@@ -1,0 +1,267 @@
+import Link from "next/link";
+import {
+  ShoppingBag,
+  FileText,
+  Clock,
+  CheckCircle,
+  ArrowRight,
+  AlertCircle,
+  Download,
+} from "lucide-react";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+
+// Mock data - replace with real data from database
+const stats = [
+  {
+    title: "Total Orders",
+    value: "3",
+    icon: ShoppingBag,
+    color: "text-primary",
+    bgColor: "bg-primary/10",
+  },
+  {
+    title: "Completed",
+    value: "2",
+    icon: CheckCircle,
+    color: "text-green-600",
+    bgColor: "bg-green-100",
+  },
+  {
+    title: "In Progress",
+    value: "1",
+    icon: Clock,
+    color: "text-amber-600",
+    bgColor: "bg-amber-100",
+  },
+  {
+    title: "Documents",
+    value: "5",
+    icon: FileText,
+    color: "text-blue-600",
+    bgColor: "bg-blue-100",
+  },
+];
+
+const recentOrders = [
+  {
+    id: "LLC-2024-ABC123",
+    service: "LLC Formation",
+    state: "Wyoming",
+    status: "completed",
+    date: "2024-12-05",
+    total: "$249",
+  },
+  {
+    id: "LLC-2024-DEF456",
+    service: "EIN Application",
+    status: "in_progress",
+    date: "2024-12-08",
+    total: "$79",
+  },
+  {
+    id: "LLC-2024-GHI789",
+    service: "Registered Agent",
+    state: "Wyoming",
+    status: "pending",
+    date: "2024-12-10",
+    total: "$99",
+  },
+];
+
+const recentDocuments = [
+  {
+    name: "Articles of Organization",
+    type: "LLC Document",
+    status: "ready",
+    date: "2024-12-05",
+  },
+  {
+    name: "Operating Agreement",
+    type: "LLC Document",
+    status: "ready",
+    date: "2024-12-05",
+  },
+  {
+    name: "EIN Confirmation Letter",
+    type: "Tax Document",
+    status: "pending",
+    date: "2024-12-08",
+  },
+];
+
+const statusColors: Record<string, string> = {
+  completed: "bg-green-100 text-green-700",
+  in_progress: "bg-amber-100 text-amber-700",
+  pending: "bg-gray-100 text-gray-700",
+  ready: "bg-green-100 text-green-700",
+};
+
+export default function DashboardPage() {
+  return (
+    <div className="space-y-6">
+      {/* Page Header */}
+      <div>
+        <h1 className="text-2xl font-bold text-foreground">Dashboard</h1>
+        <p className="text-muted-foreground">
+          Welcome back! Here's an overview of your account.
+        </p>
+      </div>
+
+      {/* Alert Banner */}
+      <div className="rounded-lg border border-amber-200 bg-amber-50 p-4">
+        <div className="flex items-start gap-3">
+          <AlertCircle className="mt-0.5 h-5 w-5 shrink-0 text-amber-600" />
+          <div className="flex-1">
+            <p className="font-medium text-amber-800">Action Required</p>
+            <p className="mt-1 text-sm text-amber-700">
+              Your EIN application is in progress. We need additional
+              information to proceed.{" "}
+              <Link
+                href="/dashboard/orders/LLC-2024-DEF456"
+                className="font-medium underline"
+              >
+                View details
+              </Link>
+            </p>
+          </div>
+        </div>
+      </div>
+
+      {/* Stats Grid */}
+      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+        {stats.map((stat) => (
+          <Card key={stat.title}>
+            <CardContent className="flex items-center gap-4 p-6">
+              <div
+                className={`flex h-12 w-12 items-center justify-center rounded-lg ${stat.bgColor}`}
+              >
+                <stat.icon className={`h-6 w-6 ${stat.color}`} />
+              </div>
+              <div>
+                <p className="text-2xl font-bold">{stat.value}</p>
+                <p className="text-sm text-muted-foreground">{stat.title}</p>
+              </div>
+            </CardContent>
+          </Card>
+        ))}
+      </div>
+
+      {/* Content Grid */}
+      <div className="grid gap-6 lg:grid-cols-2">
+        {/* Recent Orders */}
+        <Card>
+          <CardHeader className="flex flex-row items-center justify-between">
+            <CardTitle>Recent Orders</CardTitle>
+            <Button variant="ghost" size="sm" asChild>
+              <Link href="/dashboard/orders">
+                View All
+                <ArrowRight className="ml-1 h-4 w-4" />
+              </Link>
+            </Button>
+          </CardHeader>
+          <CardContent>
+            <div className="space-y-4">
+              {recentOrders.map((order) => (
+                <Link
+                  key={order.id}
+                  href={`/dashboard/orders/${order.id}`}
+                  className="flex items-center justify-between rounded-lg border p-4 transition-colors hover:bg-muted/50"
+                >
+                  <div className="space-y-1">
+                    <p className="font-medium">{order.service}</p>
+                    <p className="text-sm text-muted-foreground">
+                      {order.id}
+                      {order.state && ` • ${order.state}`}
+                    </p>
+                  </div>
+                  <div className="text-right">
+                    <Badge
+                      variant="secondary"
+                      className={statusColors[order.status]}
+                    >
+                      {order.status.replace("_", " ")}
+                    </Badge>
+                    <p className="mt-1 text-sm font-medium">{order.total}</p>
+                  </div>
+                </Link>
+              ))}
+            </div>
+          </CardContent>
+        </Card>
+
+        {/* Recent Documents */}
+        <Card>
+          <CardHeader className="flex flex-row items-center justify-between">
+            <CardTitle>Recent Documents</CardTitle>
+            <Button variant="ghost" size="sm" asChild>
+              <Link href="/dashboard/documents">
+                View All
+                <ArrowRight className="ml-1 h-4 w-4" />
+              </Link>
+            </Button>
+          </CardHeader>
+          <CardContent>
+            <div className="space-y-4">
+              {recentDocuments.map((doc, index) => (
+                <div
+                  key={index}
+                  className="flex items-center justify-between rounded-lg border p-4"
+                >
+                  <div className="flex items-center gap-3">
+                    <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary/10 text-primary">
+                      <FileText className="h-5 w-5" />
+                    </div>
+                    <div>
+                      <p className="font-medium">{doc.name}</p>
+                      <p className="text-sm text-muted-foreground">
+                        {doc.type} • {doc.date}
+                      </p>
+                    </div>
+                  </div>
+                  {doc.status === "ready" ? (
+                    <Button variant="ghost" size="sm">
+                      <Download className="mr-1 h-4 w-4" />
+                      Download
+                    </Button>
+                  ) : (
+                    <Badge
+                      variant="secondary"
+                      className={statusColors[doc.status]}
+                    >
+                      {doc.status}
+                    </Badge>
+                  )}
+                </div>
+              ))}
+            </div>
+          </CardContent>
+        </Card>
+      </div>
+
+      {/* Quick Actions */}
+      <Card>
+        <CardHeader>
+          <CardTitle>Quick Actions</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <div className="flex flex-wrap gap-3">
+            <Button asChild>
+              <Link href="/services/llc-formation">New LLC Formation</Link>
+            </Button>
+            <Button variant="outline" asChild>
+              <Link href="/services/ein-application">Apply for EIN</Link>
+            </Button>
+            <Button variant="outline" asChild>
+              <Link href="/dashboard/support">Contact Support</Link>
+            </Button>
+            <Button variant="outline" asChild>
+              <Link href="/dashboard/documents">Upload Document</Link>
+            </Button>
+          </div>
+        </CardContent>
+      </Card>
+    </div>
+  );
+}

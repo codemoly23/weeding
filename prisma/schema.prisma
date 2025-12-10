@@ -1,0 +1,507 @@
+generator client {
+  provider = "prisma-client-js"
+  output   = "../node_modules/.prisma/client"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+// ============ USER & AUTH ============
+model User {
+  id            String    @id @default(cuid())
+  email         String    @unique
+  emailVerified DateTime?
+  name          String?
+  phone         String?
+  country       String?
+  image         String?
+  password      String?
+  role          UserRole  @default(CUSTOMER)
+
+  accounts      Account[]
+  sessions      Session[]
+  orders        Order[]
+  documents     Document[]
+  tickets       Ticket[]
+
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  @@index([email])
+  @@index([role])
+}
+
+enum UserRole {
+  CUSTOMER
+  ADMIN
+  CONTENT_MANAGER
+  SALES_AGENT
+  SUPPORT_AGENT
+}
+
+model Account {
+  id                String  @id @default(cuid())
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String? @db.Text
+  access_token      String? @db.Text
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String? @db.Text
+  session_state     String?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+  @@index([userId])
+}
+
+model Session {
+  id           String   @id @default(cuid())
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+}
+
+model VerificationToken {
+  identifier String
+  token      String   @unique
+  expires    DateTime
+
+  @@unique([identifier, token])
+}
+
+// ============ SERVICES & PACKAGES ============
+model Service {
+  id          String   @id @default(cuid())
+  name        String
+  slug        String   @unique
+  description String   @db.Text
+  shortDesc   String?
+  icon        String?
+  image       String?
+  isActive    Boolean  @default(true)
+  sortOrder   Int      @default(0)
+
+  packages    Package[]
+  orderItems  OrderItem[]
+
+  // SEO
+  metaTitle       String?
+  metaDescription String?
+  keywords        String[]
+
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([slug])
+  @@index([isActive])
+}
+
+model Package {
+  id          String   @id @default(cuid())
+  serviceId   String
+  name        String
+  description String?  @db.Text
+  priceUSD    Decimal  @db.Decimal(10, 2)
+  priceBDT    Decimal? @db.Decimal(10, 2)
+  features    String[]
+  isPopular   Boolean  @default(false)
+  isActive    Boolean  @default(true)
+  sortOrder   Int      @default(0)
+
+  service     Service  @relation(fields: [serviceId], references: [id], onDelete: Cascade)
+  orderItems  OrderItem[]
+
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([serviceId])
+  @@index([isActive])
+}
+
+// ============ ORDERS & PAYMENTS ============
+model Order {
+  id              String      @id @default(cuid())
+  orderNumber     String      @unique
+  userId          String
+  status          OrderStatus @default(PENDING)
+
+  // Pricing
+  subtotalUSD     Decimal     @db.Decimal(10, 2)
+  discountUSD     Decimal     @default(0) @db.Decimal(10, 2)
+  totalUSD        Decimal     @db.Decimal(10, 2)
+  currency        String      @default("USD")
+  exchangeRate    Decimal?    @db.Decimal(10, 4)
+
+  // Payment
+  paymentMethod   String?
+  paymentStatus   PaymentStatus @default(PENDING)
+  paymentId       String?
+  paidAt          DateTime?
+
+  // LLC Details
+  llcName         String?
+  llcState        String?
+  llcType         String?
+
+  // Contact
+  customerName    String
+  customerEmail   String
+  customerPhone   String?
+  customerCountry String?
+
+  // Coupon
+  couponId        String?
+  coupon          Coupon?     @relation(fields: [couponId], references: [id])
+
+  // Relations
+  user            User        @relation(fields: [userId], references: [id])
+  items           OrderItem[]
+  documents       Document[]
+  notes           OrderNote[]
+  invoices        Invoice[]
+
+  createdAt       DateTime    @default(now())
+  updatedAt       DateTime    @updatedAt
+
+  @@index([userId])
+  @@index([orderNumber])
+  @@index([status])
+  @@index([paymentStatus])
+  @@index([createdAt])
+}
+
+enum OrderStatus {
+  PENDING
+  PROCESSING
+  IN_PROGRESS
+  WAITING_FOR_INFO
+  COMPLETED
+  CANCELLED
+  REFUNDED
+}
+
+enum PaymentStatus {
+  PENDING
+  PAID
+  FAILED
+  REFUNDED
+  PARTIALLY_REFUNDED
+}
+
+model OrderItem {
+  id          String   @id @default(cuid())
+  orderId     String
+  serviceId   String
+  packageId   String?
+
+  name        String
+  description String?
+  quantity    Int      @default(1)
+  priceUSD    Decimal  @db.Decimal(10, 2)
+  stateFee    Decimal? @db.Decimal(10, 2)
+
+  order       Order    @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  service     Service  @relation(fields: [serviceId], references: [id])
+  package     Package? @relation(fields: [packageId], references: [id])
+
+  createdAt   DateTime @default(now())
+
+  @@index([orderId])
+}
+
+model OrderNote {
+  id          String   @id @default(cuid())
+  orderId     String
+  authorId    String?
+  content     String   @db.Text
+  isInternal  Boolean  @default(false)
+
+  order       Order    @relation(fields: [orderId], references: [id], onDelete: Cascade)
+
+  createdAt   DateTime @default(now())
+
+  @@index([orderId])
+}
+
+// ============ DOCUMENTS ============
+model Document {
+  id          String         @id @default(cuid())
+  orderId     String?
+  userId      String
+  type        DocumentType
+  name        String
+  fileName    String
+  fileUrl     String
+  fileSize    Int
+  mimeType    String
+  status      DocumentStatus @default(PENDING)
+
+  order       Order?         @relation(fields: [orderId], references: [id])
+  user        User           @relation(fields: [userId], references: [id])
+
+  createdAt   DateTime       @default(now())
+  updatedAt   DateTime       @updatedAt
+
+  @@index([orderId])
+  @@index([userId])
+  @@index([status])
+}
+
+enum DocumentType {
+  PASSPORT
+  ID_CARD
+  ADDRESS_PROOF
+  ARTICLES_OF_ORG
+  EIN_LETTER
+  OPERATING_AGREEMENT
+  BANK_STATEMENT
+  OTHER
+}
+
+enum DocumentStatus {
+  PENDING
+  APPROVED
+  REJECTED
+  EXPIRED
+}
+
+// ============ INVOICES ============
+model Invoice {
+  id            String        @id @default(cuid())
+  invoiceNumber String        @unique
+  orderId       String
+
+  subtotal      Decimal       @db.Decimal(10, 2)
+  discount      Decimal       @default(0) @db.Decimal(10, 2)
+  tax           Decimal       @default(0) @db.Decimal(10, 2)
+  total         Decimal       @db.Decimal(10, 2)
+  currency      String        @default("USD")
+
+  status        InvoiceStatus @default(DRAFT)
+  dueDate       DateTime?
+  paidAt        DateTime?
+
+  order         Order         @relation(fields: [orderId], references: [id])
+
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt
+
+  @@index([orderId])
+  @@index([status])
+}
+
+enum InvoiceStatus {
+  DRAFT
+  SENT
+  PAID
+  OVERDUE
+  CANCELLED
+}
+
+// ============ SUPPORT TICKETS ============
+model Ticket {
+  id          String       @id @default(cuid())
+  userId      String
+  subject     String
+  status      TicketStatus @default(OPEN)
+  priority    TicketPriority @default(MEDIUM)
+
+  user        User         @relation(fields: [userId], references: [id])
+  messages    TicketMessage[]
+
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+
+  @@index([userId])
+  @@index([status])
+}
+
+enum TicketStatus {
+  OPEN
+  IN_PROGRESS
+  WAITING_FOR_CUSTOMER
+  RESOLVED
+  CLOSED
+}
+
+enum TicketPriority {
+  LOW
+  MEDIUM
+  HIGH
+  URGENT
+}
+
+model TicketMessage {
+  id          String   @id @default(cuid())
+  ticketId    String
+  authorId    String?
+  content     String   @db.Text
+  isStaff     Boolean  @default(false)
+
+  ticket      Ticket   @relation(fields: [ticketId], references: [id], onDelete: Cascade)
+
+  createdAt   DateTime @default(now())
+
+  @@index([ticketId])
+}
+
+// ============ CONTENT ============
+model BlogPost {
+  id            String      @id @default(cuid())
+  title         String
+  slug          String      @unique
+  excerpt       String?     @db.Text
+  content       String      @db.Text
+  coverImage    String?
+  authorId      String?
+  status        PostStatus  @default(DRAFT)
+  publishedAt   DateTime?
+
+  categories    BlogCategory[]
+  tags          String[]
+
+  // SEO
+  metaTitle       String?
+  metaDescription String?
+
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
+
+  @@index([slug])
+  @@index([status])
+  @@index([publishedAt])
+}
+
+enum PostStatus {
+  DRAFT
+  PUBLISHED
+  ARCHIVED
+}
+
+model BlogCategory {
+  id          String     @id @default(cuid())
+  name        String
+  slug        String     @unique
+  description String?
+  posts       BlogPost[]
+
+  @@index([slug])
+}
+
+model Testimonial {
+  id          String   @id @default(cuid())
+  name        String
+  company     String?
+  country     String?
+  avatar      String?
+  content     String   @db.Text
+  rating      Int      @default(5)
+  isActive    Boolean  @default(true)
+  sortOrder   Int      @default(0)
+
+  createdAt   DateTime @default(now())
+
+  @@index([isActive])
+}
+
+model FAQ {
+  id          String   @id @default(cuid())
+  question    String
+  answer      String   @db.Text
+  category    String?
+  isActive    Boolean  @default(true)
+  sortOrder   Int      @default(0)
+
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([isActive])
+  @@index([category])
+}
+
+// ============ SETTINGS ============
+model Setting {
+  id        String   @id @default(cuid())
+  key       String   @unique
+  value     String   @db.Text
+  type      String   @default("string")
+
+  updatedAt DateTime @updatedAt
+
+  @@index([key])
+}
+
+// ============ STATE FEES ============
+model StateFee {
+  id              String   @id @default(cuid())
+  stateCode       String   @unique
+  stateName       String
+  llcFee          Decimal  @db.Decimal(10, 2)
+  annualFee       Decimal? @db.Decimal(10, 2)
+  processingTime  String?
+  isPopular       Boolean  @default(false)
+
+  // SEO for state landing pages
+  metaTitle       String?
+  metaDescription String?
+  content         String?  @db.Text
+
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([stateCode])
+  @@index([isPopular])
+}
+
+// ============ COUPONS ============
+model Coupon {
+  id          String      @id @default(cuid())
+  code        String      @unique
+  description String?
+  type        CouponType  @default(PERCENTAGE)
+  value       Decimal     @db.Decimal(10, 2)
+  minOrder    Decimal?    @db.Decimal(10, 2)
+  maxDiscount Decimal?    @db.Decimal(10, 2)
+  usageLimit  Int?
+  usedCount   Int         @default(0)
+  isActive    Boolean     @default(true)
+  expiresAt   DateTime?
+
+  orders      Order[]
+
+  createdAt   DateTime    @default(now())
+
+  @@index([code])
+  @@index([isActive])
+}
+
+enum CouponType {
+  PERCENTAGE
+  FIXED
+}
+
+// ============ ACTIVITY LOG ============
+model ActivityLog {
+  id          String   @id @default(cuid())
+  userId      String?
+  action      String
+  entity      String
+  entityId    String?
+  metadata    Json?
+  ipAddress   String?
+
+  createdAt   DateTime @default(now())
+
+  @@index([userId])
+  @@index([entity])
+  @@index([createdAt])
+}
