@@ -2,7 +2,27 @@
 
 import Link from "next/link";
 import { useState } from "react";
-import { Menu, X, ChevronDown } from "lucide-react";
+import {
+  Menu,
+  ChevronDown,
+  Building2,
+  FileText,
+  ShoppingCart,
+  MapPin,
+  Landmark,
+  Shield,
+  BadgeCheck,
+  Stamp,
+  Calculator,
+  FileCheck,
+  ScrollText,
+  Package,
+  Sparkles,
+  Target,
+  AlertTriangle,
+  BookOpen,
+  Users,
+} from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   Sheet,
@@ -12,19 +32,61 @@ import {
 } from "@/components/ui/sheet";
 import { cn } from "@/lib/utils";
 
-const navigation = [
-  { name: "Home", href: "/" },
+const serviceCategories = [
   {
-    name: "Services",
-    href: "/services",
-    children: [
-      { name: "LLC Formation", href: "/services/llc-formation" },
-      { name: "EIN Application", href: "/services/ein-application" },
-      { name: "Amazon Seller Account", href: "/services/amazon-seller" },
-      { name: "Registered Agent", href: "/services/registered-agent" },
-      { name: "Virtual Address", href: "/services/virtual-address" },
+    name: "Formation & Legal",
+    description: "Start your US business",
+    icon: Building2,
+    services: [
+      { name: "LLC Formation", href: "/services/llc-formation", icon: Building2, popular: true },
+      { name: "EIN Application", href: "/services/ein-application", icon: FileText },
+      { name: "ITIN Application", href: "/services/itin-application", icon: FileCheck },
+      { name: "Trademark Registration", href: "/services/trademark-registration", icon: Stamp, popular: true },
+      { name: "DBA / Trade Name", href: "/services/dba-filing", icon: FileText },
+      { name: "Operating Agreement", href: "/services/operating-agreement", icon: ScrollText },
     ],
   },
+  {
+    name: "Compliance & Documents",
+    description: "Keep your business compliant",
+    icon: Shield,
+    services: [
+      { name: "Registered Agent", href: "/services/registered-agent", icon: Shield },
+      { name: "Annual Compliance", href: "/services/compliance", icon: FileCheck },
+      { name: "Virtual US Address", href: "/services/virtual-address", icon: MapPin },
+      { name: "Amendment Filing", href: "/services/amendment-filing", icon: FileText },
+      { name: "Certificate of Good Standing", href: "/services/certificate-good-standing", icon: FileCheck },
+      { name: "Apostille Service", href: "/services/apostille-service", icon: Stamp },
+    ],
+  },
+  {
+    name: "Amazon Services",
+    description: "Sell on Amazon with confidence",
+    icon: ShoppingCart,
+    services: [
+      { name: "Amazon Seller Account", href: "/services/amazon-seller", icon: ShoppingCart, popular: true },
+      { name: "Brand Registry", href: "/services/brand-registry", icon: BadgeCheck, popular: true },
+      { name: "Category Ungating", href: "/services/category-ungating", icon: Package },
+      { name: "Listing Optimization", href: "/services/product-listing-optimization", icon: Target },
+      { name: "A+ Content Creation", href: "/services/a-plus-content", icon: Sparkles },
+      { name: "Account Reinstatement", href: "/services/account-reinstatement", icon: AlertTriangle },
+    ],
+  },
+  {
+    name: "Tax & Finance",
+    description: "Financial services",
+    icon: Calculator,
+    services: [
+      { name: "Business Banking", href: "/services/business-banking", icon: Landmark, popular: true },
+      { name: "Bookkeeping", href: "/services/bookkeeping", icon: BookOpen },
+      { name: "Tax Filing", href: "/services/tax-filing", icon: Calculator },
+    ],
+  },
+];
+
+const navigation = [
+  { name: "Home", href: "/" },
+  { name: "Services", href: "/services", hasDropdown: true },
   { name: "Pricing", href: "/pricing" },
   { name: "About", href: "/about" },
   { name: "Blog", href: "/blog" },
@@ -33,6 +95,7 @@ const navigation = [
 
 export function Header() {
   const [hoveredItem, setHoveredItem] = useState<string | null>(null);
+  const [mobileServicesOpen, setMobileServicesOpen] = useState(false);
 
   return (
     <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
@@ -64,7 +127,7 @@ export function Header() {
                 )}
               >
                 {item.name}
-                {item.children && (
+                {item.hasDropdown && (
                   <ChevronDown
                     className={cn(
                       "h-4 w-4 transition-transform",
@@ -74,19 +137,77 @@ export function Header() {
                 )}
               </Link>
 
-              {/* Dropdown Menu */}
-              {item.children && hoveredItem === item.name && (
-                <div className="absolute left-0 top-full pt-2">
-                  <div className="w-56 rounded-lg border bg-background p-2 shadow-lg">
-                    {item.children.map((child) => (
+              {/* Mega Menu Dropdown */}
+              {item.hasDropdown && hoveredItem === item.name && (
+                <div className="absolute left-1/2 top-full -translate-x-1/2 pt-4">
+                  <div className="w-[800px] rounded-xl border bg-background p-6 shadow-xl">
+                    <div className="mb-4 flex items-center justify-between border-b pb-4">
+                      <div>
+                        <h3 className="font-semibold text-foreground">Our Services</h3>
+                        <p className="text-sm text-muted-foreground">
+                          Complete business solutions for international entrepreneurs
+                        </p>
+                      </div>
                       <Link
-                        key={child.name}
-                        href={child.href}
-                        className="block rounded-md px-3 py-2 text-sm text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
+                        href="/services"
+                        className="text-sm font-medium text-primary hover:underline"
                       >
-                        {child.name}
+                        View All Services →
                       </Link>
-                    ))}
+                    </div>
+
+                    <div className="grid grid-cols-4 gap-6">
+                      {serviceCategories.map((category) => (
+                        <div key={category.name}>
+                          <div className="mb-3 flex items-center gap-2">
+                            <category.icon className="h-4 w-4 text-primary" />
+                            <h4 className="text-sm font-semibold text-foreground">
+                              {category.name}
+                            </h4>
+                          </div>
+                          <ul className="space-y-1">
+                            {category.services.map((service) => (
+                              <li key={service.name}>
+                                <Link
+                                  href={service.href}
+                                  className="group flex items-center gap-2 rounded-md px-2 py-1.5 text-sm text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
+                                >
+                                  <span className="flex-1">{service.name}</span>
+                                  {service.popular && (
+                                    <span className="rounded bg-primary/10 px-1.5 py-0.5 text-[10px] font-medium text-primary">
+                                      Popular
+                                    </span>
+                                  )}
+                                </Link>
+                              </li>
+                            ))}
+                          </ul>
+                        </div>
+                      ))}
+                    </div>
+
+                    {/* Quick Links */}
+                    <div className="mt-6 flex items-center gap-4 border-t pt-4">
+                      <span className="text-sm text-muted-foreground">Quick Start:</span>
+                      <Link
+                        href="/services/llc-formation"
+                        className="rounded-full bg-primary/10 px-3 py-1 text-xs font-medium text-primary transition-colors hover:bg-primary hover:text-primary-foreground"
+                      >
+                        Form Your LLC
+                      </Link>
+                      <Link
+                        href="/services/amazon-seller"
+                        className="rounded-full bg-primary/10 px-3 py-1 text-xs font-medium text-primary transition-colors hover:bg-primary hover:text-primary-foreground"
+                      >
+                        Start Selling on Amazon
+                      </Link>
+                      <Link
+                        href="/contact"
+                        className="rounded-full bg-muted px-3 py-1 text-xs font-medium text-muted-foreground transition-colors hover:bg-muted/80"
+                      >
+                        Free Consultation
+                      </Link>
+                    </div>
                   </div>
                 </div>
               )}
@@ -112,7 +233,7 @@ export function Header() {
               <span className="sr-only">Open menu</span>
             </Button>
           </SheetTrigger>
-          <SheetContent side="right" className="w-80">
+          <SheetContent side="right" className="w-80 overflow-y-auto">
             <div className="flex flex-col gap-4 py-4">
               <div className="flex items-center justify-between">
                 <Link href="/" className="flex items-center space-x-2">
@@ -126,32 +247,102 @@ export function Header() {
               </div>
 
               <div className="mt-6 flex flex-col gap-1">
-                {navigation.map((item) => (
-                  <div key={item.name}>
-                    <SheetClose asChild>
-                      <Link
-                        href={item.href}
-                        className="block rounded-md px-3 py-2 text-base font-medium text-foreground hover:bg-muted"
-                      >
-                        {item.name}
-                      </Link>
-                    </SheetClose>
-                    {item.children && (
-                      <div className="ml-4 mt-1 flex flex-col gap-1">
-                        {item.children.map((child) => (
-                          <SheetClose asChild key={child.name}>
-                            <Link
-                              href={child.href}
-                              className="block rounded-md px-3 py-2 text-sm text-muted-foreground hover:bg-muted hover:text-foreground"
-                            >
-                              {child.name}
-                            </Link>
-                          </SheetClose>
-                        ))}
-                      </div>
-                    )}
-                  </div>
-                ))}
+                {/* Home */}
+                <SheetClose asChild>
+                  <Link
+                    href="/"
+                    className="block rounded-md px-3 py-2 text-base font-medium text-foreground hover:bg-muted"
+                  >
+                    Home
+                  </Link>
+                </SheetClose>
+
+                {/* Services Accordion */}
+                <div>
+                  <button
+                    onClick={() => setMobileServicesOpen(!mobileServicesOpen)}
+                    className="flex w-full items-center justify-between rounded-md px-3 py-2 text-base font-medium text-foreground hover:bg-muted"
+                  >
+                    Services
+                    <ChevronDown
+                      className={cn(
+                        "h-4 w-4 transition-transform",
+                        mobileServicesOpen && "rotate-180"
+                      )}
+                    />
+                  </button>
+
+                  {mobileServicesOpen && (
+                    <div className="ml-2 mt-2 space-y-4 border-l-2 border-muted pl-4">
+                      {serviceCategories.map((category) => (
+                        <div key={category.name}>
+                          <div className="mb-2 flex items-center gap-2">
+                            <category.icon className="h-4 w-4 text-primary" />
+                            <span className="text-sm font-semibold text-foreground">
+                              {category.name}
+                            </span>
+                          </div>
+                          <ul className="space-y-1">
+                            {category.services.map((service) => (
+                              <li key={service.name}>
+                                <SheetClose asChild>
+                                  <Link
+                                    href={service.href}
+                                    className="block rounded-md px-2 py-1.5 text-sm text-muted-foreground hover:bg-muted hover:text-foreground"
+                                  >
+                                    {service.name}
+                                  </Link>
+                                </SheetClose>
+                              </li>
+                            ))}
+                          </ul>
+                        </div>
+                      ))}
+                      <SheetClose asChild>
+                        <Link
+                          href="/services"
+                          className="block rounded-md px-2 py-2 text-sm font-medium text-primary hover:bg-muted"
+                        >
+                          View All Services →
+                        </Link>
+                      </SheetClose>
+                    </div>
+                  )}
+                </div>
+
+                {/* Other Navigation Items */}
+                <SheetClose asChild>
+                  <Link
+                    href="/pricing"
+                    className="block rounded-md px-3 py-2 text-base font-medium text-foreground hover:bg-muted"
+                  >
+                    Pricing
+                  </Link>
+                </SheetClose>
+                <SheetClose asChild>
+                  <Link
+                    href="/about"
+                    className="block rounded-md px-3 py-2 text-base font-medium text-foreground hover:bg-muted"
+                  >
+                    About
+                  </Link>
+                </SheetClose>
+                <SheetClose asChild>
+                  <Link
+                    href="/blog"
+                    className="block rounded-md px-3 py-2 text-base font-medium text-foreground hover:bg-muted"
+                  >
+                    Blog
+                  </Link>
+                </SheetClose>
+                <SheetClose asChild>
+                  <Link
+                    href="/contact"
+                    className="block rounded-md px-3 py-2 text-base font-medium text-foreground hover:bg-muted"
+                  >
+                    Contact
+                  </Link>
+                </SheetClose>
               </div>
 
               <div className="mt-6 flex flex-col gap-2">

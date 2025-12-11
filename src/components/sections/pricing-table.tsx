@@ -13,22 +13,8 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
+import { StateSelector, type State } from "@/components/ui/state-selector";
 import { cn } from "@/lib/utils";
-
-const states = [
-  { code: "WY", name: "Wyoming", fee: 100 },
-  { code: "DE", name: "Delaware", fee: 140 },
-  { code: "NM", name: "New Mexico", fee: 50 },
-  { code: "TX", name: "Texas", fee: 300 },
-  { code: "FL", name: "Florida", fee: 125 },
-];
 
 const packages = [
   {
@@ -87,8 +73,11 @@ const packages = [
   },
 ];
 
+// Default state for initial render
+const defaultState: State = { code: "WY", name: "Wyoming", fee: 100 };
+
 export function PricingTable() {
-  const [selectedState, setSelectedState] = useState(states[0]);
+  const [selectedState, setSelectedState] = useState<State>(defaultState);
 
   return (
     <section className="py-16 lg:py-24">
@@ -108,27 +97,15 @@ export function PricingTable() {
         </div>
 
         {/* State Selector */}
-        <div className="mx-auto mt-8 max-w-xs">
-          <label className="mb-2 block text-sm font-medium text-foreground">
+        <div className="mx-auto mt-8 max-w-md">
+          <label className="mb-2 block text-sm font-medium text-foreground text-center">
             Select your state for accurate pricing
           </label>
-          <Select
-            value={selectedState.code}
-            onValueChange={(value) =>
-              setSelectedState(states.find((s) => s.code === value) || states[0])
-            }
-          >
-            <SelectTrigger>
-              <SelectValue placeholder="Select a state" />
-            </SelectTrigger>
-            <SelectContent>
-              {states.map((state) => (
-                <SelectItem key={state.code} value={state.code}>
-                  {state.name} (${state.fee} state fee)
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
+          <StateSelector
+            value={selectedState}
+            onChange={setSelectedState}
+            placeholder="Search for a state..."
+          />
         </div>
 
         {/* Pricing Cards */}

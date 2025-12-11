@@ -1,17 +1,19 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect, useCallback } from "react";
 import Link from "next/link";
 import {
   Package,
   Search,
-  Filter,
   Download,
   MoreHorizontal,
   Eye,
   Edit,
   Mail,
-  RefreshCcw,
+  ChevronLeft,
+  ChevronRight,
+  Loader2,
+  RefreshCw,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -47,117 +49,171 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Checkbox } from "@/components/ui/checkbox";
+import { toast } from "sonner";
 
-// Mock data
-const orders = [
-  {
-    id: "LLC-2024-ABC123",
-    customer: {
-      name: "John Doe",
-      email: "john@example.com",
-      country: "Bangladesh",
-    },
-    service: "LLC Formation",
-    package: "Standard",
-    state: "Wyoming",
-    amount: 249,
-    status: "processing",
-    paymentStatus: "paid",
-    createdAt: "2024-12-10",
-  },
-  {
-    id: "LLC-2024-DEF456",
-    customer: {
-      name: "Jane Smith",
-      email: "jane@example.com",
-      country: "India",
-    },
-    service: "EIN Application",
-    package: "Basic",
-    state: "N/A",
-    amount: 99,
-    status: "completed",
-    paymentStatus: "paid",
-    createdAt: "2024-12-09",
-  },
-  {
-    id: "LLC-2024-GHI789",
-    customer: {
-      name: "Bob Wilson",
-      email: "bob@example.com",
-      country: "Pakistan",
-    },
-    service: "LLC Formation",
-    package: "Premium",
-    state: "Delaware",
-    amount: 449,
-    status: "pending",
-    paymentStatus: "pending",
-    createdAt: "2024-12-09",
-  },
-  {
-    id: "LLC-2024-JKL012",
-    customer: {
-      name: "Alice Brown",
-      email: "alice@example.com",
-      country: "UAE",
-    },
-    service: "Amazon Seller",
-    package: "Standard",
-    state: "N/A",
-    amount: 199,
-    status: "in_progress",
-    paymentStatus: "paid",
-    createdAt: "2024-12-08",
-  },
-  {
-    id: "LLC-2024-MNO345",
-    customer: {
-      name: "Charlie Davis",
-      email: "charlie@example.com",
-      country: "Malaysia",
-    },
-    service: "LLC Formation",
-    package: "Standard",
-    state: "Wyoming",
-    amount: 249,
-    status: "completed",
-    paymentStatus: "paid",
-    createdAt: "2024-12-07",
-  },
+type OrderStatus = "PENDING" | "PROCESSING" | "IN_PROGRESS" | "WAITING_FOR_INFO" | "COMPLETED" | "CANCELLED" | "REFUNDED";
+type PaymentStatus = "PENDING" | "PAID" | "FAILED" | "REFUNDED";
+
+interface Order {
+  id: string;
+  orderNumber: string;
+  llcName: string | null;
+  llcState: string | null;
+  llcType: string | null;
+  status: OrderStatus;
+  paymentStatus: PaymentStatus;
+  totalUSD: string;
+  customerName: string;
+  customerEmail: string;
+  customerCountry: string | null;
+  createdAt: string;
+  items: Array<{
+    id: string;
+    name: string;
+    priceUSD: string;
+    stateFee: string | null;
+  }>;
+  user: {
+    id: string;
+    email: string;
+    name: string | null;
+    country: string | null;
+  };
+}
+
+const statusOptions: { value: OrderStatus; label: string }[] = [
+  { value: "PENDING", label: "Pending" },
+  { value: "PROCESSING", label: "Processing" },
+  { value: "IN_PROGRESS", label: "In Progress" },
+  { value: "WAITING_FOR_INFO", label: "Waiting for Info" },
+  { value: "COMPLETED", label: "Completed" },
+  { value: "CANCELLED", label: "Cancelled" },
+  { value: "REFUNDED", label: "Refunded" },
 ];
 
 const statusColors: Record<string, string> = {
-  pending: "bg-gray-100 text-gray-700",
-  processing: "bg-blue-100 text-blue-700",
-  in_progress: "bg-amber-100 text-amber-700",
-  completed: "bg-green-100 text-green-700",
-  cancelled: "bg-red-100 text-red-700",
+  PENDING: "bg-gray-100 text-gray-700 border-gray-200",
+  PROCESSING: "bg-blue-100 text-blue-700 border-blue-200",
+  IN_PROGRESS: "bg-amber-100 text-amber-700 border-amber-200",
+  WAITING_FOR_INFO: "bg-purple-100 text-purple-700 border-purple-200",
+  COMPLETED: "bg-green-100 text-green-700 border-green-200",
+  CANCELLED: "bg-red-100 text-red-700 border-red-200",
+  REFUNDED: "bg-gray-100 text-gray-700 border-gray-200",
 };
 
 const paymentColors: Record<string, string> = {
-  pending: "bg-amber-100 text-amber-700",
-  paid: "bg-green-100 text-green-700",
-  failed: "bg-red-100 text-red-700",
-  refunded: "bg-gray-100 text-gray-700",
+  PENDING: "bg-amber-100 text-amber-700",
+  PAID: "bg-green-100 text-green-700",
+  FAILED: "bg-red-100 text-red-700",
+  REFUNDED: "bg-gray-100 text-gray-700",
 };
 
+const PER_PAGE_OPTIONS = [10, 20, 50, 100];
+
 export default function AdminOrdersPage() {
+  const [orders, setOrders] = useState<Order[]>([]);
   const [selectedOrders, setSelectedOrders] = useState<string[]>([]);
   const [statusFilter, setStatusFilter] = useState("all");
   const [paymentFilter, setPaymentFilter] = useState("all");
-
-  const filteredOrders = orders.filter((order) => {
-    if (statusFilter !== "all" && order.status !== statusFilter) return false;
-    if (paymentFilter !== "all" && order.paymentStatus !== paymentFilter) return false;
-    return true;
+  const [searchQuery, setSearchQuery] = useState("");
+  const [currentPage, setCurrentPage] = useState(1);
+  const [perPage, setPerPage] = useState(10);
+  const [totalPages, setTotalPages] = useState(1);
+  const [totalOrders, setTotalOrders] = useState(0);
+  const [isLoading, setIsLoading] = useState(true);
+  const [stats, setStats] = useState({
+    pending: 0,
+    processing: 0,
+    inProgress: 0,
+    completed: 0,
   });
 
+  // Fetch orders from API
+  const fetchOrders = useCallback(async () => {
+    setIsLoading(true);
+    try {
+      const params = new URLSearchParams({
+        page: currentPage.toString(),
+        limit: perPage.toString(),
+        search: searchQuery,
+      });
+
+      if (statusFilter !== "all") {
+        params.append("status", statusFilter);
+      }
+
+      const response = await fetch(`/api/orders?${params}`);
+      const data = await response.json();
+
+      if (response.ok) {
+        setOrders(data.orders);
+        setTotalPages(data.pagination.totalPages);
+        setTotalOrders(data.pagination.total);
+
+        // Calculate stats from fetched orders
+        const pending = data.orders.filter((o: Order) => o.status === "PENDING").length;
+        const processing = data.orders.filter((o: Order) => o.status === "PROCESSING").length;
+        const inProgress = data.orders.filter((o: Order) => o.status === "IN_PROGRESS").length;
+        const completed = data.orders.filter((o: Order) => o.status === "COMPLETED").length;
+        setStats({ pending, processing, inProgress, completed });
+      } else {
+        toast.error("Failed to fetch orders");
+      }
+    } catch (error) {
+      console.error("Error fetching orders:", error);
+      toast.error("Failed to fetch orders");
+    } finally {
+      setIsLoading(false);
+    }
+  }, [currentPage, perPage, searchQuery, statusFilter]);
+
+  useEffect(() => {
+    fetchOrders();
+  }, [fetchOrders]);
+
+  const handleFilterChange = (type: "status" | "payment" | "search", value: string) => {
+    setCurrentPage(1);
+    if (type === "status") setStatusFilter(value);
+    else if (type === "payment") setPaymentFilter(value);
+    else setSearchQuery(value);
+  };
+
+  const handlePerPageChange = (value: string) => {
+    setPerPage(Number(value));
+    setCurrentPage(1);
+  };
+
+  const handleStatusChange = async (orderId: string, newStatus: OrderStatus) => {
+    try {
+      const response = await fetch(`/api/orders/${orderId}`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ status: newStatus }),
+      });
+
+      if (response.ok) {
+        toast.success("Status updated successfully");
+        setOrders((prev) =>
+          prev.map((order) =>
+            order.orderNumber === orderId || order.id === orderId
+              ? { ...order, status: newStatus }
+              : order
+          )
+        );
+      } else {
+        toast.error("Failed to update status");
+      }
+    } catch (error) {
+      console.error("Error updating status:", error);
+      toast.error("Failed to update status");
+    }
+  };
+
   const toggleAll = () => {
-    if (selectedOrders.length === filteredOrders.length) {
+    if (selectedOrders.length === orders.length) {
       setSelectedOrders([]);
     } else {
-      setSelectedOrders(filteredOrders.map((o) => o.id));
+      setSelectedOrders(orders.map((o) => o.id));
     }
   };
 
@@ -167,6 +223,18 @@ export default function AdminOrdersPage() {
     } else {
       setSelectedOrders([...selectedOrders, id]);
     }
+  };
+
+  const formatDate = (dateString: string) => {
+    return new Date(dateString).toLocaleDateString("en-US", {
+      year: "numeric",
+      month: "short",
+      day: "numeric",
+    });
+  };
+
+  const formatPrice = (price: string) => {
+    return `$${parseFloat(price).toFixed(0)}`;
   };
 
   return (
@@ -180,6 +248,10 @@ export default function AdminOrdersPage() {
           </p>
         </div>
         <div className="flex gap-2">
+          <Button variant="outline" onClick={fetchOrders} disabled={isLoading}>
+            <RefreshCw className={`mr-2 h-4 w-4 ${isLoading ? "animate-spin" : ""}`} />
+            Refresh
+          </Button>
           <Button variant="outline">
             <Download className="mr-2 h-4 w-4" />
             Export
@@ -197,33 +269,25 @@ export default function AdminOrdersPage() {
       <div className="grid gap-4 sm:grid-cols-4">
         <Card>
           <CardContent className="pt-6">
-            <div className="text-2xl font-bold">
-              {orders.filter((o) => o.status === "pending").length}
-            </div>
+            <div className="text-2xl font-bold">{stats.pending}</div>
             <p className="text-sm text-muted-foreground">Pending</p>
           </CardContent>
         </Card>
         <Card>
           <CardContent className="pt-6">
-            <div className="text-2xl font-bold">
-              {orders.filter((o) => o.status === "processing").length}
-            </div>
+            <div className="text-2xl font-bold">{stats.processing}</div>
             <p className="text-sm text-muted-foreground">Processing</p>
           </CardContent>
         </Card>
         <Card>
           <CardContent className="pt-6">
-            <div className="text-2xl font-bold">
-              {orders.filter((o) => o.status === "in_progress").length}
-            </div>
+            <div className="text-2xl font-bold">{stats.inProgress}</div>
             <p className="text-sm text-muted-foreground">In Progress</p>
           </CardContent>
         </Card>
         <Card>
           <CardContent className="pt-6">
-            <div className="text-2xl font-bold">
-              {orders.filter((o) => o.status === "completed").length}
-            </div>
+            <div className="text-2xl font-bold">{stats.completed}</div>
             <p className="text-sm text-muted-foreground">Completed</p>
           </CardContent>
         </Card>
@@ -235,31 +299,36 @@ export default function AdminOrdersPage() {
           <div className="flex flex-col gap-4 sm:flex-row">
             <div className="relative flex-1">
               <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
-              <Input placeholder="Search orders..." className="pl-9" />
+              <Input
+                placeholder="Search orders..."
+                className="pl-9"
+                value={searchQuery}
+                onChange={(e) => handleFilterChange("search", e.target.value)}
+              />
             </div>
-            <Select value={statusFilter} onValueChange={setStatusFilter}>
+            <Select value={statusFilter} onValueChange={(v) => handleFilterChange("status", v)}>
               <SelectTrigger className="w-full sm:w-40">
                 <SelectValue placeholder="Status" />
               </SelectTrigger>
               <SelectContent>
                 <SelectItem value="all">All Status</SelectItem>
-                <SelectItem value="pending">Pending</SelectItem>
-                <SelectItem value="processing">Processing</SelectItem>
-                <SelectItem value="in_progress">In Progress</SelectItem>
-                <SelectItem value="completed">Completed</SelectItem>
-                <SelectItem value="cancelled">Cancelled</SelectItem>
+                <SelectItem value="PENDING">Pending</SelectItem>
+                <SelectItem value="PROCESSING">Processing</SelectItem>
+                <SelectItem value="IN_PROGRESS">In Progress</SelectItem>
+                <SelectItem value="COMPLETED">Completed</SelectItem>
+                <SelectItem value="CANCELLED">Cancelled</SelectItem>
               </SelectContent>
             </Select>
-            <Select value={paymentFilter} onValueChange={setPaymentFilter}>
+            <Select value={paymentFilter} onValueChange={(v) => handleFilterChange("payment", v)}>
               <SelectTrigger className="w-full sm:w-40">
                 <SelectValue placeholder="Payment" />
               </SelectTrigger>
               <SelectContent>
                 <SelectItem value="all">All Payments</SelectItem>
-                <SelectItem value="pending">Pending</SelectItem>
-                <SelectItem value="paid">Paid</SelectItem>
-                <SelectItem value="failed">Failed</SelectItem>
-                <SelectItem value="refunded">Refunded</SelectItem>
+                <SelectItem value="PENDING">Pending</SelectItem>
+                <SelectItem value="PAID">Paid</SelectItem>
+                <SelectItem value="FAILED">Failed</SelectItem>
+                <SelectItem value="REFUNDED">Refunded</SelectItem>
               </SelectContent>
             </Select>
           </div>
@@ -292,130 +361,233 @@ export default function AdminOrdersPage() {
       {/* Orders Table */}
       <Card>
         <CardHeader>
-          <CardTitle>All Orders</CardTitle>
-          <CardDescription>
-            {filteredOrders.length} orders total
-          </CardDescription>
+          <div className="flex items-center justify-between">
+            <div>
+              <CardTitle>All Orders</CardTitle>
+              <CardDescription>
+                {totalOrders} orders total
+              </CardDescription>
+            </div>
+            <div className="flex items-center gap-2">
+              <span className="text-sm text-muted-foreground">Per page:</span>
+              <Select value={perPage.toString()} onValueChange={handlePerPageChange}>
+                <SelectTrigger className="w-20">
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  {PER_PAGE_OPTIONS.map((option) => (
+                    <SelectItem key={option} value={option.toString()}>
+                      {option}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+          </div>
         </CardHeader>
         <CardContent>
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead className="w-12">
-                  <Checkbox
-                    checked={
-                      selectedOrders.length === filteredOrders.length &&
-                      filteredOrders.length > 0
-                    }
-                    onCheckedChange={toggleAll}
-                  />
-                </TableHead>
-                <TableHead>Order</TableHead>
-                <TableHead>Customer</TableHead>
-                <TableHead className="hidden md:table-cell">Service</TableHead>
-                <TableHead className="hidden lg:table-cell">State</TableHead>
-                <TableHead>Amount</TableHead>
-                <TableHead>Status</TableHead>
-                <TableHead className="hidden sm:table-cell">Payment</TableHead>
-                <TableHead className="text-right">Actions</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {filteredOrders.map((order) => (
-                <TableRow key={order.id}>
-                  <TableCell>
-                    <Checkbox
-                      checked={selectedOrders.includes(order.id)}
-                      onCheckedChange={() => toggleOrder(order.id)}
-                    />
-                  </TableCell>
-                  <TableCell>
-                    <div>
-                      <Link
-                        href={`/admin/orders/${order.id}`}
-                        className="font-medium hover:underline"
-                      >
-                        {order.id}
-                      </Link>
-                      <p className="text-xs text-muted-foreground">
-                        {order.createdAt}
-                      </p>
-                    </div>
-                  </TableCell>
-                  <TableCell>
-                    <div>
-                      <p className="font-medium">{order.customer.name}</p>
-                      <p className="text-xs text-muted-foreground">
-                        {order.customer.email}
-                      </p>
-                    </div>
-                  </TableCell>
-                  <TableCell className="hidden md:table-cell">
-                    <div>
-                      <p>{order.service}</p>
-                      <p className="text-xs text-muted-foreground">
-                        {order.package}
-                      </p>
-                    </div>
-                  </TableCell>
-                  <TableCell className="hidden lg:table-cell">
-                    {order.state}
-                  </TableCell>
-                  <TableCell>${order.amount}</TableCell>
-                  <TableCell>
-                    <Badge
-                      variant="secondary"
-                      className={statusColors[order.status]}
-                    >
-                      {order.status.replace("_", " ")}
-                    </Badge>
-                  </TableCell>
-                  <TableCell className="hidden sm:table-cell">
-                    <Badge
-                      variant="secondary"
-                      className={paymentColors[order.paymentStatus]}
-                    >
-                      {order.paymentStatus}
-                    </Badge>
-                  </TableCell>
-                  <TableCell className="text-right">
-                    <DropdownMenu>
-                      <DropdownMenuTrigger asChild>
-                        <Button variant="ghost" size="icon">
-                          <MoreHorizontal className="h-4 w-4" />
-                        </Button>
-                      </DropdownMenuTrigger>
-                      <DropdownMenuContent align="end">
-                        <DropdownMenuLabel>Actions</DropdownMenuLabel>
-                        <DropdownMenuSeparator />
-                        <DropdownMenuItem asChild>
-                          <Link href={`/admin/orders/${order.id}`}>
-                            <Eye className="mr-2 h-4 w-4" />
-                            View Details
+          {isLoading ? (
+            <div className="flex h-64 items-center justify-center">
+              <Loader2 className="h-8 w-8 animate-spin text-primary" />
+            </div>
+          ) : orders.length === 0 ? (
+            <div className="flex h-64 flex-col items-center justify-center text-center">
+              <Package className="h-12 w-12 text-muted-foreground/50" />
+              <h3 className="mt-4 text-lg font-semibold">No orders found</h3>
+              <p className="text-sm text-muted-foreground">
+                {searchQuery
+                  ? "Try adjusting your search or filters"
+                  : "Orders will appear here when customers submit applications"}
+              </p>
+            </div>
+          ) : (
+            <>
+              <Table>
+                <TableHeader>
+                  <TableRow>
+                    <TableHead className="w-12">
+                      <Checkbox
+                        checked={
+                          selectedOrders.length === orders.length &&
+                          orders.length > 0
+                        }
+                        onCheckedChange={toggleAll}
+                      />
+                    </TableHead>
+                    <TableHead>Order</TableHead>
+                    <TableHead>Customer</TableHead>
+                    <TableHead className="hidden md:table-cell">LLC Name</TableHead>
+                    <TableHead className="hidden lg:table-cell">State</TableHead>
+                    <TableHead>Amount</TableHead>
+                    <TableHead>Status</TableHead>
+                    <TableHead className="hidden sm:table-cell">Payment</TableHead>
+                    <TableHead className="text-right">Actions</TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {orders.map((order) => (
+                    <TableRow key={order.id}>
+                      <TableCell>
+                        <Checkbox
+                          checked={selectedOrders.includes(order.id)}
+                          onCheckedChange={() => toggleOrder(order.id)}
+                        />
+                      </TableCell>
+                      <TableCell>
+                        <div>
+                          <Link
+                            href={`/admin/orders/${order.orderNumber}`}
+                            className="font-medium hover:underline"
+                          >
+                            {order.orderNumber}
                           </Link>
-                        </DropdownMenuItem>
-                        <DropdownMenuItem asChild>
-                          <Link href={`/admin/orders/${order.id}/edit`}>
-                            <Edit className="mr-2 h-4 w-4" />
-                            Edit Order
-                          </Link>
-                        </DropdownMenuItem>
-                        <DropdownMenuItem>
-                          <Mail className="mr-2 h-4 w-4" />
-                          Send Email
-                        </DropdownMenuItem>
-                        <DropdownMenuSeparator />
-                        <DropdownMenuItem>
-                          <RefreshCcw className="mr-2 h-4 w-4" />
-                          Change Status
-                        </DropdownMenuItem>
-                      </DropdownMenuContent>
-                    </DropdownMenu>
-                  </TableCell>
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
+                          <p className="text-xs text-muted-foreground">
+                            {formatDate(order.createdAt)}
+                          </p>
+                        </div>
+                      </TableCell>
+                      <TableCell>
+                        <div>
+                          <p className="font-medium">{order.customerName}</p>
+                          <p className="text-xs text-muted-foreground">
+                            {order.customerEmail}
+                          </p>
+                        </div>
+                      </TableCell>
+                      <TableCell className="hidden md:table-cell">
+                        <div>
+                          <p>{order.llcName || "N/A"}</p>
+                          <p className="text-xs text-muted-foreground">
+                            {order.llcType === "single" ? "Single-Member" : order.llcType === "multi" ? "Multi-Member" : ""}
+                          </p>
+                        </div>
+                      </TableCell>
+                      <TableCell className="hidden lg:table-cell">
+                        {order.llcState || "N/A"}
+                      </TableCell>
+                      <TableCell>{formatPrice(order.totalUSD)}</TableCell>
+                      <TableCell>
+                        <Select
+                          value={order.status}
+                          onValueChange={(value: OrderStatus) =>
+                            handleStatusChange(order.orderNumber, value)
+                          }
+                        >
+                          <SelectTrigger
+                            className={`w-36 h-7 text-xs font-medium border ${statusColors[order.status]}`}
+                          >
+                            <SelectValue />
+                          </SelectTrigger>
+                          <SelectContent>
+                            {statusOptions.map((option) => (
+                              <SelectItem key={option.value} value={option.value}>
+                                {option.label}
+                              </SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
+                      </TableCell>
+                      <TableCell className="hidden sm:table-cell">
+                        <Badge
+                          variant="secondary"
+                          className={paymentColors[order.paymentStatus]}
+                        >
+                          {order.paymentStatus.toLowerCase()}
+                        </Badge>
+                      </TableCell>
+                      <TableCell className="text-right">
+                        <DropdownMenu>
+                          <DropdownMenuTrigger asChild>
+                            <Button variant="ghost" size="icon">
+                              <MoreHorizontal className="h-4 w-4" />
+                            </Button>
+                          </DropdownMenuTrigger>
+                          <DropdownMenuContent align="end">
+                            <DropdownMenuLabel>Actions</DropdownMenuLabel>
+                            <DropdownMenuSeparator />
+                            <DropdownMenuItem asChild>
+                              <Link href={`/admin/orders/${order.orderNumber}`}>
+                                <Eye className="mr-2 h-4 w-4" />
+                                View Details
+                              </Link>
+                            </DropdownMenuItem>
+                            <DropdownMenuItem asChild>
+                              <Link href={`/admin/orders/${order.orderNumber}/edit`}>
+                                <Edit className="mr-2 h-4 w-4" />
+                                Edit Order
+                              </Link>
+                            </DropdownMenuItem>
+                            <DropdownMenuItem>
+                              <Mail className="mr-2 h-4 w-4" />
+                              Send Email
+                            </DropdownMenuItem>
+                          </DropdownMenuContent>
+                        </DropdownMenu>
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+
+              {/* Pagination */}
+              {totalPages > 1 && (
+                <div className="flex items-center justify-between border-t pt-4 mt-4">
+                  <p className="text-sm text-muted-foreground">
+                    Showing {(currentPage - 1) * perPage + 1} to{" "}
+                    {Math.min(currentPage * perPage, totalOrders)} of {totalOrders} orders
+                  </p>
+                  <div className="flex items-center gap-2">
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
+                      disabled={currentPage === 1}
+                    >
+                      <ChevronLeft className="h-4 w-4" />
+                      Previous
+                    </Button>
+                    <div className="flex items-center gap-1">
+                      {Array.from({ length: totalPages }, (_, i) => i + 1)
+                        .filter((page) => {
+                          return (
+                            page === 1 ||
+                            page === totalPages ||
+                            Math.abs(page - currentPage) <= 1
+                          );
+                        })
+                        .map((page, index, array) => {
+                          const showEllipsis = index > 0 && page - array[index - 1] > 1;
+                          return (
+                            <div key={page} className="flex items-center">
+                              {showEllipsis && (
+                                <span className="px-2 text-muted-foreground">...</span>
+                              )}
+                              <Button
+                                variant={currentPage === page ? "default" : "outline"}
+                                size="sm"
+                                className="w-8 h-8 p-0"
+                                onClick={() => setCurrentPage(page)}
+                              >
+                                {page}
+                              </Button>
+                            </div>
+                          );
+                        })}
+                    </div>
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() => setCurrentPage((p) => Math.min(totalPages, p + 1))}
+                      disabled={currentPage === totalPages}
+                    >
+                      Next
+                      <ChevronRight className="h-4 w-4" />
+                    </Button>
+                  </div>
+                </div>
+              )}
+            </>
+          )}
         </CardContent>
       </Card>
     </div>

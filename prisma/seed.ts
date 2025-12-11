@@ -1,13 +1,18 @@
+import { PrismaClient } from "@prisma/client";
+import { PrismaPg } from "@prisma/adapter-pg";
+import { Pool } from "pg";
 import bcrypt from "bcryptjs";
-import { execSync } from "child_process";
+import "dotenv/config";
 
-// Use Prisma CLI for database operations since pg Pool has auth issues
-function runPrismaSQL(sql: string) {
-  const escaped = sql.replace(/"/g, '\\"');
-  execSync(`cd "${process.cwd()}" && echo "${escaped}" | npx prisma db execute --stdin`, {
-    stdio: "inherit",
-  });
-}
+const pool = new Pool({
+  host: process.env.DATABASE_HOST || "127.0.0.1",
+  port: parseInt(process.env.DATABASE_PORT || "5432"),
+  user: process.env.DATABASE_USER || "postgres",
+  password: process.env.DATABASE_PASSWORD,
+  database: process.env.DATABASE_NAME || "llcpad",
+});
+const adapter = new PrismaPg(pool);
+const prisma = new PrismaClient({ adapter });
 
 async function main() {
   console.log("Seeding database...");
@@ -297,4 +302,5 @@ main()
   })
   .finally(async () => {
     await prisma.$disconnect();
+    await pool.end();
   });

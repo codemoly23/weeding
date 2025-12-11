@@ -34,15 +34,37 @@ interface OrderDetails {
 
 function SuccessContent() {
   const searchParams = useSearchParams();
+  const orderId = searchParams.get("orderId");
   const sessionId = searchParams.get("session_id");
   const isDemo = searchParams.get("demo") === "true";
   const [loading, setLoading] = useState(true);
   const [order, setOrder] = useState<OrderDetails | null>(null);
 
   useEffect(() => {
-    if (sessionId || isDemo) {
-      // In production, fetch order details from API
-      // For now, simulate loading and use mock data
+    if (orderId) {
+      // Fetch real order details from API
+      fetch(`/api/orders/${orderId}`)
+        .then((res) => res.json())
+        .then((data) => {
+          if (data.orderNumber) {
+            setOrder({
+              orderId: data.orderNumber,
+              service: data.items?.[0]?.name || "LLC Formation",
+              package: "Standard",
+              state: data.llcState || "Wyoming",
+              llcName: data.llcName || "LLC",
+              total: parseFloat(data.totalUSD) || 0,
+              email: data.customerEmail || "",
+            });
+          }
+          setLoading(false);
+        })
+        .catch((error) => {
+          console.error("Error fetching order:", error);
+          setLoading(false);
+        });
+    } else if (sessionId || isDemo) {
+      // Demo mode fallback
       const timer = setTimeout(() => {
         setOrder({
           orderId: "LLC-2024-" + Math.random().toString(36).substring(2, 8).toUpperCase(),
@@ -59,7 +81,7 @@ function SuccessContent() {
     } else {
       setLoading(false);
     }
-  }, [sessionId, isDemo]);
+  }, [orderId, sessionId, isDemo]);
 
   if (loading) {
     return (
@@ -74,7 +96,7 @@ function SuccessContent() {
     );
   }
 
-  if (!sessionId && !isDemo) {
+  if (!orderId && !sessionId && !isDemo) {
     return (
       <div className="container mx-auto max-w-2xl px-4 py-16">
         <Card>
