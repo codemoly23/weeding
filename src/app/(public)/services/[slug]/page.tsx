@@ -19,6 +19,7 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 import { services, getServiceBySlug, getAllServiceSlugs } from "@/lib/data/services";
+import { getServiceForm } from "@/lib/data/service-forms";
 import { cn } from "@/lib/utils";
 import { MultiJsonLd } from "@/components/seo/json-ld";
 import {
@@ -58,6 +59,12 @@ export default async function ServicePage({ params }: PageProps) {
   }
 
   const Icon = service.icon;
+
+  // Determine checkout URL based on whether service has a form config
+  const hasFormConfig = getServiceForm(service.slug) !== undefined;
+  const checkoutBaseUrl = hasFormConfig
+    ? `/checkout/${service.slug}`
+    : `/checkout?service=${service.slug}`;
 
   const schemaData: Record<string, unknown>[] = [
     generateServiceSchema({
@@ -123,7 +130,7 @@ export default async function ServicePage({ params }: PageProps) {
             {/* CTA */}
             <div className="mt-8 flex flex-wrap gap-4">
               <Button size="lg" asChild>
-                <Link href={`/checkout?service=${service.slug}`}>
+                <Link href={checkoutBaseUrl}>
                   Get Started - From ${service.startingPrice}
                   <ArrowRight className="ml-2 h-4 w-4" />
                 </Link>
@@ -189,7 +196,11 @@ export default async function ServicePage({ params }: PageProps) {
                     asChild
                   >
                     <Link
-                      href={`/checkout?service=${service.slug}&package=${pkg.name.toLowerCase()}`}
+                      href={
+                        hasFormConfig
+                          ? `/checkout/${service.slug}?package=${pkg.name.toLowerCase()}`
+                          : `/checkout?service=${service.slug}&package=${pkg.name.toLowerCase()}`
+                      }
                     >
                       Select {pkg.name}
                     </Link>
