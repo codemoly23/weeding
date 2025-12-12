@@ -18,6 +18,11 @@ import {
   Info,
   Plus,
   Trash2,
+  Mail,
+  Lock,
+  LogIn,
+  Eye,
+  EyeOff,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -50,6 +55,7 @@ import { cn } from "@/lib/utils";
 import { services } from "@/lib/data/services";
 import { StateSelector, type State } from "@/components/ui/state-selector";
 import { CountrySelector, ELIGIBLE_COUNTRIES } from "@/components/ui/country-selector";
+import { Header } from "@/components/layout/header";
 import { toast } from "sonner";
 
 const steps = [
@@ -69,6 +75,14 @@ const managementTypes = [
   { value: "manager", label: "Manager-Managed", description: "Designated manager(s) run operations" },
 ];
 
+interface LoggedInUser {
+  id: string;
+  email: string;
+  name: string;
+  role: string;
+  phone?: string;
+}
+
 function CheckoutForm() {
   const searchParams = useSearchParams();
   const router = useRouter();
@@ -76,6 +90,17 @@ function CheckoutForm() {
   const [currentStep, setCurrentStep] = useState(1);
   const [isLoading, setIsLoading] = useState(false);
   const [errors, setErrors] = useState<Record<string, string>>({});
+
+  // Logged-in user state
+  const [loggedInUser, setLoggedInUser] = useState<LoggedInUser | null>(null);
+
+  // Inline login state
+  const [showInlineLogin, setShowInlineLogin] = useState(false);
+  const [loginEmail, setLoginEmail] = useState("");
+  const [loginPassword, setLoginPassword] = useState("");
+  const [showLoginPassword, setShowLoginPassword] = useState(false);
+  const [loginError, setLoginError] = useState("");
+  const [isLoggingIn, setIsLoggingIn] = useState(false);
 
   // Service & Package selection
   const [selectedService, setSelectedService] = useState(
@@ -100,6 +125,72 @@ function CheckoutForm() {
         .catch(console.error);
     }
   }, [searchParams]);
+
+  // Check for logged-in user on mount
+  useEffect(() => {
+    const storedUser = localStorage.getItem("user");
+    if (storedUser) {
+      try {
+        const user = JSON.parse(storedUser);
+        if (user.id && user.email) {
+          setLoggedInUser(user);
+        }
+      } catch {
+        localStorage.removeItem("user");
+      }
+    }
+  }, []);
+
+  // Pre-fill contact fields from logged-in user
+  useEffect(() => {
+    if (loggedInUser) {
+      const nameParts = loggedInUser.name.split(" ");
+      const firstName = nameParts[0] || "";
+      const lastName = nameParts.slice(1).join(" ") || "";
+
+      setFormData((prev) => ({
+        ...prev,
+        ownerFirstName: prev.ownerFirstName || firstName,
+        ownerLastName: prev.ownerLastName || lastName,
+        ownerEmail: prev.ownerEmail || loggedInUser.email,
+        ownerPhone: prev.ownerPhone || loggedInUser.phone || "",
+      }));
+    }
+  }, [loggedInUser]);
+
+  // Handle inline login
+  const handleInlineLogin = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsLoggingIn(true);
+    setLoginError("");
+
+    try {
+      const response = await fetch("/api/auth/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email: loginEmail, password: loginPassword }),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        setLoginError(data.error || "Invalid email or password");
+        return;
+      }
+
+      // Store user data and update state
+      localStorage.setItem("user", JSON.stringify(data.user));
+      setLoggedInUser(data.user);
+      setShowInlineLogin(false);
+      // Dispatch event for header update
+      window.dispatchEvent(new Event("user-auth-change"));
+      toast.success(`Welcome back, ${data.user.name}!`);
+    } catch {
+      setLoginError("An error occurred. Please try again.");
+    } finally {
+      setIsLoggingIn(false);
+    }
+  };
 
   const [formData, setFormData] = useState({
     // LLC Details
@@ -395,15 +486,18 @@ function CheckoutForm() {
       if (!formData.ownerPassportNumber.trim()) {
         newErrors.ownerPassportNumber = "Passport number is required for international LLC owners";
       }
-      if (!formData.password) {
-        newErrors.password = "Password is required to create your account";
-      } else if (formData.password.length < 8) {
-        newErrors.password = "Password must be at least 8 characters";
-      }
-      if (!formData.confirmPassword) {
-        newErrors.confirmPassword = "Please confirm your password";
-      } else if (formData.password !== formData.confirmPassword) {
-        newErrors.confirmPassword = "Passwords do not match";
+      // Only require password for non-logged-in users
+      if (!loggedInUser) {
+        if (!formData.password) {
+          newErrors.password = "Password is required to create your account";
+        } else if (formData.password.length < 8) {
+          newErrors.password = "Password must be at least 8 characters";
+        }
+        if (!formData.confirmPassword) {
+          newErrors.confirmPassword = "Please confirm your password";
+        } else if (formData.password !== formData.confirmPassword) {
+          newErrors.confirmPassword = "Passwords do not match";
+        }
       }
     }
 
@@ -488,8 +582,12 @@ function CheckoutForm() {
             passportNumber: formData.ownerPassportNumber,
             dateOfBirth: formData.ownerDateOfBirth,
             ownershipPercentage: formData.ownershipPercentage,
-            password: formData.password,
+            // Only include password for new users
+            ...(loggedInUser ? {} : { password: formData.password }),
           },
+
+          // Include userId for logged-in users
+          ...(loggedInUser ? { userId: loggedInUser.id } : {}),
 
           // Additional Members
           additionalMembers: formData.additionalMembers,
@@ -530,17 +628,19 @@ function CheckoutForm() {
   };
 
   return (
-    <TooltipProvider>
-      <div className="min-h-screen bg-muted/30 py-8">
-        <div className="container mx-auto px-4">
-          {/* Back Link */}
-          <Link
-            href="/"
-            className="mb-6 inline-flex items-center text-sm text-muted-foreground hover:text-foreground"
-          >
-            <ArrowLeft className="mr-2 h-4 w-4" />
-            Back to Home
-          </Link>
+    <>
+      <Header />
+      <TooltipProvider>
+        <div className="min-h-screen bg-muted/30 py-8">
+          <div className="container mx-auto px-4">
+            {/* Back Link */}
+            <Link
+              href="/"
+              className="mb-6 inline-flex items-center text-sm text-muted-foreground hover:text-foreground"
+            >
+              <ArrowLeft className="mr-2 h-4 w-4" />
+              Back to Home
+            </Link>
 
           {/* Progress Steps */}
           <div className="mb-8">
@@ -1317,52 +1417,171 @@ function CheckoutForm() {
 
                     <Separator />
 
-                    {/* Account Credentials */}
-                    <div className="space-y-4">
-                      <h3 className="font-semibold">Create Your Account</h3>
-                      <div className="rounded-lg bg-blue-50 p-3 text-sm text-blue-700">
-                        <div className="flex items-start gap-2">
-                          <Info className="mt-0.5 h-4 w-4 shrink-0" />
-                          <p>
-                            Create a password to access your dashboard and track your application status after submission.
-                          </p>
+                    {/* Account Section - Different for logged-in vs new users */}
+                    {loggedInUser ? (
+                      <div className="space-y-4">
+                        <h3 className="font-semibold">Your Account</h3>
+                        <div className="rounded-lg bg-green-50 border border-green-200 p-4">
+                          <div className="flex items-center gap-3">
+                            <div className="flex h-10 w-10 items-center justify-center rounded-full bg-green-100">
+                              <User className="h-5 w-5 text-green-600" />
+                            </div>
+                            <div>
+                              <p className="font-medium text-green-800">{loggedInUser.name}</p>
+                              <p className="text-sm text-green-600">{loggedInUser.email}</p>
+                            </div>
+                          </div>
                         </div>
                       </div>
-                      <div className="grid gap-4 sm:grid-cols-2">
-                        <div className="space-y-2">
-                          <Label htmlFor="password">Password *</Label>
-                          <Input
-                            id="password"
-                            name="password"
-                            type="password"
-                            value={formData.password}
-                            onChange={handleInputChange}
-                            onBlur={handleBlur}
-                            placeholder="Min. 8 characters"
-                            className={errors.password ? "border-destructive" : ""}
-                          />
-                          {errors.password && (
-                            <p className="text-sm text-destructive">{errors.password}</p>
-                          )}
-                        </div>
-                        <div className="space-y-2">
-                          <Label htmlFor="confirmPassword">Confirm Password *</Label>
-                          <Input
-                            id="confirmPassword"
-                            name="confirmPassword"
-                            type="password"
-                            value={formData.confirmPassword}
-                            onChange={handleInputChange}
-                            onBlur={handleBlur}
-                            placeholder="Re-enter password"
-                            className={errors.confirmPassword ? "border-destructive" : ""}
-                          />
-                          {errors.confirmPassword && (
-                            <p className="text-sm text-destructive">{errors.confirmPassword}</p>
-                          )}
-                        </div>
+                    ) : (
+                      <div className="space-y-4">
+                        <h3 className="font-semibold">Create Your Account</h3>
+
+                        {/* Inline Login Option */}
+                        {showInlineLogin ? (
+                          <div className="rounded-lg border-2 border-amber-200 bg-amber-50 p-4">
+                            <div className="flex items-start gap-3 mb-4">
+                              <LogIn className="h-5 w-5 text-amber-600 mt-0.5" />
+                              <div>
+                                <h4 className="font-medium text-amber-800">Login to Your Account</h4>
+                                <p className="text-sm text-amber-700">
+                                  Login below to continue with your order.
+                                </p>
+                              </div>
+                            </div>
+
+                            <form onSubmit={handleInlineLogin} className="space-y-4 bg-white rounded-lg p-4 border">
+                              {loginError && (
+                                <div className="rounded-lg bg-destructive/10 p-3 text-sm text-destructive">
+                                  {loginError}
+                                </div>
+                              )}
+                              <div className="space-y-2">
+                                <Label htmlFor="login_email">Email</Label>
+                                <div className="relative">
+                                  <Mail className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+                                  <Input
+                                    id="login_email"
+                                    type="email"
+                                    placeholder="your@email.com"
+                                    value={loginEmail}
+                                    onChange={(e) => setLoginEmail(e.target.value)}
+                                    className="pl-10"
+                                    required
+                                    disabled={isLoggingIn}
+                                  />
+                                </div>
+                              </div>
+                              <div className="space-y-2">
+                                <Label htmlFor="login_password">Password</Label>
+                                <div className="relative">
+                                  <Lock className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+                                  <Input
+                                    id="login_password"
+                                    type={showLoginPassword ? "text" : "password"}
+                                    placeholder="••••••••"
+                                    value={loginPassword}
+                                    onChange={(e) => setLoginPassword(e.target.value)}
+                                    className="pl-10 pr-10"
+                                    required
+                                    disabled={isLoggingIn}
+                                  />
+                                  <button
+                                    type="button"
+                                    onClick={() => setShowLoginPassword(!showLoginPassword)}
+                                    className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
+                                  >
+                                    {showLoginPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                                  </button>
+                                </div>
+                              </div>
+                              <div className="flex gap-2">
+                                <Button type="submit" disabled={isLoggingIn} className="flex-1">
+                                  {isLoggingIn ? (
+                                    <>
+                                      <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                                      Logging in...
+                                    </>
+                                  ) : (
+                                    <>
+                                      <LogIn className="mr-2 h-4 w-4" />
+                                      Login & Continue
+                                    </>
+                                  )}
+                                </Button>
+                                <Button
+                                  type="button"
+                                  variant="outline"
+                                  onClick={() => {
+                                    setShowInlineLogin(false);
+                                    setLoginError("");
+                                  }}
+                                >
+                                  Cancel
+                                </Button>
+                              </div>
+                            </form>
+                          </div>
+                        ) : (
+                          <>
+                            <div className="rounded-lg bg-blue-50 p-3 text-sm text-blue-700">
+                              <div className="flex items-start gap-2">
+                                <Info className="mt-0.5 h-4 w-4 shrink-0" />
+                                <p>
+                                  Create a password to access your dashboard and track your application status after submission.
+                                </p>
+                              </div>
+                            </div>
+                            <div className="grid gap-4 sm:grid-cols-2">
+                              <div className="space-y-2">
+                                <Label htmlFor="password">Password *</Label>
+                                <Input
+                                  id="password"
+                                  name="password"
+                                  type="password"
+                                  value={formData.password}
+                                  onChange={handleInputChange}
+                                  onBlur={handleBlur}
+                                  placeholder="Min. 8 characters"
+                                  className={errors.password ? "border-destructive" : ""}
+                                />
+                                {errors.password && (
+                                  <p className="text-sm text-destructive">{errors.password}</p>
+                                )}
+                              </div>
+                              <div className="space-y-2">
+                                <Label htmlFor="confirmPassword">Confirm Password *</Label>
+                                <Input
+                                  id="confirmPassword"
+                                  name="confirmPassword"
+                                  type="password"
+                                  value={formData.confirmPassword}
+                                  onChange={handleInputChange}
+                                  onBlur={handleBlur}
+                                  placeholder="Re-enter password"
+                                  className={errors.confirmPassword ? "border-destructive" : ""}
+                                />
+                                {errors.confirmPassword && (
+                                  <p className="text-sm text-destructive">{errors.confirmPassword}</p>
+                                )}
+                              </div>
+                            </div>
+                            <div className="rounded-lg bg-muted p-4 text-center">
+                              <p className="text-sm text-muted-foreground">
+                                Already have an account?{" "}
+                                <button
+                                  type="button"
+                                  onClick={() => setShowInlineLogin(true)}
+                                  className="text-primary font-medium hover:underline"
+                                >
+                                  Login here
+                                </button>
+                              </p>
+                            </div>
+                          </>
+                        )}
                       </div>
-                    </div>
+                    )}
 
                     <Separator />
 
@@ -1670,9 +1889,10 @@ function CheckoutForm() {
               </Card>
             </div>
           </div>
+          </div>
         </div>
-      </div>
-    </TooltipProvider>
+      </TooltipProvider>
+    </>
   );
 }
 

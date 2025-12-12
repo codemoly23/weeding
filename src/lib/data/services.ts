@@ -488,17 +488,36 @@ export const services = [
   {
     slug: "dba-filing",
     name: "DBA / Trade Name",
-    shortDesc: "Register a 'Doing Business As' name for your LLC.",
+    shortDesc: "Run multiple brands under one LLC. A DBA lets you accept payments, open bank accounts, and market your business under any name you choose - without forming a new company.",
     description: `
-      <p>A DBA (Doing Business As), also known as a fictitious name or trade name, allows your LLC to operate under a different name than your registered business name.</p>
+      <p>Want to launch a new brand without the hassle and cost of forming another LLC? A DBA (Doing Business As) is your answer. It's the simplest way to operate under a different name while keeping all the legal protection of your existing LLC.</p>
 
-      <h3>Why Use a DBA?</h3>
+      <h3>What Exactly is a DBA?</h3>
+      <p>A DBA - also called a fictitious name, trade name, or assumed name - is simply a registered alias for your business. Your LLC "ABC Holdings LLC" can do business as "Fresh Organic Foods" or "TechGadget Store" without any legal confusion.</p>
+
+      <h3>Why Smart Business Owners Use DBAs</h3>
       <ul>
-        <li>Operate multiple brands under one LLC</li>
-        <li>Create a more marketable business name</li>
-        <li>Open bank accounts under the DBA name</li>
-        <li>Accept payments under your trade name</li>
+        <li><strong>Multiple Brands, One LLC:</strong> Run an Amazon store, a Shopify site, and a consulting practice - all under one LLC with different DBAs. Save thousands on formation fees and annual reports.</li>
+        <li><strong>Professional Branding:</strong> "Smith & Johnson Marketing" sounds more professional than "SJ Holdings LLC" to potential clients.</li>
+        <li><strong>Banking Flexibility:</strong> Open separate bank accounts for each DBA, making accounting and cash flow management much simpler.</li>
+        <li><strong>Test New Markets:</strong> Launch a new product line under a fresh brand without committing to a whole new business entity.</li>
+        <li><strong>Accept Payments Properly:</strong> Customers write checks to your business name, not your LLC's legal name. Without a DBA, banks won't accept them.</li>
       </ul>
+
+      <h3>DBA vs. New LLC - Which Should You Choose?</h3>
+      <p>Here's a simple rule: if the new business has significantly different liability risks or you want separate ownership, form a new LLC. If you just need a different public-facing name for marketing, a DBA is faster, cheaper, and easier to manage.</p>
+
+      <h3>The Filing Process</h3>
+      <p>DBA requirements vary by state and sometimes by county. Some states file at the state level, others require county filings, and a few need both. We handle the research and paperwork so you don't have to figure out the local rules.</p>
+      <ol>
+        <li>We verify your desired name is available</li>
+        <li>Prepare and file the appropriate forms</li>
+        <li>Handle any publication requirements (some states require newspaper publication)</li>
+        <li>Deliver your official DBA certificate</li>
+      </ol>
+
+      <h3>How Long Does a DBA Last?</h3>
+      <p>Most DBAs are valid for 5 years and need renewal. Some states like California require renewal every 5 years with a new filing fee. We'll remind you before expiration so your business name stays protected.</p>
     `,
     icon: FilePen,
     image: "/images/services/dba.jpg",
@@ -507,81 +526,34 @@ export const services = [
     popular: false,
     features: [
       "Name availability search",
-      "State DBA filing",
+      "State/county DBA filing",
+      "Publication handling (if required)",
       "Certificate of registration",
-      "Digital copies",
+      "Digital document delivery",
+      "Renewal reminders",
     ],
     packages: [
       {
         name: "Standard",
         price: 99,
-        description: "DBA registration",
+        description: "Complete DBA registration service",
         features: [
-          "Name Search",
-          "State Filing",
-          "Certificate",
-          "Email Support",
+          "Name Availability Search",
+          "State/County Filing",
+          "DBA Certificate",
+          "Digital Copies",
         ],
-        notIncluded: [],
+        notIncluded: ["Publication Fee"],
       },
-    ],
-    faqs: [
       {
-        question: "What's the difference between DBA and LLC?",
-        answer: "An LLC is a legal business structure, while a DBA is just an alternate name your LLC can use. The DBA doesn't create a new legal entity.",
-      },
-    ],
-  },
-  {
-    slug: "operating-agreement",
-    name: "Operating Agreement",
-    shortDesc: "Get a customized Operating Agreement for your LLC.",
-    description: `
-      <p>An Operating Agreement is a key document that outlines the ownership structure, management rules, and operating procedures of your LLC. While not always legally required, it's essential for opening bank accounts and protecting your business.</p>
-
-      <h3>What's Included</h3>
-      <ul>
-        <li>Customized to your LLC structure</li>
-        <li>Member/manager provisions</li>
-        <li>Profit distribution rules</li>
-        <li>Voting and decision-making procedures</li>
-        <li>Buy-sell provisions</li>
-      </ul>
-    `,
-    icon: ScrollText,
-    image: "/images/services/operating-agreement.jpg",
-    startingPrice: 149,
-    category: "formation" as ServiceCategory,
-    popular: false,
-    features: [
-      "Custom Operating Agreement",
-      "Single or multi-member",
-      "Member-managed or manager-managed",
-      "Profit distribution terms",
-      "Editable document",
-    ],
-    packages: [
-      {
-        name: "Standard",
+        name: "Complete",
         price: 149,
-        description: "Custom Operating Agreement",
-        features: [
-          "Custom Document",
-          "All LLC Types",
-          "Digital Delivery",
-          "1 Revision",
-        ],
-        notIncluded: ["Attorney Review"],
-      },
-      {
-        name: "Premium",
-        price: 249,
-        description: "With legal review",
+        description: "With publication handling",
         features: [
           "Everything in Standard",
-          "Attorney Review",
-          "Unlimited Revisions",
-          "Phone Consultation",
+          "Newspaper Publication",
+          "Proof of Publication",
+          "Priority Processing",
         ],
         notIncluded: [],
         popular: true,
@@ -589,8 +561,121 @@ export const services = [
     ],
     faqs: [
       {
-        question: "Is an Operating Agreement required?",
-        answer: "Some states require it, but even when not required, banks typically need to see an Operating Agreement to open a business account.",
+        question: "What's the difference between a DBA and forming a new LLC?",
+        answer: "A DBA is just an alternate name for your existing LLC - it doesn't create a new legal entity or provide additional liability protection. It's faster (days vs weeks) and cheaper ($99 vs $200+) than forming a new LLC. Choose a DBA when you want a different public name; choose a new LLC when you need separate liability protection or different ownership.",
+      },
+      {
+        question: "Can I open a bank account with my DBA name?",
+        answer: "Yes! That's one of the main reasons to get a DBA. Once registered, you can open a business bank account under your DBA name, accept checks made out to that name, and process credit cards under your trade name.",
+      },
+      {
+        question: "Do I need a DBA if my LLC name is the same as my business name?",
+        answer: "No. If your LLC is registered as 'Joe's Pizza Shop LLC' and you operate as 'Joe's Pizza Shop,' you don't need a DBA. You only need one if you want to operate under a different name than your legal LLC name.",
+      },
+      {
+        question: "How many DBAs can one LLC have?",
+        answer: "There's no limit! Your single LLC can have multiple DBAs, each for a different brand or business line. Many entrepreneurs use this strategy to test new markets or run completely different businesses under one legal entity.",
+      },
+      {
+        question: "Does a DBA protect my business name like a trademark?",
+        answer: "No. A DBA only registers your right to use that name for business purposes in your state/county - it doesn't prevent others from using the same name elsewhere. For nationwide brand protection, you need a trademark registration.",
+      },
+    ],
+  },
+  {
+    slug: "operating-agreement",
+    name: "Operating Agreement",
+    shortDesc: "Your LLC's rulebook - required by banks, protects you from partners, and proves you're a real business. Custom-drafted for single or multi-member LLCs.",
+    description: `
+      <p>Try opening a US bank account without an Operating Agreement - you'll be turned away at the door. This document isn't just paperwork; it's the rulebook that governs how your LLC operates, and banks, payment processors, and partners all want to see it.</p>
+
+      <h3>Why Your LLC Absolutely Needs an Operating Agreement</h3>
+      <ul>
+        <li><strong>Banks Require It:</strong> Mercury, Relay, Chase, Bank of America - they all ask for your Operating Agreement during account opening. No agreement, no account. It's that simple.</li>
+        <li><strong>Protects Your Limited Liability:</strong> Without an Operating Agreement, courts may decide your LLC isn't a "real" separate entity. This is called "piercing the corporate veil" - and it exposes your personal assets to business debts.</li>
+        <li><strong>Prevents Partner Disputes:</strong> Who gets what percentage of profits? What happens if a member wants out? Who makes decisions? Without written rules, disagreements can destroy friendships and businesses.</li>
+        <li><strong>Overrides Bad State Default Rules:</strong> If you don't have an Operating Agreement, your state's default LLC laws apply - and they might not be what you want. For example, some states split profits equally regardless of investment amounts.</li>
+      </ul>
+
+      <h3>What's Covered in Your Operating Agreement</h3>
+      <ul>
+        <li><strong>Ownership Percentages:</strong> Who owns what percentage of the LLC</li>
+        <li><strong>Capital Contributions:</strong> How much each member invested</li>
+        <li><strong>Profit & Loss Distribution:</strong> How money gets divided (doesn't have to match ownership!)</li>
+        <li><strong>Management Structure:</strong> Member-managed (all owners run it) or Manager-managed (designated managers)</li>
+        <li><strong>Voting Rights:</strong> How decisions are made, what requires unanimous consent</li>
+        <li><strong>Adding/Removing Members:</strong> Process for bringing in new partners or buying out existing ones</li>
+        <li><strong>Dissolution:</strong> What happens if the business closes</li>
+      </ul>
+
+      <h3>Single-Member vs. Multi-Member - Why It Matters</h3>
+      <p><strong>Single-Member LLC:</strong> You might think "I'm the only owner, why do I need rules?" But an Operating Agreement proves to banks and courts that your LLC is a legitimate separate entity, not just you operating under a different name. It also sets up succession planning if something happens to you.</p>
+      <p><strong>Multi-Member LLC:</strong> This is where things get critical. Your Operating Agreement is the contract between you and your partners. Get it wrong, and you're setting up future lawsuits. We've seen partnerships dissolve over disagreements that a good Operating Agreement would have prevented.</p>
+
+      <h3>Member-Managed vs. Manager-Managed</h3>
+      <p><strong>Member-Managed:</strong> All owners participate in daily operations and decision-making. Best for small LLCs where all members are actively involved.</p>
+      <p><strong>Manager-Managed:</strong> Specific people (can be members or outsiders) handle operations while other members are passive investors. Better for LLCs with silent partners or outside investors.</p>
+    `,
+    icon: ScrollText,
+    image: "/images/services/operating-agreement.jpg",
+    startingPrice: 149,
+    category: "formation" as ServiceCategory,
+    popular: false,
+    features: [
+      "Customized to your specific LLC",
+      "Single-member or multi-member versions",
+      "Member-managed or manager-managed",
+      "Profit distribution provisions",
+      "Buy-sell and succession clauses",
+      "Editable Word document",
+    ],
+    packages: [
+      {
+        name: "Standard",
+        price: 149,
+        description: "Custom Operating Agreement for your LLC",
+        features: [
+          "Customized Document",
+          "All LLC Structures",
+          "Digital Delivery (Word + PDF)",
+          "1 Revision Round",
+        ],
+        notIncluded: ["Attorney Review"],
+      },
+      {
+        name: "Premium",
+        price: 249,
+        description: "With attorney review - Best for partnerships",
+        features: [
+          "Everything in Standard",
+          "Attorney Review & Feedback",
+          "Unlimited Revisions",
+          "15-Min Phone Consultation",
+        ],
+        notIncluded: [],
+        popular: true,
+      },
+    ],
+    faqs: [
+      {
+        question: "Is an Operating Agreement legally required?",
+        answer: "Only a few states (like California, New York, Missouri) legally require it. But here's the thing - every bank requires one to open a business account. And without one, you risk losing your limited liability protection in court. So while it may not be 'required' by your state, it's required for actually running your business.",
+      },
+      {
+        question: "Can I write my own Operating Agreement?",
+        answer: "Technically yes, but we don't recommend it. A poorly drafted agreement can create more problems than having none at all. Ambiguous language leads to disputes, and missing clauses leave gaps that default to state law (which might not favor you). Our agreements are drafted based on thousands of LLCs and cover scenarios most people don't think about.",
+      },
+      {
+        question: "I'm the only member - do I still need one?",
+        answer: "Absolutely. Single-member Operating Agreements serve two critical purposes: (1) They prove to banks and the IRS that your LLC is a legitimate separate entity, and (2) They establish what happens to your LLC if you become incapacitated or pass away. Without one, your family may have difficulty accessing business accounts.",
+      },
+      {
+        question: "Can I change my Operating Agreement later?",
+        answer: "Yes! Operating Agreements can be amended at any time with member consent. Common amendments include adding new members, changing profit distributions, or updating management structure. We provide your document in editable format so you can make changes as your business evolves.",
+      },
+      {
+        question: "What's the difference between Articles of Organization and Operating Agreement?",
+        answer: "Articles of Organization is the public document filed with the state to legally create your LLC - it's very basic (just name, address, registered agent). The Operating Agreement is a private internal document that contains the detailed rules for how your LLC operates. Banks need both.",
       },
     ],
   },
@@ -686,17 +771,48 @@ export const services = [
   {
     slug: "compliance",
     name: "Annual Compliance",
-    shortDesc: "Stay compliant with annual reports, renewals, and state filings.",
+    shortDesc: "Never worry about state deadlines again. We track your annual reports, file on time, and keep your LLC in good standing - so you don't wake up to penalties or a dissolved business.",
     description: `
-      <p>Keep your LLC in good standing with our annual compliance service. We track deadlines and file required documents so you never miss a renewal.</p>
+      <p>Miss one annual report deadline and your LLC can lose its "good standing" status. Miss another, and some states will administratively dissolve your business entirely. For international entrepreneurs managing their US LLC from abroad, keeping track of different state deadlines is a nightmare we solve for you.</p>
 
-      <h3>What's Covered</h3>
+      <h3>What Happens If You Miss Compliance Deadlines?</h3>
+      <p>The consequences are real and expensive:</p>
       <ul>
-        <li>Annual report filing</li>
-        <li>Registered agent renewal</li>
-        <li>Compliance monitoring</li>
-        <li>State fee payment assistance</li>
+        <li><strong>Late Fees:</strong> States charge penalty fees ranging from $25 to $200+ for late filings</li>
+        <li><strong>Loss of Good Standing:</strong> Your LLC status changes to "not in good standing" - banks may freeze accounts, contracts become harder to sign</li>
+        <li><strong>Administrative Dissolution:</strong> After continued non-compliance, states can dissolve your LLC without your consent</li>
+        <li><strong>Loss of Name Protection:</strong> Someone else could register your business name while your LLC is dissolved</li>
+        <li><strong>Personal Liability:</strong> Operating a dissolved LLC can expose you personally to business debts</li>
       </ul>
+
+      <h3>What We Handle For You</h3>
+      <ul>
+        <li><strong>Annual Report Filing:</strong> We prepare and file your annual/biennial report before the deadline</li>
+        <li><strong>Franchise Tax:</strong> States like Delaware and California require annual franchise tax payments - we handle the paperwork</li>
+        <li><strong>Registered Agent Coordination:</strong> Ensure your registered agent information stays current</li>
+        <li><strong>Address Updates:</strong> If your business address changes, we update state records</li>
+        <li><strong>Good Standing Verification:</strong> We confirm your filing was accepted and your status is current</li>
+      </ul>
+
+      <h3>State-by-State Requirements (2025)</h3>
+      <ul>
+        <li><strong>Wyoming:</strong> Annual report due on anniversary date. $62 state fee (minimum). We file 30 days before deadline.</li>
+        <li><strong>Delaware:</strong> Annual franchise tax due June 1st. $300 minimum. Miss it and you'll pay $200+ in penalties.</li>
+        <li><strong>New Mexico:</strong> No annual report required! One of the reasons we recommend this state for low-maintenance LLCs.</li>
+        <li><strong>Florida:</strong> Annual report due May 1st. $138.75 fee. Late fee of $400 kicks in immediately after deadline.</li>
+        <li><strong>Texas:</strong> No annual report, but you must file a "No Tax Due" franchise tax report. Due May 15th.</li>
+      </ul>
+
+      <h3>How Our Service Works</h3>
+      <ol>
+        <li><strong>We Track Everything:</strong> Your deadlines are in our system with multiple reminder checkpoints</li>
+        <li><strong>60-Day Notice:</strong> You'll get an email 60 days before any deadline</li>
+        <li><strong>We Prepare & File:</strong> Our team handles the paperwork and submits on time</li>
+        <li><strong>Confirmation:</strong> You receive proof of filing and updated good standing status</li>
+      </ol>
+
+      <h3>Peace of Mind for International Owners</h3>
+      <p>When you're running your business from Bangladesh, India, or anywhere outside the US, the last thing you need is to track American state government deadlines. Different states, different dates, different requirements - we handle it all so you can focus on growing your business.</p>
     `,
     icon: Briefcase,
     image: "/images/services/compliance.jpg",
@@ -704,42 +820,89 @@ export const services = [
     category: "compliance" as ServiceCategory,
     popular: false,
     features: [
-      "Annual report filing",
-      "Deadline tracking",
-      "Compliance alerts",
-      "Good standing maintenance",
+      "Annual report preparation & filing",
+      "Franchise tax filing assistance",
+      "60/30/7 day deadline reminders",
+      "Good standing verification",
+      "State fee payment coordination",
+      "Document storage & access",
     ],
     packages: [
       {
         name: "Annual",
         price: 149,
-        description: "Per year + state fees",
+        description: "Complete annual compliance service (+ state fees)",
         features: [
           "Annual Report Filing",
           "Deadline Monitoring",
-          "Compliance Alerts",
-          "Support",
+          "Email Reminders",
+          "Good Standing Check",
         ],
         notIncluded: [],
       },
     ],
-    faqs: [],
+    faqs: [
+      {
+        question: "What's included in the $149 fee vs. state fees?",
+        answer: "Our $149 fee covers the service - deadline tracking, document preparation, filing, and support. State fees (like Wyoming's $62 annual report fee or Delaware's $300 franchise tax) are separate and vary by state. We'll tell you the exact state fee before we file so there are no surprises.",
+      },
+      {
+        question: "When is my annual report due?",
+        answer: "It depends on your state. Wyoming reports are due on your LLC's formation anniversary. Delaware franchise tax is due June 1st. Some states use calendar year deadlines. When you sign up, we'll tell you your exact deadline and add it to our tracking system.",
+      },
+      {
+        question: "What if I already missed a deadline?",
+        answer: "Don't panic - most states allow late filing with penalties. The sooner you file, the lower the penalties. Contact us immediately and we'll assess the situation, calculate any late fees, and file as quickly as possible to restore your good standing.",
+      },
+      {
+        question: "My state (New Mexico) has no annual report - do I still need this service?",
+        answer: "New Mexico is one of the few states with no annual report requirement. If that's your only LLC and nothing has changed, you technically don't need annual compliance filing. However, you should still maintain your registered agent service and keep your Operating Agreement updated.",
+      },
+      {
+        question: "What happens if my LLC loses good standing?",
+        answer: "Losing good standing means your LLC is flagged for non-compliance. Banks may question your account, you might have trouble signing contracts, and continued non-compliance leads to administrative dissolution. The good news: it's usually fixable by filing the overdue reports and paying late fees.",
+      },
+    ],
   },
   {
     slug: "amendment-filing",
     name: "Amendment Filing",
-    shortDesc: "Update your LLC information with the state.",
+    shortDesc: "Changed your LLC name, address, or ownership? File the official amendment with the state. Keep your records current and avoid compliance issues.",
     description: `
-      <p>When your business details change, you need to file an amendment with the state. This includes changes to your business name, registered agent, principal address, or member/manager information.</p>
+      <p>Your LLC isn't set in stone. Business names evolve, addresses change, partners come and go. When these changes happen, your state needs to know - that's what an amendment filing does. It officially updates your LLC's public record.</p>
 
-      <h3>Common Amendments</h3>
+      <h3>When You Need to File an Amendment</h3>
       <ul>
-        <li>Business name change</li>
-        <li>Registered agent change</li>
-        <li>Principal address change</li>
-        <li>Member/manager changes</li>
-        <li>Purpose statement updates</li>
+        <li><strong>LLC Name Change:</strong> Rebranding? Found a better name? Changing your LLC's legal name requires a state amendment. (Note: This is different from a DBA, which adds an alternate name without changing the legal name.)</li>
+        <li><strong>Principal Address Change:</strong> Moving your business headquarters? The state needs the new address on file.</li>
+        <li><strong>Registered Agent Change:</strong> Switching registered agent providers? An amendment updates your official agent of record.</li>
+        <li><strong>Management Structure Change:</strong> Converting from member-managed to manager-managed (or vice versa).</li>
+        <li><strong>Member/Manager Changes:</strong> Some states require amendments when ownership changes, especially if member names are on the Articles of Organization.</li>
+        <li><strong>Purpose Statement Update:</strong> Expanding into new business activities that don't fit your original stated purpose.</li>
       </ul>
+
+      <h3>Why Timely Amendments Matter</h3>
+      <p>Operating with outdated state records creates real problems:</p>
+      <ul>
+        <li><strong>Bank Issues:</strong> Banks verify your LLC details against state records. Mismatches can freeze accounts or prevent new account openings.</li>
+        <li><strong>Legal Vulnerability:</strong> If you're sued, outdated addresses mean you might miss service of process - leading to default judgments against you.</li>
+        <li><strong>Contract Problems:</strong> Partners and vendors may question contracts signed with old information.</li>
+        <li><strong>Compliance Flags:</strong> Some states penalize LLCs operating with incorrect information on file.</li>
+      </ul>
+
+      <h3>Our Amendment Process</h3>
+      <ol>
+        <li><strong>Review Current Records:</strong> We pull your current state filing to confirm what needs updating</li>
+        <li><strong>Prepare Amendment:</strong> We draft the Articles of Amendment with the correct legal language</li>
+        <li><strong>File with State:</strong> Submit to the Secretary of State with required fees</li>
+        <li><strong>Confirmation:</strong> You receive the stamped/approved amendment for your records</li>
+      </ol>
+
+      <h3>Timeline & Fees</h3>
+      <p>Most amendments are processed within 3-7 business days, though this varies by state. Wyoming is typically fastest (1-2 days), while states like California can take 2-3 weeks. Expedited processing is available in most states for an additional fee.</p>
+
+      <h3>Name Change vs. DBA - Know the Difference</h3>
+      <p>If you want to operate under a different name but keep your legal LLC name, you need a DBA (Doing Business As), not an amendment. An amendment actually changes your LLC's legal name on state records. Choose wisely - both have their uses.</p>
     `,
     icon: FilePen,
     image: "/images/services/amendment.jpg",
@@ -747,47 +910,111 @@ export const services = [
     category: "compliance" as ServiceCategory,
     popular: false,
     features: [
-      "Amendment preparation",
-      "State filing",
-      "Updated documents",
-      "Digital copies",
+      "Current filing review",
+      "Amendment document preparation",
+      "State filing & submission",
+      "Stamped amendment certificate",
+      "Updated document copies",
+      "Record keeping assistance",
     ],
     packages: [
       {
         name: "Standard",
         price: 99,
-        description: "Single amendment",
+        description: "Single amendment filing (+ state fees)",
         features: [
           "Document Preparation",
           "State Filing",
-          "Updated Certificate",
+          "Amendment Certificate",
           "Digital Copies",
         ],
+        notIncluded: ["Expedited Processing"],
+      },
+      {
+        name: "Rush",
+        price: 179,
+        description: "Expedited processing where available",
+        features: [
+          "Everything in Standard",
+          "Expedited State Processing",
+          "Priority Handling",
+          "Same-Day Submission",
+        ],
         notIncluded: [],
+        popular: true,
       },
     ],
     faqs: [
       {
-        question: "When do I need to file an amendment?",
-        answer: "You should file an amendment whenever there are changes to the information on your original Articles of Organization, such as name, address, or management structure.",
+        question: "How long does an amendment take to process?",
+        answer: "Standard processing takes 3-7 business days in most states. Wyoming is often approved within 1-2 days, while California and New York can take 2-3 weeks. We offer expedited service where states allow it.",
+      },
+      {
+        question: "Do I need to update my EIN after a name change?",
+        answer: "No, your EIN stays the same even if you change your LLC name. However, you should notify the IRS of the name change by filing Form 8822-B or including the name change on your next tax return. We can help with this process.",
+      },
+      {
+        question: "Can I change multiple things in one amendment?",
+        answer: "Yes! You can bundle multiple changes (like name and address) into a single amendment filing, saving on state fees. Let us know all the changes you need and we'll include everything in one filing.",
+      },
+      {
+        question: "What if I need to add or remove a member?",
+        answer: "It depends on your state. Some states (like Wyoming) don't list members on the Articles of Organization, so no amendment is needed - just update your Operating Agreement. Other states require amendments for ownership changes. We'll advise based on your state's requirements.",
+      },
+      {
+        question: "Will an amendment affect my existing contracts or bank accounts?",
+        answer: "Your existing contracts remain valid, but you may need to notify the other parties of changes (especially name changes). Banks will need to update their records - bring your amendment certificate to update your account information.",
       },
     ],
   },
   {
     slug: "certificate-good-standing",
     name: "Certificate of Good Standing",
-    shortDesc: "Get official proof that your LLC is in compliance.",
+    shortDesc: "Official state proof that your LLC exists and is compliant. Required for bank accounts, business loans, contracts, and foreign qualification in other states.",
     description: `
-      <p>A Certificate of Good Standing (also called Certificate of Existence or Status Certificate) is an official document from the state confirming your LLC is properly registered and compliant with all requirements.</p>
+      <p>A Certificate of Good Standing is basically your LLC's report card - it's an official state document proving your business exists, is properly registered, and has met all its compliance obligations. Banks, lenders, partners, and other states will ask for this document.</p>
 
-      <h3>When You Need It</h3>
+      <h3>What Does "Good Standing" Actually Mean?</h3>
+      <p>When a state says your LLC is in "good standing," they're confirming:</p>
       <ul>
-        <li>Opening bank accounts</li>
-        <li>Securing business loans</li>
-        <li>Registering in other states</li>
-        <li>Entering contracts</li>
-        <li>Business license applications</li>
+        <li>Your LLC is currently registered and active (not dissolved or suspended)</li>
+        <li>All annual reports have been filed on time</li>
+        <li>All franchise taxes and fees have been paid</li>
+        <li>There are no pending administrative actions against your LLC</li>
       </ul>
+
+      <h3>When You'll Need This Certificate</h3>
+      <ul>
+        <li><strong>Opening Bank Accounts:</strong> Most banks require a recent Certificate of Good Standing (usually within 30-90 days) to verify your LLC is legitimate before opening business accounts.</li>
+        <li><strong>Business Loans & Credit:</strong> Lenders want proof your business is in good standing before extending credit.</li>
+        <li><strong>Foreign Qualification:</strong> Registering your LLC to do business in another state? That state will require a Certificate of Good Standing from your home state.</li>
+        <li><strong>Major Contracts:</strong> Large clients, government contracts, and commercial leases often require good standing verification.</li>
+        <li><strong>Business Sales:</strong> Buying or selling a business? Good standing certificates are standard in due diligence.</li>
+        <li><strong>International Use:</strong> Using your LLC documents abroad often requires a Certificate of Good Standing with an apostille.</li>
+      </ul>
+
+      <h3>Different Names, Same Document</h3>
+      <p>States call this document different things:</p>
+      <ul>
+        <li>Certificate of Good Standing (most states)</li>
+        <li>Certificate of Existence (Texas, Arkansas)</li>
+        <li>Certificate of Status (Arizona)</li>
+        <li>Certificate of Fact (some states)</li>
+        <li>Letter of Good Standing</li>
+      </ul>
+      <p>They all mean the same thing - we'll get you the right document for your state.</p>
+
+      <h3>How Long is it Valid?</h3>
+      <p>Certificates of Good Standing don't technically expire, but most requesting parties want a recent one:</p>
+      <ul>
+        <li>Banks typically want one issued within 30-90 days</li>
+        <li>Foreign qualification usually requires within 30-60 days</li>
+        <li>Some contracts may specify their own requirements</li>
+      </ul>
+      <p>If you need the certificate for a specific purpose, check their requirements before ordering.</p>
+
+      <h3>Processing Time</h3>
+      <p>Most states issue certificates within 1-3 business days. Some states offer same-day service for an additional fee. We'll advise on timing based on your state and urgency.</p>
     `,
     icon: FileCheck,
     image: "/images/services/good-standing.jpg",
@@ -795,54 +1022,110 @@ export const services = [
     category: "compliance" as ServiceCategory,
     popular: false,
     features: [
-      "Official state document",
-      "Digital delivery",
-      "Fast processing",
-      "Apostille-ready",
+      "Official state-issued certificate",
+      "Digital copy delivered by email",
+      "Physical copy available",
+      "Fast processing (1-3 days)",
+      "Apostille service available",
+      "Valid for banking & contracts",
     ],
     packages: [
       {
         name: "Standard",
         price: 49,
-        description: "Certificate retrieval",
+        description: "Digital certificate (+ state fees)",
         features: [
-          "State Request",
-          "Digital Copy",
+          "State Filing Request",
+          "Digital Copy (PDF)",
           "Email Delivery",
           "Support",
         ],
-        notIncluded: ["Apostille"],
+        notIncluded: ["Physical Copy", "Apostille"],
       },
       {
         name: "With Apostille",
         price: 149,
-        description: "International use",
+        description: "For international use",
         features: [
-          "State Request",
-          "Apostille Service",
-          "Physical Mail",
+          "Certificate Request",
+          "Apostille Certification",
+          "Physical Document",
           "International Shipping",
         ],
         notIncluded: [],
         popular: true,
       },
     ],
-    faqs: [],
+    faqs: [
+      {
+        question: "How quickly can I get a Certificate of Good Standing?",
+        answer: "Most states process certificates within 1-3 business days. Some states like Wyoming offer same-day processing. If you need it urgently, let us know and we'll explore expedited options for your state.",
+      },
+      {
+        question: "What if my LLC is NOT in good standing?",
+        answer: "If your LLC has fallen out of good standing (missed reports, unpaid fees), you'll need to fix those issues before the state will issue a certificate. We can help identify what's needed to restore good standing, file the necessary documents, and then obtain your certificate.",
+      },
+      {
+        question: "Do I need an apostille for my certificate?",
+        answer: "Only if you're using the certificate outside the US in a country that's part of the Hague Apostille Convention. An apostille is an international authentication that makes your US document valid abroad. If you're using the certificate domestically (US banks, US contracts), you don't need an apostille.",
+      },
+      {
+        question: "How long is a Certificate of Good Standing valid?",
+        answer: "The certificate itself doesn't expire - it's a snapshot of your LLC's status on the date issued. However, most requesting parties (banks, other states) want a 'fresh' certificate, typically issued within 30-90 days. Check with whoever is requesting it for their specific requirements.",
+      },
+      {
+        question: "Can I use this certificate to open a bank account?",
+        answer: "Yes! A Certificate of Good Standing is one of the standard documents banks request when opening business accounts. Combined with your Articles of Organization, Operating Agreement, and EIN, it completes the typical document package banks need.",
+      },
+    ],
   },
   {
     slug: "llc-dissolution",
     name: "LLC Dissolution",
-    shortDesc: "Properly close your LLC and settle all obligations.",
+    shortDesc: "Close your LLC the right way. Stop annual fees, protect yourself from future liability, and get official closure from the state. Don't let an inactive LLC become a compliance nightmare.",
     description: `
-      <p>When you're ready to close your business, proper dissolution ensures you're no longer liable for state fees, taxes, and compliance requirements. We handle the paperwork to officially close your LLC.</p>
+      <p>Shutting down your LLC might seem as simple as just stopping operations - but it's not. Without proper dissolution, you'll keep owing annual fees, franchise taxes, and state reports for a business that no longer exists. We've seen people get hit with years of back fees for "zombie LLCs" they thought were closed.</p>
 
-      <h3>Dissolution Process</h3>
+      <h3>Why You Can't Just Walk Away</h3>
+      <p>Here's what happens if you abandon your LLC without dissolving it:</p>
       <ul>
-        <li>Articles of Dissolution filing</li>
-        <li>Final tax clearance assistance</li>
-        <li>Registered agent termination</li>
-        <li>Final state filing confirmation</li>
+        <li><strong>Ongoing Fees:</strong> State annual report fees and franchise taxes keep accumulating. Wyoming's $62/year becomes $620 after 10 years. Delaware's $300/year becomes $3,000.</li>
+        <li><strong>Penalties:</strong> Late fees and penalties stack up on top of regular fees</li>
+        <li><strong>Credit Impact:</strong> Some states report delinquent LLCs to credit bureaus</li>
+        <li><strong>Legal Exposure:</strong> An un-dissolved LLC can still be sued, and you might not even know about it if you've moved on</li>
+        <li><strong>Future Problems:</strong> Outstanding LLC obligations can surface during background checks, loan applications, or when forming new businesses</li>
       </ul>
+
+      <h3>The Proper Dissolution Process</h3>
+      <ol>
+        <li><strong>Internal Resolution:</strong> Members vote to dissolve (documented in meeting minutes or written consent)</li>
+        <li><strong>Settle Obligations:</strong> Pay off debts, close accounts, distribute remaining assets</li>
+        <li><strong>Tax Clearance:</strong> File final tax returns, get tax clearance from state (required in some states)</li>
+        <li><strong>File Articles of Dissolution:</strong> Submit official dissolution paperwork to the state</li>
+        <li><strong>Notify IRS:</strong> Close your EIN account with the IRS</li>
+        <li><strong>Cancel Permits & Licenses:</strong> Close out any business licenses or permits</li>
+      </ol>
+
+      <h3>What We Handle</h3>
+      <ul>
+        <li>Prepare and file Articles of Dissolution with the state</li>
+        <li>Coordinate any required tax clearance documentation</li>
+        <li>Terminate registered agent service</li>
+        <li>Provide dissolution confirmation for your records</li>
+        <li>Guide you on closing bank accounts and IRS notification</li>
+      </ul>
+
+      <h3>When Dissolution Makes Sense</h3>
+      <ul>
+        <li>You're no longer operating the business</li>
+        <li>You've started a new LLC and don't need the old one</li>
+        <li>The business has served its purpose (held a single project or property)</li>
+        <li>Partnership dissolution - members going separate ways</li>
+        <li>Business failed and you want clean closure</li>
+      </ul>
+
+      <h3>Alternative: Should You Keep It Dormant?</h3>
+      <p>Some entrepreneurs prefer keeping their LLC dormant (inactive but still registered) rather than dissolving. This might make sense if annual fees are low (like Wyoming's $62) and you might use the LLC again in the future. We can advise on whether dissolution or dormancy makes more sense for your situation.</p>
     `,
     icon: FileX,
     image: "/images/services/dissolution.jpg",
@@ -850,29 +1133,64 @@ export const services = [
     category: "compliance" as ServiceCategory,
     popular: false,
     features: [
-      "Articles of Dissolution",
-      "State filing",
-      "Tax clearance guidance",
-      "Final confirmation",
+      "Articles of Dissolution preparation",
+      "State filing & submission",
+      "Tax clearance coordination",
+      "Registered agent termination",
+      "IRS closure guidance",
+      "Dissolution confirmation",
     ],
     packages: [
       {
         name: "Standard",
         price: 149,
-        description: "LLC dissolution",
+        description: "Complete dissolution service (+ state fees)",
         features: [
-          "Dissolution Filing",
-          "State Submission",
-          "Final Confirmation",
-          "Support",
+          "Articles of Dissolution",
+          "State Filing",
+          "Dissolution Certificate",
+          "Closure Guidance",
+        ],
+        notIncluded: ["Tax Clearance Filing"],
+      },
+      {
+        name: "Complete",
+        price: 249,
+        description: "With tax clearance assistance",
+        features: [
+          "Everything in Standard",
+          "Tax Clearance Filing",
+          "Final Return Guidance",
+          "IRS EIN Closure Letter",
         ],
         notIncluded: [],
+        popular: true,
       },
     ],
     faqs: [
       {
-        question: "Why should I formally dissolve my LLC?",
-        answer: "Without formal dissolution, you may continue to owe state fees, annual reports, and franchise taxes even if you're not operating the business.",
+        question: "What happens to debts if I dissolve my LLC?",
+        answer: "Dissolving your LLC doesn't erase debts. Before dissolution, you must settle all known obligations or make arrangements with creditors. If you dissolve with unpaid debts, creditors may be able to pursue members personally in some cases. Make sure debts are settled before filing for dissolution.",
+      },
+      {
+        question: "Can I dissolve an LLC that's not in good standing?",
+        answer: "In most states, yes - but you'll typically need to pay outstanding fees and penalties first to bring it into good standing before dissolution is accepted. Some states allow dissolution of non-compliant LLCs but may require back fees. We'll assess your situation and advise on the most cost-effective approach.",
+      },
+      {
+        question: "How long does dissolution take?",
+        answer: "The actual dissolution filing typically takes 1-2 weeks to process. However, if your state requires tax clearance, that can add several weeks depending on whether you have outstanding tax obligations to resolve.",
+      },
+      {
+        question: "What's the difference between dissolution and administrative dissolution?",
+        answer: "Voluntary dissolution is when you choose to close your LLC properly. Administrative dissolution is when the state forcibly closes your LLC for non-compliance (missed reports, unpaid fees). Administrative dissolution often comes with penalties and doesn't cleanly close your obligations. Always better to dissolve voluntarily.",
+      },
+      {
+        question: "Do I need to cancel my EIN after dissolving?",
+        answer: "You should notify the IRS that your LLC is closed, but the EIN itself is never 'cancelled' - it's permanently assigned. You'll send the IRS a letter requesting to close the EIN account. We provide guidance and a template letter as part of our service.",
+      },
+      {
+        question: "Can I form a new LLC with the same name after dissolution?",
+        answer: "Usually yes! Once your LLC is dissolved, the name becomes available again (after any state-specific waiting period, typically immediate to 120 days). You can then register a new LLC with that name. Some clients dissolve old LLCs specifically to re-register the name under a new entity.",
       },
     ],
   },
@@ -934,18 +1252,48 @@ export const services = [
   {
     slug: "apostille-service",
     name: "Apostille Service",
-    shortDesc: "Get your US documents certified for international use.",
+    shortDesc: "Make your US business documents valid internationally. Apostille certification is required for using LLC documents in 120+ countries for banking, contracts, and legal proceedings.",
     description: `
-      <p>An apostille is an international certification that authenticates US documents for use in countries that are members of the Hague Apostille Convention. It's often required for using US business documents abroad.</p>
+      <p>Planning to use your US business documents in another country? Most countries won't accept them without an apostille - an international certification that proves the document is authentic. Whether you're opening a foreign bank account, signing international contracts, or dealing with government agencies abroad, an apostille makes your US documents officially recognized.</p>
 
-      <h3>Documents We Apostille</h3>
+      <h3>What is an Apostille?</h3>
+      <p>An apostille is a certificate issued by a US state authority (usually the Secretary of State) that authenticates the origin of a public document. It's recognized by all 120+ countries that are part of the Hague Apostille Convention.</p>
+      <p>Think of it as a "super-notarization" for international use. Without it, foreign governments and institutions have no way to verify that your US document is legitimate.</p>
+
+      <h3>When You Need an Apostille</h3>
       <ul>
-        <li>Articles of Organization</li>
-        <li>Certificate of Good Standing</li>
-        <li>Operating Agreement</li>
-        <li>EIN confirmation letter</li>
-        <li>Other corporate documents</li>
+        <li><strong>International Banking:</strong> Opening business accounts outside the US often requires apostilled LLC documents</li>
+        <li><strong>Foreign Business Registration:</strong> Registering your US LLC to operate in another country</li>
+        <li><strong>International Contracts:</strong> Some international partners require apostilled proof of your business existence</li>
+        <li><strong>Legal Proceedings:</strong> Using US business documents in foreign courts or government proceedings</li>
+        <li><strong>Real Estate:</strong> Buying or selling property abroad through your LLC</li>
+        <li><strong>Government Filings:</strong> Submitting documents to foreign government agencies</li>
       </ul>
+
+      <h3>Documents We Can Apostille</h3>
+      <ul>
+        <li><strong>Articles of Organization:</strong> Your LLC formation document</li>
+        <li><strong>Certificate of Good Standing:</strong> Proof your LLC is active and compliant</li>
+        <li><strong>Certificate of Formation:</strong> Official state acknowledgment of your LLC</li>
+        <li><strong>Operating Agreement:</strong> Requires notarization first, then apostille</li>
+        <li><strong>Amendment Certificates:</strong> Official name or structure changes</li>
+        <li><strong>Corporate Resolutions:</strong> Board/member decisions (requires notarization)</li>
+      </ul>
+
+      <h3>The Apostille Process</h3>
+      <ol>
+        <li><strong>Document Review:</strong> We verify your document is apostille-eligible</li>
+        <li><strong>Notarization (if needed):</strong> Some documents require notarization before apostille</li>
+        <li><strong>State Submission:</strong> We submit to the appropriate Secretary of State</li>
+        <li><strong>Apostille Issuance:</strong> State attaches the apostille certificate</li>
+        <li><strong>Delivery:</strong> Physical document shipped to you via secure courier</li>
+      </ol>
+
+      <h3>Processing Time</h3>
+      <p>Standard processing takes 5-10 business days depending on the state. Expedited service (where available) can reduce this to 1-3 days. International shipping typically adds 3-7 business days depending on destination.</p>
+
+      <h3>Countries That Accept Apostilles</h3>
+      <p>Over 120 countries accept apostilled documents, including all of Europe, Australia, India, UAE, Japan, South Korea, Brazil, Mexico, and many more. Notable exceptions include China, Canada, and Pakistan, which may require embassy legalization instead (a different process we can also assist with).</p>
     `,
     icon: Stamp,
     image: "/images/services/apostille.jpg",
@@ -954,38 +1302,73 @@ export const services = [
     popular: false,
     features: [
       "Secretary of State apostille",
-      "Document preparation",
-      "International shipping",
-      "Fast processing",
+      "Notarization included (if needed)",
+      "All 50 states covered",
+      "International courier shipping",
+      "Tracking & insurance included",
+      "Document verification",
     ],
     packages: [
       {
         name: "Standard",
         price: 99,
-        description: "Per document",
+        description: "Per document, US delivery",
         features: [
           "Apostille Certificate",
           "State Processing",
           "Digital Copy",
           "US Shipping",
         ],
-        notIncluded: ["International Shipping"],
+        notIncluded: ["International Shipping", "Rush Processing"],
       },
       {
         name: "International",
         price: 149,
-        description: "With global shipping",
+        description: "Per document, global delivery",
         features: [
           "Everything in Standard",
-          "DHL/FedEx Shipping",
-          "Tracking Number",
-          "Insurance",
+          "DHL/FedEx International",
+          "Full Tracking",
+          "Shipping Insurance",
         ],
         notIncluded: [],
         popular: true,
       },
+      {
+        name: "Rush International",
+        price: 199,
+        description: "Expedited processing + global delivery",
+        features: [
+          "Everything in International",
+          "Expedited State Processing",
+          "Priority Handling",
+          "Express Shipping",
+        ],
+        notIncluded: [],
+      },
     ],
-    faqs: [],
+    faqs: [
+      {
+        question: "What's the difference between an apostille and notarization?",
+        answer: "Notarization verifies signatures on a document - a notary confirms the person signing is who they claim to be. An apostille is a government certification that authenticates the document itself for international use. Some documents need both: first notarized, then apostilled.",
+      },
+      {
+        question: "Does my country accept apostilles?",
+        answer: "If your country is part of the Hague Apostille Convention (120+ countries), yes. This includes most of Europe, India, UAE, Australia, Japan, South Korea, and South America. Notable exceptions are China, Canada, and Pakistan, which require embassy legalization instead. Contact us and we'll verify for your specific country.",
+      },
+      {
+        question: "Can I get an apostille on a copy of my document?",
+        answer: "It depends on the state and document type. Some states apostille certified copies, others require the original document. In most cases, you'll need to obtain a new certified copy from the state (like a fresh Certificate of Good Standing) for apostille. We handle the entire process.",
+      },
+      {
+        question: "How long is an apostilled document valid?",
+        answer: "The apostille itself doesn't expire. However, the underlying document may have freshness requirements - for example, a Certificate of Good Standing apostilled today proves status as of today, not six months from now. Check with the requesting institution for their requirements.",
+      },
+      {
+        question: "I need apostilles for multiple documents - is there a discount?",
+        answer: "Yes! When processing multiple documents together, we can often reduce per-document costs since they're submitted and shipped together. Contact us with your full document list for a custom quote.",
+      },
+    ],
   },
   {
     slug: "reseller-certificate",
@@ -1037,16 +1420,50 @@ export const services = [
   {
     slug: "virtual-address",
     name: "Virtual US Address",
-    shortDesc: "Get a real US business address for mail forwarding and business presence.",
+    shortDesc: "A real US street address for your business mail. Receive bank cards, Amazon correspondence, and important documents - all scanned and forwarded to you anywhere in the world.",
     description: `
-      <p>A virtual US address gives your business a professional American presence. Use it for business correspondence, bank applications, and Amazon seller verification.</p>
+      <p>Your US LLC needs a US address, but you live in Bangladesh, India, or somewhere else outside America. A virtual address solves this problem - you get a real street address in the US that receives your mail, scans it for you, and forwards physical items when needed.</p>
 
-      <h3>Features</h3>
+      <h3>Why You Need a Virtual US Address</h3>
       <ul>
-        <li>Real street address (not a PO Box)</li>
-        <li>Mail scanning and forwarding</li>
-        <li>Package receiving</li>
-        <li>Use for business registration</li>
+        <li><strong>Receive Bank Cards & Documents:</strong> Your Mercury or Relay debit card needs to ship somewhere. Bank statements, tax documents, and important correspondence need a real address.</li>
+        <li><strong>Amazon Seller Address:</strong> Amazon may send verification letters or important notices to your business address. You need to actually receive them.</li>
+        <li><strong>Professional Presence:</strong> A US street address looks more professional than a foreign address on invoices, contracts, and your website.</li>
+        <li><strong>Separate from Registered Agent:</strong> Your registered agent receives legal documents, but you shouldn't use that address for regular business mail. A virtual address handles everyday correspondence.</li>
+        <li><strong>Package Receiving:</strong> Receive product samples, returned items, or business supplies at your US address.</li>
+      </ul>
+
+      <h3>What Makes Our Virtual Address Different</h3>
+      <p>Not all virtual addresses work for business purposes. Some are flagged as "commercial mail receiving agencies" (CMRAs) and rejected by banks. Our addresses are:</p>
+      <ul>
+        <li><strong>Real Street Addresses:</strong> Not PO Boxes - actual physical locations</li>
+        <li><strong>Bank-Friendly:</strong> Used by thousands of business owners for bank applications</li>
+        <li><strong>Suite Numbers (Not PMB):</strong> Formatted as "Suite 101" not "PMB 101" - looks like a real office</li>
+        <li><strong>Major Metro Locations:</strong> Addresses in business-friendly cities</li>
+      </ul>
+
+      <h3>How It Works</h3>
+      <ol>
+        <li><strong>Get Your Address:</strong> We assign you a real US street address with your own suite number</li>
+        <li><strong>Mail Arrives:</strong> When mail arrives, we scan the envelope and notify you</li>
+        <li><strong>You Decide:</strong> View the scan online. Choose to open & scan contents, forward physically, or shred</li>
+        <li><strong>Content Scanning:</strong> We open the mail and scan the contents for you to view online</li>
+        <li><strong>Forwarding:</strong> Need the physical document? We ship it to you anywhere in the world</li>
+      </ol>
+
+      <h3>Package Handling</h3>
+      <p>We receive packages on your behalf. Small packages can be forwarded internationally. For larger items, we can consolidate multiple packages into one shipment to save on shipping costs.</p>
+
+      <h3>What You Can Use This Address For</h3>
+      <ul>
+        <li>Business bank account correspondence</li>
+        <li>Credit card and debit card shipping</li>
+        <li>Amazon Seller Central address</li>
+        <li>State business registrations</li>
+        <li>IRS correspondence</li>
+        <li>Business license applications</li>
+        <li>Your website and marketing materials</li>
+        <li>Supplier and vendor communication</li>
       </ul>
     `,
     icon: MapPin,
@@ -1055,40 +1472,66 @@ export const services = [
     category: "compliance" as ServiceCategory,
     popular: false,
     features: [
-      "Real US street address",
-      "Mail scanning",
-      "Mail forwarding",
+      "Real US street address (not PO Box)",
+      "Bank-friendly format (Suite #)",
+      "Mail scanning & notification",
+      "Online mailbox dashboard",
       "Package receiving",
-      "Online mailbox access",
+      "International mail forwarding",
     ],
     packages: [
       {
         name: "Basic",
         price: 149,
-        description: "Per year",
+        description: "Per year - Perfect for new LLCs",
         features: [
           "US Street Address",
-          "Mail Scanning",
-          "Online Access",
-          "30 Scans/month",
+          "Envelope Scanning",
+          "Online Dashboard",
+          "30 Mail Scans/month",
         ],
-        notIncluded: ["Package Forwarding"],
+        notIncluded: ["Package Forwarding", "Check Deposit"],
       },
       {
         name: "Premium",
         price: 249,
-        description: "Per year",
+        description: "Per year - Full mail management",
         features: [
           "Everything in Basic",
-          "Unlimited Scans",
+          "Unlimited Mail Scans",
           "Package Forwarding",
-          "Check Deposit",
+          "Check Deposit Service",
         ],
         notIncluded: [],
         popular: true,
       },
     ],
-    faqs: [],
+    faqs: [
+      {
+        question: "Is this address different from a registered agent address?",
+        answer: "Yes! A registered agent address is specifically for receiving legal documents and state correspondence - it's a legal requirement. A virtual address is for your regular business mail: bank statements, credit cards, Amazon letters, vendor correspondence, etc. Most international LLC owners need both services.",
+      },
+      {
+        question: "Can I use this address to open a bank account?",
+        answer: "You can use this as your mailing address for bank correspondence (where they send cards and statements). However, most banks also require a personal residential address for KYC purposes. The virtual address works great for receiving your debit cards and bank mail.",
+      },
+      {
+        question: "How quickly do you scan and notify me of new mail?",
+        answer: "Mail received before 2 PM EST is typically scanned and uploaded the same business day. You'll receive an email notification whenever new mail arrives. Package notifications are sent within 2 hours of receipt.",
+      },
+      {
+        question: "What happens if I receive a package?",
+        answer: "We notify you immediately. You can then choose to: (1) Forward it to your international address, (2) Hold it for consolidation with other packages, or (3) Have us return it. Forwarding costs depend on package weight and destination.",
+      },
+      {
+        question: "Can Amazon or banks tell it's a virtual address?",
+        answer: "Our addresses use suite numbers (not PMB numbers) and are real street addresses at commercial buildings. They look and function like regular business addresses. Thousands of our clients use them successfully with Amazon and banks.",
+      },
+      {
+        question: "What if I need to receive something urgently?",
+        answer: "We offer express forwarding options. For urgent documents, we can scan and email content within hours, then ship physically via express courier (DHL/FedEx). Express shipping typically arrives within 3-5 business days internationally.",
+      },
+    ],
   },
 
   // ========== AMAZON SERVICES ==========
@@ -1316,18 +1759,59 @@ export const services = [
   {
     slug: "category-ungating",
     name: "Category Ungating",
-    shortDesc: "Get approved to sell in restricted Amazon categories.",
+    shortDesc: "Unlock restricted Amazon categories and start selling high-profit products. We handle invoices, documentation, and applications for Grocery, Beauty, Toys, and more.",
     description: `
-      <p>Many profitable Amazon categories are restricted and require approval before you can sell. We help you prepare the necessary documentation and submit applications to get ungated quickly.</p>
+      <p>Amazon restricts certain categories to keep out low-quality sellers - but that also means less competition and higher profit margins for those who get approved. If you've found a profitable product only to see "You need approval to list in this category," we can help you get ungated.</p>
 
-      <h3>Popular Restricted Categories</h3>
+      <h3>Why Categories Are Restricted</h3>
+      <p>Amazon gates categories for several reasons:</p>
       <ul>
-        <li>Grocery & Gourmet Foods</li>
-        <li>Health & Personal Care</li>
-        <li>Beauty</li>
-        <li>Toys & Games (seasonal)</li>
-        <li>Automotive</li>
-        <li>Watches</li>
+        <li><strong>Customer Safety:</strong> Products like supplements, topicals, and baby items need quality controls</li>
+        <li><strong>Brand Protection:</strong> Luxury goods and branded items require authenticity verification</li>
+        <li><strong>Seasonal Demand:</strong> Toys get restricted before Q4 to prevent inexperienced sellers from ruining holiday inventory</li>
+        <li><strong>Counterfeit Prevention:</strong> Categories with high counterfeit rates have stricter requirements</li>
+      </ul>
+
+      <h3>Most Requested Gated Categories (2025)</h3>
+      <ul>
+        <li><strong>Grocery & Gourmet Food:</strong> Growing rapidly - requires invoices from approved distributors</li>
+        <li><strong>Health & Personal Care:</strong> One of the most profitable - needs proper documentation</li>
+        <li><strong>Beauty:</strong> Huge market - requires invoices showing brand authorization</li>
+        <li><strong>Topicals (Lotions, Creams):</strong> Within Beauty - additional requirements</li>
+        <li><strong>Toys & Games:</strong> Restricted Q4, but approval lasts forever once obtained</li>
+        <li><strong>Pet Supplies:</strong> Growing category - moderate requirements</li>
+        <li><strong>Baby:</strong> Safety-focused - stricter documentation</li>
+        <li><strong>Automotive:</strong> Parts need authenticity proof</li>
+        <li><strong>Fine Jewelry:</strong> High-value - extensive verification</li>
+      </ul>
+
+      <h3>What's Required for Ungating?</h3>
+      <p>Requirements vary by category, but typically include:</p>
+      <ul>
+        <li><strong>Professional Seller Account:</strong> Individual accounts can't get ungated in most categories</li>
+        <li><strong>Invoices:</strong> Usually need 3 invoices from legitimate wholesalers/distributors showing 30+ units purchased</li>
+        <li><strong>Product Images:</strong> Sometimes Amazon requests photos of actual inventory</li>
+        <li><strong>Brand Letters:</strong> Some brands require authorization letters</li>
+        <li><strong>Account Health:</strong> Good metrics and no policy violations help significantly</li>
+      </ul>
+
+      <h3>Our Ungating Process</h3>
+      <ol>
+        <li><strong>Category Assessment:</strong> We analyze current requirements for your target categories</li>
+        <li><strong>Documentation Strategy:</strong> We identify what invoices/documents you need and from which suppliers</li>
+        <li><strong>Invoice Guidance:</strong> We guide you on obtaining proper invoices that Amazon will accept</li>
+        <li><strong>Application Preparation:</strong> We prepare your ungating application with all required elements</li>
+        <li><strong>Submission & Follow-up:</strong> We submit and handle any back-and-forth with Amazon</li>
+        <li><strong>Appeal (if needed):</strong> If initially denied, we prepare appeal documentation</li>
+      </ol>
+
+      <h3>Common Mistakes That Get Applications Denied</h3>
+      <ul>
+        <li>Invoices from non-approved suppliers or marketplaces (Amazon, eBay receipts don't count)</li>
+        <li>Invoices with missing information (no address, no contact info)</li>
+        <li>Product images that look like stock photos instead of actual inventory</li>
+        <li>Quantity too low (Amazon wants to see you're a serious seller)</li>
+        <li>Invoice dates too old (typically need to be within 180 days)</li>
       </ul>
     `,
     icon: Package,
@@ -1336,10 +1820,12 @@ export const services = [
     category: "amazon" as ServiceCategory,
     popular: false,
     features: [
-      "Category analysis",
-      "Document preparation",
-      "Application submission",
-      "Appeal support if needed",
+      "Category requirement analysis",
+      "Invoice & documentation guidance",
+      "Application preparation",
+      "Submission handling",
+      "Appeal support if denied",
+      "Category-specific strategy",
     ],
     packages: [
       {
@@ -1348,47 +1834,134 @@ export const services = [
         description: "One category ungating",
         features: [
           "Category Analysis",
-          "Document Prep",
-          "Application",
-          "Support",
+          "Document Guidance",
+          "Application Prep",
+          "14-Day Support",
         ],
-        notIncluded: [],
+        notIncluded: ["Appeal Support"],
       },
       {
         name: "Multi-Category",
         price: 349,
-        description: "Up to 3 categories",
+        description: "Up to 3 categories - Best Value",
         features: [
           "3 Categories",
           "Priority Processing",
-          "Appeal Support",
-          "Strategy Guide",
+          "Appeal Support Included",
+          "30-Day Support",
         ],
         notIncluded: [],
         popular: true,
       },
+      {
+        name: "Full Access",
+        price: 599,
+        description: "Up to 6 categories",
+        features: [
+          "6 Categories",
+          "Dedicated Specialist",
+          "Unlimited Appeals",
+          "60-Day Support",
+        ],
+        notIncluded: [],
+      },
     ],
     faqs: [
       {
-        question: "Which categories require ungating?",
-        answer: "Categories like Grocery, Beauty, Health & Personal Care, Toys (seasonal), and Automotive typically require approval. Requirements change, so we help you navigate the current rules.",
+        question: "What invoices does Amazon accept for ungating?",
+        answer: "Amazon requires invoices from legitimate wholesalers or distributors (not retail receipts from Amazon, Walmart, etc.). Invoices must include supplier name/address/contact, your business name/address, itemized products with quantities (typically 30+ units), purchase date within 180 days, and must be on the supplier's letterhead or have their logo.",
+      },
+      {
+        question: "How long does ungating take?",
+        answer: "Once you have proper documentation, Amazon typically responds within 1-7 days. If approved, you can start listing immediately. If denied, we can appeal within 2-3 days. The whole process (including getting proper invoices) usually takes 2-4 weeks.",
+      },
+      {
+        question: "What if I don't have invoices from approved suppliers?",
+        answer: "We can guide you to suppliers whose invoices Amazon accepts. For some categories, we work with wholesale partners who provide invoices specifically for ungating purposes. This is a legitimate way to get proper documentation.",
+      },
+      {
+        question: "Is ungating approval permanent?",
+        answer: "Yes! Once you're approved for a category, it stays on your account permanently. You don't need to renew or reapply. That's why it's worth investing in proper ungating - it's a one-time barrier to a lifetime of selling opportunity.",
+      },
+      {
+        question: "Can new seller accounts get ungated?",
+        answer: "Yes, but some categories require account history (90+ days) or good performance metrics. We assess your account status and recommend which categories to target first. Often, starting with easier categories builds account credibility for harder ones.",
+      },
+      {
+        question: "What's the difference between category ungating and brand ungating?",
+        answer: "Category ungating lets you sell in an entire category (like Grocery or Beauty). Brand ungating lets you sell specific brands within categories you're already approved for. Some brands require separate approval even if you're category-approved. We handle both.",
       },
     ],
   },
   {
     slug: "product-listing-optimization",
     name: "Product Listing Optimization",
-    shortDesc: "Optimize your Amazon listings for maximum visibility and sales.",
+    shortDesc: "Turn browsers into buyers. We optimize your Amazon titles, bullets, descriptions, and backend keywords for higher rankings and better conversion rates.",
     description: `
-      <p>A well-optimized product listing can dramatically increase your visibility in Amazon search results and boost your conversion rate. Our experts optimize every element of your listing.</p>
+      <p>Your product might be great, but if your listing doesn't show up in search or doesn't convince people to buy, it doesn't matter. Amazon SEO is different from Google - the algorithm cares about relevance AND sales velocity. We optimize both.</p>
+
+      <h3>Why Listing Optimization Matters</h3>
+      <ul>
+        <li><strong>Visibility:</strong> 70% of Amazon shoppers never go past the first page of search results. If you're not ranking, you're invisible.</li>
+        <li><strong>Conversion:</strong> The average Amazon conversion rate is 10-15%. Top listings convert at 20%+. That's double the sales from the same traffic.</li>
+        <li><strong>PPC Efficiency:</strong> Better organic rankings mean lower ad costs. Why pay for clicks you could get free?</li>
+        <li><strong>The Flywheel Effect:</strong> Better listings → More sales → Better rankings → Even more sales. It compounds.</li>
+      </ul>
 
       <h3>What We Optimize</h3>
+
+      <h4>Title Optimization</h4>
+      <p>Your title is the most important ranking factor. We craft titles that:</p>
       <ul>
-        <li>Title with strategic keywords</li>
-        <li>Bullet points highlighting benefits</li>
-        <li>Product description</li>
-        <li>Backend search terms</li>
-        <li>Image recommendations</li>
+        <li>Include your primary keywords naturally (not stuffed)</li>
+        <li>Follow Amazon's style guidelines for your category</li>
+        <li>Communicate key benefits within the first 80 characters (mobile cutoff)</li>
+        <li>Include brand name, size, quantity, and key differentiators</li>
+      </ul>
+
+      <h4>Bullet Points (Key Features)</h4>
+      <p>Bullets sell your product. We write bullets that:</p>
+      <ul>
+        <li>Lead with benefits, support with features</li>
+        <li>Include secondary keywords naturally</li>
+        <li>Address common customer questions and objections</li>
+        <li>Use formatting (CAPS for emphasis) strategically</li>
+      </ul>
+
+      <h4>Product Description</h4>
+      <p>Often ignored but still valuable for:</p>
+      <ul>
+        <li>Additional keywords and long-tail phrases</li>
+        <li>Storytelling and brand building</li>
+        <li>Detailed specifications for technical products</li>
+        <li>Cross-selling opportunities</li>
+      </ul>
+
+      <h4>Backend Search Terms</h4>
+      <p>The hidden keywords customers never see but Amazon indexes:</p>
+      <ul>
+        <li>Synonyms and alternate spellings</li>
+        <li>Common misspellings (yes, really)</li>
+        <li>Spanish/other language terms (for US marketplace)</li>
+        <li>Competitor brand names you can rank for</li>
+      </ul>
+
+      <h3>Our Process</h3>
+      <ol>
+        <li><strong>Keyword Research:</strong> We identify high-volume, relevant keywords using tools like Helium 10, Jungle Scout, and Amazon's own data</li>
+        <li><strong>Competitor Analysis:</strong> We study top-ranking competitors to understand what's working</li>
+        <li><strong>Content Creation:</strong> We write compelling copy that balances SEO with conversion</li>
+        <li><strong>Implementation:</strong> We provide ready-to-upload content or implement directly</li>
+        <li><strong>Tracking:</strong> We recommend tracking tools to monitor ranking improvements</li>
+      </ol>
+
+      <h3>Image Recommendations</h3>
+      <p>While we don't create images, we provide detailed guidance on:</p>
+      <ul>
+        <li>Required main image specifications</li>
+        <li>Recommended lifestyle and infographic images</li>
+        <li>Competitor image analysis</li>
+        <li>A+ Content image recommendations</li>
       </ul>
     `,
     icon: TrendingUp,
@@ -1397,56 +1970,133 @@ export const services = [
     category: "amazon" as ServiceCategory,
     popular: false,
     features: [
-      "Keyword research",
+      "Deep keyword research",
       "Title optimization",
-      "Bullet point writing",
-      "Description copywriting",
-      "Backend keywords",
+      "5 bullet points (key features)",
+      "Product description",
+      "Backend search terms",
+      "Image recommendations",
     ],
     packages: [
       {
         name: "Single Listing",
         price: 149,
-        description: "One product optimization",
+        description: "One product - Full optimization",
         features: [
           "Keyword Research",
-          "Full Optimization",
-          "Image Guidance",
-          "1 Revision",
+          "Complete Listing Copy",
+          "Backend Keywords",
+          "1 Revision Round",
         ],
-        notIncluded: [],
+        notIncluded: ["Competitor Analysis"],
       },
       {
         name: "5-Pack",
         price: 549,
-        description: "Five products",
+        description: "Five products - Most Popular",
         features: [
-          "5 Listings",
-          "Keyword Strategy",
+          "5 Full Optimizations",
           "Competitor Analysis",
+          "Keyword Strategy Map",
           "Unlimited Revisions",
         ],
         notIncluded: [],
         popular: true,
       },
+      {
+        name: "10-Pack",
+        price: 899,
+        description: "Ten products - Best Value",
+        features: [
+          "10 Full Optimizations",
+          "Category Strategy",
+          "Priority Support",
+          "30-Day Follow-up",
+        ],
+        notIncluded: [],
+      },
     ],
-    faqs: [],
+    faqs: [
+      {
+        question: "How long until I see ranking improvements?",
+        answer: "Amazon's algorithm typically takes 1-2 weeks to fully index and respond to listing changes. You may see initial movement within days, with full impact visible in 2-4 weeks. Results also depend on your sales velocity, reviews, and competition.",
+      },
+      {
+        question: "Will you implement the changes or just provide the content?",
+        answer: "Both options are available. We can provide optimized content for you to upload, or we can implement directly in your Seller Central account (requires temporary access). Most clients prefer we handle implementation to ensure everything is done correctly.",
+      },
+      {
+        question: "What information do you need from me?",
+        answer: "We need: (1) Your ASIN or product URL, (2) Any specific keywords you want to target, (3) Key product features and benefits, (4) Your target audience, and (5) Any brand guidelines or restrictions. A 15-minute kickoff call helps us understand your product and goals.",
+      },
+      {
+        question: "Do you guarantee page 1 rankings?",
+        answer: "We don't guarantee specific rankings because they depend on many factors outside listing optimization (reviews, price, competition, sales history). What we do guarantee is professionally optimized content following proven best practices that give you the best possible chance of ranking.",
+      },
+      {
+        question: "Should I optimize listings before or after running PPC?",
+        answer: "Before! Optimized listings convert better, which means your PPC spend is more efficient. Running ads to a poorly optimized listing wastes money. Optimize first, then advertise to maximize your ROI.",
+      },
+      {
+        question: "How is this different from A+ Content?",
+        answer: "Listing optimization covers your title, bullets, description, and backend keywords - the core elements every listing has. A+ Content (Enhanced Brand Content) is additional visual content below the description, available only to brand-registered sellers. We offer both services separately.",
+      },
+    ],
   },
   {
     slug: "a-plus-content",
     name: "A+ Content Creation",
-    shortDesc: "Create stunning A+ Content (EBC) to boost conversions.",
+    shortDesc: "Visual storytelling that sells. Transform your product page with professional A+ Content featuring comparison charts, lifestyle images, and brand story modules that boost conversions up to 10%.",
     description: `
-      <p>A+ Content (formerly Enhanced Brand Content) allows brand-registered sellers to add rich media to their product descriptions. Our design team creates compelling content that increases conversions by up to 10%.</p>
+      <p>A+ Content (formerly Enhanced Brand Content or EBC) replaces your plain text product description with a visually rich experience featuring images, comparison charts, and brand storytelling. Amazon's own data shows A+ Content increases conversions by 3-10% - that's significant when you're driving thousands of visitors.</p>
 
-      <h3>What You Get</h3>
+      <h3>What is A+ Content?</h3>
+      <p>A+ Content appears below the bullet points and replaces the standard product description with a visual layout. It's exclusive to Brand Registry members and gives you space to:</p>
       <ul>
-        <li>Professional content design</li>
-        <li>Custom graphics and images</li>
-        <li>Brand story module</li>
-        <li>Comparison charts</li>
-        <li>Mobile-optimized layout</li>
+        <li>Show your product in action with lifestyle imagery</li>
+        <li>Explain features with infographics and icons</li>
+        <li>Compare product variations side-by-side</li>
+        <li>Tell your brand story to build trust</li>
+        <li>Address common questions visually</li>
       </ul>
+
+      <h3>Why A+ Content Works</h3>
+      <ul>
+        <li><strong>Visual Processing:</strong> Humans process images 60,000x faster than text. A+ Content lets you communicate more, faster.</li>
+        <li><strong>Mobile Dominance:</strong> Over 60% of Amazon shopping happens on mobile. A+ Content's visual format works better on small screens than walls of text.</li>
+        <li><strong>Trust Building:</strong> Professional A+ Content signals "legitimate brand" - customers feel more confident buying.</li>
+        <li><strong>Reduced Returns:</strong> Better product understanding means fewer "not what I expected" returns.</li>
+        <li><strong>SEO Benefits:</strong> While A+ text isn't directly indexed, the improved conversion rate signals quality to Amazon's algorithm.</li>
+      </ul>
+
+      <h3>A+ Content Modules We Create</h3>
+      <ul>
+        <li><strong>Standard Image & Text:</strong> Product images with supporting text explanations</li>
+        <li><strong>Comparison Charts:</strong> Compare your product variations or against competitors (without naming them)</li>
+        <li><strong>Feature Highlights:</strong> Icon-based callouts of key product benefits</li>
+        <li><strong>Brand Story:</strong> Tell your brand's origin, mission, and values</li>
+        <li><strong>Technical Specifications:</strong> Detailed specs in an easy-to-scan format</li>
+        <li><strong>FAQ Module:</strong> Pre-answer common customer questions</li>
+      </ul>
+
+      <h3>Our A+ Content Process</h3>
+      <ol>
+        <li><strong>Discovery Call:</strong> Understand your product, brand, and target customer</li>
+        <li><strong>Competitor Analysis:</strong> Study what top competitors are doing in your category</li>
+        <li><strong>Content Strategy:</strong> Plan which modules and messaging will be most effective</li>
+        <li><strong>Design Creation:</strong> Our designers create custom graphics optimized for Amazon</li>
+        <li><strong>Copy Writing:</strong> Compelling text that complements the visuals</li>
+        <li><strong>Review & Revisions:</strong> You review, we refine until you're satisfied</li>
+        <li><strong>Upload & Testing:</strong> We upload to Amazon and verify everything displays correctly</li>
+      </ol>
+
+      <h3>Premium A+ vs Standard A+</h3>
+      <p>Amazon offers two tiers of A+ Content:</p>
+      <ul>
+        <li><strong>Basic A+ (What most sellers use):</strong> Limited module options, smaller images</li>
+        <li><strong>Premium A+ (Previously A++ Content):</strong> Interactive modules, video, larger images - requires invitation or high sales volume</li>
+      </ul>
+      <p>We design for both tiers based on what your account has access to.</p>
     `,
     icon: Sparkles,
     image: "/images/services/a-plus-content.jpg",
@@ -1454,60 +2104,144 @@ export const services = [
     category: "amazon" as ServiceCategory,
     popular: false,
     features: [
-      "Professional design",
-      "Custom graphics",
-      "Mobile optimization",
-      "Brand storytelling",
-      "Comparison modules",
+      "Professional graphic design",
+      "Custom images & infographics",
+      "Comparison charts",
+      "Brand story module",
+      "Mobile-optimized layout",
+      "Upload & implementation",
     ],
     packages: [
       {
         name: "Standard",
         price: 199,
-        description: "Basic A+ Content",
+        description: "Essential A+ Content",
         features: [
           "5 Content Modules",
-          "Stock Graphics",
-          "1 Revision",
-          "Upload Assistance",
+          "Template-Based Design",
+          "Stock Image Enhancement",
+          "1 Revision Round",
         ],
-        notIncluded: ["Custom Graphics"],
+        notIncluded: ["Custom Graphics", "Brand Story"],
       },
       {
         name: "Premium",
         price: 349,
-        description: "Full A+ experience",
+        description: "Full A+ experience - Most Popular",
         features: [
           "7 Content Modules",
-          "Custom Graphics",
-          "Brand Story",
+          "Custom Graphic Design",
+          "Brand Story Module",
           "Unlimited Revisions",
         ],
         notIncluded: [],
         popular: true,
       },
+      {
+        name: "Premium Plus",
+        price: 549,
+        description: "Complete brand experience",
+        features: [
+          "All Available Modules",
+          "Premium Custom Graphics",
+          "Video Integration (if eligible)",
+          "A/B Testing Strategy",
+        ],
+        notIncluded: [],
+      },
     ],
     faqs: [
       {
         question: "Do I need Brand Registry for A+ Content?",
-        answer: "Yes, A+ Content is only available to sellers enrolled in Amazon Brand Registry.",
+        answer: "Yes, A+ Content is exclusively available to sellers enrolled in Amazon Brand Registry. If you don't have Brand Registry, we can help you get enrolled (you'll need a trademark - registered or pending).",
+      },
+      {
+        question: "How much does A+ Content increase sales?",
+        answer: "Amazon reports that A+ Content increases conversion rates by 3-10% on average. Results vary by product and category. Even a 5% conversion improvement can significantly impact your sales and organic ranking over time.",
+      },
+      {
+        question: "What images do I need to provide?",
+        answer: "Ideally, high-resolution product photos (at least 1500x1500 pixels), lifestyle images showing the product in use, and any brand assets (logo, brand colors). If you don't have professional photos, we can work with what you have or recommend photography services.",
+      },
+      {
+        question: "How long does A+ Content creation take?",
+        answer: "Standard projects take 5-7 business days from kickoff to delivery. Premium projects with custom graphics take 7-10 business days. Rush service is available for urgent needs.",
+      },
+      {
+        question: "Can I use A+ Content on all my listings?",
+        answer: "Yes! Once you have A+ Content created, you can apply it to any ASIN within your brand. Many sellers create a brand template and apply it across their entire catalog with minor product-specific modifications.",
+      },
+      {
+        question: "Does A+ Content help with Amazon SEO?",
+        answer: "The text in A+ Content isn't directly indexed by Amazon's search algorithm. However, the improved conversion rate that A+ Content provides does signal quality to Amazon, which can indirectly boost your organic ranking. The real value is in converting more of your existing traffic.",
       },
     ],
   },
   {
     slug: "ppc-campaign-setup",
     name: "PPC Campaign Setup",
-    shortDesc: "Launch profitable Amazon advertising campaigns.",
+    shortDesc: "Stop wasting money on Amazon ads. We set up properly structured PPC campaigns with researched keywords, strategic bids, and negative keyword lists that actually convert.",
     description: `
-      <p>Amazon PPC (Pay-Per-Click) advertising is essential for new product launches and maintaining visibility. Our experts set up optimized campaigns to maximize your ROI.</p>
+      <p>Amazon PPC can either drain your budget or fuel your growth - the difference is in the setup. Most sellers launch campaigns with Amazon's "automatic" settings and wonder why they're spending $30 to sell a $25 product. We build campaigns designed for profitability from day one.</p>
 
-      <h3>Campaign Types We Set Up</h3>
+      <h3>Why PPC Setup Matters</h3>
       <ul>
-        <li>Sponsored Products</li>
-        <li>Sponsored Brands</li>
-        <li>Sponsored Display</li>
-        <li>Product Targeting campaigns</li>
-        <li>Category targeting campaigns</li>
+        <li><strong>New Product Visibility:</strong> New products have no sales history, so they don't rank organically. PPC is the only way to get initial visibility and sales.</li>
+        <li><strong>The Amazon Flywheel:</strong> PPC sales boost your organic ranking. Better ranking = more organic sales = even better ranking. It compounds.</li>
+        <li><strong>Competitive Defense:</strong> If you're not advertising, your competitors are showing up on YOUR product page via Sponsored Display ads.</li>
+        <li><strong>Data Collection:</strong> PPC generates valuable data about which keywords convert - use this to optimize your listings.</li>
+      </ul>
+
+      <h3>Campaign Types We Build</h3>
+
+      <h4>Sponsored Products (The Foundation)</h4>
+      <p>The most important campaign type for most sellers:</p>
+      <ul>
+        <li><strong>Automatic Campaigns:</strong> Let Amazon find keywords (we use these for discovery)</li>
+        <li><strong>Manual Keyword Campaigns:</strong> Target specific keywords you choose (where the money is made)</li>
+        <li><strong>ASIN Targeting:</strong> Show your ads on competitor product pages</li>
+      </ul>
+
+      <h4>Sponsored Brands (Brand Registry Required)</h4>
+      <p>Banner ads at the top of search results:</p>
+      <ul>
+        <li>Feature your logo and multiple products</li>
+        <li>Drive traffic to your Amazon Store</li>
+        <li>Higher click-through rates than Sponsored Products</li>
+      </ul>
+
+      <h4>Sponsored Display</h4>
+      <p>Retargeting and audience-based advertising:</p>
+      <ul>
+        <li>Target shoppers who viewed your products</li>
+        <li>Target shoppers who viewed similar products</li>
+        <li>Reach audiences on and off Amazon</li>
+      </ul>
+
+      <h3>Our PPC Setup Process</h3>
+      <ol>
+        <li><strong>Product & Market Analysis:</strong> Understand your margins, competition, and realistic ACoS targets</li>
+        <li><strong>Keyword Research:</strong> Deep dive into high-intent keywords using Helium 10, Amazon Brand Analytics, and competitor research</li>
+        <li><strong>Campaign Architecture:</strong> Build a logical structure (separate campaigns by match type, product, goal)</li>
+        <li><strong>Bid Strategy:</strong> Set bids based on keyword value, competition, and your target ACoS</li>
+        <li><strong>Negative Keywords:</strong> Block irrelevant searches from wasting budget from the start</li>
+        <li><strong>Launch & Monitor:</strong> Implement campaigns and track initial performance</li>
+      </ol>
+
+      <h3>What "Good" PPC Looks Like (2025 Benchmarks)</h3>
+      <ul>
+        <li><strong>ACoS (Advertising Cost of Sale):</strong> 15-30% for established products, 40-60% acceptable for launches</li>
+        <li><strong>TACoS (Total ACoS):</strong> Should decrease over time as organic sales increase</li>
+        <li><strong>Click-Through Rate:</strong> 0.3-0.5% average, 0.5%+ is excellent</li>
+        <li><strong>Conversion Rate:</strong> Should match or exceed your organic conversion rate</li>
+      </ul>
+
+      <h3>What We Don't Do (And Why)</h3>
+      <p>We don't promise overnight success or guaranteed rankings. Amazon PPC is competitive and requires realistic expectations:</p>
+      <ul>
+        <li>New products need 2-4 weeks to gather enough data for optimization</li>
+        <li>Some niches have high CPCs - we can't change market dynamics</li>
+        <li>PPC can't fix a bad product or listing - those need to be addressed first</li>
       </ul>
     `,
     icon: Target,
@@ -1516,60 +2250,154 @@ export const services = [
     category: "amazon" as ServiceCategory,
     popular: false,
     features: [
-      "Keyword research",
-      "Campaign structure",
-      "Bid optimization",
-      "Negative keywords",
-      "Performance guide",
+      "Comprehensive keyword research",
+      "Structured campaign architecture",
+      "All campaign types setup",
+      "Strategic bid management",
+      "Negative keyword lists",
+      "Performance tracking setup",
     ],
     packages: [
       {
         name: "Starter",
         price: 249,
-        description: "Basic campaign setup",
+        description: "Foundation campaigns for 1-3 products",
         features: [
-          "3 Campaigns",
+          "3 Campaign Setup",
           "Keyword Research",
-          "Initial Setup",
-          "Strategy Guide",
+          "Negative Keywords",
+          "Setup Guide & Training",
         ],
-        notIncluded: ["Ongoing Management"],
+        notIncluded: ["Ongoing Management", "Sponsored Brands"],
       },
       {
         name: "Pro",
         price: 449,
-        description: "Complete PPC setup",
+        description: "Complete PPC foundation - Most Popular",
         features: [
           "10 Campaigns",
           "All Ad Types",
-          "1-Month Optimization",
-          "Weekly Reports",
+          "2-Week Optimization",
+          "Weekly Performance Reports",
+        ],
+        notIncluded: ["Ongoing Management"],
+        popular: true,
+      },
+      {
+        name: "Launch",
+        price: 699,
+        description: "Full launch support with management",
+        features: [
+          "Unlimited Campaigns",
+          "30-Day Management",
+          "Daily Bid Optimization",
+          "Bi-Weekly Strategy Calls",
         ],
         notIncluded: [],
-        popular: true,
       },
     ],
     faqs: [
       {
-        question: "How much should I budget for PPC?",
-        answer: "We recommend starting with $20-50 per day per product. Our setup optimizes for efficiency, so your budget goes further.",
+        question: "How much should I budget for Amazon PPC?",
+        answer: "For new products, we recommend $30-50 per day per product during launch (first 4-8 weeks). Established products can often maintain visibility with $15-30/day. Your actual budget should be based on your profit margins and target ACoS - we help calculate this during setup.",
+      },
+      {
+        question: "What's a good ACoS for my campaigns?",
+        answer: "A 'good' ACoS depends on your profit margins. If your profit margin is 30%, an ACoS under 30% means you're profitable on ad sales. For launches, higher ACoS (even 50-70%) can be acceptable to drive initial sales and rankings. We help you understand your break-even ACoS.",
+      },
+      {
+        question: "Do you provide ongoing management or just setup?",
+        answer: "We offer both. Starter and Pro packages focus on setup and training so you can manage campaigns yourself. Our Launch package includes 30 days of active management. For ongoing management beyond that, we offer monthly management plans separately.",
+      },
+      {
+        question: "How long until I see results from PPC?",
+        answer: "You'll see impressions and clicks within hours of launch. However, meaningful data requires 2-4 weeks of running campaigns. Real optimization happens after we have enough conversion data to make informed decisions. Don't panic in week one - PPC is a medium-term strategy.",
+      },
+      {
+        question: "Should I run PPC on a brand new product?",
+        answer: "Yes, but with proper expectations. New products need PPC for initial visibility, but they'll have lower conversion rates until they get reviews. We structure new product campaigns differently - focusing on relevant, buyer-intent keywords with controlled budgets until the listing gains traction.",
+      },
+      {
+        question: "What's the difference between automatic and manual campaigns?",
+        answer: "Automatic campaigns let Amazon decide when to show your ads based on your listing content - good for keyword discovery but less control. Manual campaigns target specific keywords you choose - more control and typically better ROI once you know which keywords work. We use both strategically.",
       },
     ],
   },
   {
     slug: "account-reinstatement",
     name: "Account Reinstatement",
-    shortDesc: "Get your suspended Amazon account reinstated quickly.",
+    shortDesc: "Suspended by Amazon? We've helped hundreds of sellers get reinstated. Professional Plan of Action writing with proven templates that Amazon's team responds to.",
     description: `
-      <p>A suspended Amazon account can devastate your business. Our experienced team has helped hundreds of sellers get reinstated by crafting effective Plans of Action (POA) and appeals.</p>
+      <p>Waking up to an Amazon suspension email is terrifying. Your income stops, your inventory is stranded, and you don't know what you did wrong. Worse, sending the wrong appeal can make things worse. We've successfully reinstated hundreds of accounts - we know what Amazon wants to see.</p>
 
-      <h3>Suspension Types We Handle</h3>
+      <h3>Common Suspension Types We Handle</h3>
+
+      <h4>Inauthentic Item Suspensions</h4>
+      <p>The most common suspension for new sellers. Amazon believes (rightly or wrongly) that your products aren't genuine. We help you:</p>
       <ul>
-        <li>Performance-related suspensions</li>
-        <li>Policy violations</li>
-        <li>Inauthentic item claims</li>
-        <li>Linked account issues</li>
-        <li>Verification failures</li>
+        <li>Understand what triggered the complaint</li>
+        <li>Gather proper documentation proving authenticity</li>
+        <li>Write appeals that address Amazon's specific concerns</li>
+      </ul>
+
+      <h4>Performance-Based Suspensions</h4>
+      <p>Order defect rate, late shipments, or cancellation rate too high? We help you:</p>
+      <ul>
+        <li>Identify the root causes of performance issues</li>
+        <li>Create concrete action plans for improvement</li>
+        <li>Present data showing you can meet Amazon's standards</li>
+      </ul>
+
+      <h4>Policy Violation Suspensions</h4>
+      <p>Listing issues, restricted product violations, review manipulation, or other policy breaches:</p>
+      <ul>
+        <li>Determine exactly which policy was violated</li>
+        <li>Address the violation directly with corrective actions</li>
+        <li>Demonstrate understanding of Amazon's policies going forward</li>
+      </ul>
+
+      <h4>Linked Account Issues</h4>
+      <p>Amazon thinks you're connected to another suspended account. Tricky but solvable:</p>
+      <ul>
+        <li>Identify how accounts may have been linked (shared IP, address, payment method)</li>
+        <li>Prove your account is legitimately separate</li>
+        <li>Navigate Amazon's verification requirements</li>
+      </ul>
+
+      <h4>Verification Failures</h4>
+      <p>Failed identity verification, video call issues, or document rejection:</p>
+      <ul>
+        <li>Understand why verification failed</li>
+        <li>Prepare proper documentation that meets Amazon's standards</li>
+        <li>Guide you through re-verification process</li>
+      </ul>
+
+      <h3>What Makes a Successful Appeal</h3>
+      <p>Amazon's Seller Performance team reviews thousands of appeals daily. Successful appeals share these traits:</p>
+      <ul>
+        <li><strong>Acknowledgment:</strong> Accept responsibility (even if you disagree)</li>
+        <li><strong>Root Cause:</strong> Clearly identify WHY the problem happened</li>
+        <li><strong>Immediate Actions:</strong> What you've already done to fix it</li>
+        <li><strong>Preventive Measures:</strong> How you'll prevent it from happening again</li>
+        <li><strong>Supporting Documentation:</strong> Invoices, photos, or evidence when required</li>
+      </ul>
+
+      <h3>Our Reinstatement Process</h3>
+      <ol>
+        <li><strong>Account Analysis:</strong> We review your suspension notice, account health, and history to understand exactly what went wrong</li>
+        <li><strong>Document Collection:</strong> We identify what documentation is needed and help you gather it</li>
+        <li><strong>POA Writing:</strong> We write a professional Plan of Action using proven templates and language</li>
+        <li><strong>Submission:</strong> We submit through the proper channels (Seller Central, Appeal form, or escalation)</li>
+        <li><strong>Follow-up:</strong> We monitor response and handle any additional appeals needed</li>
+      </ol>
+
+      <h3>Realistic Expectations</h3>
+      <p>We're honest about reinstatement:</p>
+      <ul>
+        <li>Most accounts CAN be reinstated with the right approach</li>
+        <li>Some violations (black hat tactics, repeated offenses) have lower success rates</li>
+        <li>Amazon's timeline is 1-3 days per response, but complex cases take longer</li>
+        <li>First appeal is most important - bad appeals can make reinstatement harder</li>
       </ul>
     `,
     icon: AlertTriangle,
@@ -1578,34 +2406,35 @@ export const services = [
     category: "amazon" as ServiceCategory,
     popular: false,
     features: [
-      "Account analysis",
-      "Plan of Action writing",
+      "Detailed account analysis",
+      "Professional POA writing",
+      "Document preparation guidance",
       "Appeal submission",
-      "Follow-up support",
-      "Prevention guidance",
+      "Follow-up appeals included",
+      "Prevention recommendations",
     ],
     packages: [
       {
         name: "Standard",
         price: 399,
-        description: "Basic reinstatement",
+        description: "Most suspension types",
         features: [
           "Account Analysis",
-          "Plan of Action",
-          "1 Appeal",
-          "7-day Support",
+          "Plan of Action (POA)",
+          "1 Appeal Round",
+          "7-Day Support",
         ],
-        notIncluded: ["Multiple Appeals"],
+        notIncluded: ["Multiple Appeals", "Phone Consultation"],
       },
       {
         name: "Premium",
         price: 699,
-        description: "Full reinstatement service",
+        description: "Complex suspensions - Most Popular",
         features: [
           "Everything in Standard",
-          "Up to 3 Appeals",
-          "30-day Support",
-          "Prevention Strategy",
+          "Up to 3 Appeal Rounds",
+          "30-Day Support",
+          "Prevention Strategy Session",
         ],
         notIncluded: [],
         popular: true,
@@ -1613,20 +2442,40 @@ export const services = [
       {
         name: "Emergency",
         price: 999,
-        description: "Priority handling",
+        description: "Priority handling for urgent cases",
         features: [
           "Same-Day Analysis",
           "Unlimited Appeals",
-          "Dedicated Manager",
-          "60-day Support",
+          "Dedicated Case Manager",
+          "60-Day Support + Escalation",
         ],
         notIncluded: [],
       },
     ],
     faqs: [
       {
-        question: "How long does reinstatement take?",
-        answer: "Most reinstatements are resolved within 1-4 weeks, depending on the suspension type. Emergency cases get priority handling.",
+        question: "How long does reinstatement typically take?",
+        answer: "Amazon typically responds to appeals within 1-3 business days. Simple cases (first offense, clear documentation) often resolve in 1-2 weeks. Complex cases (linked accounts, repeated violations) can take 3-6 weeks. Emergency cases get our fastest turnaround on POA preparation.",
+      },
+      {
+        question: "Can you guarantee my account will be reinstated?",
+        answer: "No one can guarantee reinstatement - anyone who promises 100% success is lying. However, our success rate is over 85% across all suspension types. Some cases (serious policy violations, repeat offenders, black hat tactics) have lower success rates regardless of how good the appeal is.",
+      },
+      {
+        question: "Should I submit an appeal before contacting you?",
+        answer: "If possible, NO. Your first appeal is the most important one. A bad first appeal can make reinstatement harder. If you've already submitted appeals and been denied, we can still help, but the case becomes more complex. Contact us before your first submission if you can.",
+      },
+      {
+        question: "What documentation do I need to provide?",
+        answer: "It depends on your suspension type. Inauthentic claims need invoices from authorized suppliers. Performance issues need operational improvement evidence. We'll tell you exactly what's needed after analyzing your case - don't send Amazon random documents hoping something works.",
+      },
+      {
+        question: "Why did Amazon suspend my account with no warning?",
+        answer: "Amazon doesn't always give warnings, especially for what they consider serious violations. Sometimes suspensions are triggered by competitor attacks, customer complaints, or automated systems. We help determine the actual cause and address it properly.",
+      },
+      {
+        question: "What if my appeal gets rejected?",
+        answer: "Rejection isn't the end. Our Premium and Emergency packages include multiple appeal rounds. We analyze Amazon's response, strengthen the POA, address their specific concerns, and resubmit. Many accounts are reinstated on second or third appeal with the right adjustments.",
       },
     ],
   },
@@ -1799,18 +2648,60 @@ export const services = [
   {
     slug: "bookkeeping",
     name: "Bookkeeping Service",
-    shortDesc: "Professional bookkeeping to keep your finances organized.",
+    shortDesc: "Clean books, stress-free tax season. We categorize transactions, reconcile accounts, and prepare monthly financial statements - so you know exactly where your business stands.",
     description: `
-      <p>Keep your business finances organized with our monthly bookkeeping service. We track income, expenses, and prepare financial reports so you're always ready for tax season.</p>
+      <p>Running an Amazon store or e-commerce business from abroad while trying to keep your books straight in a foreign tax system? It's a recipe for chaos. Our bookkeeping service handles the numbers so you can focus on growing your business - and when tax season comes, you're already prepared.</p>
 
-      <h3>What's Included</h3>
+      <h3>Why Professional Bookkeeping Matters</h3>
       <ul>
-        <li>Transaction categorization</li>
-        <li>Bank reconciliation</li>
-        <li>Monthly financial statements</li>
-        <li>Expense tracking</li>
-        <li>Tax-ready reports</li>
+        <li><strong>Tax Compliance:</strong> The IRS doesn't care that you're based in Bangladesh. If you have a US LLC, you have US reporting obligations. Proper books make tax filing straightforward instead of a scramble.</li>
+        <li><strong>Business Decisions:</strong> Are you actually profitable? Which products make money? What are your real margins? Without organized books, you're guessing.</li>
+        <li><strong>Banking Requirements:</strong> Banks and lenders want to see financial statements. Messy books = no business loans.</li>
+        <li><strong>Peace of Mind:</strong> Knowing your finances are handled properly lets you focus on what you're good at - building your business.</li>
       </ul>
+
+      <h3>What Our Bookkeeping Includes</h3>
+
+      <h4>Monthly Transaction Processing</h4>
+      <ul>
+        <li>Import transactions from all connected accounts (bank, PayPal, Stripe, Amazon)</li>
+        <li>Categorize each transaction to the proper expense category</li>
+        <li>Match deposits to income sources</li>
+        <li>Flag unusual or unclear transactions for your review</li>
+      </ul>
+
+      <h4>Bank & Account Reconciliation</h4>
+      <ul>
+        <li>Ensure every transaction in your books matches your bank statements</li>
+        <li>Identify and correct discrepancies</li>
+        <li>Reconcile PayPal, Stripe, and payment processor accounts</li>
+        <li>Track Amazon deposits against Seller Central data</li>
+      </ul>
+
+      <h4>Financial Statements</h4>
+      <ul>
+        <li><strong>Profit & Loss (Income Statement):</strong> See your revenue, expenses, and net profit</li>
+        <li><strong>Balance Sheet:</strong> Snapshot of assets, liabilities, and equity</li>
+        <li><strong>Cash Flow Statement:</strong> Where your money is coming from and going to</li>
+      </ul>
+
+      <h4>E-Commerce Specific Features</h4>
+      <ul>
+        <li>Amazon settlement report reconciliation</li>
+        <li>FBA fee tracking and categorization</li>
+        <li>Inventory cost tracking</li>
+        <li>Multi-currency transaction handling</li>
+        <li>Sales tax liability tracking</li>
+      </ul>
+
+      <h3>Tools We Support</h3>
+      <p>We work with major accounting platforms:</p>
+      <ul>
+        <li><strong>QuickBooks Online:</strong> Most popular for US businesses</li>
+        <li><strong>Xero:</strong> Great for international businesses</li>
+        <li><strong>Wave:</strong> Free option for simpler businesses</li>
+      </ul>
+      <p>Don't have accounting software yet? We'll help you choose and set up the right platform.</p>
     `,
     icon: BookOpen,
     image: "/images/services/bookkeeping.jpg",
@@ -1818,34 +2709,35 @@ export const services = [
     category: "tax-finance" as ServiceCategory,
     popular: false,
     features: [
-      "Monthly bookkeeping",
-      "Bank reconciliation",
-      "Financial reports",
-      "Tax preparation",
-      "Dedicated bookkeeper",
+      "Monthly transaction categorization",
+      "Bank & account reconciliation",
+      "Profit & Loss statement",
+      "Balance sheet preparation",
+      "Amazon seller report integration",
+      "Year-end tax readiness",
     ],
     packages: [
       {
         name: "Starter",
         price: 149,
-        description: "Per month (up to 50 transactions)",
+        description: "Per month - Up to 100 transactions",
         features: [
-          "Transaction Categorization",
+          "100 Monthly Transactions",
           "Bank Reconciliation",
-          "Monthly P&L",
+          "Monthly P&L Report",
           "Email Support",
         ],
-        notIncluded: ["Payroll"],
+        notIncluded: ["Balance Sheet", "Dedicated Accountant"],
       },
       {
         name: "Growth",
         price: 299,
-        description: "Per month (up to 200 transactions)",
+        description: "Per month - Up to 300 transactions",
         features: [
-          "Everything in Starter",
-          "Balance Sheet",
-          "Quarterly Review Call",
-          "Priority Support",
+          "300 Monthly Transactions",
+          "Full Financial Statements",
+          "Amazon Report Integration",
+          "Monthly Review Call",
         ],
         notIncluded: [],
         popular: true,
@@ -1853,12 +2745,12 @@ export const services = [
       {
         name: "Scale",
         price: 499,
-        description: "Per month (unlimited transactions)",
+        description: "Per month - Unlimited transactions",
         features: [
-          "Everything in Growth",
           "Unlimited Transactions",
-          "Monthly Review Call",
-          "CFO Advisory",
+          "Dedicated Accountant",
+          "Inventory Tracking",
+          "Weekly Check-ins",
         ],
         notIncluded: [],
       },
@@ -1866,25 +2758,84 @@ export const services = [
     faqs: [
       {
         question: "What accounting software do you use?",
-        answer: "We work with QuickBooks, Xero, and Wave. We'll recommend the best option for your business size and needs.",
+        answer: "We primarily work with QuickBooks Online and Xero. Both are cloud-based, so you can access your books anytime from anywhere. If you don't have accounting software yet, we recommend QuickBooks Online for most US-focused businesses.",
+      },
+      {
+        question: "How do you handle Amazon seller accounts?",
+        answer: "We integrate with your Amazon Seller Central to pull settlement reports. This lets us accurately track your Amazon revenue, fees, and deposits. We reconcile Amazon deposits to your bank account and categorize all the various fees properly.",
+      },
+      {
+        question: "What if I have months of messy or missing bookkeeping?",
+        answer: "We offer catch-up bookkeeping services. We'll reconstruct your books from bank statements, Amazon reports, and any documentation you have. Pricing depends on how far back we need to go and transaction volume. Contact us for a catch-up quote.",
+      },
+      {
+        question: "Do you handle sales tax?",
+        answer: "We track sales tax liability as part of bookkeeping. For actual sales tax filing (submitting returns to state tax authorities), that's a separate service. Many states have economic nexus laws that may require you to collect and remit sales tax.",
+      },
+      {
+        question: "Will my books be ready for tax filing?",
+        answer: "Yes! That's a core goal of our service. By year-end, your books will be reconciled, categorized, and ready to hand off to your tax preparer. We provide tax-ready reports and can communicate directly with your CPA if needed.",
       },
     ],
   },
   {
     slug: "tax-filing",
     name: "Tax Filing Service",
-    shortDesc: "US business tax preparation and filing for your LLC.",
+    shortDesc: "US LLC tax preparation for international owners. We handle Schedule C, Form 1065, state filings, and FBAR requirements. Stay compliant without understanding the US tax code yourself.",
     description: `
-      <p>Stay compliant with US tax requirements with our tax filing service. We prepare and file the appropriate tax returns for your LLC, whether you're a single-member or multi-member LLC.</p>
+      <p>US tax law is complicated even for Americans - for international LLC owners, it's a maze of confusing forms, deadlines, and requirements. We prepare and file your LLC tax returns correctly, so you stay compliant without having to become a US tax expert.</p>
 
-      <h3>What's Included</h3>
+      <h3>Understanding LLC Taxation for Non-US Owners</h3>
+      <p>Here's what most international entrepreneurs don't realize: how your LLC is taxed depends on several factors:</p>
       <ul>
-        <li>Form 1065 (Partnership return)</li>
-        <li>Form 1120-S (S-Corp election)</li>
-        <li>Schedule C preparation</li>
-        <li>State tax filings</li>
-        <li>Tax planning advice</li>
+        <li><strong>Single-Member LLC (Foreign Owned):</strong> Often treated as a "disregarded entity" for US tax purposes. If you have no US-source income, you may have minimal US tax obligations - but you likely still have informational filing requirements.</li>
+        <li><strong>Multi-Member LLC:</strong> Taxed as a partnership by default. Requires Form 1065 and K-1s for each member, even if the members are all non-US persons.</li>
+        <li><strong>S-Corp Election:</strong> Some LLCs elect S-Corp status for tax savings (not available for all international owners).</li>
       </ul>
+
+      <h3>Key Tax Forms We Handle</h3>
+      <ul>
+        <li><strong>Form 5472:</strong> Required for foreign-owned single-member LLCs - reports transactions with foreign owners</li>
+        <li><strong>Form 1120:</strong> Pro forma return filed with Form 5472 for foreign-owned LLCs</li>
+        <li><strong>Form 1065:</strong> Partnership return for multi-member LLCs</li>
+        <li><strong>Schedule K-1:</strong> Individual partner income allocation</li>
+        <li><strong>Form 1040-NR:</strong> Non-resident individual return (if you have US-source income)</li>
+        <li><strong>State Returns:</strong> Many states have separate filing requirements</li>
+      </ul>
+
+      <h3>Important Deadlines</h3>
+      <ul>
+        <li><strong>March 15:</strong> Partnership returns (Form 1065) due</li>
+        <li><strong>April 15:</strong> Individual returns and Form 5472/1120 for single-member LLCs due</li>
+        <li><strong>State Deadlines:</strong> Vary by state - we track all applicable deadlines</li>
+      </ul>
+      <p>Extensions are available, but we recommend filing on time to avoid potential issues with banks and compliance records.</p>
+
+      <h3>What We Don't Do (And Why)</h3>
+      <p>We're upfront about boundaries:</p>
+      <ul>
+        <li><strong>Not Tax Advice:</strong> We prepare returns based on your situation, but we're not providing legal tax advice. For complex tax planning, we recommend consulting a CPA or tax attorney.</li>
+        <li><strong>Not FBAR Filing:</strong> If you have US bank accounts exceeding $10,000, you may need to file FBAR separately. We can refer you to specialists.</li>
+        <li><strong>Not Audit Representation:</strong> If the IRS audits your return, you'll need a CPA or enrolled agent for representation. We can provide documents and explanations.</li>
+      </ul>
+
+      <h3>Our Tax Preparation Process</h3>
+      <ol>
+        <li><strong>Intake:</strong> You complete our tax questionnaire and upload financial documents</li>
+        <li><strong>Review:</strong> We review your books and identify all filing requirements</li>
+        <li><strong>Preparation:</strong> We prepare all required federal and state returns</li>
+        <li><strong>Review Call:</strong> We walk through your returns and answer questions</li>
+        <li><strong>E-Filing:</strong> We electronically file with the IRS and applicable states</li>
+        <li><strong>Confirmation:</strong> You receive copies of all filed returns for your records</li>
+      </ol>
+
+      <h3>Common International Owner Situations</h3>
+      <ul>
+        <li><strong>Amazon Sellers:</strong> Amazon income is typically US-source, which creates filing obligations</li>
+        <li><strong>Service Businesses:</strong> If work is performed outside the US for non-US clients, may not be US-source income</li>
+        <li><strong>Dropshipping:</strong> Complex - depends on where value is created and customers are located</li>
+      </ul>
+      <p>We assess your specific situation during the intake process and advise on requirements.</p>
     `,
     icon: Calculator,
     image: "/images/services/tax-filing.jpg",
@@ -1892,34 +2843,35 @@ export const services = [
     category: "tax-finance" as ServiceCategory,
     popular: false,
     features: [
-      "Federal tax return",
-      "State tax return",
-      "Tax planning",
-      "E-filing",
+      "Federal tax return preparation",
+      "Form 5472 for foreign owners",
+      "State tax filing (where required)",
+      "E-filing with IRS",
+      "Year-end review call",
       "IRS correspondence support",
     ],
     packages: [
       {
         name: "Basic",
         price: 349,
-        description: "Single-member LLC",
+        description: "Single-member foreign-owned LLC",
         features: [
-          "Schedule C",
-          "Federal Filing",
-          "E-File",
+          "Form 5472 + 1120 Pro Forma",
+          "Federal E-Filing",
+          "Document Checklist",
           "Email Support",
         ],
-        notIncluded: ["State Filing"],
+        notIncluded: ["State Filing", "Phone Consultation"],
       },
       {
         name: "Standard",
         price: 549,
-        description: "Multi-member or S-Corp",
+        description: "Multi-member LLC or with state filing",
         features: [
-          "Form 1065 or 1120-S",
+          "Form 1065 Partnership Return",
+          "K-1s for All Members",
           "Federal + 1 State",
-          "K-1 Preparation",
-          "Tax Planning Call",
+          "Tax Review Call",
         ],
         notIncluded: [],
         popular: true,
@@ -1927,12 +2879,12 @@ export const services = [
       {
         name: "Complete",
         price: 799,
-        description: "Full tax service",
+        description: "Complex situations & multi-state",
         features: [
-          "All Returns",
+          "All Required Returns",
           "Multi-State Filing",
-          "Quarterly Estimates",
-          "Year-Round Support",
+          "Quarterly Estimate Calculations",
+          "Year-Round Email Support",
         ],
         notIncluded: [],
       },
@@ -1940,7 +2892,27 @@ export const services = [
     faqs: [
       {
         question: "Do I need to file US taxes as a foreign LLC owner?",
-        answer: "It depends on your situation. Single-member LLCs owned by non-residents typically don't have US tax obligations if they have no US-source income, but there may be informational filings required.",
+        answer: "Almost always yes - at minimum, foreign-owned single-member LLCs must file Form 5472 (reporting transactions with foreign owners) with a pro forma Form 1120. Failure to file can result in a $25,000 penalty per year. Even if you owe no US taxes, the filing requirement exists.",
+      },
+      {
+        question: "What is Form 5472 and why is it required?",
+        answer: "Form 5472 reports 'reportable transactions' between a US LLC and its foreign owner. This includes capital contributions, distributions, and any payments between you and your LLC. It's filed with a pro forma Form 1120. The IRS uses this for information gathering, not necessarily taxation.",
+      },
+      {
+        question: "When are LLC tax returns due?",
+        answer: "For foreign-owned single-member LLCs: April 15th (Form 5472/1120). For multi-member LLCs: March 15th (Form 1065). Extensions are available, but filing on time is better for compliance records. We handle extension requests if needed.",
+      },
+      {
+        question: "Do I owe US taxes on my Amazon income?",
+        answer: "Amazon income from US customers is generally considered US-source income. However, for single-member LLCs owned by non-residents with no US presence beyond the LLC, tax treaty benefits may reduce or eliminate US tax liability. We assess your specific situation during preparation.",
+      },
+      {
+        question: "What documents do I need to provide?",
+        answer: "We'll need: your LLC formation documents, EIN confirmation, financial statements or bookkeeping records, Amazon settlement reports (if applicable), bank statements, and any other income/expense documentation. We provide a detailed checklist during onboarding.",
+      },
+      {
+        question: "What happens if I haven't filed previous years?",
+        answer: "Missing past filings is serious but fixable. We can prepare back returns and help you become compliant. The IRS penalty for missing Form 5472 is $25,000 per return, but voluntary disclosure and compliance can sometimes reduce penalties. The key is to fix it before the IRS contacts you.",
       },
     ],
   },
