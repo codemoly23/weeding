@@ -52,7 +52,6 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { cn } from "@/lib/utils";
-import { services } from "@/lib/data/services";
 import { StateSelector, type State } from "@/components/ui/state-selector";
 import { CountrySelector, ELIGIBLE_COUNTRIES } from "@/components/ui/country-selector";
 import { Header } from "@/components/layout/header";
@@ -83,6 +82,25 @@ interface LoggedInUser {
   phone?: string;
 }
 
+// Service types for API response
+interface ServicePackage {
+  id: string;
+  name: string;
+  description: string | null;
+  price: number;
+  isPopular: boolean;
+  features: string[];
+  notIncluded: string[];
+}
+
+interface ServiceInfo {
+  id: string;
+  slug: string;
+  name: string;
+  shortDesc: string;
+  packages: ServicePackage[];
+}
+
 function CheckoutForm() {
   const searchParams = useSearchParams();
   const router = useRouter();
@@ -90,6 +108,10 @@ function CheckoutForm() {
   const [currentStep, setCurrentStep] = useState(1);
   const [isLoading, setIsLoading] = useState(false);
   const [errors, setErrors] = useState<Record<string, string>>({});
+
+  // Services from API
+  const [services, setServices] = useState<ServiceInfo[]>([]);
+  const [isLoadingServices, setIsLoadingServices] = useState(true);
 
   // Logged-in user state
   const [loggedInUser, setLoggedInUser] = useState<LoggedInUser | null>(null);
@@ -110,6 +132,25 @@ function CheckoutForm() {
     searchParams.get("package") || "standard"
   );
   const [selectedState, setSelectedState] = useState<State | null>(null);
+
+  // Fetch services from API
+  useEffect(() => {
+    const fetchServices = async () => {
+      setIsLoadingServices(true);
+      try {
+        const response = await fetch("/api/services");
+        if (response.ok) {
+          const data = await response.json();
+          setServices(data.services || []);
+        }
+      } catch (error) {
+        console.error("Error fetching services:", error);
+      } finally {
+        setIsLoadingServices(false);
+      }
+    };
+    fetchServices();
+  }, []);
 
   // Fetch initial state from URL
   useEffect(() => {
@@ -627,6 +668,25 @@ function CheckoutForm() {
     }
   };
 
+  // Show loading state while fetching services
+  if (isLoadingServices) {
+    return (
+      <>
+        <Header />
+        <div className="min-h-screen bg-muted/30 py-8">
+          <div className="container mx-auto flex items-center justify-center">
+            <div className="text-center">
+              <Loader2 className="mx-auto h-12 w-12 animate-spin text-primary" />
+              <p className="mt-4 text-lg text-muted-foreground">
+                Loading checkout...
+              </p>
+            </div>
+          </div>
+        </div>
+      </>
+    );
+  }
+
   return (
     <>
       <Header />
@@ -725,7 +785,7 @@ function CheckoutForm() {
                                 : "hover:border-primary/50"
                             )}
                           >
-                            {p.popular && (
+                            {p.isPopular && (
                               <Badge className="mb-2" variant="secondary">
                                 Popular
                               </Badge>

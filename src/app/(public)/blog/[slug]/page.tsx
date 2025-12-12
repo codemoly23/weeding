@@ -9,18 +9,16 @@ import {
   blogPosts,
   blogCategories,
   getBlogPostBySlug,
-  getAllBlogSlugs,
   getRecentBlogPosts,
 } from "@/lib/data/blog";
 import { MultiJsonLd } from "@/components/seo/json-ld";
 import { generateBreadcrumbSchema } from "@/lib/seo";
 
+// Force dynamic rendering to avoid SSG issues with client components
+export const dynamic = 'force-dynamic';
+
 interface PageProps {
   params: Promise<{ slug: string }>;
-}
-
-export async function generateStaticParams() {
-  return getAllBlogSlugs().map((slug) => ({ slug }));
 }
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {

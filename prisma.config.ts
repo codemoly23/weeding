@@ -2,6 +2,7 @@ import "dotenv/config";
 import { defineConfig, env } from "prisma/config";
 
 export default defineConfig({
+  // @ts-expect-error earlyAccess is valid for Prisma 7
   earlyAccess: true,
   schema: "prisma/schema.prisma",
   migrate: {
@@ -11,6 +12,9 @@ export default defineConfig({
       const pool = new Pool({ connectionString: process.env.DATABASE_URL });
       return new PrismaPg(pool);
     },
+  },
+  migrations: {
+    seed: "npx tsx prisma/seed.ts",
   },
   datasource: {
     url: env("DATABASE_URL"),

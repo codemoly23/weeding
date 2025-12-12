@@ -134,6 +134,7 @@ export async function POST(request: NextRequest) {
         data: {
           name: data.serviceName || "LLC Formation",
           slug: data.serviceId,
+          shortDesc: "US LLC Formation Service",
           description: "US LLC Formation Service",
           isActive: true,
         },
