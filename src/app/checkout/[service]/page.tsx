@@ -56,7 +56,6 @@ import {
   AlertTitle,
 } from "@/components/ui/alert";
 import { cn } from "@/lib/utils";
-import { services } from "@/lib/data/services";
 import {
   getServiceForm,
   type ServiceFormConfig,
@@ -129,6 +128,47 @@ function ServiceCheckoutForm() {
   const [showLoginPassword, setShowLoginPassword] = useState(false);
   const [loginError, setLoginError] = useState("");
   const [isLoggingIn, setIsLoggingIn] = useState(false);
+
+  // Service data from API
+  interface ServicePackage {
+    id: string;
+    name: string;
+    description: string | null;
+    price: number;
+    isPopular: boolean;
+    features: string[];
+    notIncluded: string[];
+  }
+
+  interface ServiceInfo {
+    id: string;
+    slug: string;
+    name: string;
+    shortDesc: string;
+    packages: ServicePackage[];
+  }
+
+  const [service, setService] = useState<ServiceInfo | null>(null);
+  const [isLoadingService, setIsLoadingService] = useState(true);
+
+  // Fetch service data from API
+  useEffect(() => {
+    const fetchService = async () => {
+      setIsLoadingService(true);
+      try {
+        const response = await fetch(`/api/services/${serviceSlug}`);
+        if (response.ok) {
+          const data = await response.json();
+          setService(data);
+        }
+      } catch (error) {
+        console.error("Error fetching service:", error);
+      } finally {
+        setIsLoadingService(false);
+      }
+    };
+    fetchService();
+  }, [serviceSlug]);
 
   // Check for logged-in user on mount
   useEffect(() => {
@@ -266,8 +306,7 @@ function ServiceCheckoutForm() {
     }
   };
 
-  // Get service info and selected package
-  const service = services.find((s) => s.slug === serviceSlug);
+  // Get selected package from service data
   const selectedPackage = service?.packages.find(
     (p) => p.name.toLowerCase() === selectedPackageSlug.toLowerCase()
   ) || service?.packages[0];
@@ -857,6 +896,39 @@ function ServiceCheckoutForm() {
     }
   };
 
+  // Show loading state while fetching service data
+  if (isLoadingService) {
+    return (
+      <div className="min-h-screen bg-muted/30 py-8">
+        <div className="container mx-auto flex items-center justify-center">
+          <div className="text-center">
+            <Loader2 className="mx-auto h-12 w-12 animate-spin text-primary" />
+            <p className="mt-4 text-lg text-muted-foreground">
+              Loading service details...
+            </p>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  // Show error if service not found in database
+  if (!service) {
+    return (
+      <div className="min-h-screen bg-muted/30 py-8">
+        <div className="container mx-auto px-4 text-center">
+          <h1 className="text-2xl font-bold">Service Not Found</h1>
+          <p className="mt-2 text-muted-foreground">
+            The requested service is not available.
+          </p>
+          <Link href="/services">
+            <Button className="mt-4">Browse Services</Button>
+          </Link>
+        </div>
+      </div>
+    );
+  }
+
   if (!formConfig) {
     // If no form config, redirect to main checkout or show error
     if (serviceSlug === "llc-formation") {
@@ -866,9 +938,9 @@ function ServiceCheckoutForm() {
     return (
       <div className="min-h-screen bg-muted/30 py-8">
         <div className="container mx-auto px-4 text-center">
-          <h1 className="text-2xl font-bold">Service Not Found</h1>
+          <h1 className="text-2xl font-bold">Checkout Not Configured</h1>
           <p className="mt-2 text-muted-foreground">
-            The requested service checkout is not available.
+            The checkout flow for this service is being set up.
           </p>
           <Link href="/services">
             <Button className="mt-4">Browse Services</Button>
@@ -1443,7 +1515,7 @@ function ServiceCheckoutForm() {
                   <div className="mt-4 rounded-lg bg-muted p-3">
                     <p className="text-sm font-medium">Processing Time</p>
                     <p className="text-sm text-muted-foreground">
-                      {service?.processingTime || "3-5 business days"}
+                      3-5 business days
                     </p>
                   </div>
 

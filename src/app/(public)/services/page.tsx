@@ -4,7 +4,11 @@ import { ArrowRight } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { services } from "@/lib/data/services";
+import { ServiceIcon } from "@/components/ui/service-icon";
+import prisma from "@/lib/db";
+
+// Force dynamic rendering
+export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = {
   title: "Services",
@@ -12,7 +16,45 @@ export const metadata: Metadata = {
     "Explore our comprehensive US business formation services including LLC formation, EIN application, Amazon seller accounts, and more.",
 };
 
-export default function ServicesPage() {
+interface ServiceListItem {
+  id: string;
+  slug: string;
+  name: string;
+  shortDesc: string;
+  icon: string | null;
+  startingPrice: number;
+  isPopular: boolean;
+}
+
+async function getServices(): Promise<ServiceListItem[]> {
+  try {
+    const services = await prisma.service.findMany({
+      where: { isActive: true },
+      select: {
+        id: true,
+        slug: true,
+        name: true,
+        shortDesc: true,
+        icon: true,
+        startingPrice: true,
+        isPopular: true,
+      },
+      orderBy: [{ sortOrder: "asc" }, { name: "asc" }],
+    });
+
+    return services.map((s) => ({
+      ...s,
+      startingPrice: Number(s.startingPrice),
+    }));
+  } catch (error) {
+    console.error("Error fetching services:", error);
+    return [];
+  }
+}
+
+export default async function ServicesPage() {
+  const services = await getServices();
+
   return (
     <div className="py-16 lg:py-24">
       <div className="container mx-auto px-4">
@@ -32,14 +74,12 @@ export default function ServicesPage() {
 
         {/* Services Grid */}
         <div className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-          {services.map((service) => {
-            const Icon = service.icon;
-            return (
+          {services.map((service) => (
               <Link key={service.slug} href={`/services/${service.slug}`}>
                 <Card className="group h-full transition-all hover:border-primary hover:shadow-lg">
                   <CardHeader>
                     <div className="mb-4 flex h-14 w-14 items-center justify-center rounded-xl bg-primary/10 text-primary transition-colors group-hover:bg-primary group-hover:text-primary-foreground">
-                      <Icon className="h-7 w-7" />
+                      <ServiceIcon name={service.icon || "Package"} className="h-7 w-7" />
                     </div>
                     <CardTitle className="text-xl">{service.name}</CardTitle>
                   </CardHeader>
@@ -54,9 +94,17 @@ export default function ServicesPage() {
                   </CardContent>
                 </Card>
               </Link>
-            );
-          })}
+            ))}
         </div>
+
+        {/* Empty State */}
+        {services.length === 0 && (
+          <div className="mt-12 text-center">
+            <p className="text-muted-foreground">
+              No services available at the moment. Please check back later.
+            </p>
+          </div>
+        )}
 
         {/* CTA */}
         <div className="mt-16 text-center">

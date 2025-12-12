@@ -67,8 +67,11 @@ const navItems: NavItem[] = [
   },
   {
     title: "Services",
-    href: "/admin/services",
-    icon: Settings,
+    icon: Tag,
+    children: [
+      { title: "All Services", href: "/admin/services" },
+      { title: "Categories", href: "/admin/services/categories" },
+    ],
   },
   {
     title: "Content",

@@ -18,7 +18,7 @@ const serviceOrderSchema = z.object({
   serviceName: z.string(),
 
   // Form data - flexible object for any service
-  formData: z.record(z.unknown()),
+  formData: z.record(z.string(), z.unknown()),
 
   // Pricing
   totalAmount: z.number(),
@@ -162,6 +162,7 @@ export async function POST(request: NextRequest) {
         data: {
           name: data.serviceName,
           slug: data.serviceId,
+          shortDesc: `${data.serviceName} Service`,
           description: `${data.serviceName} Service`,
           isActive: true,
         },
