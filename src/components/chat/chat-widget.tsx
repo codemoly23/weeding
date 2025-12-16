@@ -1,11 +1,37 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import { useChat } from "./use-chat";
-import { ChatButton } from "./chat-button";
+import { ChatButton, WidgetSettings } from "./chat-button";
 import { ChatWindow } from "./chat-window";
 
 export function ChatWidget() {
   const chat = useChat();
+  const [settings, setSettings] = useState<WidgetSettings | null>(null);
+  const [isEnabled, setIsEnabled] = useState(true);
+
+  // Fetch widget settings on mount
+  useEffect(() => {
+    const fetchSettings = async () => {
+      try {
+        const response = await fetch("/api/widget-settings");
+        if (response.ok) {
+          const data = await response.json();
+          setSettings(data);
+          setIsEnabled(data.enabled !== false);
+        }
+      } catch (error) {
+        console.error("Error fetching widget settings:", error);
+      }
+    };
+
+    fetchSettings();
+  }, []);
+
+  // Don't render if widget is disabled
+  if (!isEnabled) {
+    return null;
+  }
 
   return (
     <>
@@ -28,6 +54,7 @@ export function ChatWidget() {
         onUploadFile={chat.uploadFile}
         onLoadMoreMessages={chat.loadMoreMessages}
         onNewChat={chat.clearChat}
+        settings={settings}
       />
 
       {/* Floating Button */}
@@ -36,6 +63,7 @@ export function ChatWidget() {
         onClick={chat.isOpen ? chat.closeChat : chat.openChat}
         unreadCount={chat.unreadCount}
         isOnline={chat.isOnline}
+        settings={settings || undefined}
       />
     </>
   );
