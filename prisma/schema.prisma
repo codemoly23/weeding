@@ -140,6 +140,7 @@ model Service {
   features        ServiceFeature[]
   faqs            ServiceFAQ[]
   orderItems      OrderItem[]
+  formTemplate    ServiceFormTemplate?
 
   // SEO
   metaTitle       String?
@@ -269,6 +270,7 @@ model Order {
   notes           OrderNote[]
   invoices        Invoice[]
   tickets         SupportTicket[]
+  formSubmissions FormSubmission[]
 
   createdAt       DateTime    @default(now())
   updatedAt       DateTime    @updatedAt
@@ -792,4 +794,271 @@ model LegalPage {
 
   @@index([slug])
   @@index([isActive])
+}
+
+// ============================================
+// DYNAMIC FORM BUILDER
+// ============================================
+
+// Form template for each service
+model ServiceFormTemplate {
+  id          String   @id @default(cuid())
+  serviceId   String   @unique
+  service     Service  @relation(fields: [serviceId], references: [id], onDelete: Cascade)
+
+  // Template metadata
+  version     Int      @default(1)
+  isActive    Boolean  @default(true)
+
+  // Relations
+  tabs        FormTab[]
+
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+// Form tabs (steps)
+model FormTab {
+  id          String   @id @default(cuid())
+  templateId  String
+  template    ServiceFormTemplate @relation(fields: [templateId], references: [id], onDelete: Cascade)
+
+  // Tab configuration
+  name        String       // "Personal Information"
+  description String?      // "Your basic personal details"
+  icon        String?      // "user", "map-pin", "file-text"
+  order       Int          // 1, 2, 3...
+
+  // Relations
+  fields      FormField[]
+
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([templateId, order])
+}
+
+// Individual form fields
+model FormField {
+  id              String   @id @default(cuid())
+  tabId           String
+  tab             FormTab  @relation(fields: [tabId], references: [id], onDelete: Cascade)
+
+  // Field identity
+  name            String       // "firstName", "dateOfBirth"
+  label           String       // "First Name", "Date of Birth"
+  type            FieldType
+
+  // Display
+  placeholder     String?
+  helpText        String?      // Tooltip/info text
+  order           Int
+  width           FieldWidth   @default(FULL)
+
+  // Validation
+  required        Boolean      @default(false)
+  validation      Json?        // { minLength, maxLength, pattern, min, max }
+
+  // Options (for select, radio, checkbox)
+  options         Json?        // [{ value, label, description? }]
+
+  // Data source (for dynamic options)
+  dataSourceType  DataSourceType?
+  dataSourceKey   String?      // "countries", "states", "custom:business_types"
+  dependsOn       String?      // Field name this depends on (e.g., state depends on country)
+
+  // Conditional rendering
+  conditionalLogic Json?       // { show: true, when: "fieldName", operator: "equals", value: "X" }
+
+  // File upload settings
+  accept          String?      // ".pdf,.jpg,.png"
+  maxSize         Int?         // Max file size in MB
+
+  // Default value
+  defaultValue    String?
+
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  @@index([tabId, order])
+}
+
+enum FieldType {
+  TEXT
+  EMAIL
+  PHONE
+  NUMBER
+  DATE
+  TEXTAREA
+  SELECT
+  MULTI_SELECT
+  RADIO
+  CHECKBOX
+  CHECKBOX_GROUP
+  FILE_UPLOAD
+  IMAGE_UPLOAD
+  COUNTRY_SELECT
+  STATE_SELECT
+  ADDRESS
+  SIGNATURE
+  RICH_TEXT
+  HEADING
+  PARAGRAPH
+  DIVIDER
+}
+
+enum FieldWidth {
+  FULL
+  HALF
+  THIRD
+  TWO_THIRD
+}
+
+enum DataSourceType {
+  STATIC
+  COUNTRY_LIST
+  STATE_LIST
+  CURRENCY_LIST
+  CUSTOM_LIST
+  API_ENDPOINT
+}
+
+// ============================================
+// DYNAMIC DATA LISTS
+// ============================================
+
+// System-managed lists (countries, currencies, etc.)
+model SystemList {
+  id             String   @id @default(cuid())
+  key            String   @unique  // "countries", "currencies", "us_states"
+  name           String            // "Countries", "Currencies"
+  description    String?
+  type           String            // "country", "state", "currency", "general"
+
+  // Settings
+  isEditable     Boolean  @default(false)  // Can admin edit?
+  isHierarchical Boolean  @default(false)  // Has parent-child relationship?
+
+  // Relations
+  items          SystemListItem[]
+
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+}
+
+// Items in system lists
+model SystemListItem {
+  id          String   @id @default(cuid())
+  listId      String
+  list        SystemList @relation(fields: [listId], references: [id], onDelete: Cascade)
+
+  // Item data
+  value       String       // "US", "BD", "USD"
+  label       String       // "United States", "Bangladesh"
+  code        String?      // ISO code or short code
+  icon        String?      // Flag emoji or icon name
+
+  // Additional data
+  metadata    Json?        // { phoneCode: "+1", symbol: "$", etc. }
+
+  // Hierarchy (for states -> country relationship)
+  parentId    String?
+  parent      SystemListItem? @relation("ItemHierarchy", fields: [parentId], references: [id])
+  children    SystemListItem[] @relation("ItemHierarchy")
+
+  // Display
+  order       Int          @default(0)
+  isPopular   Boolean      @default(false)  // Show in quick select
+  isActive    Boolean      @default(true)
+
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@unique([listId, value])
+  @@index([listId, parentId])
+  @@index([listId, isPopular])
+}
+
+// Custom lists created by admin
+model CustomList {
+  id          String   @id @default(cuid())
+  key         String   @unique  // "business_types", "industry_types"
+  name        String
+  description String?
+
+  items       CustomListItem[]
+
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model CustomListItem {
+  id          String   @id @default(cuid())
+  listId      String
+  list        CustomList @relation(fields: [listId], references: [id], onDelete: Cascade)
+
+  value       String
+  label       String
+  description String?
+  metadata    Json?
+  order       Int          @default(0)
+  isActive    Boolean      @default(true)
+
+  @@index([listId, order])
+}
+
+// ============================================
+// FORM SUBMISSIONS
+// ============================================
+
+// Store form submission data
+model FormSubmission {
+  id              String   @id @default(cuid())
+  orderId         String
+  order           Order    @relation(fields: [orderId], references: [id], onDelete: Cascade)
+
+  // Form template reference
+  templateId      String
+  templateVersion Int      // Which version of form was used
+
+  // Submission data
+  data            Json     // All form field values as JSON
+
+  // Status tracking
+  status          SubmissionStatus @default(DRAFT)
+
+  // Files
+  files           FormSubmissionFile[]
+
+  submittedAt     DateTime?
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  @@index([orderId])
+  @@index([templateId])
+}
+
+model FormSubmissionFile {
+  id              String   @id @default(cuid())
+  submissionId    String
+  submission      FormSubmission @relation(fields: [submissionId], references: [id], onDelete: Cascade)
+
+  fieldName       String   // Which form field
+  fileName        String
+  fileUrl         String
+  fileSize        Int
+  mimeType        String
+
+  createdAt       DateTime @default(now())
+
+  @@index([submissionId])
+}
+
+enum SubmissionStatus {
+  DRAFT
+  SUBMITTED
+  UNDER_REVIEW
+  APPROVED
+  REJECTED
+  NEEDS_REVISION
 }

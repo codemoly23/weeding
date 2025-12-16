@@ -7,6 +7,7 @@ import { ChatInput } from "./chat-input";
 import { ChatPreForm } from "./chat-pre-form";
 import { ChatOfflineForm } from "./chat-offline-form";
 import type { ChatMessage, ChatTicket } from "./use-chat";
+import type { WidgetSettings } from "./chat-button";
 
 interface ChatWindowProps {
   isOpen: boolean;
@@ -39,6 +40,7 @@ interface ChatWindowProps {
   } | null>;
   onLoadMoreMessages: () => void;
   onNewChat: () => void;
+  settings?: WidgetSettings | null;
 }
 
 export function ChatWindow({
@@ -59,15 +61,48 @@ export function ChatWindow({
   onUploadFile,
   onLoadMoreMessages,
   onNewChat,
+  settings,
 }: ChatWindowProps) {
   if (!isOpen) return null;
+
+  // Calculate position based on settings
+  const getPositionStyle = (): React.CSSProperties => {
+    const pos = settings?.position || "bottom-right";
+    const hOffset = settings?.horizontalOffset ?? 24;
+    const vOffset = settings?.verticalOffset ?? 24;
+
+    // Window should be above the button (button height ~56px + gap)
+    const buttonOffset = 70;
+
+    const style: React.CSSProperties = {};
+
+    if (pos.includes("bottom")) {
+      style.bottom = `${vOffset + buttonOffset}px`;
+    } else {
+      style.top = `${vOffset + buttonOffset}px`;
+    }
+
+    if (pos.includes("right")) {
+      style.right = `${hOffset}px`;
+    } else {
+      style.left = `${hOffset}px`;
+    }
+
+    return style;
+  };
+
+  const primaryColor = settings?.primaryColor || "#2563eb";
 
   // Minimized state - show compact bar
   if (isMinimized) {
     return (
       <button
         onClick={onMinimize}
-        className="fixed bottom-24 right-6 z-50 flex items-center gap-3 rounded-lg bg-primary px-4 py-2 text-white shadow-lg transition-transform hover:scale-102"
+        style={{
+          ...getPositionStyle(),
+          backgroundColor: primaryColor,
+        }}
+        className="fixed z-50 flex items-center gap-3 rounded-lg px-4 py-2 text-white shadow-lg transition-transform hover:scale-102"
       >
         <div className="flex h-8 w-8 items-center justify-center rounded-full bg-white/20">
           <span className="text-sm font-bold">LP</span>
@@ -84,12 +119,13 @@ export function ChatWindow({
 
   return (
     <div
+      style={getPositionStyle()}
       className={cn(
-        "fixed bottom-24 right-6 z-50 flex h-[500px] w-[380px] flex-col overflow-hidden rounded-xl bg-background shadow-2xl border transition-all duration-300",
+        "fixed z-50 flex h-[500px] w-[380px] flex-col overflow-hidden rounded-xl bg-background shadow-2xl border transition-all duration-300",
         "max-h-[calc(100vh-120px)]",
         "sm:h-[500px] sm:w-[380px]",
         // Mobile full screen
-        "max-sm:bottom-0 max-sm:right-0 max-sm:left-0 max-sm:top-0 max-sm:h-full max-sm:w-full max-sm:rounded-none"
+        "max-sm:!bottom-0 max-sm:!right-0 max-sm:!left-0 max-sm:!top-0 max-sm:h-full max-sm:w-full max-sm:rounded-none"
       )}
     >
       {/* Header */}

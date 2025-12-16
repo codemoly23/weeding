@@ -11,6 +11,7 @@ import {
   Trash2,
   GripVertical,
   X,
+  FormInput,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -515,14 +516,24 @@ export default function ServiceEditorPage() {
             </p>
           </div>
         </div>
-        <Button onClick={handleSave} disabled={isSaving}>
-          {isSaving ? (
-            <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-          ) : (
-            <Save className="mr-2 h-4 w-4" />
+        <div className="flex gap-2">
+          {!isNew && (
+            <Button variant="outline" asChild>
+              <Link href={`/admin/services/${serviceId}/form-builder`}>
+                <FormInput className="mr-2 h-4 w-4" />
+                Form Builder
+              </Link>
+            </Button>
           )}
-          Save Changes
-        </Button>
+          <Button onClick={handleSave} disabled={isSaving}>
+            {isSaving ? (
+              <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+            ) : (
+              <Save className="mr-2 h-4 w-4" />
+            )}
+            Save Changes
+          </Button>
+        </div>
       </div>
 
       {/* Tabs */}
