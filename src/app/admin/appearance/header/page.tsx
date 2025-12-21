@@ -10,6 +10,9 @@ import {
   Monitor,
   Loader2,
   ExternalLink,
+  ChevronDown,
+  X,
+  GripVertical,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
@@ -36,6 +39,16 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
 
 const layoutOptions: { value: HeaderLayout; label: string; description: string }[] = [
   { value: "DEFAULT", label: "Default", description: "Logo left, Nav center, CTA right" },
@@ -453,6 +466,12 @@ export default function HeaderBuilderPage() {
   const [saving, setSaving] = useState(false);
   const [header, setHeader] = useState<HeaderConfig | null>(null);
   const [previewMode, setPreviewMode] = useState<"desktop" | "mobile">("desktop");
+  const [expandedButtons, setExpandedButtons] = useState<number[]>([]);
+  const [deleteButtonIndex, setDeleteButtonIndex] = useState<number | null>(null);
+  const [draggedIndex, setDraggedIndex] = useState<number | null>(null);
+  const [dragOverIndex, setDragOverIndex] = useState<number | null>(null);
+  // Auth button position: index where auth button appears (null = at end after all CTA buttons)
+  const [authButtonPosition, setAuthButtonPosition] = useState<number | null>(null);
 
   // Form state
   const [formData, setFormData] = useState({
@@ -464,8 +483,23 @@ export default function HeaderBuilderPage() {
     logoMaxHeight: 40,
     showAuthButtons: true,
     loginText: "Sign In",
+    loginUrl: "/auth/signin",
+    loginStyle: {
+      bgColor: "transparent",
+      textColor: "#374151",
+      borderWidth: 0,
+      borderRadius: 6,
+      hoverBgColor: "#f3f4f6",
+    } as ButtonCustomStyle,
     registerText: "Get Started",
     registerUrl: "/services/llc-formation",
+    registerStyle: {
+      bgColor: "#2563eb",
+      textColor: "#ffffff",
+      borderWidth: 0,
+      borderRadius: 6,
+      hoverBgColor: "#1d4ed8",
+    } as ButtonCustomStyle,
     searchEnabled: false,
     mobileBreakpoint: 1024,
     height: 64,
@@ -496,8 +530,23 @@ export default function HeaderBuilderPage() {
           logoMaxHeight: activeHeader.logoMaxHeight,
           showAuthButtons: activeHeader.showAuthButtons,
           loginText: activeHeader.loginText,
+          loginUrl: activeHeader.loginUrl || "/auth/signin",
+          loginStyle: activeHeader.loginStyle || {
+            bgColor: "transparent",
+            textColor: "#374151",
+            borderWidth: 0,
+            borderRadius: 6,
+            hoverBgColor: "#f3f4f6",
+          },
           registerText: activeHeader.registerText,
           registerUrl: activeHeader.registerUrl,
+          registerStyle: activeHeader.registerStyle || {
+            bgColor: "#2563eb",
+            textColor: "#ffffff",
+            borderWidth: 0,
+            borderRadius: 6,
+            hoverBgColor: "#1d4ed8",
+          },
           searchEnabled: activeHeader.searchEnabled,
           mobileBreakpoint: activeHeader.mobileBreakpoint,
           height: activeHeader.height,
@@ -578,6 +627,116 @@ export default function HeaderBuilderPage() {
   function removeCTAButton(index: number) {
     const newButtons = formData.ctaButtons.filter((_, i) => i !== index);
     setFormData({ ...formData, ctaButtons: newButtons });
+    // Also remove from expanded list
+    setExpandedButtons(expandedButtons.filter((i) => i !== index));
+    setDeleteButtonIndex(null);
+  }
+
+  function handleDeleteClick(index: number) {
+    setDeleteButtonIndex(index);
+  }
+
+  function toggleButtonExpanded(index: number) {
+    setExpandedButtons((prev) =>
+      prev.includes(index)
+        ? prev.filter((i) => i !== index)
+        : [...prev, index]
+    );
+  }
+
+  // Drag and drop handlers for CTA button reordering
+  // Note: index -1 represents the auth button
+  function handleDragStart(e: React.DragEvent, index: number) {
+    e.dataTransfer.effectAllowed = "move";
+    e.dataTransfer.setData("text/plain", String(index));
+    setDraggedIndex(index);
+  }
+
+  function handleDragOver(e: React.DragEvent, index: number) {
+    e.preventDefault();
+    e.dataTransfer.dropEffect = "move";
+    if (draggedIndex !== null && draggedIndex !== index) {
+      setDragOverIndex(index);
+    }
+  }
+
+  function handleDragLeave(e: React.DragEvent) {
+    e.preventDefault();
+    setDragOverIndex(null);
+  }
+
+  function handleDrop(e: React.DragEvent, dropIndex: number) {
+    e.preventDefault();
+    if (draggedIndex === null || draggedIndex === dropIndex) {
+      setDragOverIndex(null);
+      return;
+    }
+
+    // Handle auth button drag (-1 index)
+    if (draggedIndex === -1) {
+      // Auth button being dragged to a new position
+      // dropIndex is the CTA button index where it should be placed
+      setAuthButtonPosition(dropIndex);
+      setDraggedIndex(null);
+      setDragOverIndex(null);
+      return;
+    }
+
+    if (dropIndex === -1) {
+      // Dropping a CTA button onto auth button position
+      // Swap positions: auth button takes CTA button's old position
+      const currentAuthPos = authButtonPosition ?? formData.ctaButtons.length;
+      if (draggedIndex < currentAuthPos) {
+        setAuthButtonPosition(draggedIndex);
+      } else {
+        setAuthButtonPosition(draggedIndex);
+      }
+      setDraggedIndex(null);
+      setDragOverIndex(null);
+      return;
+    }
+
+    // Regular CTA button reordering
+    const newButtons = [...formData.ctaButtons];
+    const [draggedButton] = newButtons.splice(draggedIndex, 1);
+    newButtons.splice(dropIndex, 0, draggedButton);
+
+    setFormData({ ...formData, ctaButtons: newButtons });
+
+    // Update auth button position if needed
+    if (authButtonPosition !== null) {
+      let newAuthPos = authButtonPosition;
+      if (draggedIndex < authButtonPosition && dropIndex >= authButtonPosition) {
+        newAuthPos = authButtonPosition - 1;
+      } else if (draggedIndex > authButtonPosition && dropIndex <= authButtonPosition) {
+        newAuthPos = authButtonPosition + 1;
+      } else if (draggedIndex === authButtonPosition) {
+        // This shouldn't happen as auth is -1
+      }
+      setAuthButtonPosition(newAuthPos);
+    }
+
+    // Update expanded buttons indices after reorder
+    setExpandedButtons((prev) => {
+      return prev.map((i) => {
+        if (i < 0) return i; // Keep auth button expansion state
+        if (i === draggedIndex) return dropIndex;
+        if (draggedIndex < dropIndex) {
+          if (i > draggedIndex && i <= dropIndex) return i - 1;
+        } else {
+          if (i >= dropIndex && i < draggedIndex) return i + 1;
+        }
+        return i;
+      });
+    });
+
+    setDraggedIndex(null);
+    setDragOverIndex(null);
+  }
+
+  function handleDragEnd() {
+    setDraggedIndex(null);
+    setDragOverIndex(null);
   }
 
   if (loading) {
@@ -857,8 +1016,7 @@ export default function HeaderBuilderPage() {
       <Tabs defaultValue="layout" className="space-y-4">
         <TabsList>
           <TabsTrigger value="layout">Layout</TabsTrigger>
-          <TabsTrigger value="cta">CTA Buttons</TabsTrigger>
-          <TabsTrigger value="auth">Auth Buttons</TabsTrigger>
+          <TabsTrigger value="cta">Buttons</TabsTrigger>
           <TabsTrigger value="style">Styling</TabsTrigger>
         </TabsList>
 
@@ -1012,41 +1170,95 @@ export default function HeaderBuilderPage() {
               <CardTitle>Call to Action Buttons</CardTitle>
               <CardDescription>Configure header CTA buttons with preset or custom styling</CardDescription>
             </CardHeader>
-            <CardContent className="space-y-4">
+            <CardContent className="space-y-2">
               {formData.ctaButtons.length === 0 ? (
                 <div className="flex flex-col items-center justify-center rounded-lg border-2 border-dashed p-8">
-                  <p className="mb-4 text-muted-foreground">No CTA buttons configured</p>
-                  <Button onClick={addCTAButton}>Add CTA Button</Button>
+                  <p className="text-muted-foreground">No CTA buttons configured</p>
                 </div>
               ) : (
                 <>
-                  {formData.ctaButtons.map((btn, index) => (
-                    <div key={index} className="rounded-lg border p-4 space-y-4">
-                      {/* Basic Settings Row */}
-                      <div className="flex items-end gap-4">
-                        <div className="flex-1 space-y-2">
-                          <Label>Button Text</Label>
-                          <Input
-                            value={btn.text}
-                            onChange={(e) => updateCTAButton(index, { text: e.target.value })}
+                  {formData.ctaButtons.map((btn, index) => {
+                    const isExpanded = expandedButtons.includes(index);
+                    const isDragging = draggedIndex === index;
+                    const isDragOver = dragOverIndex === index;
+                    return (
+                    <div
+                      key={index}
+                      className={cn(
+                        "rounded-lg border bg-card transition-all",
+                        isDragging && "opacity-50 scale-[0.98]",
+                        isDragOver && "border-primary border-2 bg-primary/5"
+                      )}
+                      draggable
+                      onDragStart={(e) => handleDragStart(e, index)}
+                      onDragOver={(e) => handleDragOver(e, index)}
+                      onDragLeave={(e) => handleDragLeave(e)}
+                      onDrop={(e) => handleDrop(e, index)}
+                      onDragEnd={handleDragEnd}
+                    >
+                      {/* Collapsible Header - Always Visible */}
+                      <div
+                        className="flex items-center justify-between p-4 cursor-pointer hover:bg-muted/50 transition-colors"
+                        onClick={() => toggleButtonExpanded(index)}
+                      >
+                        <div className="flex items-center gap-3">
+                          <div
+                            className="cursor-grab active:cursor-grabbing p-1 -ml-1 hover:bg-muted rounded"
+                            onClick={(e) => e.stopPropagation()}
+                          >
+                            <GripVertical className="h-4 w-4 text-muted-foreground" />
+                          </div>
+                          <span className="font-medium">{btn.text || "Untitled Button"}</span>
+                          <span className="text-sm text-muted-foreground">→ {btn.url || "/"}</span>
+                          <ChevronDown
+                            className={cn(
+                              "h-4 w-4 text-muted-foreground transition-transform",
+                              isExpanded && "rotate-180"
+                            )}
                           />
                         </div>
-                        <div className="flex-1 space-y-2">
-                          <Label>URL</Label>
-                          <Input
-                            value={btn.url}
-                            onChange={(e) => updateCTAButton(index, { url: e.target.value })}
+                        <div className="flex items-center gap-2">
+                          <Switch
+                            checked={btn.enabled !== false}
+                            onCheckedChange={(checked) => {
+                              updateCTAButton(index, { enabled: checked });
+                            }}
+                            onClick={(e) => e.stopPropagation()}
                           />
+                          <Button
+                            variant="ghost"
+                            size="icon"
+                            className="h-8 w-8 text-muted-foreground hover:text-destructive"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              handleDeleteClick(index);
+                            }}
+                          >
+                            <X className="h-4 w-4" />
+                          </Button>
                         </div>
-                        <Button
-                          variant="ghost"
-                          size="icon"
-                          className="text-destructive"
-                          onClick={() => removeCTAButton(index)}
-                        >
-                          &times;
-                        </Button>
                       </div>
+
+                      {/* Expanded Content */}
+                      {isExpanded && (
+                        <div className="border-t p-4 space-y-4">
+                          {/* Basic Settings Row */}
+                          <div className="grid gap-4 md:grid-cols-2">
+                            <div className="space-y-2">
+                              <Label>Button Text</Label>
+                              <Input
+                                value={btn.text}
+                                onChange={(e) => updateCTAButton(index, { text: e.target.value })}
+                              />
+                            </div>
+                            <div className="space-y-2">
+                              <Label>URL</Label>
+                              <Input
+                                value={btn.url}
+                                onChange={(e) => updateCTAButton(index, { url: e.target.value })}
+                              />
+                            </div>
+                          </div>
 
                       {/* Custom Button Styling */}
                       <Accordion type="multiple" defaultValue={["colors"]} className="w-full">
@@ -1628,66 +1840,503 @@ export default function HeaderBuilderPage() {
                             })}
                           </div>
                       </div>
+                        </div>
+                      )}
                     </div>
-                  ))}
-                  <Button variant="outline" onClick={addCTAButton}>
-                    Add Another Button
-                  </Button>
+                  );
+                  })}
                 </>
               )}
-            </CardContent>
-          </Card>
-        </TabsContent>
 
-        {/* Auth Buttons Tab */}
-        <TabsContent value="auth" className="space-y-4">
-          <Card>
-            <CardHeader>
-              <CardTitle>Authentication Buttons</CardTitle>
-              <CardDescription>Configure sign in and register buttons</CardDescription>
-            </CardHeader>
-            <CardContent className="space-y-6">
-              <div className="flex items-center justify-between rounded-lg border p-4">
-                <div>
-                  <Label className="text-base">Show Auth Buttons</Label>
-                  <p className="text-sm text-muted-foreground">
-                    Display sign in/register buttons for logged out users
-                  </p>
-                </div>
-                <Switch
-                  checked={formData.showAuthButtons}
-                  onCheckedChange={(checked) => setFormData({ ...formData, showAuthButtons: checked })}
-                />
-              </div>
-
+              {/* Auth Buttons - Sign In (non-deletable, draggable) */}
               {formData.showAuthButtons && (
-                <div className="grid gap-4 md:grid-cols-3">
-                  <div className="space-y-2">
-                    <Label htmlFor="loginText">Sign In Button Text</Label>
-                    <Input
-                      id="loginText"
-                      value={formData.loginText}
-                      onChange={(e) => setFormData({ ...formData, loginText: e.target.value })}
-                    />
+                <div
+                  className={cn(
+                    "rounded-lg border bg-card transition-all",
+                    draggedIndex === -1 && "opacity-50 scale-[0.98]",
+                    dragOverIndex === -1 && "border-primary border-2 bg-primary/5"
+                  )}
+                  draggable
+                  onDragStart={(e) => handleDragStart(e, -1)}
+                  onDragOver={(e) => handleDragOver(e, -1)}
+                  onDragLeave={(e) => handleDragLeave(e)}
+                  onDrop={(e) => handleDrop(e, -1)}
+                  onDragEnd={handleDragEnd}
+                >
+                  <div
+                    className="flex items-center justify-between p-4 cursor-pointer hover:bg-muted/50 transition-colors"
+                    onClick={() => setExpandedButtons(prev =>
+                      prev.includes(-1) ? prev.filter(i => i !== -1) : [...prev, -1]
+                    )}
+                  >
+                    <div className="flex items-center gap-3">
+                      <div
+                        className="cursor-grab active:cursor-grabbing p-1 -ml-1 hover:bg-muted rounded"
+                        onClick={(e) => e.stopPropagation()}
+                      >
+                        <GripVertical className="h-4 w-4 text-muted-foreground" />
+                      </div>
+                      <span className="font-medium">{formData.loginText || "Sign In"}</span>
+                      <span className="text-sm text-muted-foreground">→ {formData.loginUrl || "/auth/signin"}</span>
+                      <Badge variant="secondary" className="text-xs">Auth</Badge>
+                      <ChevronDown
+                        className={cn(
+                          "h-4 w-4 text-muted-foreground transition-transform",
+                          expandedButtons.includes(-1) && "rotate-180"
+                        )}
+                      />
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <Switch
+                        checked={formData.showAuthButtons}
+                        onCheckedChange={(checked) => {
+                          setFormData({ ...formData, showAuthButtons: checked });
+                        }}
+                        onClick={(e) => e.stopPropagation()}
+                      />
+                    </div>
                   </div>
-                  <div className="space-y-2">
-                    <Label htmlFor="registerText">Register Button Text</Label>
-                    <Input
-                      id="registerText"
-                      value={formData.registerText}
-                      onChange={(e) => setFormData({ ...formData, registerText: e.target.value })}
-                    />
-                  </div>
-                  <div className="space-y-2">
-                    <Label htmlFor="registerUrl">Register URL</Label>
-                    <Input
-                      id="registerUrl"
-                      value={formData.registerUrl}
-                      onChange={(e) => setFormData({ ...formData, registerUrl: e.target.value })}
-                    />
-                  </div>
+
+                  {expandedButtons.includes(-1) && (
+                    <div className="border-t p-4 space-y-4">
+                      <div className="grid gap-4 md:grid-cols-2">
+                        <div className="space-y-2">
+                          <Label>Button Text</Label>
+                          <Input
+                            value={formData.loginText}
+                            onChange={(e) => setFormData({ ...formData, loginText: e.target.value })}
+                          />
+                        </div>
+                        <div className="space-y-2">
+                          <Label>URL</Label>
+                          <Input
+                            value={formData.loginUrl}
+                            onChange={(e) => setFormData({ ...formData, loginUrl: e.target.value })}
+                          />
+                        </div>
+                      </div>
+
+                      <Accordion type="multiple" defaultValue={["colors"]} className="w-full">
+                        {/* Colors Section */}
+                        <AccordionItem value="colors">
+                          <AccordionTrigger className="text-sm">
+                            Colors
+                            {(formData.loginStyle?.bgColor || formData.loginStyle?.textColor || formData.loginStyle?.useGradient) && (
+                              <Badge variant="secondary" className="ml-2 text-xs">Customized</Badge>
+                            )}
+                          </AccordionTrigger>
+                          <AccordionContent className="space-y-4 pt-2">
+                            {/* Gradient Toggle */}
+                            <div className="flex items-center justify-between rounded-lg border p-3">
+                              <div>
+                                <Label className="text-sm">Use Gradient Background</Label>
+                                <p className="text-xs text-muted-foreground">Enable gradient instead of solid color</p>
+                              </div>
+                              <Switch
+                                checked={formData.loginStyle?.useGradient || false}
+                                onCheckedChange={(checked) => setFormData({
+                                  ...formData,
+                                  loginStyle: {
+                                    ...formData.loginStyle,
+                                    useGradient: checked,
+                                    gradientFrom: checked ? (formData.loginStyle?.gradientFrom || "#2563eb") : formData.loginStyle?.gradientFrom,
+                                    gradientTo: checked ? (formData.loginStyle?.gradientTo || "#7c3aed") : formData.loginStyle?.gradientTo,
+                                  }
+                                })}
+                              />
+                            </div>
+
+                            {formData.loginStyle?.useGradient ? (
+                              <div className="rounded-lg border p-3 space-y-3 bg-muted/30">
+                                <div className="grid gap-4 md:grid-cols-3">
+                                  <div className="space-y-2">
+                                    <Label className="text-xs">Gradient From</Label>
+                                    <div className="flex gap-2">
+                                      <Input
+                                        type="color"
+                                        value={formData.loginStyle?.gradientFrom || "#2563eb"}
+                                        onChange={(e) => setFormData({
+                                          ...formData,
+                                          loginStyle: { ...formData.loginStyle, gradientFrom: e.target.value }
+                                        })}
+                                        className="h-9 w-12 cursor-pointer p-1"
+                                      />
+                                      <Input
+                                        value={formData.loginStyle?.gradientFrom || ""}
+                                        onChange={(e) => setFormData({
+                                          ...formData,
+                                          loginStyle: { ...formData.loginStyle, gradientFrom: e.target.value }
+                                        })}
+                                        className="flex-1 text-xs"
+                                      />
+                                    </div>
+                                  </div>
+                                  <div className="space-y-2">
+                                    <Label className="text-xs">Gradient To</Label>
+                                    <div className="flex gap-2">
+                                      <Input
+                                        type="color"
+                                        value={formData.loginStyle?.gradientTo || "#7c3aed"}
+                                        onChange={(e) => setFormData({
+                                          ...formData,
+                                          loginStyle: { ...formData.loginStyle, gradientTo: e.target.value }
+                                        })}
+                                        className="h-9 w-12 cursor-pointer p-1"
+                                      />
+                                      <Input
+                                        value={formData.loginStyle?.gradientTo || ""}
+                                        onChange={(e) => setFormData({
+                                          ...formData,
+                                          loginStyle: { ...formData.loginStyle, gradientTo: e.target.value }
+                                        })}
+                                        className="flex-1 text-xs"
+                                      />
+                                    </div>
+                                  </div>
+                                  <div className="space-y-2">
+                                    <Label className="text-xs">Direction</Label>
+                                    <Select
+                                      value={formData.loginStyle?.gradientDirection || "to-r"}
+                                      onValueChange={(value: GradientDirection) => setFormData({
+                                        ...formData,
+                                        loginStyle: { ...formData.loginStyle, gradientDirection: value }
+                                      })}
+                                    >
+                                      <SelectTrigger className="text-xs">
+                                        <SelectValue />
+                                      </SelectTrigger>
+                                      <SelectContent>
+                                        {gradientDirectionOptions.map((dir) => (
+                                          <SelectItem key={dir.value} value={dir.value}>{dir.label}</SelectItem>
+                                        ))}
+                                      </SelectContent>
+                                    </Select>
+                                  </div>
+                                </div>
+                                <div className="space-y-2 pt-2">
+                                  <Label className="text-xs">Text Color</Label>
+                                  <div className="flex gap-2">
+                                    <Input
+                                      type="color"
+                                      value={formData.loginStyle?.textColor || "#ffffff"}
+                                      onChange={(e) => setFormData({
+                                        ...formData,
+                                        loginStyle: { ...formData.loginStyle, textColor: e.target.value }
+                                      })}
+                                      className="h-9 w-12 cursor-pointer p-1"
+                                    />
+                                    <Input
+                                      value={formData.loginStyle?.textColor || ""}
+                                      onChange={(e) => setFormData({
+                                        ...formData,
+                                        loginStyle: { ...formData.loginStyle, textColor: e.target.value }
+                                      })}
+                                      className="flex-1 text-xs"
+                                    />
+                                  </div>
+                                </div>
+                              </div>
+                            ) : (
+                              <div className="grid gap-4 md:grid-cols-3">
+                                <div className="space-y-2">
+                                  <Label className="text-xs">Background Color</Label>
+                                  <div className="flex gap-2">
+                                    <Input
+                                      type="color"
+                                      value={formData.loginStyle?.bgColor || "#ffffff"}
+                                      onChange={(e) => setFormData({
+                                        ...formData,
+                                        loginStyle: { ...formData.loginStyle, bgColor: e.target.value }
+                                      })}
+                                      className="h-9 w-12 cursor-pointer p-1"
+                                    />
+                                    <Input
+                                      value={formData.loginStyle?.bgColor || ""}
+                                      onChange={(e) => setFormData({
+                                        ...formData,
+                                        loginStyle: { ...formData.loginStyle, bgColor: e.target.value }
+                                      })}
+                                      placeholder="transparent"
+                                      className="flex-1 text-xs"
+                                    />
+                                  </div>
+                                </div>
+                                <div className="space-y-2">
+                                  <Label className="text-xs">Text Color</Label>
+                                  <div className="flex gap-2">
+                                    <Input
+                                      type="color"
+                                      value={formData.loginStyle?.textColor || "#374151"}
+                                      onChange={(e) => setFormData({
+                                        ...formData,
+                                        loginStyle: { ...formData.loginStyle, textColor: e.target.value }
+                                      })}
+                                      className="h-9 w-12 cursor-pointer p-1"
+                                    />
+                                    <Input
+                                      value={formData.loginStyle?.textColor || ""}
+                                      onChange={(e) => setFormData({
+                                        ...formData,
+                                        loginStyle: { ...formData.loginStyle, textColor: e.target.value }
+                                      })}
+                                      placeholder="#374151"
+                                      className="flex-1 text-xs"
+                                    />
+                                  </div>
+                                </div>
+                                <div className="space-y-2">
+                                  <Label className="text-xs">Border Color</Label>
+                                  <div className="flex gap-2">
+                                    <Input
+                                      type="color"
+                                      value={formData.loginStyle?.borderColor || "#e5e7eb"}
+                                      onChange={(e) => setFormData({
+                                        ...formData,
+                                        loginStyle: { ...formData.loginStyle, borderColor: e.target.value }
+                                      })}
+                                      className="h-9 w-12 cursor-pointer p-1"
+                                    />
+                                    <Input
+                                      value={formData.loginStyle?.borderColor || ""}
+                                      onChange={(e) => setFormData({
+                                        ...formData,
+                                        loginStyle: { ...formData.loginStyle, borderColor: e.target.value }
+                                      })}
+                                      placeholder="#e5e7eb"
+                                      className="flex-1 text-xs"
+                                    />
+                                  </div>
+                                </div>
+                              </div>
+                            )}
+                          </AccordionContent>
+                        </AccordionItem>
+
+                        {/* Border Section */}
+                        <AccordionItem value="border">
+                          <AccordionTrigger className="text-sm">
+                            Border
+                            {(formData.loginStyle?.borderWidth || formData.loginStyle?.borderRadius !== 6) && (
+                              <Badge variant="secondary" className="ml-2 text-xs">Customized</Badge>
+                            )}
+                          </AccordionTrigger>
+                          <AccordionContent className="space-y-4 pt-2">
+                            <div className="grid gap-4 md:grid-cols-2">
+                              <div className="space-y-2">
+                                <div className="flex items-center justify-between">
+                                  <Label className="text-xs">Border Width</Label>
+                                  <span className="text-xs text-muted-foreground">{formData.loginStyle?.borderWidth ?? 0}px</span>
+                                </div>
+                                <Slider
+                                  value={[formData.loginStyle?.borderWidth ?? 0]}
+                                  onValueChange={(value) => setFormData({
+                                    ...formData,
+                                    loginStyle: { ...formData.loginStyle, borderWidth: value[0] }
+                                  })}
+                                  min={0}
+                                  max={4}
+                                  step={1}
+                                />
+                              </div>
+                              <div className="space-y-2">
+                                <div className="flex items-center justify-between">
+                                  <Label className="text-xs">Border Radius</Label>
+                                  <span className="text-xs text-muted-foreground">{formData.loginStyle?.borderRadius ?? 6}px</span>
+                                </div>
+                                <Slider
+                                  value={[formData.loginStyle?.borderRadius ?? 6]}
+                                  onValueChange={(value) => setFormData({
+                                    ...formData,
+                                    loginStyle: { ...formData.loginStyle, borderRadius: value[0] }
+                                  })}
+                                  min={0}
+                                  max={24}
+                                  step={2}
+                                />
+                              </div>
+                            </div>
+                          </AccordionContent>
+                        </AccordionItem>
+
+                        {/* Hover Effects */}
+                        <AccordionItem value="hover">
+                          <AccordionTrigger className="text-sm">Hover Effects</AccordionTrigger>
+                          <AccordionContent className="space-y-4 pt-2">
+                            <div className="space-y-2">
+                              <Label className="text-xs">Hover Effect</Label>
+                              <Select
+                                value={formData.loginStyle?.hoverEffect || "none"}
+                                onValueChange={(value: ButtonHoverEffect) => setFormData({
+                                  ...formData,
+                                  loginStyle: { ...formData.loginStyle, hoverEffect: value }
+                                })}
+                              >
+                                <SelectTrigger>
+                                  <SelectValue />
+                                </SelectTrigger>
+                                <SelectContent>
+                                  {hoverEffectOptions.map((effect) => (
+                                    <SelectItem key={effect.value} value={effect.value}>{effect.label}</SelectItem>
+                                  ))}
+                                </SelectContent>
+                              </Select>
+                            </div>
+                            <div className="grid gap-4 md:grid-cols-2">
+                              <div className="space-y-2">
+                                <Label className="text-xs">Hover Background Color</Label>
+                                <div className="flex gap-2">
+                                  <Input
+                                    type="color"
+                                    value={formData.loginStyle?.hoverBgColor || "#f3f4f6"}
+                                    onChange={(e) => setFormData({
+                                      ...formData,
+                                      loginStyle: { ...formData.loginStyle, hoverBgColor: e.target.value }
+                                    })}
+                                    className="h-9 w-12 cursor-pointer p-1"
+                                  />
+                                  <Input
+                                    value={formData.loginStyle?.hoverBgColor || ""}
+                                    onChange={(e) => setFormData({
+                                      ...formData,
+                                      loginStyle: { ...formData.loginStyle, hoverBgColor: e.target.value }
+                                    })}
+                                    placeholder="#f3f4f6"
+                                    className="flex-1 text-xs"
+                                  />
+                                </div>
+                              </div>
+                              <div className="space-y-2">
+                                <Label className="text-xs">Hover Text Color</Label>
+                                <div className="flex gap-2">
+                                  <Input
+                                    type="color"
+                                    value={formData.loginStyle?.hoverTextColor || "#000000"}
+                                    onChange={(e) => setFormData({
+                                      ...formData,
+                                      loginStyle: { ...formData.loginStyle, hoverTextColor: e.target.value }
+                                    })}
+                                    className="h-9 w-12 cursor-pointer p-1"
+                                  />
+                                  <Input
+                                    value={formData.loginStyle?.hoverTextColor || ""}
+                                    onChange={(e) => setFormData({
+                                      ...formData,
+                                      loginStyle: { ...formData.loginStyle, hoverTextColor: e.target.value }
+                                    })}
+                                    className="flex-1 text-xs"
+                                  />
+                                </div>
+                              </div>
+                            </div>
+                          </AccordionContent>
+                        </AccordionItem>
+
+                        {/* Shadow */}
+                        <AccordionItem value="shadow">
+                          <AccordionTrigger className="text-sm">Shadow</AccordionTrigger>
+                          <AccordionContent className="space-y-4 pt-2">
+                            <div className="space-y-2">
+                              <Label className="text-xs">Box Shadow</Label>
+                              <Input
+                                value={formData.loginStyle?.shadow || ""}
+                                onChange={(e) => setFormData({
+                                  ...formData,
+                                  loginStyle: { ...formData.loginStyle, shadow: e.target.value }
+                                })}
+                                placeholder="0 4px 14px rgba(0,0,0,0.1)"
+                                className="text-xs"
+                              />
+                            </div>
+                            <div className="space-y-2">
+                              <Label className="text-xs">Hover Shadow</Label>
+                              <Input
+                                value={formData.loginStyle?.hoverShadow || ""}
+                                onChange={(e) => setFormData({
+                                  ...formData,
+                                  loginStyle: { ...formData.loginStyle, hoverShadow: e.target.value }
+                                })}
+                                placeholder="0 8px 20px rgba(0,0,0,0.15)"
+                                className="text-xs"
+                              />
+                            </div>
+                          </AccordionContent>
+                        </AccordionItem>
+                      </Accordion>
+
+                      {/* Preview */}
+                      <div className="pt-2 border-t">
+                        <Label className="text-xs text-muted-foreground mb-2 block">Preview (hover to test effect)</Label>
+                        <PreviewCTAButton btn={{
+                          text: formData.loginText,
+                          url: formData.loginUrl,
+                          variant: "ghost",
+                          style: formData.loginStyle
+                        }} />
+                      </div>
+
+                      {/* Quick Style Presets */}
+                      <div className="pt-4 border-t">
+                        <Label className="text-sm font-medium mb-3 block">Quick Style Presets</Label>
+                        <p className="text-xs text-muted-foreground mb-3">
+                          Click to apply a modern 2025 button style. You can customize further after applying.
+                        </p>
+                        <div className="grid grid-cols-2 md:grid-cols-5 gap-2">
+                          {buttonStylePresets.map((preset) => {
+                            const previewBg = preset.style.useGradient
+                              ? `linear-gradient(${getGradientCSS(preset.style.gradientDirection)}, ${preset.style.gradientFrom}, ${preset.style.gradientTo})`
+                              : preset.style.bgColor || "#2563eb";
+                            return (
+                              <button
+                                key={preset.id}
+                                type="button"
+                                onClick={() => setFormData({
+                                  ...formData,
+                                  loginStyle: { ...preset.style }
+                                })}
+                                className="group relative flex flex-col items-center p-2 rounded-lg border hover:border-primary hover:bg-muted/50 transition-all"
+                                title={preset.description}
+                              >
+                                <span
+                                  className="inline-flex items-center justify-center px-3 py-1.5 text-[10px] font-medium rounded transition-all mb-1.5"
+                                  style={{
+                                    background: previewBg,
+                                    color: preset.style.textColor || "#ffffff",
+                                    borderWidth: `${preset.style.borderWidth ?? 0}px`,
+                                    borderStyle: "solid",
+                                    borderColor: preset.style.borderColor || "transparent",
+                                    borderRadius: `${preset.style.borderRadius ?? 6}px`,
+                                    boxShadow: preset.style.shadow,
+                                  }}
+                                >
+                                  {formData.loginText || "Sign In"}
+                                </span>
+                                <span className="text-[10px] text-muted-foreground group-hover:text-foreground text-center leading-tight">
+                                  {preset.name}
+                                </span>
+                              </button>
+                            );
+                          })}
+                        </div>
+                      </div>
+                    </div>
+                  )}
                 </div>
               )}
+
+              {/* Save and Add Buttons at bottom */}
+              <div className="pt-4 border-t mt-4 space-y-3">
+                <Button onClick={handleSave} disabled={saving} className="w-full">
+                  {saving ? (
+                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                  ) : (
+                    <Save className="mr-2 h-4 w-4" />
+                  )}
+                  Save
+                </Button>
+                <Button variant="outline" onClick={addCTAButton} className="w-full border-dashed">
+                  + Add new button
+                </Button>
+              </div>
             </CardContent>
           </Card>
         </TabsContent>
@@ -1769,6 +2418,31 @@ export default function HeaderBuilderPage() {
           </Button>
         </CardContent>
       </Card>
+
+      {/* Delete Confirmation Dialog */}
+      <AlertDialog open={deleteButtonIndex !== null} onOpenChange={(open) => !open && setDeleteButtonIndex(null)}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Delete CTA Button?</AlertDialogTitle>
+            <AlertDialogDescription>
+              Are you sure you want to delete{" "}
+              <span className="font-medium text-foreground">
+                "{deleteButtonIndex !== null ? formData.ctaButtons[deleteButtonIndex]?.text || "this button" : "this button"}"
+              </span>
+              ? This action cannot be undone.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Cancel</AlertDialogCancel>
+            <AlertDialogAction
+              className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+              onClick={() => deleteButtonIndex !== null && removeCTAButton(deleteButtonIndex)}
+            >
+              Delete
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   );
 }

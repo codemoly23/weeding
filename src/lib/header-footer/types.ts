@@ -72,6 +72,7 @@ export interface CTAButton {
   url: string;
   variant: "primary" | "secondary" | "outline" | "ghost";
   icon?: string;
+  enabled?: boolean;
   // Phase 5: Optional custom style override (backward compatible)
   style?: ButtonCustomStyle;
 }
