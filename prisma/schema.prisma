@@ -1094,8 +1094,11 @@ model HeaderConfig {
   // Auth Buttons
   showAuthButtons Boolean      @default(true)
   loginText       String       @default("Sign In")
+  loginUrl        String       @default("/auth/signin")
+  loginStyle      Json?        // ButtonCustomStyle
   registerText    String       @default("Get Started")
   registerUrl     String       @default("/services/llc-formation")
+  registerStyle   Json?        // ButtonCustomStyle
 
   // Search
   searchEnabled   Boolean      @default(false)
