@@ -42,7 +42,11 @@ export function HeaderMinimal({
       {/* Search and Mobile menu */}
       {mounted && (
         <div className="flex items-center gap-2">
-          <SearchButton enabled={config.search?.enabled ?? false} />
+          <SearchButton
+            enabled={config.search?.enabled ?? false}
+            serviceCategories={serviceCategories}
+            navigation={navigation}
+          />
           <MobileMenu
             navigation={navigation}
             serviceCategories={serviceCategories}

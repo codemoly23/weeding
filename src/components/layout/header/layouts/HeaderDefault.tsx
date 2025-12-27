@@ -53,7 +53,11 @@ export function HeaderDefault({
 
       {/* Desktop CTA - Right */}
       <div className="hidden lg:flex lg:items-center lg:gap-x-4">
-        <SearchButton enabled={config.search?.enabled ?? false} />
+        <SearchButton
+          enabled={config.search?.enabled ?? false}
+          serviceCategories={serviceCategories}
+          navigation={navigation}
+        />
         <CTAButtons
           buttons={config.cta || []}
           showAuth={config.auth?.showButtons ?? true}
