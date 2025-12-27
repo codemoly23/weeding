@@ -85,6 +85,20 @@ export interface TopBarLink {
   icon?: string;
 }
 
+// Single Announcement Item
+export interface AnnouncementItem {
+  id: string;
+  text: string;
+  links?: TopBarLink[];
+  isActive?: boolean;
+}
+
+// Animation Effect (unified for both entrance and loop)
+export type AnimationEffect = "fade" | "slide-down" | "slide-up" | "pulse";
+
+// Animation Mode - unified system
+export type AnimationMode = "none" | "once" | "loop";
+
 // Announcement Bar Style (adapted from ButtonCustomStyle)
 export interface AnnouncementBarStyle {
   // Background
@@ -117,9 +131,12 @@ export interface AnnouncementBarPreset {
 
 // Enhanced TopBarContent with styling support
 export interface TopBarContent {
-  // Content
+  // Content - Single announcement (legacy support)
   text: string;
   links?: TopBarLink[];
+
+  // Multiple Announcements (new feature)
+  announcements?: AnnouncementItem[];
 
   // Styling (inline in content for flexibility)
   style?: AnnouncementBarStyle;
@@ -129,12 +146,16 @@ export interface TopBarContent {
   autoHideSeconds?: number;
   position?: "fixed" | "static";
 
-  // Animation
-  entranceAnimation?: "none" | "slide-down" | "fade-in";
-  animationDuration?: number;
-  enableMarquee?: boolean;
+  // Unified Animation System
+  animationMode?: AnimationMode; // "none" | "once" | "loop"
+  animationEffect?: AnimationEffect; // "fade" | "slide-down" | "slide-up" | "pulse"
+  animationInterval?: number; // seconds between loops (only used when mode = "loop", default: 5)
 
-  // Legacy support
+  // Legacy support (kept for backward compatibility)
+  entranceAnimation?: "none" | "slide-down" | "fade-in";
+  enableLoopAnimation?: boolean;
+  loopInterval?: number;
+  loopEffect?: AnimationEffect;
   showSocial?: boolean;
 }
 

@@ -39,7 +39,7 @@ import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
-import type { HeaderConfig, HeaderLayout, CTAButton, ButtonHoverEffect, ButtonCustomStyle, GradientDirection, TopBarContent, AnnouncementBarStyle, AnnouncementBarPreset } from "@/lib/header-footer/types";
+import type { HeaderConfig, HeaderLayout, CTAButton, ButtonHoverEffect, ButtonCustomStyle, GradientDirection, TopBarContent, AnnouncementBarStyle, AnnouncementBarPreset, AnnouncementItem, AnimationEffect, AnimationMode } from "@/lib/header-footer/types";
 import {
   Accordion,
   AccordionContent,
@@ -587,6 +587,7 @@ export default function HeaderBuilderPage() {
   const defaultTopBarContent: TopBarContent = {
     text: "🎉 Welcome! Get 10% off your first order with code WELCOME10",
     links: [],
+    announcements: [],
     style: {
       bgColor: "#1e40af",
       textColor: "#ffffff",
@@ -596,10 +597,16 @@ export default function HeaderBuilderPage() {
     },
     dismissible: true,
     position: "fixed",
-    entranceAnimation: "slide-down",
-    animationDuration: 300,
-    enableMarquee: false,
+    // Unified Animation System
+    animationMode: "once",
+    animationEffect: "slide-down",
+    animationInterval: 5,
   };
+
+  // Generate unique ID
+  function generateAnnouncementId(): string {
+    return `ann-${Date.now()}-${Math.random().toString(36).substring(2, 7)}`;
+  }
 
   // Form state
   const [formData, setFormData] = useState({
@@ -722,8 +729,9 @@ export default function HeaderBuilderPage() {
 
       if (!res.ok) {
         const data = await res.json().catch(() => ({}));
+        console.error("API Error Response:", res.status, data);
         const details = data.details ? `: ${typeof data.details === 'string' ? data.details : JSON.stringify(data.details)}` : '';
-        throw new Error(data.error || "Failed to save" + details);
+        throw new Error(data.error || `Failed to save (HTTP ${res.status})` + details);
       }
 
       toast.success("Header configuration saved");
@@ -1271,105 +1279,386 @@ export default function HeaderBuilderPage() {
                   {/* Expanded Settings when enabled */}
                   {formData.topBarEnabled && (
                     <div className="border-t px-4 pb-4 pt-4 space-y-4">
-                      {/* Announcement Text */}
-                      <div className="space-y-2">
-                        <Label>Announcement Text</Label>
-                        <Input
-                          value={formData.topBarContent.text}
-                          onChange={(e) => setFormData({
-                            ...formData,
-                            topBarContent: { ...formData.topBarContent, text: e.target.value }
-                          })}
-                          placeholder="🎉 Welcome! Get 10% off your first order..."
-                        />
-                      </div>
-
-                      {/* Links */}
-                      <div className="space-y-2">
+                      {/* Announcements Section */}
+                      <div className="space-y-3">
                         <div className="flex items-center justify-between">
-                          <Label>Links (optional)</Label>
+                          <div>
+                            <Label className="text-sm font-medium">Announcements</Label>
+                            <p className="text-xs text-muted-foreground">Add multiple announcements to rotate automatically</p>
+                          </div>
                           <Button
                             type="button"
                             variant="outline"
                             size="sm"
-                            onClick={() => setFormData({
-                              ...formData,
-                              topBarContent: {
-                                ...formData.topBarContent,
-                                links: [...(formData.topBarContent.links || []), { label: "Learn More", url: "/", target: "_self" }]
+                            onClick={() => {
+                              const newAnnouncement: AnnouncementItem = {
+                                id: generateAnnouncementId(),
+                                text: "",
+                                links: [],
+                                isActive: true,
+                              };
+                              // If no announcements yet, migrate the legacy text
+                              const currentAnnouncements = formData.topBarContent.announcements || [];
+                              if (currentAnnouncements.length === 0 && formData.topBarContent.text) {
+                                // First, add existing text as first announcement
+                                const legacyAnnouncement: AnnouncementItem = {
+                                  id: generateAnnouncementId(),
+                                  text: formData.topBarContent.text,
+                                  links: formData.topBarContent.links || [],
+                                  isActive: true,
+                                };
+                                setFormData({
+                                  ...formData,
+                                  topBarContent: {
+                                    ...formData.topBarContent,
+                                    announcements: [legacyAnnouncement, newAnnouncement],
+                                  }
+                                });
+                              } else {
+                                setFormData({
+                                  ...formData,
+                                  topBarContent: {
+                                    ...formData.topBarContent,
+                                    announcements: [...currentAnnouncements, newAnnouncement],
+                                  }
+                                });
                               }
-                            })}
+                            }}
                           >
-                            <Plus className="h-4 w-4 mr-1" /> Add Link
+                            <Plus className="h-4 w-4 mr-1" /> Add Announcement
                           </Button>
                         </div>
-                        {formData.topBarContent.links && formData.topBarContent.links.length > 0 && (
+
+                        {/* Show single text field if no multiple announcements */}
+                        {(!formData.topBarContent.announcements || formData.topBarContent.announcements.length === 0) && (
+                          <div className="space-y-2">
+                            <Label className="text-xs">Announcement Text</Label>
+                            <Input
+                              value={formData.topBarContent.text}
+                              onChange={(e) => setFormData({
+                                ...formData,
+                                topBarContent: { ...formData.topBarContent, text: e.target.value }
+                              })}
+                              placeholder="🎉 Welcome! Get 10% off your first order..."
+                            />
+                            {/* Single announcement links */}
+                            <div className="space-y-2 pt-2">
+                              <div className="flex items-center justify-between">
+                                <Label className="text-xs">Links (optional)</Label>
+                                <Button
+                                  type="button"
+                                  variant="ghost"
+                                  size="sm"
+                                  className="h-7 text-xs"
+                                  onClick={() => setFormData({
+                                    ...formData,
+                                    topBarContent: {
+                                      ...formData.topBarContent,
+                                      links: [...(formData.topBarContent.links || []), { label: "Learn More", url: "/", target: "_self" }]
+                                    }
+                                  })}
+                                >
+                                  <Plus className="h-3 w-3 mr-1" /> Add Link
+                                </Button>
+                              </div>
+                              {formData.topBarContent.links && formData.topBarContent.links.length > 0 && (
+                                <div className="space-y-2">
+                                  {formData.topBarContent.links.map((link, idx) => (
+                                    <div key={idx} className="flex gap-2 items-center">
+                                      <Input
+                                        value={link.label}
+                                        onChange={(e) => {
+                                          const newLinks = [...(formData.topBarContent.links || [])];
+                                          newLinks[idx] = { ...newLinks[idx], label: e.target.value };
+                                          setFormData({
+                                            ...formData,
+                                            topBarContent: { ...formData.topBarContent, links: newLinks }
+                                          });
+                                        }}
+                                        placeholder="Label"
+                                        className="flex-1 h-8 text-sm"
+                                      />
+                                      <Input
+                                        value={link.url}
+                                        onChange={(e) => {
+                                          const newLinks = [...(formData.topBarContent.links || [])];
+                                          newLinks[idx] = { ...newLinks[idx], url: e.target.value };
+                                          setFormData({
+                                            ...formData,
+                                            topBarContent: { ...formData.topBarContent, links: newLinks }
+                                          });
+                                        }}
+                                        placeholder="URL"
+                                        className="flex-1 h-8 text-sm"
+                                      />
+                                      <Button
+                                        type="button"
+                                        variant="ghost"
+                                        size="icon"
+                                        className="h-8 w-8"
+                                        onClick={() => {
+                                          const newLinks = (formData.topBarContent.links || []).filter((_, i) => i !== idx);
+                                          setFormData({
+                                            ...formData,
+                                            topBarContent: { ...formData.topBarContent, links: newLinks }
+                                          });
+                                        }}
+                                      >
+                                        <X className="h-3 w-3" />
+                                      </Button>
+                                    </div>
+                                  ))}
+                                </div>
+                              )}
+                            </div>
+                          </div>
+                        )}
+
+                        {/* Multiple Announcements List */}
+                        {formData.topBarContent.announcements && formData.topBarContent.announcements.length > 0 && (
                           <div className="space-y-3">
-                            {formData.topBarContent.links.map((link, idx) => (
-                              <div key={idx} className="space-y-2 p-3 rounded-lg bg-muted/30">
-                                <div className="flex gap-2 items-center">
-                                  <Input
-                                    value={link.label}
-                                    onChange={(e) => {
-                                      const newLinks = [...(formData.topBarContent.links || [])];
-                                      newLinks[idx] = { ...newLinks[idx], label: e.target.value };
-                                      setFormData({
-                                        ...formData,
-                                        topBarContent: { ...formData.topBarContent, links: newLinks }
-                                      });
-                                    }}
-                                    placeholder="Label"
-                                    className="flex-1"
-                                  />
-                                  <Input
-                                    value={link.url}
-                                    onChange={(e) => {
-                                      const newLinks = [...(formData.topBarContent.links || [])];
-                                      newLinks[idx] = { ...newLinks[idx], url: e.target.value };
-                                      setFormData({
-                                        ...formData,
-                                        topBarContent: { ...formData.topBarContent, links: newLinks }
-                                      });
-                                    }}
-                                    placeholder="URL"
-                                    className="flex-1"
-                                  />
+                            {formData.topBarContent.announcements.map((announcement, annIdx) => (
+                              <div key={announcement.id} className="p-3 rounded-lg border bg-muted/20 space-y-2">
+                                <div className="flex items-start gap-2">
+                                  <div className="flex-1 space-y-2">
+                                    <div className="flex items-center gap-2">
+                                      <Badge variant="outline" className="text-xs">
+                                        {annIdx + 1}
+                                      </Badge>
+                                      <Switch
+                                        checked={announcement.isActive !== false}
+                                        onCheckedChange={(checked) => {
+                                          const newAnnouncements = [...(formData.topBarContent.announcements || [])];
+                                          newAnnouncements[annIdx] = { ...newAnnouncements[annIdx], isActive: checked };
+                                          setFormData({
+                                            ...formData,
+                                            topBarContent: { ...formData.topBarContent, announcements: newAnnouncements }
+                                          });
+                                        }}
+                                      />
+                                      <span className="text-xs text-muted-foreground">
+                                        {announcement.isActive !== false ? "Active" : "Inactive"}
+                                      </span>
+                                    </div>
+                                    <Input
+                                      value={announcement.text}
+                                      onChange={(e) => {
+                                        const newAnnouncements = [...(formData.topBarContent.announcements || [])];
+                                        newAnnouncements[annIdx] = { ...newAnnouncements[annIdx], text: e.target.value };
+                                        setFormData({
+                                          ...formData,
+                                          topBarContent: { ...formData.topBarContent, announcements: newAnnouncements }
+                                        });
+                                      }}
+                                      placeholder="Enter announcement text..."
+                                      className="text-sm"
+                                    />
+                                    {/* Announcement Links */}
+                                    <div className="space-y-2">
+                                      <div className="flex items-center justify-between">
+                                        <span className="text-xs text-muted-foreground">Links</span>
+                                        <Button
+                                          type="button"
+                                          variant="ghost"
+                                          size="sm"
+                                          className="h-6 text-xs px-2"
+                                          onClick={() => {
+                                            const newAnnouncements = [...(formData.topBarContent.announcements || [])];
+                                            newAnnouncements[annIdx] = {
+                                              ...newAnnouncements[annIdx],
+                                              links: [...(newAnnouncements[annIdx].links || []), { label: "Learn More", url: "/", target: "_self" }]
+                                            };
+                                            setFormData({
+                                              ...formData,
+                                              topBarContent: { ...formData.topBarContent, announcements: newAnnouncements }
+                                            });
+                                          }}
+                                        >
+                                          <Plus className="h-3 w-3 mr-1" /> Link
+                                        </Button>
+                                      </div>
+                                      {announcement.links && announcement.links.length > 0 && (
+                                        <div className="space-y-1">
+                                          {announcement.links.map((link, linkIdx) => (
+                                            <div key={linkIdx} className="flex gap-1 items-center">
+                                              <Input
+                                                value={link.label}
+                                                onChange={(e) => {
+                                                  const newAnnouncements = [...(formData.topBarContent.announcements || [])];
+                                                  const newLinks = [...(newAnnouncements[annIdx].links || [])];
+                                                  newLinks[linkIdx] = { ...newLinks[linkIdx], label: e.target.value };
+                                                  newAnnouncements[annIdx] = { ...newAnnouncements[annIdx], links: newLinks };
+                                                  setFormData({
+                                                    ...formData,
+                                                    topBarContent: { ...formData.topBarContent, announcements: newAnnouncements }
+                                                  });
+                                                }}
+                                                placeholder="Label"
+                                                className="flex-1 h-7 text-xs"
+                                              />
+                                              <Input
+                                                value={link.url}
+                                                onChange={(e) => {
+                                                  const newAnnouncements = [...(formData.topBarContent.announcements || [])];
+                                                  const newLinks = [...(newAnnouncements[annIdx].links || [])];
+                                                  newLinks[linkIdx] = { ...newLinks[linkIdx], url: e.target.value };
+                                                  newAnnouncements[annIdx] = { ...newAnnouncements[annIdx], links: newLinks };
+                                                  setFormData({
+                                                    ...formData,
+                                                    topBarContent: { ...formData.topBarContent, announcements: newAnnouncements }
+                                                  });
+                                                }}
+                                                placeholder="URL"
+                                                className="flex-1 h-7 text-xs"
+                                              />
+                                              <Button
+                                                type="button"
+                                                variant="ghost"
+                                                size="icon"
+                                                className="h-7 w-7"
+                                                onClick={() => {
+                                                  const newAnnouncements = [...(formData.topBarContent.announcements || [])];
+                                                  const newLinks = (newAnnouncements[annIdx].links || []).filter((_, i) => i !== linkIdx);
+                                                  newAnnouncements[annIdx] = { ...newAnnouncements[annIdx], links: newLinks };
+                                                  setFormData({
+                                                    ...formData,
+                                                    topBarContent: { ...formData.topBarContent, announcements: newAnnouncements }
+                                                  });
+                                                }}
+                                              >
+                                                <X className="h-3 w-3" />
+                                              </Button>
+                                            </div>
+                                          ))}
+                                        </div>
+                                      )}
+                                    </div>
+                                  </div>
                                   <Button
                                     type="button"
                                     variant="ghost"
                                     size="icon"
+                                    className="h-8 w-8 text-destructive hover:text-destructive"
                                     onClick={() => {
-                                      const newLinks = (formData.topBarContent.links || []).filter((_, i) => i !== idx);
+                                      const newAnnouncements = (formData.topBarContent.announcements || []).filter((_, i) => i !== annIdx);
                                       setFormData({
                                         ...formData,
-                                        topBarContent: { ...formData.topBarContent, links: newLinks }
+                                        topBarContent: { ...formData.topBarContent, announcements: newAnnouncements }
                                       });
                                     }}
                                   >
                                     <X className="h-4 w-4" />
                                   </Button>
                                 </div>
-                                <div className="flex items-center gap-2">
-                                  <Checkbox
-                                    id={`link-newtab-${idx}`}
-                                    checked={link.target === "_blank"}
-                                    onCheckedChange={(checked) => {
-                                      const newLinks = [...(formData.topBarContent.links || [])];
-                                      newLinks[idx] = { ...newLinks[idx], target: checked ? "_blank" : "_self" };
-                                      setFormData({
-                                        ...formData,
-                                        topBarContent: { ...formData.topBarContent, links: newLinks }
-                                      });
-                                    }}
-                                  />
-                                  <Label htmlFor={`link-newtab-${idx}`} className="text-xs text-muted-foreground cursor-pointer">
-                                    Open in new tab
-                                  </Label>
-                                </div>
                               </div>
                             ))}
                           </div>
                         )}
+                      </div>
+
+                      {/* Unified Animation Settings */}
+                      <div className="space-y-3 p-3 rounded-lg bg-muted/30">
+                        <div>
+                          <Label className="text-sm font-medium">Animation</Label>
+                          <p className="text-xs text-muted-foreground">
+                            How the announcement bar appears and rotates
+                          </p>
+                        </div>
+
+                        {/* Animation Mode */}
+                        <div className="space-y-1">
+                          <Label className="text-xs">Mode</Label>
+                          <Select
+                            value={formData.topBarContent.animationMode || "once"}
+                            onValueChange={(value) => setFormData({
+                              ...formData,
+                              topBarContent: { ...formData.topBarContent, animationMode: value as AnimationMode }
+                            })}
+                          >
+                            <SelectTrigger className="h-8">
+                              <SelectValue />
+                            </SelectTrigger>
+                            <SelectContent>
+                              <SelectItem value="none">
+                                <div className="flex flex-col">
+                                  <span>None</span>
+                                  <span className="text-xs text-muted-foreground">Show instantly, no animation</span>
+                                </div>
+                              </SelectItem>
+                              <SelectItem value="once">
+                                <div className="flex flex-col">
+                                  <span>Once (on load)</span>
+                                  <span className="text-xs text-muted-foreground">Animate once when page loads</span>
+                                </div>
+                              </SelectItem>
+                              <SelectItem value="loop">
+                                <div className="flex flex-col">
+                                  <span>Loop</span>
+                                  <span className="text-xs text-muted-foreground">Continuously rotate/re-animate</span>
+                                </div>
+                              </SelectItem>
+                            </SelectContent>
+                          </Select>
+                        </div>
+
+                        {/* Animation Effect - show only when mode is not "none" */}
+                        {formData.topBarContent.animationMode !== "none" && (
+                          <div className="grid grid-cols-2 gap-3">
+                            <div className="space-y-1">
+                              <Label className="text-xs">Effect</Label>
+                              <Select
+                                value={formData.topBarContent.animationEffect || "slide-down"}
+                                onValueChange={(value) => setFormData({
+                                  ...formData,
+                                  topBarContent: { ...formData.topBarContent, animationEffect: value as AnimationEffect }
+                                })}
+                              >
+                                <SelectTrigger className="h-8">
+                                  <SelectValue />
+                                </SelectTrigger>
+                                <SelectContent>
+                                  <SelectItem value="fade">Fade</SelectItem>
+                                  <SelectItem value="slide-down">Slide Down</SelectItem>
+                                  <SelectItem value="slide-up">Slide Up</SelectItem>
+                                  <SelectItem value="pulse">Pulse</SelectItem>
+                                </SelectContent>
+                              </Select>
+                            </div>
+
+                            {/* Interval - show only when mode is "loop" */}
+                            {formData.topBarContent.animationMode === "loop" && (
+                              <div className="space-y-1">
+                                <Label className="text-xs">Interval (seconds)</Label>
+                                <Input
+                                  type="number"
+                                  min={2}
+                                  max={60}
+                                  value={formData.topBarContent.animationInterval ?? 5}
+                                  onChange={(e) => setFormData({
+                                    ...formData,
+                                    topBarContent: { ...formData.topBarContent, animationInterval: parseInt(e.target.value) || 5 }
+                                  })}
+                                  className="h-8"
+                                />
+                              </div>
+                            )}
+                          </div>
+                        )}
+
+                        {/* Mode description */}
+                        <p className="text-xs text-muted-foreground bg-muted/50 p-2 rounded">
+                          {formData.topBarContent.animationMode === "none" && "Bar appears instantly without any animation."}
+                          {formData.topBarContent.animationMode === "once" && (
+                            (formData.topBarContent.announcements?.length || 0) > 1
+                              ? "Bar animates once on load. Multiple announcements will cycle through once then stop."
+                              : "Bar animates once when the page loads."
+                          )}
+                          {formData.topBarContent.animationMode === "loop" && (
+                            (formData.topBarContent.announcements?.length || 0) > 1
+                              ? `Announcements rotate every ${formData.topBarContent.animationInterval || 5} seconds continuously.`
+                              : `Announcement re-animates every ${formData.topBarContent.animationInterval || 5} seconds.`
+                          )}
+                        </p>
                       </div>
 
                       {/* Style Presets */}
@@ -1663,25 +1952,6 @@ export default function HeaderBuilderPage() {
                                 })}
                               />
                             </div>
-                            <div className="space-y-2">
-                              <Label className="text-xs">Entrance Animation</Label>
-                              <Select
-                                value={formData.topBarContent.entranceAnimation || "slide-down"}
-                                onValueChange={(value: "none" | "slide-down" | "fade-in") => setFormData({
-                                  ...formData,
-                                  topBarContent: { ...formData.topBarContent, entranceAnimation: value }
-                                })}
-                              >
-                                <SelectTrigger className="text-xs">
-                                  <SelectValue />
-                                </SelectTrigger>
-                                <SelectContent>
-                                  <SelectItem value="none">None</SelectItem>
-                                  <SelectItem value="slide-down">Slide Down</SelectItem>
-                                  <SelectItem value="fade-in">Fade In</SelectItem>
-                                </SelectContent>
-                              </Select>
-                            </div>
                           </AccordionContent>
                         </AccordionItem>
                       </Accordion>
@@ -1690,7 +1960,7 @@ export default function HeaderBuilderPage() {
                       <div className="space-y-2 pt-2">
                         <Label className="text-xs text-muted-foreground">Preview</Label>
                         <div
-                          className="rounded-lg overflow-hidden text-sm py-2 px-4 flex items-center justify-center gap-4"
+                          className="rounded-lg overflow-hidden text-sm py-2 px-4 flex items-center justify-center gap-4 relative"
                           style={{
                             background: formData.topBarContent.style?.useGradient
                               ? `linear-gradient(${getGradientCSS(formData.topBarContent.style?.gradientDirection)}, ${formData.topBarContent.style?.gradientFrom || "#FF6B35"}, ${formData.topBarContent.style?.gradientTo || "#F72585"})`
@@ -1698,22 +1968,53 @@ export default function HeaderBuilderPage() {
                             color: formData.topBarContent.style?.textColor || "#ffffff",
                           }}
                         >
-                          <span>{formData.topBarContent.text || "Your announcement here..."}</span>
-                          {formData.topBarContent.links && formData.topBarContent.links.length > 0 && (
-                            <span
-                              style={{
-                                color: formData.topBarContent.style?.linkColor || "#fbbf24",
-                                fontWeight: formData.topBarContent.style?.linkStyle === "bold" ? "bold" : "normal",
-                                textDecoration: formData.topBarContent.style?.linkStyle === "underline" ? "underline" : "none",
-                              }}
-                            >
-                              {formData.topBarContent.links[0].label}
-                            </span>
-                          )}
+                          {/* Show first announcement or legacy text */}
+                          <span>
+                            {formData.topBarContent.announcements && formData.topBarContent.announcements.length > 0
+                              ? formData.topBarContent.announcements[0]?.text || "Your announcement here..."
+                              : formData.topBarContent.text || "Your announcement here..."
+                            }
+                          </span>
+                          {/* Show links from first announcement or legacy */}
+                          {(() => {
+                            const links = formData.topBarContent.announcements && formData.topBarContent.announcements.length > 0
+                              ? formData.topBarContent.announcements[0]?.links
+                              : formData.topBarContent.links;
+                            return links && links.length > 0 && (
+                              <span
+                                style={{
+                                  color: formData.topBarContent.style?.linkColor || "#fbbf24",
+                                  fontWeight: formData.topBarContent.style?.linkStyle === "bold" ? "bold" : "normal",
+                                  textDecoration: formData.topBarContent.style?.linkStyle === "underline" ? "underline" : "none",
+                                }}
+                              >
+                                {links[0].label}
+                              </span>
+                            );
+                          })()}
                           {formData.topBarContent.dismissible !== false && (
                             <X className="h-4 w-4 opacity-70" />
                           )}
+                          {/* Show dots indicator for multiple announcements */}
+                          {formData.topBarContent.announcements && formData.topBarContent.announcements.length > 1 && (
+                            <div className="absolute bottom-0.5 left-1/2 -translate-x-1/2 flex gap-1">
+                              {formData.topBarContent.announcements.map((_, idx) => (
+                                <span
+                                  key={idx}
+                                  className={cn(
+                                    "w-1 h-1 rounded-full",
+                                    idx === 0 ? "bg-white" : "bg-white/40"
+                                  )}
+                                />
+                              ))}
+                            </div>
+                          )}
                         </div>
+                        {formData.topBarContent.announcements && formData.topBarContent.announcements.length > 1 && formData.topBarContent.animationMode === "loop" && (
+                          <p className="text-xs text-muted-foreground text-center">
+                            {formData.topBarContent.announcements.filter(a => a.isActive !== false).length} announcements will rotate every {formData.topBarContent.animationInterval || 5}s
+                          </p>
+                        )}
                       </div>
                     </div>
                   )}

@@ -79,7 +79,11 @@ export function HeaderCentered({
 
         {/* CTA positioned absolute right */}
         <div className="absolute right-0 flex items-center gap-x-4">
-          <SearchButton enabled={config.search?.enabled ?? false} />
+          <SearchButton
+            enabled={config.search?.enabled ?? false}
+            serviceCategories={serviceCategories}
+            navigation={navigation}
+          />
           <CTAButtons
             buttons={config.cta || []}
             showAuth={config.auth?.showButtons ?? true}

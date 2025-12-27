@@ -64,7 +64,11 @@ export function HeaderSplit({
             setHoveredItem={setHoveredItem}
             split="right"
           />
-          <SearchButton enabled={config.search?.enabled ?? false} />
+          <SearchButton
+            enabled={config.search?.enabled ?? false}
+            serviceCategories={serviceCategories}
+            navigation={navigation}
+          />
           <CTAButtons
             buttons={config.cta || []}
             showAuth={config.auth?.showButtons ?? true}
