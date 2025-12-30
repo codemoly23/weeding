@@ -27,6 +27,7 @@ const headerConfigSchema = z.object({
   mobileBreakpoint: z.number().default(1024),
   bgColor: z.string().optional().nullable(),
   textColor: z.string().optional().nullable(),
+  hoverColor: z.string().optional().nullable(),
   height: z.number().default(64),
 });
 

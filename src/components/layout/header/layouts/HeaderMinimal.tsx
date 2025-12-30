@@ -21,6 +21,7 @@ export function HeaderMinimal({
   sessionStatus: _sessionStatus,
   businessConfig,
   onLogout,
+  styling: _styling,
 }: HeaderLayoutProps) {
   const [mounted, setMounted] = useState(false);
 
@@ -31,12 +32,12 @@ export function HeaderMinimal({
   return (
     <nav
       className="container mx-auto flex items-center justify-between px-4"
-      style={{ height: `${config.height || 64}px` }}
+      style={{ height: `${config.height || 80}px` }}
     >
       {/* Logo - Left */}
       <Logo
         businessConfig={businessConfig}
-        maxHeight={config.logo?.maxHeight || 36}
+        maxHeight={config.logo?.maxHeight || 56}
       />
 
       {/* Search and Mobile menu */}

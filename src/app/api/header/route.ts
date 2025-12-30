@@ -92,6 +92,7 @@ export async function GET() {
       styling: {
         bgColor: header.bgColor,
         textColor: header.textColor,
+        hoverColor: header.hoverColor,
         accentColor: header.accentColor,
         borderColor: header.borderColor,
       },

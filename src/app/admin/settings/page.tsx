@@ -30,6 +30,7 @@ import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Separator } from "@/components/ui/separator";
+import { Switch } from "@/components/ui/switch";
 import { toast } from "sonner";
 
 interface BusinessSettings {
@@ -37,6 +38,9 @@ interface BusinessSettings {
   "business.name": string;
   "business.tagline": string;
   "business.description": string;
+  // Display settings
+  "business.display.logo": string;
+  "business.display.name": string;
   // Logo
   "business.logo.url": string;
   "business.logo.text": string;
@@ -65,6 +69,8 @@ const defaultSettings: BusinessSettings = {
   "business.name": "LLCPad",
   "business.tagline": "Your Business Formation Partner",
   "business.description": "Empowering global entrepreneurs to launch legitimate US businesses and Amazon stores with zero complexity.",
+  "business.display.logo": "true",
+  "business.display.name": "true",
   "business.logo.url": "",
   "business.logo.text": "L",
   "business.favicon.url": "",
@@ -285,6 +291,54 @@ export default function BusinessSettingsPage() {
 
           <Separator />
 
+          {/* Display Settings */}
+          <div className="space-y-4">
+            <h4 className="font-medium">Header Display Settings</h4>
+            <p className="text-sm text-muted-foreground">
+              Choose what to display in the header. At least one option should be enabled.
+            </p>
+            <div className="grid gap-4 sm:grid-cols-2">
+              <div className="flex items-center justify-between rounded-lg border p-4">
+                <div className="space-y-0.5">
+                  <Label htmlFor="display-logo">Show Logo</Label>
+                  <p className="text-xs text-muted-foreground">
+                    Display the logo image or fallback text
+                  </p>
+                </div>
+                <Switch
+                  id="display-logo"
+                  checked={settings["business.display.logo"] !== "false"}
+                  onCheckedChange={(checked) =>
+                    updateSetting("business.display.logo", checked ? "true" : "false")
+                  }
+                />
+              </div>
+              <div className="flex items-center justify-between rounded-lg border p-4">
+                <div className="space-y-0.5">
+                  <Label htmlFor="display-name">Show Business Name</Label>
+                  <p className="text-xs text-muted-foreground">
+                    Display the business name text
+                  </p>
+                </div>
+                <Switch
+                  id="display-name"
+                  checked={settings["business.display.name"] !== "false"}
+                  onCheckedChange={(checked) =>
+                    updateSetting("business.display.name", checked ? "true" : "false")
+                  }
+                />
+              </div>
+            </div>
+            {settings["business.display.logo"] === "false" &&
+              settings["business.display.name"] === "false" && (
+                <p className="text-sm text-amber-600">
+                  ⚠️ Warning: Both logo and name are disabled. At least one should be visible in the header.
+                </p>
+              )}
+          </div>
+
+          <Separator />
+
           {/* Logo & Favicon */}
           <div className="grid gap-6 sm:grid-cols-2">
             {/* Logo Upload */}
@@ -334,7 +388,7 @@ export default function BusinessSettingsPage() {
                     Upload Logo
                   </Button>
                   <p className="text-xs text-muted-foreground">
-                    Recommended: 200x200px, PNG or SVG
+                    Recommended: 400px+ height, SVG or PNG (2x-3x for retina)
                   </p>
                 </div>
               </div>

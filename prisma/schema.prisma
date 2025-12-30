@@ -1086,7 +1086,7 @@ model HeaderConfig {
 
   // Logo Settings
   logoPosition    LogoPosition @default(LEFT)
-  logoMaxHeight   Int          @default(40)
+  logoMaxHeight   Int          @default(56)
 
   // CTA Buttons
   ctaButtons      Json?        // [{ text, url, variant, icon }]
@@ -1109,6 +1109,7 @@ model HeaderConfig {
   // Styling
   bgColor         String?
   textColor       String?
+  hoverColor      String?      // Menu hover color
   accentColor     String?
   borderColor     String?
   height          Int          @default(64)

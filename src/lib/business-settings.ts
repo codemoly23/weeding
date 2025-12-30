@@ -11,6 +11,9 @@ export const BUSINESS_SETTINGS = {
   BUSINESS_NAME: "business.name",
   BUSINESS_TAGLINE: "business.tagline",
   BUSINESS_DESCRIPTION: "business.description",
+  // Display settings
+  DISPLAY_LOGO: "business.display.logo",
+  DISPLAY_NAME: "business.display.name",
   // Logo
   LOGO_URL: "business.logo.url",
   LOGO_TEXT: "business.logo.text",
@@ -44,6 +47,10 @@ export interface BusinessConfig {
   name: string;
   tagline: string;
   description: string;
+  display: {
+    showLogo: boolean;
+    showName: boolean;
+  };
   logo: {
     url: string;
     text: string;
@@ -103,6 +110,10 @@ export async function getBusinessConfig(): Promise<BusinessConfig> {
     name: settingsMap[BUSINESS_SETTINGS.BUSINESS_NAME] || "LLCPad",
     tagline: settingsMap[BUSINESS_SETTINGS.BUSINESS_TAGLINE] || "Your Business Formation Partner",
     description: settingsMap[BUSINESS_SETTINGS.BUSINESS_DESCRIPTION] || "Empowering global entrepreneurs to launch legitimate US businesses and Amazon stores with zero complexity.",
+    display: {
+      showLogo: settingsMap[BUSINESS_SETTINGS.DISPLAY_LOGO] !== "false",
+      showName: settingsMap[BUSINESS_SETTINGS.DISPLAY_NAME] !== "false",
+    },
     logo: {
       url: settingsMap[BUSINESS_SETTINGS.LOGO_URL] || "",
       text: settingsMap[BUSINESS_SETTINGS.LOGO_TEXT] || "L",
@@ -152,6 +163,10 @@ export function getDefaultBusinessConfig(): BusinessConfig {
     name: "LLCPad",
     tagline: "Your Business Formation Partner",
     description: "Empowering global entrepreneurs to launch legitimate US businesses and Amazon stores with zero complexity.",
+    display: {
+      showLogo: true,
+      showName: true,
+    },
     logo: {
       url: "",
       text: "L",

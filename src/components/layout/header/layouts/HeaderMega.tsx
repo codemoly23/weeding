@@ -153,6 +153,7 @@ export function HeaderMega({
   sessionStatus,
   businessConfig,
   onLogout,
+  styling,
 }: HeaderLayoutProps) {
   const [hoveredItem, setHoveredItem] = useState<string | null>(null);
   const [mounted, setMounted] = useState(false);
@@ -163,17 +164,21 @@ export function HeaderMega({
 
   const servicesItem = navigation.find((item) => item.hasDropdown);
 
+  // Custom colors from styling
+  const hasCustomTextColor = !!styling?.textColor;
+  const hasCustomHoverColor = !!styling?.hoverColor;
+
   return (
     <div>
       {/* Row 1: Logo and CTA */}
       <div className="container mx-auto px-4">
         <div
           className="flex items-center justify-between border-b border-border/50"
-          style={{ height: `${Math.floor((config.height || 64) * 0.65)}px` }}
+          style={{ height: `${Math.floor((config.height || 80) * 0.65)}px` }}
         >
           <Logo
             businessConfig={businessConfig}
-            maxHeight={config.logo?.maxHeight || 36}
+            maxHeight={config.logo?.maxHeight || 56}
           />
 
           <div className="hidden lg:flex lg:items-center lg:gap-x-4">
@@ -225,38 +230,55 @@ export function HeaderMega({
       {/* Row 2: Full-width navigation bar */}
       <div
         className="relative hidden border-b bg-muted/30 lg:block"
-        style={{ height: `${Math.floor((config.height || 64) * 0.55)}px` }}
+        style={{ height: `${Math.floor((config.height || 80) * 0.55)}px` }}
       >
         <div className="container mx-auto flex h-full items-center px-4">
           <nav className="flex items-center gap-x-1">
-            {navigation.map((item) => (
-              <div
-                key={item.name}
-                className="relative"
-                onMouseEnter={() => setHoveredItem(item.name)}
-                onMouseLeave={() => setHoveredItem(null)}
-              >
-                <Link
-                  href={item.href}
-                  className={cn(
-                    "flex items-center gap-1 rounded-md px-4 py-2 text-sm font-medium transition-colors",
-                    hoveredItem === item.name
-                      ? "bg-background text-foreground shadow-sm"
-                      : "text-muted-foreground hover:text-foreground"
-                  )}
+            {navigation.map((item) => {
+              const isHovered = hoveredItem === item.name;
+
+              // Determine text color
+              const textStyle: React.CSSProperties = {};
+              if (hasCustomTextColor || hasCustomHoverColor) {
+                if (isHovered && hasCustomHoverColor) {
+                  textStyle.color = styling?.hoverColor;
+                } else if (hasCustomTextColor) {
+                  textStyle.color = styling?.textColor;
+                }
+              }
+
+              return (
+                <div
+                  key={item.name}
+                  className="relative"
+                  onMouseEnter={() => setHoveredItem(item.name)}
+                  onMouseLeave={() => setHoveredItem(null)}
                 >
-                  {item.name}
-                  {item.hasDropdown && (
-                    <ChevronDown
-                      className={cn(
-                        "h-4 w-4 transition-transform",
-                        hoveredItem === item.name && "rotate-180"
-                      )}
-                    />
-                  )}
-                </Link>
-              </div>
-            ))}
+                  <Link
+                    href={item.href}
+                    className={cn(
+                      "flex items-center gap-1 rounded-md px-4 py-2 text-sm font-medium transition-colors",
+                      !hasCustomTextColor && !hasCustomHoverColor && (
+                        isHovered
+                          ? "bg-background text-foreground shadow-sm"
+                          : "text-muted-foreground hover:text-foreground"
+                      )
+                    )}
+                    style={textStyle}
+                  >
+                    {item.name}
+                    {item.hasDropdown && (
+                      <ChevronDown
+                        className={cn(
+                          "h-4 w-4 transition-transform",
+                          isHovered && "rotate-180"
+                        )}
+                      />
+                    )}
+                  </Link>
+                </div>
+              );
+            })}
           </nav>
         </div>
 

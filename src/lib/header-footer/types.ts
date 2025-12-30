@@ -339,6 +339,7 @@ export interface PublicHeaderResponse {
   styling: {
     bgColor?: string;
     textColor?: string;
+    hoverColor?: string;
   };
 }
 
