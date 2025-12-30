@@ -31,14 +31,14 @@ async function seedHeaderFooter() {
       transparent: false,
       topBarEnabled: false,
       logoPosition: "LEFT",
-      logoMaxHeight: 36,
+      logoMaxHeight: 56,
       showAuthButtons: true,
       loginText: "Sign In",
       registerText: "Get Started",
       registerUrl: "/services/llc-formation",
       searchEnabled: false,
       mobileBreakpoint: 1024,
-      height: 64,
+      height: 80,
       ctaButtons: JSON.stringify([
         {
           text: "Get Started",

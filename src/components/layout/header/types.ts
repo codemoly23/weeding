@@ -25,6 +25,10 @@ export interface ServiceCategory {
 
 export interface BusinessConfig {
   name: string;
+  display?: {
+    showLogo: boolean;
+    showName: boolean;
+  };
   logo: {
     url: string;
     text: string;
@@ -41,6 +45,10 @@ export interface HeaderLayoutProps {
   isScrolled: boolean;
   businessConfig: BusinessConfig;
   onLogout: () => void;
+  styling?: {
+    textColor?: string;
+    hoverColor?: string;
+  };
 }
 
 export interface LogoProps {
@@ -55,6 +63,10 @@ export interface NavigationProps {
   hoveredItem: string | null;
   setHoveredItem: (item: string | null) => void;
   split?: "left" | "right" | "all";
+  styling?: {
+    textColor?: string;
+    hoverColor?: string;
+  };
 }
 
 export interface UserMenuProps {

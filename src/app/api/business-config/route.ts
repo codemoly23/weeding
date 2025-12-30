@@ -13,6 +13,7 @@ export async function GET() {
       name: "LLCPad",
       tagline: "Your Business Formation Partner",
       description: "Empowering global entrepreneurs to launch legitimate US businesses.",
+      display: { showLogo: true, showName: true },
       logo: { url: "", text: "L" },
       favicon: "",
       contact: { email: "contact@llcpad.com", phone: "", supportEmail: "support@llcpad.com" },

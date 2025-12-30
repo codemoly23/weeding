@@ -7,6 +7,10 @@ interface BusinessConfig {
   name: string;
   tagline: string;
   description: string;
+  display?: {
+    showLogo: boolean;
+    showName: boolean;
+  };
   logo: {
     url: string;
     text: string;
@@ -41,6 +45,10 @@ const defaultConfig: BusinessConfig = {
   name: "LLCPad",
   tagline: "Your Business Formation Partner",
   description: "Empowering global entrepreneurs to launch legitimate US businesses and Amazon stores with zero complexity.",
+  display: {
+    showLogo: true,
+    showName: true,
+  },
   logo: {
     url: "",
     text: "L",

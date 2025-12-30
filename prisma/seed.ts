@@ -2089,7 +2089,7 @@ async function main() {
       transparent: false,
       topBarEnabled: false,
       logoPosition: "LEFT",
-      logoMaxHeight: 36,
+      logoMaxHeight: 56,
       ctaButtons: JSON.stringify([
         { text: "Get Started", url: "/services/llc-formation", variant: "primary" }
       ]),
@@ -2099,7 +2099,7 @@ async function main() {
       registerUrl: "/services/llc-formation",
       searchEnabled: false,
       mobileBreakpoint: 1024,
-      height: 64,
+      height: 80,
     },
   });
   console.log("  ✓ Header config created");

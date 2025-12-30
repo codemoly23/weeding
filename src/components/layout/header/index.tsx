@@ -139,16 +139,22 @@ export function Header() {
     await signOut({ callbackUrl: "/" });
   };
 
+  // Check if custom styling is set
+  const hasCustomBgColor = !!headerConfig?.styling?.bgColor;
+  const hasCustomTextColor = !!headerConfig?.styling?.textColor;
+
   // Get styling from header config
   const headerStyle = {
-    ...(headerConfig?.styling?.bgColor && !headerConfig.transparent && { backgroundColor: headerConfig.styling.bgColor }),
-    ...(headerConfig?.styling?.textColor && { color: headerConfig.styling.textColor }),
+    ...(hasCustomBgColor && !headerConfig?.transparent && { backgroundColor: headerConfig.styling.bgColor }),
+    ...(hasCustomTextColor && { color: headerConfig.styling.textColor }),
   };
 
-  // Transparent header styles
+  // Transparent header styles - don't apply bg class if custom bgColor is set
   const transparentStyles = headerConfig?.transparent && !isScrolled
     ? "bg-transparent text-white"
-    : "bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 border-b";
+    : hasCustomBgColor
+      ? "border-b" // Only border, let inline style handle background
+      : "bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 border-b";
 
   // Common layout props
   const layoutProps = {
@@ -161,15 +167,20 @@ export function Header() {
     isScrolled,
     businessConfig: {
       name: businessConfig.name,
+      display: businessConfig.display,
       logo: businessConfig.logo,
     },
     onLogout: handleLogout,
+    styling: {
+      textColor: headerConfig?.styling?.textColor,
+      hoverColor: headerConfig?.styling?.hoverColor,
+    },
   };
 
   // Render layout based on config
   const renderLayout = () => {
     if (!headerConfig) {
-      return <HeaderDefault {...layoutProps} config={{ ...layoutProps.config, layout: "DEFAULT", height: 64, cta: [], auth: { showButtons: true, loginText: "Sign In", registerText: "Get Started", registerUrl: "/services/llc-formation" } }} />;
+      return <HeaderDefault {...layoutProps} config={{ ...layoutProps.config, layout: "DEFAULT", height: 80, cta: [], auth: { showButtons: true, loginText: "Sign In", registerText: "Get Started", registerUrl: "/services/llc-formation" } }} />;
     }
 
     switch (headerConfig.layout) {

@@ -616,10 +616,10 @@ export default function HeaderBuilderPage() {
     transparent: false,
     topBarEnabled: false,
     topBarContent: defaultTopBarContent,
-    logoMaxHeight: 40,
+    logoMaxHeight: 56,
     showAuthButtons: true,
     loginText: "Sign In",
-    loginUrl: "/auth/signin",
+    loginUrl: "/login",
     loginStyle: {
       bgColor: "transparent",
       textColor: "#374151",
@@ -638,9 +638,10 @@ export default function HeaderBuilderPage() {
     } as ButtonCustomStyle,
     searchEnabled: false,
     mobileBreakpoint: 1024,
-    height: 64,
+    height: 80,
     bgColor: "",
     textColor: "",
+    hoverColor: "",
     ctaButtons: [] as CTAButton[],
   });
 
@@ -667,7 +668,7 @@ export default function HeaderBuilderPage() {
           logoMaxHeight: activeHeader.logoMaxHeight,
           showAuthButtons: activeHeader.showAuthButtons,
           loginText: activeHeader.loginText,
-          loginUrl: activeHeader.loginUrl || "/auth/signin",
+          loginUrl: "/login", // Fixed URL - not editable
           loginStyle: activeHeader.loginStyle || {
             bgColor: "transparent",
             textColor: "#374151",
@@ -689,6 +690,7 @@ export default function HeaderBuilderPage() {
           height: activeHeader.height,
           bgColor: activeHeader.bgColor || "",
           textColor: activeHeader.textColor || "",
+          hoverColor: activeHeader.hoverColor || "",
           // Ensure all buttons have style property (migration from preset-only buttons)
           ctaButtons: (activeHeader.ctaButtons || []).map((btn: CTAButton) => ({
             ...btn,
@@ -718,6 +720,7 @@ export default function HeaderBuilderPage() {
         ...formData,
         bgColor: formData.bgColor || null,
         textColor: formData.textColor || null,
+        hoverColor: formData.hoverColor || null,
       };
       console.log("Saving header with payload:", JSON.stringify(payload, null, 2));
 
@@ -2791,7 +2794,7 @@ export default function HeaderBuilderPage() {
                         <GripVertical className="h-4 w-4 text-muted-foreground" />
                       </div>
                       <span className="font-medium">{formData.loginText || "Sign In"}</span>
-                      <span className="text-sm text-muted-foreground">→ {formData.loginUrl || "/auth/signin"}</span>
+                      <span className="text-sm text-muted-foreground">→ /login</span>
                       <Badge variant="secondary" className="text-xs">Auth</Badge>
                       <ChevronDown
                         className={cn(
@@ -2825,8 +2828,12 @@ export default function HeaderBuilderPage() {
                           <Label>URL</Label>
                           <Input
                             value={formData.loginUrl}
-                            onChange={(e) => setFormData({ ...formData, loginUrl: e.target.value })}
+                            disabled
+                            className="bg-muted"
                           />
+                          <p className="text-xs text-muted-foreground">
+                            Login URL is fixed and cannot be changed
+                          </p>
                         </div>
                       </div>
 
@@ -3263,7 +3270,7 @@ export default function HeaderBuilderPage() {
               <CardDescription>Customize colors and appearance</CardDescription>
             </CardHeader>
             <CardContent className="space-y-6">
-              <div className="grid gap-4 md:grid-cols-2">
+              <div className="grid gap-4 md:grid-cols-3">
                 <div className="space-y-2">
                   <Label htmlFor="bgColor">Background Color</Label>
                   <div className="flex gap-2">
@@ -3300,6 +3307,28 @@ export default function HeaderBuilderPage() {
                       className="flex-1"
                     />
                   </div>
+                </div>
+
+                <div className="space-y-2">
+                  <Label htmlFor="hoverColor">Menu Hover Color</Label>
+                  <div className="flex gap-2">
+                    <Input
+                      id="hoverColor"
+                      type="color"
+                      value={formData.hoverColor || "#2563eb"}
+                      onChange={(e) => setFormData({ ...formData, hoverColor: e.target.value })}
+                      className="h-10 w-14 cursor-pointer p-1"
+                    />
+                    <Input
+                      value={formData.hoverColor}
+                      onChange={(e) => setFormData({ ...formData, hoverColor: e.target.value })}
+                      placeholder="#2563eb (click color to set)"
+                      className="flex-1"
+                    />
+                  </div>
+                  {!formData.hoverColor && (
+                    <p className="text-xs text-amber-600">Click the color picker to set a hover color</p>
+                  )}
                 </div>
               </div>
 

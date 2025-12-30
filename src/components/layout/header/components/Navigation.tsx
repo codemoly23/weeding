@@ -148,6 +148,7 @@ export function Navigation({
   hoveredItem,
   setHoveredItem,
   split = "all",
+  styling,
 }: NavigationProps) {
   // Split navigation items if needed
   let displayItems = items;
@@ -157,39 +158,60 @@ export function Navigation({
     displayItems = items.slice(Math.ceil(items.length / 2));
   }
 
+  // Custom colors from styling
+  const hasCustomTextColor = !!styling?.textColor;
+  const hasCustomHoverColor = !!styling?.hoverColor;
+
   return (
     <div className="flex items-center gap-x-8">
-      {displayItems.map((item) => (
-        <div
-          key={item.name}
-          className="relative"
-          onMouseEnter={() => setHoveredItem(item.name)}
-          onMouseLeave={() => setHoveredItem(null)}
-        >
-          <Link
-            href={item.href}
-            className={cn(
-              "flex items-center gap-1 text-sm font-medium text-muted-foreground transition-colors hover:text-foreground",
-              hoveredItem === item.name && "text-foreground"
-            )}
-          >
-            {item.name}
-            {item.hasDropdown && (
-              <ChevronDown
-                className={cn(
-                  "h-4 w-4 transition-transform",
-                  hoveredItem === item.name && "rotate-180"
-                )}
-              />
-            )}
-          </Link>
+      {displayItems.map((item) => {
+        const isHovered = hoveredItem === item.name;
 
-          {/* Mega Menu Dropdown */}
-          {item.hasDropdown && hoveredItem === item.name && (
-            <MegaMenuDropdown categories={serviceCategories} />
-          )}
-        </div>
-      ))}
+        // Determine text color
+        const textStyle: React.CSSProperties = {};
+        if (hasCustomTextColor || hasCustomHoverColor) {
+          if (isHovered && hasCustomHoverColor) {
+            textStyle.color = styling?.hoverColor;
+          } else if (hasCustomTextColor) {
+            textStyle.color = styling?.textColor;
+          }
+        }
+
+        return (
+          <div
+            key={item.name}
+            className="relative"
+            onMouseEnter={() => setHoveredItem(item.name)}
+            onMouseLeave={() => setHoveredItem(null)}
+          >
+            <Link
+              href={item.href}
+              className={cn(
+                "flex items-center gap-1 text-sm font-medium transition-colors",
+                // Only use default classes if no custom colors
+                !hasCustomTextColor && !hasCustomHoverColor && "text-muted-foreground hover:text-foreground",
+                !hasCustomTextColor && !hasCustomHoverColor && isHovered && "text-foreground"
+              )}
+              style={textStyle}
+            >
+              {item.name}
+              {item.hasDropdown && (
+                <ChevronDown
+                  className={cn(
+                    "h-4 w-4 transition-transform",
+                    isHovered && "rotate-180"
+                  )}
+                />
+              )}
+            </Link>
+
+            {/* Mega Menu Dropdown */}
+            {item.hasDropdown && isHovered && (
+              <MegaMenuDropdown categories={serviceCategories} />
+            )}
+          </div>
+        );
+      })}
     </div>
   );
 }
