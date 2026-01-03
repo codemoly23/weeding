@@ -111,6 +111,8 @@ function getHoverEffectClass(effect?: ButtonHoverEffect): string {
       return "hover:shadow-[0_0_15px_rgba(59,130,246,0.5)]";
     case "heartbeat":
       return "animate-heartbeat";
+    case "stitches":
+      return "stitches-button";
     // Complex effects handled via inline styles or special components
     case "slide-fill":
     case "border-fill":

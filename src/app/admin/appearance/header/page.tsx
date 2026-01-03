@@ -98,6 +98,7 @@ const hoverEffectOptions: { value: ButtonHoverEffect; label: string }[] = [
   { value: "craft-expand", label: "Craft Expand (Icon Circle)" },
   { value: "heartbeat", label: "Heartbeat Pulse" },
   { value: "flow-border", label: "Flow Border (Rotating Gradient)" },
+  { value: "stitches", label: "Stitches (3D Dashed Border)" },
 ];
 
 // 2025 Modern Button Style Presets
@@ -302,6 +303,20 @@ const buttonStylePresets: ButtonStylePreset[] = [
       shadow: "0 0 0 2px rgba(37, 99, 235, 0.3)",
     },
   },
+  // 14. Stitches Button - 3D effect with dashed inner border
+  {
+    id: "stitches",
+    name: "Stitches Button",
+    description: "3D stitched effect with dashed inner border and shadow depth",
+    style: {
+      bgColor: "#0ea5e9",
+      textColor: "#ffffff",
+      borderWidth: 2,
+      borderColor: "#0ea5e9",
+      borderRadius: 8,
+      hoverEffect: "stitches",
+    },
+  },
 ];
 
 // Announcement Bar Style Presets (adapted from button presets)
@@ -444,6 +459,8 @@ function getPreviewHoverClass(effect?: ButtonHoverEffect): string {
       return "hover:shadow-[0_0_15px_rgba(59,130,246,0.5)]";
     case "heartbeat":
       return "animate-heartbeat";
+    case "stitches":
+      return "stitches-button";
     // Complex effects handled via inline styles in component or special components
     case "slide-fill":
     case "border-fill":

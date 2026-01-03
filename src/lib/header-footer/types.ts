@@ -23,7 +23,8 @@ export type ButtonHoverEffect =
   | "ripple"
   | "craft-expand" // CraftButton style - icon circle expands on hover
   | "heartbeat" // Pulsing heartbeat animation effect
-  | "flow-border"; // Rotating border gradient effect
+  | "flow-border" // Rotating border gradient effect
+  | "stitches"; // 3D stitched border effect with inner shadows
 
 // Gradient direction for button backgrounds
 export type GradientDirection =
