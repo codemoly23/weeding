@@ -33,7 +33,7 @@ export async function logActivity({
         action,
         entity,
         entityId,
-        metadata: metadata || null,
+        metadata: metadata ? JSON.parse(JSON.stringify(metadata)) : undefined,
         ipAddress,
       },
     });

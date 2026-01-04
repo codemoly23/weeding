@@ -24,12 +24,25 @@ export async function GET(
             packageId: true,
             included: true,
             customValue: true,
+            valueType: true,
+            addonPriceUSD: true,
+            addonPriceBDT: true,
           },
         },
       },
     });
 
-    return NextResponse.json({ features });
+    // Transform Decimal fields to numbers
+    const transformedFeatures = features.map((f) => ({
+      ...f,
+      packageMappings: f.packageMappings.map((m) => ({
+        ...m,
+        addonPriceUSD: m.addonPriceUSD ? Number(m.addonPriceUSD) : null,
+        addonPriceBDT: m.addonPriceBDT ? Number(m.addonPriceBDT) : null,
+      })),
+    }));
+
+    return NextResponse.json({ features: transformedFeatures });
   } catch (error) {
     console.error("Error fetching features:", error);
     return NextResponse.json(

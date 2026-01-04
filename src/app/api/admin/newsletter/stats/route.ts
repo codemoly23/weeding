@@ -4,9 +4,9 @@ import { checkAdminAccess, authError } from "@/lib/admin-auth";
 
 export async function GET() {
   try {
-    const hasAccess = await checkAdminAccess();
-    if (!hasAccess) {
-      return authError();
+    const accessResult = await checkAdminAccess();
+    if (accessResult.error) {
+      return authError(accessResult);
     }
 
     // Get total subscribers

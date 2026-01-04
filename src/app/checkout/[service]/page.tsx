@@ -245,8 +245,10 @@ function ServiceCheckoutForm() {
     if (dynamicTemplate && dynamicTemplate.tabs.length > 0) {
       // Convert dynamic template to ServiceFormConfig format
       const dynamicConfig: ServiceFormConfig = {
-        slug: serviceSlug,
-        serviceName: service?.name || serviceSlug,
+        serviceSlug: serviceSlug,
+        title: service?.name || serviceSlug,
+        description: service?.shortDesc || "",
+        faqs: [],
         steps: dynamicTemplate.tabs.map((tab, index) => ({
           id: index + 1,
           name: tab.name,
@@ -299,7 +301,6 @@ function ServiceCheckoutForm() {
             } as FormField;
           }),
         })),
-        faqs: [], // FAQs will come from static config as fallback
       };
 
       // Merge FAQs from static config if available

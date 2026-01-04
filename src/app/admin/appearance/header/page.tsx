@@ -678,7 +678,7 @@ function PreviewCTAButton({ btn }: { btn: CTAButton }) {
     );
   }
 
-  // Preset variant button
+  // Preset variant button (btn.style is undefined here)
   const variant = btn.variant === "outline"
     ? "outline"
     : btn.variant === "ghost"
@@ -689,9 +689,7 @@ function PreviewCTAButton({ btn }: { btn: CTAButton }) {
 
   return (
     <Button size="sm" variant={variant} className="gap-2">
-      {btn.style?.iconPosition === "left" && renderPreviewIcon(btn.style)}
       {btn.text}
-      {btn.style?.iconPosition !== "left" && renderPreviewIcon(btn.style)}
     </Button>
   );
 }

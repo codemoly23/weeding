@@ -148,7 +148,7 @@ export async function POST(request: Request) {
             showTitle: widgetFields.showTitle ?? true,
             column: widgetFields.column || 1,
             sortOrder: widgetFields.sortOrder || 0,
-            content: content || undefined,
+            content: content ? JSON.parse(JSON.stringify(content)) : undefined,
           },
         });
 

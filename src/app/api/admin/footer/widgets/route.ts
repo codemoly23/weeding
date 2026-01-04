@@ -190,8 +190,8 @@ export async function PUT(request: NextRequest) {
     if (menuItems !== undefined) {
       const widget = await prisma.$transaction(async (tx) => {
         // Delete existing menu items
-        await tx.footerWidgetLink.deleteMany({
-          where: { widgetId: id },
+        await tx.menuItem.deleteMany({
+          where: { footerWidgetId: id },
         });
 
         // Update widget and create new menu items

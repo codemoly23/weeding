@@ -19,9 +19,22 @@ export async function GET(
             slug: true,
           },
         },
+        // Features for comparison table (using correct relation name)
         features: {
           orderBy: { sortOrder: "asc" },
-          select: { id: true, text: true },
+          include: {
+            packageMappings: {
+              select: {
+                id: true,
+                packageId: true,
+                included: true,
+                customValue: true,
+                valueType: true,
+                addonPriceUSD: true,
+                addonPriceBDT: true,
+              },
+            },
+          },
         },
         packages: {
           where: { isActive: true },
@@ -66,13 +79,38 @@ export async function GET(
       metaTitle: service.metaTitle,
       metaDescription: service.metaDescription,
       category: service.category,
+      // Legacy features (simple text array)
       features: service.features.map((f) => f.text),
+      // New comparison table data
+      comparisonFeatures: service.features.map((f) => ({
+        id: f.id,
+        text: f.text,
+        tooltip: f.tooltip,
+        description: f.description,
+        packageMappings: f.packageMappings.map((m) => ({
+          id: m.id,
+          packageId: m.packageId,
+          included: m.included,
+          customValue: m.customValue,
+          valueType: m.valueType,
+          addonPriceUSD: m.addonPriceUSD ? Number(m.addonPriceUSD) : null,
+          addonPriceBDT: m.addonPriceBDT ? Number(m.addonPriceBDT) : null,
+        })),
+      })),
       packages: service.packages.map((p) => ({
         id: p.id,
         name: p.name,
         description: p.description,
         price: Number(p.priceUSD),
+        priceBDT: p.priceBDT ? Number(p.priceBDT) : null,
         isPopular: p.isPopular,
+        // New fields
+        processingTime: p.processingTime,
+        processingTimeNote: p.processingTimeNote,
+        processingIcon: p.processingIcon,
+        badgeText: p.badgeText,
+        badgeColor: p.badgeColor,
+        // Legacy features
         features: p.features.map((f) => f.text),
         notIncluded: p.notIncluded.map((n) => n.text),
       })),

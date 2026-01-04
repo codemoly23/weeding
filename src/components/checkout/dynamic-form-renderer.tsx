@@ -50,7 +50,7 @@ interface FormField {
     min?: number;
     max?: number;
   };
-  options?: Array<{ value: string; label: string }>;
+  options?: Array<{ value: string; label: string; icon?: string }>;
   dataSourceType?: string;
   dataSourceKey?: string;
   dependsOn?: string;
@@ -257,7 +257,7 @@ export function DynamicFormRenderer({
         if (field.dataSourceType === "state_list" && field.dependsOn) {
           // Fetch states based on selected country
           const countryValue = formValues[field.dependsOn];
-          if (countryValue) {
+          if (countryValue && typeof countryValue === 'string') {
             fetchListData(field.dataSourceKey, countryValue);
           }
         } else if (
@@ -290,7 +290,7 @@ export function DynamicFormRenderer({
         break;
       case "contains":
         conditionMet = Array.isArray(value)
-          ? value.includes(watchedValue)
+          ? value.includes(watchedValue as string)
           : String(watchedValue).includes(String(value));
         break;
       case "not_empty":
@@ -444,7 +444,7 @@ export function DynamicFormRenderer({
               control={control}
               render={({ field: controllerField }) => (
                 <Select
-                  value={controllerField.value || ""}
+                  value={typeof controllerField.value === 'string' ? controllerField.value : ""}
                   onValueChange={(value) => {
                     controllerField.onChange(value);
                     // Clear dependent fields when this field changes
@@ -456,7 +456,7 @@ export function DynamicFormRenderer({
                       });
                     });
                   }}
-                  disabled={isLoading || (field.dependsOn && !dependsOnValue)}
+                  disabled={isLoading || !!(field.dependsOn && !dependsOnValue)}
                 >
                   <SelectTrigger className={cn(error && "border-destructive")}>
                     <SelectValue
@@ -493,7 +493,7 @@ export function DynamicFormRenderer({
               control={control}
               render={({ field: controllerField }) => (
                 <RadioGroup
-                  value={controllerField.value}
+                  value={typeof controllerField.value === 'string' ? controllerField.value : undefined}
                   onValueChange={controllerField.onChange}
                   className="flex flex-col space-y-1"
                 >
@@ -521,7 +521,7 @@ export function DynamicFormRenderer({
               render={({ field: controllerField }) => (
                 <Checkbox
                   id={field.name}
-                  checked={controllerField.value}
+                  checked={typeof controllerField.value === 'boolean' ? controllerField.value : undefined}
                   onCheckedChange={controllerField.onChange}
                 />
               )}

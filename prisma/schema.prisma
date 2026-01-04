@@ -48,6 +48,14 @@ enum UserRole {
   SUPPORT_AGENT
 }
 
+// Feature value types for comparison table
+enum FeatureValueType {
+  BOOLEAN    // Shows ✓ or ✗
+  TEXT       // Shows customValue text
+  ADDON      // Shows "+ $XX" button (clickable add-on)
+  DASH       // Shows — (not applicable)
+}
+
 // ============ ROLE PERMISSIONS ============
 model RolePermission {
   id         String   @id @default(cuid())
@@ -200,6 +208,15 @@ model Package {
   isActive    Boolean  @default(true)
   sortOrder   Int      @default(0)
 
+  // Processing time display
+  processingTime     String?  // "3 weeks", "3 business days"
+  processingTimeNote String?  // "(instead of 3 weeks)"
+  processingIcon     String?  // "clock" or "zap" for fast
+
+  // Badge/label for package
+  badgeText   String?  // "Recommended", "Best Value", "Most Popular"
+  badgeColor  String?  // "orange", "green", "blue"
+
   service     Service  @relation(fields: [serviceId], references: [id], onDelete: Cascade)
   features    PackageFeature[]
   notIncluded PackageNotIncluded[]
@@ -249,6 +266,11 @@ model PackageFeatureMap {
 
   included    Boolean @default(true)  // true = ✓, false = ✗
   customValue String? // Optional: "10 per month" instead of just ✓
+
+  // New fields for enhanced comparison table
+  valueType     FeatureValueType @default(BOOLEAN)  // BOOLEAN, TEXT, ADDON, DASH
+  addonPriceUSD Decimal?         @db.Decimal(10, 2) // Add-on price if valueType=ADDON
+  addonPriceBDT Decimal?         @db.Decimal(10, 2) // BDT price for addon
 
   @@unique([packageId, featureId])
   @@index([packageId])

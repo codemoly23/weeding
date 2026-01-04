@@ -1,4 +1,4 @@
-import { PrismaClient } from "@prisma/client";
+import { PrismaClient, FeatureValueType } from "@prisma/client";
 import { PrismaPg } from "@prisma/adapter-pg";
 import { Pool } from "pg";
 import bcrypt from "bcryptjs";
@@ -41,6 +41,131 @@ const serviceCategories = [
   },
 ];
 
+// LLC Formation comparison table features - matches screenshot design
+// These are separate from the legacy "features" array and use the new comparison table structure
+const llcFormationComparisonFeatures = [
+  {
+    text: "Preparing & Filing the Articles of Organization",
+    tooltip: "We prepare and file your LLC formation documents with the state",
+    description: "Includes: Company name verification, Articles preparation, State filing, Formation certificate",
+    packages: {
+      Basic: { valueType: "BOOLEAN" as FeatureValueType, included: true },
+      Standard: { valueType: "BOOLEAN" as FeatureValueType, included: true },
+      Premium: { valueType: "BOOLEAN" as FeatureValueType, included: true },
+    },
+  },
+  {
+    text: "FREE 1st Year Registered Agent Service!",
+    tooltip: "A registered agent receives legal documents on behalf of your LLC",
+    packages: {
+      Basic: { valueType: "BOOLEAN" as FeatureValueType, included: true },
+      Standard: { valueType: "BOOLEAN" as FeatureValueType, included: true },
+      Premium: { valueType: "BOOLEAN" as FeatureValueType, included: true },
+    },
+  },
+  {
+    text: "FREE 1st Month of Virtual Address Service!",
+    tooltip: "Use our professional business address for mail and documents",
+    packages: {
+      Basic: { valueType: "BOOLEAN" as FeatureValueType, included: true },
+      Standard: { valueType: "BOOLEAN" as FeatureValueType, included: true },
+      Premium: { valueType: "BOOLEAN" as FeatureValueType, included: true },
+    },
+  },
+  {
+    text: "Expedited Filing",
+    tooltip: "Get your LLC approved faster with priority processing",
+    description: "3 business days (instead of 3 weeks)",
+    packages: {
+      Basic: { valueType: "ADDON" as FeatureValueType, included: false, addonPriceUSD: 50 },
+      Standard: { valueType: "ADDON" as FeatureValueType, included: false, addonPriceUSD: 50 },
+      Premium: { valueType: "BOOLEAN" as FeatureValueType, included: true },
+    },
+  },
+  {
+    text: "Business Contract Templates",
+    tooltip: "Professional contract templates for common business needs",
+    packages: {
+      Basic: { valueType: "ADDON" as FeatureValueType, included: false, addonPriceUSD: 150 },
+      Standard: { valueType: "ADDON" as FeatureValueType, included: false, addonPriceUSD: 150 },
+      Premium: { valueType: "BOOLEAN" as FeatureValueType, included: true },
+    },
+  },
+  {
+    text: "EIN Business Tax Number",
+    tooltip: "Your Employer Identification Number from the IRS",
+    packages: {
+      Basic: { valueType: "ADDON" as FeatureValueType, included: false, addonPriceUSD: 70 },
+      Standard: { valueType: "BOOLEAN" as FeatureValueType, included: true },
+      Premium: { valueType: "BOOLEAN" as FeatureValueType, included: true },
+    },
+  },
+  {
+    text: "Operating Agreement",
+    tooltip: "Legal document outlining LLC ownership and operating procedures",
+    packages: {
+      Basic: { valueType: "ADDON" as FeatureValueType, included: false, addonPriceUSD: 99 },
+      Standard: { valueType: "BOOLEAN" as FeatureValueType, included: true },
+      Premium: { valueType: "BOOLEAN" as FeatureValueType, included: true },
+    },
+  },
+  {
+    text: "Domain Name + Business Email",
+    tooltip: "Professional domain and email for your business",
+    packages: {
+      Basic: { valueType: "DASH" as FeatureValueType, included: false },
+      Standard: { valueType: "DASH" as FeatureValueType, included: false },
+      Premium: { valueType: "BOOLEAN" as FeatureValueType, included: true },
+    },
+  },
+  {
+    text: "FREE 1st Year Business Phone Number",
+    tooltip: "US phone number for your business",
+    description: "*Offer valid only for US-based clients.",
+    packages: {
+      Basic: { valueType: "DASH" as FeatureValueType, included: false },
+      Standard: { valueType: "DASH" as FeatureValueType, included: false },
+      Premium: { valueType: "BOOLEAN" as FeatureValueType, included: true },
+    },
+  },
+  {
+    text: "Lifetime Compliance Alerts",
+    tooltip: "Never miss important filing deadlines with our reminder system",
+    packages: {
+      Basic: { valueType: "DASH" as FeatureValueType, included: false },
+      Standard: { valueType: "BOOLEAN" as FeatureValueType, included: true },
+      Premium: { valueType: "BOOLEAN" as FeatureValueType, included: true },
+    },
+  },
+  {
+    text: "Unlimited Phone & Email Support",
+    tooltip: "Get help whenever you need it from our expert team",
+    packages: {
+      Basic: { valueType: "DASH" as FeatureValueType, included: false },
+      Standard: { valueType: "BOOLEAN" as FeatureValueType, included: true },
+      Premium: { valueType: "BOOLEAN" as FeatureValueType, included: true },
+    },
+  },
+  {
+    text: "Online Access Dashboard",
+    tooltip: "Access all your documents and manage your LLC online",
+    packages: {
+      Basic: { valueType: "BOOLEAN" as FeatureValueType, included: true },
+      Standard: { valueType: "BOOLEAN" as FeatureValueType, included: true },
+      Premium: { valueType: "BOOLEAN" as FeatureValueType, included: true },
+    },
+  },
+  {
+    text: "Business Banking Account Offer",
+    tooltip: "Special offers for business banking from our partners",
+    packages: {
+      Basic: { valueType: "BOOLEAN" as FeatureValueType, included: true },
+      Standard: { valueType: "BOOLEAN" as FeatureValueType, included: true },
+      Premium: { valueType: "BOOLEAN" as FeatureValueType, included: true },
+    },
+  },
+];
+
 // Full services data
 const servicesData = [
   {
@@ -68,7 +193,7 @@ const servicesData = [
 </ul>`,
     icon: "Building2",
     image: "/images/services/llc-formation.jpg",
-    startingPrice: 199,
+    startingPrice: 0,
     categorySlug: "formation",
     isPopular: true,
     features: [
@@ -81,89 +206,47 @@ const servicesData = [
       "24/7 customer support",
       "100% satisfaction guarantee",
     ],
+    // New package structure with comparison table support
     packages: [
       {
         name: "Basic",
-        price: 199,
+        price: 0,
         description: "Essential LLC formation for budget-conscious entrepreneurs",
-        features: [
-          "Employer Identification Number (EIN)",
-          "US Registered Agent for One Year",
-          "US Mail Forwarding for One Year",
-          "Basic Tax Consultation on US Earnings",
-          "US Business Address for One Year",
-          "Incorporation of Your US Company",
-          "Operating Agreement",
-          "Annual Compliance With the State",
-        ],
-        notIncluded: [
-          "Premium Consultation for US Business",
-          "US BOI Filing",
-          "Unique US Business Address (10 Mail Forwarding)",
-          "US Fintech Bank Account",
-        ],
+        processingTime: "3 weeks",
+        processingIcon: "clock",
+        badgeText: null,
+        badgeColor: null,
+        features: [],
+        notIncluded: [],
         isPopular: false,
       },
       {
         name: "Standard",
-        price: 449,
+        price: 199,
         description: "Most popular - Everything you need to start your US business",
-        features: [
-          "US Fintech Bank Account",
-          "US Business Stripe Account with Expert Hand",
-          "Employer Identification Number (EIN)",
-          "US Registered Agent for One Year",
-          "US Mail Forwarding for One Year",
-          "US Business Debit Card",
-          "Expert Guidance on Managing your Financial Accounts",
-          "Basic Tax Consultation on US Earnings",
-          "US Business Address for One Year",
-          "Incorporation of Your US Company",
-          "Operating Agreement",
-          "Annual Compliance With the State",
-        ],
-        notIncluded: [
-          "US Business PayPal Account with Expert Hand",
-          "Premium Consultation for US Business",
-          "US BOI Filing",
-          "Unique US Business Address (10 Mail Forwarding)",
-        ],
+        processingTime: "3 weeks",
+        processingIcon: "clock",
+        badgeText: "Recommended",
+        badgeColor: "orange",
+        features: [],
+        notIncluded: [],
         isPopular: true,
       },
       {
         name: "Premium",
-        price: 672,
+        price: 299,
         description: "All-inclusive package for serious entrepreneurs",
-        features: [
-          "US Fintech Bank Account",
-          "US Business PayPal Account with Expert Hand",
-          "US Business Stripe Account with Expert Hand",
-          "Employer Identification Number (EIN)",
-          "US Registered Agent for One Year",
-          "US Mail Forwarding for One Year",
-          "US Business Debit Card",
-          "Expert Guidance on Managing your Financial Accounts",
-          "Basic Tax Consultation on US Earnings",
-          "US Business Address for One Year",
-          "Incorporation of Your US Company",
-          "Operating Agreement",
-          "Annual Compliance With the State",
-          "Free High Value Business Guide",
-        ],
-        notIncluded: [
-          "Premium Consultation for US Business",
-          "US BOI Filing",
-          "Unique US Business Address (10 Mail Forwarding)",
-          "US Worldfirst Business Bank Account",
-          "US Grey Business Bank Account",
-          "USA Wise Business Account",
-          "US Airwallex Business Bank Account",
-          "US Business Square Account with Expert Hand",
-          "US SumUp Business Bank Account",
-        ],
+        processingTime: "3 days",
+        processingIcon: "zap",
+        badgeText: null,
+        badgeColor: null,
+        features: [],
+        notIncluded: [],
         isPopular: false,
       },
     ],
+    // Use new comparison features
+    comparisonFeatures: llcFormationComparisonFeatures,
     faqs: [
       {
         question: "Can non-US residents form a US LLC?",
@@ -1722,7 +1805,7 @@ async function main() {
   console.log("\n🛠️ Creating services...");
 
   for (const serviceData of servicesData) {
-    const { features, packages, faqs, categorySlug, metaTitle, metaDescription, ...serviceFields } = serviceData;
+    const { features, packages, faqs, categorySlug, metaTitle, metaDescription, comparisonFeatures, ...serviceFields } = serviceData as typeof servicesData[0] & { comparisonFeatures?: typeof llcFormationComparisonFeatures };
 
     // Create or update service
     const service = await prisma.service.upsert({
@@ -1764,24 +1847,19 @@ async function main() {
     for (const pkg of existingPackages) {
       await prisma.packageFeature.deleteMany({ where: { packageId: pkg.id } });
       await prisma.packageNotIncluded.deleteMany({ where: { packageId: pkg.id } });
+      await prisma.packageFeatureMap.deleteMany({ where: { packageId: pkg.id } });
     }
     await prisma.package.deleteMany({ where: { serviceId: service.id } });
 
-    // Create service features
-    for (let i = 0; i < features.length; i++) {
-      await prisma.serviceFeature.create({
-        data: {
-          serviceId: service.id,
-          text: features[i],
-          sortOrder: i,
-        },
-      });
-    }
-    console.log(`    - ${features.length} features`);
-
-    // Create packages with features
+    // Create packages with new fields (need packages first for comparison features)
+    const packageMap: Record<string, string> = {};
     for (let i = 0; i < packages.length; i++) {
-      const pkg = packages[i];
+      const pkg = packages[i] as typeof packages[0] & {
+        processingTime?: string;
+        processingIcon?: string;
+        badgeText?: string | null;
+        badgeColor?: string | null;
+      };
       const createdPackage = await prisma.package.create({
         data: {
           serviceId: service.id,
@@ -1790,10 +1868,17 @@ async function main() {
           priceUSD: pkg.price,
           isPopular: pkg.isPopular,
           sortOrder: i,
+          // New fields
+          processingTime: pkg.processingTime || null,
+          processingTimeNote: null,
+          processingIcon: pkg.processingIcon || null,
+          badgeText: pkg.badgeText || null,
+          badgeColor: pkg.badgeColor || null,
         },
       });
+      packageMap[pkg.name] = createdPackage.id;
 
-      // Create package features
+      // Create legacy package features (for backward compatibility)
       for (let j = 0; j < pkg.features.length; j++) {
         await prisma.packageFeature.create({
           data: {
@@ -1816,6 +1901,62 @@ async function main() {
       }
     }
     console.log(`    - ${packages.length} packages`);
+
+    // Create comparison table features if available
+    if (comparisonFeatures && comparisonFeatures.length > 0) {
+      for (let i = 0; i < comparisonFeatures.length; i++) {
+        const feature = comparisonFeatures[i];
+
+        // Create the master feature
+        const createdFeature = await prisma.serviceFeature.create({
+          data: {
+            serviceId: service.id,
+            text: feature.text,
+            tooltip: feature.tooltip || null,
+            description: feature.description || null,
+            sortOrder: i,
+          },
+        });
+
+        // Create package feature mappings
+        for (const [packageName, mapping] of Object.entries(feature.packages)) {
+          const packageId = packageMap[packageName];
+          if (packageId) {
+            const mappingData = mapping as {
+              valueType: FeatureValueType;
+              included: boolean;
+              addonPriceUSD?: number;
+              addonPriceBDT?: number;
+              customValue?: string;
+            };
+            await prisma.packageFeatureMap.create({
+              data: {
+                packageId,
+                featureId: createdFeature.id,
+                included: mappingData.included,
+                valueType: mappingData.valueType,
+                addonPriceUSD: mappingData.addonPriceUSD || null,
+                addonPriceBDT: mappingData.addonPriceBDT || null,
+                customValue: mappingData.customValue || null,
+              },
+            });
+          }
+        }
+      }
+      console.log(`    - ${comparisonFeatures.length} comparison features`);
+    } else {
+      // Legacy: Create simple service features
+      for (let i = 0; i < features.length; i++) {
+        await prisma.serviceFeature.create({
+          data: {
+            serviceId: service.id,
+            text: features[i],
+            sortOrder: i,
+          },
+        });
+      }
+      console.log(`    - ${features.length} features`);
+    }
 
     // Create service FAQs
     for (let i = 0; i < faqs.length; i++) {
@@ -2095,6 +2236,7 @@ async function main() {
       ]),
       showAuthButtons: true,
       loginText: "Sign In",
+      loginUrl: "/login",
       registerText: "Get Started",
       registerUrl: "/services/llc-formation",
       searchEnabled: false,
