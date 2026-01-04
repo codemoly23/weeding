@@ -51,7 +51,7 @@ export async function POST(
     const { id: packageId } = await params;
     const body = await request.json();
 
-    const { featureId, included, customValue } = body;
+    const { featureId, included, customValue, valueType, addonPriceUSD, addonPriceBDT } = body;
 
     if (!featureId) {
       return NextResponse.json(
@@ -60,7 +60,7 @@ export async function POST(
       );
     }
 
-    // Upsert the mapping
+    // Upsert the mapping with all fields
     const mapping = await prisma.packageFeatureMap.upsert({
       where: {
         packageId_featureId: {
@@ -73,14 +73,24 @@ export async function POST(
         featureId,
         included: included ?? true,
         customValue: customValue || null,
+        valueType: valueType || "BOOLEAN",
+        addonPriceUSD: addonPriceUSD != null ? parseFloat(String(addonPriceUSD)) : null,
+        addonPriceBDT: addonPriceBDT != null ? parseFloat(String(addonPriceBDT)) : null,
       },
       update: {
         included: included ?? true,
         customValue: customValue || null,
+        ...(valueType !== undefined && { valueType }),
+        ...(addonPriceUSD !== undefined && { addonPriceUSD: addonPriceUSD != null ? parseFloat(String(addonPriceUSD)) : null }),
+        ...(addonPriceBDT !== undefined && { addonPriceBDT: addonPriceBDT != null ? parseFloat(String(addonPriceBDT)) : null }),
       },
     });
 
-    return NextResponse.json(mapping);
+    return NextResponse.json({
+      ...mapping,
+      addonPriceUSD: mapping.addonPriceUSD ? Number(mapping.addonPriceUSD) : null,
+      addonPriceBDT: mapping.addonPriceBDT ? Number(mapping.addonPriceBDT) : null,
+    });
   } catch (error) {
     console.error("Error updating package feature:", error);
     return NextResponse.json(

@@ -92,7 +92,7 @@ export async function sendAdminNotification(
       replyTo: params.customerEmail,
     });
 
-    console.log("Admin notification email sent:", result.id);
+    console.log("Admin notification email sent:", result.data?.id);
     return result;
   } catch (error) {
     console.error("Failed to send admin notification email:", error);
@@ -138,7 +138,7 @@ export async function sendCustomerReply(params: SendCustomerReplyParams) {
       replyTo: settings.replyTo,
     });
 
-    console.log("Customer reply email sent:", result.id);
+    console.log("Customer reply email sent:", result.data?.id);
     return result;
   } catch (error) {
     console.error("Failed to send customer reply email:", error);
@@ -188,7 +188,7 @@ export async function sendChatSummary(params: SendChatSummaryParams) {
       replyTo: settings.replyTo,
     });
 
-    console.log("Chat summary email sent:", result.id);
+    console.log("Chat summary email sent:", result.data?.id);
     return result;
   } catch (error) {
     console.error("Failed to send chat summary email:", error);
@@ -219,7 +219,7 @@ export async function sendTestEmail(toEmail: string) {
       `,
     });
 
-    console.log("Test email sent:", result.id);
+    console.log("Test email sent:", result.data?.id);
     return result;
   } catch (error) {
     console.error("Failed to send test email:", error);

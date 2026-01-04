@@ -79,27 +79,30 @@ export default function TicketDetailPage() {
 
   // Real-time updates via Pusher
   useTicketChannel(ticketId, {
-    onMessage: (message) => {
+    onMessageNew: (event) => {
       setTicket((prev) => {
         if (!prev) return prev;
+        const msg = event.message;
         // Avoid duplicates
-        if (prev.messages.some((m) => m.id === message.id)) return prev;
+        if (prev.messages.some((m) => m.id === msg.id)) return prev;
         return {
           ...prev,
           messages: [...prev.messages, {
-            id: message.id,
-            content: message.content,
-            senderType: message.senderType,
-            senderName: message.senderName,
-            type: message.type,
-            createdAt: message.createdAt,
-            attachments: message.attachments || [],
+            id: msg.id,
+            content: msg.content,
+            senderType: msg.senderType,
+            senderName: msg.senderName,
+            type: msg.type,
+            createdAt: msg.createdAt,
+            attachments: msg.attachments || [],
           }],
         };
       });
     },
-    onStatusChange: (data) => {
-      setTicket((prev) => prev ? { ...prev, status: data.status } : prev);
+    onTicketUpdated: (data) => {
+      if (data.updates.status) {
+        setTicket((prev) => prev ? { ...prev, status: data.updates.status as "OPEN" | "IN_PROGRESS" | "WAITING_FOR_CUSTOMER" | "RESOLVED" | "CLOSED" } : prev);
+      }
     },
   });
 

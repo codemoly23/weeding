@@ -52,8 +52,14 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
 import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
+import { Minus, DollarSign } from "lucide-react";
 
 interface Category {
   id: string;
@@ -76,10 +82,15 @@ interface ServiceFeature {
   packageMappings?: PackageFeatureMapping[];
 }
 
+type FeatureValueType = "BOOLEAN" | "TEXT" | "ADDON" | "DASH";
+
 interface PackageFeatureMapping {
   packageId: string;
   included: boolean;
   customValue?: string | null;
+  valueType?: FeatureValueType;
+  addonPriceUSD?: number | null;
+  addonPriceBDT?: number | null;
 }
 
 interface Package {
@@ -629,22 +640,91 @@ export default function ServiceEditorPage() {
       if (response.ok) {
         // Update local state
         setMasterFeatures((prev) =>
-          prev.map((f) =>
-            f.id === featureId
-              ? {
-                  ...f,
-                  packageMappings: f.packageMappings?.map((m) =>
-                    m.packageId === packageId ? { ...m, included: !currentIncluded } : m
-                  ) || [],
-                }
-              : f
-          )
+          prev.map((f) => {
+            if (f.id !== featureId) return f;
+
+            const existingMappings = f.packageMappings || [];
+            const mappingExists = existingMappings.some((m) => m.packageId === packageId);
+
+            if (mappingExists) {
+              // Update existing mapping
+              return {
+                ...f,
+                packageMappings: existingMappings.map((m) =>
+                  m.packageId === packageId ? { ...m, included: !currentIncluded } : m
+                ),
+              };
+            } else {
+              // Create new mapping in local state
+              return {
+                ...f,
+                packageMappings: [
+                  ...existingMappings,
+                  { packageId, included: !currentIncluded },
+                ],
+              };
+            }
+          })
         );
+        toast.success("Feature updated");
       } else {
         toast.error("Failed to update feature");
       }
     } catch (error) {
       console.error("Error toggling feature:", error);
+      toast.error("Failed to update feature");
+    }
+  };
+
+  // Update package feature mapping with all fields
+  const updatePackageFeatureMapping = async (
+    packageId: string,
+    featureId: string,
+    updates: Partial<PackageFeatureMapping>
+  ) => {
+    try {
+      const response = await fetch(`/api/admin/packages/${packageId}/features`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          featureId,
+          ...updates,
+        }),
+      });
+
+      if (response.ok) {
+        const updatedMapping = await response.json();
+        // Update local state
+        setMasterFeatures((prev) =>
+          prev.map((f) => {
+            if (f.id !== featureId) return f;
+
+            const existingMappings = f.packageMappings || [];
+            const mappingExists = existingMappings.some((m) => m.packageId === packageId);
+
+            if (mappingExists) {
+              return {
+                ...f,
+                packageMappings: existingMappings.map((m) =>
+                  m.packageId === packageId
+                    ? { ...m, ...updatedMapping }
+                    : m
+                ),
+              };
+            } else {
+              return {
+                ...f,
+                packageMappings: [...existingMappings, updatedMapping],
+              };
+            }
+          })
+        );
+        toast.success("Feature updated");
+      } else {
+        toast.error("Failed to update feature");
+      }
+    } catch (error) {
+      console.error("Error updating feature mapping:", error);
       toast.error("Failed to update feature");
     }
   };
@@ -1066,27 +1146,159 @@ export default function ServiceEditorPage() {
                                   (m) => m.packageId === pkg.id
                                 );
                                 const isIncluded = mapping?.included ?? false;
+                                const valueType = mapping?.valueType || "BOOLEAN";
+                                const addonPriceUSD = mapping?.addonPriceUSD;
 
-                                return (
-                                  <td key={pkg.id} className="px-4 py-2 text-center">
-                                    <button
-                                      onClick={() =>
-                                        pkg.id && togglePackageFeature(pkg.id, feature.id, isIncluded)
-                                      }
-                                      className={cn(
-                                        "inline-flex h-8 w-8 items-center justify-center rounded-full transition-colors",
-                                        isIncluded
-                                          ? "bg-emerald-500 text-white hover:bg-emerald-600 dark:bg-emerald-600 dark:hover:bg-emerald-500"
-                                          : "bg-slate-300 text-slate-600 hover:bg-slate-400 dark:bg-slate-600 dark:text-slate-300 dark:hover:bg-slate-500"
-                                      )}
-                                      disabled={!pkg.id}
-                                    >
-                                      {isIncluded ? (
+                                // Render cell icon/content based on valueType
+                                const renderCellIcon = () => {
+                                  switch (valueType) {
+                                    case "ADDON":
+                                      return (
+                                        <div className="flex flex-col items-center gap-0.5">
+                                          <DollarSign className="h-4 w-4" />
+                                          <span className="text-[10px]">{addonPriceUSD || 0}</span>
+                                        </div>
+                                      );
+                                    case "TEXT":
+                                      return <span className="text-xs font-medium">{mapping?.customValue || "—"}</span>;
+                                    case "DASH":
+                                      return <Minus className="h-4 w-4 stroke-2" />;
+                                    default:
+                                      return isIncluded ? (
                                         <Check className="h-4 w-4 stroke-3" />
                                       ) : (
                                         <X className="h-4 w-4 stroke-3" />
-                                      )}
-                                    </button>
+                                      );
+                                  }
+                                };
+
+                                const getCellColors = () => {
+                                  switch (valueType) {
+                                    case "ADDON":
+                                      return "bg-amber-500 text-white hover:bg-amber-600";
+                                    case "TEXT":
+                                      return "bg-blue-500 text-white hover:bg-blue-600";
+                                    case "DASH":
+                                      return "bg-gray-400 text-white hover:bg-gray-500";
+                                    default:
+                                      return isIncluded
+                                        ? "bg-emerald-500 text-white hover:bg-emerald-600"
+                                        : "bg-slate-300 text-slate-600 hover:bg-slate-400";
+                                  }
+                                };
+
+                                return (
+                                  <td key={pkg.id} className="px-4 py-2 text-center">
+                                    <Popover>
+                                      <PopoverTrigger asChild>
+                                        <button
+                                          className={cn(
+                                            "inline-flex h-8 min-w-8 items-center justify-center rounded-full transition-colors px-2",
+                                            getCellColors()
+                                          )}
+                                          disabled={!pkg.id}
+                                        >
+                                          {renderCellIcon()}
+                                        </button>
+                                      </PopoverTrigger>
+                                      <PopoverContent className="w-64" align="center">
+                                        <div className="space-y-4">
+                                          <div className="space-y-2">
+                                            <Label className="text-xs font-medium">Value Type</Label>
+                                            <Select
+                                              value={valueType}
+                                              onValueChange={(value: FeatureValueType) => {
+                                                if (pkg.id) {
+                                                  updatePackageFeatureMapping(pkg.id, feature.id, {
+                                                    valueType: value,
+                                                    included: value === "BOOLEAN" ? isIncluded : true,
+                                                  });
+                                                }
+                                              }}
+                                            >
+                                              <SelectTrigger className="h-8">
+                                                <SelectValue />
+                                              </SelectTrigger>
+                                              <SelectContent>
+                                                <SelectItem value="BOOLEAN">Included (✓/✗)</SelectItem>
+                                                <SelectItem value="ADDON">Add-on (+$XX)</SelectItem>
+                                                <SelectItem value="TEXT">Custom Text</SelectItem>
+                                                <SelectItem value="DASH">Not Applicable (—)</SelectItem>
+                                              </SelectContent>
+                                            </Select>
+                                          </div>
+
+                                          {valueType === "BOOLEAN" && (
+                                            <div className="flex items-center justify-between">
+                                              <Label className="text-xs">Included</Label>
+                                              <Switch
+                                                checked={isIncluded}
+                                                onCheckedChange={(checked) => {
+                                                  if (pkg.id) {
+                                                    updatePackageFeatureMapping(pkg.id, feature.id, {
+                                                      included: checked,
+                                                    });
+                                                  }
+                                                }}
+                                              />
+                                            </div>
+                                          )}
+
+                                          {valueType === "ADDON" && (
+                                            <div className="space-y-2">
+                                              <Label className="text-xs">Add-on Price (USD)</Label>
+                                              <Input
+                                                type="number"
+                                                step="0.01"
+                                                placeholder="e.g. 50"
+                                                defaultValue={addonPriceUSD || ""}
+                                                className="h-8"
+                                                onBlur={(e) => {
+                                                  if (pkg.id) {
+                                                    updatePackageFeatureMapping(pkg.id, feature.id, {
+                                                      addonPriceUSD: e.target.value ? parseFloat(e.target.value) : null,
+                                                    });
+                                                  }
+                                                }}
+                                              />
+                                              <Label className="text-xs">Add-on Price (BDT)</Label>
+                                              <Input
+                                                type="number"
+                                                step="1"
+                                                placeholder="e.g. 5000"
+                                                defaultValue={mapping?.addonPriceBDT || ""}
+                                                className="h-8"
+                                                onBlur={(e) => {
+                                                  if (pkg.id) {
+                                                    updatePackageFeatureMapping(pkg.id, feature.id, {
+                                                      addonPriceBDT: e.target.value ? parseFloat(e.target.value) : null,
+                                                    });
+                                                  }
+                                                }}
+                                              />
+                                            </div>
+                                          )}
+
+                                          {valueType === "TEXT" && (
+                                            <div className="space-y-2">
+                                              <Label className="text-xs">Custom Value</Label>
+                                              <Input
+                                                placeholder='e.g. "10 per month"'
+                                                defaultValue={mapping?.customValue || ""}
+                                                className="h-8"
+                                                onBlur={(e) => {
+                                                  if (pkg.id) {
+                                                    updatePackageFeatureMapping(pkg.id, feature.id, {
+                                                      customValue: e.target.value || null,
+                                                    });
+                                                  }
+                                                }}
+                                              />
+                                            </div>
+                                          )}
+                                        </div>
+                                      </PopoverContent>
+                                    </Popover>
                                   </td>
                                 );
                               })}

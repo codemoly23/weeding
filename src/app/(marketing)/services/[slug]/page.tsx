@@ -25,19 +25,27 @@ import {
 import { ServiceIcon } from "@/components/ui/service-icon";
 import { PackageComparisonTable } from "@/components/services/package-comparison-table";
 import prisma from "@/lib/db";
+import type { FeatureValueType } from "@prisma/client";
 
 // Force dynamic rendering to avoid SSG issues with client components
 export const dynamic = "force-dynamic";
+
+interface PackageFeatureMapping {
+  id: string;
+  packageId: string;
+  included: boolean;
+  customValue: string | null;
+  valueType: FeatureValueType;
+  addonPriceUSD: number | null;
+  addonPriceBDT: number | null;
+}
 
 interface MasterFeature {
   id: string;
   text: string;
   tooltip: string | null;
-  packageMappings: {
-    packageId: string;
-    included: boolean;
-    customValue: string | null;
-  }[];
+  description: string | null;
+  packageMappings: PackageFeatureMapping[];
 }
 
 interface PackageData {
@@ -46,6 +54,17 @@ interface PackageData {
   description: string | null;
   priceUSD: number;
   isPopular: boolean;
+  processingTime: string | null;
+  processingTimeNote: string | null;
+  processingIcon: string | null;
+  badgeText: string | null;
+  badgeColor: string | null;
+}
+
+interface StateFee {
+  stateCode: string;
+  stateName: string;
+  llcFee: number;
 }
 
 interface ServiceData {
@@ -69,6 +88,7 @@ interface ServiceData {
     question: string;
     answer: string;
   }[];
+  stateFees: StateFee[];
 }
 
 interface RelatedService {
@@ -91,11 +111,16 @@ async function getService(slug: string): Promise<ServiceData | null> {
             id: true,
             text: true,
             tooltip: true,
+            description: true,
             packageMappings: {
               select: {
+                id: true,
                 packageId: true,
                 included: true,
                 customValue: true,
+                valueType: true,
+                addonPriceUSD: true,
+                addonPriceBDT: true,
               },
             },
           },
@@ -109,6 +134,11 @@ async function getService(slug: string): Promise<ServiceData | null> {
             description: true,
             priceUSD: true,
             isPopular: true,
+            processingTime: true,
+            processingTimeNote: true,
+            processingIcon: true,
+            badgeText: true,
+            badgeColor: true,
           },
         },
         faqs: {
@@ -119,6 +149,24 @@ async function getService(slug: string): Promise<ServiceData | null> {
     });
 
     if (!service) return null;
+
+    // Fetch state fees for LLC formation services
+    let stateFees: StateFee[] = [];
+    if (slug === "llc-formation") {
+      const fees = await prisma.stateFee.findMany({
+        orderBy: [{ isPopular: "desc" }, { stateName: "asc" }],
+        select: {
+          stateCode: true,
+          stateName: true,
+          llcFee: true,
+        },
+      });
+      stateFees = fees.map((f) => ({
+        stateCode: f.stateCode,
+        stateName: f.stateName,
+        llcFee: Number(f.llcFee),
+      }));
+    }
 
     return {
       id: service.id,
@@ -138,10 +186,15 @@ async function getService(slug: string): Promise<ServiceData | null> {
         id: f.id,
         text: f.text,
         tooltip: f.tooltip,
+        description: f.description,
         packageMappings: f.packageMappings.map((m) => ({
+          id: m.id,
           packageId: m.packageId,
           included: m.included,
           customValue: m.customValue,
+          valueType: m.valueType,
+          addonPriceUSD: m.addonPriceUSD ? Number(m.addonPriceUSD) : null,
+          addonPriceBDT: m.addonPriceBDT ? Number(m.addonPriceBDT) : null,
         })),
       })),
       packages: service.packages.map((p) => ({
@@ -150,8 +203,14 @@ async function getService(slug: string): Promise<ServiceData | null> {
         description: p.description,
         priceUSD: Number(p.priceUSD),
         isPopular: p.isPopular,
+        processingTime: p.processingTime,
+        processingTimeNote: p.processingTimeNote,
+        processingIcon: p.processingIcon,
+        badgeText: p.badgeText,
+        badgeColor: p.badgeColor,
       })),
       faqs: service.faqs,
+      stateFees,
     };
   } catch (error) {
     console.error("Error fetching service:", error);
@@ -325,7 +384,7 @@ export default async function ServicePage({ params }: PageProps) {
         {/* SECTION 3: Package Comparison Table */}
         {service.packages.length > 0 && (
           <section className="mt-16">
-            <div className="mx-auto max-w-5xl">
+            <div className="mx-auto max-w-7xl">
               <h2 className="mb-2 text-center text-2xl font-semibold">
                 Choose Your Package
               </h2>
@@ -337,9 +396,19 @@ export default async function ServicePage({ params }: PageProps) {
                 <PackageComparisonTable
                   features={service.masterFeatures}
                   packages={service.packages.map((pkg) => ({
-                    ...pkg,
+                    id: pkg.id,
+                    name: pkg.name,
+                    description: pkg.description,
+                    price: pkg.priceUSD,
+                    isPopular: pkg.isPopular,
+                    processingTime: pkg.processingTime,
+                    processingTimeNote: pkg.processingTimeNote,
+                    processingIcon: pkg.processingIcon,
+                    badgeText: pkg.badgeText,
+                    badgeColor: pkg.badgeColor,
                     checkoutUrl: getPackageCheckoutUrl(pkg.name),
                   }))}
+                  serviceSlug={service.slug}
                 />
               ) : (
                 // Fallback: Simple package cards if no comparison data

@@ -4,9 +4,9 @@ import { checkAdminAccess, authError } from "@/lib/admin-auth";
 
 export async function POST() {
   try {
-    const hasAccess = await checkAdminAccess();
-    if (!hasAccess) {
-      return authError();
+    const accessResult = await checkAdminAccess();
+    if (accessResult.error) {
+      return authError(accessResult);
     }
 
     const apiKey = await getSetting("newsletter.brevo.apiKey");
