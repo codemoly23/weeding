@@ -19,79 +19,55 @@ import { cn } from "@/lib/utils";
 const packages = [
   {
     name: "Basic",
-    description: "Essential LLC formation for budget-conscious entrepreneurs",
-    price: 199,
+    description: "Essential LLC formation to get started",
+    price: 0,
     features: [
-      { name: "Employer Identification Number (EIN)", included: true },
-      { name: "US Registered Agent for One Year", included: true },
-      { name: "US Mail Forwarding for One Year", included: true },
-      { name: "Basic Tax Consultation on US Earnings", included: true },
-      { name: "US Business Address for One Year", included: true },
-      { name: "Incorporation of Your US Company", included: true },
-      { name: "Operating Agreement", included: true },
-      { name: "Annual Compliance With the State", included: true },
-      { name: "Premium Consultation for US Business", included: false },
-      { name: "US BOI Filing", included: false },
-      { name: "Unique US Business Address (10 Mail Forwarding)", included: false },
-      { name: "US Fintech Bank Account", included: false },
+      { name: "New Mexico State Filing Fee", included: true },
+      { name: "Registered Agent (First Year)", included: false, addon: "$99" },
+      { name: "EIN Application", included: false, addon: "$70" },
+      { name: "BOI Filing", included: false, addon: "$49" },
+      { name: "US Business Address/Mail Forwarding", included: false, addon: "$120" },
+      { name: "US Business Phone Number", included: false, addon: "$60" },
+      { name: "US Fintech Business Bank Account Setup", included: false },
+      { name: "Stripe Business Account Setup", included: false },
     ],
+    processingTime: "3 weeks",
     cta: "Get Started",
     popular: false,
   },
   {
     name: "Standard",
-    description: "Most popular - Everything you need to start your US business",
-    price: 449,
+    description: "Recommended for international entrepreneurs",
+    price: 299,
     features: [
-      { name: "US Fintech Bank Account", included: true },
-      { name: "US Business Stripe Account with Expert Hand", included: true },
-      { name: "Employer Identification Number (EIN)", included: true },
-      { name: "US Registered Agent for One Year", included: true },
-      { name: "US Mail Forwarding for One Year", included: true },
-      { name: "US Business Debit Card", included: true },
-      { name: "Expert Guidance on Managing your Financial Accounts", included: true },
-      { name: "Basic Tax Consultation on US Earnings", included: true },
-      { name: "US Business Address for One Year", included: true },
-      { name: "Incorporation of Your US Company", included: true },
-      { name: "Operating Agreement", included: true },
-      { name: "Annual Compliance With the State", included: true },
-      { name: "US Business PayPal Account with Expert Hand", included: false },
-      { name: "Premium Consultation for US Business", included: false },
-      { name: "US BOI Filing", included: false },
-      { name: "Unique US Business Address (10 Mail Forwarding)", included: false },
+      { name: "New Mexico State Filing Fee", included: true },
+      { name: "Registered Agent (First Year)", included: true },
+      { name: "EIN Application", included: true },
+      { name: "BOI Filing", included: true },
+      { name: "US Business Address/Mail Forwarding", included: false, addon: "$120" },
+      { name: "US Business Phone Number", included: false, addon: "$60" },
+      { name: "US Fintech Business Bank Account Setup", included: false, addon: "$99" },
+      { name: "Stripe Business Account Setup", included: false, addon: "$79" },
     ],
+    processingTime: "3 weeks",
     cta: "Get Started",
     popular: true,
   },
   {
     name: "Premium",
-    description: "All-inclusive package for serious entrepreneurs",
-    price: 672,
+    description: "All-inclusive package with fastest processing",
+    price: 620,
     features: [
-      { name: "US Fintech Bank Account", included: true },
-      { name: "US Business PayPal Account with Expert Hand", included: true },
-      { name: "US Business Stripe Account with Expert Hand", included: true },
-      { name: "Employer Identification Number (EIN)", included: true },
-      { name: "US Registered Agent for One Year", included: true },
-      { name: "US Mail Forwarding for One Year", included: true },
-      { name: "US Business Debit Card", included: true },
-      { name: "Expert Guidance on Managing your Financial Accounts", included: true },
-      { name: "Basic Tax Consultation on US Earnings", included: true },
-      { name: "US Business Address for One Year", included: true },
-      { name: "Incorporation of Your US Company", included: true },
-      { name: "Operating Agreement", included: true },
-      { name: "Annual Compliance With the State", included: true },
-      { name: "Free High Value Business Guide", included: true },
-      { name: "Premium Consultation for US Business", included: false },
-      { name: "US BOI Filing", included: false },
-      { name: "Unique US Business Address (10 Mail Forwarding)", included: false },
-      { name: "US Worldfirst Business Bank Account", included: false },
-      { name: "US Grey Business Bank Account", included: false },
-      { name: "USA Wise Business Account", included: false },
-      { name: "US Airwallex Business Bank Account", included: false },
-      { name: "US Business Square Account with Expert Hand", included: false },
-      { name: "US SumUp Business Bank Account", included: false },
+      { name: "New Mexico State Filing Fee", included: true },
+      { name: "Registered Agent (First Year)", included: true },
+      { name: "EIN Application", included: true },
+      { name: "BOI Filing", included: true },
+      { name: "US Business Address/Mail Forwarding", included: true },
+      { name: "US Business Phone Number", included: true },
+      { name: "US Fintech Business Bank Account Setup", included: true },
+      { name: "Stripe Business Account Setup", included: true },
     ],
+    processingTime: "3 weeks",
     cta: "Get Started",
     popular: false,
   },
@@ -188,10 +164,22 @@ export function PricingTable() {
                         )}
                       >
                         {feature.name}
+                        {!feature.included && feature.addon && (
+                          <span className="ml-1 text-xs text-muted-foreground">
+                            (Add-on {feature.addon})
+                          </span>
+                        )}
                       </span>
                     </li>
                   ))}
                 </ul>
+                {pkg.processingTime && (
+                  <div className="mt-4 pt-4 border-t">
+                    <p className="text-sm text-muted-foreground">
+                      Processing Time: <span className="font-medium text-foreground">{pkg.processingTime}</span>
+                    </p>
+                  </div>
+                )}
               </CardContent>
               <CardFooter>
                 <Button
