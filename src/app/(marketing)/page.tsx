@@ -63,7 +63,7 @@ export default function HomePage() {
       <HowItWorks />
       <PricingTable />
       <Testimonials />
-      <BlogSection />
+      {/* <BlogSection /> */}
       <FAQSection />
       <CTASection />
     </>

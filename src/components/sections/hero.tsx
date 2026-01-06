@@ -92,7 +92,7 @@ export function Hero() {
           {/* Pricing Teaser */}
           <p className="mt-6 text-sm text-muted-foreground">
             Starting from{" "}
-            <span className="font-semibold text-foreground">$149</span> + State
+            <span className="font-semibold text-foreground">Free</span> + State
             fees • No hidden charges
           </p>
         </div>
