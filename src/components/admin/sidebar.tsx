@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
@@ -139,6 +139,19 @@ export function AdminSidebar() {
   const [collapsed, setCollapsed] = useState(true); // Collapsed by default - show only icons
   const [openItems, setOpenItems] = useState<string[]>([]);
 
+  // Persist collapsed state to localStorage
+  useEffect(() => {
+    const saved = localStorage.getItem("admin-sidebar-collapsed");
+    if (saved !== null) {
+      setCollapsed(saved === "true");
+    }
+  }, []);
+
+  const handleCollapsedChange = (value: boolean) => {
+    setCollapsed(value);
+    localStorage.setItem("admin-sidebar-collapsed", String(value));
+  };
+
   const toggleItem = (title: string) => {
     setOpenItems((prev) =>
       prev.includes(title)
@@ -189,7 +202,7 @@ export function AdminSidebar() {
           <Button
             variant="ghost"
             size="icon"
-            onClick={() => setCollapsed(!collapsed)}
+            onClick={() => handleCollapsedChange(!collapsed)}
             className={cn(collapsed && "mx-auto")}
           >
             {collapsed ? (
