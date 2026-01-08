@@ -18,7 +18,7 @@ interface AccordionSectionProps {
 
 export function AccordionSection({
   title,
-  defaultOpen = true,
+  defaultOpen = false, // Closed by default - user clicks to expand
   action,
   children,
   className,

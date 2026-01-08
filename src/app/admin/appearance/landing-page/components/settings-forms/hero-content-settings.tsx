@@ -1,7 +1,6 @@
 "use client";
 
 import { useCallback } from "react";
-import { Sparkles } from "lucide-react";
 import type { LandingPageBlock } from "@prisma/client";
 import type { HeroSettings, HeroVariant, FeatureItem, FeatureListLayout, FeatureIconPosition, ButtonCustomStyle } from "@/lib/landing-blocks/types";
 import { defaultHeroSettings } from "@/lib/landing-blocks/defaults";
@@ -111,14 +110,7 @@ export function HeroContentSettings({
       </AccordionSection>
 
       {/* Headline Section */}
-      <AccordionSection
-        title="Headline"
-        action={{
-          label: "Edit with AI",
-          icon: Sparkles,
-          onClick: () => console.log("AI Edit"),
-        }}
-      >
+      <AccordionSection title="Headline">
         <TextInput
           label="Text"
           value={s.headline.text}
@@ -229,14 +221,7 @@ export function HeroContentSettings({
       )}
 
       {/* Subheadline Section */}
-      <AccordionSection
-        title="Subheadline"
-        action={{
-          label: "Edit with AI",
-          icon: Sparkles,
-          onClick: () => console.log("AI Edit"),
-        }}
-      >
+      <AccordionSection title="Subheadline">
         <TextAreaInput
           label="Text"
           value={s.subheadline.text}
