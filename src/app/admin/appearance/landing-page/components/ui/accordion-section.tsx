@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { ChevronDown, Sparkles } from "lucide-react";
+import { ChevronRight } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 interface AccordionSectionProps {
@@ -26,35 +26,60 @@ export function AccordionSection({
   const [isOpen, setIsOpen] = useState(defaultOpen);
 
   return (
-    <div className={cn("border-b pb-4", className)}>
-      {/* Header */}
-      <div className="flex w-full items-center justify-between py-3">
-        <button
-          onClick={() => setIsOpen(!isOpen)}
-          className="flex items-center gap-2"
-        >
-          <ChevronDown
+    <div className={cn("", className)}>
+      {/* Clickable Header Card */}
+      <div
+        onClick={() => setIsOpen(!isOpen)}
+        className={cn(
+          "flex w-full cursor-pointer items-center justify-between rounded-lg border bg-background px-4 py-3.5 transition-all duration-200",
+          "hover:border-primary/30 hover:bg-muted/50",
+          isOpen && "border-primary/40 bg-muted/30"
+        )}
+      >
+        <div className="flex items-center gap-3">
+          <div
             className={cn(
-              "h-4 w-4 text-muted-foreground transition-transform",
-              !isOpen && "-rotate-90"
+              "flex h-7 w-7 items-center justify-center rounded-md bg-muted transition-colors",
+              isOpen && "bg-primary/10"
             )}
-          />
-          <span className="text-sm font-semibold">{title}</span>
-        </button>
+          >
+            <ChevronRight
+              className={cn(
+                "h-4 w-4 text-muted-foreground transition-transform duration-200",
+                isOpen && "rotate-90 text-primary"
+              )}
+            />
+          </div>
+          <span
+            className={cn(
+              "text-sm font-medium text-foreground/80 transition-colors",
+              isOpen && "text-foreground"
+            )}
+          >
+            {title}
+          </span>
+        </div>
 
         {action && (
           <button
-            onClick={action.onClick}
-            className="flex items-center gap-1 rounded px-2 py-1 text-xs text-primary hover:bg-primary/10"
+            onClick={(e) => {
+              e.stopPropagation();
+              action.onClick();
+            }}
+            className="flex items-center gap-1 rounded-md px-2.5 py-1.5 text-xs font-medium text-primary hover:bg-primary/10"
           >
-            {action.icon && <action.icon className="h-3 w-3" />}
+            {action.icon && <action.icon className="h-3.5 w-3.5" />}
             {action.label}
           </button>
         )}
       </div>
 
       {/* Content */}
-      {isOpen && <div className="space-y-4 pl-6">{children}</div>}
+      {isOpen && (
+        <div className="mt-3 space-y-4 rounded-lg border border-dashed border-muted-foreground/20 bg-muted/20 p-4">
+          {children}
+        </div>
+      )}
     </div>
   );
 }

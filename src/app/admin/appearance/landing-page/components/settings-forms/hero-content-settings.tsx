@@ -83,7 +83,7 @@ export function HeroContentSettings({
   );
 
   return (
-    <div className="space-y-2">
+    <div className="space-y-3">
       {/* Badge Section */}
       <AccordionSection title="Badge">
         <ToggleSwitch
