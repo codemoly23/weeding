@@ -8,11 +8,10 @@ import {
   CheckCircle,
   ArrowRight,
   Star,
-  Check,
-  ChevronRight,
 } from "lucide-react";
+import * as LucideIcons from "lucide-react";
 import { cn } from "@/lib/utils";
-import type { HeroSettings } from "@/lib/landing-blocks/types";
+import type { HeroSettings, FeatureItem } from "@/lib/landing-blocks/types";
 import {
   HeroBackground,
   AnimatedWords,
@@ -23,15 +22,27 @@ interface HeroSplitDashboardProps {
   settings: HeroSettings;
 }
 
-const featureIcons = {
-  checkCircle: CheckCircle,
-  check: Check,
-  star: Star,
-  arrow: ChevronRight,
-};
+// Get Lucide icon component by name
+function getLucideIcon(name: string): React.ComponentType<{ className?: string }> {
+  const icons = LucideIcons as Record<string, React.ComponentType<{ className?: string }>>;
+  return icons[name] || CheckCircle;
+}
+
+// Helper to normalize feature items (handles both old string[] and new FeatureItem[] formats)
+function normalizeFeatureItems(items: unknown): FeatureItem[] {
+  if (!Array.isArray(items)) return [];
+
+  return items.map((item, index) => {
+    if (typeof item === 'string') {
+      return { id: `feat_${index}`, text: item, icon: 'CheckCircle' };
+    }
+    return item as FeatureItem;
+  });
+}
 
 export function HeroSplitDashboard({ settings }: HeroSplitDashboardProps) {
-  const FeatureIcon = featureIcons[settings.features.icon] || CheckCircle;
+  // Normalize features for backward compatibility
+  const normalizedFeatures = normalizeFeatureItems(settings.features.items);
 
   const getHeadlineSize = () => {
     switch (settings.headline.size) {
@@ -91,17 +102,39 @@ export function HeroSplitDashboard({ settings }: HeroSplitDashboardProps) {
             </p>
 
             {/* Features List */}
-            {settings.features.enabled && settings.features.items.length > 0 && (
-              <div className="mt-6 flex flex-col gap-3">
-                {settings.features.items.map((feature) => (
-                  <div
-                    key={feature}
-                    className="flex items-center gap-3 text-slate-400"
-                  >
-                    <FeatureIcon className="h-5 w-5 shrink-0 text-green-500" />
-                    <span>{feature}</span>
-                  </div>
-                ))}
+            {settings.features.enabled && normalizedFeatures.length > 0 && (
+              <div
+                className={cn(
+                  "mt-6",
+                  (settings.features.layout ?? "list") === "list"
+                    ? "flex flex-col gap-3"
+                    : cn(
+                        "grid gap-3",
+                        (settings.features.columns ?? 1) === 1 && "grid-cols-1",
+                        (settings.features.columns ?? 1) === 2 && "grid-cols-2",
+                        (settings.features.columns ?? 1) === 3 && "grid-cols-3",
+                        (settings.features.columns ?? 1) === 4 && "grid-cols-4"
+                      )
+                )}
+              >
+                {normalizedFeatures.map((feature) => {
+                  const Icon = getLucideIcon(feature.icon);
+                  return (
+                    <div
+                      key={feature.id}
+                      className={cn(
+                        "flex items-center gap-3 text-slate-400",
+                        (settings.features.iconPosition ?? "left") === "right" && "flex-row-reverse"
+                      )}
+                    >
+                      <Icon
+                        className="h-5 w-5 shrink-0"
+                        style={{ color: settings.features.iconColor ?? "#22c55e" }}
+                      />
+                      <span>{feature.text}</span>
+                    </div>
+                  );
+                })}
               </div>
             )}
 

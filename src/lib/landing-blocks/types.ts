@@ -136,11 +136,25 @@ export interface HeroSubheadlineSettings {
   size: "sm" | "base" | "lg";
 }
 
+// Individual Feature Item
+export interface FeatureItem {
+  id: string;
+  text: string;
+  icon: string; // Lucide icon name, e.g., "CheckCircle", "Star", "Zap"
+}
+
+// Feature List Layout
+export type FeatureListLayout = "list" | "grid";
+export type FeatureIconPosition = "left" | "right";
+
 // Hero Features List Settings
 export interface HeroFeaturesSettings {
   enabled: boolean;
-  items: string[];
-  icon: "checkCircle" | "check" | "star" | "arrow";
+  items: FeatureItem[];
+  layout: FeatureListLayout;
+  iconPosition: FeatureIconPosition;
+  iconColor: string; // Tailwind color class or hex
+  columns: 1 | 2 | 3 | 4; // For grid layout
 }
 
 // Hero CTA Button Settings

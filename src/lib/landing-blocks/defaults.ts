@@ -38,11 +38,14 @@ export const defaultHeroSettings: HeroSettings = {
   features: {
     enabled: true,
     items: [
-      "Fast 24-48 hour processing",
-      "100% Compliance guaranteed",
-      "Dedicated support team",
+      { id: "feat_1", text: "Fast 24-48 hour processing", icon: "CheckCircle" },
+      { id: "feat_2", text: "100% Compliance guaranteed", icon: "CheckCircle" },
+      { id: "feat_3", text: "Dedicated support team", icon: "CheckCircle" },
     ],
-    icon: "checkCircle",
+    layout: "list",
+    iconPosition: "left",
+    iconColor: "#22c55e", // green-500
+    columns: 3,
   },
 
   primaryCTA: {

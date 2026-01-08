@@ -3,7 +3,7 @@
 import { useCallback } from "react";
 import { Sparkles } from "lucide-react";
 import type { LandingPageBlock } from "@prisma/client";
-import type { HeroSettings, HeroVariant } from "@/lib/landing-blocks/types";
+import type { HeroSettings, HeroVariant, FeatureItem, FeatureListLayout, FeatureIconPosition } from "@/lib/landing-blocks/types";
 import { defaultHeroSettings } from "@/lib/landing-blocks/defaults";
 import { AccordionSection } from "../ui/accordion-section";
 import {
@@ -13,6 +13,7 @@ import {
   ToggleSwitch,
   SelectInput,
 } from "../ui/form-controls";
+import { FeatureListEditor } from "../ui/feature-list-editor";
 
 interface HeroContentSettingsProps {
   block: LandingPageBlock;
@@ -20,11 +21,35 @@ interface HeroContentSettingsProps {
   onUpdateSettings: (settings: HeroSettings) => void;
 }
 
+// Helper to migrate old string[] items to new FeatureItem[] format
+function migrateFeatureItems(items: unknown): FeatureItem[] {
+  if (!Array.isArray(items)) return defaultHeroSettings.features.items;
+
+  // Check if already in new format
+  if (items.length > 0 && typeof items[0] === 'object' && 'id' in items[0]) {
+    return items as FeatureItem[];
+  }
+
+  // Convert old string[] format to new format
+  return (items as string[]).map((text, index) => ({
+    id: `feat_migrated_${index}_${Date.now()}`,
+    text: String(text),
+    icon: "CheckCircle",
+  }));
+}
+
 export function HeroContentSettings({
   block,
   settings,
   onUpdateSettings,
 }: HeroContentSettingsProps) {
+  // Migrate features if needed
+  const migratedFeatures = {
+    ...defaultHeroSettings.features,
+    ...settings?.features,
+    items: migrateFeatureItems(settings?.features?.items),
+  };
+
   // Merge with defaults
   const s: HeroSettings = {
     ...defaultHeroSettings,
@@ -32,7 +57,7 @@ export function HeroContentSettings({
     badge: { ...defaultHeroSettings.badge, ...settings?.badge },
     headline: { ...defaultHeroSettings.headline, ...settings?.headline },
     subheadline: { ...defaultHeroSettings.subheadline, ...settings?.subheadline },
-    features: { ...defaultHeroSettings.features, ...settings?.features },
+    features: migratedFeatures,
     primaryCTA: { ...defaultHeroSettings.primaryCTA, ...settings?.primaryCTA },
     secondaryCTA: { ...defaultHeroSettings.secondaryCTA, ...settings?.secondaryCTA },
   };
@@ -222,23 +247,20 @@ export function HeroContentSettings({
 
       {/* Features Section */}
       <AccordionSection title="Features List" defaultOpen={s.features.enabled}>
-        <ToggleSwitch
-          label="Show Features"
-          checked={s.features.enabled}
-          onChange={(checked) => updateNested("features", "enabled", checked)}
+        <FeatureListEditor
+          enabled={s.features.enabled}
+          items={s.features.items}
+          layout={s.features.layout}
+          iconPosition={s.features.iconPosition}
+          iconColor={s.features.iconColor}
+          columns={s.features.columns}
+          onEnabledChange={(enabled) => updateNested("features", "enabled", enabled)}
+          onItemsChange={(items) => updateNested("features", "items", items)}
+          onLayoutChange={(layout) => updateNested("features", "layout", layout)}
+          onIconPositionChange={(position) => updateNested("features", "iconPosition", position)}
+          onIconColorChange={(color) => updateNested("features", "iconColor", color)}
+          onColumnsChange={(columns) => updateNested("features", "columns", columns)}
         />
-        {s.features.enabled && (
-          <TextAreaInput
-            label="Items (one per line)"
-            value={s.features.items.join("\n")}
-            onChange={(v) => {
-              const items = v.split("\n").filter(Boolean);
-              updateNested("features", "items", items);
-            }}
-            placeholder="Fast 24-48 hour processing&#10;100% Compliance guaranteed&#10;Dedicated support team"
-            rows={4}
-          />
-        )}
       </AccordionSection>
 
       {/* Primary CTA Section */}
