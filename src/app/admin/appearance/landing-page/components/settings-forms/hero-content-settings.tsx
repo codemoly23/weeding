@@ -85,7 +85,7 @@ export function HeroContentSettings({
   return (
     <div className="space-y-2">
       {/* Badge Section */}
-      <AccordionSection title="Badge" defaultOpen={s.badge.enabled}>
+      <AccordionSection title="Badge">
         <ToggleSwitch
           label="Show Badge"
           checked={s.badge.enabled}
@@ -232,7 +232,7 @@ export function HeroContentSettings({
       </AccordionSection>
 
       {/* Features Section */}
-      <AccordionSection title="Features List" defaultOpen={s.features.enabled}>
+      <AccordionSection title="Features List">
         <FeatureListEditor
           enabled={s.features.enabled}
           items={s.features.items}
@@ -292,7 +292,7 @@ export function HeroContentSettings({
       </AccordionSection>
 
       {/* Secondary CTA Section */}
-      <AccordionSection title="Secondary Button" defaultOpen={s.secondaryCTA.enabled}>
+      <AccordionSection title="Secondary Button">
         <ToggleSwitch
           label="Show Secondary Button"
           checked={s.secondaryCTA.enabled}
