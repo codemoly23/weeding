@@ -521,7 +521,7 @@ function PreviewCTAButton({ btn }: { btn: CTAButton }) {
       // Get the icon for CraftButton
       const craftIcon = btn.style.icon && btn.style.icon !== "none" && btn.style.icon.trim() !== ""
         ? renderPreviewIcon(btn.style)
-        : <ArrowUpRight className="size-3 stroke-2 transition-transform duration-500 group-hover:rotate-45" />;
+        : <ArrowUpRight className="size-3 stroke-2" />;
 
       return (
         <CraftButton

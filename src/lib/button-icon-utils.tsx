@@ -58,7 +58,7 @@ export function getCraftButtonIcon(
 ): React.ReactNode {
   // If custom icon is specified, use it
   if (style?.icon && style.icon !== "none" && style.icon !== "arrow-up-right") {
-    return renderButtonIcon(style, "size-4 stroke-2 transition-transform duration-500 group-hover:rotate-45");
+    return renderButtonIcon(style, "size-3 stroke-2");
   }
 
   // Default: ArrowUpRight icon (imported where needed)

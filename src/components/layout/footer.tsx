@@ -82,7 +82,7 @@ function FooterButton({
         >
           <CraftButtonLabel>{text}</CraftButtonLabel>
           <CraftButtonIcon>
-            <ArrowUpRight className="size-3 stroke-2 transition-transform duration-500 group-hover:rotate-45" />
+            <ArrowUpRight className="size-3 stroke-2" />
           </CraftButtonIcon>
         </CraftButton>
       </SmartLink>
