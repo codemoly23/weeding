@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
@@ -136,8 +136,33 @@ const navItems: NavItem[] = [
 export function AdminSidebar() {
   const pathname = usePathname();
   const { config } = useBusinessConfig();
-  const [collapsed, setCollapsed] = useState(false);
+  const [mounted, setMounted] = useState(false); // Prevent transition flash on initial load
+  const [collapsed, setCollapsed] = useState(false); // Expanded by default
   const [openItems, setOpenItems] = useState<string[]>([]);
+
+  // Landing page always starts collapsed, other pages respect user preference
+  const isLandingPage = pathname === "/admin/appearance/landing-page";
+
+  useEffect(() => {
+    if (isLandingPage) {
+      // Landing page: always collapsed
+      setCollapsed(true);
+    } else {
+      // Other pages: use localStorage preference (default: expanded/false)
+      const saved = localStorage.getItem("admin-sidebar-collapsed");
+      setCollapsed(saved === "true");
+    }
+    // Mark as mounted after state is set to prevent transition flash
+    setMounted(true);
+  }, [isLandingPage]);
+
+  const handleCollapsedChange = (value: boolean) => {
+    setCollapsed(value);
+    // Only save preference for non-landing pages
+    if (!isLandingPage) {
+      localStorage.setItem("admin-sidebar-collapsed", String(value));
+    }
+  };
 
   const toggleItem = (title: string) => {
     setOpenItems((prev) =>
@@ -160,7 +185,8 @@ export function AdminSidebar() {
     <TooltipProvider delayDuration={0}>
       <aside
         className={cn(
-          "flex h-screen flex-col border-r bg-card transition-all duration-300",
+          "flex h-screen flex-col border-r bg-card",
+          mounted && "transition-all duration-300", // Only animate after initial load
           collapsed ? "w-16" : "w-64"
         )}
       >
@@ -189,7 +215,7 @@ export function AdminSidebar() {
           <Button
             variant="ghost"
             size="icon"
-            onClick={() => setCollapsed(!collapsed)}
+            onClick={() => handleCollapsedChange(!collapsed)}
             className={cn(collapsed && "mx-auto")}
           >
             {collapsed ? (

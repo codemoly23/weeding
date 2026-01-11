@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useCallback, useMemo } from "react";
+import { useState, useCallback, useMemo, useRef, useEffect } from "react";
 import {
   GripVertical,
   Settings,
@@ -40,6 +40,7 @@ interface PreviewBlockProps {
   onMoveDown: () => void;
   isFirst: boolean;
   isLast: boolean;
+  device: "desktop" | "mobile";
 }
 
 // ============================================
@@ -79,6 +80,7 @@ function PreviewBlock({
   onMoveDown,
   isFirst,
   isLast,
+  device,
 }: PreviewBlockProps) {
   const [isHovered, setIsHovered] = useState(false);
 
@@ -114,7 +116,7 @@ function PreviewBlock({
         variant: variantMap[block.type] || "centered",
       };
 
-      return <HeroBlock settings={mergedSettings} />;
+      return <HeroBlock settings={mergedSettings} isPreview device={device} />;
     }
 
     // Placeholder for other block types
@@ -222,31 +224,36 @@ function PreviewBlock({
         </div>
 
         {/* Block Content */}
-        <div
-          className="relative cursor-pointer"
-          onClick={onSelect}
-        >
-          {/* Selection/Hover Border */}
+        <div className="relative">
+          {/* Selection/Hover Border - Clickable overlay that blocks ALL mouse events */}
           <div
             className={cn(
-              "pointer-events-none absolute inset-0 z-40 border-2 transition-colors",
+              "absolute inset-0 z-40 border-2 transition-colors cursor-pointer",
               isSelected
                 ? "border-primary"
                 : isHovered
                 ? "border-primary/50"
                 : "border-transparent"
             )}
+            onClick={onSelect}
+            onMouseMove={(e) => e.stopPropagation()}
+            onMouseOver={(e) => e.stopPropagation()}
+            onMouseOut={(e) => e.stopPropagation()}
           />
 
           {/* Block Label */}
           {showControls && (
-            <div className="absolute left-2 top-2 z-50 rounded bg-primary px-2 py-0.5 text-xs font-medium text-primary-foreground">
+            <div className="absolute left-2 top-2 z-50 rounded bg-primary px-2 py-0.5 text-xs font-medium text-primary-foreground pointer-events-none">
               {block.type}
             </div>
           )}
 
-          {/* Actual Block Render */}
-          <div className="pointer-events-none">
+          {/* Actual Block Render - Completely isolated */}
+          <div
+            data-preview-mode
+            className="select-none"
+            style={{ pointerEvents: 'none' }}
+          >
             {renderBlockContent()}
           </div>
         </div>
@@ -274,6 +281,39 @@ export function LivePreviewCanvas({
     [blocks]
   );
 
+  // Scroll detection for auto-hide scrollbar
+  const scrollContainerRef = useRef<HTMLDivElement>(null);
+  const [isScrolling, setIsScrolling] = useState(false);
+  const scrollTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+
+  useEffect(() => {
+    const scrollContainer = scrollContainerRef.current;
+    if (!scrollContainer) return;
+
+    const handleScroll = () => {
+      setIsScrolling(true);
+
+      // Clear existing timeout
+      if (scrollTimeoutRef.current) {
+        clearTimeout(scrollTimeoutRef.current);
+      }
+
+      // Hide scrollbar after 1 second of no scrolling
+      scrollTimeoutRef.current = setTimeout(() => {
+        setIsScrolling(false);
+      }, 1000);
+    };
+
+    scrollContainer.addEventListener("scroll", handleScroll);
+
+    return () => {
+      scrollContainer.removeEventListener("scroll", handleScroll);
+      if (scrollTimeoutRef.current) {
+        clearTimeout(scrollTimeoutRef.current);
+      }
+    };
+  }, []);
+
   const handleClickOutside = useCallback(
     (e: React.MouseEvent) => {
       if (e.target === e.currentTarget) {
@@ -297,7 +337,13 @@ export function LivePreviewCanvas({
       </div>
 
       {/* Preview Area */}
-      <div className="flex-1 overflow-auto p-4 scrollbar-auto-hide">
+      <div
+        ref={scrollContainerRef}
+        className={cn(
+          "flex-1 overflow-auto p-4 scrollbar-on-scroll",
+          isScrolling && "is-scrolling"
+        )}
+      >
         <div
           className={cn(
             "mx-auto overflow-hidden rounded-lg border bg-background shadow-sm transition-all",
@@ -344,6 +390,7 @@ export function LivePreviewCanvas({
                     }}
                     isFirst={index === 0}
                     isLast={index === sortedBlocks.length - 1}
+                    device={device}
                   />
 
                   {/* Add Block Button After Block */}

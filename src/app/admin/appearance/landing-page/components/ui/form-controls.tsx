@@ -97,19 +97,40 @@ interface LinkInputProps {
   value: string;
   onChange: (value: string) => void;
   placeholder?: string;
+  openInNewTab?: boolean;
+  onOpenInNewTabChange?: (value: boolean) => void;
 }
 
-export function LinkInput({ label, value, onChange, placeholder }: LinkInputProps) {
+export function LinkInput({
+  label,
+  value,
+  onChange,
+  placeholder,
+  openInNewTab,
+  onOpenInNewTabChange,
+}: LinkInputProps) {
   return (
     <FormField label={label}>
-      <div className="relative">
-        <Input
-          value={value}
-          onChange={(e) => onChange(e.target.value)}
-          placeholder={placeholder || "/page-url"}
-          className="pr-9"
-        />
-        <LinkIcon className="absolute right-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+      <div className="space-y-2">
+        <div className="relative">
+          <Input
+            value={value}
+            onChange={(e) => onChange(e.target.value)}
+            placeholder={placeholder || "/page-url or https://..."}
+            className="pr-9"
+          />
+          <LinkIcon className="absolute right-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+        </div>
+        {onOpenInNewTabChange && (
+          <div className="flex items-center justify-between text-xs">
+            <span className="text-muted-foreground">Open in new tab</span>
+            <Switch
+              checked={openInNewTab ?? false}
+              onCheckedChange={onOpenInNewTabChange}
+              className="scale-75"
+            />
+          </div>
+        )}
       </div>
     </FormField>
   );
@@ -244,17 +265,18 @@ export function ColorPicker({ label, value, onChange }: ColorPickerProps) {
   return (
     <FormField label={label}>
       <div className="flex gap-2">
-        <div
-          className="h-9 w-12 shrink-0 cursor-pointer rounded border"
-          style={{ backgroundColor: value }}
-          onClick={() => {
-            const input = document.createElement("input");
-            input.type = "color";
-            input.value = value;
-            input.onchange = (e) => onChange((e.target as HTMLInputElement).value);
-            input.click();
-          }}
-        />
+        <div className="relative h-9 w-12 shrink-0">
+          <div
+            className="h-full w-full rounded border cursor-pointer"
+            style={{ backgroundColor: value }}
+          />
+          <input
+            type="color"
+            value={value}
+            onChange={(e) => onChange(e.target.value)}
+            className="absolute inset-0 h-full w-full cursor-pointer opacity-0"
+          />
+        </div>
         <Input
           value={value}
           onChange={(e) => onChange(e.target.value)}

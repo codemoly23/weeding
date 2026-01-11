@@ -54,6 +54,14 @@ npx shadcn@latest add [component]  # Add component
 
 `customer` | `admin` | `content_manager` | `sales_agent` | `support_agent`
 
+## Git Commit Policy
+
+**CRITICAL:** When creating git commits:
+- NEVER add "Co-Authored-By: Claude" or any AI attribution
+- NEVER add "Generated with Claude Code" or similar messages
+- Only use the project owner's name and email (from git config)
+- Keep commit messages clean and professional
+
 ## Important
 
 - Always include legal disclaimers (not a law firm)

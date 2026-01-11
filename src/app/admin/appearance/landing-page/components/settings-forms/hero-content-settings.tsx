@@ -1,9 +1,8 @@
 "use client";
 
 import { useCallback } from "react";
-import { Sparkles } from "lucide-react";
 import type { LandingPageBlock } from "@prisma/client";
-import type { HeroSettings, HeroVariant, FeatureItem, FeatureListLayout, FeatureIconPosition } from "@/lib/landing-blocks/types";
+import type { HeroSettings, HeroVariant, FeatureItem, FeatureListLayout, FeatureIconPosition, ButtonCustomStyle, TrustBadgeItem, StatItem } from "@/lib/landing-blocks/types";
 import { defaultHeroSettings } from "@/lib/landing-blocks/defaults";
 import { AccordionSection } from "../ui/accordion-section";
 import {
@@ -14,6 +13,10 @@ import {
   SelectInput,
 } from "../ui/form-controls";
 import { FeatureListEditor } from "../ui/feature-list-editor";
+import { TrustBadgesEditor } from "../ui/trust-badges-editor";
+import { StatsEditor } from "../ui/stats-editor";
+import { ButtonStyleEditor } from "@/components/admin/button-style-editor";
+import { NumberInput } from "../ui/form-controls";
 
 interface HeroContentSettingsProps {
   block: LandingPageBlock;
@@ -60,6 +63,9 @@ export function HeroContentSettings({
     features: migratedFeatures,
     primaryCTA: { ...defaultHeroSettings.primaryCTA, ...settings?.primaryCTA },
     secondaryCTA: { ...defaultHeroSettings.secondaryCTA, ...settings?.secondaryCTA },
+    trustText: { ...defaultHeroSettings.trustText, ...settings?.trustText },
+    trustBadges: { ...defaultHeroSettings.trustBadges, ...settings?.trustBadges },
+    stats: { ...defaultHeroSettings.stats, ...settings?.stats },
   };
 
   const updateNested = useCallback(
@@ -83,9 +89,9 @@ export function HeroContentSettings({
   );
 
   return (
-    <div className="space-y-2">
+    <div className="space-y-3">
       {/* Badge Section */}
-      <AccordionSection title="Badge" defaultOpen={s.badge.enabled}>
+      <AccordionSection title="Badge">
         <ToggleSwitch
           label="Show Badge"
           checked={s.badge.enabled}
@@ -110,14 +116,7 @@ export function HeroContentSettings({
       </AccordionSection>
 
       {/* Headline Section */}
-      <AccordionSection
-        title="Headline"
-        action={{
-          label: "Edit with AI",
-          icon: Sparkles,
-          onClick: () => console.log("AI Edit"),
-        }}
-      >
+      <AccordionSection title="Headline">
         <TextInput
           label="Text"
           value={s.headline.text}
@@ -125,11 +124,11 @@ export function HeroContentSettings({
           placeholder="Start Your US LLC in 24 Hours"
         />
         <TextInput
-          label="Highlight Word"
+          label="Highlight Words"
           value={s.headline.highlightWord || ""}
           onChange={(v) => updateNested("headline", "highlightWord", v)}
-          placeholder="US LLC"
-          description="This word will be highlighted with primary color"
+          placeholder="US LLC, 24 Hours"
+          description="Separate multiple words with comma (e.g., US LLC, 24 Hours)"
         />
         <SelectInput
           label="Size"
@@ -228,14 +227,7 @@ export function HeroContentSettings({
       )}
 
       {/* Subheadline Section */}
-      <AccordionSection
-        title="Subheadline"
-        action={{
-          label: "Edit with AI",
-          icon: Sparkles,
-          onClick: () => console.log("AI Edit"),
-        }}
-      >
+      <AccordionSection title="Subheadline">
         <TextAreaInput
           label="Text"
           value={s.subheadline.text}
@@ -246,7 +238,7 @@ export function HeroContentSettings({
       </AccordionSection>
 
       {/* Features Section */}
-      <AccordionSection title="Features List" defaultOpen={s.features.enabled}>
+      <AccordionSection title="Features List">
         <FeatureListEditor
           enabled={s.features.enabled}
           items={s.features.items}
@@ -276,6 +268,8 @@ export function HeroContentSettings({
           value={s.primaryCTA.link}
           onChange={(v) => updateNested("primaryCTA", "link", v)}
           placeholder="/services/llc-formation"
+          openInNewTab={s.primaryCTA.openInNewTab}
+          onOpenInNewTabChange={(v) => updateNested("primaryCTA", "openInNewTab", v)}
         />
         <ToggleSwitch
           label="Show Price"
@@ -291,10 +285,22 @@ export function HeroContentSettings({
             placeholder="From $0"
           />
         )}
+
+        {/* Button Style Editor */}
+        <div className="mt-4 pt-4 border-t">
+          <ButtonStyleEditor
+            style={s.primaryCTA.style || {}}
+            onChange={(style: ButtonCustomStyle) => updateNested("primaryCTA", "style", style)}
+            buttonText={s.primaryCTA.text || "Button"}
+            showPreview={true}
+            showPresets={true}
+            compact={true}
+          />
+        </div>
       </AccordionSection>
 
       {/* Secondary CTA Section */}
-      <AccordionSection title="Secondary Button" defaultOpen={s.secondaryCTA.enabled}>
+      <AccordionSection title="Secondary Button">
         <ToggleSwitch
           label="Show Secondary Button"
           checked={s.secondaryCTA.enabled}
@@ -313,9 +319,75 @@ export function HeroContentSettings({
               value={s.secondaryCTA.link}
               onChange={(v) => updateNested("secondaryCTA", "link", v)}
               placeholder="/pricing"
+              openInNewTab={s.secondaryCTA.openInNewTab}
+              onOpenInNewTabChange={(v) => updateNested("secondaryCTA", "openInNewTab", v)}
             />
+
+            {/* Button Style Editor */}
+            <div className="mt-4 pt-4 border-t">
+              <ButtonStyleEditor
+                style={s.secondaryCTA.style || {}}
+                onChange={(style: ButtonCustomStyle) => updateNested("secondaryCTA", "style", style)}
+                buttonText={s.secondaryCTA.text || "Button"}
+                showPreview={true}
+                showPresets={true}
+                compact={true}
+              />
+            </div>
           </>
         )}
+      </AccordionSection>
+
+      {/* Trust Text Section */}
+      <AccordionSection title="Trust Text">
+        <ToggleSwitch
+          label="Show Trust Text"
+          checked={s.trustText?.enabled ?? false}
+          onChange={(checked) => updateNested("trustText", "enabled", checked)}
+        />
+        {s.trustText?.enabled && (
+          <>
+            <TextInput
+              label="Trust Text"
+              value={s.trustText?.text || ""}
+              onChange={(v) => updateNested("trustText", "text", v)}
+              placeholder="4.9/5 from 2,000+ reviews"
+            />
+            <ToggleSwitch
+              label="Show Star Rating"
+              checked={s.trustText?.showRating ?? false}
+              onChange={(checked) => updateNested("trustText", "showRating", checked)}
+            />
+            {s.trustText?.showRating && (
+              <TextInput
+                label="Rating Value"
+                value={s.trustText?.rating?.toString() || "4.9"}
+                onChange={(v) => updateNested("trustText", "rating", parseFloat(v) || 0)}
+                placeholder="4.9"
+              />
+            )}
+          </>
+        )}
+      </AccordionSection>
+
+      {/* Trust Badges Section */}
+      <AccordionSection title="Trust Badges">
+        <TrustBadgesEditor
+          enabled={s.trustBadges?.enabled ?? false}
+          items={s.trustBadges?.items || []}
+          onEnabledChange={(enabled) => updateNested("trustBadges", "enabled", enabled)}
+          onItemsChange={(items) => updateNested("trustBadges", "items", items)}
+        />
+      </AccordionSection>
+
+      {/* Stats Section */}
+      <AccordionSection title="Stats Section">
+        <StatsEditor
+          enabled={s.stats?.enabled ?? false}
+          items={s.stats?.items || []}
+          onEnabledChange={(enabled) => updateNested("stats", "enabled", enabled)}
+          onItemsChange={(items) => updateNested("stats", "items", items)}
+        />
       </AccordionSection>
     </div>
   );

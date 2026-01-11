@@ -3,6 +3,10 @@
 // ============================================
 
 import type { LandingPageBlock } from "@prisma/client";
+import type { ButtonCustomStyle } from "@/lib/header-footer/types";
+
+// Re-export for convenience
+export type { ButtonCustomStyle } from "@/lib/header-footer/types";
 
 // Block Categories
 export type BlockCategory =
@@ -120,6 +124,10 @@ export interface HeroBadgeSettings {
   text: string;
   emoji?: string;
   style: "default" | "outline" | "solid";
+  // Style settings
+  bgColor?: string;
+  textColor?: string;
+  borderColor?: string;
 }
 
 // Hero Headline Settings
@@ -128,12 +136,17 @@ export interface HeroHeadlineSettings {
   highlightWord?: string;
   size: HeadlineSize;
   animatedWords?: AnimatedWordsSettings;
+  // Style settings
+  color?: string;
+  highlightColor?: string;
 }
 
 // Hero Subheadline Settings
 export interface HeroSubheadlineSettings {
   text: string;
   size: "sm" | "base" | "lg";
+  // Style settings
+  color?: string;
 }
 
 // Individual Feature Item
@@ -165,6 +178,8 @@ export interface HeroCTASettings {
   showPrice?: boolean;
   priceText?: string;
   icon?: string;
+  openInNewTab?: boolean;
+  style?: ButtonCustomStyle;
 }
 
 // Hero Secondary CTA Settings
@@ -174,6 +189,8 @@ export interface HeroSecondaryCTASettings {
   link: string;
   variant: CTAVariant;
   icon?: string;
+  openInNewTab?: boolean;
+  style?: ButtonCustomStyle;
 }
 
 // Trust Rating Settings
@@ -183,6 +200,9 @@ export interface HeroTrustTextSettings {
   showRating: boolean;
   rating: number;
   reviewCount: number;
+  // Style settings
+  textColor?: string;
+  starColor?: string;
 }
 
 // Trust Badge Item
@@ -195,6 +215,11 @@ export interface TrustBadgeItem {
 export interface HeroTrustBadgesSettings {
   enabled: boolean;
   items: TrustBadgeItem[];
+  // Style settings
+  iconColor?: string;
+  textColor?: string;
+  bgColor?: string;
+  borderColor?: string;
 }
 
 // Stat Item
@@ -210,6 +235,12 @@ export interface StatItem {
 export interface HeroStatsSettings {
   enabled: boolean;
   items: StatItem[];
+  // Style settings
+  valueColor?: string;
+  labelColor?: string;
+  dividerColor?: string;
+  // Animation settings
+  animateCount?: boolean;
 }
 
 // Hero Visual Settings (for split variants)

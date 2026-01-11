@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import Image from "next/image";
+import { SmartLink } from "@/components/ui/smart-link";
 import { useMemo, useState, useEffect, useRef } from "react";
 import {
   Facebook,
@@ -22,13 +23,25 @@ import {
 } from "lucide-react";
 import { useBusinessConfig } from "@/hooks/use-business-config";
 import { useFooterConfig, getWidgetsByColumn, getWidgetLinks } from "@/hooks/use-footer-config";
-import type { FooterWidget, PublicFooterResponse, ButtonCustomStyle, ButtonHoverEffect, GradientDirection } from "@/lib/header-footer/types";
+import type { FooterWidget, PublicFooterResponse, ButtonCustomStyle } from "@/lib/header-footer/types";
 import { CraftButton, CraftButtonLabel, CraftButtonIcon } from "@/components/ui/craft-button";
 import { PrimaryFlowButton } from "@/components/ui/flow-button";
 import { NeuralButton } from "@/components/ui/neural-button";
 import { Button } from "@/components/ui/button";
+import { CRAFT_BG_DARK, WHITE, ORANGE_PRIMARY } from "@/lib/button-constants";
 import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
+
+// Shared button utilities
+import {
+  getNormalBackground,
+  getHoverBackground,
+  getGradientShiftBackground,
+  getHoverEffectClass,
+  isComplexHoverEffect,
+  getComplexEffectStyles,
+  getFinalBackground,
+} from "@/lib/button-utils";
 
 // TikTok icon component
 function TikTokIcon({ className }: { className?: string }) {
@@ -39,63 +52,29 @@ function TikTokIcon({ className }: { className?: string }) {
   );
 }
 
-// Helper functions for button styling
-function getGradientCSS(direction?: GradientDirection): string {
-  switch (direction) {
-    case "to-r": return "to right";
-    case "to-l": return "to left";
-    case "to-t": return "to top";
-    case "to-b": return "to bottom";
-    case "to-tr": return "to top right";
-    case "to-tl": return "to top left";
-    case "to-br": return "to bottom right";
-    case "to-bl": return "to bottom left";
-    default: return "to right";
-  }
-}
-
-function getButtonHoverClass(effect?: ButtonHoverEffect): string {
-  switch (effect) {
-    case "darken": return "hover:brightness-90";
-    case "lighten": return "hover:brightness-110";
-    case "shadow-lift": return "hover:-translate-y-0.5 hover:shadow-lg";
-    case "shadow-press": return "hover:translate-y-0.5 hover:shadow-sm";
-    case "scale-up": return "hover:scale-105";
-    case "scale-down": return "hover:scale-95";
-    case "glow-pulse": return "hover:shadow-[0_0_15px_rgba(249,115,22,0.5)]";
-    case "heartbeat": return "animate-heartbeat";
-    case "stitches": return "stitches-button";
-    case "ring-hover": return "ring-offset-background hover:ring-primary/90 transition-all duration-300 hover:ring-2 hover:ring-offset-2";
-    default: return "";
-  }
-}
-
-function isComplexButtonEffect(effect?: ButtonHoverEffect): boolean {
-  return effect === "slide-fill" || effect === "border-fill" || effect === "gradient-shift" || effect === "ripple";
-}
-
 // Footer Button Component
 function FooterButton({
   text,
   url,
   style,
-  target = "_self"
+  openInNewTab = false,
 }: {
   text: string;
   url: string;
   style: ButtonCustomStyle;
-  target?: "_self" | "_blank";
+  openInNewTab?: boolean;
 }) {
   const [isHovered, setIsHovered] = useState(false);
-  const isExternal = target === "_blank" || url.startsWith("http");
+  const isExternal = /^(https?:\/\/|mailto:|tel:|#)/.test(url);
+  const shouldOpenNewTab = openInNewTab || style.openInNewTab;
 
   // Special button components based on hover effect
   if (style.hoverEffect === "craft-expand") {
     return (
-      <Link href={url} target={target}>
+      <SmartLink href={url} openInNewTab={shouldOpenNewTab}>
         <CraftButton
-          bgColor={style.bgColor || "#18181b"}
-          textColor={style.textColor || "#ffffff"}
+          bgColor={style.bgColor || CRAFT_BG_DARK}
+          textColor={style.textColor || WHITE}
           size="sm"
           style={{
             boxShadow: style.shadow,
@@ -104,126 +83,60 @@ function FooterButton({
         >
           <CraftButtonLabel>{text}</CraftButtonLabel>
           <CraftButtonIcon>
-            <ArrowUpRight className="size-3 stroke-2 transition-transform duration-500 group-hover:rotate-45" />
+            <ArrowUpRight className="size-3 stroke-2" />
           </CraftButtonIcon>
         </CraftButton>
-      </Link>
+      </SmartLink>
     );
   }
 
   if (style.hoverEffect === "flow-border") {
     return (
-      <Link href={url} target={target}>
+      <SmartLink href={url} openInNewTab={shouldOpenNewTab}>
         <PrimaryFlowButton
           className="text-sm"
           style={{
-            '--tw-ring-color': `${style.bgColor || '#F97316'}99`,
+            '--tw-ring-color': `${style.bgColor || ORANGE_PRIMARY}99`,
           } as React.CSSProperties}
         >
           {text}
           {isExternal && <ExternalLink className="ml-1.5 h-3.5 w-3.5" />}
         </PrimaryFlowButton>
-      </Link>
+      </SmartLink>
     );
   }
 
   if (style.hoverEffect === "neural") {
     return (
-      <Link href={url} target={target}>
+      <SmartLink href={url} openInNewTab={shouldOpenNewTab}>
         <NeuralButton size="sm">
           {text}
           {isExternal && <ExternalLink className="ml-1.5 h-3.5 w-3.5" />}
         </NeuralButton>
-      </Link>
+      </SmartLink>
     );
   }
 
-  // Standard button with custom styling
-  const hoverClass = getButtonHoverClass(style.hoverEffect);
-  const hasComplexEffect = isComplexButtonEffect(style.hoverEffect);
-
-  const getNormalBackground = () => {
-    if (style.useGradient) {
-      return `linear-gradient(${getGradientCSS(style.gradientDirection)}, ${style.gradientFrom || "#F97316"}, ${style.gradientTo || "#EA580C"})`;
-    }
-    return style.bgColor || "#F97316";
-  };
-
-  const getHoverBackground = () => {
-    if (style.hoverUseGradient) {
-      return `linear-gradient(${getGradientCSS(style.hoverGradientDirection)}, ${style.hoverGradientFrom || "#EA580C"}, ${style.hoverGradientTo || "#C2410C"})`;
-    }
-    if (style.hoverBgColor) {
-      return style.hoverBgColor;
-    }
-    return getNormalBackground();
-  };
-
-  const getGradientShiftBackground = () => {
-    const fromColor = style.bgColor || "#F97316";
-    const toColor = style.hoverBgColor || "#EA580C";
-    return `linear-gradient(90deg, ${fromColor} 0%, ${toColor} 50%, ${fromColor} 100%)`;
-  };
-
-  const getComplexEffectStyles = (): React.CSSProperties => {
-    if (!hasComplexEffect) return {};
-
-    switch (style.hoverEffect) {
-      case "slide-fill":
-        return {
-          boxShadow: isHovered
-            ? `inset 200px 0 0 0 ${style.hoverBgColor || "#EA580C"}`
-            : `inset 0 0 0 0 ${style.hoverBgColor || "#EA580C"}`,
-        };
-      case "border-fill":
-        return {
-          boxShadow: isHovered
-            ? `inset 0 0 0 50px ${style.hoverBgColor || "#EA580C"}`
-            : `inset 0 0 0 0 ${style.hoverBgColor || "#EA580C"}`,
-        };
-      case "gradient-shift":
-        return {
-          backgroundSize: "200% 100%",
-          backgroundPosition: isHovered ? "100% 0" : "0% 0",
-        };
-      case "ripple":
-        return {
-          boxShadow: isHovered
-            ? `0 0 0 8px ${(style.bgColor || "#F97316")}30, 0 0 20px ${(style.bgColor || "#F97316")}20`
-            : `0 0 0 0 ${(style.bgColor || "#F97316")}30`,
-        };
-      default:
-        return {};
-    }
-  };
-
-  const effectStyles = getComplexEffectStyles();
-
-  const getFinalBackground = () => {
-    if (style.hoverEffect === "gradient-shift") {
-      return getGradientShiftBackground();
-    }
-    if (style.hoverEffect === "slide-fill" || style.hoverEffect === "border-fill") {
-      return getNormalBackground();
-    }
-    return isHovered ? getHoverBackground() : getNormalBackground();
-  };
+  // Standard button with custom styling - uses shared utilities
+  const hoverClass = getHoverEffectClass(style.hoverEffect);
+  const hasComplexEffect = isComplexHoverEffect(style.hoverEffect);
+  const effectStyles = getComplexEffectStyles(style, isHovered);
 
   return (
-    <Link
+    <SmartLink
       href={url}
-      target={target}
+      openInNewTab={shouldOpenNewTab}
       className={cn(
         "relative inline-flex items-center justify-center gap-2 px-4 py-2 text-sm font-medium cursor-pointer overflow-hidden",
         hoverClass,
         hasComplexEffect ? "transition-all duration-500 ease-out" : "transition-all duration-300"
       )}
       style={{
-        background: getFinalBackground(),
+        background: getFinalBackground(style, isHovered),
         color: isHovered && style.hoverTextColor ? style.hoverTextColor : (style.textColor || "#ffffff"),
         borderWidth: `${style.borderWidth ?? 0}px`,
         borderStyle: "solid",
-        borderColor: style.borderColor || style.bgColor || "#F97316",
+        borderColor: style.borderColor || style.bgColor || ORANGE_PRIMARY,
         borderRadius: `${style.borderRadius ?? 6}px`,
         ...effectStyles,
         ...((!hasComplexEffect && style.shadow) ? { boxShadow: isHovered && style.hoverShadow ? style.hoverShadow : style.shadow } : {}),
@@ -233,7 +146,7 @@ function FooterButton({
     >
       {text}
       {isExternal && <ExternalLink className="h-3.5 w-3.5" />}
-    </Link>
+    </SmartLink>
   );
 }
 
@@ -957,12 +870,13 @@ function FooterWidgetRenderer({
         text?: string;
         url?: string;
         target?: "_self" | "_blank";
+        openInNewTab?: boolean;
         style?: ButtonCustomStyle;
       } | null;
 
       const buttonText = buttonContent?.text || "Click Here";
       const buttonUrl = buttonContent?.url || "#";
-      const buttonTarget = buttonContent?.target || "_self";
+      const buttonOpenInNewTab = buttonContent?.openInNewTab ?? buttonContent?.target === "_blank";
       const buttonStyle = buttonContent?.style || {};
 
       return (
@@ -975,7 +889,7 @@ function FooterWidgetRenderer({
               text={buttonText}
               url={buttonUrl}
               style={buttonStyle}
-              target={buttonTarget}
+              openInNewTab={buttonOpenInNewTab}
             />
           </div>
         </div>
@@ -1195,7 +1109,7 @@ export function Footer() {
     "--footer-link-color": styling?.linkColor || "inherit",
     "--footer-link-hover-color": styling?.linkHoverColor || styling?.accentColor || "#22d3ee",
     "--footer-heading-color": styling?.headingColor || "inherit",
-    "--footer-accent-color": styling?.accentColor || "#F97316",
+    "--footer-accent-color": styling?.accentColor || ORANGE_PRIMARY,
     "--footer-divider-color": styling?.dividerColor || styling?.borderColor || "#e5e7eb",
   };
 
@@ -1214,7 +1128,7 @@ export function Footer() {
     if (!borderStyle || borderStyle === "none") return null;
 
     const height = styling?.topBorderHeight || 1;
-    const color = styling?.topBorderColor || styling?.accentColor || "#F97316";
+    const color = styling?.topBorderColor || styling?.accentColor || ORANGE_PRIMARY;
 
     if (borderStyle === "gradient") {
       return (

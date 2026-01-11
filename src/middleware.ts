@@ -14,6 +14,11 @@ const adminRoles = ["ADMIN", "SUPPORT_AGENT", "SALES_AGENT", "CONTENT_MANAGER"];
 export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
+  // Skip middleware for API routes - they handle their own auth and return JSON errors
+  if (pathname.startsWith("/api/")) {
+    return NextResponse.next();
+  }
+
   // Check if the route requires protection
   const isProtectedRoute = protectedRoutes.some(
     (route) => pathname === route || pathname.startsWith(`${route}/`)
