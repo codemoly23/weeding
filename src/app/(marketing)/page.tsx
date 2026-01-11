@@ -1,5 +1,6 @@
 import prisma from "@/lib/db";
 import { PageRenderer } from "@/components/landing-page/page-renderer";
+import { WidgetSectionsRenderer } from "@/components/landing-page/widget-sections-renderer";
 import { Hero } from "@/components/sections/hero";
 import { ServicesGrid } from "@/components/sections/services-grid";
 import { HowItWorks } from "@/components/sections/how-it-works";
@@ -14,6 +15,7 @@ import {
   generateFAQSchema,
   generateProductSchema,
 } from "@/lib/seo";
+import type { Section } from "@/lib/page-builder/types";
 
 const homepageFaqs = [
   {
@@ -43,6 +45,37 @@ const homepageFaqs = [
   },
 ];
 
+const HOMEPAGE_SLUG = "homepage";
+const WIDGET_BLOCK_TYPE = "widget-page-sections";
+
+/**
+ * Fetch widget page builder sections from the database
+ */
+async function getWidgetSections(): Promise<Section[]> {
+  try {
+    const page = await prisma.landingPage.findUnique({
+      where: { slug: HOMEPAGE_SLUG },
+      include: {
+        blocks: {
+          where: { type: WIDGET_BLOCK_TYPE, isActive: true },
+        },
+      },
+    });
+
+    if (!page || page.blocks.length === 0) {
+      return [];
+    }
+
+    const widgetBlock = page.blocks.find((b) => b.type === WIDGET_BLOCK_TYPE);
+    const sections = widgetBlock?.settings as Section[] | null;
+
+    return Array.isArray(sections) ? sections : [];
+  } catch (error) {
+    console.error("Error fetching widget sections:", error);
+    return [];
+  }
+}
+
 /**
  * Fetch the default landing page with its blocks
  * Falls back to null if no default page exists
@@ -70,11 +103,16 @@ async function getDefaultLandingPage() {
 }
 
 export default async function HomePage() {
-  // Fetch dynamic landing page content
+  // Fetch widget page builder sections (new system)
+  const widgetSections = await getWidgetSections();
+
+  // Fetch old block-based landing page content (fallback)
   const landingPage = await getDefaultLandingPage();
 
-  // Use dynamic content if available and has hero blocks, otherwise use static
-  const useDynamicContent =
+  // Priority: Widget sections > Old blocks > Static components
+  const useWidgetSections = widgetSections.length > 0;
+  const useOldBlocks =
+    !useWidgetSections &&
     landingPage &&
     landingPage.blocks.length > 0 &&
     landingPage.blocks.some((b) => b.type.startsWith("hero"));
@@ -96,13 +134,25 @@ export default async function HomePage() {
         ]}
       />
 
-      {useDynamicContent ? (
+      {useWidgetSections ? (
         <>
-          {/* Render hero blocks from database */}
+          {/* Render widget page builder sections */}
+          <WidgetSectionsRenderer sections={widgetSections} />
+          {/* Static sections below hero */}
+          <ServicesGrid />
+          <HowItWorks />
+          <PricingTable />
+          <Testimonials />
+          <FAQSection />
+          <CTASection />
+        </>
+      ) : useOldBlocks ? (
+        <>
+          {/* Render old hero blocks from database */}
           <PageRenderer
-            blocks={landingPage.blocks.filter((b) => b.type.startsWith("hero"))}
+            blocks={landingPage!.blocks.filter((b) => b.type.startsWith("hero"))}
           />
-          {/* Static sections (will be converted to blocks in future) */}
+          {/* Static sections */}
           <ServicesGrid />
           <HowItWorks />
           <PricingTable />

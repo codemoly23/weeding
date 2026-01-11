@@ -125,6 +125,7 @@ const navItems: NavItem[] = [
     icon: Settings,
     children: [
       { title: "General", href: "/admin/settings" },
+      { title: "Media Storage", href: "/admin/settings/media-storage" },
       { title: "Payments", href: "/admin/settings/payments" },
       { title: "Email", href: "/admin/settings/email" },
       { title: "Newsletter", href: "/admin/settings/newsletter" },

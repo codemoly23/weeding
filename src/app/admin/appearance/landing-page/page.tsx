@@ -1,24 +1,7 @@
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
+import { useState, useCallback, useEffect } from "react";
 import Link from "next/link";
-import {
-  DndContext,
-  DragOverlay,
-  closestCenter,
-  KeyboardSensor,
-  PointerSensor,
-  useSensor,
-  useSensors,
-  DragStartEvent,
-  DragEndEvent,
-} from "@dnd-kit/core";
-import {
-  arrayMove,
-  SortableContext,
-  sortableKeyboardCoordinates,
-  verticalListSortingStrategy,
-} from "@dnd-kit/sortable";
 import {
   Save,
   Eye,
@@ -32,266 +15,317 @@ import {
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
-import type { LandingPage, LandingPageBlock } from "@prisma/client";
+import type {
+  Section,
+  SectionLayout,
+  WidgetType,
+  BuilderSelection,
+} from "@/lib/page-builder/types";
+import { createSection, createWidget } from "@/lib/page-builder/widget-registry";
 
 // New Components
-import { BuilderPanel } from "./components/builder-panel";
-import { LivePreviewCanvas } from "./components/live-preview-canvas";
+import { WidgetBuilderPanel } from "./components/widget-builder-panel";
+import { WidgetPageBuilder } from "./components/widget-page-builder";
 
-type PageWithBlocks = LandingPage & { blocks: LandingPageBlock[] };
+// Import widget registration
+import "@/lib/page-builder/register-widgets";
 
-export default function LandingPageBuilderPage() {
-  const [page, setPage] = useState<PageWithBlocks | null>(null);
-  const [blocks, setBlocks] = useState<LandingPageBlock[]>([]);
-  const [selectedBlockId, setSelectedBlockId] = useState<string | null>(null);
-  const [activeId, setActiveId] = useState<string | null>(null);
+export default function WidgetBasedLandingPageBuilder() {
+  const [sections, setSections] = useState<Section[]>([]);
+  const [selection, setSelection] = useState<BuilderSelection>({ type: null });
   const [isDirty, setIsDirty] = useState(false);
   const [isSaving, setSaving] = useState(false);
-  const [isLoading, setLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(true);
   const [previewDevice, setPreviewDevice] = useState<"desktop" | "mobile">("desktop");
-  const [pendingInsertPosition, setPendingInsertPosition] = useState<number | null>(null);
 
-  // DnD sensors
-  const sensors = useSensors(
-    useSensor(PointerSensor, {
-      activationConstraint: {
-        distance: 8,
-      },
-    }),
-    useSensor(KeyboardSensor, {
-      coordinateGetter: sortableKeyboardCoordinates,
-    })
-  );
-
-  // Load default landing page
+  // Load saved data on mount
   useEffect(() => {
-    async function loadPage() {
+    async function loadData() {
       try {
-        const response = await fetch("/api/admin/landing-pages");
-        const pages = await response.json();
-
-        // Find default page or first page
-        let defaultPage = pages.find((p: LandingPage) => p.isDefault);
-        if (!defaultPage && pages.length > 0) {
-          defaultPage = pages[0];
-        }
-
-        if (defaultPage) {
-          // Fetch full page with blocks
-          const pageResponse = await fetch(`/api/admin/landing-pages/${defaultPage.id}`);
-          const fullPage = await pageResponse.json();
-          setPage(fullPage);
-          setBlocks(fullPage.blocks || []);
-        } else {
-          // Create default homepage
-          const createResponse = await fetch("/api/admin/landing-pages", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({
-              slug: "homepage",
-              name: "Homepage",
-              isDefault: true,
-            }),
-          });
-          const newPage = await createResponse.json();
-          setPage(newPage);
-          setBlocks([]);
+        const response = await fetch("/api/admin/page-builder");
+        if (response.ok) {
+          const data = await response.json();
+          if (data.sections && Array.isArray(data.sections)) {
+            setSections(data.sections);
+          }
         }
       } catch (error) {
-        console.error("Error loading page:", error);
-        toast.error("Failed to load landing page");
+        console.error("Failed to load page data:", error);
+        toast.error("Failed to load page data");
       } finally {
-        setLoading(false);
+        setIsLoading(false);
       }
     }
-
-    loadPage();
+    loadData();
   }, []);
 
-  // Add block handler - uses pendingInsertPosition if no position provided
-  const handleAddBlock = useCallback(async (type: string, position?: number) => {
-    if (!page) return;
+  // Widget browser state (left panel)
+  const [pendingWidgetColumn, setPendingWidgetColumn] = useState<{
+    sectionId: string;
+    columnId: string;
+  } | null>(null);
 
-    // Use pending position if available, otherwise use provided position or append to end
-    const insertPosition = position ?? pendingInsertPosition ?? blocks.length;
+  // Add a new section
+  const handleAddSection = useCallback((layout: SectionLayout) => {
+    const newSection = createSection(layout);
+    newSection.order = sections.length;
+    setSections((prev) => [...prev, newSection]);
+    setIsDirty(true);
+    setSelection({
+      type: "section",
+      sectionId: newSection.id,
+    });
+  }, [sections.length]);
 
-    try {
-      const response = await fetch(`/api/admin/landing-pages/${page.id}/blocks`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          type,
-          sortOrder: insertPosition,
-        }),
-      });
+  // Request to add widget (shows widget browser in left panel)
+  const handleRequestAddWidget = useCallback((sectionId: string, columnId: string) => {
+    setPendingWidgetColumn({ sectionId, columnId });
+    // Don't open modal - widget browser shows in left panel when pendingWidgetColumn is set
+  }, []);
 
-      const newBlock = await response.json();
+  // Add a widget to a column
+  const handleAddWidget = useCallback((sectionId: string, columnId: string, widgetType: WidgetType) => {
+    const newWidget = createWidget(widgetType);
 
-      setBlocks((prev) => {
-        const updated = [...prev];
-        updated.splice(insertPosition, 0, newBlock);
-        return updated.map((b, i) => ({ ...b, sortOrder: i }));
-      });
+    setSections((prev) =>
+      prev.map((section) => {
+        if (section.id !== sectionId) return section;
+        return {
+          ...section,
+          columns: section.columns.map((column) => {
+            if (column.id !== columnId) return column;
+            return {
+              ...column,
+              widgets: [...column.widgets, newWidget],
+            };
+          }),
+        };
+      })
+    );
 
-      setSelectedBlockId(newBlock.id);
-      setPendingInsertPosition(null); // Clear pending position after insertion
-      setIsDirty(true);
-      toast.success("Block added");
-    } catch (error) {
-      console.error("Error adding block:", error);
-      toast.error("Failed to add block");
-    }
-  }, [page, pendingInsertPosition, blocks.length]);
+    setIsDirty(true);
+    setPendingWidgetColumn(null);
 
-  // Update block settings handler
-  const handleUpdateBlockSettings = useCallback(async (blockId: string, settings: Record<string, unknown>) => {
-    if (!page) return;
+    // Select the new widget
+    setSelection({
+      type: "widget",
+      sectionId,
+      columnId,
+      widgetId: newWidget.id,
+    });
+  }, []);
 
-    setBlocks((prev) =>
-      prev.map((b) => (b.id === blockId ? { ...b, settings: settings as LandingPageBlock["settings"] } : b))
+  // Update section settings
+  const handleUpdateSection = useCallback((sectionId: string, settings: Section["settings"]) => {
+    setSections((prev) =>
+      prev.map((section) =>
+        section.id === sectionId ? { ...section, settings } : section
+      )
     );
     setIsDirty(true);
+  }, []);
 
-    // Debounced save to API
-    try {
-      await fetch(`/api/admin/landing-pages/${page.id}/blocks/${blockId}`, {
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ settings }),
-      });
-    } catch (error) {
-      console.error("Error updating block:", error);
-    }
-  }, [page]);
+  // Update section layout
+  const handleUpdateSectionLayout = useCallback((sectionId: string, layout: SectionLayout) => {
+    setSections((prev) =>
+      prev.map((section) => {
+        if (section.id !== sectionId) return section;
 
-  // Delete block handler
-  const handleDeleteBlock = useCallback(async (blockId: string) => {
-    if (!page) return;
+        // Create new columns if needed
+        const currentColumns = section.columns.length;
+        const neededColumns = getColumnCount(layout);
 
-    try {
-      await fetch(`/api/admin/landing-pages/${page.id}/blocks/${blockId}`, {
-        method: "DELETE",
-      });
+        let columns = [...section.columns];
+        if (neededColumns > currentColumns) {
+          // Add more columns
+          for (let i = currentColumns; i < neededColumns; i++) {
+            columns.push({
+              id: `col_${Date.now()}_${i}`,
+              widgets: [],
+              settings: { verticalAlign: "top", padding: 0 },
+            });
+          }
+        } else if (neededColumns < currentColumns) {
+          // Remove extra columns (move widgets to first column)
+          const extraWidgets = columns
+            .slice(neededColumns)
+            .flatMap((c) => c.widgets);
+          columns = columns.slice(0, neededColumns);
+          if (extraWidgets.length > 0) {
+            columns[0].widgets = [...columns[0].widgets, ...extraWidgets];
+          }
+        }
 
-      setBlocks((prev) => prev.filter((b) => b.id !== blockId));
-      if (selectedBlockId === blockId) {
-        setSelectedBlockId(null);
-      }
-      setIsDirty(true);
-      toast.success("Block deleted");
-    } catch (error) {
-      console.error("Error deleting block:", error);
-      toast.error("Failed to delete block");
-    }
-  }, [page, selectedBlockId]);
-
-  // Duplicate block handler
-  const handleDuplicateBlock = useCallback(async (blockId: string) => {
-    if (!page) return;
-
-    const block = blocks.find((b) => b.id === blockId);
-    if (!block) return;
-
-    try {
-      const response = await fetch(`/api/admin/landing-pages/${page.id}/blocks`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          type: block.type,
-          settings: block.settings,
-          sortOrder: block.sortOrder + 1,
-        }),
-      });
-
-      const newBlock = await response.json();
-
-      setBlocks((prev) => {
-        const index = prev.findIndex((b) => b.id === blockId);
-        const updated = [...prev];
-        updated.splice(index + 1, 0, newBlock);
-        return updated.map((b, i) => ({ ...b, sortOrder: i }));
-      });
-
-      setSelectedBlockId(newBlock.id);
-      setIsDirty(true);
-      toast.success("Block duplicated");
-    } catch (error) {
-      console.error("Error duplicating block:", error);
-      toast.error("Failed to duplicate block");
-    }
-  }, [page, blocks]);
-
-  // DnD handlers
-  const handleDragStart = (event: DragStartEvent) => {
-    setActiveId(event.active.id as string);
-  };
-
-  const handleDragEnd = async (event: DragEndEvent) => {
-    const { active, over } = event;
-    setActiveId(null);
-
-    if (!over || active.id === over.id || !page) return;
-
-    const oldIndex = blocks.findIndex((b) => b.id === active.id);
-    const newIndex = blocks.findIndex((b) => b.id === over.id);
-
-    const reorderedBlocks = arrayMove(blocks, oldIndex, newIndex).map((b, i) => ({
-      ...b,
-      sortOrder: i,
-    }));
-
-    setBlocks(reorderedBlocks);
+        return { ...section, layout, columns };
+      })
+    );
     setIsDirty(true);
+  }, []);
 
-    // Save to API
-    try {
-      await fetch(`/api/admin/landing-pages/${page.id}/blocks/reorder`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          blockIds: reorderedBlocks.map((b) => b.id),
-        }),
-      });
-    } catch (error) {
-      console.error("Error reordering blocks:", error);
-      toast.error("Failed to reorder blocks");
+  // Update widget settings
+  const handleUpdateWidget = useCallback((
+    sectionId: string,
+    columnId: string,
+    widgetId: string,
+    settings: unknown
+  ) => {
+    setSections((prev) =>
+      prev.map((section) => {
+        if (section.id !== sectionId) return section;
+        return {
+          ...section,
+          columns: section.columns.map((column) => {
+            if (column.id !== columnId) return column;
+            return {
+              ...column,
+              widgets: column.widgets.map((widget) =>
+                widget.id === widgetId ? { ...widget, settings } : widget
+              ),
+            };
+          }),
+        };
+      })
+    );
+    setIsDirty(true);
+  }, []);
+
+  // Update widget spacing
+  const handleUpdateWidgetSpacing = useCallback((
+    sectionId: string,
+    columnId: string,
+    widgetId: string,
+    spacing: { marginTop: number; marginBottom: number }
+  ) => {
+    setSections((prev) =>
+      prev.map((section) => {
+        if (section.id !== sectionId) return section;
+        return {
+          ...section,
+          columns: section.columns.map((column) => {
+            if (column.id !== columnId) return column;
+            return {
+              ...column,
+              widgets: column.widgets.map((widget) =>
+                widget.id === widgetId ? { ...widget, spacing } : widget
+              ),
+            };
+          }),
+        };
+      })
+    );
+    setIsDirty(true);
+  }, []);
+
+  // Selection handlers
+  const handleSelectSection = useCallback((sectionId: string) => {
+    setSelection({ type: "section", sectionId });
+  }, []);
+
+  const handleSelectWidget = useCallback((sectionId: string, columnId: string, widgetId: string) => {
+    setSelection({ type: "widget", sectionId, columnId, widgetId });
+  }, []);
+
+  const handleClearSelection = useCallback(() => {
+    setSelection({ type: null });
+  }, []);
+
+  // Selection change handler - clears pendingWidgetColumn when selecting elements
+  const handleSelectionChange = useCallback((newSelection: BuilderSelection) => {
+    setSelection(newSelection);
+    // Clear pending widget column when user selects a widget or section
+    // This allows the panel to switch to edit mode
+    if (newSelection.type === "widget" || newSelection.type === "section") {
+      setPendingWidgetColumn(null);
     }
-  };
+  }, []);
+
+  // Delete section handler
+  const handleDeleteSection = useCallback((sectionId: string) => {
+    setSections((prev) => prev.filter((s) => s.id !== sectionId));
+    setIsDirty(true);
+    // Clear selection if the deleted section was selected
+    setSelection((prev) =>
+      prev.sectionId === sectionId ? { type: null } : prev
+    );
+  }, []);
+
+  // Duplicate section handler
+  const handleDuplicateSection = useCallback((sectionId: string) => {
+    setSections((prev) => {
+      const sectionIndex = prev.findIndex((s) => s.id === sectionId);
+      if (sectionIndex === -1) return prev;
+
+      const section = prev[sectionIndex];
+      const duplicated: Section = {
+        ...section,
+        id: `section_${Date.now()}`,
+        columns: section.columns.map((col) => ({
+          ...col,
+          id: `col_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
+          widgets: col.widgets.map((w) => ({
+            ...w,
+            id: `widget_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
+          })),
+        })),
+      };
+
+      const updated = [
+        ...prev.slice(0, sectionIndex + 1),
+        duplicated,
+        ...prev.slice(sectionIndex + 1),
+      ];
+      return updated.map((s, i) => ({ ...s, order: i }));
+    });
+    setIsDirty(true);
+  }, []);
+
+  // Delete widget handler
+  const handleDeleteWidget = useCallback((sectionId: string, columnId: string, widgetId: string) => {
+    setSections((prev) =>
+      prev.map((section) => {
+        if (section.id !== sectionId) return section;
+        return {
+          ...section,
+          columns: section.columns.map((column) => {
+            if (column.id !== columnId) return column;
+            return {
+              ...column,
+              widgets: column.widgets.filter((w) => w.id !== widgetId),
+            };
+          }),
+        };
+      })
+    );
+    setIsDirty(true);
+    // Clear selection if the deleted widget was selected
+    setSelection((prev) =>
+      prev.widgetId === widgetId ? { type: null } : prev
+    );
+  }, []);
 
   // Save handler
   const handleSave = async () => {
-    if (!page) return;
-
     setSaving(true);
     try {
-      await fetch(`/api/admin/landing-pages/${page.id}`, {
-        method: "PUT",
+      const response = await fetch("/api/admin/page-builder", {
+        method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          incrementVersion: true,
-        }),
+        body: JSON.stringify({ sections }),
       });
 
+      if (!response.ok) {
+        throw new Error("Failed to save");
+      }
+
       setIsDirty(false);
-      toast.success("Page saved");
+      toast.success("Page saved successfully");
     } catch (error) {
-      console.error("Error saving page:", error);
+      console.error("Save error:", error);
       toast.error("Failed to save page");
     } finally {
       setSaving(false);
     }
   };
-
-  // Get selected block
-  const selectedBlock = blocks.find((b) => b.id === selectedBlockId) || null;
-
-  if (isLoading) {
-    return (
-      <div className="flex h-[calc(100vh-4rem)] items-center justify-center">
-        <Loader2 className="h-8 w-8 animate-spin text-primary" />
-      </div>
-    );
-  }
 
   return (
     <div className="flex h-[calc(100vh-4rem)] flex-col">
@@ -307,11 +341,7 @@ export default function LandingPageBuilderPage() {
           <div className="flex items-center gap-2">
             <LayoutGrid className="h-5 w-5 text-muted-foreground" />
             <span className="font-medium">Landing Page Builder</span>
-            {page && (
-              <span className="text-sm text-muted-foreground">
-                — {page.name}
-              </span>
-            )}
+            <span className="text-sm text-muted-foreground">— Homepage</span>
           </div>
         </div>
 
@@ -360,57 +390,74 @@ export default function LandingPageBuilderPage() {
       </div>
 
       {/* Main Content - Two Panel Layout */}
-      <DndContext
-        sensors={sensors}
-        collisionDetection={closestCenter}
-        onDragStart={handleDragStart}
-        onDragEnd={handleDragEnd}
-      >
-        <div className="flex flex-1 overflow-hidden">
-          {/* Left Panel - Builder Panel (Context-Aware) */}
-          <BuilderPanel
-            blocks={blocks}
-            selectedBlock={selectedBlock}
-            onAddBlock={handleAddBlock}
-            onSelectBlock={setSelectedBlockId}
-            onUpdateSettings={(settings) =>
-              selectedBlockId && handleUpdateBlockSettings(selectedBlockId, settings)
-            }
-            pendingInsertPosition={pendingInsertPosition}
-            onClearPendingPosition={() => setPendingInsertPosition(null)}
-            className="w-[360px] shrink-0"
-          />
+      <div className="flex flex-1 overflow-hidden">
+        {/* Left Panel - Widget Builder Panel */}
+        <WidgetBuilderPanel
+          sections={sections}
+          selection={selection}
+          onAddSection={handleAddSection}
+          onAddWidget={handleAddWidget}
+          onUpdateSection={handleUpdateSection}
+          onUpdateSectionLayout={handleUpdateSectionLayout}
+          onUpdateWidget={handleUpdateWidget}
+          onUpdateWidgetSpacing={handleUpdateWidgetSpacing}
+          onSelectSection={handleSelectSection}
+          onSelectWidget={handleSelectWidget}
+          onClearSelection={handleClearSelection}
+          pendingWidgetColumn={pendingWidgetColumn}
+          onClearPendingColumn={() => setPendingWidgetColumn(null)}
+          className="w-[320px] shrink-0"
+        />
 
-          {/* Right Panel - Live Preview Canvas */}
-          <SortableContext
-            items={blocks.map((b) => b.id)}
-            strategy={verticalListSortingStrategy}
-          >
-            <LivePreviewCanvas
-              blocks={blocks}
-              selectedBlockId={selectedBlockId}
-              onSelectBlock={setSelectedBlockId}
-              onRequestAddBlock={(position) => {
-                setSelectedBlockId(null); // Switch to browse mode
-                setPendingInsertPosition(position);
-              }}
-              onDeleteBlock={handleDeleteBlock}
-              onDuplicateBlock={handleDuplicateBlock}
-              device={previewDevice}
-              className="flex-1"
-            />
-          </SortableContext>
-
-          {/* Drag Overlay */}
-          <DragOverlay>
-            {activeId ? (
-              <div className="rounded-lg border bg-card p-4 shadow-lg">
-                {blocks.find((b) => b.id === activeId)?.type || "Block"}
-              </div>
-            ) : null}
-          </DragOverlay>
+        {/* Right Panel - Page Builder Canvas */}
+        <div className="flex-1 overflow-auto bg-muted/30">
+          <div className="p-4">
+            {/* Device Frame */}
+            <div className="text-center text-xs text-muted-foreground mb-2">
+              {previewDevice === "desktop" ? "Desktop (1440px)" : "Mobile (375px)"}
+            </div>
+            <div
+              className={cn(
+                "mx-auto bg-background rounded-lg border overflow-hidden transition-all duration-300",
+                previewDevice === "desktop" ? "max-w-full" : "max-w-[375px]"
+              )}
+            >
+              {isLoading ? (
+                <div className="flex items-center justify-center py-20">
+                  <Loader2 className="h-8 w-8 animate-spin text-muted-foreground" />
+                </div>
+              ) : (
+                <WidgetPageBuilder
+                  sections={sections}
+                  onChange={setSections}
+                  selection={selection}
+                  onSelectionChange={handleSelectionChange}
+                  onRequestAddWidget={handleRequestAddWidget}
+                  onDeleteSection={handleDeleteSection}
+                  onDuplicateSection={handleDuplicateSection}
+                  onDeleteWidget={handleDeleteWidget}
+                  device={previewDevice}
+                />
+              )}
+            </div>
+          </div>
         </div>
-      </DndContext>
+      </div>
+
     </div>
   );
+}
+
+// Helper to get column count from layout
+function getColumnCount(layout: SectionLayout): number {
+  switch (layout) {
+    case "1": return 1;
+    case "1-1":
+    case "1-2":
+    case "2-1": return 2;
+    case "1-1-1":
+    case "1-2-1": return 3;
+    case "1-1-1-1": return 4;
+    default: return 1;
+  }
 }
