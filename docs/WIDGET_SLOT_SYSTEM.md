@@ -205,7 +205,6 @@ type WidgetType =
   | "feature-comparison"
 
   // Layout Widgets
-  | "spacer"
   | "divider"
   | "accordion"
   | "tabs"
@@ -298,20 +297,125 @@ interface HeroContentWidget {
 
 ### 2. Image Widget
 
+Modern, feature-rich image widget with professional effects inspired by Elementor, Webflow, and 2025-2026 design trends.
+
 ```typescript
 interface ImageWidget {
   type: "image";
   settings: {
-    src: string;
-    alt: string;
-    objectFit: "cover" | "contain" | "fill";
-    borderRadius: number;
-    shadow: "none" | "sm" | "md" | "lg" | "xl" | "2xl";
-    aspectRatio?: "auto" | "1:1" | "4:3" | "16:9" | "3:2";
-    animation: "none" | "fade" | "slide-up" | "zoom";
+    // === BASIC ===
+    src: string;                    // Image URL
+    alt: string;                    // Alt text for accessibility
+    title?: string;                 // Title attribute (tooltip)
+
+    // === SIZE & FIT ===
+    objectFit: "cover" | "contain" | "fill" | "none" | "scale-down";
+    aspectRatio: "auto" | "1:1" | "4:3" | "3:2" | "16:9" | "21:9" | "2:3" | "3:4" | "9:16";
+    maxWidth?: number;              // Max width as percentage (1-100)
+    alignment: "left" | "center" | "right";
+
+    // === STYLING ===
+    borderRadius: number;           // Border radius in pixels
+    shadow: "none" | "sm" | "md" | "lg" | "xl" | "2xl" | "glow";
+    shadowColor?: string;           // Custom shadow color for glow effect
+    border: {
+      width: number;
+      color: string;
+      style: "solid" | "dashed" | "dotted" | "double";
+    };
+
+    // === LINK OPTIONS ===
+    link?: {
+      url: string;
+      openInNewTab: boolean;
+      lightbox: boolean;            // Open in fullscreen lightbox modal
+    };
+
+    // === CAPTION ===
+    caption?: {
+      enabled: boolean;
+      text: string;
+      position: "below" | "overlay-bottom" | "overlay-top" | "overlay-center";
+      backgroundColor?: string;
+      textColor?: string;
+      fontSize: "xs" | "sm" | "md" | "lg";
+    };
+
+    // === HOVER EFFECTS ===
+    hoverEffect:
+      | "none"
+      | "zoom"                      // Scale up
+      | "zoom-out"                  // Scale down
+      | "brighten"                  // Increase brightness
+      | "darken"                    // Decrease brightness
+      | "grayscale"                 // Convert to grayscale
+      | "blur"                      // Apply blur
+      | "rotate"                    // Slight rotation
+      | "tilt-left"                 // Tilt to left
+      | "tilt-right"                // Tilt to right
+      | "lift"                      // Lift up with shadow
+      | "glow"                      // Glow effect with shadow color
+      | "shine"                     // Diagonal shine sweep
+      | "overlay-fade";             // Fade in overlay
+    hoverTransitionDuration: number; // Transition duration in ms
+
+    // === OVERLAY ===
+    overlay?: {
+      enabled: boolean;
+      color: string;
+      opacity: number;              // 0-1
+      showOnHover: boolean;         // Only show on hover
+    };
+
+    // === ENTRANCE ANIMATION ===
+    animation: "none" | "fade" | "slide-up" | "slide-down" | "slide-left" | "slide-right" | "zoom" | "bounce" | "flip";
+    animationDuration: number;      // Duration in ms
+    animationDelay: number;         // Delay in ms
+
+    // === FLOATING ANIMATION ===
+    floatAnimation: "none" | "float" | "pulse" | "bounce" | "swing" | "wobble";
+
+    // === PARALLAX ===
+    parallax?: {
+      enabled: boolean;
+      speed: number;                // 0-1 (higher = more movement)
+      direction: "vertical" | "horizontal";
+    };
+
+    // === MASK/SHAPE ===
+    mask: "none" | "circle" | "rounded-lg" | "rounded-xl" | "hexagon" | "blob" | "diamond" | "triangle";
+
+    // === PERFORMANCE ===
+    lazyLoad: boolean;              // Enable lazy loading
+    priority: boolean;              // Above-fold priority loading
+
+    // === CSS FILTERS ===
+    filters?: {
+      brightness: number;           // 0-200 (100 = normal)
+      contrast: number;             // 0-200 (100 = normal)
+      saturation: number;           // 0-200 (100 = normal)
+      blur: number;                 // 0-20 pixels
+      grayscale: number;            // 0-100 percent
+      sepia: number;                // 0-100 percent
+      hueRotate: number;            // 0-360 degrees
+    };
   };
 }
 ```
+
+#### Image Widget Features
+
+| Category | Features |
+|----------|----------|
+| **Hover Effects** | Zoom, zoom-out, brighten, darken, grayscale, blur, rotate, tilt, lift, glow, shine sweep, overlay fade |
+| **Entrance Animations** | Fade, slide (4 directions), zoom, bounce, flip - triggered on scroll |
+| **Floating Animations** | Float, pulse, bounce, swing, wobble - continuous looping |
+| **Parallax** | Vertical or horizontal parallax on scroll |
+| **Lightbox** | Full-screen modal with click-to-close |
+| **Masks/Shapes** | Circle, rounded corners, hexagon, blob, diamond, triangle |
+| **Filters** | Brightness, contrast, saturation, blur, grayscale, sepia, hue-rotate |
+| **Captions** | Below image or overlay (top/center/bottom) with custom styling |
+| **Shadows** | 6 preset sizes + custom glow color |
 
 ### 3. Lead Form Widget
 
@@ -716,33 +820,39 @@ model LandingPage {
 
 ## Migration Strategy
 
-### Phase 1: Core Infrastructure
-- [ ] Create Section, Column, Widget type definitions
-- [ ] Build widget registry system
-- [ ] Create layout selector component
-- [ ] Create widget browser component
-- [ ] Build section/column rendering
+### Phase 1: Core Infrastructure ✅
+- [x] Create Section, Column, Widget type definitions
+- [x] Build widget registry system
+- [x] Create layout selector component
+- [x] Create widget browser component
+- [x] Build section/column rendering
 
-### Phase 2: Essential Widgets
-- [ ] Hero Content widget (migrate from existing)
-- [ ] Image widget
-- [ ] Trust Badges widget
-- [ ] Stats Section widget
+### Phase 2: Essential Widgets ✅
+- [x] Hero Content widget (with button style presets: Craft, Flow, Neural)
+- [x] Image widget (comprehensive modern features)
+- [x] Trust Badges widget
+- [x] Stats Section widget
+- [x] Heading widget
+- [x] Text Block widget
+- [x] Divider widget (10 styles including gradient, dotted, icon, text)
 
-### Phase 3: Form Widgets
-- [ ] Lead Form widget
+### Phase 3: Form Widgets ✅
+- [x] Lead Form widget
 - [ ] Contact Form widget
 - [ ] Form submission handling
 
 ### Phase 4: More Widgets
-- [ ] Video widget
-- [ ] Testimonial widget
+- [x] Video widget
+- [x] Testimonial widget
 - [ ] FAQ widget
 - [ ] Pricing widgets
 
 ### Phase 5: Advanced Features
-- [ ] Drag & drop reordering
-- [ ] Copy/paste sections
+- [x] Drag & drop reordering (sections)
+- [x] Copy/duplicate sections
+- [x] Section settings (background: solid/gradient/image/video, spacing, max-width)
+- [x] Column settings (vertical alignment, padding)
+- [x] Widget spacing controls (margin top/bottom)
 - [ ] Section templates/presets
 - [ ] Global styles
 - [ ] Responsive controls
@@ -781,4 +891,26 @@ model LandingPage {
 
 ---
 
-*Document Version: 2.0 - Section-Based Architecture*
+---
+
+## Changelog
+
+### v3.0 (2026-01-12)
+- **Image Widget**: Complete rewrite with modern features
+  - 13 hover effects (zoom, glow, shine, tilt, lift, etc.)
+  - 8 entrance animations with Intersection Observer
+  - 5 floating animations (continuous looping)
+  - Parallax scrolling support
+  - Lightbox modal
+  - 8 mask shapes (circle, hexagon, blob, diamond, etc.)
+  - 7 CSS filters
+  - Caption overlay support
+- **Spacer Widget**: Removed (widgets now have built-in spacing controls)
+- **Migration Status**: Updated to reflect completed phases
+
+### v2.0
+- Section-Based Architecture (Elementor/Webflow style)
+- Widget registry system
+- Core widgets implementation
+
+*Document Version: 3.0 - Comprehensive Widget System*

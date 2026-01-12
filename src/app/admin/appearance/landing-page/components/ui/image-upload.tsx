@@ -89,16 +89,47 @@ export function ImageUpload({
     onChange("");
   }
 
+  // Normalize URL - add https:// if missing from domain-like URLs
+  const normalizeImageUrl = (url: string): string => {
+    if (!url || url.trim() === "") return "";
+    // Already a relative path
+    if (url.startsWith("/")) return url;
+    // Already has protocol
+    if (url.startsWith("http://") || url.startsWith("https://")) return url;
+    // Looks like a domain (contains . and no spaces) - add https://
+    if (url.includes(".") && !url.includes(" ")) {
+      return `https://${url}`;
+    }
+    return url;
+  };
+
+  // Check if URL is valid for Image component
+  const isValidImageUrl = (url: string): boolean => {
+    if (!url || url.trim() === "") return false;
+    // Check if it's a relative path starting with /
+    if (url.startsWith("/")) return true;
+    // Check if it's a valid absolute URL
+    try {
+      new URL(url);
+      return true;
+    } catch {
+      return false;
+    }
+  };
+
+  const normalizedValue = normalizeImageUrl(value);
+  const hasValidImage = normalizedValue && isValidImageUrl(normalizedValue);
+
   return (
     <div className={cn("space-y-2", className)}>
       {label && <Label>{label}</Label>}
 
-      {value ? (
+      {hasValidImage ? (
         // Preview with remove button
         <div className={cn("relative group", previewClassName)}>
           <div className="relative aspect-video w-full max-w-sm rounded-lg border overflow-hidden bg-muted">
             <Image
-              src={value}
+              src={normalizedValue}
               alt="Preview"
               fill
               className="object-contain"

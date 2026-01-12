@@ -106,8 +106,12 @@ export async function uploadToR2(
     // Construct public URL
     let url: string;
     if (config.publicUrl) {
-      // Custom domain
-      url = `${config.publicUrl.replace(/\/$/, "")}/${key}`;
+      // Custom domain - ensure it has protocol
+      let publicUrl = config.publicUrl.replace(/\/$/, "");
+      if (!publicUrl.startsWith("http://") && !publicUrl.startsWith("https://")) {
+        publicUrl = `https://${publicUrl}`;
+      }
+      url = `${publicUrl}/${key}`;
     } else if (config.accountId) {
       // R2.dev URL (needs to be enabled in bucket settings)
       url = `https://${config.bucketName}.${config.accountId}.r2.dev/${key}`;

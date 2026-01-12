@@ -149,13 +149,88 @@ export const DEFAULT_HERO_CONTENT_SETTINGS: HeroContentWidgetSettings = {
 };
 
 export const DEFAULT_IMAGE_SETTINGS: ImageWidgetSettings = {
+  // Basic
   src: "",
   alt: "Image description",
+  title: "",
+
+  // Size & Fit
   objectFit: "cover",
+  aspectRatio: "16:9",
+  maxWidth: 100,
+  alignment: "center",
+
+  // Styling
   borderRadius: 8,
   shadow: "lg",
-  aspectRatio: "16:9",
+  shadowColor: "#f97316",
+  border: {
+    width: 0,
+    color: "#e2e8f0",
+    style: "solid",
+  },
+
+  // Link Options
+  link: undefined,
+
+  // Lightbox
+  lightbox: false,
+
+  // Caption
+  caption: {
+    enabled: false,
+    text: "",
+    position: "below",
+    backgroundColor: "#000000",
+    backgroundOpacity: 0.7,
+    textColor: "#ffffff",
+    fontSize: "sm",
+  },
+
+  // Hover Effects
+  hoverEffect: "zoom",
+  hoverTransitionDuration: 300,
+
+  // Overlay
+  overlay: {
+    enabled: false,
+    color: "#000000",
+    opacity: 0.3,
+    showOnHover: false,
+  },
+
+  // Entrance Animation
   animation: "none",
+  animationDuration: 600,
+  animationDelay: 0,
+
+  // Floating Animation
+  floatAnimation: "none",
+
+  // Parallax
+  parallax: {
+    enabled: false,
+    speed: 0.5,
+    direction: "vertical",
+  },
+
+  // Mask/Shape
+  mask: "none",
+
+  // Advanced
+  lazyLoad: true,
+  priority: false,
+
+  // Filters
+  filters: {
+    brightness: 100,
+    contrast: 100,
+    saturation: 100,
+    blur: 0,
+    grayscale: 0,
+    sepia: 0,
+    hueRotate: 0,
+  },
 };
 
 export const DEFAULT_TRUST_BADGES_SETTINGS: TrustBadgesWidgetSettings = {

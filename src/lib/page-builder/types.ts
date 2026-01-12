@@ -270,20 +270,115 @@ export interface HeroContentWidgetSettings {
   alignment: "left" | "center" | "right";
 }
 
-// Image Widget
-export type ImageObjectFit = "cover" | "contain" | "fill";
-export type ImageShadow = "none" | "sm" | "md" | "lg" | "xl" | "2xl";
-export type ImageAspectRatio = "auto" | "1:1" | "4:3" | "16:9" | "3:2";
-export type ImageAnimation = "none" | "fade" | "slide-up" | "zoom";
+// Image Widget - Comprehensive Modern Settings
+export type ImageObjectFit = "cover" | "contain" | "fill" | "none" | "scale-down";
+export type ImageShadow = "none" | "sm" | "md" | "lg" | "xl" | "2xl" | "inner" | "glow";
+export type ImageAspectRatio = "auto" | "1:1" | "4:3" | "16:9" | "3:2" | "2:3" | "9:16" | "21:9";
+export type ImageAnimation = "none" | "fade" | "slide-up" | "slide-down" | "slide-left" | "slide-right" | "zoom-in" | "zoom-out" | "flip" | "rotate";
+export type ImageHoverEffect =
+  | "none"
+  | "zoom"
+  | "zoom-out"
+  | "brighten"
+  | "darken"
+  | "grayscale"
+  | "blur"
+  | "rotate"
+  | "tilt-left"
+  | "tilt-right"
+  | "lift"
+  | "glow"
+  | "shine"
+  | "overlay-fade";
+export type ImageFloatAnimation = "none" | "float" | "pulse" | "bounce" | "swing" | "wobble";
+export type ImageMask = "none" | "circle" | "rounded-lg" | "rounded-xl" | "hexagon" | "blob" | "diamond" | "triangle";
 
 export interface ImageWidgetSettings {
+  // Basic
   src: string;
   alt: string;
+  title?: string;
+
+  // Size & Fit
   objectFit: ImageObjectFit;
+  aspectRatio: ImageAspectRatio;
+  maxWidth?: number; // percentage 10-100
+  alignment: "left" | "center" | "right";
+
+  // Styling
   borderRadius: number;
   shadow: ImageShadow;
-  aspectRatio: ImageAspectRatio;
+  shadowColor?: string; // for glow effect
+  border: {
+    width: number;
+    color: string;
+    style: "solid" | "dashed" | "dotted" | "double";
+  };
+
+  // Link Options
+  link?: {
+    url: string;
+    openInNewTab: boolean;
+  };
+
+  // Lightbox (click image to view fullscreen)
+  lightbox: boolean;
+
+  // Caption
+  caption?: {
+    enabled: boolean;
+    text: string;
+    position: "below" | "overlay-bottom" | "overlay-top" | "overlay-center";
+    backgroundColor?: string;
+    backgroundOpacity?: number; // 0-1
+    textColor?: string;
+    fontSize: "xs" | "sm" | "md" | "lg";
+  };
+
+  // Hover Effects
+  hoverEffect: ImageHoverEffect;
+  hoverTransitionDuration: number; // ms
+
+  // Overlay
+  overlay?: {
+    enabled: boolean;
+    color: string;
+    opacity: number;
+    showOnHover: boolean;
+  };
+
+  // Entrance Animation
   animation: ImageAnimation;
+  animationDuration: number; // ms
+  animationDelay: number; // ms
+
+  // Floating Animation (continuous)
+  floatAnimation: ImageFloatAnimation;
+
+  // Parallax
+  parallax?: {
+    enabled: boolean;
+    speed: number; // 0.1 to 1.0
+    direction: "vertical" | "horizontal";
+  };
+
+  // Mask/Shape
+  mask: ImageMask;
+
+  // Advanced
+  lazyLoad: boolean;
+  priority: boolean; // for LCP images
+
+  // Filters
+  filters?: {
+    brightness: number; // 0-200, default 100
+    contrast: number; // 0-200, default 100
+    saturation: number; // 0-200, default 100
+    blur: number; // 0-20px
+    grayscale: number; // 0-100%
+    sepia: number; // 0-100%
+    hueRotate: number; // 0-360deg
+  };
 }
 
 // Lead Form Widget
