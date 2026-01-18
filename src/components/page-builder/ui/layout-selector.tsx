@@ -15,28 +15,28 @@ export function LayoutSelector({ isOpen, onClose, onSelect }: LayoutSelectorProp
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center">
+    <div className="fixed inset-0 z-50 flex items-start sm:items-center justify-center overflow-y-auto p-4 sm:p-6">
       {/* Backdrop */}
       <div
-        className="absolute inset-0 bg-black/60 backdrop-blur-sm"
+        className="fixed inset-0 bg-black/60 backdrop-blur-sm"
         onClick={onClose}
       />
 
       {/* Modal */}
-      <div className="relative bg-slate-900 rounded-xl border border-slate-700 shadow-2xl w-full max-w-lg mx-4">
+      <div className="relative bg-slate-900 rounded-xl border border-slate-700 shadow-2xl w-full max-w-lg my-4 sm:my-8 flex flex-col max-h-[calc(100vh-2rem)] sm:max-h-[calc(100vh-4rem)]">
         {/* Header */}
-        <div className="flex items-center justify-between px-6 py-4 border-b border-slate-700">
-          <h2 className="text-lg font-semibold text-white">Select Layout</h2>
+        <div className="flex items-center justify-between px-4 sm:px-6 py-3 sm:py-4 border-b border-slate-700 shrink-0">
+          <h2 className="text-base sm:text-lg font-semibold text-white">Select Layout</h2>
           <button
             onClick={onClose}
-            className="text-slate-400 hover:text-white transition-colors"
+            className="p-1 text-slate-400 hover:text-white hover:bg-slate-700 rounded-lg transition-colors"
           >
             <X className="h-5 w-5" />
           </button>
         </div>
 
-        {/* Content */}
-        <div className="p-6 space-y-3">
+        {/* Content - Scrollable */}
+        <div className="p-4 sm:p-6 space-y-3 overflow-y-auto flex-1">
           {LAYOUT_PREVIEWS.map((preview) => {
             const layoutInfo = SECTION_LAYOUTS.find((l) => l.layout === preview.layout);
             if (!layoutInfo) return null;
@@ -49,18 +49,18 @@ export function LayoutSelector({ isOpen, onClose, onSelect }: LayoutSelectorProp
                   onClose();
                 }}
                 className={cn(
-                  "w-full p-4 rounded-lg border border-slate-700 bg-slate-800/50",
+                  "w-full p-3 sm:p-4 rounded-lg border border-slate-700 bg-slate-800/50",
                   "hover:border-orange-500 hover:bg-slate-800 transition-all duration-200",
                   "group"
                 )}
               >
                 {/* Layout Preview Bars */}
-                <div className="flex gap-2 mb-3">
+                <div className="flex gap-2 mb-2 sm:mb-3">
                   {preview.bars.map((bar, index) => (
                     <div
                       key={index}
                       className={cn(
-                        "h-8 rounded transition-colors duration-200",
+                        "h-6 sm:h-8 rounded transition-colors duration-200",
                         bar.className,
                         "group-hover:bg-orange-500/60"
                       )}

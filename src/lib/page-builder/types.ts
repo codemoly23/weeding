@@ -768,6 +768,8 @@ export interface StatsSectionWidgetSettings {
     labelColor: string;
     valueSize: "sm" | "md" | "lg" | "xl";
     divider: boolean;
+    showTopBorder?: boolean;
+    topBorderColor?: string;
   };
   centered: boolean;
   animateOnScroll: boolean;

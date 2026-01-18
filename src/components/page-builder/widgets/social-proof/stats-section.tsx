@@ -104,9 +104,9 @@ function AnimatedStat({
   };
 
   return (
-    <div className="flex flex-col items-center">
+    <div className="flex flex-col items-center py-2">
       <span
-        className={cn("font-bold tabular-nums", getValueSizeClass())}
+        className={cn("font-bold tabular-nums leading-tight", getValueSizeClass())}
         style={{ color: valueColor }}
       >
         {prefix}
@@ -114,7 +114,7 @@ function AnimatedStat({
         {suffix}
       </span>
       <span
-        className="text-sm mt-1"
+        className="text-sm mt-2 font-medium uppercase tracking-wide"
         style={{ color: labelColor }}
       >
         {label}
@@ -177,10 +177,14 @@ export function StatsSectionWidget({ settings, isPreview = false }: StatsSection
     <div
       ref={containerRef}
       className={cn(
-        "grid gap-8",
+        "grid gap-8 pt-8",
         getColumnsClass(),
-        centered && "text-center"
+        centered && "text-center",
+        style.showTopBorder && "border-t"
       )}
+      style={{
+        borderColor: style.showTopBorder ? (style.topBorderColor || "#334155") : undefined,
+      }}
     >
       {stats.map((stat, index) => (
         <div
