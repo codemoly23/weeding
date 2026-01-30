@@ -6,6 +6,7 @@ import {
   Plus,
   MoreHorizontal,
   Edit,
+  Pencil,
   Trash2,
   Copy,
   ExternalLink,
@@ -109,12 +110,17 @@ export default function PagesListPage() {
   const [showCreateDialog, setShowCreateDialog] = useState(false);
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
   const [showTemplateDialog, setShowTemplateDialog] = useState(false);
+  const [showRenameDialog, setShowRenameDialog] = useState(false);
   const [selectedPage, setSelectedPage] = useState<PageData | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   // Create form state
   const [newPageName, setNewPageName] = useState("");
   const [newPageSlug, setNewPageSlug] = useState("");
+
+  // Rename form state
+  const [editPageName, setEditPageName] = useState("");
+  const [editPageSlug, setEditPageSlug] = useState("");
 
   // Template assignment state
   const [selectedTemplateType, setSelectedTemplateType] = useState<string>("");
@@ -310,6 +316,57 @@ export default function PagesListPage() {
     }
   };
 
+  // Rename page handler
+  const handleRenamePage = async () => {
+    if (!selectedPage) return;
+
+    if (!editPageName.trim()) {
+      toast.error("Page name is required");
+      return;
+    }
+
+    if (!editPageSlug.trim()) {
+      toast.error("Page slug is required");
+      return;
+    }
+
+    setIsSubmitting(true);
+    try {
+      const response = await fetch(`/api/admin/pages/${selectedPage.id}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          name: editPageName,
+          slug: editPageSlug,
+        }),
+      });
+
+      if (!response.ok) {
+        const error = await response.json();
+        throw new Error(error.error || "Failed to rename page");
+      }
+
+      const updatedPage = await response.json();
+
+      // Update local state
+      setPages((prev) =>
+        prev.map((p) =>
+          p.id === selectedPage.id
+            ? { ...p, name: updatedPage.name, slug: updatedPage.slug }
+            : p
+        )
+      );
+
+      setShowRenameDialog(false);
+      setSelectedPage(null);
+      toast.success("Page renamed successfully");
+    } catch (error) {
+      toast.error(error instanceof Error ? error.message : "Failed to rename page");
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
   return (
     <div className="container mx-auto py-6">
       <div className="mb-6 flex items-center justify-between">
@@ -474,6 +531,17 @@ export default function PagesListPage() {
                           <DropdownMenuItem
                             onClick={() => {
                               setSelectedPage(page);
+                              setEditPageName(page.name);
+                              setEditPageSlug(page.slug);
+                              setShowRenameDialog(true);
+                            }}
+                          >
+                            <Pencil className="mr-2 h-4 w-4" />
+                            Rename
+                          </DropdownMenuItem>
+                          <DropdownMenuItem
+                            onClick={() => {
+                              setSelectedPage(page);
                               setSelectedTemplateType(page.templateType || "none");
                               setShowTemplateDialog(true);
                             }}
@@ -623,6 +691,50 @@ export default function PagesListPage() {
             <Button onClick={handleAssignTemplate} disabled={isSubmitting}>
               {isSubmitting && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
               {selectedTemplateType && selectedTemplateType !== "none" ? "Assign Template" : "Unassign"}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      {/* Rename Page Dialog */}
+      <Dialog open={showRenameDialog} onOpenChange={setShowRenameDialog}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Rename Page</DialogTitle>
+            <DialogDescription>
+              Update the page name and URL slug.
+            </DialogDescription>
+          </DialogHeader>
+          <div className="space-y-4 py-4">
+            <div className="space-y-2">
+              <Label htmlFor="edit-name">Page Name</Label>
+              <Input
+                id="edit-name"
+                placeholder="e.g., Homepage, Service Details"
+                value={editPageName}
+                onChange={(e) => setEditPageName(e.target.value)}
+              />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="edit-slug">Slug</Label>
+              <Input
+                id="edit-slug"
+                placeholder="e.g., home, services"
+                value={editPageSlug}
+                onChange={(e) => setEditPageSlug(e.target.value)}
+              />
+              <p className="text-xs text-muted-foreground">
+                URL: /{editPageSlug || "slug"}
+              </p>
+            </div>
+          </div>
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setShowRenameDialog(false)}>
+              Cancel
+            </Button>
+            <Button onClick={handleRenamePage} disabled={isSubmitting}>
+              {isSubmitting && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+              Save Changes
             </Button>
           </DialogFooter>
         </DialogContent>

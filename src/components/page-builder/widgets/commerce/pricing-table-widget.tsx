@@ -43,6 +43,7 @@ import type {
   BadgeStyle,
 } from "@/lib/page-builder/types";
 import { DEFAULT_PRICING_TABLE_SETTINGS } from "@/lib/page-builder/defaults";
+import { PricingCardsView } from "./pricing-cards-view";
 
 // =============================================================================
 // TYPES
@@ -634,13 +635,18 @@ function ComparisonTable({
                 className="sticky left-0 z-20 h-6"
                 style={{ backgroundColor: tableStyle.backgroundColor || "#ffffff" }}
               />
-              {packages.map((pkg, index) => (
+              {packages.map((pkg, index) => {
+                const isSelected = pkg.id === selectedPackageId;
+                // Disable default highlightColumn when any package is selected - only selected column gets highlight
+                const isHighlighted = !selectedPackageId && tableHeader.highlightColumn === index;
+                return (
                 <th
                   key={`badge-${pkg.id}`}
                   className="relative h-6 cursor-pointer"
                   style={{
-                    backgroundColor:
-                      tableHeader.highlightColumn === index
+                    backgroundColor: isSelected
+                      ? colors.highlightedColumnBg || "#fff7ed"
+                      : isHighlighted
                         ? tableHeader.highlightColor || "#fff7ed"
                         : tableStyle.backgroundColor || "#ffffff",
                   }}
@@ -666,7 +672,8 @@ function ComparisonTable({
                     </div>
                   )}
                 </th>
-              ))}
+              );
+              })}
             </tr>
 
             {/* Header Row */}
@@ -683,7 +690,8 @@ function ComparisonTable({
               </th>
               {packages.map((pkg, index) => {
                 const isSelected = pkg.id === selectedPackageId;
-                const isHighlighted = tableHeader.highlightColumn === index;
+                // Disable default highlightColumn when any package is selected - only selected column gets highlight
+                const isHighlighted = !selectedPackageId && tableHeader.highlightColumn === index;
                 return (
                   <th
                     key={pkg.id}
@@ -822,7 +830,8 @@ function ComparisonTable({
 
                 {packages.map((pkg, pkgIndex) => {
                   const isSelected = pkg.id === selectedPackageId;
-                  const isHighlighted = tableHeader.highlightColumn === pkgIndex;
+                  // Disable default highlightColumn when any package is selected - only selected column gets highlight
+                  const isHighlighted = !selectedPackageId && tableHeader.highlightColumn === pkgIndex;
                   return (
                     <td
                       key={pkg.id}
@@ -1189,54 +1198,72 @@ export function PricingTableWidget({
         </div>
       )}
 
-      {/* Desktop Layout */}
-      <div className="hidden lg:flex gap-6">
-        <ComparisonTable
+      {/* View Mode: Cards */}
+      {settings.viewMode === "cards" && (
+        <PricingCardsView
           settings={settings}
           features={serviceData.comparisonFeatures}
           packages={serviceData.packages}
           selectedPackageId={selectedPackageId}
           onPackageSelect={handlePackageSelect}
-          stateFee={stateFee}
-          selectedAddons={selectedAddons}
-          onToggleAddon={toggleAddon}
-          isAddonSelected={isAddonSelected}
-          expandedFeature={expandedFeature}
-          onExpandFeature={setExpandedFeature}
-        />
-
-        <OrderSummary
-          settings={settings}
-          selectedPackage={selectedPackage}
           selectedState={selectedState}
           stateFee={stateFee}
-          selectedAddons={selectedAddons}
-          grandTotal={grandTotal}
           serviceSlug={serviceData.slug}
         />
-      </div>
+      )}
 
-      {/* Mobile Layout */}
-      <div className="lg:hidden mt-8">
-        <MobileOrderSummary
-          settings={settings}
-          selectedPackage={selectedPackage}
-          stateFee={stateFee}
-          selectedAddons={selectedAddons}
-          grandTotal={grandTotal}
-          serviceSlug={serviceData.slug}
-          selectedState={selectedState}
-        />
+      {/* View Mode: Table - Desktop Layout */}
+      {settings.viewMode === "table" && (
+        <>
+          <div className="hidden lg:flex gap-6">
+            <ComparisonTable
+              settings={settings}
+              features={serviceData.comparisonFeatures}
+              packages={serviceData.packages}
+              selectedPackageId={selectedPackageId}
+              onPackageSelect={handlePackageSelect}
+              stateFee={stateFee}
+              selectedAddons={selectedAddons}
+              onToggleAddon={toggleAddon}
+              isAddonSelected={isAddonSelected}
+              expandedFeature={expandedFeature}
+              onExpandFeature={setExpandedFeature}
+            />
 
-        <MobilePackageCards
-          settings={settings}
-          packages={serviceData.packages}
-          features={serviceData.comparisonFeatures}
-          selectedPackageId={selectedPackageId}
-          onPackageSelect={handlePackageSelect}
-          stateFee={stateFee}
-        />
-      </div>
+            <OrderSummary
+              settings={settings}
+              selectedPackage={selectedPackage}
+              selectedState={selectedState}
+              stateFee={stateFee}
+              selectedAddons={selectedAddons}
+              grandTotal={grandTotal}
+              serviceSlug={serviceData.slug}
+            />
+          </div>
+
+          {/* View Mode: Table - Mobile Layout */}
+          <div className="lg:hidden mt-8">
+            <MobileOrderSummary
+              settings={settings}
+              selectedPackage={selectedPackage}
+              stateFee={stateFee}
+              selectedAddons={selectedAddons}
+              grandTotal={grandTotal}
+              serviceSlug={serviceData.slug}
+              selectedState={selectedState}
+            />
+
+            <MobilePackageCards
+              settings={settings}
+              packages={serviceData.packages}
+              features={serviceData.comparisonFeatures}
+              selectedPackageId={selectedPackageId}
+              onPackageSelect={handlePackageSelect}
+              stateFee={stateFee}
+            />
+          </div>
+        </>
+      )}
     </div>
   );
 }

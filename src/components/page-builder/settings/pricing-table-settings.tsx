@@ -1,8 +1,9 @@
 "use client";
 
-import { useEffect, useState } from "react";
 import type {
   PricingTableWidgetSettings,
+  PricingViewMode,
+  PricingCardStyleConfig,
   BadgeStyle,
   PricingTableLayoutStyle,
   PricingCardLayoutStyle,
@@ -19,14 +20,7 @@ import {
   TextInput,
 } from "@/app/admin/appearance/landing-page/components/ui/form-controls";
 import { AccordionSection } from "@/app/admin/appearance/landing-page/components/ui/accordion-section";
-import { Label } from "@/components/ui/label";
-
-// Service type
-interface Service {
-  id: string;
-  name: string;
-  slug: string;
-}
+import { ServiceSelector } from "@/components/ui/service-selector";
 
 interface PricingTableWidgetSettingsProps {
   settings: PricingTableWidgetSettings;
@@ -39,9 +33,6 @@ export function PricingTableWidgetSettingsPanel({
   onChange,
   activeTab = "content",
 }: PricingTableWidgetSettingsProps) {
-  const [services, setServices] = useState<Service[]>([]);
-  const [loadingServices, setLoadingServices] = useState(true);
-
   // Merge with defaults
   const s: PricingTableWidgetSettings = {
     ...DEFAULT_PRICING_TABLE_SETTINGS,
@@ -61,6 +52,10 @@ export function PricingTableWidgetSettingsPanel({
         ...DEFAULT_PRICING_TABLE_SETTINGS.header.description,
         ...settings?.header?.description,
       },
+    },
+    cardStyle: {
+      ...DEFAULT_PRICING_TABLE_SETTINGS.cardStyle,
+      ...settings?.cardStyle,
     },
     dataSource: {
       ...DEFAULT_PRICING_TABLE_SETTINGS.dataSource,
@@ -127,30 +122,6 @@ export function PricingTableWidgetSettingsPanel({
       ...settings?.colors,
     },
   };
-
-  // Fetch services
-  useEffect(() => {
-    async function fetchServices() {
-      try {
-        const response = await fetch("/api/services/public?limit=50");
-        if (response.ok) {
-          const data = await response.json();
-          setServices(
-            data.services?.map((svc: { id: string; name: string; slug: string }) => ({
-              id: svc.id,
-              name: svc.name,
-              slug: svc.slug,
-            })) || []
-          );
-        }
-      } catch (err) {
-        console.error("Failed to fetch services:", err);
-      } finally {
-        setLoadingServices(false);
-      }
-    }
-    fetchServices();
-  }, []);
 
   // Update helpers
   const updateHeader = (
@@ -231,6 +202,15 @@ export function PricingTableWidgetSettingsPanel({
     });
   };
 
+  const updateCardStyle = (
+    updates: Partial<PricingCardStyleConfig>
+  ) => {
+    onChange({
+      ...s,
+      cardStyle: { ...s.cardStyle, ...updates },
+    });
+  };
+
   const updateTableStyle = (
     updates: Partial<PricingTableWidgetSettings["tableStyle"]>
   ) => {
@@ -297,21 +277,39 @@ export function PricingTableWidgetSettingsPanel({
   // Content Tab
   const renderContentTab = () => (
     <div className="space-y-3">
+      {/* View Mode */}
+      <AccordionSection title="View Mode" defaultOpen>
+        <div className="space-y-4">
+          <SelectInput
+            label="Display Style"
+            value={s.viewMode}
+            onChange={(v) => onChange({ ...s, viewMode: v as PricingViewMode })}
+            options={[
+              { value: "table", label: "Comparison Table" },
+              { value: "cards", label: "Pricing Cards" },
+            ]}
+          />
+          <p className="text-xs text-muted-foreground">
+            {s.viewMode === "table"
+              ? "Side-by-side feature comparison with sticky headers."
+              : "Modern card layout with individual package details."}
+          </p>
+        </div>
+      </AccordionSection>
+
       {/* Data Source */}
       <AccordionSection title="Data Source" defaultOpen>
         <div className="space-y-4">
-          <SelectInput
-            label="Select Service"
-            value={s.dataSource.serviceSlug || "_none"}
-            onChange={(v) => updateDataSource({ serviceSlug: v === "_none" ? undefined : v })}
-            options={[
-              { value: "_none", label: loadingServices ? "Loading..." : "Select a service" },
-              ...services.map((svc) => ({
-                value: svc.slug,
-                label: svc.name,
-              })),
-            ]}
-          />
+          <div className="space-y-2">
+            <label className="text-sm font-medium text-foreground">
+              Select Service
+            </label>
+            <ServiceSelector
+              value={s.dataSource.serviceSlug || null}
+              onChange={(service) => updateDataSource({ serviceSlug: service?.slug || undefined })}
+              placeholder="Search and select a service..."
+            />
+          </div>
           <p className="text-xs text-muted-foreground">
             Packages and features will be loaded from the selected service.
           </p>
@@ -516,7 +514,124 @@ export function PricingTableWidgetSettingsPanel({
   // Style Tab
   const renderStyleTab = () => (
     <div className="space-y-3">
-      {/* Table Style */}
+      {/* Card Style (shown when viewMode is cards) */}
+      {s.viewMode === "cards" && (
+        <AccordionSection title="Card Style" defaultOpen>
+          <div className="space-y-4">
+            <SelectInput
+              label="Layout"
+              value={s.cardStyle.layout}
+              onChange={(v) =>
+                updateCardStyle({ layout: v as "grid" | "horizontal-scroll" })
+              }
+              options={[
+                { value: "grid", label: "Grid" },
+                { value: "horizontal-scroll", label: "Horizontal Scroll" },
+              ]}
+            />
+            <SelectInput
+              label="Columns (Desktop)"
+              value={s.cardStyle.columns.toString()}
+              onChange={(v) => updateCardStyle({ columns: parseInt(v) as 2 | 3 | 4 })}
+              options={[
+                { value: "2", label: "2 Columns" },
+                { value: "3", label: "3 Columns" },
+                { value: "4", label: "4 Columns" },
+              ]}
+            />
+            <NumberInput
+              label="Gap Between Cards"
+              value={s.cardStyle.gap}
+              onChange={(v) => updateCardStyle({ gap: v })}
+              min={8}
+              max={48}
+            />
+            <NumberInput
+              label="Card Border Radius"
+              value={s.cardStyle.cardBorderRadius}
+              onChange={(v) => updateCardStyle({ cardBorderRadius: v })}
+              min={0}
+              max={24}
+            />
+            <SelectInput
+              label="Card Shadow"
+              value={s.cardStyle.cardShadow}
+              onChange={(v) =>
+                updateCardStyle({ cardShadow: v as "none" | "sm" | "md" | "lg" | "xl" })
+              }
+              options={[
+                { value: "none", label: "None" },
+                { value: "sm", label: "Small" },
+                { value: "md", label: "Medium" },
+                { value: "lg", label: "Large" },
+                { value: "xl", label: "Extra Large" },
+              ]}
+            />
+            <SelectInput
+              label="Popular Card Style"
+              value={s.cardStyle.popularCardStyle}
+              onChange={(v) =>
+                updateCardStyle({
+                  popularCardStyle: v as "ring" | "elevated" | "gradient-border" | "glow",
+                })
+              }
+              options={[
+                { value: "ring", label: "Ring Border" },
+                { value: "elevated", label: "Elevated" },
+                { value: "gradient-border", label: "Gradient Border" },
+                { value: "glow", label: "Glow Effect" },
+              ]}
+            />
+            <SelectInput
+              label="Price Size"
+              value={s.cardStyle.priceSize}
+              onChange={(v) =>
+                updateCardStyle({ priceSize: v as "sm" | "md" | "lg" | "xl" })
+              }
+              options={[
+                { value: "sm", label: "Small" },
+                { value: "md", label: "Medium" },
+                { value: "lg", label: "Large" },
+                { value: "xl", label: "Extra Large" },
+              ]}
+            />
+            <SelectInput
+              label="Feature List Style"
+              value={s.cardStyle.featureListStyle}
+              onChange={(v) =>
+                updateCardStyle({ featureListStyle: v as "compact" | "spacious" })
+              }
+              options={[
+                { value: "compact", label: "Compact" },
+                { value: "spacious", label: "Spacious" },
+              ]}
+            />
+            <ToggleSwitch
+              label="Show Processing Time"
+              checked={s.cardStyle.showProcessingTime}
+              onChange={(checked) => updateCardStyle({ showProcessingTime: checked })}
+            />
+            <ToggleSwitch
+              label="Show Total Price"
+              checked={s.cardStyle.showTotalPrice}
+              onChange={(checked) => updateCardStyle({ showTotalPrice: checked })}
+            />
+            <ColorInput
+              label="Card Background"
+              value={s.cardStyle.cardBackgroundColor || "#ffffff"}
+              onChange={(v) => updateCardStyle({ cardBackgroundColor: v })}
+            />
+            <ColorInput
+              label="Card Border Color"
+              value={s.cardStyle.cardBorderColor || "#e2e8f0"}
+              onChange={(v) => updateCardStyle({ cardBorderColor: v })}
+            />
+          </div>
+        </AccordionSection>
+      )}
+
+      {/* Table Style (shown when viewMode is table) */}
+      {s.viewMode === "table" && (
       <AccordionSection title="Table Style" defaultOpen>
         <div className="space-y-4">
           <SelectInput
@@ -574,6 +689,7 @@ export function PricingTableWidgetSettingsPanel({
           />
         </div>
       </AccordionSection>
+      )}
 
       {/* Header Style */}
       {s.header.show && (

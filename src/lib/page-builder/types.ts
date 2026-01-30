@@ -1721,9 +1721,40 @@ export interface PricingCTARowConfig {
 }
 
 /**
+ * Pricing View Mode
+ */
+export type PricingViewMode = "table" | "cards";
+
+/**
+ * Card Style Settings (for cards view mode)
+ */
+export interface PricingCardStyleConfig {
+  layout: "grid" | "horizontal-scroll";  // Grid or swipeable
+  columns: 2 | 3 | 4;                     // Desktop columns
+  gap: number;                            // Gap between cards in px
+  cardBorderRadius: number;
+  cardBorderWidth: number;
+  cardBorderColor?: string;
+  cardBackgroundColor?: string;
+  cardShadow: "none" | "sm" | "md" | "lg" | "xl";
+  popularCardStyle: "ring" | "elevated" | "gradient-border" | "glow";
+  showProcessingTime: boolean;
+  showTotalPrice: boolean;
+  priceSize: "sm" | "md" | "lg" | "xl";
+  featureListStyle: "compact" | "spacious";
+  ctaStyle: "full-width" | "auto";
+}
+
+/**
  * Main Pricing Table Widget Settings
  */
 export interface PricingTableWidgetSettings {
+  // View Mode (table or cards)
+  viewMode: PricingViewMode;
+
+  // Card Style Settings (when viewMode is "cards")
+  cardStyle: PricingCardStyleConfig;
+
   // Header Section (above table)
   header: {
     show: boolean;

@@ -873,6 +873,27 @@ export const DEFAULT_PROCESS_STEPS_SETTINGS: ProcessStepsWidgetSettings = {
 };
 
 export const DEFAULT_PRICING_TABLE_SETTINGS: PricingTableWidgetSettings = {
+  // View Mode
+  viewMode: "table",
+
+  // Card Style Settings (when viewMode is "cards")
+  cardStyle: {
+    layout: "grid",
+    columns: 3,
+    gap: 24,
+    cardBorderRadius: 12,
+    cardBorderWidth: 1,
+    cardBorderColor: "#e2e8f0",
+    cardBackgroundColor: "#ffffff",
+    cardShadow: "sm",
+    popularCardStyle: "ring",
+    showProcessingTime: true,
+    showTotalPrice: true,
+    priceSize: "lg",
+    featureListStyle: "compact",
+    ctaStyle: "full-width",
+  },
+
   // Header Section
   header: {
     show: true,
