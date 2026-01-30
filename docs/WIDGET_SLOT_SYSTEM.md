@@ -949,6 +949,671 @@ interface TestimonialWidget {
 }
 ```
 
+### 8. Heading Widget
+
+Modern, feature-rich heading widget inspired by Elementor, Webflow, Divi, and Framer (2025 analysis). Designed for flexible typography with animations, gradients, and advanced text effects.
+
+#### Research Summary (2025 Page Builder Analysis)
+
+| Source | Key Insights |
+|--------|--------------|
+| **[Elementor](https://elementor.com/help/heading-widget/)** | Typography controls (family, weight, size, line-height, letter-spacing), responsive sizes, text shadow, HTML tags, link option |
+| **[Webflow](https://help.webflow.com/hc/en-us/articles/33961334261779-Advanced-web-typography)** | Text fills (color, gradient, image), animated gradients, spans for highlighting, CH units for max-width |
+| **[Divi](https://diviflash.com/modules/advanced-heading/)** | Multi-heading (per-word styling), animated text (9 effects), dual colors, text stroke, gradient text, divider integration |
+| **[Framer](https://www.framer.com/blog/text-animations/)** | Split text animation (char/word), text reveal on scroll, staggered animations, blur/fade effects |
+| **[ThePlus Addons](https://theplusaddons.com/elementor-widget/heading-titles/)** | Advanced effects, marquee text, highlight animations |
+
+#### Design Principles
+
+1. **Progressive Complexity**: Basic settings first, advanced options expandable
+2. **Responsive First**: Per-device typography controls (desktop/tablet/mobile)
+3. **Performance**: CSS-only animations where possible, lazy-load GSAP for complex effects
+4. **Accessibility**: Semantic HTML tags, proper contrast, reduced-motion support
+5. **Composable**: Can combine multiple effects (gradient + shadow + animation)
+
+```typescript
+// === HEADING WIDGET SETTINGS ===
+interface HeadingWidgetSettings {
+  // === CONTENT TAB ===
+  content: {
+    // Main text
+    text: string;
+
+    // HTML tag (semantic heading or display element)
+    htmlTag: "h1" | "h2" | "h3" | "h4" | "h5" | "h6" | "div" | "span" | "p";
+
+    // Link (make heading clickable)
+    link?: {
+      url: string;
+      openInNewTab: boolean;
+    };
+
+    // Highlight specific words (comma-separated)
+    highlight?: {
+      enabled: boolean;
+      words: string;           // "US Business, LLC" (comma-separated)
+      style: HighlightStyle;
+    };
+
+    // Split heading (Divi-style multi-part heading)
+    splitHeading?: {
+      enabled: boolean;
+      beforeText: string;      // "Start Your"
+      mainText: string;        // "US Business"
+      afterText: string;       // "Today"
+      // Each part can have different styling
+    };
+  };
+
+  // === STYLE TAB ===
+  style: {
+    // Alignment
+    alignment: "left" | "center" | "right";
+
+    // Typography
+    typography: TypographySettings;
+
+    // Text Color/Fill
+    textFill: TextFillSettings;
+
+    // Text Effects
+    textStroke?: TextStrokeSettings;
+    textShadow?: TextShadowSettings;
+
+    // Highlight styling (when highlight.enabled = true)
+    highlightStyle?: {
+      color?: string;
+      backgroundColor?: string;
+      backgroundType?: "solid" | "gradient" | "marker";
+      gradientColors?: string[];
+      padding?: string;          // "0 4px"
+      borderRadius?: number;
+    };
+
+    // Split heading styles (when splitHeading.enabled = true)
+    splitStyles?: {
+      before: Partial<TypographySettings> & { color?: string };
+      main: Partial<TypographySettings> & { color?: string };
+      after: Partial<TypographySettings> & { color?: string };
+    };
+  };
+
+  // === ANIMATION TAB ===
+  animation?: {
+    // Entrance animation (triggered on scroll into view)
+    entrance?: {
+      enabled: boolean;
+      type: EntranceAnimationType;
+      duration: number;        // ms (default: 600)
+      delay: number;           // ms (default: 0)
+      easing: EasingType;
+    };
+
+    // Text animation (split text effects)
+    textAnimation?: {
+      enabled: boolean;
+      type: TextAnimationType;
+      splitBy: "characters" | "words" | "lines";
+      staggerDelay: number;    // ms between each item (default: 50)
+      duration: number;        // ms per item
+      easing: EasingType;
+      loop: boolean;           // For rotating/typing effects
+      loopDelay?: number;      // Delay between loops
+    };
+
+    // Continuous animation (always running)
+    continuousAnimation?: {
+      enabled: boolean;
+      type: ContinuousAnimationType;
+      duration: number;
+      // For gradient-shift
+      gradientColors?: string[];
+      gradientAngle?: number;
+    };
+
+    // Hover animation
+    hoverAnimation?: {
+      enabled: boolean;
+      type: HoverAnimationType;
+      duration: number;
+    };
+  };
+
+  // === RESPONSIVE TAB ===
+  responsive?: {
+    desktop: ResponsiveOverrides;
+    tablet?: ResponsiveOverrides;
+    mobile?: ResponsiveOverrides;
+  };
+
+  // === ADVANCED TAB ===
+  advanced?: {
+    // CSS classes
+    customClass?: string;
+
+    // Max width (for readability)
+    maxWidth?: {
+      enabled: boolean;
+      value: number;
+      unit: "px" | "ch" | "%" | "vw";  // ch = character width (Webflow style)
+    };
+
+    // Visibility
+    hideOnDesktop: boolean;
+    hideOnTablet: boolean;
+    hideOnMobile: boolean;
+
+    // Attributes
+    customId?: string;
+    customAttributes?: Record<string, string>;
+  };
+}
+
+// === TYPOGRAPHY SETTINGS ===
+interface TypographySettings {
+  fontFamily?: string;         // Google Font or system font
+  fontSize: number;
+  fontSizeUnit: "px" | "em" | "rem" | "vw";
+  fontWeight: 100 | 200 | 300 | 400 | 500 | 600 | 700 | 800 | 900;
+  fontStyle: "normal" | "italic";
+  textTransform: "none" | "uppercase" | "lowercase" | "capitalize";
+  textDecoration: "none" | "underline" | "line-through";
+  lineHeight: number;          // Unitless (1.2, 1.5, etc.)
+  letterSpacing: number;       // px or em
+  letterSpacingUnit: "px" | "em";
+  wordSpacing?: number;        // px
+}
+
+// === TEXT FILL SETTINGS ===
+interface TextFillSettings {
+  type: "solid" | "gradient" | "image";
+
+  // Solid color
+  color?: string;
+
+  // Gradient fill
+  gradient?: {
+    type: "linear" | "radial";
+    angle: number;             // For linear (0-360)
+    colors: Array<{
+      color: string;
+      position: number;        // 0-100
+    }>;
+  };
+
+  // Image fill (knockout text)
+  image?: {
+    url: string;
+    size: "cover" | "contain" | "auto";
+    position: "center" | "top" | "bottom";
+    fixed: boolean;            // Parallax effect
+  };
+}
+
+// === TEXT STROKE (OUTLINE) ===
+interface TextStrokeSettings {
+  enabled: boolean;
+  width: number;               // px (typically 1-5)
+  color: string;
+  fillColor?: string;          // Optional: make text transparent to show only stroke
+}
+
+// === TEXT SHADOW ===
+interface TextShadowSettings {
+  enabled: boolean;
+  shadows: Array<{
+    offsetX: number;           // px
+    offsetY: number;           // px
+    blur: number;              // px
+    color: string;
+  }>;
+}
+
+// === HIGHLIGHT STYLES ===
+type HighlightStyle =
+  | "color"              // Just different color
+  | "background"         // Background color
+  | "gradient"           // Gradient background
+  | "underline"          // Animated underline
+  | "marker"             // Marker/highlighter effect
+  | "glow";              // Glow effect
+
+// === ANIMATION TYPES ===
+
+// Entrance animations (scroll-triggered)
+type EntranceAnimationType =
+  | "none"
+  | "fade"
+  | "fade-up"
+  | "fade-down"
+  | "fade-left"
+  | "fade-right"
+  | "zoom-in"
+  | "zoom-out"
+  | "slide-up"
+  | "slide-down"
+  | "flip"
+  | "bounce";
+
+// Text animations (split text)
+type TextAnimationType =
+  | "none"
+  | "fade-in"            // Each char/word fades in
+  | "slide-up"           // Each char/word slides up
+  | "slide-down"         // Each char/word slides down
+  | "scale"              // Each char/word scales in
+  | "rotate"             // Each char/word rotates in
+  | "blur-in"            // Each char/word blurs in (Framer style)
+  | "typewriter"         // Typing effect
+  | "wave"               // Wave animation (Divi style)
+  | "bounce"             // Bounce in
+  | "elastic"            // Elastic spring
+  | "glitch"             // Glitch effect
+  | "scramble";          // Text scramble/decode
+
+// Continuous animations (always running)
+type ContinuousAnimationType =
+  | "none"
+  | "gradient-shift"     // Animated gradient (Webflow style)
+  | "pulse"              // Subtle pulse
+  | "glow"               // Pulsing glow
+  | "shimmer"            // Shimmer/shine effect
+  | "float";             // Gentle floating
+
+// Hover animations
+type HoverAnimationType =
+  | "none"
+  | "color-change"
+  | "underline-grow"
+  | "background-fill"
+  | "scale"
+  | "letter-spacing"
+  | "glow";
+
+// Easing types
+type EasingType =
+  | "linear"
+  | "ease"
+  | "ease-in"
+  | "ease-out"
+  | "ease-in-out"
+  | "bounce"
+  | "elastic"
+  | "back";
+
+// Responsive overrides
+interface ResponsiveOverrides {
+  fontSize?: number;
+  fontSizeUnit?: "px" | "em" | "rem" | "vw";
+  lineHeight?: number;
+  letterSpacing?: number;
+  alignment?: "left" | "center" | "right";
+  textAlign?: "left" | "center" | "right";
+}
+```
+
+#### Heading Widget Features Summary
+
+| Category | Features |
+|----------|----------|
+| **Typography** | Font family (Google Fonts), size (px/em/rem/vw), weight (100-900), style, transform, decoration, line-height, letter-spacing |
+| **Text Fill** | Solid color, linear/radial gradient, image fill (knockout text) |
+| **Text Effects** | Stroke/outline (width + color), shadows (multiple layers), glow |
+| **Highlighting** | Per-word styling, color, background, gradient, underline, marker effect |
+| **Split Heading** | 3-part heading with independent styling per part (Divi Multi-Heading style) |
+| **Entrance Animations** | 12 types: fade, slide, zoom, flip, bounce - scroll triggered |
+| **Text Animations** | 12 types: typewriter, wave, blur-in, glitch, scramble - split by char/word/line |
+| **Continuous Animations** | Gradient shift, pulse, glow, shimmer, float |
+| **Hover Effects** | Color change, underline grow, background fill, scale, letter-spacing |
+| **Responsive** | Per-device typography overrides (desktop/tablet/mobile) |
+| **Advanced** | Max-width (px/ch/%/vw), custom classes, visibility toggles |
+
+#### Implementation Architecture
+
+```
+src/
+├── components/
+│   └── page-builder/
+│       ├── widgets/
+│       │   └── content/
+│       │       └── heading-widget.tsx      # Main widget component
+│       │
+│       └── settings/
+│           └── widget-settings/
+│               └── heading-settings/
+│                   ├── index.tsx           # Main settings panel
+│                   ├── content-tab.tsx     # Text, HTML tag, link, highlight
+│                   ├── style-tab.tsx       # Typography, fill, effects
+│                   ├── animation-tab.tsx   # All animation controls
+│                   └── responsive-tab.tsx  # Per-device overrides
+│
+├── lib/
+│   └── page-builder/
+│       ├── types.ts                        # HeadingWidgetSettings interface
+│       ├── defaults.ts                     # DEFAULT_HEADING_SETTINGS
+│       └── animations/
+│           ├── text-animations.ts          # Split text animation utilities
+│           └── entrance-animations.ts      # Intersection Observer based
+│
+└── styles/
+    └── heading-animations.css              # CSS keyframes for animations
+```
+
+#### CSS Animation Examples
+
+```css
+/* Gradient Shift Animation (Webflow style) */
+@keyframes gradient-shift {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+.heading-gradient-animated {
+  background: linear-gradient(90deg, var(--color-1), var(--color-2), var(--color-1));
+  background-size: 200% 100%;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: gradient-shift 3s ease infinite;
+}
+
+/* Text Stroke (Outline) */
+.heading-stroke {
+  -webkit-text-stroke: var(--stroke-width) var(--stroke-color);
+  -webkit-text-fill-color: var(--fill-color, transparent);
+}
+
+/* Marker Highlight Effect */
+.heading-highlight-marker {
+  background: linear-gradient(
+    to bottom,
+    transparent 50%,
+    var(--highlight-color) 50%
+  );
+  padding: 0 4px;
+}
+
+/* Split Text Animation (Framer style) */
+.heading-char {
+  display: inline-block;
+  opacity: 0;
+  transform: translateY(20px);
+  animation: char-reveal 0.5s ease forwards;
+  animation-delay: calc(var(--char-index) * 50ms);
+}
+
+@keyframes char-reveal {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Typewriter Effect */
+@keyframes typewriter {
+  from { width: 0; }
+  to { width: 100%; }
+}
+
+.heading-typewriter {
+  overflow: hidden;
+  white-space: nowrap;
+  animation: typewriter 2s steps(var(--char-count)) forwards;
+  border-right: 2px solid currentColor;
+}
+
+/* Wave Animation (Divi style) */
+.heading-wave .char {
+  display: inline-block;
+  animation: wave 1s ease-in-out infinite;
+  animation-delay: calc(var(--char-index) * 0.1s);
+}
+
+@keyframes wave {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
+
+/* Glitch Effect */
+@keyframes glitch {
+  0%, 90%, 100% { transform: translate(0); }
+  20% { transform: translate(-2px, 2px); }
+  40% { transform: translate(-2px, -2px); }
+  60% { transform: translate(2px, 2px); }
+  80% { transform: translate(2px, -2px); }
+}
+
+.heading-glitch {
+  position: relative;
+}
+
+.heading-glitch::before,
+.heading-glitch::after {
+  content: attr(data-text);
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.heading-glitch::before {
+  animation: glitch 0.3s infinite;
+  color: #ff00ff;
+  z-index: -1;
+  left: 2px;
+}
+
+.heading-glitch::after {
+  animation: glitch 0.3s infinite reverse;
+  color: #00ffff;
+  z-index: -2;
+  left: -2px;
+}
+```
+
+#### React Implementation Pattern
+
+```typescript
+// Split text utility for character/word animations
+function splitText(text: string, splitBy: "characters" | "words" | "lines"): string[] {
+  switch (splitBy) {
+    case "characters":
+      return text.split("");
+    case "words":
+      return text.split(" ");
+    case "lines":
+      return text.split("\n");
+    default:
+      return [text];
+  }
+}
+
+// Heading Widget Component
+export function HeadingWidget({ settings }: { settings: HeadingWidgetSettings }) {
+  const Tag = settings.content.htmlTag as keyof JSX.IntrinsicElements;
+  const ref = useRef<HTMLElement>(null);
+
+  // Intersection Observer for entrance animation
+  useEffect(() => {
+    if (!settings.animation?.entrance?.enabled) return;
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          ref.current?.classList.add("animate-in");
+          observer.disconnect();
+        }
+      },
+      { threshold: 0.1 }
+    );
+
+    if (ref.current) observer.observe(ref.current);
+    return () => observer.disconnect();
+  }, []);
+
+  // Text animation rendering
+  const renderAnimatedText = () => {
+    if (!settings.animation?.textAnimation?.enabled) {
+      return renderHighlightedText(settings.content.text);
+    }
+
+    const parts = splitText(
+      settings.content.text,
+      settings.animation.textAnimation.splitBy
+    );
+
+    return parts.map((part, index) => (
+      <span
+        key={index}
+        className="heading-char"
+        style={{ "--char-index": index } as React.CSSProperties}
+      >
+        {part}
+        {settings.animation?.textAnimation?.splitBy === "words" && " "}
+      </span>
+    ));
+  };
+
+  return (
+    <Tag
+      ref={ref}
+      className={cn(
+        "heading-widget",
+        getAlignmentClass(settings.style.alignment),
+        getEntranceClass(settings.animation?.entrance),
+        getTextFillClass(settings.style.textFill),
+        settings.advanced?.customClass
+      )}
+      style={{
+        ...getTypographyStyles(settings.style.typography),
+        ...getTextFillStyles(settings.style.textFill),
+        ...getTextStrokeStyles(settings.style.textStroke),
+        ...getTextShadowStyles(settings.style.textShadow),
+      }}
+    >
+      {renderAnimatedText()}
+    </Tag>
+  );
+}
+```
+
+#### Settings Panel UI Mock
+
+```
+┌─────────────────────────────────────┐
+│ ← Back           Heading        :   │
+├─────────────────────────────────────┤
+│ Content │ Style │ Animation │ Adv.  │
+├─────────────────────────────────────┤
+│                                     │
+│ Text                                │
+│ ┌─────────────────────────────────┐ │
+│ │ Start Your US Business Today   │ │
+│ └─────────────────────────────────┘ │
+│                                     │
+│ HTML Tag                            │
+│ ┌───────────────────────────┬─────┐ │
+│ │ H2                        │ ▼   │ │
+│ └───────────────────────────┴─────┘ │
+│                                     │
+│ ▼ Highlight Words                   │
+│   ☑ Enable Highlighting            │
+│   Words  [US Business, Today]      │
+│   Style  [Gradient ▼]              │
+│                                     │
+│ ▼ Link                              │
+│   URL    [https://...]             │
+│   ☐ Open in New Tab                │
+│                                     │
+└─────────────────────────────────────┘
+
+┌─────────────────────────────────────┐
+│ Content │ Style │ Animation │ Adv.  │
+├─────────────────────────────────────┤
+│                                     │
+│ Alignment                           │
+│ [◀ Left] [Center] [Right ▶]       │
+│                                     │
+│ ▼ Typography                        │
+│   Font Family  [Inter ▼]           │
+│   Size         [48] [px ▼]         │
+│   Weight       [700 Bold ▼]        │
+│   Line Height  [1.2]               │
+│   Letter Spacing [0] px            │
+│   Transform    [None ▼]            │
+│                                     │
+│ ▼ Text Fill                         │
+│   ○ Solid  ● Gradient  ○ Image    │
+│   ┌─────────────────────────────┐  │
+│   │ ████████████████████████████│  │
+│   │ #F97316 ──────── #EF4444   │  │
+│   └─────────────────────────────┘  │
+│   Angle [90°]                       │
+│                                     │
+│ ▼ Text Stroke                       │
+│   ☐ Enable Stroke                  │
+│   Width [2] px                      │
+│   Color [████] #ffffff              │
+│                                     │
+│ ▼ Text Shadow                       │
+│   ☑ Enable Shadow                  │
+│   + Add Shadow                      │
+│   ┌─────────────────────────────┐  │
+│   │ X: 0  Y: 4  Blur: 10  #000 │  │
+│   └─────────────────────────────┘  │
+│                                     │
+└─────────────────────────────────────┘
+
+┌─────────────────────────────────────┐
+│ Content │ Style │ Animation │ Adv.  │
+├─────────────────────────────────────┤
+│                                     │
+│ ▼ Entrance Animation                │
+│   ☑ Enable                         │
+│   Type      [Fade Up ▼]            │
+│   Duration  [600] ms                │
+│   Delay     [0] ms                  │
+│   Easing    [Ease Out ▼]           │
+│                                     │
+│ ▼ Text Animation                    │
+│   ☑ Enable                         │
+│   Type      [Blur In ▼]            │
+│   Split By  [Words ▼]              │
+│   Stagger   [50] ms                 │
+│   Duration  [400] ms                │
+│   ☐ Loop Animation                 │
+│                                     │
+│ ▼ Continuous Animation              │
+│   ☐ Enable                         │
+│   Type      [Gradient Shift ▼]     │
+│                                     │
+│ ▼ Hover Animation                   │
+│   ☐ Enable                         │
+│   Type      [Underline Grow ▼]     │
+│                                     │
+└─────────────────────────────────────┘
+```
+
+#### Performance Best Practices
+
+1. **CSS-First Animations**: Use CSS keyframes for simple animations
+2. **Lazy Load GSAP**: Only load for complex text animations (glitch, scramble)
+3. **Intersection Observer**: Trigger entrance animations only when visible
+4. **Will-Change Hints**: Use `will-change: transform, opacity` sparingly
+5. **Reduced Motion**: Respect `prefers-reduced-motion` media query
+
+```typescript
+// Reduced motion support
+const prefersReducedMotion = window.matchMedia(
+  "(prefers-reduced-motion: reduce)"
+).matches;
+
+if (prefersReducedMotion) {
+  // Disable or simplify animations
+}
+```
+
 ---
 
 ## Widget Browser UI
@@ -1224,7 +1889,7 @@ model LandingPage {
 - [x] Image widget (comprehensive modern features)
 - [x] Trust Badges widget
 - [x] Stats Section widget
-- [x] Heading widget
+- [x] **Heading widget** (v3.2 - comprehensive modern features, see spec below)
 - [x] Text Block widget
 - [x] Divider widget (10 styles including gradient, dotted, icon, text)
 
@@ -1288,6 +1953,23 @@ model LandingPage {
 
 ## Changelog
 
+### v3.2 (2026-01-23)
+- **Heading Widget**: Complete rewrite with modern 2025 page builder features
+  - Based on analysis of: Elementor, Webflow, Divi, Framer, ThePlus Addons
+  - Typography: Full control (family, size in px/em/rem/vw, weight, line-height, letter-spacing)
+  - Text Fill: Solid color, linear/radial gradient, image fill (knockout text)
+  - Text Effects: Stroke/outline, multiple text shadows, glow
+  - Highlighting: Per-word styling with 6 styles (color, background, gradient, underline, marker, glow)
+  - Split Heading: 3-part heading with independent styling (Divi Multi-Heading style)
+  - Entrance Animations: 12 types (fade, slide, zoom, flip, bounce) - scroll triggered
+  - Text Animations: 12 types (typewriter, wave, blur-in, glitch, scramble) - split by char/word/line
+  - Continuous Animations: Gradient shift, pulse, glow, shimmer, float
+  - Hover Effects: Color change, underline grow, background fill, scale, letter-spacing
+  - Responsive: Per-device typography overrides (desktop/tablet/mobile)
+  - Advanced: Max-width (px/ch/%/vw), custom classes, visibility toggles
+  - Accessibility: Semantic HTML tags, reduced-motion support
+  - Performance: CSS-first animations, lazy GSAP loading, Intersection Observer
+
 ### v3.1 (2026-01-12)
 - **Image Slider Widget**: Comprehensive specification added
   - 6 slider types: Standard, Hero, Carousel, Gallery, Split-screen, Vertical
@@ -1318,4 +2000,4 @@ model LandingPage {
 - Widget registry system
 - Core widgets implementation
 
-*Document Version: 3.1 - Image Slider Widget Specification*
+*Document Version: 3.2 - Heading Widget Specification (2025 Page Builder Analysis)*
