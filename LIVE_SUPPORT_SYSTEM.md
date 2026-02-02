@@ -115,9 +115,9 @@ A modern, real-time customer support system combining:
 ## 🏗️ Technical Architecture
 
 ### Frontend Stack:
-- **Framework**: Next.js 16 (App Router)
-- **UI Library**: React 18 + TypeScript
-- **Styling**: Tailwind CSS 4
+- **Framework**: Next.js 16.0.7+ (PATCHED for CVE-2025-66478)
+- **UI Library**: React 19.2.3+ + TypeScript (PATCHED for CVE-2025-55182 React2Shell)
+- **Styling**: Tailwind CSS 4.1
 - **Components**: shadcn/ui
 - **Real-time**: Socket.io (self-hosted, free)
 - **State Management**: React Context + Zustand

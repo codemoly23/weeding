@@ -78,6 +78,9 @@ The License Server is a **standalone application** that handles:
 
 ### 2026 Latest Stack
 
+> ⚠️ **SECURITY NOTICE**: React2Shell (CVE-2025-55182) এবং Next.js RCE (CVE-2025-66478)
+> vulnerabilities December 2025 এ discover হয়েছে। নিচের versions গুলো patched।
+
 ```
 ┌─────────────────────────────────────────────────────────────────────────┐
 │                    LICENSE SERVER TECH STACK                             │
@@ -85,10 +88,10 @@ The License Server is a **standalone application** that handles:
 │                                                                          │
 │  FRAMEWORK & RUNTIME                                                     │
 │  ───────────────────                                                     │
-│  • Next.js 16.0.7+          (App Router, Server Components)             │
-│  • React 19                 (Latest stable)                              │
+│  • Next.js 16.0.7+          (PATCHED - CVE-2025-66478 fix)              │
+│  • React 19.2.3+            (PATCHED - CVE-2025-55182 React2Shell fix)  │
 │  • TypeScript 5.9           (Strict mode)                                │
-│  • Node.js 22 LTS           (Latest LTS)                                 │
+│  • Node.js 22 LTS           (January 2026 security release)             │
 │                                                                          │
 │  DATABASE                                                                │
 │  ────────                                                                │
@@ -146,9 +149,9 @@ The License Server is a **standalone application** that handles:
   },
   "dependencies": {
     "next": "^16.0.7",
-    "react": "^19.0.0",
-    "react-dom": "^19.0.0",
-    "@prisma/client": "^7.0.0",
+    "react": "^19.2.3",
+    "react-dom": "^19.2.3",
+    "@prisma/client": "^7.2.0",
     "next-auth": "^5.0.0",
     "@auth/prisma-adapter": "^2.0.0",
     "jose": "^5.0.0",
@@ -165,7 +168,7 @@ The License Server is a **standalone application** that handles:
   },
   "devDependencies": {
     "typescript": "^5.9.0",
-    "prisma": "^7.0.0",
+    "prisma": "^7.2.0",
     "@types/node": "^22.0.0",
     "@types/react": "^19.0.0",
     "@types/bcrypt": "^5.0.0",
