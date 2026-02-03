@@ -227,7 +227,8 @@ export function AdminSidebar() {
   }, [isPageBuilder]);
 
   // Combine static nav items with plugin menu items
-  const allNavItems = [...navItems.slice(0, -1), ...pluginMenuItems, navItems[navItems.length - 1]];
+  // Insert plugin items before Appearance and Settings (last 2 items)
+  const allNavItems = [...navItems.slice(0, -2), ...pluginMenuItems, ...navItems.slice(-2)];
 
   const handleCollapsedChange = (value: boolean) => {
     setCollapsed(value);

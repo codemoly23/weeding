@@ -7,7 +7,7 @@
 // ============================================
 
 // Message types
-export interface ChatMessage {
+export interface SocketChatMessage {
   id: string;
   ticketId: string;
   content: string;
@@ -86,8 +86,8 @@ export interface ClientToServerEvents {
 // Server → Client events
 export interface ServerToClientEvents {
   // Messages
-  'message:new': (message: ChatMessage) => void;
-  'message:updated': (message: ChatMessage) => void;
+  'message:new': (message: SocketChatMessage) => void;
+  'message:updated': (message: SocketChatMessage) => void;
   'message:deleted': (messageId: string) => void;
 
   // Typing

@@ -1,7 +1,7 @@
 // AI Suggestions API - Generate suggestions for agents
 import { NextRequest, NextResponse } from 'next/server';
-import { prisma } from '@livesupport-pro/database';
-import { createAIChatService } from '@livesupport-pro/ai';
+import { prisma } from '@livesupport/database';
+import { createAIChatService } from '@livesupport/ai';
 import { z } from 'zod';
 
 const suggestSchema = z.object({

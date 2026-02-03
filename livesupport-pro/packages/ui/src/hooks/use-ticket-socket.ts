@@ -11,7 +11,7 @@ import {
   MESSAGE_EVENTS,
   TICKET_EVENTS,
   AUTH_EVENTS,
-  type ChatMessage,
+  type SocketChatMessage,
   type TypingData,
 } from '@livesupport/core';
 
@@ -32,7 +32,7 @@ export interface UseTicketSocketReturn {
   socket: Socket | null;
   isConnected: boolean;
   isAuthenticated: boolean;
-  messages: ChatMessage[];
+  messages: SocketChatMessage[];
   typingUsers: string[];
   sendMessage: (content: string, attachments?: string[]) => void;
   startTyping: () => void;
@@ -54,7 +54,7 @@ export function useTicketSocket(options: UseTicketSocketOptions): UseTicketSocke
   const socketRef = useRef<Socket | null>(null);
   const [isConnected, setIsConnected] = useState(false);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [messages, setMessages] = useState<ChatMessage[]>([]);
+  const [messages, setMessages] = useState<SocketChatMessage[]>([]);
   const [typingUsers, setTypingUsers] = useState<Map<string, string>>(new Map());
   const [error, setError] = useState<string | null>(null);
 
@@ -125,7 +125,7 @@ export function useTicketSocket(options: UseTicketSocketOptions): UseTicketSocke
     });
 
     // Message events
-    socket.on(MESSAGE_EVENTS.NEW, (message: ChatMessage) => {
+    socket.on(MESSAGE_EVENTS.NEW, (message: SocketChatMessage) => {
       if (message.ticketId === ticketId) {
         setMessages((prev) => {
           // Avoid duplicates

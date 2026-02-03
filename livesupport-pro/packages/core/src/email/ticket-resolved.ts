@@ -22,8 +22,9 @@ export function getTicketResolvedEmail(data: TicketResolvedEmailData): {
     summary,
     feedbackUrl,
     brandName = 'Support',
-    brandColor = '#2563eb',
+    // brandColor reserved for future use
   } = data;
+  void data.brandColor;
 
   const html = `
 <!DOCTYPE html>

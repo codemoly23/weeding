@@ -7,6 +7,7 @@ import type { LicenseStatus, LicenseTier } from '@prisma/client';
 // GET /api/licenses - List licenses with pagination
 export async function GET(request: NextRequest) {
   const session = await auth();
+  console.log('[API /licenses GET] Session:', session ? { id: session.user?.id, email: session.user?.email } : 'null');
   if (!session) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
   }
@@ -42,6 +43,7 @@ export async function GET(request: NextRequest) {
 // POST /api/licenses - Create new license
 export async function POST(request: NextRequest) {
   const session = await auth();
+  console.log('[API /licenses POST] Session:', session ? { id: session.user?.id, email: session.user?.email } : 'null');
   if (!session) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
   }

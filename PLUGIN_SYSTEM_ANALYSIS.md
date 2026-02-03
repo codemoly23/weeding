@@ -648,3 +648,307 @@ Files removed:
 2. Implement Plugin ZIP Upload system (Section 4 of this document)
 3. Add license activation flow
 4. Test real-time socket connections
+
+---
+
+## 10. Dynamic Plugin Page Loading System (Clean CMS Architecture)
+
+**Date Added:** 2026-02-03
+**Purpose:** CMS কে clean রাখা - plugin না কিনলে plugin এর কোনো code CMS এ থাকবে না
+
+---
+
+### 10.1 সমস্যা
+
+❌ **Option A (Bad Approach):**
+```
+src/app/admin/tickets/page.tsx  ← Plugin specific page in CMS
+```
+- CMS এ plugin specific pages থাকলে, যারা plugin কেনেনি তাদের CMS ও dirty থাকবে
+- Plugin uninstall করলেও pages থেকে যাবে
+
+✅ **Option C (Correct Approach):**
+```
+src/app/admin/[...pluginPath]/page.tsx  ← Single catch-all route
+```
+- CMS clean থাকে
+- Plugin install করলেই pages কাজ করে
+- Plugin uninstall করলে pages auto-remove
+
+---
+
+### 10.2 Architecture
+
+```
+┌─────────────────────────────────────────────────────────────────────────┐
+│                    Dynamic Plugin Page Loading                           │
+├─────────────────────────────────────────────────────────────────────────┤
+│                                                                          │
+│  CMS Structure (Clean):                                                  │
+│  ┌─────────────────────────────────────────────────────────────────┐    │
+│  │  src/app/admin/                                                  │    │
+│  │  ├── page.tsx                    ← Dashboard (CMS core)          │    │
+│  │  ├── orders/                     ← Orders (CMS core)             │    │
+│  │  ├── customers/                  ← Customers (CMS core)          │    │
+│  │  ├── settings/                   ← Settings (CMS core)           │    │
+│  │  └── [...]pluginPath/            ← CATCH-ALL for plugins         │    │
+│  │      └── page.tsx                ← Dynamic plugin page loader    │    │
+│  └─────────────────────────────────────────────────────────────────┘    │
+│                                                                          │
+│  Plugin Files (Separate):                                                │
+│  ┌─────────────────────────────────────────────────────────────────┐    │
+│  │  plugins/                        ← Created after plugin install   │    │
+│  │  └── livesupport-pro/                                            │    │
+│  │      ├── plugin.json             ← Manifest with routes          │    │
+│  │      └── dist/                                                    │    │
+│  │          ├── pages/              ← Plugin pages                   │    │
+│  │          │   ├── tickets/index.js                                │    │
+│  │          │   ├── tickets/chat.js                                 │    │
+│  │          │   └── tickets/settings.js                             │    │
+│  │          └── components/         ← Plugin components              │    │
+│  └─────────────────────────────────────────────────────────────────┘    │
+│                                                                          │
+└─────────────────────────────────────────────────────────────────────────┘
+```
+
+---
+
+### 10.3 Request Flow
+
+```
+User visits: /admin/tickets/chat
+
+     │
+     ▼
+┌─────────────────────────────────────────────────────────────────┐
+│  Step 1: Catch-All Route Receives Request                        │
+│  ─────────────────────────────────────────                       │
+│  File: src/app/admin/[...pluginPath]/page.tsx                    │
+│  Params: pluginPath = ["tickets", "chat"]                        │
+│  Full path: /admin/tickets/chat                                  │
+└────────────────────────────┬────────────────────────────────────┘
+                             │
+                             ▼
+┌─────────────────────────────────────────────────────────────────┐
+│  Step 2: Check if Path Matches Active Plugin                     │
+│  ─────────────────────────────────────────                       │
+│  Query: SELECT * FROM Plugin                                     │
+│         WHERE status = 'ACTIVE'                                  │
+│         AND EXISTS (menuItem with path = '/admin/tickets/chat')  │
+│                                                                  │
+│  Result: Found plugin "livesupport-pro"                          │
+└────────────────────────────┬────────────────────────────────────┘
+                             │
+                             ▼
+┌─────────────────────────────────────────────────────────────────┐
+│  Step 3: Load Plugin Page Component                              │
+│  ─────────────────────────────────                               │
+│  Plugin path: plugins/livesupport-pro/dist/pages/tickets/chat.js │
+│                                                                  │
+│  Dynamic import:                                                  │
+│  const PageComponent = await import(pluginPagePath)              │
+│  return <PageComponent {...props} />                             │
+└────────────────────────────┬────────────────────────────────────┘
+                             │
+                             ▼
+┌─────────────────────────────────────────────────────────────────┐
+│  Step 4: Render Plugin Page                                      │
+│  ─────────────────────────                                       │
+│  Plugin's LiveChat component renders with full functionality     │
+└─────────────────────────────────────────────────────────────────┘
+```
+
+---
+
+### 10.4 Plugin Uninstall = Auto Cleanup
+
+```
+┌─────────────────────────────────────────────────────────────────┐
+│                    Plugin Uninstall Flow                         │
+├─────────────────────────────────────────────────────────────────┤
+│                                                                  │
+│  Admin clicks "Uninstall" on livesupport-pro                     │
+│                                                                  │
+│  Step 1: Delete plugin files                                     │
+│  ┌─────────────────────────────────────────────────────────┐    │
+│  │  rm -rf plugins/livesupport-pro/                         │    │
+│  │  ✅ All plugin code deleted                              │    │
+│  └─────────────────────────────────────────────────────────┘    │
+│                                                                  │
+│  Step 2: Delete database records                                 │
+│  ┌─────────────────────────────────────────────────────────┐    │
+│  │  DELETE FROM PluginMenuItem WHERE pluginId = '...'       │    │
+│  │  DELETE FROM PluginSetting WHERE pluginId = '...'        │    │
+│  │  DELETE FROM Plugin WHERE slug = 'livesupport-pro'       │    │
+│  │  ✅ All plugin data deleted                              │    │
+│  └─────────────────────────────────────────────────────────┘    │
+│                                                                  │
+│  Step 3: Run plugin migrations (down)                            │
+│  ┌─────────────────────────────────────────────────────────┐    │
+│  │  Optional: Run 002_down.sql, 001_down.sql                │    │
+│  │  ✅ Plugin database tables removed                       │    │
+│  └─────────────────────────────────────────────────────────┘    │
+│                                                                  │
+│  Result:                                                         │
+│  ┌─────────────────────────────────────────────────────────┐    │
+│  │  • /admin/tickets → 404 (no plugin to handle)            │    │
+│  │  • Sidebar: Support menu disappears                       │    │
+│  │  • CMS: Completely clean, no plugin traces                │    │
+│  └─────────────────────────────────────────────────────────┘    │
+│                                                                  │
+└─────────────────────────────────────────────────────────────────┘
+```
+
+---
+
+### 10.5 Files to Create/Modify
+
+| File | Action | Purpose |
+|------|--------|---------|
+| `src/app/admin/[...pluginPath]/page.tsx` | CREATE | Catch-all route for plugin pages |
+| `src/lib/plugin-loader.ts` | CREATE | Service to load plugin pages dynamically |
+| `src/app/api/admin/plugins/[slug]/route.ts` | MODIFY | Add uninstall endpoint with file deletion |
+| `plugins/` | DIRECTORY | Created when first plugin installed |
+
+---
+
+### 10.6 Benefits
+
+| Aspect | Before (Option A) | After (Option C) |
+|--------|-------------------|------------------|
+| CMS without plugin | ❌ Has plugin pages | ✅ Clean, no traces |
+| Plugin install | Manual page creation | ✅ Auto-works |
+| Plugin uninstall | Manual page deletion | ✅ Auto-cleanup |
+| Multiple plugins | Each needs pages in CMS | ✅ All handled by catch-all |
+| Plugin updates | Update CMS pages | ✅ Just update plugin files |
+
+---
+
+### 10.7 Implementation Status
+
+| Task | Status | Date |
+|------|--------|------|
+| Document architecture | ✅ Done | 2026-02-03 |
+| Create catch-all route | ✅ Done | 2026-02-03 |
+| Create plugin loader service | ✅ Done | 2026-02-03 |
+| Update plugin uninstall API | ✅ Done | 2026-02-03 |
+| Update livesupport-pro plugin structure | ✅ Done | 2026-02-03 |
+| Test full flow | ⏳ Pending | - |
+
+---
+
+### 10.8 Implementation Details (2026-02-03)
+
+**Files Created:**
+
+1. **`src/lib/plugin-loader.ts`** - Plugin loader service
+   - `findPluginForPath()` - Find plugin by URL path
+   - `getComponentPath()` - Convert URL to file path
+   - `componentExists()` - Check if component exists
+   - `deletePluginFiles()` - Delete plugin folder on uninstall
+
+2. **`src/app/admin/[...pluginPath]/page.tsx`** - Catch-all route
+   - Checks if path matches active plugin
+   - Shows fallback UI if component not loaded
+   - Supports metadata generation
+
+3. **`src/app/api/admin/plugins/[slug]/route.ts`** - Updated DELETE endpoint
+   - Now deletes plugin files from `/plugins/` folder
+   - Cascades to database records
+   - Optional `?keepFiles=true` to preserve files
+
+**Plugin Pages Created (livesupport-pro/apps/llcpad-plugin/src/pages/):**
+
+| Page | File | Features |
+|------|------|----------|
+| Tickets List | `tickets/index.tsx` | Stats, filters, search, table view |
+| Live Chat | `tickets/chat.tsx` | Session list, chat interface, typing |
+| Analytics | `tickets/analytics.tsx` | Charts, stats, agent performance |
+| Canned Responses | `tickets/canned-responses.tsx` | CRUD, categories, shortcuts |
+| Settings | `tickets/settings.tsx` | General, chat, notifications, AI |
+
+**Plugin Configuration Updated:**
+- `plugin.json` now includes `routes` section mapping paths to components
+
+---
+
+### 10.9 Architecture Decision: Option A for LLCPad CMS (2026-02-03)
+
+**Decision:** Option A (Pre-installed Pages with Database Flag Control) is the chosen architecture for LLCPad CMS plugin system.
+
+#### Why Option A?
+
+| Factor | Option A (Pre-installed) | Option C (Runtime) | Decision |
+|--------|--------------------------|-------------------|----------|
+| Rebuild required | ❌ No rebuild | ✅ No rebuild | Tie |
+| Next.js compatibility | ✅ Full SSR support | ⚠️ Client-only components | Option A wins |
+| Code complexity | ✅ Simple | ⚠️ Complex dynamic loading | Option A wins |
+| Future maintenance | ✅ Standard Next.js | ⚠️ Custom loader issues | Option A wins |
+| Tree-shaking | ✅ Unused code removed | N/A | Option A wins |
+| SEO support | ✅ Full SSR/SSG | ⚠️ Client render only | Option A wins |
+
+#### Implementation Strategy
+
+1. **Plugin pages pre-bundled in CMS**
+   - All plugin pages exist in CMS codebase (e.g., `src/app/admin/tickets/`)
+   - Pages are conditionally rendered based on plugin activation status
+   - Database `Plugin.status = 'ACTIVE'` controls page visibility
+
+2. **Catch-all route for fallback**
+   - `src/app/admin/[...pluginPath]/page.tsx` handles unmatched routes
+   - Shows 404 if no active plugin matches
+   - Shows fallback UI if plugin active but page not pre-installed
+
+3. **Tree-shaking handles unused code**
+   - If plugin not activated, pages still exist but are effectively dead code
+   - Next.js build process removes unused imports
+   - Production bundle stays optimized
+
+#### Plugin Page Conditional Rendering Pattern
+
+```tsx
+// src/app/admin/tickets/page.tsx
+import { notFound } from "next/navigation";
+import prisma from "@/lib/db";
+import TicketsPageContent from "./content";
+
+export default async function TicketsPage() {
+  // Check if livesupport-pro plugin is active
+  const plugin = await prisma.plugin.findUnique({
+    where: { slug: "livesupport-pro" },
+  });
+
+  if (!plugin || plugin.status !== "ACTIVE") {
+    notFound();
+  }
+
+  return <TicketsPageContent />;
+}
+```
+
+#### Standalone App Remains Separate
+
+**Important:** The standalone LiveSupport Pro application (`livesupport-pro/apps/web/`) is a completely separate project:
+
+| Aspect | LLCPad CMS Plugin | Standalone App |
+|--------|-------------------|----------------|
+| Location | `livesupport-pro/apps/llcpad-plugin/` | `livesupport-pro/apps/web/` |
+| Purpose | Extend LLCPad CMS | Independent support system |
+| Deployment | Within LLCPad CMS | Separate server |
+| Database | Shares LLCPad DB | Own database |
+| Updates | Plugin update mechanism | Standard app deployment |
+
+The standalone app:
+- Can be sold separately or used independently
+- Has its own full-featured implementation
+- Serves as reference for plugin page development
+- Does NOT affect LLCPad CMS architecture decisions
+
+#### Summary
+
+For LLCPad CMS v1:
+- ✅ **Option A selected** for plugin page implementation
+- ✅ Pre-installed pages with database flag control
+- ✅ No rebuild required for plugin activation/deactivation
+- ✅ Full Next.js SSR/SSG support maintained
+- ✅ Standalone app remains independent project

@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, Suspense, lazy } from "react";
 
 interface PluginWidget {
   pluginSlug: string;
@@ -13,13 +13,56 @@ interface PluginWidgetLoaderProps {
   position: "body-end" | "body-start" | "header" | "footer";
 }
 
+// Lazy load the LiveSupport chat widget for better performance
+const LiveSupportChatWidget = lazy(() =>
+  import("./livesupport-chat-widget").then((mod) => ({
+    default: mod.LiveSupportChatWidget,
+  }))
+);
+
+/**
+ * Render widget component based on plugin and widget name
+ */
+function renderWidget(widget: PluginWidget) {
+  // LiveSupport Pro Chat Widget
+  if (widget.pluginSlug === "livesupport-pro" && widget.widgetName === "ChatWidget") {
+    return (
+      <Suspense fallback={null}>
+        <LiveSupportChatWidget
+          config={widget.config as {
+            position?: "bottom-right" | "bottom-left";
+            primaryColor?: string;
+            welcomeMessage?: string;
+            enabled?: boolean;
+          }}
+        />
+      </Suspense>
+    );
+  }
+
+  // For other plugins, render a placeholder div that can be hydrated by external scripts
+  return (
+    <div
+      id={`plugin-widget-${widget.pluginSlug}-${widget.widgetName}`}
+      data-plugin={widget.pluginSlug}
+      data-widget={widget.widgetName}
+      data-config={JSON.stringify(widget.config)}
+    />
+  );
+}
+
 /**
  * Dynamic Plugin Widget Loader
  * Loads widgets from active plugins based on their manifest configuration.
  *
  * This component fetches active plugin widgets from the API and renders
- * placeholder/loading states. The actual widget rendering is handled by
- * each plugin's own script/component that gets injected when the plugin is active.
+ * the appropriate widget component for each plugin.
+ *
+ * Supported widgets:
+ * - livesupport-pro/ChatWidget - Live chat widget for customer support
+ *
+ * For unsupported plugins, it renders placeholder divs that can be
+ * hydrated by the plugin's own scripts.
  */
 export function PluginWidgetLoader({ position }: PluginWidgetLoaderProps) {
   const [widgets, setWidgets] = useState<PluginWidget[]>([]);
@@ -51,14 +94,8 @@ export function PluginWidgetLoader({ position }: PluginWidgetLoaderProps) {
   return (
     <>
       {widgets.map((widget) => (
-        <div
-          key={`${widget.pluginSlug}-${widget.widgetName}`}
-          id={`plugin-widget-${widget.pluginSlug}-${widget.widgetName}`}
-          data-plugin={widget.pluginSlug}
-          data-widget={widget.widgetName}
-          data-config={JSON.stringify(widget.config)}
-        >
-          {/* Widget content is injected by the plugin's script */}
+        <div key={`${widget.pluginSlug}-${widget.widgetName}`}>
+          {renderWidget(widget)}
         </div>
       ))}
     </>

@@ -44,6 +44,15 @@
     "widgets": true,
     "apiRoutes": true
   },
+  "routes": {
+    "admin": [
+      { "path": "/admin/tickets", "component": "TicketsPage", "file": "pages/tickets/index" },
+      { "path": "/admin/tickets/chat", "component": "LiveChatPage", "file": "pages/tickets/chat" },
+      { "path": "/admin/tickets/analytics", "component": "AnalyticsPage", "file": "pages/tickets/analytics" },
+      { "path": "/admin/tickets/canned-responses", "component": "CannedResponsesPage", "file": "pages/tickets/canned-responses" },
+      { "path": "/admin/tickets/settings", "component": "SettingsPage", "file": "pages/tickets/settings" }
+    ]
+  },
   "settings": [
     {
       "key": "chat.enabled",

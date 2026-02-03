@@ -14,6 +14,38 @@ const port = parseInt(process.env.PORT || "3000", 10);
 const app = next({ dev, hostname, port });
 const handle = app.getRequestHandler();
 
+// Token refresh scheduler
+async function scheduleTokenRefresh() {
+  if (!dev) {
+    try {
+      const { runTokenRefreshJob } = await import("./src/lib/token-refresh-job");
+
+      // Run initial token refresh
+      console.log("[TokenRefresh] Running initial token refresh...");
+      const result = await runTokenRefreshJob();
+      console.log(
+        `[TokenRefresh] Complete: ${result.refreshed} refreshed, ${result.skipped} skipped, ${result.failed} failed`
+      );
+
+      // Schedule daily refresh (24 hours)
+      setInterval(
+        async () => {
+          console.log("[TokenRefresh] Running scheduled refresh...");
+          try {
+            const refreshResult = await runTokenRefreshJob();
+            console.log(`[TokenRefresh] Refreshed: ${refreshResult.refreshed}`);
+          } catch (err) {
+            console.error("[TokenRefresh] Failed:", err);
+          }
+        },
+        24 * 60 * 60 * 1000 // 24 hours
+      );
+    } catch (error) {
+      console.error("[TokenRefresh] Init failed:", error);
+    }
+  }
+}
+
 async function startServer() {
   try {
     // Prepare Next.js
@@ -33,6 +65,9 @@ async function startServer() {
 
     // Initialize Socket.io
     const io = initializeSocketServer(httpServer);
+
+    // Schedule token refresh (production only)
+    await scheduleTokenRefresh();
 
     // Handle server errors
     httpServer.on("error", (err) => {

@@ -3968,112 +3968,558 @@ Authorization: Bearer {admin_api_key}
 | **Server-side Plugin Check** | `/src/lib/plugins.ts` | ✅ `isPluginActive()`, `getActivePlugins()` |
 | **Conditional Widget Render** | `/src/app/(marketing)/layout.tsx` | ✅ Server-side check |
 
-#### ❌ Missing Components (CMS Side)
+### ⚠️ IMPORTANT: Option A Architecture (Pre-installed Plugin)
 
-| Component | Description | Priority |
-|-----------|-------------|----------|
-| **Plugin ZIP Upload UI** | Admin → Settings → Plugins → Upload ZIP | HIGH |
-| **Plugin Extraction Service** | Extract ZIP, validate manifest, copy files | HIGH |
-| **License Activation UI** | Dialog to enter license key after upload | HIGH |
-| **License Verification Integration** | CMS → License Server API call | HIGH |
-| **Plugin Activation API** | `POST /api/admin/plugins/{slug}/activate` | HIGH |
-| **Plugin Deactivation API** | `POST /api/admin/plugins/{slug}/deactivate` | MEDIUM |
-| **Plugin Settings Storage** | Store plugin-specific settings in PluginSetting | MEDIUM |
-| **Plugin Migration Runner** | Run SQL migrations from plugin ZIP | MEDIUM |
-| **License Status Periodic Check** | Cron job to verify license validity | LOW |
-| **Plugin Update System** | Check for updates, download new version | LOW |
+> **Decision Date:** February 2026
+> **Applies To:** LLCPad CMS only (Standalone app remains separate)
 
-#### 🔄 Plugin Activation Flow (To Implement)
+**LLCPad CMS plugin system এর জন্য Option A (Pre-installed Plugin with Database Flag Control) choose করা হয়েছে।**
+
+#### 🚨 Implementation Scope: FULL-STACK (Not Just UI)
 
 ```
 ┌─────────────────────────────────────────────────────────────────────────┐
-│                    CMS Plugin Activation Journey                         │
+│        LLCPad CMS Plugin - FULL-STACK IMPLEMENTATION                     │
 ├─────────────────────────────────────────────────────────────────────────┤
 │                                                                          │
-│  STEP 1: Upload                        STEP 2: Extract & Validate        │
-│  ┌─────────────────────┐              ┌─────────────────────┐            │
-│  │ Admin uploads       │     →        │ • Unzip to temp     │            │
-│  │ plugin.zip          │              │ • Read plugin.json  │            │
-│  │                     │              │ • Validate schema   │            │
-│  │ ❌ NOT IMPLEMENTED  │              │ • Check compat      │            │
-│  └─────────────────────┘              │ ❌ NOT IMPLEMENTED  │            │
-│                                        └──────────┬──────────┘            │
-│                                                   │                       │
-│  STEP 3: License Key                              ▼                       │
-│  ┌─────────────────────┐              ┌─────────────────────┐            │
-│  │ Show dialog:        │     ←        │ requiresActivation  │            │
-│  │ "Enter License Key" │              │ = true in manifest  │            │
-│  │                     │              └─────────────────────┘            │
-│  │ ❌ NOT IMPLEMENTED  │                                                 │
-│  └──────────┬──────────┘                                                 │
-│             │                                                            │
-│             ▼                                                            │
-│  STEP 4: Verify License                                                  │
+│  ⚠️ এটা শুধু UI mockup বা frontend component না!                         │
+│  সব কিছু fully functional হবে - production ready                        │
+│                                                                          │
+│  ┌───────────────────────────────────────────────────────────────────┐  │
+│  │                                                                    │  │
+│  │  FRONTEND (React/Next.js)         BACKEND (API Routes)            │  │
+│  │  ────────────────────────         ────────────────────            │  │
+│  │  ✅ Plugin Activation Modal       ✅ POST /api/plugins/activate   │  │
+│  │  ✅ License Key Input             ✅ POST /api/plugins/deactivate │  │
+│  │  ✅ Tickets List Page             ✅ GET/POST /api/tickets        │  │
+│  │  ✅ Ticket Detail Page            ✅ GET/POST /api/messages       │  │
+│  │  ✅ Live Chat Dashboard           ✅ Socket.io Server             │  │
+│  │  ✅ Analytics Dashboard           ✅ JWT Token Verification       │  │
+│  │  ✅ Canned Responses CRUD         ✅ License Server Integration   │  │
+│  │  ✅ Settings Pages                ✅ Email Notifications          │  │
+│  │  ✅ Chat Widget (Public)          ✅ File Upload API              │  │
+│  │                                                                    │  │
+│  │  DATABASE (Prisma/PostgreSQL)     SECURITY                        │  │
+│  │  ────────────────────────────     ────────                        │  │
+│  │  ✅ Ticket, Message tables        ✅ RSA-256 JWT Signing          │  │
+│  │  ✅ ChatSession table             ✅ Domain Lock Verification     │  │
+│  │  ✅ CannedResponse table          ✅ Server-side Access Guard     │  │
+│  │  ✅ Plugin, PluginSetting         ✅ Token Refresh Mechanism      │  │
+│  │  ✅ Migrations                    ✅ Anti-Null Layers             │  │
+│  │  ✅ Indexes for performance       ✅ Middleware Protection        │  │
+│  │                                                                    │  │
+│  └───────────────────────────────────────────────────────────────────┘  │
+│                                                                          │
+│  Development করতে হবে:                                                   │
+│  ─────────────────────                                                   │
+│  1. Frontend pages + components (React/TypeScript)                      │
+│  2. Backend API routes (Next.js API Routes)                             │
+│  3. Database schema + migrations (Prisma)                               │
+│  4. Real-time functionality (Socket.io)                                 │
+│  5. Security implementation (JWT, Guards, Middleware)                   │
+│  6. License integration (License Server API calls)                      │
+│                                                                          │
+│  🎯 Goal: Plugin activate করলেই সব features কাজ করবে, কোনো extra        │
+│           setup ছাড়াই                                                    │
+│                                                                          │
+└─────────────────────────────────────────────────────────────────────────┘
+```
+
+#### Why Option A? (Not ZIP Upload)
+
+```
+┌─────────────────────────────────────────────────────────────────────────┐
+│                    ZIP Upload vs Pre-installed                           │
+├─────────────────────────────────────────────────────────────────────────┤
+│                                                                          │
+│  ❌ ZIP Upload Approach (Not Used)                                       │
+│  ─────────────────────────────────                                       │
+│  • Next.js cannot load pages at runtime (requires rebuild)               │
+│  • ZIP upload → rebuild = 2-5 minute wait                                │
+│  • Low RAM servers (1-2GB) cannot rebuild                                │
+│  • Build failures = support nightmare                                    │
+│  • Complex implementation (~1500 LOC)                                    │
+│                                                                          │
+│  ✅ Pre-installed Approach (CHOSEN)                                      │
+│  ──────────────────────────────────                                      │
+│  • Plugin pages bundled with CMS at build time                          │
+│  • Database flag controls visibility (status = ACTIVE/INACTIVE)         │
+│  • Instant activation (2-5 seconds)                                     │
+│  • Works on any server                                                   │
+│  • Simple implementation (~100 LOC)                                      │
+│  • Full SSR/SSG support                                                  │
+│                                                                          │
+└─────────────────────────────────────────────────────────────────────────┘
+```
+
+#### Option A Architecture Flow
+
+```
+┌─────────────────────────────────────────────────────────────────────────┐
+│             Pre-installed Plugin Activation Flow                         │
+├─────────────────────────────────────────────────────────────────────────┤
+│                                                                          │
+│  STEP 1: User visits /admin/settings/plugins                            │
 │  ┌─────────────────────────────────────────────────────────────────┐    │
 │  │                                                                  │    │
-│  │  CMS                          License Server                     │    │
-│  │  ────                         ──────────────                     │    │
+│  │  🧩 Plugins                                                      │    │
 │  │                                                                  │    │
-│  │  POST /api/admin/plugins/     POST license.llcpad.com/          │    │
-│  │       activate                     api/licenses/verify           │    │
-│  │       {licenseKey: "..."}          {licenseKey, domain, ...}    │    │
-│  │                                                                  │    │
-│  │  ❌ NOT IMPLEMENTED               ✅ IMPLEMENTED                 │    │
+│  │  ┌────────────────────────────────────────────────────────────┐ │    │
+│  │  │  💬 LiveSupport Pro                              v1.0.0    │ │    │
+│  │  │  Professional live chat & ticketing system                 │ │    │
+│  │  │                                                            │ │    │
+│  │  │  Status: ⚪ Inactive        License: Not activated         │ │    │
+│  │  │                                                            │ │    │
+│  │  │  [🔑 Activate]                                             │ │    │
+│  │  └────────────────────────────────────────────────────────────┘ │    │
 │  │                                                                  │    │
 │  └─────────────────────────────────────────────────────────────────┘    │
 │                                                                          │
-│  STEP 5: Install & Activate                                              │
+│  STEP 2: User clicks "Activate" → License Key Modal                     │
 │  ┌─────────────────────────────────────────────────────────────────┐    │
 │  │                                                                  │    │
-│  │  If license valid:                                               │    │
-│  │  • Copy plugin files to /plugins/{slug}/                        │    │
-│  │  • Run database migrations                                       │    │
-│  │  • Store Plugin record (status: ACTIVE)                         │    │
-│  │  • Store license key in Plugin.licenseKey                       │    │
-│  │  • Register admin menu items                                     │    │
+│  │  🔑 Activate LiveSupport Pro                               [X]  │    │
+│  │  ─────────────────────────────────────────────────────────────  │    │
 │  │                                                                  │    │
-│  │  ❌ NOT IMPLEMENTED                                              │    │
+│  │  Enter your license key to activate this plugin.                │    │
+│  │                                                                  │    │
+│  │  License Key:                                                    │    │
+│  │  ┌──────────────────────────────────────────────────────────┐   │    │
+│  │  │  LSP-PRO-                                                 │   │    │
+│  │  └──────────────────────────────────────────────────────────┘   │    │
+│  │                                                                  │    │
+│  │  This license will be activated for: yourdomain.com             │    │
+│  │                                                                  │    │
+│  │  ☐ I agree to the terms of service                              │    │
+│  │                                                                  │    │
+│  │  [Purchase License]                    [Cancel]  [✓ Activate]   │    │
 │  │                                                                  │    │
 │  └─────────────────────────────────────────────────────────────────┘    │
 │                                                                          │
-│  STEP 6: Plugin Active                                                   │
+│  STEP 3: License Verification (Server-side)                             │
 │  ┌─────────────────────────────────────────────────────────────────┐    │
 │  │                                                                  │    │
-│  │  • Plugin.status = ACTIVE                                        │    │
-│  │  • isPluginActive('livesupport-pro') returns true               │    │
-│  │  • ChatWidget renders on frontend                                │    │
-│  │  • Admin menu shows plugin pages                                 │    │
+│  │  CMS Server                         License Server               │    │
+│  │  ──────────                         ──────────────               │    │
 │  │                                                                  │    │
-│  │  ✅ Server-side check implemented                                │    │
-│  │  ❌ Full activation flow NOT implemented                         │    │
+│  │  POST /api/admin/plugins/     ───▶  POST /api/licenses/verify   │    │
+│  │       livesupport-pro/activate       {licenseKey, domain}       │    │
+│  │                                                                  │    │
+│  │  • Verify license key           ◀───  {valid: true, token: ...} │    │
+│  │  • Check domain limit                                            │    │
+│  │  • Return signed JWT token                                       │    │
+│  │                                                                  │    │
+│  └─────────────────────────────────────────────────────────────────┘    │
+│                                                                          │
+│  STEP 4: Plugin Activated                                               │
+│  ┌─────────────────────────────────────────────────────────────────┐    │
+│  │                                                                  │    │
+│  │  Database Updated:                                               │    │
+│  │  • Plugin.status = 'ACTIVE'                                     │    │
+│  │  • Plugin.licenseKey = 'LSP-PRO-...'                            │    │
+│  │  • Plugin.licenseToken = 'eyJhbG...' (JWT)                      │    │
+│  │  • Plugin.tokenExpiresAt = now + 7 days                         │    │
+│  │                                                                  │    │
+│  │  Result:                                                         │    │
+│  │  ✅ Sidebar shows "Support" menu                                 │    │
+│  │  ✅ /admin/tickets page accessible                               │    │
+│  │  ✅ Chat widget renders on frontend                              │    │
+│  │  ✅ All plugin features enabled                                  │    │
 │  │                                                                  │    │
 │  └─────────────────────────────────────────────────────────────────┘    │
 │                                                                          │
 └─────────────────────────────────────────────────────────────────────────┘
 ```
 
-#### 🎯 Next Implementation Steps
+#### Plugin Page Access Control (Server-side)
 
-1. **Create Plugin Upload UI** (`/admin/settings/plugins`)
-   - Drag & drop ZIP file upload
-   - Progress indicator
-   - Error handling
+```typescript
+// src/app/admin/tickets/page.tsx
+import { notFound } from "next/navigation";
+import { verifyPluginAccess } from "@/lib/plugin-guard";
 
-2. **Create Plugin Installation Service** (`/src/services/plugin-installer.ts`)
-   - ZIP extraction
-   - Manifest validation
-   - File copying
-   - Migration running
+export default async function TicketsPage() {
+  // Server-side check - CANNOT be bypassed by client
+  const access = await verifyPluginAccess("livesupport-pro");
 
-3. **Create License Verification API** (`/api/admin/plugins/[slug]/activate`)
-   - Accept license key
-   - Call License Server
-   - Update Plugin record
+  if (!access.allowed) {
+    notFound(); // Returns 404, not even a hint that page exists
+  }
 
-4. **Create License Activation Dialog Component**
-   - Modal with license key input
-   - Domain display
+  // Only reaches here if plugin is legitimately active
+  return <TicketsPageContent features={access.features} />;
+}
+```
+
+```typescript
+// src/lib/plugin-guard.ts
+import prisma from "@/lib/db";
+import { verifyJWT } from "@/lib/jwt";
+
+interface PluginAccess {
+  allowed: boolean;
+  features: string[];
+  tier: string | null;
+  reason?: string;
+}
+
+export async function verifyPluginAccess(pluginSlug: string): Promise<PluginAccess> {
+  // 1. Check database status
+  const plugin = await prisma.plugin.findUnique({
+    where: { slug: pluginSlug },
+  });
+
+  if (!plugin || plugin.status !== "ACTIVE") {
+    return { allowed: false, features: [], tier: null, reason: "PLUGIN_INACTIVE" };
+  }
+
+  // 2. Verify JWT token signature (anti-null measure)
+  if (!plugin.licenseToken) {
+    return { allowed: false, features: [], tier: null, reason: "NO_TOKEN" };
+  }
+
+  const tokenResult = verifyJWT(plugin.licenseToken);
+
+  if (!tokenResult.valid) {
+    // Token invalid or expired - try silent refresh
+    const refreshResult = await refreshLicenseToken(plugin.licenseKey!);
+
+    if (!refreshResult.success) {
+      return { allowed: false, features: [], tier: null, reason: "TOKEN_INVALID" };
+    }
+  }
+
+  // 3. Check license expiry (actual license, not token)
+  if (plugin.licenseExpiresAt && plugin.licenseExpiresAt < new Date()) {
+    return { allowed: false, features: [], tier: null, reason: "LICENSE_EXPIRED" };
+  }
+
+  // 4. All checks passed
+  return {
+    allowed: true,
+    features: tokenResult.data?.features || [],
+    tier: tokenResult.data?.tier || plugin.licenseTier,
+  };
+}
+```
+
+### 🔐 Anti-Null Security Measures (Option A)
+
+```
+┌─────────────────────────────────────────────────────────────────────────┐
+│                    5-Layer Anti-Null Protection                          │
+├─────────────────────────────────────────────────────────────────────────┤
+│                                                                          │
+│  LAYER 1: Database Flag Check                                           │
+│  ────────────────────────────────────────────────────────────────────   │
+│  • Plugin.status must be 'ACTIVE'                                       │
+│  • Checked on EVERY admin page load (server-side)                       │
+│  • Checked on EVERY API request                                         │
+│                                                                          │
+│  ⚠️ Bypass: Direct DB modification (UPDATE Plugin SET status='ACTIVE')  │
+│  🛡️ Mitigated by: Layer 2                                               │
+│                                                                          │
+│  ─────────────────────────────────────────────────────────────────────  │
+│                                                                          │
+│  LAYER 2: JWT Token Signature Verification                              │
+│  ────────────────────────────────────────────────────────────────────   │
+│  • Token must be present in Plugin.licenseToken                         │
+│  • Token signature verified with RSA PUBLIC KEY                         │
+│  • Token NOT expired (7 days validity)                                  │
+│                                                                          │
+│  ⚠️ Bypass: Forge JWT token                                             │
+│  🛡️ Protected by: RSA-256 signature (PRIVATE key on license server)    │
+│  ❌ CANNOT be bypassed without private key                               │
+│                                                                          │
+│  ─────────────────────────────────────────────────────────────────────  │
+│                                                                          │
+│  LAYER 3: Domain Lock Verification                                      │
+│  ────────────────────────────────────────────────────────────────────   │
+│  • Token contains allowed domain                                         │
+│  • Current domain must match token domain                                │
+│  • Prevents token copying to other sites                                 │
+│                                                                          │
+│  ⚠️ Bypass: Change NEXT_PUBLIC_SITE_URL                                 │
+│  🛡️ Protected by: Server reads actual request hostname                  │
+│                                                                          │
+│  ─────────────────────────────────────────────────────────────────────  │
+│                                                                          │
+│  LAYER 4: Periodic License Server Heartbeat                             │
+│  ────────────────────────────────────────────────────────────────────   │
+│  • Token auto-refreshes every 5-7 days                                  │
+│  • Refresh requires valid license on server                              │
+│  • Revoked licenses fail refresh                                         │
+│                                                                          │
+│  ⚠️ Bypass: Block network to license server                             │
+│  🛡️ Protected by: Token expires, features disabled after 30 days       │
+│                                                                          │
+│  ─────────────────────────────────────────────────────────────────────  │
+│                                                                          │
+│  LAYER 5: Feature-Level Access Control                                  │
+│  ────────────────────────────────────────────────────────────────────   │
+│  • Each feature checks license tier                                      │
+│  • AI features need PROFESSIONAL tier                                    │
+│  • Some features degrade gracefully                                      │
+│                                                                          │
+│  ⚠️ Bypass: Modify client-side code                                     │
+│  🛡️ Protected by: Server-side checks on API routes                      │
+│                                                                          │
+└─────────────────────────────────────────────────────────────────────────┘
+```
+
+#### Anti-Null Implementation Code
+
+```typescript
+// src/lib/jwt.ts - RSA JWT Verification
+import jwt from 'jsonwebtoken';
+
+// PUBLIC KEY embedded in CMS (safe to expose)
+const PUBLIC_KEY = `-----BEGIN PUBLIC KEY-----
+MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA...
+-----END PUBLIC KEY-----`;
+
+interface TokenPayload {
+  licenseKey: string;
+  domain: string;
+  tier: string;
+  features: string[];
+  exp: number;
+  iat: number;
+}
+
+export function verifyJWT(token: string): { valid: boolean; data?: TokenPayload } {
+  try {
+    const decoded = jwt.verify(token, PUBLIC_KEY, {
+      algorithms: ['RS256'],
+    }) as TokenPayload;
+
+    // Additional domain check
+    const currentDomain = process.env.NEXT_PUBLIC_SITE_URL
+      ? new URL(process.env.NEXT_PUBLIC_SITE_URL).hostname
+      : 'localhost';
+
+    if (decoded.domain !== currentDomain && decoded.domain !== '*') {
+      console.warn(`[License] Domain mismatch: ${decoded.domain} vs ${currentDomain}`);
+      return { valid: false };
+    }
+
+    return { valid: true, data: decoded };
+  } catch (error) {
+    console.error('[License] JWT verification failed:', error);
+    return { valid: false };
+  }
+}
+```
+
+```typescript
+// src/middleware.ts - Request-level protection
+import { NextResponse } from 'next/server';
+import type { NextRequest } from 'next/server';
+
+export async function middleware(request: NextRequest) {
+  const pathname = request.nextUrl.pathname;
+
+  // Plugin page patterns
+  const pluginRoutes = [
+    { pattern: /^\/admin\/tickets/, plugin: 'livesupport-pro' },
+    { pattern: /^\/admin\/support/, plugin: 'livesupport-pro' },
+    { pattern: /^\/api\/support\//, plugin: 'livesupport-pro' },
+  ];
+
+  for (const route of pluginRoutes) {
+    if (route.pattern.test(pathname)) {
+      // Quick DB check via API (cached)
+      const response = await fetch(
+        `${request.nextUrl.origin}/api/internal/plugin-status/${route.plugin}`,
+        { headers: { 'x-internal-key': process.env.INTERNAL_API_KEY! } }
+      );
+
+      if (!response.ok) {
+        // Plugin not active - return 404
+        return NextResponse.rewrite(new URL('/404', request.url));
+      }
+    }
+  }
+
+  return NextResponse.next();
+}
+
+export const config = {
+  matcher: ['/admin/tickets/:path*', '/admin/support/:path*', '/api/support/:path*'],
+};
+```
+
+### 📋 Implementation Components (Option A - Updated)
+
+#### ✅ Already Implemented
+
+| Component | Location | Status |
+|-----------|----------|--------|
+| **License Server** | `/license-server/` | ✅ Complete |
+| **Plugin Database Schema** | `/prisma/schema.prisma` | ✅ Complete |
+| **Plugin Status Check** | `/src/lib/plugins.ts` | ✅ `isPluginActive()` |
+| **Conditional Widget Render** | `/src/app/(marketing)/layout.tsx` | ✅ Server-side |
+
+#### ❌ Missing Components (Option A - CMS Side)
+
+| Component | Description | Priority |
+|-----------|-------------|----------|
+| **Plugin Activation UI** | `/admin/settings/plugins` - Show inactive plugins with Activate button | HIGH |
+| **License Key Modal** | Dialog to enter license key when clicking Activate | HIGH |
+| **Plugin Activation API** | `POST /api/admin/plugins/{slug}/activate` - Verify & activate | HIGH |
+| **JWT Verification Library** | `/src/lib/jwt.ts` - RSA-256 signature verification | HIGH |
+| **Plugin Guard Middleware** | `/src/lib/plugin-guard.ts` - Server-side access control | HIGH |
+| **Token Refresh Service** | Background job to refresh tokens before expiry | MEDIUM |
+| **Plugin Deactivation API** | `POST /api/admin/plugins/{slug}/deactivate` | MEDIUM |
+| **License Status Banner** | Show warning if token expired, prompt to re-verify | LOW |
+
+#### 🔄 Plugin Activation Flow (Option A - Pre-installed)
+
+```
+┌─────────────────────────────────────────────────────────────────────────┐
+│           Option A: Pre-installed Plugin Activation Journey              │
+├─────────────────────────────────────────────────────────────────────────┤
+│                                                                          │
+│  INITIAL STATE: Plugin exists in CMS but inactive                       │
+│  ┌─────────────────────────────────────────────────────────────────┐    │
+│  │                                                                  │    │
+│  │  Database: Plugin record exists with status = 'INSTALLED'       │    │
+│  │  Pages: /admin/tickets exists but returns 404 (guarded)         │    │
+│  │  Sidebar: "Support" menu hidden                                  │    │
+│  │  Widget: Chat widget not rendered                                │    │
+│  │                                                                  │    │
+│  └─────────────────────────────────────────────────────────────────┘    │
+│                                                                          │
+│  STEP 1: View Plugins Page                                              │
+│  ┌─────────────────────────────────────────────────────────────────┐    │
+│  │                                                                  │    │
+│  │  Admin visits /admin/settings/plugins                           │    │
+│  │  Sees pre-installed plugins list:                               │    │
+│  │                                                                  │    │
+│  │  ┌────────────────────────────────────────────────────────┐     │    │
+│  │  │  💬 LiveSupport Pro                          v1.0.0    │     │    │
+│  │  │  Status: ⚪ Inactive                                    │     │    │
+│  │  │                                                         │     │    │
+│  │  │  [🔑 Activate]                                         │     │    │
+│  │  └────────────────────────────────────────────────────────┘     │    │
+│  │                                                                  │    │
+│  │  ✅ IMPLEMENTED (UI exists)                                      │    │
+│  │  ❌ Activation flow NOT implemented                              │    │
+│  │                                                                  │    │
+│  └─────────────────────────────────────────────────────────────────┘    │
+│                                                                          │
+│  STEP 2: Click Activate → License Modal                                 │
+│  ┌─────────────────────────────────────────────────────────────────┐    │
+│  │                                                                  │    │
+│  │  Modal opens with:                                               │    │
+│  │  • License key input field                                       │    │
+│  │  • Current domain display (yourdomain.com)                      │    │
+│  │  • Terms checkbox                                                │    │
+│  │  • Purchase link for new customers                               │    │
+│  │                                                                  │    │
+│  │  ❌ NOT IMPLEMENTED                                              │    │
+│  │                                                                  │    │
+│  └─────────────────────────────────────────────────────────────────┘    │
+│                                                                          │
+│  STEP 3: Submit License Key                                             │
+│  ┌─────────────────────────────────────────────────────────────────┐    │
+│  │                                                                  │    │
+│  │  CMS Server                          License Server              │    │
+│  │  ──────────                          ──────────────              │    │
+│  │                                                                  │    │
+│  │  1. POST /api/admin/plugins/                                    │    │
+│  │     livesupport-pro/activate                                    │    │
+│  │     {licenseKey: "LSP-PRO-..."}                                │    │
+│  │                                                                  │    │
+│  │  2. Server calls License Server ───▶ POST /api/licenses/verify  │    │
+│  │     {licenseKey, domain, pluginSlug}                            │    │
+│  │                                                                  │    │
+│  │  3. License Server returns:    ◀─── {valid, token, tier, ...}   │    │
+│  │     • RSA-signed JWT token                                      │    │
+│  │     • License tier & features                                   │    │
+│  │     • Domain lock info                                          │    │
+│  │                                                                  │    │
+│  │  ❌ CMS API NOT IMPLEMENTED                                      │    │
+│  │  ✅ License Server IMPLEMENTED                                   │    │
+│  │                                                                  │    │
+│  └─────────────────────────────────────────────────────────────────┘    │
+│                                                                          │
+│  STEP 4: Activate Plugin (Database Update)                              │
+│  ┌─────────────────────────────────────────────────────────────────┐    │
+│  │                                                                  │    │
+│  │  If license valid:                                               │    │
+│  │                                                                  │    │
+│  │  UPDATE Plugin SET                                               │    │
+│  │    status = 'ACTIVE',                                           │    │
+│  │    licenseKey = 'LSP-PRO-...',                                  │    │
+│  │    licenseToken = 'eyJhbG...',     -- RSA-signed JWT            │    │
+│  │    licenseTier = 'PROFESSIONAL',                                │    │
+│  │    licenseValidUntil = '2027-02-01',                            │    │
+│  │    tokenExpiresAt = NOW() + 7 days,                             │    │
+│  │    lastActivatedAt = NOW()                                      │    │
+│  │  WHERE slug = 'livesupport-pro';                                │    │
+│  │                                                                  │    │
+│  │  Run database migrations (if any)                                │    │
+│  │                                                                  │    │
+│  │  ❌ NOT IMPLEMENTED                                              │    │
+│  │                                                                  │    │
+│  └─────────────────────────────────────────────────────────────────┘    │
+│                                                                          │
+│  STEP 5: Plugin Now Active                                              │
+│  ┌─────────────────────────────────────────────────────────────────┐    │
+│  │                                                                  │    │
+│  │  Immediate effects:                                              │    │
+│  │                                                                  │    │
+│  │  ✓ Plugin.status = 'ACTIVE'                                     │    │
+│  │  ✓ Sidebar shows "Support" menu (reads from DB)                 │    │
+│  │  ✓ /admin/tickets returns page (plugin guard passes)            │    │
+│  │  ✓ Chat widget renders on public pages                          │    │
+│  │  ✓ API routes return data                                       │    │
+│  │                                                                  │    │
+│  │  All controlled by database flag + JWT verification             │    │
+│  │  No rebuild required!                                            │    │
+│  │                                                                  │    │
+│  └─────────────────────────────────────────────────────────────────┘    │
+│                                                                          │
+└─────────────────────────────────────────────────────────────────────────┘
+```
+
+#### 🎯 Next Implementation Steps (Option A)
+
+1. **Create License Activation Modal** (`/src/components/admin/license-activation-modal.tsx`)
+   - License key input field
+   - Current domain display
    - Terms agreement checkbox
+   - Loading state during verification
+   - Error messages for invalid keys
+
+2. **Create Plugin Activation API** (`/api/admin/plugins/[slug]/activate`)
+   - Accept license key from modal
+   - Call License Server to verify
+   - Verify RSA-signed JWT token
+   - Update Plugin record with token
+   - Run database migrations if needed
+
+3. **Create Plugin Guard Library** (`/src/lib/plugin-guard.ts`)
+   - `verifyPluginAccess(slug)` function
+   - JWT signature verification
+   - Domain lock validation
+   - Feature-level access control
+
+4. **Create JWT Verification Library** (`/src/lib/jwt.ts`)
+   - RSA-256 public key embedded
+   - `verifyJWT(token)` function
+   - Token expiry checking
+
+5. **Update Plugin Pages** (All plugin pages)
+   - Add `verifyPluginAccess()` call at top
+   - Return `notFound()` if not allowed
+   - Pass features to components
+
+6. **Create Token Refresh Job** (`/src/jobs/refresh-plugin-tokens.ts`)
+   - Run daily via cron
+   - Refresh tokens older than 5 days
+   - Log refresh failures
 
 ---
 

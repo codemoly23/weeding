@@ -13,7 +13,7 @@ import {
   TICKET_EVENTS,
   MESSAGE_EVENTS,
   CHAT_EVENTS,
-  type ChatMessage,
+  type SocketChatMessage,
   type TicketData,
 } from '@livesupport/core';
 
@@ -38,7 +38,7 @@ export interface UseAdminSocketReturn {
   onNewTicket: (callback: (ticket: TicketData) => void) => () => void;
   onTicketUpdated: (callback: (ticket: TicketData) => void) => () => void;
   onTicketAssigned: (callback: (data: { ticketId: string; agentId: string; agentName: string }) => void) => () => void;
-  onNewMessage: (callback: (message: ChatMessage) => void) => () => void;
+  onNewMessage: (callback: (message: SocketChatMessage) => void) => () => void;
   onChatRequest: (callback: (data: { session: any }) => void) => () => void;
   // Actions
   setStatus: (status: 'online' | 'away' | 'offline') => void;
@@ -176,7 +176,7 @@ export function useAdminSocket(options: UseAdminSocketOptions): UseAdminSocketRe
     []
   );
 
-  const onNewMessage = useCallback((callback: (message: ChatMessage) => void) => {
+  const onNewMessage = useCallback((callback: (message: SocketChatMessage) => void) => {
     const socket = socketRef.current;
     if (!socket) return () => {};
 

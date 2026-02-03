@@ -15,6 +15,9 @@ export { lifecycle } from './lifecycle';
 // Components
 export * from './components';
 
+// Pages (Admin Dashboard Pages)
+export * from './pages';
+
 // Re-export from shared packages for convenience
 export {
   TicketService,

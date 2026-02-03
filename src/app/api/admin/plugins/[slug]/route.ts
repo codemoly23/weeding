@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import prisma from "@/lib/db";
 import { z } from "zod";
+import { pluginLoader } from "@/lib/plugin-loader";
 
 // Validation schema for updating a plugin
 const updatePluginSchema = z.object({
@@ -119,6 +120,8 @@ export async function DELETE(
 ) {
   try {
     const { slug } = await params;
+    const searchParams = request.nextUrl.searchParams;
+    const keepFiles = searchParams.get("keepFiles") === "true";
 
     const existing = await prisma.plugin.findUnique({
       where: { slug },
@@ -131,13 +134,25 @@ export async function DELETE(
       );
     }
 
-    // Delete plugin (cascades to settings and menu items)
+    // Step 1: Delete plugin files (unless keepFiles=true)
+    if (!keepFiles) {
+      try {
+        await pluginLoader.deletePluginFiles(slug);
+        console.log(`Plugin files deleted for: ${slug}`);
+      } catch (fileError) {
+        // Log but don't fail if files don't exist
+        console.warn(`Could not delete plugin files for ${slug}:`, fileError);
+      }
+    }
+
+    // Step 2: Delete plugin from database (cascades to settings and menu items)
     await prisma.plugin.delete({
       where: { slug },
     });
 
     return NextResponse.json({
       message: "Plugin uninstalled successfully",
+      filesDeleted: !keepFiles,
     });
   } catch (error) {
     console.error("Error uninstalling plugin:", error);

@@ -19,7 +19,20 @@ import {
   Key,
   Shield,
   Globe,
+  MessageSquare,
+  type LucideIcon,
 } from "lucide-react";
+
+// Map of icon names to actual icon components
+const iconMap: Record<string, LucideIcon> = {
+  MessageSquare,
+  Puzzle,
+  Package,
+  Settings,
+  Key,
+  Shield,
+  Globe,
+};
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -478,18 +491,14 @@ export default function PluginsPage() {
             {/* Plugin Info */}
             {uploadedPlugin && (
               <Card className="bg-muted/50">
-                <CardContent className="pt-4">
+                <CardContent className="p-4">
                   <div className="flex items-center gap-3">
-                    <div className="h-10 w-10 rounded-lg bg-gradient-to-br from-primary/20 to-primary/10 flex items-center justify-center">
-                      {uploadedPlugin.icon ? (
-                        <span className="text-xl">{uploadedPlugin.icon}</span>
-                      ) : (
-                        <Puzzle className="h-5 w-5 text-primary" />
-                      )}
+                    <div className="h-12 w-12 rounded-lg bg-gradient-to-br from-primary/20 to-primary/10 flex items-center justify-center shrink-0">
+                      <Puzzle className="h-6 w-6 text-primary" />
                     </div>
-                    <div>
-                      <p className="font-medium">{uploadedPlugin.name}</p>
-                      <p className="text-xs text-muted-foreground">
+                    <div className="min-w-0 flex-1">
+                      <p className="font-semibold text-base truncate">{uploadedPlugin.name}</p>
+                      <p className="text-sm text-muted-foreground truncate">
                         v{uploadedPlugin.version}
                         {uploadedPlugin.author && ` by ${uploadedPlugin.author}`}
                       </p>
@@ -612,11 +621,19 @@ export default function PluginsPage() {
                 <div className="flex items-start justify-between">
                   <div className="flex items-center gap-3">
                     <div className="h-10 w-10 rounded-lg bg-gradient-to-br from-primary/20 to-primary/10 flex items-center justify-center">
-                      {plugin.icon ? (
-                        <span className="text-xl">{plugin.icon}</span>
-                      ) : (
-                        <Puzzle className="h-5 w-5 text-primary" />
-                      )}
+                      {(() => {
+                        // Check if icon is a known lucide icon name
+                        const IconComponent = plugin.icon && iconMap[plugin.icon];
+                        if (IconComponent) {
+                          return <IconComponent className="h-5 w-5 text-primary" />;
+                        }
+                        // Check if icon is an emoji (not alphanumeric)
+                        if (plugin.icon && !/^[a-zA-Z]+$/.test(plugin.icon)) {
+                          return <span className="text-xl">{plugin.icon}</span>;
+                        }
+                        // Default to Puzzle icon
+                        return <Puzzle className="h-5 w-5 text-primary" />;
+                      })()}
                     </div>
                     <div>
                       <CardTitle className="text-base">{plugin.name}</CardTitle>

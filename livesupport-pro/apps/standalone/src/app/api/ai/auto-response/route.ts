@@ -1,7 +1,7 @@
 // AI Auto-Response API
 import { NextRequest, NextResponse } from 'next/server';
-import { prisma } from '@livesupport-pro/database';
-import { createAIChatService } from '@livesupport-pro/ai';
+import { prisma } from '@livesupport/database';
+import { createAIChatService } from '@livesupport/ai';
 import { z } from 'zod';
 
 const autoResponseSchema = z.object({

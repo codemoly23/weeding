@@ -83,12 +83,17 @@ export default function GenerateLicensePage() {
     setLoading(true);
 
     try {
+      // Convert date string to ISO datetime string if provided
+      const expiresAt = formData.expiresAt
+        ? new Date(formData.expiresAt + 'T23:59:59.999Z').toISOString()
+        : null;
+
       const response = await fetch('/api/licenses', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           ...formData,
-          expiresAt: formData.expiresAt || null,
+          expiresAt,
         }),
       });
 

@@ -1,7 +1,7 @@
 // AI Connection Test API
 import { NextResponse } from 'next/server';
-import { prisma } from '@livesupport-pro/database';
-import { createAIChatService } from '@livesupport-pro/ai';
+import { prisma } from '@livesupport/database';
+import { createAIChatService } from '@livesupport/ai';
 
 // POST /api/ai/test
 export async function POST() {

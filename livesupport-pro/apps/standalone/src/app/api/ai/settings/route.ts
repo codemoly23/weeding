@@ -1,6 +1,6 @@
 // AI Settings API
 import { NextRequest, NextResponse } from 'next/server';
-import { prisma } from '@livesupport-pro/database';
+import { prisma } from '@livesupport/database';
 import { z } from 'zod';
 
 const aiSettingsSchema = z.object({

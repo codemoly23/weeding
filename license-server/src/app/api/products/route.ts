@@ -5,7 +5,12 @@ import { createProductSchema } from '@/lib/validations/product';
 
 // GET /api/products - List all products
 export async function GET(request: NextRequest) {
+  // Debug: Log cookies to trace auth issues
+  const cookies = request.cookies.getAll();
+  console.log('[API /products GET] Cookies received:', cookies.map(c => c.name));
+
   const session = await auth();
+  console.log('[API /products GET] Session:', session ? { id: session.user?.id, email: session.user?.email } : 'null');
   if (!session) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
   }

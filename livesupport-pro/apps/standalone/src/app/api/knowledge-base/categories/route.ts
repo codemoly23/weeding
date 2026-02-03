@@ -1,6 +1,6 @@
 // Knowledge Base Categories API
 import { NextResponse } from 'next/server';
-import { prisma } from '@livesupport-pro/database';
+import { prisma } from '@livesupport/database';
 
 // GET /api/knowledge-base/categories
 export async function GET() {
