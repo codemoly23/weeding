@@ -164,223 +164,241 @@ function SectionHeader({ settings }: { settings: ProcessStepsWidgetSettings }) {
   );
 }
 
-// Connector Line with Animations
-function ConnectorLine({
-  settings,
-  isLast,
-  isVertical,
-}: {
-  settings: ProcessStepsWidgetSettings;
-  isLast: boolean;
-  isVertical: boolean;
-}) {
+// Horizontal Connector Line - spans grid gap between steps
+function HorizontalConnectorLine({ settings }: { settings: ProcessStepsWidgetSettings }) {
   const { connector } = settings;
 
-  if (!connector.show || isLast) return null;
-
-  const getAnimationStyles = (): React.CSSProperties => {
-    const baseStyles: React.CSSProperties = {
-      backgroundColor: connector.color || "#fde8d7",
-    };
-
-    if (connector.style === "dashed") {
-      return {
-        ...baseStyles,
-        backgroundImage: `repeating-linear-gradient(
-          ${isVertical ? "180deg" : "90deg"},
-          ${connector.color || "#fde8d7"},
-          ${connector.color || "#fde8d7"} 8px,
-          transparent 8px,
-          transparent 16px
-        )`,
-        backgroundColor: "transparent",
-      };
-    }
-
-    if (connector.style === "dotted") {
-      return {
-        ...baseStyles,
-        backgroundImage: `repeating-linear-gradient(
-          ${isVertical ? "180deg" : "90deg"},
-          ${connector.color || "#fde8d7"},
-          ${connector.color || "#fde8d7"} 4px,
-          transparent 4px,
-          transparent 12px
-        )`,
-        backgroundColor: "transparent",
-      };
-    }
-
-    if (connector.style === "gradient") {
-      return {
-        background: `linear-gradient(${isVertical ? "180deg" : "90deg"}, ${connector.color || "#fde8d7"}, ${connector.secondaryColor || "#f97316"})`,
-      };
-    }
-
-    return baseStyles;
-  };
-
-  const speedMap = {
+  const speedMap: Record<string, string> = {
     slow: "8s",
     medium: "4s",
     fast: "2s",
   };
 
-  const animationDuration = speedMap[connector.animationSpeed];
+  const animationDuration = speedMap[connector.animationSpeed] || "4s";
+  const color = connector.color || "#fde8d7";
+  const secondaryColor = connector.secondaryColor || "#f97316";
+  const direction = "to right";
 
-  // Animation keyframes are defined in CSS
-  const getAnimationClass = (): string => {
-    switch (connector.animation) {
-      case "flow":
-        return "animate-connector-flow";
-      case "pulse":
-        return "animate-connector-pulse";
-      case "dash-flow":
-        return "animate-connector-dash";
-      case "shimmer":
-        return "animate-connector-shimmer";
-      case "draw":
-        return "animate-connector-draw";
+  // Get background styles based on line style
+  const getLineStyleBackground = (): React.CSSProperties => {
+    switch (connector.style) {
+      case "dashed":
+        return {
+          backgroundImage: `repeating-linear-gradient(${direction}, ${color} 0px, ${color} 10px, transparent 10px, transparent 20px)`,
+          backgroundColor: "transparent",
+        };
+      case "dotted":
+        return {
+          backgroundImage: `repeating-linear-gradient(${direction}, ${color} 0px, ${color} 4px, transparent 4px, transparent 12px)`,
+          backgroundColor: "transparent",
+        };
+      case "gradient":
+        return {
+          background: `linear-gradient(${direction}, ${color}, ${secondaryColor})`,
+        };
+      case "solid":
       default:
-        return "";
+        return {
+          backgroundColor: color,
+        };
     }
   };
 
-  // Build the final background style combining line style + animation
+  // Get final styles based on animation
   const getFinalStyles = (): React.CSSProperties => {
-    const lineStyles = getAnimationStyles();
-
-    // For shimmer, we need to layer the shimmer on top using pseudo-element approach
-    // But since we can't use pseudo-elements easily, we'll use a different approach
-    if (connector.animation === "shimmer") {
-      // Keep the line style, shimmer will be handled via opacity animation
-      return lineStyles;
+    switch (connector.animation) {
+      case "flow":
+        return {
+          background: `linear-gradient(${direction}, ${color}, ${secondaryColor}, ${color})`,
+          backgroundSize: "200% 100%",
+        };
+      case "shimmer":
+        return {
+          background: `linear-gradient(90deg, ${color} 0%, ${color} 40%, ${secondaryColor} 50%, ${color} 60%, ${color} 100%)`,
+          backgroundSize: "300% 100%",
+        };
+      case "dash-flow":
+        return {
+          backgroundImage: `repeating-linear-gradient(${direction}, ${color} 0px, ${color} 10px, transparent 10px, transparent 20px)`,
+          backgroundColor: "transparent",
+        };
+      default:
+        return getLineStyleBackground();
     }
+  };
 
-    return lineStyles;
+  // Get animation style
+  const getAnimationStyle = (): React.CSSProperties => {
+    switch (connector.animation) {
+      case "flow":
+        return { animation: `connector-flow-h ${animationDuration} linear infinite` };
+      case "pulse":
+        return { animation: `connector-pulse ${animationDuration} ease-in-out infinite` };
+      case "dash-flow":
+        return { animation: `connector-dash-h ${animationDuration} linear infinite` };
+      case "shimmer":
+        return { animation: `connector-shimmer-h ${animationDuration} linear infinite` };
+      case "draw":
+        return {
+          transformOrigin: "left",
+          animation: `connector-draw-h 1.5s ease-out forwards`,
+        };
+      default:
+        return {};
+    }
   };
 
   return (
-    <>
-      {/* CSS Animations */}
-      <style jsx global>{`
-        @keyframes connector-flow {
-          0% { background-position: 0% 50%; }
-          50% { background-position: 100% 50%; }
-          100% { background-position: 0% 50%; }
-        }
-        @keyframes connector-pulse {
-          0%, 100% { opacity: 0.6; }
-          50% { opacity: 1; }
-        }
-        @keyframes connector-dash {
-          0% { background-position: 0 0; }
-          100% { background-position: ${isVertical ? "0 100px" : "100px 0"}; }
-        }
-        @keyframes connector-shimmer {
-          0% { background-position: -200% 0; }
-          100% { background-position: 200% 0; }
-        }
-        @keyframes connector-draw {
-          0% { transform: ${isVertical ? "scaleY(0)" : "scaleX(0)"}; }
-          100% { transform: ${isVertical ? "scaleY(1)" : "scaleX(1)"}; }
-        }
-        @keyframes dot-travel {
-          0% { transform: ${isVertical ? "translateY(-100%)" : "translateX(-100%)"}; }
-          100% { transform: ${isVertical ? "translateY(200%)" : "translateX(200%)"}; }
-        }
-        .animate-connector-flow {
-          background-size: 200% 200%;
-          animation: connector-flow ${animationDuration} ease infinite;
-        }
-        .animate-connector-pulse {
-          animation: connector-pulse ${animationDuration} ease-in-out infinite;
-        }
-        .animate-connector-dash {
-          animation: connector-dash ${animationDuration} linear infinite;
-        }
-        .animate-connector-shimmer {
-          position: relative;
-          overflow: hidden;
-        }
-        .animate-connector-shimmer::after {
-          content: '';
-          position: absolute;
-          top: 0;
-          left: 0;
-          right: 0;
-          bottom: 0;
-          background: linear-gradient(90deg, transparent, rgba(255,255,255,0.6), transparent);
-          background-size: 200% 100%;
-          animation: connector-shimmer ${animationDuration} linear infinite;
-        }
-        .animate-connector-draw {
-          transform-origin: ${isVertical ? "top" : "left"};
-          animation: connector-draw 1s ease-out forwards;
-        }
-      `}</style>
-
-      {isVertical ? (
-        // Vertical connector
+    <div
+      className="absolute pointer-events-none"
+      style={{
+        // Position at the right edge of this grid cell, spanning the gap
+        top: "32px", // Roughly at icon center height
+        right: `-${settings.layout.gap}px`,
+        width: `${settings.layout.gap}px`,
+        height: `${connector.thickness}px`,
+        ...getFinalStyles(),
+        ...getAnimationStyle(),
+        zIndex: 5,
+      }}
+    >
+      {/* Traveling Dot */}
+      {connector.animation === "dot-travel" && (
         <div
-          className={cn(
-            "absolute left-1/2 -translate-x-1/2 w-0.5",
-            getAnimationClass()
-          )}
+          className="absolute rounded-full"
           style={{
-            ...getFinalStyles(),
-            height: `${settings.layout.verticalSpacing}px`,
-            top: "100%",
-            width: `${connector.thickness}px`,
+            width: `${connector.dotSize || 8}px`,
+            height: `${connector.dotSize || 8}px`,
+            backgroundColor: connector.dotColor || "#f97316",
+            top: "50%",
+            marginTop: `-${(connector.dotSize || 8) / 2}px`,
+            animation: `dot-travel-h ${animationDuration} linear infinite`,
           }}
-        >
-          {/* Traveling Dot for dot-travel animation */}
-          {connector.animation === "dot-travel" && (
-            <div
-              className="absolute rounded-full"
-              style={{
-                width: `${connector.dotSize || 8}px`,
-                height: `${connector.dotSize || 8}px`,
-                backgroundColor: connector.dotColor || "#f97316",
-                left: "50%",
-                transform: "translateX(-50%)",
-                animation: `dot-travel ${animationDuration} linear infinite`,
-              }}
-            />
-          )}
-        </div>
-      ) : (
-        // Horizontal connector
-        <div
-          className={cn(
-            "absolute top-1/2 -translate-y-1/2 flex-1",
-            getAnimationClass()
-          )}
-          style={{
-            ...getFinalStyles(),
-            height: `${connector.thickness}px`,
-            left: "calc(50% + 40px)",
-            right: "calc(-50% + 40px)",
-            width: "calc(100% - 80px)",
-          }}
-        >
-          {/* Traveling Dot for dot-travel animation */}
-          {connector.animation === "dot-travel" && (
-            <div
-              className="absolute rounded-full"
-              style={{
-                width: `${connector.dotSize || 8}px`,
-                height: `${connector.dotSize || 8}px`,
-                backgroundColor: connector.dotColor || "#f97316",
-                top: "50%",
-                transform: "translateY(-50%)",
-                animation: `dot-travel ${animationDuration} linear infinite`,
-              }}
-            />
-          )}
-        </div>
+        />
       )}
-    </>
+    </div>
+  );
+}
+
+// Vertical Connector Line with Animations
+function VerticalConnectorLine({
+  settings,
+  isLast,
+}: {
+  settings: ProcessStepsWidgetSettings;
+  isLast: boolean;
+}) {
+  const { connector } = settings;
+
+  if (!connector.show || isLast) return null;
+
+  const speedMap: Record<string, string> = {
+    slow: "8s",
+    medium: "4s",
+    fast: "2s",
+  };
+
+  const animationDuration = speedMap[connector.animationSpeed] || "4s";
+  const color = connector.color || "#fde8d7";
+  const secondaryColor = connector.secondaryColor || "#f97316";
+  const direction = "to bottom";
+
+  // Get background styles based on line style
+  const getLineStyleBackground = (): React.CSSProperties => {
+    switch (connector.style) {
+      case "dashed":
+        return {
+          backgroundImage: `repeating-linear-gradient(${direction}, ${color} 0px, ${color} 10px, transparent 10px, transparent 20px)`,
+          backgroundColor: "transparent",
+        };
+      case "dotted":
+        return {
+          backgroundImage: `repeating-linear-gradient(${direction}, ${color} 0px, ${color} 4px, transparent 4px, transparent 12px)`,
+          backgroundColor: "transparent",
+        };
+      case "gradient":
+        return {
+          background: `linear-gradient(${direction}, ${color}, ${secondaryColor})`,
+        };
+      case "solid":
+      default:
+        return {
+          backgroundColor: color,
+        };
+    }
+  };
+
+  // Get final styles based on animation
+  const getFinalStyles = (): React.CSSProperties => {
+    switch (connector.animation) {
+      case "flow":
+        return {
+          background: `linear-gradient(${direction}, ${color}, ${secondaryColor}, ${color})`,
+          backgroundSize: "100% 200%",
+        };
+      case "shimmer":
+        return {
+          background: `linear-gradient(180deg, ${color} 0%, ${color} 40%, ${secondaryColor} 50%, ${color} 60%, ${color} 100%)`,
+          backgroundSize: "100% 300%",
+        };
+      case "dash-flow":
+        return {
+          backgroundImage: `repeating-linear-gradient(${direction}, ${color} 0px, ${color} 10px, transparent 10px, transparent 20px)`,
+          backgroundColor: "transparent",
+        };
+      default:
+        return getLineStyleBackground();
+    }
+  };
+
+  // Get animation style
+  const getAnimationStyle = (): React.CSSProperties => {
+    switch (connector.animation) {
+      case "flow":
+        return { animation: `connector-flow-v ${animationDuration} linear infinite` };
+      case "pulse":
+        return { animation: `connector-pulse ${animationDuration} ease-in-out infinite` };
+      case "dash-flow":
+        return { animation: `connector-dash-v ${animationDuration} linear infinite` };
+      case "shimmer":
+        return { animation: `connector-shimmer-v ${animationDuration} linear infinite` };
+      case "draw":
+        return {
+          transformOrigin: "top",
+          animation: `connector-draw-v 1.5s ease-out forwards`,
+        };
+      default:
+        return {};
+    }
+  };
+
+  return (
+    <div
+      className="absolute left-1/2 -translate-x-1/2 pointer-events-none"
+      style={{
+        ...getFinalStyles(),
+        ...getAnimationStyle(),
+        height: `${settings.layout.verticalSpacing}px`,
+        top: "100%",
+        width: `${connector.thickness}px`,
+        zIndex: 5,
+      }}
+    >
+      {/* Traveling Dot for dot-travel animation */}
+      {connector.animation === "dot-travel" && (
+        <div
+          className="absolute rounded-full"
+          style={{
+            width: `${connector.dotSize || 8}px`,
+            height: `${connector.dotSize || 8}px`,
+            backgroundColor: connector.dotColor || "#f97316",
+            left: "50%",
+            marginLeft: `-${(connector.dotSize || 8) / 2}px`,
+            animation: `dot-travel-v ${animationDuration} linear infinite`,
+          }}
+        />
+      )}
+    </div>
   );
 }
 
@@ -398,6 +416,7 @@ function StepItem({
   isLast: boolean;
   isVertical: boolean;
 }) {
+  const [isHovered, setIsHovered] = useState(false);
   const Icon = getLucideIcon(step.icon);
   const { stepNumber, stepIcon, stepContent, card } = settings;
 
@@ -462,15 +481,32 @@ function StepItem({
     bounce: "group-hover:animate-bounce",
     pulse: "group-hover:animate-pulse",
     rotate: "group-hover:rotate-12 transition-transform",
-    shake: "group-hover:animate-shake",
+    shake: "icon-hover-shake",
   };
 
-  // Card hover effect classes
-  const cardHoverClasses = {
-    none: "",
-    lift: "hover:-translate-y-1 hover:shadow-lg transition-all",
-    glow: "hover:shadow-lg hover:shadow-primary/20 transition-all",
-    scale: "hover:scale-105 transition-transform",
+  // Get hover effect styles (state-based for preview mode compatibility)
+  const getHoverStyles = (): React.CSSProperties => {
+    if (!card.show || card.hoverEffect === "none" || !isHovered) {
+      return {};
+    }
+
+    switch (card.hoverEffect) {
+      case "lift":
+        return {
+          transform: "translateY(-8px)",
+          boxShadow: "0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1)",
+        };
+      case "glow":
+        return {
+          boxShadow: "0 0 25px rgba(249, 115, 22, 0.5), 0 0 10px rgba(249, 115, 22, 0.3)",
+        };
+      case "scale":
+        return {
+          transform: "scale(1.05)",
+        };
+      default:
+        return {};
+    }
   };
 
   const alignmentClasses = {
@@ -479,12 +515,25 @@ function StepItem({
     right: "items-end text-right",
   };
 
+  // Base shadow for card
+  const getBaseShadow = () => {
+    if (!card.show || card.shadow === "none") return undefined;
+    switch (card.shadow) {
+      case "sm": return "0 1px 2px rgba(0,0,0,0.05)";
+      case "md": return "0 4px 6px rgba(0,0,0,0.1)";
+      case "lg": return "0 10px 15px rgba(0,0,0,0.1)";
+      default: return undefined;
+    }
+  };
+
+  const hoverStyles = getHoverStyles();
+
   return (
     <div
       className={cn(
-        "relative group flex flex-col",
+        "relative group flex flex-col overflow-visible",
         alignmentClasses[stepContent.alignment],
-        card.show && cardHoverClasses[card.hoverEffect]
+        card.show && card.hoverEffect !== "none" && "cursor-pointer"
       )}
       style={{
         backgroundColor: card.show ? card.backgroundColor : undefined,
@@ -492,16 +541,16 @@ function StepItem({
         borderWidth: card.show ? `${card.borderWidth}px` : undefined,
         borderColor: card.show ? card.borderColor : undefined,
         padding: card.show ? `${card.padding}px` : undefined,
-        boxShadow: card.show && card.shadow !== "none"
-          ? card.shadow === "sm" ? "0 1px 2px rgba(0,0,0,0.05)"
-          : card.shadow === "md" ? "0 4px 6px rgba(0,0,0,0.1)"
-          : "0 10px 15px rgba(0,0,0,0.1)"
-          : undefined,
+        boxShadow: hoverStyles.boxShadow || getBaseShadow(),
+        transform: hoverStyles.transform,
+        transition: "all 0.3s ease",
       }}
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
     >
       {/* Icon with Number Badge */}
       {stepIcon.show && (
-        <div className="relative mb-4">
+        <div className="relative mb-4 overflow-visible">
           {/* Icon Container */}
           <div
             className={cn(
@@ -547,15 +596,12 @@ function StepItem({
             </div>
           )}
 
-          {/* Connector Line (for horizontal layout) */}
-          {!isVertical && (
-            <ConnectorLine
-              settings={settings}
-              isLast={isLast}
-              isVertical={false}
-            />
-          )}
         </div>
+      )}
+
+      {/* Horizontal Connector Line - positioned at StepItem level for better alignment */}
+      {!isVertical && !isLast && settings.connector.show && (
+        <HorizontalConnectorLine settings={settings} />
       )}
 
       {/* Title */}
@@ -576,10 +622,9 @@ function StepItem({
 
       {/* Connector Line (for vertical layout) */}
       {isVertical && (
-        <ConnectorLine
+        <VerticalConnectorLine
           settings={settings}
           isLast={isLast}
-          isVertical={true}
         />
       )}
     </div>
@@ -652,7 +697,7 @@ export function ProcessStepsWidget({
 
       <div
         className={cn(
-          "grid relative",
+          "grid relative overflow-visible",
           getColumnClasses(),
           isAlternating && "lg:grid-cols-1"
         )}
@@ -662,7 +707,7 @@ export function ProcessStepsWidget({
           <div
             key={step.id}
             className={cn(
-              "transition-all duration-500",
+              "transition-all duration-500 overflow-visible",
               isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4",
               isAlternating && index % 2 !== 0 && "lg:ml-auto"
             )}

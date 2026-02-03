@@ -726,6 +726,10 @@ export interface LeadFormWidgetSettings {
   emailTo?: string;
   // Styling
   backgroundColor?: string;
+  titleColor?: string;
+  descriptionColor?: string;
+  labelColor?: string;
+  inputTextColor?: string;
   padding: number;
   borderRadius: number;
   shadow: boolean;
@@ -1262,12 +1266,125 @@ export interface HeadingWidgetSettings {
   };
 }
 
-// Text Block Widget
+// Text Block Widget (Tiptap)
+export type TextBlockToolbarPreset = "minimal" | "basic" | "standard" | "full";
+
 export interface TextBlockWidgetSettings {
-  content: string;
-  alignment: "left" | "center" | "right" | "justify";
-  color?: string;
-  size: "sm" | "md" | "lg";
+  // === CONTENT ===
+  content: string; // HTML content from Tiptap
+
+  // === EDITOR CONFIG ===
+  editor: {
+    toolbar: TextBlockToolbarPreset;
+    minHeight: number; // px (default: 200)
+    maxHeight?: number; // px (optional limit)
+    charLimit?: number;
+    placeholder?: string;
+  };
+
+  // === TYPOGRAPHY ===
+  typography: {
+    fontFamily?: string;
+    fontSize: number; // px
+    lineHeight: number; // unitless (e.g., 1.6)
+    letterSpacing?: number; // px
+    color: string;
+    linkColor: string;
+    linkHoverColor: string;
+    linkUnderline: boolean;
+  };
+
+  // === CONTAINER STYLING ===
+  container: {
+    backgroundColor?: string;
+    padding: number; // px
+    borderRadius: number; // px
+    border?: {
+      width: number;
+      color: string;
+      style: "solid" | "dashed" | "dotted";
+    };
+    shadow?: "none" | "sm" | "md" | "lg";
+    maxWidth?: number; // px (for readability)
+  };
+
+  // === PARAGRAPH STYLING ===
+  paragraphSpacing: number; // Margin between paragraphs (px)
+
+  // === LIST STYLING ===
+  lists: {
+    bulletStyle: "disc" | "circle" | "square" | "none";
+    bulletColor?: string;
+    numberStyle:
+      | "decimal"
+      | "lower-alpha"
+      | "upper-alpha"
+      | "lower-roman"
+      | "upper-roman";
+    indentation: number; // px
+  };
+
+  // === BLOCKQUOTE STYLING ===
+  blockquote: {
+    borderColor: string;
+    borderWidth: number;
+    backgroundColor?: string;
+    fontStyle: "normal" | "italic";
+    padding: number;
+  };
+
+  // === DROP CAP ===
+  dropCap: {
+    enabled: boolean;
+    size: number; // Lines to span (2-4)
+    color?: string;
+    fontFamily?: string;
+  };
+
+  // === COLUMNS (Multi-column text) ===
+  columns?: {
+    enabled: boolean;
+    count: 1 | 2 | 3;
+    gap: number; // px
+    divider?: {
+      show: boolean;
+      color: string;
+      width: number;
+    };
+  };
+
+  // === ANIMATION ===
+  animation?: {
+    entrance: {
+      enabled: boolean;
+      type: "none" | "fade" | "fade-up" | "fade-down" | "slide-up";
+      duration: number; // ms
+      delay: number; // ms
+    };
+  };
+
+  // === RESPONSIVE ===
+  responsive?: {
+    tablet?: {
+      fontSize?: number;
+      lineHeight?: number;
+      columns?: number;
+    };
+    mobile?: {
+      fontSize?: number;
+      lineHeight?: number;
+      columns?: number;
+    };
+  };
+
+  // === ADVANCED ===
+  advanced?: {
+    customClass?: string;
+    customId?: string;
+    hideOnDesktop: boolean;
+    hideOnTablet: boolean;
+    hideOnMobile: boolean;
+  };
 }
 
 // Spacer Widget

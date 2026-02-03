@@ -1,5 +1,6 @@
 @import "tailwindcss" source("../");
 @import "../styles/heading-animations.css";
+@import "../styles/text-block.css";
 
 @theme inline {
   /* Heartbeat Animation */
@@ -172,6 +173,7 @@
       transform: translateX(100%);
     }
   }
+
 }
 
 @theme {
@@ -479,4 +481,77 @@
   [data-preview-mode] a:hover {
     transform: none !important;
   }
+}
+
+/* ============================================
+   Process Steps - Global Keyframes
+   (Outside @theme for direct animation property usage)
+   ============================================ */
+
+/* Connector Flow Animations */
+@keyframes connector-flow-h {
+  0% { background-position: 0% 0; }
+  100% { background-position: 200% 0; }
+}
+@keyframes connector-flow-v {
+  0% { background-position: 0 0%; }
+  100% { background-position: 0 200%; }
+}
+
+/* Connector Pulse */
+@keyframes connector-pulse {
+  0%, 100% { opacity: 0.4; transform: scaleY(0.8); }
+  50% { opacity: 1; transform: scaleY(1); }
+}
+
+/* Connector Dash Flow */
+@keyframes connector-dash-h {
+  0% { background-position: 0 0; }
+  100% { background-position: 40px 0; }
+}
+@keyframes connector-dash-v {
+  0% { background-position: 0 0; }
+  100% { background-position: 0 40px; }
+}
+
+/* Connector Shimmer */
+@keyframes connector-shimmer-h {
+  0% { background-position: -100% 0; }
+  100% { background-position: 200% 0; }
+}
+@keyframes connector-shimmer-v {
+  0% { background-position: 0 -100%; }
+  100% { background-position: 0 200%; }
+}
+
+/* Connector Draw */
+@keyframes connector-draw-h {
+  0% { transform: scaleX(0); opacity: 0; }
+  100% { transform: scaleX(1); opacity: 1; }
+}
+@keyframes connector-draw-v {
+  0% { transform: scaleY(0); opacity: 0; }
+  100% { transform: scaleY(1); opacity: 1; }
+}
+
+/* Traveling Dot */
+@keyframes dot-travel-h {
+  0% { left: -10%; }
+  100% { left: 110%; }
+}
+@keyframes dot-travel-v {
+  0% { top: -10%; }
+  100% { top: 110%; }
+}
+
+/* Icon Hover Shake */
+@keyframes icon-shake {
+  0%, 100% { transform: translateX(0); }
+  10%, 30%, 50%, 70%, 90% { transform: translateX(-4px); }
+  20%, 40%, 60%, 80% { transform: translateX(4px); }
+}
+
+/* Process Steps - Icon Hover Shake Effect */
+.group:hover .icon-hover-shake {
+  animation: icon-shake 0.5s ease-in-out;
 }

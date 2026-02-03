@@ -60,22 +60,31 @@ export function TestimonialsWidgetSettingsPanel({
     fetchTags();
   }, []);
 
-  // Merge with defaults
-  const s: TestimonialsWidgetSettings = {
-    ...DEFAULT_TESTIMONIALS_SETTINGS,
-    ...settings,
-    header: { ...DEFAULT_TESTIMONIALS_SETTINGS.header, ...settings?.header },
-    dataSource: { ...DEFAULT_TESTIMONIALS_SETTINGS.dataSource, ...settings?.dataSource },
-    gridView: { ...DEFAULT_TESTIMONIALS_SETTINGS.gridView, ...settings?.gridView },
-    carouselView: { ...DEFAULT_TESTIMONIALS_SETTINGS.carouselView, ...settings?.carouselView },
-    videoView: { ...DEFAULT_TESTIMONIALS_SETTINGS.videoView, ...settings?.videoView },
-    cardStyle: { ...DEFAULT_TESTIMONIALS_SETTINGS.cardStyle, ...settings?.cardStyle },
-    avatar: { ...DEFAULT_TESTIMONIALS_SETTINGS.avatar, ...settings?.avatar },
-    content: { ...DEFAULT_TESTIMONIALS_SETTINGS.content, ...settings?.content },
-    trustFooter: { ...DEFAULT_TESTIMONIALS_SETTINGS.trustFooter, ...settings?.trustFooter },
-    animation: { ...DEFAULT_TESTIMONIALS_SETTINGS.animation, ...settings?.animation },
-    responsive: { ...DEFAULT_TESTIMONIALS_SETTINGS.responsive, ...settings?.responsive },
-  };
+  // Deep merge helper for nested objects
+  function deepMerge<T extends Record<string, any>>(defaults: T, overrides: Partial<T> | undefined): T {
+    if (!overrides) return defaults;
+    const result = { ...defaults };
+    for (const key in overrides) {
+      if (overrides[key] !== undefined) {
+        if (
+          typeof defaults[key] === "object" &&
+          defaults[key] !== null &&
+          !Array.isArray(defaults[key]) &&
+          typeof overrides[key] === "object" &&
+          overrides[key] !== null &&
+          !Array.isArray(overrides[key])
+        ) {
+          result[key] = deepMerge(defaults[key], overrides[key] as any);
+        } else {
+          result[key] = overrides[key] as any;
+        }
+      }
+    }
+    return result;
+  }
+
+  // Deep merge with defaults to ensure all nested properties exist
+  const s: TestimonialsWidgetSettings = deepMerge(DEFAULT_TESTIMONIALS_SETTINGS, settings);
   const updateSettings = useCallback(
     (updates: Partial<TestimonialsWidgetSettings>) => {
       onChange({ ...s, ...updates });

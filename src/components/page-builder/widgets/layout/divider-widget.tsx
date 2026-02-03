@@ -40,11 +40,18 @@ export function DividerWidget({ settings: partialSettings, isPreview }: DividerW
     textBackground,
   } = settings;
 
-  // Alignment classes
-  const alignmentClass = {
+  // Alignment classes for row flex (horizontal main axis)
+  const rowAlignmentClass = {
     left: "justify-start",
     center: "justify-center",
     right: "justify-end",
+  }[alignment];
+
+  // Alignment classes for column flex (horizontal cross axis - for double line)
+  const colAlignmentClass = {
+    left: "items-start",
+    center: "items-center",
+    right: "items-end",
   }[alignment];
 
   // Text size classes
@@ -107,7 +114,7 @@ export function DividerWidget({ settings: partialSettings, isPreview }: DividerW
   // Render based on style
   if (style === "double") {
     return (
-      <div className={cn("flex flex-col gap-1", alignmentClass)} style={containerStyle}>
+      <div className={cn("flex flex-col w-full gap-1", colAlignmentClass)} style={containerStyle}>
         <div style={{ height: `${thickness}px`, width: `${width}%`, backgroundColor: color }} />
         <div style={{ height: `${thickness}px`, width: `${width}%`, backgroundColor: color }} />
       </div>
@@ -117,7 +124,7 @@ export function DividerWidget({ settings: partialSettings, isPreview }: DividerW
   if (style === "with-icon") {
     const IconComponent = getLucideIcon(icon || "Minus");
     return (
-      <div className={cn("flex items-center gap-4", alignmentClass)} style={containerStyle}>
+      <div className={cn("flex w-full items-center gap-4", rowAlignmentClass)} style={containerStyle}>
         <div
           className="flex-1"
           style={{
@@ -143,7 +150,7 @@ export function DividerWidget({ settings: partialSettings, isPreview }: DividerW
 
   if (style === "with-text") {
     return (
-      <div className={cn("flex items-center gap-4", alignmentClass)} style={containerStyle}>
+      <div className={cn("flex w-full items-center gap-4", rowAlignmentClass)} style={containerStyle}>
         <div
           className="flex-1"
           style={{
@@ -173,7 +180,7 @@ export function DividerWidget({ settings: partialSettings, isPreview }: DividerW
 
   // Default line styles (solid, dashed, dotted, gradient, gradient-fade)
   return (
-    <div className={cn("flex", alignmentClass)} style={containerStyle}>
+    <div className={cn("flex w-full", rowAlignmentClass)} style={containerStyle}>
       <div style={getLineStyle()} />
     </div>
   );

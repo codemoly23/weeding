@@ -48,6 +48,19 @@ function deepMerge<T>(target: T, source: Partial<T>): T {
   return result;
 }
 
+// Default font sizes for each HTML tag
+const TAG_FONT_SIZES: Record<string, number> = {
+  h1: 48,
+  h2: 36,
+  h3: 30,
+  h4: 24,
+  h5: 20,
+  h6: 18,
+  div: 16,
+  span: 16,
+  p: 16,
+};
+
 export function HeadingWidgetSettingsPanel({
   settings: partialSettings,
   onChange,
@@ -148,7 +161,19 @@ export function HeadingWidgetSettingsPanel({
         <SelectInput
           label="HTML Tag"
           value={settings.content.htmlTag}
-          onChange={(v) => updateContent("htmlTag", v as HeadingWidgetSettings["content"]["htmlTag"])}
+          onChange={(v) => {
+            const newTag = v as HeadingWidgetSettings["content"]["htmlTag"];
+            const newFontSize = TAG_FONT_SIZES[newTag] || 36;
+            // Update both tag and font size together
+            onChange({
+              ...settings,
+              content: { ...settings.content, htmlTag: newTag },
+              style: {
+                ...settings.style,
+                typography: { ...settings.style.typography, fontSize: newFontSize },
+              },
+            });
+          }}
           options={[
             { value: "h1", label: "H1 - Main Heading" },
             { value: "h2", label: "H2 - Section Heading" },
@@ -249,8 +274,10 @@ export function HeadingWidgetSettingsPanel({
               checked={settings.content.splitHeading?.enabled || false}
               onChange={(v: boolean) =>
                 updateContent("splitHeading", {
-                  ...settings.content.splitHeading!,
                   enabled: v,
+                  beforeText: settings.content.splitHeading?.beforeText || "",
+                  mainText: settings.content.splitHeading?.mainText || settings.content.text || "Heading",
+                  afterText: settings.content.splitHeading?.afterText || "",
                 })
               }
             />
@@ -302,24 +329,16 @@ export function HeadingWidgetSettingsPanel({
     return (
       <div className="space-y-4">
         {/* Alignment */}
-        <div className="space-y-2">
-          <Label className="text-xs text-slate-400">Alignment</Label>
-          <div className="flex gap-2">
-            {(["left", "center", "right"] as const).map((align) => (
-              <button
-                key={align}
-                onClick={() => updateStyle("alignment", align)}
-                className={`flex-1 py-2 px-3 text-xs rounded border transition-colors ${
-                  settings.style.alignment === align
-                    ? "bg-orange-500/20 border-orange-500 text-orange-400"
-                    : "bg-slate-800 border-slate-700 text-slate-400 hover:border-slate-600"
-                }`}
-              >
-                {align.charAt(0).toUpperCase() + align.slice(1)}
-              </button>
-            ))}
-          </div>
-        </div>
+        <SelectInput
+          label="Alignment"
+          value={settings.style.alignment}
+          onChange={(v) => updateStyle("alignment", v as "left" | "center" | "right")}
+          options={[
+            { value: "left", label: "Left" },
+            { value: "center", label: "Center" },
+            { value: "right", label: "Right" },
+          ]}
+        />
 
         {/* Typography */}
         <AccordionSection title="Typography" defaultOpen>
@@ -412,24 +431,16 @@ export function HeadingWidgetSettingsPanel({
         {/* Text Fill */}
         <AccordionSection title="Text Fill">
           <div className="space-y-3">
-            <div className="space-y-2">
-              <Label className="text-xs text-slate-400">Fill Type</Label>
-              <div className="flex gap-2">
-                {(["solid", "gradient", "image"] as const).map((type) => (
-                  <button
-                    key={type}
-                    onClick={() => updateTextFill("type", type)}
-                    className={`flex-1 py-2 px-3 text-xs rounded border transition-colors ${
-                      settings.style.textFill.type === type
-                        ? "bg-orange-500/20 border-orange-500 text-orange-400"
-                        : "bg-slate-800 border-slate-700 text-slate-400 hover:border-slate-600"
-                    }`}
-                  >
-                    {type.charAt(0).toUpperCase() + type.slice(1)}
-                  </button>
-                ))}
-              </div>
-            </div>
+            <SelectInput
+              label="Fill Type"
+              value={settings.style.textFill.type}
+              onChange={(v) => updateTextFill("type", v as "solid" | "gradient" | "image")}
+              options={[
+                { value: "solid", label: "Solid Color" },
+                { value: "gradient", label: "Gradient" },
+                { value: "image", label: "Image" },
+              ]}
+            />
 
             {settings.style.textFill.type === "solid" && (
               <ColorInput
@@ -582,6 +593,48 @@ export function HeadingWidgetSettingsPanel({
           </div>
         </AccordionSection>
 
+        {/* Split Styles - Only show when Split Heading is enabled */}
+        {settings.content.splitHeading?.enabled && (
+          <AccordionSection title="Split Text Colors" defaultOpen>
+            <div className="space-y-3">
+              <p className="text-xs text-slate-500 mb-2">
+                Set different colors for each part of the split heading
+              </p>
+              <ColorInput
+                label="Before Text Color"
+                value={settings.style.splitStyles?.before?.color || settings.style.textFill?.color || "#000000"}
+                onChange={(v) =>
+                  updateStyle("splitStyles", {
+                    ...settings.style.splitStyles,
+                    before: { ...settings.style.splitStyles?.before, color: v },
+                  })
+                }
+              />
+              <ColorInput
+                label="Main Text Color"
+                value={settings.style.splitStyles?.main?.color || "#f97316"}
+                onChange={(v) =>
+                  updateStyle("splitStyles", {
+                    ...settings.style.splitStyles,
+                    main: { ...settings.style.splitStyles?.main, color: v },
+                  })
+                }
+                description="This is the highlighted part"
+              />
+              <ColorInput
+                label="After Text Color"
+                value={settings.style.splitStyles?.after?.color || settings.style.textFill?.color || "#000000"}
+                onChange={(v) =>
+                  updateStyle("splitStyles", {
+                    ...settings.style.splitStyles,
+                    after: { ...settings.style.splitStyles?.after, color: v },
+                  })
+                }
+              />
+            </div>
+          </AccordionSection>
+        )}
+
         {/* Text Stroke */}
         <AccordionSection title="Text Stroke (Outline)">
           <div className="space-y-3">
@@ -622,15 +675,18 @@ export function HeadingWidgetSettingsPanel({
                   }
                 />
                 <ColorInput
-                  label="Fill Color (optional)"
-                  value={settings.style.textStroke?.fillColor || ""}
+                  label="Fill Color"
+                  value={settings.style.textStroke?.fillColor || "transparent"}
                   onChange={(v) =>
                     updateStyle("textStroke", {
                       ...settings.style.textStroke!,
-                      fillColor: v || undefined,
+                      fillColor: v && v.trim() !== "" && v !== "transparent" ? v : undefined,
                     })
                   }
                 />
+                <p className="text-xs text-slate-500 mt-1">
+                  Color inside the stroke. Default is transparent (outline-only effect).
+                </p>
               </>
             )}
           </div>

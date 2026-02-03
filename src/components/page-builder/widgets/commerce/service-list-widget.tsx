@@ -11,6 +11,7 @@ import type {
   ServiceListCardStyle,
   BadgeStyle,
 } from "@/lib/page-builder/types";
+import { DEFAULT_SERVICE_LIST_SETTINGS } from "@/lib/page-builder/defaults";
 import type { ButtonCustomStyle } from "@/lib/header-footer/types";
 import {
   getNormalBackground,
@@ -138,7 +139,23 @@ function renderHighlightedText(
 
 // Header Section Component
 function SectionHeader({ settings }: { settings: ServiceListWidgetSettings }) {
-  const { header } = settings;
+  // Deep merge header with defaults
+  const header = {
+    ...DEFAULT_SERVICE_LIST_SETTINGS.header,
+    ...settings.header,
+    badge: {
+      ...DEFAULT_SERVICE_LIST_SETTINGS.header.badge,
+      ...settings.header?.badge,
+    },
+    heading: {
+      ...DEFAULT_SERVICE_LIST_SETTINGS.header.heading,
+      ...settings.header?.heading,
+    },
+    description: {
+      ...DEFAULT_SERVICE_LIST_SETTINGS.header.description,
+      ...settings.header?.description,
+    },
+  };
 
   if (!header?.show) return null;
 

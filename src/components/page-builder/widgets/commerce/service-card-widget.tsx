@@ -12,6 +12,7 @@ import type {
   ServiceCardHoverEffect,
   BadgeStyle,
 } from "@/lib/page-builder/types";
+import { DEFAULT_SERVICE_CARD_SETTINGS } from "@/lib/page-builder/defaults";
 
 // Service type from database
 interface ServiceData {
@@ -234,6 +235,91 @@ function getIconSizeClasses(size: "sm" | "md" | "lg"): { container: string; icon
   }
 }
 
+// Get icon style classes (shape) - handles all ServiceCardIconStyle values
+function getIconStyleClasses(style: string): string {
+  switch (style) {
+    case "circle":
+      return "rounded-full";
+    case "rounded":
+      return "rounded-lg";
+    case "square":
+      return "rounded-none";
+    case "gradient-bg":
+      return "rounded-lg bg-gradient-to-br from-primary/20 to-purple-500/20";
+    case "outline":
+      return "rounded-lg border-2 bg-transparent";
+    case "none":
+      return "bg-transparent";
+    default:
+      return "rounded-lg";
+  }
+}
+
+// Check if icon style should have background
+function hasIconBackground(style: string): boolean {
+  return style !== "none" && style !== "outline";
+}
+
+// Get icon hover effect classes (for container)
+function getIconHoverEffectClasses(effect: string): string {
+  switch (effect) {
+    case "scale":
+      return "group-hover:scale-110";
+    case "invert":
+      return "group-hover:bg-primary group-hover:text-primary-foreground";
+    case "bounce":
+      return "group-hover:animate-bounce";
+    case "none":
+    default:
+      return "";
+  }
+}
+
+// Get icon animation classes (for icon itself)
+function getIconAnimationClasses(animation: string): string {
+  switch (animation) {
+    case "scale":
+      return "group-hover:scale-125";
+    case "rotate":
+      return "group-hover:rotate-12";
+    case "bounce":
+      return "group-hover:animate-bounce";
+    case "pulse":
+      return "group-hover:animate-pulse";
+    case "none":
+    default:
+      return "";
+  }
+}
+
+// Get price position classes and styles
+function getPriceDisplay(
+  position: "bottom" | "top-right" | "badge",
+  price: string
+): { className: string; style?: React.CSSProperties; isBadge: boolean; isTopRight: boolean } {
+  switch (position) {
+    case "top-right":
+      return {
+        className: "absolute top-3 right-4 text-sm font-semibold text-primary bg-primary/10 px-2 py-1 rounded-md",
+        isTopRight: true,
+        isBadge: false,
+      };
+    case "badge":
+      return {
+        className: "inline-flex items-center px-3 py-1 rounded-full text-sm font-semibold bg-primary text-primary-foreground",
+        isTopRight: false,
+        isBadge: true,
+      };
+    case "bottom":
+    default:
+      return {
+        className: "font-semibold text-primary",
+        isTopRight: false,
+        isBadge: false,
+      };
+  }
+}
+
 // Get hover effect classes
 function getHoverClasses(effect: ServiceCardHoverEffect): string {
   switch (effect) {
@@ -262,26 +348,61 @@ function MinimalCard({
 }) {
   const Icon = getLucideIcon(service.icon);
   const iconSize = getIconSizeClasses(settings.icon.size);
+  const iconStyle = getIconStyleClasses(settings.icon.style);
+  const iconHoverEffect = getIconHoverEffectClasses(settings.hover.iconEffect);
+  const iconAnimation = getIconAnimationClasses(settings.icon.hoverAnimation);
+  const isInline = settings.icon.position === "inline";
+  const isCentered = settings.icon.position === "top-center";
+  const priceDisplay = getPriceDisplay(settings.content.pricePosition, formatPrice(service.startingPrice));
+
+  const renderIcon = () => {
+    if (!settings.icon.show) return null;
+    const showBg = hasIconBackground(settings.icon.style);
+    return (
+      <div
+        className={cn(
+          "flex items-center justify-center shrink-0 transition-all duration-200",
+          iconSize.container,
+          iconStyle,
+          showBg && "border border-transparent",
+          iconHoverEffect
+        )}
+        style={{
+          backgroundColor: showBg
+            ? (settings.icon.backgroundColor || "rgb(249 115 22 / 0.1)")
+            : "transparent",
+        }}
+      >
+        <Icon
+          className={cn(iconSize.icon, "transition-all duration-200", iconAnimation)}
+          style={{ color: settings.icon.iconColor || "#f97316" }}
+        />
+      </div>
+    );
+  };
 
   return (
-    <div className="flex flex-col gap-3 p-6">
-      {settings.icon.show && (
-        <div
-          className={cn(
-            "flex items-center justify-center rounded-md",
-            iconSize.container
-          )}
-          style={{
-            backgroundColor: settings.icon.backgroundColor || "rgb(249 115 22 / 0.1)",
-          }}
-        >
-          <Icon
-            className={iconSize.icon}
-            style={{ color: settings.icon.iconColor || "#f97316" }}
-          />
-        </div>
+    <div className={cn("relative flex flex-col gap-3 p-6", isCentered && "items-center text-center")}>
+      {/* Price at top-right */}
+      {settings.content.showPrice && priceDisplay.isTopRight && (
+        <span className={priceDisplay.className}>
+          {formatPrice(service.startingPrice)}
+        </span>
       )}
-      <h3 className="font-semibold text-foreground">{service.name}</h3>
+
+      {/* Icon at top (non-inline) */}
+      {settings.icon.show && !isInline && renderIcon()}
+
+      {/* Title with inline icon */}
+      {isInline ? (
+        <div className="flex items-center gap-3">
+          {renderIcon()}
+          <h3 className="font-semibold text-foreground">{service.name}</h3>
+        </div>
+      ) : (
+        <h3 className="font-semibold text-foreground">{service.name}</h3>
+      )}
+
       {settings.content.showDescription && (
         <p
           className={cn(
@@ -294,8 +415,10 @@ function MinimalCard({
           {service.shortDesc}
         </p>
       )}
-      {settings.content.showPrice && (
-        <span className="text-sm font-semibold text-primary">
+
+      {/* Price at bottom or as badge */}
+      {settings.content.showPrice && !priceDisplay.isTopRight && (
+        <span className={priceDisplay.className}>
           {formatPrice(service.startingPrice)}
         </span>
       )}
@@ -312,10 +435,43 @@ function ElevatedCard({
 }) {
   const Icon = getLucideIcon(service.icon);
   const iconSize = getIconSizeClasses(settings.icon.size);
+  const iconStyle = getIconStyleClasses(settings.icon.style);
+  const iconHoverEffect = getIconHoverEffectClasses(settings.hover.iconEffect);
+  const iconAnimation = getIconAnimationClasses(settings.icon.hoverAnimation);
   const hasBadge = settings.content.showBadge && service.isPopular;
+  const isInline = settings.icon.position === "inline";
+  const isCentered = settings.icon.position === "top-center";
+  const priceDisplay = getPriceDisplay(settings.content.pricePosition, formatPrice(service.startingPrice));
+
+  const renderIcon = () => {
+    if (!settings.icon.show) return null;
+    const showBg = hasIconBackground(settings.icon.style);
+    return (
+      <div
+        className={cn(
+          "flex items-center justify-center transition-all duration-200 shrink-0",
+          iconSize.container,
+          iconStyle,
+          showBg && "border border-transparent",
+          iconHoverEffect
+        )}
+        style={{
+          backgroundColor: showBg
+            ? (settings.icon.backgroundColor || "rgb(249 115 22 / 0.1)")
+            : "transparent",
+        }}
+      >
+        <Icon
+          className={cn(iconSize.icon, "transition-all duration-200", iconAnimation)}
+          style={{ color: settings.icon.iconColor || "#f97316" }}
+        />
+      </div>
+    );
+  };
 
   return (
     <>
+      {/* Popular Badge */}
       {hasBadge && (
         <Badge
           className={cn(
@@ -326,30 +482,39 @@ function ElevatedCard({
           Popular
         </Badge>
       )}
-      <div className="p-6">
-        {settings.icon.show && (
-          <div
-            className={cn(
-              "mb-4 flex items-center justify-center rounded-lg transition-colors group-hover:bg-primary group-hover:text-primary-foreground",
-              iconSize.container
-            )}
-            style={{
-              backgroundColor: settings.icon.backgroundColor || "rgb(249 115 22 / 0.1)",
-            }}
-          >
-            <Icon
-              className={cn(iconSize.icon, "transition-colors")}
-              style={{ color: settings.icon.iconColor || "#f97316" }}
-            />
+
+      {/* Price at top-right */}
+      {settings.content.showPrice && priceDisplay.isTopRight && (
+        <span className={cn(priceDisplay.className, hasBadge && settings.content.badgePosition === "top-right" && "top-10")}>
+          {formatPrice(service.startingPrice)}
+        </span>
+      )}
+
+      <div className={cn("p-6", isCentered && "flex flex-col items-center text-center")}>
+        {/* Icon at top (non-inline) */}
+        {settings.icon.show && !isInline && (
+          <div className="mb-4">
+            {renderIcon()}
           </div>
         )}
-        <h3 className={cn(
-          "text-lg font-semibold text-foreground",
-          // Add top margin when icon is hidden but badge is shown to prevent overlap
-          !settings.icon.show && hasBadge && "mt-4"
-        )}>{service.name}</h3>
+
+        {/* Title with inline icon */}
+        {isInline ? (
+          <div className="flex items-center gap-3">
+            {renderIcon()}
+            <h3 className={cn(
+              "text-lg font-semibold text-foreground",
+              !settings.icon.show && hasBadge && "mt-4"
+            )}>{service.name}</h3>
+          </div>
+        ) : (
+          <h3 className={cn(
+            "text-lg font-semibold text-foreground",
+            !settings.icon.show && hasBadge && "mt-4"
+          )}>{service.name}</h3>
+        )}
       </div>
-      <div className="px-6 pb-6 space-y-4">
+      <div className={cn("px-6 pb-6 space-y-4", isCentered && "text-center")}>
         {settings.content.showDescription && (
           <p
             className={cn(
@@ -362,9 +527,10 @@ function ElevatedCard({
             {service.shortDesc}
           </p>
         )}
-        <div className="flex items-center justify-between">
-          {settings.content.showPrice && (
-            <span className="font-semibold text-primary">
+        <div className={cn("flex items-center", isCentered ? "justify-center gap-4" : "justify-between")}>
+          {/* Price at bottom or as badge */}
+          {settings.content.showPrice && !priceDisplay.isTopRight && (
+            <span className={priceDisplay.className}>
               {formatPrice(service.startingPrice)}
             </span>
           )}
@@ -386,10 +552,46 @@ function GlassmorphismCard({
 }) {
   const Icon = getLucideIcon(service.icon);
   const iconSize = getIconSizeClasses(settings.icon.size);
+  const iconStyle = getIconStyleClasses(settings.icon.style);
+  const iconHoverEffect = getIconHoverEffectClasses(settings.hover.iconEffect);
+  const iconAnimation = getIconAnimationClasses(settings.icon.hoverAnimation);
   const hasBadge = settings.content.showBadge && service.isPopular;
+  const isInline = settings.icon.position === "inline";
+  const isCentered = settings.icon.position === "top-center";
+  const priceDisplay = getPriceDisplay(settings.content.pricePosition, formatPrice(service.startingPrice));
+
+  const renderIcon = () => {
+    if (!settings.icon.show) return null;
+    const showBg = hasIconBackground(settings.icon.style);
+    return (
+      <div
+        className={cn(
+          "flex items-center justify-center backdrop-blur-sm border border-white/20 shrink-0 transition-all duration-200",
+          iconSize.container,
+          iconStyle,
+          showBg ? "bg-white/10" : "bg-transparent border-transparent",
+          iconHoverEffect
+        )}
+      >
+        <Icon className={cn(iconSize.icon, "text-white transition-all duration-200", iconAnimation)} />
+      </div>
+    );
+  };
+
+  // Custom price classes for glassmorphism style
+  const getPriceClasses = () => {
+    if (priceDisplay.isTopRight) {
+      return cn("absolute top-3 right-4 text-sm font-semibold text-white bg-white/10 backdrop-blur-sm px-2 py-1 rounded-md border border-white/20", hasBadge && settings.content.badgePosition === "top-right" && "top-10");
+    }
+    if (priceDisplay.isBadge) {
+      return "inline-flex items-center px-3 py-1 rounded-full text-sm font-semibold bg-white/20 text-white backdrop-blur-sm";
+    }
+    return "font-semibold text-white";
+  };
 
   return (
     <>
+      {/* Popular Badge */}
       {hasBadge && (
         <Badge
           className={cn(
@@ -400,26 +602,42 @@ function GlassmorphismCard({
           Popular
         </Badge>
       )}
-      <div className="p-6">
-        {settings.icon.show && (
-          <div
-            className={cn(
-              "mb-4 flex items-center justify-center rounded-xl bg-white/10 backdrop-blur-sm border border-white/20",
-              iconSize.container
-            )}
-          >
-            <Icon className={cn(iconSize.icon, "text-white")} />
+
+      {/* Price at top-right */}
+      {settings.content.showPrice && priceDisplay.isTopRight && (
+        <span className={getPriceClasses()}>
+          {formatPrice(service.startingPrice)}
+        </span>
+      )}
+
+      <div className={cn("p-6", isCentered && "flex flex-col items-center text-center")}>
+        {/* Icon at top (non-inline) */}
+        {settings.icon.show && !isInline && (
+          <div className="mb-4">
+            {renderIcon()}
           </div>
         )}
-        <h3 className={cn(
-          "text-lg font-semibold text-white",
-          !settings.icon.show && hasBadge && "mt-4"
-        )}>{service.name}</h3>
+
+        {/* Title with inline icon */}
+        {isInline ? (
+          <div className="flex items-center gap-3">
+            {renderIcon()}
+            <h3 className={cn(
+              "text-lg font-semibold text-white",
+              !settings.icon.show && hasBadge && "mt-4"
+            )}>{service.name}</h3>
+          </div>
+        ) : (
+          <h3 className={cn(
+            "text-lg font-semibold text-white",
+            !settings.icon.show && hasBadge && "mt-4"
+          )}>{service.name}</h3>
+        )}
         {settings.content.showCategory && service.category && (
           <span className="text-xs text-white/60">{service.category.name}</span>
         )}
       </div>
-      <div className="px-6 pb-6 space-y-4">
+      <div className={cn("px-6 pb-6 space-y-4", isCentered && "text-center")}>
         {settings.content.showDescription && (
           <p
             className={cn(
@@ -432,9 +650,10 @@ function GlassmorphismCard({
             {service.shortDesc}
           </p>
         )}
-        <div className="flex items-center justify-between">
-          {settings.content.showPrice && (
-            <span className="font-semibold text-white">
+        <div className={cn("flex items-center", isCentered ? "justify-center gap-4" : "justify-between")}>
+          {/* Price at bottom or as badge */}
+          {settings.content.showPrice && !priceDisplay.isTopRight && (
+            <span className={getPriceClasses()}>
               {formatPrice(service.startingPrice)}
             </span>
           )}
@@ -456,7 +675,42 @@ function GradientBorderCard({
 }) {
   const Icon = getLucideIcon(service.icon);
   const iconSize = getIconSizeClasses(settings.icon.size);
+  const iconStyle = getIconStyleClasses(settings.icon.style);
+  const iconHoverEffect = getIconHoverEffectClasses(settings.hover.iconEffect);
+  const iconAnimation = getIconAnimationClasses(settings.icon.hoverAnimation);
   const hasBadge = settings.content.showBadge && service.isPopular;
+  const isInline = settings.icon.position === "inline";
+  const isCentered = settings.icon.position === "top-center";
+  const priceDisplay = getPriceDisplay(settings.content.pricePosition, formatPrice(service.startingPrice));
+
+  const renderIcon = () => {
+    if (!settings.icon.show) return null;
+    const showBg = hasIconBackground(settings.icon.style);
+    return (
+      <div
+        className={cn(
+          "flex items-center justify-center shrink-0 transition-all duration-200",
+          iconSize.container,
+          iconStyle,
+          showBg ? "bg-gradient-to-br from-primary/20 to-purple-500/20" : "bg-transparent",
+          iconHoverEffect
+        )}
+      >
+        <Icon className={cn(iconSize.icon, "text-primary transition-all duration-200", iconAnimation)} />
+      </div>
+    );
+  };
+
+  // Custom price classes for gradient border style
+  const getPriceClasses = () => {
+    if (priceDisplay.isTopRight) {
+      return cn("absolute top-3 right-4 text-sm font-semibold bg-gradient-to-r from-primary to-purple-500 bg-clip-text text-transparent bg-card/80 px-2 py-1 rounded-md", hasBadge && settings.content.badgePosition === "top-right" && "top-10");
+    }
+    if (priceDisplay.isBadge) {
+      return "inline-flex items-center px-3 py-1 rounded-full text-sm font-semibold bg-gradient-to-r from-primary to-purple-500 text-white";
+    }
+    return "font-semibold bg-gradient-to-r from-primary to-purple-500 bg-clip-text text-transparent";
+  };
 
   return (
     <div className="relative p-[2px] rounded-xl bg-gradient-to-br from-primary via-purple-500 to-pink-500 group-hover:from-primary group-hover:via-orange-400 group-hover:to-yellow-400 transition-all">
@@ -464,6 +718,7 @@ function GradientBorderCard({
         className="relative bg-card rounded-xl h-full"
         style={{ borderRadius: `${Math.max(0, settings.borderRadius - 2)}px` }}
       >
+        {/* Popular Badge */}
         {hasBadge && (
           <Badge
             className={cn(
@@ -474,23 +729,39 @@ function GradientBorderCard({
             Popular
           </Badge>
         )}
-        <div className="p-6">
-          {settings.icon.show && (
-            <div
-              className={cn(
-                "mb-4 flex items-center justify-center rounded-lg bg-gradient-to-br from-primary/20 to-purple-500/20",
-                iconSize.container
-              )}
-            >
-              <Icon className={cn(iconSize.icon, "text-primary")} />
+
+        {/* Price at top-right */}
+        {settings.content.showPrice && priceDisplay.isTopRight && (
+          <span className={getPriceClasses()}>
+            {formatPrice(service.startingPrice)}
+          </span>
+        )}
+
+        <div className={cn("p-6", isCentered && "flex flex-col items-center text-center")}>
+          {/* Icon at top (non-inline) */}
+          {settings.icon.show && !isInline && (
+            <div className="mb-4">
+              {renderIcon()}
             </div>
           )}
-          <h3 className={cn(
-            "text-lg font-semibold text-foreground",
-            !settings.icon.show && hasBadge && "mt-4"
-          )}>{service.name}</h3>
+
+          {/* Title with inline icon */}
+          {isInline ? (
+            <div className="flex items-center gap-3">
+              {renderIcon()}
+              <h3 className={cn(
+                "text-lg font-semibold text-foreground",
+                !settings.icon.show && hasBadge && "mt-4"
+              )}>{service.name}</h3>
+            </div>
+          ) : (
+            <h3 className={cn(
+              "text-lg font-semibold text-foreground",
+              !settings.icon.show && hasBadge && "mt-4"
+            )}>{service.name}</h3>
+          )}
         </div>
-        <div className="px-6 pb-6 space-y-4">
+        <div className={cn("px-6 pb-6 space-y-4", isCentered && "text-center")}>
           {settings.content.showDescription && (
             <p
               className={cn(
@@ -503,9 +774,10 @@ function GradientBorderCard({
               {service.shortDesc}
             </p>
           )}
-          <div className="flex items-center justify-between">
-            {settings.content.showPrice && (
-              <span className="font-semibold bg-gradient-to-r from-primary to-purple-500 bg-clip-text text-transparent">
+          <div className={cn("flex items-center", isCentered ? "justify-center gap-4" : "justify-between")}>
+            {/* Price at bottom or as badge */}
+            {settings.content.showPrice && !priceDisplay.isTopRight && (
+              <span className={getPriceClasses()}>
                 {formatPrice(service.startingPrice)}
               </span>
             )}
@@ -528,13 +800,47 @@ function SpotlightCard({
 }) {
   const Icon = getLucideIcon(service.icon);
   const iconSize = getIconSizeClasses(settings.icon.size);
+  const iconStyle = getIconStyleClasses(settings.icon.style);
   const hasBadge = settings.content.showBadge && service.isPopular;
+  const isInline = settings.icon.position === "inline";
+  const isCentered = settings.icon.position === "top-center";
+  const priceDisplay = getPriceDisplay(settings.content.pricePosition, formatPrice(service.startingPrice));
+
+  const iconHoverEffect = getIconHoverEffectClasses(settings.hover.iconEffect);
+  const iconAnimation = getIconAnimationClasses(settings.icon.hoverAnimation);
+
+  const renderIcon = () => {
+    if (!settings.icon.show) return null;
+    const showBg = hasIconBackground(settings.icon.style);
+    return (
+      <div
+        className={cn(
+          "flex items-center justify-center transition-all duration-300 group-hover:shadow-lg group-hover:shadow-primary/20 shrink-0",
+          iconSize.container,
+          iconStyle,
+          showBg && "border border-transparent",
+          iconHoverEffect
+        )}
+        style={{
+          backgroundColor: showBg
+            ? (settings.icon.backgroundColor || "rgb(249 115 22 / 0.1)")
+            : "transparent",
+        }}
+      >
+        <Icon
+          className={cn(iconSize.icon, "transition-all duration-200", iconAnimation)}
+          style={{ color: settings.icon.iconColor || "#f97316" }}
+        />
+      </div>
+    );
+  };
 
   return (
     <>
       {/* Spotlight gradient overlay on hover */}
       <div className="absolute inset-0 bg-gradient-to-br from-white/0 via-white/0 to-white/0 opacity-0 group-hover:opacity-100 group-hover:from-white/5 group-hover:via-transparent group-hover:to-transparent transition-opacity rounded-xl pointer-events-none" />
 
+      {/* Popular Badge */}
       {hasBadge && (
         <Badge
           className={cn(
@@ -545,29 +851,39 @@ function SpotlightCard({
           Popular
         </Badge>
       )}
-      <div className="relative z-10 p-6">
-        {settings.icon.show && (
-          <div
-            className={cn(
-              "mb-4 flex items-center justify-center rounded-lg transition-all duration-300 group-hover:shadow-lg group-hover:shadow-primary/20",
-              iconSize.container
-            )}
-            style={{
-              backgroundColor: settings.icon.backgroundColor || "rgb(249 115 22 / 0.1)",
-            }}
-          >
-            <Icon
-              className={cn(iconSize.icon, "transition-transform group-hover:scale-110")}
-              style={{ color: settings.icon.iconColor || "#f97316" }}
-            />
+
+      {/* Price at top-right */}
+      {settings.content.showPrice && priceDisplay.isTopRight && (
+        <span className={cn(priceDisplay.className, "z-10", hasBadge && settings.content.badgePosition === "top-right" && "top-10")}>
+          {formatPrice(service.startingPrice)}
+        </span>
+      )}
+
+      <div className={cn("relative z-10 p-6", isCentered && "flex flex-col items-center text-center")}>
+        {/* Icon at top (non-inline) */}
+        {settings.icon.show && !isInline && (
+          <div className="mb-4">
+            {renderIcon()}
           </div>
         )}
-        <h3 className={cn(
-          "text-lg font-semibold text-foreground",
-          !settings.icon.show && hasBadge && "mt-4"
-        )}>{service.name}</h3>
+
+        {/* Title with inline icon */}
+        {isInline ? (
+          <div className="flex items-center gap-3">
+            {renderIcon()}
+            <h3 className={cn(
+              "text-lg font-semibold text-foreground",
+              !settings.icon.show && hasBadge && "mt-4"
+            )}>{service.name}</h3>
+          </div>
+        ) : (
+          <h3 className={cn(
+            "text-lg font-semibold text-foreground",
+            !settings.icon.show && hasBadge && "mt-4"
+          )}>{service.name}</h3>
+        )}
       </div>
-      <div className="relative z-10 px-6 pb-6 space-y-4">
+      <div className={cn("relative z-10 px-6 pb-6 space-y-4", isCentered && "text-center")}>
         {settings.content.showDescription && (
           <p
             className={cn(
@@ -580,9 +896,10 @@ function SpotlightCard({
             {service.shortDesc}
           </p>
         )}
-        <div className="flex items-center justify-between">
-          {settings.content.showPrice && (
-            <span className="font-semibold text-primary">
+        <div className={cn("flex items-center", isCentered ? "justify-center gap-4" : "justify-between")}>
+          {/* Price at bottom or as badge */}
+          {settings.content.showPrice && !priceDisplay.isTopRight && (
+            <span className={priceDisplay.className}>
               {formatPrice(service.startingPrice)}
             </span>
           )}
@@ -604,8 +921,53 @@ function NeonGlowCard({
 }) {
   const Icon = getLucideIcon(service.icon);
   const iconSize = getIconSizeClasses(settings.icon.size);
+  const iconStyle = getIconStyleClasses(settings.icon.style);
   const glowColor = settings.hover.glowColor || "#f97316";
   const hasBadge = settings.content.showBadge && service.isPopular;
+  const isInline = settings.icon.position === "inline";
+  const isCentered = settings.icon.position === "top-center";
+  const priceDisplay = getPriceDisplay(settings.content.pricePosition, formatPrice(service.startingPrice));
+  const iconHoverEffect = getIconHoverEffectClasses(settings.hover.iconEffect);
+  const iconAnimation = getIconAnimationClasses(settings.icon.hoverAnimation);
+
+  const renderIcon = () => {
+    if (!settings.icon.show) return null;
+    const showBg = hasIconBackground(settings.icon.style);
+    return (
+      <div
+        className={cn(
+          "flex items-center justify-center border transition-all duration-300 shrink-0",
+          iconSize.container,
+          iconStyle,
+          iconHoverEffect
+        )}
+        style={{
+          borderColor: showBg ? `${glowColor}40` : "transparent",
+          backgroundColor: showBg ? `${glowColor}10` : "transparent",
+        }}
+      >
+        <Icon
+          className={cn(iconSize.icon, "transition-all duration-200 group-hover:drop-shadow-[0_0_8px_var(--glow-color)]", iconAnimation)}
+          style={{
+            color: glowColor,
+            // @ts-ignore - CSS variable for neon effect
+            "--glow-color": glowColor,
+          } as React.CSSProperties}
+        />
+      </div>
+    );
+  };
+
+  // Custom price classes for neon glow style
+  const getPriceClasses = () => {
+    if (priceDisplay.isTopRight) {
+      return cn("absolute top-3 right-4 text-sm font-semibold bg-black/50 backdrop-blur-sm px-2 py-1 rounded-md border z-10", hasBadge && settings.content.badgePosition === "top-right" && "top-10");
+    }
+    if (priceDisplay.isBadge) {
+      return "inline-flex items-center px-3 py-1 rounded-full text-sm font-semibold bg-black/50 backdrop-blur-sm border";
+    }
+    return "font-semibold";
+  };
 
   return (
     <>
@@ -615,6 +977,7 @@ function NeonGlowCard({
         style={{ backgroundColor: glowColor, opacity: 0.3 }}
       />
 
+      {/* Popular Badge */}
       {hasBadge && (
         <Badge
           className={cn(
@@ -626,43 +989,60 @@ function NeonGlowCard({
           Popular
         </Badge>
       )}
-      <div className="relative z-10 p-6">
-        {settings.icon.show && (
-          <div
-            className={cn(
-              "mb-4 flex items-center justify-center rounded-lg border transition-all duration-300",
-              iconSize.container
-            )}
-            style={{
-              borderColor: `${glowColor}40`,
-              backgroundColor: `${glowColor}10`,
-            }}
-          >
-            <Icon
-              className={cn(iconSize.icon, "transition-all group-hover:drop-shadow-[0_0_8px_var(--glow-color)]")}
-              style={{
-                color: glowColor,
-                // @ts-ignore - CSS variable for neon effect
-                "--glow-color": glowColor,
-              } as React.CSSProperties}
-            />
+
+      {/* Price at top-right */}
+      {settings.content.showPrice && priceDisplay.isTopRight && (
+        <span
+          className={getPriceClasses()}
+          style={{ borderColor: glowColor, color: glowColor }}
+        >
+          {formatPrice(service.startingPrice)}
+        </span>
+      )}
+
+      <div className={cn("relative z-10 p-6", isCentered && "flex flex-col items-center text-center")}>
+        {/* Icon at top (non-inline) */}
+        {settings.icon.show && !isInline && (
+          <div className="mb-4">
+            {renderIcon()}
           </div>
         )}
-        <h3
-          className={cn(
-            "text-lg font-semibold transition-all group-hover:drop-shadow-[0_0_10px_var(--glow-color)]",
-            !settings.icon.show && hasBadge && "mt-4"
-          )}
-          style={{
-            color: glowColor,
-            // @ts-ignore
-            "--glow-color": glowColor,
-          } as React.CSSProperties}
-        >
-          {service.name}
-        </h3>
+
+        {/* Title with inline icon */}
+        {isInline ? (
+          <div className="flex items-center gap-3">
+            {renderIcon()}
+            <h3
+              className={cn(
+                "text-lg font-semibold transition-all group-hover:drop-shadow-[0_0_10px_var(--glow-color)]",
+                !settings.icon.show && hasBadge && "mt-4"
+              )}
+              style={{
+                color: glowColor,
+                // @ts-ignore
+                "--glow-color": glowColor,
+              } as React.CSSProperties}
+            >
+              {service.name}
+            </h3>
+          </div>
+        ) : (
+          <h3
+            className={cn(
+              "text-lg font-semibold transition-all group-hover:drop-shadow-[0_0_10px_var(--glow-color)]",
+              !settings.icon.show && hasBadge && "mt-4"
+            )}
+            style={{
+              color: glowColor,
+              // @ts-ignore
+              "--glow-color": glowColor,
+            } as React.CSSProperties}
+          >
+            {service.name}
+          </h3>
+        )}
       </div>
-      <div className="relative z-10 px-6 pb-6 space-y-4">
+      <div className={cn("relative z-10 px-6 pb-6 space-y-4", isCentered && "text-center")}>
         {settings.content.showDescription && (
           <p
             className={cn(
@@ -675,9 +1055,13 @@ function NeonGlowCard({
             {service.shortDesc}
           </p>
         )}
-        <div className="flex items-center justify-between">
-          {settings.content.showPrice && (
-            <span className="font-semibold" style={{ color: glowColor }}>
+        <div className={cn("flex items-center", isCentered ? "justify-center gap-4" : "justify-between")}>
+          {/* Price at bottom or as badge */}
+          {settings.content.showPrice && !priceDisplay.isTopRight && (
+            <span
+              className={getPriceClasses()}
+              style={{ borderColor: priceDisplay.isBadge ? glowColor : undefined, color: glowColor }}
+            >
               {formatPrice(service.startingPrice)}
             </span>
           )}
@@ -765,10 +1149,35 @@ function ServiceCard({
   );
 }
 
-export function ServiceCardWidget({ settings, isPreview = false }: ServiceCardWidgetProps) {
+export function ServiceCardWidget({ settings: partialSettings, isPreview = false }: ServiceCardWidgetProps) {
   const [services, setServices] = useState<ServiceData[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+
+  // Deep merge with defaults to ensure all nested properties exist
+  const settings: ServiceCardWidgetSettings = {
+    ...DEFAULT_SERVICE_CARD_SETTINGS,
+    ...partialSettings,
+    header: {
+      ...DEFAULT_SERVICE_CARD_SETTINGS.header,
+      ...partialSettings?.header,
+      badge: { ...DEFAULT_SERVICE_CARD_SETTINGS.header.badge, ...partialSettings?.header?.badge },
+      heading: { ...DEFAULT_SERVICE_CARD_SETTINGS.header.heading, ...partialSettings?.header?.heading },
+      description: { ...DEFAULT_SERVICE_CARD_SETTINGS.header.description, ...partialSettings?.header?.description },
+    },
+    filters: { ...DEFAULT_SERVICE_CARD_SETTINGS.filters, ...partialSettings?.filters },
+    layout: { ...DEFAULT_SERVICE_CARD_SETTINGS.layout, ...partialSettings?.layout },
+    icon: { ...DEFAULT_SERVICE_CARD_SETTINGS.icon, ...partialSettings?.icon },
+    content: { ...DEFAULT_SERVICE_CARD_SETTINGS.content, ...partialSettings?.content },
+    hover: { ...DEFAULT_SERVICE_CARD_SETTINGS.hover, ...partialSettings?.hover },
+    colors: { ...DEFAULT_SERVICE_CARD_SETTINGS.colors, ...partialSettings?.colors },
+    responsive: {
+      ...DEFAULT_SERVICE_CARD_SETTINGS.responsive,
+      ...partialSettings?.responsive,
+      tablet: { ...DEFAULT_SERVICE_CARD_SETTINGS.responsive.tablet, ...partialSettings?.responsive?.tablet },
+      mobile: { ...DEFAULT_SERVICE_CARD_SETTINGS.responsive.mobile, ...partialSettings?.responsive?.mobile },
+    },
+  };
 
   useEffect(() => {
     async function fetchServices() {

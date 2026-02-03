@@ -33,7 +33,7 @@ import type {
 
 export const DEFAULT_SECTION_BACKGROUND: SectionBackground = {
   type: "solid",
-  color: "transparent",
+  color: "#ffffff",
   gradient: {
     type: "linear",
     angle: 180,
@@ -314,6 +314,10 @@ export const DEFAULT_LEAD_FORM_SETTINGS: LeadFormWidgetSettings = {
   successMessage: "Thank you! We'll be in touch soon.",
   submitTo: "database",
   backgroundColor: "#1e293b",
+  titleColor: "#ffffff",
+  descriptionColor: "#94a3b8",
+  labelColor: "#e2e8f0",
+  inputTextColor: "#ffffff",
   padding: 24,
   borderRadius: 12,
   shadow: true,
@@ -368,7 +372,7 @@ export const DEFAULT_TESTIMONIALS_SETTINGS: TestimonialsWidgetSettings = {
       highlightWords: "10,000+",
       highlightColor: "#f97316",
       size: "xl",
-      color: "#ffffff",
+      color: "#0f172a",
     },
     description: {
       show: true,
@@ -573,7 +577,7 @@ export const DEFAULT_HEADING_SETTINGS: HeadingWidgetSettings = {
     },
     textFill: {
       type: "solid",
-      color: "#ffffff",
+      color: "#000000",
       gradient: {
         type: "linear",
         angle: 90,
@@ -682,10 +686,113 @@ export const DEFAULT_HEADING_SETTINGS: HeadingWidgetSettings = {
 };
 
 export const DEFAULT_TEXT_BLOCK_SETTINGS: TextBlockWidgetSettings = {
-  content: "Add your text content here. This can be a paragraph or multiple paragraphs.",
-  alignment: "left",
-  color: "#94a3b8",
-  size: "md",
+  // Content
+  content:
+    "<p>Add your text content here. This can be a paragraph or multiple paragraphs.</p>",
+
+  // Editor Config
+  editor: {
+    toolbar: "standard",
+    minHeight: 200,
+    maxHeight: undefined,
+    charLimit: undefined,
+    placeholder: "Start writing...",
+  },
+
+  // Typography
+  typography: {
+    fontFamily: undefined, // Inherit from theme
+    fontSize: 16,
+    lineHeight: 1.6,
+    letterSpacing: undefined,
+    color: "#cbd5e1",
+    linkColor: "#60a5fa",
+    linkHoverColor: "#93c5fd",
+    linkUnderline: true,
+  },
+
+  // Container
+  container: {
+    backgroundColor: undefined,
+    padding: 0,
+    borderRadius: 0,
+    border: undefined,
+    shadow: "none",
+    maxWidth: undefined,
+  },
+
+  // Paragraph spacing
+  paragraphSpacing: 16,
+
+  // Lists
+  lists: {
+    bulletStyle: "disc",
+    bulletColor: "#f97316",
+    numberStyle: "decimal",
+    indentation: 24,
+  },
+
+  // Blockquote
+  blockquote: {
+    borderColor: "#f97316",
+    borderWidth: 4,
+    backgroundColor: "#1e293b",
+    fontStyle: "italic",
+    padding: 16,
+  },
+
+  // Drop Cap
+  dropCap: {
+    enabled: false,
+    size: 3,
+    color: "#f97316",
+    fontFamily: undefined,
+  },
+
+  // Columns
+  columns: {
+    enabled: false,
+    count: 1,
+    gap: 32,
+    divider: {
+      show: false,
+      color: "#334155",
+      width: 1,
+    },
+  },
+
+  // Animation
+  animation: {
+    entrance: {
+      enabled: false,
+      type: "none",
+      duration: 600,
+      delay: 0,
+    },
+  },
+
+  // Responsive
+  responsive: {
+    tablet: {
+      fontSize: 15,
+      lineHeight: 1.6,
+      columns: 1,
+    },
+    mobile: {
+      fontSize: 14,
+      lineHeight: 1.5,
+      columns: 1,
+    },
+  },
+
+  // Advanced
+  advanced: {
+    customClass: undefined,
+    customId: undefined,
+    hideOnDesktop: false,
+    hideOnTablet: false,
+    hideOnMobile: false,
+  },
 };
 
 export const DEFAULT_SPACER_SETTINGS: SpacerWidgetSettings = {

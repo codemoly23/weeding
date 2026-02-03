@@ -5,14 +5,37 @@ import { Star, Quote } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import type { TestimonialsWidgetSettings, TestimonialItem } from "@/lib/page-builder/types";
+import { DEFAULT_TESTIMONIALS_SETTINGS } from "@/lib/page-builder/defaults";
 import { TestimonialsGridView } from "./testimonials-grid-view";
 import { TestimonialsCarouselView } from "./testimonials-carousel-view";
 import { TestimonialsVideoView } from "./testimonials-video-view";
 import { cn } from "@/lib/utils";
 
 interface TestimonialsWidgetProps {
-  settings: TestimonialsWidgetSettings;
+  settings: Partial<TestimonialsWidgetSettings>;
   isPreview?: boolean;
+}
+
+// Deep merge helper for nested objects
+function deepMerge<T extends Record<string, any>>(defaults: T, overrides: Partial<T>): T {
+  const result = { ...defaults };
+  for (const key in overrides) {
+    if (overrides[key] !== undefined) {
+      if (
+        typeof defaults[key] === "object" &&
+        defaults[key] !== null &&
+        !Array.isArray(defaults[key]) &&
+        typeof overrides[key] === "object" &&
+        overrides[key] !== null &&
+        !Array.isArray(overrides[key])
+      ) {
+        result[key] = deepMerge(defaults[key], overrides[key] as any);
+      } else {
+        result[key] = overrides[key] as any;
+      }
+    }
+  }
+  return result;
 }
 
 // Helper to get initials from name
@@ -71,7 +94,10 @@ export function StarRating({
   );
 }
 
-export function TestimonialsWidget({ settings, isPreview = false }: TestimonialsWidgetProps) {
+export function TestimonialsWidget({ settings: partialSettings, isPreview = false }: TestimonialsWidgetProps) {
+  // Merge with defaults to ensure all required properties exist
+  const settings = deepMerge(DEFAULT_TESTIMONIALS_SETTINGS, partialSettings);
+
   const [testimonials, setTestimonials] = useState<TestimonialItem[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
@@ -128,7 +154,14 @@ export function TestimonialsWidget({ settings, isPreview = false }: Testimonials
 
   // Render highlighted heading
   const renderHeading = () => {
-    const { text, highlightWords, highlightColor, size, color } = settings.header.heading;
+    const heading = settings.header?.heading || DEFAULT_TESTIMONIALS_SETTINGS.header.heading;
+    const text = heading.text || DEFAULT_TESTIMONIALS_SETTINGS.header.heading.text;
+    const highlightWords = heading.highlightWords;
+    const highlightColor = heading.highlightColor || DEFAULT_TESTIMONIALS_SETTINGS.header.heading.highlightColor;
+    const size = heading.size || DEFAULT_TESTIMONIALS_SETTINGS.header.heading.size;
+    // Use dark color as fallback if white (invisible on light backgrounds)
+    const rawColor = heading.color || DEFAULT_TESTIMONIALS_SETTINGS.header.heading.color;
+    const color = rawColor === "#ffffff" ? "#0f172a" : rawColor;
 
     if (!highlightWords) {
       return (
@@ -242,27 +275,34 @@ export function TestimonialsWidget({ settings, isPreview = false }: Testimonials
     right: "text-right ml-auto",
   };
 
+  // Get header settings with fallbacks
+  const header = settings.header || DEFAULT_TESTIMONIALS_SETTINGS.header;
+  const headerAlignment = header.alignment || DEFAULT_TESTIMONIALS_SETTINGS.header.alignment;
+  const headerMarginBottom = header.marginBottom ?? DEFAULT_TESTIMONIALS_SETTINGS.header.marginBottom;
+  const badge = header.badge || DEFAULT_TESTIMONIALS_SETTINGS.header.badge;
+  const description = header.description || DEFAULT_TESTIMONIALS_SETTINGS.header.description;
+
   return (
     <div className="w-full">
       {/* Header Section */}
-      {settings.header.show && (
+      {(header.show !== false) && (
         <div
-          className={cn("max-w-2xl", alignmentClasses[settings.header.alignment])}
-          style={{ marginBottom: settings.header.marginBottom }}
+          className={cn("max-w-2xl", alignmentClasses[headerAlignment])}
+          style={{ marginBottom: headerMarginBottom }}
         >
           {/* Badge */}
-          {settings.header.badge.show && (
+          {badge.show && (
             <Badge
               variant="secondary"
               className="mb-4"
               style={{
-                backgroundColor: settings.header.badge.bgColor,
-                color: settings.header.badge.textColor,
-                borderColor: settings.header.badge.borderColor,
-                borderWidth: settings.header.badge.style === "outline" ? 1 : 0,
+                backgroundColor: badge.bgColor || DEFAULT_TESTIMONIALS_SETTINGS.header.badge.bgColor,
+                color: badge.textColor || DEFAULT_TESTIMONIALS_SETTINGS.header.badge.textColor,
+                borderColor: badge.borderColor || DEFAULT_TESTIMONIALS_SETTINGS.header.badge.borderColor,
+                borderWidth: badge.style === "outline" ? 1 : 0,
               }}
             >
-              {settings.header.badge.text}
+              {badge.text || DEFAULT_TESTIMONIALS_SETTINGS.header.badge.text}
             </Badge>
           )}
 
@@ -270,12 +310,12 @@ export function TestimonialsWidget({ settings, isPreview = false }: Testimonials
           {renderHeading()}
 
           {/* Description */}
-          {settings.header.description.show && (
+          {description.show && (
             <p
-              className={cn("mt-4", descriptionSizeClasses[settings.header.description.size])}
-              style={{ color: settings.header.description.color }}
+              className={cn("mt-4", descriptionSizeClasses[description.size || DEFAULT_TESTIMONIALS_SETTINGS.header.description.size])}
+              style={{ color: description.color || DEFAULT_TESTIMONIALS_SETTINGS.header.description.color }}
             >
-              {settings.header.description.text}
+              {description.text || DEFAULT_TESTIMONIALS_SETTINGS.header.description.text}
             </p>
           )}
         </div>

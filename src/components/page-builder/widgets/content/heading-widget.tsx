@@ -91,9 +91,18 @@ function getTextStrokeStyles(
 ): React.CSSProperties {
   if (!textStroke?.enabled) return {};
 
+  // Use fillColor if explicitly set, not empty, and not "transparent" keyword
+  // Otherwise default to transparent for outline-only effect
+  const fillColor =
+    textStroke.fillColor &&
+    textStroke.fillColor.trim() !== "" &&
+    textStroke.fillColor.toLowerCase() !== "transparent"
+      ? textStroke.fillColor
+      : "transparent";
+
   return {
     WebkitTextStroke: `${textStroke.width}px ${textStroke.color}`,
-    WebkitTextFillColor: textStroke.fillColor || "transparent",
+    WebkitTextFillColor: fillColor,
   };
 }
 
@@ -120,6 +129,20 @@ function getAlignmentClass(alignment: "left" | "center" | "right"): string {
     default:
       return "text-left";
   }
+}
+
+// Convert easing name to CSS easing value
+function getEasingValue(easing?: string): string {
+  const easingMap: Record<string, string> = {
+    linear: "linear",
+    ease: "ease",
+    "ease-in": "ease-in",
+    "ease-out": "ease-out",
+    "ease-in-out": "ease-in-out",
+    bounce: "cubic-bezier(0.68, -0.55, 0.265, 1.55)",
+    elastic: "cubic-bezier(0.175, 0.885, 0.32, 1.275)",
+  };
+  return easingMap[easing || "ease-out"] || "ease-out";
 }
 
 // Get entrance animation class
@@ -183,7 +206,11 @@ function getHoverAnimationClass(
 export function HeadingWidget({ settings, isPreview = false }: HeadingWidgetProps) {
   const ref = useRef<HTMLElement>(null);
   const [isVisible, setIsVisible] = useState(false);
+  const [animationKey, setAnimationKey] = useState(0);
   const [prefersReducedMotion, setPrefersReducedMotion] = useState(false);
+
+  // Track previous animation settings to detect changes
+  const prevAnimationRef = useRef<string>("");
 
   // Check for reduced motion preference
   useEffect(() => {
@@ -195,26 +222,55 @@ export function HeadingWidget({ settings, isPreview = false }: HeadingWidgetProp
     return () => mediaQuery.removeEventListener("change", handler);
   }, []);
 
-  // Intersection Observer for entrance animation
+  // Re-trigger animation when entrance settings change (for preview mode)
+  useEffect(() => {
+    if (!settings.animation?.entrance?.enabled) {
+      prevAnimationRef.current = "";
+      return;
+    }
+
+    const currentSettings = JSON.stringify({
+      type: settings.animation.entrance.type,
+      easing: settings.animation.entrance.easing,
+      duration: settings.animation.entrance.duration,
+      delay: settings.animation.entrance.delay,
+    });
+
+    // Only retrigger if settings actually changed (not on first enable)
+    if (prevAnimationRef.current && prevAnimationRef.current !== currentSettings) {
+      // Settings changed - increment key to force re-run of intersection observer effect
+      setAnimationKey((k) => k + 1);
+    }
+
+    prevAnimationRef.current = currentSettings;
+  }, [
+    settings.animation?.entrance?.enabled,
+    settings.animation?.entrance?.type,
+    settings.animation?.entrance?.easing,
+    settings.animation?.entrance?.duration,
+    settings.animation?.entrance?.delay,
+  ]);
+
+  // Entrance animation trigger
   useEffect(() => {
     if (!settings.animation?.entrance?.enabled || prefersReducedMotion) {
       setIsVisible(true);
       return;
     }
 
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          setIsVisible(true);
-          observer.disconnect();
-        }
-      },
-      { threshold: 0.1 }
-    );
+    // Reset isVisible to false to start animation from hidden state
+    setIsVisible(false);
 
-    if (ref.current) observer.observe(ref.current);
-    return () => observer.disconnect();
-  }, [settings.animation?.entrance?.enabled, prefersReducedMotion]);
+    // For page builder preview, play animation immediately after a short delay
+    // This ensures the hidden state is applied before animation starts
+    const showTimer = setTimeout(() => {
+      setIsVisible(true);
+    }, 100);
+
+    return () => {
+      clearTimeout(showTimer);
+    };
+  }, [settings.animation?.entrance?.enabled, prefersReducedMotion, animationKey]);
 
   // Memoized styles
   const typographyStyles = useMemo(
@@ -367,6 +423,22 @@ export function HeadingWidget({ settings, isPreview = false }: HeadingWidgetProp
 
     const splitStyles = settings.style.splitStyles;
 
+    // Get text stroke styles to apply to split text spans
+    // This ensures text stroke works correctly with split heading
+    const hasFillColor =
+      settings.style.textStroke?.fillColor &&
+      settings.style.textStroke.fillColor.trim() !== "" &&
+      settings.style.textStroke.fillColor.toLowerCase() !== "transparent";
+
+    const strokeStyles = settings.style.textStroke?.enabled
+      ? {
+          WebkitTextStroke: `${settings.style.textStroke.width}px ${settings.style.textStroke.color}`,
+          ...(hasFillColor
+            ? { WebkitTextFillColor: settings.style.textStroke.fillColor }
+            : { WebkitTextFillColor: "transparent" }),
+        }
+      : {};
+
     return (
       <>
         {split.beforeText && (
@@ -378,6 +450,7 @@ export function HeadingWidget({ settings, isPreview = false }: HeadingWidgetProp
                 ...splitStyles?.before,
               }),
               color: splitStyles?.before?.color,
+              ...strokeStyles,
             }}
           >
             {split.beforeText}{" "}
@@ -391,6 +464,7 @@ export function HeadingWidget({ settings, isPreview = false }: HeadingWidgetProp
               ...splitStyles?.main,
             }),
             color: splitStyles?.main?.color,
+            ...strokeStyles,
           }}
         >
           {split.mainText}
@@ -404,6 +478,7 @@ export function HeadingWidget({ settings, isPreview = false }: HeadingWidgetProp
                 ...splitStyles?.after,
               }),
               color: splitStyles?.after?.color,
+              ...strokeStyles,
             }}
           >
             {" "}{split.afterText}
@@ -416,16 +491,32 @@ export function HeadingWidget({ settings, isPreview = false }: HeadingWidgetProp
   // Determine the tag to use - use React.ElementType for proper JSX support
   const Tag = settings.content.htmlTag as React.ElementType;
 
+  // Get entrance class
+  const entranceClass = getEntranceClass(settings.animation?.entrance);
+
   // Build class names
   const classNames = cn(
     "heading-widget",
     getAlignmentClass(settings.style.alignment),
     !isVisible && settings.animation?.entrance?.enabled && "heading-hidden",
-    isVisible && getEntranceClass(settings.animation?.entrance),
+    isVisible && entranceClass,
     getContinuousAnimationClass(settings.animation?.continuousAnimation),
     !isPreview && getHoverAnimationClass(settings.animation?.hoverAnimation),
     settings.advanced?.customClass
   );
+
+  // Debug logging
+  if (settings.animation?.entrance?.enabled) {
+    console.log("[HeadingWidget Animation]", {
+      isVisible,
+      animationKey,
+      entranceType: settings.animation.entrance.type,
+      entranceClass,
+      classNames,
+      duration: settings.animation.entrance.duration,
+      easing: settings.animation.entrance.easing,
+    });
+  }
 
   // Build inline styles
   const inlineStyles: React.CSSProperties = {
@@ -439,6 +530,7 @@ export function HeadingWidget({ settings, isPreview = false }: HeadingWidgetProp
     ...(settings.animation?.entrance?.enabled && {
       "--entrance-duration": `${settings.animation.entrance.duration}ms`,
       "--entrance-delay": `${settings.animation.entrance.delay}ms`,
+      "--entrance-easing": getEasingValue(settings.animation.entrance.easing),
     } as React.CSSProperties),
     ...(settings.animation?.continuousAnimation?.enabled && {
       "--continuous-duration": `${settings.animation.continuousAnimation.duration}ms`,
@@ -453,10 +545,17 @@ export function HeadingWidget({ settings, isPreview = false }: HeadingWidgetProp
     ? renderSplitHeading()
     : renderAnimatedText();
 
+  // Generate unique key for animation re-trigger
+  // This forces React to recreate the DOM element when animation changes
+  const animationElementKey = settings.animation?.entrance?.enabled
+    ? `heading-anim-${animationKey}-${settings.animation.entrance.type}`
+    : "heading-no-anim";
+
   // Wrap in link if needed
   if (settings.content.link?.url) {
     return (
       <Tag
+        key={animationElementKey}
         ref={ref as React.RefObject<HTMLHeadingElement>}
         className={classNames}
         style={inlineStyles}
@@ -476,6 +575,7 @@ export function HeadingWidget({ settings, isPreview = false }: HeadingWidgetProp
 
   return (
     <Tag
+      key={animationElementKey}
       ref={ref as React.RefObject<HTMLHeadingElement>}
       className={classNames}
       style={inlineStyles}

@@ -420,6 +420,40 @@ export default function PageEditorPage({ params }: { params: Promise<{ id: strin
     setSelection((prev) => (prev.widgetId === widgetId ? { type: null } : prev));
   }, []);
 
+  // Duplicate widget handler
+  const handleDuplicateWidget = useCallback((sectionId: string, columnId: string, widgetId: string) => {
+    setSections((prev) =>
+      prev.map((section) => {
+        if (section.id !== sectionId) return section;
+        return {
+          ...section,
+          columns: section.columns.map((column) => {
+            if (column.id !== columnId) return column;
+            const widgetIndex = column.widgets.findIndex((w) => w.id === widgetId);
+            if (widgetIndex === -1) return column;
+
+            const widget = column.widgets[widgetIndex];
+            const duplicated = {
+              ...widget,
+              id: `widget_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
+              settings: JSON.parse(JSON.stringify(widget.settings)), // Deep clone settings
+            };
+
+            return {
+              ...column,
+              widgets: [
+                ...column.widgets.slice(0, widgetIndex + 1),
+                duplicated,
+                ...column.widgets.slice(widgetIndex + 1),
+              ],
+            };
+          }),
+        };
+      })
+    );
+    setIsDirty(true);
+  }, []);
+
   // Drag-and-drop handlers
   const handleDragStart = useCallback((event: DragStartEvent) => {
     const widgetType = event.active.data.current?.widgetType as WidgetType;
@@ -743,6 +777,7 @@ export default function PageEditorPage({ params }: { params: Promise<{ id: strin
                   onDeleteSection={handleDeleteSection}
                   onDuplicateSection={handleDuplicateSection}
                   onDeleteWidget={handleDeleteWidget}
+                  onDuplicateWidget={handleDuplicateWidget}
                   device={previewDevice}
                   isDraggingWidget={activeDragWidget !== null}
                 />

@@ -949,7 +949,603 @@ interface TestimonialWidget {
 }
 ```
 
-### 8. Heading Widget
+### 8. Text Block Widget (Tiptap)
+
+Modern rich text editor widget powered by **Tiptap** - a headless, framework-agnostic editor built on ProseMirror. Designed for content-heavy sections like about pages, service descriptions, and blog content.
+
+#### Why Tiptap?
+
+| Feature | Tiptap |
+|---------|--------|
+| **Architecture** | Headless - full UI control |
+| **Bundle Size** | ~45kb (core + starter kit) |
+| **React Support** | Native React hooks & components |
+| **Extensibility** | 50+ official extensions |
+| **Output** | HTML or JSON (flexible storage) |
+| **Collaboration** | Built-in real-time support (Yjs) |
+| **TypeScript** | First-class support |
+| **Documentation** | Excellent with examples |
+| **Community** | Large, active ecosystem (2025) |
+
+#### Installation
+
+```bash
+npm install @tiptap/react @tiptap/starter-kit @tiptap/extension-placeholder @tiptap/extension-text-align @tiptap/extension-link @tiptap/extension-image @tiptap/extension-color @tiptap/extension-text-style @tiptap/extension-highlight
+```
+
+#### TypeScript Definition
+
+```typescript
+// === TEXT BLOCK WIDGET SETTINGS ===
+interface TextBlockWidgetSettings {
+  // === CONTENT ===
+  content: string;  // HTML content from Tiptap
+
+  // === EDITOR CONFIG ===
+  editor: {
+    // Toolbar configuration
+    toolbar: TextBlockToolbarPreset;
+
+    // Editor height
+    minHeight: number;        // px (default: 200)
+    maxHeight?: number;       // px (optional limit)
+
+    // Character/word limits
+    charLimit?: number;
+
+    // Placeholder text
+    placeholder?: string;
+  };
+
+  // === TYPOGRAPHY ===
+  typography: {
+    fontFamily?: string;           // Base font family
+    fontSize: number;              // Base font size (px)
+    lineHeight: number;            // Line height (unitless, e.g., 1.6)
+    letterSpacing?: number;        // Letter spacing (px)
+    color: string;                 // Text color
+
+    // Link styling
+    linkColor: string;
+    linkHoverColor: string;
+    linkUnderline: boolean;
+  };
+
+  // === CONTAINER STYLING ===
+  container: {
+    backgroundColor?: string;
+    padding: number;               // px
+    borderRadius: number;          // px
+    border?: {
+      width: number;
+      color: string;
+      style: "solid" | "dashed" | "dotted";
+    };
+    shadow?: "none" | "sm" | "md" | "lg";
+    maxWidth?: number;             // px (for readability)
+  };
+
+  // === PARAGRAPH STYLING ===
+  paragraphSpacing: number;        // Margin between paragraphs (px)
+
+  // === LIST STYLING ===
+  lists: {
+    bulletStyle: "disc" | "circle" | "square" | "none";
+    bulletColor?: string;
+    numberStyle: "decimal" | "lower-alpha" | "upper-alpha" | "lower-roman" | "upper-roman";
+    indentation: number;           // px
+  };
+
+  // === BLOCKQUOTE STYLING ===
+  blockquote: {
+    borderColor: string;
+    borderWidth: number;
+    backgroundColor?: string;
+    fontStyle: "normal" | "italic";
+    padding: number;
+  };
+
+  // === DROP CAP ===
+  dropCap: {
+    enabled: boolean;
+    size: number;                  // Lines to span (2-4)
+    color?: string;
+    fontFamily?: string;
+  };
+
+  // === COLUMNS (Multi-column text) ===
+  columns?: {
+    enabled: boolean;
+    count: 1 | 2 | 3;
+    gap: number;                   // px
+    divider?: {
+      show: boolean;
+      color: string;
+      width: number;
+    };
+  };
+
+  // === ANIMATION ===
+  animation?: {
+    entrance: {
+      enabled: boolean;
+      type: "none" | "fade" | "fade-up" | "fade-down" | "slide-up";
+      duration: number;            // ms
+      delay: number;               // ms
+    };
+  };
+
+  // === RESPONSIVE ===
+  responsive?: {
+    tablet?: {
+      fontSize?: number;
+      lineHeight?: number;
+      columns?: number;
+    };
+    mobile?: {
+      fontSize?: number;
+      lineHeight?: number;
+      columns?: number;
+    };
+  };
+
+  // === ADVANCED ===
+  advanced?: {
+    customClass?: string;
+    customId?: string;
+    hideOnDesktop: boolean;
+    hideOnTablet: boolean;
+    hideOnMobile: boolean;
+  };
+}
+
+// Toolbar presets for different use cases
+type TextBlockToolbarPreset =
+  | "minimal"      // Bold, Italic, Link only
+  | "basic"        // + Headings, Lists, Alignment
+  | "standard"     // + Colors, Images, Tables
+  | "full"         // All features
+  | "custom";      // Custom toolbar configuration
+
+// Custom toolbar buttons (when preset = "custom")
+type ToolbarButton =
+  | "bold" | "italic" | "underline" | "strike"
+  | "subscript" | "superscript"
+  | "formatBlock"  // Headings H1-H6, P
+  | "fontColor" | "hiliteColor"
+  | "align"        // Left, Center, Right, Justify
+  | "list"         // Ordered, Unordered
+  | "indent" | "outdent"
+  | "link" | "image" | "video"
+  | "table"
+  | "blockquote" | "horizontalRule"
+  | "removeFormat"
+  | "codeView"     // HTML source
+  | "fullScreen";
+```
+
+#### Toolbar Presets
+
+```typescript
+// Tiptap extensions to enable per preset
+const TOOLBAR_PRESETS = {
+  minimal: {
+    buttons: ["bold", "italic", "link"],
+    extensions: ["StarterKit", "Link"],
+  },
+
+  basic: {
+    buttons: ["heading", "bold", "italic", "bulletList", "orderedList", "link"],
+    extensions: ["StarterKit", "Link", "Placeholder"],
+  },
+
+  standard: {
+    buttons: [
+      "heading", "bold", "italic", "strike",
+      "highlight", "textAlign",
+      "bulletList", "orderedList",
+      "link", "image", "blockquote", "horizontalRule",
+      "undo", "redo"
+    ],
+    extensions: [
+      "StarterKit", "Link", "Image", "Placeholder",
+      "TextAlign", "Highlight", "Color", "TextStyle"
+    ],
+  },
+
+  full: {
+    buttons: [
+      "heading", "bold", "italic", "underline", "strike",
+      "highlight", "color", "textAlign",
+      "bulletList", "orderedList",
+      "link", "image", "blockquote", "codeBlock", "horizontalRule",
+      "undo", "redo", "clearFormatting"
+    ],
+    extensions: [
+      "StarterKit", "Link", "Image", "Placeholder",
+      "TextAlign", "Highlight", "Color", "TextStyle",
+      "Underline", "Subscript", "Superscript"
+    ],
+  },
+};
+```
+
+#### Text Block Widget Features Summary
+
+| Category | Features |
+|----------|----------|
+| **Editor** | Tiptap (ProseMirror), 4 toolbar presets, HTML/JSON output |
+| **Formatting** | Bold, Italic, Underline, Strike, Headings (H1-H6) |
+| **Lists** | Ordered, Unordered with custom bullet/number styles |
+| **Media** | Image upload with drag-drop support |
+| **Typography** | Font family, size, line-height, letter-spacing, colors |
+| **Links** | Custom link colors, hover states, underline toggle |
+| **Blockquotes** | Border color, background, font style |
+| **Drop Cap** | First letter styling, size, color, font |
+| **Columns** | 1-3 column layout with gap and dividers |
+| **Container** | Background, padding, border radius, shadow |
+| **Animation** | Fade, slide entrance animations |
+| **Responsive** | Per-device typography and column overrides |
+
+#### Implementation Architecture
+
+```
+src/
+├── components/
+│   └── page-builder/
+│       ├── widgets/
+│       │   └── content/
+│       │       └── text-block-widget.tsx     # Main widget component
+│       │
+│       └── settings/
+│           └── widget-settings/
+│               └── text-block-settings/
+│                   ├── index.tsx             # Main settings panel
+│                   ├── editor-tab.tsx        # Toolbar preset, height
+│                   ├── style-tab.tsx         # Typography, lists, blockquote
+│                   └── advanced-tab.tsx      # Columns, animation, responsive
+│
+├── lib/
+│   └── page-builder/
+│       ├── types.ts                          # TextBlockWidgetSettings
+│       ├── defaults.ts                       # DEFAULT_TEXT_BLOCK_SETTINGS
+│       └── tiptap-extensions.ts              # Tiptap extension configs
+│
+└── styles/
+    └── tiptap-editor.css                     # Custom Tiptap theme
+```
+
+#### React Component Example
+
+```tsx
+"use client";
+
+import { useEditor, EditorContent } from "@tiptap/react";
+import StarterKit from "@tiptap/starter-kit";
+import Placeholder from "@tiptap/extension-placeholder";
+import TextAlign from "@tiptap/extension-text-align";
+import Link from "@tiptap/extension-link";
+import Image from "@tiptap/extension-image";
+import Highlight from "@tiptap/extension-highlight";
+import Color from "@tiptap/extension-color";
+import TextStyle from "@tiptap/extension-text-style";
+import type { TextBlockWidgetSettings } from "@/lib/page-builder/types";
+import { TiptapToolbar } from "./tiptap-toolbar";
+
+interface TextBlockWidgetProps {
+  settings: TextBlockWidgetSettings;
+  isEditing?: boolean;
+  onContentChange?: (content: string) => void;
+}
+
+export function TextBlockWidget({
+  settings,
+  isEditing = false,
+  onContentChange,
+}: TextBlockWidgetProps) {
+  const editor = useEditor({
+    extensions: [
+      StarterKit,
+      Placeholder.configure({
+        placeholder: settings.editor.placeholder || "Start writing...",
+      }),
+      TextAlign.configure({
+        types: ["heading", "paragraph"],
+      }),
+      Link.configure({
+        openOnClick: false,
+      }),
+      Image,
+      Highlight,
+      Color,
+      TextStyle,
+    ],
+    content: settings.content,
+    editable: isEditing,
+    onUpdate: ({ editor }) => {
+      onContentChange?.(editor.getHTML());
+    },
+  });
+
+  // Read-only view (frontend)
+  if (!isEditing) {
+    return (
+      <div
+        className="text-block-widget prose prose-invert max-w-none"
+        style={{
+          fontFamily: settings.typography.fontFamily,
+          fontSize: settings.typography.fontSize,
+          lineHeight: settings.typography.lineHeight,
+          letterSpacing: settings.typography.letterSpacing,
+          color: settings.typography.color,
+          backgroundColor: settings.container.backgroundColor,
+          padding: settings.container.padding,
+          borderRadius: settings.container.borderRadius,
+          columnCount: settings.columns?.enabled ? settings.columns.count : 1,
+          columnGap: settings.columns?.gap,
+        }}
+        dangerouslySetInnerHTML={{ __html: settings.content }}
+      />
+    );
+  }
+
+  // Editor view (admin)
+  return (
+    <div className="text-block-editor">
+      <TiptapToolbar editor={editor} preset={settings.editor.toolbar} />
+      <EditorContent
+        editor={editor}
+        className="tiptap-content"
+        style={{
+          minHeight: settings.editor.minHeight,
+          maxHeight: settings.editor.maxHeight,
+        }}
+      />
+    </div>
+  );
+}
+```
+
+#### Custom Dark Theme CSS
+
+```css
+/* Tiptap Dark Theme for Admin Panel */
+.tiptap-editor {
+  --tiptap-bg: #1e293b;
+  --tiptap-text: #e2e8f0;
+  --tiptap-border: #334155;
+  --tiptap-toolbar-bg: #0f172a;
+  --tiptap-btn-hover: #334155;
+  --tiptap-btn-active: #475569;
+}
+
+/* Toolbar */
+.tiptap-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  padding: 8px;
+  background-color: var(--tiptap-toolbar-bg);
+  border: 1px solid var(--tiptap-border);
+  border-bottom: none;
+  border-radius: 8px 8px 0 0;
+}
+
+.tiptap-toolbar button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border: none;
+  border-radius: 4px;
+  background: transparent;
+  color: var(--tiptap-text);
+  cursor: pointer;
+  transition: background-color 0.15s;
+}
+
+.tiptap-toolbar button:hover {
+  background-color: var(--tiptap-btn-hover);
+}
+
+.tiptap-toolbar button.is-active {
+  background-color: var(--tiptap-btn-active);
+}
+
+/* Editor Content Area */
+.tiptap-content .ProseMirror {
+  padding: 16px;
+  min-height: 200px;
+  background-color: var(--tiptap-bg);
+  border: 1px solid var(--tiptap-border);
+  border-radius: 0 0 8px 8px;
+  color: var(--tiptap-text);
+  outline: none;
+}
+
+.tiptap-content .ProseMirror p.is-editor-empty:first-child::before {
+  content: attr(data-placeholder);
+  color: #64748b;
+  pointer-events: none;
+  float: left;
+  height: 0;
+}
+
+/* Typography in Editor */
+.tiptap-content .ProseMirror h1 { font-size: 2rem; font-weight: 700; margin: 1rem 0; }
+.tiptap-content .ProseMirror h2 { font-size: 1.5rem; font-weight: 600; margin: 0.75rem 0; }
+.tiptap-content .ProseMirror h3 { font-size: 1.25rem; font-weight: 600; margin: 0.5rem 0; }
+.tiptap-content .ProseMirror p { margin: 0.5rem 0; }
+
+/* Links */
+.tiptap-content .ProseMirror a {
+  color: #60a5fa;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+/* Lists */
+.tiptap-content .ProseMirror ul,
+.tiptap-content .ProseMirror ol {
+  padding-left: 1.5rem;
+  margin: 0.5rem 0;
+}
+
+/* Blockquote */
+.tiptap-content .ProseMirror blockquote {
+  border-left: 4px solid #f97316;
+  padding-left: 1rem;
+  margin: 1rem 0;
+  color: #94a3b8;
+  font-style: italic;
+}
+
+/* Code Block */
+.tiptap-content .ProseMirror pre {
+  background-color: #0f172a;
+  border-radius: 8px;
+  padding: 1rem;
+  font-family: monospace;
+  overflow-x: auto;
+}
+
+/* Horizontal Rule */
+.tiptap-content .ProseMirror hr {
+  border: none;
+  border-top: 1px solid var(--tiptap-border);
+  margin: 1.5rem 0;
+}
+
+/* Image */
+.tiptap-content .ProseMirror img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 8px;
+}
+```
+
+#### Settings Panel UI Mock
+
+```
+┌─────────────────────────────────────┐
+│ ← Back         Text Block        :   │
+├─────────────────────────────────────┤
+│ Content │ Style │ Advanced          │
+├─────────────────────────────────────┤
+│                                     │
+│ Toolbar Preset                      │
+│ ┌───────────────────────────┬─────┐ │
+│ │ Standard                  │ ▼   │ │
+│ └───────────────────────────┴─────┘ │
+│                                     │
+│ Editor Height                       │
+│ ○ Auto  ● Fixed                    │
+│ Height  [300] px                    │
+│ Min     [200] px                    │
+│                                     │
+│ ▼ Content Editor                    │
+│ ┌─────────────────────────────────┐ │
+│ │ B I U  │ ≡ │ • 1. │ 🔗 🖼      │ │
+│ ├─────────────────────────────────┤ │
+│ │                                 │ │
+│ │ Enter your content here...     │ │
+│ │                                 │ │
+│ │                                 │ │
+│ └─────────────────────────────────┘ │
+│                                     │
+│ Character Limit                     │
+│ ☐ Enable     [5000] chars          │
+│                                     │
+└─────────────────────────────────────┘
+
+┌─────────────────────────────────────┐
+│ Content │ Style │ Advanced          │
+├─────────────────────────────────────┤
+│                                     │
+│ ▼ Typography                        │
+│   Font Family  [Inter ▼]           │
+│   Font Size    [16] px              │
+│   Line Height  [1.6]                │
+│   Text Color   [████] #cbd5e1       │
+│                                     │
+│ ▼ Links                             │
+│   Link Color       [████] #60a5fa   │
+│   Hover Color      [████] #93c5fd   │
+│   ☑ Show Underline                 │
+│                                     │
+│ ▼ Lists                             │
+│   Bullet Style   [● Disc ▼]        │
+│   Bullet Color   [████] #f97316     │
+│   Number Style   [1. Decimal ▼]    │
+│                                     │
+│ ▼ Blockquote                        │
+│   Border Color   [████] #f97316     │
+│   Border Width   [4] px             │
+│   Background     [████] #1e293b     │
+│   ☑ Italic Text                    │
+│                                     │
+│ ▼ Drop Cap                          │
+│   ☐ Enable Drop Cap                │
+│   Lines to Span  [3]                │
+│   Color          [████] #f97316     │
+│                                     │
+│ ▼ Container                         │
+│   Background     [████] transparent │
+│   Padding        [0] px             │
+│   Border Radius  [0] px             │
+│   Shadow         [None ▼]          │
+│                                     │
+└─────────────────────────────────────┘
+
+┌─────────────────────────────────────┐
+│ Content │ Style │ Advanced          │
+├─────────────────────────────────────┤
+│                                     │
+│ ▼ Multi-Column Layout               │
+│   ☐ Enable Columns                 │
+│   Columns  [2]                      │
+│   Gap      [32] px                  │
+│   ☐ Show Divider                   │
+│                                     │
+│ ▼ Animation                         │
+│   ☐ Enable Entrance                │
+│   Type      [Fade Up ▼]            │
+│   Duration  [600] ms                │
+│   Delay     [0] ms                  │
+│                                     │
+│ ▼ Responsive                        │
+│   Tablet                            │
+│     Font Size  [15] px              │
+│     Columns    [1]                  │
+│   Mobile                            │
+│     Font Size  [14] px              │
+│     Columns    [1]                  │
+│                                     │
+│ ▼ Visibility                        │
+│   ☐ Hide on Desktop                │
+│   ☐ Hide on Tablet                 │
+│   ☐ Hide on Mobile                 │
+│                                     │
+│ Custom Class                        │
+│ ┌─────────────────────────────────┐ │
+│ │                                 │ │
+│ └─────────────────────────────────┘ │
+│                                     │
+└─────────────────────────────────────┘
+```
+
+#### Performance Notes
+
+1. **SSR Safe**: Tiptap works with Next.js App Router - use `useEditor` hook in client components
+2. **Lazy Load in View Mode**: In read-only mode, just render HTML - no need to load the editor
+3. **Debounced onChange**: Tiptap batches updates efficiently, but consider debouncing for network saves
+4. **Extension Loading**: Only load extensions needed for the selected toolbar preset
+5. **Image Optimization**: Use Next.js Image component for uploaded images
+
+---
+
+### 9. Heading Widget
 
 Modern, feature-rich heading widget inspired by Elementor, Webflow, Divi, and Framer (2025 analysis). Designed for flexible typography with animations, gradients, and advanced text effects.
 
@@ -1890,7 +2486,7 @@ model LandingPage {
 - [x] Trust Badges widget
 - [x] Stats Section widget
 - [x] **Heading widget** (v3.2 - comprehensive modern features, see spec below)
-- [x] Text Block widget
+- [x] **Text Block widget** (v3.3 - Tiptap WYSIWYG, see spec below)
 - [x] Divider widget (10 styles including gradient, dotted, icon, text)
 
 ### Phase 3: Form Widgets ✅
@@ -1953,6 +2549,21 @@ model LandingPage {
 
 ## Changelog
 
+### v3.3 (2026-02-03)
+- **Text Block Widget**: Complete specification with Tiptap integration
+  - Tiptap WYSIWYG editor (ProseMirror-based, React-native)
+  - 4 toolbar presets: Minimal, Basic, Standard, Full
+  - Typography controls: Font family, size, line-height, letter-spacing, color
+  - Link styling: Custom colors, hover states, underline toggle
+  - List styling: Custom bullet/number styles and colors
+  - Blockquote styling: Border color/width, background, italic
+  - Drop Cap: First letter styling with size and color
+  - Multi-column layout: 1-3 columns with gap and dividers
+  - Container styling: Background, padding, border radius, shadow
+  - Entrance animations: Fade, fade-up, fade-down, slide-up
+  - Responsive: Per-device typography and column overrides
+  - Dark theme CSS for admin panel
+
 ### v3.2 (2026-01-23)
 - **Heading Widget**: Complete rewrite with modern 2025 page builder features
   - Based on analysis of: Elementor, Webflow, Divi, Framer, ThePlus Addons
@@ -2000,4 +2611,4 @@ model LandingPage {
 - Widget registry system
 - Core widgets implementation
 
-*Document Version: 3.2 - Heading Widget Specification (2025 Page Builder Analysis)*
+*Document Version: 3.3 - Text Block Widget with Tiptap (2026-02-03)*

@@ -87,38 +87,40 @@ export function TrustBadgesWidget({ settings, isPreview = false }: TrustBadgesWi
 
   // Grid layout - Card style
   return (
-    <div
-      className={cn(
-        "grid gap-4",
-        getColumnsClass(),
-        centered && "mx-auto max-w-4xl"
-      )}
-    >
-      {badges.map((badge) => {
-        const Icon = getLucideIcon(badge.icon);
-        return (
-          <div
-            key={badge.id}
-            className="flex flex-col items-center justify-center gap-2 px-4 py-5 rounded-xl border text-center backdrop-blur-sm transition-all duration-200 hover:scale-[1.02]"
-            style={{
-              backgroundColor: style.backgroundColor,
-              borderColor: style.borderColor,
-              borderRadius: `${style.borderRadius}px`,
-            }}
-          >
-            <Icon
-              className="h-6 w-6 shrink-0"
-              style={{ color: style.iconColor }}
-            />
-            <span
-              className="text-sm font-medium text-center"
-              style={{ color: style.textColor }}
+    <div className={cn(centered && "flex justify-center")}>
+      <div
+        className={cn(
+          "grid gap-4",
+          getColumnsClass(),
+          centered && "w-fit"
+        )}
+      >
+        {badges.map((badge) => {
+          const Icon = getLucideIcon(badge.icon);
+          return (
+            <div
+              key={badge.id}
+              className="flex flex-col items-center justify-center gap-2 px-4 py-5 rounded-xl border text-center backdrop-blur-sm transition-all duration-200 hover:scale-[1.02]"
+              style={{
+                backgroundColor: style.backgroundColor,
+                borderColor: style.borderColor,
+                borderRadius: `${style.borderRadius}px`,
+              }}
             >
-              {badge.text}
-            </span>
-          </div>
-        );
-      })}
+              <Icon
+                className="h-6 w-6 shrink-0"
+                style={{ color: style.iconColor }}
+              />
+              <span
+                className="text-sm font-medium text-center"
+                style={{ color: style.textColor }}
+              >
+                {badge.text}
+              </span>
+            </div>
+          );
+        })}
+      </div>
     </div>
   );
 }

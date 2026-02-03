@@ -27,11 +27,26 @@ export function ServiceListWidgetSettingsPanel({
   onChange,
   activeTab = "content",
 }: ServiceListWidgetSettingsProps) {
-  // Merge with defaults
+  // Merge with defaults (deep merge for nested objects)
   const s: ServiceListWidgetSettings = {
     ...DEFAULT_SERVICE_LIST_SETTINGS,
     ...settings,
-    header: { ...DEFAULT_SERVICE_LIST_SETTINGS.header, ...settings?.header },
+    header: {
+      ...DEFAULT_SERVICE_LIST_SETTINGS.header,
+      ...settings?.header,
+      badge: {
+        ...DEFAULT_SERVICE_LIST_SETTINGS.header.badge,
+        ...settings?.header?.badge,
+      },
+      heading: {
+        ...DEFAULT_SERVICE_LIST_SETTINGS.header.heading,
+        ...settings?.header?.heading,
+      },
+      description: {
+        ...DEFAULT_SERVICE_LIST_SETTINGS.header.description,
+        ...settings?.header?.description,
+      },
+    },
     filters: { ...DEFAULT_SERVICE_LIST_SETTINGS.filters, ...settings?.filters },
     layout: { ...DEFAULT_SERVICE_LIST_SETTINGS.layout, ...settings?.layout },
     categoryCard: {
@@ -42,7 +57,18 @@ export function ServiceListWidgetSettingsPanel({
       ...DEFAULT_SERVICE_LIST_SETTINGS.serviceItem,
       ...settings?.serviceItem,
     },
-    cta: { ...DEFAULT_SERVICE_LIST_SETTINGS.cta, ...settings?.cta },
+    cta: {
+      ...DEFAULT_SERVICE_LIST_SETTINGS.cta,
+      ...settings?.cta,
+      primaryButton: {
+        ...DEFAULT_SERVICE_LIST_SETTINGS.cta.primaryButton,
+        ...settings?.cta?.primaryButton,
+      },
+      secondaryButton: {
+        ...DEFAULT_SERVICE_LIST_SETTINGS.cta.secondaryButton,
+        ...settings?.cta?.secondaryButton,
+      },
+    },
     responsive: {
       ...DEFAULT_SERVICE_LIST_SETTINGS.responsive,
       ...settings?.responsive,
