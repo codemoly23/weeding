@@ -20,6 +20,7 @@ import {
   DEFAULT_SERVICE_LIST_SETTINGS,
   DEFAULT_PROCESS_STEPS_SETTINGS,
   DEFAULT_PRICING_TABLE_SETTINGS,
+  DEFAULT_SERVICE_HERO_SETTINGS,
 } from "./defaults";
 
 // Import widget components
@@ -33,6 +34,7 @@ import {
 import { DividerWidget } from "@/components/page-builder/widgets/layout";
 import { ServiceCardWidget, ServiceListWidget, PricingTableWidget } from "@/components/page-builder/widgets/commerce";
 import { LeadFormWidget } from "@/components/page-builder/widgets/forms";
+import { ServiceHeroWidget } from "@/components/page-builder/widgets/service";
 
 // Register all widgets
 export function registerAllWidgets() {
@@ -180,6 +182,17 @@ export function registerAllWidgets() {
     category: "content",
     defaultSettings: DEFAULT_PROCESS_STEPS_SETTINGS,
     component: ProcessStepsWidget,
+  });
+
+  // Service Widgets (for Service Details template)
+  WidgetRegistry.register({
+    type: "service-hero",
+    name: "Service Hero",
+    description: "Dynamic service title, description, and CTA buttons",
+    icon: "Sparkles",
+    category: "service",
+    defaultSettings: DEFAULT_SERVICE_HERO_SETTINGS,
+    component: ServiceHeroWidget,
   });
 }
 

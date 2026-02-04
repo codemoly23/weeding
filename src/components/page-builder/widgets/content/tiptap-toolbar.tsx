@@ -159,7 +159,8 @@ function ImagePopover({
 
   const addImage = useCallback(() => {
     if (url) {
-      editor.chain().focus().setImage({ src: url }).run();
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      (editor.chain().focus() as any).setImage({ src: url }).run();
       setUrl("");
       setOpen(false);
     }
@@ -388,7 +389,8 @@ export function TiptapToolbar({ editor, preset }: TiptapToolbarProps) {
           <Strikethrough className="h-4 w-4" />
         </ToolbarButton>
         <ToolbarButton
-          onClick={() => editor.chain().focus().toggleHighlight().run()}
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          onClick={() => (editor.chain().focus() as any).toggleHighlight().run()}
           isActive={editor.isActive("highlight")}
           title="Highlight"
         >
@@ -574,7 +576,8 @@ export function TiptapToolbar({ editor, preset }: TiptapToolbarProps) {
         <Strikethrough className="h-4 w-4" />
       </ToolbarButton>
       <ToolbarButton
-        onClick={() => editor.chain().focus().toggleHighlight().run()}
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        onClick={() => (editor.chain().focus() as any).toggleHighlight().run()}
         isActive={editor.isActive("highlight")}
         title="Highlight"
       >

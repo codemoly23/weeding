@@ -605,28 +605,30 @@ export function HeadingWidgetSettingsPanel({
                 value={settings.style.splitStyles?.before?.color || settings.style.textFill?.color || "#000000"}
                 onChange={(v) =>
                   updateStyle("splitStyles", {
-                    ...settings.style.splitStyles,
                     before: { ...settings.style.splitStyles?.before, color: v },
+                    main: settings.style.splitStyles?.main || {},
+                    after: settings.style.splitStyles?.after || {},
                   })
                 }
               />
               <ColorInput
-                label="Main Text Color"
+                label="Main Text Color (Highlighted)"
                 value={settings.style.splitStyles?.main?.color || "#f97316"}
                 onChange={(v) =>
                   updateStyle("splitStyles", {
-                    ...settings.style.splitStyles,
+                    before: settings.style.splitStyles?.before || {},
                     main: { ...settings.style.splitStyles?.main, color: v },
+                    after: settings.style.splitStyles?.after || {},
                   })
                 }
-                description="This is the highlighted part"
               />
               <ColorInput
                 label="After Text Color"
                 value={settings.style.splitStyles?.after?.color || settings.style.textFill?.color || "#000000"}
                 onChange={(v) =>
                   updateStyle("splitStyles", {
-                    ...settings.style.splitStyles,
+                    before: settings.style.splitStyles?.before || {},
+                    main: settings.style.splitStyles?.main || {},
                     after: { ...settings.style.splitStyles?.after, color: v },
                   })
                 }

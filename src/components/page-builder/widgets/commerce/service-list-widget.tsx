@@ -460,10 +460,12 @@ function ServiceItem({
   settings: ServiceListWidgetSettings;
   isLast: boolean;
 }) {
-  const hoverEffectClasses = {
+  const hoverEffectClasses: Record<string, string> = {
     none: "",
     highlight: "hover:bg-muted",
     slide: "hover:translate-x-1",
+    scale: "hover:scale-105",
+    underline: "hover:underline",
   };
 
   return (
@@ -524,7 +526,7 @@ function CategoryCard({
         return b.startingPrice - a.startingPrice;
       case "name":
         return a.name.localeCompare(b.name);
-      case "order":
+      case "sort-order":
       default:
         return 0; // Already sorted by API
     }

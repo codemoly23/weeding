@@ -33,6 +33,11 @@ model User {
   authoredNotes     InternalNote[]    @relation("AuthoredNotes")
   cannedResponses   CannedResponse[]  @relation("CreatedCannedResponses")
 
+  // Lead management relations
+  assignedLeads     Lead[]           @relation("AssignedLeads")
+  performedActivities LeadActivity[] @relation("PerformedActivities")
+  authoredLeadNotes LeadNote[]       @relation("AuthoredLeadNotes")
+
   createdAt     DateTime  @default(now())
   updatedAt     DateTime  @updatedAt
 
@@ -154,6 +159,9 @@ model Service {
   metaTitle       String?
   metaDescription String?
   keywords        String[]
+
+  // Page Builder Display Options (per-service section visibility)
+  displayOptions  Json     @default("{}")  // ServiceDisplayOptions type
 
   createdAt       DateTime @default(now())
   updatedAt       DateTime @updatedAt
@@ -1680,4 +1688,261 @@ model PluginMenuItem {
 
   @@index([pluginId])
   @@index([isActive])
+}
+
+// ============================================
+// LEAD MANAGEMENT SYSTEM
+// ============================================
+
+enum LeadStatus {
+  NEW
+  CONTACTED
+  QUALIFIED
+  PROPOSAL
+  NEGOTIATION
+  WON
+  LOST
+  UNQUALIFIED
+}
+
+enum LeadSource {
+  WEBSITE
+  REFERRAL
+  GOOGLE_ADS
+  FACEBOOK_ADS
+  SOCIAL_MEDIA
+  DIRECT
+  COLD_OUTREACH
+  OTHER
+}
+
+enum LeadPriority {
+  LOW
+  MEDIUM
+  HIGH
+  URGENT
+}
+
+// Main Lead model
+model Lead {
+  id              String       @id @default(cuid())
+
+  // Contact Information
+  firstName       String
+  lastName        String?
+  email           String
+  phone           String?
+  company         String?
+  country         String?
+  city            String?
+
+  // Lead Qualification
+  status          LeadStatus   @default(NEW)
+  source          LeadSource   @default(WEBSITE)
+  sourceDetail    String?      // e.g., specific landing page URL, campaign name
+  score           Int          @default(0)    // 0-100 lead score
+  scoreHistory    Json?        // Track score changes over time
+  scoreDecayDays  Int          @default(0)    // Days since last activity for decay
+  priority        LeadPriority @default(MEDIUM)
+
+  // Engagement Tracking (for scoring)
+  pageViews       Int          @default(0)
+  lastPageViewed  String?
+  visitCount      Int          @default(1)
+  lastActivityAt  DateTime     @default(now())
+
+  // Assignment
+  assignedToId    String?
+  assignedTo      User?        @relation("AssignedLeads", fields: [assignedToId], references: [id])
+  assignedAt      DateTime?
+
+  // Service Interest
+  interestedIn    String[]     // Array of service slugs
+  budget          String?
+  timeline        String?
+
+  // Custom Fields (dynamic form fields)
+  customFields    Json?
+
+  // UTM Tracking
+  utmSource       String?
+  utmMedium       String?
+  utmCampaign     String?
+  utmTerm         String?
+  utmContent      String?
+
+  // Conversion Tracking
+  convertedAt     DateTime?
+  convertedToId   String?      // User ID if converted to customer
+
+  // Form Instance Reference
+  formInstanceId  String?
+  formInstance    LeadFormInstance? @relation(fields: [formInstanceId], references: [id])
+
+  // Notes & Communication
+  notes           String?      @db.Text
+
+  // IP & Metadata
+  ipAddress       String?
+  userAgent       String?
+
+  // Relations
+  activities      LeadActivity[]
+  leadNotes       LeadNote[]
+
+  createdAt       DateTime     @default(now())
+  updatedAt       DateTime     @updatedAt
+
+  @@index([email])
+  @@index([status])
+  @@index([source])
+  @@index([assignedToId])
+  @@index([score])
+  @@index([createdAt])
+  @@index([priority])
+  @@index([formInstanceId])
+}
+
+// Lead Activity Log
+model LeadActivity {
+  id          String   @id @default(cuid())
+  leadId      String
+  lead        Lead     @relation(fields: [leadId], references: [id], onDelete: Cascade)
+
+  // Activity details
+  type        String   // status_change, note_added, email_sent, call_made, meeting_scheduled, score_updated
+  description String
+  metadata    Json?    // Additional data (old/new status, score change, etc.)
+
+  // Who performed the action
+  performedById String?
+  performedBy   User?  @relation("PerformedActivities", fields: [performedById], references: [id])
+
+  createdAt   DateTime @default(now())
+
+  @@index([leadId])
+  @@index([type])
+  @@index([createdAt])
+}
+
+// Lead Notes (separate from activity log for longer notes)
+model LeadNote {
+  id          String   @id @default(cuid())
+  leadId      String
+  lead        Lead     @relation(fields: [leadId], references: [id], onDelete: Cascade)
+
+  content     String   @db.Text
+  isPinned    Boolean  @default(false)
+
+  // Author
+  authorId    String
+  author      User     @relation("AuthoredLeadNotes", fields: [authorId], references: [id])
+
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([leadId])
+  @@index([authorId])
+}
+
+// Lead Form Templates (reusable field definitions)
+model LeadFormTemplate {
+  id                    String   @id @default(cuid())
+  name                  String   // "LLC Lead Form"
+  description           String?
+  fields                Json     // Field definitions array
+
+  // Defaults (can be overridden in instance)
+  defaultSuccessMessage  String?
+  defaultSuccessRedirect String?
+  defaultAutoAssignTo    String?
+
+  // Styling defaults
+  defaultStyling         Json?
+
+  // Management
+  isActive      Boolean  @default(true)
+  isSystem      Boolean  @default(false) // System templates can't be deleted
+  usageCount    Int      @default(0)
+
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  // Relations
+  formInstances LeadFormInstance[]
+
+  @@index([isActive])
+}
+
+// Lead Form Instances (page-specific configurations)
+model LeadFormInstance {
+  id              String   @id @default(cuid())
+  name            String   // "Homepage LLC Form"
+  slug            String   @unique // "homepage-llc-form"
+
+  // Template reference
+  templateId      String
+  template        LeadFormTemplate @relation(fields: [templateId], references: [id])
+
+  // Override fields
+  fieldOverrides  Json?
+  stylingOverrides Json?
+
+  // Instance-specific settings
+  successMessage   String?
+  successRedirect  String?
+  autoAssignToId   String?
+  roundRobinAssign Boolean  @default(false)
+
+  // Tracking identifiers
+  trackingEventName String?
+  trackingParams    Json?
+
+  // Status
+  isActive      Boolean  @default(true)
+
+  // Stats
+  submissionCount Int     @default(0)
+  conversionCount Int     @default(0)
+  lastSubmission  DateTime?
+
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  // Relations
+  leads         Lead[]
+
+  @@index([templateId])
+  @@index([isActive])
+  @@index([slug])
+}
+
+// Global Tracking Settings (GTM, FB Pixel, Google Ads)
+model TrackingSettings {
+  id              String   @id @default(cuid())
+
+  // Google Tag Manager
+  gtmEnabled      Boolean  @default(false)
+  gtmContainerId  String?
+  gtmTrackForms   Boolean  @default(true)
+  gtmTrackPages   Boolean  @default(true)
+
+  // Facebook Pixel
+  fbPixelEnabled  Boolean  @default(false)
+  fbPixelId       String?
+  fbTrackLead     Boolean  @default(true)
+  fbTrackPageView Boolean  @default(true)
+  fbTrackContent  Boolean  @default(false)
+
+  // Google Ads
+  gadsEnabled         Boolean  @default(false)
+  gadsConversionId    String?
+  gadsConversionLabel String?
+  gadsDefaultValue    Float?
+
+  // TikTok (Future)
+  tiktokEnabled   Boolean  @default(false)
+  tiktokPixelId   String?
+
+  updatedAt       DateTime @updatedAt
 }

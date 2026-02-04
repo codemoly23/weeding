@@ -44,19 +44,21 @@ function mergeWithDefaults(
       ...settings.dropCap,
     },
     columns: {
-      ...DEFAULT_TEXT_BLOCK_SETTINGS.columns,
-      ...settings.columns,
+      enabled: settings.columns?.enabled ?? DEFAULT_TEXT_BLOCK_SETTINGS.columns!.enabled,
+      count: settings.columns?.count ?? DEFAULT_TEXT_BLOCK_SETTINGS.columns!.count,
+      gap: settings.columns?.gap ?? DEFAULT_TEXT_BLOCK_SETTINGS.columns!.gap,
       divider: {
-        ...DEFAULT_TEXT_BLOCK_SETTINGS.columns?.divider,
-        ...settings.columns?.divider,
+        show: settings.columns?.divider?.show ?? DEFAULT_TEXT_BLOCK_SETTINGS.columns!.divider!.show,
+        color: settings.columns?.divider?.color ?? DEFAULT_TEXT_BLOCK_SETTINGS.columns!.divider!.color,
+        width: settings.columns?.divider?.width ?? DEFAULT_TEXT_BLOCK_SETTINGS.columns!.divider!.width,
       },
     },
     animation: {
-      ...DEFAULT_TEXT_BLOCK_SETTINGS.animation,
-      ...settings.animation,
       entrance: {
-        ...DEFAULT_TEXT_BLOCK_SETTINGS.animation?.entrance,
-        ...settings.animation?.entrance,
+        enabled: settings.animation?.entrance?.enabled ?? DEFAULT_TEXT_BLOCK_SETTINGS.animation!.entrance.enabled,
+        type: settings.animation?.entrance?.type ?? DEFAULT_TEXT_BLOCK_SETTINGS.animation!.entrance.type,
+        duration: settings.animation?.entrance?.duration ?? DEFAULT_TEXT_BLOCK_SETTINGS.animation!.entrance.duration,
+        delay: settings.animation?.entrance?.delay ?? DEFAULT_TEXT_BLOCK_SETTINGS.animation!.entrance.delay,
       },
     },
     responsive: {
@@ -64,8 +66,11 @@ function mergeWithDefaults(
       ...settings.responsive,
     },
     advanced: {
-      ...DEFAULT_TEXT_BLOCK_SETTINGS.advanced,
-      ...settings.advanced,
+      customClass: settings.advanced?.customClass ?? DEFAULT_TEXT_BLOCK_SETTINGS.advanced!.customClass,
+      customId: settings.advanced?.customId ?? DEFAULT_TEXT_BLOCK_SETTINGS.advanced!.customId,
+      hideOnDesktop: settings.advanced?.hideOnDesktop ?? DEFAULT_TEXT_BLOCK_SETTINGS.advanced!.hideOnDesktop,
+      hideOnTablet: settings.advanced?.hideOnTablet ?? DEFAULT_TEXT_BLOCK_SETTINGS.advanced!.hideOnTablet,
+      hideOnMobile: settings.advanced?.hideOnMobile ?? DEFAULT_TEXT_BLOCK_SETTINGS.advanced!.hideOnMobile,
     },
   };
 }
@@ -261,19 +266,21 @@ export function TextBlockWidget({
     }
 
     // Animation keyframes as inline style fallback
-    const animationName = {
+    const animationName: Record<string, string | undefined> = {
+      none: undefined,
       fade: "text-block-fade-in",
       "fade-up": "text-block-fade-up",
       "fade-down": "text-block-fade-down",
       "slide-up": "text-block-slide-up",
-    }[type];
+    };
+    const selectedAnimation = animationName[type];
 
-    if (!animationName || type === "none") {
+    if (!selectedAnimation || type === "none") {
       return {};
     }
 
     return {
-      animation: `${animationName} ${duration}ms ease-out ${delay}ms forwards`,
+      animation: `${selectedAnimation} ${duration}ms ease-out ${delay}ms forwards`,
     };
   }, [settings.animation, isVisible, isEditing]);
 

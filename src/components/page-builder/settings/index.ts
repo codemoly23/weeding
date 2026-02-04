@@ -13,3 +13,4 @@ export { ProcessStepsWidgetSettingsPanel } from "./process-steps-settings";
 export { PricingTableWidgetSettingsPanel } from "./pricing-table-settings";
 export { TestimonialsWidgetSettingsPanel } from "./testimonials-settings";
 export { LeadFormWidgetSettingsPanel } from "./lead-form-settings";
+export { ServiceHeroWidgetSettingsPanel } from "./service-hero-settings";

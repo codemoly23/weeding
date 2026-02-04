@@ -19,6 +19,12 @@ export const WIDGET_CATEGORIES: WidgetCategoryInfo[] = [
     description: "Frequently used widgets",
   },
   {
+    id: "service",
+    name: "Service",
+    icon: "Briefcase",
+    description: "Service Details template widgets",
+  },
+  {
     id: "content",
     name: "Content",
     icon: "FileText",

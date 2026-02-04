@@ -129,7 +129,7 @@ export const DEFAULT_HERO_CONTENT_SETTINGS: HeroContentWidgetSettings = {
     columns: 3,
     iconColor: "#22c55e",
     iconPosition: "left",
-    layout: "inline",
+    layout: "list",
   },
   primaryButton: {
     show: true,
@@ -946,7 +946,7 @@ export const DEFAULT_SERVICE_LIST_SETTINGS: ServiceListWidgetSettings = {
     showAllCategories: true,
     categories: [],
     limitServicesPerCategory: 0, // 0 = no limit
-    sortServicesBy: "order",
+    sortServicesBy: "sort-order",
     activeOnly: true,
   },
 
@@ -1586,6 +1586,40 @@ export const DEFAULT_IMAGE_SLIDER_SETTINGS: ImageSliderWidgetSettings = {
 };
 
 // ============================================
+// SERVICE HERO WIDGET DEFAULTS
+// ============================================
+
+export const DEFAULT_SERVICE_HERO_SETTINGS: import("./types").ServiceHeroWidgetSettings = {
+  // Content Source
+  titleSource: "auto",
+  subtitleSource: "auto",
+
+  // Price Badge
+  showPriceBadge: true,
+  priceBadgeText: "From ${{service.startingPrice}}",
+
+  // Primary Button
+  primaryCtaText: "Get Started",
+  primaryCtaLink: "/checkout/{{service.slug}}",
+  showPriceInButton: true,
+
+  // Secondary Button
+  showSecondaryButton: true,
+  secondaryCtaText: "Ask a Question",
+  secondaryCtaLink: "/contact",
+
+  // Appearance
+  backgroundType: "none",
+  textAlignment: "center",
+  titleSize: "default",
+  spacing: "lg",
+
+  // Spacing (Advanced)
+  marginTop: 0,
+  marginBottom: 0,
+};
+
+// ============================================
 // EXPORT ALL DEFAULTS
 // ============================================
 
@@ -1607,4 +1641,5 @@ export const WIDGET_DEFAULTS: Record<string, unknown> = {
   "service-list": DEFAULT_SERVICE_LIST_SETTINGS,
   "process-steps": DEFAULT_PROCESS_STEPS_SETTINGS,
   "pricing-table": DEFAULT_PRICING_TABLE_SETTINGS,
+  "service-hero": DEFAULT_SERVICE_HERO_SETTINGS,
 };

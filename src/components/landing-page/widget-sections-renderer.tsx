@@ -17,6 +17,7 @@ import {
   TestimonialsWidget,
 } from "@/components/page-builder/widgets";
 import { ServiceCardWidget, ServiceListWidget, PricingTableWidget } from "@/components/page-builder/widgets/commerce";
+import { ServiceHeroWidget } from "@/components/page-builder/widgets/service/service-hero";
 
 // Helper: Generate background styles from SectionBackground
 function getBackgroundStyles(bg: SectionBackground): React.CSSProperties {
@@ -270,6 +271,9 @@ function WidgetRenderer({ widget }: WidgetRendererProps) {
 
       case "testimonials-carousel":
         return <TestimonialsWidget settings={widget.settings as any} />;
+
+      case "service-hero":
+        return <ServiceHeroWidget settings={widget.settings as any} />;
 
       default:
         // Unknown widget type - render nothing in production
