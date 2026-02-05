@@ -165,7 +165,19 @@ export type WidgetType =
   | "feature-grid"
   | "countdown"
   | "map"
-  | "custom-html";
+  | "custom-html"
+  // Service Widgets (for Service Details template)
+  | "service-hero"
+  | "service-features"
+  | "service-pricing"
+  | "service-process"
+  | "service-faq"
+  | "service-requirements"
+  | "service-deliverables"
+  | "service-timeline"
+  | "related-services"
+  | "service-testimonials"
+  | "service-cta";
 
 export type WidgetCategory =
   | "most-used"
@@ -176,7 +188,8 @@ export type WidgetCategory =
   | "commerce"
   | "layout"
   | "cta"
-  | "advanced";
+  | "advanced"
+  | "service"; // Service-specific widgets (for Service Details template)
 
 export interface WidgetSpacing {
   marginTop: number;
@@ -726,6 +739,10 @@ export interface LeadFormWidgetSettings {
   emailTo?: string;
   // Styling
   backgroundColor?: string;
+  titleColor?: string;
+  descriptionColor?: string;
+  labelColor?: string;
+  inputTextColor?: string;
   padding: number;
   borderRadius: number;
   shadow: boolean;
@@ -1262,12 +1279,125 @@ export interface HeadingWidgetSettings {
   };
 }
 
-// Text Block Widget
+// Text Block Widget (Tiptap)
+export type TextBlockToolbarPreset = "minimal" | "basic" | "standard" | "full";
+
 export interface TextBlockWidgetSettings {
-  content: string;
-  alignment: "left" | "center" | "right" | "justify";
-  color?: string;
-  size: "sm" | "md" | "lg";
+  // === CONTENT ===
+  content: string; // HTML content from Tiptap
+
+  // === EDITOR CONFIG ===
+  editor: {
+    toolbar: TextBlockToolbarPreset;
+    minHeight: number; // px (default: 200)
+    maxHeight?: number; // px (optional limit)
+    charLimit?: number;
+    placeholder?: string;
+  };
+
+  // === TYPOGRAPHY ===
+  typography: {
+    fontFamily?: string;
+    fontSize: number; // px
+    lineHeight: number; // unitless (e.g., 1.6)
+    letterSpacing?: number; // px
+    color: string;
+    linkColor: string;
+    linkHoverColor: string;
+    linkUnderline: boolean;
+  };
+
+  // === CONTAINER STYLING ===
+  container: {
+    backgroundColor?: string;
+    padding: number; // px
+    borderRadius: number; // px
+    border?: {
+      width: number;
+      color: string;
+      style: "solid" | "dashed" | "dotted";
+    };
+    shadow?: "none" | "sm" | "md" | "lg";
+    maxWidth?: number; // px (for readability)
+  };
+
+  // === PARAGRAPH STYLING ===
+  paragraphSpacing: number; // Margin between paragraphs (px)
+
+  // === LIST STYLING ===
+  lists: {
+    bulletStyle: "disc" | "circle" | "square" | "none";
+    bulletColor?: string;
+    numberStyle:
+      | "decimal"
+      | "lower-alpha"
+      | "upper-alpha"
+      | "lower-roman"
+      | "upper-roman";
+    indentation: number; // px
+  };
+
+  // === BLOCKQUOTE STYLING ===
+  blockquote: {
+    borderColor: string;
+    borderWidth: number;
+    backgroundColor?: string;
+    fontStyle: "normal" | "italic";
+    padding: number;
+  };
+
+  // === DROP CAP ===
+  dropCap: {
+    enabled: boolean;
+    size: number; // Lines to span (2-4)
+    color?: string;
+    fontFamily?: string;
+  };
+
+  // === COLUMNS (Multi-column text) ===
+  columns?: {
+    enabled: boolean;
+    count: 1 | 2 | 3;
+    gap: number; // px
+    divider?: {
+      show: boolean;
+      color: string;
+      width: number;
+    };
+  };
+
+  // === ANIMATION ===
+  animation?: {
+    entrance: {
+      enabled: boolean;
+      type: "none" | "fade" | "fade-up" | "fade-down" | "slide-up";
+      duration: number; // ms
+      delay: number; // ms
+    };
+  };
+
+  // === RESPONSIVE ===
+  responsive?: {
+    tablet?: {
+      fontSize?: number;
+      lineHeight?: number;
+      columns?: number;
+    };
+    mobile?: {
+      fontSize?: number;
+      lineHeight?: number;
+      columns?: number;
+    };
+  };
+
+  // === ADVANCED ===
+  advanced?: {
+    customClass?: string;
+    customId?: string;
+    hideOnDesktop: boolean;
+    hideOnTablet: boolean;
+    hideOnMobile: boolean;
+  };
 }
 
 // Spacer Widget
@@ -2092,4 +2222,174 @@ export interface PricingTableWidgetSettings {
     rowBorderColor?: string;
     addonToggleActive?: string;
   };
+}
+
+// ============================================
+// SERVICE WIDGETS SETTINGS
+// For Service Details template
+// ============================================
+
+/**
+ * Service Hero Widget Settings
+ * Displays service title, description, price badge, and CTA buttons
+ */
+export interface ServiceHeroWidgetSettings {
+  // Content Source
+  titleSource: "auto" | "custom";
+  customTitle?: string;
+  subtitleSource: "auto" | "custom";
+  customSubtitle?: string;
+
+  // Price Badge
+  showPriceBadge: boolean;
+  priceBadgeText: string; // Supports {{service.startingPrice}}
+
+  // Primary Button
+  primaryCtaText: string;
+  primaryCtaLink: string; // Supports {{service.slug}}
+  showPriceInButton: boolean;
+
+  // Secondary Button
+  showSecondaryButton: boolean;
+  secondaryCtaText: string;
+  secondaryCtaLink: string;
+
+  // Appearance
+  backgroundType: "none" | "solid" | "gradient" | "image";
+  backgroundColor?: string;
+  backgroundGradient?: string;
+  backgroundImage?: string;
+  textAlignment: "left" | "center" | "right";
+  titleSize: "default" | "large" | "xl";
+  spacing: "sm" | "md" | "lg" | "xl";
+
+  // Spacing (Advanced)
+  marginTop?: number;
+  marginBottom?: number;
+}
+
+/**
+ * Service Features Widget Settings
+ * Displays list of included features
+ */
+export interface ServiceFeaturesWidgetSettings {
+  titleSource: "auto" | "custom";
+  customTitle?: string; // Default: "What's Included"
+  layout: "grid" | "list" | "cards";
+  columns: 2 | 3 | 4;
+  showIcons: boolean;
+  iconStyle: "checkmark" | "bullet" | "custom";
+  iconColor?: string;
+}
+
+/**
+ * Service Pricing Widget Settings
+ * Displays pricing tiers/packages
+ */
+export interface ServicePricingWidgetSettings {
+  titleSource: "auto" | "custom";
+  customTitle?: string; // Default: "Choose Your Package"
+  layout: "horizontal" | "vertical";
+  highlightRecommended: boolean;
+  showComparisonTable: boolean;
+  ctaText: string; // Default: "Select Plan"
+}
+
+/**
+ * Service Process Widget Settings
+ * Displays step-by-step process
+ */
+export interface ServiceProcessWidgetSettings {
+  titleSource: "auto" | "custom";
+  customTitle?: string; // Default: "How It Works"
+  layout: "horizontal" | "vertical" | "alternating";
+  showStepNumbers: boolean;
+  showConnectors: boolean;
+}
+
+/**
+ * Service FAQ Widget Settings
+ * Displays frequently asked questions
+ */
+export interface ServiceFaqWidgetSettings {
+  titleSource: "auto" | "custom";
+  customTitle?: string; // Default: "Frequently Asked Questions"
+  layout: "accordion" | "grid" | "list";
+  expandFirst: boolean;
+  allowMultipleOpen: boolean;
+}
+
+/**
+ * Service Requirements Widget Settings
+ * Displays what's needed from the customer
+ */
+export interface ServiceRequirementsWidgetSettings {
+  titleSource: "auto" | "custom";
+  customTitle?: string; // Default: "What You'll Need"
+  layout: "list" | "cards";
+  showIcons: boolean;
+}
+
+/**
+ * Service Deliverables Widget Settings
+ * Displays what the customer receives
+ */
+export interface ServiceDeliverablesWidgetSettings {
+  titleSource: "auto" | "custom";
+  customTitle?: string; // Default: "What You'll Get"
+  layout: "list" | "cards" | "timeline";
+  showIcons: boolean;
+}
+
+/**
+ * Service Timeline Widget Settings
+ * Displays expected delivery timeline
+ */
+export interface ServiceTimelineWidgetSettings {
+  titleSource: "auto" | "custom";
+  customTitle?: string; // Default: "Timeline"
+  showIcon: boolean;
+  layout: "inline" | "card";
+}
+
+/**
+ * Related Services Widget Settings
+ * Displays other services to consider
+ */
+export interface RelatedServicesWidgetSettings {
+  titleSource: "auto" | "custom";
+  customTitle?: string; // Default: "Related Services"
+  maxItems: number; // Default: 3
+  layout: "grid" | "carousel";
+  showPrice: boolean;
+  showDescription: boolean;
+}
+
+/**
+ * Service Testimonials Widget Settings
+ * Displays customer reviews for this service
+ */
+export interface ServiceTestimonialsWidgetSettings {
+  titleSource: "auto" | "custom";
+  customTitle?: string; // Default: "What Our Clients Say"
+  layout: "grid" | "carousel" | "list";
+  maxItems: number;
+  showRating: boolean;
+  showDate: boolean;
+}
+
+/**
+ * Service CTA Banner Widget Settings
+ * Displays call-to-action section
+ */
+export interface ServiceCtaWidgetSettings {
+  titleSource: "auto" | "custom";
+  customTitle?: string;
+  subtitleSource: "auto" | "custom";
+  customSubtitle?: string;
+  ctaText: string;
+  ctaLink: string; // Supports {{service.slug}}
+  backgroundType: "solid" | "gradient" | "image";
+  backgroundColor?: string;
+  backgroundGradient?: string;
 }

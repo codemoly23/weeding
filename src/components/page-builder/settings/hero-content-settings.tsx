@@ -1,6 +1,7 @@
 "use client";
 
 import { useCallback } from "react";
+import * as LucideIcons from "lucide-react";
 import type { HeroContentWidgetSettings } from "@/lib/page-builder/types";
 import { DEFAULT_HERO_CONTENT_SETTINGS } from "@/lib/page-builder/defaults";
 import { AccordionSection } from "@/app/admin/appearance/landing-page/components/ui/accordion-section";
@@ -20,6 +21,33 @@ interface HeroContentWidgetSettingsProps {
   settings: HeroContentWidgetSettings;
   onChange: (settings: HeroContentWidgetSettings) => void;
   activeTab?: "content" | "style" | "advanced";
+}
+
+// Get Lucide icon component by name
+// Converts input to PascalCase to match Lucide React naming convention
+function getLucideIcon(
+  name: string
+): React.ComponentType<{ className?: string; style?: React.CSSProperties }> | null {
+  if (!name) return null;
+
+  const icons = LucideIcons as unknown as Record<
+    string,
+    React.ComponentType<{ className?: string; style?: React.CSSProperties }>
+  >;
+
+  // Try exact match first
+  if (icons[name]) return icons[name];
+
+  // Convert to PascalCase (airplay -> Airplay, check-circle -> CheckCircle)
+  const toPascalCase = (str: string) => {
+    return str
+      .split(/[-_\s]+/) // Split by hyphen, underscore, or space
+      .map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
+      .join('');
+  };
+
+  const pascalName = toPascalCase(name);
+  return icons[pascalName] || null;
 }
 
 export function HeroContentWidgetSettingsPanel({
@@ -78,13 +106,31 @@ export function HeroContentWidgetSettingsPanel({
               onChange={(v) => updateNested("badge", "text", v)}
               placeholder="Badge text..."
             />
-            <TextInput
-              label="Icon"
-              value={s.badge.icon}
-              onChange={(v) => updateNested("badge", "icon", v)}
-              placeholder="Flag"
-              description="Lucide icon name (e.g., Flag, Star, Zap)"
-            />
+            <div>
+              <TextInput
+                label="Icon"
+                value={s.badge.icon}
+                onChange={(v) => updateNested("badge", "icon", v)}
+                placeholder="Flag"
+                description="Lucide icon name (e.g., Flag, Star, Zap)"
+              />
+              {s.badge.icon && (() => {
+                const Icon = getLucideIcon(s.badge.icon);
+                return Icon ? (
+                  <div className="mt-2 flex items-center gap-2 text-sm text-muted-foreground">
+                    <span>Preview:</span>
+                    <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-md bg-muted">
+                      <Icon className="h-4 w-4" />
+                      <span>{s.badge.icon}</span>
+                    </div>
+                  </div>
+                ) : (
+                  <div className="mt-2 text-sm text-amber-600">
+                    Icon "{s.badge.icon}" not found. Try: Flag, Star, Zap, CheckCircle
+                  </div>
+                );
+              })()}
+            </div>
           </>
         )}
       </AccordionSection>

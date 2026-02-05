@@ -26,6 +26,15 @@ import { ServiceIcon } from "@/components/ui/service-icon";
 import { PackageComparisonTable } from "@/components/services/package-comparison-table";
 import prisma from "@/lib/db";
 import type { FeatureValueType } from "@prisma/client";
+import {
+  ServiceProvider,
+  filterSectionsByDisplayOptions,
+  DEFAULT_DISPLAY_OPTIONS,
+  type ServiceData as ServiceContextData,
+  type ServiceDisplayOptions,
+} from "@/lib/page-builder/contexts/service-context";
+import { getActiveTemplateForType } from "@/lib/data/templates";
+import { PageBuilderRenderer } from "@/components/page-builder/renderer";
 
 // Force dynamic rendering to avoid SSG issues with client components
 export const dynamic = "force-dynamic";
@@ -89,6 +98,7 @@ interface ServiceData {
     answer: string;
   }[];
   stateFees: StateFee[];
+  displayOptions: Partial<ServiceDisplayOptions>;
 }
 
 interface RelatedService {
@@ -211,6 +221,7 @@ async function getService(slug: string): Promise<ServiceData | null> {
       })),
       faqs: service.faqs,
       stateFees,
+      displayOptions: (service.displayOptions as Partial<ServiceDisplayOptions>) || {},
     };
   } catch (error) {
     console.error("Error fetching service:", error);
@@ -280,6 +291,63 @@ export default async function ServicePage({ params }: PageProps) {
 
   const relatedServices = await getRelatedServices(slug);
 
+  // Check for SERVICE_DETAILS template
+  const template = await getActiveTemplateForType("SERVICE_DETAILS");
+
+  // Debug: Log template info
+  console.log("[Service Page] Template found:", template ? {
+    id: template.id,
+    name: template.name,
+    sectionsCount: template.sections.length,
+  } : null);
+
+  // Prepare service data for context
+  const serviceContextData: ServiceContextData = {
+    id: service.id,
+    name: service.name,
+    slug: service.slug,
+    shortDesc: service.shortDesc,
+    description: service.description,
+    icon: service.icon,
+    image: service.image,
+    startingPrice: service.startingPrice,
+    processingTime: service.processingTime,
+    isPopular: service.isPopular,
+    isActive: true,
+    sortOrder: 0,
+    category: null,
+    packages: service.packages.map((pkg) => ({
+      id: pkg.id,
+      name: pkg.name,
+      shortDesc: pkg.description,
+      price: pkg.priceUSD,
+      originalPrice: null,
+      isRecommended: pkg.isPopular,
+      isActive: true,
+      sortOrder: 0,
+      featureMappings: [],
+    })),
+    features: service.masterFeatures.map((f) => ({
+      id: f.id,
+      text: f.text,
+      description: f.description,
+      tooltip: f.tooltip,
+      sortOrder: 0,
+    })),
+    faqs: service.faqs.map((f) => ({
+      id: f.id,
+      question: f.question,
+      answer: f.answer,
+      sortOrder: 0,
+    })),
+    metaTitle: service.metaTitle,
+    metaDescription: service.metaDescription,
+    keywords: [],
+    displayOptions: service.displayOptions,
+    createdAt: new Date(),
+    updatedAt: new Date(),
+  };
+
   // Determine checkout URL based on whether service has a form config
   const hasFormConfig = getServiceForm(service.slug) !== undefined;
   const checkoutBaseUrl = hasFormConfig
@@ -320,7 +388,27 @@ export default async function ServicePage({ params }: PageProps) {
   const hasComparisonData =
     service.masterFeatures.length > 0 && service.packages.length > 0;
 
+  // If there's an active template, use PageBuilderRenderer
+  if (template && template.sections.length > 0) {
+    // Filter sections based on service's displayOptions
+    const visibleSections = filterSectionsByDisplayOptions(
+      template.sections,
+      service.displayOptions
+    );
+
+    return (
+      <ServiceProvider service={serviceContextData}>
+        <div className="py-12 lg:py-20">
+          <MultiJsonLd data={schemaData} />
+          <PageBuilderRenderer sections={visibleSections} />
+        </div>
+      </ServiceProvider>
+    );
+  }
+
+  // Default layout (no template or template has no sections)
   return (
+    <ServiceProvider service={serviceContextData}>
     <div className="py-12 lg:py-20">
       <MultiJsonLd data={schemaData} />
       <div className="container mx-auto px-4">
@@ -525,5 +613,6 @@ export default async function ServicePage({ params }: PageProps) {
         )}
       </div>
     </div>
+    </ServiceProvider>
   );
 }

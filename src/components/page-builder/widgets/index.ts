@@ -1,4 +1,5 @@
-export { HeroContentWidget, ProcessStepsWidget } from "./content";
+export { HeroContentWidget, ProcessStepsWidget, HeadingWidget, TextBlockWidget } from "./content";
 export { ImageWidget, ImageSliderWidget } from "./media";
-export { TrustBadgesWidget, StatsSectionWidget } from "./social-proof";
+export { TrustBadgesWidget, StatsSectionWidget, TestimonialsWidget } from "./social-proof";
 export { DividerWidget } from "./layout";
+export { LeadFormWidget } from "./forms";

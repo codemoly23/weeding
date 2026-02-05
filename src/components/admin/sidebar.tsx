@@ -21,6 +21,7 @@ import {
   UserCog,
   Palette,
   Puzzle,
+  Target,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useBusinessConfig } from "@/hooks/use-business-config";
@@ -62,6 +63,17 @@ const navItems: NavItem[] = [
     title: "Customers",
     href: "/admin/customers",
     icon: Users,
+  },
+  {
+    title: "Leads",
+    icon: Target,
+    children: [
+      { title: "All Leads", href: "/admin/leads" },
+      { title: "Pipeline", href: "/admin/leads/pipeline" },
+      { title: "Forms", href: "/admin/leads/forms" },
+      { title: "Analytics", href: "/admin/leads/analytics" },
+      { title: "Settings", href: "/admin/leads/settings" },
+    ],
   },
   {
     title: "Services",
@@ -162,6 +174,7 @@ const iconMap: Record<string, React.ComponentType<{ className?: string }>> = {
   UserCog,
   Palette,
   Puzzle,
+  Target,
 };
 
 export function AdminSidebar() {
@@ -170,6 +183,7 @@ export function AdminSidebar() {
   const [mounted, setMounted] = useState(false); // Prevent transition flash on initial load
   const [collapsed, setCollapsed] = useState(false); // Expanded by default
   const [openItems, setOpenItems] = useState<string[]>([]);
+  const [closedItems, setClosedItems] = useState<string[]>([]); // Track manually closed items
   const [pluginMenuItems, setPluginMenuItems] = useState<NavItem[]>([]);
 
   // Page builder pages always start collapsed for maximum workspace
@@ -239,11 +253,25 @@ export function AdminSidebar() {
   };
 
   const toggleItem = (title: string) => {
-    setOpenItems((prev) =>
-      prev.includes(title)
-        ? prev.filter((item) => item !== title)
-        : [...prev, title]
-    );
+    // If item is in closedItems, remove it (opening)
+    if (closedItems.includes(title)) {
+      setClosedItems((prev) => prev.filter((item) => item !== title));
+      setOpenItems((prev) => [...prev, title]);
+    } else if (openItems.includes(title)) {
+      // If in openItems, close it
+      setOpenItems((prev) => prev.filter((item) => item !== title));
+      setClosedItems((prev) => [...prev, title]);
+    } else {
+      // If not in either, check if child is active
+      // If child is active, add to closedItems to close it
+      // Otherwise add to openItems to open it
+      const navItem = [...navItems, ...pluginMenuItems].find((i) => i.title === title);
+      if (navItem?.children && isChildActive(navItem.children)) {
+        setClosedItems((prev) => [...prev, title]);
+      } else {
+        setOpenItems((prev) => [...prev, title]);
+      }
+    }
   };
 
   const isActive = (href: string) => {
@@ -306,7 +334,7 @@ export function AdminSidebar() {
             const Icon = item.icon;
 
             if (item.children) {
-              const isOpen = openItems.includes(item.title) || isChildActive(item.children);
+              const isOpen = (openItems.includes(item.title) || isChildActive(item.children)) && !closedItems.includes(item.title);
 
               if (collapsed) {
                 return (

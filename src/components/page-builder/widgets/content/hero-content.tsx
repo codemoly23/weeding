@@ -35,6 +35,7 @@ interface HeroContentWidgetProps {
 }
 
 // Get Lucide icon component by name
+// Converts input to PascalCase to match Lucide React naming convention
 function getLucideIcon(
   name: string
 ): React.ComponentType<{ className?: string; style?: React.CSSProperties }> {
@@ -42,7 +43,20 @@ function getLucideIcon(
     string,
     React.ComponentType<{ className?: string; style?: React.CSSProperties }>
   >;
-  return icons[name] || CheckCircle;
+
+  // Try exact match first
+  if (icons[name]) return icons[name];
+
+  // Convert to PascalCase (airplay -> Airplay, check-circle -> CheckCircle)
+  const toPascalCase = (str: string) => {
+    return str
+      .split(/[-_\s]+/) // Split by hyphen, underscore, or space
+      .map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
+      .join('');
+  };
+
+  const pascalName = toPascalCase(name);
+  return icons[pascalName] || CheckCircle;
 }
 
 export function HeroContentWidget({ settings, isPreview = false }: HeroContentWidgetProps) {

@@ -33,6 +33,7 @@ interface WidgetPageBuilderProps {
   onDeleteSection?: (sectionId: string) => void;
   onDuplicateSection?: (sectionId: string) => void;
   onDeleteWidget?: (sectionId: string, columnId: string, widgetId: string) => void;
+  onDuplicateWidget?: (sectionId: string, columnId: string, widgetId: string) => void;
   isPreviewMode?: boolean;
   device?: "desktop" | "mobile";
   isDraggingWidget?: boolean;
@@ -130,6 +131,7 @@ export function WidgetPageBuilder({
   onDeleteSection,
   onDuplicateSection,
   onDeleteWidget,
+  onDuplicateWidget,
   isPreviewMode = false,
   device = "desktop",
   isDraggingWidget = false,
@@ -408,6 +410,7 @@ export function WidgetPageBuilder({
                         })
                       }
                       onDelete={() => onDeleteWidget?.(section.id, column.id, widget.id)}
+                      onDuplicate={() => onDuplicateWidget?.(section.id, column.id, widget.id)}
                       isPreview={isPreviewMode}
                     />
                   ))}

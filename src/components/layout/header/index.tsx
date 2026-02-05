@@ -141,12 +141,27 @@ export function Header() {
 
   // Check if custom styling is set - use explicit white as default
   const bgColor = headerConfig?.styling?.bgColor || "#ffffff";
-  const hasCustomTextColor = !!headerConfig?.styling?.textColor;
+
+  // Helper to detect if a color is dark
+  const isDarkColor = (hex: string): boolean => {
+    const color = hex.replace("#", "");
+    const r = parseInt(color.substring(0, 2), 16);
+    const g = parseInt(color.substring(2, 4), 16);
+    const b = parseInt(color.substring(4, 6), 16);
+    // Calculate relative luminance
+    const luminance = (0.299 * r + 0.587 * g + 0.114 * b) / 255;
+    return luminance < 0.5;
+  };
+
+  // Auto-detect text color if not set - white for dark bg, dark for light bg
+  const isDarkBg = isDarkColor(bgColor);
+  const textColor = headerConfig?.styling?.textColor || (isDarkBg ? "#ffffff" : "#0f172a");
+  const hoverColor = headerConfig?.styling?.hoverColor || (isDarkBg ? "#f97316" : "#f97316");
 
   // Get styling from header config - always set background color
   const headerStyle: React.CSSProperties = {
     ...(!headerConfig?.transparent && { backgroundColor: bgColor }),
-    ...(hasCustomTextColor && { color: headerConfig.styling.textColor }),
+    color: textColor,
   };
 
   // Transparent header styles - always use inline style for background
@@ -170,8 +185,8 @@ export function Header() {
     },
     onLogout: handleLogout,
     styling: {
-      textColor: headerConfig?.styling?.textColor,
-      hoverColor: headerConfig?.styling?.hoverColor,
+      textColor: textColor,
+      hoverColor: hoverColor,
     },
   };
 

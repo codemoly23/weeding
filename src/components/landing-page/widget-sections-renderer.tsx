@@ -11,8 +11,13 @@ import {
   StatsSectionWidget,
   DividerWidget,
   ProcessStepsWidget,
+  HeadingWidget,
+  TextBlockWidget,
+  LeadFormWidget,
+  TestimonialsWidget,
 } from "@/components/page-builder/widgets";
 import { ServiceCardWidget, ServiceListWidget, PricingTableWidget } from "@/components/page-builder/widgets/commerce";
+import { ServiceHeroWidget } from "@/components/page-builder/widgets/service/service-hero";
 
 // Helper: Generate background styles from SectionBackground
 function getBackgroundStyles(bg: SectionBackground): React.CSSProperties {
@@ -254,6 +259,21 @@ function WidgetRenderer({ widget }: WidgetRendererProps) {
 
       case "pricing-table":
         return <PricingTableWidget settings={widget.settings as any} />;
+
+      case "heading":
+        return <HeadingWidget settings={widget.settings as any} />;
+
+      case "text-block":
+        return <TextBlockWidget settings={widget.settings as any} />;
+
+      case "lead-form":
+        return <LeadFormWidget settings={widget.settings as any} />;
+
+      case "testimonials-carousel":
+        return <TestimonialsWidget settings={widget.settings as any} />;
+
+      case "service-hero":
+        return <ServiceHeroWidget settings={widget.settings as any} />;
 
       default:
         // Unknown widget type - render nothing in production

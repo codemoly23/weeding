@@ -30,6 +30,8 @@ export const EMAIL_SETTINGS = {
   // Admin notifications
   ADMIN_EMAIL: "email.admin.email",
   NOTIFY_ADMIN_NEW_ORDER: "email.notify.adminNewOrder",
+  // Lead notifications
+  NOTIFY_ADMIN_NEW_LEAD: "email.notify.adminNewLead",
 };
 
 // Cache for email config
@@ -58,6 +60,7 @@ interface EmailConfig {
     paymentSuccess: boolean;
     paymentFailed: boolean;
     adminNewOrder: boolean;
+    adminNewLead: boolean;
   };
 }
 
@@ -105,6 +108,7 @@ export async function getEmailConfig(): Promise<EmailConfig> {
       paymentSuccess: settingsMap[EMAIL_SETTINGS.NOTIFY_PAYMENT_SUCCESS] === "true",
       paymentFailed: settingsMap[EMAIL_SETTINGS.NOTIFY_PAYMENT_FAILED] === "true",
       adminNewOrder: settingsMap[EMAIL_SETTINGS.NOTIFY_ADMIN_NEW_ORDER] === "true",
+      adminNewLead: settingsMap[EMAIL_SETTINGS.NOTIFY_ADMIN_NEW_LEAD] === "true",
     },
   };
   configCacheTime = Date.now();
