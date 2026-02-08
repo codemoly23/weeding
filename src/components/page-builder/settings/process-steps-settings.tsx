@@ -144,7 +144,7 @@ export function ProcessStepsWidgetSettingsPanel({
 
   // Content Tab
   const renderContentTab = () => (
-    <div className="space-y-3">
+    <div className="space-y-3 w-full min-w-0 max-w-full">
       {/* Section Header */}
       <AccordionSection title="Section Header">
         <ToggleSwitch
@@ -218,28 +218,28 @@ export function ProcessStepsWidgetSettingsPanel({
 
       {/* Steps */}
       <AccordionSection title="Steps" defaultOpen={true}>
-        <div className="space-y-3">
+        <div className="space-y-3 w-full min-w-0">
           {s.steps.map((step, index) => (
             <div
               key={step.id}
-              className="border rounded-lg bg-muted/30 overflow-hidden"
+              className="border rounded-lg bg-muted/30 overflow-hidden min-w-0 w-full"
             >
               {/* Step Header */}
               <div
-                className="flex items-center gap-2 p-3 cursor-pointer hover:bg-muted/50"
+                className="flex items-center gap-1.5 px-2 py-2 cursor-pointer hover:bg-muted/50 min-w-0 w-full"
                 onClick={() =>
                   setExpandedStepId(expandedStepId === step.id ? null : step.id)
                 }
               >
-                <GripVertical className="w-4 h-4 text-muted-foreground" />
-                <span className="flex-1 font-medium text-sm truncate">
+                <GripVertical className="w-4 h-4 text-muted-foreground shrink-0" />
+                <span className="flex-1 font-medium text-sm truncate min-w-0">
                   {index + 1}. {step.title}
                 </span>
-                <div className="flex items-center gap-1 shrink-0">
+                <div className="flex items-center gap-0.5 shrink-0">
                   <Button
                     variant="ghost"
                     size="icon"
-                    className="h-6 w-6"
+                    className="h-5 w-5"
                     onClick={(e) => {
                       e.stopPropagation();
                       moveStep(index, "up");
@@ -251,7 +251,7 @@ export function ProcessStepsWidgetSettingsPanel({
                   <Button
                     variant="ghost"
                     size="icon"
-                    className="h-6 w-6"
+                    className="h-5 w-5"
                     onClick={(e) => {
                       e.stopPropagation();
                       moveStep(index, "down");
@@ -263,7 +263,7 @@ export function ProcessStepsWidgetSettingsPanel({
                   <Button
                     variant="ghost"
                     size="icon"
-                    className="h-6 w-6 text-destructive hover:text-destructive"
+                    className="h-5 w-5 text-destructive hover:text-destructive"
                     onClick={(e) => {
                       e.stopPropagation();
                       removeStep(step.id);
@@ -325,7 +325,7 @@ export function ProcessStepsWidgetSettingsPanel({
 
   // Style Tab
   const renderStyleTab = () => (
-    <div className="space-y-3">
+    <div className="space-y-3 w-full min-w-0 max-w-full">
       {/* Layout */}
       <AccordionSection title="Layout" defaultOpen={true}>
         <div className="space-y-4">
@@ -656,6 +656,9 @@ export function ProcessStepsWidgetSettingsPanel({
                   { value: "dashed", label: "Dashed" },
                   { value: "dotted", label: "Dotted" },
                   { value: "gradient", label: "Gradient" },
+                  { value: "double", label: "Double" },
+                  { value: "wavy", label: "Wavy" },
+                  { value: "glow", label: "Glow" },
                 ]}
               />
               <SelectInput
@@ -670,6 +673,9 @@ export function ProcessStepsWidgetSettingsPanel({
                   { value: "dot-travel", label: "Traveling Dot" },
                   { value: "shimmer", label: "Shimmer" },
                   { value: "draw", label: "Draw on Scroll" },
+                  { value: "bounce", label: "Bounce" },
+                  { value: "rainbow", label: "Rainbow" },
+                  { value: "snake", label: "Snake" },
                 ]}
               />
               {s.connector.animation !== "none" && (
@@ -696,9 +702,9 @@ export function ProcessStepsWidgetSettingsPanel({
                 value={s.connector.color || "#fde8d7"}
                 onChange={(v) => updateConnector({ color: v })}
               />
-              {(s.connector.style === "gradient" || s.connector.animation === "flow") && (
+              {(s.connector.style === "gradient" || s.connector.style === "glow" || s.connector.animation === "flow") && (
                 <ColorInput
-                  label="Secondary Color"
+                  label={s.connector.style === "glow" ? "Glow Color" : "Secondary Color"}
                   value={s.connector.secondaryColor || "#f97316"}
                   onChange={(v) => updateConnector({ secondaryColor: v })}
                 />
@@ -798,7 +804,7 @@ export function ProcessStepsWidgetSettingsPanel({
 
   // Advanced Tab
   const renderAdvancedTab = () => (
-    <div className="space-y-3">
+    <div className="space-y-3 w-full min-w-0 max-w-full">
       {/* Animation Settings */}
       <AccordionSection title="Animation" defaultOpen={true}>
         <div className="space-y-4">
@@ -864,7 +870,7 @@ export function ProcessStepsWidgetSettingsPanel({
   );
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-4 w-full min-w-0 max-w-full">
       {activeTab === "content" && renderContentTab()}
       {activeTab === "style" && renderStyleTab()}
       {activeTab === "advanced" && renderAdvancedTab()}

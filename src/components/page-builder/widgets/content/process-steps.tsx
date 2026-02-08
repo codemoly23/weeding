@@ -196,6 +196,23 @@ function HorizontalConnectorLine({ settings }: { settings: ProcessStepsWidgetSet
         return {
           background: `linear-gradient(${direction}, ${color}, ${secondaryColor})`,
         };
+      case "double":
+        return {
+          backgroundColor: "transparent",
+          backgroundImage: `linear-gradient(to bottom, ${color} 0px, ${color} 30%, transparent 30%, transparent 70%, ${color} 70%, ${color} 100%)`,
+        };
+      case "wavy":
+        return {
+          backgroundColor: "transparent",
+          backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 8' preserveAspectRatio='none'%3E%3Cpath d='M0 4 Q5 0 10 4 T20 4' stroke='${encodeURIComponent(color)}' stroke-width='2' fill='none'/%3E%3C/svg%3E")`,
+          backgroundRepeat: "repeat-x",
+          backgroundSize: "20px 100%",
+        };
+      case "glow":
+        return {
+          backgroundColor: color,
+          boxShadow: `0 0 8px 2px ${secondaryColor}, 0 0 16px 4px ${secondaryColor}40`,
+        };
       case "solid":
       default:
         return {
@@ -222,6 +239,18 @@ function HorizontalConnectorLine({ settings }: { settings: ProcessStepsWidgetSet
           backgroundImage: `repeating-linear-gradient(${direction}, ${color} 0px, ${color} 10px, transparent 10px, transparent 20px)`,
           backgroundColor: "transparent",
         };
+      case "rainbow":
+        return {
+          background: `linear-gradient(${direction}, #ff6b6b, #feca57, #48dbfb, #ff9ff3, #54a0ff, #5f27cd)`,
+          backgroundSize: "100% 100%",
+        };
+      case "snake":
+        return {
+          backgroundColor: "transparent",
+          backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 8' preserveAspectRatio='none'%3E%3Cpath d='M0 4 Q10 0 20 4 T40 4' stroke='${encodeURIComponent(color)}' stroke-width='2' fill='none'/%3E%3C/svg%3E")`,
+          backgroundRepeat: "repeat-x",
+          backgroundSize: "40px 100%",
+        };
       default:
         return getLineStyleBackground();
     }
@@ -243,6 +272,15 @@ function HorizontalConnectorLine({ settings }: { settings: ProcessStepsWidgetSet
           transformOrigin: "left",
           animation: `connector-draw-h 1.5s ease-out forwards`,
         };
+      case "bounce":
+        return {
+          transformOrigin: "center",
+          animation: `connector-bounce-h ${animationDuration} ease-in-out infinite`
+        };
+      case "rainbow":
+        return { animation: `connector-rainbow ${animationDuration} linear infinite` };
+      case "snake":
+        return { animation: `connector-snake-h ${animationDuration} linear infinite` };
       default:
         return {};
     }
@@ -320,6 +358,23 @@ function VerticalConnectorLine({
         return {
           background: `linear-gradient(${direction}, ${color}, ${secondaryColor})`,
         };
+      case "double":
+        return {
+          backgroundColor: "transparent",
+          backgroundImage: `linear-gradient(to right, ${color} 0px, ${color} 30%, transparent 30%, transparent 70%, ${color} 70%, ${color} 100%)`,
+        };
+      case "wavy":
+        return {
+          backgroundColor: "transparent",
+          backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 8 20' preserveAspectRatio='none'%3E%3Cpath d='M4 0 Q0 5 4 10 T4 20' stroke='${encodeURIComponent(color)}' stroke-width='2' fill='none'/%3E%3C/svg%3E")`,
+          backgroundRepeat: "repeat-y",
+          backgroundSize: "100% 20px",
+        };
+      case "glow":
+        return {
+          backgroundColor: color,
+          boxShadow: `0 0 8px 2px ${secondaryColor}, 0 0 16px 4px ${secondaryColor}40`,
+        };
       case "solid":
       default:
         return {
@@ -346,6 +401,18 @@ function VerticalConnectorLine({
           backgroundImage: `repeating-linear-gradient(${direction}, ${color} 0px, ${color} 10px, transparent 10px, transparent 20px)`,
           backgroundColor: "transparent",
         };
+      case "rainbow":
+        return {
+          background: `linear-gradient(${direction}, #ff6b6b, #feca57, #48dbfb, #ff9ff3, #54a0ff, #5f27cd)`,
+          backgroundSize: "100% 100%",
+        };
+      case "snake":
+        return {
+          backgroundColor: "transparent",
+          backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 8 40' preserveAspectRatio='none'%3E%3Cpath d='M4 0 Q0 10 4 20 T4 40' stroke='${encodeURIComponent(color)}' stroke-width='2' fill='none'/%3E%3C/svg%3E")`,
+          backgroundRepeat: "repeat-y",
+          backgroundSize: "100% 40px",
+        };
       default:
         return getLineStyleBackground();
     }
@@ -367,6 +434,15 @@ function VerticalConnectorLine({
           transformOrigin: "top",
           animation: `connector-draw-v 1.5s ease-out forwards`,
         };
+      case "bounce":
+        return {
+          transformOrigin: "center",
+          animation: `connector-bounce-v ${animationDuration} ease-in-out infinite`
+        };
+      case "rainbow":
+        return { animation: `connector-rainbow ${animationDuration} linear infinite` };
+      case "snake":
+        return { animation: `connector-snake-v ${animationDuration} linear infinite` };
       default:
         return {};
     }

@@ -1808,7 +1808,10 @@ export type ConnectorLineStyle =
   | "solid"
   | "dashed"
   | "dotted"
-  | "gradient";
+  | "gradient"
+  | "double"
+  | "wavy"
+  | "glow";
 
 export type ConnectorAnimation =
   | "none"
@@ -1817,7 +1820,10 @@ export type ConnectorAnimation =
   | "dash-flow"      // Animated dashes moving
   | "dot-travel"     // Dots traveling along the line
   | "shimmer"        // Shimmer/shine effect
-  | "draw";          // Line drawing animation on scroll
+  | "draw"           // Line drawing animation on scroll
+  | "bounce"         // Elastic bounce wave effect
+  | "rainbow"        // Multi-color cycling animation
+  | "snake";         // Wave travels along the line
 
 export type StepNumberStyle =
   | "circle"
