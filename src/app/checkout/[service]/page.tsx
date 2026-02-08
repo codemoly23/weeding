@@ -69,7 +69,7 @@ import {
   type FormField,
   type FormStep,
 } from "@/lib/data/service-forms";
-import { StateSelector, type State } from "@/components/ui/state-selector";
+import { LocationSelector, type LocationItem } from "@/components/ui/location-selector";
 import { CountrySelector } from "@/components/ui/country-selector";
 import { Header } from "@/components/layout/header";
 import { toast } from "sonner";
@@ -108,7 +108,7 @@ function ServiceCheckoutForm() {
   const [isLoading, setIsLoading] = useState(false);
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [formValues, setFormValues] = useState<FormValues>({});
-  const [selectedState, setSelectedState] = useState<State | null>(null);
+  const [selectedLocation, setSelectedLocation] = useState<LocationItem | null>(null);
   const [faqOpen, setFaqOpen] = useState<number | null>(null);
   const [agreeTerms, setAgreeTerms] = useState(false);
   const [understandDisclaimer, setUnderstandDisclaimer] = useState(false);
@@ -509,12 +509,12 @@ function ServiceCheckoutForm() {
     }
   };
 
-  // Handle state selection
-  const handleStateChange = (state: State | null, fieldName: string) => {
+  // Handle location selection
+  const handleLocationChange = (location: LocationItem | null, fieldName: string) => {
     if (fieldName === "formationState" || fieldName === "state") {
-      setSelectedState(state);
+      setSelectedLocation(location);
     }
-    handleInputChange(fieldName, state?.code || "");
+    handleInputChange(fieldName, location?.code || "");
   };
 
   // Validate current step
@@ -709,9 +709,10 @@ function ServiceCheckoutForm() {
           packageName: selectedPackage?.name,
           packagePrice: serviceFee,
           formData: formValues,
-          totalAmount: serviceFee + (selectedState?.fee || 0),
-          stateCode: selectedState?.code,
-          stateName: selectedState?.name,
+          totalAmount: serviceFee + (selectedLocation?.fee || 0),
+          locationCode: selectedLocation?.code,
+          locationName: selectedLocation?.name,
+          stateCode: selectedLocation?.code, // backward compat
           // Include account data for new users, or userId for logged-in users
           ...(loggedInUser
             ? { userId: loggedInUser.id }
@@ -1035,10 +1036,11 @@ function ServiceCheckoutForm() {
                 </Tooltip>
               )}
             </div>
-            <StateSelector
-              value={field.name === "formationState" || field.name === "state" ? selectedState : null}
-              onChange={(state) => handleStateChange(state, field.name)}
-              placeholder={field.placeholder || "Select a state..."}
+            <LocationSelector
+              value={field.name === "formationState" || field.name === "state" ? selectedLocation : null}
+              onChange={(location) => handleLocationChange(location, field.name)}
+              placeholder={field.placeholder || "Select a location..."}
+              serviceId={service?.id}
             />
             {fieldError && (
               <p className="text-sm text-destructive">{fieldError}</p>
@@ -1602,7 +1604,7 @@ function ServiceCheckoutForm() {
                     ) : (
                       <>
                         <Check className="mr-2 h-4 w-4" />
-                        Submit Application - ${serviceFee + (selectedState?.fee || 0)}
+                        Submit Application - ${serviceFee + (selectedLocation?.fee || 0)}
                       </>
                     )}
                   </Button>
@@ -1660,10 +1662,10 @@ function ServiceCheckoutForm() {
                       </span>
                       <span className="font-medium">${serviceFee}</span>
                     </div>
-                    {selectedState && (
+                    {selectedLocation && (
                       <div className="flex justify-between">
-                        <span className="text-muted-foreground">State Fee ({selectedState.name})</span>
-                        <span className="font-medium">${selectedState.fee}</span>
+                        <span className="text-muted-foreground">Location Fee ({selectedLocation.name})</span>
+                        <span className="font-medium">${selectedLocation.fee}</span>
                       </div>
                     )}
                   </div>
@@ -1673,7 +1675,7 @@ function ServiceCheckoutForm() {
                   <div className="flex justify-between text-lg font-semibold">
                     <span>Total</span>
                     <span className="text-primary">
-                      ${serviceFee + (selectedState?.fee || 0)}
+                      ${serviceFee + (selectedLocation?.fee || 0)}
                     </span>
                   </div>
 

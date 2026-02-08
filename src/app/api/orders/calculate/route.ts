@@ -6,7 +6,8 @@ import { z } from "zod";
 const calculateSchema = z.object({
   serviceId: z.string().optional(),
   packageId: z.string().optional(),
-  stateCode: z.string().length(2).optional(),
+  locationCode: z.string().optional(),
+  stateCode: z.string().length(2).optional(), // Backward compat: auto-prefixed to "US-XX"
   addons: z.array(z.object({
     id: z.string(),
     quantity: z.number().min(1).optional(),
@@ -16,7 +17,13 @@ const calculateSchema = z.object({
 
 interface PriceBreakdown {
   basePrice: number;
+  locationFee: number | null;
+  locationName: string | null;
+  locationCode: string | null;
+  locationFeeLabel: string | null;
+  /** @deprecated Use locationFee */
   stateFee: number | null;
+  /** @deprecated Use locationName */
   stateFeeName: string | null;
   addonsTotal: number;
   addons: Array<{
@@ -37,7 +44,7 @@ interface PriceBreakdown {
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
-    const { packageId, stateCode, couponCode } = calculateSchema.parse(body);
+    const { packageId, locationCode, stateCode, couponCode } = calculateSchema.parse(body);
 
     if (!packageId) {
       return NextResponse.json(
@@ -55,6 +62,8 @@ export async function POST(request: NextRequest) {
             id: true,
             name: true,
             processingTime: true,
+            hasLocationBasedPricing: true,
+            locationFeeLabel: true,
           },
         },
       },
@@ -69,6 +78,10 @@ export async function POST(request: NextRequest) {
 
     const breakdown: PriceBreakdown = {
       basePrice: Number(pkg.priceUSD),
+      locationFee: null,
+      locationName: null,
+      locationCode: null,
+      locationFeeLabel: pkg.service.locationFeeLabel,
       stateFee: null,
       stateFeeName: null,
       addonsTotal: 0,
@@ -81,22 +94,65 @@ export async function POST(request: NextRequest) {
       processingTime: pkg.service.processingTime,
     };
 
-    // Get state fee if applicable
-    if (stateCode) {
-      const stateFee = await prisma.stateFee.findUnique({
-        where: { stateCode: stateCode.toUpperCase() },
+    // Resolve location code: prefer locationCode, fallback to "US-{stateCode}"
+    const resolvedLocationCode = locationCode || (stateCode ? `US-${stateCode.toUpperCase()}` : null);
+
+    // Get location fee if applicable
+    if (resolvedLocationCode && pkg.service.hasLocationBasedPricing) {
+      const location = await prisma.location.findUnique({
+        where: { code: resolvedLocationCode },
       });
 
-      if (stateFee) {
-        breakdown.stateFee = Number(stateFee.llcFee);
-        breakdown.stateFeeName = stateFee.stateName;
-        breakdown.subtotal += breakdown.stateFee;
-        breakdown.total += breakdown.stateFee;
+      if (location) {
+        // Look up the FILING fee for this service + location
+        const fee = await prisma.locationFee.findFirst({
+          where: {
+            serviceId: pkg.service.id,
+            locationId: location.id,
+            feeType: "FILING",
+            isActive: true,
+          },
+        });
 
-        // Update processing time if state has specific time
-        if (stateFee.processingTime) {
-          breakdown.processingTime = stateFee.processingTime;
+        if (fee) {
+          breakdown.locationFee = Number(fee.amountUSD);
+          breakdown.locationName = location.name;
+          breakdown.locationCode = location.code;
+          // Backward compat
+          breakdown.stateFee = breakdown.locationFee;
+          breakdown.stateFeeName = breakdown.locationName;
+
+          breakdown.subtotal += breakdown.locationFee;
+          breakdown.total += breakdown.locationFee;
+
+          // Update processing time if location fee has specific time
+          if (fee.processingTime) {
+            breakdown.processingTime = fee.processingTime;
+          }
         }
+      }
+    } else if (stateCode) {
+      // Fallback: try old StateFee table for backward compat
+      try {
+        const stateFee = await prisma.stateFee.findUnique({
+          where: { stateCode: stateCode.toUpperCase() },
+        });
+
+        if (stateFee) {
+          breakdown.stateFee = Number(stateFee.llcFee);
+          breakdown.stateFeeName = stateFee.stateName;
+          breakdown.locationFee = breakdown.stateFee;
+          breakdown.locationName = breakdown.stateFeeName;
+          breakdown.locationCode = `US-${stateCode.toUpperCase()}`;
+          breakdown.subtotal += breakdown.stateFee;
+          breakdown.total += breakdown.stateFee;
+
+          if (stateFee.processingTime) {
+            breakdown.processingTime = stateFee.processingTime;
+          }
+        }
+      } catch {
+        // StateFee table may not exist, ignore
       }
     }
 

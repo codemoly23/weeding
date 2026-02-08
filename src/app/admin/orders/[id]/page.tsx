@@ -80,6 +80,9 @@ interface OrderItem {
   description: string | null;
   priceUSD: string;
   stateFee: string | null;
+  locationCode: string | null;
+  locationName: string | null;
+  locationFeeLabel: string | null;
   quantity: number;
   service?: {
     id: string;
@@ -695,7 +698,8 @@ export default function AdminOrderDetailPage({ params }: PageProps) {
                       <p className="font-medium">{formatPrice(item.priceUSD)}</p>
                       {item.stateFee && parseFloat(item.stateFee) > 0 && (
                         <p className="text-sm text-muted-foreground">
-                          +{formatPrice(item.stateFee)} state fee
+                          +{formatPrice(item.stateFee)} {item.locationFeeLabel?.toLowerCase() || "location fee"}
+                          {item.locationName && ` (${item.locationName})`}
                         </p>
                       )}
                       {item.quantity > 1 && (

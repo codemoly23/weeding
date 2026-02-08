@@ -46,6 +46,14 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
 import { toast } from "sonner";
 import { RichTextEditor } from "@/components/admin/ui/rich-text-editor";
 import { FaqRichEditor } from "@/components/admin/ui/faq-rich-editor";
@@ -62,7 +70,7 @@ import {
 } from "@/components/ui/popover";
 import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
-import { Minus, DollarSign } from "lucide-react";
+import { Minus, DollarSign, MapPin, Search as SearchIcon, Loader2 as Loader2Icon } from "lucide-react";
 
 interface Category {
   id: string;
@@ -870,6 +878,9 @@ export default function ServiceEditorPage() {
             )}
           </TabsTrigger>
           <TabsTrigger value="faqs">FAQs ({service.faqs.length})</TabsTrigger>
+          {!isNew && (
+            <TabsTrigger value="location-pricing">Location Pricing</TabsTrigger>
+          )}
           <TabsTrigger value="seo">SEO</TabsTrigger>
         </TabsList>
 
@@ -1459,6 +1470,13 @@ export default function ServiceEditorPage() {
           </Card>
         </TabsContent>
 
+        {/* Location Pricing Tab */}
+        {!isNew && serviceId && (
+          <TabsContent value="location-pricing">
+            <LocationPricingTab serviceId={serviceId} />
+          </TabsContent>
+        )}
+
         {/* SEO Tab */}
         <TabsContent value="seo">
           <Card>
@@ -1751,5 +1769,455 @@ export default function ServiceEditorPage() {
         </DialogContent>
       </Dialog>
     </div>
+  );
+}
+
+// ============ Location Pricing Tab Component ============
+
+interface LocationFeeRow {
+  id?: string;
+  locationId: string;
+  locationCode: string;
+  locationName: string;
+  locationCountry: string;
+  filingFee: number;
+  annualFee: number | null;
+  processingTime: string;
+  isActive: boolean;
+}
+
+function LocationPricingTab({ serviceId }: { serviceId: string }) {
+  const [isEnabled, setIsEnabled] = useState(false);
+  const [feeLabel, setFeeLabel] = useState("State Fee");
+  const [fees, setFees] = useState<LocationFeeRow[]>([]);
+  const [allLocations, setAllLocations] = useState<
+    { id: string; code: string; name: string; country: string }[]
+  >([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [isSaving, setIsSaving] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [hasChanges, setHasChanges] = useState(false);
+
+  // Fetch service location fees and all available locations
+  const fetchData = useCallback(async () => {
+    setIsLoading(true);
+    try {
+      const [feesRes, locationsRes] = await Promise.all([
+        fetch(`/api/admin/services/${serviceId}/location-fees`),
+        fetch("/api/admin/location-pricing"),
+      ]);
+
+      if (feesRes.ok) {
+        const feesData = await feesRes.json();
+        setIsEnabled(feesData.service.hasLocationBasedPricing);
+        setFeeLabel(feesData.service.locationFeeLabel || "State Fee");
+
+        // Group fees by location
+        const feeMap = new Map<string, LocationFeeRow>();
+        for (const fee of feesData.fees) {
+          const key = fee.locationId;
+          const existing = feeMap.get(key);
+          if (!existing) {
+            feeMap.set(key, {
+              id: fee.id,
+              locationId: fee.locationId,
+              locationCode: fee.location.code,
+              locationName: fee.location.name,
+              locationCountry: fee.location.country,
+              filingFee: fee.feeType === "FILING" ? fee.amountUSD : 0,
+              annualFee: fee.feeType === "ANNUAL" ? fee.amountUSD : null,
+              processingTime: fee.processingTime || "",
+              isActive: fee.isActive,
+            });
+          } else {
+            if (fee.feeType === "FILING") {
+              existing.filingFee = fee.amountUSD;
+            } else if (fee.feeType === "ANNUAL") {
+              existing.annualFee = fee.amountUSD;
+            }
+            if (fee.processingTime) {
+              existing.processingTime = fee.processingTime;
+            }
+          }
+        }
+        setFees(Array.from(feeMap.values()));
+      }
+
+      if (locationsRes.ok) {
+        const locData = await locationsRes.json();
+        setAllLocations(
+          locData.locations.map(
+            (l: { id: string; code: string; name: string; country: string }) => ({
+              id: l.id,
+              code: l.code,
+              name: l.name,
+              country: l.country,
+            })
+          )
+        );
+      }
+    } catch (error) {
+      console.error("Error fetching location pricing data:", error);
+      toast.error("Failed to load location pricing data");
+    } finally {
+      setIsLoading(false);
+    }
+  }, [serviceId]);
+
+  useEffect(() => {
+    fetchData();
+  }, [fetchData]);
+
+  const updateFeeRow = (
+    locationId: string,
+    field: keyof LocationFeeRow,
+    value: string | number | boolean | null
+  ) => {
+    setFees((prev) =>
+      prev.map((f) =>
+        f.locationId === locationId ? { ...f, [field]: value } : f
+      )
+    );
+    setHasChanges(true);
+  };
+
+  const addLocationFee = (locationId: string) => {
+    const location = allLocations.find((l) => l.id === locationId);
+    if (!location) return;
+
+    // Don't add duplicates
+    if (fees.find((f) => f.locationId === locationId)) {
+      toast.error("This location already has fees configured");
+      return;
+    }
+
+    setFees((prev) => [
+      ...prev,
+      {
+        locationId: location.id,
+        locationCode: location.code,
+        locationName: location.name,
+        locationCountry: location.country,
+        filingFee: 0,
+        annualFee: null,
+        processingTime: "",
+        isActive: true,
+      },
+    ]);
+    setHasChanges(true);
+  };
+
+  const removeLocationFee = async (locationId: string) => {
+    // Remove from local state
+    setFees((prev) => prev.filter((f) => f.locationId !== locationId));
+    setHasChanges(true);
+
+    // Also delete from server
+    try {
+      await fetch(
+        `/api/admin/services/${serviceId}/location-fees?locationId=${locationId}`,
+        { method: "DELETE" }
+      );
+    } catch (error) {
+      console.error("Error removing location fee:", error);
+    }
+  };
+
+  const saveFees = async () => {
+    setIsSaving(true);
+    try {
+      // Build the bulk upsert payload
+      const feePayload = [];
+      for (const row of fees) {
+        // Always add filing fee
+        feePayload.push({
+          locationId: row.locationId,
+          feeType: "FILING" as const,
+          amountUSD: row.filingFee,
+          processingTime: row.processingTime || null,
+          isActive: row.isActive,
+        });
+        // Add annual fee if set
+        if (row.annualFee !== null && row.annualFee !== undefined) {
+          feePayload.push({
+            locationId: row.locationId,
+            feeType: "ANNUAL" as const,
+            amountUSD: row.annualFee,
+            isActive: row.isActive,
+          });
+        }
+      }
+
+      const response = await fetch(
+        `/api/admin/services/${serviceId}/location-fees`,
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            hasLocationBasedPricing: isEnabled,
+            locationFeeLabel: feeLabel,
+            fees: feePayload,
+          }),
+        }
+      );
+
+      if (response.ok) {
+        toast.success("Location pricing saved");
+        setHasChanges(false);
+      } else {
+        const data = await response.json();
+        toast.error(data.error || "Failed to save");
+      }
+    } catch (error) {
+      console.error("Error saving location fees:", error);
+      toast.error("Failed to save location pricing");
+    } finally {
+      setIsSaving(false);
+    }
+  };
+
+  // Filter fees by search
+  const filteredFees = fees.filter(
+    (f) =>
+      f.locationName.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      f.locationCode.toLowerCase().includes(searchQuery.toLowerCase())
+  );
+
+  // Locations not yet added
+  const availableLocations = allLocations.filter(
+    (l) => !fees.find((f) => f.locationId === l.id)
+  );
+
+  if (isLoading) {
+    return (
+      <div className="flex h-48 items-center justify-center">
+        <Loader2 className="h-6 w-6 animate-spin text-primary" />
+      </div>
+    );
+  }
+
+  return (
+    <Card>
+      <CardHeader>
+        <div className="flex items-center justify-between">
+          <div>
+            <CardTitle className="flex items-center gap-2">
+              <MapPin className="h-5 w-5" />
+              Location-Based Pricing
+            </CardTitle>
+            <CardDescription>
+              Enable location-specific fees for this service (e.g., state filing
+              fees)
+            </CardDescription>
+          </div>
+          {hasChanges && (
+            <Button onClick={saveFees} disabled={isSaving}>
+              {isSaving && (
+                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+              )}
+              Save Changes
+            </Button>
+          )}
+        </div>
+      </CardHeader>
+      <CardContent className="space-y-6">
+        {/* Enable Toggle */}
+        <div className="flex items-center justify-between rounded-lg border p-4">
+          <div>
+            <Label className="text-base">
+              Enable location-based pricing
+            </Label>
+            <p className="text-sm text-muted-foreground">
+              When enabled, customers will select a location and the
+              corresponding fee will be added to their order
+            </p>
+          </div>
+          <Switch
+            checked={isEnabled}
+            onCheckedChange={(v) => {
+              setIsEnabled(v);
+              setHasChanges(true);
+            }}
+          />
+        </div>
+
+        {isEnabled && (
+          <>
+            {/* Fee Label */}
+            <div className="space-y-2">
+              <Label>Customer-facing label</Label>
+              <Input
+                value={feeLabel}
+                onChange={(e) => {
+                  setFeeLabel(e.target.value);
+                  setHasChanges(true);
+                }}
+                placeholder='e.g., "State Fee", "Filing Fee", "Province Fee"'
+                className="max-w-sm"
+              />
+              <p className="text-xs text-muted-foreground">
+                This label appears in the pricing table and checkout
+              </p>
+            </div>
+
+            {/* Add Location + Search */}
+            <div className="flex items-center gap-3">
+              <div className="relative flex-1">
+                <SearchIcon className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+                <Input
+                  placeholder="Search locations..."
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  className="pl-9"
+                />
+              </div>
+              {availableLocations.length > 0 && (
+                <Select
+                  onValueChange={(v) => addLocationFee(v)}
+                >
+                  <SelectTrigger className="w-55">
+                    <SelectValue placeholder="+ Add Location" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {availableLocations.map((loc) => (
+                      <SelectItem key={loc.id} value={loc.id}>
+                        {loc.name} ({loc.code})
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              )}
+            </div>
+
+            {/* Fee Table */}
+            {filteredFees.length === 0 ? (
+              <div className="rounded-lg border border-dashed p-8 text-center">
+                <MapPin className="mx-auto h-8 w-8 text-muted-foreground" />
+                <p className="mt-2 font-medium">No location fees configured</p>
+                <p className="text-sm text-muted-foreground">
+                  Add locations above to start configuring fees
+                </p>
+              </div>
+            ) : (
+              <div className="rounded-md border">
+                <Table>
+                  <TableHeader>
+                    <TableRow>
+                      <TableHead>Location</TableHead>
+                      <TableHead>Filing Fee ($)</TableHead>
+                      <TableHead>Annual Fee ($)</TableHead>
+                      <TableHead>Processing Time</TableHead>
+                      <TableHead>Active</TableHead>
+                      <TableHead className="w-10"></TableHead>
+                    </TableRow>
+                  </TableHeader>
+                  <TableBody>
+                    {filteredFees.map((row) => (
+                      <TableRow key={row.locationId}>
+                        <TableCell>
+                          <div className="flex items-center gap-2">
+                            <Badge variant="outline" className="font-mono text-xs">
+                              {row.locationCode}
+                            </Badge>
+                            <span className="font-medium">
+                              {row.locationName}
+                            </span>
+                          </div>
+                        </TableCell>
+                        <TableCell>
+                          <Input
+                            type="number"
+                            min="0"
+                            step="0.01"
+                            value={row.filingFee}
+                            onChange={(e) =>
+                              updateFeeRow(
+                                row.locationId,
+                                "filingFee",
+                                Number(e.target.value)
+                              )
+                            }
+                            className="w-24"
+                          />
+                        </TableCell>
+                        <TableCell>
+                          <Input
+                            type="number"
+                            min="0"
+                            step="0.01"
+                            value={row.annualFee ?? ""}
+                            onChange={(e) =>
+                              updateFeeRow(
+                                row.locationId,
+                                "annualFee",
+                                e.target.value
+                                  ? Number(e.target.value)
+                                  : null
+                              )
+                            }
+                            className="w-24"
+                            placeholder="-"
+                          />
+                        </TableCell>
+                        <TableCell>
+                          <Input
+                            value={row.processingTime}
+                            onChange={(e) =>
+                              updateFeeRow(
+                                row.locationId,
+                                "processingTime",
+                                e.target.value
+                              )
+                            }
+                            className="w-36"
+                            placeholder="e.g., 3-5 days"
+                          />
+                        </TableCell>
+                        <TableCell>
+                          <Switch
+                            checked={row.isActive}
+                            onCheckedChange={(v) =>
+                              updateFeeRow(
+                                row.locationId,
+                                "isActive",
+                                v
+                              )
+                            }
+                          />
+                        </TableCell>
+                        <TableCell>
+                          <Button
+                            variant="ghost"
+                            size="icon"
+                            className="text-destructive"
+                            onClick={() =>
+                              removeLocationFee(row.locationId)
+                            }
+                          >
+                            <Trash2 className="h-4 w-4" />
+                          </Button>
+                        </TableCell>
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                </Table>
+              </div>
+            )}
+
+            {/* Save Button (sticky at bottom) */}
+            {hasChanges && (
+              <div className="flex justify-end border-t pt-4">
+                <Button onClick={saveFees} disabled={isSaving}>
+                  {isSaving && (
+                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                  )}
+                  Save Location Pricing
+                </Button>
+              </div>
+            )}
+          </>
+        )}
+      </CardContent>
+    </Card>
   );
 }

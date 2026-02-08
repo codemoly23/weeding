@@ -17,7 +17,12 @@ const orderSchema = z.object({
   packageId: z.string(),
   packageName: z.string().optional(),
 
-  // State
+  // Location (replaces State)
+  locationCode: z.string().optional(),
+  locationName: z.string().optional(),
+  locationFee: z.number().default(0),
+  locationFeeLabel: z.string().optional(),
+  // Backward compat
   stateCode: z.string().optional(),
   stateName: z.string().optional(),
   stateFee: z.number().default(0),
@@ -179,7 +184,7 @@ export async function POST(request: NextRequest) {
         totalUSD: data.totalAmount,
         currency: "USD",
         llcName: data.llcName,
-        llcState: data.stateCode,
+        llcState: data.locationCode || data.stateCode,
         llcType: data.llcType,
         customerName: `${data.owner.firstName} ${data.owner.lastName}`,
         customerEmail: data.owner.email,
@@ -190,9 +195,12 @@ export async function POST(request: NextRequest) {
             {
               serviceId: service.id,
               name: `${data.serviceName || "LLC Formation"} - ${data.packageName || "Standard"} Package`,
-              description: `${data.stateName || ""} LLC Formation`,
+              description: `${data.locationName || data.stateName || ""} Formation`,
               priceUSD: data.serviceFee,
-              stateFee: data.stateFee,
+              stateFee: data.locationFee || data.stateFee,
+              locationCode: data.locationCode || (data.stateCode ? `US-${data.stateCode}` : undefined),
+              locationName: data.locationName || data.stateName,
+              locationFeeLabel: data.locationFeeLabel,
             },
           ],
         },
@@ -227,7 +235,7 @@ export async function POST(request: NextRequest) {
         metadata: {
           orderNumber,
           llcName: data.llcName,
-          state: data.stateCode,
+          locationCode: data.locationCode || data.stateCode,
           total: data.totalAmount,
         },
       },

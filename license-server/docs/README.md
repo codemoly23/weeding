@@ -21,7 +21,7 @@ npm run dev
 
 Access: http://localhost:3001
 - Email: admin@llcpad.com
-- Password: ![alt text](image.png)
+- Password: admin123
 
 ## Tech Stack
 

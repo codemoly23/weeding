@@ -1978,9 +1978,11 @@ export type PricingTableLayoutStyle = "classic" | "modern" | "minimal" | "border
 export type PricingCardLayoutStyle = "stacked" | "swipeable" | "accordion";
 
 /**
- * State fee position options
+ * Location fee position options
  */
-export type StateFeePosition = "above-table" | "below-header" | "in-summary";
+export type LocationFeePosition = "above-table" | "below-header" | "in-summary";
+/** @deprecated Use LocationFeePosition */
+export type StateFeePosition = LocationFeePosition;
 
 /**
  * Order summary position options
@@ -1993,17 +1995,19 @@ export type OrderSummaryPosition = "right" | "left" | "bottom" | "floating";
 export type PricingCTAStyle = "solid" | "outline" | "gradient" | "glow";
 
 /**
- * State fee configuration
+ * Location fee configuration
  */
-export interface StateFeeConfig {
+export interface LocationFeeConfig {
   enabled: boolean;
-  position: StateFeePosition;
-  label: string;                    // "Select your state"
-  showFeeBreakdown: boolean;        // Show state fee amount separately
-  defaultState?: string;            // Default state code (e.g., "WY")
-  highlightSavings: boolean;        // Show "Save $X" for cheaper states
+  position: LocationFeePosition;
+  label: string;                    // "Select your location"
+  showFeeBreakdown: boolean;        // Show location fee amount separately
+  defaultState?: string;            // Default location code (e.g., "US-WY")
+  highlightSavings: boolean;        // Show "Save $X" for cheaper locations
   sortBy: "name" | "fee-asc" | "fee-desc" | "popular";
 }
+/** @deprecated Use LocationFeeConfig */
+export type StateFeeConfig = LocationFeeConfig;
 
 /**
  * Order summary sidebar configuration
@@ -2013,7 +2017,7 @@ export interface OrderSummaryConfig {
   position: OrderSummaryPosition;
   title: string;                    // "Order Summary"
   showPackageDetails: boolean;      // Show selected package breakdown
-  showStateFee: boolean;            // Show state fee in summary
+  showStateFee: boolean;            // Show location fee in summary
   showAddons: boolean;              // Show selected addons
   showTotal: boolean;               // Show total price
   stickyOnScroll: boolean;          // Sticky sidebar on scroll
@@ -2160,8 +2164,8 @@ export interface PricingTableWidgetSettings {
     }>;
   };
 
-  // State Fee Configuration
-  stateFee: StateFeeConfig;
+  // Location Fee Configuration (property name kept as 'stateFee' for backward compat with saved settings)
+  stateFee: LocationFeeConfig;
 
   // Order Summary Configuration
   orderSummary: OrderSummaryConfig;

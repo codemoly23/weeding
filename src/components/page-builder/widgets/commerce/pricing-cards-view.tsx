@@ -12,7 +12,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import type { State } from "@/components/ui/state-selector";
+import type { LocationItem } from "@/components/ui/location-selector";
 import { cn } from "@/lib/utils";
 import type {
   PricingTableWidgetSettings,
@@ -61,8 +61,8 @@ interface PricingCardsViewProps {
   packages: Package[];
   selectedPackageId: string | null;
   onPackageSelect: (packageId: string) => void;
-  selectedState: State | null;
-  stateFee: number;
+  selectedLocation: LocationItem | null;
+  locationFee: number;
   serviceSlug: string;
 }
 
@@ -76,8 +76,8 @@ export function PricingCardsView({
   packages,
   selectedPackageId,
   onPackageSelect,
-  selectedState,
-  stateFee,
+  selectedLocation,
+  locationFee,
   serviceSlug,
 }: PricingCardsViewProps) {
   const { cardStyle, ctaButtons, colors } = settings;
@@ -88,7 +88,7 @@ export function PricingCardsView({
 
   const getCheckoutUrl = (pkg: Package) => {
     return `/checkout/${serviceSlug}?package=${getPackageSlug(pkg)}${
-      selectedState?.code ? `&state=${selectedState.code}` : ""
+      selectedLocation?.code ? `&location=${selectedLocation.code}` : ""
     }`;
   };
 
@@ -173,7 +173,7 @@ export function PricingCardsView({
       {packages.map((pkg) => {
         const isSelected = pkg.id === selectedPackageId;
         const packageFeatures = getPackageFeatures(pkg);
-        const total = pkg.price + stateFee;
+        const total = pkg.price + locationFee;
 
         return (
           <Card
@@ -234,20 +234,20 @@ export function PricingCardsView({
                   >
                     ${pkg.price}
                   </span>
-                  {stateFee > 0 && (
+                  {locationFee > 0 && (
                     <>
                       <span className="text-muted-foreground text-lg">+</span>
                       <span className="text-lg font-semibold text-primary">
-                        ${stateFee}
+                        ${locationFee}
                       </span>
                       <span className="text-sm text-muted-foreground ml-1">
-                        state fee
+                        {settings.stateFee?.label?.toLowerCase() || "location fee"}
                       </span>
                     </>
                   )}
                 </div>
 
-                {cardStyle.showTotalPrice && stateFee > 0 && (
+                {cardStyle.showTotalPrice && locationFee > 0 && (
                   <p className="mt-2 text-sm text-muted-foreground">
                     Total:{" "}
                     <span className="font-semibold text-foreground">

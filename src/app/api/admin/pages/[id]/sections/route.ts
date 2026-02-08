@@ -69,6 +69,18 @@ export async function PUT(request: NextRequest, { params }: RouteParams) {
       );
     }
 
+    // Debug: Log what the server received
+    const totalWidgets = sections.reduce(
+      (sum: number, s: { columns?: { widgets?: unknown[] }[] }) =>
+        sum + (s.columns || []).reduce((cs: number, c) => cs + (c.widgets || []).length, 0),
+      0
+    );
+    console.log("[Sections API] Saving:", {
+      pageId: id,
+      sectionCount: sections.length,
+      totalWidgets,
+    });
+
     // Check if page exists
     const page = await prisma.landingPage.findUnique({
       where: { id },

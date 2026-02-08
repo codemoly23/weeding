@@ -61,7 +61,7 @@ import {
   sanitizeZipCode,
   INPUT_LIMITS
 } from "@/lib/utils";
-import { StateSelector, type State } from "@/components/ui/state-selector";
+import { LocationSelector, type LocationItem } from "@/components/ui/location-selector";
 import { CountrySelector, ELIGIBLE_COUNTRIES } from "@/components/ui/country-selector";
 import { Header } from "@/components/layout/header";
 import { toast } from "sonner";
@@ -146,7 +146,7 @@ function CheckoutForm() {
   const [selectedPackage, setSelectedPackage] = useState(
     searchParams.get("package") || "standard"
   );
-  const [selectedState, setSelectedState] = useState<State | null>(null);
+  const [selectedLocation, setSelectedLocation] = useState<LocationItem | null>(null);
 
   // Payment state
   const [enabledGateways, setEnabledGateways] = useState<PaymentGateway[]>([]);
@@ -173,15 +173,15 @@ function CheckoutForm() {
     fetchServices();
   }, []);
 
-  // Fetch initial state from URL
+  // Fetch initial location from URL
   useEffect(() => {
-    const stateCode = searchParams.get("state");
-    if (stateCode) {
-      fetch(`/api/states?search=${stateCode}&limit=1`)
+    const locationCode = searchParams.get("location") || searchParams.get("state");
+    if (locationCode) {
+      fetch(`/api/locations?search=${locationCode}&limit=1`)
         .then((res) => res.json())
         .then((data) => {
-          if (data.states && data.states.length > 0) {
-            setSelectedState(data.states[0]);
+          if (data.locations && data.locations.length > 0) {
+            setSelectedLocation(data.locations[0]);
           }
         })
         .catch(console.error);
@@ -349,9 +349,9 @@ function CheckoutForm() {
   );
 
   const serviceFee = pkg?.price || 0;
-  const stateFee = selectedState?.fee || 0;
+  const locationFee = selectedLocation?.fee || 0;
   const expeditedFee = formData.expeditedProcessing ? 75 : 0;
-  const total = serviceFee + stateFee + expeditedFee;
+  const total = serviceFee + locationFee + expeditedFee;
 
   const handleInputChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -571,8 +571,8 @@ function CheckoutForm() {
     const newErrors: Record<string, string> = {};
 
     if (step === 1) {
-      if (!selectedState) {
-        newErrors.state = "Please select a formation state";
+      if (!selectedLocation) {
+        newErrors.state = "Please select a formation location";
       }
     }
 
@@ -723,10 +723,11 @@ function CheckoutForm() {
           packageId: selectedPackage,
           packageName: pkg?.name,
 
-          // State
-          stateCode: selectedState?.code,
-          stateName: selectedState?.name,
-          stateFee: stateFee,
+          // Location (keep stateCode for backward compat)
+          stateCode: selectedLocation?.code,
+          locationCode: selectedLocation?.code,
+          locationName: selectedLocation?.name,
+          locationFee: locationFee,
 
           // LLC Details
           llcName: formData.llcName,
@@ -821,7 +822,8 @@ function CheckoutForm() {
           orderId: createdOrderId,
           serviceId: selectedService,
           packageId: selectedPackage,
-          stateCode: selectedState?.code,
+          stateCode: selectedLocation?.code,
+          locationCode: selectedLocation?.code,
           llcName: formData.llcName,
           contactInfo: {
             fullName: `${formData.ownerFirstName} ${formData.ownerLastName}`,
@@ -831,7 +833,7 @@ function CheckoutForm() {
           },
           total,
           serviceFee,
-          stateFee,
+          locationFee,
         }),
       });
 
@@ -934,13 +936,13 @@ function CheckoutForm() {
           <div className="grid gap-8 lg:grid-cols-3">
             {/* Main Form */}
             <div className="lg:col-span-2">
-              {/* Step 1: Package & State Selection */}
+              {/* Step 1: Package & Location Selection */}
               {currentStep === 1 && (
                 <Card>
                   <CardHeader>
-                    <CardTitle>Select Your Package & State</CardTitle>
+                    <CardTitle>Select Your Package & Location</CardTitle>
                     <CardDescription>
-                      Choose the service package and formation state for your LLC
+                      Choose the service package and formation location for your LLC
                     </CardDescription>
                   </CardHeader>
                   <CardContent className="space-y-6">
@@ -996,14 +998,15 @@ function CheckoutForm() {
                       </div>
                     </div>
 
-                    {/* State Selection */}
+                    {/* Location Selection */}
                     {selectedService === "llc-formation" && (
                       <div className="space-y-2">
-                        <Label>Formation State *</Label>
-                        <StateSelector
-                          value={selectedState}
-                          onChange={setSelectedState}
-                          placeholder="Search for a state..."
+                        <Label>Formation Location *</Label>
+                        <LocationSelector
+                          value={selectedLocation}
+                          onChange={setSelectedLocation}
+                          serviceId={selectedService}
+                          placeholder="Search for a location..."
                         />
                         {errors.state && (
                           <p className="text-sm text-destructive">{errors.state}</p>
@@ -1919,8 +1922,8 @@ function CheckoutForm() {
                           <span className="font-medium">{pkg?.name}</span>
                         </div>
                         <div className="flex justify-between">
-                          <span className="text-muted-foreground">Formation State</span>
-                          <span className="font-medium">{selectedState?.name}</span>
+                          <span className="text-muted-foreground">Formation Location</span>
+                          <span className="font-medium">{selectedLocation?.name}</span>
                         </div>
                       </div>
                     </div>
@@ -2165,12 +2168,12 @@ function CheckoutForm() {
                       </span>
                       <span className="font-medium">${serviceFee}</span>
                     </div>
-                    {selectedState && (
+                    {selectedLocation && (
                       <div className="flex justify-between">
                         <span className="text-muted-foreground">
-                          State Fee ({selectedState.name})
+                          Location Fee ({selectedLocation.name})
                         </span>
-                        <span className="font-medium">${stateFee}</span>
+                        <span className="font-medium">${locationFee}</span>
                       </div>
                     )}
                     {formData.expeditedProcessing && (

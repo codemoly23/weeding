@@ -1235,13 +1235,13 @@ export const DEFAULT_PRICING_TABLE_SETTINGS: PricingTableWidgetSettings = {
     manualPackages: undefined,
   },
 
-  // State Fee Configuration
+  // Location Fee Configuration
   stateFee: {
     enabled: true,
     position: "above-table",
-    label: "Select your state",
+    label: "Select Location",
     showFeeBreakdown: true,
-    defaultState: "WY",
+    defaultState: "US-WY",
     highlightSavings: true,
     sortBy: "popular",
   },

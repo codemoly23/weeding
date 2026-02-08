@@ -7,7 +7,7 @@ import type {
   BadgeStyle,
   PricingTableLayoutStyle,
   PricingCardLayoutStyle,
-  StateFeePosition,
+  LocationFeePosition,
   OrderSummaryPosition,
   PricingCTAStyle,
 } from "@/lib/page-builder/types";
@@ -300,19 +300,33 @@ export function PricingTableWidgetSettingsPanel({
       {/* Data Source */}
       <AccordionSection title="Data Source" defaultOpen>
         <div className="space-y-4">
-          <div className="space-y-2">
-            <label className="text-sm font-medium text-foreground">
-              Select Service
-            </label>
-            <ServiceSelector
-              value={s.dataSource.serviceSlug || null}
-              onChange={(service) => updateDataSource({ serviceSlug: service?.slug || undefined })}
-              placeholder="Search and select a service..."
-            />
-          </div>
+          <SelectInput
+            label="Mode"
+            value={s.dataSource.mode || "manual"}
+            onChange={(v) => updateDataSource({ mode: v as "manual" | "auto" })}
+            options={[
+              { value: "auto", label: "Auto (from Service Context)" },
+              { value: "manual", label: "Manual (select a service)" },
+            ]}
+          />
           <p className="text-xs text-muted-foreground">
-            Packages and features will be loaded from the selected service.
+            {s.dataSource.mode === "auto"
+              ? "Automatically shows packages from the current service page. Use this in Service Details templates."
+              : "Manually select a service to display its packages."}
           </p>
+
+          {s.dataSource.mode !== "auto" && (
+            <div className="space-y-2">
+              <label className="text-sm font-medium text-foreground">
+                Select Service
+              </label>
+              <ServiceSelector
+                value={s.dataSource.serviceSlug || null}
+                onChange={(service) => updateDataSource({ serviceSlug: service?.slug || undefined })}
+                placeholder="Search and select a service..."
+              />
+            </div>
+          )}
         </div>
       </AccordionSection>
 
@@ -391,10 +405,10 @@ export function PricingTableWidgetSettingsPanel({
         </AccordionSection>
       )}
 
-      {/* State Fee */}
-      <AccordionSection title="State Fee">
+      {/* Location Fee */}
+      <AccordionSection title="Location Fee">
         <ToggleSwitch
-          label="Enable State Fee"
+          label="Enable Location Fee"
           checked={s.stateFee.enabled}
           onChange={(checked) => updateStateFee({ enabled: checked })}
         />
@@ -405,13 +419,13 @@ export function PricingTableWidgetSettingsPanel({
               label="Label"
               value={s.stateFee.label}
               onChange={(v) => updateStateFee({ label: v })}
-              placeholder="Select your state"
+              placeholder="Select Location"
             />
             <SelectInput
               label="Position"
               value={s.stateFee.position}
               onChange={(v) =>
-                updateStateFee({ position: v as StateFeePosition })
+                updateStateFee({ position: v as LocationFeePosition })
               }
               options={[
                 { value: "above-table", label: "Above Table" },
@@ -474,7 +488,7 @@ export function PricingTableWidgetSettingsPanel({
               }
             />
             <ToggleSwitch
-              label="Show State Fee"
+              label="Show Location Fee"
               checked={s.orderSummary.showStateFee}
               onChange={(checked) =>
                 updateOrderSummary({ showStateFee: checked })

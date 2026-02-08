@@ -38,6 +38,9 @@ interface OrderItem {
   description: string | null;
   priceUSD: string;
   stateFee: string | null;
+  locationCode: string | null;
+  locationName: string | null;
+  locationFeeLabel: string | null;
   quantity: number;
   serviceId: string;
   packageId: string | null;
@@ -265,6 +268,9 @@ export default function AdminOrderEditPage({ params }: PageProps) {
           description: "",
           priceUSD: "0",
           stateFee: "0",
+          locationCode: null,
+          locationName: null,
+          locationFeeLabel: null,
           quantity: 1,
           serviceId: "",
           packageId: null,
@@ -571,7 +577,7 @@ export default function AdminOrderEditPage({ params }: PageProps) {
                           />
                         </div>
                         <div className="space-y-2">
-                          <Label>State Fee (USD)</Label>
+                          <Label>Location Fee (USD)</Label>
                           <Input
                             type="number"
                             step="0.01"

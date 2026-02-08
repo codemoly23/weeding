@@ -88,12 +88,16 @@ export const updateLicenseSchema = z.object({
     .enum(['ACTIVE', 'EXPIRED', 'SUSPENDED', 'REVOKED', 'REFUNDED'])
     .optional(),
   tier: z.enum(['STANDARD', 'PROFESSIONAL', 'ENTERPRISE', 'DEVELOPER']).optional(),
+  customerEmail: z.string().email().optional(),
+  customerName: z.string().max(255).nullable().optional(),
   domainLockMode: z.enum(['LOCKED', 'UNLOCKED']).optional(),
   maxDomains: z.number().int().min(1).optional(),
   expiresAt: z.string().datetime().nullable().optional(),
   supportExpiresAt: z.string().datetime().nullable().optional(),
+  orderId: z.string().max(255).nullable().optional(),
+  orderSource: z.enum(['MANUAL', 'ENVATO', 'GUMROAD', 'STRIPE']).nullable().optional(),
   features: z.array(z.string()).optional(),
-  notes: z.string().max(2000).optional(),
+  notes: z.string().max(2000).nullable().optional(),
 });
 
 export type VerifyLicenseInput = z.infer<typeof verifyLicenseSchema>;
