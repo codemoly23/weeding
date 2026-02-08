@@ -102,13 +102,19 @@ export function FaqAccordionWidgetSettingsPanel({
               label="Show FAQs"
               value={settings.source}
               onChange={(v) =>
-                updateField("source", v as "all" | "category")
+                updateField("source", v as "all" | "category" | "service")
               }
               options={[
                 { value: "all", label: "All Categories" },
                 { value: "category", label: "Specific Categories" },
+                { value: "service", label: "Current Service (auto)" },
               ]}
             />
+            {settings.source === "service" && (
+              <p className="text-xs text-muted-foreground">
+                Pulls FAQs from the current service&apos;s FAQ list. Use this in Service Details templates.
+              </p>
+            )}
             {settings.source === "category" && (
               <div className="space-y-2">
                 <label className="text-xs font-medium text-foreground">

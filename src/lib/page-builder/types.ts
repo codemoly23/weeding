@@ -169,6 +169,8 @@ export type WidgetType =
   // Service Widgets (for Service Details template)
   | "service-hero"
   | "service-features"
+  | "service-description"
+  | "service-breadcrumb"
   | "service-pricing"
   | "service-process"
   | "service-faq"
@@ -177,7 +179,13 @@ export type WidgetType =
   | "service-timeline"
   | "related-services"
   | "service-testimonials"
-  | "service-cta";
+  | "service-cta"
+  // Blog Widgets
+  | "blog-post-grid"
+  | "blog-post-carousel"
+  | "blog-featured-post"
+  | "blog-post-list"
+  | "blog-recent-posts";
 
 export type WidgetCategory =
   | "most-used"
@@ -189,7 +197,8 @@ export type WidgetCategory =
   | "layout"
   | "cta"
   | "advanced"
-  | "service"; // Service-specific widgets (for Service Details template)
+  | "service" // Service-specific widgets (for Service Details template)
+  | "blog"; // Blog widgets
 
 export interface WidgetSpacing {
   marginTop: number;
@@ -2139,7 +2148,8 @@ export interface PricingTableWidgetSettings {
   // Data Source
   dataSource: {
     type: "service" | "manual";
-    serviceSlug?: string;           // Service to pull packages from
+    mode: "manual" | "auto";        // "auto" reads slug from ServiceContext
+    serviceSlug?: string;           // Service to pull packages from (when mode=manual)
     // Manual mode fields (for future use)
     manualPackages?: Array<{
       id: string;
@@ -2270,17 +2280,58 @@ export interface ServiceHeroWidgetSettings {
 }
 
 /**
+ * Shared widget header settings pattern
+ */
+export interface WidgetHeaderSettings {
+  show: boolean;
+  heading: string;
+  description: string;
+  alignment: "left" | "center";
+}
+
+/**
  * Service Features Widget Settings
- * Displays list of included features
+ * Displays list of included features with 4 style variants
  */
 export interface ServiceFeaturesWidgetSettings {
-  titleSource: "auto" | "custom";
-  customTitle?: string; // Default: "What's Included"
-  layout: "grid" | "list" | "cards";
-  columns: 2 | 3 | 4;
+  header: WidgetHeaderSettings;
+  variant: "minimal-checkmark" | "cards" | "compact-grid" | "highlighted";
+  columns: 1 | 2 | 3 | 4;
   showIcons: boolean;
-  iconStyle: "checkmark" | "bullet" | "custom";
-  iconColor?: string;
+  iconStyle: "check" | "circle-check" | "badge-check";
+  iconColor: string;
+  showDescriptions: boolean;
+}
+
+/**
+ * Service Description Widget Settings
+ * Renders service.description with prose styling, 3 variants
+ */
+export interface ServiceDescriptionWidgetSettings {
+  header: WidgetHeaderSettings;
+  variant: "clean-prose" | "bordered" | "two-column-sidebar";
+  maxWidth: "sm" | "md" | "lg" | "xl" | "full";
+  fontSize: "sm" | "md" | "lg";
+  sidebar: {
+    show: boolean;
+    showProcessingTime: boolean;
+    showStartingPrice: boolean;
+    showPopularBadge: boolean;
+  };
+}
+
+/**
+ * Service Breadcrumb Widget Settings
+ * Dynamic breadcrumb: Home > Services > {Category?} > {Service Name}
+ */
+export interface ServiceBreadcrumbWidgetSettings {
+  variant: "simple-text" | "pill-chip" | "minimal";
+  separator: "chevron" | "slash" | "arrow" | "dot";
+  showHome: boolean;
+  homeLabel: string;
+  showCategory: boolean;
+  fontSize: "xs" | "sm" | "md";
+  alignment: "left" | "center";
 }
 
 /**
@@ -2319,7 +2370,7 @@ export interface FaqAccordionWidgetSettings {
     description: string;
     alignment: "left" | "center";
   };
-  source: "all" | "category";
+  source: "all" | "category" | "service";
   categories: string[];
   maxItems: number;
   expandFirst: boolean;
@@ -2376,15 +2427,17 @@ export interface ServiceTimelineWidgetSettings {
 
 /**
  * Related Services Widget Settings
- * Displays other services to consider
+ * Displays other services to consider, 4 card variants
  */
 export interface RelatedServicesWidgetSettings {
-  titleSource: "auto" | "custom";
-  customTitle?: string; // Default: "Related Services"
-  maxItems: number; // Default: 3
-  layout: "grid" | "carousel";
+  header: WidgetHeaderSettings;
+  maxItems: number;
+  columns: 2 | 3 | 4;
+  cardVariant: "minimal" | "elevated" | "horizontal" | "bordered-badge";
   showPrice: boolean;
   showDescription: boolean;
+  showCategoryBadge: boolean;
+  ctaText: string;
 }
 
 /**
@@ -2414,4 +2467,321 @@ export interface ServiceCtaWidgetSettings {
   backgroundType: "solid" | "gradient" | "image";
   backgroundColor?: string;
   backgroundGradient?: string;
+}
+
+// ============================================
+// BLOG WIDGET TYPES
+// ============================================
+
+/** Shared section header for blog widgets */
+export interface BlogSectionHeader {
+  show: boolean;
+  badge?: {
+    show: boolean;
+    text: string;
+    icon?: string;
+    style: BadgeStyle;
+    bgColor?: string;
+    textColor?: string;
+    borderColor?: string;
+  };
+  heading: {
+    text: string;
+    size: "sm" | "md" | "lg" | "xl" | "2xl";
+    color?: string;
+    highlightWords?: string;
+    highlightColor?: string;
+  };
+  subheading?: {
+    show: boolean;
+    text: string;
+    color?: string;
+  };
+  viewAllLink: {
+    show: boolean;
+    text: string;
+    url: string;
+    style: "link" | "button-outline" | "button-solid";
+    color?: string;
+  };
+  alignment: "left" | "center" | "space-between";
+  marginBottom: number;
+}
+
+/** Shared data source query builder for blog widgets */
+export interface BlogDataSource {
+  source: "all" | "category" | "tag" | "recent" | "manual";
+  categories?: string[];
+  tags?: string[];
+  postIds?: string[];
+  postCount: number;
+  offset: number;
+  orderBy: "date" | "title" | "random" | "modified";
+  orderDirection: "desc" | "asc";
+  excludeCurrentPost: boolean;
+}
+
+/** Blog post data from API */
+export interface BlogPostData {
+  id: string;
+  title: string;
+  slug: string;
+  excerpt: string | null;
+  coverImage: string | null;
+  authorId: string | null;
+  publishedAt: string | null;
+  tags: string[];
+  categories: { id: string; name: string; slug: string }[];
+  createdAt: string;
+}
+
+/** Blog Post Grid Widget Settings */
+export interface BlogPostGridWidgetSettings {
+  header: BlogSectionHeader;
+  dataSource: BlogDataSource;
+  layout: {
+    type: "grid" | "masonry";
+    columns: {
+      desktop: 1 | 2 | 3 | 4;
+      tablet: 1 | 2 | 3;
+      mobile: 1 | 2;
+    };
+    gap: number;
+    equalHeight: boolean;
+  };
+  card: {
+    style: "default" | "bordered" | "elevated" | "minimal";
+    backgroundColor?: string;
+    borderRadius: number;
+    shadow: "none" | "sm" | "md" | "lg";
+    hoverEffect: "none" | "lift" | "shadow" | "scale";
+    image: {
+      show: boolean;
+      aspectRatio: "16:9" | "4:3" | "3:2" | "1:1";
+      borderRadius: number;
+      hoverEffect: "none" | "zoom" | "brighten";
+    };
+    categoryBadge: {
+      show: boolean;
+      position: "overlay-top-left" | "above-title" | "below-title";
+      style: "pill" | "solid" | "minimal";
+    };
+    title: {
+      show: boolean;
+      maxLines: number;
+      fontSize: "sm" | "md" | "lg" | "xl";
+      fontWeight: 500 | 600 | 700;
+    };
+    excerpt: {
+      show: boolean;
+      maxLength: number;
+      fontSize: "xs" | "sm" | "md";
+    };
+    meta: {
+      show: boolean;
+      items: ("date" | "category" | "readingTime")[];
+      dateFormat: "relative" | "short" | "long";
+      separator: "dot" | "dash" | "pipe";
+      fontSize: "xs" | "sm";
+    };
+    readMore: {
+      show: boolean;
+      text: string;
+      style: "link" | "button-sm" | "arrow-only";
+    };
+    contentPadding: number;
+  };
+  filterTabs: {
+    show: boolean;
+    style: "pills" | "underline" | "buttons";
+    showAll: boolean;
+    allText: string;
+    categories: string[];
+  };
+  pagination: {
+    type: "none" | "load-more" | "numbered";
+    postsPerLoad: number;
+    loadMoreText: string;
+  };
+  emptyState: {
+    title: string;
+    description: string;
+  };
+  animation: {
+    entrance: {
+      enabled: boolean;
+      type: "none" | "fade" | "fade-up";
+      stagger: boolean;
+      staggerDelay: number;
+    };
+  };
+}
+
+/** Blog Post Carousel Widget Settings */
+export interface BlogPostCarouselWidgetSettings {
+  header: BlogSectionHeader;
+  dataSource: BlogDataSource;
+  carousel: {
+    slidesPerView: {
+      desktop: 1 | 2 | 3 | 4;
+      tablet: 1 | 2 | 3;
+      mobile: 1;
+    };
+    spaceBetween: number;
+    autoplay: {
+      enabled: boolean;
+      delay: number;
+      pauseOnHover: boolean;
+    };
+    loop: boolean;
+    speed: number;
+    navigation: {
+      arrows: {
+        enabled: boolean;
+        style: "default" | "minimal" | "rounded";
+        showOnHover: boolean;
+      };
+      dots: {
+        enabled: boolean;
+        style: "dots" | "lines";
+      };
+    };
+  };
+  card: BlogPostGridWidgetSettings["card"];
+}
+
+/** Blog Featured Post Widget Settings */
+export interface BlogFeaturedPostWidgetSettings {
+  dataSource: {
+    source: "latest" | "specific" | "category-latest";
+    postId?: string;
+    categorySlug?: string;
+  };
+  layout: "overlay" | "split-left" | "split-right" | "stacked";
+  image: {
+    aspectRatio: "16:9" | "21:9" | "4:3";
+    borderRadius: number;
+    overlay: {
+      enabled: boolean;
+      color: string;
+      opacity: number;
+    };
+    hoverEffect: "none" | "zoom" | "ken-burns";
+  };
+  content: {
+    categoryBadge: {
+      show: boolean;
+      style: "pill" | "solid";
+    };
+    title: {
+      size: "lg" | "xl" | "2xl" | "3xl";
+      fontWeight: 600 | 700 | 800;
+      maxLines: number;
+    };
+    excerpt: {
+      show: boolean;
+      maxLength: number;
+      fontSize: "sm" | "md" | "lg";
+    };
+    meta: {
+      show: boolean;
+      items: ("date" | "readingTime" | "category")[];
+      dateFormat: "relative" | "short" | "long";
+    };
+    readMore: {
+      show: boolean;
+      text: string;
+      style: "button-primary" | "button-outline" | "link" | "arrow";
+    };
+    alignment: "left" | "center";
+    verticalPosition: "top" | "center" | "bottom";
+  };
+  height: "auto" | "sm" | "md" | "lg" | "xl";
+}
+
+/** Blog Post List Widget Settings */
+export interface BlogPostListWidgetSettings {
+  header: BlogSectionHeader;
+  dataSource: BlogDataSource;
+  layout: {
+    imagePosition: "left" | "right" | "alternating" | "none";
+    imageWidth: "small" | "medium" | "large";
+    gap: number;
+    divider: {
+      show: boolean;
+      style: "solid" | "dashed";
+      color?: string;
+    };
+  };
+  item: {
+    image: {
+      show: boolean;
+      aspectRatio: "1:1" | "4:3" | "16:9";
+      borderRadius: number;
+      hoverEffect: "none" | "zoom";
+    };
+    categoryBadge: {
+      show: boolean;
+      style: "pill" | "text-only";
+    };
+    title: {
+      maxLines: number;
+      fontSize: "sm" | "md" | "lg";
+      fontWeight: 500 | 600 | 700;
+    };
+    excerpt: {
+      show: boolean;
+      maxLength: number;
+      fontSize: "xs" | "sm" | "md";
+    };
+    meta: {
+      show: boolean;
+      items: ("date" | "category" | "readingTime")[];
+      dateFormat: "relative" | "short";
+      fontSize: "xs" | "sm";
+    };
+    hoverEffect: "none" | "highlight" | "shift-right";
+  };
+  pagination: {
+    type: "none" | "load-more" | "numbered";
+    loadMoreText: string;
+  };
+}
+
+/** Blog Recent Posts Widget Settings (compact) */
+export interface BlogRecentPostsWidgetSettings {
+  header: {
+    show: boolean;
+    text: string;
+    size: "sm" | "md" | "lg";
+    color?: string;
+  };
+  dataSource: {
+    postCount: number;
+    categories?: string[];
+    orderBy: "date" | "random";
+  };
+  display: {
+    style: "title-only" | "title-date" | "title-meta" | "thumbnail" | "numbered";
+    thumbnail: {
+      size: number;
+      borderRadius: number;
+      aspectRatio: "1:1" | "4:3";
+    };
+    titleFontSize: "xs" | "sm" | "md";
+    titleMaxLines: number;
+    dateFontSize: "xs" | "sm";
+    dateFormat: "relative" | "short";
+    itemGap: number;
+    divider: {
+      show: boolean;
+      color?: string;
+    };
+  };
+  viewAllLink: {
+    show: boolean;
+    text: string;
+    url: string;
+    color?: string;
+  };
 }

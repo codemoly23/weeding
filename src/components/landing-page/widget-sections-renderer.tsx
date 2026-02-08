@@ -18,7 +18,13 @@ import {
   TestimonialsWidget,
 } from "@/components/page-builder/widgets";
 import { ServiceCardWidget, ServiceListWidget, PricingTableWidget } from "@/components/page-builder/widgets/commerce";
-import { ServiceHeroWidget } from "@/components/page-builder/widgets/service/service-hero";
+import {
+  ServiceHeroWidget,
+  ServiceFeaturesWidget,
+  ServiceDescriptionWidget,
+  ServiceBreadcrumbWidget,
+  RelatedServicesWidget,
+} from "@/components/page-builder/widgets/service";
 
 // Helper: Generate background styles from SectionBackground
 function getBackgroundStyles(bg: SectionBackground): React.CSSProperties {
@@ -275,6 +281,18 @@ function WidgetRenderer({ widget }: WidgetRendererProps) {
 
       case "service-hero":
         return <ServiceHeroWidget settings={widget.settings as any} />;
+
+      case "service-features":
+        return <ServiceFeaturesWidget settings={widget.settings as any} />;
+
+      case "service-description":
+        return <ServiceDescriptionWidget settings={widget.settings as any} />;
+
+      case "service-breadcrumb":
+        return <ServiceBreadcrumbWidget settings={widget.settings as any} />;
+
+      case "related-services":
+        return <RelatedServicesWidget settings={widget.settings as any} />;
 
       case "faq":
         return <FaqAccordionWidget settings={widget.settings as any} />;

@@ -22,6 +22,10 @@ import {
   DEFAULT_PRICING_TABLE_SETTINGS,
   DEFAULT_SERVICE_HERO_SETTINGS,
   DEFAULT_FAQ_ACCORDION_SETTINGS,
+  DEFAULT_SERVICE_FEATURES_SETTINGS,
+  DEFAULT_SERVICE_DESCRIPTION_SETTINGS,
+  DEFAULT_SERVICE_BREADCRUMB_SETTINGS,
+  DEFAULT_RELATED_SERVICES_SETTINGS,
 } from "./defaults";
 
 // Import widget components
@@ -35,7 +39,13 @@ import {
 import { DividerWidget, FaqAccordionWidget } from "@/components/page-builder/widgets/layout";
 import { ServiceCardWidget, ServiceListWidget, PricingTableWidget } from "@/components/page-builder/widgets/commerce";
 import { LeadFormWidget } from "@/components/page-builder/widgets/forms";
-import { ServiceHeroWidget } from "@/components/page-builder/widgets/service";
+import {
+  ServiceHeroWidget,
+  ServiceFeaturesWidget,
+  ServiceDescriptionWidget,
+  ServiceBreadcrumbWidget,
+  RelatedServicesWidget,
+} from "@/components/page-builder/widgets/service";
 
 // Register all widgets
 export function registerAllWidgets() {
@@ -205,6 +215,46 @@ export function registerAllWidgets() {
     category: "service",
     defaultSettings: DEFAULT_SERVICE_HERO_SETTINGS,
     component: ServiceHeroWidget,
+  });
+
+  WidgetRegistry.register({
+    type: "service-features",
+    name: "Service Features",
+    description: "What's Included grid with 4 style variants",
+    icon: "CheckSquare",
+    category: "service",
+    defaultSettings: DEFAULT_SERVICE_FEATURES_SETTINGS,
+    component: ServiceFeaturesWidget,
+  });
+
+  WidgetRegistry.register({
+    type: "service-description",
+    name: "Service Description",
+    description: "Rich HTML description with sidebar highlights",
+    icon: "FileText",
+    category: "service",
+    defaultSettings: DEFAULT_SERVICE_DESCRIPTION_SETTINGS,
+    component: ServiceDescriptionWidget,
+  });
+
+  WidgetRegistry.register({
+    type: "service-breadcrumb",
+    name: "Service Breadcrumb",
+    description: "Dynamic breadcrumb navigation with 3 styles",
+    icon: "ChevronRight",
+    category: "service",
+    defaultSettings: DEFAULT_SERVICE_BREADCRUMB_SETTINGS,
+    component: ServiceBreadcrumbWidget,
+  });
+
+  WidgetRegistry.register({
+    type: "related-services",
+    name: "Related Services",
+    description: "Related service cards with 4 card variants",
+    icon: "Grid2X2",
+    category: "service",
+    defaultSettings: DEFAULT_RELATED_SERVICES_SETTINGS,
+    component: RelatedServicesWidget,
   });
 }
 

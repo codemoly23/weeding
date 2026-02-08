@@ -25,6 +25,15 @@ import type {
   ServiceListWidgetSettings,
   ProcessStepsWidgetSettings,
   PricingTableWidgetSettings,
+  BlogPostGridWidgetSettings,
+  BlogPostCarouselWidgetSettings,
+  BlogFeaturedPostWidgetSettings,
+  BlogPostListWidgetSettings,
+  BlogRecentPostsWidgetSettings,
+  ServiceFeaturesWidgetSettings,
+  ServiceDescriptionWidgetSettings,
+  ServiceBreadcrumbWidgetSettings,
+  RelatedServicesWidgetSettings,
 } from "./types";
 
 // ============================================
@@ -1221,7 +1230,8 @@ export const DEFAULT_PRICING_TABLE_SETTINGS: PricingTableWidgetSettings = {
   // Data Source - binds to service
   dataSource: {
     type: "service",
-    serviceSlug: undefined, // Will be selected in settings panel
+    mode: "manual",            // "auto" reads slug from ServiceContext
+    serviceSlug: undefined,    // Used when mode === "manual"
     manualPackages: undefined,
   },
 
@@ -1640,6 +1650,363 @@ export const DEFAULT_FAQ_ACCORDION_SETTINGS = {
 };
 
 // ============================================
+// SERVICE FEATURES WIDGET DEFAULTS
+// ============================================
+
+export const DEFAULT_SERVICE_FEATURES_SETTINGS: ServiceFeaturesWidgetSettings = {
+  header: {
+    show: true,
+    heading: "What's Included",
+    description: "Everything you get with this service",
+    alignment: "center",
+  },
+  variant: "minimal-checkmark",
+  columns: 3,
+  showIcons: true,
+  iconStyle: "circle-check",
+  iconColor: "#22C55E",
+  showDescriptions: false,
+};
+
+// ============================================
+// SERVICE DESCRIPTION WIDGET DEFAULTS
+// ============================================
+
+export const DEFAULT_SERVICE_DESCRIPTION_SETTINGS: ServiceDescriptionWidgetSettings = {
+  header: {
+    show: true,
+    heading: "About {{service.name}}",
+    description: "",
+    alignment: "left",
+  },
+  variant: "clean-prose",
+  maxWidth: "lg",
+  fontSize: "md",
+  sidebar: {
+    show: true,
+    showProcessingTime: true,
+    showStartingPrice: true,
+    showPopularBadge: true,
+  },
+};
+
+// ============================================
+// SERVICE BREADCRUMB WIDGET DEFAULTS
+// ============================================
+
+export const DEFAULT_SERVICE_BREADCRUMB_SETTINGS: ServiceBreadcrumbWidgetSettings = {
+  variant: "simple-text",
+  separator: "chevron",
+  showHome: true,
+  homeLabel: "Home",
+  showCategory: true,
+  fontSize: "sm",
+  alignment: "left",
+};
+
+// ============================================
+// RELATED SERVICES WIDGET DEFAULTS
+// ============================================
+
+export const DEFAULT_RELATED_SERVICES_SETTINGS: RelatedServicesWidgetSettings = {
+  header: {
+    show: true,
+    heading: "Related Services",
+    description: "Other services you might be interested in",
+    alignment: "center",
+  },
+  maxItems: 4,
+  columns: 4,
+  cardVariant: "elevated",
+  showPrice: true,
+  showDescription: true,
+  showCategoryBadge: false,
+  ctaText: "Learn More",
+};
+
+// ============================================
+// BLOG WIDGET DEFAULTS
+// ============================================
+
+const DEFAULT_BLOG_HEADER: BlogPostGridWidgetSettings["header"] = {
+  show: true,
+  badge: {
+    show: false,
+    text: "Blog",
+    style: "pill",
+    bgColor: "#3b82f633",
+    textColor: "#60a5fa",
+    borderColor: "#3b82f680",
+  },
+  heading: {
+    text: "Latest Articles",
+    size: "xl",
+    color: "#ffffff",
+    highlightWords: "",
+    highlightColor: "#3b82f6",
+  },
+  subheading: {
+    show: false,
+    text: "Insights and guides for entrepreneurs",
+    color: "#94a3b8",
+  },
+  viewAllLink: {
+    show: true,
+    text: "View All Articles →",
+    url: "/blog",
+    style: "link",
+    color: "#60a5fa",
+  },
+  alignment: "space-between",
+  marginBottom: 32,
+};
+
+const DEFAULT_BLOG_DATA_SOURCE: BlogPostGridWidgetSettings["dataSource"] = {
+  source: "all",
+  categories: [],
+  tags: [],
+  postIds: [],
+  postCount: 6,
+  offset: 0,
+  orderBy: "date",
+  orderDirection: "desc",
+  excludeCurrentPost: false,
+};
+
+const DEFAULT_BLOG_CARD: BlogPostGridWidgetSettings["card"] = {
+  style: "default",
+  borderRadius: 12,
+  shadow: "sm",
+  hoverEffect: "lift",
+  image: {
+    show: true,
+    aspectRatio: "16:9",
+    borderRadius: 12,
+    hoverEffect: "zoom",
+  },
+  categoryBadge: {
+    show: true,
+    position: "above-title",
+    style: "pill",
+  },
+  title: {
+    show: true,
+    maxLines: 2,
+    fontSize: "lg",
+    fontWeight: 600,
+  },
+  excerpt: {
+    show: true,
+    maxLength: 120,
+    fontSize: "sm",
+  },
+  meta: {
+    show: true,
+    items: ["date", "category"],
+    dateFormat: "short",
+    separator: "dot",
+    fontSize: "xs",
+  },
+  readMore: {
+    show: false,
+    text: "Read More →",
+    style: "link",
+  },
+  contentPadding: 16,
+};
+
+export const DEFAULT_BLOG_POST_GRID_SETTINGS: BlogPostGridWidgetSettings = {
+  header: { ...DEFAULT_BLOG_HEADER },
+  dataSource: { ...DEFAULT_BLOG_DATA_SOURCE },
+  layout: {
+    type: "grid",
+    columns: { desktop: 3, tablet: 2, mobile: 1 },
+    gap: 24,
+    equalHeight: true,
+  },
+  card: { ...DEFAULT_BLOG_CARD },
+  filterTabs: {
+    show: false,
+    style: "pills",
+    showAll: true,
+    allText: "All",
+    categories: [],
+  },
+  pagination: {
+    type: "none",
+    postsPerLoad: 6,
+    loadMoreText: "Load More Articles",
+  },
+  emptyState: {
+    title: "No articles found",
+    description: "Check back later for new content",
+  },
+  animation: {
+    entrance: {
+      enabled: true,
+      type: "fade-up",
+      stagger: true,
+      staggerDelay: 100,
+    },
+  },
+};
+
+export const DEFAULT_BLOG_POST_CAROUSEL_SETTINGS: BlogPostCarouselWidgetSettings = {
+  header: { ...DEFAULT_BLOG_HEADER },
+  dataSource: { ...DEFAULT_BLOG_DATA_SOURCE },
+  carousel: {
+    slidesPerView: { desktop: 3, tablet: 2, mobile: 1 },
+    spaceBetween: 24,
+    autoplay: {
+      enabled: false,
+      delay: 5000,
+      pauseOnHover: true,
+    },
+    loop: true,
+    speed: 500,
+    navigation: {
+      arrows: {
+        enabled: true,
+        style: "default",
+        showOnHover: false,
+      },
+      dots: {
+        enabled: true,
+        style: "dots",
+      },
+    },
+  },
+  card: { ...DEFAULT_BLOG_CARD },
+};
+
+export const DEFAULT_BLOG_FEATURED_POST_SETTINGS: BlogFeaturedPostWidgetSettings = {
+  dataSource: {
+    source: "latest",
+  },
+  layout: "overlay",
+  image: {
+    aspectRatio: "16:9",
+    borderRadius: 16,
+    overlay: {
+      enabled: true,
+      color: "#000000",
+      opacity: 0.5,
+    },
+    hoverEffect: "zoom",
+  },
+  content: {
+    categoryBadge: {
+      show: true,
+      style: "pill",
+    },
+    title: {
+      size: "2xl",
+      fontWeight: 700,
+      maxLines: 3,
+    },
+    excerpt: {
+      show: true,
+      maxLength: 200,
+      fontSize: "md",
+    },
+    meta: {
+      show: true,
+      items: ["date", "readingTime"],
+      dateFormat: "long",
+    },
+    readMore: {
+      show: true,
+      text: "Read Article →",
+      style: "button-primary",
+    },
+    alignment: "left",
+    verticalPosition: "bottom",
+  },
+  height: "lg",
+};
+
+export const DEFAULT_BLOG_POST_LIST_SETTINGS: BlogPostListWidgetSettings = {
+  header: { ...DEFAULT_BLOG_HEADER },
+  dataSource: { ...DEFAULT_BLOG_DATA_SOURCE },
+  layout: {
+    imagePosition: "left",
+    imageWidth: "medium",
+    gap: 24,
+    divider: {
+      show: true,
+      style: "solid",
+      color: "#1e293b",
+    },
+  },
+  item: {
+    image: {
+      show: true,
+      aspectRatio: "4:3",
+      borderRadius: 8,
+      hoverEffect: "zoom",
+    },
+    categoryBadge: {
+      show: true,
+      style: "text-only",
+    },
+    title: {
+      maxLines: 2,
+      fontSize: "lg",
+      fontWeight: 600,
+    },
+    excerpt: {
+      show: true,
+      maxLength: 150,
+      fontSize: "sm",
+    },
+    meta: {
+      show: true,
+      items: ["date", "category"],
+      dateFormat: "short",
+      fontSize: "xs",
+    },
+    hoverEffect: "highlight",
+  },
+  pagination: {
+    type: "none",
+    loadMoreText: "Load More",
+  },
+};
+
+export const DEFAULT_BLOG_RECENT_POSTS_SETTINGS: BlogRecentPostsWidgetSettings = {
+  header: {
+    show: true,
+    text: "Recent Posts",
+    size: "md",
+  },
+  dataSource: {
+    postCount: 5,
+    orderBy: "date",
+  },
+  display: {
+    style: "title-date",
+    thumbnail: {
+      size: 60,
+      borderRadius: 8,
+      aspectRatio: "1:1",
+    },
+    titleFontSize: "sm",
+    titleMaxLines: 2,
+    dateFontSize: "xs",
+    dateFormat: "relative",
+    itemGap: 12,
+    divider: {
+      show: false,
+    },
+  },
+  viewAllLink: {
+    show: true,
+    text: "View All Posts →",
+    url: "/blog",
+  },
+};
+
+// ============================================
 // EXPORT ALL DEFAULTS
 // ============================================
 
@@ -1662,5 +2029,14 @@ export const WIDGET_DEFAULTS: Record<string, unknown> = {
   "process-steps": DEFAULT_PROCESS_STEPS_SETTINGS,
   "pricing-table": DEFAULT_PRICING_TABLE_SETTINGS,
   "service-hero": DEFAULT_SERVICE_HERO_SETTINGS,
+  "service-features": DEFAULT_SERVICE_FEATURES_SETTINGS,
+  "service-description": DEFAULT_SERVICE_DESCRIPTION_SETTINGS,
+  "service-breadcrumb": DEFAULT_SERVICE_BREADCRUMB_SETTINGS,
+  "related-services": DEFAULT_RELATED_SERVICES_SETTINGS,
   "faq": DEFAULT_FAQ_ACCORDION_SETTINGS,
+  "blog-post-grid": DEFAULT_BLOG_POST_GRID_SETTINGS,
+  "blog-post-carousel": DEFAULT_BLOG_POST_CAROUSEL_SETTINGS,
+  "blog-featured-post": DEFAULT_BLOG_FEATURED_POST_SETTINGS,
+  "blog-post-list": DEFAULT_BLOG_POST_LIST_SETTINGS,
+  "blog-recent-posts": DEFAULT_BLOG_RECENT_POSTS_SETTINGS,
 };

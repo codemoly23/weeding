@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import { ChevronDown } from "lucide-react";
 import { cn } from "@/lib/utils";
 import type { FaqAccordionWidgetSettings } from "@/lib/page-builder/types";
+import { useOptionalServiceContext } from "@/lib/page-builder/contexts/service-context";
 
 interface FaqItem {
   id: string;
@@ -26,6 +27,9 @@ export function FaqAccordionWidget({
   const [openItems, setOpenItems] = useState<Set<string>>(new Set());
   const [activeCategory, setActiveCategory] = useState<string>("all");
 
+  // Service context for source: "service"
+  const serviceContext = useOptionalServiceContext();
+
   const defaultHeader = {
     show: true,
     heading: "Frequently Asked Questions",
@@ -46,6 +50,29 @@ export function FaqAccordionWidget({
   };
 
   useEffect(() => {
+    // Source: "service" - read FAQs directly from ServiceContext (no API call)
+    if (s.source === "service") {
+      if (serviceContext?.service?.faqs) {
+        const serviceFaqs: FaqItem[] = serviceContext.service.faqs
+          .slice(0, s.maxItems)
+          .map((faq) => ({
+            id: faq.id,
+            question: faq.question,
+            answer: faq.answer,
+            category: null,
+          }));
+        setFaqs(serviceFaqs);
+        if (s.expandFirst && serviceFaqs.length > 0) {
+          setOpenItems(new Set([serviceFaqs[0].id]));
+        }
+      } else {
+        setFaqs([]);
+      }
+      setLoading(false);
+      return;
+    }
+
+    // Source: "all" or "category" - fetch from global FAQ API
     async function fetchFaqs() {
       try {
         const params = new URLSearchParams();
@@ -77,7 +104,7 @@ export function FaqAccordionWidget({
 
     fetchFaqs();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [settings?.source, settings?.maxItems, settings?.expandFirst, JSON.stringify(settings?.categories)]);
+  }, [settings?.source, settings?.maxItems, settings?.expandFirst, JSON.stringify(settings?.categories), serviceContext?.service?.faqs]);
 
   const toggleItem = (id: string) => {
     setOpenItems((prev) => {
@@ -409,7 +436,7 @@ function FaqItemBordered({
       >
         <div className="overflow-hidden">
           <div
-            className="prose prose-sm max-w-none px-5 pb-5 pl-[4.25rem] text-muted-foreground"
+            className="prose prose-sm max-w-none px-5 pb-5 pl-17 text-muted-foreground"
             dangerouslySetInnerHTML={{ __html: faq.answer }}
           />
         </div>

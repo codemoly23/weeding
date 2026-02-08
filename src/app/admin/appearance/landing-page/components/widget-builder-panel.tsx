@@ -532,7 +532,7 @@ function EditMode({ widget, section, columnId, onBack, onUpdateSettings, onUpdat
           )}
 
           {/* Fallback for unknown widget types */}
-          {!["hero-content", "heading", "text-block", "image", "image-slider", "trust-badges", "stats-section", "divider", "service-card", "service-list", "process-steps", "pricing-table", "testimonials-carousel", "lead-form", "service-hero", "faq"].includes(widget.type) && (
+          {!["hero-content", "heading", "text-block", "image", "image-slider", "trust-badges", "stats-section", "divider", "service-card", "service-list", "process-steps", "pricing-table", "testimonials-carousel", "lead-form", "service-hero", "faq", "service-features", "service-description", "service-breadcrumb", "related-services"].includes(widget.type) && (
             <p className="text-center text-sm text-muted-foreground">
               Settings for {widget.type} coming soon.
             </p>

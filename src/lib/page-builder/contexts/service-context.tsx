@@ -205,6 +205,8 @@ export function useOptionalServiceContext() {
 export const WIDGET_TO_DISPLAY_OPTION: Record<string, keyof ServiceDisplayOptions> = {
   "service-hero": "showHero",
   "service-features": "showFeatures",
+  "service-description": "showDeliverables",
+  "service-breadcrumb": "showHero",         // Shows when hero shows
   "service-pricing": "showPricing",
   "service-process": "showProcessSteps",
   "service-faq": "showFaq",

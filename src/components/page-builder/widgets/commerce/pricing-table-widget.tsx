@@ -43,6 +43,7 @@ import type {
   BadgeStyle,
 } from "@/lib/page-builder/types";
 import { DEFAULT_PRICING_TABLE_SETTINGS } from "@/lib/page-builder/defaults";
+import { useOptionalServiceContext } from "@/lib/page-builder/contexts/service-context";
 import { PricingCardsView } from "./pricing-cards-view";
 
 // =============================================================================
@@ -1003,6 +1004,12 @@ export function PricingTableWidget({
 }: PricingTableWidgetProps) {
   const settings = { ...DEFAULT_PRICING_TABLE_SETTINGS, ...propsSettings };
 
+  // Auto mode: resolve slug from ServiceContext
+  const serviceContext = useOptionalServiceContext();
+  const resolvedSlug = settings.dataSource.mode === "auto"
+    ? serviceContext?.service?.slug
+    : settings.dataSource.serviceSlug;
+
   const [serviceData, setServiceData] = useState<ServiceData | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -1015,7 +1022,7 @@ export function PricingTableWidget({
   // Fetch service data
   useEffect(() => {
     async function fetchServiceData() {
-      if (!settings.dataSource.serviceSlug) {
+      if (!resolvedSlug) {
         setLoading(false);
         return;
       }
@@ -1025,7 +1032,7 @@ export function PricingTableWidget({
         setError(null);
 
         const response = await fetch(
-          `/api/services/${settings.dataSource.serviceSlug}`
+          `/api/services/${resolvedSlug}`
         );
         if (!response.ok) {
           throw new Error("Failed to fetch service data");
@@ -1054,7 +1061,7 @@ export function PricingTableWidget({
     }
 
     fetchServiceData();
-  }, [settings.dataSource.serviceSlug]);
+  }, [resolvedSlug]);
 
   // Get selected package
   const selectedPackage = useMemo(
@@ -1148,7 +1155,7 @@ export function PricingTableWidget({
   }
 
   // No service selected
-  if (!settings.dataSource.serviceSlug || !serviceData) {
+  if (!resolvedSlug || !serviceData) {
     return (
       <div>
         <SectionHeader settings={settings} />
