@@ -23,7 +23,10 @@ const serviceOrderSchema = z.object({
   // Pricing
   totalAmount: z.number(),
 
-  // State (optional - not all services need it)
+  // Location (optional - not all services need it)
+  locationCode: z.string().optional(),
+  locationName: z.string().optional(),
+  // Backward compat
   stateCode: z.string().optional(),
   stateName: z.string().optional(),
 
@@ -188,7 +191,7 @@ export async function POST(request: NextRequest) {
         subtotalUSD: data.totalAmount,
         totalUSD: data.totalAmount,
         currency: "USD",
-        llcState: data.stateCode,
+        llcState: data.locationCode || data.stateCode,
         customerName,
         customerEmail,
         customerPhone,
@@ -198,9 +201,11 @@ export async function POST(request: NextRequest) {
             {
               serviceId: service.id,
               name: data.serviceName,
-              description: `${data.serviceName} ${data.stateName ? `- ${data.stateName}` : ""}`.trim(),
+              description: `${data.serviceName} ${data.locationName || data.stateName ? `- ${data.locationName || data.stateName}` : ""}`.trim(),
               priceUSD: data.totalAmount,
               stateFee: 0,
+              locationCode: data.locationCode || (data.stateCode ? `US-${data.stateCode}` : undefined),
+              locationName: data.locationName || data.stateName,
             },
           ],
         },
@@ -236,7 +241,7 @@ export async function POST(request: NextRequest) {
         metadata: {
           orderNumber,
           service: data.serviceName,
-          state: data.stateCode,
+          locationCode: data.locationCode || data.stateCode,
           total: data.totalAmount,
         },
       },

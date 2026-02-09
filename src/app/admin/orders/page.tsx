@@ -72,6 +72,8 @@ interface Order {
     name: string;
     priceUSD: string;
     stateFee: string | null;
+    locationName: string | null;
+    locationFeeLabel: string | null;
   }>;
   user: {
     id: string;

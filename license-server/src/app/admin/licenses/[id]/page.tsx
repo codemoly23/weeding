@@ -1,6 +1,6 @@
 import { notFound } from 'next/navigation';
 import Link from 'next/link';
-import { ArrowLeft, Copy, Mail, Clock, Globe, Key, AlertTriangle } from 'lucide-react';
+import { ArrowLeft, Copy, Mail, Clock, Globe, Key, AlertTriangle, Pencil } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -85,6 +85,12 @@ export default async function LicenseDetailPage({
           </p>
         </div>
         <div className="flex gap-2">
+          <Link href={`/admin/licenses/${license.id}/edit`}>
+            <Button variant="outline">
+              <Pencil className="mr-2 h-4 w-4" />
+              Edit
+            </Button>
+          </Link>
           <Button variant="outline">
             <Mail className="mr-2 h-4 w-4" />
             Send to Customer

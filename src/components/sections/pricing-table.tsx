@@ -13,7 +13,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { StateSelector, type State } from "@/components/ui/state-selector";
+import { LocationSelector, type LocationItem } from "@/components/ui/location-selector";
 import { cn } from "@/lib/utils";
 
 const packages = [
@@ -73,11 +73,11 @@ const packages = [
   },
 ];
 
-// Default state for initial render
-const defaultState: State = { code: "WY", name: "Wyoming", fee: 100 };
+// Default location for initial render
+const defaultLocation: LocationItem = { code: "US-WY", name: "Wyoming", country: "US", type: "STATE", isPopular: true, fee: 100 };
 
 export function PricingTable() {
-  const [selectedState, setSelectedState] = useState<State>(defaultState);
+  const [selectedLocation, setSelectedLocation] = useState<LocationItem>(defaultLocation);
 
   return (
     <section className="py-16 lg:py-24">
@@ -91,20 +91,20 @@ export function PricingTable() {
             Transparent Pricing, No Hidden Fees
           </h2>
           <p className="mt-4 text-lg text-muted-foreground">
-            Choose the package that fits your needs. State filing fees are
-            separate and vary by state.
+            Choose the package that fits your needs. Filing fees are
+            separate and vary by location.
           </p>
         </div>
 
-        {/* State Selector */}
+        {/* Location Selector */}
         <div className="mx-auto mt-8 max-w-md">
           <label className="mb-2 block text-sm font-medium text-foreground text-center">
-            Select your state for accurate pricing
+            Select your location for accurate pricing
           </label>
-          <StateSelector
-            value={selectedState}
-            onChange={setSelectedState}
-            placeholder="Search for a state..."
+          <LocationSelector
+            value={selectedLocation}
+            onChange={setSelectedLocation}
+            placeholder="Search for a location..."
           />
         </div>
 
@@ -132,17 +132,17 @@ export function PricingTable() {
                   </span>
                   <span className="text-muted-foreground"> + </span>
                   <span className="text-lg font-semibold text-primary">
-                    ${selectedState.fee}
+                    ${selectedLocation.fee}
                   </span>
                   <span className="text-sm text-muted-foreground">
                     {" "}
-                    state fee
+                    filing fee
                   </span>
                 </div>
                 <p className="mt-1 text-sm text-muted-foreground">
                   Total:{" "}
                   <span className="font-semibold text-foreground">
-                    ${pkg.price + selectedState.fee}
+                    ${pkg.price + selectedLocation.fee}
                   </span>
                 </p>
               </CardHeader>
@@ -188,7 +188,7 @@ export function PricingTable() {
                   asChild
                 >
                   <Link
-                    href={`/checkout?package=${pkg.name.toLowerCase()}&state=${selectedState.code}`}
+                    href={`/checkout?package=${pkg.name.toLowerCase()}&location=${selectedLocation.code}`}
                   >
                     {pkg.cta}
                     <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />

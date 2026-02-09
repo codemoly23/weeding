@@ -105,8 +105,8 @@ const navItems: NavItem[] = [
     icon: Percent,
   },
   {
-    title: "State Fees",
-    href: "/admin/state-fees",
+    title: "Location-Based Pricing",
+    href: "/admin/location-pricing",
     icon: MapPin,
   },
   {

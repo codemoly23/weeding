@@ -154,6 +154,11 @@ model Service {
   faqs            ServiceFAQ[]
   orderItems      OrderItem[]
   formTemplate    ServiceFormTemplate?
+  locationFees    LocationFee[]
+
+  // Location-Based Pricing
+  hasLocationBasedPricing  Boolean  @default(false)
+  locationFeeLabel         String?  // "State Fee", "Province Fee", "Filing Fee"
 
   // SEO
   metaTitle       String?
@@ -367,7 +372,13 @@ model OrderItem {
   description String?
   quantity    Int      @default(1)
   priceUSD    Decimal  @db.Decimal(10, 2)
-  stateFee    Decimal? @db.Decimal(10, 2)
+  stateFee    Decimal? @db.Decimal(10, 2) // Kept for backward compat
+
+  // Location-Based Pricing (denormalized for historical accuracy)
+  locationId       String?
+  locationCode     String?  // "US-WY"
+  locationName     String?  // "Wyoming"
+  locationFeeLabel String?  // "State Filing Fee"
 
   order       Order    @relation(fields: [orderId], references: [id], onDelete: Cascade)
   service     Service  @relation(fields: [serviceId], references: [id])
@@ -750,7 +761,7 @@ model Setting {
   @@index([key])
 }
 
-// ============ STATE FEES ============
+// ============ STATE FEES (DEPRECATED - kept for backward compat) ============
 model StateFee {
   id              String   @id @default(cuid())
   stateCode       String   @unique
@@ -770,6 +781,91 @@ model StateFee {
 
   @@index([stateCode])
   @@index([isPopular])
+}
+
+// ============ LOCATION-BASED PRICING ============
+
+enum LocationType {
+  STATE       // US state
+  PROVINCE    // Canadian province, etc.
+  COUNTRY     // Entire country
+  TERRITORY   // US territory (PR, GU), etc.
+}
+
+enum FeeType {
+  FILING      // One-time formation/filing fee
+  ANNUAL      // Annual report/renewal fee
+  EXPEDITED   // Expedited processing upcharge
+  FRANCHISE   // Franchise tax
+  CUSTOM      // Custom fee type
+}
+
+model Location {
+  id              String       @id @default(cuid())
+  code            String       @unique        // "US-WY", "US-DE", "CA-ON", "UK"
+  name            String                      // "Wyoming", "Delaware", "Ontario"
+  country         String                      // "US", "CA", "UK" (ISO country code)
+  type            LocationType @default(STATE)
+
+  isPopular       Boolean      @default(false)
+  isActive        Boolean      @default(true)
+  sortOrder       Int          @default(0)
+
+  // SEO for location landing pages
+  metaTitle       String?
+  metaDescription String?
+  content         String?      @db.Text
+
+  // Relations
+  fees            LocationFee[]
+
+  createdAt       DateTime     @default(now())
+  updatedAt       DateTime     @updatedAt
+
+  @@index([country])
+  @@index([type])
+  @@index([isActive, isPopular])
+  @@index([country, type])
+}
+
+model LocationFee {
+  id              String   @id @default(cuid())
+
+  // Which service this fee applies to
+  serviceId       String
+  service         Service  @relation(fields: [serviceId], references: [id], onDelete: Cascade)
+
+  // Which location
+  locationId      String
+  location        Location @relation(fields: [locationId], references: [id], onDelete: Cascade)
+
+  // Fee details
+  feeType         FeeType  @default(FILING)
+  label           String?  // Custom display label: "State Filing Fee", "Annual Report Fee"
+
+  amountUSD       Decimal  @db.Decimal(10, 2)
+  amountBDT       Decimal? @db.Decimal(10, 2)
+
+  processingTime  String?  // "3-5 business days"
+
+  isActive        Boolean  @default(true)
+  isRequired      Boolean  @default(true)  // Required fees are always added
+
+  // Expedited option
+  expeditedFee    Decimal? @db.Decimal(10, 2)
+  expeditedTime   String?  // "24 hours"
+
+  notes           String?  @db.Text
+
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  // One fee of each type per service+location combo
+  @@unique([serviceId, locationId, feeType])
+  @@index([serviceId])
+  @@index([locationId])
+  @@index([feeType])
+  @@index([isActive])
 }
 
 // ============ COUPONS ============
@@ -1524,12 +1620,6 @@ enum PageTemplateType {
   CUSTOM            // Custom standalone pages
 }
 
-// Page mode - distinguishes standalone pages from templates
-enum PageMode {
-  PAGE              // Standalone page with its own slug/URL (e.g., homepage, about)
-  TEMPLATE          // Layout template applied to dynamic pages (e.g., service details)
-}
-
 // Landing page definition
 model LandingPage {
   id              String   @id @default(cuid())
@@ -1538,11 +1628,8 @@ model LandingPage {
   isActive        Boolean  @default(true)
   isDefault       Boolean  @default(false) // Is this the main homepage? (deprecated, use templateType)
 
-  // Page mode - PAGE or TEMPLATE
-  pageMode        PageMode @default(PAGE) // PAGE = standalone, TEMPLATE = layout for dynamic pages
-
-  // Template assignment
-  templateType    PageTemplateType?  // Which page type this template serves (used when pageMode = TEMPLATE)
+  // Template assignment (null = regular page, non-null = template for that page type)
+  templateType    PageTemplateType?  // Which page type this template serves
   isTemplateActive Boolean @default(false) // Is this the active template for the page type?
 
   // SEO
@@ -1564,7 +1651,6 @@ model LandingPage {
   @@index([slug])
   @@index([isActive, isDefault])
   @@index([templateType, isTemplateActive])
-  @@index([pageMode])
 }
 
 // Individual block on a landing page

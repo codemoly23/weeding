@@ -102,6 +102,9 @@ export default function PageEditorPage({ params }: { params: Promise<{ id: strin
   const [page, setPage] = useState<PageData | null>(null);
   const [templates, setTemplates] = useState<TemplateInfo[]>([]);
   const [sections, setSections] = useState<Section[]>([]);
+  const sectionsRef = useRef<Section[]>([]);
+  // Keep ref in sync with state to avoid stale closures in save handler
+  sectionsRef.current = sections;
   const [selection, setSelection] = useState<BuilderSelection>({ type: null });
   const [isDirty, setIsDirty] = useState(false);
   const [isSaving, setSaving] = useState(false);
@@ -119,6 +122,17 @@ export default function PageEditorPage({ params }: { params: Promise<{ id: strin
   const scrollContainerRef = useRef<HTMLDivElement>(null);
   const [isScrolling, setIsScrolling] = useState(false);
   const scrollTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+
+  // Warn user about unsaved changes when navigating away
+  useEffect(() => {
+    const handleBeforeUnload = (e: BeforeUnloadEvent) => {
+      if (isDirty) {
+        e.preventDefault();
+      }
+    };
+    window.addEventListener("beforeunload", handleBeforeUnload);
+    return () => window.removeEventListener("beforeunload", handleBeforeUnload);
+  }, [isDirty]);
 
   // Drag-and-drop state
   const [activeDragWidget, setActiveDragWidget] = useState<WidgetType | null>(null);
@@ -480,20 +494,42 @@ export default function PageEditorPage({ params }: { params: Promise<{ id: strin
     setActiveDragWidget(null);
   }, []);
 
-  // Save handler
+  // Save handler - uses sectionsRef to avoid stale closure issues
   const handleSave = async () => {
     setSaving(true);
     try {
+      // Use ref to get the absolute latest sections value
+      const currentSections = sectionsRef.current;
+
+      // Debug: Log what we're saving
+      const totalWidgets = currentSections.reduce(
+        (sum, s) => sum + s.columns.reduce((cs, c) => cs + c.widgets.length, 0),
+        0
+      );
+      console.log("[PageBuilder Save] Saving sections:", {
+        sectionCount: currentSections.length,
+        totalWidgets,
+        widgetTypes: currentSections.flatMap((s) =>
+          s.columns.flatMap((c) => c.widgets.map((w) => w.type))
+        ),
+      });
+
       // Save sections
+      const sectionsPayload = JSON.stringify({ sections: currentSections });
       const sectionsRes = await fetch(`/api/admin/pages/${id}/sections`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ sections }),
+        body: sectionsPayload,
       });
 
       if (!sectionsRes.ok) {
+        const errorText = await sectionsRes.text();
+        console.error("[PageBuilder Save] Sections save failed:", errorText);
         throw new Error("Failed to save sections");
       }
+
+      const sectionsResult = await sectionsRes.json();
+      console.log("[PageBuilder Save] Sections saved:", sectionsResult);
 
       // Save page settings
       const settingsRes = await fetch(`/api/admin/pages/${id}`, {
@@ -527,7 +563,7 @@ export default function PageEditorPage({ params }: { params: Promise<{ id: strin
       }
 
       setIsDirty(false);
-      toast.success("Page saved successfully");
+      toast.success(`Page saved (${currentSections.length} sections, ${totalWidgets} widgets)`);
     } catch (error) {
       console.error("Save error:", error);
       toast.error("Failed to save page");
@@ -704,6 +740,12 @@ export default function PageEditorPage({ params }: { params: Promise<{ id: strin
             </SheetContent>
           </Sheet>
 
+          {isDirty && (
+            <span className="text-xs text-amber-500 font-medium">
+              Unsaved changes
+            </span>
+          )}
+
           <Button variant="outline" size="sm" asChild>
             <a href={`/${pageSlug}`} target="_blank" rel="noopener noreferrer">
               <Eye className="mr-2 h-4 w-4" />
@@ -712,13 +754,19 @@ export default function PageEditorPage({ params }: { params: Promise<{ id: strin
             </a>
           </Button>
 
-          <Button size="sm" onClick={handleSave} disabled={!isDirty || isSaving}>
+          <Button
+            size="sm"
+            onClick={handleSave}
+            disabled={!isDirty || isSaving}
+            variant={isDirty ? "default" : "outline"}
+            className={cn(isDirty && "animate-pulse")}
+          >
             {isSaving ? (
               <Loader2 className="mr-2 h-4 w-4 animate-spin" />
             ) : (
               <Save className="mr-2 h-4 w-4" />
             )}
-            Save
+            {isDirty ? "Save Changes" : "Saved"}
           </Button>
         </div>
       </div>

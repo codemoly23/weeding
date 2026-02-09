@@ -357,6 +357,7 @@ license-server/
 │   │   │   ├── licenses/
 │   │   │   │   ├── page.tsx            # License list
 │   │   │   │   ├── [id]/page.tsx       # License detail
+│   │   │   │   ├── [id]/edit/page.tsx  # License edit
 │   │   │   │   └── new/page.tsx        # Generate license
 │   │   │   ├── products/
 │   │   │   │   ├── page.tsx            # Product list
@@ -985,7 +986,39 @@ Authorization: Bearer {session_token}
 // Get single license with all details
 
 // PUT /api/licenses/{id}
-// Update license (status, notes, expiry, etc.)
+// Update license (status, tier, notes, expiry, domains, etc.)
+// Request
+{
+  "status": "ACTIVE",              // Optional: ACTIVE | EXPIRED | SUSPENDED | REVOKED | REFUNDED
+  "tier": "PROFESSIONAL",          // Optional: STANDARD | PROFESSIONAL | ENTERPRISE | DEVELOPER
+  "customerEmail": "new@email.com",// Optional: Update customer email
+  "customerName": "New Name",      // Optional: Update customer name
+  "domainLockMode": "LOCKED",      // Optional: LOCKED | UNLOCKED
+  "maxDomains": 5,                 // Optional: Override tier default
+  "expiresAt": "2027-02-01T00:00:00Z", // Optional: null = lifetime
+  "supportExpiresAt": "2027-08-01T00:00:00Z", // Optional
+  "features": ["chat", "tickets", "email-support", "ai-responses", "analytics"], // Optional: Override tier defaults
+  "notes": "Updated by admin",     // Optional
+  "reason": "Customer requested upgrade" // Optional: Logged in activity
+}
+
+// Response
+{
+  "success": true,
+  "license": {
+    "id": "clx...",
+    "licenseKey": "LSP-PRO-A7B2K9M3-4X2Q",
+    "status": "ACTIVE",
+    "tier": "PROFESSIONAL",
+    "customerEmail": "new@email.com",
+    "customerName": "New Name",
+    "updatedAt": "2026-02-08T10:00:00Z"
+  },
+  "changes": [
+    { "field": "tier", "from": "STANDARD", "to": "PROFESSIONAL" },
+    { "field": "customerEmail", "from": "old@email.com", "to": "new@email.com" }
+  ]
+}
 
 // DELETE /api/licenses/{id}
 // Permanently delete license
@@ -1294,6 +1327,114 @@ Authorization: Bearer {session_token}
 │                                                                          │
 └─────────────────────────────────────────────────────────────────────────┘
 ```
+
+### License Edit
+
+Route: `/admin/licenses/[id]/edit`
+
+Clicking [Edit] from the License List or License Detail page navigates here. Pre-populates all fields from the existing license. Changes are logged in the activity log with a reason.
+
+```
+┌─────────────────────────────────────────────────────────────────────────┐
+│  ← Back to License Detail    Edit License: LSP-PRO-A7B2K9M3-4X2Q       │
+├─────────────────────────────────────────────────────────────────────────┤
+│                                                                          │
+│  ┌─────────────────────────────────┐  ┌─────────────────────────────┐  │
+│  │  LICENSE INFO                    │  │  CURRENT STATUS              │  │
+│  │                                  │  │                              │  │
+│  │  License Key (read-only)         │  │  Status *                    │  │
+│  │  LSP-PRO-A7B2K9M3-4X2Q     📋   │  │  [ACTIVE                  ▼] │  │
+│  │                                  │  │   ACTIVE                     │  │
+│  │  Product (read-only)             │  │   SUSPENDED                  │  │
+│  │  LiveSupport Pro                 │  │   REVOKED                    │  │
+│  │                                  │  │   EXPIRED                    │  │
+│  │  Created                         │  │   REFUNDED                   │  │
+│  │  Feb 1, 2026                     │  │                              │  │
+│  └─────────────────────────────────┘  └─────────────────────────────┘  │
+│                                                                          │
+│  LICENSE TIER & FEATURES                                                │
+│  ┌───────────────────────────────────────────────────────────────────┐  │
+│  │  License Tier *                                                    │  │
+│  │  ┌─────────────────────────────────────────────────────────────┐  │  │
+│  │  │  ○ STANDARD ($49)   - 1 domain, basic features              │  │  │
+│  │  │  ◉ PROFESSIONAL ($99) - 3 domains, all features             │  │  │
+│  │  │  ○ ENTERPRISE ($249) - Unlimited domains, priority support  │  │  │
+│  │  │  ○ DEVELOPER ($499)  - Unlimited, resale rights, source     │  │  │
+│  │  └─────────────────────────────────────────────────────────────┘  │  │
+│  │                                                                    │  │
+│  │  Features (auto-populated from tier, editable for overrides)      │  │
+│  │  ┌─────────────────────────────────────────────────────────────┐  │  │
+│  │  │  ☑ chat  ☑ tickets  ☑ email-support                        │  │  │
+│  │  │  ☑ ai-responses  ☑ analytics                                │  │  │
+│  │  │  ☐ white-label  ☐ priority-support                          │  │  │
+│  │  │  ☐ source-code  ☐ resale-rights                             │  │  │
+│  │  └─────────────────────────────────────────────────────────────┘  │  │
+│  │  ⓘ Changing tier auto-updates features. Manual overrides persist. │  │
+│  └───────────────────────────────────────────────────────────────────┘  │
+│                                                                          │
+│  DOMAIN SETTINGS                                                        │
+│  ┌───────────────────────────────────────────────────────────────────┐  │
+│  │  Domain Lock Mode *                                                │  │
+│  │  ◉ LOCKED    ○ UNLOCKED                                           │  │
+│  │                                                                    │  │
+│  │  Max Domains                                                       │  │
+│  │  [3          ] (tier default: 3)                                   │  │
+│  │                                                                    │  │
+│  │  ⚠️ Current activations: 2 domains                                 │  │
+│  │  Reducing below 2 will NOT auto-deactivate existing domains.      │  │
+│  └───────────────────────────────────────────────────────────────────┘  │
+│                                                                          │
+│  CUSTOMER INFO                                                          │
+│  ┌─────────────────────────────────┐  ┌─────────────────────────────┐  │
+│  │  Customer Email *                │  │  Customer Name               │  │
+│  │  [john@email.com             ]  │  │  [John Doe                ]  │  │
+│  └─────────────────────────────────┘  └─────────────────────────────┘  │
+│                                                                          │
+│  ┌─────────────────────────────────┐  ┌─────────────────────────────┐  │
+│  │  Order ID                        │  │  Order Source                │  │
+│  │  [envato-12345678            ]  │  │  [CodeCanyon              ▼] │  │
+│  └─────────────────────────────────┘  └─────────────────────────────┘  │
+│                                                                          │
+│  DATES                                                                  │
+│  ┌─────────────────────────────────┐  ┌─────────────────────────────┐  │
+│  │  License Expiration              │  │  Support Expiration          │  │
+│  │  ◉ Lifetime (Never)             │  │  [2027-02-01            📅]  │  │
+│  │  ○ Custom: [____________]       │  │                              │  │
+│  └─────────────────────────────────┘  └─────────────────────────────┘  │
+│                                                                          │
+│  INTERNAL NOTES                                                         │
+│  ┌───────────────────────────────────────────────────────────────────┐  │
+│  │  VIP customer, extended support period.                            │  │
+│  │  Contact: +1-234-567-8900                                         │  │
+│  └───────────────────────────────────────────────────────────────────┘  │
+│                                                                          │
+│  CHANGE REASON                                                          │
+│  ┌───────────────────────────────────────────────────────────────────┐  │
+│  │  Customer requested upgrade to Professional tier                   │  │
+│  └───────────────────────────────────────────────────────────────────┘  │
+│  ⓘ This will be logged in the license activity history.               │
+│                                                                          │
+│  ┌───────────────────────────────────────────────────────────────────┐  │
+│  │  Changes Preview                                                   │  │
+│  │  ─────────────                                                     │  │
+│  │  • Tier: STANDARD → PROFESSIONAL                                   │  │
+│  │  • Max Domains: 1 → 3                                              │  │
+│  │  • Features: +ai-responses, +analytics                             │  │
+│  │  • Support Until: Aug 1, 2026 → Feb 1, 2027                       │  │
+│  └───────────────────────────────────────────────────────────────────┘  │
+│                                                                          │
+│                               [Cancel]  [Save Changes]                  │
+│                                                                          │
+└─────────────────────────────────────────────────────────────────────────┘
+```
+
+**Key behaviors:**
+- License Key and Product are **read-only** (cannot be changed after creation)
+- Changing tier auto-populates features and max domains from the product tier definition
+- Features can be manually overridden (e.g., grant `ai-responses` to a STANDARD license)
+- "Changes Preview" shows a diff of all modified fields before saving
+- "Change Reason" is required when changing status or tier (logged in activity)
+- Reducing max domains below current activation count shows a warning but allows it
 
 ---
 

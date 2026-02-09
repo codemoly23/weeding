@@ -170,7 +170,7 @@ export function SupportSettingsClient({
   const [isSaving, setIsSaving] = useState(false);
   const [hasChanges, setHasChanges] = useState(false);
 
-  const hasAiFeature = features.includes("ai");
+  const hasAiFeature = features.includes("ai-responses");
   const hasChatFeature = features.includes("chat");
 
   const fetchSettings = useCallback(async () => {

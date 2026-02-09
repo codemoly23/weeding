@@ -18,6 +18,7 @@ import { TrustBadgesWidget } from "../widgets/social-proof/trust-badges";
 import { StatsSectionWidget } from "../widgets/social-proof/stats-section";
 import { TestimonialsWidget } from "../widgets/social-proof/testimonials-widget";
 import { DividerWidget } from "../widgets/layout/divider-widget";
+import { FaqAccordionWidget } from "../widgets/layout/faq-accordion-widget";
 import { LeadFormWidget } from "../widgets/forms/lead-form-widget";
 import { PricingTableWidget } from "../widgets/commerce/pricing-table-widget";
 import { ServiceCardWidget } from "../widgets/commerce/service-card-widget";
@@ -25,6 +26,10 @@ import { ServiceListWidget } from "../widgets/commerce/service-list-widget";
 
 // Service widgets
 import { ServiceHeroWidget } from "../widgets/service/service-hero";
+import { ServiceFeaturesWidget } from "../widgets/service/service-features";
+import { ServiceDescriptionWidget } from "../widgets/service/service-description";
+import { ServiceBreadcrumbWidget } from "../widgets/service/service-breadcrumb";
+import { RelatedServicesWidget } from "../widgets/service/related-services";
 
 // Blog widgets
 import {
@@ -69,9 +74,14 @@ const WIDGET_COMPONENTS: Partial<Record<WidgetType, React.ComponentType<any>>> =
 
   // Layout widgets
   "divider": DividerWidget,
+  "faq": FaqAccordionWidget,
 
   // Service widgets
   "service-hero": ServiceHeroWidget,
+  "service-features": ServiceFeaturesWidget,
+  "service-description": ServiceDescriptionWidget,
+  "service-breadcrumb": ServiceBreadcrumbWidget,
+  "related-services": RelatedServicesWidget,
 
   // Blog widgets
   "blog-post-grid": BlogPostGridWidget,

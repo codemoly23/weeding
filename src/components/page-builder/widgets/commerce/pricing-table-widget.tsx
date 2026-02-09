@@ -30,7 +30,7 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
-import { StateSelector, type State } from "@/components/ui/state-selector";
+import { LocationSelector, type LocationItem } from "@/components/ui/location-selector";
 import {
   Collapsible,
   CollapsibleContent,
@@ -249,8 +249,8 @@ function SectionHeader({ settings }: { settings: PricingTableWidgetSettings }) {
 interface OrderSummaryProps {
   settings: PricingTableWidgetSettings;
   selectedPackage: Package | undefined;
-  selectedState: State | null;
-  stateFee: number;
+  selectedLocation: LocationItem | null;
+  locationFee: number;
   selectedAddons: SelectedAddon[];
   grandTotal: number;
   serviceSlug: string;
@@ -259,8 +259,8 @@ interface OrderSummaryProps {
 function OrderSummary({
   settings,
   selectedPackage,
-  selectedState,
-  stateFee,
+  selectedLocation,
+  locationFee,
   selectedAddons,
   grandTotal,
   serviceSlug,
@@ -275,7 +275,7 @@ function OrderSummary({
   };
 
   const checkoutUrl = `/checkout/${serviceSlug}?package=${getPackageSlug(selectedPackage)}${
-    selectedState?.code ? `&state=${selectedState.code}` : ""
+    selectedLocation?.code ? `&location=${selectedLocation.code}` : ""
   }${
     selectedAddons.length > 0
       ? `&addons=${selectedAddons.map((a) => a.featureId).join(",")}`
@@ -303,12 +303,12 @@ function OrderSummary({
             </div>
           )}
 
-          {orderSummary.showStateFee && selectedState && stateFee > 0 && (
+          {orderSummary.showStateFee && selectedLocation && locationFee > 0 && (
             <div className="flex justify-between text-sm">
               <span className="text-gray-600">
-                {selectedState.name} State Fee:
+                {selectedLocation.name} {settings.stateFee.label || "Fee"}:
               </span>
-              <span className="font-medium">${stateFee}</span>
+              <span className="font-medium">${locationFee}</span>
             </div>
           )}
 
@@ -370,21 +370,21 @@ function OrderSummary({
 interface MobileOrderSummaryProps {
   settings: PricingTableWidgetSettings;
   selectedPackage: Package | undefined;
-  stateFee: number;
+  locationFee: number;
   selectedAddons: SelectedAddon[];
   grandTotal: number;
   serviceSlug: string;
-  selectedState: State | null;
+  selectedLocation: LocationItem | null;
 }
 
 function MobileOrderSummary({
   settings,
   selectedPackage,
-  stateFee,
+  locationFee,
   selectedAddons,
   grandTotal,
   serviceSlug,
-  selectedState,
+  selectedLocation,
 }: MobileOrderSummaryProps) {
   const { orderSummary, ctaButtons } = settings;
 
@@ -396,7 +396,7 @@ function MobileOrderSummary({
   };
 
   const checkoutUrl = `/checkout/${serviceSlug}?package=${getPackageSlug(selectedPackage)}${
-    selectedState?.code ? `&state=${selectedState.code}` : ""
+    selectedLocation?.code ? `&location=${selectedLocation.code}` : ""
   }${
     selectedAddons.length > 0
       ? `&addons=${selectedAddons.map((a) => a.featureId).join(",")}`
@@ -415,10 +415,10 @@ function MobileOrderSummary({
             <span className="font-medium">${selectedPackage.price}</span>
           </div>
         )}
-        {orderSummary.showStateFee && stateFee > 0 && (
+        {orderSummary.showStateFee && locationFee > 0 && (
           <div className="flex justify-between">
-            <span>State Fee:</span>
-            <span className="font-medium">${stateFee}</span>
+            <span>{settings.stateFee.label || "Location Fee"}:</span>
+            <span className="font-medium">${locationFee}</span>
           </div>
         )}
         {orderSummary.showAddons &&
@@ -469,7 +469,7 @@ interface ComparisonTableProps {
   packages: Package[];
   selectedPackageId: string | null;
   onPackageSelect: (packageId: string) => void;
-  stateFee: number;
+  locationFee: number;
   selectedAddons: SelectedAddon[];
   onToggleAddon: (
     featureId: string,
@@ -488,7 +488,7 @@ function ComparisonTable({
   packages,
   selectedPackageId,
   onPackageSelect,
-  stateFee,
+  locationFee,
   selectedAddons,
   onToggleAddon,
   isAddonSelected,
@@ -730,9 +730,9 @@ function ComparisonTable({
                       </div>
                     )}
 
-                    {stateFee > 0 && (
+                    {locationFee > 0 && (
                       <div className="text-xs text-gray-500 mt-1">
-                        + ${stateFee} state fee
+                        + ${locationFee} {settings.stateFee.label?.toLowerCase() || "location fee"}
                       </div>
                     )}
 
@@ -874,7 +874,7 @@ interface MobilePackageCardsProps {
   features: ComparisonFeature[];
   selectedPackageId: string | null;
   onPackageSelect: (packageId: string) => void;
-  stateFee: number;
+  locationFee: number;
 }
 
 function MobilePackageCards({
@@ -883,7 +883,7 @@ function MobilePackageCards({
   features,
   selectedPackageId,
   onPackageSelect,
-  stateFee,
+  locationFee,
 }: MobilePackageCardsProps) {
   const { responsive } = settings;
 
@@ -924,8 +924,8 @@ function MobilePackageCards({
               <div className="text-center mb-4">
                 <h3 className="text-xl font-semibold">{pkg.name}</h3>
                 <p className="text-3xl font-bold mt-1">${pkg.price}</p>
-                {stateFee > 0 && (
-                  <p className="text-xs text-gray-500">+ ${stateFee} state fee</p>
+                {locationFee > 0 && (
+                  <p className="text-xs text-gray-500">+ ${locationFee} {settings.stateFee.label?.toLowerCase() || "location fee"}</p>
                 )}
                 {pkg.processingTime && (
                   <div className="flex items-center justify-center gap-1 mt-2 text-xs text-gray-500">
@@ -1015,7 +1015,7 @@ export function PricingTableWidget({
   const [error, setError] = useState<string | null>(null);
 
   const [selectedPackageId, setSelectedPackageId] = useState<string | null>(null);
-  const [selectedState, setSelectedState] = useState<State | null>(null);
+  const [selectedLocation, setSelectedLocation] = useState<LocationItem | null>(null);
   const [selectedAddons, setSelectedAddons] = useState<SelectedAddon[]>([]);
   const [expandedFeature, setExpandedFeature] = useState<string | null>(null);
 
@@ -1069,10 +1069,10 @@ export function PricingTableWidget({
     [serviceData?.packages, selectedPackageId]
   );
 
-  // Get state fee
-  const stateFee = useMemo(
-    () => selectedState?.fee || 0,
-    [selectedState]
+  // Get location fee
+  const locationFee = useMemo(
+    () => selectedLocation?.fee || 0,
+    [selectedLocation]
   );
 
   // Calculate totals
@@ -1082,8 +1082,8 @@ export function PricingTableWidget({
   );
 
   const grandTotal = useMemo(
-    () => (selectedPackage?.price || 0) + stateFee + addonsTotal,
-    [selectedPackage, stateFee, addonsTotal]
+    () => (selectedPackage?.price || 0) + locationFee + addonsTotal,
+    [selectedPackage, locationFee, addonsTotal]
   );
 
   // Toggle addon selection
@@ -1192,14 +1192,16 @@ export function PricingTableWidget({
     <div className="w-full">
       <SectionHeader settings={settings} />
 
-      {/* State Selector */}
+      {/* Location Selector */}
       {settings.stateFee.enabled && (
         <div className="mb-6 flex items-center gap-3">
           <span className="text-sm font-medium">{settings.stateFee.label}:</span>
-          <StateSelector
-            value={selectedState}
-            onChange={setSelectedState}
-            placeholder="Select your state..."
+          <LocationSelector
+            value={selectedLocation}
+            onChange={setSelectedLocation}
+            serviceId={serviceData?.id}
+            placeholder="Select location..."
+            feeLabel={settings.stateFee.label || "fee"}
             className="w-64"
           />
         </div>
@@ -1213,8 +1215,8 @@ export function PricingTableWidget({
           packages={serviceData.packages}
           selectedPackageId={selectedPackageId}
           onPackageSelect={handlePackageSelect}
-          selectedState={selectedState}
-          stateFee={stateFee}
+          selectedLocation={selectedLocation}
+          locationFee={locationFee}
           serviceSlug={serviceData.slug}
         />
       )}
@@ -1229,7 +1231,7 @@ export function PricingTableWidget({
               packages={serviceData.packages}
               selectedPackageId={selectedPackageId}
               onPackageSelect={handlePackageSelect}
-              stateFee={stateFee}
+              locationFee={locationFee}
               selectedAddons={selectedAddons}
               onToggleAddon={toggleAddon}
               isAddonSelected={isAddonSelected}
@@ -1240,8 +1242,8 @@ export function PricingTableWidget({
             <OrderSummary
               settings={settings}
               selectedPackage={selectedPackage}
-              selectedState={selectedState}
-              stateFee={stateFee}
+              selectedLocation={selectedLocation}
+              locationFee={locationFee}
               selectedAddons={selectedAddons}
               grandTotal={grandTotal}
               serviceSlug={serviceData.slug}
@@ -1253,11 +1255,11 @@ export function PricingTableWidget({
             <MobileOrderSummary
               settings={settings}
               selectedPackage={selectedPackage}
-              stateFee={stateFee}
+              locationFee={locationFee}
               selectedAddons={selectedAddons}
               grandTotal={grandTotal}
               serviceSlug={serviceData.slug}
-              selectedState={selectedState}
+              selectedLocation={selectedLocation}
             />
 
             <MobilePackageCards
@@ -1266,7 +1268,7 @@ export function PricingTableWidget({
               features={serviceData.comparisonFeatures}
               selectedPackageId={selectedPackageId}
               onPackageSelect={handlePackageSelect}
-              stateFee={stateFee}
+              locationFee={locationFee}
             />
           </div>
         </>

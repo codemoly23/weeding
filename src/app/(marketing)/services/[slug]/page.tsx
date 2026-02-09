@@ -23,11 +23,12 @@ import prisma from "@/lib/db";
 import type { FeatureValueType } from "@prisma/client";
 import {
   ServiceProvider,
-  filterSectionsByDisplayOptions,
-  DEFAULT_DISPLAY_OPTIONS,
   type ServiceData as ServiceContextData,
-  type ServiceDisplayOptions,
 } from "@/lib/page-builder/contexts/service-context";
+import {
+  filterSectionsByDisplayOptions,
+  type ServiceDisplayOptions,
+} from "@/lib/page-builder/display-options";
 import { getActiveTemplateForType } from "@/lib/data/templates";
 import { PageBuilderRenderer } from "@/components/page-builder/renderer";
 
@@ -65,12 +66,6 @@ interface PackageData {
   badgeColor: string | null;
 }
 
-interface StateFee {
-  stateCode: string;
-  stateName: string;
-  llcFee: number;
-}
-
 interface ServiceData {
   id: string;
   slug: string;
@@ -92,7 +87,8 @@ interface ServiceData {
     question: string;
     answer: string;
   }[];
-  stateFees: StateFee[];
+  hasLocationBasedPricing: boolean;
+  locationFeeLabel: string | null;
   displayOptions: Partial<ServiceDisplayOptions>;
 }
 
@@ -155,24 +151,6 @@ async function getService(slug: string): Promise<ServiceData | null> {
 
     if (!service) return null;
 
-    // Fetch state fees for LLC formation services
-    let stateFees: StateFee[] = [];
-    if (slug === "llc-formation") {
-      const fees = await prisma.stateFee.findMany({
-        orderBy: [{ isPopular: "desc" }, { stateName: "asc" }],
-        select: {
-          stateCode: true,
-          stateName: true,
-          llcFee: true,
-        },
-      });
-      stateFees = fees.map((f) => ({
-        stateCode: f.stateCode,
-        stateName: f.stateName,
-        llcFee: Number(f.llcFee),
-      }));
-    }
-
     return {
       id: service.id,
       slug: service.slug,
@@ -215,7 +193,8 @@ async function getService(slug: string): Promise<ServiceData | null> {
         badgeColor: p.badgeColor,
       })),
       faqs: service.faqs,
-      stateFees,
+      hasLocationBasedPricing: service.hasLocationBasedPricing,
+      locationFeeLabel: service.locationFeeLabel,
       displayOptions: (service.displayOptions as Partial<ServiceDisplayOptions>) || {},
     };
   } catch (error) {
@@ -492,6 +471,9 @@ export default async function ServicePage({ params }: PageProps) {
                     checkoutUrl: getPackageCheckoutUrl(pkg.name),
                   }))}
                   serviceSlug={service.slug}
+                  serviceId={service.id}
+                  hasLocationBasedPricing={service.hasLocationBasedPricing}
+                  locationFeeLabel={service.locationFeeLabel}
                 />
               ) : (
                 // Fallback: Simple package cards if no comparison data

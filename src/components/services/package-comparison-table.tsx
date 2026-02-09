@@ -13,7 +13,7 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
-import { StateSelector, type State } from "@/components/ui/state-selector";
+import { LocationSelector, type LocationItem } from "@/components/ui/location-selector";
 import {
   Collapsible,
   CollapsibleContent,
@@ -68,18 +68,24 @@ interface PackageComparisonTableProps {
   features: ComparisonFeature[];
   packages: Package[];
   serviceSlug?: string;
+  serviceId?: string;
+  hasLocationBasedPricing?: boolean;
+  locationFeeLabel?: string | null;
 }
 
 export function PackageComparisonTable({
   features,
   packages,
   serviceSlug = "",
+  serviceId,
+  hasLocationBasedPricing = false,
+  locationFeeLabel,
 }: PackageComparisonTableProps) {
   // State management
   const [selectedPackageId, setSelectedPackageId] = useState<string | null>(
     packages.find((p) => p.isPopular)?.id || packages[0]?.id || null
   );
-  const [selectedState, setSelectedState] = useState<State | null>(null);
+  const [selectedLocation, setSelectedLocation] = useState<LocationItem | null>(null);
   const [selectedAddons, setSelectedAddons] = useState<SelectedAddon[]>([]);
   const [expandedFeature, setExpandedFeature] = useState<string | null>(null);
 
@@ -95,10 +101,10 @@ export function PackageComparisonTable({
     return pkg.name.toLowerCase().replace(/\s+/g, "-");
   };
 
-  // Get state fee from selected state
-  const stateFee = useMemo(
-    () => selectedState?.fee || 0,
-    [selectedState]
+  // Get location fee from selected location
+  const locationFee = useMemo(
+    () => selectedLocation?.fee || 0,
+    [selectedLocation]
   );
 
   // Calculate totals
@@ -108,8 +114,8 @@ export function PackageComparisonTable({
   );
 
   const grandTotal = useMemo(
-    () => (selectedPackage?.price || 0) + stateFee + addonsTotal,
-    [selectedPackage, stateFee, addonsTotal]
+    () => (selectedPackage?.price || 0) + locationFee + addonsTotal,
+    [selectedPackage, locationFee, addonsTotal]
   );
 
   // Toggle addon selection
@@ -243,16 +249,22 @@ export function PackageComparisonTable({
 
   return (
     <div className="w-full">
-      {/* State Selector */}
-      <div className="mb-6 flex items-center gap-3">
-        <span className="text-sm font-medium">Select State:</span>
-        <StateSelector
-          value={selectedState}
-          onChange={setSelectedState}
-          placeholder="Select your state..."
-          className="w-64"
-        />
-      </div>
+      {/* Location Selector */}
+      {hasLocationBasedPricing && (
+        <div className="mb-6 flex items-center gap-3">
+          <span className="text-sm font-medium">
+            {locationFeeLabel ? `Select ${locationFeeLabel.replace(/ Fee$/i, "")}:` : "Select Location:"}
+          </span>
+          <LocationSelector
+            value={selectedLocation}
+            onChange={setSelectedLocation}
+            serviceId={serviceId}
+            placeholder={locationFeeLabel ? `Select your ${locationFeeLabel.replace(/ Fee$/i, "").toLowerCase()}...` : "Select location..."}
+            feeLabel={locationFeeLabel || "fee"}
+            className="w-64"
+          />
+        </div>
+      )}
 
       <div className="flex gap-6">
         {/* Main Comparison Table */}
@@ -327,10 +339,10 @@ export function PackageComparisonTable({
                           ${pkg.price}
                         </div>
 
-                        {/* State Fee Note */}
-                        {stateFee > 0 && (
+                        {/* Location Fee Note */}
+                        {locationFee > 0 && (
                           <div className="text-xs text-gray-500 mt-1">
-                            + ${stateFee} state fee
+                            + ${locationFee} {locationFeeLabel?.toLowerCase() || "location fee"}
                           </div>
                         )}
 
@@ -463,13 +475,13 @@ export function PackageComparisonTable({
                 </div>
               )}
 
-              {/* State Fee */}
-              {selectedState && stateFee > 0 && (
+              {/* Location Fee */}
+              {selectedLocation && locationFee > 0 && (
                 <div className="flex justify-between text-sm">
                   <span className="text-gray-600">
-                    {selectedState.name} State Fee:
+                    {selectedLocation.name} {locationFeeLabel || "Fee"}:
                   </span>
-                  <span className="font-medium">${stateFee}</span>
+                  <span className="font-medium">${locationFee}</span>
                 </div>
               )}
 
@@ -502,7 +514,7 @@ export function PackageComparisonTable({
                 asChild
               >
                 <Link
-                  href={`/checkout/${serviceSlug}?package=${getPackageSlug(selectedPackage)}${selectedState?.code ? `&state=${selectedState.code}` : ""}${selectedAddons.length > 0 ? `&addons=${selectedAddons.map((a) => a.featureId).join(",")}` : ""}`}
+                  href={`/checkout/${serviceSlug}?package=${getPackageSlug(selectedPackage)}${selectedLocation?.code ? `&location=${selectedLocation.code}` : ""}${selectedAddons.length > 0 ? `&addons=${selectedAddons.map((a) => a.featureId).join(",")}` : ""}`}
                 >
                   Get Started
                 </Link>
@@ -534,10 +546,10 @@ export function PackageComparisonTable({
                 <span className="font-medium">${selectedPackage.price}</span>
               </div>
             )}
-            {stateFee > 0 && (
+            {locationFee > 0 && (
               <div className="flex justify-between">
-                <span>State Fee:</span>
-                <span className="font-medium">${stateFee}</span>
+                <span>{locationFeeLabel || "Location Fee"}:</span>
+                <span className="font-medium">${locationFee}</span>
               </div>
             )}
             {selectedAddons.map((addon) => (
@@ -558,7 +570,7 @@ export function PackageComparisonTable({
           <CardFooter>
             <Button className="w-full bg-orange-500 hover:bg-orange-600" asChild>
               <Link
-                href={`/checkout/${serviceSlug}?package=${getPackageSlug(selectedPackage)}${selectedState?.code ? `&state=${selectedState.code}` : ""}${selectedAddons.length > 0 ? `&addons=${selectedAddons.map((a) => a.featureId).join(",")}` : ""}`}
+                href={`/checkout/${serviceSlug}?package=${getPackageSlug(selectedPackage)}${selectedLocation?.code ? `&location=${selectedLocation.code}` : ""}${selectedAddons.length > 0 ? `&addons=${selectedAddons.map((a) => a.featureId).join(",")}` : ""}`}
               >
                 Get Started - ${grandTotal}
               </Link>
@@ -604,8 +616,8 @@ export function PackageComparisonTable({
                 <div className="text-center mb-4">
                   <h3 className="text-xl font-semibold">{pkg.name}</h3>
                   <p className="text-3xl font-bold mt-1">${pkg.price}</p>
-                  {stateFee > 0 && (
-                    <p className="text-xs text-gray-500">+ ${stateFee} state fee</p>
+                  {locationFee > 0 && (
+                    <p className="text-xs text-gray-500">+ ${locationFee} {locationFeeLabel?.toLowerCase() || "location fee"}</p>
                   )}
                   {pkg.processingTime && (
                     <div className="flex items-center justify-center gap-1 mt-2 text-xs text-gray-500">

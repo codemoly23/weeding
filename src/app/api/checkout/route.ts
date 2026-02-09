@@ -6,7 +6,8 @@ const checkoutSchema = z.object({
   orderId: z.string().optional(), // Order number for existing orders
   serviceId: z.string(),
   packageId: z.string(),
-  stateCode: z.string().optional(),
+  locationCode: z.string().optional(),
+  stateCode: z.string().optional(), // Backward compat
   llcName: z.string().optional(),
   llcActivity: z.string().optional(),
   members: z.array(
@@ -24,7 +25,10 @@ const checkoutSchema = z.object({
   }),
   total: z.number(),
   serviceFee: z.number(),
-  stateFee: z.number(),
+  locationFee: z.number().optional(),
+  stateFee: z.number().optional(), // Backward compat
+  locationName: z.string().optional(),
+  locationFeeLabel: z.string().optional(),
 });
 
 export async function POST(request: NextRequest) {
@@ -34,30 +38,42 @@ export async function POST(request: NextRequest) {
     // Validate request body
     const validatedData = checkoutSchema.parse(body);
 
+    // Resolve location code and fee
+    const resolvedLocationCode = validatedData.locationCode || validatedData.stateCode || "";
+    const resolvedLocationFee = validatedData.locationFee ?? validatedData.stateFee ?? 0;
+    const resolvedLocationName = validatedData.locationName || resolvedLocationCode;
+    const feeLabel = validatedData.locationFeeLabel || "Filing Fee";
+
     // Create line items for Stripe
     const lineItems = [
       {
         price_data: {
           currency: "usd",
           product_data: {
-            name: `LLC Formation - ${validatedData.packageId.charAt(0).toUpperCase() + validatedData.packageId.slice(1)} Package`,
-            description: `${validatedData.stateCode} LLC Formation for ${validatedData.llcName}`,
+            name: `Service - ${validatedData.packageId.charAt(0).toUpperCase() + validatedData.packageId.slice(1)} Package`,
+            description: validatedData.llcName
+              ? `${resolvedLocationName} Formation for ${validatedData.llcName}`
+              : "Service package",
           },
           unit_amount: validatedData.serviceFee * 100, // Convert to cents
         },
         quantity: 1,
       },
-      {
-        price_data: {
-          currency: "usd",
-          product_data: {
-            name: `State Filing Fee - ${validatedData.stateCode}`,
-            description: `Official state filing fee for ${validatedData.stateCode}`,
-          },
-          unit_amount: validatedData.stateFee * 100, // Convert to cents
-        },
-        quantity: 1,
-      },
+      ...(resolvedLocationFee > 0
+        ? [
+            {
+              price_data: {
+                currency: "usd",
+                product_data: {
+                  name: `${feeLabel} - ${resolvedLocationName}`,
+                  description: `Official ${feeLabel.toLowerCase()} for ${resolvedLocationName}`,
+                },
+                unit_amount: resolvedLocationFee * 100, // Convert to cents
+              },
+              quantity: 1,
+            },
+          ]
+        : []),
     ];
 
     // Create Stripe checkout session
@@ -68,7 +84,8 @@ export async function POST(request: NextRequest) {
         orderId: validatedData.orderId || "",
         serviceId: validatedData.serviceId,
         packageId: validatedData.packageId,
-        stateCode: validatedData.stateCode || "",
+        locationCode: resolvedLocationCode,
+        stateCode: validatedData.stateCode || "", // Backward compat
         llcName: validatedData.llcName || "",
         llcActivity: validatedData.llcActivity || "",
         customerName: validatedData.contactInfo.fullName,

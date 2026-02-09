@@ -213,7 +213,7 @@ export default async function StateLandingPage({ params }: PageProps) {
 
           <div className="mt-8 flex flex-wrap justify-center gap-4">
             <Button size="lg" asChild>
-              <Link href={`/checkout?service=llc-formation&state=${stateInfo.code}`}>
+              <Link href={`/checkout?service=llc-formation&location=US-${stateInfo.code}`}>
                 Start Your {stateInfo.name} LLC
                 <ArrowRight className="ml-2 h-4 w-4" />
               </Link>
@@ -310,7 +310,7 @@ export default async function StateLandingPage({ params }: PageProps) {
                     asChild
                   >
                     <Link
-                      href={`/checkout?service=llc-formation&state=${stateInfo.code}&package=${pkg.name.toLowerCase()}`}
+                      href={`/checkout?service=llc-formation&location=US-${stateInfo.code}&package=${pkg.name.toLowerCase()}`}
                     >
                       Choose {pkg.name}
                     </Link>
@@ -412,7 +412,7 @@ export default async function StateLandingPage({ params }: PageProps) {
           </p>
           <div className="mt-8 flex flex-wrap justify-center gap-4">
             <Button size="lg" asChild>
-              <Link href={`/checkout?service=llc-formation&state=${stateInfo.code}`}>
+              <Link href={`/checkout?service=llc-formation&location=US-${stateInfo.code}`}>
                 Start Your {stateInfo.name} LLC - From ${149 + stateInfo.fee}
                 <ArrowRight className="ml-2 h-4 w-4" />
               </Link>
