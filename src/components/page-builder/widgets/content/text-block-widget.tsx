@@ -203,10 +203,8 @@ export function TextBlockWidget({
       styles.backgroundColor = settings.container.backgroundColor || undefined;
     }
 
-    // Border (skip solid border if gradient border is active)
-    if (settings.container.border && !hasGradientBorder) {
-      styles.border = `${settings.container.border.width}px ${settings.container.border.style} ${settings.container.border.color}`;
-    }
+    // Border is only used as metadata for gradient border width — don't render as solid border
+    // (there is no independent solid border control in the settings UI)
 
     // When gradient border is active, adjust inner border radius
     if (hasGradientBorder) {

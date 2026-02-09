@@ -934,7 +934,7 @@ export function TextBlockWidgetSettingsPanel({
                       colors: settings.container.gradientBorder?.colors || ["#f97316", "#8b5cf6"],
                       angle: settings.container.gradientBorder?.angle || 135,
                     },
-                    // Initialize border width if not set
+                    // Initialize border width when enabling, clear border when disabling
                     ...(v && !settings.container.border
                       ? {
                           border: {
@@ -943,7 +943,9 @@ export function TextBlockWidgetSettingsPanel({
                             style: "solid" as const,
                           },
                         }
-                      : {}),
+                      : !v
+                        ? { border: undefined }
+                        : {}),
                   },
                 })
               }
