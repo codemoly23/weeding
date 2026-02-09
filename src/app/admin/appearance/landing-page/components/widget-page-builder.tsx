@@ -297,140 +297,169 @@ export function WidgetPageBuilder({
           </div>
         )}
 
-        {/* Section Content - with overflow-hidden for backgrounds */}
-        <div
-          className={cn(
-            "relative w-full transition-all duration-200 overflow-hidden",
-            isSelected && !isPreviewMode && "ring-2 ring-orange-500 ring-offset-2 ring-offset-slate-900"
-          )}
-          style={{
-            ...backgroundStyles,
-            paddingTop: `${settings.paddingTop}px`,
-            paddingBottom: `${settings.paddingBottom}px`,
-            borderRadius: settings.borderRadius ? `${settings.borderRadius}px` : undefined,
-          }}
-          onClick={(e) => {
-            e.stopPropagation();
-            if (!isPreviewMode) {
-              onSelectionChange({
-                type: "section",
-                sectionId: section.id,
-              });
-            }
-          }}
-        >
-          {/* Video Background */}
-          {background.type === "video" && background.video?.url && (
-            <video
-              autoPlay
-              muted={background.video.muted}
-              loop={background.video.loop}
-              playsInline
-              poster={background.video.poster}
-              className="absolute inset-0 w-full h-full object-cover pointer-events-none"
-            >
-              <source src={background.video.url} type="video/mp4" />
-            </video>
-          )}
+        {/* Section Content - with optional gradient border wrapper */}
+        {(() => {
+          const hasGradientBorder = settings.gradientBorder?.enabled && settings.gradientBorder.colors?.length >= 2;
+          const innerBorderRadius = hasGradientBorder && settings.borderRadius
+            ? Math.max(0, settings.borderRadius - (settings.gradientBorder!.width || 2))
+            : settings.borderRadius;
 
-          {/* Background Overlay - works for all types */}
-          {background.overlay?.enabled && (
+          const sectionContentDiv = (
             <div
-              className="absolute inset-0 pointer-events-none z-1"
+              className={cn(
+                "relative w-full transition-all duration-200 overflow-hidden",
+                isSelected && !isPreviewMode && !hasGradientBorder && "ring-2 ring-orange-500 ring-offset-2 ring-offset-slate-900"
+              )}
               style={{
-                backgroundColor: background.overlay.color,
-                opacity: background.overlay.opacity,
+                ...backgroundStyles,
+                paddingTop: `${settings.paddingTop}px`,
+                paddingBottom: `${settings.paddingBottom}px`,
+                borderRadius: innerBorderRadius ? `${innerBorderRadius}px` : undefined,
               }}
-            />
-          )}
-
-        {/* Container - above overlay */}
-        <div className={cn("relative z-2 mx-auto px-4", !settings.fullWidth && "max-w-7xl")}>
-          {/* Grid */}
-          <div
-            className={cn(
-              "grid",
-              forceMobileLayout ? "grid-cols-1" : getLayoutGridClass(layout)
-            )}
-            style={{ gap: `${settings.gap}px` }}
-          >
-            {columns.map((column, colIndex) => {
-              const isColumnSelected = selection.columnId === column.id;
-              const columnSpan = forceMobileLayout ? "col-span-1" : columnSpanClasses[colIndex];
-
-              return (
-                <div
-                  key={column.id}
-                  className={cn(
-                    "relative flex flex-col min-h-[100px] transition-all duration-200",
-                    column.settings.verticalAlign === "center" && "justify-center",
-                    column.settings.verticalAlign === "bottom" && "justify-end",
-                    !isPreviewMode && "group/column",
-                    isColumnSelected && !isPreviewMode && "ring-2 ring-blue-500 ring-offset-1 ring-offset-slate-900 rounded-md",
-                    columnSpan
-                  )}
-                  style={{
-                    padding: column.settings.padding ? `${column.settings.padding}px` : undefined,
-                    backgroundColor: column.settings.backgroundColor,
-                  }}
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    if (!isPreviewMode) {
-                      onSelectionChange({
-                        type: "column",
-                        sectionId: section.id,
-                        columnId: column.id,
-                      });
-                    }
-                  }}
+              onClick={(e) => {
+                e.stopPropagation();
+                if (!isPreviewMode) {
+                  onSelectionChange({
+                    type: "section",
+                    sectionId: section.id,
+                  });
+                }
+              }}
+            >
+              {/* Video Background */}
+              {background.type === "video" && background.video?.url && (
+                <video
+                  autoPlay
+                  muted={background.video.muted}
+                  loop={background.video.loop}
+                  playsInline
+                  poster={background.video.poster}
+                  className="absolute inset-0 w-full h-full object-cover pointer-events-none"
                 >
-                  {/* Empty State - Droppable Zone */}
-                  {column.widgets.length === 0 && !isPreviewMode && (
-                    <DroppableWidgetZone
-                      sectionId={section.id}
-                      columnId={column.id}
-                      isEmpty={true}
-                      isDraggingWidget={isDraggingWidget}
-                      onRequestAddWidget={() => onRequestAddWidget(section.id, column.id)}
-                    />
-                  )}
+                  <source src={background.video.url} type="video/mp4" />
+                </video>
+              )}
 
-                  {/* Widgets */}
-                  {column.widgets.map((widget) => (
-                    <WidgetWrapper
-                      key={widget.id}
-                      widget={widget}
-                      isSelected={selection.widgetId === widget.id}
-                      onSelect={() =>
-                        onSelectionChange({
-                          type: "widget",
-                          sectionId: section.id,
-                          columnId: column.id,
-                          widgetId: widget.id,
-                        })
-                      }
-                      onDelete={() => onDeleteWidget?.(section.id, column.id, widget.id)}
-                      onDuplicate={() => onDuplicateWidget?.(section.id, column.id, widget.id)}
-                      isPreview={isPreviewMode}
-                    />
-                  ))}
+              {/* Background Overlay - works for all types */}
+              {background.overlay?.enabled && (
+                <div
+                  className="absolute inset-0 pointer-events-none z-1"
+                  style={{
+                    backgroundColor: background.overlay.color,
+                    opacity: background.overlay.opacity,
+                  }}
+                />
+              )}
 
-                  {/* Add Widget Button (when column has widgets) - Droppable Zone */}
-                  {column.widgets.length > 0 && !isPreviewMode && (
-                    <DroppableWidgetZone
-                      sectionId={section.id}
-                      columnId={column.id}
-                      isEmpty={false}
-                      isDraggingWidget={isDraggingWidget}
-                      onRequestAddWidget={() => onRequestAddWidget(section.id, column.id)}
-                    />
+              {/* Container - above overlay */}
+              <div className={cn("relative z-2 mx-auto px-4", !settings.fullWidth && "max-w-7xl")}>
+                {/* Grid */}
+                <div
+                  className={cn(
+                    "grid",
+                    forceMobileLayout ? "grid-cols-1" : getLayoutGridClass(layout)
                   )}
+                  style={{ gap: `${settings.gap}px` }}
+                >
+                  {columns.map((column, colIndex) => {
+                    const isColumnSelected = selection.columnId === column.id;
+                    const columnSpan = forceMobileLayout ? "col-span-1" : columnSpanClasses[colIndex];
+
+                    return (
+                      <div
+                        key={column.id}
+                        className={cn(
+                          "relative flex flex-col min-h-[100px] transition-all duration-200",
+                          column.settings.verticalAlign === "center" && "justify-center",
+                          column.settings.verticalAlign === "bottom" && "justify-end",
+                          !isPreviewMode && "group/column",
+                          isColumnSelected && !isPreviewMode && "ring-2 ring-blue-500 ring-offset-1 ring-offset-slate-900 rounded-md",
+                          columnSpan
+                        )}
+                        style={{
+                          padding: column.settings.padding ? `${column.settings.padding}px` : undefined,
+                          backgroundColor: column.settings.backgroundColor,
+                        }}
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          if (!isPreviewMode) {
+                            onSelectionChange({
+                              type: "column",
+                              sectionId: section.id,
+                              columnId: column.id,
+                            });
+                          }
+                        }}
+                      >
+                        {/* Empty State - Droppable Zone */}
+                        {column.widgets.length === 0 && !isPreviewMode && (
+                          <DroppableWidgetZone
+                            sectionId={section.id}
+                            columnId={column.id}
+                            isEmpty={true}
+                            isDraggingWidget={isDraggingWidget}
+                            onRequestAddWidget={() => onRequestAddWidget(section.id, column.id)}
+                          />
+                        )}
+
+                        {/* Widgets */}
+                        {column.widgets.map((widget) => (
+                          <WidgetWrapper
+                            key={widget.id}
+                            widget={widget}
+                            isSelected={selection.widgetId === widget.id}
+                            onSelect={() =>
+                              onSelectionChange({
+                                type: "widget",
+                                sectionId: section.id,
+                                columnId: column.id,
+                                widgetId: widget.id,
+                              })
+                            }
+                            onDelete={() => onDeleteWidget?.(section.id, column.id, widget.id)}
+                            onDuplicate={() => onDuplicateWidget?.(section.id, column.id, widget.id)}
+                            isPreview={isPreviewMode}
+                          />
+                        ))}
+
+                        {/* Add Widget Button (when column has widgets) - Droppable Zone */}
+                        {column.widgets.length > 0 && !isPreviewMode && (
+                          <DroppableWidgetZone
+                            sectionId={section.id}
+                            columnId={column.id}
+                            isEmpty={false}
+                            isDraggingWidget={isDraggingWidget}
+                            onRequestAddWidget={() => onRequestAddWidget(section.id, column.id)}
+                          />
+                        )}
+                      </div>
+                    );
+                  })}
                 </div>
-              );
-            })}
-          </div>
-        </div>
-        </div>
+              </div>
+            </div>
+          );
+
+          if (hasGradientBorder) {
+            const { colors, angle, width } = settings.gradientBorder!;
+            return (
+              <div
+                className={cn(
+                  isSelected && !isPreviewMode && "ring-2 ring-orange-500 ring-offset-2 ring-offset-slate-900"
+                )}
+                style={{
+                  padding: `${width || 2}px`,
+                  background: `linear-gradient(${angle}deg, ${colors.join(", ")})`,
+                  borderRadius: settings.borderRadius ? `${settings.borderRadius}px` : undefined,
+                }}
+              >
+                {sectionContentDiv}
+              </div>
+            );
+          }
+
+          return sectionContentDiv;
+        })()}
       </div>
     );
   };

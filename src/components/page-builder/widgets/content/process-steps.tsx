@@ -604,7 +604,30 @@ function StepItem({
 
   const hoverStyles = getHoverStyles();
 
-  return (
+  // Gradient border detection
+  const hasGradientBorder = card.show && card.gradientBorder?.enabled &&
+    card.gradientBorder.colors?.length >= 2;
+
+  // Build card background style
+  const getCardBackground = (): string | undefined => {
+    if (!card.show) return undefined;
+    if (card.backgroundType === "gradient" && card.gradientBackground?.colors?.length) {
+      const { colors, angle } = card.gradientBackground;
+      return `linear-gradient(${angle}deg, ${colors.join(", ")})`;
+    }
+    return undefined;
+  };
+
+  const cardBgColor = card.show && card.backgroundType !== "gradient"
+    ? card.backgroundColor
+    : undefined;
+
+  const cardBorderWidth = hasGradientBorder ? 0 : (card.show ? card.borderWidth : undefined);
+  const innerBorderRadius = hasGradientBorder
+    ? Math.max(0, card.borderRadius - (card.borderWidth || 2))
+    : (card.show ? card.borderRadius : undefined);
+
+  const cardContent = (
     <div
       className={cn(
         "relative group flex flex-col overflow-visible",
@@ -612,17 +635,18 @@ function StepItem({
         card.show && card.hoverEffect !== "none" && "cursor-pointer"
       )}
       style={{
-        backgroundColor: card.show ? card.backgroundColor : undefined,
-        borderRadius: card.show ? `${card.borderRadius}px` : undefined,
-        borderWidth: card.show ? `${card.borderWidth}px` : undefined,
-        borderColor: card.show ? card.borderColor : undefined,
+        background: getCardBackground(),
+        backgroundColor: cardBgColor,
+        borderRadius: card.show ? `${innerBorderRadius}px` : undefined,
+        borderWidth: cardBorderWidth ? `${cardBorderWidth}px` : undefined,
+        borderColor: card.show && !hasGradientBorder ? card.borderColor : undefined,
         padding: card.show ? `${card.padding}px` : undefined,
-        boxShadow: hoverStyles.boxShadow || getBaseShadow(),
-        transform: hoverStyles.transform,
+        boxShadow: !hasGradientBorder ? (hoverStyles.boxShadow || getBaseShadow()) : undefined,
+        transform: !hasGradientBorder ? hoverStyles.transform : undefined,
         transition: "all 0.3s ease",
       }}
-      onMouseEnter={() => setIsHovered(true)}
-      onMouseLeave={() => setIsHovered(false)}
+      onMouseEnter={() => !hasGradientBorder && setIsHovered(true)}
+      onMouseLeave={() => !hasGradientBorder && setIsHovered(false)}
     >
       {/* Icon with Number Badge */}
       {stepIcon.show && (
@@ -705,6 +729,34 @@ function StepItem({
       )}
     </div>
   );
+
+  // Wrap with gradient border if enabled
+  if (hasGradientBorder) {
+    const { colors, angle } = card.gradientBorder!;
+    const borderWidth = card.borderWidth || 2;
+    return (
+      <div
+        className={cn(
+          "overflow-visible",
+          card.hoverEffect !== "none" && "cursor-pointer"
+        )}
+        style={{
+          padding: `${borderWidth}px`,
+          background: `linear-gradient(${angle}deg, ${colors.join(", ")})`,
+          borderRadius: `${card.borderRadius}px`,
+          boxShadow: hoverStyles.boxShadow || getBaseShadow(),
+          transform: hoverStyles.transform,
+          transition: "all 0.3s ease",
+        }}
+        onMouseEnter={() => setIsHovered(true)}
+        onMouseLeave={() => setIsHovered(false)}
+      >
+        {cardContent}
+      </div>
+    );
+  }
+
+  return cardContent;
 }
 
 export function ProcessStepsWidget({

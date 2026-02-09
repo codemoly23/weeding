@@ -78,6 +78,7 @@ export const DEFAULT_SECTION_SETTINGS: SectionSettings = {
   gap: 32,
   maxWidth: "xl",
   borderRadius: 0,
+  gradientBorder: undefined,
 };
 
 // ============================================
@@ -722,9 +723,12 @@ export const DEFAULT_TEXT_BLOCK_SETTINGS: TextBlockWidgetSettings = {
   // Container
   container: {
     backgroundColor: undefined,
+    backgroundType: "solid",
+    gradientBackground: undefined,
     padding: 0,
     borderRadius: 0,
     border: undefined,
+    gradientBorder: undefined,
     shadow: "none",
     maxWidth: undefined,
   },
@@ -1150,9 +1154,12 @@ export const DEFAULT_PROCESS_STEPS_SETTINGS: ProcessStepsWidgetSettings = {
   card: {
     show: false,
     backgroundColor: "transparent",
+    backgroundType: "solid",
+    gradientBackground: undefined,
     borderRadius: 0,
     borderWidth: 0,
     borderColor: "transparent",
+    gradientBorder: undefined,
     padding: 0,
     shadow: "none",
     hoverEffect: "none",

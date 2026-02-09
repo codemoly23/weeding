@@ -99,7 +99,12 @@ function SectionRenderer({ section }: SectionRendererProps) {
     backgroundStyles.backgroundPosition = "center";
   }
 
-  return (
+  const hasGradientBorder = settings.gradientBorder?.enabled && settings.gradientBorder.colors?.length >= 2;
+  const innerBorderRadius = hasGradientBorder && settings.borderRadius
+    ? Math.max(0, settings.borderRadius - (settings.gradientBorder!.width || 2))
+    : settings.borderRadius;
+
+  const sectionContent = (
     <section
       className={cn(
         "relative w-full",
@@ -109,7 +114,7 @@ function SectionRenderer({ section }: SectionRendererProps) {
         ...backgroundStyles,
         paddingTop: `${settings.paddingTop}px`,
         paddingBottom: `${settings.paddingBottom}px`,
-        borderRadius: settings.borderRadius ? `${settings.borderRadius}px` : undefined,
+        borderRadius: innerBorderRadius ? `${innerBorderRadius}px` : undefined,
       }}
     >
       {/* Background Overlay */}
@@ -119,7 +124,7 @@ function SectionRenderer({ section }: SectionRendererProps) {
           style={{
             backgroundColor: settings.backgroundOverlay.color,
             opacity: settings.backgroundOverlay.opacity,
-            borderRadius: settings.borderRadius ? `${settings.borderRadius}px` : undefined,
+            borderRadius: innerBorderRadius ? `${innerBorderRadius}px` : undefined,
           }}
         />
       )}
@@ -147,6 +152,23 @@ function SectionRenderer({ section }: SectionRendererProps) {
       </div>
     </section>
   );
+
+  if (hasGradientBorder) {
+    const { colors, angle, width } = settings.gradientBorder!;
+    return (
+      <div
+        style={{
+          padding: `${width || 2}px`,
+          background: `linear-gradient(${angle}deg, ${colors.join(", ")})`,
+          borderRadius: settings.borderRadius ? `${settings.borderRadius}px` : undefined,
+        }}
+      >
+        {sectionContent}
+      </div>
+    );
+  }
+
+  return sectionContent;
 }
 
 // ============================================

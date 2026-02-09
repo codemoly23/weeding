@@ -22,6 +22,7 @@ import {
   TextAreaInput,
 } from "@/app/admin/appearance/landing-page/components/ui/form-controls";
 import { AccordionSection } from "@/app/admin/appearance/landing-page/components/ui/accordion-section";
+import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
@@ -740,11 +741,86 @@ export function ProcessStepsWidgetSettingsPanel({
           />
           {s.card.show && (
             <>
-              <ColorInput
-                label="Background"
-                value={s.card.backgroundColor || "#ffffff"}
-                onChange={(v) => updateCard({ backgroundColor: v })}
+              {/* Background Type */}
+              <SelectInput
+                label="Background Type"
+                value={s.card.backgroundType || "solid"}
+                onChange={(v) => {
+                  const newType = v as "solid" | "gradient";
+                  updateCard({
+                    backgroundType: newType,
+                    ...(newType === "gradient" && !s.card.gradientBackground
+                      ? {
+                          gradientBackground: {
+                            colors: ["#1e1b4b", "#0f172a"],
+                            angle: 135,
+                          },
+                        }
+                      : {}),
+                  });
+                }}
+                options={[
+                  { value: "solid", label: "Solid" },
+                  { value: "gradient", label: "Gradient" },
+                ]}
               />
+              {/* Solid background */}
+              {(s.card.backgroundType || "solid") === "solid" && (
+                <ColorInput
+                  label="Background"
+                  value={s.card.backgroundColor || "#ffffff"}
+                  onChange={(v) => updateCard({ backgroundColor: v })}
+                />
+              )}
+              {/* Gradient background */}
+              {s.card.backgroundType === "gradient" && (
+                <>
+                  <div className="space-y-2">
+                    <Label className="text-xs text-slate-400">Gradient Colors</Label>
+                    <div className="grid grid-cols-2 gap-2">
+                      <ColorInput
+                        label="From"
+                        value={s.card.gradientBackground?.colors?.[0] || "#1e1b4b"}
+                        onChange={(v) =>
+                          updateCard({
+                            gradientBackground: {
+                              colors: [v, s.card.gradientBackground?.colors?.[1] || "#0f172a"],
+                              angle: s.card.gradientBackground?.angle || 135,
+                            },
+                          })
+                        }
+                      />
+                      <ColorInput
+                        label="To"
+                        value={s.card.gradientBackground?.colors?.[1] || "#0f172a"}
+                        onChange={(v) =>
+                          updateCard({
+                            gradientBackground: {
+                              colors: [s.card.gradientBackground?.colors?.[0] || "#1e1b4b", v],
+                              angle: s.card.gradientBackground?.angle || 135,
+                            },
+                          })
+                        }
+                      />
+                    </div>
+                  </div>
+                  <NumberInput
+                    label="Gradient Angle"
+                    value={s.card.gradientBackground?.angle || 135}
+                    onChange={(v) =>
+                      updateCard({
+                        gradientBackground: {
+                          colors: s.card.gradientBackground?.colors || ["#1e1b4b", "#0f172a"],
+                          angle: v,
+                        },
+                      })
+                    }
+                    min={0}
+                    max={360}
+                    step={15}
+                  />
+                </>
+              )}
               <NumberInput
                 label="Border Radius"
                 value={s.card.borderRadius}
@@ -759,12 +835,78 @@ export function ProcessStepsWidgetSettingsPanel({
                 min={0}
                 max={4}
               />
-              {s.card.borderWidth > 0 && (
+              {s.card.borderWidth > 0 && !s.card.gradientBorder?.enabled && (
                 <ColorInput
                   label="Border Color"
                   value={s.card.borderColor || "#e2e8f0"}
                   onChange={(v) => updateCard({ borderColor: v })}
                 />
+              )}
+              {/* Gradient Border */}
+              <ToggleSwitch
+                label="Gradient Border"
+                checked={s.card.gradientBorder?.enabled || false}
+                onChange={(v: boolean) =>
+                  updateCard({
+                    gradientBorder: {
+                      enabled: v,
+                      colors: s.card.gradientBorder?.colors || ["#f97316", "#8b5cf6"],
+                      angle: s.card.gradientBorder?.angle || 135,
+                    },
+                    ...(v && s.card.borderWidth === 0 ? { borderWidth: 2 } : {}),
+                  })
+                }
+              />
+              {s.card.gradientBorder?.enabled && (
+                <>
+                  <div className="space-y-2">
+                    <Label className="text-xs text-slate-400">Border Gradient Colors</Label>
+                    <div className="grid grid-cols-2 gap-2">
+                      <ColorInput
+                        label="From"
+                        value={s.card.gradientBorder?.colors?.[0] || "#f97316"}
+                        onChange={(v) =>
+                          updateCard({
+                            gradientBorder: {
+                              enabled: true,
+                              colors: [v, s.card.gradientBorder?.colors?.[1] || "#8b5cf6"],
+                              angle: s.card.gradientBorder?.angle || 135,
+                            },
+                          })
+                        }
+                      />
+                      <ColorInput
+                        label="To"
+                        value={s.card.gradientBorder?.colors?.[1] || "#8b5cf6"}
+                        onChange={(v) =>
+                          updateCard({
+                            gradientBorder: {
+                              enabled: true,
+                              colors: [s.card.gradientBorder?.colors?.[0] || "#f97316", v],
+                              angle: s.card.gradientBorder?.angle || 135,
+                            },
+                          })
+                        }
+                      />
+                    </div>
+                  </div>
+                  <NumberInput
+                    label="Border Gradient Angle"
+                    value={s.card.gradientBorder?.angle || 135}
+                    onChange={(v) =>
+                      updateCard({
+                        gradientBorder: {
+                          enabled: true,
+                          colors: s.card.gradientBorder?.colors || ["#f97316", "#8b5cf6"],
+                          angle: v,
+                        },
+                      })
+                    }
+                    min={0}
+                    max={360}
+                    step={15}
+                  />
+                </>
               )}
               <NumberInput
                 label="Padding"

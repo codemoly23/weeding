@@ -163,7 +163,10 @@ function SectionRenderer({ section }: SectionRendererProps) {
     borderRadius: settings.borderRadius ? `${settings.borderRadius}px` : undefined,
   };
 
-  return (
+  // Gradient border support
+  const hasGradientBorder = settings.gradientBorder?.enabled && settings.gradientBorder.colors?.length >= 2;
+
+  const sectionContent = (
     <section className="relative overflow-hidden" style={sectionStyle}>
       {/* Video Background */}
       {background.type === "video" && background.video?.url && (
@@ -222,6 +225,27 @@ function SectionRenderer({ section }: SectionRendererProps) {
       </div>
     </section>
   );
+
+  // Wrap with gradient border if enabled
+  if (hasGradientBorder) {
+    const { colors, angle, width } = settings.gradientBorder!;
+    const borderWidth = width || 2;
+    const borderRadius = settings.borderRadius || 0;
+
+    return (
+      <div
+        style={{
+          padding: `${borderWidth}px`,
+          background: `linear-gradient(${angle}deg, ${colors.join(", ")})`,
+          borderRadius: borderRadius ? `${borderRadius}px` : undefined,
+        }}
+      >
+        {sectionContent}
+      </div>
+    );
+  }
+
+  return sectionContent;
 }
 
 interface WidgetRendererProps {

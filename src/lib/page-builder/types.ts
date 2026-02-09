@@ -86,6 +86,12 @@ export interface SectionSettings {
   gap: number;
   maxWidth: MaxWidth;
   borderRadius?: number;
+  gradientBorder?: {
+    enabled: boolean;
+    colors: string[];
+    angle: number;
+    width: number;
+  };
   className?: string;
 }
 
@@ -1320,12 +1326,22 @@ export interface TextBlockWidgetSettings {
   // === CONTAINER STYLING ===
   container: {
     backgroundColor?: string;
+    backgroundType?: "solid" | "gradient";
+    gradientBackground?: {
+      colors: string[];
+      angle: number;
+    };
     padding: number; // px
     borderRadius: number; // px
     border?: {
       width: number;
       color: string;
       style: "solid" | "dashed" | "dotted";
+    };
+    gradientBorder?: {
+      enabled: boolean;
+      colors: string[];
+      angle: number;
     };
     shadow?: "none" | "sm" | "md" | "lg";
     maxWidth?: number; // px (for readability)
@@ -1937,9 +1953,19 @@ export interface ProcessStepsWidgetSettings {
   card: {
     show: boolean;
     backgroundColor?: string;
+    backgroundType?: "solid" | "gradient";
+    gradientBackground?: {
+      colors: string[];
+      angle: number;
+    };
     borderRadius: number;
     borderWidth: number;
     borderColor?: string;
+    gradientBorder?: {
+      enabled: boolean;
+      colors: string[];
+      angle: number;
+    };
     padding: number;
     shadow: "none" | "sm" | "md" | "lg";
     hoverEffect: "none" | "lift" | "glow" | "scale";
