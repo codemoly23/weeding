@@ -1,15 +1,16 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import {
   Save,
   List,
-  Settings,
   Bell,
   Users,
   Gauge,
   Palette,
+  Columns,
+  Loader2,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -22,13 +23,6 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Separator } from "@/components/ui/separator";
 import { toast } from "sonner";
@@ -51,9 +45,37 @@ const SCORE_THRESHOLDS = [
   { label: "Very Hot", min: 76, max: 100, color: "#dc2626" },
 ];
 
+const OPTIONAL_COLUMNS = [
+  { key: "phone", label: "Phone", description: "Contact phone number" },
+  { key: "company", label: "Company", description: "Company or organization name" },
+  { key: "budget", label: "Budget", description: "Estimated budget range" },
+  { key: "timeline", label: "Timeline", description: "Expected timeline" },
+  { key: "priority", label: "Priority", description: "Lead priority level" },
+  { key: "interestedIn", label: "Interested In", description: "Services the lead is interested in" },
+];
+
+interface ColumnConfig {
+  phone: boolean;
+  company: boolean;
+  budget: boolean;
+  timeline: boolean;
+  priority: boolean;
+  interestedIn: boolean;
+}
+
+const DEFAULT_COLUMNS: ColumnConfig = {
+  phone: false,
+  company: false,
+  budget: false,
+  timeline: false,
+  priority: false,
+  interestedIn: true,
+};
+
 export default function SettingsPage() {
   const [notifications, setNotifications] = useState({
     newLead: true,
+    leadAutoResponse: false,
     assignment: true,
     statusChange: false,
     dailyDigest: true,
@@ -74,9 +96,118 @@ export default function SettingsPage() {
     hotLeadsOnly: false,
   });
 
+  const [columns, setColumns] = useState<ColumnConfig>(DEFAULT_COLUMNS);
+
+  const [saving, setSaving] = useState<string | null>(null);
+  const [loadingSettings, setLoadingSettings] = useState(true);
+
+  // Load persisted settings on mount
+  useEffect(() => {
+    async function loadSettings() {
+      try {
+        const response = await fetch("/api/admin/settings?prefix=leads.");
+        if (response.ok) {
+          const data = await response.json();
+          const settings = data.settings || {};
+
+          // Load notifications
+          if (settings["leads.notify.newLead"] !== undefined) {
+            setNotifications((prev) => ({
+              ...prev,
+              newLead: settings["leads.notify.newLead"] === "true",
+            }));
+          }
+          if (settings["leads.notify.leadAutoResponse"] !== undefined) {
+            setNotifications((prev) => ({
+              ...prev,
+              leadAutoResponse: settings["leads.notify.leadAutoResponse"] === "true",
+            }));
+          }
+          if (settings["leads.notify.assignment"] !== undefined) {
+            setNotifications((prev) => ({
+              ...prev,
+              assignment: settings["leads.notify.assignment"] === "true",
+            }));
+          }
+          if (settings["leads.notify.statusChange"] !== undefined) {
+            setNotifications((prev) => ({
+              ...prev,
+              statusChange: settings["leads.notify.statusChange"] === "true",
+            }));
+          }
+          if (settings["leads.notify.dailyDigest"] !== undefined) {
+            setNotifications((prev) => ({
+              ...prev,
+              dailyDigest: settings["leads.notify.dailyDigest"] === "true",
+            }));
+          }
+
+          // Load column config
+          if (settings["leads.table.columns"]) {
+            try {
+              const parsed = JSON.parse(settings["leads.table.columns"]);
+              setColumns((prev) => ({ ...prev, ...parsed }));
+            } catch {
+              // ignore parse error
+            }
+          }
+
+          // Load auto-assign
+          if (settings["leads.autoAssign.enabled"] !== undefined) {
+            setAutoAssign((prev) => ({
+              ...prev,
+              enabled: settings["leads.autoAssign.enabled"] === "true",
+            }));
+          }
+          if (settings["leads.autoAssign.roundRobin"] !== undefined) {
+            setAutoAssign((prev) => ({
+              ...prev,
+              roundRobin: settings["leads.autoAssign.roundRobin"] === "true",
+            }));
+          }
+          if (settings["leads.autoAssign.hotLeadsOnly"] !== undefined) {
+            setAutoAssign((prev) => ({
+              ...prev,
+              hotLeadsOnly: settings["leads.autoAssign.hotLeadsOnly"] === "true",
+            }));
+          }
+        }
+      } catch (error) {
+        console.error("Error loading settings:", error);
+      } finally {
+        setLoadingSettings(false);
+      }
+    }
+    loadSettings();
+  }, []);
+
+  const saveSettings = async (settingsToSave: Record<string, string>, sectionName: string) => {
+    setSaving(sectionName);
+    try {
+      const response = await fetch("/api/admin/settings", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ settings: settingsToSave }),
+      });
+
+      if (!response.ok) throw new Error("Failed to save settings");
+      toast.success(`${sectionName} saved`);
+    } catch (error) {
+      console.error("Error saving settings:", error);
+      toast.error(`Failed to save ${sectionName.toLowerCase()}`);
+    } finally {
+      setSaving(null);
+    }
+  };
+
   const handleSaveNotifications = () => {
-    // In a real app, this would save to the API
-    toast.success("Notification settings saved");
+    saveSettings({
+      "leads.notify.newLead": notifications.newLead.toString(),
+      "leads.notify.leadAutoResponse": notifications.leadAutoResponse.toString(),
+      "leads.notify.assignment": notifications.assignment.toString(),
+      "leads.notify.statusChange": notifications.statusChange.toString(),
+      "leads.notify.dailyDigest": notifications.dailyDigest.toString(),
+    }, "Notification settings");
   };
 
   const handleSaveScoring = () => {
@@ -84,7 +215,17 @@ export default function SettingsPage() {
   };
 
   const handleSaveAutoAssign = () => {
-    toast.success("Auto-assignment settings saved");
+    saveSettings({
+      "leads.autoAssign.enabled": autoAssign.enabled.toString(),
+      "leads.autoAssign.roundRobin": autoAssign.roundRobin.toString(),
+      "leads.autoAssign.hotLeadsOnly": autoAssign.hotLeadsOnly.toString(),
+    }, "Auto-assignment settings");
+  };
+
+  const handleSaveColumns = () => {
+    saveSettings({
+      "leads.table.columns": JSON.stringify(columns),
+    }, "Column settings");
   };
 
   return (
@@ -123,6 +264,10 @@ export default function SettingsPage() {
             <Users className="h-4 w-4" />
             Auto-Assignment
           </TabsTrigger>
+          <TabsTrigger value="columns" className="flex items-center gap-2">
+            <Columns className="h-4 w-4" />
+            Table Columns
+          </TabsTrigger>
         </TabsList>
 
         {/* Pipeline Settings */}
@@ -135,7 +280,7 @@ export default function SettingsPage() {
               </CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
-              {PIPELINE_STAGES.map((stage, idx) => (
+              {PIPELINE_STAGES.map((stage) => (
                 <div key={stage.key} className="flex items-center gap-4 p-4 border rounded-lg">
                   <div
                     className="w-4 h-4 rounded-full flex-shrink-0"
@@ -308,6 +453,21 @@ export default function SettingsPage() {
                 <Switch
                   checked={notifications.newLead}
                   onCheckedChange={(checked) => setNotifications({ ...notifications, newLead: checked })}
+                  disabled={loadingSettings}
+                />
+              </div>
+              <Separator />
+              <div className="flex items-center justify-between">
+                <div>
+                  <Label>Lead Auto-Response Email</Label>
+                  <p className="text-sm text-muted-foreground">
+                    Send an automatic thank-you email to new leads
+                  </p>
+                </div>
+                <Switch
+                  checked={notifications.leadAutoResponse}
+                  onCheckedChange={(checked) => setNotifications({ ...notifications, leadAutoResponse: checked })}
+                  disabled={loadingSettings}
                 />
               </div>
               <Separator />
@@ -321,6 +481,7 @@ export default function SettingsPage() {
                 <Switch
                   checked={notifications.assignment}
                   onCheckedChange={(checked) => setNotifications({ ...notifications, assignment: checked })}
+                  disabled={loadingSettings}
                 />
               </div>
               <Separator />
@@ -334,6 +495,7 @@ export default function SettingsPage() {
                 <Switch
                   checked={notifications.statusChange}
                   onCheckedChange={(checked) => setNotifications({ ...notifications, statusChange: checked })}
+                  disabled={loadingSettings}
                 />
               </div>
               <Separator />
@@ -347,11 +509,16 @@ export default function SettingsPage() {
                 <Switch
                   checked={notifications.dailyDigest}
                   onCheckedChange={(checked) => setNotifications({ ...notifications, dailyDigest: checked })}
+                  disabled={loadingSettings}
                 />
               </div>
               <Separator />
-              <Button onClick={handleSaveNotifications}>
-                <Save className="mr-2 h-4 w-4" />
+              <Button onClick={handleSaveNotifications} disabled={saving === "Notification settings"}>
+                {saving === "Notification settings" ? (
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                ) : (
+                  <Save className="mr-2 h-4 w-4" />
+                )}
                 Save Notification Settings
               </Button>
             </CardContent>
@@ -378,6 +545,7 @@ export default function SettingsPage() {
                 <Switch
                   checked={autoAssign.enabled}
                   onCheckedChange={(checked) => setAutoAssign({ ...autoAssign, enabled: checked })}
+                  disabled={loadingSettings}
                 />
               </div>
               <Separator />
@@ -391,7 +559,7 @@ export default function SettingsPage() {
                 <Switch
                   checked={autoAssign.roundRobin}
                   onCheckedChange={(checked) => setAutoAssign({ ...autoAssign, roundRobin: checked })}
-                  disabled={!autoAssign.enabled}
+                  disabled={!autoAssign.enabled || loadingSettings}
                 />
               </div>
               <Separator />
@@ -405,13 +573,60 @@ export default function SettingsPage() {
                 <Switch
                   checked={autoAssign.hotLeadsOnly}
                   onCheckedChange={(checked) => setAutoAssign({ ...autoAssign, hotLeadsOnly: checked })}
-                  disabled={!autoAssign.enabled}
+                  disabled={!autoAssign.enabled || loadingSettings}
                 />
               </div>
               <Separator />
-              <Button onClick={handleSaveAutoAssign}>
-                <Save className="mr-2 h-4 w-4" />
+              <Button onClick={handleSaveAutoAssign} disabled={saving === "Auto-assignment settings"}>
+                {saving === "Auto-assignment settings" ? (
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                ) : (
+                  <Save className="mr-2 h-4 w-4" />
+                )}
                 Save Assignment Settings
+              </Button>
+            </CardContent>
+          </Card>
+        </TabsContent>
+
+        {/* Table Columns Settings */}
+        <TabsContent value="columns">
+          <Card>
+            <CardHeader>
+              <CardTitle>Table Column Visibility</CardTitle>
+              <CardDescription>
+                Choose which optional columns to show in the leads table.
+                Fixed columns (Name, Email, Status, Score, Source, Assigned To, Created) are always visible.
+              </CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-6">
+              {OPTIONAL_COLUMNS.map((col) => (
+                <div key={col.key}>
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <Label>{col.label}</Label>
+                      <p className="text-sm text-muted-foreground">
+                        {col.description}
+                      </p>
+                    </div>
+                    <Switch
+                      checked={columns[col.key as keyof ColumnConfig]}
+                      onCheckedChange={(checked) =>
+                        setColumns({ ...columns, [col.key]: checked })
+                      }
+                      disabled={loadingSettings}
+                    />
+                  </div>
+                  <Separator className="mt-6" />
+                </div>
+              ))}
+              <Button onClick={handleSaveColumns} disabled={saving === "Column settings"}>
+                {saving === "Column settings" ? (
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                ) : (
+                  <Save className="mr-2 h-4 w-4" />
+                )}
+                Save Column Settings
               </Button>
             </CardContent>
           </Card>

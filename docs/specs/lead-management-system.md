@@ -1,9 +1,10 @@
 # Lead Management System Specification
 
-> **Document Version:** 1.4
+> **Document Version:** 1.5
 > **Created:** February 4, 2026
-> **Updated:** February 4, 2026
+> **Updated:** February 9, 2026
 > **Status:** Phase 1 ✅ | Phase 2 ✅ | Phase 3 ✅ | Phase 4 Partial
+> **Future Improvements:** 9 features documented (see "Future Improvements" section) - NOT before April 2026
 
 ---
 
@@ -599,6 +600,8 @@ Decision Stage (High Points)
 
 ## 6. Speed-to-Lead (Critical 2026 Metric)
 
+> ⚠️ **IMPLEMENTATION STATUS:** Timestamps (lastActivityAt, createdAt) exist for tracking but SLA enforcement, response time reporting, auto-response emails, and escalation logic are NOT implemented. See Phase 5.
+
 > **"Speed wins — respond to leads in seconds, not hours"**
 > Studies show businesses using automation can cut manual work by 30%, leading to faster responses and higher conversion rates.
 
@@ -895,6 +898,18 @@ After conversion:
 ---
 
 ## 9. Dynamic Form Fields & Table Columns
+
+> **Implementation Decision (v1.0 - CodeCanyon):** Approach A+C chosen.
+>
+> **Fixed columns (always visible):** Name, Email, Status, Score, Source, Assigned To, Created
+>
+> **Toggleable columns (admin settings):** Phone, Company, Budget, Timeline, Priority, Interested In
+>
+> **Custom fields:** Shown on Lead detail page only (expandable section), NOT in table
+>
+> **Storage:** `Setting` table, key `leads.table.columns`, JSON value with boolean toggles
+>
+> **Rationale:** Keeps the table clean and performant for CodeCanyon buyers. Dynamic form-to-column mapping (original spec below) deferred to v2.
 
 > **Key Insight:** Form fields should automatically create corresponding columns in the lead table. Admin shouldn't manually configure both.
 
@@ -1383,6 +1398,8 @@ In the Page Builder, the Lead Form Widget selects a Form Instance:
 
 ## 11. Conversion Tracking & Analytics
 
+> ⚠️ **IMPLEMENTATION STATUS:** Schema (TrackingSettings model) exists in database but tracking scripts are NOT yet integrated into pages or form submissions. Only the database model is implemented.
+
 > **One-time global setup** for GTM, Facebook Pixel, and Google Ads. All forms automatically use these tracking codes.
 
 ### 11.1 Global Tracking Setup
@@ -1747,23 +1764,27 @@ Add to admin header:
 
 ### 11.1 Email Notifications
 
-| Trigger | Recipients | Template |
-|---------|------------|----------|
-| New lead submitted | Configured emails, assigned user | `new-lead-notification` |
-| Lead assigned | Assigned user | `lead-assigned` |
-| Follow-up due | Assigned user | `follow-up-reminder` |
-| Lead converted | Admin, assigned user | `lead-converted` |
+| Trigger | Recipients | Template | Status |
+|---------|------------|----------|--------|
+| New lead submitted | Configured emails, assigned user | `new-lead-notification` | ✅ Implemented |
+| Lead assigned | Assigned user | `lead-assigned` | ❌ Not implemented |
+| Follow-up due | Assigned user | `follow-up-reminder` | ❌ Not implemented |
+| Lead converted | Admin, assigned user | `lead-converted` | ❌ Not implemented |
 
 ### 11.2 Automation Rules (Future)
 
+> ⚠️ **STATUS:** Auto-score on submission is implemented. All others are not yet implemented.
+
 - Auto-assign leads based on source/service
 - Auto-tag leads based on criteria
-- Auto-score leads on submission
+- ~~Auto-score leads on submission~~ ✅ Done
 - Auto-send welcome email on form submission
 
 ---
 
 ## 12. Multi-Channel Lead Capture
+
+> ⚠️ **IMPLEMENTATION STATUS:** Only Website Forms (Lead Form Widget) channel is implemented. All other channels (WhatsApp, Facebook Ads, Google Ads, Live Chat, Email, Manual Entry) are NOT yet implemented. See Phase 6.
 
 > An effective CRM automatically collects leads from websites, emails, ads, and social media, ensuring no inquiry is missed.
 
@@ -1979,7 +2000,9 @@ async function handleFacebookLead(req: Request) {
 □ All automation tested end-to-end
 ```
 
-### Phase 6: Integrations (Future)
+### Phase 6: Integrations ⛔ DEFERRED TO FUTURE
+
+> **NOTE:** Phase 6 will NOT be developed in the current release cycle. These are planned for a future major version update. Do not start implementation without explicit project owner approval.
 
 **Tasks:**
 - [ ] WhatsApp Business API
@@ -1988,7 +2011,9 @@ async function handleFacebookLead(req: Request) {
 - [ ] Calendar booking integration
 - [ ] SMS notifications (Twilio)
 
-### Phase 7: AI Features (Future Roadmap)
+### Phase 7: AI Features ⛔ DEFERRED TO FUTURE
+
+> **NOTE:** Phase 7 will NOT be developed in the current release cycle. These require significant data collection (1000+ leads minimum) and are planned for a future major version update. Do not start implementation without explicit project owner approval.
 
 **Tasks:**
 - [ ] Predictive lead scoring (ML model)
@@ -2000,6 +2025,8 @@ async function handleFacebookLead(req: Request) {
 ---
 
 ## 13. Data Quality & Deduplication
+
+> ⚠️ **IMPLEMENTATION STATUS:** Basic duplicate check on email exists in POST `/api/leads`. Admin merge UI, bulk duplicate scanner, data validation rules, and data hygiene automation are NOT implemented. See Phase 5.
 
 > Poor data quality causes an estimated **$12.9 million annually** in losses for firms. Clean data is essential.
 
@@ -2067,20 +2094,22 @@ When duplicates are found, provide merge UI:
 
 ### 13.1 Access Control
 
-| Role | Permissions |
-|------|-------------|
-| Admin | Full access to all leads and settings |
-| Sales Agent | View/edit assigned leads, add notes |
-| Support Agent | View leads, add notes |
-| Content Manager | No access |
+| Role | Permissions | Status |
+|------|-------------|--------|
+| Admin | Full access to all leads and settings | ✅ Implemented |
+| Sales Agent | View/edit assigned leads, add notes | ✅ Implemented |
+| Support Agent | View leads, add notes | ✅ Implemented |
+| Content Manager | No access | ✅ Implemented |
 
 ### 13.2 Data Protection
 
-- Encrypt sensitive data at rest
-- Rate limit form submissions
-- Honeypot fields for spam prevention
-- CAPTCHA integration (optional)
-- IP-based duplicate detection
+> ⚠️ **STATUS:** Only basic admin auth checks are implemented. Rate limiting, honeypot, CAPTCHA, and encryption at rest are NOT yet implemented.
+
+- Encrypt sensitive data at rest ❌
+- Rate limit form submissions ❌
+- Honeypot fields for spam prevention ❌
+- CAPTCHA integration (optional) ❌
+- IP-based duplicate detection ❌
 
 ---
 
@@ -2489,6 +2518,483 @@ npm run dev # Manual check
 - [ ] Update API documentation
 - [ ] Remove references to deleted features
 - [ ] Update CLAUDE.md if patterns changed
+
+---
+
+## Future Improvements (Post-April 2026)
+
+> **STRICT NOTICE:** The features listed below are planned improvements identified through industry research and competitive analysis. **NONE of these will be implemented before April 2026.** These are documented for future reference only. Any developer working on this project MUST NOT start work on any item below until explicitly approved by the project owner after April 2026.
+>
+> **Current Priority:** Complete Phase 4 (remaining bulk actions) and Phase 5 (deduplication, score decay, auto-response) from the existing specification FIRST.
+
+---
+
+### F1. Lost Reason Tracking
+
+**Problem:** When a lead is marked as LOST, there is no structured data capturing WHY the lead was lost. This makes it impossible to analyze patterns and improve the sales process.
+
+**What to implement:**
+
+```prisma
+enum LostReason {
+  PRICE_TOO_HIGH        // Our pricing was too expensive
+  CHOSE_COMPETITOR      // Went with a competing service
+  NO_BUDGET             // Lead has no budget at this time
+  BAD_TIMING            // Not the right time, may revisit later
+  NOT_QUALIFIED         // Lead does not meet our criteria
+  NO_RESPONSE           // Lead stopped responding
+  CHANGED_REQUIREMENTS  // Lead's needs changed
+  OTHER                 // Other reason (free text)
+}
+
+model Lead {
+  // ... existing fields ...
+  lostReason    LostReason?
+  lostNote      String?       // Free-text explanation
+  lostAt        DateTime?     // When marked as lost
+}
+```
+
+**UI Changes:**
+- When changing status to LOST, show a modal requiring reason selection
+- Optional free-text note field
+- Analytics page: "Lost Reasons" pie chart showing distribution
+- Filter leads by lost reason on list page
+
+**API Changes:**
+- PATCH `/api/admin/leads/:id` - validate lostReason required when status = LOST
+- GET `/api/admin/leads/stats` - include lostReasons breakdown
+
+---
+
+### F2. Lead Deduplication Enhancement
+
+**Problem:** Current deduplication (Section 13) has basic email matching but lacks admin UI for manual merge and bulk duplicate detection.
+
+**What to implement:**
+
+1. **Automatic Detection on Submit:**
+   - Already partially specified in Section 13.1
+   - Add: When duplicate found, create `LeadActivity` with type `DUPLICATE_DETECTED`
+   - Add: Admin notification "Possible duplicate lead detected"
+
+2. **Admin Merge UI:**
+   ```
+   ┌─────────────────────────────────────────────────────────────────┐
+   │  Merge Leads                                           [Cancel] │
+   ├─────────────────────────────────────────────────────────────────┤
+   │                                                                  │
+   │  Primary Lead (keep):     │  Duplicate (will be merged):        │
+   │  ○ John Doe               │  ○ John D.                          │
+   │    john@example.com       │    john@example.com                  │
+   │    Score: 75              │    Score: 45                         │
+   │    Status: QUALIFIED      │    Status: NEW                       │
+   │    Notes: 3               │    Notes: 1                          │
+   │    Activities: 8          │    Activities: 2                     │
+   │                                                                  │
+   │  After merge:                                                    │
+   │  - Score: 75 (highest kept)                                     │
+   │  - Status: QUALIFIED (primary kept)                             │
+   │  - Notes: 4 (combined)                                          │
+   │  - Activities: 10 (combined)                                    │
+   │  - Custom fields: merged (primary wins conflicts)               │
+   │                                                                  │
+   │                                    [Preview Merge] [Merge Now]  │
+   └─────────────────────────────────────────────────────────────────┘
+   ```
+
+3. **Bulk Duplicate Scanner:**
+   - Settings page: "Scan for Duplicates" button
+   - Groups leads by matching email or phone
+   - Shows list of potential duplicate groups for admin review
+
+---
+
+### F3. GDPR & Data Privacy Compliance
+
+**Problem:** Target market includes international customers. EU data protection laws (GDPR) require explicit consent tracking, data retention policies, and right to erasure.
+
+**What to implement:**
+
+```prisma
+model Lead {
+  // ... existing fields ...
+
+  // GDPR Consent
+  consentGiven      Boolean    @default(false)
+  consentText       String?    // The exact consent text shown
+  consentAt         DateTime?  // When consent was given
+  consentIp         String?    // IP at time of consent
+  dataRetentionDays Int?       // Custom retention per lead (overrides global)
+}
+
+model DataDeletionRequest {
+  id          String   @id @default(cuid())
+  email       String
+  requestedAt DateTime @default(now())
+  processedAt DateTime?
+  processedBy String?
+  status      String   @default("PENDING") // PENDING, COMPLETED, REJECTED
+  notes       String?
+
+  @@index([email])
+  @@index([status])
+}
+```
+
+**Form Changes:**
+- Add consent checkbox field type to form builder
+- Consent text configurable per form template
+- Submission rejected if consent not given (when enabled)
+
+**Admin Changes:**
+- Settings > Privacy: global data retention period (default: 365 days)
+- Settings > Privacy: enable/disable GDPR mode
+- Lead detail: "Delete All Data" button (right to erasure)
+- Data Deletion Requests page: manage incoming requests
+- Automated: daily cron to delete leads past retention period
+
+**API Changes:**
+- POST `/api/leads` - accept and store consent fields
+- DELETE `/api/admin/leads/:id/gdpr-delete` - full data erasure (not soft delete)
+- GET `/api/admin/data-requests` - list deletion requests
+- POST `/api/data-request` - public endpoint for data deletion requests
+
+---
+
+### F4. Expanded Notification System
+
+**Problem:** Current notifications are basic (new lead + assignment). Missing follow-up reminders, SLA violation alerts, and digest emails.
+
+**What to implement:**
+
+**New Email Notification Triggers:**
+
+| Trigger | Recipients | When | Template |
+|---------|------------|------|----------|
+| Follow-up overdue | Assigned agent | nextFollowUpAt passed | `follow-up-overdue` |
+| SLA violation (Hot lead) | Manager + assigned agent | >1 hour no response for score 51+ | `sla-violation` |
+| SLA violation (Very Hot) | All sales agents | >5 min no response for score 76+ | `sla-urgent` |
+| Weekly digest | Admin, managers | Every Monday 9 AM | `weekly-digest` |
+| Lead re-engaged | Assigned agent | Inactive lead visits site again | `lead-reengaged` |
+| Conversion milestone | Admin | Monthly conversion report | `monthly-report` |
+
+**Weekly Digest Email Content:**
+```
+Subject: Weekly Lead Report - Jan 6-12, 2026
+
+New Leads This Week: 24
+Leads Converted: 3 (12.5%)
+Leads Lost: 2
+Average Response Time: 2.4 hours
+Top Source: Google Ads (10 leads)
+
+Pipeline Snapshot:
+- NEW: 12 leads
+- CONTACTED: 8
+- QUALIFIED: 5
+- PROPOSAL: 3
+- NEGOTIATION: 2
+
+Action Required:
+- 4 leads overdue for follow-up
+- 2 hot leads not yet contacted
+```
+
+**Admin Settings:**
+- Toggle each notification on/off
+- Configure recipients per notification type
+- Set notification schedule (immediate, daily digest, weekly)
+
+---
+
+### F5. WhatsApp Click-to-Chat Integration
+
+**Problem:** Target markets (BD, India, Pakistan, UAE) use WhatsApp as primary communication. Email open rates are significantly lower in South Asia compared to WhatsApp message read rates (98% read rate).
+
+**What to implement (Phase 1 - Simple):**
+
+**Lead Detail Page:**
+- WhatsApp icon next to phone number
+- Click opens `https://wa.me/{normalizedPhone}?text={defaultMessage}`
+- Activity auto-logged: "WhatsApp message initiated"
+
+**Admin Settings:**
+```
+┌─────────────────────────────────────────────────────────────────┐
+│  Settings > Communication > WhatsApp                             │
+├─────────────────────────────────────────────────────────────────┤
+│                                                                  │
+│  Default Message Template:                                       │
+│  ┌─────────────────────────────────────────────────────────┐   │
+│  │ Hi {{firstName}},                                        │   │
+│  │                                                          │   │
+│  │ Thank you for your interest in our {{service}} service.  │   │
+│  │ I'm {{agentName}} from LLCPad. How can I help you today?│   │
+│  └─────────────────────────────────────────────────────────┘   │
+│                                                                  │
+│  Available Variables: {{firstName}}, {{lastName}}, {{service}},  │
+│  {{agentName}}, {{companyName}}                                  │
+│                                                                  │
+└─────────────────────────────────────────────────────────────────┘
+```
+
+**Activity Logging:**
+- New LeadActivityType: `WHATSAPP_INITIATED`
+- Manually log WhatsApp conversations with notes
+
+**What NOT to implement yet (Phase 2):**
+- WhatsApp Business API (requires Meta approval, costs money)
+- Automated WhatsApp messages
+- Two-way WhatsApp conversation in admin panel
+
+---
+
+### F6. Drip Email / Lead Nurturing Automation
+
+**Problem:** Cold and warm leads receive no automated follow-up after initial contact. Research shows drip campaigns perform 2x better than one-off emails and generate 80% more sales.
+
+**What to implement:**
+
+```prisma
+model NurtureSequence {
+  id          String   @id @default(cuid())
+  name        String   // "Cold Lead Nurture"
+  description String?
+  isActive    Boolean  @default(true)
+
+  // Trigger conditions
+  triggerScore    Int?     // Apply when score <= this value
+  triggerStatus   LeadStatus? // Apply when status equals this
+  triggerSource   LeadSource? // Apply for leads from this source
+
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  steps       NurtureStep[]
+
+  @@index([isActive])
+}
+
+model NurtureStep {
+  id          String   @id @default(cuid())
+  sequenceId  String
+  sequence    NurtureSequence @relation(fields: [sequenceId], references: [id], onDelete: Cascade)
+
+  stepOrder   Int      // 1, 2, 3...
+  delayDays   Int      // Days after previous step (or enrollment)
+  subject     String   // Email subject
+  body        String   @db.Text // Email body (HTML)
+  isActive    Boolean  @default(true)
+
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([sequenceId])
+  @@index([stepOrder])
+}
+
+model NurtureEnrollment {
+  id          String   @id @default(cuid())
+  leadId      String
+  lead        Lead     @relation(fields: [leadId], references: [id], onDelete: Cascade)
+  sequenceId  String
+  sequence    NurtureSequence @relation(fields: [sequenceId], references: [id])
+
+  currentStep Int      @default(0)  // Last completed step
+  status      String   @default("ACTIVE") // ACTIVE, PAUSED, COMPLETED, CANCELLED
+  nextSendAt  DateTime?
+  completedAt DateTime?
+  cancelledAt DateTime?
+
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@unique([leadId, sequenceId])
+  @@index([status])
+  @@index([nextSendAt])
+}
+```
+
+**Default Nurture Sequences:**
+
+```
+Sequence 1: "Cold Lead Nurture" (Score 0-25)
+├── Day 0: Welcome email - "Thanks for your interest"
+├── Day 3: Educational - "5 Things to Know Before Forming an LLC"
+├── Day 7: Case study - "How [Client] Formed Their LLC in 5 Days"
+├── Day 14: Service highlight - "Our LLC Formation Process"
+├── Day 21: Social proof - "500+ LLCs Formed Successfully"
+└── Day 30: Re-engagement - "Still interested? Here's 10% off"
+
+Sequence 2: "Warm Lead Follow-up" (Score 26-50)
+├── Day 0: Personalized intro from assigned agent
+├── Day 2: Relevant service details based on interest
+├── Day 5: FAQ answers for their selected service
+└── Day 10: Direct call-to-action with booking link
+
+Sequence 3: "Post-Conversion Onboarding" (Status = WON)
+├── Day 0: Welcome + login credentials
+├── Day 1: Getting started guide
+├── Day 3: How to track your order
+└── Day 7: Satisfaction check + review request
+```
+
+**Cron Job (Daily):**
+- Query NurtureEnrollment where nextSendAt <= now() AND status = ACTIVE
+- Send the next email in sequence
+- Update currentStep and nextSendAt
+- If last step completed, mark status = COMPLETED
+
+**Admin UI:**
+- Settings > Nurture Sequences: list, create, edit, toggle active
+- Per sequence: drag-drop step reordering
+- Email template editor with variables ({{firstName}}, {{service}}, etc.)
+- Enrollment dashboard: see which leads are in which sequence
+- Manual enroll/unenroll from lead detail page
+
+---
+
+### F7. MQL/SQL Lifecycle Stage Distinction
+
+**Problem:** Current system has one flat LeadStatus. Industry standard (HubSpot, Salesforce) separates Marketing Qualified Leads (MQL) from Sales Qualified Leads (SQL) to clarify marketing-to-sales handoff.
+
+**What to implement:**
+
+```prisma
+enum LifecycleStage {
+  SUBSCRIBER     // Just signed up / newsletter
+  LEAD           // Submitted a form
+  MQL            // Marketing Qualified - meets criteria
+  SQL            // Sales Qualified - sales accepted
+  OPPORTUNITY    // Active deal in progress
+  CUSTOMER       // Converted and paying
+  EVANGELIST     // Repeat customer, referrer
+}
+
+model Lead {
+  // ... existing fields ...
+  lifecycleStage  LifecycleStage @default(LEAD)
+}
+```
+
+**Qualification Criteria (configurable):**
+
+| Stage | Auto-Qualify When |
+|-------|-------------------|
+| LEAD → MQL | Score >= 40 AND (email + phone provided) |
+| MQL → SQL | Sales agent accepts lead AND score >= 60 |
+| SQL → OPPORTUNITY | Status changed to PROPOSAL or NEGOTIATION |
+| OPPORTUNITY → CUSTOMER | Lead converted to customer (WON) |
+
+**UI Changes:**
+- Lead list: Lifecycle Stage column (color-coded badge)
+- Pipeline view: option to view by lifecycle stage instead of status
+- Analytics: MQL → SQL conversion rate, SQL → Customer conversion rate
+- Settings: configure auto-qualification thresholds
+
+---
+
+### F8. Multi-Touch Source Attribution
+
+**Problem:** Current system records only the first touch (single source). A lead may discover via Google Ads, return via organic search, then convert via email campaign. Single-source misattributes the conversion.
+
+**What to implement:**
+
+```prisma
+model LeadTouchpoint {
+  id          String   @id @default(cuid())
+  leadId      String
+  lead        Lead     @relation(fields: [leadId], references: [id], onDelete: Cascade)
+
+  // Source data
+  source      LeadSource
+  sourceDetail String?
+  pageUrl     String?
+
+  // UTM data for this touch
+  utmSource   String?
+  utmMedium   String?
+  utmCampaign String?
+  utmTerm     String?
+  utmContent  String?
+
+  // Context
+  referrer    String?
+  isFirstTouch Boolean @default(false)
+  isLastTouch  Boolean @default(false)
+
+  createdAt   DateTime @default(now())
+
+  @@index([leadId])
+  @@index([source])
+  @@index([createdAt])
+}
+```
+
+**Tracking Logic:**
+- First form submission: create Lead + first touchpoint (isFirstTouch = true)
+- Subsequent visits (cookie-based): create new touchpoint
+- On conversion: mark latest touchpoint as isLastTouch = true
+
+**Analytics Views:**
+- First-touch attribution report: which channels bring NEW leads
+- Last-touch attribution report: which channels CONVERT leads
+- Full journey view: timeline of all touchpoints per lead
+
+---
+
+### F9. Lead Re-engagement / Recycling
+
+**Problem:** LOST and UNQUALIFIED leads are archived with no process to re-engage them. Circumstances change - a lead who had no budget 3 months ago may have budget now.
+
+**What to implement:**
+
+**Automated Re-engagement Rules:**
+
+| Condition | Action | When |
+|-----------|--------|------|
+| LOST lead, reason = NO_BUDGET | Send re-engagement email | 90 days after lost |
+| LOST lead, reason = BAD_TIMING | Send re-engagement email | 60 days after lost |
+| UNQUALIFIED lead | Send educational content | 180 days after marked |
+| Any LOST lead | Re-engagement email | 6 months after lost |
+
+**Lead Recycling Workflow:**
+```
+LOST Lead (90+ days old)
+    │
+    ▼
+Automated re-engagement email sent
+    │
+    ├── Lead clicks link → Status: RECYCLED_NEW, re-enter pipeline
+    ├── Lead replies → Notify assigned agent, Status: RECYCLED_CONTACTED
+    └── No response → Mark as PERMANENTLY_CLOSED after 2 attempts
+```
+
+**New Statuses:**
+- `RECYCLED_NEW` - Previously lost lead re-entering pipeline
+- `PERMANENTLY_CLOSED` - No longer attempt contact
+
+**Admin UI:**
+- Filter: "Recyclable Leads" (LOST/UNQUALIFIED > X days)
+- Bulk action: "Re-engage Selected"
+- Dashboard metric: "Recycled Lead Conversion Rate"
+
+---
+
+### Implementation Priority Order (Post-April 2026)
+
+| Priority | Feature | Effort | Business Impact |
+|----------|---------|--------|-----------------|
+| 1 | F2. Lost Reason Tracking | Low (1-2 days) | High - completes pipeline |
+| 2 | F1. Lead Deduplication Enhancement | Medium (3-4 days) | High - prevents data mess |
+| 3 | F3. GDPR Compliance | Medium (3-4 days) | High - legal requirement |
+| 4 | F5. WhatsApp Click-to-Chat | Low (1 day) | High - target market |
+| 5 | F4. Notification Expansion | Medium (3-4 days) | Medium - usability |
+| 6 | F6. Drip/Nurture Automation | High (7-10 days) | High - conversion boost |
+| 7 | F7. MQL/SQL Lifecycle | Medium (3-4 days) | Medium - process clarity |
+| 8 | F8. Multi-Touch Attribution | Medium (4-5 days) | Medium - marketing insight |
+| 9 | F9. Lead Recycling | Medium (3-4 days) | Medium - revenue recovery |
 
 ---
 

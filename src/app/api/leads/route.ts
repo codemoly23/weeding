@@ -4,6 +4,9 @@ import { z } from "zod";
 import { LeadSource, Prisma } from "@prisma/client";
 import { sendEmail, getEmailConfig } from "@/lib/email";
 import { getNewLeadEmail } from "@/lib/email-templates/new-lead";
+import { getLeadAutoResponseEmail } from "@/lib/email-templates/lead-auto-response";
+import { enhancedSubmitLeadSchema, normalizePhone } from "@/lib/leads/validation";
+import { getSetting } from "@/lib/settings";
 
 // Calculate lead score based on various factors
 function calculateLeadScore(data: {
@@ -63,59 +66,14 @@ function calculateLeadScore(data: {
   return Math.min(score, 100);
 }
 
-// Normalize phone number
-function normalizePhone(phone: string): string {
-  return phone.replace(/[^+\d]/g, "");
-}
-
-// Public lead submission schema
-const submitLeadSchema = z.object({
-  // Required
-  firstName: z.string().min(1, "First name is required"),
-  email: z.string().email("Valid email is required"),
-
-  // Optional contact info
-  lastName: z.string().optional(),
-  phone: z.string().optional(),
-  company: z.string().optional(),
-  country: z.string().optional(),
-  city: z.string().optional(),
-
-  // Service interest
-  interestedIn: z.union([z.string(), z.array(z.string())]).optional(),
-  budget: z.string().optional(),
-  timeline: z.string().optional(),
-  message: z.string().optional(),
-
-  // Source tracking
-  source: z.string().optional(),
-  sourceDetail: z.string().optional(),
-
-  // UTM parameters
-  utmSource: z.string().optional(),
-  utmMedium: z.string().optional(),
-  utmCampaign: z.string().optional(),
-  utmTerm: z.string().optional(),
-  utmContent: z.string().optional(),
-
-  // Form instance
-  formInstanceSlug: z.string().optional(),
-  formInstanceId: z.string().optional(),
-
-  // Custom fields (any additional fields from the form)
-  customFields: z.record(z.string(), z.unknown()).optional(),
-
-  // Behavioral tracking
-  pageViews: z.number().optional(),
-  visitCount: z.number().optional(),
-  lastPageViewed: z.string().optional(),
-});
+// Schema imported from validation module (enhancedSubmitLeadSchema)
+// normalizePhone imported from validation module
 
 // POST - Public lead submission endpoint
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
-    const data = submitLeadSchema.parse(body);
+    const data = enhancedSubmitLeadSchema.parse(body);
 
     // Get IP and user agent
     const ipAddress = request.headers.get("x-forwarded-for")?.split(",")[0] ||
@@ -123,8 +81,8 @@ export async function POST(request: NextRequest) {
                       "unknown";
     const userAgent = request.headers.get("user-agent") || undefined;
 
-    // Normalize email
-    const email = data.email.toLowerCase().trim();
+    // Email already normalized by schema transform
+    const email = data.email;
 
     // Check for duplicate (existing active lead with same email)
     const existingLead = await prisma.lead.findFirst({
@@ -139,8 +97,8 @@ export async function POST(request: NextRequest) {
       const updatedLead = await prisma.lead.update({
         where: { id: existingLead.id },
         data: {
-          // Update with latest data
-          ...(data.phone && { phone: normalizePhone(data.phone) }),
+          // Update with latest data (already normalized by schema)
+          ...(data.phone && { phone: data.phone }),
           ...(data.company && { company: data.company }),
           ...(data.country && { country: data.country }),
           visitCount: { increment: 1 },
@@ -250,14 +208,14 @@ export async function POST(request: NextRequest) {
       customFields.message = data.message;
     }
 
-    // Create lead
+    // Create lead (data already normalized by schema transforms)
     const lead = await prisma.lead.create({
       data: {
-        firstName: data.firstName.trim(),
-        lastName: data.lastName?.trim(),
+        firstName: data.firstName,
+        lastName: data.lastName,
         email,
-        phone: data.phone ? normalizePhone(data.phone) : undefined,
-        company: data.company?.trim(),
+        phone: data.phone || undefined,
+        company: data.company,
         country: data.country,
         city: data.city,
         source: leadSource,
@@ -298,11 +256,11 @@ export async function POST(request: NextRequest) {
     // Send email notification to admin (non-blocking)
     sendLeadNotificationEmail({
       leadId: lead.id,
-      firstName: data.firstName.trim(),
-      lastName: data.lastName?.trim(),
+      firstName: data.firstName,
+      lastName: data.lastName,
       email,
-      phone: data.phone ? normalizePhone(data.phone) : undefined,
-      company: data.company?.trim(),
+      phone: data.phone || undefined,
+      company: data.company,
       country: data.country,
       source: leadSource,
       score,
@@ -313,6 +271,15 @@ export async function POST(request: NextRequest) {
       formName: formInstance?.name,
     }).catch((err) => {
       console.error("Failed to send lead notification email:", err);
+    });
+
+    // Send auto-response email to lead (non-blocking)
+    sendLeadAutoResponseEmail({
+      firstName: data.firstName,
+      email,
+      interestedIn,
+    }).catch((err) => {
+      console.error("Failed to send lead auto-response email:", err);
     });
 
     // Return success with tracking data for client-side tracking
@@ -401,6 +368,47 @@ async function sendLeadNotificationEmail(params: {
     console.log(`Lead notification email sent for lead ${params.leadId}`);
   } catch (error) {
     console.error("Error sending lead notification email:", error);
+    throw error;
+  }
+}
+
+// Helper function to send auto-response email to leads
+async function sendLeadAutoResponseEmail(params: {
+  firstName: string;
+  email: string;
+  interestedIn?: string[];
+}): Promise<void> {
+  try {
+    // Check if auto-response is enabled
+    const autoResponseEnabled = await getSetting("leads.notify.leadAutoResponse");
+    if (autoResponseEnabled !== "true") {
+      return;
+    }
+
+    const emailConfig = await getEmailConfig();
+    if (!emailConfig.smtp.user || !emailConfig.smtp.password) {
+      return;
+    }
+
+    const siteUrl = process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000";
+
+    const emailContent = getLeadAutoResponseEmail({
+      firstName: params.firstName,
+      interestedIn: params.interestedIn,
+      siteUrl,
+      companyName: emailConfig.fromName || "LLCPad",
+    });
+
+    await sendEmail({
+      to: params.email,
+      subject: emailContent.subject,
+      html: emailContent.html,
+      text: emailContent.text,
+    });
+
+    console.log(`Auto-response email sent to ${params.email}`);
+  } catch (error) {
+    console.error("Error sending lead auto-response email:", error);
     throw error;
   }
 }

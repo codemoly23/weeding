@@ -198,6 +198,7 @@ export async function PATCH(
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const updateData: any = {
       lastActivityAt: new Date(),
+      scoreDecayDays: 0, // Reset decay counter on new activity
     };
 
     if (data.firstName) updateData.firstName = data.firstName;

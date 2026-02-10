@@ -16,6 +16,7 @@ import {
 } from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
 import { Loader2, CheckCircle } from "lucide-react";
+import { trackLeadFormSubmit } from "@/lib/tracking-events";
 
 // Helper function to darken a hex color
 function darkenColor(hex: string, percent: number): string {
@@ -168,31 +169,9 @@ export function LeadFormWidget({
         throw new Error(result.error || "Failed to submit form");
       }
 
-      // Success! Fire tracking events if available
-      if (result.trackingData && typeof window !== "undefined") {
-        // GTM dataLayer push
-        if (window.dataLayer) {
-          window.dataLayer.push({
-            event: result.trackingData.event,
-            ...result.trackingData,
-          });
-        }
-
-        // Facebook Pixel
-        if (window.fbq) {
-          window.fbq("track", "Lead", {
-            content_name: formInstanceSlug || "lead_form",
-            content_category: result.trackingData.service,
-          });
-        }
-
-        // Google Ads
-        if (window.gtag) {
-          window.gtag("event", "conversion", {
-            send_to: result.trackingData.gadsConversion,
-            transaction_id: result.leadId,
-          });
-        }
+      // Fire tracking events (GTM, FB Pixel, Google Ads)
+      if (result.trackingData) {
+        trackLeadFormSubmit(result.trackingData);
       }
 
       setIsSubmitted(true);
@@ -407,13 +386,4 @@ export function LeadFormWidget({
       </form>
     </div>
   );
-}
-
-// Extend Window interface for tracking
-declare global {
-  interface Window {
-    dataLayer?: Record<string, unknown>[];
-    fbq?: (action: string, event: string, params?: Record<string, unknown>) => void;
-    gtag?: (action: string, event: string, params?: Record<string, unknown>) => void;
-  }
 }

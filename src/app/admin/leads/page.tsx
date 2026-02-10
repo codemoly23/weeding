@@ -16,6 +16,9 @@ import {
   Thermometer,
   Snowflake,
   Trash2,
+  Copy,
+  CheckSquare,
+  X,
 } from "lucide-react";
 import { Label } from "@/components/ui/label";
 import {
@@ -61,6 +64,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { Checkbox } from "@/components/ui/checkbox";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import {
   Dialog,
@@ -84,6 +88,8 @@ interface Lead {
   source: string;
   priority: string;
   score: number;
+  budget: string | null;
+  timeline: string | null;
   interestedIn: string[];
   assignedTo: {
     id: string;
@@ -118,6 +124,24 @@ interface Stats {
   bySource: Record<string, number>;
   pipeline: Record<string, number>;
 }
+
+interface ColumnConfig {
+  phone: boolean;
+  company: boolean;
+  budget: boolean;
+  timeline: boolean;
+  priority: boolean;
+  interestedIn: boolean;
+}
+
+const DEFAULT_COLUMNS: ColumnConfig = {
+  phone: false,
+  company: false,
+  budget: false,
+  timeline: false,
+  priority: false,
+  interestedIn: true,
+};
 
 const statusColors: Record<string, string> = {
   NEW: "bg-blue-100 text-blue-700",
@@ -178,6 +202,13 @@ export default function LeadsPage() {
   const [totalPages, setTotalPages] = useState(1);
   const [total, setTotal] = useState(0);
 
+  // Column config
+  const [columnConfig, setColumnConfig] = useState<ColumnConfig>(DEFAULT_COLUMNS);
+
+  // Bulk selection state
+  const [selectedLeads, setSelectedLeads] = useState<Set<string>>(new Set());
+  const [bulkActioning, setBulkActioning] = useState(false);
+
   // Assignment state
   const [teamMembers, setTeamMembers] = useState<TeamMember[]>([]);
   const [assignDialogOpen, setAssignDialogOpen] = useState(false);
@@ -202,6 +233,9 @@ export default function LeadsPage() {
   const [leadToDelete, setLeadToDelete] = useState<Lead | null>(null);
   const [deleting, setDeleting] = useState(false);
 
+  // Bulk delete confirmation
+  const [bulkDeleteDialogOpen, setBulkDeleteDialogOpen] = useState(false);
+
   // Export state
   const [exporting, setExporting] = useState(false);
 
@@ -210,6 +244,30 @@ export default function LeadsPage() {
   const [updatingPriority, setUpdatingPriority] = useState<string | null>(null);
   const [updatingScore, setUpdatingScore] = useState<string | null>(null);
   const [editingScore, setEditingScore] = useState<{ id: string; value: string } | null>(null);
+
+  // Load column config from settings
+  useEffect(() => {
+    async function loadColumnConfig() {
+      try {
+        const response = await fetch("/api/admin/settings?prefix=leads.table");
+        if (response.ok) {
+          const data = await response.json();
+          const settings = data.settings || {};
+          if (settings["leads.table.columns"]) {
+            try {
+              const parsed = JSON.parse(settings["leads.table.columns"]);
+              setColumnConfig((prev) => ({ ...prev, ...parsed }));
+            } catch {
+              // ignore parse error
+            }
+          }
+        }
+      } catch {
+        // use defaults
+      }
+    }
+    loadColumnConfig();
+  }, []);
 
   // Handler for inline status update
   const handleStatusChange = async (leadId: string, newStatus: string) => {
@@ -223,14 +281,13 @@ export default function LeadsPage() {
 
       if (!response.ok) throw new Error("Failed to update status");
 
-      // Update local state
       setLeads((prev) =>
         prev.map((lead) =>
           lead.id === leadId ? { ...lead, status: newStatus } : lead
         )
       );
       toast.success("Status updated");
-      fetchStats(); // Refresh stats
+      fetchStats();
     } catch (error) {
       console.error("Error updating status:", error);
       toast.error("Failed to update status");
@@ -251,7 +308,6 @@ export default function LeadsPage() {
 
       if (!response.ok) throw new Error("Failed to update priority");
 
-      // Update local state
       setLeads((prev) =>
         prev.map((lead) =>
           lead.id === leadId ? { ...lead, priority: newPriority } : lead
@@ -268,16 +324,13 @@ export default function LeadsPage() {
 
   // Handler for inline score update
   const handleScoreChange = async (leadId: string, newScore: number) => {
-    // Find current lead to compare
     const currentLead = leads.find((l) => l.id === leadId);
 
-    // Don't update if score hasn't changed
     if (currentLead && currentLead.score === newScore) {
       setEditingScore(null);
       return;
     }
 
-    // Validate score range
     if (isNaN(newScore) || newScore < 0 || newScore > 100) {
       toast.error("Score must be between 0 and 100");
       setEditingScore(null);
@@ -297,7 +350,6 @@ export default function LeadsPage() {
         throw new Error(errorData.error || "Failed to update score");
       }
 
-      // Update local state
       setLeads((prev) =>
         prev.map((lead) =>
           lead.id === leadId ? { ...lead, score: newScore } : lead
@@ -305,13 +357,72 @@ export default function LeadsPage() {
       );
       toast.success("Score updated");
       setEditingScore(null);
-      fetchStats(); // Refresh stats
+      fetchStats();
     } catch (error) {
       console.error("Error updating score:", error);
       toast.error(error instanceof Error ? error.message : "Failed to update score");
     } finally {
       setUpdatingScore(null);
     }
+  };
+
+  // Bulk action handler
+  const handleBulkAction = async (
+    action: string,
+    payload: Record<string, unknown> = {}
+  ) => {
+    if (selectedLeads.size === 0) return;
+    setBulkActioning(true);
+    try {
+      const response = await fetch("/api/admin/leads/bulk", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          leadIds: Array.from(selectedLeads),
+          action,
+          ...payload,
+        }),
+      });
+
+      if (!response.ok) {
+        const err = await response.json();
+        throw new Error(err.error || "Bulk action failed");
+      }
+
+      const result = await response.json();
+      toast.success(`${result.count} lead(s) updated`);
+      setSelectedLeads(new Set());
+      fetchLeads();
+      fetchStats();
+    } catch (error) {
+      console.error("Bulk action error:", error);
+      toast.error(error instanceof Error ? error.message : "Bulk action failed");
+    } finally {
+      setBulkActioning(false);
+      setBulkDeleteDialogOpen(false);
+    }
+  };
+
+  // Select all visible leads
+  const handleSelectAll = (checked: boolean) => {
+    if (checked) {
+      setSelectedLeads(new Set(leads.map((l) => l.id)));
+    } else {
+      setSelectedLeads(new Set());
+    }
+  };
+
+  // Toggle single lead selection
+  const handleSelectLead = (leadId: string, checked: boolean) => {
+    setSelectedLeads((prev) => {
+      const next = new Set(prev);
+      if (checked) {
+        next.add(leadId);
+      } else {
+        next.delete(leadId);
+      }
+      return next;
+    });
   };
 
   const fetchLeads = useCallback(async () => {
@@ -510,6 +621,9 @@ export default function LeadsPage() {
     }
   };
 
+  const allSelected = leads.length > 0 && leads.every((l) => selectedLeads.has(l.id));
+  const someSelected = selectedLeads.size > 0;
+
   return (
     <div className="space-y-6">
       {/* Header */}
@@ -521,6 +635,12 @@ export default function LeadsPage() {
           </p>
         </div>
         <div className="flex items-center gap-2">
+          <Button variant="outline" size="sm" asChild>
+            <Link href="/admin/leads/duplicates">
+              <Copy className="mr-2 h-4 w-4" />
+              Duplicates
+            </Link>
+          </Button>
           <Button variant="outline" onClick={() => { fetchLeads(); fetchStats(); }}>
             <RefreshCw className="mr-2 h-4 w-4" />
             Refresh
@@ -655,6 +775,87 @@ export default function LeadsPage() {
           </form>
         </CardContent>
       </Card>
+
+      {/* Bulk Actions Bar */}
+      {someSelected && (
+        <Card className="border-primary/50 bg-primary/5">
+          <CardContent className="py-3">
+            <div className="flex items-center gap-3 flex-wrap">
+              <div className="flex items-center gap-2">
+                <CheckSquare className="h-4 w-4 text-primary" />
+                <span className="text-sm font-medium">{selectedLeads.size} selected</span>
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={() => setSelectedLeads(new Set())}
+                  className="h-7 px-2"
+                >
+                  <X className="h-3 w-3" />
+                </Button>
+              </div>
+              <div className="h-4 w-px bg-border" />
+              <Select
+                onValueChange={(status) => handleBulkAction("updateStatus", { status })}
+                disabled={bulkActioning}
+              >
+                <SelectTrigger className="h-8 w-[140px]">
+                  <SelectValue placeholder="Set Status" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="NEW">New</SelectItem>
+                  <SelectItem value="CONTACTED">Contacted</SelectItem>
+                  <SelectItem value="QUALIFIED">Qualified</SelectItem>
+                  <SelectItem value="PROPOSAL">Proposal</SelectItem>
+                  <SelectItem value="NEGOTIATION">Negotiation</SelectItem>
+                  <SelectItem value="WON">Won</SelectItem>
+                  <SelectItem value="LOST">Lost</SelectItem>
+                  <SelectItem value="UNQUALIFIED">Unqualified</SelectItem>
+                </SelectContent>
+              </Select>
+              <Select
+                onValueChange={(priority) => handleBulkAction("updatePriority", { priority })}
+                disabled={bulkActioning}
+              >
+                <SelectTrigger className="h-8 w-[140px]">
+                  <SelectValue placeholder="Set Priority" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="LOW">Low</SelectItem>
+                  <SelectItem value="MEDIUM">Medium</SelectItem>
+                  <SelectItem value="HIGH">High</SelectItem>
+                  <SelectItem value="URGENT">Urgent</SelectItem>
+                </SelectContent>
+              </Select>
+              <Select
+                onValueChange={(assignedToId) => handleBulkAction("assignTo", { assignedToId })}
+                disabled={bulkActioning}
+              >
+                <SelectTrigger className="h-8 w-[140px]">
+                  <SelectValue placeholder="Assign To" />
+                </SelectTrigger>
+                <SelectContent>
+                  {teamMembers.map((member) => (
+                    <SelectItem key={member.id} value={member.id}>
+                      {member.name || member.email}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+              <Button
+                variant="destructive"
+                size="sm"
+                onClick={() => setBulkDeleteDialogOpen(true)}
+                disabled={bulkActioning}
+                className="h-8"
+              >
+                <Trash2 className="mr-1 h-3 w-3" />
+                Delete
+              </Button>
+              {bulkActioning && <Loader2 className="h-4 w-4 animate-spin" />}
+            </div>
+          </CardContent>
+        </Card>
+      )}
 
       {/* Assign Lead Dialog */}
       <Dialog open={assignDialogOpen} onOpenChange={setAssignDialogOpen}>
@@ -826,6 +1027,30 @@ export default function LeadsPage() {
         </AlertDialogContent>
       </AlertDialog>
 
+      {/* Bulk Delete Confirmation Dialog */}
+      <AlertDialog open={bulkDeleteDialogOpen} onOpenChange={setBulkDeleteDialogOpen}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Delete {selectedLeads.size} Lead(s)</AlertDialogTitle>
+            <AlertDialogDescription>
+              Are you sure you want to delete {selectedLeads.size} selected lead(s)?
+              This action cannot be undone. All associated activities and notes will also be deleted.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel disabled={bulkActioning}>Cancel</AlertDialogCancel>
+            <AlertDialogAction
+              onClick={() => handleBulkAction("delete")}
+              disabled={bulkActioning}
+              className="bg-red-600 hover:bg-red-700"
+            >
+              {bulkActioning && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+              Delete All
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
+
       {/* Leads Table */}
       <Card>
         <CardHeader>
@@ -848,11 +1073,23 @@ export default function LeadsPage() {
               <Table>
                 <TableHeader>
                   <TableRow>
+                    <TableHead className="w-[40px]">
+                      <Checkbox
+                        checked={allSelected}
+                        onCheckedChange={handleSelectAll}
+                        aria-label="Select all"
+                      />
+                    </TableHead>
                     <TableHead>Lead</TableHead>
                     <TableHead>Status</TableHead>
                     <TableHead>Score</TableHead>
                     <TableHead>Source</TableHead>
-                    <TableHead>Interested In</TableHead>
+                    {columnConfig.phone && <TableHead>Phone</TableHead>}
+                    {columnConfig.company && <TableHead>Company</TableHead>}
+                    {columnConfig.budget && <TableHead>Budget</TableHead>}
+                    {columnConfig.timeline && <TableHead>Timeline</TableHead>}
+                    {columnConfig.priority && <TableHead>Priority</TableHead>}
+                    {columnConfig.interestedIn && <TableHead>Interested In</TableHead>}
                     <TableHead>Assigned To</TableHead>
                     <TableHead>Created</TableHead>
                     <TableHead></TableHead>
@@ -860,7 +1097,14 @@ export default function LeadsPage() {
                 </TableHeader>
                 <TableBody>
                   {leads.map((lead) => (
-                    <TableRow key={lead.id}>
+                    <TableRow key={lead.id} className={selectedLeads.has(lead.id) ? "bg-primary/5" : undefined}>
+                      <TableCell>
+                        <Checkbox
+                          checked={selectedLeads.has(lead.id)}
+                          onCheckedChange={(checked) => handleSelectLead(lead.id, !!checked)}
+                          aria-label={`Select ${lead.firstName}`}
+                        />
+                      </TableCell>
                       <TableCell>
                         <Link href={`/admin/leads/${lead.id}`} className="flex items-center gap-3 hover:opacity-80 transition-opacity">
                           <Avatar className="h-8 w-8">
@@ -876,36 +1120,32 @@ export default function LeadsPage() {
                             <div className="text-sm text-muted-foreground">
                               {lead.email}
                             </div>
-                            {lead.company && (
-                              <div className="text-xs text-muted-foreground">
-                                {lead.company}
-                              </div>
-                            )}
                           </div>
                         </Link>
                       </TableCell>
                       <TableCell>
                         <div className="flex flex-col gap-1">
-                          <Badge className={statusColors[lead.status]}>
-                            {lead.status}
-                          </Badge>
                           <Select
-                            value={lead.priority}
-                            onValueChange={(value) => handlePriorityChange(lead.id, value)}
-                            disabled={updatingPriority === lead.id}
+                            value={lead.status}
+                            onValueChange={(value) => handleStatusChange(lead.id, value)}
+                            disabled={updatingStatus === lead.id}
                           >
-                            <SelectTrigger className={`h-6 w-[100px] text-xs ${priorityColors[lead.priority]}`}>
-                              {updatingPriority === lead.id ? (
+                            <SelectTrigger className={`h-7 w-[130px] text-xs ${statusColors[lead.status]}`}>
+                              {updatingStatus === lead.id ? (
                                 <Loader2 className="h-3 w-3 animate-spin" />
                               ) : (
                                 <SelectValue />
                               )}
                             </SelectTrigger>
                             <SelectContent>
-                              <SelectItem value="LOW">Low</SelectItem>
-                              <SelectItem value="MEDIUM">Medium</SelectItem>
-                              <SelectItem value="HIGH">High</SelectItem>
-                              <SelectItem value="URGENT">Urgent</SelectItem>
+                              <SelectItem value="NEW">New</SelectItem>
+                              <SelectItem value="CONTACTED">Contacted</SelectItem>
+                              <SelectItem value="QUALIFIED">Qualified</SelectItem>
+                              <SelectItem value="PROPOSAL">Proposal</SelectItem>
+                              <SelectItem value="NEGOTIATION">Negotiation</SelectItem>
+                              <SelectItem value="WON">Won</SelectItem>
+                              <SelectItem value="LOST">Lost</SelectItem>
+                              <SelectItem value="UNQUALIFIED">Unqualified</SelectItem>
                             </SelectContent>
                           </Select>
                         </div>
@@ -966,24 +1206,69 @@ export default function LeadsPage() {
                           </div>
                         )}
                       </TableCell>
-                      <TableCell>
-                        {lead.interestedIn.length > 0 ? (
-                          <div className="flex flex-wrap gap-1">
-                            {lead.interestedIn.slice(0, 2).map((service) => (
-                              <Badge key={service} variant="secondary" className="text-xs">
-                                {service}
-                              </Badge>
-                            ))}
-                            {lead.interestedIn.length > 2 && (
-                              <Badge variant="secondary" className="text-xs">
-                                +{lead.interestedIn.length - 2}
-                              </Badge>
-                            )}
-                          </div>
-                        ) : (
-                          <span className="text-muted-foreground">-</span>
-                        )}
-                      </TableCell>
+                      {columnConfig.phone && (
+                        <TableCell>
+                          <span className="text-sm">{lead.phone || "-"}</span>
+                        </TableCell>
+                      )}
+                      {columnConfig.company && (
+                        <TableCell>
+                          <span className="text-sm">{lead.company || "-"}</span>
+                        </TableCell>
+                      )}
+                      {columnConfig.budget && (
+                        <TableCell>
+                          <span className="text-sm">{lead.budget || "-"}</span>
+                        </TableCell>
+                      )}
+                      {columnConfig.timeline && (
+                        <TableCell>
+                          <span className="text-sm">{lead.timeline || "-"}</span>
+                        </TableCell>
+                      )}
+                      {columnConfig.priority && (
+                        <TableCell>
+                          <Select
+                            value={lead.priority}
+                            onValueChange={(value) => handlePriorityChange(lead.id, value)}
+                            disabled={updatingPriority === lead.id}
+                          >
+                            <SelectTrigger className={`h-6 w-[100px] text-xs ${priorityColors[lead.priority]}`}>
+                              {updatingPriority === lead.id ? (
+                                <Loader2 className="h-3 w-3 animate-spin" />
+                              ) : (
+                                <SelectValue />
+                              )}
+                            </SelectTrigger>
+                            <SelectContent>
+                              <SelectItem value="LOW">Low</SelectItem>
+                              <SelectItem value="MEDIUM">Medium</SelectItem>
+                              <SelectItem value="HIGH">High</SelectItem>
+                              <SelectItem value="URGENT">Urgent</SelectItem>
+                            </SelectContent>
+                          </Select>
+                        </TableCell>
+                      )}
+                      {columnConfig.interestedIn && (
+                        <TableCell>
+                          {lead.interestedIn.length > 0 ? (
+                            <div className="flex flex-wrap gap-1">
+                              {lead.interestedIn.slice(0, 2).map((service) => (
+                                <Badge key={service} variant="secondary" className="text-xs">
+                                  {service}
+                                </Badge>
+                              ))}
+                              {lead.interestedIn.length > 2 && (
+                                <Badge variant="secondary" className="text-xs">
+                                  +{lead.interestedIn.length - 2}
+                                </Badge>
+                              )}
+                            </div>
+                          ) : (
+                            <span className="text-muted-foreground">-</span>
+                          )}
+                        </TableCell>
+                      )}
                       <TableCell>
                         {lead.assignedTo ? (
                           <div className="flex items-center gap-2">

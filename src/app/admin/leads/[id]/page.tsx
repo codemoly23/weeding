@@ -61,8 +61,14 @@ import {
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Separator } from "@/components/ui/separator";
+import {
+  Collapsible,
+  CollapsibleContent,
+  CollapsibleTrigger,
+} from "@/components/ui/collapsible";
 import { formatDistanceToNow, format } from "date-fns";
 import { toast } from "sonner";
+import { ChevronDown } from "lucide-react";
 
 interface Lead {
   id: string;
@@ -691,6 +697,39 @@ export default function LeadDetailPage({ params }: { params: Promise<{ id: strin
                   )}
                 </CardContent>
               </Card>
+
+              {/* Custom Fields (expandable) */}
+              {lead.customFields && Object.keys(lead.customFields).length > 0 && (
+                <Collapsible>
+                  <Card>
+                    <CardHeader className="pb-3">
+                      <CollapsibleTrigger className="flex items-center justify-between w-full">
+                        <CardTitle className="text-base">Custom Fields</CardTitle>
+                        <ChevronDown className="h-4 w-4 text-muted-foreground transition-transform duration-200 [&[data-state=open]]:rotate-180" />
+                      </CollapsibleTrigger>
+                      <CardDescription>
+                        Additional data captured from form submissions
+                      </CardDescription>
+                    </CardHeader>
+                    <CollapsibleContent>
+                      <CardContent className="pt-0">
+                        <div className="grid gap-3 md:grid-cols-2">
+                          {Object.entries(lead.customFields).map(([key, value]) => (
+                            <div key={key} className="border rounded-lg p-3">
+                              <div className="text-sm text-muted-foreground capitalize">
+                                {key.replace(/[_-]/g, " ")}
+                              </div>
+                              <div className="mt-1 text-sm">
+                                {typeof value === "object" ? JSON.stringify(value) : String(value || "-")}
+                              </div>
+                            </div>
+                          ))}
+                        </div>
+                      </CardContent>
+                    </CollapsibleContent>
+                  </Card>
+                </Collapsible>
+              )}
             </TabsContent>
 
             <TabsContent value="activity" className="mt-4">

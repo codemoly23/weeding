@@ -3,6 +3,7 @@ import prisma from "@/lib/db";
 import { auth } from "@/lib/auth";
 import { z } from "zod";
 import { LeadStatus, LeadSource, LeadPriority, Prisma } from "@prisma/client";
+import { enhancedCreateLeadSchema } from "@/lib/leads/validation";
 
 // Helper to check admin access
 async function checkAdminAccess() {
@@ -176,31 +177,7 @@ export async function GET(request: NextRequest) {
   }
 }
 
-// Create lead schema
-const createLeadSchema = z.object({
-  firstName: z.string().min(1, "First name is required"),
-  lastName: z.string().optional(),
-  email: z.string().email("Valid email is required"),
-  phone: z.string().optional(),
-  company: z.string().optional(),
-  country: z.string().optional(),
-  city: z.string().optional(),
-  source: z.enum(["WEBSITE", "REFERRAL", "GOOGLE_ADS", "FACEBOOK_ADS", "SOCIAL_MEDIA", "DIRECT", "COLD_OUTREACH", "OTHER"]).optional(),
-  sourceDetail: z.string().optional(),
-  priority: z.enum(["LOW", "MEDIUM", "HIGH", "URGENT"]).optional(),
-  interestedIn: z.array(z.string()).optional(),
-  budget: z.string().optional(),
-  timeline: z.string().optional(),
-  notes: z.string().optional(),
-  customFields: z.record(z.string(), z.unknown()).optional(),
-  assignedToId: z.string().optional(),
-  utmSource: z.string().optional(),
-  utmMedium: z.string().optional(),
-  utmCampaign: z.string().optional(),
-  utmTerm: z.string().optional(),
-  utmContent: z.string().optional(),
-  formInstanceId: z.string().optional(),
-});
+// Create lead schema imported from validation module (enhancedCreateLeadSchema)
 
 // POST - Create a new lead (manual admin entry)
 export async function POST(request: NextRequest) {
@@ -215,12 +192,12 @@ export async function POST(request: NextRequest) {
     const { session } = accessCheck;
 
     const body = await request.json();
-    const data = createLeadSchema.parse(body);
+    const data = enhancedCreateLeadSchema.parse(body);
 
-    // Check for duplicate email
+    // Check for duplicate email (already normalized by schema transform)
     const existingLead = await prisma.lead.findFirst({
       where: {
-        email: data.email.toLowerCase(),
+        email: data.email,
         status: { notIn: ["WON", "LOST", "UNQUALIFIED"] },
       },
     });
@@ -249,7 +226,7 @@ export async function POST(request: NextRequest) {
       data: {
         firstName: data.firstName,
         lastName: data.lastName,
-        email: data.email.toLowerCase(),
+        email: data.email,
         phone: data.phone,
         company: data.company,
         country: data.country,
