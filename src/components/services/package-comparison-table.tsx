@@ -98,7 +98,7 @@ export function PackageComparisonTable({
   // Get package slug from name (for checkout URL)
   const getPackageSlug = (pkg: Package | undefined) => {
     if (!pkg) return "basic";
-    return pkg.name.toLowerCase().replace(/\s+/g, "-");
+    return encodeURIComponent(pkg.name.toLowerCase().replace(/\s+/g, "-"));
   };
 
   // Get location fee from selected location
@@ -515,6 +515,13 @@ export function PackageComparisonTable({
               >
                 <Link
                   href={`/checkout/${serviceSlug}?package=${getPackageSlug(selectedPackage)}${selectedLocation?.code ? `&location=${selectedLocation.code}` : ""}${selectedAddons.length > 0 ? `&addons=${selectedAddons.map((a) => a.featureId).join(",")}` : ""}`}
+                  onClick={() => {
+                    if (selectedAddons.length > 0) {
+                      sessionStorage.setItem("checkout_addons", JSON.stringify(selectedAddons));
+                    } else {
+                      sessionStorage.removeItem("checkout_addons");
+                    }
+                  }}
                 >
                   Get Started
                 </Link>
@@ -571,6 +578,13 @@ export function PackageComparisonTable({
             <Button className="w-full bg-orange-500 hover:bg-orange-600" asChild>
               <Link
                 href={`/checkout/${serviceSlug}?package=${getPackageSlug(selectedPackage)}${selectedLocation?.code ? `&location=${selectedLocation.code}` : ""}${selectedAddons.length > 0 ? `&addons=${selectedAddons.map((a) => a.featureId).join(",")}` : ""}`}
+                onClick={() => {
+                  if (selectedAddons.length > 0) {
+                    sessionStorage.setItem("checkout_addons", JSON.stringify(selectedAddons));
+                  } else {
+                    sessionStorage.removeItem("checkout_addons");
+                  }
+                }}
               >
                 Get Started - ${grandTotal}
               </Link>

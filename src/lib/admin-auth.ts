@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
-import { auth } from "@/lib/auth";
+import { cookies } from "next/headers";
+import { decode } from "next-auth/jwt";
 import prisma from "@/lib/db";
 import { UserRole } from "@prisma/client";
 import { Permission } from "@/lib/permissions";
@@ -22,6 +23,46 @@ interface AuthResult {
 // Cache for permissions (5 minute TTL)
 const permissionCache = new Map<string, { permissions: string[]; expires: number }>();
 const CACHE_TTL = 5 * 60 * 1000; // 5 minutes
+
+/**
+ * Get session from JWT token (works reliably in API routes and server components)
+ * Directly decodes the JWT from the session cookie using next-auth's decode function.
+ */
+async function getSession(): Promise<AuthResult["session"] | null> {
+  try {
+    const cookieStore = await cookies();
+    const cookieName = process.env.NODE_ENV === "production"
+      ? "__Secure-authjs.session-token"
+      : "authjs.session-token";
+    const sessionCookie = cookieStore.get(cookieName);
+
+    if (!sessionCookie?.value) {
+      return null;
+    }
+
+    const token = await decode({
+      token: sessionCookie.value,
+      secret: process.env.AUTH_SECRET!,
+      salt: cookieName,
+    });
+
+    if (!token?.id) {
+      return null;
+    }
+
+    return {
+      user: {
+        id: token.id as string,
+        role: token.role as UserRole,
+        name: token.name as string | null,
+        email: token.email as string | null,
+      },
+    };
+  } catch (error) {
+    console.error("[getSession] Error reading session:", error);
+    return null;
+  }
+}
 
 /**
  * Get permissions for a role from database (with caching)
@@ -60,7 +101,7 @@ export function clearPermissionCache(role?: UserRole): void {
  * Check if user has a specific permission
  */
 export async function checkPermission(permission: Permission): Promise<AuthResult> {
-  const session = await auth();
+  const session = await getSession();
   if (!session?.user?.id) {
     return { error: "Unauthorized", status: 401 };
   }
@@ -69,7 +110,7 @@ export async function checkPermission(permission: Permission): Promise<AuthResul
 
   // ADMIN always has all permissions
   if (role === "ADMIN") {
-    return { session: session as AuthResult["session"] };
+    return { session };
   }
 
   // Check database permissions
@@ -78,14 +119,14 @@ export async function checkPermission(permission: Permission): Promise<AuthResul
     return { error: "Forbidden - insufficient permissions", status: 403 };
   }
 
-  return { session: session as AuthResult["session"] };
+  return { session };
 }
 
 /**
  * Check if user has any of the specified permissions
  */
 export async function checkAnyPermission(requiredPermissions: Permission[]): Promise<AuthResult> {
-  const session = await auth();
+  const session = await getSession();
   if (!session?.user?.id) {
     return { error: "Unauthorized", status: 401 };
   }
@@ -94,7 +135,7 @@ export async function checkAnyPermission(requiredPermissions: Permission[]): Pro
 
   // ADMIN always has all permissions
   if (role === "ADMIN") {
-    return { session: session as AuthResult["session"] };
+    return { session };
   }
 
   // Check database permissions
@@ -105,7 +146,7 @@ export async function checkAnyPermission(requiredPermissions: Permission[]): Pro
     return { error: "Forbidden - insufficient permissions", status: 403 };
   }
 
-  return { session: session as AuthResult["session"] };
+  return { session };
 }
 
 /**
@@ -113,7 +154,7 @@ export async function checkAnyPermission(requiredPermissions: Permission[]): Pro
  * Allowed: ADMIN, SUPPORT_AGENT, SALES_AGENT, CONTENT_MANAGER
  */
 export async function checkAdminAccess(): Promise<AuthResult> {
-  const session = await auth();
+  const session = await getSession();
   if (!session?.user?.id) {
     return { error: "Unauthorized", status: 401 };
   }
@@ -121,7 +162,7 @@ export async function checkAdminAccess(): Promise<AuthResult> {
   if (!allowedRoles.includes(session.user.role as UserRole)) {
     return { error: "Forbidden", status: 403 };
   }
-  return { session: session as AuthResult["session"] };
+  return { session };
 }
 
 /**
@@ -129,7 +170,7 @@ export async function checkAdminAccess(): Promise<AuthResult> {
  * @param roles - Single role or array of allowed roles
  */
 export async function checkRole(roles: RoleCheck): Promise<AuthResult> {
-  const session = await auth();
+  const session = await getSession();
   if (!session?.user?.id) {
     return { error: "Unauthorized", status: 401 };
   }
@@ -137,7 +178,7 @@ export async function checkRole(roles: RoleCheck): Promise<AuthResult> {
   if (!allowedRoles.includes(session.user.role as UserRole)) {
     return { error: "Forbidden", status: 403 };
   }
-  return { session: session as AuthResult["session"] };
+  return { session };
 }
 
 /**
@@ -151,7 +192,7 @@ export async function checkAdminOnly(): Promise<AuthResult> {
  * Check if user can manage content (via permission or role)
  */
 export async function checkContentAccess(): Promise<AuthResult> {
-  const session = await auth();
+  const session = await getSession();
   if (!session?.user?.id) {
     return { error: "Unauthorized", status: 401 };
   }
@@ -160,7 +201,7 @@ export async function checkContentAccess(): Promise<AuthResult> {
 
   // ADMIN always has access
   if (role === "ADMIN") {
-    return { session: session as AuthResult["session"] };
+    return { session };
   }
 
   // Check for content permissions
@@ -172,14 +213,14 @@ export async function checkContentAccess(): Promise<AuthResult> {
     return { error: "Forbidden", status: 403 };
   }
 
-  return { session: session as AuthResult["session"] };
+  return { session };
 }
 
 /**
  * Check if user can manage support (via permission or role)
  */
 export async function checkSupportAccess(): Promise<AuthResult> {
-  const session = await auth();
+  const session = await getSession();
   if (!session?.user?.id) {
     return { error: "Unauthorized", status: 401 };
   }
@@ -188,7 +229,7 @@ export async function checkSupportAccess(): Promise<AuthResult> {
 
   // ADMIN always has access
   if (role === "ADMIN") {
-    return { session: session as AuthResult["session"] };
+    return { session };
   }
 
   // Check for support permissions
@@ -200,7 +241,7 @@ export async function checkSupportAccess(): Promise<AuthResult> {
     return { error: "Forbidden", status: 403 };
   }
 
-  return { session: session as AuthResult["session"] };
+  return { session };
 }
 
 /**

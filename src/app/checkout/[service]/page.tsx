@@ -455,7 +455,7 @@ function ServiceCheckoutForm() {
 
   // Get selected package from service data
   const selectedPackage = service?.packages.find(
-    (p) => p.name.toLowerCase() === selectedPackageSlug.toLowerCase()
+    (p) => p.name.toLowerCase().replace(/\s+/g, "-") === selectedPackageSlug.toLowerCase()
   ) || service?.packages[0];
   const serviceFee = selectedPackage?.price || 0;
 
@@ -1118,7 +1118,8 @@ function ServiceCheckoutForm() {
   if (!formConfig) {
     // If no form config, redirect to main checkout or show error
     if (serviceSlug === "llc-formation") {
-      router.push("/checkout");
+      const params = searchParams.toString();
+      router.push("/checkout" + (params ? `?${params}` : ""));
       return null;
     }
     return (

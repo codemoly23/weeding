@@ -124,7 +124,8 @@ export default function AdminServicesPage() {
       if (response.ok) {
         setServices(data.services);
       } else {
-        toast.error("Failed to fetch services");
+        console.error("Services API error:", response.status, data);
+        toast.error(data.error || "Failed to fetch services");
       }
     } catch (error) {
       console.error("Error fetching services:", error);

@@ -64,7 +64,7 @@ const orderSchema = z.object({
     passportNumber: z.string().optional(),
     dateOfBirth: z.string().optional(),
     ownershipPercentage: z.number().default(100),
-    password: z.string().min(8, "Password must be at least 8 characters"),
+    password: z.string().min(8, "Password must be at least 8 characters").optional(),
   }),
 
   // Additional Members (for multi-member LLC)
@@ -89,6 +89,17 @@ const orderSchema = z.object({
   serviceFee: z.number(),
   expeditedFee: z.number().default(0),
   totalAmount: z.number(),
+
+  // Add-ons
+  addons: z.array(z.object({
+    featureId: z.string(),
+    name: z.string(),
+    price: z.number(),
+  })).optional(),
+  addonsTotal: z.number().default(0),
+
+  // Logged-in user
+  userId: z.string().optional(),
 });
 
 export async function POST(request: NextRequest) {
@@ -98,13 +109,15 @@ export async function POST(request: NextRequest) {
     // Validate request body
     const data = orderSchema.parse(body);
 
-    // Hash the password
-    const hashedPassword = await bcrypt.hash(data.owner.password, 10);
+    // Hash the password if provided
+    const hashedPassword = data.owner.password
+      ? await bcrypt.hash(data.owner.password, 10)
+      : undefined;
 
     // Find or create user by email
-    let user = await prisma.user.findUnique({
-      where: { email: data.owner.email },
-    });
+    let user = data.userId
+      ? await prisma.user.findUnique({ where: { id: data.userId } })
+      : await prisma.user.findUnique({ where: { email: data.owner.email } });
 
     if (!user) {
       user = await prisma.user.create({
@@ -114,10 +127,10 @@ export async function POST(request: NextRequest) {
           phone: data.owner.phone,
           country: data.owner.country,
           role: "CUSTOMER",
-          password: hashedPassword,
+          ...(hashedPassword ? { password: hashedPassword } : {}),
         },
       });
-    } else if (!user.password) {
+    } else if (!user.password && hashedPassword) {
       // Update existing user with password if they don't have one
       user = await prisma.user.update({
         where: { id: user.id },
@@ -171,6 +184,9 @@ export async function POST(request: NextRequest) {
       needsRegisteredAgent: data.needsRegisteredAgent,
       needsBankingAssistance: data.needsBankingAssistance,
       expeditedProcessing: data.expeditedProcessing,
+      // Add-ons
+      addons: data.addons || [],
+      addonsTotal: data.addonsTotal,
     };
 
     // Create order with items and notes
@@ -202,6 +218,14 @@ export async function POST(request: NextRequest) {
               locationName: data.locationName || data.stateName,
               locationFeeLabel: data.locationFeeLabel,
             },
+            // Add-on items
+            ...(data.addons || []).map((addon) => ({
+              serviceId: service!.id,
+              name: addon.name,
+              description: "Add-on service",
+              priceUSD: addon.price,
+              stateFee: 0,
+            })),
           ],
         },
         notes: {

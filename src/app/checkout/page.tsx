@@ -64,6 +64,7 @@ import {
 import { LocationSelector, type LocationItem } from "@/components/ui/location-selector";
 import { CountrySelector, ELIGIBLE_COUNTRIES } from "@/components/ui/country-selector";
 import { Header } from "@/components/layout/header";
+import { signIn } from "next-auth/react";
 import { toast } from "sonner";
 import {
   PaymentGatewaySelector,
@@ -120,7 +121,9 @@ function CheckoutForm() {
   const searchParams = useSearchParams();
   const router = useRouter();
 
-  const [currentStep, setCurrentStep] = useState(1);
+  // Skip package step if package was pre-selected from the service page
+  const hasPreSelectedPackage = searchParams.has("package");
+  const [currentStep, setCurrentStep] = useState(hasPreSelectedPackage ? 2 : 1);
   const [isLoading, setIsLoading] = useState(false);
   const [errors, setErrors] = useState<Record<string, string>>({});
 
@@ -153,6 +156,28 @@ function CheckoutForm() {
   const [selectedGateway, setSelectedGateway] = useState<PaymentGateway | null>(null);
   const [createdOrderId, setCreatedOrderId] = useState<string | null>(null);
   const [isProcessingPayment, setIsProcessingPayment] = useState(false);
+
+  // Add-ons from service page (stored in sessionStorage)
+  const [preSelectedAddons, setPreSelectedAddons] = useState<Array<{
+    featureId: string;
+    featureText: string;
+    packageId: string;
+    price: number;
+  }>>([]);
+
+  // Load add-ons from sessionStorage
+  useEffect(() => {
+    if (hasPreSelectedPackage) {
+      const stored = sessionStorage.getItem("checkout_addons");
+      if (stored) {
+        try {
+          setPreSelectedAddons(JSON.parse(stored));
+        } catch {
+          // Invalid data
+        }
+      }
+    }
+  }, [hasPreSelectedPackage]);
 
   // Fetch services from API
   useEffect(() => {
@@ -247,6 +272,19 @@ function CheckoutForm() {
     setLoginError("");
 
     try {
+      // Use NextAuth signIn for proper session cookie
+      const result = await signIn("credentials", {
+        email: loginEmail,
+        password: loginPassword,
+        redirect: false,
+      });
+
+      if (result?.error) {
+        setLoginError("Invalid email or password");
+        return;
+      }
+
+      // Fetch user data after successful NextAuth login
       const response = await fetch("/api/auth/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -255,18 +293,15 @@ function CheckoutForm() {
 
       const data = await response.json();
 
-      if (!response.ok) {
-        setLoginError(data.error || "Invalid email or password");
-        return;
+      if (response.ok && data.user) {
+        // Store user data and update state
+        localStorage.setItem("user", JSON.stringify(data.user));
+        setLoggedInUser(data.user);
+        setShowInlineLogin(false);
+        // Dispatch event for header update
+        window.dispatchEvent(new Event("user-auth-change"));
+        toast.success(`Welcome back, ${data.user.name}!`);
       }
-
-      // Store user data and update state
-      localStorage.setItem("user", JSON.stringify(data.user));
-      setLoggedInUser(data.user);
-      setShowInlineLogin(false);
-      // Dispatch event for header update
-      window.dispatchEvent(new Event("user-auth-change"));
-      toast.success(`Welcome back, ${data.user.name}!`);
     } catch {
       setLoginError("An error occurred. Please try again.");
     } finally {
@@ -345,13 +380,14 @@ function CheckoutForm() {
 
   const service = services.find((s) => s.slug === selectedService);
   const pkg = service?.packages.find(
-    (p) => p.name.toLowerCase() === selectedPackage
+    (p) => p.name.toLowerCase().replace(/\s+/g, "-") === selectedPackage
   );
 
   const serviceFee = pkg?.price || 0;
   const locationFee = selectedLocation?.fee || 0;
   const expeditedFee = formData.expeditedProcessing ? 75 : 0;
-  const total = serviceFee + locationFee + expeditedFee;
+  const addonsTotal = preSelectedAddons.reduce((sum, a) => sum + a.price, 0);
+  const total = serviceFee + locationFee + expeditedFee + addonsTotal;
 
   const handleInputChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -701,6 +737,11 @@ function CheckoutForm() {
         toast.error("Order already created. Please complete payment.");
         return;
       }
+      // If on step 2 and package was pre-selected, go back to service page
+      if (currentStep === 2 && hasPreSelectedPackage) {
+        router.push(`/services/${selectedService}`);
+        return;
+      }
       setCurrentStep(currentStep - 1);
       window.scrollTo(0, 0);
     }
@@ -779,6 +820,10 @@ function CheckoutForm() {
           // Pricing
           serviceFee,
           expeditedFee,
+          addons: preSelectedAddons.length > 0
+            ? preSelectedAddons.map((a) => ({ featureId: a.featureId, name: a.featureText, price: a.price }))
+            : undefined,
+          addonsTotal,
           totalAmount: total,
         }),
       });
@@ -786,10 +831,18 @@ function CheckoutForm() {
       const data = await response.json();
 
       if (response.ok) {
-        // Auto-login: store user data in localStorage
+        // Auto-login: create NextAuth session + store in localStorage
         if (data.user) {
           localStorage.setItem("user", JSON.stringify(data.user));
           window.dispatchEvent(new Event("user-auth-change"));
+          // Create proper NextAuth session for new users
+          if (!loggedInUser && formData.password) {
+            await signIn("credentials", {
+              email: formData.ownerEmail,
+              password: formData.password,
+              redirect: false,
+            });
+          }
         }
         // Store order ID and proceed to payment step
         setCreatedOrderId(data.orderNumber);
@@ -797,7 +850,9 @@ function CheckoutForm() {
         window.scrollTo(0, 0);
         toast.success("Order created! Please complete payment.");
       } else {
-        const errorMsg = data.details ? `${data.error}: ${data.details}` : data.error;
+        const errorMsg = data.details
+          ? `${data.error}: ${typeof data.details === 'string' ? data.details : JSON.stringify(data.details)}`
+          : data.error;
         toast.error(errorMsg || "Failed to submit application");
         console.error("Order creation failed:", data);
       }
@@ -891,11 +946,11 @@ function CheckoutForm() {
           <div className="container mx-auto px-4">
             {/* Back Link */}
             <Link
-              href="/"
+              href={hasPreSelectedPackage ? `/services/${selectedService}` : "/"}
               className="mb-6 inline-flex items-center text-sm text-muted-foreground hover:text-foreground"
             >
               <ArrowLeft className="mr-2 h-4 w-4" />
-              Back to Home
+              {hasPreSelectedPackage ? `Back to ${service?.name || "Service"}` : "Back to Home"}
             </Link>
 
           {/* Progress Steps */}
@@ -1925,6 +1980,18 @@ function CheckoutForm() {
                           <span className="text-muted-foreground">Formation Location</span>
                           <span className="font-medium">{selectedLocation?.name}</span>
                         </div>
+                        {preSelectedAddons.length > 0 && (
+                          <>
+                            <Separator className="my-2" />
+                            <p className="text-muted-foreground font-medium">Add-ons:</p>
+                            {preSelectedAddons.map((addon) => (
+                              <div key={addon.featureId} className="flex justify-between">
+                                <span className="text-muted-foreground">{addon.featureText}</span>
+                                <span className="font-medium">${addon.price}</span>
+                              </div>
+                            ))}
+                          </>
+                        )}
                       </div>
                     </div>
 
@@ -2184,6 +2251,14 @@ function CheckoutForm() {
                         <span className="font-medium">${expeditedFee}</span>
                       </div>
                     )}
+                    {preSelectedAddons.map((addon) => (
+                      <div key={addon.featureId} className="flex justify-between">
+                        <span className="text-muted-foreground truncate max-w-40">
+                          {addon.featureText}
+                        </span>
+                        <span className="font-medium">${addon.price}</span>
+                      </div>
+                    ))}
                   </div>
 
                   <Separator />

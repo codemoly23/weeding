@@ -90,9 +90,10 @@ export async function GET(request: NextRequest) {
       total: transformedServices.length,
     });
   } catch (error) {
-    console.error("Error fetching services:", error);
+    console.error("Error fetching services:", error instanceof Error ? error.message : error);
+    console.error("Full error:", error);
     return NextResponse.json(
-      { error: "Failed to fetch services" },
+      { error: "Failed to fetch services", details: error instanceof Error ? error.message : "Unknown error" },
       { status: 500 }
     );
   }
