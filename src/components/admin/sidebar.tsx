@@ -105,7 +105,7 @@ const navItems: NavItem[] = [
     icon: Percent,
   },
   {
-    title: "Location-Based Pricing",
+    title: "Service Location",
     href: "/admin/location-pricing",
     icon: MapPin,
   },

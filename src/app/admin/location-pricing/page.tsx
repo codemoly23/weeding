@@ -14,7 +14,6 @@ import {
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
 import { Switch } from "@/components/ui/switch";
 import {
   Card,
@@ -58,23 +57,16 @@ interface Location {
   isPopular: boolean;
   isActive: boolean;
   sortOrder: number;
-  metaTitle: string | null;
-  metaDescription: string | null;
-  content: string | null;
-  feeCount: number;
 }
 
 const defaultLocation = {
   code: "",
   name: "",
-  country: "US",
+  country: "",
   type: "STATE" as string,
   isPopular: false,
   isActive: true,
   sortOrder: 0,
-  metaTitle: "",
-  metaDescription: "",
-  content: "",
 };
 
 const LOCATION_TYPES = [
@@ -82,17 +74,6 @@ const LOCATION_TYPES = [
   { value: "PROVINCE", label: "Province" },
   { value: "COUNTRY", label: "Country" },
   { value: "TERRITORY", label: "Territory" },
-];
-
-const COUNTRIES = [
-  { value: "US", label: "United States" },
-  { value: "CA", label: "Canada" },
-  { value: "UK", label: "United Kingdom" },
-  { value: "AU", label: "Australia" },
-  { value: "BD", label: "Bangladesh" },
-  { value: "IN", label: "India" },
-  { value: "PK", label: "Pakistan" },
-  { value: "AE", label: "UAE" },
 ];
 
 export default function LocationPricingPage() {
@@ -149,9 +130,6 @@ export default function LocationPricingPage() {
         isPopular: location.isPopular,
         isActive: location.isActive,
         sortOrder: location.sortOrder,
-        metaTitle: location.metaTitle || "",
-        metaDescription: location.metaDescription || "",
-        content: location.content || "",
       });
     } else {
       setEditingLocation(null);
@@ -161,8 +139,8 @@ export default function LocationPricingPage() {
   };
 
   const saveLocation = async () => {
-    if (!formData.code.trim() || !formData.name.trim()) {
-      toast.error("Code and name are required");
+    if (!formData.code.trim() || !formData.name.trim() || !formData.country.trim()) {
+      toast.error("Code, name, and country are required");
       return;
     }
 
@@ -176,12 +154,7 @@ export default function LocationPricingPage() {
       const response = await fetch(url, {
         method,
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          ...formData,
-          metaTitle: formData.metaTitle || null,
-          metaDescription: formData.metaDescription || null,
-          content: formData.content || null,
-        }),
+        body: JSON.stringify(formData),
       });
 
       if (response.ok) {
@@ -263,9 +236,9 @@ export default function LocationPricingPage() {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold">Location-Based Pricing</h1>
+          <h1 className="text-2xl font-bold">Service Location</h1>
           <p className="text-muted-foreground">
-            Manage locations (states, provinces, countries) for service pricing
+            Manage locations (states, provinces, countries) for services
           </p>
         </div>
         <Button onClick={() => openDialog()}>
@@ -307,22 +280,12 @@ export default function LocationPricingPage() {
             className="pl-9"
           />
         </div>
-        <Select
+        <Input
+          placeholder="Filter by country..."
           value={filterCountry}
-          onValueChange={(v) => setFilterCountry(v === "all" ? "" : v)}
-        >
-          <SelectTrigger className="w-[160px]">
-            <SelectValue placeholder="All Countries" />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="all">All Countries</SelectItem>
-            {COUNTRIES.map((c) => (
-              <SelectItem key={c.value} value={c.value}>
-                {c.label}
-              </SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
+          onChange={(e) => setFilterCountry(e.target.value)}
+          className="w-[180px]"
+        />
         <Select
           value={filterType}
           onValueChange={(v) => setFilterType(v === "all" ? "" : v)}
@@ -351,7 +314,6 @@ export default function LocationPricingPage() {
                 <TableHead>Code</TableHead>
                 <TableHead>Country</TableHead>
                 <TableHead>Type</TableHead>
-                <TableHead>Fees</TableHead>
                 <TableHead>Popular</TableHead>
                 <TableHead>Active</TableHead>
                 <TableHead className="text-right">Actions</TableHead>
@@ -361,7 +323,7 @@ export default function LocationPricingPage() {
               {locations.length === 0 ? (
                 <TableRow>
                   <TableCell
-                    colSpan={8}
+                    colSpan={7}
                     className="text-center text-muted-foreground"
                   >
                     No locations found. Add your first location to get started.
@@ -394,9 +356,6 @@ export default function LocationPricingPage() {
                       <Badge variant="secondary" className="text-xs">
                         {location.type}
                       </Badge>
-                    </TableCell>
-                    <TableCell>
-                      <Badge variant="outline">{location.feeCount}</Badge>
                     </TableCell>
                     <TableCell>
                       {location.isPopular && (
@@ -438,7 +397,7 @@ export default function LocationPricingPage() {
 
       {/* Edit Dialog */}
       <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
-        <DialogContent className="max-h-[90vh] overflow-y-auto sm:max-w-lg">
+        <DialogContent className="sm:max-w-lg">
           <DialogHeader>
             <DialogTitle>
               {editingLocation ? "Edit Location" : "Add Location"}
@@ -446,7 +405,7 @@ export default function LocationPricingPage() {
             <DialogDescription>
               {editingLocation
                 ? "Update location details"
-                : "Add a new location for service pricing"}
+                : "Add a new service location"}
             </DialogDescription>
           </DialogHeader>
           <div className="space-y-4">
@@ -482,24 +441,14 @@ export default function LocationPricingPage() {
 
             <div className="grid gap-4 sm:grid-cols-2">
               <div className="space-y-2">
-                <Label>Country</Label>
-                <Select
+                <Label>Country *</Label>
+                <Input
                   value={formData.country}
-                  onValueChange={(v) =>
-                    setFormData({ ...formData, country: v })
+                  onChange={(e) =>
+                    setFormData({ ...formData, country: e.target.value })
                   }
-                >
-                  <SelectTrigger>
-                    <SelectValue />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {COUNTRIES.map((c) => (
-                      <SelectItem key={c.value} value={c.value}>
-                        {c.label}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
+                  placeholder="e.g., United States, Bangladesh"
+                />
               </div>
               <div className="space-y-2">
                 <Label>Type</Label>
@@ -551,35 +500,6 @@ export default function LocationPricingPage() {
                   setFormData({ ...formData, isActive: v })
                 }
               />
-            </div>
-
-            {/* SEO Section */}
-            <div className="space-y-4 border-t pt-4">
-              <h4 className="font-medium">SEO Settings (Optional)</h4>
-              <div className="space-y-2">
-                <Label>Meta Title</Label>
-                <Input
-                  value={formData.metaTitle}
-                  onChange={(e) =>
-                    setFormData({ ...formData, metaTitle: e.target.value })
-                  }
-                  placeholder="SEO title for location page"
-                />
-              </div>
-              <div className="space-y-2">
-                <Label>Meta Description</Label>
-                <Textarea
-                  value={formData.metaDescription}
-                  onChange={(e) =>
-                    setFormData({
-                      ...formData,
-                      metaDescription: e.target.value,
-                    })
-                  }
-                  placeholder="SEO description"
-                  rows={2}
-                />
-              </div>
             </div>
           </div>
           <DialogFooter>

@@ -55,14 +55,11 @@ export async function GET(
 
 const updateLocationSchema = z.object({
   name: z.string().min(1).optional(),
-  country: z.string().min(2).optional(),
+  country: z.string().min(1).optional(),
   type: z.enum(["STATE", "PROVINCE", "COUNTRY", "TERRITORY"]).optional(),
   isPopular: z.boolean().optional(),
   isActive: z.boolean().optional(),
   sortOrder: z.number().optional(),
-  metaTitle: z.string().optional().nullable(),
-  metaDescription: z.string().optional().nullable(),
-  content: z.string().optional().nullable(),
 });
 
 // PUT /api/admin/location-pricing/[id]
@@ -92,14 +89,11 @@ export async function PUT(
       where: { id },
       data: {
         ...(data.name !== undefined && { name: data.name }),
-        ...(data.country !== undefined && { country: data.country.toUpperCase() }),
+        ...(data.country !== undefined && { country: data.country }),
         ...(data.type !== undefined && { type: data.type }),
         ...(data.isPopular !== undefined && { isPopular: data.isPopular }),
         ...(data.isActive !== undefined && { isActive: data.isActive }),
         ...(data.sortOrder !== undefined && { sortOrder: data.sortOrder }),
-        ...(data.metaTitle !== undefined && { metaTitle: data.metaTitle }),
-        ...(data.metaDescription !== undefined && { metaDescription: data.metaDescription }),
-        ...(data.content !== undefined && { content: data.content }),
       },
     });
 

@@ -18,7 +18,7 @@ export async function GET(request: NextRequest) {
 
     const where: Record<string, unknown> = {};
 
-    if (country) where.country = country.toUpperCase();
+    if (country) where.country = { contains: country, mode: "insensitive" };
     if (type) where.type = type.toUpperCase();
     if (search) {
       where.OR = [
@@ -34,11 +34,6 @@ export async function GET(request: NextRequest) {
         { sortOrder: "asc" },
         { name: "asc" },
       ],
-      include: {
-        _count: {
-          select: { fees: true },
-        },
-      },
     });
 
     return NextResponse.json({
@@ -51,10 +46,6 @@ export async function GET(request: NextRequest) {
         isPopular: loc.isPopular,
         isActive: loc.isActive,
         sortOrder: loc.sortOrder,
-        metaTitle: loc.metaTitle,
-        metaDescription: loc.metaDescription,
-        content: loc.content,
-        feeCount: loc._count.fees,
         createdAt: loc.createdAt,
         updatedAt: loc.updatedAt,
       })),
@@ -72,14 +63,11 @@ export async function GET(request: NextRequest) {
 const createLocationSchema = z.object({
   code: z.string().min(2, "Code must be at least 2 characters"),
   name: z.string().min(1, "Name is required"),
-  country: z.string().min(2, "Country code is required"),
+  country: z.string().min(1, "Country is required"),
   type: z.enum(["STATE", "PROVINCE", "COUNTRY", "TERRITORY"]).default("STATE"),
   isPopular: z.boolean().optional(),
   isActive: z.boolean().optional(),
   sortOrder: z.number().optional(),
-  metaTitle: z.string().optional().nullable(),
-  metaDescription: z.string().optional().nullable(),
-  content: z.string().optional().nullable(),
 });
 
 // POST /api/admin/location-pricing - Create new location
@@ -109,14 +97,11 @@ export async function POST(request: NextRequest) {
       data: {
         code: data.code.toUpperCase(),
         name: data.name,
-        country: data.country.toUpperCase(),
+        country: data.country,
         type: data.type,
         isPopular: data.isPopular ?? false,
         isActive: data.isActive ?? true,
         sortOrder: data.sortOrder ?? 0,
-        metaTitle: data.metaTitle,
-        metaDescription: data.metaDescription,
-        content: data.content,
       },
     });
 

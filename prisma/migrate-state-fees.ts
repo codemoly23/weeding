@@ -43,9 +43,6 @@ async function main() {
         type: "STATE",
         isPopular: sf.isPopular,
         isActive: true,
-        metaTitle: sf.metaTitle,
-        metaDescription: sf.metaDescription,
-        content: sf.content,
       },
     });
 

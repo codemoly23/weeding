@@ -811,11 +811,6 @@ model Location {
   isActive        Boolean      @default(true)
   sortOrder       Int          @default(0)
 
-  // SEO for location landing pages
-  metaTitle       String?
-  metaDescription String?
-  content         String?      @db.Text
-
   // Relations
   fees            LocationFee[]
 
