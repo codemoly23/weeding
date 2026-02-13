@@ -114,6 +114,14 @@ interface OrderDocument {
   createdAt: string;
 }
 
+interface OrderInvoice {
+  id: string;
+  invoiceNumber: string;
+  status: string;
+  total: string;
+  createdAt: string;
+}
+
 interface Order {
   id: string;
   orderNumber: string;
@@ -133,6 +141,7 @@ interface Order {
   items: OrderItem[];
   notes: OrderNote[];
   documents: OrderDocument[];
+  invoices: OrderInvoice[];
   user: {
     id: string;
     email: string;
@@ -586,7 +595,16 @@ export default function AdminOrderDetailPage({ params }: PageProps) {
               </DialogFooter>
             </DialogContent>
           </Dialog>
-          <Button variant="outline" size="sm">
+          <Button
+            variant="outline"
+            size="sm"
+            disabled={!order.invoices?.length}
+            onClick={() => {
+              if (order.invoices?.[0]) {
+                window.open(`/api/invoices/${order.invoices[0].id}/pdf`, "_blank");
+              }
+            }}
+          >
             <Download className="mr-2 h-4 w-4" />
             Download Invoice
           </Button>
@@ -1024,10 +1042,73 @@ export default function AdminOrderDetailPage({ params }: PageProps) {
                 <Mail className="mr-2 h-4 w-4" />
                 Send Status Update
               </Button>
-              <Button variant="outline" className="w-full justify-start" disabled>
-                <FileText className="mr-2 h-4 w-4" />
-                Generate Invoice
-              </Button>
+              {order.invoices?.length > 0 ? (
+                <Button
+                  variant="outline"
+                  className="w-full justify-start"
+                  onClick={() => window.open(`/api/invoices/${order.invoices[0].id}/pdf`, "_blank")}
+                >
+                  <Download className="mr-2 h-4 w-4" />
+                  Download Invoice ({order.invoices[0].invoiceNumber})
+                </Button>
+              ) : (
+                <Button
+                  variant="outline"
+                  className="w-full justify-start"
+                  disabled={isUpdating}
+                  onClick={async () => {
+                    try {
+                      setIsUpdating(true);
+                      const res = await fetch(`/api/orders/${order.id}/invoice`, {
+                        method: "POST",
+                        headers: { "Content-Type": "application/json" },
+                        body: JSON.stringify({}),
+                      });
+                      if (!res.ok) throw new Error("Failed to generate invoice");
+                      toast.success("Invoice generated");
+                      fetchOrder();
+                    } catch {
+                      toast.error("Failed to generate invoice");
+                    } finally {
+                      setIsUpdating(false);
+                    }
+                  }}
+                >
+                  <FileText className="mr-2 h-4 w-4" />
+                  Generate Invoice
+                </Button>
+              )}
+              {(order.paymentStatus === "PENDING" || order.paymentStatus === "FAILED") && (
+                <Button
+                  variant="outline"
+                  className="w-full justify-start"
+                  disabled={isUpdating}
+                  onClick={async () => {
+                    try {
+                      setIsUpdating(true);
+                      const res = await fetch(`/api/orders/${order.orderNumber}/pay`, {
+                        method: "POST",
+                        headers: { "Content-Type": "application/json" },
+                        body: JSON.stringify({ gateway: "stripe" }),
+                      });
+                      const data = await res.json();
+                      if (res.ok && data.url) {
+                        await navigator.clipboard.writeText(data.url);
+                        toast.success("Payment link copied to clipboard");
+                      } else {
+                        toast.error(data.error || "Failed to create payment link");
+                      }
+                    } catch {
+                      toast.error("Failed to create payment link");
+                    } finally {
+                      setIsUpdating(false);
+                    }
+                  }}
+                >
+                  <CreditCard className="mr-2 h-4 w-4" />
+                  Copy Payment Link
+                </Button>
+              )}
               <Button variant="outline" className="w-full justify-start" disabled>
                 <RefreshCcw className="mr-2 h-4 w-4" />
                 Resend Documents

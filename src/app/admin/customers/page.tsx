@@ -11,7 +11,6 @@ import {
   Edit,
   Mail,
   Ban,
-  UserPlus,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -152,10 +151,6 @@ export default function AdminCustomersPage() {
           <Button variant="outline">
             <Download className="mr-2 h-4 w-4" />
             Export
-          </Button>
-          <Button>
-            <UserPlus className="mr-2 h-4 w-4" />
-            Add Customer
           </Button>
         </div>
       </div>

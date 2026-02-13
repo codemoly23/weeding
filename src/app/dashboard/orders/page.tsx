@@ -70,6 +70,22 @@ const statusLabels: Record<string, string> = {
   REFUNDED: "Refunded",
 };
 
+const paymentStatusColors: Record<string, string> = {
+  PENDING: "bg-yellow-100 text-yellow-800",
+  PAID: "bg-green-100 text-green-700",
+  FAILED: "bg-red-100 text-red-700",
+  REFUNDED: "bg-gray-100 text-gray-700",
+  PARTIALLY_REFUNDED: "bg-orange-100 text-orange-700",
+};
+
+const paymentStatusLabels: Record<string, string> = {
+  PENDING: "Pending",
+  PAID: "Paid",
+  FAILED: "Failed",
+  REFUNDED: "Refunded",
+  PARTIALLY_REFUNDED: "Partial Refund",
+};
+
 export default function OrdersPage() {
   const [orders, setOrders] = useState<Order[]>([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -245,7 +261,8 @@ export default function OrdersPage() {
                     <TableHead>Order ID</TableHead>
                     <TableHead>Service</TableHead>
                     <TableHead className="hidden sm:table-cell">Date</TableHead>
-                    <TableHead>Status</TableHead>
+                    <TableHead>Order Status</TableHead>
+                    <TableHead>Payment</TableHead>
                     <TableHead className="text-right">Total</TableHead>
                   </TableRow>
                 </TableHeader>
@@ -279,6 +296,14 @@ export default function OrdersPage() {
                           className={statusColors[order.status]}
                         >
                           {statusLabels[order.status]}
+                        </Badge>
+                      </TableCell>
+                      <TableCell>
+                        <Badge
+                          variant="secondary"
+                          className={paymentStatusColors[order.paymentStatus] || "bg-gray-100 text-gray-700"}
+                        >
+                          {paymentStatusLabels[order.paymentStatus] || order.paymentStatus}
                         </Badge>
                       </TableCell>
                       <TableCell className="text-right font-medium">

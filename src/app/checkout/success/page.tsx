@@ -1,16 +1,19 @@
 "use client";
 
 import { useEffect, useState, Suspense } from "react";
-import { useSearchParams } from "next/navigation";
+import { useSearchParams, useRouter } from "next/navigation";
 import { getCurrencySymbol } from "@/lib/currencies";
 import Link from "next/link";
 import {
   CheckCircle,
+  AlertCircle,
+  Clock,
   ArrowRight,
   Loader2,
   Mail,
   ClipboardList,
   LogIn,
+  CreditCard,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
@@ -21,6 +24,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
+import { toast } from "sonner";
 
 interface OrderItem {
   name: string;
@@ -38,16 +42,20 @@ interface OrderData {
   customerEmail: string;
   customerName: string;
   status: string;
+  paymentStatus: string;
   items: OrderItem[];
   formSubmissions: Array<{ data: Record<string, unknown> }>;
 }
 
 function SuccessContent() {
   const searchParams = useSearchParams();
+  const router = useRouter();
   const orderId = searchParams.get("orderId");
+  const sessionId = searchParams.get("session_id");
   const [loading, setLoading] = useState(true);
   const [order, setOrder] = useState<OrderData | null>(null);
   const [currencySymbol, setCurrencySymbol] = useState("$");
+  const [payingNow, setPayingNow] = useState(false);
 
   useEffect(() => {
     fetch("/api/business-config")
@@ -59,6 +67,23 @@ function SuccessContent() {
       })
       .catch(() => {});
   }, []);
+
+  // Verify Stripe session if session_id is present
+  useEffect(() => {
+    if (sessionId && !orderId) {
+      fetch(`/api/checkout?session_id=${sessionId}`)
+        .then((res) => res.json())
+        .then((data) => {
+          if (data.orderId) {
+            // Redirect to include orderId
+            router.replace(`/checkout/success?orderId=${data.orderId}`);
+          } else {
+            setLoading(false);
+          }
+        })
+        .catch(() => setLoading(false));
+    }
+  }, [sessionId, orderId, router]);
 
   useEffect(() => {
     if (orderId) {
@@ -74,10 +99,32 @@ function SuccessContent() {
           console.error("Error fetching order:", error);
           setLoading(false);
         });
-    } else {
+    } else if (!sessionId) {
       setLoading(false);
     }
-  }, [orderId]);
+  }, [orderId, sessionId]);
+
+  const handlePayNow = async () => {
+    if (!order) return;
+    setPayingNow(true);
+    try {
+      const res = await fetch(`/api/orders/${order.orderNumber}/pay`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ gateway: "stripe" }),
+      });
+      const data = await res.json();
+      if (res.ok && data.url) {
+        window.location.href = data.url;
+      } else {
+        toast.error(data.error || "Failed to create payment session");
+      }
+    } catch {
+      toast.error("Something went wrong. Please try again.");
+    } finally {
+      setPayingNow(false);
+    }
+  };
 
   if (loading) {
     return (
@@ -92,7 +139,7 @@ function SuccessContent() {
     );
   }
 
-  if (!orderId) {
+  if (!orderId && !sessionId) {
     return (
       <div className="container mx-auto max-w-2xl px-4 py-16">
         <Card>
@@ -127,6 +174,11 @@ function SuccessContent() {
     );
   }
 
+  const paymentStatus = order.paymentStatus || "PENDING";
+  const isPaid = paymentStatus === "PAID";
+  const isFailed = paymentStatus === "FAILED";
+  const isPending = !isPaid && !isFailed;
+
   const item = order.items?.[0];
   const serviceName = item?.service?.name || item?.name || "Service";
   const packageName = item?.package?.name || null;
@@ -137,20 +189,14 @@ function SuccessContent() {
   const formData = order.formSubmissions?.[0]?.data as Record<string, unknown> | undefined;
   const displayFields: Array<{ label: string; value: string }> = [];
 
-  // Always show Service
   displayFields.push({ label: "Service", value: serviceName });
-
-  // Show Package if exists
   if (packageName) {
     displayFields.push({ label: "Package", value: packageName });
   }
-
-  // Show Location if exists
   if (locationName) {
     displayFields.push({ label: "Service Location", value: locationName });
   }
 
-  // Extract notable form fields (skip internal/account fields)
   if (formData) {
     const skipKeys = new Set([
       "email", "password", "confirmPassword", "phone", "country",
@@ -163,7 +209,6 @@ function SuccessContent() {
       if (value === null || value === undefined || value === "") continue;
       if (typeof value === "object") continue;
 
-      // Convert camelCase/snake_case to readable label
       const label = key
         .replace(/([A-Z])/g, " $1")
         .replace(/[_-]/g, " ")
@@ -176,18 +221,88 @@ function SuccessContent() {
 
   return (
     <div className="container mx-auto max-w-3xl px-4 py-8 md:py-16">
-      {/* Success Header */}
+      {/* Status Header */}
       <div className="mb-8 text-center">
-        <div className="mx-auto mb-4 flex h-20 w-20 items-center justify-center rounded-full bg-green-100">
-          <CheckCircle className="h-10 w-10 text-green-600" />
-        </div>
-        <h1 className="text-3xl font-bold text-foreground">
-          Order Confirmed!
-        </h1>
-        <p className="mt-2 text-lg text-muted-foreground">
-          Thank you for your order. We&apos;ve received your payment successfully.
-        </p>
+        {isPaid && (
+          <>
+            <div className="mx-auto mb-4 flex h-20 w-20 items-center justify-center rounded-full bg-green-100">
+              <CheckCircle className="h-10 w-10 text-green-600" />
+            </div>
+            <h1 className="text-3xl font-bold text-foreground">
+              Order Confirmed!
+            </h1>
+            <p className="mt-2 text-lg text-muted-foreground">
+              Thank you for your order. We&apos;ve received your payment successfully.
+            </p>
+          </>
+        )}
+
+        {isPending && (
+          <>
+            <div className="mx-auto mb-4 flex h-20 w-20 items-center justify-center rounded-full bg-yellow-100">
+              <Clock className="h-10 w-10 text-yellow-600" />
+            </div>
+            <h1 className="text-3xl font-bold text-foreground">
+              Order Received — Payment Pending
+            </h1>
+            <p className="mt-2 text-lg text-muted-foreground">
+              Your order has been created. Complete your payment to proceed.
+            </p>
+          </>
+        )}
+
+        {isFailed && (
+          <>
+            <div className="mx-auto mb-4 flex h-20 w-20 items-center justify-center rounded-full bg-red-100">
+              <AlertCircle className="h-10 w-10 text-red-600" />
+            </div>
+            <h1 className="text-3xl font-bold text-foreground">
+              Payment Failed
+            </h1>
+            <p className="mt-2 text-lg text-muted-foreground">
+              Your payment could not be processed. Please try again.
+            </p>
+          </>
+        )}
       </div>
+
+      {/* Pay Now Banner for pending/failed */}
+      {(isPending || isFailed) && (
+        <Card className="mb-6 border-2 border-yellow-300">
+          <CardContent className="pt-6">
+            <div className="flex flex-col items-center gap-4 sm:flex-row sm:justify-between">
+              <div className="flex items-center gap-3">
+                <CreditCard className="h-6 w-6 text-yellow-600" />
+                <div>
+                  <p className="font-medium">
+                    {isFailed ? "Try payment again" : "Complete your payment"}
+                  </p>
+                  <p className="text-sm text-muted-foreground">
+                    Amount: {currencySymbol}{total.toFixed(2)}
+                  </p>
+                </div>
+              </div>
+              <Button
+                size="lg"
+                onClick={handlePayNow}
+                disabled={payingNow}
+              >
+                {payingNow ? (
+                  <>
+                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                    Processing...
+                  </>
+                ) : (
+                  <>
+                    <CreditCard className="mr-2 h-4 w-4" />
+                    {isFailed ? "Try Again" : "Pay Now"}
+                  </>
+                )}
+              </Button>
+            </div>
+          </CardContent>
+        </Card>
+      )}
 
       {/* Order Details Card */}
       <Card className="mb-6">
@@ -206,9 +321,11 @@ function SuccessContent() {
           </div>
           <Separator />
           <div className="flex justify-between">
-            <span className="font-medium">Total Paid</span>
-            <span className="text-xl font-bold text-primary">
-              {currencySymbol}{total}
+            <span className="font-medium">
+              {isPaid ? "Total Paid" : "Total Due"}
+            </span>
+            <span className={`text-xl font-bold ${isPaid ? "text-primary" : "text-foreground"}`}>
+              {currencySymbol}{total.toFixed(2)}
             </span>
           </div>
         </CardContent>
@@ -224,25 +341,32 @@ function SuccessContent() {
         </CardHeader>
         <CardContent>
           <div className="space-y-6">
-            <div className="flex gap-4">
-              <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-primary/10 text-primary">
-                <Mail className="h-5 w-5" />
+            {isPaid && (
+              <div className="flex gap-4">
+                <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-primary/10 text-primary">
+                  <Mail className="h-5 w-5" />
+                </div>
+                <div>
+                  <h3 className="font-medium">Confirmation Email</h3>
+                  <p className="text-sm text-muted-foreground">
+                    A confirmation email has been sent to {order.customerEmail} with your order details and receipt.
+                  </p>
+                </div>
               </div>
-              <div>
-                <h3 className="font-medium">Confirmation Email</h3>
-                <p className="text-sm text-muted-foreground">
-                  A confirmation email has been sent to {order.customerEmail} with your order details and receipt.
-                </p>
-              </div>
-            </div>
+            )}
             <div className="flex gap-4">
               <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-primary/10 text-primary">
                 <ClipboardList className="h-5 w-5" />
               </div>
               <div>
-                <h3 className="font-medium">Order Processing</h3>
+                <h3 className="font-medium">
+                  {isPaid ? "Order Processing" : "Order Created"}
+                </h3>
                 <p className="text-sm text-muted-foreground">
-                  Our team will review your order and begin processing it. You can track the status from your dashboard at any time.
+                  {isPaid
+                    ? "Our team will review your order and begin processing it. You can track the status from your dashboard at any time."
+                    : "Your order has been created and is waiting for payment. Once payment is received, our team will begin processing it."
+                  }
                 </p>
               </div>
             </div>

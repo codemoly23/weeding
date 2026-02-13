@@ -131,12 +131,15 @@ export async function GET(request: NextRequest) {
       );
     }
 
-    // In production, fetch from database
-    // For now, return mock data
+    // Verify Stripe session
+    const { getCheckoutSession } = await import("@/lib/stripe");
+    const session = await getCheckoutSession(sessionId);
+
     return NextResponse.json({
-      status: "complete",
-      orderId: "ORD-" + new Date().toISOString().slice(0, 10).replace(/-/g, "") + "001",
-      customerEmail: "customer@example.com",
+      status: session.payment_status === "paid" ? "complete" : session.payment_status,
+      orderId: session.metadata?.orderId || null,
+      customerEmail: session.customer_email || session.customer_details?.email || null,
+      amountTotal: session.amount_total ? session.amount_total / 100 : 0,
     });
   } catch (error) {
     console.error("Get session error:", error);

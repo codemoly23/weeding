@@ -79,6 +79,7 @@ const WIDGET_COMPONENTS: Partial<Record<WidgetType, React.ComponentType<any>>> =
   // Layout widgets
   "divider": DividerWidget,
   "faq": FaqAccordionWidget,
+  "faq-accordion": FaqAccordionWidget,
 
   // Service widgets
   "service-hero": ServiceHeroWidget,

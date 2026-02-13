@@ -371,12 +371,6 @@ export default function AdminOrdersPage() {
             )}
             Export
           </Button>
-          <Button asChild>
-            <Link href="/admin/orders/new">
-              <Package className="mr-2 h-4 w-4" />
-              New Order
-            </Link>
-          </Button>
         </div>
       </div>
 

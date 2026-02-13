@@ -1,13 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
 import { prisma } from "@/lib/db";
-
-// Generate unique invoice number
-function generateInvoiceNumber(): string {
-  const year = new Date().getFullYear();
-  const random = Math.random().toString(36).substring(2, 8).toUpperCase();
-  return `INV-${year}-${random}`;
-}
+import { generateInvoiceNumber, buildInvoiceItems } from "@/lib/invoice-utils";
 
 const createInvoiceSchema = z.object({
   dueDate: z.string().optional(),
@@ -40,6 +34,8 @@ export async function POST(
             id: true,
             email: true,
             name: true,
+            phone: true,
+            country: true,
           },
         },
       },
@@ -65,16 +61,27 @@ export async function POST(
       });
     }
 
+    // Build items snapshot
+    const items = buildInvoiceItems(order.items);
+    const serviceName = order.items[0]?.name || null;
+
     // Create invoice
     const invoice = await prisma.invoice.create({
       data: {
-        invoiceNumber: generateInvoiceNumber(),
+        invoiceNumber: await generateInvoiceNumber(),
         orderId: order.id,
+        userId: order.userId,
+        customerName: order.customerName,
+        customerEmail: order.customerEmail,
+        customerPhone: order.customerPhone,
+        customerCountry: order.customerCountry,
+        items,
+        serviceName,
         subtotal: order.subtotalUSD,
         discount: order.discountUSD,
-        tax: 0,
         total: order.totalUSD,
         currency: order.currency,
+        notes: data.notes,
         status: order.paymentStatus === "PAID" ? "PAID" : "SENT",
         dueDate: data.dueDate ? new Date(data.dueDate) : null,
         paidAt: order.paidAt,

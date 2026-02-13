@@ -38,6 +38,9 @@ model User {
   performedActivities LeadActivity[] @relation("PerformedActivities")
   authoredLeadNotes LeadNote[]       @relation("AuthoredLeadNotes")
 
+  // Invoice relations
+  invoices          Invoice[]
+
   createdAt     DateTime  @default(now())
   updatedAt     DateTime  @updatedAt
 
@@ -447,27 +450,41 @@ enum DocumentStatus {
 
 // ============ INVOICES ============
 model Invoice {
-  id            String        @id @default(cuid())
-  invoiceNumber String        @unique
-  orderId       String
+  id              String        @id @default(cuid())
+  invoiceNumber   String        @unique
+  orderId         String?       // Optional — null for standalone invoices
+  userId          String        // Customer (required)
 
-  subtotal      Decimal       @db.Decimal(10, 2)
-  discount      Decimal       @default(0) @db.Decimal(10, 2)
-  tax           Decimal       @default(0) @db.Decimal(10, 2)
-  total         Decimal       @db.Decimal(10, 2)
-  currency      String        @default("USD")
+  // Denormalized customer info
+  customerName    String
+  customerEmail   String
+  customerPhone   String?
+  customerCountry String?
 
-  status        InvoiceStatus @default(DRAFT)
-  dueDate       DateTime?
-  paidAt        DateTime?
+  // Items snapshot (JSON array)
+  items           Json?         // [{ name, description, quantity, price }]
+  serviceName     String?       // Primary service name (for filtering)
 
-  order         Order         @relation(fields: [orderId], references: [id])
+  subtotal        Decimal       @db.Decimal(10, 2)
+  discount        Decimal       @default(0) @db.Decimal(10, 2)
+  total           Decimal       @db.Decimal(10, 2)
+  currency        String        @default("USD")
 
-  createdAt     DateTime      @default(now())
-  updatedAt     DateTime      @updatedAt
+  notes           String?       @db.Text
+  status          InvoiceStatus @default(DRAFT)
+  dueDate         DateTime?
+  paidAt          DateTime?
+
+  order           Order?        @relation(fields: [orderId], references: [id])
+  user            User          @relation(fields: [userId], references: [id])
+
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
 
   @@index([orderId])
+  @@index([userId])
   @@index([status])
+  @@index([serviceName])
 }
 
 enum InvoiceStatus {

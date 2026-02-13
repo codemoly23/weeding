@@ -16,6 +16,7 @@ import {
   Loader2,
   Eye,
   MessageCircle,
+  CreditCard,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -61,6 +62,14 @@ interface OrderDocument {
   createdAt: string;
 }
 
+interface OrderInvoice {
+  id: string;
+  invoiceNumber: string;
+  status: string;
+  total: string;
+  createdAt: string;
+}
+
 interface Order {
   id: string;
   orderNumber: string;
@@ -78,6 +87,7 @@ interface Order {
   customerCountry: string | null;
   items: OrderItem[];
   documents: OrderDocument[];
+  invoices: OrderInvoice[];
   createdAt: string;
   updatedAt: string;
 }
@@ -183,7 +193,7 @@ export default function OrderDetailPage({ params }: PageProps) {
   const [order, setOrder] = useState<Order | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [currencySymbol, setCurrencySymbol] = useState("$");
-  const [businessName, setBusinessName] = useState("");
+  const [payingNow, setPayingNow] = useState(false);
 
   const fmtPrice = (price: string | number) => formatPrice(price, currencySymbol);
 
@@ -194,7 +204,6 @@ export default function OrderDetailPage({ params }: PageProps) {
       .then((res) => res.json())
       .then((config) => {
         if (config.currency) setCurrencySymbol(getCurrencySymbol(config.currency));
-        if (config.name) setBusinessName(config.name);
       })
       .catch(() => {});
   }, [params]);
@@ -259,71 +268,32 @@ export default function OrderDetailPage({ params }: PageProps) {
 
   const handleDownloadInvoice = () => {
     if (!order) return;
-    const invoiceHtml = `
-      <!DOCTYPE html>
-      <html><head><title>Invoice - ${order.orderNumber}</title>
-      <style>
-        body { font-family: system-ui, sans-serif; max-width: 800px; margin: 0 auto; padding: 40px; color: #333; }
-        .header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 40px; }
-        .header h1 { font-size: 28px; margin: 0; }
-        .header .company { text-align: right; color: #666; }
-        .meta { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 30px; }
-        .meta-box { background: #f9fafb; padding: 16px; border-radius: 8px; }
-        .meta-box h3 { margin: 0 0 8px; font-size: 14px; color: #666; text-transform: uppercase; }
-        .meta-box p { margin: 4px 0; }
-        table { width: 100%; border-collapse: collapse; margin-bottom: 20px; }
-        th { text-align: left; padding: 12px; border-bottom: 2px solid #e5e7eb; font-size: 14px; color: #666; }
-        td { padding: 12px; border-bottom: 1px solid #e5e7eb; }
-        .total-row { font-weight: bold; font-size: 18px; }
-        .badge { display: inline-block; padding: 4px 12px; border-radius: 20px; font-size: 12px; font-weight: 600; }
-        .badge-paid { background: #d1fae5; color: #065f46; }
-        .badge-pending { background: #fef3c7; color: #92400e; }
-        .footer { margin-top: 40px; text-align: center; color: #999; font-size: 12px; }
-        @media print { body { padding: 20px; } }
-      </style></head><body>
-      <div class="header">
-        <div><h1>INVOICE</h1><p style="color:#666">${order.orderNumber}</p></div>
-        <div class="company"><strong>${businessName || "Business"}</strong></div>
-      </div>
-      <div class="meta">
-        <div class="meta-box">
-          <h3>Bill To</h3>
-          <p><strong>${order.customerName}</strong></p>
-          <p>${order.customerEmail}</p>
-          ${order.customerPhone ? `<p>${order.customerPhone}</p>` : ""}
-          ${order.customerCountry ? `<p>${order.customerCountry}</p>` : ""}
-        </div>
-        <div class="meta-box">
-          <h3>Invoice Details</h3>
-          <p><strong>Date:</strong> ${new Date(order.createdAt).toLocaleDateString()}</p>
-          <p><strong>Order:</strong> ${order.orderNumber}</p>
-          <p><strong>Status:</strong> <span class="badge ${order.paymentStatus === "PAID" ? "badge-paid" : "badge-pending"}">${order.paymentStatus}</span></p>
-          ${order.paidAt ? `<p><strong>Paid:</strong> ${new Date(order.paidAt).toLocaleDateString()}</p>` : ""}
-        </div>
-      </div>
-      <table>
-        <thead><tr><th>Item</th><th style="text-align:right">Price</th></tr></thead>
-        <tbody>
-          ${order.items.map((item) => `
-            <tr>
-              <td>${item.name}${item.description ? `<br><small style="color:#666">${item.description}</small>` : ""}</td>
-              <td style="text-align:right">${fmtPrice(item.priceUSD)}${item.stateFee && parseFloat(item.stateFee) > 0 ? `<br><small style="color:#666">+${fmtPrice(item.stateFee)} ${item.locationFeeLabel || "fee"}</small>` : ""}</td>
-            </tr>
-          `).join("")}
-        </tbody>
-      </table>
-      <div style="text-align:right">
-        <p>Subtotal: ${fmtPrice(order.subtotalUSD)}</p>
-        ${parseFloat(order.discountUSD) > 0 ? `<p style="color:#16a34a">Discount: -${fmtPrice(order.discountUSD)}</p>` : ""}
-        <p class="total-row">Total: ${fmtPrice(order.totalUSD)}</p>
-      </div>
-      <div class="footer"><p>Thank you for your business!</p></div>
-      </body></html>
-    `;
-    const printWindow = window.open("", "_blank");
-    if (printWindow) {
-      printWindow.document.write(invoiceHtml);
-      printWindow.document.close();
+    if (order.invoices?.length > 0) {
+      window.open(`/api/invoices/${order.invoices[0].id}/pdf`, "_blank");
+    } else {
+      toast.error("No invoice available for this order");
+    }
+  };
+
+  const handlePayNow = async () => {
+    if (!order) return;
+    setPayingNow(true);
+    try {
+      const res = await fetch(`/api/orders/${order.orderNumber}/pay`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ gateway: "stripe" }),
+      });
+      const data = await res.json();
+      if (res.ok && data.url) {
+        window.location.href = data.url;
+      } else {
+        toast.error(data.error || "Failed to create payment session");
+      }
+    } catch {
+      toast.error("Something went wrong. Please try again.");
+    } finally {
+      setPayingNow(false);
     }
   };
 
@@ -583,6 +553,25 @@ export default function OrderDetailPage({ params }: PageProps) {
                 <p className="text-xs text-center text-muted-foreground">
                   Paid on {formatDateTime(order.paidAt)}
                 </p>
+              )}
+              {(order.paymentStatus === "PENDING" || order.paymentStatus === "FAILED") && (
+                <Button
+                  className="w-full"
+                  onClick={handlePayNow}
+                  disabled={payingNow}
+                >
+                  {payingNow ? (
+                    <>
+                      <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                      Processing...
+                    </>
+                  ) : (
+                    <>
+                      <CreditCard className="mr-2 h-4 w-4" />
+                      {order.paymentStatus === "FAILED" ? "Retry Payment" : "Pay Now"}
+                    </>
+                  )}
+                </Button>
               )}
               <Separator />
               <Button

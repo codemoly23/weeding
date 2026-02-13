@@ -183,6 +183,7 @@ export type WidgetType =
   | "button-group"
   // Advanced Widgets
   | "faq"
+  | "faq-accordion"
   | "timeline"
   | "team-grid"
   | "feature-grid"

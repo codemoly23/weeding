@@ -75,9 +75,18 @@ import { CountrySelector } from "@/components/ui/country-selector";
 import { Header } from "@/components/layout/header";
 import { toast } from "sonner";
 import { Eye, EyeOff } from "lucide-react";
+import { PaymentGatewaySelector, type PaymentGateway } from "@/components/checkout/payment-gateway-selector";
+import { PayPalButton } from "@/components/checkout/paypal-button";
 
 interface FormValues {
-  [key: string]: string | boolean | number | File | null;
+  [key: string]: string | boolean | number | null;
+}
+
+interface UploadingFile {
+  fieldName: string;
+  fileName: string;
+  progress: boolean;
+  error?: string;
 }
 
 interface LoggedInUser {
@@ -113,6 +122,14 @@ function ServiceCheckoutForm() {
   const [faqOpen, setFaqOpen] = useState<number | null>(null);
   const [agreeTerms, setAgreeTerms] = useState(false);
   const [understandDisclaimer, setUnderstandDisclaimer] = useState(false);
+
+  // Payment gateway states
+  const [enabledGateways, setEnabledGateways] = useState<PaymentGateway[]>([]);
+  const [selectedGateway, setSelectedGateway] = useState<PaymentGateway | null>(null);
+  const [showPayPalOverlay, setShowPayPalOverlay] = useState(false);
+  const [createdOrderNumber, setCreatedOrderNumber] = useState<string | null>(null);
+  const [createdOrderTotal, setCreatedOrderTotal] = useState(0);
+  const [uploadingFiles, setUploadingFiles] = useState<Record<string, UploadingFile>>({});
 
   // User & Account states
   const [loggedInUser, setLoggedInUser] = useState<LoggedInUser | null>(null);
@@ -239,6 +256,23 @@ function ServiceCheckoutForm() {
     };
     fetchServiceAndForm();
   }, [serviceSlug]);
+
+  // Fetch enabled payment gateways
+  useEffect(() => {
+    fetch("/api/checkout/gateways")
+      .then((res) => res.json())
+      .then((data) => {
+        const gateways = (data.gateways || []) as PaymentGateway[];
+        setEnabledGateways(gateways);
+        // Auto-select if only one gateway
+        if (gateways.length === 1) {
+          setSelectedGateway(gateways[0]);
+        }
+      })
+      .catch(() => {
+        // No gateways available
+      });
+  }, []);
 
   // Check for logged-in user on mount
   useEffect(() => {
@@ -499,7 +533,53 @@ function ServiceCheckoutForm() {
   };
 
   // Handle input changes with sanitization based on field type
-  const handleInputChange = (name: string, value: string | boolean | number | File | null, fieldType?: string) => {
+  // Handle file upload — upload immediately, store URL
+  const handleFileUpload = async (fieldName: string, file: File) => {
+    setUploadingFiles((prev) => ({
+      ...prev,
+      [fieldName]: { fieldName, fileName: file.name, progress: true },
+    }));
+
+    try {
+      const formData = new FormData();
+      formData.append("file", file);
+      formData.append("fieldName", fieldName);
+
+      const res = await fetch("/api/checkout/upload", {
+        method: "POST",
+        body: formData,
+      });
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        setUploadingFiles((prev) => ({
+          ...prev,
+          [fieldName]: { fieldName, fileName: file.name, progress: false, error: data.error },
+        }));
+        toast.error(data.error || "Upload failed");
+        return;
+      }
+
+      // Store URL in form values (not File object)
+      setFormValues((prev) => ({ ...prev, [fieldName]: data.url }));
+      setUploadingFiles((prev) => ({
+        ...prev,
+        [fieldName]: { fieldName, fileName: file.name, progress: false },
+      }));
+      if (errors[fieldName]) {
+        setErrors((prev) => ({ ...prev, [fieldName]: "" }));
+      }
+    } catch {
+      setUploadingFiles((prev) => ({
+        ...prev,
+        [fieldName]: { fieldName, fileName: file.name, progress: false, error: "Upload failed" },
+      }));
+      toast.error("Failed to upload file");
+    }
+  };
+
+  const handleInputChange = (name: string, value: string | boolean | number | null, fieldType?: string) => {
     let sanitizedValue = value;
 
     // Only sanitize string values
@@ -615,7 +695,7 @@ function ServiceCheckoutForm() {
     return Object.keys(newErrors).length === 0;
   };
 
-  // Validate final step (terms)
+  // Validate final step (terms + payment gateway)
   const validateFinalStep = (): boolean => {
     const newErrors: Record<string, string> = {};
     if (!agreeTerms) {
@@ -623,6 +703,9 @@ function ServiceCheckoutForm() {
     }
     if (!understandDisclaimer) {
       newErrors.understandDisclaimer = "Please acknowledge the disclaimer";
+    }
+    if (enabledGateways.length > 0 && !selectedGateway) {
+      newErrors.paymentGateway = "Please select a payment method";
     }
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
@@ -645,14 +728,17 @@ function ServiceCheckoutForm() {
 
   // Calculate total steps - add account step if not logged in, skip contact for logged in
   const getTotalSteps = () => {
-    if (!formConfig) return 1;
+    if (!formConfig) {
+      // No form: Account (if not logged in) + Review & Payment
+      return loggedInUser ? 1 : 2;
+    }
     const filteredSteps = getFilteredSteps();
     return loggedInUser ? filteredSteps.length : formConfig.steps.length + 1;
   };
 
   // Get step number for account step (inserted before last step)
   const getAccountStepNumber = () => {
-    if (!formConfig) return 1;
+    if (!formConfig) return 1; // Account is step 1 for form-less services
     return formConfig.steps.length; // Account step is right before the final terms step
   };
 
@@ -684,8 +770,6 @@ function ServiceCheckoutForm() {
   };
 
   const handleNext = () => {
-    if (!formConfig) return;
-
     const totalSteps = getTotalSteps();
 
     // Validate based on current step type
@@ -722,11 +806,12 @@ function ServiceCheckoutForm() {
   };
 
   const handleSubmit = async () => {
-    if (!formConfig || !validateFinalStep()) return;
+    if (!validateFinalStep()) return;
 
     setIsLoading(true);
 
     try {
+      // Step 1: Create order
       const response = await fetch("/api/service-orders", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -741,7 +826,6 @@ function ServiceCheckoutForm() {
           locationCode: selectedLocation?.code,
           locationName: selectedLocation?.name,
           stateCode: selectedLocation?.code, // backward compat
-          // Include account data for new users, or userId for logged-in users
           ...(loggedInUser
             ? { userId: loggedInUser.id }
             : {
@@ -759,21 +843,56 @@ function ServiceCheckoutForm() {
 
       const data = await response.json();
 
-      if (response.ok) {
-        if (data.user) {
-          localStorage.setItem("user", JSON.stringify(data.user));
+      if (!response.ok) {
+        if (response.status === 409 && data.error === "EMAIL_EXISTS") {
+          setShowLoginPrompt(true);
+          setExistingUserName(data.userName);
+          toast.error("An account with this email already exists. Please login to continue.");
+          setCurrentStep(getAccountStepNumber());
+          return;
         }
-        toast.success("Application submitted successfully!");
-        router.push(`/checkout/success?orderId=${data.orderId}`);
-      } else if (response.status === 409 && data.error === "EMAIL_EXISTS") {
-        // Email already exists - prompt login
-        setShowLoginPrompt(true);
-        setExistingUserName(data.userName);
-        toast.error("An account with this email already exists. Please login to continue.");
-        // Go back to account step
-        setCurrentStep(getAccountStepNumber());
+        toast.error(data.error || "Failed to submit order");
+        return;
+      }
+
+      // Save user data if returned
+      if (data.user) {
+        localStorage.setItem("user", JSON.stringify(data.user));
+        window.dispatchEvent(new Event("user-auth-change"));
+      }
+
+      const orderNumber = data.orderId;
+
+      // Step 2: Handle payment based on selected gateway
+      if (selectedGateway === "stripe") {
+        // Create Stripe checkout session and redirect
+        const payRes = await fetch(`/api/orders/${orderNumber}/pay`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ gateway: "stripe" }),
+        });
+
+        const payData = await payRes.json();
+
+        if (payRes.ok && payData.url) {
+          // Redirect to Stripe hosted checkout
+          window.location.href = payData.url;
+          return;
+        } else {
+          toast.error(payData.error || "Failed to create payment session. You can pay from your dashboard.");
+          router.push(`/checkout/success?orderId=${orderNumber}`);
+        }
+      } else if (selectedGateway === "paypal") {
+        // Show PayPal button overlay
+        setCreatedOrderNumber(orderNumber);
+        setCreatedOrderTotal(serviceFee + (selectedLocation?.fee || 0));
+        setShowPayPalOverlay(true);
+        setIsLoading(false);
+        return;
       } else {
-        toast.error(data.error || "Failed to submit application");
+        // No payment gateway — order created without payment
+        toast.success("Order submitted successfully!");
+        router.push(`/checkout/success?orderId=${orderNumber}`);
       }
     } catch (error) {
       console.error("Submission error:", error);
@@ -1012,7 +1131,9 @@ function ServiceCheckoutForm() {
           </div>
         );
 
-      case "file":
+      case "file": {
+        const uploadState = uploadingFiles[field.name];
+        const uploadedUrl = value as string;
         return (
           <div key={field.name} className="space-y-2">
             <div className="flex items-center gap-2">
@@ -1035,16 +1156,35 @@ function ServiceCheckoutForm() {
               type="file"
               accept={field.accept}
               onChange={(e) => {
-                const file = e.target.files?.[0] || null;
-                handleInputChange(field.name, file);
+                const file = e.target.files?.[0];
+                if (file) {
+                  handleFileUpload(field.name, file);
+                }
               }}
               className={fieldError ? "border-destructive" : ""}
+              disabled={uploadState?.progress}
             />
+            {uploadState?.progress && (
+              <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                <Loader2 className="h-4 w-4 animate-spin" />
+                Uploading {uploadState.fileName}...
+              </div>
+            )}
+            {uploadState?.error && (
+              <p className="text-sm text-destructive">{uploadState.error}</p>
+            )}
+            {uploadedUrl && !uploadState?.progress && (
+              <div className="flex items-center gap-2 text-sm text-green-600">
+                <Check className="h-4 w-4" />
+                {uploadState?.fileName || "File"} uploaded
+              </div>
+            )}
             {fieldError && (
               <p className="text-sm text-destructive">{fieldError}</p>
             )}
           </div>
         );
+      }
 
       case "state":
         return (
@@ -1172,30 +1312,28 @@ function ServiceCheckoutForm() {
     );
   }
 
-  if (!formConfig) {
-    return (
-      <div className="min-h-screen bg-muted/30 py-8">
-        <div className="container mx-auto px-4 text-center">
-          <h1 className="text-2xl font-bold">Checkout Not Configured</h1>
-          <p className="mt-2 text-muted-foreground">
-            The checkout form for this service hasn&apos;t been set up yet. Please configure it from the admin panel.
-          </p>
-          <Link href="/services">
-            <Button className="mt-4">Browse Services</Button>
-          </Link>
-        </div>
-      </div>
-    );
-  }
+  // For services without forms: simplified checkout (account + payment only)
+  const hasFormSteps = formConfig && formConfig.steps.length > 0;
 
-  const currentStepConfig = getCurrentFormStep();
+  const currentStepConfig = hasFormSteps ? getCurrentFormStep() : null;
   const totalSteps = getTotalSteps();
 
   // Build progress steps array - filter contact for logged-in, insert Account for new users
   const getProgressSteps = () => {
+    // No form steps: simplified flow
+    if (!hasFormSteps) {
+      if (loggedInUser) {
+        return [{ id: 1, name: "Review & Payment", isLast: true }];
+      }
+      return [
+        { id: 1, name: "Account", isLast: false },
+        { id: 2, name: "Review & Payment", isLast: true },
+      ];
+    }
+
     if (loggedInUser) {
       // For logged-in users: skip contact info steps
-      const filteredSteps = formConfig.steps.filter((s) => !isContactInfoStep(s));
+      const filteredSteps = formConfig!.steps.filter((s) => !isContactInfoStep(s));
       return filteredSteps.map((s, idx) => ({
         id: idx + 1,
         name: s.name,
@@ -1204,10 +1342,10 @@ function ServiceCheckoutForm() {
     }
 
     // For non-logged-in users: show all steps + Account step
-    const steps = formConfig.steps.map((s, idx) => ({
+    const steps = formConfig!.steps.map((s, idx) => ({
       id: s.id,
       name: s.name,
-      isLast: idx === formConfig.steps.length - 1,
+      isLast: idx === formConfig!.steps.length - 1,
     }));
 
     // Insert Account step before the last step
@@ -1559,12 +1697,12 @@ function ServiceCheckoutForm() {
                 </Card>
               )}
 
-              {/* Final step - Terms and agreements */}
+              {/* Final step - Review, Payment & Terms */}
               {isFinalStep() && (
                 <Card className="mt-6">
                   <CardHeader>
-                    <CardTitle>Review & Submit</CardTitle>
-                    <CardDescription>Please review and accept the terms to complete your order</CardDescription>
+                    <CardTitle>Review & Complete Order</CardTitle>
+                    <CardDescription>Review your details, select payment method, and complete your order</CardDescription>
                   </CardHeader>
                   <CardContent className="space-y-6">
                     {/* Order Summary for logged-in users */}
@@ -1586,6 +1724,24 @@ function ServiceCheckoutForm() {
                         <p className="text-sm text-muted-foreground">{accountData.email}</p>
                       </div>
                     )}
+
+                    {/* Payment Method Selection */}
+                    {enabledGateways.length > 0 && (
+                      <div className="space-y-3">
+                        <Separator />
+                        <PaymentGatewaySelector
+                          enabledGateways={enabledGateways}
+                          selectedGateway={selectedGateway}
+                          onSelect={setSelectedGateway}
+                          disabled={isLoading}
+                        />
+                        {errors.paymentGateway && (
+                          <p className="text-sm text-destructive">{errors.paymentGateway}</p>
+                        )}
+                      </div>
+                    )}
+
+                    <Separator />
 
                     <div className="space-y-4">
                       <h3 className="font-semibold">Terms & Agreements</h3>
@@ -1647,24 +1803,56 @@ function ServiceCheckoutForm() {
                     <ArrowRight className="ml-2 h-4 w-4" />
                   </Button>
                 ) : (
-                  <Button onClick={handleSubmit} disabled={isLoading} size="lg">
+                  <Button onClick={handleSubmit} disabled={isLoading || showPayPalOverlay} size="lg">
                     {isLoading ? (
                       <>
                         <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                        Submitting...
+                        Processing...
                       </>
                     ) : (
                       <>
                         <Check className="mr-2 h-4 w-4" />
-                        Submit Application - {currencySymbol}{serviceFee + (selectedLocation?.fee || 0)}
+                        {enabledGateways.length > 0
+                          ? `Complete Order — ${currencySymbol}${serviceFee + (selectedLocation?.fee || 0)}`
+                          : `Submit Order — ${currencySymbol}${serviceFee + (selectedLocation?.fee || 0)}`}
                       </>
                     )}
                   </Button>
                 )}
               </div>
 
+              {/* PayPal Payment Overlay */}
+              {showPayPalOverlay && createdOrderNumber && (
+                <Card className="mt-6 border-2 border-primary">
+                  <CardHeader>
+                    <CardTitle>Complete Payment with PayPal</CardTitle>
+                    <CardDescription>
+                      Your order #{createdOrderNumber} has been created. Complete your payment below.
+                    </CardDescription>
+                  </CardHeader>
+                  <CardContent>
+                    <PayPalButton
+                      orderId={createdOrderNumber}
+                      amount={createdOrderTotal}
+                      currency="USD"
+                      onSuccess={() => {
+                        toast.success("Payment completed successfully!");
+                        router.push(`/checkout/success?orderId=${createdOrderNumber}`);
+                      }}
+                      onError={(error) => {
+                        toast.error(error || "Payment failed. You can try again from your dashboard.");
+                      }}
+                      onCancel={() => {
+                        toast.info("Payment cancelled. You can pay later from your dashboard.");
+                        router.push(`/checkout/success?orderId=${createdOrderNumber}`);
+                      }}
+                    />
+                  </CardContent>
+                </Card>
+              )}
+
               {/* FAQs Section */}
-              {formConfig.faqs.length > 0 && (
+              {formConfig && formConfig.faqs.length > 0 && (
                 <Card className="mt-8">
                   <CardHeader>
                     <CardTitle className="flex items-center gap-2">

@@ -6,6 +6,7 @@ import {
   LayoutDashboard,
   ShoppingBag,
   FileText,
+  Receipt,
   User,
   HelpCircle,
   LogOut,
@@ -25,6 +26,11 @@ const navigation = [
     name: "Orders",
     href: "/dashboard/orders",
     icon: ShoppingBag,
+  },
+  {
+    name: "Invoices",
+    href: "/dashboard/invoices",
+    icon: Receipt,
   },
   {
     name: "Documents",

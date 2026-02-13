@@ -20,6 +20,16 @@ async function handleCheckoutSessionCompleted(
   const orderId = metadata.orderId;
 
   try {
+    // Idempotency check — skip if already paid
+    const existingOrder = await prisma.order.findUnique({
+      where: { orderNumber: orderId },
+    });
+
+    if (existingOrder?.paymentStatus === "PAID") {
+      console.log(`Order ${orderId} already paid, skipping`);
+      return;
+    }
+
     // Update order payment status
     const order = await prisma.order.update({
       where: { orderNumber: orderId },
@@ -29,6 +39,15 @@ async function handleCheckoutSessionCompleted(
         paymentId: session.payment_intent as string,
         paidAt: new Date(),
         status: "PROCESSING",
+      },
+    });
+
+    // Update linked invoice to PAID
+    await prisma.invoice.updateMany({
+      where: { orderId: order.id, status: { not: "PAID" } },
+      data: {
+        status: "PAID",
+        paidAt: new Date(),
       },
     });
 

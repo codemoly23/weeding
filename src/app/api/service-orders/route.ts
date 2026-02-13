@@ -3,6 +3,7 @@ import { z } from "zod";
 import bcrypt from "bcryptjs";
 import { prisma } from "@/lib/db";
 import { generateOrderNumber } from "@/lib/order-utils";
+import { generateInvoiceNumber, buildInvoiceItems } from "@/lib/invoice-utils";
 
 // Schema for service order - more flexible than LLC-specific
 const serviceOrderSchema = z.object({
@@ -245,6 +246,35 @@ export async function POST(request: NextRequest) {
       },
     });
 
+    // Auto-create invoice for this order
+    const invoiceItems = buildInvoiceItems(order.items);
+    const invoiceNumber = await generateInvoiceNumber();
+
+    // Get currency from business settings
+    const currencySetting = await prisma.setting.findUnique({
+      where: { key: "business.currency" },
+    });
+    const currency = (currencySetting?.value as string) || order.currency || "USD";
+
+    await prisma.invoice.create({
+      data: {
+        invoiceNumber,
+        orderId: order.id,
+        userId: user.id,
+        customerName,
+        customerEmail,
+        customerPhone,
+        customerCountry,
+        items: invoiceItems,
+        serviceName: data.serviceName,
+        subtotal: order.subtotalUSD,
+        discount: order.discountUSD,
+        total: order.totalUSD,
+        currency,
+        status: "SENT",
+      },
+    });
+
     // Log activity
     await prisma.activityLog.create({
       data: {
@@ -254,6 +284,7 @@ export async function POST(request: NextRequest) {
         entityId: order.id,
         metadata: {
           orderNumber,
+          invoiceNumber,
           service: data.serviceName,
           locationCode: data.locationCode || data.stateCode,
           total: data.totalAmount,

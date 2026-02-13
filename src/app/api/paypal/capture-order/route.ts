@@ -34,6 +34,16 @@ export async function POST(request: NextRequest) {
         paymentMethod: "paypal",
         paymentId: result.transactionId,
         paidAt: new Date(),
+        status: "PROCESSING",
+      },
+    });
+
+    // Update linked invoice to PAID
+    await prisma.invoice.updateMany({
+      where: { orderId: order.id, status: { not: "PAID" } },
+      data: {
+        status: "PAID",
+        paidAt: new Date(),
       },
     });
 

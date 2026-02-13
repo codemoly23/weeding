@@ -326,6 +326,7 @@ function WidgetRenderer({ widget }: WidgetRendererProps) {
         return <RelatedServicesWidget settings={widget.settings as any} />;
 
       case "faq":
+      case "faq-accordion":
         return <FaqAccordionWidget settings={widget.settings as any} />;
 
       case "button-group":

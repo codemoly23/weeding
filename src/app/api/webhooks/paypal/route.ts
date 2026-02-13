@@ -48,6 +48,16 @@ async function handlePaymentCaptureCompleted(event: PayPalWebhookEvent) {
   }
 
   try {
+    // Idempotency check — skip if already paid
+    const existingOrder = await prisma.order.findUnique({
+      where: { orderNumber: orderId },
+    });
+
+    if (existingOrder?.paymentStatus === "PAID") {
+      console.log(`Order ${orderId} already paid, skipping`);
+      return;
+    }
+
     const order = await prisma.order.update({
       where: { orderNumber: orderId },
       data: {
@@ -56,6 +66,15 @@ async function handlePaymentCaptureCompleted(event: PayPalWebhookEvent) {
         paymentId: capture.id,
         paidAt: new Date(),
         status: "PROCESSING",
+      },
+    });
+
+    // Update linked invoice to PAID
+    await prisma.invoice.updateMany({
+      where: { orderId: order.id, status: { not: "PAID" } },
+      data: {
+        status: "PAID",
+        paidAt: new Date(),
       },
     });
 
