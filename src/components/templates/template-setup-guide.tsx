@@ -13,7 +13,8 @@ type PageType =
   | "blog_list"
   | "about"
   | "contact"
-  | "faq";
+  | "faq"
+  | "pricing";
 
 interface SetupStep {
   title: string;
@@ -230,6 +231,31 @@ const SETUP_GUIDE_CONFIG: Record<PageType, SetupGuideConfig> = {
       {
         title: "Save & Publish",
         description: "The FAQ page will now use this template.",
+      },
+    ],
+  },
+  pricing: {
+    title: "Pricing Page",
+    description: "Design your pricing page.",
+    steps: [
+      {
+        title: "Go to Page Builder",
+        description: "Navigate to Admin Panel → Appearance → Page Builder",
+        action: { label: "Open Page Builder", href: "/admin/appearance/pages" },
+      },
+      {
+        title: "Create a New Page",
+        description: 'Click "Create Page" and design your pricing page layout.',
+        tip: "Use the Pricing Table widget to show service packages with comparison features.",
+      },
+      {
+        title: "Assign as Pricing Template",
+        description:
+          'In Page Settings, select "Pricing Page" from the template dropdown.',
+      },
+      {
+        title: "Save & Publish",
+        description: "The pricing page will now use this template.",
       },
     ],
   },

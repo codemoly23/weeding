@@ -122,6 +122,13 @@ export async function getFaqTemplate(): Promise<TemplateData | null> {
 }
 
 /**
+ * Get the PRICING template
+ */
+export async function getPricingTemplate(): Promise<TemplateData | null> {
+  return getActiveTemplate("PRICING");
+}
+
+/**
  * Check if a template exists for a page type
  */
 export async function hasTemplate(templateType: PageTemplateType): Promise<boolean> {

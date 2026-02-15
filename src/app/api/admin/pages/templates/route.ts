@@ -76,6 +76,7 @@ function formatTemplateLabel(type: PageTemplateType): string {
     CONTACT: "Contact Page",
     FAQ: "FAQ Page",
     CHECKOUT: "Checkout",
+    PRICING: "Pricing Page",
     CUSTOM: "Custom Page",
   };
   return labels[type] || type;
@@ -95,6 +96,7 @@ function getTemplateDescription(type: PageTemplateType): string {
     CONTACT: "Contact page (/contact)",
     FAQ: "FAQ page (/faq)",
     CHECKOUT: "Checkout pages (/checkout/*)",
+    PRICING: "Pricing page (/pricing)",
     CUSTOM: "Custom standalone pages with custom URLs",
   };
   return descriptions[type] || "";

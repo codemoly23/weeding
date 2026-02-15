@@ -27,7 +27,8 @@ type PageType =
   | "blog_list"
   | "about"
   | "contact"
-  | "faq";
+  | "faq"
+  | "pricing";
 
 interface ComingSoonPageProps {
   pageType: PageType;
@@ -100,6 +101,13 @@ const COMING_SOON_CONFIG: Record<
     description:
       "Our FAQ page is being prepared. Check back soon for answers to common questions!",
     icon: HelpCircle,
+  },
+  pricing: {
+    title: "Pricing",
+    subtitle: "Coming Soon",
+    description:
+      "Our pricing page is being prepared. Check back soon for transparent pricing information!",
+    icon: Package,
   },
 };
 

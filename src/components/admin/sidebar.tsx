@@ -21,6 +21,8 @@ import {
   Palette,
   Puzzle,
   Target,
+  Paintbrush,
+  Database,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useBusinessConfig } from "@/hooks/use-business-config";
@@ -116,6 +118,7 @@ const navItems: NavItem[] = [
       { title: "Header Builder", href: "/admin/appearance/header" },
       { title: "Menu Builder", href: "/admin/appearance/header/menu" },
       { title: "Footer Builder", href: "/admin/appearance/footer" },
+      { title: "Theme Gallery", href: "/admin/appearance/themes" },
     ],
   },
   {
@@ -128,6 +131,7 @@ const navItems: NavItem[] = [
       { title: "Email", href: "/admin/settings/email" },
       { title: "Newsletter", href: "/admin/settings/newsletter" },
       { title: "Plugins", href: "/admin/settings/plugins" },
+      { title: "Data Management", href: "/admin/settings/data" },
       { title: "Profile", href: "/admin/profile" },
     ],
   },
@@ -168,6 +172,8 @@ const iconMap: Record<string, React.ComponentType<{ className?: string }>> = {
   Palette,
   Puzzle,
   Target,
+  Paintbrush,
+  Database,
 };
 
 export function AdminSidebar() {

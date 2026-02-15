@@ -1,338 +1,259 @@
 # Theme & Data Management System
 
-> **Status:** Planned (implement after core features complete)
+> **Status:** Implemented
 > **Priority:** Before CodeCanyon submission
 
 ## Overview
 
-Service-wise starter themes with full demo content, data export/import, and factory reset for the CMS.
+4-layer theme system with full demo content, data export/import, factory reset, and dynamic color palette for the CMS.
+
+---
+
+## Architecture: 4-Layer Theme System
+
+```
+Layer 1: Widget Defaults (code-level)  [EXISTING]
+   → Every widget has defaultSettings in defaults.ts
+   → Theme-independent - always same generic placeholder
+   → Applied when user adds a new widget to page builder
+
+Layer 2: Theme Widget Presets (theme data.json → widgetPresets)
+   → Per-widget demo content overrides per theme
+   → "Legal" theme hero widget → LLC-specific hero content
+   → Applied when user adds NEW widget while theme is active
+
+Layer 3: Full Site Import (theme activation)
+   → One-click imports: services, pages, blogs, FAQs, testimonials,
+     settings, header, footer, menu, legal pages, form templates
+   → Replaces all content (preserves users, orders, leads)
+
+Layer 4: Theme Color Palette (CSS variables)
+   → Stored in data.json under "colorPalette" key
+   → Saved to ActiveTheme.colorPalette on activation
+   → ThemeColorProvider injects into :root via <style> tag
+   → Controls: buttons, sections, links, cards, header/footer
+   → Widget-specific colors override when explicitly set
+```
 
 ---
 
 ## 1. Theme Package Structure
 
-Each theme is a folder shipped in `/public/themes/`:
+Each theme is a folder in `/public/themes/`:
 
 ```
 public/themes/
-├── llc-formation/
-│   ├── meta.json
-│   ├── data.json
-│   └── assets/           ← Optional: hero images, logos, service icons
+├── legal/
+│   ├── meta.json        ← Theme metadata
+│   ├── data.json        ← Full site content + colors + widget presets
+│   └── thumbnail.jpg    ← Preview image (optional)
 │
-├── cleaning-service/
-│   ├── meta.json
-│   ├── data.json
-│   └── assets/
-│
-├── digital-agency/
-│   ├── meta.json
-│   ├── data.json
-│   └── assets/
-│
-├── restaurant/
-│   ├── meta.json
-│   ├── data.json
-│   └── assets/
-│
-└── consulting/
-    ├── meta.json
-    ├── data.json
-    └── assets/
+├── cleaning-service/    ← Future theme
+├── digital-agency/      ← Future theme
+└── consulting/          ← Future theme
 ```
 
 ### meta.json
 
 ```json
 {
-  "name": "Cleaning Service Pro",
+  "name": "Legal & Business Services",
   "version": "1.0",
-  "description": "Complete cleaning service website with 6 services, 3 blog posts, and full homepage design",
-  "category": "home-services",
+  "description": "Complete LLC formation & business services website...",
+  "category": "legal-business",
   "thumbnail": "thumbnail.jpg",
-  "serviceCount": 6,
+  "serviceCount": 24,
   "author": "LLCPad"
 }
 ```
 
-### data.json
+### data.json Structure
 
 ```json
 {
   "version": "1.0",
-  "exportedAt": "2026-02-12T00:00:00Z",
+  "exportedAt": "2026-02-15T00:00:00Z",
 
-  "settings": {
-    "business.name": "SparkleClean Pro",
-    "business.tagline": "Professional Cleaning Services",
-    "business.currency": "USD",
-    "business.country": "US",
-    "business.email": "hello@sparkleclean.com",
-    "business.phone": "+1 (555) 123-4567",
-    "business.address": "123 Clean St, New York, NY 10001"
-  },
-
-  "services": [
-    {
-      "name": "Deep House Cleaning",
-      "slug": "deep-house-cleaning",
-      "shortDescription": "Thorough top-to-bottom cleaning",
-      "description": "Full HTML description...",
-      "icon": "sparkles",
-      "published": true,
-      "sortOrder": 1,
-      "packages": [
-        {
-          "name": "Basic",
-          "price": 99,
-          "description": "Standard deep clean",
-          "features": ["Kitchen cleaning", "Bathroom sanitization", "Vacuuming"],
-          "isPopular": false
-        },
-        {
-          "name": "Premium",
-          "price": 199,
-          "description": "Premium deep clean with extras",
-          "features": ["Everything in Basic", "Window cleaning", "Appliance cleaning", "Laundry"],
-          "isPopular": true
-        }
-      ],
-      "faqs": [
-        { "question": "How long does deep cleaning take?", "answer": "Typically 3-5 hours..." }
-      ],
-      "formTemplate": {
-        "fields": [
-          { "name": "propertyType", "label": "Property Type", "type": "select", "options": ["House", "Apartment", "Condo"] },
-          { "name": "squareFootage", "label": "Square Footage", "type": "number" },
-          { "name": "preferredDate", "label": "Preferred Date", "type": "date" }
-        ]
-      }
-    }
-  ],
-
-  "pages": [
-    {
-      "name": "Home",
-      "slug": "home",
-      "templateType": "HOME",
-      "isSystem": true,
-      "isTemplateActive": true,
-      "sections": []
-    }
-  ],
-
-  "blogs": [
-    {
-      "title": "10 Tips for a Cleaner Home",
-      "slug": "10-tips-cleaner-home",
-      "content": "Full markdown content...",
-      "excerpt": "Discover our top cleaning tips",
-      "category": "tips",
-      "published": true
-    }
-  ],
-
-  "faqCategories": [
-    {
-      "name": "General",
-      "faqs": [
-        { "question": "What areas do you serve?", "answer": "We serve the greater metro area..." }
-      ]
-    }
-  ],
-
-  "legalPages": [
-    {
-      "title": "Terms of Service",
-      "slug": "terms",
-      "content": "Full HTML content..."
+  "colorPalette": {
+    "light": {
+      "background": "#ffffff",
+      "foreground": "#0f172a",
+      "primary": "#F97316",
+      "primary-foreground": "#ffffff",
+      "secondary": "#0A0F1E",
+      "muted": "#F1F5F9",
+      "accent": "#F97316",
+      "destructive": "#EF4444",
+      "border": "#E2E8F0",
+      "ring": "#F97316"
     },
-    {
-      "title": "Privacy Policy",
-      "slug": "privacy",
-      "content": "Full HTML content..."
-    }
-  ],
-
-  "headerConfig": {
-    "layout": "DEFAULT",
-    "navigation": [
-      { "label": "Home", "url": "/" },
-      { "label": "Services", "url": "/services" },
-      { "label": "About", "url": "/about" },
-      { "label": "Blog", "url": "/blog" },
-      { "label": "Contact", "url": "/contact" }
-    ]
+    "dark": { "..." }
   },
 
-  "footerConfig": {
-    "layout": "MULTI_COLUMN",
-    "widgets": []
+  "widgetPresets": {
+    "hero-content": { "headline": { "text": "Start Your US LLC..." } },
+    "services-grid": { "heading": "Our Services" }
   },
 
-  "locationPricing": [],
-  "testimonials": []
+  "settings": { "site_name": "LLCPad", "..." },
+  "serviceCategories": [],
+  "services": [],
+  "pages": [],
+  "blogCategories": [],
+  "blogs": [],
+  "faqs": [],
+  "testimonials": [],
+  "legalPages": [],
+  "headerConfig": {},
+  "menuItems": [],
+  "footerConfig": {},
+  "footerWidgets": [],
+  "formTemplates": [],
+  "locationFees": []
 }
 ```
 
 ---
 
-## 2. Asset Handling
+## 2. Color System
 
-**v1 (JSON only):** Images use URL references or built-in lucide icon names. No binary files in data.json.
+Colors follow shadcn/ui's CSS variable pattern. Theme activation overrides Tailwind v4 `@theme` variables via inline `<style>` tag.
 
-**v2 (ZIP support):** Theme distributed as `.zip` containing `data.json` + `assets/` folder. On import, assets uploaded to Cloudflare R2 and URLs replaced in data.
+### How It Works
 
-### Image Strategy for v1:
-- Service icons: Use lucide icon names (e.g., "sparkles", "home", "truck")
-- Hero images: Use placeholder URLs or Unsplash URLs
-- Logos: Text-based logo from business name (generated by the header component)
+1. `globals.css` defines default colors via `@theme { --color-primary: #F97316; ... }`
+2. `ThemeColorProvider` (server component in root layout) reads `ActiveTheme.colorPalette`
+3. If active theme exists, generates `<style>:root { --color-primary: #...; }</style>`
+4. CSS specificity: inline style > @theme defaults → colors change globally
+5. All shadcn/ui components (`bg-primary`, `text-muted-foreground`, etc.) auto-update
+
+### Color Variables
+
+| Variable | Purpose |
+|----------|---------|
+| `--color-primary` | Buttons, links, focus rings, accents |
+| `--color-secondary` | Secondary buttons, dark sections |
+| `--color-muted` | Subtle backgrounds, disabled states |
+| `--color-accent` | Highlighted elements |
+| `--color-destructive` | Error states, delete buttons |
+| `--color-background` | Page background |
+| `--color-foreground` | Primary text |
+| `--color-border` | Borders, dividers |
+| `--color-card` | Card backgrounds |
 
 ---
 
 ## 3. Admin UI
 
-### 3.1 Starter Kits Page (`/admin/settings/starter-kits`)
+### Theme Gallery (`/admin/appearance/themes`)
 
-Grid of available themes with:
-- Thumbnail preview
-- Theme name, description, service count
-- "Preview" button (opens demo in new tab or shows screenshots)
-- "Import" button (with confirmation dialog)
-- Warning: "This will replace all content data. User accounts and orders are preserved."
+- Grid of available themes with thumbnail, name, description, service count
+- "Active" badge on currently active theme
+- "Activate" button with dialog offering:
+  - **"Activate with Demo Content"** → Full Layer 3 import
+  - **"Apply Colors Only"** → Only Layer 4 color palette
+- Warning about content replacement
+- Progress indicator during import
 
-### 3.2 Data Management Page (`/admin/settings/data`)
+### Data Management (`/admin/settings/data`)
 
 Three sections:
 
-**Export Data:**
-- "Export All Data" button
-- Downloads `site-export-{date}.json`
-- Includes everything from data.json structure
-
-**Import Data:**
-- File upload input (.json files)
-- Validation step: shows what will be imported (X services, Y pages, etc.)
-- Confirmation with "CONFIRM" typed input
-- Progress bar during import
-
-**Reset Data:**
-- Warning banner explaining what gets deleted
-- Requires typing "RESET" to confirm
-- Resets to factory defaults (empty services, default system pages)
+1. **Export Data** → Downloads `llcpad-export-{date}.json`
+2. **Import Data** → File upload, validation preview, typed "CONFIRM" confirmation
+3. **Reset Data** → Danger zone, typed "RESET" confirmation, factory reset
 
 ---
 
 ## 4. API Endpoints
 
-### POST /api/admin/data/import
-```
-Body: { data: DataJSON, source?: "theme" | "file" }
-Response: { success: true, imported: { services: 6, pages: 4, blogs: 3, ... } }
-```
-
-**Import flow:**
-1. Validate JSON structure
-2. Start Prisma transaction
-3. Delete existing: services, packages, pages (non-system recreated), blogs, FAQs, testimonials
-4. Preserve: users, orders, invoices, activity logs, leads
-5. Import in order: settings → services → packages → pages → blogs → FAQs → legal → header/footer config
-6. Commit transaction
-7. Revalidate all paths
-8. Return summary
-
-### POST /api/admin/data/export
-```
-Response: Downloadable JSON file
-```
-
-**Export flow:**
-1. Read all: settings, services (with packages, FAQs, form templates), pages (with sections), blogs, FAQs, legal pages, header config, footer config, location pricing, testimonials
-2. Serialize to data.json format
-3. Return as downloadable file with Content-Disposition header
-
-### POST /api/admin/data/reset
-```
-Body: { confirmation: "RESET" }
-Response: { success: true, message: "All data has been reset" }
-```
-
-**Reset flow:**
-1. Validate confirmation === "RESET"
-2. Start Prisma transaction
-3. Delete: services, packages, order items (orphaned), pages, page blocks, blogs, FAQs, testimonials, legal pages, location pricing
-4. Reset settings to defaults
-5. Recreate system pages (Home, Service Details, etc.)
-6. Commit transaction
-7. Revalidate all paths
-
-### GET /api/admin/themes
-```
-Response: { themes: [{ name, description, thumbnail, serviceCount, ... }] }
-```
-Reads from `/public/themes/` directory.
-
-### POST /api/admin/themes/import
-```
-Body: { themeId: "cleaning-service" }
-```
-Reads theme data.json from `/public/themes/{themeId}/data.json` and runs import flow.
+| Method | Endpoint | Purpose |
+|--------|----------|---------|
+| GET | `/api/admin/themes` | List available themes |
+| POST | `/api/admin/themes/import` | Activate theme (full or colors-only) |
+| POST | `/api/admin/data/export` | Export all data as JSON download |
+| POST | `/api/admin/data/import` | Import data from uploaded JSON |
+| PUT | `/api/admin/data/import` | Validate data without importing |
+| POST | `/api/admin/data/reset` | Factory reset all content |
 
 ---
 
-## 5. Suggested Starter Themes
+## 5. Database
 
-| # | Theme | Services | Category |
-|---|-------|----------|----------|
-| 1 | **LLC Formation** | LLC, EIN, Registered Agent, Amazon Seller, Banking, Compliance, Virtual Address, Trademark | Legal/Business |
-| 2 | **Cleaning Service** | Deep Clean, Move-in/out, Carpet Cleaning, Window Cleaning, Office Cleaning, Recurring Service | Home Services |
-| 3 | **Digital Agency** | Web Design, SEO, Branding, Social Media Management, Content Creation, PPC Advertising | Marketing |
-| 4 | **Restaurant/Catering** | Catering, Meal Prep, Private Chef, Event Food, Delivery, Party Packages | Food & Beverage |
-| 5 | **Consulting** | Strategy, HR Consulting, IT Consulting, Financial Advisory, Legal Consulting, Training | Professional |
+### ActiveTheme Model
 
----
-
-## 6. Implementation Phases
-
-### Phase 1: Export/Import/Reset APIs (with isSystem)
-- `POST /api/admin/data/export`
-- `POST /api/admin/data/import`
-- `POST /api/admin/data/reset`
-- JSON validation utilities
-
-### Phase 2: Admin UI
-- `/admin/settings/data` page (Export, Import, Reset)
-- `/admin/settings/starter-kits` page (theme browser)
-
-### Phase 3: Build Theme Data Files
-- Create 5 data.json files with full demo content
-- Each theme: 5-8 services, 3 packages each, 3-5 blog posts, FAQ content, legal pages, homepage design
-
-### Phase 4: Asset Support (v2)
-- ZIP upload/download support
-- Image extraction and R2 upload during import
-- Image inclusion in export
+```prisma
+model ActiveTheme {
+  id           String   @id @default(cuid())
+  themeId      String   @unique
+  themeName    String
+  activatedAt  DateTime @default(now())
+  colorPalette Json?
+}
+```
 
 ---
 
-## 7. Data Safety Rules
+## 6. Data Safety Rules
 
 **NEVER deleted during import/reset:**
-- `User` (all user accounts)
-- `Account` / `Session` (auth data)
-- `Order` / `OrderItem` / `OrderNote` (customer orders)
-- `Invoice` (financial records)
-- `Lead` / `LeadActivity` / `LeadNote` (lead data)
-- `ActivityLog` (audit trail)
-- `VerificationToken` (auth tokens)
+- User, Account, Session (auth)
+- Order, OrderItem, OrderNote (financial)
+- Invoice (financial)
+- Lead, LeadActivity, LeadNote (sales)
+- ActivityLog (audit)
+- RolePermission (RBAC)
+- Location (system lists)
+- SystemList items (countries, states, currencies)
+- CannedResponse (support)
+- Plugin, PluginSetting (plugins)
 
 **Always deleted and recreated:**
-- `Service` / `ServicePackage` / `ServiceFeature` / `ServiceFAQ`
-- `LandingPage` / `LandingPageBlock`
-- `BlogPost` / `BlogCategory`
-- `FAQ` / `FAQCategory`
-- `LegalPage`
-- `Testimonial`
-- `LocationPricing`
-- `Setting` (all settings replaced)
-- Header/Footer config (stored in Settings)
+- Service, Package, ServiceFeature, PackageFeatureMap, ServiceFAQ
+- ServiceCategory
+- ServiceFormTemplate, FormTab, FormField
+- LandingPage, LandingPageBlock
+- BlogPost, BlogCategory
+- FAQ (global)
+- Testimonial
+- LegalPage
+- LocationFee
+- Setting (all)
+- HeaderConfig, MenuItem
+- FooterConfig, FooterWidget
+- ActiveTheme
+
+---
+
+## 7. Available Themes
+
+| # | Theme | Services | Category | Status |
+|---|-------|----------|----------|--------|
+| 1 | **Legal & Business Services** | 24 | legal-business | Implemented |
+| 2 | Cleaning Service | - | home-services | Planned |
+| 3 | Digital Agency | - | marketing | Planned |
+| 4 | Restaurant/Catering | - | food-beverage | Planned |
+| 5 | Consulting | - | professional | Planned |
+
+---
+
+## 8. Key Files
+
+| File | Purpose |
+|------|---------|
+| `prisma/schema.prisma` | ActiveTheme model |
+| `src/lib/theme/theme-types.ts` | All TypeScript interfaces |
+| `src/lib/theme/theme-exporter.ts` | Export logic |
+| `src/lib/theme/theme-importer.ts` | Import logic (Prisma transaction) |
+| `src/lib/theme/theme-reset.ts` | Factory reset logic |
+| `src/lib/theme/color-provider.tsx` | CSS variable injection |
+| `src/app/api/admin/themes/route.ts` | GET themes list |
+| `src/app/api/admin/themes/import/route.ts` | POST activate theme |
+| `src/app/api/admin/data/export/route.ts` | POST export data |
+| `src/app/api/admin/data/import/route.ts` | POST/PUT import data |
+| `src/app/api/admin/data/reset/route.ts` | POST reset data |
+| `src/app/admin/appearance/themes/page.tsx` | Theme Gallery UI |
+| `src/app/admin/settings/data/page.tsx` | Data Management UI |
+| `public/themes/legal/meta.json` | Legal theme metadata |
+| `public/themes/legal/data.json` | Legal theme full data |
+| `scripts/export-legal-theme.ts` | Script to rebuild data.json from DB |

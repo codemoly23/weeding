@@ -195,6 +195,7 @@ export function CTAButtons({
   sessionStatus,
   onLogout,
 }: CTAButtonsProps) {
+  const safeButtons = Array.isArray(buttons) ? buttons : [];
   const isLoggedIn = !!(user || session?.user);
   const isLoading = sessionStatus === "loading";
 
@@ -203,8 +204,8 @@ export function CTAButtons({
     return (
       <div className="flex items-center gap-x-4">
         {/* CTA buttons placeholder */}
-        {buttons && buttons.length > 0 &&
-          buttons.map((_, index) => (
+        {safeButtons.length > 0 &&
+          safeButtons.map((_, index) => (
             <div
               key={index}
               className="h-9 w-24 animate-pulse rounded-md bg-muted"
@@ -220,8 +221,8 @@ export function CTAButtons({
     return (
       <div className="flex items-center gap-x-4">
         {/* Show CTA buttons for logged in users too */}
-        {buttons && buttons.length > 0 &&
-          buttons.map((btn, index) => (
+        {safeButtons.length > 0 &&
+          safeButtons.map((btn, index) => (
             <CTAButtonItem key={index} btn={btn} index={index} />
           ))}
         <UserMenu user={user} session={session} onLogout={onLogout} />
@@ -353,8 +354,8 @@ export function CTAButtons({
     <div className="flex items-center gap-x-4">
       {renderAuthButton()}
 
-      {buttons && buttons.length > 0 ? (
-        buttons.map((btn, index) => (
+      {safeButtons.length > 0 ? (
+        safeButtons.map((btn, index) => (
           <CTAButtonItem key={index} btn={btn} index={index} />
         ))
       ) : (

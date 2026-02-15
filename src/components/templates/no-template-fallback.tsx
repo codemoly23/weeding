@@ -12,7 +12,8 @@ type PageType =
   | "blog_list"
   | "about"
   | "contact"
-  | "faq";
+  | "faq"
+  | "pricing";
 
 // Roles that can access page builder and see setup instructions
 const PAGE_BUILDER_ROLES = ["admin", "content_manager"];
