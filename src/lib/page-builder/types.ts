@@ -262,6 +262,13 @@ export interface WidgetContainerStyle {
   borderWidth?: number;
   shadow?: "none" | "sm" | "md" | "lg";
   maxWidth?: number;
+  glow?: {
+    enabled: boolean;
+    color: string;
+    blur: number;
+    spread: number;
+    opacity: number;
+  };
 }
 
 // ============================================
@@ -819,6 +826,14 @@ export interface LeadFormWidgetSettings {
   submitTo: FormSubmitTo;
   webhookUrl?: string;
   emailTo?: string;
+  // Form Layout
+  formMaxWidth?: number; // Max width in px (0 = full width)
+  formAlignment?: "left" | "center" | "right";
+  // Button Layout
+  buttonLayout?: "horizontal" | "vertical" | "stacked";
+  buttonAlignment?: "left" | "center" | "right";
+  buttonGap?: number;
+  buttonWidth?: number; // Width in px (0 = auto)
   // Styling
   backgroundColor?: string;
   titleColor?: string;
@@ -1450,6 +1465,13 @@ export interface TextBlockWidgetSettings {
     };
     shadow?: "none" | "sm" | "md" | "lg";
     maxWidth?: number; // px (for readability)
+    glow?: {
+      enabled: boolean;
+      color: string;
+      blur: number;
+      spread: number;
+      opacity: number;
+    };
   };
 
   // === PARAGRAPH STYLING ===
