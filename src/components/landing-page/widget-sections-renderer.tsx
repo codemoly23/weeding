@@ -41,7 +41,7 @@ function getBackgroundStyles(bg: SectionBackground): React.CSSProperties {
       break;
 
     case "gradient":
-      if (bg.gradient) {
+      if (bg.gradient && Array.isArray(bg.gradient.colors)) {
         const colorStops = bg.gradient.colors
           .map((c) => `${c.color} ${c.position}%`)
           .join(", ");

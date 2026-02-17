@@ -292,8 +292,8 @@ function HorizontalConnectorLine({ settings }: { settings: ProcessStepsWidgetSet
       style={{
         // Position at the right edge of this grid cell, spanning the gap
         top: "32px", // Roughly at icon center height
-        right: `-${settings.layout.gap}px`,
-        width: `${settings.layout.gap}px`,
+        right: `-${layout.gap}px`,
+        width: `${layout.gap}px`,
         height: `${connector.thickness}px`,
         ...getFinalStyles(),
         ...getAnimationStyle(),
@@ -454,7 +454,7 @@ function VerticalConnectorLine({
       style={{
         ...getFinalStyles(),
         ...getAnimationStyle(),
-        height: `${settings.layout.verticalSpacing}px`,
+        height: `${layout.verticalSpacing}px`,
         top: "100%",
         width: `${connector.thickness}px`,
         zIndex: 5,
@@ -494,7 +494,11 @@ function StepItem({
 }) {
   const [isHovered, setIsHovered] = useState(false);
   const Icon = getLucideIcon(step.icon);
-  const { stepNumber, stepIcon, stepContent, card } = settings;
+  const stepNumber = settings.stepNumber || {} as typeof settings.stepNumber;
+  const stepIcon = settings.stepIcon || {} as typeof settings.stepIcon;
+  const stepContent = settings.stepContent || {} as typeof settings.stepContent;
+  const card = settings.card || {} as typeof settings.card;
+  const connector = settings.connector || {} as typeof settings.connector;
 
   // Icon size classes
   const iconSizeClasses = {
@@ -700,7 +704,7 @@ function StepItem({
       )}
 
       {/* Horizontal Connector Line - positioned at StepItem level for better alignment */}
-      {!isVertical && !isLast && settings.connector.show && (
+      {!isVertical && !isLast && connector.show && (
         <HorizontalConnectorLine settings={settings} />
       )}
 
@@ -763,12 +767,19 @@ export function ProcessStepsWidget({
   settings,
   isPreview = false,
 }: ProcessStepsWidgetProps) {
-  const [isVisible, setIsVisible] = useState(!settings.animation.animateOnScroll);
+  // Defensive defaults for missing settings from theme data
+  const animation = settings.animation || {} as typeof settings.animation;
+  const layout = settings.layout || {} as typeof settings.layout;
+  const responsive = settings.responsive || {} as typeof settings.responsive;
+  const connector = settings.connector || {} as typeof settings.connector;
+  const steps = settings.steps || [];
+
+  const [isVisible, setIsVisible] = useState(!animation.animateOnScroll);
   const containerRef = useRef<HTMLDivElement>(null);
 
   // Intersection observer for scroll animation
   useEffect(() => {
-    if (!settings.animation.animateOnScroll || isPreview) {
+    if (!animation.animateOnScroll || isPreview) {
       setIsVisible(true);
       return;
     }
@@ -789,15 +800,15 @@ export function ProcessStepsWidget({
     }
 
     return () => observer.disconnect();
-  }, [settings.animation.animateOnScroll, isPreview]);
+  }, [animation.animateOnScroll, isPreview]);
 
-  const isVertical = settings.layout.type === "vertical";
-  const isAlternating = settings.layout.type === "alternating";
+  const isVertical = layout.type === "vertical";
+  const isAlternating = layout.type === "alternating";
 
   // Get responsive column classes
   const getColumnClasses = () => {
-    const cols = settings.layout.columns;
-    const tabletCols = settings.responsive.tablet.columns;
+    const cols = layout.columns;
+    const tabletCols = responsive?.tablet?.columns;
 
     if (isVertical) {
       return "grid-cols-1";
@@ -875,9 +886,9 @@ export function ProcessStepsWidget({
           getColumnClasses(),
           isAlternating && "lg:grid-cols-1"
         )}
-        style={{ gap: `${settings.layout.gap}px` }}
+        style={{ gap: `${layout.gap}px` }}
       >
-        {settings.steps.map((step, index) => (
+        {steps.map((step, index) => (
           <div
             key={step.id}
             className={cn(
@@ -887,7 +898,7 @@ export function ProcessStepsWidget({
             )}
             style={{
               transitionDelay: isVisible
-                ? `${index * settings.animation.staggerDelay}ms`
+                ? `${index * animation.staggerDelay}ms`
                 : "0ms",
               maxWidth: isAlternating ? "50%" : undefined,
             }}
@@ -896,7 +907,7 @@ export function ProcessStepsWidget({
               step={step}
               index={index}
               settings={settings}
-              isLast={index === settings.steps.length - 1}
+              isLast={index === steps.length - 1}
               isVertical={isVertical || isAlternating}
             />
           </div>

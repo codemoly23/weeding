@@ -431,8 +431,8 @@ function getColumnClasses(
   };
 
   return cn(
-    mobileColMap[responsive.mobile.columns],
-    tabletColMap[responsive.tablet.columns],
+    mobileColMap[responsive?.mobile?.columns || 1],
+    tabletColMap[responsive?.tablet?.columns || 2],
     desktopColMap[columns]
   );
 }
@@ -474,25 +474,25 @@ function ServiceItem({
       href={`/services/${service.slug}`}
       className={cn(
         "group flex items-center justify-between py-2 px-1 transition-all duration-200 rounded-md",
-        hoverEffectClasses[settings.serviceItem.hoverEffect]
+        hoverEffectClasses[serviceItem.hoverEffect]
       )}
-      style={{ padding: `${settings.serviceItem.padding}px` }}
+      style={{ padding: `${serviceItem.padding}px` }}
     >
       <span
         className={cn(
           "transition-colors group-hover:text-primary",
-          settings.serviceItem.fontSize === "sm" && "text-sm",
-          settings.serviceItem.fontSize === "md" && "text-base",
-          settings.serviceItem.fontSize === "lg" && "text-lg"
+          serviceItem.fontSize === "sm" && "text-sm",
+          serviceItem.fontSize === "md" && "text-base",
+          serviceItem.fontSize === "lg" && "text-lg"
         )}
-        style={{ color: settings.serviceItem.nameColor }}
+        style={{ color: serviceItem.nameColor }}
       >
         {service.name}
       </span>
-      {settings.serviceItem.showPrice && (
+      {serviceItem.showPrice && (
         <span
           className="text-sm"
-          style={{ color: settings.serviceItem.priceColor }}
+          style={{ color: serviceItem.priceColor }}
         >
           {formatPrice(service.startingPrice)}
         </span>
@@ -510,17 +510,17 @@ function CategoryCard({
   settings: ServiceListWidgetSettings;
 }) {
   const Icon = getLucideIcon(category.icon);
-  const iconSize = getIconSizeClasses(settings.categoryCard.iconSize);
+  const iconSize = getIconSizeClasses(categoryCard.iconSize);
 
   // Apply service limit if set
   const displayedServices =
-    settings.filters.limitServicesPerCategory > 0
-      ? category.services.slice(0, settings.filters.limitServicesPerCategory)
+    filters.limitServicesPerCategory > 0
+      ? category.services.slice(0, filters.limitServicesPerCategory)
       : category.services;
 
   // Sort services
   const sortedServices = [...displayedServices].sort((a, b) => {
-    switch (settings.filters.sortServicesBy) {
+    switch (filters.sortServicesBy) {
       case "price-asc":
         return a.startingPrice - b.startingPrice;
       case "price-desc":
@@ -554,50 +554,50 @@ function CategoryCard({
     <div
       className={cn(
         "flex flex-col h-full",
-        cardStyleClasses[settings.layout.cardStyle]
+        cardStyleClasses[layout.cardStyle]
       )}
       style={{
-        borderRadius: `${settings.categoryCard.borderRadius}px`,
+        borderRadius: `${categoryCard.borderRadius}px`,
         borderWidth:
-          settings.layout.cardStyle !== "minimal"
-            ? `${settings.categoryCard.borderWidth}px`
+          layout.cardStyle !== "minimal"
+            ? `${categoryCard.borderWidth}px`
             : 0,
-        borderColor: settings.categoryCard.borderColor,
+        borderColor: categoryCard.borderColor,
         backgroundColor:
-          settings.layout.cardStyle !== "glassmorphism"
-            ? settings.categoryCard.backgroundColor
+          layout.cardStyle !== "glassmorphism"
+            ? categoryCard.backgroundColor
             : undefined,
-        padding: `${settings.categoryCard.padding}px`,
+        padding: `${categoryCard.padding}px`,
       }}
     >
       {/* Category Header */}
       <div className="flex items-start gap-3 mb-4">
-        {settings.categoryCard.showIcon && (
+        {categoryCard.showIcon && (
           <div
             className={cn(
               "flex items-center justify-center shrink-0",
               iconSize.container,
-              settings.categoryCard.iconStyle === "rounded" && "rounded-lg",
-              settings.categoryCard.iconStyle === "circle" && "rounded-full",
-              settings.categoryCard.iconStyle === "square" && "rounded-none"
+              categoryCard.iconStyle === "rounded" && "rounded-lg",
+              categoryCard.iconStyle === "circle" && "rounded-full",
+              categoryCard.iconStyle === "square" && "rounded-none"
             )}
             style={{
-              backgroundColor: settings.categoryCard.iconBgColor,
+              backgroundColor: categoryCard.iconBgColor,
             }}
           >
             <Icon
               className={iconSize.icon}
-              style={{ color: settings.categoryCard.iconColor }}
+              style={{ color: categoryCard.iconColor }}
             />
           </div>
         )}
         <div className="flex-1 min-w-0">
           <h3
-            className={cn("font-semibold text-foreground", titleSizeClasses[settings.categoryCard.titleSize])}
+            className={cn("font-semibold text-foreground", titleSizeClasses[categoryCard.titleSize])}
           >
             {category.name}
           </h3>
-          {settings.categoryCard.showTagline && category.description && (
+          {categoryCard.showTagline && category.description && (
             <p className="text-sm text-muted-foreground mt-0.5 line-clamp-2">
               {category.description}
             </p>
@@ -614,11 +614,11 @@ function CategoryCard({
               settings={settings}
               isLast={index === sortedServices.length - 1}
             />
-            {settings.serviceItem.divider &&
+            {serviceItem.divider &&
               index < sortedServices.length - 1 && (
                 <div
                   className="h-px mx-1"
-                  style={{ backgroundColor: settings.serviceItem.dividerColor }}
+                  style={{ backgroundColor: serviceItem.dividerColor }}
                 />
               )}
           </div>
@@ -626,8 +626,8 @@ function CategoryCard({
       </div>
 
       {/* View More Link if services are limited */}
-      {settings.filters.limitServicesPerCategory > 0 &&
-        category.services.length > settings.filters.limitServicesPerCategory && (
+      {filters.limitServicesPerCategory > 0 &&
+        category.services.length > filters.limitServicesPerCategory && (
           <Link
             href={`/services?category=${category.slug}`}
             className="mt-4 text-sm text-primary hover:underline flex items-center gap-1"
@@ -644,6 +644,13 @@ export function ServiceListWidget({
   settings,
   isPreview = false,
 }: ServiceListWidgetProps) {
+  // Defensive defaults for missing settings from theme data
+  const filters = settings.filters || {} as typeof settings.filters;
+  const layout = settings.layout || {} as typeof settings.layout;
+  const responsive = settings.responsive;
+  const categoryCard = settings.categoryCard || {} as typeof settings.categoryCard;
+  const serviceItem = settings.serviceItem || {} as typeof settings.serviceItem;
+
   const [categories, setCategories] = useState<CategoryData[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -664,16 +671,16 @@ export function ServiceListWidget({
 
         // Filter categories if specific ones are selected
         if (
-          !settings.filters.showAllCategories &&
-          settings.filters.categories.length > 0
+          !filters.showAllCategories &&
+          filters.categories.length > 0
         ) {
           fetchedCategories = fetchedCategories.filter((cat) =>
-            settings.filters.categories.includes(cat.id)
+            filters.categories.includes(cat.id)
           );
         }
 
         // Filter out categories with no services if activeOnly
-        if (settings.filters.activeOnly) {
+        if (filters.activeOnly) {
           fetchedCategories = fetchedCategories.filter(
             (cat) => cat.services.length > 0
           );
@@ -690,9 +697,9 @@ export function ServiceListWidget({
 
     fetchCategories();
   }, [
-    settings.filters.showAllCategories,
-    settings.filters.categories,
-    settings.filters.activeOnly,
+    filters?.showAllCategories,
+    filters?.categories,
+    filters?.activeOnly,
   ]);
 
   if (loading) {
@@ -703,15 +710,15 @@ export function ServiceListWidget({
         <div
           className={cn(
             "grid",
-            getColumnClasses(settings.layout.columns, settings.responsive)
+            getColumnClasses(layout.columns, responsive)
           )}
-          style={{ gap: `${settings.layout.gap}px` }}
+          style={{ gap: `${layout.gap}px` }}
         >
           {Array.from({ length: 4 }).map((_, i) => (
             <div
               key={i}
               className="h-64 animate-pulse rounded-xl bg-muted/50"
-              style={{ borderRadius: `${settings.categoryCard.borderRadius}px` }}
+              style={{ borderRadius: `${categoryCard.borderRadius}px` }}
             />
           ))}
         </div>
@@ -752,9 +759,9 @@ export function ServiceListWidget({
       <div
         className={cn(
           "grid",
-          getColumnClasses(settings.layout.columns, settings.responsive)
+          getColumnClasses(layout.columns, responsive)
         )}
-        style={{ gap: `${settings.layout.gap}px` }}
+        style={{ gap: `${layout.gap}px` }}
       >
         {categories.map((category) => (
           <CategoryCard

@@ -192,7 +192,7 @@ export function WidgetPageBuilder({
         break;
 
       case "gradient":
-        if (bg.gradient) {
+        if (bg.gradient && Array.isArray(bg.gradient.colors)) {
           const colorStops = bg.gradient.colors
             .map((c) => `${c.color} ${c.position}%`)
             .join(", ");
@@ -238,7 +238,7 @@ export function WidgetPageBuilder({
 
   // Render a single section
   const renderSection = (section: Section, index: number) => {
-    const { settings, layout, columns } = section;
+    const { settings, layout, columns = [] } = section;
     const columnSpanClasses = getColumnSpanClasses(layout);
     const isSelected = selection.sectionId === section.id && selection.type === "section";
 

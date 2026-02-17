@@ -68,6 +68,7 @@ export function HeroContentWidget({ settings, isPreview = false }: HeroContentWi
 
   // Parse headline with highlight words (supports comma-separated)
   const renderHeadline = () => {
+    if (!settings.headline) return settings.headline?.text || "";
     const { text, highlightWords, highlightColor } = settings.headline;
 
     if (!highlightWords) {
@@ -117,7 +118,7 @@ export function HeroContentWidget({ settings, isPreview = false }: HeroContentWi
 
   // Get headline size class
   const getHeadlineSize = () => {
-    switch (settings.headline.size) {
+    switch (settings.headline?.size) {
       case "sm":
         return "text-2xl sm:text-3xl";
       case "md":
@@ -145,6 +146,7 @@ export function HeroContentWidget({ settings, isPreview = false }: HeroContentWi
 
   // Render primary button with custom styles
   const renderPrimaryButton = () => {
+    if (!settings.primaryButton) return null;
     const btnStyle = settings.primaryButton.style;
     const hasCustom = hasCustomStyle(btnStyle);
 
@@ -333,6 +335,7 @@ export function HeroContentWidget({ settings, isPreview = false }: HeroContentWi
 
   // Render secondary button with custom styles
   const renderSecondaryButton = () => {
+    if (!settings.secondaryButton) return null;
     const btnStyle = settings.secondaryButton.style;
     const hasCustom = hasCustomStyle(btnStyle);
 
@@ -518,7 +521,7 @@ export function HeroContentWidget({ settings, isPreview = false }: HeroContentWi
     <WidgetContainer container={settings.container}>
     <div className={cn("flex flex-col gap-6", getAlignmentClass())}>
       {/* Badge */}
-      {settings.badge.show && (
+      {settings.badge?.show && (
         <Badge
           className={cn(
             "w-fit font-medium px-4 py-2 text-sm border",
@@ -553,15 +556,15 @@ export function HeroContentWidget({ settings, isPreview = false }: HeroContentWi
         className={cn(
           "font-bold tracking-tight",
           getHeadlineSize(),
-          !isHexColor(settings.headline.color) && (settings.headline.color || "text-white")
+          !isHexColor(settings.headline?.color) && (settings.headline?.color || "text-white")
         )}
-        style={isHexColor(settings.headline.color) ? { color: settings.headline.color } : undefined}
+        style={isHexColor(settings.headline?.color) ? { color: settings.headline.color } : undefined}
       >
         {renderHeadline()}
       </h1>
 
       {/* Subheadline */}
-      {settings.subheadline.show && (
+      {settings.subheadline?.show && (
         <p
           className={cn(
             settings.subheadline.size === "sm" && "text-base",
@@ -576,7 +579,7 @@ export function HeroContentWidget({ settings, isPreview = false }: HeroContentWi
       )}
 
       {/* Features */}
-      {settings.features.show && settings.features.items.length > 0 && (
+      {settings.features?.show && settings.features?.items?.length > 0 && (
         <div
           className={cn(
             "mt-2",
@@ -620,13 +623,13 @@ export function HeroContentWidget({ settings, isPreview = false }: HeroContentWi
           settings.alignment === "center" ? "sm:flex-row sm:justify-center" : "sm:flex-row"
         )}
       >
-        {settings.primaryButton.show && renderPrimaryButton()}
+        {settings.primaryButton?.show && renderPrimaryButton()}
 
-        {settings.secondaryButton.show && renderSecondaryButton()}
+        {settings.secondaryButton?.show && renderSecondaryButton()}
       </div>
 
       {/* Trust Text */}
-      {settings.trustText.show && (
+      {settings.trustText?.show && (
         <div
           className="flex items-center gap-2 text-sm mt-2"
           style={{ color: settings.trustText.textColor || "#9ca3af" }}
