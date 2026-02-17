@@ -461,6 +461,11 @@ function ServiceItem({
   settings: ServiceListWidgetSettings;
   isLast: boolean;
 }) {
+  const serviceItem = {
+    ...DEFAULT_SERVICE_LIST_SETTINGS.serviceItem,
+    ...settings.serviceItem,
+  };
+
   const hoverEffectClasses: Record<string, string> = {
     none: "",
     highlight: "hover:bg-muted",
@@ -509,6 +514,23 @@ function CategoryCard({
   category: CategoryData;
   settings: ServiceListWidgetSettings;
 }) {
+  const filters = {
+    ...DEFAULT_SERVICE_LIST_SETTINGS.filters,
+    ...settings.filters,
+  };
+  const layout = {
+    ...DEFAULT_SERVICE_LIST_SETTINGS.layout,
+    ...settings.layout,
+  };
+  const categoryCard = {
+    ...DEFAULT_SERVICE_LIST_SETTINGS.categoryCard,
+    ...settings.categoryCard,
+  };
+  const serviceItem = {
+    ...DEFAULT_SERVICE_LIST_SETTINGS.serviceItem,
+    ...settings.serviceItem,
+  };
+
   const Icon = getLucideIcon(category.icon);
   const iconSize = getIconSizeClasses(categoryCard.iconSize);
 
@@ -644,12 +666,27 @@ export function ServiceListWidget({
   settings,
   isPreview = false,
 }: ServiceListWidgetProps) {
-  // Defensive defaults for missing settings from theme data
-  const filters = settings.filters || {} as typeof settings.filters;
-  const layout = settings.layout || {} as typeof settings.layout;
-  const responsive = settings.responsive;
-  const categoryCard = settings.categoryCard || {} as typeof settings.categoryCard;
-  const serviceItem = settings.serviceItem || {} as typeof settings.serviceItem;
+  // Deep merge with defaults to guarantee all properties exist
+  const filters = {
+    ...DEFAULT_SERVICE_LIST_SETTINGS.filters,
+    ...settings.filters,
+  };
+  const layout = {
+    ...DEFAULT_SERVICE_LIST_SETTINGS.layout,
+    ...settings.layout,
+  };
+  const responsive = {
+    tablet: { ...DEFAULT_SERVICE_LIST_SETTINGS.responsive.tablet, ...settings.responsive?.tablet },
+    mobile: { ...DEFAULT_SERVICE_LIST_SETTINGS.responsive.mobile, ...settings.responsive?.mobile },
+  };
+  const categoryCard = {
+    ...DEFAULT_SERVICE_LIST_SETTINGS.categoryCard,
+    ...settings.categoryCard,
+  };
+  const serviceItem = {
+    ...DEFAULT_SERVICE_LIST_SETTINGS.serviceItem,
+    ...settings.serviceItem,
+  };
 
   const [categories, setCategories] = useState<CategoryData[]>([]);
   const [loading, setLoading] = useState(true);

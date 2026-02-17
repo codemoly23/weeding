@@ -1713,12 +1713,9 @@ export function Footer() {
                     </span>
                   </div>
                 )}
-                <div>
-                  <span className="text-xl font-bold" style={{ color: styling?.headingColor }}>
-                    {businessConfig.name}
-                  </span>
-                  <p className="text-sm opacity-80">{businessConfig.description}</p>
-                </div>
+                <span className="text-xl font-bold" style={{ color: styling?.headingColor }}>
+                  {businessConfig.name}
+                </span>
               </Link>
 
               <p className="max-w-lg text-sm opacity-80">

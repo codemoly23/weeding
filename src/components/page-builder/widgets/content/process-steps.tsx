@@ -9,6 +9,7 @@ import type {
   BadgeStyle,
   ConnectorAnimation,
 } from "@/lib/page-builder/types";
+import { DEFAULT_PROCESS_STEPS_SETTINGS } from "@/lib/page-builder/defaults";
 
 interface ProcessStepsWidgetProps {
   settings: ProcessStepsWidgetSettings;
@@ -166,7 +167,8 @@ function SectionHeader({ settings }: { settings: ProcessStepsWidgetSettings }) {
 
 // Horizontal Connector Line - spans grid gap between steps
 function HorizontalConnectorLine({ settings }: { settings: ProcessStepsWidgetSettings }) {
-  const { connector } = settings;
+  const connector = { ...DEFAULT_PROCESS_STEPS_SETTINGS.connector, ...settings.connector };
+  const layout = { ...DEFAULT_PROCESS_STEPS_SETTINGS.layout, ...settings.layout };
 
   const speedMap: Record<string, string> = {
     slow: "8s",
@@ -326,7 +328,8 @@ function VerticalConnectorLine({
   settings: ProcessStepsWidgetSettings;
   isLast: boolean;
 }) {
-  const { connector } = settings;
+  const connector = { ...DEFAULT_PROCESS_STEPS_SETTINGS.connector, ...settings.connector };
+  const layout = { ...DEFAULT_PROCESS_STEPS_SETTINGS.layout, ...settings.layout };
 
   if (!connector.show || isLast) return null;
 
@@ -494,11 +497,26 @@ function StepItem({
 }) {
   const [isHovered, setIsHovered] = useState(false);
   const Icon = getLucideIcon(step.icon);
-  const stepNumber = settings.stepNumber || {} as typeof settings.stepNumber;
-  const stepIcon = settings.stepIcon || {} as typeof settings.stepIcon;
-  const stepContent = settings.stepContent || {} as typeof settings.stepContent;
-  const card = settings.card || {} as typeof settings.card;
-  const connector = settings.connector || {} as typeof settings.connector;
+  const stepNumber = {
+    ...DEFAULT_PROCESS_STEPS_SETTINGS.stepNumber,
+    ...settings.stepNumber,
+  };
+  const stepIcon = {
+    ...DEFAULT_PROCESS_STEPS_SETTINGS.stepIcon,
+    ...settings.stepIcon,
+  };
+  const stepContent = {
+    ...DEFAULT_PROCESS_STEPS_SETTINGS.stepContent,
+    ...settings.stepContent,
+  };
+  const card = {
+    ...DEFAULT_PROCESS_STEPS_SETTINGS.card,
+    ...settings.card,
+  };
+  const connector = {
+    ...DEFAULT_PROCESS_STEPS_SETTINGS.connector,
+    ...settings.connector,
+  };
 
   // Icon size classes
   const iconSizeClasses = {
@@ -767,12 +785,24 @@ export function ProcessStepsWidget({
   settings,
   isPreview = false,
 }: ProcessStepsWidgetProps) {
-  // Defensive defaults for missing settings from theme data
-  const animation = settings.animation || {} as typeof settings.animation;
-  const layout = settings.layout || {} as typeof settings.layout;
-  const responsive = settings.responsive || {} as typeof settings.responsive;
-  const connector = settings.connector || {} as typeof settings.connector;
-  const steps = settings.steps || [];
+  // Deep merge with defaults to guarantee all properties exist
+  const animation = {
+    ...DEFAULT_PROCESS_STEPS_SETTINGS.animation,
+    ...settings.animation,
+  };
+  const layout = {
+    ...DEFAULT_PROCESS_STEPS_SETTINGS.layout,
+    ...settings.layout,
+  };
+  const responsive = {
+    tablet: { ...DEFAULT_PROCESS_STEPS_SETTINGS.responsive.tablet, ...settings.responsive?.tablet },
+    mobile: { ...DEFAULT_PROCESS_STEPS_SETTINGS.responsive.mobile, ...settings.responsive?.mobile },
+  };
+  const connector = {
+    ...DEFAULT_PROCESS_STEPS_SETTINGS.connector,
+    ...settings.connector,
+  };
+  const steps = settings.steps?.length ? settings.steps : DEFAULT_PROCESS_STEPS_SETTINGS.steps;
 
   const [isVisible, setIsVisible] = useState(!animation.animateOnScroll);
   const containerRef = useRef<HTMLDivElement>(null);
