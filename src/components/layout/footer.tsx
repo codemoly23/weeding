@@ -1521,7 +1521,15 @@ export function Footer() {
 
   // ============== CENTERED LAYOUT ==============
   if (layout === "CENTERED") {
+    // Separate widgets by type for centered layout rendering
     const linkWidgets = allWidgets.filter(w => w.type === "LINKS");
+    const newsletterWidget = allWidgets.find(w => w.type === "NEWSLETTER");
+    const contactWidget = allWidgets.find(w => w.type === "CONTACT");
+    // Other widgets (TEXT, CUSTOM_HTML, BUTTON, etc.) excluding BRAND and SOCIAL (handled separately)
+    const otherWidgets = allWidgets.filter(w =>
+      w.type !== "LINKS" && w.type !== "BRAND" && w.type !== "SOCIAL" &&
+      w.type !== "NEWSLETTER" && w.type !== "CONTACT"
+    );
 
     return (
       <footer
@@ -1540,6 +1548,21 @@ export function Footer() {
           />
         )}
         <div className="container mx-auto px-4 relative z-10">
+          {/* Newsletter Section (if exists) */}
+          {newsletterWidget && (
+            <div className="flex flex-col items-center text-center mb-8">
+              <FooterWidgetRenderer
+                widget={newsletterWidget}
+                businessConfig={businessConfig}
+                socialLinks={socialLinks}
+                footerConfig={footerConfig}
+                headingClasses={headingClasses}
+                linkClasses={linkClasses}
+                logoUrl={footerLogoUrl}
+              />
+            </div>
+          )}
+
           {/* Centered Logo & Description */}
           <div className="flex flex-col items-center text-center">
             <Link href="/" className="flex items-center space-x-3 focus:outline-none focus:ring-2 focus:ring-primary rounded">
@@ -1609,6 +1632,290 @@ export function Footer() {
               })}
             </div>
           )}
+
+          {/* Contact Info (if widget exists) */}
+          {contactWidget && (
+            <div className="mt-8 flex justify-center">
+              <FooterWidgetRenderer
+                widget={contactWidget}
+                businessConfig={businessConfig}
+                socialLinks={socialLinks}
+                footerConfig={footerConfig}
+                headingClasses={headingClasses}
+                linkClasses={linkClasses}
+                logoUrl={footerLogoUrl}
+              />
+            </div>
+          )}
+
+          {/* Other widgets (TEXT, CUSTOM_HTML, BUTTON, etc.) */}
+          {otherWidgets.length > 0 && (
+            <div className="mt-8 flex flex-wrap justify-center gap-8">
+              {otherWidgets.map((widget) => (
+                <div key={widget.id} className="text-center">
+                  <FooterWidgetRenderer
+                    widget={widget}
+                    businessConfig={businessConfig}
+                    socialLinks={socialLinks}
+                    footerConfig={footerConfig}
+                    headingClasses={headingClasses}
+                    linkClasses={linkClasses}
+                    logoUrl={footerLogoUrl}
+                  />
+                </div>
+              ))}
+            </div>
+          )}
+
+          <BottomBar />
+        </div>
+      </footer>
+    );
+  }
+
+  // ============== ASYMMETRIC LAYOUT ==============
+  if (layout === "ASYMMETRIC") {
+    const linkWidgets = allWidgets.filter(w => w.type === "LINKS");
+
+    return (
+      <footer
+        ref={footerRef}
+        className={cn("relative border-t overflow-hidden footer-dynamic-styles", animationClasses)}
+        style={footerStyle}
+        role="contentinfo"
+      >
+        <FooterStyles />
+        <TopBorder />
+        {styling?.bgType === "pattern" && styling.bgPattern && (
+          <BackgroundPattern
+            pattern={styling.bgPattern}
+            color={styling.bgPatternColor || "#000"}
+            opacity={styling.bgPatternOpacity || 10}
+          />
+        )}
+        <div className="container mx-auto px-4 relative z-10">
+          <div className="flex flex-col gap-10 lg:flex-row">
+            {/* Left section (2/3) - Brand */}
+            <div className="lg:w-2/3 space-y-6">
+              <Link href="/" className="flex items-center space-x-4 focus:outline-none focus:ring-2 focus:ring-primary rounded">
+                {footerLogoUrl ? (
+                  <Image
+                    src={footerLogoUrl}
+                    alt={businessConfig.name}
+                    width={96}
+                    height={96}
+                    className="h-24 w-24 rounded-lg object-contain"
+                  />
+                ) : (
+                  <div className="flex h-24 w-24 items-center justify-center rounded-lg bg-primary">
+                    <span className="text-2xl font-bold text-primary-foreground">
+                      {businessConfig.logo.text || businessConfig.name.charAt(0)}
+                    </span>
+                  </div>
+                )}
+                <div>
+                  <span className="text-xl font-bold" style={{ color: styling?.headingColor }}>
+                    {businessConfig.name}
+                  </span>
+                  <p className="text-sm opacity-80">{businessConfig.description}</p>
+                </div>
+              </Link>
+
+              <p className="max-w-lg text-sm opacity-80">
+                {businessConfig.description}
+              </p>
+
+              {/* Social Links */}
+              {socialLinks.length > 0 && (
+                <EnhancedSocialLinks
+                  links={socialLinks}
+                  shape={footerConfig?.social?.shape}
+                  size={footerConfig?.social?.size}
+                  colorMode={footerConfig?.social?.colorMode}
+                  hoverEffect={footerConfig?.social?.hoverEffect}
+                  accentColor={styling?.accentColor || undefined}
+                  bgStyle={footerConfig?.social?.bgStyle as "none" | "subtle" | "solid" | "outline" | undefined}
+                />
+              )}
+            </div>
+
+            {/* Right section (1/3) - Link widgets */}
+            <div className="lg:w-1/3 grid grid-cols-2 gap-8 lg:grid-cols-1">
+              {linkWidgets.length > 0 ? (
+                linkWidgets.map((widget) => (
+                  <FooterWidgetRenderer
+                    key={widget.id}
+                    widget={widget}
+                    businessConfig={businessConfig}
+                    socialLinks={socialLinks}
+                    footerConfig={footerConfig}
+                    headingClasses={headingClasses}
+                    linkClasses={linkClasses}
+                    logoUrl={footerLogoUrl}
+                  />
+                ))
+              ) : (
+                <>
+                  <nav aria-label="Company">
+                    <h3 className={headingClasses}>Company</h3>
+                    <ul className="mt-4 space-y-3">
+                      {fallbackLinks.company.map((link) => (
+                        <li key={link.name}>
+                          <Link href={link.href} className={cn("text-sm", linkClasses)}>
+                            {link.name}
+                          </Link>
+                        </li>
+                      ))}
+                    </ul>
+                  </nav>
+                  <nav aria-label="Legal">
+                    <h3 className={headingClasses}>Legal</h3>
+                    <ul className="mt-4 space-y-3">
+                      {fallbackLinks.legal.map((link) => (
+                        <li key={link.name}>
+                          <Link href={link.href} className={cn("text-sm", linkClasses)}>
+                            {link.name}
+                          </Link>
+                        </li>
+                      ))}
+                    </ul>
+                  </nav>
+                </>
+              )}
+            </div>
+          </div>
+
+          <BottomBar />
+        </div>
+      </footer>
+    );
+  }
+
+  // ============== APP_FOCUSED LAYOUT ==============
+  if (layout === "APP_FOCUSED") {
+    return (
+      <footer
+        ref={footerRef}
+        className={cn("relative border-t overflow-hidden footer-dynamic-styles", animationClasses)}
+        style={footerStyle}
+        role="contentinfo"
+      >
+        <FooterStyles />
+        <TopBorder />
+        {styling?.bgType === "pattern" && styling.bgPattern && (
+          <BackgroundPattern
+            pattern={styling.bgPattern}
+            color={styling.bgPatternColor || "#000"}
+            opacity={styling.bgPatternOpacity || 10}
+          />
+        )}
+        <div className="container mx-auto px-4 relative z-10">
+          <div className="flex flex-col gap-10 lg:flex-row">
+            {/* Left section - App promo */}
+            <div className="lg:w-1/3 space-y-6">
+              <Link href="/" className="flex items-center space-x-3 focus:outline-none focus:ring-2 focus:ring-primary rounded">
+                {footerLogoUrl ? (
+                  <Image
+                    src={footerLogoUrl}
+                    alt={businessConfig.name}
+                    width={96}
+                    height={96}
+                    className="h-24 w-24 rounded-lg object-contain"
+                  />
+                ) : (
+                  <div className="flex h-24 w-24 items-center justify-center rounded-lg bg-primary">
+                    <span className="text-2xl font-bold text-primary-foreground">
+                      {businessConfig.logo.text || businessConfig.name.charAt(0)}
+                    </span>
+                  </div>
+                )}
+                <span className="text-xl font-bold" style={{ color: styling?.headingColor }}>
+                  {businessConfig.name}
+                </span>
+              </Link>
+
+              <p className="text-sm opacity-80">{businessConfig.description}</p>
+
+              {/* Social Links */}
+              {socialLinks.length > 0 && (
+                <EnhancedSocialLinks
+                  links={socialLinks}
+                  shape={footerConfig?.social?.shape}
+                  size={footerConfig?.social?.size}
+                  colorMode={footerConfig?.social?.colorMode}
+                  hoverEffect={footerConfig?.social?.hoverEffect}
+                  accentColor={styling?.accentColor || undefined}
+                  bgStyle={footerConfig?.social?.bgStyle as "none" | "subtle" | "solid" | "outline" | undefined}
+                />
+              )}
+            </div>
+
+            {/* Right section - Widget grid */}
+            <div className="lg:w-2/3">
+              {hasDynamicWidgets ? (
+                <div className="grid grid-cols-2 gap-8 md:grid-cols-3">
+                  {Object.entries(widgetsByColumn!)
+                    .filter(([, widgets]) => widgets.length > 0)
+                    .filter(([, widgets]) => !widgets.some(w => w.type === "BRAND"))
+                    .map(([column, widgets]) => (
+                      <div key={column}>
+                        {widgets.map((widget) => (
+                          <FooterWidgetRenderer
+                            key={widget.id}
+                            widget={widget}
+                            businessConfig={businessConfig}
+                            socialLinks={socialLinks}
+                            footerConfig={footerConfig}
+                            headingClasses={headingClasses}
+                            linkClasses={linkClasses}
+                            logoUrl={footerLogoUrl}
+                          />
+                        ))}
+                      </div>
+                    ))}
+                </div>
+              ) : (
+                <div className="grid grid-cols-2 gap-8 md:grid-cols-3">
+                  <nav aria-label="Services">
+                    <h3 className={headingClasses}>Services</h3>
+                    <ul className="mt-4 space-y-3">
+                      {fallbackLinks.services.map((link) => (
+                        <li key={link.name}>
+                          <Link href={link.href} className={cn("text-sm", linkClasses)}>
+                            {link.name}
+                          </Link>
+                        </li>
+                      ))}
+                    </ul>
+                  </nav>
+                  <nav aria-label="Company">
+                    <h3 className={headingClasses}>Company</h3>
+                    <ul className="mt-4 space-y-3">
+                      {fallbackLinks.company.map((link) => (
+                        <li key={link.name}>
+                          <Link href={link.href} className={cn("text-sm", linkClasses)}>
+                            {link.name}
+                          </Link>
+                        </li>
+                      ))}
+                    </ul>
+                  </nav>
+                  <nav aria-label="Legal">
+                    <h3 className={headingClasses}>Legal</h3>
+                    <ul className="mt-4 space-y-3">
+                      {fallbackLinks.legal.map((link) => (
+                        <li key={link.name}>
+                          <Link href={link.href} className={cn("text-sm", linkClasses)}>
+                            {link.name}
+                          </Link>
+                        </li>
+                      ))}
+                    </ul>
+                  </nav>
+                </div>
+              )}
+            </div>
+          </div>
 
           <BottomBar />
         </div>
