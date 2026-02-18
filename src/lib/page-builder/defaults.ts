@@ -1331,7 +1331,7 @@ export const DEFAULT_PRICING_TABLE_SETTINGS: PricingTableWidgetSettings = {
   // Data Source - binds to service
   dataSource: {
     type: "service",
-    mode: "manual",            // "auto" reads slug from ServiceContext
+    mode: "auto",              // "auto" reads slug from ServiceContext
     serviceSlug: undefined,    // Used when mode === "manual"
     manualPackages: undefined,
   },

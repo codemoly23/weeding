@@ -2250,7 +2250,8 @@
                           }
                         },
                         "dataSource": {
-                          "source": "service"
+                          "type": "service",
+                          "mode": "auto"
                         }
                       }
                     }
@@ -2341,13 +2342,11 @@
                         "marginBottom": 0
                       },
                       "settings": {
-                        "dataSource": {
-                          "source": "service"
-                        },
                         "style": {
                           "iconPosition": "right",
                           "divider": true
-                        }
+                        },
+                        "source": "service"
                       }
                     }
                   ],
