@@ -899,6 +899,8 @@ export interface StatItem {
   prefix?: string;
   suffix?: string;
   animate: boolean;
+  icon?: string;       // Lucide icon name e.g. "Trophy"
+  iconColor?: string;  // Per-stat icon color override
 }
 
 export interface StatsSectionWidgetSettings {
@@ -911,6 +913,9 @@ export interface StatsSectionWidgetSettings {
     divider: boolean;
     showTopBorder?: boolean;
     topBorderColor?: string;
+    layout?: "vertical" | "horizontal"; // horizontal = icon left, number+label right
+    iconColor?: string;                  // Global icon color
+    iconSize?: "sm" | "md" | "lg";      // Global icon size
   };
   centered: boolean;
   animateOnScroll: boolean;

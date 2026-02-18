@@ -1,9 +1,56 @@
 "use client";
 
 import { useEffect, useState, useRef } from "react";
+import {
+  Users, TrendingUp, Trophy, Award, Star, Globe, Clock,
+  Zap, Shield, ShieldCheck, CheckCircle, Briefcase,
+  Building2, DollarSign, Heart, ThumbsUp, Rocket, Target,
+  FileText, Package, Timer, Crown, Sparkles, BarChart2,
+  UserCheck, Medal, Smile, MessageCircle, ArrowUp, Percent,
+  ClipboardCheck, ClipboardList, BadgeCheck,
+} from "lucide-react";
 import { cn } from "@/lib/utils";
-import type { StatsSectionWidgetSettings } from "@/lib/page-builder/types";
+import type { StatsSectionWidgetSettings, StatItem } from "@/lib/page-builder/types";
 import { WidgetContainer } from "@/components/page-builder/shared/widget-container";
+
+// Curated icon map — add more as needed
+export const STATS_ICON_MAP: Record<string, React.ElementType> = {
+  Users,
+  UserCheck,
+  TrendingUp,
+  BarChart2,
+  Trophy,
+  Award,
+  Medal,
+  Crown,
+  Star,
+  Globe,
+  Clock,
+  Timer,
+  Zap,
+  Sparkles,
+  Shield,
+  ShieldCheck,
+  CheckCircle,
+  Briefcase,
+  Building2,
+  DollarSign,
+  Percent,
+  Heart,
+  ThumbsUp,
+  Smile,
+  MessageCircle,
+  Rocket,
+  Target,
+  ArrowUp,
+  FileText,
+  Package,
+  ClipboardCheck,
+  ClipboardList,
+  BadgeCheck,
+};
+
+export const STATS_ICON_OPTIONS = Object.keys(STATS_ICON_MAP).sort();
 
 interface StatsSectionWidgetProps {
   settings: StatsSectionWidgetSettings;
@@ -50,36 +97,43 @@ function useAnimatedCounter(
   return count;
 }
 
+// Get icon size class
+function getIconSizeClass(size?: "sm" | "md" | "lg") {
+  switch (size) {
+    case "sm": return "h-8 w-8";
+    case "lg": return "h-14 w-14";
+    default:   return "h-10 w-10"; // md
+  }
+}
+
 // Individual stat component with animation
 function AnimatedStat({
-  value,
-  label,
-  prefix,
-  suffix,
+  stat,
   animate,
   valueColor,
   labelColor,
   valueSize,
+  layout,
+  globalIconColor,
+  iconSize,
 }: {
-  value: string;
-  label: string;
-  prefix?: string;
-  suffix?: string;
+  stat: StatItem;
   animate: boolean;
   valueColor: string;
   labelColor: string;
   valueSize: string;
+  layout: "vertical" | "horizontal";
+  globalIconColor: string;
+  iconSize: "sm" | "md" | "lg";
 }) {
+  const { value, label, prefix, suffix, icon, iconColor } = stat;
+
   // Parse numeric value
   const numericValue = parseFloat(value.replace(/[^0-9.]/g, "")) || 0;
   const hasDecimal = value.includes(".");
   const decimalPlaces = hasDecimal ? value.split(".")[1]?.length || 0 : 0;
 
-  const animatedValue = useAnimatedCounter(
-    numericValue,
-    2000,
-    animate
-  );
+  const animatedValue = useAnimatedCounter(numericValue, 2000, animate);
 
   // Format the displayed value
   const displayValue = animate
@@ -91,21 +145,61 @@ function AnimatedStat({
   // Get value size class
   const getValueSizeClass = () => {
     switch (valueSize) {
-      case "sm":
-        return "text-2xl sm:text-3xl";
-      case "md":
-        return "text-3xl sm:text-4xl";
-      case "lg":
-        return "text-4xl sm:text-5xl";
-      case "xl":
-        return "text-5xl sm:text-6xl";
-      default:
-        return "text-3xl sm:text-4xl";
+      case "sm": return "text-2xl sm:text-3xl";
+      case "md": return "text-3xl sm:text-4xl";
+      case "lg": return "text-4xl sm:text-5xl";
+      case "xl": return "text-5xl sm:text-6xl";
+      default:   return "text-3xl sm:text-4xl";
     }
   };
 
+  // Resolve icon component
+  const IconComponent = icon ? STATS_ICON_MAP[icon] : null;
+  const resolvedIconColor = iconColor || globalIconColor;
+
+  if (layout === "horizontal") {
+    // Horizontal: icon on left, number+label stacked on right
+    return (
+      <div className="flex items-center gap-4">
+        {IconComponent && (
+          <div
+            className={cn("shrink-0", getIconSizeClass(iconSize))}
+            style={{ color: resolvedIconColor }}
+          >
+            <IconComponent className="h-full w-full" />
+          </div>
+        )}
+        <div className="flex flex-col">
+          <span
+            className={cn("font-bold tabular-nums leading-tight", getValueSizeClass())}
+            style={{ color: valueColor }}
+          >
+            {prefix}
+            {displayValue}
+            {suffix}
+          </span>
+          <span
+            className="text-sm font-medium uppercase tracking-wide"
+            style={{ color: labelColor }}
+          >
+            {label}
+          </span>
+        </div>
+      </div>
+    );
+  }
+
+  // Vertical layout (default)
   return (
     <div className="flex flex-col items-center py-2">
+      {IconComponent && (
+        <div
+          className={cn("mb-3", getIconSizeClass(iconSize))}
+          style={{ color: resolvedIconColor }}
+        >
+          <IconComponent className="h-full w-full" />
+        </div>
+      )}
       <span
         className={cn("font-bold tabular-nums leading-tight", getValueSizeClass())}
         style={{ color: valueColor }}
@@ -128,6 +222,10 @@ export function StatsSectionWidget({ settings, isPreview = false }: StatsSection
   const { stats, columns, style, centered, animateOnScroll } = settings;
   const [isVisible, setIsVisible] = useState(!animateOnScroll);
   const containerRef = useRef<HTMLDivElement>(null);
+
+  const layout = style.layout ?? "vertical";
+  const iconColor = style.iconColor ?? "#f97316";
+  const iconSize = style.iconSize ?? "md";
 
   // Intersection observer for scroll animation
   useEffect(() => {
@@ -153,66 +251,62 @@ export function StatsSectionWidget({ settings, isPreview = false }: StatsSection
   // Get grid columns class
   const getColumnsClass = () => {
     switch (columns) {
-      case 2:
-        return "grid-cols-2";
-      case 3:
-        return "grid-cols-2 sm:grid-cols-3";
-      case 4:
-        return "grid-cols-2 sm:grid-cols-4";
-      case 5:
-        return "grid-cols-2 sm:grid-cols-3 lg:grid-cols-5";
-      default:
-        return "grid-cols-2 sm:grid-cols-4";
+      case 2: return "grid-cols-2";
+      case 3: return "grid-cols-2 sm:grid-cols-3";
+      case 4: return "grid-cols-2 sm:grid-cols-4";
+      case 5: return "grid-cols-2 sm:grid-cols-3 lg:grid-cols-5";
+      default: return "grid-cols-2 sm:grid-cols-4";
     }
   };
 
   if (stats.length === 0) {
     return (
       <WidgetContainer container={settings.container}>
-      <div className="flex items-center justify-center h-24 bg-slate-800/50 rounded-lg border border-dashed border-slate-600">
-        <span className="text-sm text-slate-500">No stats configured</span>
-      </div>
+        <div className="flex items-center justify-center h-24 bg-slate-800/50 rounded-lg border border-dashed border-slate-600">
+          <span className="text-sm text-slate-500">No stats configured</span>
+        </div>
       </WidgetContainer>
     );
   }
 
   return (
     <WidgetContainer container={settings.container}>
-    <div
-      ref={containerRef}
-      className={cn(
-        "grid gap-8 pt-8",
-        getColumnsClass(),
-        centered && "text-center",
-        style.showTopBorder && "border-t"
-      )}
-      style={{
-        borderColor: style.showTopBorder ? (style.topBorderColor || "#334155") : undefined,
-      }}
-    >
-      {stats.map((stat, index) => (
-        <div
-          key={stat.id}
-          className={cn(
-            "relative",
-            style.divider &&
-              index !== stats.length - 1 &&
-              "after:absolute after:right-0 after:top-1/2 after:-translate-y-1/2 after:h-12 after:w-px after:bg-slate-700 after:hidden sm:after:block"
-          )}
-        >
-          <AnimatedStat
-            value={stat.value}
-            label={stat.label}
-            prefix={stat.prefix}
-            suffix={stat.suffix}
-            animate={isVisible && stat.animate}
-            valueColor={style.valueColor}
-            labelColor={style.labelColor}
-            valueSize={style.valueSize}
-          />
-        </div>
-      ))}
-    </div>
+      <div
+        ref={containerRef}
+        className={cn(
+          "grid gap-8 pt-8",
+          getColumnsClass(),
+          centered && layout === "vertical" && "text-center",
+          style.showTopBorder && "border-t"
+        )}
+        style={{
+          borderColor: style.showTopBorder ? (style.topBorderColor || "#334155") : undefined,
+        }}
+      >
+        {stats.map((stat, index) => (
+          <div
+            key={stat.id}
+            className={cn(
+              "relative",
+              layout === "horizontal" && "flex items-center",
+              style.divider &&
+                index !== stats.length - 1 &&
+                "after:absolute after:right-0 after:top-1/2 after:-translate-y-1/2 after:h-12 after:w-px after:bg-slate-700 after:hidden sm:after:block"
+            )}
+          >
+            <AnimatedStat
+              stat={stat}
+              animate={isVisible && stat.animate}
+              valueColor={style.valueColor}
+              labelColor={style.labelColor}
+              valueSize={style.valueSize}
+              layout={layout}
+              globalIconColor={iconColor}
+              iconSize={iconSize}
+            />
+          </div>
+        ))}
+      </div>
     </WidgetContainer>
   );
 }

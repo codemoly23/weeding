@@ -39,10 +39,20 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { cn } from "@/lib/utils";
+import { STATS_ICON_MAP, STATS_ICON_OPTIONS } from "@/components/page-builder/widgets/social-proof/stats-section";
+
+// Icon preview component
+function IconPreview({ iconName, color }: { iconName?: string; color?: string }) {
+  if (!iconName) return null;
+  const IconComponent = STATS_ICON_MAP[iconName];
+  if (!IconComponent) return null;
+  return <IconComponent className="h-4 w-4" style={{ color: color || "#f97316" }} />;
+}
 
 interface SortableStatItemProps {
   stat: StatItem;
   index: number;
+  globalIconColor: string;
   onUpdate: (id: string, updates: Partial<StatItem>) => void;
   onDelete: (id: string) => void;
   onCopy: (id: string) => void;
@@ -51,6 +61,7 @@ interface SortableStatItemProps {
 function SortableStatItem({
   stat,
   index,
+  globalIconColor,
   onUpdate,
   onDelete,
   onCopy,
@@ -71,6 +82,11 @@ function SortableStatItem({
     transition,
   };
 
+  const iconOptions = [
+    { value: "none", label: "No icon" },
+    ...STATS_ICON_OPTIONS.map((name) => ({ value: name, label: name })),
+  ];
+
   return (
     <div
       ref={setNodeRef}
@@ -90,6 +106,11 @@ function SortableStatItem({
         >
           <GripVertical className="h-4 w-4 text-muted-foreground" />
           <span className="text-[10px] text-muted-foreground">{index + 1}</span>
+        </div>
+
+        {/* Icon preview */}
+        <div className="shrink-0">
+          <IconPreview iconName={stat.icon} color={stat.iconColor || globalIconColor} />
         </div>
 
         {/* Value Input */}
@@ -166,6 +187,32 @@ function SortableStatItem({
               />
             </div>
           </div>
+
+          {/* Icon selector */}
+          <div>
+            <div className="flex items-center gap-2 mb-1">
+              <label className="text-xs text-muted-foreground">Icon</label>
+              {stat.icon && (
+                <IconPreview iconName={stat.icon} color={stat.iconColor || globalIconColor} />
+              )}
+            </div>
+            <SelectInput
+              label=""
+              value={stat.icon || "none"}
+              onChange={(v) => onUpdate(stat.id, { icon: v === "none" ? undefined : v })}
+              options={iconOptions}
+            />
+          </div>
+
+          {/* Per-stat icon color override */}
+          {stat.icon && (
+            <ColorInput
+              label="Icon Color (overrides global)"
+              value={stat.iconColor || globalIconColor}
+              onChange={(v) => onUpdate(stat.id, { iconColor: v })}
+            />
+          )}
+
           <div className="flex items-center gap-2 pt-1">
             <Checkbox
               id={`animate-${stat.id}`}
@@ -240,6 +287,7 @@ export function StatsSectionWidgetSettingsPanel({
       prefix: "",
       suffix: "",
       animate: true,
+      icon: "",
     };
     onChange({ ...s, stats: [...s.stats, newStat] });
   }, [s, onChange]);
@@ -284,6 +332,8 @@ export function StatsSectionWidgetSettingsPanel({
     }
   }, [s, onChange]);
 
+  const globalIconColor = s.style.iconColor ?? "#f97316";
+
   // Content Tab
   const renderContentTab = () => (
     <div className="space-y-4">
@@ -300,12 +350,14 @@ export function StatsSectionWidgetSettingsPanel({
         ]}
       />
 
-      {/* Centered */}
-      <ToggleSwitch
-        label="Center Stats"
-        checked={s.centered}
-        onChange={(checked) => updateField("centered", checked)}
-      />
+      {/* Centered (only applies to vertical layout) */}
+      {(s.style.layout ?? "vertical") === "vertical" && (
+        <ToggleSwitch
+          label="Center Stats"
+          checked={s.centered}
+          onChange={(checked) => updateField("centered", checked)}
+        />
+      )}
 
       {/* Stats List */}
       <div className="space-y-2">
@@ -333,6 +385,7 @@ export function StatsSectionWidgetSettingsPanel({
                   key={stat.id}
                   stat={stat}
                   index={index}
+                  globalIconColor={globalIconColor}
                   onUpdate={updateStat}
                   onDelete={removeStat}
                   onCopy={copyStat}
@@ -359,6 +412,17 @@ export function StatsSectionWidgetSettingsPanel({
   // Style Tab
   const renderStyleTab = () => (
     <div className="space-y-3">
+      {/* Layout */}
+      <SelectInput
+        label="Item Layout"
+        value={s.style.layout ?? "vertical"}
+        onChange={(v) => updateStyleField("layout", v)}
+        options={[
+          { value: "vertical", label: "Vertical (icon top, number below)" },
+          { value: "horizontal", label: "Horizontal (icon left, number right)" },
+        ]}
+      />
+
       <ColorInput
         label="Value Color"
         value={s.style.valueColor}
@@ -380,6 +444,27 @@ export function StatsSectionWidgetSettingsPanel({
           { value: "xl", label: "Extra Large" },
         ]}
       />
+
+      {/* Icon settings */}
+      <div className="border-t pt-3 space-y-3">
+        <p className="text-xs font-medium text-muted-foreground">Icon Settings</p>
+        <ColorInput
+          label="Global Icon Color"
+          value={s.style.iconColor ?? "#f97316"}
+          onChange={(v) => updateStyleField("iconColor", v)}
+        />
+        <SelectInput
+          label="Icon Size"
+          value={s.style.iconSize ?? "md"}
+          onChange={(v) => updateStyleField("iconSize", v)}
+          options={[
+            { value: "sm", label: "Small (32px)" },
+            { value: "md", label: "Medium (40px)" },
+            { value: "lg", label: "Large (56px)" },
+          ]}
+        />
+      </div>
+
       <ToggleSwitch
         label="Show Dividers"
         checked={s.style.divider}

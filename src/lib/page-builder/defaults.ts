@@ -309,21 +309,24 @@ export const DEFAULT_TRUST_BADGES_SETTINGS: TrustBadgesWidgetSettings = {
 
 export const DEFAULT_STATS_SECTION_SETTINGS: StatsSectionWidgetSettings = {
   stats: [
-    { id: "stat_1", value: "10000", label: "LLCs Formed", suffix: "+", animate: true },
-    { id: "stat_2", value: "50", label: "Countries Served", suffix: "+", animate: true },
-    { id: "stat_3", value: "4.9", label: "Customer Rating", prefix: "", suffix: "/5", animate: true },
-    { id: "stat_4", value: "24", label: "Average Processing", suffix: "h", animate: true },
+    { id: "stat_1", value: "500", label: "Projects Completed", suffix: "+", animate: true, icon: "ClipboardCheck" },
+    { id: "stat_2", value: "150", label: "Happy Clients", suffix: "+", animate: true, icon: "Users" },
+    { id: "stat_3", value: "98", label: "Client Retention", suffix: "%", animate: true, icon: "Heart" },
+    { id: "stat_4", value: "50", label: "Revenue Generated", prefix: "$", suffix: "M+", animate: true, icon: "DollarSign" },
   ],
   columns: 4,
   style: {
-    valueColor: "#f97316",
-    labelColor: "#94a3b8",
-    valueSize: "md",
+    valueColor: "#111827",
+    labelColor: "#6b7280",
+    valueSize: "lg",
     divider: false,
-    showTopBorder: true,
+    showTopBorder: false,
     topBorderColor: "#334155",
+    layout: "horizontal",
+    iconColor: "#f97316",
+    iconSize: "lg",
   },
-  centered: true,
+  centered: false,
   animateOnScroll: true,
   // Container Style
   container: DEFAULT_WIDGET_CONTAINER,
@@ -470,7 +473,7 @@ export const DEFAULT_TESTIMONIALS_SETTINGS: TestimonialsWidgetSettings = {
   },
 
   // View Mode
-  viewMode: "grid",
+  viewMode: "carousel",
   testimonialType: "photo",
 
   // Data Source (from database)
@@ -493,7 +496,7 @@ export const DEFAULT_TESTIMONIALS_SETTINGS: TestimonialsWidgetSettings = {
 
   // Carousel View Settings
   carouselView: {
-    layout: "standard",
+    layout: "centered",
     effect: "slide",
     autoplay: true,
     autoplayDelay: 5000,
@@ -502,7 +505,7 @@ export const DEFAULT_TESTIMONIALS_SETTINGS: TestimonialsWidgetSettings = {
     spaceBetween: 24,
     navigation: {
       arrows: {
-        enabled: true,
+        enabled: false,
         style: "rounded",
         size: "md",
         color: "#ffffff",
@@ -513,8 +516,8 @@ export const DEFAULT_TESTIMONIALS_SETTINGS: TestimonialsWidgetSettings = {
       pagination: {
         enabled: true,
         type: "dots",
-        activeColor: "#3b82f6",
-        inactiveColor: "#64748b",
+        activeColor: "#030303",
+        inactiveColor: "#cccccc",
       },
     },
     splitLayout: {
@@ -1743,7 +1746,7 @@ export const DEFAULT_FAQ_ACCORDION_SETTINGS = {
     description: "Get answers to common questions about our services",
     alignment: "center" as const,
   },
-  source: "all" as const,
+  source: "service" as const,
   categories: [],
   maxItems: 10,
   expandFirst: true,
