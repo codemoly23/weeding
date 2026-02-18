@@ -120,6 +120,7 @@ export function FaqAccordionWidget({
     }
 
     // Source: "all" or "category" - fetch from global FAQ API
+    // Falls back to service context FAQs if global table is empty
     async function fetchFaqs() {
       try {
         const params = new URLSearchParams();
@@ -137,13 +138,38 @@ export function FaqAccordionWidget({
         }
 
         data = data.slice(0, s.maxItems);
+
+        // Fallback: if global FAQs empty but service context has FAQs, use those
+        if (data.length === 0 && serviceContext?.service?.faqs?.length) {
+          data = serviceContext.service.faqs.slice(0, s.maxItems).map((faq) => ({
+            id: faq.id,
+            question: faq.question,
+            answer: faq.answer,
+            category: null,
+          }));
+        }
+
         setFaqs(data);
 
         if (s.expandFirst && data.length > 0) {
           setOpenItems(new Set([data[0].id]));
         }
       } catch {
-        setFaqs([]);
+        // On error, try service context as fallback
+        if (serviceContext?.service?.faqs?.length) {
+          const fallback = serviceContext.service.faqs.slice(0, s.maxItems).map((faq) => ({
+            id: faq.id,
+            question: faq.question,
+            answer: faq.answer,
+            category: null,
+          }));
+          setFaqs(fallback);
+          if (s.expandFirst && fallback.length > 0) {
+            setOpenItems(new Set([fallback[0].id]));
+          }
+        } else {
+          setFaqs([]);
+        }
       } finally {
         setLoading(false);
       }
@@ -191,7 +217,7 @@ export function FaqAccordionWidget({
   if (loading) {
     return (
       <WidgetContainer container={settings.container}>
-      <div className="mx-auto max-w-3xl space-y-4">
+      <div className="space-y-4">
         {[1, 2, 3].map((i) => (
           <div key={i} className="h-16 animate-pulse rounded-xl bg-muted" />
         ))}
@@ -251,7 +277,7 @@ export function FaqAccordionWidget({
           </div>
         )}
 
-        <div className="mx-auto max-w-3xl space-y-12">
+        <div className="space-y-12">
           {serviceFaqGroups.map((group) => (
             <section key={group.categoryId}>
               <div className="mb-8 rounded-lg border bg-muted/30 p-4">
@@ -425,7 +451,7 @@ export function FaqAccordionWidget({
       )}
 
       {/* FAQ Items */}
-      <div className="mx-auto max-w-3xl">
+      <div className="w-full">
         {s.style === "minimal" && (
           <div className="divide-y divide-border">
             {displayFaqs.map((faq) => (

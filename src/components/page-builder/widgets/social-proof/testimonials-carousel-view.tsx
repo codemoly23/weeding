@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import { Quote, ChevronLeft, ChevronRight } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -37,6 +37,13 @@ export function TestimonialsCarouselView({
   const goToNext = () => {
     setCurrentIndex((prev) => (prev === totalSlides - 1 ? 0 : prev + 1));
   };
+
+  // Autoplay
+  useEffect(() => {
+    if (!carouselView.autoplay || totalSlides <= 1) return;
+    const interval = setInterval(goToNext, carouselView.autoplayDelay || 5000);
+    return () => clearInterval(interval);
+  }, [carouselView.autoplay, carouselView.autoplayDelay, totalSlides]);
 
   // Arrow button size classes
   const arrowSizeClasses = {
@@ -507,14 +514,136 @@ export function TestimonialsCarouselView({
     );
   };
 
+  // Render Centered Quote Carousel (inspired by agency-style design)
+  const renderCenteredCarousel = () => {
+    const testimonial = testimonials[currentIndex];
+    const { pagination } = carouselView.navigation;
+    const activeColor = pagination.activeColor || "#030303";
+    const inactiveColor = pagination.inactiveColor || "#cccccc";
+    const padded = (n: number) => String(n).padStart(2, "0");
+
+    return (
+      <div className="relative w-full">
+        {/* Slides */}
+        <div className="overflow-hidden">
+          <div
+            className="flex transition-transform duration-500 ease-out"
+            style={{ transform: `translateX(-${currentIndex * 100}%)` }}
+          >
+            {testimonials.map((t) => (
+              <div
+                key={t.id}
+                className="w-full flex-shrink-0 flex flex-col items-center text-center px-4 md:px-16 lg:px-32"
+              >
+                {/* Quote text */}
+                <p
+                  className={cn(
+                    "mb-10 text-2xl md:text-3xl lg:text-4xl font-light leading-snug",
+                    content.quoteStyle === "italic" && "italic"
+                  )}
+                  style={{ color: content.quoteColor }}
+                  dangerouslySetInnerHTML={{
+                    __html: t.content,
+                  }}
+                />
+
+                {/* Author row: quote icon + avatar overlapping, then name & role */}
+                <div className="flex items-center gap-4 text-left">
+                  {/* Overlapping quote icon + avatar */}
+                  <div className="relative flex items-center">
+                    {/* SVG quote mark circle */}
+                    <div
+                      className="flex h-12 w-12 items-center justify-center rounded-full z-10"
+                      style={{ backgroundColor: activeColor }}
+                    >
+                      <svg width="20" height="16" viewBox="0 0 36 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M28.5847 16.895C28.1454 19.6558 24.6944 22.6049 21.9963 22.6676C21.8081 22.6676 21.6198 22.7304 21.4943 22.8559C21.3688 22.9186 21.2433 22.9814 21.1806 23.1696C20.2394 24.9265 20.7414 26.3069 22.31 27.4364C24.1297 28.754 27.016 27.4364 28.4592 26.2442C32.0985 23.2323 35.8005 18.0245 35.6123 13.0674C36.2397 9.74178 36.1142 6.16534 35.173 3.21626C34.5456 1.33387 32.7259 0.392675 30.8435 0.267183C28.9611 0.141588 25.0709 -0.423025 23.3767 0.706306C21.6826 1.83584 21.5571 4.03197 21.3688 5.91425C21.1806 7.98488 20.6159 11.8753 22.3728 13.5067C24.1297 15.0753 29.1494 13.3812 28.5847 16.895ZM7.87837 16.895C7.43915 19.6558 3.9882 22.6049 1.29001 22.6676C1.10177 22.6676 0.913532 22.7304 0.78804 22.8559C0.662445 22.9186 0.537052 22.9814 0.474205 23.1696C-0.466991 24.9265 0.034977 26.3069 1.60364 27.4364C3.42328 28.754 6.30961 27.4364 7.75288 26.2442C11.3922 23.2323 15.0942 18.0244 14.906 13.0674C15.5334 9.74178 15.4079 6.16534 14.4668 3.21626C13.8394 1.33387 12.0197 0.392675 10.1372 0.267183C8.25485 0.141588 4.36458 -0.423025 2.67043 0.706306C0.976379 1.83584 0.850784 4.03197 0.662548 5.91425C0.474308 7.98488 -0.0904121 11.8753 1.66649 13.5067C3.42339 15.0753 8.50584 13.3812 7.87837 16.895Z" fill="white"/>
+                      </svg>
+                    </div>
+                    {/* Avatar overlapping */}
+                    {avatar.style !== "none" && (
+                      <div
+                        className={cn(
+                          "rounded-full overflow-hidden border-2 border-white -ml-3",
+                          splitAvatarSizeClasses[avatar.size]
+                        )}
+                        style={{ borderColor: avatar.borderColor || "#ffffff" }}
+                      >
+                        {avatar.style === "photo" && t.avatar ? (
+                          <img src={t.avatar} alt={t.name} className="h-full w-full object-cover" />
+                        ) : (
+                          <div
+                            className="flex h-full w-full items-center justify-center text-sm font-bold"
+                            style={{ backgroundColor: avatar.backgroundColor, color: avatar.textColor }}
+                          >
+                            {getInitials(t.name)}
+                          </div>
+                        )}
+                      </div>
+                    )}
+                  </div>
+
+                  {/* Name & Role */}
+                  <div>
+                    <p className="font-semibold text-lg leading-tight" style={{ color: content.nameColor }}>
+                      {t.name}
+                    </p>
+                    <p className="text-sm" style={{ color: content.infoColor }}>
+                      {[
+                        content.showCompany && t.company,
+                        content.showCountry && t.country,
+                      ]
+                        .filter(Boolean)
+                        .join(", ")}
+                    </p>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Progress navigation: 02 ——— 03 */}
+        <div className="mt-10 flex items-center justify-center gap-4">
+          <span className="text-sm font-medium tabular-nums" style={{ color: activeColor }}>
+            {padded(currentIndex + 1)}
+          </span>
+          <div
+            className="relative h-px w-32 md:w-48 overflow-hidden rounded-full"
+            style={{ backgroundColor: inactiveColor }}
+          >
+            <div
+              className="absolute left-0 top-0 h-full transition-all duration-500"
+              style={{
+                backgroundColor: activeColor,
+                width: `${((currentIndex + 1) / totalSlides) * 100}%`,
+              }}
+            />
+          </div>
+          <span className="text-sm tabular-nums" style={{ color: inactiveColor }}>
+            {padded(totalSlides)}
+          </span>
+        </div>
+      </div>
+    );
+  };
+
   return (
     <div className="group relative">
       {/* Carousel Content */}
-      {carouselView.layout === "split" ? renderSplitCarousel() : renderStandardCarousel()}
+      {carouselView.layout === "centered"
+        ? renderCenteredCarousel()
+        : carouselView.layout === "split"
+        ? renderSplitCarousel()
+        : renderStandardCarousel()}
 
-      {/* Navigation */}
-      {renderArrows()}
-      {renderPagination()}
+      {/* Navigation (arrows + pagination) — skip for centered (it has its own) */}
+      {carouselView.layout !== "centered" && (
+        <>
+          {renderArrows()}
+          {renderPagination()}
+        </>
+      )}
     </div>
   );
 }

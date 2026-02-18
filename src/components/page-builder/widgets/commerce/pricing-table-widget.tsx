@@ -521,6 +521,9 @@ function ComparisonTable({
   currencySymbol = "$",
 }: ComparisonTableProps) {
   const { tableStyle, tableHeader, featureRows, colors } = settings;
+  const accentColor = settings.ctaButtons?.defaultBgColor || "#f97316";
+  const accentBgLight = `${accentColor}15`;
+  const accentBgMedium = `${accentColor}25`;
 
   const renderCellContent = (
     feature: ComparisonFeature,
@@ -552,20 +555,18 @@ function ComparisonTable({
               className={cn(
                 "h-8 px-3 text-sm font-medium transition-all",
                 isSelected
-                  ? "bg-orange-500 text-white border-orange-500 hover:bg-orange-600 hover:border-orange-600"
-                  : isSelectedColumn
-                    ? "border-orange-300 hover:border-orange-500 hover:bg-orange-50"
-                    : "border-gray-300 hover:border-gray-400"
+                  ? "text-white"
+                  : "border-gray-300 hover:border-gray-400"
               )}
               style={
                 isSelected
                   ? {
-                      backgroundColor:
-                        featureRows.addonStyle.selectedColor || "#f97316",
-                      borderColor:
-                        featureRows.addonStyle.selectedColor || "#f97316",
+                      backgroundColor: featureRows.addonStyle.selectedColor || accentColor,
+                      borderColor: featureRows.addonStyle.selectedColor || accentColor,
                     }
-                  : undefined
+                  : isSelectedColumn
+                    ? { borderColor: `${accentColor}80` }
+                    : undefined
               }
               onClick={(e) => {
                 e.stopPropagation();
@@ -596,10 +597,8 @@ function ComparisonTable({
       case "TEXT":
         return (
           <span
-            className={cn(
-              "text-sm font-medium",
-              isSelectedColumn && "text-orange-700"
-            )}
+            className="text-sm font-medium"
+            style={isSelectedColumn ? { color: accentColor } : undefined}
           >
             {customValue}
           </span>
@@ -610,15 +609,12 @@ function ComparisonTable({
         if (included) {
           return (
             <div
-              className={cn(
-                "inline-flex h-6 w-6 items-center justify-center rounded-full",
-                isSelectedColumn ? "bg-orange-500 text-white" : "bg-gray-400 text-white"
-              )}
-              style={
-                isSelectedColumn && featureRows.booleanStyle.trueColor
-                  ? { backgroundColor: featureRows.booleanStyle.trueColor }
-                  : undefined
-              }
+              className="inline-flex h-6 w-6 items-center justify-center rounded-full text-white"
+              style={{
+                backgroundColor: isSelectedColumn
+                  ? featureRows.booleanStyle.trueColor || accentColor
+                  : "#9ca3af",
+              }}
             >
               <Check className="h-4 w-4 stroke-[3]" />
             </div>
@@ -671,28 +667,23 @@ function ComparisonTable({
                   className="relative h-6 cursor-pointer"
                   style={{
                     backgroundColor: isSelected
-                      ? colors.highlightedColumnBg || "#fff7ed"
+                      ? colors.highlightedColumnBg || accentBgLight
                       : isHighlighted
-                        ? tableHeader.highlightColor || "#fff7ed"
+                        ? tableHeader.highlightColor || accentBgLight
                         : tableStyle.backgroundColor || "#ffffff",
                   }}
                   onClick={() => onPackageSelect(pkg.id)}
                 >
                   {tableHeader.showPopularBadge && pkg.badgeText && (
                     <div
-                      className={cn(
-                        "absolute bottom-0 left-1/2 -translate-x-1/2 translate-y-1/2 px-3 py-1 text-xs font-semibold text-white rounded-full whitespace-nowrap z-10 shadow-sm",
-                        pkg.badgeColor === "orange"
-                          ? "bg-orange-500"
+                      className="absolute bottom-0 left-1/2 -translate-x-1/2 translate-y-1/2 px-3 py-1 text-xs font-semibold text-white rounded-full whitespace-nowrap z-10 shadow-sm"
+                      style={{
+                        backgroundColor: tableHeader.popularBadgeColor
+                          ? tableHeader.popularBadgeColor
                           : pkg.badgeColor === "green"
-                            ? "bg-emerald-500"
-                            : "bg-emerald-500"
-                      )}
-                      style={
-                        tableHeader.popularBadgeColor
-                          ? { backgroundColor: tableHeader.popularBadgeColor }
-                          : undefined
-                      }
+                            ? "#10b981"
+                            : accentColor,
+                      }}
                     >
                       {pkg.badgeText}
                     </div>
@@ -723,25 +714,25 @@ function ComparisonTable({
                     key={pkg.id}
                     className={cn(
                       "relative min-w-36 cursor-pointer px-4 pt-5 pb-4 text-center transition-all",
-                      isSelected ? "bg-orange-50" : "hover:bg-gray-50"
+                      !isSelected && "hover:bg-gray-50"
                     )}
                     style={{
                       backgroundColor: isSelected
-                        ? colors.highlightedColumnBg || "#fff7ed"
+                        ? colors.highlightedColumnBg || accentBgLight
                         : isHighlighted
-                          ? tableHeader.highlightColor || "#fff7ed"
+                          ? tableHeader.highlightColor || accentBgLight
                           : tableStyle.backgroundColor || "#ffffff",
                     }}
                     onClick={() => onPackageSelect(pkg.id)}
                   >
                     {tableHeader.showPackageNames && (
                       <div
-                        className={cn(
-                          "mb-2 rounded-lg border-2 px-4 py-1 transition-all",
+                        className="mb-2 rounded-lg border-2 px-4 py-1 transition-all"
+                        style={
                           isSelected
-                            ? "border-orange-500 bg-white"
-                            : "border-gray-200 bg-gray-50"
-                        )}
+                            ? { borderColor: accentColor, backgroundColor: "#ffffff" }
+                            : { borderColor: "#e5e7eb", backgroundColor: "#f9fafb" }
+                        }
                       >
                         <span className="text-sm font-semibold text-gray-900">
                           {pkg.name}
@@ -764,15 +755,12 @@ function ComparisonTable({
                     {pkg.processingTime && (
                       <div className="flex items-center justify-center gap-1 mt-2 text-xs text-gray-500">
                         {pkg.processingIcon === "zap" ? (
-                          <Zap className="h-3 w-3 text-orange-500" />
+                          <Zap className="h-3 w-3" style={{ color: accentColor }} />
                         ) : (
                           <Clock className="h-3 w-3" />
                         )}
                         <span
-                          className={cn(
-                            pkg.processingIcon === "zap" &&
-                              "text-orange-600 font-medium"
-                          )}
+                          style={pkg.processingIcon === "zap" ? { color: accentColor, fontWeight: 500 } : undefined}
                         >
                           {pkg.processingTime}
                         </span>
@@ -861,15 +849,12 @@ function ComparisonTable({
                   return (
                     <td
                       key={pkg.id}
-                      className={cn(
-                        "px-4 py-4 text-center transition-all cursor-pointer",
-                        featureRows.rowHoverEffect && "hover:bg-orange-50/30"
-                      )}
+                      className="px-4 py-4 text-center transition-all cursor-pointer"
                       style={{
                         backgroundColor: isSelected
-                          ? colors.highlightedColumnBg || "#fff7ed70"
+                          ? colors.highlightedColumnBg || accentBgLight
                           : isHighlighted
-                            ? `${tableHeader.highlightColor || "#fff7ed"}80`
+                            ? `${tableHeader.highlightColor || accentBgLight}80`
                             : featureRows.alternateRowColors && index % 2 !== 0
                               ? "#f9fafb80"
                               : tableStyle.backgroundColor || "#ffffff",
@@ -913,6 +898,8 @@ function MobilePackageCards({
   currencySymbol = "$",
 }: MobilePackageCardsProps) {
   const { responsive } = settings;
+  const accentColor = settings.ctaButtons?.defaultBgColor || "#f97316";
+  const accentBgLight = `${accentColor}15`;
 
   return (
     <div className="lg:hidden">
@@ -925,24 +912,20 @@ function MobilePackageCards({
           return (
             <div
               key={pkg.id}
-              className={cn(
-                "min-w-72 max-w-80 shrink-0 snap-center rounded-xl border-2 p-5 cursor-pointer transition-all",
+              className="min-w-72 max-w-80 shrink-0 snap-center rounded-xl border-2 p-5 cursor-pointer transition-all"
+              style={
                 isSelected
-                  ? "border-orange-500 bg-orange-50 shadow-lg"
-                  : "border-gray-200 bg-white"
-              )}
+                  ? { borderColor: accentColor, backgroundColor: accentBgLight, boxShadow: "0 10px 15px -3px rgba(0,0,0,0.1)" }
+                  : { borderColor: "#e5e7eb", backgroundColor: "#ffffff" }
+              }
               onClick={() => onPackageSelect(pkg.id)}
             >
               {pkg.badgeText && (
                 <Badge
-                  className={cn(
-                    "mb-3",
-                    pkg.badgeColor === "orange"
-                      ? "bg-orange-500"
-                      : pkg.badgeColor === "green"
-                        ? "bg-emerald-500"
-                        : "bg-emerald-500"
-                  )}
+                  className="mb-3 text-white"
+                  style={{
+                    backgroundColor: pkg.badgeColor === "green" ? "#10b981" : accentColor,
+                  }}
                 >
                   {pkg.badgeText}
                 </Badge>
@@ -957,7 +940,7 @@ function MobilePackageCards({
                 {pkg.processingTime && (
                   <div className="flex items-center justify-center gap-1 mt-2 text-xs text-gray-500">
                     {pkg.processingIcon === "zap" ? (
-                      <Zap className="h-3 w-3 text-orange-500" />
+                      <Zap className="h-3 w-3" style={{ color: accentColor }} />
                     ) : (
                       <Clock className="h-3 w-3" />
                     )}
@@ -993,10 +976,8 @@ function MobilePackageCards({
                       >
                         {isIncluded ? (
                           <Check
-                            className={cn(
-                              "mt-0.5 h-4 w-4 shrink-0",
-                              isSelected ? "text-orange-500" : "text-gray-500"
-                            )}
+                            className="mt-0.5 h-4 w-4 shrink-0"
+                            style={{ color: isSelected ? accentColor : "#6b7280" }}
                           />
                         ) : (
                           <X className="mt-0.5 h-4 w-4 shrink-0 text-gray-300" />

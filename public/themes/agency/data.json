@@ -2210,7 +2210,7 @@
               ],
               "settings": {
                 "gap": 0,
-                "maxWidth": "lg",
+                "maxWidth": "xl",
                 "fullWidth": false,
                 "isVisible": true,
                 "paddingTop": 48,
@@ -2359,7 +2359,7 @@
               ],
               "settings": {
                 "gap": 0,
-                "maxWidth": "lg",
+                "maxWidth": "xl",
                 "fullWidth": false,
                 "isVisible": true,
                 "paddingTop": 48,
@@ -2533,7 +2533,7 @@
               ],
               "settings": {
                 "gap": 0,
-                "maxWidth": "lg",
+                "maxWidth": "xl",
                 "fullWidth": false,
                 "isVisible": true,
                 "paddingTop": 64,

@@ -231,6 +231,16 @@ export function registerAllWidgets() {
     component: FaqAccordionWidget,
   });
 
+  WidgetRegistry.register({
+    type: "faq-accordion",
+    name: "FAQ Accordion",
+    description: "Display FAQs from the admin panel in beautiful accordion styles",
+    icon: "HelpCircle",
+    category: "layout",
+    defaultSettings: DEFAULT_FAQ_ACCORDION_SETTINGS,
+    component: FaqAccordionWidget,
+  });
+
   // Service Widgets (for Service Details template)
   WidgetRegistry.register({
     type: "service-hero",

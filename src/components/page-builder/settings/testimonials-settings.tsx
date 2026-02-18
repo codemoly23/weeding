@@ -274,6 +274,146 @@ export function TestimonialsWidgetSettingsPanel({
             </Popover>
           </div>
 
+          {/* Carousel View Settings — shown early for discoverability */}
+          {s.viewMode === "carousel" && (
+            <Collapsible defaultOpen>
+              <CollapsibleTrigger className="flex w-full items-center justify-between py-2 text-sm font-medium">
+                Carousel Settings
+                <ChevronDown className="h-4 w-4" />
+              </CollapsibleTrigger>
+              <CollapsibleContent className="space-y-3 pt-2">
+                <SelectInput
+                  label="Layout"
+                  value={s.carouselView.layout}
+                  onChange={(value) =>
+                    updateCarouselView({
+                      layout: value as "standard" | "split" | "centered",
+                    })
+                  }
+                  options={[
+                    { label: "Standard", value: "standard" },
+                    { label: "Split (Large Photo)", value: "split" },
+                    { label: "Centered", value: "centered" },
+                  ]}
+                />
+
+                <ToggleSwitch
+                  label="Autoplay"
+                  checked={s.carouselView.autoplay}
+                  onChange={(checked: boolean) =>
+                    updateCarouselView({ autoplay: checked })
+                  }
+                />
+
+                {s.carouselView.autoplay && (
+                  <NumberInput
+                    label="Autoplay Delay (ms)"
+                    value={s.carouselView.autoplayDelay}
+                    onChange={(value) => updateCarouselView({ autoplayDelay: value })}
+                    min={1000}
+                    max={10000}
+                    step={500}
+                  />
+                )}
+
+                <ToggleSwitch
+                  label="Loop"
+                  checked={s.carouselView.loop}
+                  onChange={(checked: boolean) => updateCarouselView({ loop: checked })}
+                />
+
+                <ToggleSwitch
+                  label="Show Arrows"
+                  checked={s.carouselView.navigation.arrows.enabled}
+                  onChange={(checked: boolean) =>
+                    updateCarouselView({
+                      navigation: {
+                        ...s.carouselView.navigation,
+                        arrows: {
+                          ...s.carouselView.navigation.arrows,
+                          enabled: checked,
+                        },
+                      },
+                    })
+                  }
+                />
+
+                <ToggleSwitch
+                  label="Show Pagination"
+                  checked={s.carouselView.navigation.pagination.enabled}
+                  onChange={(checked: boolean) =>
+                    updateCarouselView({
+                      navigation: {
+                        ...s.carouselView.navigation,
+                        pagination: {
+                          ...s.carouselView.navigation.pagination,
+                          enabled: checked,
+                        },
+                      },
+                    })
+                  }
+                />
+
+                {s.carouselView.navigation.pagination.enabled && (
+                  <>
+                    {s.carouselView.layout !== "centered" && (
+                      <SelectInput
+                        label="Pagination Type"
+                        value={s.carouselView.navigation.pagination.type}
+                        onChange={(value) =>
+                          updateCarouselView({
+                            navigation: {
+                              ...s.carouselView.navigation,
+                              pagination: {
+                                ...s.carouselView.navigation.pagination,
+                                type: value as "dots" | "fraction" | "progressbar",
+                              },
+                            },
+                          })
+                        }
+                        options={[
+                          { label: "Dots", value: "dots" },
+                          { label: "Fraction", value: "fraction" },
+                          { label: "Progress Bar", value: "progressbar" },
+                        ]}
+                      />
+                    )}
+                    <ColorInput
+                      label={s.carouselView.layout === "centered" ? "Progress Bar Color (Active)" : "Active Color"}
+                      value={s.carouselView.navigation.pagination.activeColor || "#030303"}
+                      onChange={(value) =>
+                        updateCarouselView({
+                          navigation: {
+                            ...s.carouselView.navigation,
+                            pagination: {
+                              ...s.carouselView.navigation.pagination,
+                              activeColor: value,
+                            },
+                          },
+                        })
+                      }
+                    />
+                    <ColorInput
+                      label={s.carouselView.layout === "centered" ? "Progress Bar Track Color" : "Inactive Color"}
+                      value={s.carouselView.navigation.pagination.inactiveColor || "#cccccc"}
+                      onChange={(value) =>
+                        updateCarouselView({
+                          navigation: {
+                            ...s.carouselView.navigation,
+                            pagination: {
+                              ...s.carouselView.navigation.pagination,
+                              inactiveColor: value,
+                            },
+                          },
+                        })
+                      }
+                    />
+                  </>
+                )}
+              </CollapsibleContent>
+            </Collapsible>
+          )}
+
           {/* Header Section */}
           <Collapsible defaultOpen>
             <CollapsibleTrigger className="flex w-full items-center justify-between py-2 text-sm font-medium">
@@ -777,106 +917,6 @@ export function TestimonialsWidgetSettingsPanel({
                     onChange={(value) => updateGridView({ quoteIconColor: value })}
                   />
                 </>
-              )}
-            </>
-          )}
-
-          {/* Carousel View Settings */}
-          {s.viewMode === "carousel" && (
-            <>
-              <SelectInput
-                label="Layout"
-                value={s.carouselView.layout}
-                onChange={(value) =>
-                  updateCarouselView({
-                    layout: value as "standard" | "split" | "centered",
-                  })
-                }
-                options={[
-                  { label: "Standard", value: "standard" },
-                  { label: "Split (Large Photo)", value: "split" },
-                  { label: "Centered", value: "centered" },
-                ]}
-              />
-
-              <ToggleSwitch
-                label="Autoplay"
-                checked={s.carouselView.autoplay}
-                onChange={(checked: boolean) =>
-                  updateCarouselView({ autoplay: checked })
-                }
-              />
-
-              {s.carouselView.autoplay && (
-                <NumberInput
-                  label="Autoplay Delay (ms)"
-                  value={s.carouselView.autoplayDelay}
-                  onChange={(value) => updateCarouselView({ autoplayDelay: value })}
-                  min={1000}
-                  max={10000}
-                  step={500}
-                />
-              )}
-
-              <ToggleSwitch
-                label="Loop"
-                checked={s.carouselView.loop}
-                onChange={(checked: boolean) => updateCarouselView({ loop: checked })}
-              />
-
-              <ToggleSwitch
-                label="Show Arrows"
-                checked={s.carouselView.navigation.arrows.enabled}
-                onChange={(checked: boolean) =>
-                  updateCarouselView({
-                    navigation: {
-                      ...s.carouselView.navigation,
-                      arrows: {
-                        ...s.carouselView.navigation.arrows,
-                        enabled: checked,
-                      },
-                    },
-                  })
-                }
-              />
-
-              <ToggleSwitch
-                label="Show Pagination"
-                checked={s.carouselView.navigation.pagination.enabled}
-                onChange={(checked: boolean) =>
-                  updateCarouselView({
-                    navigation: {
-                      ...s.carouselView.navigation,
-                      pagination: {
-                        ...s.carouselView.navigation.pagination,
-                        enabled: checked,
-                      },
-                    },
-                  })
-                }
-              />
-
-              {s.carouselView.navigation.pagination.enabled && (
-                <SelectInput
-                  label="Pagination Type"
-                  value={s.carouselView.navigation.pagination.type}
-                  onChange={(value) =>
-                    updateCarouselView({
-                      navigation: {
-                        ...s.carouselView.navigation,
-                        pagination: {
-                          ...s.carouselView.navigation.pagination,
-                          type: value as "dots" | "fraction" | "progressbar",
-                        },
-                      },
-                    })
-                  }
-                  options={[
-                    { label: "Dots", value: "dots" },
-                    { label: "Fraction", value: "fraction" },
-                    { label: "Progress Bar", value: "progressbar" },
-                  ]}
-                />
               )}
             </>
           )}

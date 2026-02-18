@@ -576,7 +576,7 @@ function EditMode({ widget, section, columnId, onBack, onUpdateSettings, onUpdat
           )}
 
           {/* FAQ Accordion Widget */}
-          {widget.type === "faq" && (
+          {(widget.type === "faq" || widget.type === "faq-accordion") && (
             <FaqAccordionWidgetSettingsPanel
               settings={widget.settings as any}
               onChange={onUpdateSettings}
@@ -625,7 +625,7 @@ function EditMode({ widget, section, columnId, onBack, onUpdateSettings, onUpdat
           )}
 
           {/* Fallback for unknown widget types */}
-          {!["hero-content", "heading", "text-block", "image", "image-slider", "trust-badges", "stats-section", "divider", "service-card", "service-list", "process-steps", "pricing-table", "testimonials-carousel", "lead-form", "service-hero", "faq", "service-features", "service-description", "service-breadcrumb", "related-services", "blog-post-grid", "blog-post-carousel", "blog-featured-post", "blog-post-list", "blog-recent-posts"].includes(widget.type) && (
+          {!["hero-content", "heading", "text-block", "image", "image-slider", "trust-badges", "stats-section", "divider", "service-card", "service-list", "process-steps", "pricing-table", "testimonials-carousel", "lead-form", "service-hero", "faq", "faq-accordion", "service-features", "service-description", "service-breadcrumb", "related-services", "blog-post-grid", "blog-post-carousel", "blog-featured-post", "blog-post-list", "blog-recent-posts"].includes(widget.type) && (
             <p className="text-center text-sm text-muted-foreground">
               Settings for {widget.type} coming soon.
             </p>

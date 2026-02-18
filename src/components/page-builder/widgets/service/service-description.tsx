@@ -116,7 +116,6 @@ export function ServiceDescriptionWidget({
   if (s.variant === "clean-prose") {
     return (
       <WidgetContainer container={s.container}>
-      <div className="mx-auto" style={{ maxWidth: maxWidthMap[s.maxWidth] }}>
         {headerElement}
         <div
           className={cn(
@@ -127,7 +126,6 @@ export function ServiceDescriptionWidget({
           )}
           dangerouslySetInnerHTML={{ __html: service.description }}
         />
-      </div>
       </WidgetContainer>
     );
   }
@@ -136,7 +134,6 @@ export function ServiceDescriptionWidget({
   if (s.variant === "bordered") {
     return (
       <WidgetContainer container={s.container}>
-      <div className="mx-auto" style={{ maxWidth: maxWidthMap[s.maxWidth] }}>
         {headerElement}
         <div className="rounded-xl border border-l-4 border-l-primary bg-card p-8">
           <div
@@ -148,7 +145,6 @@ export function ServiceDescriptionWidget({
             dangerouslySetInnerHTML={{ __html: service.description }}
           />
         </div>
-      </div>
       </WidgetContainer>
     );
   }
@@ -156,7 +152,6 @@ export function ServiceDescriptionWidget({
   // ---- Variant: two-column-sidebar ----
   return (
     <WidgetContainer container={s.container}>
-    <div className="mx-auto" style={{ maxWidth: maxWidthMap[s.maxWidth] }}>
       {headerElement}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
         {/* Content (2/3) */}
@@ -202,7 +197,6 @@ export function ServiceDescriptionWidget({
           </div>
         )}
       </div>
-    </div>
     </WidgetContainer>
   );
 }
