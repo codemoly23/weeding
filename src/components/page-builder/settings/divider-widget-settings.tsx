@@ -10,18 +10,22 @@ import {
   TextInput,
 } from "@/app/admin/appearance/landing-page/components/ui/form-controls";
 import { AccordionSection } from "@/app/admin/appearance/landing-page/components/ui/accordion-section";
+import { useFieldAccordion } from "@/components/page-builder/settings/use-field-accordion";
 
 interface DividerWidgetSettingsPanelProps {
   settings: Partial<DividerWidgetSettings>;
   onChange: (settings: DividerWidgetSettings) => void;
   activeTab: "content" | "style" | "advanced";
+  activeFieldId?: string | null;
 }
 
 export function DividerWidgetSettingsPanel({
   settings: partialSettings,
   onChange,
   activeTab,
+  activeFieldId,
 }: DividerWidgetSettingsPanelProps) {
+  const { getAccordionProps } = useFieldAccordion(activeFieldId);
   // Merge with defaults
   const settings: DividerWidgetSettings = {
     ...DEFAULT_DIVIDER_SETTINGS,
@@ -58,7 +62,7 @@ export function DividerWidgetSettingsPanel({
 
         {/* Icon settings */}
         {settings.style === "with-icon" && (
-          <AccordionSection title="Icon Settings" defaultOpen>
+          <AccordionSection title="Icon Settings" defaultOpen {...getAccordionProps("icon")}>
             <div className="space-y-3">
               <TextInput
                 label="Icon Name"
@@ -87,7 +91,7 @@ export function DividerWidgetSettingsPanel({
 
         {/* Text settings */}
         {settings.style === "with-text" && (
-          <AccordionSection title="Text Settings" defaultOpen>
+          <AccordionSection title="Text Settings" defaultOpen {...getAccordionProps("text")}>
             <div className="space-y-3">
               <TextInput
                 label="Text"
@@ -126,7 +130,7 @@ export function DividerWidgetSettingsPanel({
   if (activeTab === "style") {
     return (
       <div className="space-y-4">
-        <AccordionSection title="Line Style" defaultOpen>
+        <AccordionSection title="Line Style" defaultOpen {...getAccordionProps("line")}>
           <div className="space-y-3">
             <ColorInput
               label="Primary Color"

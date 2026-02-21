@@ -286,6 +286,7 @@ export function ImageWidget({ settings, isPreview = false }: ImageWidgetProps) {
   const imageContent = (
     <div
       ref={containerRef}
+      data-field-id="image"
       className={cn(
         "group relative overflow-hidden w-full",
         getAspectRatioClass(),

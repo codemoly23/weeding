@@ -11,11 +11,13 @@ import {
   ToggleSwitch,
 } from "@/app/admin/appearance/landing-page/components/ui/form-controls";
 import { AccordionSection } from "@/app/admin/appearance/landing-page/components/ui/accordion-section";
+import { useFieldAccordion } from "@/components/page-builder/settings/use-field-accordion";
 
 interface FaqAccordionWidgetSettingsPanelProps {
   settings: Partial<FaqAccordionWidgetSettings>;
   onChange: (settings: FaqAccordionWidgetSettings) => void;
   activeTab: "content" | "style" | "advanced";
+  activeFieldId?: string | null;
 }
 
 const CATEGORY_OPTIONS = [
@@ -29,7 +31,9 @@ export function FaqAccordionWidgetSettingsPanel({
   settings: partialSettings,
   onChange,
   activeTab,
+  activeFieldId,
 }: FaqAccordionWidgetSettingsPanelProps) {
+  const { getAccordionProps } = useFieldAccordion(activeFieldId);
   const settings: FaqAccordionWidgetSettings = {
     ...DEFAULT_FAQ_ACCORDION_SETTINGS,
     ...partialSettings,
@@ -63,7 +67,7 @@ export function FaqAccordionWidgetSettingsPanel({
   if (activeTab === "content") {
     return (
       <div className="space-y-4">
-        <AccordionSection title="Header" defaultOpen>
+        <AccordionSection title="Header" defaultOpen {...getAccordionProps("header")}>
           <div className="space-y-3">
             <ToggleSwitch
               label="Show Header"
@@ -100,7 +104,7 @@ export function FaqAccordionWidgetSettingsPanel({
           </div>
         </AccordionSection>
 
-        <AccordionSection title="Data Source" defaultOpen>
+        <AccordionSection title="Data Source" defaultOpen {...getAccordionProps("faq-items")}>
           <div className="space-y-3">
             <SelectInput
               label="Show FAQs"

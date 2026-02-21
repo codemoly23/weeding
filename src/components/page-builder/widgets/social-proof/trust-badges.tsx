@@ -55,6 +55,7 @@ export function TrustBadgesWidget({ settings, isPreview = false }: TrustBadgesWi
     return (
       <WidgetContainer container={settings.container}>
       <div
+        data-field-id="badges"
         className={cn(
           "flex flex-wrap gap-3",
           centered && "justify-center"
@@ -93,7 +94,7 @@ export function TrustBadgesWidget({ settings, isPreview = false }: TrustBadgesWi
   // Grid layout - Card style
   return (
     <WidgetContainer container={settings.container}>
-    <div className={cn(centered && "flex justify-center")}>
+    <div data-field-id="badges" className={cn(centered && "flex justify-center")}>
       <div
         className={cn(
           "grid gap-4",

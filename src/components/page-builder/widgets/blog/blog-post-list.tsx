@@ -152,7 +152,9 @@ export function BlogPostListWidget({
     <WidgetContainer container={s.container}>
     <div>
       {/* Section Header */}
-      <BlogSectionHeader settings={s.header} />
+      <div data-field-id="header">
+        <BlogSectionHeader settings={s.header} />
+      </div>
 
       {/* Loading State */}
       {loading && posts.length === 0 && (
@@ -181,7 +183,7 @@ export function BlogPostListWidget({
 
       {/* Posts List */}
       {posts.length > 0 && (
-        <div className="flex flex-col" style={{ gap: `${s.layout.gap}px` }}>
+        <div data-field-id="posts" className="flex flex-col" style={{ gap: `${s.layout.gap}px` }}>
           {posts.map((post, index) => {
             const imgPos = getImagePosition(index);
             const primaryCategory = post.categories?.[0];

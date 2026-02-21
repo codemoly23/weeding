@@ -21,6 +21,7 @@ import {
   TextAreaInput,
 } from "@/app/admin/appearance/landing-page/components/ui/form-controls";
 import { AccordionSection } from "@/app/admin/appearance/landing-page/components/ui/accordion-section";
+import { useFieldAccordion } from "@/components/page-builder/settings/use-field-accordion";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
 
@@ -35,13 +36,16 @@ interface ServiceCardWidgetSettingsProps {
   settings: ServiceCardWidgetSettings;
   onChange: (settings: ServiceCardWidgetSettings) => void;
   activeTab?: "content" | "style" | "advanced";
+  activeFieldId?: string | null;
 }
 
 export function ServiceCardWidgetSettingsPanel({
   settings,
   onChange,
   activeTab = "content",
+  activeFieldId,
 }: ServiceCardWidgetSettingsProps) {
+  const { getAccordionProps } = useFieldAccordion(activeFieldId);
   const [categories, setCategories] = useState<ServiceCategory[]>([]);
   const [loadingCategories, setLoadingCategories] = useState(true);
 
@@ -174,7 +178,7 @@ export function ServiceCardWidgetSettingsPanel({
   const renderContentTab = () => (
     <div className="space-y-3">
       {/* Section Header Accordion - Content only */}
-      <AccordionSection title="Section Header">
+      <AccordionSection title="Section Header" {...getAccordionProps("section-header")}>
         <ToggleSwitch
           label="Show Header"
           checked={s.header.show}
@@ -478,7 +482,7 @@ export function ServiceCardWidgetSettingsPanel({
       )}
 
       {/* Card Style Accordion */}
-      <AccordionSection title="Card Style">
+      <AccordionSection title="Card Style" {...getAccordionProps("cards")}>
         <SelectInput
           label="Style Variant"
           value={s.cardStyle}

@@ -222,12 +222,15 @@ interface TrustBadgesWidgetSettingsProps {
   settings: TrustBadgesWidgetSettings;
   onChange: (settings: TrustBadgesWidgetSettings) => void;
   activeTab?: "content" | "style" | "advanced";
+  activeFieldId?: string | null;
 }
 
 export function TrustBadgesWidgetSettingsPanel({
   settings,
   onChange,
   activeTab = "content",
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  activeFieldId,
 }: TrustBadgesWidgetSettingsProps) {
   const sensors = useSensors(
     useSensor(PointerSensor),

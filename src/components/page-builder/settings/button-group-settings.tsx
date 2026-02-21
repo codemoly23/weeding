@@ -14,6 +14,7 @@ import {
   ToggleSwitch,
 } from "@/app/admin/appearance/landing-page/components/ui/form-controls";
 import { AccordionSection } from "@/app/admin/appearance/landing-page/components/ui/accordion-section";
+import { useFieldAccordion } from "@/components/page-builder/settings/use-field-accordion";
 import { Button } from "@/components/ui/button";
 import { ButtonStyleEditor } from "@/components/admin/button-style-editor";
 import type { ButtonCustomStyle } from "@/lib/header-footer/types";
@@ -22,13 +23,16 @@ interface ButtonGroupWidgetSettingsPanelProps {
   settings: Partial<ButtonGroupWidgetSettings>;
   onChange: (settings: ButtonGroupWidgetSettings) => void;
   activeTab?: "content" | "style" | "advanced";
+  activeFieldId?: string | null;
 }
 
 export function ButtonGroupWidgetSettingsPanel({
   settings: partialSettings,
   onChange,
   activeTab = "content",
+  activeFieldId,
 }: ButtonGroupWidgetSettingsPanelProps) {
+  const { getAccordionProps } = useFieldAccordion(activeFieldId);
   const settings: ButtonGroupWidgetSettings = {
     ...DEFAULT_BUTTON_GROUP_SETTINGS,
     ...partialSettings,
@@ -141,7 +145,7 @@ export function ButtonGroupWidgetSettingsPanel({
   // Style Tab
   const renderStyleTab = () => (
     <div className="space-y-4">
-      <AccordionSection title="Layout" defaultOpen>
+      <AccordionSection title="Layout" defaultOpen {...getAccordionProps("buttons")}>
         <div className="space-y-3">
           <SelectInput
             label="Direction"

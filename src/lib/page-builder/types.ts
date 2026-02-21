@@ -1808,6 +1808,7 @@ export interface BuilderSelection {
   sectionId?: string;
   columnId?: string;
   widgetId?: string;
+  fieldId?: string | null;
 }
 
 export interface BuilderState {

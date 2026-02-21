@@ -20,6 +20,7 @@ import {
   TextAreaInput,
 } from "@/app/admin/appearance/landing-page/components/ui/form-controls";
 import { AccordionSection } from "@/app/admin/appearance/landing-page/components/ui/accordion-section";
+import { useFieldAccordion } from "@/components/page-builder/settings/use-field-accordion";
 import { Label } from "@/components/ui/label";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Plus, Trash2 } from "lucide-react";
@@ -29,6 +30,7 @@ interface HeadingWidgetSettingsPanelProps {
   settings: Partial<HeadingWidgetSettings>;
   onChange: (settings: HeadingWidgetSettings) => void;
   activeTab: "content" | "style" | "advanced";
+  activeFieldId?: string | null;
 }
 
 // Deep merge helper
@@ -66,7 +68,9 @@ export function HeadingWidgetSettingsPanel({
   settings: partialSettings,
   onChange,
   activeTab,
+  activeFieldId,
 }: HeadingWidgetSettingsPanelProps) {
+  const { getAccordionProps } = useFieldAccordion(activeFieldId);
   // Deep merge with defaults
   const settings: HeadingWidgetSettings = {
     ...deepMerge(

@@ -12,16 +12,20 @@ import {
   TextInput,
 } from "@/app/admin/appearance/landing-page/components/ui/form-controls";
 import { AccordionSection } from "@/app/admin/appearance/landing-page/components/ui/accordion-section";
+import { useFieldAccordion } from "@/components/page-builder/settings/use-field-accordion";
 
 interface BlogRecentPostsSettingsProps {
   settings: BlogRecentPostsWidgetSettings;
   onChange: (settings: BlogRecentPostsWidgetSettings) => void;
+  activeFieldId?: string | null;
 }
 
 export function BlogRecentPostsSettingsPanel({
   settings,
   onChange,
+  activeFieldId,
 }: BlogRecentPostsSettingsProps) {
+  const { getAccordionProps } = useFieldAccordion(activeFieldId);
   // Deep merge with defaults
   const s = {
     ...DEFAULT_BLOG_RECENT_POSTS_SETTINGS,
@@ -94,7 +98,7 @@ export function BlogRecentPostsSettingsPanel({
   return (
     <div className="space-y-3">
       {/* Header */}
-      <AccordionSection title="Header">
+      <AccordionSection title="Header" {...getAccordionProps("header")}>
         <ToggleSwitch
           label="Show Header"
           checked={s.header.show}
@@ -155,7 +159,7 @@ export function BlogRecentPostsSettingsPanel({
       </AccordionSection>
 
       {/* Display */}
-      <AccordionSection title="Display">
+      <AccordionSection title="Display" {...getAccordionProps("posts")}>
         <SelectInput
           label="Style"
           value={s.display.style}

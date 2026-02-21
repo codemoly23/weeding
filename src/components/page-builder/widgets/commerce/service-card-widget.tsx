@@ -1306,8 +1306,11 @@ export function ServiceCardWidget({ settings: partialSettings, isPreview = false
   return (
     <WidgetContainer container={settings.container}>
     <div>
-      <SectionHeader settings={settings} />
+      <div data-field-id="section-header">
+        <SectionHeader settings={settings} />
+      </div>
       <div
+        data-field-id="cards"
         className={cn(
           "grid",
           getColumnClasses(settings.layout.columns, settings.responsive),

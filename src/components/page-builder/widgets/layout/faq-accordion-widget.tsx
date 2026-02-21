@@ -378,6 +378,7 @@ export function FaqAccordionWidget({
       {/* Header */}
       {s.header.show && (
         <div
+          data-field-id="header"
           className={cn(
             "mb-10",
             s.header.alignment === "center" && "text-center"
@@ -451,7 +452,7 @@ export function FaqAccordionWidget({
       )}
 
       {/* FAQ Items */}
-      <div className="w-full">
+      <div className="w-full" data-field-id="faq-items">
         {s.style === "minimal" && (
           <div className="divide-y divide-border">
             {displayFaqs.map((faq) => (

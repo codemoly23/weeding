@@ -14,18 +14,22 @@ import {
   TextInput,
 } from "@/app/admin/appearance/landing-page/components/ui/form-controls";
 import { AccordionSection } from "@/app/admin/appearance/landing-page/components/ui/accordion-section";
+import { useFieldAccordion } from "@/components/page-builder/settings/use-field-accordion";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
 
 interface BlogPostListSettingsProps {
   settings: BlogPostListWidgetSettings;
   onChange: (settings: BlogPostListWidgetSettings) => void;
+  activeFieldId?: string | null;
 }
 
 export function BlogPostListSettingsPanel({
   settings,
   onChange,
+  activeFieldId,
 }: BlogPostListSettingsProps) {
+  const { getAccordionProps } = useFieldAccordion(activeFieldId);
   // Deep merge with defaults
   const s = {
     ...DEFAULT_BLOG_POST_LIST_SETTINGS,
@@ -306,7 +310,7 @@ export function BlogPostListSettingsPanel({
       </AccordionSection>
 
       {/* Item Design */}
-      <AccordionSection title="Item Design">
+      <AccordionSection title="Item Design" {...getAccordionProps("posts")}>
         {/* Image */}
         {s.layout.imagePosition !== "none" && (
           <>
@@ -469,7 +473,7 @@ export function BlogPostListSettingsPanel({
       </AccordionSection>
 
       {/* Header */}
-      <AccordionSection title="Header">
+      <AccordionSection title="Header" {...getAccordionProps("header")}>
         <ToggleSwitch
           label="Show Header"
           checked={s.header.show}

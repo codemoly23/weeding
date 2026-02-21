@@ -11,19 +11,23 @@ import {
 } from "@/app/admin/appearance/landing-page/components/ui/form-controls";
 import { ImageUpload } from "@/app/admin/appearance/landing-page/components/ui/image-upload";
 import { AccordionSection } from "@/app/admin/appearance/landing-page/components/ui/accordion-section";
+import { useFieldAccordion } from "@/components/page-builder/settings/use-field-accordion";
 import { ColorPicker } from "@/components/ui/color-picker";
 
 interface ImageWidgetSettingsProps {
   settings: ImageWidgetSettings;
   onChange: (settings: ImageWidgetSettings) => void;
   activeTab?: "content" | "style" | "advanced";
+  activeFieldId?: string | null;
 }
 
 export function ImageWidgetSettingsPanel({
   settings,
   onChange,
   activeTab = "content",
+  activeFieldId,
 }: ImageWidgetSettingsProps) {
+  const { getAccordionProps } = useFieldAccordion(activeFieldId);
   // Deep merge with defaults - use explicit typing to handle optional fields
   const s = {
     ...DEFAULT_IMAGE_SETTINGS,
@@ -61,7 +65,7 @@ export function ImageWidgetSettingsPanel({
   const renderContentTab = () => (
     <div className="space-y-4">
       {/* Image Upload */}
-      <AccordionSection title="Image" defaultOpen>
+      <AccordionSection title="Image" defaultOpen {...getAccordionProps("image")}>
         <div className="space-y-3">
           <ImageUpload
             label="Image Source"

@@ -6,6 +6,7 @@ import type { ButtonCustomStyle } from "@/lib/header-footer/types";
 import { DEFAULT_SERVICE_LIST_SETTINGS, DEFAULT_WIDGET_CONTAINER } from "@/lib/page-builder/defaults";
 import { ContainerStyleSection } from "@/components/page-builder/shared/container-style-section";
 import { AccordionSection } from "@/app/admin/appearance/landing-page/components/ui/accordion-section";
+import { useFieldAccordion } from "@/components/page-builder/settings/use-field-accordion";
 import {
   TextInput,
   TextAreaInput,
@@ -21,13 +22,16 @@ interface ServiceListWidgetSettingsProps {
   settings: ServiceListWidgetSettings;
   onChange: (settings: ServiceListWidgetSettings) => void;
   activeTab?: "content" | "style" | "advanced";
+  activeFieldId?: string | null;
 }
 
 export function ServiceListWidgetSettingsPanel({
   settings,
   onChange,
   activeTab = "content",
+  activeFieldId,
 }: ServiceListWidgetSettingsProps) {
+  const { getAccordionProps } = useFieldAccordion(activeFieldId);
   // Merge with defaults (deep merge for nested objects)
   const s: ServiceListWidgetSettings = {
     ...DEFAULT_SERVICE_LIST_SETTINGS,
@@ -128,7 +132,7 @@ export function ServiceListWidgetSettingsPanel({
   const renderContentTab = () => (
     <div className="space-y-3">
       {/* Section Header */}
-      <AccordionSection title="Section Header">
+      <AccordionSection title="Section Header" {...getAccordionProps("section-header")}>
         <ToggleSwitch
           label="Show Header"
           checked={s.header.show}
@@ -227,7 +231,7 @@ export function ServiceListWidgetSettingsPanel({
       </AccordionSection>
 
       {/* Category Card Display */}
-      <AccordionSection title="Category Card Display">
+      <AccordionSection title="Category Card Display" {...getAccordionProps("cards")}>
         <ToggleSwitch
           label="Show Category Icon"
           checked={s.categoryCard.showIcon}
@@ -263,7 +267,7 @@ export function ServiceListWidgetSettingsPanel({
       </AccordionSection>
 
       {/* CTA Section */}
-      <AccordionSection title="Call to Action">
+      <AccordionSection title="Call to Action" {...getAccordionProps("cta")}>
         <ToggleSwitch
           label="Show CTA Section"
           checked={s.cta.show}

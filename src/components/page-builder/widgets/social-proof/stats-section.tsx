@@ -273,6 +273,7 @@ export function StatsSectionWidget({ settings, isPreview = false }: StatsSection
     <WidgetContainer container={settings.container}>
       <div
         ref={containerRef}
+        data-field-id="stats"
         className={cn(
           "grid gap-8 pt-8",
           getColumnsClass(),

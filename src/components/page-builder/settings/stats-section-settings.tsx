@@ -243,12 +243,15 @@ interface StatsSectionWidgetSettingsProps {
   settings: StatsSectionWidgetSettings;
   onChange: (settings: StatsSectionWidgetSettings) => void;
   activeTab?: "content" | "style" | "advanced";
+  activeFieldId?: string | null;
 }
 
 export function StatsSectionWidgetSettingsPanel({
   settings,
   onChange,
   activeTab = "content",
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  activeFieldId,
 }: StatsSectionWidgetSettingsProps) {
   const sensors = useSensors(
     useSensor(PointerSensor),

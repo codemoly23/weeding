@@ -22,6 +22,7 @@ import {
   TextAreaInput,
 } from "@/app/admin/appearance/landing-page/components/ui/form-controls";
 import { AccordionSection } from "@/app/admin/appearance/landing-page/components/ui/accordion-section";
+import { useFieldAccordion } from "@/components/page-builder/settings/use-field-accordion";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
@@ -30,13 +31,16 @@ interface ProcessStepsWidgetSettingsProps {
   settings: ProcessStepsWidgetSettings;
   onChange: (settings: ProcessStepsWidgetSettings) => void;
   activeTab?: "content" | "style" | "advanced";
+  activeFieldId?: string | null;
 }
 
 export function ProcessStepsWidgetSettingsPanel({
   settings,
   onChange,
   activeTab = "content",
+  activeFieldId,
 }: ProcessStepsWidgetSettingsProps) {
+  const { getAccordionProps } = useFieldAccordion(activeFieldId);
   const [expandedStepId, setExpandedStepId] = useState<string | null>(null);
 
   // Merge with defaults
@@ -152,7 +156,7 @@ export function ProcessStepsWidgetSettingsPanel({
   const renderContentTab = () => (
     <div className="space-y-3 w-full min-w-0 max-w-full">
       {/* Section Header */}
-      <AccordionSection title="Section Header">
+      <AccordionSection title="Section Header" {...getAccordionProps("section-header")}>
         <ToggleSwitch
           label="Show Header"
           checked={s.header.show}
@@ -223,7 +227,7 @@ export function ProcessStepsWidgetSettingsPanel({
       )}
 
       {/* Steps */}
-      <AccordionSection title="Steps" defaultOpen={true}>
+      <AccordionSection title="Steps" defaultOpen={true} {...getAccordionProps("steps")}>
         <div className="space-y-3 w-full min-w-0">
           {s.steps.map((step, index) => (
             <div

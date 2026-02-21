@@ -513,6 +513,7 @@ export function ImageSliderWidget({ settings, isPreview = false }: ImageSliderWi
   return (
     <WidgetContainer container={settings.container}>
     <div
+      data-field-id="slider"
       className={cn(
         "image-slider-widget relative group",
         getShadowClass(),

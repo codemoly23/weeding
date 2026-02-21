@@ -5,6 +5,7 @@ import type { ServiceHeroWidgetSettings } from "@/lib/page-builder/types";
 import { DEFAULT_SERVICE_HERO_SETTINGS, DEFAULT_WIDGET_CONTAINER } from "@/lib/page-builder/defaults";
 import { ContainerStyleSection } from "@/components/page-builder/shared/container-style-section";
 import { AccordionSection } from "@/app/admin/appearance/landing-page/components/ui/accordion-section";
+import { useFieldAccordion } from "@/components/page-builder/settings/use-field-accordion";
 import {
   TextInput,
   TextAreaInput,
@@ -18,13 +19,16 @@ interface ServiceHeroWidgetSettingsProps {
   settings: ServiceHeroWidgetSettings;
   onChange: (settings: ServiceHeroWidgetSettings) => void;
   activeTab?: "content" | "style" | "advanced";
+  activeFieldId?: string | null;
 }
 
 export function ServiceHeroWidgetSettingsPanel({
   settings,
   onChange,
   activeTab = "content",
+  activeFieldId,
 }: ServiceHeroWidgetSettingsProps) {
+  const { getAccordionProps } = useFieldAccordion(activeFieldId);
   // Merge with defaults
   const s: ServiceHeroWidgetSettings = {
     ...DEFAULT_SERVICE_HERO_SETTINGS,
@@ -49,7 +53,7 @@ export function ServiceHeroWidgetSettingsPanel({
   const renderContentTab = () => (
     <div className="space-y-3">
       {/* Title Section */}
-      <AccordionSection title="Title" defaultOpen>
+      <AccordionSection title="Title" defaultOpen {...getAccordionProps("title")}>
         <SelectInput
           label="Title Source"
           value={s.titleSource}
@@ -70,7 +74,7 @@ export function ServiceHeroWidgetSettingsPanel({
       </AccordionSection>
 
       {/* Subtitle Section */}
-      <AccordionSection title="Subtitle">
+      <AccordionSection title="Subtitle" {...getAccordionProps("subtitle")}>
         <SelectInput
           label="Subtitle Source"
           value={s.subtitleSource}
@@ -92,7 +96,7 @@ export function ServiceHeroWidgetSettingsPanel({
       </AccordionSection>
 
       {/* Price Badge Section */}
-      <AccordionSection title="Price Badge">
+      <AccordionSection title="Price Badge" {...getAccordionProps("price-badge")}>
         <ToggleSwitch
           label="Show Price Badge"
           checked={s.showPriceBadge}
@@ -110,7 +114,7 @@ export function ServiceHeroWidgetSettingsPanel({
       </AccordionSection>
 
       {/* Primary Button Section */}
-      <AccordionSection title="Primary Button">
+      <AccordionSection title="Primary Button" {...getAccordionProps("primary-button")}>
         <TextInput
           label="Button Text"
           value={s.primaryCtaText}
@@ -134,7 +138,7 @@ export function ServiceHeroWidgetSettingsPanel({
       </AccordionSection>
 
       {/* Secondary Button Section */}
-      <AccordionSection title="Secondary Button">
+      <AccordionSection title="Secondary Button" {...getAccordionProps("secondary-button")}>
         <ToggleSwitch
           label="Show Secondary Button"
           checked={s.showSecondaryButton}

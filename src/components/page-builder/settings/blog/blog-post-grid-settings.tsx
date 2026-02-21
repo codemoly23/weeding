@@ -14,18 +14,22 @@ import {
   TextInput,
 } from "@/app/admin/appearance/landing-page/components/ui/form-controls";
 import { AccordionSection } from "@/app/admin/appearance/landing-page/components/ui/accordion-section";
+import { useFieldAccordion } from "@/components/page-builder/settings/use-field-accordion";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
 
 interface BlogPostGridSettingsProps {
   settings: BlogPostGridWidgetSettings;
   onChange: (settings: BlogPostGridWidgetSettings) => void;
+  activeFieldId?: string | null;
 }
 
 export function BlogPostGridSettingsPanel({
   settings,
   onChange,
+  activeFieldId,
 }: BlogPostGridSettingsProps) {
+  const { getAccordionProps } = useFieldAccordion(activeFieldId);
   // Deep merge with defaults
   const s = {
     ...DEFAULT_BLOG_POST_GRID_SETTINGS,
@@ -343,7 +347,7 @@ export function BlogPostGridSettingsPanel({
       </AccordionSection>
 
       {/* Card Design */}
-      <AccordionSection title="Card Design">
+      <AccordionSection title="Card Design" {...getAccordionProps("posts")}>
         <SelectInput
           label="Style"
           value={s.card.style}
@@ -632,7 +636,7 @@ export function BlogPostGridSettingsPanel({
       </AccordionSection>
 
       {/* Header */}
-      <AccordionSection title="Header">
+      <AccordionSection title="Header" {...getAccordionProps("header")}>
         <ToggleSwitch
           label="Show Header"
           checked={s.header.show}

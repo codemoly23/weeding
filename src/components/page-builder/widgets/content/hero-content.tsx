@@ -538,6 +538,7 @@ export function HeroContentWidget({ settings: rawSettings, isPreview = false }: 
       {/* Badge */}
       {settings.badge.show && (
         <Badge
+          data-field-id="badge"
           className={cn(
             "w-fit font-medium px-4 py-2 text-sm border",
             settings.badge.style === "pill" && "rounded-full",
@@ -568,6 +569,7 @@ export function HeroContentWidget({ settings: rawSettings, isPreview = false }: 
 
       {/* Headline */}
       <h1
+        data-field-id="headline"
         className={cn(
           "font-bold tracking-tight",
           getHeadlineSize(),
@@ -581,6 +583,7 @@ export function HeroContentWidget({ settings: rawSettings, isPreview = false }: 
       {/* Subheadline */}
       {settings.subheadline.show && (
         <p
+          data-field-id="subheadline"
           className={cn(
             settings.subheadline.size === "sm" && "text-base",
             settings.subheadline.size === "md" && "text-lg",
@@ -596,6 +599,7 @@ export function HeroContentWidget({ settings: rawSettings, isPreview = false }: 
       {/* Features */}
       {settings.features.show && settings.features.items.length > 0 && (
         <div
+          data-field-id="features"
           className={cn(
             "mt-2",
             settings.features.layout === "list"
@@ -638,14 +642,19 @@ export function HeroContentWidget({ settings: rawSettings, isPreview = false }: 
           settings.alignment === "center" ? "sm:flex-row sm:justify-center" : "sm:flex-row"
         )}
       >
-        {settings.primaryButton.show && renderPrimaryButton()}
+        {settings.primaryButton.show && (
+          <div data-field-id="primary-button">{renderPrimaryButton()}</div>
+        )}
 
-        {settings.secondaryButton.show && renderSecondaryButton()}
+        {settings.secondaryButton.show && (
+          <div data-field-id="secondary-button">{renderSecondaryButton()}</div>
+        )}
       </div>
 
       {/* Trust Text */}
       {settings.trustText.show && (
         <div
+          data-field-id="trust-text"
           className="flex items-center gap-2 text-sm mt-2"
           style={{ color: settings.trustText.textColor || "#9ca3af" }}
         >

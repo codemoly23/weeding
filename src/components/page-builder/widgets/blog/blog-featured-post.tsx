@@ -539,12 +539,12 @@ export function BlogFeaturedPostWidget({
       style={{ borderRadius: s.image.borderRadius }}
     >
       {/* Image on top */}
-      <div className="relative aspect-video w-full overflow-hidden">
+      <div data-field-id="image" className="relative aspect-video w-full overflow-hidden">
         {imageElement}
       </div>
 
       {/* Content below */}
-      <div className="p-6 md:p-8">{contentBlock}</div>
+      <div data-field-id="content" className="p-6 md:p-8">{contentBlock}</div>
     </WrapLink>
     </WidgetContainer>
   );

@@ -7,6 +7,8 @@ import { cn } from "@/lib/utils";
 interface AccordionSectionProps {
   title: string;
   defaultOpen?: boolean;
+  isOpen?: boolean;
+  onOpenChange?: (open: boolean) => void;
   action?: {
     label: string;
     icon?: React.ElementType;
@@ -19,11 +21,23 @@ interface AccordionSectionProps {
 export function AccordionSection({
   title,
   defaultOpen = false, // Closed by default - user clicks to expand
+  isOpen: controlledOpen,
+  onOpenChange,
   action,
   children,
   className,
 }: AccordionSectionProps) {
-  const [isOpen, setIsOpen] = useState(defaultOpen);
+  const [internalOpen, setInternalOpen] = useState(defaultOpen);
+  const isControlled = controlledOpen !== undefined;
+  const isOpen = isControlled ? controlledOpen : internalOpen;
+
+  const handleToggle = () => {
+    const next = !isOpen;
+    if (!isControlled) {
+      setInternalOpen(next);
+    }
+    onOpenChange?.(next);
+  };
 
   return (
     <div
@@ -35,7 +49,7 @@ export function AccordionSection({
     >
       {/* Clickable Header */}
       <div
-        onClick={() => setIsOpen(!isOpen)}
+        onClick={handleToggle}
         className={cn(
           "flex w-full cursor-pointer items-center justify-between px-4 py-3.5 transition-colors min-w-0",
           isOpen ? "bg-primary/5" : "hover:bg-muted/50"

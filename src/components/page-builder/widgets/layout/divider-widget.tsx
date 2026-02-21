@@ -116,7 +116,7 @@ export function DividerWidget({ settings: partialSettings, isPreview }: DividerW
   if (style === "double") {
     return (
       <WidgetContainer container={settings.container}>
-      <div className={cn("flex flex-col w-full gap-1", colAlignmentClass)} style={containerStyle}>
+      <div data-field-id="line" className={cn("flex flex-col w-full gap-1", colAlignmentClass)} style={containerStyle}>
         <div style={{ height: `${thickness}px`, width: `${width}%`, backgroundColor: color }} />
         <div style={{ height: `${thickness}px`, width: `${width}%`, backgroundColor: color }} />
       </div>
@@ -128,7 +128,7 @@ export function DividerWidget({ settings: partialSettings, isPreview }: DividerW
     const IconComponent = getLucideIcon(icon || "Minus");
     return (
       <WidgetContainer container={settings.container}>
-      <div className={cn("flex w-full items-center gap-4", rowAlignmentClass)} style={containerStyle}>
+      <div data-field-id="icon" className={cn("flex w-full items-center gap-4", rowAlignmentClass)} style={containerStyle}>
         <div
           className="flex-1"
           style={{
@@ -156,7 +156,7 @@ export function DividerWidget({ settings: partialSettings, isPreview }: DividerW
   if (style === "with-text") {
     return (
       <WidgetContainer container={settings.container}>
-      <div className={cn("flex w-full items-center gap-4", rowAlignmentClass)} style={containerStyle}>
+      <div data-field-id="text" className={cn("flex w-full items-center gap-4", rowAlignmentClass)} style={containerStyle}>
         <div
           className="flex-1"
           style={{
@@ -188,7 +188,7 @@ export function DividerWidget({ settings: partialSettings, isPreview }: DividerW
   // Default line styles (solid, dashed, dotted, gradient, gradient-fade)
   return (
     <WidgetContainer container={settings.container}>
-    <div className={cn("flex w-full", rowAlignmentClass)} style={containerStyle}>
+    <div data-field-id="line" className={cn("flex w-full", rowAlignmentClass)} style={containerStyle}>
       <div style={getLineStyle()} />
     </div>
     </WidgetContainer>

@@ -21,19 +21,23 @@ import {
   TextInput,
 } from "@/app/admin/appearance/landing-page/components/ui/form-controls";
 import { AccordionSection } from "@/app/admin/appearance/landing-page/components/ui/accordion-section";
+import { useFieldAccordion } from "@/components/page-builder/settings/use-field-accordion";
 import { ServiceSelector } from "@/components/ui/service-selector";
 
 interface PricingTableWidgetSettingsProps {
   settings: PricingTableWidgetSettings;
   onChange: (settings: PricingTableWidgetSettings) => void;
   activeTab?: "content" | "style" | "advanced";
+  activeFieldId?: string | null;
 }
 
 export function PricingTableWidgetSettingsPanel({
   settings,
   onChange,
   activeTab = "content",
+  activeFieldId,
 }: PricingTableWidgetSettingsProps) {
+  const { getAccordionProps } = useFieldAccordion(activeFieldId);
   // Merge with defaults
   const s: PricingTableWidgetSettings = {
     ...DEFAULT_PRICING_TABLE_SETTINGS,
@@ -333,7 +337,7 @@ export function PricingTableWidgetSettingsPanel({
       </AccordionSection>
 
       {/* Section Header */}
-      <AccordionSection title="Section Header">
+      <AccordionSection title="Section Header" {...getAccordionProps("section-header")}>
         <ToggleSwitch
           label="Show Header"
           checked={s.header.show}
@@ -532,7 +536,7 @@ export function PricingTableWidgetSettingsPanel({
     <div className="space-y-3">
       {/* Card Style (shown when viewMode is cards) */}
       {s.viewMode === "cards" && (
-        <AccordionSection title="Card Style" defaultOpen>
+        <AccordionSection title="Card Style" defaultOpen {...getAccordionProps("pricing-table")}>
           <div className="space-y-4">
             <SelectInput
               label="Layout"

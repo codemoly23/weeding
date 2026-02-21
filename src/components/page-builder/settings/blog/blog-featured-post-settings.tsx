@@ -12,18 +12,22 @@ import {
   TextInput,
 } from "@/app/admin/appearance/landing-page/components/ui/form-controls";
 import { AccordionSection } from "@/app/admin/appearance/landing-page/components/ui/accordion-section";
+import { useFieldAccordion } from "@/components/page-builder/settings/use-field-accordion";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
 
 interface BlogFeaturedPostSettingsProps {
   settings: BlogFeaturedPostWidgetSettings;
   onChange: (settings: BlogFeaturedPostWidgetSettings) => void;
+  activeFieldId?: string | null;
 }
 
 export function BlogFeaturedPostSettingsPanel({
   settings,
   onChange,
+  activeFieldId,
 }: BlogFeaturedPostSettingsProps) {
+  const { getAccordionProps } = useFieldAccordion(activeFieldId);
   // Deep merge with defaults
   const s = {
     ...DEFAULT_BLOG_FEATURED_POST_SETTINGS,
@@ -195,7 +199,7 @@ export function BlogFeaturedPostSettingsPanel({
       </AccordionSection>
 
       {/* Image */}
-      <AccordionSection title="Image">
+      <AccordionSection title="Image" {...getAccordionProps("image")}>
         <SelectInput
           label="Aspect Ratio"
           value={s.image.aspectRatio}
@@ -256,7 +260,7 @@ export function BlogFeaturedPostSettingsPanel({
       </AccordionSection>
 
       {/* Content */}
-      <AccordionSection title="Content">
+      <AccordionSection title="Content" {...getAccordionProps("content")}>
         {/* Category Badge */}
         <ToggleSwitch
           label="Show Category Badge"

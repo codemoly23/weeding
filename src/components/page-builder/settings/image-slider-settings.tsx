@@ -25,6 +25,7 @@ interface ImageSliderSettingsProps {
   settings: ImageSliderWidgetSettings;
   onChange: (settings: ImageSliderWidgetSettings) => void;
   activeTab?: "content" | "style" | "advanced";
+  activeFieldId?: string | null;
 }
 
 // Generate unique ID
@@ -81,6 +82,8 @@ export function ImageSliderSettingsPanel({
   settings,
   onChange,
   activeTab = "content",
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  activeFieldId,
 }: ImageSliderSettingsProps) {
   const [expandedSlide, setExpandedSlide] = useState<string | null>(
     settings.slides[0]?.id || null

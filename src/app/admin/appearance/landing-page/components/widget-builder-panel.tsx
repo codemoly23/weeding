@@ -371,12 +371,13 @@ interface EditModeProps {
   widget: Widget<unknown>;
   section: Section;
   columnId: string;
+  activeFieldId?: string | null;
   onBack: () => void;
   onUpdateSettings: (settings: unknown) => void;
   onUpdateSpacing: (spacing: WidgetSpacing) => void;
 }
 
-function EditMode({ widget, section, columnId, onBack, onUpdateSettings, onUpdateSpacing }: EditModeProps) {
+function EditMode({ widget, section, columnId, activeFieldId, onBack, onUpdateSettings, onUpdateSpacing }: EditModeProps) {
   const [activeTab, setActiveTab] = useState<SettingsTab>("content");
 
   const widgetDef = WidgetRegistry.get(widget.type);
@@ -437,6 +438,7 @@ function EditMode({ widget, section, columnId, onBack, onUpdateSettings, onUpdat
               settings={widget.settings as any}
               onChange={onUpdateSettings}
               activeTab={activeTab}
+              activeFieldId={activeFieldId}
             />
           )}
 
@@ -446,6 +448,7 @@ function EditMode({ widget, section, columnId, onBack, onUpdateSettings, onUpdat
               settings={widget.settings as any}
               onChange={onUpdateSettings}
               activeTab={activeTab}
+              activeFieldId={activeFieldId}
             />
           )}
 
@@ -455,6 +458,7 @@ function EditMode({ widget, section, columnId, onBack, onUpdateSettings, onUpdat
               settings={widget.settings as any}
               onChange={onUpdateSettings}
               activeTab={activeTab}
+              activeFieldId={activeFieldId}
             />
           )}
 
@@ -464,6 +468,7 @@ function EditMode({ widget, section, columnId, onBack, onUpdateSettings, onUpdat
               settings={widget.settings as any}
               onChange={onUpdateSettings}
               activeTab={activeTab}
+              activeFieldId={activeFieldId}
             />
           )}
 
@@ -473,6 +478,7 @@ function EditMode({ widget, section, columnId, onBack, onUpdateSettings, onUpdat
               settings={widget.settings as any}
               onChange={onUpdateSettings}
               activeTab={activeTab}
+              activeFieldId={activeFieldId}
             />
           )}
 
@@ -482,6 +488,7 @@ function EditMode({ widget, section, columnId, onBack, onUpdateSettings, onUpdat
               settings={widget.settings as any}
               onChange={onUpdateSettings}
               activeTab={activeTab}
+              activeFieldId={activeFieldId}
             />
           )}
 
@@ -491,6 +498,7 @@ function EditMode({ widget, section, columnId, onBack, onUpdateSettings, onUpdat
               settings={widget.settings as any}
               onChange={onUpdateSettings}
               activeTab={activeTab}
+              activeFieldId={activeFieldId}
             />
           )}
 
@@ -500,6 +508,7 @@ function EditMode({ widget, section, columnId, onBack, onUpdateSettings, onUpdat
               settings={widget.settings as any}
               onChange={onUpdateSettings}
               activeTab={activeTab}
+              activeFieldId={activeFieldId}
             />
           )}
 
@@ -509,6 +518,7 @@ function EditMode({ widget, section, columnId, onBack, onUpdateSettings, onUpdat
               settings={widget.settings as any}
               onChange={onUpdateSettings}
               activeTab={activeTab}
+              activeFieldId={activeFieldId}
             />
           )}
 
@@ -518,6 +528,7 @@ function EditMode({ widget, section, columnId, onBack, onUpdateSettings, onUpdat
               settings={widget.settings as any}
               onChange={onUpdateSettings}
               activeTab={activeTab}
+              activeFieldId={activeFieldId}
             />
           )}
 
@@ -527,6 +538,7 @@ function EditMode({ widget, section, columnId, onBack, onUpdateSettings, onUpdat
               settings={widget.settings as any}
               onChange={onUpdateSettings}
               activeTab={activeTab}
+              activeFieldId={activeFieldId}
             />
           )}
 
@@ -536,6 +548,7 @@ function EditMode({ widget, section, columnId, onBack, onUpdateSettings, onUpdat
               settings={widget.settings as any}
               onChange={onUpdateSettings}
               activeTab={activeTab}
+              activeFieldId={activeFieldId}
             />
           )}
 
@@ -545,6 +558,7 @@ function EditMode({ widget, section, columnId, onBack, onUpdateSettings, onUpdat
               settings={widget.settings as any}
               onChange={onUpdateSettings}
               activeTab={activeTab}
+              activeFieldId={activeFieldId}
             />
           )}
 
@@ -554,6 +568,7 @@ function EditMode({ widget, section, columnId, onBack, onUpdateSettings, onUpdat
               settings={widget.settings as any}
               onChange={onUpdateSettings}
               activeTab={activeTab}
+              activeFieldId={activeFieldId}
             />
           )}
 
@@ -563,6 +578,7 @@ function EditMode({ widget, section, columnId, onBack, onUpdateSettings, onUpdat
               settings={widget.settings as any}
               onChange={onUpdateSettings}
               activeTab={activeTab}
+              activeFieldId={activeFieldId}
             />
           )}
 
@@ -572,6 +588,7 @@ function EditMode({ widget, section, columnId, onBack, onUpdateSettings, onUpdat
               settings={widget.settings as any}
               onChange={onUpdateSettings}
               activeTab={activeTab}
+              activeFieldId={activeFieldId}
             />
           )}
 
@@ -581,6 +598,7 @@ function EditMode({ widget, section, columnId, onBack, onUpdateSettings, onUpdat
               settings={widget.settings as any}
               onChange={onUpdateSettings}
               activeTab={activeTab}
+              activeFieldId={activeFieldId}
             />
           )}
 
@@ -589,6 +607,7 @@ function EditMode({ widget, section, columnId, onBack, onUpdateSettings, onUpdat
             <BlogPostGridSettingsPanel
               settings={widget.settings as any}
               onChange={onUpdateSettings}
+              activeFieldId={activeFieldId}
             />
           )}
 
@@ -597,6 +616,7 @@ function EditMode({ widget, section, columnId, onBack, onUpdateSettings, onUpdat
             <BlogPostCarouselSettingsPanel
               settings={widget.settings as any}
               onChange={onUpdateSettings}
+              activeFieldId={activeFieldId}
             />
           )}
 
@@ -605,6 +625,7 @@ function EditMode({ widget, section, columnId, onBack, onUpdateSettings, onUpdat
             <BlogFeaturedPostSettingsPanel
               settings={widget.settings as any}
               onChange={onUpdateSettings}
+              activeFieldId={activeFieldId}
             />
           )}
 
@@ -613,6 +634,7 @@ function EditMode({ widget, section, columnId, onBack, onUpdateSettings, onUpdat
             <BlogPostListSettingsPanel
               settings={widget.settings as any}
               onChange={onUpdateSettings}
+              activeFieldId={activeFieldId}
             />
           )}
 
@@ -621,6 +643,7 @@ function EditMode({ widget, section, columnId, onBack, onUpdateSettings, onUpdat
             <BlogRecentPostsSettingsPanel
               settings={widget.settings as any}
               onChange={onUpdateSettings}
+              activeFieldId={activeFieldId}
             />
           )}
 
@@ -905,6 +928,7 @@ export function WidgetBuilderPanel({
           widget={selectedWidget}
           section={selectedSection}
           columnId={selectedColumn.id}
+          activeFieldId={selection.fieldId}
           onBack={handleBack}
           onUpdateSettings={handleUpdateWidgetSettings}
           onUpdateSpacing={handleUpdateWidgetSpacing}

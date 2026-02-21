@@ -1,6 +1,7 @@
 "use client";
 
 import { useCallback } from "react";
+import { useFieldAccordion } from "@/components/page-builder/settings/use-field-accordion";
 import * as LucideIcons from "lucide-react";
 import type { HeroContentWidgetSettings } from "@/lib/page-builder/types";
 import { DEFAULT_HERO_CONTENT_SETTINGS, DEFAULT_WIDGET_CONTAINER } from "@/lib/page-builder/defaults";
@@ -22,6 +23,7 @@ interface HeroContentWidgetSettingsProps {
   settings: HeroContentWidgetSettings;
   onChange: (settings: HeroContentWidgetSettings) => void;
   activeTab?: "content" | "style" | "advanced";
+  activeFieldId?: string | null;
 }
 
 // Get Lucide icon component by name
@@ -55,7 +57,9 @@ export function HeroContentWidgetSettingsPanel({
   settings,
   onChange,
   activeTab = "content",
+  activeFieldId,
 }: HeroContentWidgetSettingsProps) {
+  const { getAccordionProps } = useFieldAccordion(activeFieldId);
   // Merge with defaults
   const s: HeroContentWidgetSettings = {
     ...DEFAULT_HERO_CONTENT_SETTINGS,
@@ -94,7 +98,7 @@ export function HeroContentWidgetSettingsPanel({
   const renderContentTab = () => (
     <div className="space-y-3">
       {/* Badge Section */}
-      <AccordionSection title="Badge">
+      <AccordionSection title="Badge" {...getAccordionProps("badge")}>
         <ToggleSwitch
           label="Show Badge"
           checked={s.badge.show}
@@ -138,7 +142,7 @@ export function HeroContentWidgetSettingsPanel({
       </AccordionSection>
 
       {/* Headline Section */}
-      <AccordionSection title="Headline">
+      <AccordionSection title="Headline" {...getAccordionProps("headline")}>
         <TextInput
           label="Text"
           value={s.headline.text}
@@ -155,7 +159,7 @@ export function HeroContentWidgetSettingsPanel({
       </AccordionSection>
 
       {/* Subheadline Section */}
-      <AccordionSection title="Subheadline">
+      <AccordionSection title="Subheadline" {...getAccordionProps("subheadline")}>
         <ToggleSwitch
           label="Show Subheadline"
           checked={s.subheadline.show}
@@ -173,7 +177,7 @@ export function HeroContentWidgetSettingsPanel({
       </AccordionSection>
 
       {/* Features Section */}
-      <AccordionSection title="Features List">
+      <AccordionSection title="Features List" {...getAccordionProps("features")}>
         <FeatureListEditor
           enabled={s.features.show}
           items={s.features.items}
@@ -183,7 +187,7 @@ export function HeroContentWidgetSettingsPanel({
       </AccordionSection>
 
       {/* Primary Button Section */}
-      <AccordionSection title="Primary Button">
+      <AccordionSection title="Primary Button" {...getAccordionProps("primary-button")}>
         <ToggleSwitch
           label="Show Primary Button"
           checked={s.primaryButton.show}
@@ -228,7 +232,7 @@ export function HeroContentWidgetSettingsPanel({
       </AccordionSection>
 
       {/* Secondary Button Section */}
-      <AccordionSection title="Secondary Button">
+      <AccordionSection title="Secondary Button" {...getAccordionProps("secondary-button")}>
         <ToggleSwitch
           label="Show Secondary Button"
           checked={s.secondaryButton.show}
@@ -273,7 +277,7 @@ export function HeroContentWidgetSettingsPanel({
       </AccordionSection>
 
       {/* Trust Text Section */}
-      <AccordionSection title="Trust Text">
+      <AccordionSection title="Trust Text" {...getAccordionProps("trust-text")}>
         <ToggleSwitch
           label="Show Trust Text"
           checked={s.trustText.show}

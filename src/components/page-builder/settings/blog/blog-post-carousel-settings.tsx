@@ -13,18 +13,22 @@ import {
   TextInput,
 } from "@/app/admin/appearance/landing-page/components/ui/form-controls";
 import { AccordionSection } from "@/app/admin/appearance/landing-page/components/ui/accordion-section";
+import { useFieldAccordion } from "@/components/page-builder/settings/use-field-accordion";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
 
 interface BlogPostCarouselSettingsProps {
   settings: BlogPostCarouselWidgetSettings;
   onChange: (settings: BlogPostCarouselWidgetSettings) => void;
+  activeFieldId?: string | null;
 }
 
 export function BlogPostCarouselSettingsPanel({
   settings,
   onChange,
+  activeFieldId,
 }: BlogPostCarouselSettingsProps) {
+  const { getAccordionProps } = useFieldAccordion(activeFieldId);
   // Deep merge with defaults - defaults guarantee all required fields exist
   const d = DEFAULT_BLOG_POST_CAROUSEL_SETTINGS;
   const s = {
@@ -253,7 +257,7 @@ export function BlogPostCarouselSettingsPanel({
       </AccordionSection>
 
       {/* Carousel Settings */}
-      <AccordionSection title="Carousel">
+      <AccordionSection title="Carousel" {...getAccordionProps("carousel")}>
         <SelectInput
           label="Slides Per View (Desktop)"
           value={s.carousel.slidesPerView.desktop.toString()}
@@ -592,7 +596,7 @@ export function BlogPostCarouselSettingsPanel({
       </AccordionSection>
 
       {/* Header */}
-      <AccordionSection title="Header">
+      <AccordionSection title="Header" {...getAccordionProps("header")}>
         <ToggleSwitch
           label="Show Header"
           checked={s.header.show}

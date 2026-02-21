@@ -442,12 +442,13 @@ export function WidgetPageBuilder({
                             key={widget.id}
                             widget={widget}
                             isSelected={selection.widgetId === widget.id}
-                            onSelect={() =>
+                            onSelect={(fieldId) =>
                               onSelectionChange({
                                 type: "widget",
                                 sectionId: section.id,
                                 columnId: column.id,
                                 widgetId: widget.id,
+                                fieldId: fieldId ?? null,
                               })
                             }
                             onDelete={() => onDeleteWidget?.(section.id, column.id, widget.id)}

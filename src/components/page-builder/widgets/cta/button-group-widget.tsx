@@ -29,6 +29,7 @@ export function ButtonGroupWidget({
   return (
     <WidgetContainer container={settings.container}>
     <div
+      data-field-id="buttons"
       className={cn(
         "flex flex-wrap",
         settings.layout === "vertical" && "flex-col items-start",

@@ -36,10 +36,21 @@ class WidgetErrorBoundary extends React.Component<
   }
 }
 
+/** Walk up from the click target to find the nearest data-field-id attribute */
+function findFieldId(target: HTMLElement, boundary: HTMLElement): string | null {
+  let el: HTMLElement | null = target;
+  while (el && el !== boundary) {
+    const fieldId = el.getAttribute("data-field-id");
+    if (fieldId) return fieldId;
+    el = el.parentElement;
+  }
+  return null;
+}
+
 interface WidgetWrapperProps {
   widget: Widget<unknown>;
   isSelected?: boolean;
-  onSelect?: () => void;
+  onSelect?: (fieldId?: string | null) => void;
   onDelete?: () => void;
   onDuplicate?: () => void;
   isPreview?: boolean;
@@ -81,14 +92,17 @@ export function WidgetWrapper({
     <div
       className={cn(
         "relative group/widget transition-all duration-200",
-        !isPreview && "cursor-pointer",
         isSelected && !isPreview && "ring-2 ring-green-500 ring-offset-1 ring-offset-slate-900 rounded-md"
       )}
       style={spacingStyles}
-      onClick={(e) => {
-        e.stopPropagation();
+      onClickCapture={(e) => {
         if (!isPreview && onSelect) {
-          onSelect();
+          // Let toolbar buttons handle their own clicks
+          if ((e.target as HTMLElement).closest("[data-widget-toolbar]")) return;
+          e.stopPropagation();
+          e.preventDefault();
+          const fieldId = findFieldId(e.target as HTMLElement, e.currentTarget as HTMLElement);
+          onSelect(fieldId);
         }
       }}
     >
@@ -109,7 +123,7 @@ export function WidgetWrapper({
           </div>
 
           {/* Right: Actions */}
-          <div className="flex items-center gap-1 bg-slate-800/90 backdrop-blur-sm rounded-md px-1 py-1 shadow-lg border border-slate-700 pointer-events-auto">
+          <div data-widget-toolbar className="flex items-center gap-1 bg-slate-800/90 backdrop-blur-sm rounded-md px-1 py-1 shadow-lg border border-slate-700 pointer-events-auto">
             <button
               onClick={(e) => {
                 e.stopPropagation();
@@ -145,7 +159,7 @@ export function WidgetWrapper({
       )}
 
       {/* Widget Content */}
-      <div className={cn(!isPreview && "pointer-events-none")}>
+      <div>
         <WidgetErrorBoundary widgetType={widget.type}>
           {renderWidget()}
         </WidgetErrorBoundary>

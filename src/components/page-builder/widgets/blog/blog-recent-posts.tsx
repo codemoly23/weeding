@@ -178,6 +178,7 @@ export function BlogRecentPostsWidget({
       {/* Header */}
       {s.header.show && (
         <h3
+          data-field-id="header"
           className={cn(
             "mb-4 font-semibold text-slate-900 dark:text-white",
             getHeaderSizeClass(s.header.size)
@@ -189,7 +190,7 @@ export function BlogRecentPostsWidget({
       )}
 
       {/* Posts List */}
-      <div className="flex flex-col" style={{ gap: `${s.display.itemGap}px` }}>
+      <div data-field-id="posts" className="flex flex-col" style={{ gap: `${s.display.itemGap}px` }}>
         {posts.map((post, index) => {
           const postDate = post.publishedAt || post.createdAt;
           const primaryCategory = post.categories?.[0];

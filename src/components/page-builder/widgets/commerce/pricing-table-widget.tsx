@@ -1222,7 +1222,9 @@ export function PricingTableWidget({
   return (
     <WidgetContainer container={settings.container}>
     <div className="w-full">
-      <SectionHeader settings={settings} />
+      <div data-field-id="section-header">
+        <SectionHeader settings={settings} />
+      </div>
 
       {/* Location Selector - only show when both widget setting AND service DB flag are enabled */}
       {settings.stateFee.enabled && serviceData?.hasLocationBasedPricing && (
@@ -1242,6 +1244,7 @@ export function PricingTableWidget({
 
       {/* View Mode: Cards */}
       {settings.viewMode === "cards" && (
+        <div data-field-id="pricing-table">
         <PricingCardsView
           settings={settings}
           features={serviceData.comparisonFeatures}
@@ -1253,10 +1256,12 @@ export function PricingTableWidget({
           serviceSlug={serviceData.slug}
           currencySymbol={currencySymbol}
         />
+        </div>
       )}
 
       {/* View Mode: Table - Desktop Layout */}
       {settings.viewMode === "table" && (
+        <div data-field-id="pricing-table">
         <>
           <div className="hidden lg:flex gap-6">
             <ComparisonTable
@@ -1312,6 +1317,7 @@ export function PricingTableWidget({
             />
           </div>
         </>
+        </div>
       )}
     </div>
     </WidgetContainer>

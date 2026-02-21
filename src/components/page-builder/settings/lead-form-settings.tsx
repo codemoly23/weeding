@@ -17,6 +17,7 @@ import {
   ToggleSwitch,
 } from "@/app/admin/appearance/landing-page/components/ui/form-controls";
 import { AccordionSection } from "@/app/admin/appearance/landing-page/components/ui/accordion-section";
+import { useFieldAccordion } from "@/components/page-builder/settings/use-field-accordion";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { ButtonStyleEditor } from "@/components/admin/button-style-editor";
@@ -48,13 +49,16 @@ interface LeadFormWidgetSettingsPanelProps {
   settings: Partial<LeadFormWidgetSettings>;
   onChange: (settings: LeadFormWidgetSettings) => void;
   activeTab?: "content" | "style" | "advanced";
+  activeFieldId?: string | null;
 }
 
 export function LeadFormWidgetSettingsPanel({
   settings: partialSettings,
   onChange,
   activeTab = "content",
+  activeFieldId,
 }: LeadFormWidgetSettingsPanelProps) {
+  const { getAccordionProps } = useFieldAccordion(activeFieldId);
   // Debug: log when the settings panel renders
   console.log("[LeadFormSettings] Rendering, activeTab:", activeTab, "settings:", partialSettings);
 
@@ -161,7 +165,7 @@ export function LeadFormWidgetSettingsPanel({
   const renderContentTab = () => (
     <div className="space-y-4">
       {/* Form Header */}
-      <AccordionSection title="Form Header" defaultOpen>
+      <AccordionSection title="Form Header" defaultOpen {...getAccordionProps("form-header")}>
         <div className="space-y-3">
           <TextInput
             label="Title"
@@ -179,7 +183,7 @@ export function LeadFormWidgetSettingsPanel({
       </AccordionSection>
 
       {/* Form Template */}
-      <AccordionSection title="Form Template" defaultOpen>
+      <AccordionSection title="Form Template" defaultOpen {...getAccordionProps("form-fields")}>
         <div className="space-y-3">
           <SelectInput
             label="Select Template"
@@ -270,7 +274,7 @@ export function LeadFormWidgetSettingsPanel({
       </AccordionSection>
 
       {/* Submit Button */}
-      <AccordionSection title="Submit Button" defaultOpen>
+      <AccordionSection title="Submit Button" defaultOpen {...getAccordionProps("submit-button")}>
         <div className="space-y-3">
           <TextInput
             label="Button Text"

@@ -126,7 +126,9 @@ export function BlogPostGridWidget({
       `}</style>
 
       {/* Section Header */}
-      <BlogSectionHeader settings={s.header} />
+      <div data-field-id="header">
+        <BlogSectionHeader settings={s.header} />
+      </div>
 
       {/* Filter Tabs */}
       {s.filterTabs.show && filterCategories.length > 0 && (
@@ -168,6 +170,7 @@ export function BlogPostGridWidget({
       {/* Posts Grid */}
       {posts.length > 0 && (
         <div
+          data-field-id="posts"
           className={cn(
             "grid",
             gridClass,

@@ -21,6 +21,7 @@ import {
   ToggleSwitch,
 } from "@/app/admin/appearance/landing-page/components/ui/form-controls";
 import { AccordionSection } from "@/app/admin/appearance/landing-page/components/ui/accordion-section";
+import { useFieldAccordion } from "@/components/page-builder/settings/use-field-accordion";
 import { Label } from "@/components/ui/label";
 import { cn } from "@/lib/utils";
 // Note: Button was removed as it's not used currently
@@ -49,6 +50,7 @@ interface TextBlockWidgetSettingsPanelProps {
   settings: Partial<TextBlockWidgetSettings>;
   onChange: (settings: TextBlockWidgetSettings) => void;
   activeTab: "content" | "style" | "advanced";
+  activeFieldId?: string | null;
 }
 
 // Deep merge helper
@@ -516,7 +518,9 @@ export function TextBlockWidgetSettingsPanel({
   settings: partialSettings,
   onChange,
   activeTab,
+  activeFieldId,
 }: TextBlockWidgetSettingsPanelProps) {
+  const { getAccordionProps } = useFieldAccordion(activeFieldId);
   // Deep merge with defaults
   const settings: TextBlockWidgetSettings = useMemo(
     () => deepMerge(DEFAULT_TEXT_BLOCK_SETTINGS, partialSettings as Partial<TextBlockWidgetSettings>),

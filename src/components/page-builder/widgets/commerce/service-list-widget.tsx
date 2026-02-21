@@ -792,8 +792,11 @@ export function ServiceListWidget({
   return (
     <WidgetContainer container={settings.container}>
     <div>
-      <SectionHeader settings={settings} />
+      <div data-field-id="section-header">
+        <SectionHeader settings={settings} />
+      </div>
       <div
+        data-field-id="cards"
         className={cn(
           "grid",
           getColumnClasses(layout.columns, responsive)
@@ -808,7 +811,9 @@ export function ServiceListWidget({
           />
         ))}
       </div>
-      <CTASection settings={settings} />
+      <div data-field-id="cta">
+        <CTASection settings={settings} />
+      </div>
     </div>
     </WidgetContainer>
   );

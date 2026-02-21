@@ -913,9 +913,12 @@ export function ProcessStepsWidget({
           : undefined,
       }}
     >
-      <SectionHeader settings={settings} />
+      <div data-field-id="section-header">
+        <SectionHeader settings={settings} />
+      </div>
 
       <div
+        data-field-id="steps"
         className={cn(
           "grid relative overflow-visible",
           getColumnClasses(),

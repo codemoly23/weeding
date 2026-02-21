@@ -188,25 +188,31 @@ export function ServiceHeroWidget({
 
         {/* Price Badge */}
         {settings.showPriceBadge && (
-          <span className="inline-block px-4 py-1.5 bg-orange-100 text-orange-800 rounded-full text-sm font-medium mb-4">
+          <span data-field-id="price-badge" className="inline-block px-4 py-1.5 bg-orange-100 text-orange-800 rounded-full text-sm font-medium mb-4">
             {priceBadgeText}
           </span>
         )}
 
         {/* Title */}
-        <h1 className={cn(
-          "font-bold tracking-tight text-foreground",
-          titleSizeClasses[settings.titleSize]
-        )}>
+        <h1
+          data-field-id="title"
+          className={cn(
+            "font-bold tracking-tight text-foreground",
+            titleSizeClasses[settings.titleSize]
+          )}
+        >
           {title}
         </h1>
 
         {/* Subtitle */}
         {subtitle && (
-          <p className={cn(
-            "mt-4 text-xl text-muted-foreground max-w-2xl",
-            settings.textAlignment === "center" && "mx-auto"
-          )}>
+          <p
+            data-field-id="subtitle"
+            className={cn(
+              "mt-4 text-xl text-muted-foreground max-w-2xl",
+              settings.textAlignment === "center" && "mx-auto"
+            )}
+          >
             {subtitle}
           </p>
         )}
@@ -217,20 +223,24 @@ export function ServiceHeroWidget({
           settings.textAlignment === "center" && "justify-center",
           settings.textAlignment === "right" && "justify-end"
         )}>
-          <Button size="lg" asChild>
-            <Link href={primaryLink}>
-              {settings.primaryCtaText}
-              {settings.showPriceInButton && ` - ${formattedPrice}`}
-              <ArrowRight className="ml-2 h-4 w-4" />
-            </Link>
-          </Button>
-
-          {settings.showSecondaryButton && (
-            <Button size="lg" variant="outline" asChild>
-              <Link href={secondaryLink}>
-                {settings.secondaryCtaText}
+          <div data-field-id="primary-button">
+            <Button size="lg" asChild>
+              <Link href={primaryLink}>
+                {settings.primaryCtaText}
+                {settings.showPriceInButton && ` - ${formattedPrice}`}
+                <ArrowRight className="ml-2 h-4 w-4" />
               </Link>
             </Button>
+          </div>
+
+          {settings.showSecondaryButton && (
+            <div data-field-id="secondary-button">
+              <Button size="lg" variant="outline" asChild>
+                <Link href={secondaryLink}>
+                  {settings.secondaryCtaText}
+                </Link>
+              </Button>
+            </div>
           )}
         </div>
       </div>

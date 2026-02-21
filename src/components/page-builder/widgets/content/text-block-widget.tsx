@@ -338,6 +338,7 @@ export function TextBlockWidget({
     <div
       ref={hasGradientBorder ? undefined : containerRef}
       className={classNames}
+      data-field-id="content"
       style={{
         ...contentStyles,
         ...cssVariables,

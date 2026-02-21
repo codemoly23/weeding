@@ -106,7 +106,9 @@ export function BlogPostCarouselWidget({
     <WidgetContainer container={s.container}>
     <div>
       {/* Section Header */}
-      <BlogSectionHeader settings={s.header} />
+      <div data-field-id="header">
+        <BlogSectionHeader settings={s.header} />
+      </div>
 
       {/* Loading State */}
       {loading && posts.length === 0 && (
@@ -136,6 +138,7 @@ export function BlogPostCarouselWidget({
       {/* Swiper Carousel */}
       {posts.length > 0 && (
         <div
+          data-field-id="carousel"
           className={cn(
             "blog-carousel",
             // Show/hide navigation arrows on hover

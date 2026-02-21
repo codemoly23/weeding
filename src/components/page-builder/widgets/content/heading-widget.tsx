@@ -562,6 +562,7 @@ export function HeadingWidget({ settings, isPreview = false }: HeadingWidgetProp
         className={classNames}
         style={inlineStyles}
         id={settings.advanced?.customId}
+        data-field-id="heading"
         {...settings.advanced?.customAttributes}
       >
         <SmartLink
@@ -584,6 +585,7 @@ export function HeadingWidget({ settings, isPreview = false }: HeadingWidgetProp
       className={classNames}
       style={inlineStyles}
       id={settings.advanced?.customId}
+      data-field-id="heading"
       {...settings.advanced?.customAttributes}
     >
       {content}

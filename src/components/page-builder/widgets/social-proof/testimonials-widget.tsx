@@ -289,6 +289,7 @@ export function TestimonialsWidget({ settings: partialSettings, isPreview = fals
       {/* Header Section */}
       {(header.show !== false) && (
         <div
+          data-field-id="header"
           className={cn("max-w-2xl", alignmentClasses[headerAlignment])}
           style={{ marginBottom: headerMarginBottom }}
         >
@@ -324,6 +325,7 @@ export function TestimonialsWidget({ settings: partialSettings, isPreview = fals
       )}
 
       {/* Content - Different views based on viewMode */}
+      <div data-field-id="testimonials">
       {isLoading ? (
         <div className="flex items-center justify-center py-12">
           <div className="h-8 w-8 animate-spin rounded-full border-4 border-primary border-t-transparent" />
@@ -363,6 +365,7 @@ export function TestimonialsWidget({ settings: partialSettings, isPreview = fals
           )}
         </>
       )}
+      </div>
 
       {/* Trust Footer */}
       {renderTrustFooter()}

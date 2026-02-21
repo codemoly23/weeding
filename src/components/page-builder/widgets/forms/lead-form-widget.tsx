@@ -811,6 +811,7 @@ export function LeadFormWidget({
       }}
     >
       {/* Title */}
+      <div data-field-id="form-header">
       {title && (
         <h3
           className="text-xl font-semibold mb-2"
@@ -829,6 +830,7 @@ export function LeadFormWidget({
           {description}
         </p>
       )}
+      </div>
 
       {/* Error Message */}
       {error && (
@@ -838,7 +840,7 @@ export function LeadFormWidget({
       )}
 
       {/* Form Fields */}
-      <form ref={formRef} className="space-y-4" onSubmit={handleSubmit}>
+      <form ref={formRef} className="space-y-4" onSubmit={handleSubmit} data-field-id="form-fields">
         {groupFieldsByWidth(fields).map((item, groupIdx) => {
           if (Array.isArray(item)) {
             // Pair of half-width fields rendered side by side
@@ -857,6 +859,7 @@ export function LeadFormWidget({
 
         {/* Submit Button with layout controls */}
         <div
+          data-field-id="submit-button"
           className={cn(
             "flex",
             buttonLayout === "horizontal" ? "flex-row flex-wrap" : "flex-col",

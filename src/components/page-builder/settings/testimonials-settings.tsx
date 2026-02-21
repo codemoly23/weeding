@@ -36,12 +36,15 @@ interface TestimonialsWidgetSettingsPanelProps {
   settings: TestimonialsWidgetSettings;
   onChange: (settings: TestimonialsWidgetSettings) => void;
   activeTab?: "content" | "style" | "advanced";
+  activeFieldId?: string | null;
 }
 
 export function TestimonialsWidgetSettingsPanel({
   settings,
   onChange,
   activeTab = "content",
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  activeFieldId,
 }: TestimonialsWidgetSettingsPanelProps) {
   // Dynamic tags from API
   const [availableTags, setAvailableTags] = useState<TestimonialTag[]>([]);
