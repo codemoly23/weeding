@@ -1,0 +1,623 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AgencyX Blog — Digital Marketing Insights & Growth Strategies</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+<style>
+/* ========== RESET & BASE ========== */
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --bg:#06080f;
+  --bg-card:rgba(255,255,255,0.03);
+  --bg-glass:rgba(255,255,255,0.05);
+  --border:rgba(255,255,255,0.06);
+  --border-hover:rgba(255,255,255,0.12);
+  --text:#f0f0f5;
+  --text-secondary:#8a8f9e;
+  --accent:#6366f1;
+  --accent-glow:rgba(99,102,241,0.25);
+  --accent2:#8b5cf6;
+  --green:#22c55e;
+  --radius:16px;
+  --nav-h:72px;
+}
+html{scroll-behavior:smooth;overflow-x:hidden}
+body{font-family:'Inter',system-ui,-apple-system,sans-serif;background:var(--bg);color:var(--text);line-height:1.6;overflow-x:hidden;-webkit-font-smoothing:antialiased}
+a{color:inherit;text-decoration:none}
+button{cursor:pointer;font-family:inherit}
+img{max-width:100%;display:block}
+
+/* ========== UTILITY ========== */
+.container{max-width:1200px;margin:0 auto;padding:0 24px}
+.badge{display:inline-flex;align-items:center;gap:6px;padding:5px 14px;border-radius:999px;font-size:12px;font-weight:600;letter-spacing:.3px;border:1px solid var(--border)}
+.badge--accent{background:rgba(99,102,241,.1);border-color:rgba(99,102,241,.3);color:var(--accent)}
+.badge--secondary{background:var(--bg-glass);color:var(--text-secondary)}
+.badge--seo{background:rgba(99,102,241,.1);border-color:rgba(99,102,241,.25);color:#a5b4fc}
+.badge--ppc{background:rgba(139,92,246,.1);border-color:rgba(139,92,246,.25);color:#c4b5fd}
+.badge--social{background:rgba(236,72,153,.08);border-color:rgba(236,72,153,.2);color:#f9a8d4}
+.badge--content{background:rgba(245,158,11,.08);border-color:rgba(245,158,11,.2);color:#fbbf24}
+.badge--email{background:rgba(6,182,212,.08);border-color:rgba(6,182,212,.2);color:#67e8f9}
+.badge--analytics{background:rgba(34,197,94,.08);border-color:rgba(34,197,94,.2);color:#86efac}
+.section-label{text-align:center;margin-bottom:16px}
+.section-title{font-size:clamp(26px,3.5vw,40px);font-weight:800;letter-spacing:-.02em;line-height:1.15}
+.section-title--center{text-align:center}
+.section-subtitle{font-size:clamp(15px,1.8vw,17px);color:var(--text-secondary);max-width:560px;margin:12px auto 0;text-align:center}
+.btn{display:inline-flex;align-items:center;gap:8px;padding:14px 32px;border-radius:12px;font-size:15px;font-weight:600;border:none;transition:all .3s ease;position:relative;overflow:hidden}
+.btn--primary{background:var(--accent);color:#fff}
+.btn--primary:hover{background:#4f46e5;transform:translateY(-2px);box-shadow:0 8px 30px var(--accent-glow)}
+.btn--outline{background:transparent;color:var(--text);border:1px solid var(--border)}
+.btn--outline:hover{border-color:var(--accent);color:var(--accent);transform:translateY(-2px)}
+.btn--sm{padding:10px 20px;font-size:14px}
+.btn svg{width:16px;height:16px;transition:transform .3s}
+.btn:hover svg{transform:translateX(4px)}
+
+/* ========== ANIMATIONS ========== */
+@keyframes fade-up{from{opacity:0;transform:translateY(40px)}to{opacity:1;transform:translateY(0)}}
+@keyframes fade-in{from{opacity:0}to{opacity:1}}
+@keyframes gradient-shift{0%{background-position:0% 50%}50%{background-position:100% 50%}100%{background-position:0% 50%}}
+@keyframes pulse-glow{0%,100%{opacity:.3}50%{opacity:.6}}
+.reveal{opacity:0;transform:translateY(30px);transition:all .7s cubic-bezier(.16,1,.3,1)}
+.reveal.visible{opacity:1;transform:translateY(0)}
+.reveal-delay-1{transition-delay:.1s}.reveal-delay-2{transition-delay:.2s}
+.reveal-delay-3{transition-delay:.3s}.reveal-delay-4{transition-delay:.4s}
+.reveal-delay-5{transition-delay:.5s}.reveal-delay-6{transition-delay:.6s}
+
+/* ========== NAV ========== */
+.nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:0 24px;height:var(--nav-h);display:flex;align-items:center;transition:all .4s ease}
+.nav.scrolled{background:rgba(6,8,15,0.88);backdrop-filter:blur(20px) saturate(1.4);border-bottom:1px solid var(--border)}
+.nav__inner{max-width:1200px;margin:0 auto;width:100%;display:flex;align-items:center;justify-content:space-between}
+.nav__logo{font-size:22px;font-weight:800;display:flex;align-items:center;gap:8px}
+.nav__logo span{color:var(--accent)}
+.nav__links{display:flex;gap:32px;list-style:none}
+.nav__links a{font-size:14px;font-weight:500;color:var(--text-secondary);transition:color .3s}
+.nav__links a:hover,.nav__links a.active{color:var(--text)}
+.nav__cta{display:flex;gap:12px;align-items:center}
+.nav__cta .btn{padding:10px 24px;font-size:14px}
+.nav__burger{display:none;flex-direction:column;gap:5px;background:none;border:none;cursor:pointer;padding:4px}
+.nav__burger span{width:24px;height:2px;background:var(--text);border-radius:2px;transition:all .3s}
+
+/* ========== MOBILE MENU ========== */
+.mobile-menu{position:fixed;top:0;right:-100%;width:280px;height:100vh;background:#0d1020;z-index:200;display:flex;flex-direction:column;padding:80px 32px 32px;gap:8px;transition:right .4s cubic-bezier(.16,1,.3,1);border-left:1px solid var(--border)}
+.mobile-menu.open{right:0}
+.mobile-menu a{font-size:16px;font-weight:500;padding:12px 0;border-bottom:1px solid var(--border);color:var(--text-secondary);transition:color .3s}
+.mobile-menu a:last-child{border-bottom:none;margin-top:8px}
+.mobile-menu a:hover{color:var(--text)}
+.mobile-menu__close{position:absolute;top:20px;right:20px;background:none;border:none;color:var(--text);font-size:24px;padding:4px;line-height:1}
+.mobile-menu__close svg{width:24px;height:24px}
+
+/* ========== HERO ========== */
+.hero-blog{position:relative;padding:calc(var(--nav-h) + 64px) 0 64px;overflow:hidden;min-height:420px}
+.hero-blog__bg{position:absolute;inset:0;z-index:0;pointer-events:none}
+.hero-blog__grid{position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,.03) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.03) 1px,transparent 1px);background-size:60px 60px;mask-image:radial-gradient(ellipse 80% 70% at 50% 0%,black 40%,transparent 100%)}
+.hero-blog__orb{position:absolute;border-radius:50%;filter:blur(100px);animation:pulse-glow 6s ease-in-out infinite}
+.hero-blog__orb--1{width:500px;height:500px;background:#6366f1;top:-200px;left:-100px;opacity:.07}
+.hero-blog__orb--2{width:400px;height:400px;background:#8b5cf6;top:-150px;right:-80px;opacity:.06;animation-delay:2s}
+.hero-blog__content{position:relative;z-index:1;text-align:center}
+.hero-blog__eyebrow{display:flex;align-items:center;justify-content:center;gap:8px;margin-bottom:20px}
+.hero-blog__eyebrow span{display:inline-flex;align-items:center;gap:6px;font-size:13px;font-weight:600;color:var(--accent);background:rgba(99,102,241,.1);border:1px solid rgba(99,102,241,.25);padding:6px 16px;border-radius:999px}
+.hero-blog__title{font-size:clamp(32px,5vw,62px);font-weight:900;letter-spacing:-.03em;line-height:1.1;margin-bottom:16px;animation:fade-up .8s cubic-bezier(.16,1,.3,1) forwards}
+.gradient-text{background:linear-gradient(135deg,var(--accent),#a78bfa,var(--accent2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;background-size:200% 200%;animation:gradient-shift 4s ease infinite}
+.hero-blog__desc{font-size:clamp(15px,2vw,18px);color:var(--text-secondary);max-width:520px;margin:0 auto 32px;animation:fade-up .8s .1s cubic-bezier(.16,1,.3,1) both}
+.hero-blog__stats{display:flex;align-items:center;justify-content:center;gap:32px;margin-bottom:36px;flex-wrap:wrap}
+.hero-stat{text-align:center}
+.hero-stat__num{font-size:22px;font-weight:800;color:var(--text)}
+.hero-stat__label{font-size:12px;color:var(--text-secondary);margin-top:2px}
+.hero-stat-div{width:1px;height:32px;background:var(--border)}
+
+/* ========== FILTER TABS ========== */
+.filter-wrap{display:flex;align-items:center;justify-content:center;gap:8px;flex-wrap:wrap;animation:fade-up .8s .2s cubic-bezier(.16,1,.3,1) both}
+.filter-tab{background:var(--bg-card);border:1px solid var(--border);color:var(--text-secondary);padding:8px 20px;border-radius:999px;font-size:13px;font-weight:600;cursor:pointer;transition:all .25s}
+.filter-tab:hover{border-color:var(--border-hover);color:var(--text)}
+.filter-tab.active{background:var(--accent);border-color:var(--accent);color:#fff}
+
+/* ========== FEATURED POST ========== */
+.featured-wrap{padding:60px 0 0}
+.featured-label{display:flex;align-items:center;gap:12px;margin-bottom:24px}
+.featured-label::after{content:'';flex:1;height:1px;background:var(--border)}
+.featured-label span{font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--text-secondary);white-space:nowrap}
+.featured-card{display:grid;grid-template-columns:1fr 1fr;gap:0;border-radius:20px;overflow:hidden;border:1px solid var(--border);transition:border-color .3s}
+.featured-card:hover{border-color:var(--border-hover)}
+.featured-card__cover{min-height:340px;position:relative;overflow:hidden}
+.featured-cover-inner{position:absolute;inset:0;display:flex;align-items:center;justify-content:center}
+.cover--seo{background:linear-gradient(135deg,#1e1b4b 0%,#312e81 40%,#4338ca 70%,#6366f1 100%)}
+.cover--ppc{background:linear-gradient(135deg,#1e1040 0%,#2e1065 40%,#5b21b6 70%,#8b5cf6 100%)}
+.cover--social{background:linear-gradient(135deg,#1a0a1c 0%,#4a044e 40%,#9d174d 70%,#ec4899 100%)}
+.cover--content{background:linear-gradient(135deg,#1c0f00 0%,#451a03 40%,#92400e 70%,#f59e0b 100%)}
+.cover--email{background:linear-gradient(135deg,#06080f 0%,#083344 40%,#0e7490 70%,#06b6d4 100%)}
+.cover--analytics{background:linear-gradient(135deg,#052e16 0%,#14532d 40%,#15803d 70%,#22c55e 100%)}
+.cover--cro{background:linear-gradient(135deg,#1c0a00 0%,#431407 40%,#b91c1c 70%,#ef4444 100%)}
+.cover-icon{width:80px;height:80px;background:rgba(255,255,255,.12);border-radius:20px;display:flex;align-items:center;justify-content:center;backdrop-filter:blur(8px)}
+.cover-icon svg{width:40px;height:40px;stroke:#fff;opacity:.9}
+.featured-card__body{padding:40px;background:var(--bg-card);display:flex;flex-direction:column;justify-content:center}
+.featured-card__tag{margin-bottom:16px}
+.featured-card__title{font-size:clamp(18px,2.5vw,26px);font-weight:800;letter-spacing:-.02em;line-height:1.25;margin-bottom:16px}
+.featured-card__title a:hover{color:var(--accent)}
+.featured-card__excerpt{font-size:15px;color:var(--text-secondary);line-height:1.7;margin-bottom:24px}
+.featured-card__meta{display:flex;align-items:center;gap:16px;font-size:13px;color:var(--text-secondary);margin-bottom:24px}
+.featured-card__meta svg{width:14px;height:14px;flex-shrink:0}
+.featured-card__meta-item{display:flex;align-items:center;gap:5px}
+.featured-card__cta{align-self:flex-start}
+
+/* ========== POST GRID ========== */
+.posts-wrap{padding:64px 0}
+.posts-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:32px;flex-wrap:wrap;gap:16px}
+.posts-header h2{font-size:22px;font-weight:700}
+.post-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px}
+.post-card{background:var(--bg-card);border:1px solid var(--border);border-radius:16px;overflow:hidden;transition:all .3s;display:flex;flex-direction:column}
+.post-card:hover{border-color:var(--border-hover);transform:translateY(-4px);box-shadow:0 20px 40px rgba(0,0,0,.3)}
+.post-card__cover{height:160px;position:relative;overflow:hidden;flex-shrink:0}
+.post-card__cover-inner{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;transition:transform .4s}
+.post-card:hover .post-card__cover-inner{transform:scale(1.04)}
+.post-card__cover-inner .cover-icon{width:56px;height:56px;border-radius:14px}
+.post-card__cover-inner .cover-icon svg{width:28px;height:28px}
+.post-card__body{padding:20px;display:flex;flex-direction:column;flex:1}
+.post-card__tags{margin-bottom:12px}
+.post-card__title{font-size:15px;font-weight:700;line-height:1.4;margin-bottom:10px;flex:1}
+.post-card__title a:hover{color:var(--accent)}
+.post-card__excerpt{font-size:13px;color:var(--text-secondary);line-height:1.6;margin-bottom:16px}
+.post-card__footer{display:flex;align-items:center;justify-content:space-between;border-top:1px solid var(--border);padding-top:12px;margin-top:auto}
+.post-card__meta{display:flex;align-items:center;gap:12px;font-size:12px;color:var(--text-secondary)}
+.post-card__meta-item{display:flex;align-items:center;gap:4px}
+.post-card__meta svg{width:12px;height:12px}
+.post-card__read{display:flex;align-items:center;gap:4px;font-size:12px;font-weight:600;color:var(--accent);transition:gap .2s}
+.post-card__read svg{width:12px;height:12px;transition:transform .2s}
+.post-card:hover .post-card__read{gap:7px}
+.post-card:hover .post-card__read svg{transform:translateX(3px)}
+
+/* ========== MOST POPULAR ========== */
+.popular-wrap{padding:0 0 80px}
+.popular-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;margin-top:40px}
+.popular-card{background:var(--bg-card);border:1px solid var(--border);border-radius:16px;padding:24px;display:flex;gap:20px;align-items:flex-start;transition:all .3s;position:relative;overflow:hidden}
+.popular-card::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,var(--accent),var(--accent2));opacity:0;transition:opacity .3s}
+.popular-card:hover{border-color:var(--accent);transform:translateY(-3px)}
+.popular-card:hover::before{opacity:.04}
+.popular-card__num{font-size:38px;font-weight:900;font-family:'JetBrains Mono',monospace;color:var(--border-hover);line-height:1;flex-shrink:0;min-width:40px}
+.popular-card__body{position:relative;z-index:1}
+.popular-card__cat{margin-bottom:8px}
+.popular-card__title{font-size:15px;font-weight:700;line-height:1.4;margin-bottom:8px}
+.popular-card__title a:hover{color:var(--accent)}
+.popular-card__meta{display:flex;align-items:center;gap:10px;font-size:12px;color:var(--text-secondary)}
+.popular-card__meta svg{width:12px;height:12px}
+.popular-card__views{display:flex;align-items:center;gap:4px}
+
+/* ========== NEWSLETTER ========== */
+.newsletter{padding:0 0 100px}
+.newsletter__box{background:linear-gradient(135deg,rgba(99,102,241,.12),rgba(139,92,246,.08));border:1px solid rgba(99,102,241,.2);border-radius:24px;padding:56px 48px;text-align:center;position:relative;overflow:hidden}
+.newsletter__box::before{content:'';position:absolute;top:-60px;left:50%;transform:translateX(-50%);width:400px;height:200px;background:radial-gradient(ellipse,rgba(99,102,241,.15),transparent 70%);pointer-events:none}
+.newsletter__box h2{font-size:clamp(22px,3vw,32px);font-weight:800;letter-spacing:-.02em;margin-bottom:12px}
+.newsletter__box p{font-size:16px;color:var(--text-secondary);max-width:420px;margin:0 auto 32px}
+.newsletter__form{display:flex;gap:12px;max-width:440px;margin:0 auto}
+.newsletter__input{flex:1;background:rgba(255,255,255,.06);border:1px solid var(--border);border-radius:12px;padding:14px 18px;font-size:14px;color:var(--text);font-family:inherit;outline:none;transition:border-color .3s}
+.newsletter__input::placeholder{color:var(--text-secondary)}
+.newsletter__input:focus{border-color:var(--accent)}
+.newsletter__note{font-size:12px;color:var(--text-secondary);margin-top:12px;opacity:.7}
+
+/* ========== FOOTER ========== */
+footer{border-top:1px solid var(--border)}
+.footer__grid{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:40px;padding:60px 0 40px}
+.footer__brand{font-size:22px;font-weight:800;display:flex;align-items:center;gap:8px;margin-bottom:16px}
+.footer__brand span{color:var(--accent)}
+.footer__brand-desc{font-size:14px;color:var(--text-secondary);line-height:1.7;max-width:260px}
+.footer__col h4{font-size:13px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--text-secondary);margin-bottom:16px}
+.footer__col ul{list-style:none;display:flex;flex-direction:column;gap:10px}
+.footer__col ul li a{font-size:14px;color:var(--text-secondary);transition:color .3s}
+.footer__col ul li a:hover{color:var(--text)}
+.footer__bottom{display:flex;justify-content:space-between;align-items:center;padding:24px 0;border-top:1px solid var(--border);font-size:13px;color:var(--text-secondary);flex-wrap:wrap;gap:8px}
+.footer__disclaimer{font-size:12px;color:var(--text-secondary);opacity:.5;padding-bottom:24px;line-height:1.6;max-width:700px}
+
+/* ========== RESPONSIVE ========== */
+@media(max-width:900px){
+  .featured-card{grid-template-columns:1fr}
+  .featured-card__cover{min-height:220px}
+  .post-grid{grid-template-columns:repeat(2,1fr)}
+  .popular-grid{grid-template-columns:1fr}
+  .footer__grid{grid-template-columns:1fr 1fr}
+}
+@media(max-width:600px){
+  .nav__links{display:none}
+  .nav__cta{display:none}
+  .nav__burger{display:flex}
+  .post-grid{grid-template-columns:1fr}
+  .hero-blog__stats{gap:20px}
+  .newsletter__form{flex-direction:column}
+  .footer__grid{grid-template-columns:1fr}
+  .footer__bottom{flex-direction:column;text-align:center}
+}
+</style>
+</head>
+<body>
+
+<nav class="nav" id="nav">
+  <div class="nav__inner">
+    <a href="#" class="nav__logo">
+      <svg width="28" height="28" viewBox="0 0 28 28" fill="none"><rect width="28" height="28" rx="8" fill="#6366f1"/><text x="14" y="20" text-anchor="middle" font-family="Inter,sans-serif" font-size="11" font-weight="800" fill="#fff">AX</text></svg>
+      Agency<span>X</span>
+    </a>
+    <ul class="nav__links">
+      <li><a href="#">Services</a></li>
+      <li><a href="#">How It Works</a></li>
+      <li><a href="#">Pricing</a></li>
+      <li><a href="#">Reviews</a></li>
+      <li><a href="#" class="active">Blog</a></li>
+    </ul>
+    <div class="nav__cta">
+      <a href="#" class="btn btn--outline" style="font-size:13px;padding:8px 18px">Log In</a>
+      <a href="#" class="btn btn--primary" style="font-size:13px;padding:8px 18px">Get Started</a>
+    </div>
+    <button class="nav__burger" id="burger" aria-label="Menu">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</nav>
+
+<div class="mobile-menu" id="mobileMenu">
+  <button class="mobile-menu__close" id="menuClose"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg></button>
+  <a href="#">Services</a>
+  <a href="#">How It Works</a>
+  <a href="#">Pricing</a>
+  <a href="#">Reviews</a>
+  <a href="#">Blog</a>
+  <a href="#" class="btn btn--primary" onclick="closeMenu()">Get Started</a>
+</div>
+
+<!-- ===== HERO ===== -->
+<section class="hero-blog">
+  <div class="hero-blog__bg">
+    <div class="hero-blog__grid"></div>
+    <div class="hero-blog__orb hero-blog__orb--1"></div>
+    <div class="hero-blog__orb hero-blog__orb--2"></div>
+  </div>
+  <div class="container">
+    <div class="hero-blog__content">
+      <div class="hero-blog__eyebrow reveal">
+        <span>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14"><path d="M12 20h9M16.5 3.5a2.121 2.121 0 013 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
+          Marketing Insights
+        </span>
+      </div>
+      <h1 class="hero-blog__title">
+        We Grow Brands Through <span class="gradient-text">Digital Innovation</span>
+      </h1>
+      <p class="hero-blog__desc reveal reveal-delay-1">Data-driven digital marketing agency helping ambitious brands achieve measurable growth through SEO, PPC, Social Media &amp; Content Marketing.</p>
+      <div class="hero-blog__stats reveal reveal-delay-2">
+        <div class="hero-stat"><div class="hero-stat__num">200+</div><div class="hero-stat__label">Guides Published</div></div>
+        <div class="hero-stat-div"></div>
+        <div class="hero-stat"><div class="hero-stat__num">85K</div><div class="hero-stat__label">Monthly Readers</div></div>
+        <div class="hero-stat-div"></div>
+        <div class="hero-stat"><div class="hero-stat__num">320%</div><div class="hero-stat__label">Avg. Client ROI</div></div>
+      </div>
+      <div class="filter-wrap" id="filterWrap">
+        <button class="filter-tab active" data-cat="all" onclick="filterPosts('all')">All Posts</button>
+        <button class="filter-tab" data-cat="seo" onclick="filterPosts('seo')">SEO</button>
+        <button class="filter-tab" data-cat="ppc" onclick="filterPosts('ppc')">PPC</button>
+        <button class="filter-tab" data-cat="social" onclick="filterPosts('social')">Social Media</button>
+        <button class="filter-tab" data-cat="content" onclick="filterPosts('content')">Content</button>
+        <button class="filter-tab" data-cat="email" onclick="filterPosts('email')">Email</button>
+        <button class="filter-tab" data-cat="analytics" onclick="filterPosts('analytics')">Analytics</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== FEATURED POST ===== -->
+<section class="featured-wrap">
+  <div class="container">
+    <div class="featured-label reveal"><span>Featured Article</span></div>
+    <div class="featured-card reveal reveal-delay-1">
+      <div class="featured-card__cover">
+        <div class="featured-cover-inner cover--ppc">
+          <div class="cover-icon" style="width:100px;height:100px;border-radius:24px">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="52" height="52"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/><path d="M7 10l3-3 2 2 3-3"/></svg>
+          </div>
+        </div>
+      </div>
+      <div class="featured-card__body">
+        <div class="featured-card__tag"><span class="badge badge--ppc">PPC</span></div>
+        <h2 class="featured-card__title"><a href="#">How We Achieved 4x ROAS for an E-Commerce Brand in 90 Days</a></h2>
+        <p class="featured-card__excerpt">A deep dive into the exact Google Ads and Meta Ads strategy we used to transform a struggling DTC brand's paid campaigns — including targeting, creative testing, and bidding frameworks that delivered 400% return on ad spend consistently.</p>
+        <div class="featured-card__meta">
+          <div class="featured-card__meta-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>Feb 18, 2026</div>
+          <div class="featured-card__meta-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>14 min read</div>
+          <div class="featured-card__meta-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>12.4K views</div>
+        </div>
+        <a href="#" class="btn btn--primary featured-card__cta">Read Case Study <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== POST GRID ===== -->
+<section class="posts-wrap">
+  <div class="container">
+    <div class="posts-header">
+      <h2>Latest Articles</h2>
+      <a href="#" class="btn btn--outline btn--sm">View All <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
+    </div>
+    <div class="post-grid" id="postGrid">
+
+      <!-- Card 1 — SEO -->
+      <article class="post-card reveal reveal-delay-1" data-cat="seo">
+        <div class="post-card__cover">
+          <div class="post-card__cover-inner cover--seo">
+            <div class="cover-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/><path d="M11 8v6M8 11h6"/></svg></div>
+          </div>
+        </div>
+        <div class="post-card__body">
+          <div class="post-card__tags"><span class="badge badge--seo">SEO</span></div>
+          <h3 class="post-card__title"><a href="#">Technical SEO Checklist 2026: 80 Points to Audit Your Website</a></h3>
+          <p class="post-card__excerpt">Core Web Vitals, crawlability, schema markup, and indexing — the complete audit framework our team uses.</p>
+          <div class="post-card__footer">
+            <div class="post-card__meta">
+              <div class="post-card__meta-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>Feb 14, 2026</div>
+              <div class="post-card__meta-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>16 min</div>
+            </div>
+            <span class="post-card__read">Read <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span>
+          </div>
+        </div>
+      </article>
+
+      <!-- Card 2 — PPC -->
+      <article class="post-card reveal reveal-delay-2" data-cat="ppc">
+        <div class="post-card__cover">
+          <div class="post-card__cover-inner cover--ppc">
+            <div class="cover-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg></div>
+          </div>
+        </div>
+        <div class="post-card__body">
+          <div class="post-card__tags"><span class="badge badge--ppc">PPC</span></div>
+          <h3 class="post-card__title"><a href="#">Google Ads Smart Bidding vs Manual CPC: The 2026 Breakdown</a></h3>
+          <p class="post-card__excerpt">We tested both strategies across 12 accounts over 6 months. Here's what actually moves the needle.</p>
+          <div class="post-card__footer">
+            <div class="post-card__meta">
+              <div class="post-card__meta-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>Feb 10, 2026</div>
+              <div class="post-card__meta-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>11 min</div>
+            </div>
+            <span class="post-card__read">Read <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span>
+          </div>
+        </div>
+      </article>
+
+      <!-- Card 3 — Social -->
+      <article class="post-card reveal reveal-delay-3" data-cat="social">
+        <div class="post-card__cover">
+          <div class="post-card__cover-inner cover--social">
+            <div class="cover-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M18 2h-3a5 5 0 00-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 011-1h3z"/></svg></div>
+          </div>
+        </div>
+        <div class="post-card__body">
+          <div class="post-card__tags"><span class="badge badge--social">Social</span></div>
+          <h3 class="post-card__title"><a href="#">Instagram Algorithm 2026: What Still Drives Organic Reach</a></h3>
+          <p class="post-card__excerpt">From Reels to carousels — how we helped a brand grow from 8K to 120K followers in under a year.</p>
+          <div class="post-card__footer">
+            <div class="post-card__meta">
+              <div class="post-card__meta-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>Feb 6, 2026</div>
+              <div class="post-card__meta-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>9 min</div>
+            </div>
+            <span class="post-card__read">Read <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span>
+          </div>
+        </div>
+      </article>
+
+      <!-- Card 4 — Content -->
+      <article class="post-card reveal reveal-delay-1" data-cat="content">
+        <div class="post-card__cover">
+          <div class="post-card__cover-inner cover--content">
+            <div class="cover-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><path d="M14 2v6h6M16 13H8M16 17H8M10 9H8"/></svg></div>
+          </div>
+        </div>
+        <div class="post-card__body">
+          <div class="post-card__tags"><span class="badge badge--content">Content</span></div>
+          <h3 class="post-card__title"><a href="#">Content Marketing ROI: How to Measure and Scale What Works</a></h3>
+          <p class="post-card__excerpt">The exact attribution model we use to track blog content from first click to closed deal — and optimize accordingly.</p>
+          <div class="post-card__footer">
+            <div class="post-card__meta">
+              <div class="post-card__meta-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>Jan 30, 2026</div>
+              <div class="post-card__meta-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>13 min</div>
+            </div>
+            <span class="post-card__read">Read <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span>
+          </div>
+        </div>
+      </article>
+
+      <!-- Card 5 — Email -->
+      <article class="post-card reveal reveal-delay-2" data-cat="email">
+        <div class="post-card__cover">
+          <div class="post-card__cover-inner cover--email">
+            <div class="cover-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg></div>
+          </div>
+        </div>
+        <div class="post-card__body">
+          <div class="post-card__tags"><span class="badge badge--email">Email</span></div>
+          <h3 class="post-card__title"><a href="#">Email Automation Sequences That Convert: Our 7-Step Blueprint</a></h3>
+          <p class="post-card__excerpt">The welcome, nurture, and win-back flows we deploy for every client — with open rate and conversion data included.</p>
+          <div class="post-card__footer">
+            <div class="post-card__meta">
+              <div class="post-card__meta-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>Jan 22, 2026</div>
+              <div class="post-card__meta-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>10 min</div>
+            </div>
+            <span class="post-card__read">Read <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span>
+          </div>
+        </div>
+      </article>
+
+      <!-- Card 6 — Analytics -->
+      <article class="post-card reveal reveal-delay-3" data-cat="analytics">
+        <div class="post-card__cover">
+          <div class="post-card__cover-inner cover--analytics">
+            <div class="cover-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/><polyline points="22 12 18 12 14 8 10 13 6 8 2 12"/></svg></div>
+          </div>
+        </div>
+        <div class="post-card__body">
+          <div class="post-card__tags"><span class="badge badge--analytics">Analytics</span></div>
+          <h3 class="post-card__title"><a href="#">GA4 Metrics That Actually Matter (And 5 You Should Stop Tracking)</a></h3>
+          <p class="post-card__excerpt">After migrating 80+ client accounts to GA4, here are the KPIs that correlate with real business outcomes.</p>
+          <div class="post-card__footer">
+            <div class="post-card__meta">
+              <div class="post-card__meta-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>Jan 15, 2026</div>
+              <div class="post-card__meta-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>8 min</div>
+            </div>
+            <span class="post-card__read">Read <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span>
+          </div>
+        </div>
+      </article>
+
+    </div>
+  </div>
+</section>
+
+<!-- ===== MOST POPULAR ===== -->
+<section class="popular-wrap">
+  <div class="container">
+    <div class="section-label reveal"><span class="badge badge--secondary">Most Popular</span></div>
+    <h2 class="section-title section-title--center reveal reveal-delay-1">Top Reads This Month</h2>
+    <p class="section-subtitle reveal reveal-delay-2">Guides our readers keep coming back to</p>
+    <div class="popular-grid">
+
+      <div class="popular-card reveal reveal-delay-1">
+        <div class="popular-card__num">01</div>
+        <div class="popular-card__body">
+          <div class="popular-card__cat"><span class="badge badge--seo">SEO</span></div>
+          <h3 class="popular-card__title"><a href="#">320% ROI: How AgencyX Transformed 5 Brands with Organic Search</a></h3>
+          <div class="popular-card__meta">
+            <div class="popular-card__views"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>28.4K views</div>
+            <span>·</span>
+            <span>18 min read</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="popular-card reveal reveal-delay-2">
+        <div class="popular-card__num">02</div>
+        <div class="popular-card__body">
+          <div class="popular-card__cat"><span class="badge badge--ppc">PPC</span></div>
+          <h3 class="popular-card__title"><a href="#">The PPC Budget Allocation Formula for Consistent 4x ROAS</a></h3>
+          <div class="popular-card__meta">
+            <div class="popular-card__views"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>21.7K views</div>
+            <span>·</span>
+            <span>12 min read</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="popular-card reveal reveal-delay-3">
+        <div class="popular-card__num">03</div>
+        <div class="popular-card__body">
+          <div class="popular-card__cat"><span class="badge badge--email">Email</span></div>
+          <h3 class="popular-card__title"><a href="#">180% Revenue Lift in 90 Days: Our Email Automation Playbook</a></h3>
+          <div class="popular-card__meta">
+            <div class="popular-card__views"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>19.1K views</div>
+            <span>·</span>
+            <span>15 min read</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ===== NEWSLETTER ===== -->
+<section class="newsletter">
+  <div class="container">
+    <div class="newsletter__box reveal">
+      <span class="badge badge--accent" style="margin-bottom:20px">Weekly Newsletter</span>
+      <h2>Get Marketing Insights<br>Delivered Every Tuesday</h2>
+      <p>Join 30,000+ marketers who read AgencyX's weekly breakdown of what's working in digital marketing right now.</p>
+      <div class="newsletter__form">
+        <input type="email" class="newsletter__input" placeholder="your@email.com">
+        <button class="btn btn--primary">Subscribe <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></button>
+      </div>
+      <p class="newsletter__note">No spam. Unsubscribe anytime.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ===== FOOTER ===== -->
+<footer>
+  <div class="container">
+    <div class="footer__grid">
+      <div>
+        <div class="footer__brand">
+          <svg width="28" height="28" viewBox="0 0 28 28" fill="none"><rect width="28" height="28" rx="8" fill="#6366f1"/><text x="14" y="20" text-anchor="middle" font-family="Inter,sans-serif" font-size="11" font-weight="800" fill="#fff">AX</text></svg>
+          Agency<span>X</span>
+        </div>
+        <p class="footer__brand-desc">Data-driven digital marketing agency helping ambitious brands achieve measurable growth.</p>
+      </div>
+      <div class="footer__col">
+        <h4>Services</h4>
+        <ul>
+          <li><a href="#">SEO Optimization</a></li>
+          <li><a href="#">PPC Advertising</a></li>
+          <li><a href="#">Social Media</a></li>
+          <li><a href="#">Content Marketing</a></li>
+          <li><a href="#">Email Marketing</a></li>
+        </ul>
+      </div>
+      <div class="footer__col">
+        <h4>Company</h4>
+        <ul>
+          <li><a href="#">About Us</a></li>
+          <li><a href="#">Case Studies</a></li>
+          <li><a href="#">Blog</a></li>
+          <li><a href="#">Contact</a></li>
+          <li><a href="#">Careers</a></li>
+        </ul>
+      </div>
+      <div class="footer__col">
+        <h4>Legal</h4>
+        <ul>
+          <li><a href="#">Privacy Policy</a></li>
+          <li><a href="#">Terms of Service</a></li>
+          <li><a href="#">Refund Policy</a></li>
+          <li><a href="#">Cookie Policy</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer__bottom">
+      <span>&copy; 2026 AgencyX. All rights reserved.</span>
+      <span>Results-focused digital marketing</span>
+    </div>
+    <p class="footer__disclaimer">AgencyX is a digital marketing agency. Results may vary based on industry, competition, budget, and campaign duration. Past results do not guarantee future performance.</p>
+  </div>
+</footer>
+
+<script>
+// ===== NAV =====
+const nav = document.getElementById('nav');
+window.addEventListener('scroll', () => { nav.classList.toggle('scrolled', window.scrollY > 50); });
+const burger = document.getElementById('burger');
+const mobileMenu = document.getElementById('mobileMenu');
+const menuClose = document.getElementById('menuClose');
+burger.addEventListener('click', () => mobileMenu.classList.add('open'));
+menuClose.addEventListener('click', () => mobileMenu.classList.remove('open'));
+function closeMenu() { mobileMenu.classList.remove('open'); }
+
+// ===== SCROLL REVEAL =====
+const reveals = document.querySelectorAll('.reveal');
+const revealObs = new IntersectionObserver((entries) => {
+  entries.forEach(e => { if(e.isIntersecting){ e.target.classList.add('visible'); revealObs.unobserve(e.target); } });
+}, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+reveals.forEach(el => revealObs.observe(el));
+
+// ===== FILTER =====
+function filterPosts(cat) {
+  document.querySelectorAll('.filter-tab').forEach(t => t.classList.toggle('active', t.dataset.cat === cat));
+  document.querySelectorAll('#postGrid .post-card').forEach(card => {
+    const show = cat === 'all' || card.dataset.cat === cat;
+    card.style.display = show ? '' : 'none';
+  });
+}
+
+// ===== SMOOTH SCROLL =====
+document.querySelectorAll('a[href^="#"]').forEach(a => {
+  a.addEventListener('click', e => {
+    const t = document.querySelector(a.getAttribute('href'));
+    if(t){ e.preventDefault(); t.scrollIntoView({ behavior:'smooth' }); }
+  });
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,597 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AgencyX Blog — Magazine | Digital Marketing Insights</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+<style>
+/* ========== RESET & BASE ========== */
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --bg:#06080f;
+  --bg-card:rgba(255,255,255,0.03);
+  --bg-glass:rgba(255,255,255,0.05);
+  --border:rgba(255,255,255,0.06);
+  --border-hover:rgba(255,255,255,0.12);
+  --text:#f0f0f5;
+  --text-secondary:#8a8f9e;
+  --accent:#6366f1;
+  --accent-glow:rgba(99,102,241,0.25);
+  --accent2:#8b5cf6;
+  --green:#22c55e;
+  --radius:16px;
+  --nav-h:72px;
+}
+html{scroll-behavior:smooth;overflow-x:hidden}
+body{font-family:'Inter',system-ui,-apple-system,sans-serif;background:var(--bg);color:var(--text);line-height:1.6;overflow-x:hidden;-webkit-font-smoothing:antialiased}
+a{color:inherit;text-decoration:none}
+button{cursor:pointer;font-family:inherit}
+img{max-width:100%;display:block}
+
+/* ========== UTILITY ========== */
+.container{max-width:1200px;margin:0 auto;padding:0 24px}
+.badge{display:inline-flex;align-items:center;gap:6px;padding:5px 14px;border-radius:999px;font-size:12px;font-weight:600;letter-spacing:.3px;border:1px solid var(--border)}
+.badge--accent{background:rgba(99,102,241,.1);border-color:rgba(99,102,241,.3);color:var(--accent)}
+.badge--secondary{background:var(--bg-glass);color:var(--text-secondary)}
+.badge--seo{background:rgba(99,102,241,.1);border-color:rgba(99,102,241,.25);color:#a5b4fc}
+.badge--ppc{background:rgba(139,92,246,.1);border-color:rgba(139,92,246,.25);color:#c4b5fd}
+.badge--social{background:rgba(236,72,153,.08);border-color:rgba(236,72,153,.2);color:#f9a8d4}
+.badge--content{background:rgba(245,158,11,.08);border-color:rgba(245,158,11,.2);color:#fbbf24}
+.badge--email{background:rgba(6,182,212,.08);border-color:rgba(6,182,212,.2);color:#67e8f9}
+.badge--analytics{background:rgba(34,197,94,.08);border-color:rgba(34,197,94,.2);color:#86efac}
+.badge--cro{background:rgba(239,68,68,.08);border-color:rgba(239,68,68,.2);color:#fca5a5}
+.section-label{text-align:center;margin-bottom:16px}
+.section-title{font-size:clamp(26px,3.5vw,40px);font-weight:800;letter-spacing:-.02em;line-height:1.15}
+.section-title--center{text-align:center}
+.section-subtitle{font-size:clamp(15px,1.8vw,17px);color:var(--text-secondary);max-width:520px;margin:12px auto 0;text-align:center}
+.btn{display:inline-flex;align-items:center;gap:8px;padding:14px 32px;border-radius:12px;font-size:15px;font-weight:600;border:none;transition:all .3s ease;position:relative;overflow:hidden}
+.btn--primary{background:var(--accent);color:#fff}
+.btn--primary:hover{background:#4f46e5;transform:translateY(-2px);box-shadow:0 8px 30px var(--accent-glow)}
+.btn--outline{background:transparent;color:var(--text);border:1px solid var(--border)}
+.btn--outline:hover{border-color:var(--accent);color:var(--accent);transform:translateY(-2px)}
+.btn--sm{padding:10px 20px;font-size:14px}
+.btn svg{width:16px;height:16px;transition:transform .3s}
+.btn:hover svg{transform:translateX(4px)}
+
+/* ========== ANIMATIONS ========== */
+@keyframes fade-up{from{opacity:0;transform:translateY(40px)}to{opacity:1;transform:translateY(0)}}
+@keyframes fade-in{from{opacity:0}to{opacity:1}}
+@keyframes gradient-shift{0%{background-position:0% 50%}50%{background-position:100% 50%}100%{background-position:0% 50%}}
+@keyframes pulse-glow{0%,100%{opacity:.3}50%{opacity:.6}}
+.reveal{opacity:0;transform:translateY(30px);transition:all .7s cubic-bezier(.16,1,.3,1)}
+.reveal.visible{opacity:1;transform:translateY(0)}
+.reveal-delay-1{transition-delay:.1s}.reveal-delay-2{transition-delay:.2s}
+.reveal-delay-3{transition-delay:.3s}.reveal-delay-4{transition-delay:.4s}
+.reveal-delay-5{transition-delay:.5s}.reveal-delay-6{transition-delay:.6s}
+
+/* ========== NAV ========== */
+.nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:0 24px;height:var(--nav-h);display:flex;align-items:center;transition:all .4s ease}
+.nav.scrolled{background:rgba(6,8,15,0.88);backdrop-filter:blur(20px) saturate(1.4);border-bottom:1px solid var(--border)}
+.nav__inner{max-width:1200px;margin:0 auto;width:100%;display:flex;align-items:center;justify-content:space-between}
+.nav__logo{font-size:22px;font-weight:800;display:flex;align-items:center;gap:8px}
+.nav__logo span{color:var(--accent)}
+.nav__links{display:flex;gap:32px;list-style:none}
+.nav__links a{font-size:14px;font-weight:500;color:var(--text-secondary);transition:color .3s}
+.nav__links a:hover,.nav__links a.active{color:var(--text)}
+.nav__cta{display:flex;gap:12px;align-items:center}
+.nav__cta .btn{padding:10px 24px;font-size:14px}
+.nav__burger{display:none;flex-direction:column;gap:5px;background:none;border:none;cursor:pointer;padding:4px}
+.nav__burger span{width:24px;height:2px;background:var(--text);border-radius:2px;transition:all .3s}
+
+/* ========== MOBILE MENU ========== */
+.mobile-menu{position:fixed;top:0;right:-100%;width:280px;height:100vh;background:#0d1020;z-index:200;display:flex;flex-direction:column;padding:80px 32px 32px;gap:8px;transition:right .4s cubic-bezier(.16,1,.3,1);border-left:1px solid var(--border)}
+.mobile-menu.open{right:0}
+.mobile-menu a{font-size:16px;font-weight:500;padding:12px 0;border-bottom:1px solid var(--border);color:var(--text-secondary);transition:color .3s}
+.mobile-menu a:last-child{border-bottom:none;margin-top:8px}
+.mobile-menu a:hover{color:var(--text)}
+.mobile-menu__close{position:absolute;top:20px;right:20px;background:none;border:none;color:var(--text);font-size:24px;padding:4px;line-height:1}
+.mobile-menu__close svg{width:24px;height:24px}
+
+/* ========== COVER GRADIENTS ========== */
+.cover--seo{background:linear-gradient(135deg,#1e1b4b 0%,#312e81 40%,#4338ca 70%,#6366f1 100%)}
+.cover--ppc{background:linear-gradient(135deg,#1e1040 0%,#2e1065 40%,#5b21b6 70%,#8b5cf6 100%)}
+.cover--social{background:linear-gradient(135deg,#1a0a1c 0%,#4a044e 40%,#9d174d 70%,#ec4899 100%)}
+.cover--content{background:linear-gradient(135deg,#1c0f00 0%,#451a03 40%,#92400e 70%,#f59e0b 100%)}
+.cover--email{background:linear-gradient(135deg,#06080f 0%,#083344 40%,#0e7490 70%,#06b6d4 100%)}
+.cover--analytics{background:linear-gradient(135deg,#052e16 0%,#14532d 40%,#15803d 70%,#22c55e 100%)}
+.cover--cro{background:linear-gradient(135deg,#1c0a00 0%,#431407 40%,#b91c1c 70%,#ef4444 100%)}
+.cover-icon{width:56px;height:56px;background:rgba(255,255,255,.12);border-radius:14px;display:flex;align-items:center;justify-content:center;backdrop-filter:blur(8px)}
+.cover-icon svg{width:28px;height:28px;stroke:#fff;opacity:.9}
+
+/* ========== HERO SPLIT ========== */
+.hero-split{position:relative;padding:calc(var(--nav-h) + 56px) 0 72px;overflow:hidden}
+.hero-split__bg{position:absolute;inset:0;z-index:0;pointer-events:none}
+.hero-split__orb{position:absolute;border-radius:50%;filter:blur(120px);animation:pulse-glow 7s ease-in-out infinite}
+.hero-split__orb--1{width:600px;height:600px;background:#6366f1;top:-300px;left:-200px;opacity:.06}
+.hero-split__orb--2{width:400px;height:400px;background:#8b5cf6;bottom:-100px;right:-100px;opacity:.05;animation-delay:3s}
+.hero-split__grid{position:relative;z-index:1;display:grid;grid-template-columns:1fr 1.1fr;gap:48px;align-items:start}
+.hero-split__left{padding-top:8px}
+.hero-split__eyebrow{display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--accent);margin-bottom:20px;padding:6px 14px;background:rgba(99,102,241,.1);border:1px solid rgba(99,102,241,.2);border-radius:999px}
+.hero-split__title{font-size:clamp(30px,4vw,52px);font-weight:900;letter-spacing:-.03em;line-height:1.1;margin-bottom:20px}
+.gradient-text{background:linear-gradient(135deg,var(--accent),#a78bfa,var(--accent2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;background-size:200% 200%;animation:gradient-shift 4s ease infinite}
+.hero-split__desc{font-size:16px;color:var(--text-secondary);line-height:1.7;max-width:420px;margin-bottom:32px}
+.hero-split__stats{display:flex;gap:28px;margin-bottom:36px;flex-wrap:wrap}
+.hs-stat{border-left:2px solid var(--accent);padding-left:16px}
+.hs-stat__num{font-size:24px;font-weight:800}
+.hs-stat__label{font-size:12px;color:var(--text-secondary)}
+.hero-split__btns{display:flex;gap:12px;flex-wrap:wrap}
+
+/* ========== HERO RIGHT (MAIN CARD + SIDE) ========== */
+.hero-split__right{display:flex;flex-direction:column;gap:16px}
+.hero-main-card{border-radius:20px;overflow:hidden;border:1px solid var(--border);transition:border-color .3s;display:flex;flex-direction:column}
+.hero-main-card:hover{border-color:var(--border-hover)}
+.hero-main-cover{height:240px;position:relative}
+.hero-main-cover-inner{position:absolute;inset:0;display:flex;align-items:center;justify-content:center}
+.hero-main-cover-inner .cover-icon{width:80px;height:80px;border-radius:20px}
+.hero-main-cover-inner .cover-icon svg{width:40px;height:40px}
+.hero-main-body{padding:24px;background:var(--bg-card)}
+.hero-main-body .badge{margin-bottom:12px}
+.hero-main-title{font-size:16px;font-weight:700;line-height:1.4;margin-bottom:8px}
+.hero-main-title a:hover{color:var(--accent)}
+.hero-main-meta{display:flex;align-items:center;gap:12px;font-size:12px;color:var(--text-secondary)}
+.hero-main-meta svg{width:12px;height:12px}
+.hero-main-meta-item{display:flex;align-items:center;gap:4px}
+
+.hero-side-cards{display:flex;flex-direction:column;gap:10px}
+.hero-side-card{display:flex;align-items:center;gap:16px;background:var(--bg-card);border:1px solid var(--border);border-radius:14px;padding:16px;transition:all .3s;cursor:pointer}
+.hero-side-card:hover{border-color:var(--border-hover);transform:translateX(4px)}
+.hero-side-card__num{font-size:22px;font-weight:900;font-family:'JetBrains Mono',monospace;color:rgba(255,255,255,.12);flex-shrink:0;min-width:32px;line-height:1}
+.hero-side-card__content{flex:1;min-width:0}
+.hero-side-card__title{font-size:13px;font-weight:700;line-height:1.3;margin-bottom:4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.hero-side-card__meta{display:flex;align-items:center;gap:8px;font-size:11px;color:var(--text-secondary)}
+.hero-side-card__arrow{width:28px;height:28px;border-radius:8px;border:1px solid var(--border);display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all .3s}
+.hero-side-card__arrow svg{width:12px;height:12px}
+.hero-side-card:hover .hero-side-card__arrow{background:var(--accent);border-color:var(--accent)}
+
+/* ========== MIXED GRID ========== */
+.mix-wrap{padding:72px 0 0}
+.mix-wrap__header{display:flex;align-items:center;justify-content:space-between;margin-bottom:32px;flex-wrap:wrap;gap:16px}
+.mix-row-large{display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-bottom:24px}
+.mix-row-small{display:grid;grid-template-columns:repeat(4,1fr);gap:24px}
+.mix-card-large{background:var(--bg-card);border:1px solid var(--border);border-radius:20px;overflow:hidden;transition:all .3s;display:flex;flex-direction:column}
+.mix-card-large:hover{border-color:var(--border-hover);transform:translateY(-4px);box-shadow:0 24px 48px rgba(0,0,0,.3)}
+.mix-card-large__cover{height:220px;position:relative}
+.mix-card-large__cover-inner{position:absolute;inset:0;display:flex;align-items:center;justify-content:center}
+.mix-card-large__cover-inner .cover-icon{width:72px;height:72px;border-radius:18px}
+.mix-card-large__cover-inner .cover-icon svg{width:36px;height:36px}
+.mix-card-large__body{padding:24px;flex:1;display:flex;flex-direction:column}
+.mix-card-large__body .badge{margin-bottom:12px}
+.mix-card-large__title{font-size:17px;font-weight:700;line-height:1.35;margin-bottom:12px;flex:1}
+.mix-card-large__title a:hover{color:var(--accent)}
+.mix-card-large__excerpt{font-size:13px;color:var(--text-secondary);line-height:1.6;margin-bottom:16px}
+.mix-card-large__meta{display:flex;align-items:center;gap:12px;font-size:12px;color:var(--text-secondary);padding-top:16px;border-top:1px solid var(--border)}
+.mix-card-large__meta-item{display:flex;align-items:center;gap:4px}
+.mix-card-large__meta svg{width:12px;height:12px}
+.mix-card-small{background:var(--bg-card);border:1px solid var(--border);border-radius:16px;overflow:hidden;transition:all .3s;display:flex;flex-direction:column}
+.mix-card-small:hover{border-color:var(--border-hover);transform:translateY(-3px);box-shadow:0 16px 32px rgba(0,0,0,.25)}
+.mix-card-small__cover{height:120px;position:relative}
+.mix-card-small__cover-inner{position:absolute;inset:0;display:flex;align-items:center;justify-content:center}
+.mix-card-small__cover-inner .cover-icon{width:48px;height:48px;border-radius:12px}
+.mix-card-small__cover-inner .cover-icon svg{width:24px;height:24px}
+.mix-card-small__body{padding:16px;flex:1;display:flex;flex-direction:column}
+.mix-card-small__body .badge{margin-bottom:10px}
+.mix-card-small__title{font-size:13px;font-weight:700;line-height:1.35;flex:1}
+.mix-card-small__title a:hover{color:var(--accent)}
+.mix-card-small__meta{font-size:11px;color:var(--text-secondary);margin-top:10px;padding-top:10px;border-top:1px solid var(--border)}
+
+/* ========== SPOTLIGHT SECTION ========== */
+.spotlight{padding:80px 0}
+.spotlight__inner{background:linear-gradient(135deg,rgba(99,102,241,.08),rgba(139,92,246,.05));border:1px solid rgba(99,102,241,.15);border-radius:24px;padding:56px 48px;display:grid;grid-template-columns:1.2fr 1fr;gap:48px;align-items:center}
+.spotlight__left{}
+.spotlight__badge{margin-bottom:20px}
+.spotlight__title{font-size:clamp(22px,3vw,36px);font-weight:800;letter-spacing:-.02em;line-height:1.2;margin-bottom:16px}
+.spotlight__desc{font-size:15px;color:var(--text-secondary);line-height:1.7;margin-bottom:28px;max-width:380px}
+.spotlight__results{display:flex;gap:28px;flex-wrap:wrap}
+.spotlight-result{text-align:center}
+.spotlight-result__num{font-size:26px;font-weight:800;color:var(--accent)}
+.spotlight-result__label{font-size:12px;color:var(--text-secondary);margin-top:2px}
+.spotlight__right{display:flex;flex-direction:column;gap:16px}
+.spotlight-item{display:flex;align-items:center;gap:14px;padding:14px 0;border-bottom:1px solid var(--border)}
+.spotlight-item:last-child{border-bottom:none}
+.spotlight-item__icon{width:36px;height:36px;border-radius:10px;background:rgba(99,102,241,.1);border:1px solid rgba(99,102,241,.2);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.spotlight-item__icon svg{width:18px;height:18px;stroke:var(--accent)}
+.spotlight-item__title{font-size:14px;font-weight:600;margin-bottom:2px}
+.spotlight-item__sub{font-size:12px;color:var(--text-secondary)}
+
+/* ========== CTA ========== */
+.cta-wrap{padding:0 0 100px}
+.cta-box{background:var(--accent);border-radius:24px;padding:56px 48px;text-align:center;position:relative;overflow:hidden}
+.cta-box::before{content:'';position:absolute;top:-40px;right:-40px;width:280px;height:280px;background:rgba(255,255,255,.07);border-radius:50%}
+.cta-box::after{content:'';position:absolute;bottom:-60px;left:-60px;width:240px;height:240px;background:rgba(255,255,255,.05);border-radius:50%}
+.cta-box__content{position:relative;z-index:1}
+.cta-box h2{font-size:clamp(22px,3vw,34px);font-weight:800;letter-spacing:-.02em;margin-bottom:12px}
+.cta-box p{font-size:16px;opacity:.85;max-width:420px;margin:0 auto 32px}
+.cta-box .btn--outline{border-color:rgba(255,255,255,.5);color:#fff}
+.cta-box .btn--outline:hover{border-color:#fff;background:rgba(255,255,255,.1)}
+
+/* ========== FOOTER ========== */
+footer{border-top:1px solid var(--border)}
+.footer__grid{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:40px;padding:60px 0 40px}
+.footer__brand{font-size:22px;font-weight:800;display:flex;align-items:center;gap:8px;margin-bottom:16px}
+.footer__brand span{color:var(--accent)}
+.footer__brand-desc{font-size:14px;color:var(--text-secondary);line-height:1.7;max-width:260px}
+.footer__col h4{font-size:13px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--text-secondary);margin-bottom:16px}
+.footer__col ul{list-style:none;display:flex;flex-direction:column;gap:10px}
+.footer__col ul li a{font-size:14px;color:var(--text-secondary);transition:color .3s}
+.footer__col ul li a:hover{color:var(--text)}
+.footer__bottom{display:flex;justify-content:space-between;align-items:center;padding:24px 0;border-top:1px solid var(--border);font-size:13px;color:var(--text-secondary);flex-wrap:wrap;gap:8px}
+.footer__disclaimer{font-size:12px;color:var(--text-secondary);opacity:.5;padding-bottom:24px;line-height:1.6;max-width:700px}
+
+/* ========== RESPONSIVE ========== */
+@media(max-width:1024px){
+  .mix-row-small{grid-template-columns:repeat(2,1fr)}
+  .spotlight__inner{grid-template-columns:1fr}
+}
+@media(max-width:900px){
+  .hero-split__grid{grid-template-columns:1fr}
+  .mix-row-large{grid-template-columns:1fr}
+  .footer__grid{grid-template-columns:1fr 1fr}
+}
+@media(max-width:600px){
+  .nav__links{display:none}
+  .nav__cta{display:none}
+  .nav__burger{display:flex}
+  .mix-row-small{grid-template-columns:1fr 1fr}
+  .spotlight__inner{padding:36px 24px}
+  .cta-box{padding:40px 24px}
+  .footer__grid{grid-template-columns:1fr}
+  .footer__bottom{flex-direction:column;text-align:center}
+}
+</style>
+</head>
+<body>
+
+<nav class="nav" id="nav">
+  <div class="nav__inner">
+    <a href="#" class="nav__logo">
+      <svg width="28" height="28" viewBox="0 0 28 28" fill="none"><rect width="28" height="28" rx="8" fill="#6366f1"/><text x="14" y="20" text-anchor="middle" font-family="Inter,sans-serif" font-size="11" font-weight="800" fill="#fff">AX</text></svg>
+      Agency<span>X</span>
+    </a>
+    <ul class="nav__links">
+      <li><a href="#">Services</a></li>
+      <li><a href="#">How It Works</a></li>
+      <li><a href="#">Pricing</a></li>
+      <li><a href="#">Reviews</a></li>
+      <li><a href="#" class="active">Blog</a></li>
+    </ul>
+    <div class="nav__cta">
+      <a href="#" class="btn btn--outline" style="font-size:13px;padding:8px 18px">Log In</a>
+      <a href="#" class="btn btn--primary" style="font-size:13px;padding:8px 18px">Get Started</a>
+    </div>
+    <button class="nav__burger" id="burger" aria-label="Menu">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</nav>
+
+<div class="mobile-menu" id="mobileMenu">
+  <button class="mobile-menu__close" id="menuClose"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg></button>
+  <a href="#">Services</a>
+  <a href="#">How It Works</a>
+  <a href="#">Pricing</a>
+  <a href="#">Reviews</a>
+  <a href="#">Blog</a>
+  <a href="#" class="btn btn--primary">Get Started</a>
+</div>
+
+<!-- ===== HERO SPLIT ===== -->
+<section class="hero-split">
+  <div class="hero-split__bg">
+    <div class="hero-split__orb hero-split__orb--1"></div>
+    <div class="hero-split__orb hero-split__orb--2"></div>
+  </div>
+  <div class="container">
+    <div class="hero-split__grid">
+
+      <!-- LEFT: Copy -->
+      <div class="hero-split__left reveal">
+        <div class="hero-split__eyebrow">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="12" height="12"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+          AgencyX Blog
+        </div>
+        <h1 class="hero-split__title">
+          We Grow Brands Through <span class="gradient-text">Digital Innovation</span>
+        </h1>
+        <p class="hero-split__desc">Data-driven digital marketing agency helping ambitious brands achieve measurable growth through SEO, PPC, Social Media &amp; Content Marketing.</p>
+        <div class="hero-split__stats">
+          <div class="hs-stat"><div class="hs-stat__num">500+</div><div class="hs-stat__label">Projects Completed</div></div>
+          <div class="hs-stat"><div class="hs-stat__num">320%</div><div class="hs-stat__label">Average ROI</div></div>
+          <div class="hs-stat"><div class="hs-stat__num">4.9★</div><div class="hs-stat__label">Client Rating</div></div>
+        </div>
+        <div class="hero-split__btns">
+          <a href="#posts" class="btn btn--primary">Browse Articles <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
+          <a href="#" class="btn btn--outline">Subscribe to Newsletter</a>
+        </div>
+      </div>
+
+      <!-- RIGHT: Main card + side cards -->
+      <div class="hero-split__right reveal reveal-delay-2">
+        <!-- Main featured article -->
+        <div class="hero-main-card">
+          <div class="hero-main-cover">
+            <div class="hero-main-cover-inner cover--seo">
+              <div class="cover-icon" style="width:80px;height:80px;border-radius:20px"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="40" height="40"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/><path d="M11 8v6M8 11h6"/></svg></div>
+            </div>
+          </div>
+          <div class="hero-main-body">
+            <span class="badge badge--seo">SEO</span>
+            <h3 class="hero-main-title"><a href="#">Why 97% of Websites Never Rank on Page 1 — and How to Be the 3%</a></h3>
+            <div class="hero-main-meta">
+              <div class="hero-main-meta-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>Feb 20, 2026</div>
+              <div class="hero-main-meta-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>18 min read</div>
+              <div class="hero-main-meta-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>34K views</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Side articles -->
+        <div class="hero-side-cards">
+          <a href="#" class="hero-side-card">
+            <div class="hero-side-card__num">02</div>
+            <div class="hero-side-card__content">
+              <div class="hero-side-card__title">4x ROAS in 90 Days: Our Exact Google Ads Framework</div>
+              <div class="hero-side-card__meta"><span class="badge badge--ppc" style="padding:2px 8px;font-size:10px">PPC</span><span>14 min</span></div>
+            </div>
+            <div class="hero-side-card__arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></div>
+          </a>
+          <a href="#" class="hero-side-card">
+            <div class="hero-side-card__num">03</div>
+            <div class="hero-side-card__content">
+              <div class="hero-side-card__title">From 8K to 120K Followers: Social Strategy That Works</div>
+              <div class="hero-side-card__meta"><span class="badge badge--social" style="padding:2px 8px;font-size:10px">Social</span><span>9 min</span></div>
+            </div>
+            <div class="hero-side-card__arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></div>
+          </a>
+          <a href="#" class="hero-side-card">
+            <div class="hero-side-card__num">04</div>
+            <div class="hero-side-card__content">
+              <div class="hero-side-card__title">Email Automation That Generated 180% Revenue Lift</div>
+              <div class="hero-side-card__meta"><span class="badge badge--email" style="padding:2px 8px;font-size:10px">Email</span><span>10 min</span></div>
+            </div>
+            <div class="hero-side-card__arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></div>
+          </a>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ===== MIXED GRID ===== -->
+<section class="mix-wrap" id="posts">
+  <div class="container">
+    <div class="mix-wrap__header">
+      <h2 class="section-title">Latest Articles</h2>
+      <a href="#" class="btn btn--outline btn--sm">View All <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
+    </div>
+
+    <!-- Row 1: 2 large cards -->
+    <div class="mix-row-large">
+
+      <div class="mix-card-large reveal reveal-delay-1">
+        <div class="mix-card-large__cover">
+          <div class="mix-card-large__cover-inner cover--ppc">
+            <div class="cover-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/><path d="M7 10l3-3 2 2 3-3"/></svg></div>
+          </div>
+        </div>
+        <div class="mix-card-large__body">
+          <span class="badge badge--ppc">PPC</span>
+          <h3 class="mix-card-large__title"><a href="#">Complete Google Ads Masterclass for E-Commerce Brands in 2026</a></h3>
+          <p class="mix-card-large__excerpt">From campaign structure and keyword strategy to shopping ads and Performance Max — the end-to-end playbook we use to run campaigns that consistently outperform benchmarks.</p>
+          <div class="mix-card-large__meta">
+            <div class="mix-card-large__meta-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>Feb 12, 2026</div>
+            <div class="mix-card-large__meta-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>22 min read</div>
+            <div class="mix-card-large__meta-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>18.6K views</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="mix-card-large reveal reveal-delay-2">
+        <div class="mix-card-large__cover">
+          <div class="mix-card-large__cover-inner cover--social">
+            <div class="cover-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M23 3a10.9 10.9 0 01-3.14 1.53 4.48 4.48 0 00-7.86 3v1A10.66 10.66 0 013 4s-4 9 5 13a11.64 11.64 0 01-7 2c9 5 20 0 20-11.5a4.5 4.5 0 00-.08-.83A7.72 7.72 0 0023 3z"/></svg></div>
+          </div>
+        </div>
+        <div class="mix-card-large__body">
+          <span class="badge badge--social">Social Media</span>
+          <h3 class="mix-card-large__title"><a href="#">Social Media Algorithm Changes in 2026: What Actually Still Works</a></h3>
+          <p class="mix-card-large__excerpt">Every platform shifted its ranking signals in 2026. We analyzed 40+ accounts to find what's actually driving impressions, engagement, and conversions across Instagram, LinkedIn, and X.</p>
+          <div class="mix-card-large__meta">
+            <div class="mix-card-large__meta-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>Feb 5, 2026</div>
+            <div class="mix-card-large__meta-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>17 min read</div>
+            <div class="mix-card-large__meta-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>15.2K views</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Row 2: 4 small cards -->
+    <div class="mix-row-small">
+
+      <div class="mix-card-small reveal reveal-delay-1">
+        <div class="mix-card-small__cover">
+          <div class="mix-card-small__cover-inner cover--email">
+            <div class="cover-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg></div>
+          </div>
+        </div>
+        <div class="mix-card-small__body">
+          <span class="badge badge--email">Email</span>
+          <h3 class="mix-card-small__title"><a href="#">Email Subject Lines That Hit 45%+ Open Rates: 80 Proven Examples</a></h3>
+          <div class="mix-card-small__meta">Jan 28, 2026 · 8 min</div>
+        </div>
+      </div>
+
+      <div class="mix-card-small reveal reveal-delay-2">
+        <div class="mix-card-small__cover">
+          <div class="mix-card-small__cover-inner cover--seo">
+            <div class="cover-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg></div>
+          </div>
+        </div>
+        <div class="mix-card-small__body">
+          <span class="badge badge--seo">SEO</span>
+          <h3 class="mix-card-small__title"><a href="#">Technical SEO Audit Template: The 80-Point Checklist We Use</a></h3>
+          <div class="mix-card-small__meta">Jan 20, 2026 · 16 min</div>
+        </div>
+      </div>
+
+      <div class="mix-card-small reveal reveal-delay-3">
+        <div class="mix-card-small__cover">
+          <div class="mix-card-small__cover-inner cover--content">
+            <div class="cover-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="3"/><path d="M12 1v2m0 18v2m-9-11h2m18 0h2m-4.22-6.78l-1.42 1.42M5.64 18.36l-1.42 1.42m0-15.56l1.42 1.42m12.72 12.72l1.42 1.42"/></svg></div>
+          </div>
+        </div>
+        <div class="mix-card-small__body">
+          <span class="badge badge--content">Content</span>
+          <h3 class="mix-card-small__title"><a href="#">How to Build a Brand Identity That People Actually Remember</a></h3>
+          <div class="mix-card-small__meta">Jan 14, 2026 · 11 min</div>
+        </div>
+      </div>
+
+      <div class="mix-card-small reveal reveal-delay-4">
+        <div class="mix-card-small__cover">
+          <div class="mix-card-small__cover-inner cover--analytics">
+            <div class="cover-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg></div>
+          </div>
+        </div>
+        <div class="mix-card-small__body">
+          <span class="badge badge--analytics">Analytics</span>
+          <h3 class="mix-card-small__title"><a href="#">Marketing Analytics Dashboard Setup for Teams of Any Size</a></h3>
+          <div class="mix-card-small__meta">Jan 8, 2026 · 9 min</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ===== SPOTLIGHT ===== -->
+<section class="spotlight">
+  <div class="container">
+    <div class="spotlight__inner reveal">
+      <div class="spotlight__left">
+        <div class="spotlight__badge"><span class="badge badge--accent">Agency Results</span></div>
+        <h2 class="spotlight__title">What We Achieve for Our Clients Every Month</h2>
+        <p class="spotlight__desc">The strategies in our blog are the same ones we execute for 150+ brands across SEO, PPC, social, and content marketing.</p>
+        <div class="spotlight__results">
+          <div class="spotlight-result"><div class="spotlight-result__num">320%</div><div class="spotlight-result__label">Average ROI</div></div>
+          <div class="spotlight-result"><div class="spotlight-result__num">4x</div><div class="spotlight-result__label">ROAS on Paid Ads</div></div>
+          <div class="spotlight-result"><div class="spotlight-result__num">98%</div><div class="spotlight-result__label">Client Retention</div></div>
+        </div>
+      </div>
+      <div class="spotlight__right">
+        <div class="spotlight-item">
+          <div class="spotlight-item__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg></div>
+          <div><div class="spotlight-item__title">SEO & Organic Growth</div><div class="spotlight-item__sub">Avg. 3x organic traffic in 6 months</div></div>
+        </div>
+        <div class="spotlight-item">
+          <div class="spotlight-item__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg></div>
+          <div><div class="spotlight-item__title">PPC Campaigns</div><div class="spotlight-item__sub">Consistent 4x ROAS across industries</div></div>
+        </div>
+        <div class="spotlight-item">
+          <div class="spotlight-item__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg></div>
+          <div><div class="spotlight-item__title">Email Marketing</div><div class="spotlight-item__sub">180% avg. revenue lift in 90 days</div></div>
+        </div>
+        <div class="spotlight-item">
+          <div class="spotlight-item__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 2h-3a5 5 0 00-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 011-1h3z"/></svg></div>
+          <div><div class="spotlight-item__title">Social Media</div><div class="spotlight-item__sub">30+ qualified B2B leads/month via LinkedIn</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== CTA ===== -->
+<section class="cta-wrap">
+  <div class="container">
+    <div class="cta-box reveal">
+      <div class="cta-box__content">
+        <h2>Ready to Grow Your Brand?</h2>
+        <p>Get a free marketing audit and discover exactly where your biggest growth opportunities are hiding.</p>
+        <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap">
+          <a href="#" class="btn" style="background:#fff;color:#6366f1;font-weight:700">Get Free Audit <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
+          <a href="#" class="btn btn--outline">See Our Results</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== FOOTER ===== -->
+<footer>
+  <div class="container">
+    <div class="footer__grid">
+      <div>
+        <div class="footer__brand">
+          <svg width="28" height="28" viewBox="0 0 28 28" fill="none"><rect width="28" height="28" rx="8" fill="#6366f1"/><text x="14" y="20" text-anchor="middle" font-family="Inter,sans-serif" font-size="11" font-weight="800" fill="#fff">AX</text></svg>
+          Agency<span>X</span>
+        </div>
+        <p class="footer__brand-desc">Data-driven digital marketing agency helping ambitious brands achieve measurable growth.</p>
+      </div>
+      <div class="footer__col">
+        <h4>Services</h4>
+        <ul>
+          <li><a href="#">SEO Optimization</a></li>
+          <li><a href="#">PPC Advertising</a></li>
+          <li><a href="#">Social Media</a></li>
+          <li><a href="#">Content Marketing</a></li>
+          <li><a href="#">Email Marketing</a></li>
+        </ul>
+      </div>
+      <div class="footer__col">
+        <h4>Company</h4>
+        <ul>
+          <li><a href="#">About Us</a></li>
+          <li><a href="#">Case Studies</a></li>
+          <li><a href="#">Blog</a></li>
+          <li><a href="#">Contact</a></li>
+          <li><a href="#">Careers</a></li>
+        </ul>
+      </div>
+      <div class="footer__col">
+        <h4>Legal</h4>
+        <ul>
+          <li><a href="#">Privacy Policy</a></li>
+          <li><a href="#">Terms of Service</a></li>
+          <li><a href="#">Refund Policy</a></li>
+          <li><a href="#">Cookie Policy</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer__bottom">
+      <span>&copy; 2026 AgencyX. All rights reserved.</span>
+      <span>Results-focused digital marketing</span>
+    </div>
+    <p class="footer__disclaimer">AgencyX is a digital marketing agency. Results may vary based on industry, competition, budget, and campaign duration. Past results do not guarantee future performance.</p>
+  </div>
+</footer>
+
+<script>
+// ===== NAV =====
+const nav = document.getElementById('nav');
+window.addEventListener('scroll', () => { nav.classList.toggle('scrolled', window.scrollY > 50); });
+const burger = document.getElementById('burger');
+const mobileMenu = document.getElementById('mobileMenu');
+const menuClose = document.getElementById('menuClose');
+burger.addEventListener('click', () => mobileMenu.classList.add('open'));
+menuClose.addEventListener('click', () => mobileMenu.classList.remove('open'));
+
+// ===== SCROLL REVEAL =====
+const reveals = document.querySelectorAll('.reveal');
+const revealObs = new IntersectionObserver((entries) => {
+  entries.forEach(e => { if(e.isIntersecting){ e.target.classList.add('visible'); revealObs.unobserve(e.target); } });
+}, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+reveals.forEach(el => revealObs.observe(el));
+
+// ===== SMOOTH SCROLL =====
+document.querySelectorAll('a[href^="#"]').forEach(a => {
+  a.addEventListener('click', e => {
+    const t = document.querySelector(a.getAttribute('href'));
+    if(t){ e.preventDefault(); t.scrollIntoView({ behavior:'smooth' }); }
+  });
+});
+</script>
+</body>
+</html>
