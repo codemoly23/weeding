@@ -302,52 +302,6 @@ button{cursor:pointer;font-family:inherit}
 ::-webkit-scrollbar-track{background:var(--dark)}
 ::-webkit-scrollbar-thumb{background:rgba(255,255,255,.1);border-radius:4px}
 @media(prefers-reduced-motion:reduce){*{animation-duration:.01ms!important;transition-duration:.01ms!important}.reveal{opacity:1;transform:none}}
-
-/* ===== STATS ICONS ===== */
-.stats-icons{padding:64px 0;background:#0d1424;border-top:1px solid rgba(255,255,255,.06);border-bottom:1px solid rgba(255,255,255,.06)}
-.stats-icons__grid{display:grid;grid-template-columns:repeat(4,1fr)}
-.stat-ico{display:flex;align-items:center;gap:16px;padding:28px 24px;border-right:1px solid rgba(255,255,255,.06)}
-.stat-ico:last-child{border-right:none}
-.stat-ico__icon{width:52px;height:52px;border-radius:14px;background:rgba(99,102,241,.12);display:flex;align-items:center;justify-content:center;flex-shrink:0;border:1px solid rgba(99,102,241,.2)}
-.stat-ico__icon svg{width:24px;height:24px;color:#6366f1}
-.stat-ico__num{font-size:clamp(24px,2.2vw,32px);font-weight:800;color:#fff;line-height:1}
-.stat-ico__label{font-size:11px;text-transform:uppercase;letter-spacing:1.2px;color:rgba(255,255,255,.35);margin-top:4px}
-@media(max-width:768px){.stats-icons__grid{grid-template-columns:repeat(2,1fr)}.stat-ico{border-right:none;border-bottom:1px solid rgba(255,255,255,.06)}.stat-ico:nth-child(odd){border-right:1px solid rgba(255,255,255,.06)}.stat-ico:nth-last-child(-n+2){border-bottom:none}}
-@media(max-width:480px){.stats-icons__grid{grid-template-columns:1fr}.stat-ico{border-right:none!important;border-bottom:1px solid rgba(255,255,255,.06)}.stat-ico:last-child{border-bottom:none}}
-
-/* ===== TESTIMONIAL CAROUSEL ===== */
-.testi-section{padding:100px 0;background:#f9fafb}
-.testi-section .section-title{color:#18181b!important}
-.testi-section .section-subtitle{color:#71717a!important}
-.testi-section .section-label .badge{background:rgba(99,102,241,.08)!important;color:#6366f1!important;border-color:rgba(99,102,241,.2)!important}
-.tc-wrap{margin-top:56px}
-.tc-slides{min-height:180px;position:relative}
-.tc-slide{display:none;text-align:center;animation:fade-up .4s ease}
-.tc-slide.tc-active{display:block}
-.tc-quote{font-size:clamp(18px,2vw,26px);color:#3f3f46;line-height:1.6;max-width:680px;margin:0 auto 40px;font-style:italic;font-weight:500}
-.tc-author{display:flex;align-items:center;justify-content:center;gap:20px}
-.tc-avatars{display:flex;align-items:center;flex-shrink:0}
-.tc-av{width:50px;height:50px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:800;flex-shrink:0}
-.tc-av--dark{background:#18181b;color:#fff;font-size:22px;z-index:2;position:relative}
-.tc-av--accent{background:#fff;border:2px solid #6366f1;color:#6366f1;margin-left:-14px}
-.tc-author-info{text-align:left}
-.tc-author-name{font-size:15px;font-weight:700;color:#18181b}
-.tc-author-role{font-size:13px;color:#a1a1aa;margin-top:2px}
-.tc-nav{display:flex;align-items:center;justify-content:center;gap:20px;margin-top:48px}
-.tc-nav-num{font-size:14px;font-weight:700;color:#a1a1aa;min-width:24px;text-align:center}
-.tc-nav-num.cur{color:#18181b}
-.tc-bar{flex:1;max-width:240px;height:2px;background:#e4e4e7;border-radius:2px;cursor:pointer;overflow:hidden}
-.tc-bar-fill{height:100%;background:#6366f1;border-radius:2px;transition:width .4s ease}
-.tc-social{display:flex;align-items:center;justify-content:center;gap:24px;margin-top:48px;padding-top:36px;border-top:1px solid #e4e4e7;flex-wrap:wrap}
-.tc-faces{display:flex;align-items:center}
-.tc-face{width:34px;height:34px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;color:#fff;margin-left:-8px;border:2px solid #f9fafb;flex-shrink:0}
-.tc-face:first-child{margin-left:0}
-.tc-face:nth-child(1){background:#6366f1}.tc-face:nth-child(2){background:#8b5cf6}.tc-face:nth-child(3){background:#06b6d4}.tc-face:nth-child(4){background:#10b981}
-.tc-social-text{font-size:14px;color:#52525b}
-.tc-social-rating{display:flex;align-items:center;gap:8px;font-size:14px;font-weight:600;color:#18181b}
-.tc-rating-stars{display:flex;gap:2px}
-.tc-rating-stars svg{width:14px;height:14px;fill:#f59e0b}
-
 </style>
 </head>
 <body>
@@ -426,26 +380,14 @@ button{cursor:pointer;font-family:inherit}
   </div>
 </section>
 
-<!-- ===== STATS ===== -->
-<section class="stats-icons">
+<!-- ========== STATS BAR (GRADIENT/ORANGE) ========== -->
+<section class="stats-bar">
   <div class="container">
-    <div class="stats-icons__grid">
-      <div class="stat-ico reveal">
-        <div class="stat-ico__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"/></svg></div>
-        <div><div class="stat-ico__num">500+</div><div class="stat-ico__label">Projects Completed</div></div>
-      </div>
-      <div class="stat-ico reveal reveal-delay-1">
-        <div class="stat-ico__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/></svg></div>
-        <div><div class="stat-ico__num">150+</div><div class="stat-ico__label">Happy Clients</div></div>
-      </div>
-      <div class="stat-ico reveal reveal-delay-2">
-        <div class="stat-ico__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/></svg></div>
-        <div><div class="stat-ico__num">98%</div><div class="stat-ico__label">Client Retention</div></div>
-      </div>
-      <div class="stat-ico reveal reveal-delay-3">
-        <div class="stat-ico__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 100 7h5a3.5 3.5 0 010 7H6"/></svg></div>
-        <div><div class="stat-ico__num">$50M+</div><div class="stat-ico__label">Revenue Generated</div></div>
-      </div>
+    <div class="stats-bar__grid">
+      <div class="stats-bar__item reveal"><div class="stats-bar__num" data-target="500" data-suffix="+">0</div><div class="stats-bar__label">Clients Served</div></div>
+      <div class="stats-bar__item reveal rd1"><div class="stats-bar__num" data-target="320" data-suffix="%">0</div><div class="stats-bar__label">Average ROI</div></div>
+      <div class="stats-bar__item reveal rd2"><div class="stats-bar__num" data-target="4.9" data-suffix="/5" data-decimal="true">0</div><div class="stats-bar__label">Customer Rating</div></div>
+      <div class="stats-bar__item reveal rd3"><div class="stats-bar__num" data-target="50" data-suffix="M+">0</div><div class="stats-bar__label">Revenue Generated</div></div>
     </div>
   </div>
 </section>
@@ -504,49 +446,21 @@ button{cursor:pointer;font-family:inherit}
   </div>
 </section>
 
-<!-- ===== TESTIMONIALS ===== -->
-<section class="testi-section" id="testimonials">
+<!-- ========== TESTIMONIALS (DARK) ========== -->
+<section class="reviews-section s-dark" id="reviews">
   <div class="container">
-    <div class="section-label reveal"><span class="badge badge--secondary">Testimonials</span></div>
-    <h2 class="section-title reveal reveal-delay-1">What Our Clients Say</h2>
-    <p class="section-subtitle reveal reveal-delay-2">Don&rsquo;t just take our word for it</p>
-    <div class="tc-wrap reveal reveal-delay-3">
-      <div class="tc-slides">
-        <div class="tc-slide tc-active">
-          <p class="tc-quote">&ldquo;AgencyX tripled our organic traffic in 6 months. Their SEO strategy and content marketing completely transformed our online presence and revenue.&rdquo;</p>
-          <div class="tc-author"><div class="tc-avatars"><div class="tc-av tc-av--dark">&rdquo;</div><div class="tc-av tc-av--accent">RM</div></div><div class="tc-author-info"><div class="tc-author-name">Rachel Martinez</div><div class="tc-author-role">E-commerce Founder, USA</div></div></div>
-        </div>
-        <div class="tc-slide">
-          <p class="tc-quote">&ldquo;Our PPC campaigns with AgencyX deliver 4x ROAS consistently. The team is proactive, transparent, and genuinely invested in our success.&rdquo;</p>
-          <div class="tc-author"><div class="tc-avatars"><div class="tc-av tc-av--dark">&rdquo;</div><div class="tc-av tc-av--accent">AK</div></div><div class="tc-author-info"><div class="tc-author-name">Arjun Kumar</div><div class="tc-author-role">SaaS CEO, India</div></div></div>
-        </div>
-        <div class="tc-slide">
-          <p class="tc-quote">&ldquo;We switched from two separate agencies to AgencyX and never looked back. The integrated approach means our SEO, social, and ads all work together perfectly.&rdquo;</p>
-          <div class="tc-author"><div class="tc-avatars"><div class="tc-av tc-av--dark">&rdquo;</div><div class="tc-av tc-av--accent">ZA</div></div><div class="tc-author-info"><div class="tc-author-name">Zara Ahmed</div><div class="tc-author-role">Retail Brand Owner, UAE</div></div></div>
-        </div>
-        <div class="tc-slide">
-          <p class="tc-quote">&ldquo;AgencyX’s email marketing automation increased our revenue by 180% in just 90 days. The ROI is incredible and the team is always responsive and proactive.&rdquo;</p>
-          <div class="tc-author"><div class="tc-avatars"><div class="tc-av tc-av--dark">&rdquo;</div><div class="tc-av tc-av--accent">JP</div></div><div class="tc-author-info"><div class="tc-author-name">James Park</div><div class="tc-author-role">Subscription Business, UK</div></div></div>
-        </div>
-        <div class="tc-slide">
-          <p class="tc-quote">&ldquo;The new website AgencyX built converted 3x better than our old one from day one. Plus their SEO had us ranking page 1 within 4 months.&rdquo;</p>
-          <div class="tc-author"><div class="tc-avatars"><div class="tc-av tc-av--dark">&rdquo;</div><div class="tc-av tc-av--accent">MN</div></div><div class="tc-author-info"><div class="tc-author-name">Mia Nguyen</div><div class="tc-author-role">Beauty Brand CEO, Australia</div></div></div>
-        </div>
-        <div class="tc-slide">
-          <p class="tc-quote">&ldquo;As a B2B company, we struggled with lead gen. AgencyX’s LinkedIn strategy now brings us 30+ qualified leads every single month.&rdquo;</p>
-          <div class="tc-author"><div class="tc-avatars"><div class="tc-av tc-av--dark">&rdquo;</div><div class="tc-av tc-av--accent">TR</div></div><div class="tc-author-info"><div class="tc-author-name">Tom Richards</div><div class="tc-author-role">B2B Software Company, Canada</div></div></div>
-        </div>
-      </div>
-      <div class="tc-nav">
-        <span class="tc-nav-num cur" id="tcCur">01</span>
-        <div class="tc-bar" id="tcBar"><div class="tc-bar-fill" id="tcFill" style="width:16.67%"></div></div>
-        <span class="tc-nav-num">06</span>
-      </div>
+    <div class="section-head">
+      <span class="pill pill--light reveal">Testimonials</span>
+      <h2 class="reveal rd1">Trusted by 500+ Growing Businesses Worldwide</h2>
+      <p class="reveal rd2">See what our clients say about the results AgencyX has delivered for their businesses.</p>
     </div>
-    <div class="tc-social reveal">
-      <div class="tc-faces"><div class="tc-face">RM</div><div class="tc-face">AK</div><div class="tc-face">ZA</div><div class="tc-face">JP</div></div>
-      <span class="tc-social-text">Join 10,000+ happy customers</span>
-      <div class="tc-social-rating"><div class="tc-rating-stars"><svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg><svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg><svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg><svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg><svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg></div>4.9/5 (2,500+ reviews)</div>
+    <div class="rev-grid">
+      <div class="rev-card reveal rd1"><div class="rev-card__stars"><svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg><svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg><svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg><svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg><svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg></div><p class="rev-card__txt">"AgencyX tripled our organic traffic in 6 months. Their SEO strategy and content marketing completely transformed our online presence and revenue."</p><div class="rev-card__author"><div class="rev-card__av">RM</div><div><div class="rev-card__name">Rachel Martinez</div><div class="rev-card__role">E-commerce Founder &bull; USA</div></div></div></div>
+      <div class="rev-card reveal rd2"><div class="rev-card__stars"><svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg><svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg><svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg><svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg><svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg></div><p class="rev-card__txt">"Our PPC campaigns with AgencyX deliver 4x ROAS consistently. The team is proactive, transparent, and genuinely invested in our success."</p><div class="rev-card__author"><div class="rev-card__av">AK</div><div><div class="rev-card__name">Arjun Kumar</div><div class="rev-card__role">SaaS CEO &bull; India</div></div></div></div>
+      <div class="rev-card reveal rd3"><div class="rev-card__stars"><svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg><svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg><svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg><svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg><svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg></div><p class="rev-card__txt">"We switched from two separate agencies to AgencyX and never looked back. The integrated approach means our SEO, social, and ads all work together perfectly."</p><div class="rev-card__author"><div class="rev-card__av">ZA</div><div><div class="rev-card__name">Zara Ahmed</div><div class="rev-card__role">Retail Brand Owner &bull; UAE</div></div></div></div>
+      <div class="rev-card reveal rd4"><div class="rev-card__stars"><svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg><svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg><svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg><svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg><svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg></div><p class="rev-card__txt">"AgencyX's email marketing automation increased our revenue by 180% in just 90 days. The ROI is incredible and the team is always responsive."</p><div class="rev-card__author"><div class="rev-card__av">JP</div><div><div class="rev-card__name">James Park</div><div class="rev-card__role">Subscription Business &bull; UK</div></div></div></div>
+      <div class="rev-card reveal rd5"><div class="rev-card__stars"><svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg><svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg><svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg><svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg><svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg></div><p class="rev-card__txt">"The new website AgencyX built converted 3x better than our old one from day one. Their SEO had us ranking page 1 within 4 months!"</p><div class="rev-card__author"><div class="rev-card__av">MN</div><div><div class="rev-card__name">Mia Nguyen</div><div class="rev-card__role">Beauty Brand CEO &bull; Australia</div></div></div></div>
+      <div class="rev-card reveal rd6"><div class="rev-card__stars"><svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg><svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg><svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg><svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg><svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg></div><p class="rev-card__txt">"As a B2B company, we struggled with lead gen. AgencyX's LinkedIn strategy and content marketing now brings us 30+ qualified leads every month."</p><div class="rev-card__author"><div class="rev-card__av">TR</div><div><div class="rev-card__name">Tom Richards</div><div class="rev-card__role">B2B Software Company &bull; Canada</div></div></div></div>
     </div>
   </div>
 </section>
@@ -634,32 +548,6 @@ function togFaq(btn){const i=btn.closest('.fq'),w=i.classList.contains('on');doc
 
 // Smooth scroll
 document.querySelectorAll('a[href^="#"]').forEach(a=>{a.addEventListener('click',function(e){const h=this.getAttribute('href');if(h==='#')return;e.preventDefault();const t=document.querySelector(h);if(t){window.scrollTo({top:t.getBoundingClientRect().top+pageYOffset-80,behavior:'smooth'})}})});
-
-// Testimonial Carousel
-(function(){
-  var slides=document.querySelectorAll(".tc-slide");
-  var curEl=document.getElementById("tcCur");
-  var fill=document.getElementById("tcFill");
-  if(!slides.length)return;
-  var cur=0;
-  function go(n){
-    slides[cur].classList.remove("tc-active");
-    cur=(n+slides.length)%slides.length;
-    slides[cur].classList.add("tc-active");
-    if(curEl)curEl.textContent=String(cur+1).padStart(2,"0");
-    if(fill)fill.style.width=((cur+1)/slides.length*100)+"%";
-  }
-  var timer=setInterval(function(){go(cur+1);},4000);
-  var bar=document.getElementById("tcBar");
-  if(bar)bar.addEventListener("click",function(e){
-    var rect=this.getBoundingClientRect();
-    var pct=(e.clientX-rect.left)/rect.width;
-    clearInterval(timer);
-    go(Math.floor(pct*slides.length));
-    timer=setInterval(function(){go(cur+1);},4000);
-  });
-})();
-
 </script>
 </body>
 </html>
