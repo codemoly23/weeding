@@ -274,26 +274,128 @@ button{cursor:pointer;font-family:inherit}
 .pricing-top h2{font-family:'Outfit',sans-serif;font-size:clamp(30px,4vw,46px);font-weight:800;letter-spacing:-0.025em;color:var(--ink);margin-bottom:14px}
 .pricing-top p{font-size:16px;color:var(--text-mid);max-width:480px;margin:0 auto}
 
+/* Plan cards */
 .pricing-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px}
-.pc{border-radius:20px;padding:36px 28px;border:1.5px solid var(--border-light);display:flex;flex-direction:column;position:relative;transition:all .4s cubic-bezier(.16,1,.3,1)}
-.pc:hover{transform:translateY(-6px);box-shadow:0 24px 64px rgba(0,0,0,0.08)}
+.pc{cursor:pointer;border-radius:20px;padding:36px 28px;border:1.5px solid var(--border-light);display:flex;flex-direction:column;position:relative;transition:all .35s cubic-bezier(.16,1,.3,1)}
+.pc:hover{transform:translateY(-4px);box-shadow:0 20px 56px rgba(0,0,0,0.07)}
 .pc--mid{border-color:var(--forest);box-shadow:0 0 0 1px var(--forest);background:linear-gradient(160deg,rgba(27,58,45,0.04),var(--white))}
-.pc--mid:hover{box-shadow:0 24px 64px rgba(27,58,45,0.15),0 0 0 1px var(--forest)}
+.pc--mid:hover{box-shadow:0 20px 56px rgba(27,58,45,0.13),0 0 0 1px var(--forest)}
+.pc--active{transform:translateY(-4px);box-shadow:0 0 0 2.5px var(--forest),0 20px 56px rgba(27,58,45,0.12) !important}
+.pc--mid.pc--active{box-shadow:0 0 0 2.5px var(--forest),0 20px 56px rgba(27,58,45,0.18) !important}
+
+/* Selection indicator ring */
+.pc__sel{position:absolute;top:18px;right:18px;width:22px;height:22px;border-radius:50%;border:2px solid var(--border-light);display:flex;align-items:center;justify-content:center;transition:all .25s ease;background:transparent;flex-shrink:0}
+.pc__sel svg{width:11px;height:11px;color:#fff;opacity:0;transition:opacity .15s ease}
+.pc--active .pc__sel{background:var(--forest);border-color:var(--forest)}
+.pc--active .pc__sel svg{opacity:1}
+.pc--mid .pc__sel{border-color:rgba(27,58,45,0.3)}
+.pc--mid.pc--active .pc__sel{background:var(--forest);border-color:var(--forest)}
+
 .pc__cap{position:absolute;top:-14px;left:50%;transform:translateX(-50%);background:var(--forest);color:var(--cream);padding:5px 18px;border-radius:999px;font-size:11px;font-weight:700;letter-spacing:.6px;text-transform:uppercase;white-space:nowrap;font-family:'Outfit',sans-serif}
 .pc__tier{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1.2px;color:var(--text-faint);margin-bottom:8px;font-family:'Outfit',sans-serif}
-.pc__name{font-family:'Outfit',sans-serif;font-size:26px;font-weight:800;color:var(--ink);margin-bottom:6px}
-.pc__tagline{font-size:14px;color:var(--text-mid);margin-bottom:28px;line-height:1.4}
+.pc__name{font-family:'Outfit',sans-serif;font-size:26px;font-weight:800;color:var(--ink);margin-bottom:6px;padding-right:28px}
+.pc__tagline{font-size:14px;color:var(--text-mid);margin-bottom:20px;line-height:1.4}
+.pc__save{display:inline-flex;align-items:center;gap:5px;background:rgba(27,58,45,0.08);color:var(--forest);font-size:11px;font-weight:700;padding:3px 10px;border-radius:999px;margin-bottom:14px;letter-spacing:.4px;font-family:'Outfit',sans-serif}
+.pc__save svg{width:11px;height:11px}
 .pc__price{font-family:'Outfit',sans-serif;font-size:52px;font-weight:900;color:var(--ink);letter-spacing:-0.04em;line-height:1;margin-bottom:6px}
 .pc__price sup{font-size:26px;vertical-align:top;margin-top:12px}
-.pc__price sub{font-size:16px;color:var(--text-mid);font-weight:500}
-.pc__note{font-size:12px;color:var(--text-faint);margin:8px 0 24px;padding-bottom:24px;border-bottom:1px solid var(--border-light)}
-.pc__list{list-style:none;flex:1;display:flex;flex-direction:column;gap:2px;margin-bottom:28px}
-.pc__list li{display:flex;align-items:flex-start;gap:10px;padding:7px 0;font-size:14px}
-.pc__list li svg{width:17px;height:17px;flex-shrink:0;margin-top:2px}
+.pc__price sub{font-size:16px;color:var(--text-mid);font-weight:500;margin-left:2px}
+.pc__note{font-size:12px;color:var(--text-faint);margin:8px 0 22px;padding-bottom:22px;border-bottom:1px solid var(--border-light)}
+.pc__list{list-style:none;flex:1;display:flex;flex-direction:column;gap:0;margin-bottom:24px}
+.pc__list li{display:flex;align-items:flex-start;gap:10px;padding:7px 0;font-size:13.5px;border-bottom:1px solid rgba(14,17,9,0.05)}
+.pc__list li:last-child{border-bottom:none}
+.pc__list li svg{width:16px;height:16px;flex-shrink:0;margin-top:2px}
 .pc__list .y svg{color:var(--forest)}
-.pc__list .n{color:var(--text-faint);opacity:.6}
-.pc__list .n svg{color:var(--border-light)}
+.pc__list .addon{color:var(--text-mid);flex-direction:column;align-items:stretch;padding:0}
+.pc__list .addon svg{color:rgba(14,17,9,0.18);flex-shrink:0}
+.addon-label{flex:1;min-width:0;font-size:13.5px}
+.addon-ptag{font-size:11px;color:var(--text-faint);white-space:nowrap;margin-right:6px}
+.addon-top{display:flex;align-items:center;gap:10px;padding:8px 0}
+.addon-expand{max-height:0;overflow:hidden;transition:max-height .35s cubic-bezier(.16,1,.3,1),opacity .25s ease;opacity:0}
+.addon-expand-inner{padding:9px 4px 11px 26px;font-size:11.5px;color:var(--text-mid);line-height:1.6;border-top:1px dashed rgba(14,17,9,0.1)}
+li.addon.addon--open .addon-expand{max-height:80px;opacity:1}
 .pc .btn{width:100%;justify-content:center}
+
+/* ===== INFO ICON + TOOLTIP ===== */
+.info-icon{display:inline-flex;align-items:center;justify-content:center;width:14px;height:14px;border-radius:50%;border:1.5px solid rgba(14,17,9,0.16);background:transparent;color:var(--text-faint);font-size:9px;font-weight:700;font-style:italic;font-family:Georgia,serif;cursor:default;margin-left:5px;flex-shrink:0;position:relative;transition:all .15s ease;line-height:1;vertical-align:middle;top:-1px}
+.info-icon:hover,.info-icon:focus{border-color:var(--forest);color:var(--forest);background:rgba(27,58,45,0.07);outline:none}
+.info-tip{position:absolute;bottom:calc(100% + 8px);left:50%;transform:translateX(-50%) translateY(5px);background:var(--ink);color:rgba(255,255,255,0.88);font-size:11.5px;font-weight:400;font-style:normal;font-family:'Inter',sans-serif;line-height:1.55;padding:10px 13px;border-radius:9px;width:220px;text-align:left;opacity:0;pointer-events:none;transition:opacity .18s ease,transform .18s ease;z-index:300;white-space:normal;box-shadow:0 10px 30px rgba(0,0,0,0.22)}
+.info-tip::after{content:'';position:absolute;top:100%;left:50%;transform:translateX(-50%);border:5px solid transparent;border-top-color:var(--ink)}
+.info-icon:hover .info-tip,.info-icon:focus .info-tip{opacity:1;transform:translateX(-50%) translateY(0)}
+
+/* Inline +Add button */
+/* Left expand toggle (circle + icon) */
+.addon-toggle{display:inline-flex;align-items:center;justify-content:center;width:22px;height:22px;border-radius:50%;border:1.5px solid var(--border-light);background:var(--white);color:var(--text-faint);cursor:pointer;flex-shrink:0;transition:all .22s ease;padding:0}
+.addon-toggle svg{width:11px;height:11px;transition:transform .3s cubic-bezier(.16,1,.3,1)}
+.addon-toggle:hover{border-color:var(--forest);color:var(--forest);background:rgba(27,58,45,0.06)}
+li.addon.addon--open .addon-toggle{border-color:var(--forest);background:rgba(27,58,45,0.08);color:var(--forest)}
+li.addon.addon--open .addon-toggle svg{transform:rotate(45deg)}
+
+/* Right "+ Add" button — clearly visible */
+.add-btn{display:inline-flex;align-items:center;gap:3px;font-size:11px;font-weight:700;font-family:inherit;padding:4px 12px;border-radius:999px;border:1.5px solid var(--forest);background:transparent;color:var(--forest);cursor:pointer;transition:all .2s ease;white-space:nowrap;flex-shrink:0;line-height:1}
+.add-btn:hover{background:var(--forest);color:#fff}
+.add-btn--on{background:var(--forest) !important;color:#fff !important;border-color:var(--forest) !important}
+.add-btn--on:hover{background:var(--forest-2) !important;border-color:var(--forest-2) !important}
+
+/* ===== COMPACT ADD-ON LIST ===== */
+.pricing-addons{margin-top:36px}
+.pricing-addons__head{display:flex;align-items:center;gap:14px;margin-bottom:16px}
+.pricing-addons__head::before,.pricing-addons__head::after{content:'';flex:1;height:1px;background:var(--border-light)}
+.pricing-addons__label{font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--text-faint);white-space:nowrap}
+.ga-wrap{border:1.5px solid var(--border-light);border-radius:16px;overflow:hidden}
+.ga-item{display:flex;align-items:center;gap:13px;padding:13px 18px;background:#fff;border-bottom:1px solid var(--border-light);transition:background .15s}
+.ga-item:last-child{border-bottom:none}
+.ga-item:hover{background:rgba(27,58,45,0.02)}
+.ga-icon{width:32px;height:32px;border-radius:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.ga-icon svg{width:16px;height:16px}
+.ga-icon--red{background:rgba(232,76,30,0.1);color:var(--coral)}
+.ga-icon--green{background:rgba(27,58,45,0.09);color:var(--forest)}
+.ga-icon--blue{background:rgba(37,93,160,0.09);color:#255da0}
+.ga-icon--purple{background:rgba(100,60,160,0.09);color:#643ca0}
+.ga-info{flex:1;min-width:0}
+.ga-name{font-size:13px;font-weight:700;color:var(--ink);display:flex;align-items:center;gap:7px;flex-wrap:wrap}
+.ga-badge{font-size:9.5px;font-weight:700;letter-spacing:.4px;text-transform:uppercase;padding:1px 8px;border-radius:999px;white-space:nowrap}
+.ga-badge--warn{background:rgba(232,76,30,0.1);color:var(--coral)}
+.ga-badge--hot{background:rgba(27,58,45,0.1);color:var(--forest)}
+.ga-desc{font-size:11.5px;color:var(--text-faint);margin-top:1px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ga-price{font-family:'Outfit',sans-serif;font-size:14px;font-weight:800;color:var(--ink);letter-spacing:-0.02em;white-space:nowrap;margin-right:6px}
+
+/* ===== ORDER SUMMARY ===== */
+.os-wrap{margin-top:16px;border:1.5px solid var(--border-light);border-radius:20px;overflow:hidden;background:var(--cream)}
+.os-head{padding:14px 24px;border-bottom:1px solid var(--border-light);display:flex;justify-content:space-between;align-items:center;background:#fff}
+.os-head-title{font-size:11.5px;font-weight:700;text-transform:uppercase;letter-spacing:.9px;color:var(--text-faint)}
+.os-clear{font-size:12px;color:var(--text-faint);cursor:pointer;background:none;border:none;padding:0;transition:color .2s;font-family:inherit}
+.os-clear:hover{color:var(--coral)}
+.os-body{padding:20px 24px 24px}
+.os-lines{display:flex;flex-direction:column;gap:2px;margin-bottom:14px}
+.os-line{display:flex;justify-content:space-between;align-items:center;padding:8px 12px;border-radius:8px;font-size:13.5px}
+.os-line--plan{background:#fff;border:1px solid var(--border-light)}
+.os-line--plan .lbl{font-weight:600;color:var(--ink)}
+.os-line--addon{background:rgba(27,58,45,0.04)}
+.os-line--addon .lbl{color:var(--text-mid)}
+.os-line--addon .lbl::before{content:'+ ';color:var(--forest);font-weight:700}
+.os-line .amt{font-weight:700;color:var(--ink);font-family:'Outfit',sans-serif}
+.os-line .amt--free{color:var(--forest)}
+.os-divider{border:none;border-top:1px solid var(--border-light);margin:14px 0}
+.os-foot{display:flex;justify-content:space-between;align-items:center;gap:24px;flex-wrap:wrap}
+.os-total-label{font-size:11px;color:var(--text-faint);text-transform:uppercase;letter-spacing:.7px;font-weight:600;margin-bottom:2px}
+.os-total-amount{font-family:'Outfit',sans-serif;font-size:36px;font-weight:900;color:var(--ink);letter-spacing:-0.04em;line-height:1}
+.os-total-amount sup{font-size:18px;vertical-align:top;margin-top:9px}
+.os-total-note{font-size:11px;color:var(--text-faint);margin-top:4px}
+.os-savings{display:inline-flex;align-items:center;gap:5px;font-size:11.5px;color:var(--forest);font-weight:700;background:rgba(27,58,45,0.08);padding:3px 10px;border-radius:999px;margin-top:6px}
+.os-savings svg{width:12px;height:12px}
+.os-cta-wrap{display:flex;flex-direction:column;align-items:flex-end;gap:8px;flex-shrink:0}
+.os-trust{font-size:11px;color:var(--text-faint);text-align:right}
+
+/* Fear bar */
+.pricing-fear{margin-top:14px;background:rgba(211,84,0,0.05);border:1px solid rgba(211,84,0,0.18);border-radius:12px;padding:13px 18px;display:flex;align-items:center;gap:12px}
+.pricing-fear__icon{font-size:20px;flex-shrink:0;line-height:1}
+.pricing-fear__text{font-size:12.5px;color:var(--text-mid);line-height:1.55}
+.pricing-fear__text strong{color:var(--coral)}
+.pricing-fear__text a{color:var(--forest);font-weight:600;text-decoration:underline;text-underline-offset:2px}
+
+@media(max-width:960px){.pricing-grid{grid-template-columns:1fr;max-width:440px;margin:0 auto}}
+@media(max-width:600px){.ga-desc{display:none}.pricing-fear{flex-direction:column;text-align:center}.os-foot{flex-direction:column;align-items:stretch}.os-cta-wrap{align-items:stretch}.os-trust{text-align:center}}
 
 /* ===== TESTIMONIALS — FOREST ===== */
 .test-section{background:var(--forest);padding:100px 0;overflow:hidden}
@@ -306,19 +408,111 @@ button{cursor:pointer;font-family:inherit}
 .test-cards{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
 .tc{padding:28px;border-radius:20px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.07);transition:all .3s;position:relative}
 .tc:hover{background:rgba(255,255,255,0.08);border-color:rgba(255,255,255,0.12);transform:translateY(-4px)}
-.tc__quote{font-family:'Outfit',sans-serif;font-size:42px;color:var(--coral-2);opacity:.4;line-height:1;margin-bottom:-10px}
-.tc__stars{display:flex;gap:3px;margin-bottom:14px}
-.tc__stars svg{width:14px;height:14px;fill:var(--coral-2);color:var(--coral-2)}
-.tc__text{font-size:14px;color:rgba(250,248,244,0.65);line-height:1.75;margin-bottom:20px;font-style:italic}
-.tc__hr{height:1px;background:rgba(255,255,255,0.08);margin-bottom:16px}
-.tc__author{display:flex;align-items:center;gap:12px}
-.tc__av{width:42px;height:42px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'Outfit',sans-serif;font-size:14px;font-weight:800;color:#fff;flex-shrink:0}
-.tc:nth-child(1) .tc__av{background:rgba(232,76,30,0.6)}
-.tc:nth-child(2) .tc__av{background:rgba(5,150,105,0.6)}
-.tc:nth-child(3) .tc__av{background:rgba(124,58,237,0.6)}
-.tc__name{font-family:'Outfit',sans-serif;font-size:14px;font-weight:700;color:var(--cream)}
-.tc__role{font-size:12px;color:rgba(250,248,244,0.4);margin-top:2px}
-.tc__flag{font-size:12px;color:rgba(250,248,244,0.3);margin-top:2px}
+.tc__quote{font-family:'Outfit',sans-serif;font-size:56px;color:var(--coral-2);opacity:.5;line-height:1;margin-bottom:-8px;font-weight:900}
+.tc__stars{display:flex;gap:4px;margin-bottom:18px}
+.tc__stars svg{width:18px;height:18px;fill:var(--coral-2);color:var(--coral-2);filter:drop-shadow(0 2px 4px rgba(232,76,30,0.3))}
+.tc__text{font-size:15px;color:rgba(250,248,244,0.75);line-height:1.7;margin-bottom:auto;font-style:normal;flex-grow:1}
+.tc__hr{height:1px;background:linear-gradient(90deg,transparent,rgba(255,255,255,0.12),transparent);margin:20px 0 18px}
+.tc__author{display:flex;align-items:center;gap:14px;margin-top:auto}
+.tc__av{width:52px;height:52px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'Outfit',sans-serif;font-size:16px;font-weight:900;color:#fff;flex-shrink:0;border:2px solid rgba(255,255,255,0.1);box-shadow:0 4px 12px rgba(0,0,0,0.2)}
+.tc:nth-child(1) .tc__av{background:rgba(232,76,30,0.7)}
+.tc:nth-child(2) .tc__av{background:rgba(5,150,105,0.7)}
+.tc:nth-child(3) .tc__av{background:rgba(124,58,237,0.7)}
+.tc__name{font-family:'Outfit',sans-serif;font-size:16px;font-weight:800;color:var(--cream);letter-spacing:-0.01em}
+.tc__role{font-size:13px;color:rgba(250,248,244,0.5);margin-top:3px;font-weight:500}
+.tc__flag{font-size:13px;color:rgba(250,248,244,0.4);margin-top:2px;display:flex;align-items:center;gap:6px}
+
+/* ===== BLOG / INSIGHTS — WHITE ===== */
+.blog-section{background:var(--white);padding:100px 0;position:relative;overflow:hidden}
+.blog-section::before{content:'Read';position:absolute;left:-30px;top:50%;transform:translateY(-50%) rotate(-90deg);font-family:'Outfit',sans-serif;font-size:180px;font-weight:900;color:rgba(14,17,9,0.025);pointer-events:none;white-space:nowrap;letter-spacing:-6px}
+
+.blog-top{display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:56px;gap:32px}
+.blog-top-left .eyebrow{font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:var(--coral);margin-bottom:12px}
+.blog-top-left h2{font-family:'Outfit',sans-serif;font-size:clamp(28px,3.5vw,42px);font-weight:800;color:var(--ink);letter-spacing:-0.025em;line-height:1.15}
+.blog-top-right a{font-size:14px;font-weight:600;color:var(--forest);display:inline-flex;align-items:center;gap:6px;padding:10px 20px;border-radius:8px;border:1.5px solid var(--border-forest);transition:all .22s}
+.blog-top-right a:hover{background:var(--forest);color:var(--cream);transform:translateY(-2px)}
+.blog-top-right a svg{width:16px;height:16px;transition:transform .3s cubic-bezier(.4,0,.2,1)}
+.blog-top-right a:hover svg{transform:translateX(4px)}
+
+/* Bento Grid */
+.blog-bento{display:grid;grid-template-columns:1.15fr 1fr 1fr;grid-template-rows:1fr 1fr;gap:20px}
+.blog-card--featured{grid-row:1/-1}
+
+/* Card base */
+.blog-card{position:relative;background:var(--white);border-radius:20px;border:1px solid var(--border-light);padding:28px 28px 24px;display:flex;flex-direction:column;cursor:pointer;transition:transform .35s cubic-bezier(.4,0,.2,1),box-shadow .35s cubic-bezier(.4,0,.2,1),border-color .35s;overflow:hidden;text-decoration:none;color:inherit}
+
+/* Bottom accent line — starts at 0 width, grows on hover */
+.blog-card::after{content:'';position:absolute;bottom:0;left:0;width:0;height:3px;border-radius:0 3px 0 0;transition:width .45s cubic-bezier(.4,0,.2,1)}
+.blog-card:hover{transform:translateY(-6px);box-shadow:0 20px 40px rgba(0,0,0,0.06);border-color:transparent}
+.blog-card:hover::after{width:100%}
+
+/* Accent colors */
+.blog-card[data-accent="forest"]::after{background:var(--forest)}
+.blog-card[data-accent="coral"]::after{background:var(--coral)}
+.blog-card[data-accent="purple"]::after{background:#7c3aed}
+.blog-card[data-accent="amber"]::after{background:#d97706}
+.blog-card[data-accent="blue"]::after{background:#0284c7}
+
+/* Featured card */
+.blog-card--featured{background:var(--forest-2);border-color:transparent;padding:36px 32px 32px}
+.blog-card--featured::after{height:4px}
+.blog-card--featured::before{content:'';position:absolute;top:-40px;right:-40px;width:220px;height:220px;border-radius:50%;background:radial-gradient(circle,rgba(232,76,30,0.08),transparent 70%);pointer-events:none}
+.blog-card--featured .blog-pill{background:rgba(250,248,244,0.1);color:rgba(250,248,244,0.65);border-color:rgba(250,248,244,0.08)}
+.blog-card--featured .blog-card__title{color:var(--cream);font-size:clamp(22px,2.2vw,28px)}
+.blog-card--featured .blog-card__excerpt{color:rgba(250,248,244,0.5);font-size:15px;line-height:1.75}
+.blog-card--featured .blog-card__meta{color:rgba(250,248,244,0.35)}
+.blog-card--featured .blog-card__foot{border-top-color:rgba(255,255,255,0.07)}
+.blog-card--featured .bc-arrow{background:rgba(250,248,244,0.08)}
+.blog-card--featured .bc-arrow svg{color:var(--coral-2)}
+.blog-card--featured:hover{box-shadow:0 24px 50px rgba(0,0,0,0.2);transform:translateY(-6px)}
+.blog-card--featured:hover .blog-card__title{color:var(--coral-2)}
+.blog-card--featured:hover .bc-arrow{background:var(--coral)}
+.blog-card--featured:hover .bc-arrow svg{color:#fff}
+
+/* Pill */
+.blog-pill{display:inline-flex;padding:4px 12px;border-radius:999px;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.8px;border:1px solid var(--border-light);color:var(--text-faint);margin-bottom:16px;width:fit-content;transition:color .3s,border-color .3s,background .3s}
+.blog-card[data-accent="forest"]:hover .blog-pill{color:var(--forest);border-color:rgba(27,58,45,0.2);background:rgba(27,58,45,0.05)}
+.blog-card[data-accent="coral"]:hover .blog-pill{color:var(--coral);border-color:rgba(232,76,30,0.2);background:rgba(232,76,30,0.05)}
+.blog-card[data-accent="purple"]:hover .blog-pill{color:#7c3aed;border-color:rgba(124,58,237,0.2);background:rgba(124,58,237,0.05)}
+.blog-card[data-accent="amber"]:hover .blog-pill{color:#d97706;border-color:rgba(217,119,6,0.2);background:rgba(217,119,6,0.05)}
+.blog-card[data-accent="blue"]:hover .blog-pill{color:#0284c7;border-color:rgba(2,132,199,0.2);background:rgba(2,132,199,0.05)}
+.blog-card--featured:hover .blog-pill{color:var(--cream);border-color:rgba(250,248,244,0.25);background:rgba(250,248,244,0.12)}
+
+/* Title */
+.blog-card__title{font-family:'Outfit',sans-serif;font-size:17px;font-weight:800;color:var(--ink);letter-spacing:-0.02em;line-height:1.3;margin-bottom:10px;transition:color .3s}
+.blog-card:not(.blog-card--featured):hover .blog-card__title{color:var(--forest)}
+
+/* Excerpt */
+.blog-card__excerpt{font-size:14px;color:var(--text-mid);line-height:1.65;flex-grow:1}
+
+/* Footer */
+.blog-card__foot{display:flex;justify-content:space-between;align-items:center;margin-top:auto;padding-top:16px;border-top:1px solid var(--border-light)}
+.blog-card__meta{font-size:12px;color:var(--text-faint);font-weight:500;display:flex;align-items:center;gap:8px}
+.blog-card__meta-dot{width:3px;height:3px;border-radius:50%;background:currentColor;opacity:.5}
+
+/* Arrow circle */
+.bc-arrow{width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:var(--forest-light);flex-shrink:0;transition:background .3s cubic-bezier(.4,0,.2,1),transform .3s}
+.bc-arrow svg{width:15px;height:15px;color:var(--forest);transition:color .3s,transform .35s cubic-bezier(.4,0,.2,1)}
+.blog-card:not(.blog-card--featured):hover .bc-arrow{background:var(--forest)}
+.blog-card:not(.blog-card--featured):hover .bc-arrow svg{color:var(--cream);transform:translateX(2px)}
+.blog-card--featured:hover .bc-arrow svg{transform:translateX(2px)}
+
+/* Topic strip */
+.blog-topics{display:flex;gap:10px;margin-top:36px;flex-wrap:wrap}
+.blog-topic{display:inline-flex;align-items:center;gap:6px;padding:8px 18px;border-radius:999px;font-size:12.5px;font-weight:600;color:var(--text-mid);background:var(--cream);border:1px solid var(--border-light);transition:all .25s;cursor:pointer;white-space:nowrap;text-decoration:none}
+.blog-topic:hover{border-color:var(--forest);color:var(--forest);background:var(--forest-light)}
+.blog-topic svg{width:14px;height:14px;opacity:.5}
+
+/* Blog responsive */
+@media(max-width:960px){
+  .blog-bento{grid-template-columns:1fr 1fr;grid-template-rows:auto}
+  .blog-card--featured{grid-column:1/-1;grid-row:auto}
+}
+@media(max-width:600px){
+  .blog-bento{grid-template-columns:1fr}
+  .blog-top{flex-direction:column;align-items:flex-start;gap:16px}
+  .blog-topics{overflow-x:auto;flex-wrap:nowrap;padding-bottom:8px;-webkit-overflow-scrolling:touch}
+}
 
 /* ===== CONTACT FORM — CREAM ===== */
 .contact-section{background:var(--cream-2);padding:100px 0}
@@ -442,20 +636,59 @@ button{cursor:pointer;font-family:inherit}
   .r,.r-right,.r-left{opacity:1;transform:none}
 }
 
-/* ===== HERO LEAD FORM ===== */
-.hero__lead-form{background:var(--white);border-radius:22px;padding:30px 26px;box-shadow:0 20px 60px rgba(27,58,45,0.14);border:1.5px solid var(--border-light);position:relative;overflow:hidden}
-.hero__lead-form::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--coral),var(--coral-2))}
-.hlf-head{margin-bottom:18px}
-.hlf-title{font-family:'Outfit',sans-serif;font-size:18px;font-weight:800;color:var(--ink);margin-bottom:4px;letter-spacing:-0.02em}
-.hlf-sub{font-size:12px;color:var(--text-mid)}
-.hlf-row{display:grid;grid-template-columns:1fr 1fr;gap:9px}
-.hlf-field{margin-bottom:9px}
-.hlf-field input,.hlf-field select{width:100%;padding:10px 13px;border-radius:9px;border:1.5px solid var(--border-light);background:var(--cream);font-size:13px;font-family:inherit;color:var(--ink);outline:none;transition:border-color .2s,box-shadow .2s;-webkit-appearance:none;appearance:none}
-.hlf-field input:focus,.hlf-field select:focus{border-color:var(--forest);box-shadow:0 0 0 3px rgba(27,58,45,0.08);background:var(--white)}
-.hlf-field input::placeholder{color:var(--text-faint)}
-.hlf-field select{background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 24 24' fill='none' stroke='%234b5249' stroke-width='2' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 12px center;background-size:15px;padding-right:34px;cursor:pointer;color:var(--text-mid)}
-.hlf-btn{width:100%;justify-content:center;margin-bottom:10px;margin-top:4px}
-.hlf-trust{display:flex;justify-content:center;gap:14px;font-size:11px;color:var(--text-faint);font-weight:600;flex-wrap:wrap}
+/* ===== HERO TRACKER ===== */
+.hero__tracker{background:var(--forest);border-radius:22px 22px 0 0;position:relative;overflow:hidden;box-shadow:0 24px 64px rgba(27,58,45,0.22)}
+.hero__tracker::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--coral),var(--coral-2),rgba(232,76,30,0))}
+
+.ht-head{display:flex;align-items:center;justify-content:space-between;padding:20px 24px 16px;border-bottom:1px solid rgba(255,255,255,0.07)}
+.ht-head__title{display:flex;align-items:center;gap:8px;font-family:'Outfit',sans-serif;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1.4px;color:rgba(250,248,244,0.4)}
+.ht-head__title svg{width:13px;height:13px;opacity:.45}
+.ht-live{display:flex;align-items:center;gap:6px;font-size:10px;font-weight:700;color:#4ade80;text-transform:uppercase;letter-spacing:1px}
+.ht-live-dot{width:7px;height:7px;border-radius:50%;background:#4ade80;animation:pulse 2s ease-in-out infinite;flex-shrink:0}
+
+.ht-steps{padding:18px 24px 10px;display:flex;flex-direction:column}
+.ht-step{display:flex;align-items:flex-start;gap:14px}
+.ht-step__left{display:flex;flex-direction:column;align-items:center;flex-shrink:0;width:32px}
+.ht-step__circle{width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.ht-step__line{width:1px;min-height:22px;flex:1;margin:4px 0}
+.ht-step:last-child .ht-step__line{display:none}
+
+.ht-step--done .ht-step__circle{background:#059669;border:2px solid #059669}
+.ht-step--done .ht-step__circle svg{width:13px;height:13px;color:#fff}
+.ht-step--done .ht-step__line{background:linear-gradient(to bottom,#059669,rgba(255,255,255,0.08))}
+
+.ht-step--active .ht-step__circle{background:rgba(251,191,36,0.1);border:2px solid #fbbf24}
+.ht-step--active .ht-step__circle svg{width:13px;height:13px;color:#fbbf24}
+.ht-step--active .ht-step__line{background:rgba(255,255,255,0.08)}
+
+.ht-step--pending .ht-step__circle{background:rgba(255,255,255,0.03);border:1.5px solid rgba(255,255,255,0.1)}
+
+.ht-step__body{flex:1;padding-top:5px;padding-bottom:18px}
+.ht-step__name{font-size:13px;font-weight:600;color:var(--cream);line-height:1.3;margin-bottom:3px}
+.ht-step--pending .ht-step__name{color:rgba(250,248,244,0.3)}
+.ht-step__tag{color:rgba(250,248,244,0.4);font-weight:500;font-size:12px}
+.ht-step__sub{font-size:11px;color:rgba(250,248,244,0.38);line-height:1.4}
+.ht-step--pending .ht-step__sub{color:rgba(250,248,244,0.18)}
+
+.ht-step__badge{font-size:10px;font-weight:700;padding:3px 9px;border-radius:100px;white-space:nowrap;margin-top:7px;letter-spacing:.3px;align-self:flex-start;flex-shrink:0}
+.ht-step__badge--done{background:rgba(74,222,128,0.1);color:#4ade80}
+.ht-step__badge--active{background:rgba(251,191,36,0.12);color:#fbbf24}
+.ht-step__badge--pending{background:rgba(255,255,255,0.05);color:rgba(250,248,244,0.25)}
+
+@keyframes ht-pulse{0%,100%{opacity:1}50%{opacity:.55}}
+.ht-step__badge--active{animation:ht-pulse 2s ease-in-out infinite}
+
+.ht-stats{display:flex;align-items:center;justify-content:space-between;padding:14px 24px;border-top:1px solid rgba(255,255,255,0.07);background:rgba(0,0,0,0.14)}
+.ht-stat{text-align:center;flex:1}
+.ht-stat strong{font-family:'Outfit',sans-serif;font-size:18px;font-weight:800;color:var(--coral-2);display:block;letter-spacing:-0.02em;line-height:1.1;margin-bottom:2px}
+.ht-stat span{font-size:9px;color:rgba(250,248,244,0.38);text-transform:uppercase;letter-spacing:.6px;font-weight:600}
+.ht-divider{width:1px;height:26px;background:rgba(255,255,255,0.09);flex-shrink:0}
+
+.ht-cta{display:flex;align-items:center;justify-content:center;gap:8px;padding:15px 24px;background:var(--coral);color:#fff;text-decoration:none;font-family:'Outfit',sans-serif;font-size:14px;font-weight:700;letter-spacing:.1px;transition:background .2s,gap .2s}
+.ht-cta:hover{background:#c9431a;gap:11px}
+.ht-cta svg{width:15px;height:15px;transition:transform .2s;flex-shrink:0}
+.ht-cta:hover svg{transform:translateX(3px)}
+.ht-cta__sub{font-size:11px;font-weight:400;opacity:.65;font-family:inherit;padding-left:4px;border-left:1px solid rgba(255,255,255,0.3);margin-left:2px}
 
 /* ===== ALL SERVICES ===== */
 .allsvc-sec{background:var(--cream-2);padding:100px 0}
@@ -506,17 +739,17 @@ button{cursor:pointer;font-family:inherit}
 .client-item:hover{color:var(--forest)}
 .client-item .ci-dot{width:5px;height:5px;border-radius:50%;background:var(--coral);opacity:.5;flex-shrink:0}
 
-/* ===== TESTIMONIALS CAROUSEL ===== */
+/* ===== TESTIMONIALS CAROUSEL - 3-CARD GRID ===== */
 .tc-outer{position:relative}
-.tc-overflow{overflow:hidden}
-.tc-rail{display:flex;gap:20px;transition:transform .55s cubic-bezier(.16,1,.3,1);will-change:transform}
-.tc-rail .tc{min-width:calc(33.333% - 14px);flex-shrink:0}
-.tc-nav{display:flex;justify-content:center;gap:12px;margin-top:36px;align-items:center}
-.tc-arr{width:46px;height:46px;border-radius:50%;background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.14);display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all .25s;color:var(--cream);flex-shrink:0;font-size:18px;font-family:inherit;line-height:1}
-.tc-arr:hover{background:rgba(255,255,255,0.18);border-color:rgba(255,255,255,0.28)}
-.tc-dots-row{display:flex;gap:6px;align-items:center}
-.tc-dot{width:7px;height:7px;border-radius:50%;background:rgba(255,255,255,0.18);cursor:pointer;transition:all .3s}
-.tc-dot.on{background:var(--coral-2);width:22px;border-radius:4px}
+.tc-overflow{overflow-x:clip;overflow-y:visible;width:100%;max-width:100%}
+.tc-rail{display:flex;gap:24px;transition:transform .6s cubic-bezier(.16,1,.3,1);will-change:transform;width:100%}
+.tc-rail .tc{width:calc(33.333% - 16px);flex:0 0 auto;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.08);border-radius:16px;padding:32px;min-height:320px;display:flex;flex-direction:column;transition:all .3s cubic-bezier(.16,1,.3,1)}
+.tc-rail .tc:hover{background:rgba(255,255,255,0.06);border-color:rgba(255,255,255,0.15);transform:translateY(-4px);box-shadow:0 12px 32px rgba(0,0,0,0.3)}
+.tc-nav{display:flex;justify-content:center;gap:16px;margin-top:48px;align-items:center}
+.tc-dots-row{display:flex;gap:8px;align-items:center}
+.tc-dot{width:10px;height:10px;border-radius:50%;background:rgba(255,255,255,0.2);cursor:pointer;transition:all .3s;border:1px solid transparent}
+.tc-dot:hover{background:rgba(255,255,255,0.35)}
+.tc-dot.on{background:var(--coral-2);width:28px;border-radius:5px;border-color:rgba(232,76,30,0.3)}
 
 /* ===== PRE-FOOTER CTA ===== */
 .prefooter-cta{background:var(--forest);padding:100px 0;text-align:center;position:relative;overflow:hidden}
@@ -537,14 +770,22 @@ button{cursor:pointer;font-family:inherit}
 
 @media(max-width:1024px){
   .allsvc-grid{grid-template-columns:1fr 1fr}
-  .tc-rail .tc{min-width:calc(50% - 10px)}
+  .tc-rail .tc{width:calc(50% - 12px)}
 }
 @media(max-width:640px){
   .allsvc-grid{grid-template-columns:1fr}
-  .tc-rail .tc{min-width:calc(100% - 0px)}
+  .tc-rail{gap:16px}
+  .tc-rail .tc{width:100%;padding:24px;min-height:280px}
+  .tc__quote{font-size:42px}
+  .tc__stars svg{width:16px;height:16px}
+  .tc__text{font-size:14px}
+  .tc__av{width:44px;height:44px;font-size:14px}
+  .tc__name{font-size:15px}
+  .tc__role,.tc__flag{font-size:12px}
+  .tc-dot{width:8px;height:8px}
+  .tc-dot.on{width:24px}
   .pfc-h2{font-size:38px}
   .pfc-actions{flex-direction:column;align-items:center}
-  .hlf-row{grid-template-columns:1fr}
 }
 </style>
 </head>
@@ -570,6 +811,7 @@ button{cursor:pointer;font-family:inherit}
       <li><a href="#process">Process</a></li>
       <li><a href="#pricing">Pricing</a></li>
       <li><a href="#testimonials">Reviews</a></li>
+      <li><a href="#insights">Insights</a></li>
       <li><a href="#contact">Contact</a></li>
     </ul>
     <div class="header__right">
@@ -587,6 +829,7 @@ button{cursor:pointer;font-family:inherit}
   <a href="#process" onclick="closeMob()">Process</a>
   <a href="#pricing" onclick="closeMob()">Pricing</a>
   <a href="#testimonials" onclick="closeMob()">Reviews</a>
+  <a href="#insights" onclick="closeMob()">Insights</a>
   <a href="#contact" onclick="closeMob()">Contact</a>
   <a href="#pricing" class="btn btn--forest btn--lg" onclick="closeMob()" style="margin-top:12px">Get Started →</a>
 </div>
@@ -624,47 +867,108 @@ button{cursor:pointer;font-family:inherit}
         </div>
       </div>
       <div class="hero__right" style="animation:slideLeft .8s .4s ease both">
-        <div class="hero__lead-form">
-          <div class="hlf-head">
-            <div class="hlf-title">Get a Free Consultation</div>
-            <div class="hlf-sub">Tell us your goals — we'll recommend the perfect plan.</div>
+        <div class="hero__tracker">
+
+          <!-- Header -->
+          <div class="ht-head">
+            <div class="ht-head__title">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+              Application Tracker
+            </div>
+            <div class="ht-live">
+              <span class="ht-live-dot"></span>
+              Live
+            </div>
           </div>
-          <form onsubmit="handleHeroForm(event)">
-            <div class="hlf-row">
-              <div class="hlf-field"><input type="text" placeholder="First Name" required></div>
-              <div class="hlf-field"><input type="text" placeholder="Last Name" required></div>
+
+          <!-- Steps -->
+          <div class="ht-steps">
+
+            <!-- Step 1: Done -->
+            <div class="ht-step ht-step--done">
+              <div class="ht-step__left">
+                <div class="ht-step__circle">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M20 6L9 17l-5-5"/></svg>
+                </div>
+                <div class="ht-step__line"></div>
+              </div>
+              <div class="ht-step__body">
+                <div class="ht-step__name">Order Placed & Verified</div>
+                <div class="ht-step__sub">Documents prepared</div>
+              </div>
+              <div class="ht-step__badge ht-step__badge--done">✓ Done</div>
             </div>
-            <div class="hlf-field"><input type="email" placeholder="Email Address" required></div>
-            <div class="hlf-field"><input type="tel" placeholder="Phone / WhatsApp"></div>
-            <div class="hlf-field">
-              <select required>
-                <option value="">I'm interested in...</option>
-                <option>LLC Formation (Free + state fee)</option>
-                <option>Standard Package ($299)</option>
-                <option>Premium Package ($620)</option>
-                <option>Amazon Seller Account</option>
-                <option>Business Banking Setup</option>
-                <option>Trademark Registration</option>
-                <option>Not sure — need advice</option>
-              </select>
+
+            <!-- Step 2: Done -->
+            <div class="ht-step ht-step--done">
+              <div class="ht-step__left">
+                <div class="ht-step__circle">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M20 6L9 17l-5-5"/></svg>
+                </div>
+                <div class="ht-step__line"></div>
+              </div>
+              <div class="ht-step__body">
+                <div class="ht-step__name">State Filing Submitted</div>
+                <div class="ht-step__sub">Wyoming Secretary of State</div>
+              </div>
+              <div class="ht-step__badge ht-step__badge--done">✓ Done</div>
             </div>
-            <div class="hlf-field">
-              <select>
-                <option value="">Your Country</option>
-                <option>Bangladesh</option><option>India</option><option>Pakistan</option>
-                <option>UAE</option><option>Nigeria</option><option>Philippines</option>
-                <option>Turkey</option><option>Egypt</option><option>Other</option>
-              </select>
+
+            <!-- Step 3: Active -->
+            <div class="ht-step ht-step--active">
+              <div class="ht-step__left">
+                <div class="ht-step__circle">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                </div>
+                <div class="ht-step__line"></div>
+              </div>
+              <div class="ht-step__body">
+                <div class="ht-step__name">EIN Application <span class="ht-step__tag">(IRS)</span></div>
+                <div class="ht-step__sub">Tax ID processing</div>
+              </div>
+              <div class="ht-step__badge ht-step__badge--active">In Progress</div>
             </div>
-            <button type="submit" class="btn btn--coral btn--lg hlf-btn">
-              Start Free Consultation →
-            </button>
-            <div class="hlf-trust">
-              <span>🔒 SSL Secured</span>
-              <span>✓ No Spam</span>
-              <span>⭐ 4.9/5 Rated</span>
+
+            <!-- Step 4: Pending -->
+            <div class="ht-step ht-step--pending">
+              <div class="ht-step__left">
+                <div class="ht-step__circle"></div>
+                <div class="ht-step__line"></div>
+              </div>
+              <div class="ht-step__body">
+                <div class="ht-step__name">Documents Delivered</div>
+                <div class="ht-step__sub">All certificates + Operating Agreement</div>
+              </div>
+              <div class="ht-step__badge ht-step__badge--pending">~6 hrs</div>
             </div>
-          </form>
+
+          </div>
+
+          <!-- Stats -->
+          <div class="ht-stats">
+            <div class="ht-stat">
+              <strong>1,200+</strong>
+              <span>LLCs Formed</span>
+            </div>
+            <div class="ht-divider"></div>
+            <div class="ht-stat">
+              <strong>30+</strong>
+              <span>Countries</span>
+            </div>
+            <div class="ht-divider"></div>
+            <div class="ht-stat">
+              <strong>4.9★</strong>
+              <span>Rating</span>
+            </div>
+          </div>
+
+          <!-- CTA -->
+          <a href="#contact" class="ht-cta">
+            Start your own
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+            <span class="ht-cta__sub">Free consultation</span>
+          </a>
+
         </div>
       </div>
     </div>
@@ -674,22 +978,22 @@ button{cursor:pointer;font-family:inherit}
 <!-- TICKER -->
 <div class="ticker">
   <div class="ticker__track">
-    <div class="ticker__item"><strong>India</strong> <span class="sep">·</span> 380+ clients</div>
-    <div class="ticker__item"><strong>Pakistan</strong> <span class="sep">·</span> 240+ clients</div>
-    <div class="ticker__item"><strong>UAE</strong> <span class="sep">·</span> 180+ clients</div>
-    <div class="ticker__item"><strong>Nigeria</strong> <span class="sep">·</span> 120+ clients</div>
-    <div class="ticker__item"><strong>Philippines</strong> <span class="sep">·</span> 95+ clients</div>
-    <div class="ticker__item"><strong>Turkey</strong> <span class="sep">·</span> 80+ clients</div>
-    <div class="ticker__item"><strong>Egypt</strong> <span class="sep">·</span> 65+ clients</div>
-    <div class="ticker__item"><strong>Indonesia</strong> <span class="sep">·</span> 55+ clients</div>
-    <div class="ticker__item"><strong>India</strong> <span class="sep">·</span> 380+ clients</div>
-    <div class="ticker__item"><strong>Pakistan</strong> <span class="sep">·</span> 240+ clients</div>
-    <div class="ticker__item"><strong>UAE</strong> <span class="sep">·</span> 180+ clients</div>
-    <div class="ticker__item"><strong>Nigeria</strong> <span class="sep">·</span> 120+ clients</div>
-    <div class="ticker__item"><strong>Philippines</strong> <span class="sep">·</span> 95+ clients</div>
-    <div class="ticker__item"><strong>Turkey</strong> <span class="sep">·</span> 80+ clients</div>
-    <div class="ticker__item"><strong>Egypt</strong> <span class="sep">·</span> 65+ clients</div>
-    <div class="ticker__item"><strong>Indonesia</strong> <span class="sep">·</span> 55+ clients</div>
+    <div class="ticker__item"><strong>India</strong> <span class="sep">·</span> 320+ clients</div>
+    <div class="ticker__item"><strong>Pakistan</strong> <span class="sep">·</span> 220+ clients</div>
+    <div class="ticker__item"><strong>UAE</strong> <span class="sep">·</span> 160+ clients</div>
+    <div class="ticker__item"><strong>Nigeria</strong> <span class="sep">·</span> 110+ clients</div>
+    <div class="ticker__item"><strong>Philippines</strong> <span class="sep">·</span> 90+ clients</div>
+    <div class="ticker__item"><strong>Turkey</strong> <span class="sep">·</span> 75+ clients</div>
+    <div class="ticker__item"><strong>Egypt</strong> <span class="sep">·</span> 60+ clients</div>
+    <div class="ticker__item"><strong>Indonesia</strong> <span class="sep">·</span> 50+ clients</div>
+    <div class="ticker__item"><strong>India</strong> <span class="sep">·</span> 320+ clients</div>
+    <div class="ticker__item"><strong>Pakistan</strong> <span class="sep">·</span> 220+ clients</div>
+    <div class="ticker__item"><strong>UAE</strong> <span class="sep">·</span> 160+ clients</div>
+    <div class="ticker__item"><strong>Nigeria</strong> <span class="sep">·</span> 110+ clients</div>
+    <div class="ticker__item"><strong>Philippines</strong> <span class="sep">·</span> 90+ clients</div>
+    <div class="ticker__item"><strong>Turkey</strong> <span class="sep">·</span> 75+ clients</div>
+    <div class="ticker__item"><strong>Egypt</strong> <span class="sep">·</span> 60+ clients</div>
+    <div class="ticker__item"><strong>Indonesia</strong> <span class="sep">·</span> 50+ clients</div>
   </div>
 </div>
 
@@ -947,7 +1251,7 @@ button{cursor:pointer;font-family:inherit}
       <div class="why-right r r-left d2">
         <div class="why-metric"><div class="why-metric__num">30<sub>-day</sub></div><div class="why-metric__label">Money-back guarantee</div></div>
         <div class="why-metric"><div class="why-metric__num">100<sub>%</sub></div><div class="why-metric__label">Remote — zero US travel</div></div>
-        <div class="why-metric"><div class="why-metric__num">50<sub>+</sub></div><div class="why-metric__label">Countries successfully served</div></div>
+        <div class="why-metric"><div class="why-metric__num">30<sub>+</sub></div><div class="why-metric__label">Countries successfully served</div></div>
       </div>
     </div>
   </div>
@@ -959,59 +1263,87 @@ button{cursor:pointer;font-family:inherit}
     <div class="pricing-top r">
       <div class="eyebrow">Pricing</div>
       <h2>Simple. Transparent. No surprises.</h2>
-      <p>One-time fees. No subscriptions. State filing fees are disclosed upfront and billed separately.</p>
+      <p>One-time fees. No subscriptions. Click a plan, add what you need — see your total instantly.</p>
     </div>
+
+    <!-- PLAN CARDS -->
     <div class="pricing-grid">
-      <div class="pc r d1">
+
+      <!-- ESSENTIAL -->
+      <div class="pc r d1" data-plan-id="essential" data-price="0" data-value="79">
+        <div class="pc__sel"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M20 6L9 17l-5-5"/></svg></div>
         <div class="pc__tier">Starter</div>
         <div class="pc__name">Essential</div>
-        <div class="pc__tagline">Get your LLC filed and start building</div>
-        <div class="pc__amount"><div class="pc__price"><sup>$</sup>0 <sub>+ state fee</sub></div></div>
-        <div class="pc__note">No service fee — just the government filing cost</div>
+        <div class="pc__tagline">File your US LLC from anywhere — no US address needed</div>
+        <div class="pc__price"><sup>$</sup>0 <sub>+ state fee</sub></div>
+        <div class="pc__note">No service fee — you only pay the government filing cost</div>
         <ul class="pc__list">
-          <li class="y"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg>Articles of Organization</li>
-          <li class="y"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg>Operating Agreement</li>
+          <li class="y"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg>Articles of Organization<button class="info-icon" tabindex="0">i<span class="info-tip">The official state document that legally creates your LLC. We prepare and file this directly with the state on your behalf.</span></button></li>
+          <li class="y"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg>Operating Agreement <em style="font-size:11px;color:var(--text-faint);font-style:normal">(worth $79)</em><button class="info-icon" tabindex="0">i<span class="info-tip">Defines ownership structure, voting rights, and operating rules. Required by most banks to open a business account.</span></button></li>
           <li class="y"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg>Compliance checklist</li>
-          <li class="n"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg>Registered Agent — add $99/yr</li>
-          <li class="n"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg>EIN Application — add $99</li>
-          <li class="n"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg>US Banking Setup</li>
+          <li class="addon">
+            <div class="addon-top"><button class="addon-toggle" aria-label="More info"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 5v14M5 12h14"/></svg></button><span class="addon-label">Registered Agent</span><span class="addon-ptag">$99/yr</span><button class="add-btn" data-addon-id="ra">+ Add</button></div>
+            <div class="addon-expand"><div class="addon-expand-inner">Legally required for every US LLC. We provide a real street address in Wyoming or Delaware to receive legal notices and government mail on your behalf.</div></div>
+          </li>
+          <li class="addon">
+            <div class="addon-top"><button class="addon-toggle" aria-label="More info"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 5v14M5 12h14"/></svg></button><span class="addon-label">EIN / Tax ID</span><span class="addon-ptag">$99</span><button class="add-btn" data-addon-id="ein">+ Add</button></div>
+            <div class="addon-expand"><div class="addon-expand-inner">Required to open a US bank account, file taxes, and register as an Amazon seller. We handle the IRS SS-4 form — no SSN required.</div></div>
+          </li>
+          <li class="addon">
+            <div class="addon-top"><button class="addon-toggle" aria-label="More info"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 5v14M5 12h14"/></svg></button><span class="addon-label">US Banking Setup</span><span class="addon-ptag">$199</span><button class="add-btn" data-addon-id="banking">+ Add</button></div>
+            <div class="addon-expand"><div class="addon-expand-inner">Step-by-step guidance to open a Mercury or Relay business account — 100% online, no SSN or US visit required. Works with Stripe, PayPal, and Wise.</div></div>
+          </li>
         </ul>
-        <a href="#" class="btn btn--outline-dark">Get Started</a>
+        <a href="#contact" class="btn btn--outline-dark" onclick="event.stopPropagation()">Get Started →</a>
       </div>
-      <div class="pc pc--mid r d2">
+
+      <!-- PROFESSIONAL -->
+      <div class="pc pc--mid r d2" data-plan-id="professional" data-price="299" data-value="326">
         <div class="pc__cap">Most Popular</div>
+        <div class="pc__sel"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M20 6L9 17l-5-5"/></svg></div>
         <div class="pc__tier">Standard</div>
         <div class="pc__name">Professional</div>
-        <div class="pc__tagline">Everything international entrepreneurs need</div>
-        <div class="pc__amount"><div class="pc__price"><sup>$</sup>299 <sub>+ state fee</sub></div></div>
-        <div class="pc__note">One-time fee · No recurring charges</div>
+        <div class="pc__tagline">Everything international entrepreneurs need to launch and stay compliant</div>
+        <div class="pc__save"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg>$326+ in bundled value</div>
+        <div class="pc__price"><sup>$</sup>299 <sub>+ state fee</sub></div>
+        <div class="pc__note">One-time fee · No recurring charges · No hidden costs</div>
         <ul class="pc__list">
-          <li class="y"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg>Articles of Organization</li>
-          <li class="y"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg>Operating Agreement</li>
-          <li class="y"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg>Registered Agent (1 year free)</li>
-          <li class="y"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg>EIN / Tax ID Application</li>
-          <li class="y"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg>BOI Beneficial Ownership Filing</li>
-          <li class="n"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg>US Banking Setup — add $99</li>
+          <li class="y"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg>Articles of Organization<button class="info-icon" tabindex="0">i<span class="info-tip">The official state document that legally creates your LLC. We prepare and file this directly with the state on your behalf.</span></button></li>
+          <li class="y"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg>Operating Agreement<button class="info-icon" tabindex="0">i<span class="info-tip">Defines ownership structure, voting rights, and operating rules. Required by most banks to open a business account.</span></button></li>
+          <li class="y"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg>Registered Agent — 1 yr free <em style="font-size:11px;color:var(--text-faint);font-style:normal">($99)</em><button class="info-icon" tabindex="0">i<span class="info-tip">Legally required for every LLC. Receives official legal notices and government mail on your behalf at a real US address.</span></button></li>
+          <li class="y"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg>EIN / Tax ID Application <em style="font-size:11px;color:var(--text-faint);font-style:normal">($99)</em><button class="info-icon" tabindex="0">i<span class="info-tip">Your LLC's federal tax ID. Required to open a US bank account, file taxes, and register as an Amazon seller. No SSN needed.</span></button></li>
+          <li class="y"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg>BOI Beneficial Ownership Filing <em style="font-size:11px;color:var(--text-faint);font-style:normal">($49)</em><button class="info-icon" tabindex="0">i<span class="info-tip">Federally required since Jan 2024. All LLCs must report beneficial owners to FinCEN. Failure triggers $500/day in penalties.</span></button></li>
+          <li class="addon">
+            <div class="addon-top"><button class="addon-toggle" aria-label="More info"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 5v14M5 12h14"/></svg></button><span class="addon-label">US Banking Setup</span><span class="addon-ptag">$199</span><button class="add-btn" data-addon-id="banking">+ Add</button></div>
+            <div class="addon-expand"><div class="addon-expand-inner">Step-by-step guidance to open a Mercury or Relay business account — 100% online, no SSN or US visit required. Works with Stripe, PayPal, and Wise.</div></div>
+          </li>
         </ul>
-        <a href="#" class="btn btn--forest">Get Started →</a>
+        <a href="#contact" class="btn btn--forest" onclick="event.stopPropagation()">Get Started →</a>
       </div>
-      <div class="pc r d3">
+
+      <!-- COMPLETE -->
+      <div class="pc r d3" data-plan-id="complete" data-price="620" data-value="773">
+        <div class="pc__sel"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M20 6L9 17l-5-5"/></svg></div>
         <div class="pc__tier">Premium</div>
         <div class="pc__name">Complete</div>
-        <div class="pc__tagline">Full US business setup, done in 48 hours</div>
-        <div class="pc__amount"><div class="pc__price"><sup>$</sup>620 <sub>+ state fee</sub></div></div>
-        <div class="pc__note">All-inclusive · Priority 24h processing</div>
+        <div class="pc__tagline">Full US business setup for international entrepreneurs — in 48 hours</div>
+        <div class="pc__save"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg>Save $153 · $773+ total value</div>
+        <div class="pc__price"><sup>$</sup>620 <sub>+ state fee</sub></div>
+        <div class="pc__note">All-inclusive · Priority 24h processing · One single order</div>
         <ul class="pc__list">
-          <li class="y"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg>All Professional features</li>
-          <li class="y"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg>Virtual US Address (1 year)</li>
-          <li class="y"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg>US Business Bank Account</li>
-          <li class="y"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg>Stripe + PayPal Setup</li>
-          <li class="y"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg>Priority 24h processing</li>
-          <li class="y"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg>Dedicated account manager</li>
+          <li class="y"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg>Articles of Organization + BOI + EIN<button class="info-icon" tabindex="0">i<span class="info-tip">Includes the state LLC filing, federal Beneficial Ownership Report (FinCEN), and EIN (Tax ID) — all handled together in one order.</span></button></li>
+          <li class="y"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg>Operating Agreement<button class="info-icon" tabindex="0">i<span class="info-tip">Defines ownership structure, voting rights, and operating rules. Required by most banks to open a business account.</span></button></li>
+          <li class="y"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg>Registered Agent — 1 yr free<button class="info-icon" tabindex="0">i<span class="info-tip">Legally required for every LLC. Receives official legal notices and government mail on your behalf at a real US address.</span></button></li>
+          <li class="y"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg>Virtual US Address — 1 year <em style="font-size:11px;color:var(--text-faint);font-style:normal">($149)</em><button class="info-icon" tabindex="0">i<span class="info-tip">A real US street address for your business — required for Amazon seller verification and accepted by banks and the IRS.</span></button></li>
+          <li class="y"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg>US Business Bank Account Setup <em style="font-size:11px;color:var(--text-faint);font-style:normal">($199)</em><button class="info-icon" tabindex="0">i<span class="info-tip">Step-by-step guidance to open a Mercury or Relay account — 100% online, no SSN or US visit. Works with Stripe, PayPal, and Wise.</span></button></li>
+          <li class="y"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg>Stripe + PayPal Setup <em style="font-size:11px;color:var(--text-faint);font-style:normal">($99)</em></li>
+          <li class="y"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg>Priority 24h processing + Dedicated manager</li>
         </ul>
-        <a href="#" class="btn btn--coral">Get Started →</a>
+        <a href="#contact" class="btn btn--coral" onclick="event.stopPropagation()">Get Started →</a>
       </div>
+
     </div>
+
   </div>
 </section>
 
@@ -1022,11 +1354,11 @@ button{cursor:pointer;font-family:inherit}
     <div class="clients-track">
       <div class="client-item"><div class="ci-dot"></div>ShopNest BD</div>
       <div class="client-item"><div class="ci-dot"></div>Apex Apparel</div>
-      <div class="client-item"><div class="ci-dot"></div>TechBridge Inc</div>
-      <div class="client-item"><div class="ci-dot"></div>NovaMart Global</div>
-      <div class="client-item"><div class="ci-dot"></div>Horizon Traders</div>
-      <div class="client-item"><div class="ci-dot"></div>SwiftLogix</div>
-      <div class="client-item"><div class="ci-dot"></div>BlueStar Exports</div>
+      <div class="client-item"><div class="ci-dot"></div>DesertBloom LLC</div>
+      <div class="client-item"><div class="ci-dot"></div>MapleTrade LLC</div>
+      <div class="client-item"><div class="ci-dot"></div>SpiceRoute LLC</div>
+      <div class="client-item"><div class="ci-dot"></div>KiwiCart LLC</div>
+      <div class="client-item"><div class="ci-dot"></div>PeakVenture LLC</div>
       <div class="client-item"><div class="ci-dot"></div>EagleEcom</div>
       <div class="client-item"><div class="ci-dot"></div>Zara Ventures</div>
       <div class="client-item"><div class="ci-dot"></div>Pinnacle Goods</div>
@@ -1036,11 +1368,11 @@ button{cursor:pointer;font-family:inherit}
       <div class="client-item"><div class="ci-dot"></div>Kazi Digital</div>
       <div class="client-item"><div class="ci-dot"></div>ShopNest BD</div>
       <div class="client-item"><div class="ci-dot"></div>Apex Apparel</div>
-      <div class="client-item"><div class="ci-dot"></div>TechBridge Inc</div>
-      <div class="client-item"><div class="ci-dot"></div>NovaMart Global</div>
-      <div class="client-item"><div class="ci-dot"></div>Horizon Traders</div>
-      <div class="client-item"><div class="ci-dot"></div>SwiftLogix</div>
-      <div class="client-item"><div class="ci-dot"></div>BlueStar Exports</div>
+      <div class="client-item"><div class="ci-dot"></div>DesertBloom LLC</div>
+      <div class="client-item"><div class="ci-dot"></div>MapleTrade LLC</div>
+      <div class="client-item"><div class="ci-dot"></div>SpiceRoute LLC</div>
+      <div class="client-item"><div class="ci-dot"></div>KiwiCart LLC</div>
+      <div class="client-item"><div class="ci-dot"></div>PeakVenture LLC</div>
       <div class="client-item"><div class="ci-dot"></div>EagleEcom</div>
       <div class="client-item"><div class="ci-dot"></div>Zara Ventures</div>
       <div class="client-item"><div class="ci-dot"></div>Pinnacle Goods</div>
@@ -1058,20 +1390,13 @@ button{cursor:pointer;font-family:inherit}
     <div class="test-top">
       <div class="test-top-left r r-right">
         <div class="eyebrow">Client Stories</div>
-        <h2>Real founders,<br>real businesses</h2>
+        <h2>Trusted by founders<br>worldwide</h2>
       </div>
       <div class="test-top-right r r-left d2">Verified reviews from entrepreneurs across <strong>30+ countries</strong> who built their US businesses with LLCPad.</div>
     </div>
     <div class="tc-outer">
     <div class="tc-overflow">
     <div class="tc-rail" id="forgeRail">
-      <div class="tc r d1">
-        <div class="tc__quote">"</div>
-        <div class="tc__stars"><svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg><svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg><svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg><svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg><svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg></div>
-        <p class="tc__text">My Wyoming LLC, EIN, and bank account were all set up in 3 days. As someone from Dhaka with zero experience in US business, LLCPad made this process feel completely manageable. Unreal service.</p>
-        <div class="tc__hr"></div>
-        <div class="tc__author"><div class="tc__av">RM</div><div><div class="tc__name">Rahim Miah</div><div class="tc__role">Amazon FBA Seller</div><div class="tc__flag">🇧🇩 Dhaka, Bangladesh</div></div></div>
-      </div>
       <div class="tc r d2">
         <div class="tc__quote">"</div>
         <div class="tc__stars"><svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg><svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg><svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg><svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg><svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg></div>
@@ -1107,17 +1432,151 @@ button{cursor:pointer;font-family:inherit}
         <div class="tc__hr"></div>
         <div class="tc__author"><div class="tc__av" style="background:rgba(217,119,6,0.6)">MH</div><div><div class="tc__name">Mohammad Hassan</div><div class="tc__role">Amazon Seller</div><div class="tc__flag">🇵🇭 Manila, Philippines</div></div></div>
       </div>
+      <div class="tc">
+        <div class="tc__quote">"</div>
+        <div class="tc__stars"><svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg><svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg><svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg><svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg><svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg></div>
+        <p class="tc__text">I needed Form 5472 filed urgently to avoid penalties. LLCPad's team handled everything within 48 hours and explained every detail in simple terms. The peace of mind alone was worth the investment.</p>
+        <div class="tc__hr"></div>
+        <div class="tc__author"><div class="tc__av" style="background:rgba(147,51,234,0.6)">SK</div><div><div class="tc__name">Selin Kaplan</div><div class="tc__role">Digital Agency Owner</div><div class="tc__flag">🇹🇷 Istanbul, Turkey</div></div></div>
+      </div>
+      <div class="tc">
+        <div class="tc__quote">"</div>
+        <div class="tc__stars"><svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg><svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg><svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg><svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg><svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg></div>
+        <p class="tc__text">After my Amazon account got suspended, I was panicking. LLCPad's reinstatement service drafted a perfect Plan of Action and got my account back in 72 hours. They literally saved my business.</p>
+        <div class="tc__hr"></div>
+        <div class="tc__author"><div class="tc__av" style="background:rgba(239,68,68,0.6)">YA</div><div><div class="tc__name">Yusuf Ali</div><div class="tc__role">FBA Seller</div><div class="tc__flag">🇪🇬 Cairo, Egypt</div></div></div>
+      </div>
+      <div class="tc">
+        <div class="tc__quote">"</div>
+        <div class="tc__stars"><svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg><svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg><svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg><svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg><svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg></div>
+        <p class="tc__text">Setting up TikTok Shop US seemed impossible from Indonesia. LLCPad not only helped me get the LLC and EIN, but also guided me through the entire TikTok seller verification. Now doing $15k/month in sales!</p>
+        <div class="tc__hr"></div>
+        <div class="tc__author"><div class="tc__av" style="background:rgba(16,185,129,0.6)">DW</div><div><div class="tc__name">Dewi Lestari</div><div class="tc__role">TikTok Shop Seller</div><div class="tc__flag">🇮🇩 Jakarta, Indonesia</div></div></div>
+      </div>
+      <div class="tc">
+        <div class="tc__quote">"</div>
+        <div class="tc__stars"><svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg><svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg><svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg><svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg><svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg></div>
+        <p class="tc__text">The registered agent and virtual address service is exactly what I needed as a non-resident owner. My LLC stays compliant, all documents are scanned and forwarded instantly. Zero hassle for over 2 years now.</p>
+        <div class="tc__hr"></div>
+        <div class="tc__author"><div class="tc__av" style="background:rgba(59,130,246,0.6)">RD</div><div><div class="tc__name">Rajesh Desai</div><div class="tc__role">Consulting Firm Owner</div><div class="tc__flag">🇮🇳 Bangalore, India</div></div></div>
+      </div>
+      <div class="tc">
+        <div class="tc__quote">"</div>
+        <div class="tc__stars"><svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg><svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg><svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg><svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg><svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg></div>
+        <p class="tc__text">I tried 3 different services to open a Relay bank account for my LLC. Only LLCPad understood the exact requirements for non-resident owners. Account approved in 6 days. Professional service from start to finish.</p>
+        <div class="tc__hr"></div>
+        <div class="tc__author"><div class="tc__av" style="background:rgba(168,85,247,0.6)">NS</div><div><div class="tc__name">Nadia Siddiqui</div><div class="tc__role">Shopify Store Owner</div><div class="tc__flag">🇵🇰 Lahore, Pakistan</div></div></div>
+      </div>
+      <div class="tc">
+        <div class="tc__quote">"</div>
+        <div class="tc__stars"><svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg><svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg><svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg><svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg><svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg></div>
+        <p class="tc__text">LLCPad guided me through ITIN application and US business banking — processes that seemed impossible from Dubai. My account was open within a week. Their knowledge of non-resident requirements is truly exceptional.</p>
+        <div class="tc__hr"></div>
+        <div class="tc__author"><div class="tc__av" style="background:rgba(14,165,233,0.6)">OA</div><div><div class="tc__name">Omar Al-Mansouri</div><div class="tc__role">Import/Export Business</div><div class="tc__flag">🇦🇪 Dubai, UAE</div></div></div>
+      </div>
+      <div class="tc">
+        <div class="tc__quote">"</div>
+        <div class="tc__stars"><svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg><svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg><svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg><svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg><svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg></div>
+        <p class="tc__text">Got my Walmart seller account approved on the first try thanks to LLCPad. They handled everything from LLC formation to seller verification. Now selling on both Amazon and Walmart from Bangalore!</p>
+        <div class="tc__hr"></div>
+        <div class="tc__author"><div class="tc__av" style="background:rgba(245,158,11,0.6)">AM</div><div><div class="tc__name">Ananya Mehta</div><div class="tc__role">Multi-channel Seller</div><div class="tc__flag">🇮🇳 Bangalore, India</div></div></div>
+      </div>
     </div>
     </div><!-- tc-overflow -->
     <div class="tc-nav">
-      <button class="tc-arr" id="forgePrev">&#8592;</button>
       <div class="tc-dots-row" id="forgeDots">
         <div class="tc-dot on"></div>
         <div class="tc-dot"></div>
+        <div class="tc-dot"></div>
+        <div class="tc-dot"></div>
       </div>
-      <button class="tc-arr" id="forgeNext">&#8594;</button>
     </div>
     </div><!-- tc-outer -->
+  </div>
+</section>
+
+<!-- INSIGHTS / BLOG — WHITE -->
+<section class="blog-section" id="insights">
+  <div class="container">
+    <div class="blog-top">
+      <div class="blog-top-left r r-right">
+        <div class="eyebrow">Insights</div>
+        <h2>Free guides for<br>global founders</h2>
+      </div>
+      <div class="blog-top-right r r-left d2">
+        <a href="#">Browse all <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
+      </div>
+    </div>
+
+    <div class="blog-bento">
+
+      <!-- Featured: Wyoming vs Delaware -->
+      <a class="blog-card blog-card--featured r d1" href="#" data-accent="coral">
+        <div class="blog-pill">LLC Guide</div>
+        <div class="blog-card__title">Wyoming vs Delaware LLC for Non-Residents: Which State Should You Choose in 2026?</div>
+        <p class="blog-card__excerpt">Privacy, fees, annual costs, tax implications — we break down the real differences that matter when you're forming a US LLC from abroad. Updated with the latest BOI exemption rules and the new remittance tax impact.</p>
+        <div class="blog-card__foot">
+          <div class="blog-card__meta">12 min read <span class="blog-card__meta-dot"></span> Feb 2026</div>
+          <div class="bc-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg></div>
+        </div>
+      </a>
+
+      <!-- Card 2: Form 5472 -->
+      <a class="blog-card r d2" href="#" data-accent="coral">
+        <div class="blog-pill">Tax & Compliance</div>
+        <div class="blog-card__title">Form 5472: The $25,000 Filing Every Foreign LLC Owner Must Know</div>
+        <p class="blog-card__excerpt">Even with zero income, this IRS filing is mandatory. Miss it, and you face $25,000 in penalties.</p>
+        <div class="blog-card__foot">
+          <div class="blog-card__meta">8 min read</div>
+          <div class="bc-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg></div>
+        </div>
+      </a>
+
+      <!-- Card 3: US Banking -->
+      <a class="blog-card r d3" href="#" data-accent="blue">
+        <div class="blog-pill">Banking</div>
+        <div class="blog-card__title">US Bank Account for Non-Residents: What Changed in 2026</div>
+        <p class="blog-card__excerpt">Mercury and Relay have new rules. Here's which banks still accept non-resident LLC owners.</p>
+        <div class="blog-card__foot">
+          <div class="blog-card__meta">10 min read</div>
+          <div class="bc-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg></div>
+        </div>
+      </a>
+
+      <!-- Card 4: Remittance Tax -->
+      <a class="blog-card r d2" href="#" data-accent="amber">
+        <div class="blog-pill">New Law</div>
+        <div class="blog-card__title">The 2026 Remittance Tax: What Every Foreign LLC Owner Needs to Know</div>
+        <p class="blog-card__excerpt">The new 1% excise tax on cross-border transfers is here. How it impacts your LLC profits.</p>
+        <div class="blog-card__foot">
+          <div class="blog-card__meta">6 min read</div>
+          <div class="bc-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg></div>
+        </div>
+      </a>
+
+      <!-- Card 5: TikTok Shop -->
+      <a class="blog-card r d3" href="#" data-accent="purple">
+        <div class="blog-pill">E-Commerce</div>
+        <div class="blog-card__title">How to Set Up TikTok Shop in the US as a Non-Resident</div>
+        <p class="blog-card__excerpt">LLC, EIN, Letter of Authorization, seller verification — the complete playbook for 2026.</p>
+        <div class="blog-card__foot">
+          <div class="blog-card__meta">9 min read</div>
+          <div class="bc-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg></div>
+        </div>
+      </a>
+
+    </div>
+
+    <!-- Topic pills -->
+    <div class="blog-topics r d4">
+      <a class="blog-topic" href="#"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><path d="M14 2v6h6M16 13H8M16 17H8M10 9H8"/></svg>EIN Without SSN</a>
+      <a class="blog-topic" href="#"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>Form 5472 Guide</a>
+      <a class="blog-topic" href="#"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20"/></svg>US Banking Guide</a>
+      <a class="blog-topic" href="#"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 014 10 15.3 15.3 0 01-4 10 15.3 15.3 0 01-4-10 15.3 15.3 0 014-10z"/></svg>Amazon Seller 101</a>
+      <a class="blog-topic" href="#"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>ITIN Application</a>
+      <a class="blog-topic" href="#"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.59 13.41l-7.17 7.17a2 2 0 01-2.83 0L2 12V2h10l8.59 8.59a2 2 0 010 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg>TikTok Shop Setup</a>
+    </div>
+
   </div>
 </section>
 
@@ -1165,7 +1624,7 @@ button{cursor:pointer;font-family:inherit}
               <div class="field"><label>Your Country</label>
                 <select>
                   <option value="">Select country...</option>
-                  <option>Bangladesh</option><option>India</option><option>Pakistan</option>
+                  <option>India</option><option>Pakistan</option>
                   <option>UAE</option><option>Nigeria</option><option>Philippines</option>
                   <option>Turkey</option><option>Egypt</option><option>Other</option>
                 </select>
@@ -1184,7 +1643,7 @@ button{cursor:pointer;font-family:inherit}
                 <option>Not sure — need advice</option>
               </select>
             </div>
-            <div class="field"><label>Tell us about your business goals (optional)</label><textarea placeholder="e.g. I want to sell on Amazon from Bangladesh and need an LLC with a bank account..."></textarea></div>
+            <div class="field"><label>Tell us about your business goals (optional)</label><textarea placeholder="e.g. I want to sell on Amazon and need an LLC with a bank account..."></textarea></div>
             <div class="form-submit">
               <button type="submit" class="btn btn--coral btn--lg">
                 Send My Request
@@ -1384,19 +1843,22 @@ function handleHeroForm(e){
   btn.disabled=true;
 }
 
-// Testimonials Carousel
+// Testimonials Carousel with Auto-scroll
 (function(){
   const rail=document.getElementById('forgeRail');
   if(!rail)return;
   const cards=[...rail.querySelectorAll('.tc')];
   const dotsEl=document.getElementById('forgeDots');
+  const outer=document.querySelector('.tc-outer');
   let cur=0;
+  let autoInterval=null;
   const perView=()=>window.innerWidth<640?1:window.innerWidth<1024?2:3;
 
   function getOffset(){
     const pv=perView();
     const pages=Math.ceil(cards.length/pv);
-    const cardW=cards[0].offsetWidth+20;
+    const gap=parseFloat(getComputedStyle(rail).gap)||24;
+    const cardW=cards[0].offsetWidth+gap;
     return {pages,cardW,pv};
   }
 
@@ -1407,11 +1869,86 @@ function handleHeroForm(e){
     [...dotsEl.querySelectorAll('.tc-dot')].forEach((d,i)=>d.classList.toggle('on',i===cur));
   }
 
-  document.getElementById('forgeNext').onclick=()=>goTo(cur+1);
-  document.getElementById('forgePrev').onclick=()=>goTo(cur-1);
-  dotsEl.querySelectorAll('.tc-dot').forEach((d,i)=>d.onclick=()=>goTo(i));
+  function startAuto(){
+    stopAuto();
+    autoInterval=setInterval(()=>{
+      const {pages}=getOffset();
+      goTo((cur+1)%pages);
+    },5000);
+  }
+
+  function stopAuto(){
+    if(autoInterval)clearInterval(autoInterval);
+  }
+
+  dotsEl.querySelectorAll('.tc-dot').forEach((d,i)=>d.onclick=()=>{stopAuto();goTo(i);startAuto();});
+
+  // Pause on hover
+  outer.addEventListener('mouseenter',stopAuto);
+  outer.addEventListener('mouseleave',startAuto);
 
   window.addEventListener('resize',()=>goTo(0));
+
+  // Start auto-scroll
+  startAuto();
+})();
+
+/* ===== PRICING INTERACTIVE ===== */
+(function(){
+  const INCLUDED_IN = {
+    professional: ['ra','ein'],
+    complete:     ['ra','ein','banking']
+  };
+
+  let selPlan   = 'professional';
+  let selAddons = new Set();
+
+  function update() {
+    /* plan card highlight */
+    document.querySelectorAll('.pc[data-plan-id]').forEach(el => {
+      el.classList.toggle('pc--active', el.dataset.planId === selPlan);
+    });
+
+    /* +Add button toggle */
+    document.querySelectorAll('.add-btn[data-addon-id]').forEach(btn => {
+      const on = selAddons.has(btn.dataset.addonId);
+      btn.classList.toggle('add-btn--on', on);
+      btn.textContent = on ? '✓ Added' : '+ Add';
+    });
+  }
+
+  /* Left expand toggle click */
+  document.querySelectorAll('.addon-toggle').forEach(btn => {
+    btn.addEventListener('click', e => {
+      e.stopPropagation();
+      btn.closest('li.addon').classList.toggle('addon--open');
+    });
+  });
+
+  /* Plan card click */
+  document.querySelectorAll('.pc[data-plan-id]').forEach(el => {
+    el.addEventListener('click', e => {
+      if (e.target.closest('.btn, .add-btn, .addon-toggle')) return;
+      selPlan = el.dataset.planId;
+      (INCLUDED_IN[selPlan] || []).forEach(id => selAddons.delete(id));
+      update();
+    });
+  });
+
+  /* +Add button click — toggle state, auto-expand on add */
+  document.querySelectorAll('.add-btn[data-addon-id]').forEach(btn => {
+    btn.addEventListener('click', e => {
+      e.stopPropagation();
+      const id = btn.dataset.addonId;
+      const li = btn.closest('li.addon');
+      selAddons.has(id) ? selAddons.delete(id) : selAddons.add(id);
+      const isOn = selAddons.has(id);
+      if (li) li.classList.toggle('addon--open', isOn);
+      update();
+    });
+  });
+
+  update();
 })();
 </script>
 </body>

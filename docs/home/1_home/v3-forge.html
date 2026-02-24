@@ -422,6 +422,111 @@ li.addon.addon--open .addon-toggle svg{transform:rotate(45deg)}
 .tc__role{font-size:13px;color:rgba(250,248,244,0.5);margin-top:3px;font-weight:500}
 .tc__flag{font-size:13px;color:rgba(250,248,244,0.4);margin-top:2px;display:flex;align-items:center;gap:6px}
 
+/* ===== BLOG / INSIGHTS — WHITE ===== */
+.blog-section{background:var(--white);padding:100px 0;position:relative;overflow:hidden}
+.blog-section::before{content:'Read';position:absolute;left:-30px;top:50%;transform:translateY(-50%) rotate(-90deg);font-family:'Outfit',sans-serif;font-size:180px;font-weight:900;color:rgba(14,17,9,0.025);pointer-events:none;white-space:nowrap;letter-spacing:-6px}
+
+.blog-top{display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:56px;gap:32px}
+.blog-top-left .eyebrow{font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:var(--coral);margin-bottom:12px}
+.blog-top-left h2{font-family:'Outfit',sans-serif;font-size:clamp(28px,3.5vw,42px);font-weight:800;color:var(--ink);letter-spacing:-0.025em;line-height:1.15}
+.blog-top-right a{font-size:14px;font-weight:600;color:var(--forest);display:inline-flex;align-items:center;gap:6px;padding:10px 20px;border-radius:8px;border:1.5px solid var(--border-forest);transition:all .22s}
+.blog-top-right a:hover{background:var(--forest);color:var(--cream);transform:translateY(-2px)}
+.blog-top-right a svg{width:16px;height:16px;transition:transform .3s cubic-bezier(.4,0,.2,1)}
+.blog-top-right a:hover svg{transform:translateX(4px)}
+
+/* Bento Grid */
+.blog-bento{display:grid;grid-template-columns:1.15fr 1fr 1fr;grid-template-rows:1fr 1fr;gap:20px}
+.blog-card--featured{grid-row:1/-1}
+
+/* Card base */
+.blog-card{position:relative;background:var(--white);border-radius:20px;border:1px solid var(--border-light);padding:28px 28px 24px;display:flex;flex-direction:column;cursor:pointer;transition:transform .35s cubic-bezier(.4,0,.2,1),box-shadow .35s cubic-bezier(.4,0,.2,1),border-color .35s;overflow:hidden;text-decoration:none;color:inherit}
+
+/* Bottom accent line — starts at 0 width, grows on hover */
+.blog-card::after{content:'';position:absolute;bottom:0;left:0;width:0;height:3px;border-radius:0 3px 0 0;transition:width .45s cubic-bezier(.4,0,.2,1)}
+.blog-card:hover{transform:translateY(-6px);box-shadow:0 20px 40px rgba(0,0,0,0.06);border-color:transparent}
+.blog-card:hover::after{width:100%}
+
+/* Accent colors */
+.blog-card[data-accent="forest"]::after{background:var(--forest)}
+.blog-card[data-accent="coral"]::after{background:var(--coral)}
+.blog-card[data-accent="purple"]::after{background:#7c3aed}
+.blog-card[data-accent="amber"]::after{background:#d97706}
+.blog-card[data-accent="blue"]::after{background:#0284c7}
+
+/* Featured card */
+.blog-card--featured{background:var(--forest-2);border-color:transparent;padding:36px 32px 32px}
+.blog-card--featured::after{height:4px}
+/* ::before removed — replaced by blog-card__img background */
+.blog-card--featured .blog-pill{background:rgba(250,248,244,0.1);color:rgba(250,248,244,0.65);border-color:rgba(250,248,244,0.08)}
+.blog-card--featured .blog-card__title{color:var(--cream);font-size:clamp(22px,2.2vw,28px)}
+.blog-card--featured .blog-card__excerpt{color:rgba(250,248,244,0.5);font-size:15px;line-height:1.75}
+.blog-card--featured .blog-card__meta{color:rgba(250,248,244,0.35)}
+.blog-card--featured .blog-card__foot{border-top-color:rgba(255,255,255,0.07)}
+.blog-card--featured .bc-arrow{background:rgba(250,248,244,0.08)}
+.blog-card--featured .bc-arrow svg{color:var(--coral-2)}
+.blog-card--featured:hover{box-shadow:0 24px 50px rgba(0,0,0,0.2);transform:translateY(-6px)}
+.blog-card--featured:hover .blog-card__title{color:var(--coral-2)}
+.blog-card--featured:hover .bc-arrow{background:var(--coral)}
+.blog-card--featured:hover .bc-arrow svg{color:#fff}
+
+/* Pill */
+.blog-pill{display:inline-flex;padding:4px 12px;border-radius:999px;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.8px;border:1px solid var(--border-light);color:var(--text-faint);margin-bottom:16px;width:fit-content;transition:color .3s,border-color .3s,background .3s}
+.blog-card[data-accent="forest"]:hover .blog-pill{color:var(--forest);border-color:rgba(27,58,45,0.2);background:rgba(27,58,45,0.05)}
+.blog-card[data-accent="coral"]:hover .blog-pill{color:var(--coral);border-color:rgba(232,76,30,0.2);background:rgba(232,76,30,0.05)}
+.blog-card[data-accent="purple"]:hover .blog-pill{color:#7c3aed;border-color:rgba(124,58,237,0.2);background:rgba(124,58,237,0.05)}
+.blog-card[data-accent="amber"]:hover .blog-pill{color:#d97706;border-color:rgba(217,119,6,0.2);background:rgba(217,119,6,0.05)}
+.blog-card[data-accent="blue"]:hover .blog-pill{color:#0284c7;border-color:rgba(2,132,199,0.2);background:rgba(2,132,199,0.05)}
+.blog-card--featured:hover .blog-pill{color:var(--cream);border-color:rgba(250,248,244,0.25);background:rgba(250,248,244,0.12)}
+
+/* Title */
+.blog-card__title{font-family:'Outfit',sans-serif;font-size:17px;font-weight:800;color:var(--ink);letter-spacing:-0.02em;line-height:1.3;margin-bottom:10px;transition:color .3s}
+.blog-card:not(.blog-card--featured):hover .blog-card__title{color:var(--forest)}
+
+/* Excerpt */
+.blog-card__excerpt{font-size:14px;color:var(--text-mid);line-height:1.65;flex-grow:1}
+
+/* Footer */
+.blog-card__foot{display:flex;justify-content:space-between;align-items:center;margin-top:auto;padding-top:16px;border-top:1px solid var(--border-light)}
+.blog-card__meta{font-size:12px;color:var(--text-faint);font-weight:500;display:flex;align-items:center;gap:8px}
+.blog-card__meta-dot{width:3px;height:3px;border-radius:50%;background:currentColor;opacity:.5}
+
+/* Arrow circle */
+.bc-arrow{width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:var(--forest-light);flex-shrink:0;transition:background .3s cubic-bezier(.4,0,.2,1),transform .3s}
+.bc-arrow svg{width:15px;height:15px;color:var(--forest);transition:color .3s,transform .35s cubic-bezier(.4,0,.2,1)}
+.blog-card:not(.blog-card--featured):hover .bc-arrow{background:var(--forest)}
+.blog-card:not(.blog-card--featured):hover .bc-arrow svg{color:var(--cream);transform:translateX(2px)}
+.blog-card--featured:hover .bc-arrow svg{transform:translateX(2px)}
+
+/* Card image — regular cards */
+.blog-card__img{width:calc(100% + 56px);margin:-28px -28px 18px;height:150px;overflow:hidden;border-radius:19px 19px 0 0;position:relative}
+.blog-card__img img{width:100%;height:100%;object-fit:cover;transition:transform .6s cubic-bezier(.4,0,.2,1)}
+.blog-card:hover .blog-card__img img{transform:scale(1.06)}
+
+/* Card image — featured card (background style) */
+.blog-card--featured .blog-card__img{position:absolute;inset:0;width:100%;height:100%;margin:0;border-radius:0;z-index:0}
+.blog-card--featured .blog-card__img img{opacity:.18;width:100%;height:100%;object-fit:cover;transition:opacity .5s,transform .8s cubic-bezier(.4,0,.2,1)}
+.blog-card--featured .blog-card__img::after{content:'';position:absolute;inset:0;background:linear-gradient(to top,var(--forest-2) 25%,rgba(15,35,24,0.6))}
+.blog-card--featured:hover .blog-card__img img{opacity:.25;transform:scale(1.04)}
+.blog-card--featured .blog-card__body{position:relative;z-index:2;display:flex;flex-direction:column;height:100%}
+.blog-card--featured .blog-card__body .blog-card__excerpt{flex-grow:1}
+
+/* Topic strip */
+.blog-topics{display:flex;gap:10px;margin-top:36px;flex-wrap:wrap}
+.blog-topic{display:inline-flex;align-items:center;gap:6px;padding:8px 18px;border-radius:999px;font-size:12.5px;font-weight:600;color:var(--text-mid);background:var(--cream);border:1px solid var(--border-light);transition:all .25s;cursor:pointer;white-space:nowrap;text-decoration:none}
+.blog-topic:hover{border-color:var(--forest);color:var(--forest);background:var(--forest-light)}
+.blog-topic svg{width:14px;height:14px;opacity:.5}
+
+/* Blog responsive */
+@media(max-width:960px){
+  .blog-bento{grid-template-columns:1fr 1fr;grid-template-rows:auto}
+  .blog-card--featured{grid-column:1/-1;grid-row:auto}
+}
+@media(max-width:600px){
+  .blog-bento{grid-template-columns:1fr}
+  .blog-top{flex-direction:column;align-items:flex-start;gap:16px}
+  .blog-topics{overflow-x:auto;flex-wrap:nowrap;padding-bottom:8px;-webkit-overflow-scrolling:touch}
+}
+
 /* ===== CONTACT FORM — CREAM ===== */
 .contact-section{background:var(--cream-2);padding:100px 0}
 .contact-layout{display:grid;grid-template-columns:1fr 1.1fr;gap:80px;align-items:flex-start}
@@ -648,17 +753,12 @@ li.addon.addon--open .addon-toggle svg{transform:rotate(45deg)}
 .client-item .ci-dot{width:5px;height:5px;border-radius:50%;background:var(--coral);opacity:.5;flex-shrink:0}
 
 /* ===== TESTIMONIALS CAROUSEL - 3-CARD GRID ===== */
-.tc-outer{position:relative;padding:0 60px}
-.tc-overflow{overflow:hidden;width:100%;max-width:100%}
-.tc-rail{display:flex;gap:24px;transition:transform .6s cubic-bezier(.16,1,.3,1);will-change:transform}
-.tc-rail .tc{min-width:calc(33.333% - 16px);flex-shrink:0;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.08);border-radius:16px;padding:32px;min-height:320px;display:flex;flex-direction:column;transition:all .3s cubic-bezier(.16,1,.3,1)}
+.tc-outer{position:relative}
+.tc-overflow{overflow-x:clip;overflow-y:visible;width:100%;max-width:100%}
+.tc-rail{display:flex;gap:24px;transition:transform .6s cubic-bezier(.16,1,.3,1);will-change:transform;width:100%}
+.tc-rail .tc{width:calc(33.333% - 16px);flex:0 0 auto;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.08);border-radius:16px;padding:32px;min-height:320px;display:flex;flex-direction:column;transition:all .3s cubic-bezier(.16,1,.3,1)}
 .tc-rail .tc:hover{background:rgba(255,255,255,0.06);border-color:rgba(255,255,255,0.15);transform:translateY(-4px);box-shadow:0 12px 32px rgba(0,0,0,0.3)}
 .tc-nav{display:flex;justify-content:center;gap:16px;margin-top:48px;align-items:center}
-.tc-arr{width:52px;height:52px;border-radius:50%;background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.14);display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all .25s;color:var(--cream);flex-shrink:0;font-size:20px;font-family:inherit;line-height:1;position:absolute;top:50%;transform:translateY(-50%);z-index:10}
-.tc-arr:hover{background:rgba(232,76,30,0.2);border-color:var(--coral-2);transform:translateY(-50%) scale(1.08)}
-.tc-arr:active{transform:translateY(-50%) scale(0.96)}
-#forgePrev{left:0}
-#forgeNext{right:0}
 .tc-dots-row{display:flex;gap:8px;align-items:center}
 .tc-dot{width:10px;height:10px;border-radius:50%;background:rgba(255,255,255,0.2);cursor:pointer;transition:all .3s;border:1px solid transparent}
 .tc-dot:hover{background:rgba(255,255,255,0.35)}
@@ -683,20 +783,18 @@ li.addon.addon--open .addon-toggle svg{transform:rotate(45deg)}
 
 @media(max-width:1024px){
   .allsvc-grid{grid-template-columns:1fr 1fr}
-  .tc-rail .tc{min-width:calc(50% - 10px)}
+  .tc-rail .tc{width:calc(50% - 12px)}
 }
 @media(max-width:640px){
   .allsvc-grid{grid-template-columns:1fr}
-  .tc-outer{padding:0 16px}
   .tc-rail{gap:16px}
-  .tc-rail .tc{min-width:calc(100% - 0px);padding:24px;min-height:280px}
+  .tc-rail .tc{width:100%;padding:24px;min-height:280px}
   .tc__quote{font-size:42px}
   .tc__stars svg{width:16px;height:16px}
   .tc__text{font-size:14px}
   .tc__av{width:44px;height:44px;font-size:14px}
   .tc__name{font-size:15px}
   .tc__role,.tc__flag{font-size:12px}
-  .tc-arr{width:44px;height:44px;font-size:18px}
   .tc-dot{width:8px;height:8px}
   .tc-dot.on{width:24px}
   .pfc-h2{font-size:38px}
@@ -726,6 +824,7 @@ li.addon.addon--open .addon-toggle svg{transform:rotate(45deg)}
       <li><a href="#process">Process</a></li>
       <li><a href="#pricing">Pricing</a></li>
       <li><a href="#testimonials">Reviews</a></li>
+      <li><a href="#insights">Insights</a></li>
       <li><a href="#contact">Contact</a></li>
     </ul>
     <div class="header__right">
@@ -743,6 +842,7 @@ li.addon.addon--open .addon-toggle svg{transform:rotate(45deg)}
   <a href="#process" onclick="closeMob()">Process</a>
   <a href="#pricing" onclick="closeMob()">Pricing</a>
   <a href="#testimonials" onclick="closeMob()">Reviews</a>
+  <a href="#insights" onclick="closeMob()">Insights</a>
   <a href="#contact" onclick="closeMob()">Contact</a>
   <a href="#pricing" class="btn btn--forest btn--lg" onclick="closeMob()" style="margin-top:12px">Get Started →</a>
 </div>
@@ -1380,19 +1480,123 @@ li.addon.addon--open .addon-toggle svg{transform:rotate(45deg)}
         <div class="tc__hr"></div>
         <div class="tc__author"><div class="tc__av" style="background:rgba(168,85,247,0.6)">NS</div><div><div class="tc__name">Nadia Siddiqui</div><div class="tc__role">Shopify Store Owner</div><div class="tc__flag">🇵🇰 Lahore, Pakistan</div></div></div>
       </div>
+      <div class="tc">
+        <div class="tc__quote">"</div>
+        <div class="tc__stars"><svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg><svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg><svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg><svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg><svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg></div>
+        <p class="tc__text">LLCPad guided me through ITIN application and US business banking — processes that seemed impossible from Dubai. My account was open within a week. Their knowledge of non-resident requirements is truly exceptional.</p>
+        <div class="tc__hr"></div>
+        <div class="tc__author"><div class="tc__av" style="background:rgba(14,165,233,0.6)">OA</div><div><div class="tc__name">Omar Al-Mansouri</div><div class="tc__role">Import/Export Business</div><div class="tc__flag">🇦🇪 Dubai, UAE</div></div></div>
+      </div>
+      <div class="tc">
+        <div class="tc__quote">"</div>
+        <div class="tc__stars"><svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg><svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg><svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg><svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg><svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg></div>
+        <p class="tc__text">Got my Walmart seller account approved on the first try thanks to LLCPad. They handled everything from LLC formation to seller verification. Now selling on both Amazon and Walmart from Bangalore!</p>
+        <div class="tc__hr"></div>
+        <div class="tc__author"><div class="tc__av" style="background:rgba(245,158,11,0.6)">AM</div><div><div class="tc__name">Ananya Mehta</div><div class="tc__role">Multi-channel Seller</div><div class="tc__flag">🇮🇳 Bangalore, India</div></div></div>
+      </div>
     </div>
     </div><!-- tc-overflow -->
     <div class="tc-nav">
-      <button class="tc-arr" id="forgePrev">&#8592;</button>
       <div class="tc-dots-row" id="forgeDots">
         <div class="tc-dot on"></div>
         <div class="tc-dot"></div>
         <div class="tc-dot"></div>
         <div class="tc-dot"></div>
       </div>
-      <button class="tc-arr" id="forgeNext">&#8594;</button>
     </div>
     </div><!-- tc-outer -->
+  </div>
+</section>
+
+<!-- INSIGHTS / BLOG — WHITE -->
+<section class="blog-section" id="insights">
+  <div class="container">
+    <div class="blog-top">
+      <div class="blog-top-left r r-right">
+        <div class="eyebrow">Insights</div>
+        <h2>Free guides for<br>global founders</h2>
+      </div>
+      <div class="blog-top-right r r-left d2">
+        <a href="#">Browse all <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
+      </div>
+    </div>
+
+    <div class="blog-bento">
+
+      <!-- Featured: Wyoming vs Delaware -->
+      <a class="blog-card blog-card--featured r d1" href="#" data-accent="coral">
+        <div class="blog-card__img"><img src="https://images.unsplash.com/photo-1515861209048-dae6a1e1ed56?auto=format&fit=crop&w=800&q=80" alt="United States map — Wyoming vs Delaware LLC comparison" loading="lazy"></div>
+        <div class="blog-card__body">
+          <div class="blog-pill">LLC Guide</div>
+          <div class="blog-card__title">Wyoming vs Delaware LLC for Non-Residents: Which State Should You Choose in 2026?</div>
+          <p class="blog-card__excerpt">Privacy, fees, annual costs, tax implications — we break down the real differences that matter when you're forming a US LLC from abroad. Updated with the latest BOI exemption rules and the new remittance tax impact.</p>
+          <div class="blog-card__foot">
+            <div class="blog-card__meta">12 min read <span class="blog-card__meta-dot"></span> Feb 2026</div>
+            <div class="bc-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg></div>
+          </div>
+        </div>
+      </a>
+
+      <!-- Card 2: Form 5472 -->
+      <a class="blog-card r d2" href="#" data-accent="coral">
+        <div class="blog-card__img"><img src="https://images.unsplash.com/photo-1450101499163-c8848c66ca85?auto=format&fit=crop&w=800&q=80" alt="Tax document filing — Form 5472 compliance" loading="lazy"></div>
+        <div class="blog-pill">Tax & Compliance</div>
+        <div class="blog-card__title">Form 5472: The $25,000 Filing Every Foreign LLC Owner Must Know</div>
+        <p class="blog-card__excerpt">Even with zero income, this IRS filing is mandatory. Miss it, and you face $25,000 in penalties.</p>
+        <div class="blog-card__foot">
+          <div class="blog-card__meta">8 min read</div>
+          <div class="bc-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg></div>
+        </div>
+      </a>
+
+      <!-- Card 3: US Banking -->
+      <a class="blog-card r d3" href="#" data-accent="blue">
+        <div class="blog-card__img"><img src="https://images.unsplash.com/photo-1563013544-824ae1b704d3?auto=format&fit=crop&w=800&q=80" alt="Online banking with laptop and payment card" loading="lazy"></div>
+        <div class="blog-pill">Banking</div>
+        <div class="blog-card__title">US Bank Account for Non-Residents: What Changed in 2026</div>
+        <p class="blog-card__excerpt">Mercury and Relay have new rules. Here's which banks still accept non-resident LLC owners.</p>
+        <div class="blog-card__foot">
+          <div class="blog-card__meta">10 min read</div>
+          <div class="bc-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg></div>
+        </div>
+      </a>
+
+      <!-- Card 4: Remittance Tax -->
+      <a class="blog-card r d2" href="#" data-accent="amber">
+        <div class="blog-card__img"><img src="https://images.unsplash.com/photo-1764865988307-a7abe207fa1d?auto=format&fit=crop&w=800&q=80" alt="International currency — cross-border remittance tax" loading="lazy"></div>
+        <div class="blog-pill">New Law</div>
+        <div class="blog-card__title">The 2026 Remittance Tax: What Every Foreign LLC Owner Needs to Know</div>
+        <p class="blog-card__excerpt">The new 1% excise tax on cross-border transfers is here. How it impacts your LLC profits.</p>
+        <div class="blog-card__foot">
+          <div class="blog-card__meta">6 min read</div>
+          <div class="bc-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg></div>
+        </div>
+      </a>
+
+      <!-- Card 5: TikTok Shop -->
+      <a class="blog-card r d3" href="#" data-accent="purple">
+        <div class="blog-card__img"><img src="https://images.unsplash.com/photo-1746014601711-75145d1b241e?auto=format&fit=crop&w=800&q=80" alt="TikTok Shop on smartphone — e-commerce setup" loading="lazy"></div>
+        <div class="blog-pill">E-Commerce</div>
+        <div class="blog-card__title">How to Set Up TikTok Shop in the US as a Non-Resident</div>
+        <p class="blog-card__excerpt">LLC, EIN, Letter of Authorization, seller verification — the complete playbook for 2026.</p>
+        <div class="blog-card__foot">
+          <div class="blog-card__meta">9 min read</div>
+          <div class="bc-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg></div>
+        </div>
+      </a>
+
+    </div>
+
+    <!-- Topic pills -->
+    <div class="blog-topics r d4">
+      <a class="blog-topic" href="#"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><path d="M14 2v6h6M16 13H8M16 17H8M10 9H8"/></svg>EIN Without SSN</a>
+      <a class="blog-topic" href="#"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>Form 5472 Guide</a>
+      <a class="blog-topic" href="#"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20"/></svg>US Banking Guide</a>
+      <a class="blog-topic" href="#"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 014 10 15.3 15.3 0 01-4 10 15.3 15.3 0 01-4-10 15.3 15.3 0 014-10z"/></svg>Amazon Seller 101</a>
+      <a class="blog-topic" href="#"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>ITIN Application</a>
+      <a class="blog-topic" href="#"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.59 13.41l-7.17 7.17a2 2 0 01-2.83 0L2 12V2h10l8.59 8.59a2 2 0 010 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg>TikTok Shop Setup</a>
+    </div>
+
   </div>
 </section>
 
@@ -1673,7 +1877,8 @@ function handleHeroForm(e){
   function getOffset(){
     const pv=perView();
     const pages=Math.ceil(cards.length/pv);
-    const cardW=cards[0].offsetWidth+24;
+    const gap=parseFloat(getComputedStyle(rail).gap)||24;
+    const cardW=cards[0].offsetWidth+gap;
     return {pages,cardW,pv};
   }
 
@@ -1696,8 +1901,6 @@ function handleHeroForm(e){
     if(autoInterval)clearInterval(autoInterval);
   }
 
-  document.getElementById('forgeNext').onclick=()=>{stopAuto();goTo(cur+1);startAuto();};
-  document.getElementById('forgePrev').onclick=()=>{stopAuto();goTo(cur-1);startAuto();};
   dotsEl.querySelectorAll('.tc-dot').forEach((d,i)=>d.onclick=()=>{stopAuto();goTo(i);startAuto();});
 
   // Pause on hover
