@@ -6,6 +6,44 @@
 
 ---
 
+## Recent Updates (v3-forge.html)
+
+### Statistics Updated
+- **Total clients:** 1,200+ (maintained)
+- **Countries served:** 30+ (standardized across all mentions)
+
+### Country-wise Client Distribution (Ticker Section)
+Total: ~1,085+ (leaves room for growth to 1,200+)
+- India: 320+ clients
+- Pakistan: 220+ clients
+- UAE: 160+ clients
+- Nigeria: 110+ clients
+- Philippines: 90+ clients
+- Turkey: 75+ clients
+- Egypt: 60+ clients
+- Indonesia: 50+ clients
+
+### Brand Names (Client Ticker Section)
+International LLC brands displayed:
+- DesertBloom LLC
+- MapleTrade LLC
+- SpiceRoute LLC
+- KiwiCart LLC
+- PeakVenture LLC
+- EagleEcom
+- Zara Ventures
+- Pinnacle Goods
+- Orion Commerce
+- RapidShip Co
+- DeltaStore
+- Kazi Digital
+- ShopNest BD
+- Apex Apparel
+
+---
+
+---
+
 ## Final Service List (4 Categories)
 
 ### 1. Formation & Legal
