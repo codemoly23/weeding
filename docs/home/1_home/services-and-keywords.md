@@ -23,6 +23,8 @@ Total: ~1,085+ (leaves room for growth to 1,200+)
 - Egypt: 60+ clients
 - Indonesia: 50+ clients
 
+**Note:** Bangladesh is intentionally excluded from public portfolio display
+
 ### Brand Names (Client Ticker Section)
 International LLC brands displayed:
 - DesertBloom LLC
