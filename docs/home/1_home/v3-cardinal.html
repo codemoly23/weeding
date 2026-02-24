@@ -207,6 +207,17 @@ button{cursor:pointer;font-family:inherit}
 .svc-card p{font-size:13px;color:rgba(240,242,248,0.45);line-height:1.65;margin-bottom:20px}
 .svc-card__price{font-family:'Space Grotesk',sans-serif;font-size:14px;font-weight:700;color:var(--blue-light)}
 .svc-card--yl .svc-card__price{color:var(--yellow)}
+.svc-card__meta{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:18px}
+.svc-card__tag{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1px;padding:3px 9px;border-radius:100px;white-space:nowrap}
+.svc-card__tag--f{background:rgba(232,76,30,0.15);color:#ff8a6a}
+.svc-card__tag--e{background:rgba(96,165,250,0.15);color:#93c5fd}
+.svc-card__tag--c{background:rgba(52,211,153,0.12);color:#6ee7b7}
+.svc-card__tag--p{background:rgba(167,139,250,0.15);color:#c4b5fd}
+.svc-card__bdg{font-size:10px;font-weight:700;padding:3px 9px;border-radius:100px;white-space:nowrap;letter-spacing:0.3px}
+.svc-card__bdg--popular{background:rgba(232,76,30,0.85);color:#fff}
+.svc-card__bdg--trending{background:var(--blue);color:#fff}
+.svc-card__bdg--demand{background:rgba(52,211,153,0.18);color:#6ee7b7;border:1px solid rgba(52,211,153,0.25)}
+.svc-card__bdg--emergency{background:#dc2626;color:#fff}
 
 /* ===== HOW IT WORKS — WHITE ===== */
 .hiw-sec{background:var(--white);padding:100px 0}
@@ -458,13 +469,26 @@ button{cursor:pointer;font-family:inherit}
 .svc2-cat__name{font-family:'Space Grotesk',sans-serif;font-size:15px;font-weight:700;color:var(--text-ink);margin-bottom:3px}
 .svc2-cat__desc{font-size:11px;color:var(--text-faint);line-height:1.4}
 .svc2-cat__list{list-style:none;display:flex;flex-direction:column}
-.svc2-cat__row{display:flex;align-items:center;justify-content:space-between;padding:8px 0;border-bottom:1px solid rgba(13,17,23,0.06);font-size:13px}
+.svc2-cat__row{display:flex;align-items:center;justify-content:space-between;padding:8px 10px;margin:0 -10px;border-bottom:1px solid rgba(13,17,23,0.06);font-size:13px;border-radius:7px;position:relative;overflow:hidden;transition:background .2s ease,padding-left .25s cubic-bezier(.16,1,.3,1)}
 .svc2-cat__row:last-child{border-bottom:none}
-.svc2-cat__rname{color:var(--text-ink);font-weight:500}
-.svc2-cat:nth-child(1) .svc2-cat__rprice{color:var(--blue);font-weight:700;font-family:'Space Grotesk',sans-serif;white-space:nowrap;margin-left:8px}
-.svc2-cat:nth-child(2) .svc2-cat__rprice{color:#059669;font-weight:700;font-family:'Space Grotesk',sans-serif;white-space:nowrap;margin-left:8px}
-.svc2-cat:nth-child(3) .svc2-cat__rprice{color:#7a9400;font-weight:700;font-family:'Space Grotesk',sans-serif;white-space:nowrap;margin-left:8px}
-.svc2-cat:nth-child(4) .svc2-cat__rprice{color:#7c3aed;font-weight:700;font-family:'Space Grotesk',sans-serif;white-space:nowrap;margin-left:8px}
+.svc2-cat__row::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;border-radius:0 2px 2px 0;transform:scaleY(0);transform-origin:center;transition:transform .3s cubic-bezier(.16,1,.3,1)}
+.svc2-cat__row:hover{padding-left:18px}
+.svc2-cat__row:hover::before{transform:scaleY(1)}
+.svc2-cat:nth-child(1) .svc2-cat__row::before{background:var(--blue)}
+.svc2-cat:nth-child(1) .svc2-cat__row:hover{background:rgba(0,102,255,0.06)}
+.svc2-cat:nth-child(2) .svc2-cat__row::before{background:#059669}
+.svc2-cat:nth-child(2) .svc2-cat__row:hover{background:rgba(5,150,105,0.06)}
+.svc2-cat:nth-child(3) .svc2-cat__row::before{background:#7a9400}
+.svc2-cat:nth-child(3) .svc2-cat__row:hover{background:rgba(200,240,0,0.07)}
+.svc2-cat:nth-child(4) .svc2-cat__row::before{background:#7c3aed}
+.svc2-cat:nth-child(4) .svc2-cat__row:hover{background:rgba(124,58,237,0.06)}
+.svc2-cat__rname{color:var(--text-ink);font-weight:500;transition:color .2s ease,font-weight .2s ease}
+.svc2-cat__row:hover .svc2-cat__rname{color:var(--ink);font-weight:600}
+.svc2-cat:nth-child(1) .svc2-cat__rprice{color:var(--blue);font-weight:700;font-family:'Space Grotesk',sans-serif;white-space:nowrap;margin-left:8px;transition:transform .2s ease}
+.svc2-cat:nth-child(2) .svc2-cat__rprice{color:#059669;font-weight:700;font-family:'Space Grotesk',sans-serif;white-space:nowrap;margin-left:8px;transition:transform .2s ease}
+.svc2-cat:nth-child(3) .svc2-cat__rprice{color:#7a9400;font-weight:700;font-family:'Space Grotesk',sans-serif;white-space:nowrap;margin-left:8px;transition:transform .2s ease}
+.svc2-cat:nth-child(4) .svc2-cat__rprice{color:#7c3aed;font-weight:700;font-family:'Space Grotesk',sans-serif;white-space:nowrap;margin-left:8px;transition:transform .2s ease}
+.svc2-cat__row:hover .svc2-cat__rprice{transform:scale(1.06)}
 
 /* ===== CLIENTS MARQUEE ===== */
 .clients2-sec{background:var(--ink);padding:52px 0;border-top:1px solid var(--border-dark);border-bottom:1px solid var(--border-dark)}
@@ -724,12 +748,15 @@ button{cursor:pointer;font-family:inherit}
           <li class="svc2-cat__row"><span class="svc2-cat__rname">Annual Report Filing</span><span class="svc2-cat__rprice">$75</span></li>
           <li class="svc2-cat__row"><span class="svc2-cat__rname">BOI Ownership Filing</span><span class="svc2-cat__rprice">$49</span></li>
           <li class="svc2-cat__row"><span class="svc2-cat__rname">Apostille Service</span><span class="svc2-cat__rprice">$149</span></li>
+          <li class="svc2-cat__row"><span class="svc2-cat__rname">Form 5472 Preparation</span><span class="svc2-cat__rprice">$149</span></li>
+          <li class="svc2-cat__row"><span class="svc2-cat__rname">S-Corp Election</span><span class="svc2-cat__rprice">$149</span></li>
+          <li class="svc2-cat__row"><span class="svc2-cat__rname">Sales Tax Registration</span><span class="svc2-cat__rprice">$149/state</span></li>
         </ul>
       </div>
       <div class="svc2-cat r d3">
         <div class="svc2-cat__hd">
           <div class="svc2-cat__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 002 1.61h9.72a2 2 0 002-1.61L23 6H6"/></svg></div>
-          <div><div class="svc2-cat__name">Amazon Services</div><div class="svc2-cat__desc">Sell on Amazon with confidence</div></div>
+          <div><div class="svc2-cat__name">E-Commerce Setup</div><div class="svc2-cat__desc">Launch & grow your online store</div></div>
         </div>
         <ul class="svc2-cat__list">
           <li class="svc2-cat__row"><span class="svc2-cat__rname">Amazon Seller Account</span><span class="svc2-cat__rprice">$299</span></li>
@@ -739,6 +766,9 @@ button{cursor:pointer;font-family:inherit}
           <li class="svc2-cat__row"><span class="svc2-cat__rname">Category Ungating</span><span class="svc2-cat__rprice">$199</span></li>
           <li class="svc2-cat__row"><span class="svc2-cat__rname">A+ Content Creation</span><span class="svc2-cat__rprice">$299</span></li>
           <li class="svc2-cat__row"><span class="svc2-cat__rname">Account Reinstatement</span><span class="svc2-cat__rprice">$499</span></li>
+          <li class="svc2-cat__row"><span class="svc2-cat__rname">TikTok Shop US Setup</span><span class="svc2-cat__rprice">$199</span></li>
+          <li class="svc2-cat__row"><span class="svc2-cat__rname">Walmart Seller Account</span><span class="svc2-cat__rprice">$199</span></li>
+          <li class="svc2-cat__row"><span class="svc2-cat__rname">Shopify Store Setup</span><span class="svc2-cat__rprice">$399</span></li>
         </ul>
       </div>
       <div class="svc2-cat r d4">
@@ -753,6 +783,7 @@ button{cursor:pointer;font-family:inherit}
           <li class="svc2-cat__row"><span class="svc2-cat__rname">Tax Filing Service</span><span class="svc2-cat__rprice">$299</span></li>
           <li class="svc2-cat__row"><span class="svc2-cat__rname">Reseller Certificate</span><span class="svc2-cat__rprice">$99</span></li>
           <li class="svc2-cat__row"><span class="svc2-cat__rname">Stripe / PayPal Setup</span><span class="svc2-cat__rprice">$99</span></li>
+          <li class="svc2-cat__row"><span class="svc2-cat__rname">Financial Report Preparation</span><span class="svc2-cat__rprice">$99/mo</span></li>
         </ul>
       </div>
     </div>
@@ -767,64 +798,84 @@ button{cursor:pointer;font-family:inherit}
         <div class="label">Services</div>
         <h2>Everything to build your<br>US business, remotely</h2>
       </div>
-      <div class="svc-top__right r rl d2">A complete stack for international entrepreneurs — from entity formation to payment processing, handled by experts.</div>
+      <div class="svc-top__right r rl d2">From LLC formation to Amazon launch — 8 core services, 30+ total. Everything your US business needs, delivered 100% remotely.</div>
     </div>
     <div class="svc-grid">
       <div class="svc-card r d1">
-        <div class="svc-card__n">01 — Most Popular</div>
+        <div class="svc-card__meta">
+          <span class="svc-card__tag svc-card__tag--f">Formation & Legal</span>
+          <span class="svc-card__bdg svc-card__bdg--popular">Most Popular</span>
+        </div>
         <div class="svc-card__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 21h18M3 8v13M21 8v13M6 8V5a1 1 0 011-1h10a1 1 0 011 1v3M9 21v-5h4v5"/></svg></div>
         <h3>LLC Formation</h3>
-        <p>Wyoming or Delaware LLC in 24 hours. Full documentation, state filing, and compliance support included.</p>
-        <div class="svc-card__price">From $199 + state fee</div>
+        <p>Start your US LLC in any state — 100% remote. Articles of Organization, operating agreement, and full compliance docs delivered in 24 hours.</p>
+        <div class="svc-card__price">From $0 + state fee</div>
       </div>
       <div class="svc-card r d2">
-        <div class="svc-card__n">02</div>
+        <div class="svc-card__meta">
+          <span class="svc-card__tag svc-card__tag--f">Formation & Legal</span>
+        </div>
         <div class="svc-card__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><path d="M9 13h6M9 17h4"/></svg></div>
-        <h3>EIN Application</h3>
-        <p>IRS Employer Identification Number — required for banking, Stripe, Amazon, and tax filing.</p>
+        <h3>EIN for Non-US Residents</h3>
+        <p>IRS Employer ID Number — required for US banking, Amazon, Stripe & Payoneer. We file directly with the IRS. No SSN needed.</p>
         <div class="svc-card__price">From $99</div>
       </div>
       <div class="svc-card r d3">
-        <div class="svc-card__n">03</div>
-        <div class="svc-card__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div>
-        <h3>Registered Agent</h3>
-        <p>Legally required in all 50 states. Our reliable registered agent keeps you compliant year-round.</p>
-        <div class="svc-card__price">$99/year</div>
+        <div class="svc-card__meta">
+          <span class="svc-card__tag svc-card__tag--e">E-Commerce</span>
+          <span class="svc-card__bdg svc-card__bdg--emergency">Emergency</span>
+        </div>
+        <div class="svc-card__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg></div>
+        <h3>Amazon Account Reinstatement</h3>
+        <p>Suspended? We write your Plan of Action and submit within 24 hours. 90%+ success rate across 500+ reinstated accounts.</p>
+        <div class="svc-card__price">From $499</div>
       </div>
       <div class="svc-card svc-card--yl r d1">
-        <div class="svc-card__n">04 — Amazon Suite</div>
+        <div class="svc-card__meta">
+          <span class="svc-card__tag svc-card__tag--e">E-Commerce</span>
+          <span class="svc-card__bdg svc-card__bdg--demand">High Demand</span>
+        </div>
         <div class="svc-card__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 002 1.61h9.72a2 2 0 002-1.61L23 6H6"/></svg></div>
-        <h3>Amazon Seller Account</h3>
-        <p>Full Professional Seller account setup with identity verification, appeal support, and compliance guidance for international sellers.</p>
-        <div class="svc-card__price">From $349</div>
-      </div>
-      <div class="svc-card r d2">
-        <div class="svc-card__n">05</div>
-        <div class="svc-card__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><path d="M22 4L12 14.01l-3-3"/></svg></div>
-        <h3>Brand Registry</h3>
-        <p>Enroll your trademark with Amazon Brand Registry to access A+ Content, Sponsored Brands, and brand protection.</p>
+        <h3>Amazon Seller Account Setup</h3>
+        <p>Professional US Amazon seller account — fully verified, compliant, ready to sell. Includes identity check, tax interview, and post-setup support.</p>
         <div class="svc-card__price">From $299</div>
       </div>
+      <div class="svc-card r d2">
+        <div class="svc-card__meta">
+          <span class="svc-card__tag svc-card__tag--e">E-Commerce</span>
+          <span class="svc-card__bdg svc-card__bdg--trending">Trending 2025</span>
+        </div>
+        <div class="svc-card__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg></div>
+        <h3>TikTok Shop US Setup</h3>
+        <p>Get approved as a US TikTok Shop seller. Fastest-growing marketplace right now — low competition window, high buyer intent.</p>
+        <div class="svc-card__price">From $199</div>
+      </div>
       <div class="svc-card r d3">
-        <div class="svc-card__n">06</div>
-        <div class="svc-card__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M12 1v2m0 18v2M4.22 4.22l1.42 1.42m12.72 12.72l1.42 1.42"/></svg></div>
-        <h3>Trademark Registration</h3>
-        <p>USPTO federal trademark protection for your brand name and logo — required for Amazon Brand Registry.</p>
-        <div class="svc-card__price">From $599</div>
+        <div class="svc-card__meta">
+          <span class="svc-card__tag svc-card__tag--c">Compliance</span>
+        </div>
+        <div class="svc-card__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/><path d="M7 10h2l1 4 2-7 2 3h2"/></svg></div>
+        <h3>Sales Tax Registration</h3>
+        <p>Register for a sales tax permit in any US state. Required for all Amazon FBA and Shopify sellers with nexus. We handle all 50 states.</p>
+        <div class="svc-card__price">$149 / state</div>
       </div>
       <div class="svc-card svc-card--wide r d2">
-        <div class="svc-card__n">07 — Banking Bundle</div>
+        <div class="svc-card__meta">
+          <span class="svc-card__tag svc-card__tag--p">Finance</span>
+        </div>
         <div class="svc-card__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 21V7a2 2 0 012-2h14a2 2 0 012 2v14"/><path d="M3 10h18M7 15h.01M12 15h.01"/></svg></div>
-        <h3>US Business Banking + Virtual Address</h3>
-        <p>Open a real US business bank account entirely remotely through our banking partners. Includes US routing number, debit card, Stripe and PayPal setup — plus a real US mailing address for your LLC and Amazon account.</p>
-        <div class="svc-card__price">Banking from $199 · Address $149/yr</div>
+        <h3>US Business Bank Account</h3>
+        <p>Open a real US business bank account 100% remotely — no SSN, no US visit required. Compatible with Stripe, PayPal, Wise, and Payoneer. ACH transfers and debit card included through our trusted banking partners.</p>
+        <div class="svc-card__price">From $199</div>
       </div>
       <div class="svc-card r d3">
-        <div class="svc-card__n">08</div>
-        <div class="svc-card__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><path d="M14 2v6h6M9 15l2 2 4-4"/></svg></div>
-        <h3>BOI Filing</h3>
-        <p>Beneficial Ownership Information reporting — legally required since 2024 for all US LLCs. We handle it for you.</p>
-        <div class="svc-card__price">From $49</div>
+        <div class="svc-card__meta">
+          <span class="svc-card__tag svc-card__tag--p">Legal Protection</span>
+        </div>
+        <div class="svc-card__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="M9 12l2 2 4-4"/></svg></div>
+        <h3>USPTO Trademark Registration</h3>
+        <p>Federal trademark protection for your brand — required for Amazon Brand Registry. Covers all 50 states with exclusive nationwide rights.</p>
+        <div class="svc-card__price">From $599</div>
       </div>
     </div>
   </div>
@@ -843,32 +894,32 @@ button{cursor:pointer;font-family:inherit}
           <div class="hiw-num">1</div>
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/></svg>
         </div>
-        <h3>Choose Your Plan</h3>
-        <p>Pick a package, select your state, fill in our 5-minute intake form. That's all we need to get started.</p>
+        <h3>Tell Us Your Goal</h3>
+        <p>LLC formation, Amazon launch, TikTok Shop, tax compliance — fill our 5-minute intake form and pick exactly the services you need.</p>
       </div>
       <div class="hiw-step r d2">
         <div class="hiw-dot">
           <div class="hiw-num">2</div>
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
         </div>
-        <h3>We File Everything</h3>
-        <p>Our expert team prepares and files all documents — state registration, IRS, BOI report — with 100% accuracy.</p>
+        <h3>We Handle Every Detail</h3>
+        <p>Our team prepares and submits every document with 100% accuracy — state filing, IRS, BOI report, Amazon account, sales tax registration, and more.</p>
       </div>
       <div class="hiw-step r d3">
         <div class="hiw-dot">
           <div class="hiw-num">3</div>
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg>
         </div>
-        <h3>Track in Real Time</h3>
-        <p>Monitor every milestone through your live dashboard. Get updates as each step completes.</p>
+        <h3>Live Updates, Zero Chasing</h3>
+        <p>Track every milestone in your client dashboard. Get notified via email and WhatsApp the moment each service step is completed.</p>
       </div>
       <div class="hiw-step r d4">
         <div class="hiw-dot">
           <div class="hiw-num">4</div>
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.13-.09-2.91a2.18 2.18 0 00-2.91-.09zM12 15l-3-3a22 22 0 012-3.95A12.88 12.88 0 0122 2c0 2.72-.78 7.5-6 11a22.35 22.35 0 01-4 2z"/></svg>
         </div>
-        <h3>Launch & Grow</h3>
-        <p>Receive all documents digitally. Activate banking, launch your Amazon store, accept global payments.</p>
+        <h3>Launch, Sell & Scale</h3>
+        <p>Receive all documents digitally. Activate your US bank account, go live on Amazon, TikTok Shop, or Shopify — and start building your US revenue.</p>
       </div>
     </div>
   </div>
