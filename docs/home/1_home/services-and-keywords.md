@@ -51,7 +51,7 @@ International LLC brands displayed:
 ### 1. Formation & Legal
 | Service | Price | Online? |
 |---|---|---|
-| LLC Formation | $0 + state fee | ✅ |
+| LLC Formation | From $149 + state fee | ✅ |
 | EIN Application | $99 | ✅ |
 | Operating Agreement | $79 | ✅ |
 | DBA / Trade Name | $99 | ✅ |
@@ -60,12 +60,12 @@ International LLC brands displayed:
 ### 2. Compliance & Documents
 | Service | Price | Online? |
 |---|---|---|
-| Registered Agent | $99/yr | ⚠️ US partner |
+| Registered Agent | $250/yr | ⚠️ US partner |
 | Certificate of Good Standing | $75 | ✅ |
 | Amendment Filing | $99 | ✅ |
 | LLC Dissolution | $149 | ✅ |
 | Virtual Business Address | $149/yr | ⚠️ US partner |
-| Annual Report Filing | $75 | ✅ |
+| Annual Report Filing | $60/yr | ✅ |
 | BOI Ownership Filing | $49 | ✅ |
 | Apostille Service | $149 | ❌ Physical |
 | Form 5472 Preparation | $149 | ✅ |
