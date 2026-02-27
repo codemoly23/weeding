@@ -64,6 +64,7 @@ export async function POST(request: NextRequest) {
           themeName: meta.name,
           colorPalette: data.colorPalette as any,
           originalColorPalette: data.colorPalette as any,
+          fontConfig: (data as any).fontConfig ?? undefined,
         },
       });
 

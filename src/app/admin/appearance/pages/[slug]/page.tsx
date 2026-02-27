@@ -95,9 +95,10 @@ const TEMPLATE_LABELS: Record<string, string> = {
   CUSTOM: "Custom Page",
 };
 
-export default function PageEditorPage({ params }: { params: Promise<{ id: string }> }) {
-  const { id } = use(params);
+export default function PageEditorPage({ params }: { params: Promise<{ slug: string }> }) {
+  const { slug: pageSlugParam } = use(params);
   const router = useRouter();
+  const [pageId, setPageId] = useState<string | null>(null);
 
   const [page, setPage] = useState<PageData | null>(null);
   const [templates, setTemplates] = useState<TemplateInfo[]>([]);
@@ -175,7 +176,7 @@ export default function PageEditorPage({ params }: { params: Promise<{ id: strin
     async function loadData() {
       try {
         const [pageRes, templatesRes, widgetDefaultsRes] = await Promise.all([
-          fetch(`/api/admin/pages/${id}`),
+          fetch(`/api/admin/pages/${pageSlugParam}`),
           fetch("/api/admin/pages/templates"),
           fetch("/api/admin/themes/widget-defaults"),
         ]);
@@ -188,6 +189,7 @@ export default function PageEditorPage({ params }: { params: Promise<{ id: strin
 
         const pageData = await pageRes.json();
         setPage(pageData);
+        setPageId(pageData.id);
         setSections(pageData.sections || []);
         setPageName(pageData.name);
         setPageSlug(pageData.slug);
@@ -212,7 +214,7 @@ export default function PageEditorPage({ params }: { params: Promise<{ id: strin
       }
     }
     loadData();
-  }, [id, router]);
+  }, [pageSlugParam, router]);
 
   // Widget browser state (left panel)
   const [pendingWidgetColumn, setPendingWidgetColumn] = useState<{
@@ -505,6 +507,7 @@ export default function PageEditorPage({ params }: { params: Promise<{ id: strin
 
   // Save handler - uses sectionsRef to avoid stale closure issues
   const handleSave = async () => {
+    if (!pageId) return;
     setSaving(true);
     try {
       // Use ref to get the absolute latest sections value
@@ -525,7 +528,7 @@ export default function PageEditorPage({ params }: { params: Promise<{ id: strin
 
       // Save sections
       const sectionsPayload = JSON.stringify({ sections: currentSections });
-      const sectionsRes = await fetch(`/api/admin/pages/${id}/sections`, {
+      const sectionsRes = await fetch(`/api/admin/pages/${pageId}/sections`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: sectionsPayload,
@@ -541,7 +544,7 @@ export default function PageEditorPage({ params }: { params: Promise<{ id: strin
       console.log("[PageBuilder Save] Sections saved:", sectionsResult);
 
       // Save page settings
-      const settingsRes = await fetch(`/api/admin/pages/${id}`, {
+      const settingsRes = await fetch(`/api/admin/pages/${pageId}`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -556,9 +559,14 @@ export default function PageEditorPage({ params }: { params: Promise<{ id: strin
         throw new Error("Failed to save page settings");
       }
 
+      // If slug changed, update the URL to reflect the new slug
+      if (pageSlug !== pageSlugParam) {
+        router.replace(`/admin/appearance/pages/${pageSlug}`);
+      }
+
       // Save template assignment if changed
       if (page && selectedTemplateType !== (page.templateType || "")) {
-        const templateRes = await fetch(`/api/admin/pages/${id}/template`, {
+        const templateRes = await fetch(`/api/admin/pages/${pageId}/template`, {
           method: "PUT",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
@@ -698,7 +706,7 @@ export default function PageEditorPage({ params }: { params: Promise<{ id: strin
                         {Object.entries(TEMPLATE_LABELS).map(([value, label]) => {
                           const template = templates.find((t) => t.type === value);
                           const isOtherAssigned =
-                            template?.isAssigned && template.assignedPage?.id !== id;
+                            template?.isAssigned && template.assignedPage?.id !== pageId;
                           return (
                             <SelectItem key={value} value={value}>
                               {label}

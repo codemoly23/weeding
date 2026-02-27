@@ -13,9 +13,6 @@ import {
   Mail,
   Phone,
   MapPin,
-  Send,
-  CheckCircle,
-  Loader2,
   Sparkles,
   ArrowRight,
   ArrowUpRight,
@@ -27,9 +24,7 @@ import type { FooterWidget, PublicFooterResponse, ButtonCustomStyle } from "@/li
 import { CraftButton, CraftButtonLabel, CraftButtonIcon } from "@/components/ui/craft-button";
 import { PrimaryFlowButton } from "@/components/ui/flow-button";
 import { NeuralButton } from "@/components/ui/neural-button";
-import { Button } from "@/components/ui/button";
 import { CRAFT_BG_DARK, WHITE, ORANGE_PRIMARY } from "@/lib/button-constants";
-import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
 
 // Shared button utilities
@@ -167,180 +162,6 @@ const fallbackLinks = {
   ],
   states: [] as { name: string; href: string }[],
 };
-
-// Enhanced Newsletter form component with multiple styles
-function EnhancedNewsletterForm({
-  title,
-  subtitle,
-  formAction,
-  style = "inline",
-  buttonStyle = "primary",
-  accentColor,
-  incentive,
-  buttonText = "Subscribe",
-  borderColor,
-  textColor,
-}: {
-  title?: string;
-  subtitle?: string;
-  formAction?: string;
-  style?: "inline" | "stacked" | "floating";
-  buttonStyle?: "primary" | "secondary" | "outline" | "gradient";
-  accentColor?: string;
-  incentive?: string;
-  buttonText?: string;
-  borderColor?: string;
-  textColor?: string;
-}) {
-  const [email, setEmail] = useState("");
-  const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!email) return;
-
-    setStatus("loading");
-
-    try {
-      if (formAction) {
-        const response = await fetch(formAction, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ email }),
-        });
-        if (!response.ok) throw new Error("Subscription failed");
-      } else {
-        const response = await fetch("/api/newsletter/subscribe", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ email }),
-        });
-        if (!response.ok) throw new Error("Subscription failed");
-      }
-      setStatus("success");
-      setEmail("");
-      setTimeout(() => setStatus("idle"), 3000);
-    } catch {
-      setStatus("error");
-      setTimeout(() => setStatus("idle"), 3000);
-    }
-  };
-
-  const buttonClasses = cn(
-    "transition-all duration-200",
-    buttonStyle === "gradient" && "bg-gradient-to-r from-primary to-primary/80 hover:from-primary/90 hover:to-primary/70",
-    buttonStyle === "outline" && "border-2 border-current bg-transparent hover:bg-current/10"
-  );
-
-  if (style === "stacked") {
-    return (
-      <div className="space-y-4">
-        {title && <h3 className="text-lg font-semibold">{title}</h3>}
-        {subtitle && <p className="text-sm opacity-80">{subtitle}</p>}
-        {incentive && (
-          <div className="flex items-center gap-2 text-sm" style={{ color: accentColor }}>
-            <Sparkles className="h-4 w-4" />
-            <span>{incentive}</span>
-          </div>
-        )}
-        <form onSubmit={handleSubmit} className="space-y-3">
-          <Input
-            type="email"
-            placeholder="Enter your email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            disabled={status === "loading" || status === "success"}
-            required
-            className="w-full"
-            aria-label="Email address"
-            style={{
-              borderColor: borderColor || undefined,
-              color: textColor || undefined,
-            }}
-          />
-          <Button
-            type="submit"
-            disabled={status === "loading" || status === "success"}
-            className={cn("w-full", buttonClasses)}
-            style={accentColor ? { backgroundColor: accentColor } : undefined}
-          >
-            {status === "loading" ? (
-              <Loader2 className="h-4 w-4 animate-spin mr-2" />
-            ) : status === "success" ? (
-              <CheckCircle className="h-4 w-4 mr-2" />
-            ) : (
-              <Send className="h-4 w-4 mr-2" />
-            )}
-            {status === "success" ? "Subscribed!" : buttonText}
-          </Button>
-        </form>
-        {status === "error" && (
-          <p className="text-sm text-destructive" role="alert">Failed to subscribe. Please try again.</p>
-        )}
-      </div>
-    );
-  }
-
-  // Default inline style - Modern compact design
-  // Button uses accent color for visibility on dark backgrounds
-  const buttonBgColor = accentColor || "#22d3ee";
-
-  return (
-    <div className="space-y-3">
-      {title && <h3 className="text-sm font-semibold">{title}</h3>}
-      <form
-        onSubmit={handleSubmit}
-        className="flex max-w-sm rounded-lg overflow-hidden border focus-within:ring-2 focus-within:ring-white/40 transition-all"
-        style={{ borderColor: borderColor || "rgba(255,255,255,0.2)" }}
-      >
-        <Input
-          type="email"
-          placeholder="Enter your email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          className="flex-1 min-w-0 border-0 rounded-none bg-white/5 placeholder:opacity-50 focus-visible:ring-0 focus-visible:ring-offset-0 h-11 text-sm"
-          disabled={status === "loading" || status === "success"}
-          required
-          aria-label="Email address"
-          style={{ color: textColor || undefined }}
-        />
-        <Button
-          type="submit"
-          disabled={status === "loading" || status === "success"}
-          className="rounded-none h-11 px-5 font-semibold shrink-0 border-0 text-sm hover:opacity-90 transition-opacity disabled:opacity-50"
-          style={{
-            backgroundColor: buttonBgColor,
-            color: "#0f172a"
-          }}
-        >
-          {status === "loading" ? (
-            <Loader2 className="h-4 w-4 animate-spin" />
-          ) : status === "success" ? (
-            <>
-              <CheckCircle className="h-4 w-4 mr-1.5" />
-              Done
-            </>
-          ) : (
-            buttonText
-          )}
-        </Button>
-      </form>
-      {subtitle && <p className="text-xs opacity-50 mt-2">{subtitle}</p>}
-      {incentive && (
-        <div className="flex items-center gap-2 text-xs" style={{ color: accentColor }}>
-          <Sparkles className="h-3 w-3" />
-          <span>{incentive}</span>
-        </div>
-      )}
-      {status === "success" && (
-        <p className="text-xs text-green-400 mt-2" role="status">Successfully subscribed!</p>
-      )}
-      {status === "error" && (
-        <p className="text-xs text-red-400 mt-2" role="alert">Failed to subscribe. Please try again.</p>
-      )}
-    </div>
-  );
-}
 
 // Enhanced Social Links component with configurable styling
 function EnhancedSocialLinks({
@@ -759,24 +580,6 @@ function FooterWidgetRenderer({
               {(widget.content as { text?: string })?.text || ""}
             </p>
           </div>
-        </div>
-      );
-
-    case "NEWSLETTER":
-      // Extract newsletter content from widget
-      const nlContent = widget.content as { subtitle?: string; incentive?: string; buttonText?: string; style?: string } | null;
-      return (
-        <div>
-          <EnhancedNewsletterForm
-            title={widget.showTitle ? (widget.title ?? undefined) : undefined}
-            subtitle={nlContent?.subtitle || nlContent?.incentive || footerConfig?.newsletter?.subtitle}
-            formAction={footerConfig?.newsletter?.formAction}
-            accentColor={footerConfig?.styling?.accentColor || undefined}
-            borderColor={footerConfig?.styling?.borderColor || undefined}
-            textColor={footerConfig?.styling?.textColor || undefined}
-            style={nlContent?.style as "inline" | "stacked" | "floating" | undefined}
-            buttonText={nlContent?.buttonText || "Subscribe"}
-          />
         </div>
       );
 
@@ -1251,92 +1054,6 @@ export function Footer() {
     `}</style>
   );
 
-  // ============== NEWSLETTER_HERO LAYOUT ==============
-  if (layout === "NEWSLETTER_HERO") {
-    // Find NEWSLETTER widget if exists - use its content for the hero section
-    const newsletterWidget = allWidgets?.find(w => w.type === "NEWSLETTER");
-    const newsletterContent = newsletterWidget?.content as {
-      subtitle?: string;
-      incentive?: string;
-      buttonText?: string;
-    } | null;
-
-    // Get title from widget or fallback to config
-    const heroTitle = newsletterWidget?.title || footerConfig?.newsletter?.title || "Stay in the loop";
-    const heroSubtitle = newsletterContent?.subtitle || newsletterContent?.incentive ||
-      footerConfig?.newsletter?.subtitle || "Get the latest updates, tips, and exclusive offers delivered to your inbox.";
-
-    return (
-      <footer
-        ref={footerRef}
-        className={cn("relative border-t overflow-hidden footer-dynamic-styles", animationClasses)}
-        style={footerStyle}
-        role="contentinfo"
-      >
-        <FooterStyles />
-        <TopBorder />
-        {styling?.bgType === "pattern" && styling.bgPattern && (
-          <BackgroundPattern
-            pattern={styling.bgPattern}
-            color={styling.bgPatternColor || "#000"}
-            opacity={styling.bgPatternOpacity || 10}
-          />
-        )}
-        <div className="container mx-auto px-4 relative z-10">
-          {/* Large Newsletter Section - uses NEWSLETTER widget content if available */}
-          <div className="max-w-2xl mx-auto text-center py-8">
-            <h2 className="text-2xl md:text-3xl font-bold" style={{ color: styling?.headingColor }}>
-              {heroTitle}
-            </h2>
-            <p className="mt-4 text-lg opacity-80">
-              {heroSubtitle}
-            </p>
-            <div className="mt-8">
-              <EnhancedNewsletterForm
-                formAction={footerConfig?.newsletter?.formAction}
-                style="stacked"
-                buttonStyle="gradient"
-                accentColor={styling?.accentColor || undefined}
-                borderColor={styling?.borderColor || undefined}
-                textColor={styling?.textColor || undefined}
-              />
-            </div>
-          </div>
-
-          <Divider />
-
-          {/* Widget Grid - excludes NEWSLETTER widget since it's shown in hero */}
-          {hasDynamicWidgets && (
-            <div className="grid grid-cols-2 gap-8 md:grid-cols-4">
-              {Object.entries(widgetsByColumn!)
-                .filter(([, widgets]) => widgets.length > 0)
-                .map(([column, colWidgets]) => (
-                  <div key={column}>
-                    {colWidgets
-                      .filter(w => w.type !== "NEWSLETTER") // Exclude NEWSLETTER - shown in hero
-                      .map((widget) => (
-                        <FooterWidgetRenderer
-                          key={widget.id}
-                          widget={widget}
-                          businessConfig={businessConfig}
-                          socialLinks={socialLinks}
-                          footerConfig={footerConfig}
-                          headingClasses={headingClasses}
-                          linkClasses={linkClasses}
-                          logoUrl={footerLogoUrl}
-                        />
-                      ))}
-                  </div>
-                ))}
-            </div>
-          )}
-
-          <BottomBar />
-        </div>
-      </footer>
-    );
-  }
-
   // ============== STACKED LAYOUT ==============
   if (layout === "STACKED") {
     return (
@@ -1382,23 +1099,6 @@ export function Footer() {
           </div>
 
           <Divider />
-
-          {/* Newsletter Section */}
-          {footerConfig?.newsletter?.enabled && (
-            <>
-              <div className="max-w-md mx-auto py-6">
-                <EnhancedNewsletterForm
-                  title={footerConfig.newsletter.title}
-                  subtitle={footerConfig.newsletter.subtitle}
-                  formAction={footerConfig.newsletter.formAction}
-                  accentColor={styling?.accentColor || undefined}
-                  borderColor={styling?.borderColor || undefined}
-                  textColor={styling?.textColor || undefined}
-                />
-              </div>
-              <Divider />
-            </>
-          )}
 
           {/* Widget Grid */}
           {hasDynamicWidgets && (
@@ -1523,12 +1223,11 @@ export function Footer() {
   if (layout === "CENTERED") {
     // Separate widgets by type for centered layout rendering
     const linkWidgets = allWidgets.filter(w => w.type === "LINKS");
-    const newsletterWidget = allWidgets.find(w => w.type === "NEWSLETTER");
     const contactWidget = allWidgets.find(w => w.type === "CONTACT");
     // Other widgets (TEXT, CUSTOM_HTML, BUTTON, etc.) excluding BRAND and SOCIAL (handled separately)
     const otherWidgets = allWidgets.filter(w =>
       w.type !== "LINKS" && w.type !== "BRAND" && w.type !== "SOCIAL" &&
-      w.type !== "NEWSLETTER" && w.type !== "CONTACT"
+      w.type !== "CONTACT"
     );
 
     return (
@@ -1548,21 +1247,6 @@ export function Footer() {
           />
         )}
         <div className="container mx-auto px-4 relative z-10">
-          {/* Newsletter Section (if exists) */}
-          {newsletterWidget && (
-            <div className="flex flex-col items-center text-center mb-8">
-              <FooterWidgetRenderer
-                widget={newsletterWidget}
-                businessConfig={businessConfig}
-                socialLinks={socialLinks}
-                footerConfig={footerConfig}
-                headingClasses={headingClasses}
-                linkClasses={linkClasses}
-                logoUrl={footerLogoUrl}
-              />
-            </div>
-          )}
-
           {/* Centered Logo & Description */}
           <div className="flex flex-col items-center text-center">
             <Link href="/" className="flex items-center space-x-3 focus:outline-none focus:ring-2 focus:ring-primary rounded">

@@ -12,6 +12,8 @@ import { HeroContentWidget } from "../widgets/content/hero-content";
 import { HeadingWidget } from "../widgets/content/heading-widget";
 import { TextBlockWidget } from "../widgets/content/text-block-widget";
 import { ProcessStepsWidget } from "../widgets/content/process-steps";
+import { TickerMarqueeWidget } from "../widgets/content/ticker-marquee";
+import { CustomHtmlWidget } from "../widgets/advanced/custom-html-widget";
 import { ImageWidget } from "../widgets/media/image-widget";
 import { ImageSliderWidget } from "../widgets/media/image-slider-widget";
 import { TrustBadgesWidget } from "../widgets/social-proof/trust-badges";
@@ -94,6 +96,12 @@ const WIDGET_COMPONENTS: Partial<Record<WidgetType, React.ComponentType<any>>> =
   "blog-featured-post": BlogFeaturedPostWidget,
   "blog-post-list": BlogPostListWidget,
   "blog-recent-posts": BlogRecentPostsWidget,
+
+  // Theme widgets
+  "ticker-marquee": TickerMarqueeWidget,
+
+  // Advanced widgets
+  "custom-html": CustomHtmlWidget,
 };
 
 // ============================================

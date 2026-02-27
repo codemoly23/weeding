@@ -17,6 +17,7 @@ import {
 } from "@/app/admin/appearance/landing-page/components/ui/form-controls";
 import { FeatureListEditor } from "@/app/admin/appearance/landing-page/components/ui/feature-list-editor";
 import { ButtonStyleEditor } from "@/components/admin/button-style-editor";
+import { ImageUpload } from "@/app/admin/appearance/landing-page/components/ui/image-upload";
 import type { ButtonCustomStyle } from "@/lib/header-footer/types";
 
 interface HeroContentWidgetSettingsProps {
@@ -71,6 +72,7 @@ export function HeroContentWidgetSettingsPanel({
     primaryButton: { ...DEFAULT_HERO_CONTENT_SETTINGS.primaryButton, ...settings?.primaryButton },
     secondaryButton: { ...DEFAULT_HERO_CONTENT_SETTINGS.secondaryButton, ...settings?.secondaryButton },
     trustText: { ...DEFAULT_HERO_CONTENT_SETTINGS.trustText, ...settings?.trustText },
+    avatarGroup: { ...DEFAULT_HERO_CONTENT_SETTINGS.avatarGroup!, ...settings?.avatarGroup, avatars: settings?.avatarGroup?.avatars ?? DEFAULT_HERO_CONTENT_SETTINGS.avatarGroup!.avatars },
     container: { ...DEFAULT_WIDGET_CONTAINER, ...settings?.container },
   };
 
@@ -300,6 +302,96 @@ export function HeroContentWidgetSettingsPanel({
           </>
         )}
       </AccordionSection>
+
+      {/* Avatar Group Section */}
+      <AccordionSection title="Avatar Group" {...getAccordionProps("avatar-group")}>
+        <ToggleSwitch
+          label="Show Avatar Group"
+          checked={s.avatarGroup?.show ?? false}
+          onChange={(checked) => updateNested("avatarGroup", "show", checked)}
+        />
+        {s.avatarGroup?.show && (
+          <>
+            <TextAreaInput
+              label="Text (supports <strong> tags)"
+              value={s.avatarGroup.text}
+              onChange={(v) => updateNested("avatarGroup", "text", v)}
+              placeholder="<strong>1,200+</strong> entrepreneurs launched"
+              rows={2}
+            />
+            <div className="space-y-3">
+              <label className="text-xs font-medium text-muted-foreground">Avatars</label>
+              {s.avatarGroup.avatars.map((avatar, idx) => (
+                <div key={avatar.id} className="space-y-2 rounded-lg border p-3">
+                  <div className="flex items-center justify-between">
+                    <span className="text-xs font-medium text-muted-foreground">Avatar {idx + 1}</span>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        const newAvatars = s.avatarGroup!.avatars.filter((_, i) => i !== idx);
+                        updateNested("avatarGroup", "avatars", newAvatars);
+                      }}
+                      className="text-xs text-destructive hover:underline"
+                    >
+                      Remove
+                    </button>
+                  </div>
+                  <ImageUpload
+                    value={avatar.imageUrl || ""}
+                    onChange={(url) => {
+                      const newAvatars = [...s.avatarGroup!.avatars];
+                      newAvatars[idx] = { ...avatar, imageUrl: url };
+                      updateNested("avatarGroup", "avatars", newAvatars);
+                    }}
+                    label="Profile Image"
+                    description="36×36px recommended. PNG or JPG, max 2MB."
+                    maxSize={2}
+                    accept="image/png,image/jpeg,image/webp"
+                    showUrlInput={false}
+                  />
+                  <div className="flex items-center gap-2">
+                    <input
+                      type="text"
+                      value={avatar.initials}
+                      onChange={(e) => {
+                        const newAvatars = [...s.avatarGroup!.avatars];
+                        newAvatars[idx] = { ...avatar, initials: e.target.value };
+                        updateNested("avatarGroup", "avatars", newAvatars);
+                      }}
+                      className="w-14 px-2 py-1 text-xs border rounded bg-background"
+                      placeholder="AB"
+                    />
+                    <input
+                      type="color"
+                      value={avatar.color}
+                      onChange={(e) => {
+                        const newAvatars = [...s.avatarGroup!.avatars];
+                        newAvatars[idx] = { ...avatar, color: e.target.value };
+                        updateNested("avatarGroup", "avatars", newAvatars);
+                      }}
+                      className="w-8 h-8 rounded cursor-pointer border-0"
+                    />
+                    <span className="text-[10px] text-muted-foreground">Fallback initials & color</span>
+                  </div>
+                </div>
+              ))}
+              <button
+                type="button"
+                onClick={() => {
+                  const newAvatars = [
+                    ...s.avatarGroup!.avatars,
+                    { id: `av_${Date.now()}`, initials: "AB", color: "#059669" },
+                  ];
+                  updateNested("avatarGroup", "avatars", newAvatars);
+                }}
+                className="text-xs text-primary hover:underline"
+              >
+                + Add Avatar
+              </button>
+            </div>
+          </>
+        )}
+      </AccordionSection>
     </div>
   );
 
@@ -360,6 +452,7 @@ export function HeroContentWidgetSettingsPanel({
             { value: "md", label: "Medium" },
             { value: "lg", label: "Large" },
             { value: "xl", label: "Extra Large" },
+            { value: "2xl", label: "Display" },
           ]}
         />
         <ColorInput

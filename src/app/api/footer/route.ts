@@ -75,13 +75,6 @@ export async function GET() {
       layout: footer.layout,
       columns: footer.columns,
       widgets,
-      newsletter: {
-        enabled: footer.newsletterEnabled,
-        title: footer.newsletterTitle,
-        subtitle: footer.newsletterSubtitle,
-        provider: footer.newsletterProvider,
-        formAction: footer.newsletterFormAction,
-      },
       contact: {
         show: footer.showContactInfo,
         position: footer.contactPosition,

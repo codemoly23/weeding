@@ -1,6 +1,6 @@
 "use client";
 
-import type { Section, Widget, SectionBackground } from "@/lib/page-builder/types";
+import type { Section, Widget, SectionBackground, SectionWatermark } from "@/lib/page-builder/types";
 import { DEFAULT_SECTION_BACKGROUND } from "@/lib/page-builder/defaults";
 import { cn } from "@/lib/utils";
 import { getLayoutGridClass, getColumnSpanClasses, getMaxWidthClass } from "@/lib/page-builder/section-layouts";
@@ -18,6 +18,8 @@ import {
   TextBlockWidget,
   LeadFormWidget,
   TestimonialsWidget,
+  TickerMarqueeWidget,
+  CustomHtmlWidget,
 } from "@/components/page-builder/widgets";
 import { ServiceCardWidget, ServiceListWidget, PricingTableWidget } from "@/components/page-builder/widgets/commerce";
 import { ButtonGroupWidget } from "@/components/page-builder/widgets/cta";
@@ -148,12 +150,15 @@ function SectionRenderer({ section }: SectionRendererProps) {
     ? Math.max(0, settings.borderRadius - (settings.gradientBorder!.width || 2))
     : settings.borderRadius;
 
+  const customCSSClass = settings.customCSS ? `section-custom-${section.id}` : undefined;
+
   const sectionContent = (
     <section
       className={cn(
         "relative w-full overflow-hidden",
         visibilityClass,
         settings.className,
+        customCSSClass,
       )}
       style={{
         ...(settings.fullWidth ? backgroundStyles : {}),
@@ -165,8 +170,13 @@ function SectionRenderer({ section }: SectionRendererProps) {
         marginBottom: `${settings.marginBottom ?? 0}px`,
         minHeight: settings.minHeight ? `${settings.minHeight}px` : undefined,
         borderRadius: innerBorderRadius ? `${innerBorderRadius}px` : undefined,
+        isolation: settings.customCSS ? "isolate" : undefined,
       }}
     >
+      {/* Custom CSS (scoped to this section, z-index sandboxed via isolation) */}
+      {settings.customCSS && (
+        <style dangerouslySetInnerHTML={{ __html: `.section-custom-${section.id} { ${settings.customCSS} }` }} />
+      )}
       {/* Video Background */}
       {background.type === "video" && background.video?.url && (
         <video
@@ -205,6 +215,11 @@ function SectionRenderer({ section }: SectionRendererProps) {
         />
       )}
 
+      {/* Watermark Text Overlay */}
+      {settings.watermark?.enabled && settings.watermark.text && (
+        <WatermarkOverlay watermark={settings.watermark} />
+      )}
+
       {/* Container */}
       <div
         className={cn(
@@ -230,6 +245,10 @@ function SectionRenderer({ section }: SectionRendererProps) {
               )}
               style={{
                 padding: column.settings.padding ? `${column.settings.padding}px` : undefined,
+                paddingTop: column.settings.paddingTop ? `${column.settings.paddingTop}px` : undefined,
+                paddingBottom: column.settings.paddingBottom ? `${column.settings.paddingBottom}px` : undefined,
+                paddingLeft: column.settings.paddingLeft ? `${column.settings.paddingLeft}px` : undefined,
+                paddingRight: column.settings.paddingRight ? `${column.settings.paddingRight}px` : undefined,
                 backgroundColor: column.settings.backgroundColor,
               }}
             >
@@ -260,6 +279,41 @@ function SectionRenderer({ section }: SectionRendererProps) {
   }
 
   return sectionContent;
+}
+
+function WatermarkOverlay({ watermark }: { watermark: SectionWatermark }) {
+  const positionStyle: React.CSSProperties = {};
+
+  if (watermark.position === "left") {
+    positionStyle.left = `${watermark.offsetX}px`;
+  } else if (watermark.position === "right") {
+    positionStyle.right = `${watermark.offsetX}px`;
+  } else {
+    positionStyle.left = "50%";
+    positionStyle.marginLeft = `${watermark.offsetX}px`;
+  }
+
+  return (
+    <div
+      className="absolute z-1 pointer-events-none select-none whitespace-nowrap hidden md:block"
+      aria-hidden="true"
+      style={{
+        top: "50%",
+        transform: `translateY(-50%) ${watermark.position === "center" ? "translateX(-50%)" : ""} rotate(${watermark.rotation}deg)`,
+        marginTop: `${watermark.offsetY}px`,
+        fontFamily: "var(--font-heading), sans-serif",
+        fontSize: `${watermark.fontSize}px`,
+        fontWeight: watermark.fontWeight,
+        color: watermark.color,
+        opacity: watermark.opacity,
+        letterSpacing: "-0.04em",
+        lineHeight: 1,
+        ...positionStyle,
+      }}
+    >
+      {watermark.text}
+    </div>
+  );
 }
 
 interface WidgetRendererProps {
@@ -353,6 +407,12 @@ function WidgetRenderer({ widget }: WidgetRendererProps) {
 
       case "blog-recent-posts":
         return <BlogRecentPostsWidget settings={widget.settings as any} />;
+
+      case "custom-html":
+        return <CustomHtmlWidget settings={widget.settings as any} />;
+
+      case "ticker-marquee":
+        return <TickerMarqueeWidget settings={widget.settings as any} />;
 
       default:
         // Unknown widget type - render nothing in production

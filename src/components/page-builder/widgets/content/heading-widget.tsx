@@ -520,11 +520,13 @@ export function HeadingWidget({ settings, isPreview = false }: HeadingWidgetProp
   }
 
   // Build inline styles
+  const hasNewlines = settings.content.text.includes("\n");
   const inlineStyles: React.CSSProperties = {
     ...typographyStyles,
     ...textFillStyles,
     ...textStrokeStyles,
     ...textShadowStyles,
+    ...(hasNewlines && { whiteSpace: "pre-line" }),
     ...(settings.advanced?.maxWidth?.enabled && {
       maxWidth: `${settings.advanced.maxWidth.value}${settings.advanced.maxWidth.unit}`,
     }),

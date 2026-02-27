@@ -80,7 +80,7 @@ interface TemplateInfo {
   label: string;
   description: string;
   isAssigned: boolean;
-  assignedPage: { id: string; name: string } | null;
+  assignedPage: { id: string; name: string; slug: string } | null;
 }
 
 const TEMPLATE_LABELS: Record<string, string> = {
@@ -404,7 +404,7 @@ export default function PagesListPage() {
                     <Badge variant="secondary" className="text-xs">
                       {template.assignedPage?.name}
                     </Badge>
-                    <Link href={`/admin/appearance/pages/${template.assignedPage?.id}`}>
+                    <Link href={`/admin/appearance/pages/${template.assignedPage?.slug}`}>
                       <Button variant="ghost" size="sm">
                         <Edit className="h-3 w-3" />
                       </Button>
@@ -496,7 +496,7 @@ export default function PagesListPage() {
                     <TableCell className="font-medium">
                       <div className="flex items-center gap-2">
                         <Link
-                          href={`/admin/appearance/pages/${page.id}`}
+                          href={`/admin/appearance/pages/${page.slug}`}
                           className="hover:text-primary hover:underline"
                         >
                           {page.name}
@@ -538,7 +538,7 @@ export default function PagesListPage() {
                         </DropdownMenuTrigger>
                         <DropdownMenuContent align="end">
                           <DropdownMenuItem asChild>
-                            <Link href={`/admin/appearance/pages/${page.id}`}>
+                            <Link href={`/admin/appearance/pages/${page.slug}`}>
                               <Edit className="mr-2 h-4 w-4" />
                               Edit
                             </Link>

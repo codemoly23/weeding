@@ -7,13 +7,14 @@ interface RouteParams {
 }
 
 /**
- * GET - Get a single page by ID
+ * GET - Get a single page by ID or slug
  */
 export async function GET(request: NextRequest, { params }: RouteParams) {
   try {
     const { id } = await params;
 
-    const page = await prisma.landingPage.findUnique({
+    // Try finding by ID first, then by slug
+    let page = await prisma.landingPage.findUnique({
       where: { id },
       include: {
         blocks: {
@@ -21,6 +22,17 @@ export async function GET(request: NextRequest, { params }: RouteParams) {
         },
       },
     });
+
+    if (!page) {
+      page = await prisma.landingPage.findUnique({
+        where: { slug: id },
+        include: {
+          blocks: {
+            orderBy: { sortOrder: "asc" },
+          },
+        },
+      });
+    }
 
     if (!page) {
       return NextResponse.json(

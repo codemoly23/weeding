@@ -249,18 +249,18 @@ export function StyledButton({
           : btnStyle.borderColor || btnStyle.bgColor || ORANGE_PRIMARY,
       borderRadius: `${btnStyle.borderRadius ?? 6}px`,
       ...effectStyles,
-      ...(!hasComplex && btnStyle.shadow
+      ...(!hasComplex && (btnStyle.shadow || btnStyle.hoverShadow)
         ? {
             boxShadow:
               isHovered && btnStyle.hoverShadow
                 ? btnStyle.hoverShadow
-                : btnStyle.shadow,
+                : btnStyle.shadow || undefined,
           }
         : {}),
     };
 
     const sharedClassName = cn(
-      "relative inline-flex items-center justify-center gap-2 font-medium cursor-pointer overflow-hidden",
+      "relative inline-flex items-center justify-center gap-2 font-medium font-display cursor-pointer overflow-hidden",
       SIZE_CLASSES[size],
       hoverClass,
       hasComplex

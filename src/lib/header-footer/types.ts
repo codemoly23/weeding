@@ -236,14 +236,12 @@ export type FooterLayout =
   | "STACKED"
   | "ASYMMETRIC"
   | "MEGA_PLUS"
-  | "APP_FOCUSED"
-  | "NEWSLETTER_HERO";
+  | "APP_FOCUSED";
 
 export type FooterWidgetType =
   | "BRAND"
   | "LINKS"
   | "CONTACT"
-  | "NEWSLETTER"
   | "SOCIAL"
   | "TEXT"
   | "RECENT_POSTS"
@@ -350,13 +348,6 @@ export interface FooterConfig {
   // Responsive columns (Phase 3)
   responsiveColumns?: ResponsiveColumns | null;
   sectionOrder?: string[];
-
-  // Newsletter
-  newsletterEnabled: boolean;
-  newsletterTitle: string;
-  newsletterSubtitle?: string | null;
-  newsletterProvider?: string | null;
-  newsletterFormAction?: string | null;
 
   // Social & Contact
   showSocialLinks: boolean;
@@ -516,13 +507,6 @@ export interface PublicFooterResponse {
   responsiveColumns?: ResponsiveColumns;
   sectionOrder?: string[];
   widgets: FooterWidget[];
-  newsletter: {
-    enabled: boolean;
-    title: string;
-    subtitle?: string;
-    provider?: string;
-    formAction?: string;
-  };
   social: {
     show: boolean;
     position: string;

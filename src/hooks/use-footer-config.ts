@@ -16,11 +16,6 @@ const defaultConfig: PublicFooterResponse = {
   layout: "MULTI_COLUMN",
   columns: 4,
   widgets: [],
-  newsletter: {
-    enabled: true,
-    title: "Subscribe to our newsletter",
-    subtitle: "Get updates on new services and offers",
-  },
   social: {
     show: true,
     position: "brand",

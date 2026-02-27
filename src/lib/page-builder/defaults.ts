@@ -19,6 +19,7 @@ import type {
   DividerWidgetSettings,
   SectionSettings,
   SectionBackground,
+  SectionWatermark,
   ColumnSettings,
   GlobalSettings,
   ServiceCardWidgetSettings,
@@ -36,6 +37,8 @@ import type {
   RelatedServicesWidgetSettings,
   ButtonGroupWidgetSettings,
   WidgetContainerStyle,
+  CustomHtmlWidgetSettings,
+  TickerMarqueeWidgetSettings,
 } from "./types";
 
 // ============================================
@@ -95,6 +98,19 @@ export const DEFAULT_SECTION_BACKGROUND: SectionBackground = {
     color: "#ffffff",
     opacity: 0.1,
   },
+};
+
+export const DEFAULT_SECTION_WATERMARK: SectionWatermark = {
+  enabled: false,
+  text: "",
+  position: "right",
+  fontSize: 200,
+  fontWeight: 900,
+  color: "#ffffff",
+  opacity: 0.03,
+  rotation: 90,
+  offsetX: -40,
+  offsetY: 0,
 };
 
 export const DEFAULT_SECTION_SETTINGS: SectionSettings = {
@@ -193,6 +209,19 @@ export const DEFAULT_HERO_CONTENT_SETTINGS: HeroContentWidgetSettings = {
     text: "4.9/5 from 2,000+ reviews",
     textColor: "#9ca3af",
     starColor: "#facc15",
+  },
+  avatarGroup: {
+    show: false,
+    avatars: [
+      { id: "av_1", initials: "RM", color: "#059669" },
+      { id: "av_2", initials: "PS", color: "#7c3aed" },
+      { id: "av_3", initials: "AK", color: "#dc2626" },
+      { id: "av_4", initials: "FH", color: "#d97706" },
+      { id: "av_5", initials: "CO", color: "#0284c7" },
+    ],
+    text: "<strong>1,200+ entrepreneurs</strong> already launched their US business",
+    textColor: "#4b5249",
+    boldColor: "#0e1109",
   },
   alignment: "center",
   // Theme color binding
@@ -309,7 +338,24 @@ export const DEFAULT_TRUST_BADGES_SETTINGS: TrustBadgesWidgetSettings = {
   container: DEFAULT_WIDGET_CONTAINER,
 };
 
+export const DEFAULT_CARD_GRID_SETTINGS: StatsSectionWidgetSettings["cardGrid"] = {
+  borderRadius: 20,
+  gridGap: 1,
+  gridLineColor: "rgba(255,255,255,0.07)",
+  cellBackground: "rgba(255,255,255,0.04)",
+  cellPadding: "32px 28px",
+  valueFontFamily: undefined,
+  valueFontWeight: 900,
+  valueFontSize: 48,
+  valueLetterSpacing: "-0.04em",
+  labelFontSize: 13,
+  labelFontWeight: 500,
+  labelLetterSpacing: "0.3px",
+  labelMarginTop: 8,
+};
+
 export const DEFAULT_STATS_SECTION_SETTINGS: StatsSectionWidgetSettings = {
+  variant: "default",
   stats: [
     { id: "stat_1", value: "500", label: "Projects Completed", suffix: "+", animate: true, icon: "ClipboardCheck" },
     { id: "stat_2", value: "150", label: "Happy Clients", suffix: "+", animate: true, icon: "Users" },
@@ -2156,6 +2202,40 @@ export const DEFAULT_BLOG_RECENT_POSTS_SETTINGS: BlogRecentPostsWidgetSettings =
 };
 
 // ============================================
+// CUSTOM HTML WIDGET DEFAULTS
+// ============================================
+
+export const DEFAULT_CUSTOM_HTML_SETTINGS: CustomHtmlWidgetSettings = {
+  html: "",
+  css: "",
+  container: DEFAULT_WIDGET_CONTAINER,
+};
+
+// ============================================
+// TICKER MARQUEE WIDGET DEFAULTS
+// ============================================
+
+export const DEFAULT_TICKER_MARQUEE_SETTINGS: TickerMarqueeWidgetSettings = {
+  items: [
+    { id: "t_1", content: "<strong>India</strong> · 320+ clients" },
+    { id: "t_2", content: "<strong>Pakistan</strong> · 220+ clients" },
+    { id: "t_3", content: "<strong>UAE</strong> · 160+ clients" },
+    { id: "t_4", content: "<strong>Nigeria</strong> · 110+ clients" },
+    { id: "t_5", content: "<strong>Philippines</strong> · 90+ clients" },
+    { id: "t_6", content: "<strong>Turkey</strong> · 75+ clients" },
+    { id: "t_7", content: "<strong>Egypt</strong> · 60+ clients" },
+    { id: "t_8", content: "<strong>Indonesia</strong> · 50+ clients" },
+  ],
+  speed: 28,
+  separator: "·",
+  textColor: "rgba(250,248,244,0.5)",
+  boldColor: "rgba(250,248,244,0.85)",
+  separatorColor: "#e84c1e",
+  colors: { useTheme: false },
+  container: DEFAULT_WIDGET_CONTAINER,
+};
+
+// ============================================
 // EXPORT ALL DEFAULTS
 // ============================================
 
@@ -2189,4 +2269,6 @@ export const WIDGET_DEFAULTS: Record<string, unknown> = {
   "blog-post-list": DEFAULT_BLOG_POST_LIST_SETTINGS,
   "blog-recent-posts": DEFAULT_BLOG_RECENT_POSTS_SETTINGS,
   "button-group": DEFAULT_BUTTON_GROUP_SETTINGS,
+  "custom-html": DEFAULT_CUSTOM_HTML_SETTINGS,
+  "ticker-marquee": DEFAULT_TICKER_MARQUEE_SETTINGS,
 };

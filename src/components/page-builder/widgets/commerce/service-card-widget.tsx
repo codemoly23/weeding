@@ -307,20 +307,20 @@ function getPriceDisplay(
   switch (position) {
     case "top-right":
       return {
-        className: "absolute top-3 right-4 text-sm font-semibold text-primary bg-primary/10 px-2 py-1 rounded-md",
+        className: "absolute top-3 right-4 text-sm font-semibold font-display text-primary bg-primary/10 px-2 py-1 rounded-md",
         isTopRight: true,
         isBadge: false,
       };
     case "badge":
       return {
-        className: "inline-flex items-center px-3 py-1 rounded-full text-sm font-semibold bg-primary text-primary-foreground",
+        className: "inline-flex items-center px-3 py-1 rounded-full text-sm font-semibold font-display bg-primary text-primary-foreground",
         isTopRight: false,
         isBadge: true,
       };
     case "bottom":
     default:
       return {
-        className: "font-semibold text-primary",
+        className: "font-semibold font-display text-primary",
         isTopRight: false,
         isBadge: false,
       };

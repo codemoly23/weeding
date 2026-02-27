@@ -31,8 +31,7 @@ export type BlockType =
   | "testimonials"
   | "faq"
   | "cta-section"
-  | "stats-counter"
-  | "newsletter";
+  | "stats-counter";
 
 // ============================================
 // HERO BLOCK TYPES

@@ -889,11 +889,6 @@ model FooterConfig {
   isActive             Boolean        @default(true)
   layout               FooterLayout   @default(MULTI_COLUMN)
   columns              Int            @default(4)
-  newsletterEnabled    Boolean        @default(true)
-  newsletterTitle      String         @default("Subscribe to our newsletter")
-  newsletterSubtitle   String?
-  newsletterProvider   String?
-  newsletterFormAction String?
   showSocialLinks      Boolean        @default(true)
   socialPosition       String         @default("brand")
   showContactInfo      Boolean        @default(true)
@@ -946,7 +941,7 @@ model FooterConfig {
   linkHoverEffect      String         @default("color")
   presetId             String?
   responsiveColumns    Json?
-  sectionOrder         String[]       @default(["widgets", "newsletter", "trust", "bottom"])
+  sectionOrder         String[]       @default(["widgets", "trust", "bottom"])
   shadow               String         @default("none")
   socialBgStyle        String         @default("subtle")
   socialColorMode      String         @default("brand")
@@ -998,23 +993,6 @@ model FooterWidget {
 
   @@index([footerId])
   @@index([column, sortOrder])
-}
-
-model NewsletterSubscriber {
-  id             String                     @id @default(cuid())
-  email          String                     @unique
-  name           String?
-  status         NewsletterSubscriberStatus @default(ACTIVE)
-  source         String?
-  subscribedAt   DateTime                   @default(now())
-  unsubscribedAt DateTime?
-  confirmedAt    DateTime?
-  metadata       Json?
-  createdAt      DateTime                   @default(now())
-  updatedAt      DateTime                   @updatedAt
-
-  @@index([status])
-  @@index([subscribedAt])
 }
 
 model LandingPage {
@@ -1302,6 +1280,20 @@ model TrackingSettings {
   updatedAt           DateTime @updatedAt
 }
 
+model Ticker {
+  id        String   @id @default(cuid())
+  name      String   @unique
+  isActive  Boolean  @default(true)
+  items     Json     // Array of { id, boldText, text, link?, openInNewTab?, noFollow? }
+  speed     Int      @default(28)
+  separator String   @default("·")
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([name])
+  @@index([isActive])
+}
+
 model ActiveTheme {
   id                   String   @id @default(cuid())
   themeId              String   @unique
@@ -1514,14 +1506,12 @@ enum FooterLayout {
   ASYMMETRIC
   MEGA_PLUS
   APP_FOCUSED
-  NEWSLETTER_HERO
 }
 
 enum FooterWidgetType {
   BRAND
   LINKS
   CONTACT
-  NEWSLETTER
   SOCIAL
   TEXT
   RECENT_POSTS
@@ -1540,13 +1530,6 @@ enum FooterWidgetType {
   COUNTDOWN
   CTA_BANNER
   BUTTON
-}
-
-enum NewsletterSubscriberStatus {
-  PENDING
-  ACTIVE
-  UNSUBSCRIBED
-  BOUNCED
 }
 
 enum PageTemplateType {

@@ -51,13 +51,25 @@ export interface ThemeColorPalette {
 // ---- Font Configuration ----
 
 export interface ThemeFontConfig {
-  headingFont: string; // Google Fonts family name
-  bodyFont: string; // Google Fonts family name
+  headingFont: string; // Google Fonts family name — display/brand font
+  bodyFont: string; // Google Fonts family name — body/readable font
+  accentFont?: string; // Decorative/serif font (system or Google)
 }
 
+/** System fonts that don't need a Google Fonts <link> */
+export const SYSTEM_FONTS = [
+  "Georgia",
+  "Times New Roman",
+  "Courier New",
+  "Arial",
+  "Verdana",
+  "Garamond",
+];
+
 export const DEFAULT_FONT_CONFIG: ThemeFontConfig = {
-  headingFont: "Inter",
+  headingFont: "Outfit",
   bodyFont: "Inter",
+  accentFont: "Georgia",
 };
 
 // ---- Widget Presets (per-widget demo content) ----
@@ -302,6 +314,25 @@ export interface ThemeSettings {
   [key: string]: string;
 }
 
+// ---- Tickers ----
+
+export interface ThemeTicker {
+  name: string;
+  isActive?: boolean;
+  items: Array<{
+    id: string;
+    content: string; // HTML from editor
+    // Legacy fields (backward compat)
+    boldText?: string;
+    text?: string;
+    link?: string;
+    openInNewTab?: boolean;
+    noFollow?: boolean;
+  }>;
+  speed?: number;
+  separator?: string;
+}
+
 // ============================================
 // MAIN THEME DATA STRUCTURE (data.json)
 // ============================================
@@ -332,6 +363,7 @@ export interface ThemeData {
   footerWidgets: ThemeFooterWidget[];
   formTemplates?: ThemeFormTemplate[];
   locationFees?: ThemeLocationFee[];
+  tickers?: ThemeTicker[];
 }
 
 // ---- API Response Types ----
@@ -359,6 +391,7 @@ export interface ImportResult {
     menuItems: number;
     footerWidgets: number;
     locationFees: number;
+    tickers: number;
   };
   themeId?: string;
   duration: number; // ms

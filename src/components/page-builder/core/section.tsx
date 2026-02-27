@@ -2,7 +2,7 @@
 
 import { useRef } from "react";
 import { cn } from "@/lib/utils";
-import type { Section as SectionType, SectionSettings } from "@/lib/page-builder/types";
+import type { Section as SectionType, SectionSettings, SectionWatermark } from "@/lib/page-builder/types";
 import {
   getLayoutGridClass,
   getColumnSpanClasses,
@@ -168,6 +168,11 @@ export function Section({
         />
       )}
 
+      {/* Watermark Text Overlay */}
+      {settings.watermark?.enabled && settings.watermark.text && (
+        <WatermarkOverlay watermark={settings.watermark} />
+      )}
+
       {/* Section Toolbar (shown on hover in edit mode) */}
       {!isPreview && (
         <div className="absolute -top-3 left-1/2 -translate-x-1/2 opacity-0 group-hover/section:opacity-100 transition-opacity z-10">
@@ -229,6 +234,41 @@ export function Section({
           ))}
         </div>
       </div>
+    </div>
+  );
+}
+
+function WatermarkOverlay({ watermark }: { watermark: SectionWatermark }) {
+  const positionStyle: React.CSSProperties = {};
+
+  if (watermark.position === "left") {
+    positionStyle.left = `${watermark.offsetX}px`;
+  } else if (watermark.position === "right") {
+    positionStyle.right = `${watermark.offsetX}px`;
+  } else {
+    positionStyle.left = "50%";
+    positionStyle.marginLeft = `${watermark.offsetX}px`;
+  }
+
+  return (
+    <div
+      className="absolute z-1 pointer-events-none select-none whitespace-nowrap hidden md:block"
+      aria-hidden="true"
+      style={{
+        top: "50%",
+        transform: `translateY(-50%) ${watermark.position === "center" ? "translateX(-50%)" : ""} rotate(${watermark.rotation}deg)`,
+        marginTop: `${watermark.offsetY}px`,
+        fontFamily: "var(--font-heading), sans-serif",
+        fontSize: `${watermark.fontSize}px`,
+        fontWeight: watermark.fontWeight,
+        color: watermark.color,
+        opacity: watermark.opacity,
+        letterSpacing: "-0.04em",
+        lineHeight: 1,
+        ...positionStyle,
+      }}
+    >
+      {watermark.text}
     </div>
   );
 }

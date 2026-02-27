@@ -10,15 +10,9 @@ const footerConfigSchema = z.object({
   isActive: z.boolean().default(true),
   layout: z.enum([
     "MULTI_COLUMN", "CENTERED", "MINIMAL", "MEGA",
-    "STACKED", "ASYMMETRIC", "MEGA_PLUS", "APP_FOCUSED", "NEWSLETTER_HERO"
+    "STACKED", "ASYMMETRIC", "MEGA_PLUS", "APP_FOCUSED"
   ]).default("MULTI_COLUMN"),
   columns: z.number().min(1).max(6).default(4),
-  // Newsletter
-  newsletterEnabled: z.boolean().default(true),
-  newsletterTitle: z.string().default("Subscribe to our newsletter"),
-  newsletterSubtitle: z.string().nullable().optional(),
-  newsletterProvider: z.string().nullable().optional(),
-  newsletterFormAction: z.string().nullable().optional(),
   // Social & Contact
   showSocialLinks: z.boolean().default(true),
   socialPosition: z.string().default("brand"),

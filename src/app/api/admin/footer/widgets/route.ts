@@ -24,7 +24,6 @@ const widgetSchema = z.object({
     "BRAND",
     "LINKS",
     "CONTACT",
-    "NEWSLETTER",
     "SOCIAL",
     "TEXT",
     "RECENT_POSTS",

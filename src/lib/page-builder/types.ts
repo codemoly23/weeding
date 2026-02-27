@@ -77,6 +77,21 @@ export interface SectionBackground {
   patternOverlay?: PatternSettings; // Pattern overlay on top of any background
 }
 
+export type WatermarkPosition = "left" | "right" | "center";
+
+export interface SectionWatermark {
+  enabled: boolean;
+  text: string;
+  position: WatermarkPosition;
+  fontSize: number;       // px
+  fontWeight: number;
+  color: string;          // rgba recommended
+  opacity: number;        // 0–1
+  rotation: number;       // degrees
+  offsetX: number;        // px from edge
+  offsetY: number;        // px vertical offset from center
+}
+
 export interface SectionSettings {
   fullWidth: boolean;
   // New unified background system
@@ -106,6 +121,10 @@ export interface SectionSettings {
     width: number;
   };
   className?: string;
+  // Custom CSS (admin-editable, scoped to section)
+  customCSS?: string;
+  // Decorative watermark text overlay
+  watermark?: SectionWatermark;
   // Visibility
   isVisible: boolean;
   visibleOnMobile: boolean;
@@ -129,6 +148,10 @@ export type VerticalAlign = "top" | "center" | "bottom";
 export interface ColumnSettings {
   verticalAlign: VerticalAlign;
   padding: number;
+  paddingTop?: number;
+  paddingBottom?: number;
+  paddingLeft?: number;
+  paddingRight?: number;
   backgroundColor?: string;
   className?: string;
 }
@@ -159,7 +182,6 @@ export type WidgetType =
   // Form Widgets
   | "lead-form"
   | "contact-form"
-  | "newsletter"
   // Social Proof Widgets
   | "trust-badges"
   | "stats-section"
@@ -209,7 +231,10 @@ export type WidgetType =
   | "blog-post-carousel"
   | "blog-featured-post"
   | "blog-post-list"
-  | "blog-recent-posts";
+  | "blog-recent-posts"
+  // Theme Widgets
+  | "application-tracker"
+  | "ticker-marquee";
 
 export type WidgetCategory =
   | "most-used"
@@ -289,6 +314,8 @@ export interface HeroContentWidgetSettings {
     bgColor?: string;
     textColor?: string;
     borderColor?: string;
+    boxShadow?: string;
+    dot?: { show: boolean; color: string }; // Pulsing dot indicator
   };
 
   // Headline
@@ -296,8 +323,14 @@ export interface HeroContentWidgetSettings {
     text: string;
     highlightWords: string;
     highlightColor: string;
-    size: "sm" | "md" | "lg" | "xl";
+    underlineWords?: string; // Words that get underline decoration (comma-separated)
+    underlineColor?: string; // Color of underline decoration
+    size: "sm" | "md" | "lg" | "xl" | "2xl";
+    customFontSize?: string; // e.g., "clamp(44px,6vw,76px)" - overrides size when set
     color?: string;
+    fontWeight?: number; // 700, 800, 900
+    letterSpacing?: string; // e.g., "-0.04em"
+    lineHeight?: number; // e.g., 1.0
   };
 
   // Subheadline
@@ -306,6 +339,17 @@ export interface HeroContentWidgetSettings {
     show: boolean;
     size: "sm" | "md" | "lg";
     color?: string;
+    lineHeight?: number; // e.g., 1.75
+    maxWidth?: number; // px value, e.g., 480
+  };
+
+  // Spacing between elements
+  spacing?: {
+    badgeToHeadline?: number; // px
+    headlineToSub?: number; // px
+    subToButtons?: number; // px
+    buttonsToProof?: number; // px
+    buttonsGap?: number; // px gap between buttons
   };
 
   // Features List
@@ -345,6 +389,15 @@ export interface HeroContentWidgetSettings {
     text: string;
     textColor?: string;
     starColor?: string;
+  };
+
+  // Avatar Group (social proof)
+  avatarGroup?: {
+    show: boolean;
+    avatars: Array<{ id: string; initials: string; color: string; imageUrl?: string }>;
+    text: string;
+    textColor?: string;
+    boldColor?: string;
   };
 
   // Alignment
@@ -908,7 +961,24 @@ export interface StatItem {
   iconColor?: string;  // Per-stat icon color override
 }
 
+export interface StatsCardGridConfig {
+  borderRadius: number;
+  gridGap: number;
+  gridLineColor: string;
+  cellBackground: string;
+  cellPadding: string;
+  valueFontFamily?: string;
+  valueFontWeight?: number;
+  valueFontSize?: number;
+  valueLetterSpacing?: string;
+  labelFontSize?: number;
+  labelFontWeight?: number;
+  labelLetterSpacing?: string;
+  labelMarginTop?: number;
+}
+
 export interface StatsSectionWidgetSettings {
+  variant?: "default" | "card-grid";
   stats: StatItem[];
   columns: 2 | 3 | 4 | 5;
   style: {
@@ -918,16 +988,18 @@ export interface StatsSectionWidgetSettings {
     divider: boolean;
     showTopBorder?: boolean;
     topBorderColor?: string;
-    layout?: "vertical" | "horizontal"; // horizontal = icon left, number+label right
-    iconColor?: string;                  // Global icon color
-    iconSize?: "sm" | "md" | "lg";      // Global icon size
+    layout?: "vertical" | "horizontal";
+    iconColor?: string;
+    iconSize?: "sm" | "md" | "lg";
+    suffixColor?: string;
   };
+  cardGrid?: StatsCardGridConfig;
   centered: boolean;
   animateOnScroll: boolean;
 
   // Theme color binding
   colors?: {
-    useTheme?: boolean; // When true, use CSS var(--color-primary) as icon accent color
+    useTheme?: boolean;
   };
 
   // Container Style
@@ -3057,6 +3129,49 @@ export interface BlogRecentPostsWidgetSettings {
     text: string;
     url: string;
     color?: string;
+  };
+
+  // Container Style
+  container?: WidgetContainerStyle;
+}
+
+// ============================================
+// CUSTOM HTML WIDGET
+// ============================================
+
+export interface CustomHtmlWidgetSettings {
+  html: string;
+  css: string;
+  container?: WidgetContainerStyle;
+}
+
+// ============================================
+// TICKER MARQUEE WIDGET
+// ============================================
+
+export interface TickerMarqueeItem {
+  id: string;
+  content: string; // HTML from TipTap editor
+  // Legacy fields (backward compat)
+  boldText?: string;
+  text?: string;
+  link?: string;
+  openInNewTab?: boolean;
+  noFollow?: boolean;
+}
+
+export interface TickerMarqueeWidgetSettings {
+  tickerName?: string; // Reference to a saved ticker by name
+  items: TickerMarqueeItem[];
+  speed: number; // seconds for one full cycle
+  separator: string; // e.g., "·"
+  textColor: string;
+  boldColor: string;
+  separatorColor: string;
+
+  // Theme color binding
+  colors?: {
+    useTheme?: boolean;
   };
 
   // Container Style

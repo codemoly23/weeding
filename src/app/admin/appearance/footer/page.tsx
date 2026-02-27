@@ -123,14 +123,12 @@ const layoutOptions: { value: FooterLayout; label: string; description: string }
   { value: "ASYMMETRIC", label: "Asymmetric", description: "2:1 ratio split layout" },
   { value: "MEGA_PLUS", label: "Mega Plus", description: "Mega with featured CTA" },
   { value: "APP_FOCUSED", label: "App Focused", description: "Prominent app download" },
-  { value: "NEWSLETTER_HERO", label: "Newsletter Hero", description: "Large newsletter signup" },
 ];
 
 const widgetTypes: { value: FooterWidgetType; label: string; icon: React.ReactNode }[] = [
   { value: "BRAND", label: "Brand", icon: <Building2 className="h-4 w-4" /> },
   { value: "LINKS", label: "Links", icon: <LinkIcon className="h-4 w-4" /> },
   { value: "CONTACT", label: "Contact", icon: <Phone className="h-4 w-4" /> },
-  { value: "NEWSLETTER", label: "Newsletter", icon: <Mail className="h-4 w-4" /> },
   { value: "SOCIAL", label: "Social", icon: <Share2 className="h-4 w-4" /> },
   { value: "TEXT", label: "Text", icon: <Type className="h-4 w-4" /> },
   { value: "RECENT_POSTS", label: "Recent Posts", icon: <FileText className="h-4 w-4" /> },
@@ -602,11 +600,6 @@ export default function FooterBuilderPage() {
     name: "Default Footer",
     layout: "MULTI_COLUMN" as FooterLayout,
     columns: 4,
-    newsletterEnabled: true,
-    newsletterTitle: "Subscribe to our newsletter",
-    newsletterSubtitle: "",
-    newsletterProvider: "",
-    newsletterFormAction: "",
     showSocialLinks: true,
     socialPosition: "brand",
     showContactInfo: true,
@@ -689,11 +682,6 @@ export default function FooterBuilderPage() {
           name: activeFooter.name,
           layout: activeFooter.layout,
           columns: activeFooter.columns,
-          newsletterEnabled: activeFooter.newsletterEnabled,
-          newsletterTitle: activeFooter.newsletterTitle,
-          newsletterSubtitle: activeFooter.newsletterSubtitle || "",
-          newsletterProvider: activeFooter.newsletterProvider || "",
-          newsletterFormAction: activeFooter.newsletterFormAction || "",
           showSocialLinks: activeFooter.showSocialLinks,
           socialPosition: activeFooter.socialPosition,
           showContactInfo: activeFooter.showContactInfo,
@@ -778,12 +766,6 @@ export default function FooterBuilderPage() {
           name: formData.name,
           layout: formData.layout,
           columns: formData.columns,
-          // Newsletter
-          newsletterEnabled: formData.newsletterEnabled,
-          newsletterTitle: formData.newsletterTitle,
-          newsletterSubtitle: formData.newsletterSubtitle || null,
-          newsletterProvider: formData.newsletterProvider || null,
-          newsletterFormAction: formData.newsletterFormAction || null,
           // Social & Contact
           showSocialLinks: formData.showSocialLinks,
           socialPosition: formData.socialPosition,
@@ -1396,25 +1378,6 @@ export default function FooterBuilderPage() {
                                   )}
                                   {widget.type === "SOCIAL" && <SocialIconsPreview size="sm" />}
                                   {widget.type === "TEXT" && <p>Custom text content...</p>}
-                                  {widget.type === "NEWSLETTER" && (
-                                    <div className="mt-2 max-w-sm">
-                                      <div className="flex rounded-lg overflow-hidden" style={{ border: "1px solid rgba(255,255,255,0.2)" }}>
-                                        <input
-                                          type="email"
-                                          placeholder="Enter your email"
-                                          className="flex-1 min-w-0 h-9 px-3 border-0 text-xs"
-                                          style={{ backgroundColor: "rgba(255,255,255,0.05)" }}
-                                          readOnly
-                                        />
-                                        <button
-                                          className="h-9 px-4 text-xs font-semibold shrink-0 flex items-center"
-                                          style={{ backgroundColor: "var(--accent-color)", color: "#0f172a" }}
-                                        >
-                                          {(widget.content as { buttonText?: string })?.buttonText || "Subscribe"}
-                                        </button>
-                                      </div>
-                                    </div>
-                                  )}
                                   {widget.type === "SERVICES" && <span className="italic">Auto: Services</span>}
                                   {widget.type === "STATES" && <span className="italic">Auto: States</span>}
                                   {widget.type === "RECENT_POSTS" && <span className="italic">Recent Posts</span>}
@@ -1511,25 +1474,6 @@ export default function FooterBuilderPage() {
                               </div>
                             )}
                             {widget.type === "TEXT" && <p>Custom text content...</p>}
-                            {widget.type === "NEWSLETTER" && (
-                              <div className="mt-2 max-w-sm mx-auto">
-                                <div className="flex rounded-lg overflow-hidden" style={{ border: "1px solid rgba(255,255,255,0.2)" }}>
-                                  <input
-                                    type="email"
-                                    placeholder="Enter your email"
-                                    className="flex-1 min-w-0 h-9 px-3 border-0 text-xs"
-                                    style={{ backgroundColor: "rgba(255,255,255,0.05)" }}
-                                    readOnly
-                                  />
-                                  <button
-                                    className="h-9 px-4 text-xs font-semibold shrink-0 flex items-center"
-                                    style={{ backgroundColor: "var(--accent-color)", color: "#0f172a" }}
-                                  >
-                                    {(widget.content as { buttonText?: string })?.buttonText || "Subscribe"}
-                                  </button>
-                                </div>
-                              </div>
-                            )}
                             {widget.type === "SERVICES" && <span className="italic">Auto: Services</span>}
                             {widget.type === "STATES" && <span className="italic">Auto: States</span>}
                             {widget.type === "RECENT_POSTS" && <span className="italic">Recent Posts</span>}
@@ -1665,31 +1609,12 @@ export default function FooterBuilderPage() {
                                     </ul>
                                   )}
                                   {widget.type === "SOCIAL" && <SocialIconsPreview size="sm" />}
-                                  {widget.type === "NEWSLETTER" && (
-                                    <div className="mt-1 max-w-[200px]">
-                                      <div className="flex rounded overflow-hidden" style={{ border: "1px solid rgba(255,255,255,0.2)" }}>
-                                        <input
-                                          type="email"
-                                          placeholder="Email"
-                                          className="flex-1 min-w-0 h-6 px-2 border-0 text-[10px]"
-                                          style={{ backgroundColor: "rgba(255,255,255,0.05)" }}
-                                          readOnly
-                                        />
-                                        <button
-                                          className="h-6 px-2 text-[10px] font-semibold shrink-0"
-                                          style={{ backgroundColor: "var(--accent-color)", color: "#0f172a" }}
-                                        >
-                                          {(widget.content as { buttonText?: string })?.buttonText || "Subscribe"}
-                                        </button>
-                                      </div>
-                                    </div>
-                                  )}
                                   {widget.type === "BUTTON" && (
                                     <div className="mt-1">
                                       <FooterButtonPreview style={(widget.content as { style?: ButtonCustomStyle })?.style || {}} />
                                     </div>
                                   )}
-                                  {widget.type !== "LINKS" && widget.type !== "SOCIAL" && widget.type !== "NEWSLETTER" && widget.type !== "BRAND" && widget.type !== "BUTTON" && <span className="italic">{widget.type}</span>}
+                                  {widget.type !== "LINKS" && widget.type !== "SOCIAL" && widget.type !== "BRAND" && widget.type !== "BUTTON" && <span className="italic">{widget.type}</span>}
                                 </div>
                               </div>
                             ))
@@ -1740,85 +1665,6 @@ export default function FooterBuilderPage() {
                       })}
                     </div>
                   </div>
-                </div>
-              )}
-
-              {/* NEWSLETTER_HERO Layout */}
-              {formData.layout === "NEWSLETTER_HERO" && (
-                <div className="space-y-6">
-                  {/* Large Newsletter Section - uses NEWSLETTER widget content if available */}
-                  {(() => {
-                    // Find NEWSLETTER widget to get title/subtitle for hero section
-                    const allWidgets = footer?.widgets || [];
-                    const newsletterWidget = allWidgets.find(w => w.type === "NEWSLETTER");
-                    const nlContent = newsletterWidget?.content as { subtitle?: string; buttonText?: string } | null;
-                    const heroTitle = newsletterWidget?.title || formData.newsletterTitle || "Stay in the loop";
-                    const heroSubtitle = nlContent?.subtitle || formData.newsletterSubtitle || "Get the latest updates delivered to your inbox.";
-                    const buttonText = nlContent?.buttonText || "Subscribe";
-
-                    return (
-                      <div className="text-center py-6 border-b" style={{ borderColor: formData.borderColor || undefined }}>
-                        <h3 className="text-lg font-bold mb-2" style={{ color: formData.headingColor || undefined }}>
-                          {heroTitle}
-                        </h3>
-                        <p className="text-sm text-muted-foreground mb-4 max-w-md mx-auto">
-                          {heroSubtitle}
-                        </p>
-                        <div className="flex gap-2 justify-center max-w-sm mx-auto">
-                          <div className="flex-1 h-10 rounded border bg-background"></div>
-                          <div className="h-10 px-4 rounded bg-primary text-primary-foreground flex items-center text-sm">{buttonText}</div>
-                        </div>
-                      </div>
-                    );
-                  })()}
-                  {/* Widget Grid - Only show columns that have non-NEWSLETTER widgets */}
-                  {(() => {
-                    // Get columns that have visible widgets (excluding NEWSLETTER which is shown in hero)
-                    const visibleColumns = Array.from({ length: formData.columns }, (_, i) => i + 1)
-                      .filter(column => {
-                        const widgets = getWidgetsByColumn(column);
-                        return widgets.some(w => w.type !== "NEWSLETTER");
-                      });
-
-                    if (visibleColumns.length === 0) return null;
-
-                    return (
-                      <div
-                        className={cn("grid gap-4", previewMode === "mobile" ? "grid-cols-2" : "")}
-                        style={previewMode === "desktop" ? { gridTemplateColumns: `repeat(${visibleColumns.length}, 1fr)` } : undefined}
-                      >
-                        {visibleColumns.map((column) => {
-                          const widgets = getWidgetsByColumn(column).filter(w => w.type !== "NEWSLETTER");
-                          return (
-                            <div key={column} className="space-y-2">
-                              {widgets.map((widget) => (
-                                <div key={widget.id} className="space-y-1">
-                                  {widget.showTitle && widget.title && <h4 className="text-xs font-semibold" style={{ color: formData.headingColor || undefined }}>{widget.title}</h4>}
-                                  {widget.type === "LINKS" && (
-                                    <ul className="space-y-0.5 text-xs text-muted-foreground">
-                                      {widget.menuItems?.slice(0, 4).map((item, idx) => (
-                                        <li key={idx} className="hover:text-foreground cursor-pointer">{item.label}</li>
-                                      )) || <li>Link</li>}
-                                    </ul>
-                                  )}
-                                  {widget.type === "BRAND" && (() => {
-                                    const brandContent = widget.content as { logoMode?: "auto" | "light" | "dark" } | null;
-                                    return <div className="space-y-1"><LogoPreview size="sm" logoMode={brandContent?.logoMode || "auto"} /><span className="font-semibold text-sm block">{businessConfig.name}</span></div>;
-                                  })()}
-                                  {widget.type === "SOCIAL" && <SocialIconsPreview size="sm" />}
-                                  {widget.type === "BUTTON" && (
-                                    <div className="mt-1">
-                                      <FooterButtonPreview style={(widget.content as { style?: ButtonCustomStyle })?.style || {}} />
-                                    </div>
-                                  )}
-                                </div>
-                              ))}
-                            </div>
-                          );
-                        })}
-                      </div>
-                    );
-                  })()}
                 </div>
               )}
 
@@ -1885,14 +1731,6 @@ export default function FooterBuilderPage() {
                                 })()}
                                 {widget.type === "LINKS" && <ul className="space-y-0.5 text-xs">{widget.menuItems?.slice(0,4).map((item,i) => <li key={i} className="preview-link cursor-pointer">{item.label}</li>) || <li className="preview-link">Link</li>}</ul>}
                                 {widget.type === "SOCIAL" && <SocialIconsPreview size="sm" />}
-                                {widget.type === "NEWSLETTER" && (
-                                  <div className="mt-1 max-w-[200px]">
-                                    <div className="flex rounded overflow-hidden" style={{ border: "1px solid rgba(255,255,255,0.2)" }}>
-                                      <input type="email" placeholder="Email" className="flex-1 min-w-0 h-6 px-2 border-0 text-[10px]" style={{ backgroundColor: "rgba(255,255,255,0.05)" }} readOnly />
-                                      <button className="h-6 px-2 text-[10px] font-semibold shrink-0" style={{ backgroundColor: "var(--accent-color)", color: "#0f172a" }}>{(widget.content as { buttonText?: string })?.buttonText || "Subscribe"}</button>
-                                    </div>
-                                  </div>
-                                )}
                                 {widget.type === "BUTTON" && (
                                   <div className="mt-1">
                                     <FooterButtonPreview style={(widget.content as { style?: ButtonCustomStyle })?.style || {}} />
@@ -1950,7 +1788,6 @@ export default function FooterBuilderPage() {
       <Tabs defaultValue="layout" className="space-y-4">
         <TabsList>
           <TabsTrigger value="layout">Layout & Widgets</TabsTrigger>
-          <TabsTrigger value="newsletter">Newsletter</TabsTrigger>
           <TabsTrigger value="bottombar">Bottom Bar</TabsTrigger>
           <TabsTrigger value="style">Styling</TabsTrigger>
         </TabsList>
@@ -2222,53 +2059,6 @@ export default function FooterBuilderPage() {
                   Seed Presets
                 </Button>
               </div>
-            </CardContent>
-          </Card>
-        </TabsContent>
-
-        {/* Newsletter Tab */}
-        <TabsContent value="newsletter" className="space-y-4">
-          <Card>
-            <CardHeader>
-              <CardTitle>Newsletter Settings</CardTitle>
-              <CardDescription>Configure newsletter subscription form</CardDescription>
-            </CardHeader>
-            <CardContent className="space-y-6">
-              <div className="flex items-center justify-between rounded-lg border p-4">
-                <div>
-                  <Label className="text-base">Enable Newsletter</Label>
-                  <p className="text-sm text-muted-foreground">
-                    Show email subscription form in footer
-                  </p>
-                </div>
-                <Switch
-                  checked={formData.newsletterEnabled}
-                  onCheckedChange={(checked) => setFormData({ ...formData, newsletterEnabled: checked })}
-                />
-              </div>
-
-              {formData.newsletterEnabled && (
-                <div className="space-y-4">
-                  <div className="space-y-2">
-                    <Label htmlFor="newsletterTitle">Title</Label>
-                    <Input
-                      id="newsletterTitle"
-                      value={formData.newsletterTitle}
-                      onChange={(e) => setFormData({ ...formData, newsletterTitle: e.target.value })}
-                      placeholder="Subscribe to our newsletter"
-                    />
-                  </div>
-                  <div className="space-y-2">
-                    <Label htmlFor="newsletterSubtitle">Subtitle</Label>
-                    <Input
-                      id="newsletterSubtitle"
-                      value={formData.newsletterSubtitle}
-                      onChange={(e) => setFormData({ ...formData, newsletterSubtitle: e.target.value })}
-                      placeholder="Get updates on new services and offers"
-                    />
-                  </div>
-                </div>
-              )}
             </CardContent>
           </Card>
         </TabsContent>
@@ -4133,7 +3923,6 @@ export default function FooterBuilderPage() {
                   {widgetFormData.type === "BRAND" && "Shows logo, description, and contact info from settings."}
                   {widgetFormData.type === "SERVICES" && "Auto-populated from your active services."}
                   {widgetFormData.type === "STATES" && "Auto-populated list of popular LLC states."}
-                  {widgetFormData.type === "NEWSLETTER" && "Email subscription form."}
                   {widgetFormData.type === "SOCIAL" && "Social media links from settings."}
                   {widgetFormData.type === "CONTACT" && "Contact information from settings."}
                   {widgetFormData.type === "TEXT" && "Enter your custom text above."}

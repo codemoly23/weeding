@@ -59,8 +59,7 @@ export function WidgetContainer({ container, children, className }: WidgetContai
         className,
       )}
       style={{
-        background,
-        backgroundColor: bgColor,
+        ...(background ? { background } : bgColor ? { backgroundColor: bgColor } : {}),
         borderRadius: hasGradientBorder
           ? `${Math.max(0, borderRadius - borderWidth)}px`
           : borderRadius ? `${borderRadius}px` : undefined,

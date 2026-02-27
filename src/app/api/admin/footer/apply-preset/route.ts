@@ -7,7 +7,6 @@ type FooterWidgetType =
   | "BRAND"
   | "LINKS"
   | "CONTACT"
-  | "NEWSLETTER"
   | "SOCIAL"
   | "TEXT"
   | "RECENT_POSTS"

@@ -143,6 +143,17 @@ const GOOGLE_FONTS = [
   "Figtree",
 ];
 
+/** Accent fonts include system serif fonts + select Google decorative fonts */
+const ACCENT_FONTS = [
+  "Georgia",
+  "Times New Roman",
+  "Garamond",
+  "Playfair Display",
+  "Merriweather",
+  "Lora",
+  "Libre Baskerville",
+];
+
 // ---- Default empty palette ----
 
 const EMPTY_PALETTE: ThemeColorPalette = {
@@ -550,6 +561,32 @@ export default function ThemeCustomizePage() {
                   </Select>
                   <FontPreview fontFamily={fontConfig.bodyFont} />
                 </div>
+              </div>
+
+              {/* Accent / Decorative Font */}
+              <div className="space-y-3">
+                <Label>Accent / Decorative Font</Label>
+                <p className="text-xs text-muted-foreground">
+                  Used for decorative serif elements like pull quotes and info icons.
+                </p>
+                <Select
+                  value={fontConfig.accentFont || "Georgia"}
+                  onValueChange={(val) =>
+                    setFontConfig((prev) => ({ ...prev, accentFont: val }))
+                  }
+                >
+                  <SelectTrigger>
+                    <SelectValue placeholder="Select accent font" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {ACCENT_FONTS.map((font) => (
+                      <SelectItem key={font} value={font}>
+                        {font}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+                <FontPreview fontFamily={fontConfig.accentFont || "Georgia"} />
               </div>
 
               <div className="pt-2">

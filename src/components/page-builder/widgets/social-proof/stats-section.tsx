@@ -11,6 +11,7 @@ import {
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import type { StatsSectionWidgetSettings, StatItem } from "@/lib/page-builder/types";
+import { DEFAULT_CARD_GRID_SETTINGS } from "@/lib/page-builder/defaults";
 import { WidgetContainer } from "@/components/page-builder/shared/widget-container";
 
 // Curated icon map — add more as needed
@@ -80,8 +81,8 @@ function useAnimatedCounter(
       const elapsed = Date.now() - startTime;
       const progress = Math.min(elapsed / duration, 1);
 
-      // Ease out function
-      const easeOut = 1 - Math.pow(1 - progress, 3);
+      // Ease out quart
+      const easeOut = 1 - Math.pow(1 - progress, 4);
       const currentValue = Math.floor(startValue + (target - startValue) * easeOut);
 
       setCount(currentValue);
@@ -171,7 +172,7 @@ function AnimatedStat({
         )}
         <div className="flex flex-col">
           <span
-            className={cn("font-bold tabular-nums leading-tight", getValueSizeClass())}
+            className={cn("font-bold tabular-nums leading-tight font-display", getValueSizeClass())}
             style={{ color: valueColor }}
           >
             {prefix}
@@ -201,7 +202,7 @@ function AnimatedStat({
         </div>
       )}
       <span
-        className={cn("font-bold tabular-nums leading-tight", getValueSizeClass())}
+        className={cn("font-bold tabular-nums leading-tight font-display", getValueSizeClass())}
         style={{ color: valueColor }}
       >
         {prefix}
@@ -218,8 +219,56 @@ function AnimatedStat({
   );
 }
 
+// Card-grid animated value — renders number with separate suffix color
+function CardGridValue({
+  stat,
+  animate,
+  valueColor,
+  suffixColor,
+  cg,
+}: {
+  stat: StatItem;
+  animate: boolean;
+  valueColor: string;
+  suffixColor: string;
+  cg: NonNullable<StatsSectionWidgetSettings["cardGrid"]>;
+}) {
+  const numericValue = parseFloat(stat.value.replace(/[^0-9.]/g, "")) || 0;
+  const hasDecimal = stat.value.includes(".");
+  const decimalPlaces = hasDecimal ? stat.value.split(".")[1]?.length || 0 : 0;
+  const animatedValue = useAnimatedCounter(numericValue, 1800, animate);
+
+  const displayValue = animate
+    ? hasDecimal
+      ? animatedValue.toFixed(decimalPlaces)
+      : animatedValue.toLocaleString()
+    : stat.value;
+
+  return (
+    <div
+      style={{
+        fontFamily: cg.valueFontFamily || "var(--font-heading)",
+        fontSize: `${cg.valueFontSize || 48}px`,
+        fontWeight: cg.valueFontWeight || 900,
+        color: valueColor,
+        letterSpacing: cg.valueLetterSpacing || "-0.04em",
+        lineHeight: 1,
+      }}
+    >
+      {stat.prefix}
+      {displayValue}
+      {stat.suffix && (
+        <span style={{ color: suffixColor, fontStyle: "normal" }}>
+          {stat.suffix}
+        </span>
+      )}
+    </div>
+  );
+}
+
 export function StatsSectionWidget({ settings, isPreview = false }: StatsSectionWidgetProps) {
   const { stats, columns, style, centered, animateOnScroll } = settings;
+  const variant = settings.variant ?? "default";
   const [isVisible, setIsVisible] = useState(!animateOnScroll);
   const containerRef = useRef<HTMLDivElement>(null);
 
@@ -239,7 +288,7 @@ export function StatsSectionWidget({ settings, isPreview = false }: StatsSection
           observer.disconnect();
         }
       },
-      { threshold: 0.2 }
+      { threshold: 0.4 }
     );
 
     if (containerRef.current) {
@@ -270,6 +319,64 @@ export function StatsSectionWidget({ settings, isPreview = false }: StatsSection
     );
   }
 
+  // Card-grid variant: rounded container with 1px gap grid lines
+  if (variant === "card-grid") {
+    const cg = settings.cardGrid ?? DEFAULT_CARD_GRID_SETTINGS!;
+    const suffixColor = style.suffixColor || style.valueColor;
+
+    return (
+      <WidgetContainer container={settings.container}>
+        <div
+          ref={containerRef}
+          data-field-id="stats"
+          className="overflow-hidden"
+          style={{
+            borderRadius: `${cg.borderRadius}px`,
+            background: cg.gridLineColor,
+          }}
+        >
+          <div
+            className="grid"
+            style={{
+              gridTemplateColumns: `repeat(${columns}, 1fr)`,
+              gap: `${cg.gridGap}px`,
+            }}
+          >
+            {stats.map((stat) => (
+              <div
+                key={stat.id}
+                style={{
+                  padding: cg.cellPadding,
+                  background: cg.cellBackground,
+                }}
+              >
+                <CardGridValue
+                  stat={stat}
+                  animate={isVisible && stat.animate}
+                  valueColor={style.valueColor}
+                  suffixColor={suffixColor}
+                  cg={cg}
+                />
+                <div
+                  style={{
+                    fontSize: `${cg.labelFontSize || 13}px`,
+                    fontWeight: cg.labelFontWeight || 500,
+                    color: style.labelColor,
+                    letterSpacing: cg.labelLetterSpacing || "0.3px",
+                    marginTop: `${cg.labelMarginTop || 8}px`,
+                  }}
+                >
+                  {stat.label}
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </WidgetContainer>
+    );
+  }
+
+  // Default variant
   return (
     <WidgetContainer container={settings.container}>
       <div

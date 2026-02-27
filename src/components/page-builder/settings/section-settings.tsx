@@ -4,6 +4,8 @@ import type {
   SectionSettings,
   SectionLayout,
   SectionBackground,
+  SectionWatermark,
+  WatermarkPosition,
   BackgroundType,
   GradientType,
   BackgroundSize,
@@ -11,7 +13,7 @@ import type {
   BackgroundRepeat,
   PatternType,
 } from "@/lib/page-builder/types";
-import { DEFAULT_SECTION_SETTINGS, DEFAULT_SECTION_BACKGROUND } from "@/lib/page-builder/defaults";
+import { DEFAULT_SECTION_SETTINGS, DEFAULT_SECTION_BACKGROUND, DEFAULT_SECTION_WATERMARK } from "@/lib/page-builder/defaults";
 import { SECTION_LAYOUTS } from "@/lib/page-builder/section-layouts";
 import { PATTERN_TYPE_OPTIONS } from "@/lib/page-builder/pattern-utils";
 import {
@@ -762,6 +764,126 @@ export function SectionSettingsPanel({
               </div>
             )}
           </div>
+        </div>
+      </AccordionSection>
+
+      {/* Watermark */}
+      <AccordionSection title="Watermark">
+        <div className="space-y-4">
+          <ToggleSwitch
+            label="Decorative Text Overlay"
+            description="Large background text visible behind content"
+            checked={s.watermark?.enabled ?? false}
+            onChange={(checked) => {
+              const wm = { ...DEFAULT_SECTION_WATERMARK, ...s.watermark, enabled: checked };
+              updateField("watermark", wm);
+            }}
+          />
+
+          {s.watermark?.enabled && (
+            <div className="space-y-3">
+              <TextInput
+                label="Text"
+                value={s.watermark?.text || ""}
+                onChange={(v) =>
+                  updateField("watermark", { ...DEFAULT_SECTION_WATERMARK, ...s.watermark!, text: v })
+                }
+                placeholder="e.g. LLC, USA, FORM"
+              />
+
+              <SelectInput
+                label="Position"
+                value={s.watermark?.position || "right"}
+                onChange={(v) =>
+                  updateField("watermark", { ...DEFAULT_SECTION_WATERMARK, ...s.watermark!, position: v as WatermarkPosition })
+                }
+                options={[
+                  { value: "left", label: "Left" },
+                  { value: "center", label: "Center" },
+                  { value: "right", label: "Right" },
+                ]}
+              />
+
+              <NumberInput
+                label="Font Size"
+                value={s.watermark?.fontSize ?? 200}
+                onChange={(v) =>
+                  updateField("watermark", { ...DEFAULT_SECTION_WATERMARK, ...s.watermark!, fontSize: v })
+                }
+                min={40}
+                max={500}
+                step={20}
+                unit="px"
+              />
+
+              <NumberInput
+                label="Font Weight"
+                value={s.watermark?.fontWeight ?? 900}
+                onChange={(v) =>
+                  updateField("watermark", { ...DEFAULT_SECTION_WATERMARK, ...s.watermark!, fontWeight: v })
+                }
+                min={100}
+                max={900}
+                step={100}
+              />
+
+              <ColorInput
+                label="Color"
+                value={s.watermark?.color || "#ffffff"}
+                onChange={(v) =>
+                  updateField("watermark", { ...DEFAULT_SECTION_WATERMARK, ...s.watermark!, color: v })
+                }
+              />
+
+              <NumberInput
+                label="Opacity"
+                value={Math.round((s.watermark?.opacity ?? 0.03) * 100)}
+                onChange={(v) =>
+                  updateField("watermark", { ...DEFAULT_SECTION_WATERMARK, ...s.watermark!, opacity: v / 100 })
+                }
+                min={1}
+                max={30}
+                step={1}
+                unit="%"
+              />
+
+              <NumberInput
+                label="Rotation"
+                value={s.watermark?.rotation ?? 90}
+                onChange={(v) =>
+                  updateField("watermark", { ...DEFAULT_SECTION_WATERMARK, ...s.watermark!, rotation: v })
+                }
+                min={-180}
+                max={180}
+                step={15}
+                unit="°"
+              />
+
+              <NumberInput
+                label="Horizontal Offset"
+                value={s.watermark?.offsetX ?? -40}
+                onChange={(v) =>
+                  updateField("watermark", { ...DEFAULT_SECTION_WATERMARK, ...s.watermark!, offsetX: v })
+                }
+                min={-200}
+                max={200}
+                step={10}
+                unit="px"
+              />
+
+              <NumberInput
+                label="Vertical Offset"
+                value={s.watermark?.offsetY ?? 0}
+                onChange={(v) =>
+                  updateField("watermark", { ...DEFAULT_SECTION_WATERMARK, ...s.watermark!, offsetY: v })
+                }
+                min={-200}
+                max={200}
+                step={10}
+                unit="px"
+              />
+            </div>
+          )}
         </div>
       </AccordionSection>
     </div>

@@ -27,7 +27,7 @@ import {
   ChevronUp,
 } from "lucide-react";
 import type { StatsSectionWidgetSettings, StatItem } from "@/lib/page-builder/types";
-import { DEFAULT_STATS_SECTION_SETTINGS, DEFAULT_WIDGET_CONTAINER } from "@/lib/page-builder/defaults";
+import { DEFAULT_STATS_SECTION_SETTINGS, DEFAULT_WIDGET_CONTAINER, DEFAULT_CARD_GRID_SETTINGS } from "@/lib/page-builder/defaults";
 import { ContainerStyleSection } from "@/components/page-builder/shared/container-style-section";
 import { generateId } from "@/lib/page-builder/widget-registry";
 import {
@@ -337,9 +337,32 @@ export function StatsSectionWidgetSettingsPanel({
 
   const globalIconColor = s.style.iconColor ?? "#f97316";
 
+  const isCardGrid = (s.variant ?? "default") === "card-grid";
+
+  const updateCardGridField = (
+    key: keyof NonNullable<StatsSectionWidgetSettings["cardGrid"]>,
+    value: string | number
+  ) => {
+    onChange({
+      ...s,
+      cardGrid: { ...(s.cardGrid ?? DEFAULT_CARD_GRID_SETTINGS!), [key]: value },
+    });
+  };
+
   // Content Tab
   const renderContentTab = () => (
     <div className="space-y-4">
+      {/* Variant */}
+      <SelectInput
+        label="Design Variant"
+        value={s.variant ?? "default"}
+        onChange={(v) => updateField("variant", v as "default" | "card-grid")}
+        options={[
+          { value: "default", label: "Default (flat grid with icons)" },
+          { value: "card-grid", label: "Card Grid (rounded, dark card style)" },
+        ]}
+      />
+
       {/* Columns */}
       <SelectInput
         label="Columns"
@@ -353,8 +376,8 @@ export function StatsSectionWidgetSettingsPanel({
         ]}
       />
 
-      {/* Centered (only applies to vertical layout) */}
-      {(s.style.layout ?? "vertical") === "vertical" && (
+      {/* Centered (only applies to default vertical layout) */}
+      {!isCardGrid && (s.style.layout ?? "vertical") === "vertical" && (
         <ToggleSwitch
           label="Center Stats"
           checked={s.centered}
@@ -413,74 +436,128 @@ export function StatsSectionWidgetSettingsPanel({
   );
 
   // Style Tab
-  const renderStyleTab = () => (
-    <div className="space-y-3">
-      {/* Layout */}
-      <SelectInput
-        label="Item Layout"
-        value={s.style.layout ?? "vertical"}
-        onChange={(v) => updateStyleField("layout", v)}
-        options={[
-          { value: "vertical", label: "Vertical (icon top, number below)" },
-          { value: "horizontal", label: "Horizontal (icon left, number right)" },
-        ]}
-      />
+  const renderStyleTab = () => {
+    const cg = s.cardGrid ?? DEFAULT_CARD_GRID_SETTINGS!;
 
-      <ColorInput
-        label="Value Color"
-        value={s.style.valueColor}
-        onChange={(v) => updateStyleField("valueColor", v)}
-      />
-      <ColorInput
-        label="Label Color"
-        value={s.style.labelColor}
-        onChange={(v) => updateStyleField("labelColor", v)}
-      />
-      <SelectInput
-        label="Value Size"
-        value={s.style.valueSize}
-        onChange={(v) => updateStyleField("valueSize", v)}
-        options={[
-          { value: "sm", label: "Small" },
-          { value: "md", label: "Medium" },
-          { value: "lg", label: "Large" },
-          { value: "xl", label: "Extra Large" },
-        ]}
-      />
+    return (
+      <div className="space-y-3">
+        {/* Default variant styles */}
+        {!isCardGrid && (
+          <>
+            <SelectInput
+              label="Item Layout"
+              value={s.style.layout ?? "vertical"}
+              onChange={(v) => updateStyleField("layout", v)}
+              options={[
+                { value: "vertical", label: "Vertical (icon top, number below)" },
+                { value: "horizontal", label: "Horizontal (icon left, number right)" },
+              ]}
+            />
 
-      {/* Icon settings */}
-      <div className="border-t pt-3 space-y-3">
-        <p className="text-xs font-medium text-muted-foreground">Icon Settings</p>
+            <SelectInput
+              label="Value Size"
+              value={s.style.valueSize}
+              onChange={(v) => updateStyleField("valueSize", v)}
+              options={[
+                { value: "sm", label: "Small" },
+                { value: "md", label: "Medium" },
+                { value: "lg", label: "Large" },
+                { value: "xl", label: "Extra Large" },
+              ]}
+            />
+
+            <div className="border-t pt-3 space-y-3">
+              <p className="text-xs font-medium text-muted-foreground">Icon Settings</p>
+              <ColorInput
+                label="Global Icon Color"
+                value={s.style.iconColor ?? "#f97316"}
+                onChange={(v) => updateStyleField("iconColor", v)}
+              />
+              <SelectInput
+                label="Icon Size"
+                value={s.style.iconSize ?? "md"}
+                onChange={(v) => updateStyleField("iconSize", v)}
+                options={[
+                  { value: "sm", label: "Small (32px)" },
+                  { value: "md", label: "Medium (40px)" },
+                  { value: "lg", label: "Large (56px)" },
+                ]}
+              />
+            </div>
+
+            <ToggleSwitch
+              label="Show Dividers"
+              checked={s.style.divider}
+              onChange={(checked) => updateStyleField("divider", checked)}
+            />
+          </>
+        )}
+
+        {/* Shared color settings */}
         <ColorInput
-          label="Global Icon Color"
-          value={s.style.iconColor ?? "#f97316"}
-          onChange={(v) => updateStyleField("iconColor", v)}
+          label="Value Color"
+          value={s.style.valueColor}
+          onChange={(v) => updateStyleField("valueColor", v)}
         />
-        <SelectInput
-          label="Icon Size"
-          value={s.style.iconSize ?? "md"}
-          onChange={(v) => updateStyleField("iconSize", v)}
-          options={[
-            { value: "sm", label: "Small (32px)" },
-            { value: "md", label: "Medium (40px)" },
-            { value: "lg", label: "Large (56px)" },
-          ]}
+        <ColorInput
+          label="Label Color"
+          value={s.style.labelColor}
+          onChange={(v) => updateStyleField("labelColor", v)}
+        />
+
+        {/* Card-grid variant styles */}
+        {isCardGrid && (
+          <>
+            <ColorInput
+              label="Suffix Color"
+              value={s.style.suffixColor ?? s.style.valueColor}
+              onChange={(v) => updateStyleField("suffixColor", v)}
+            />
+
+            <div className="border-t pt-3 space-y-3">
+              <p className="text-xs font-medium text-muted-foreground">Card Grid</p>
+              <ColorInput
+                label="Grid Line Color"
+                value={cg.gridLineColor}
+                onChange={(v) => updateCardGridField("gridLineColor", v)}
+              />
+              <ColorInput
+                label="Cell Background"
+                value={cg.cellBackground}
+                onChange={(v) => updateCardGridField("cellBackground", v)}
+              />
+              <div className="grid grid-cols-2 gap-2">
+                <div>
+                  <label className="text-xs text-muted-foreground">Border Radius</label>
+                  <Input
+                    type="number"
+                    value={cg.borderRadius}
+                    onChange={(e) => updateCardGridField("borderRadius", parseInt(e.target.value) || 0)}
+                    className="h-8 mt-1"
+                  />
+                </div>
+                <div>
+                  <label className="text-xs text-muted-foreground">Value Font Size</label>
+                  <Input
+                    type="number"
+                    value={cg.valueFontSize ?? 48}
+                    onChange={(e) => updateCardGridField("valueFontSize", parseInt(e.target.value) || 48)}
+                    className="h-8 mt-1"
+                  />
+                </div>
+              </div>
+            </div>
+          </>
+        )}
+
+        {/* Container Style */}
+        <ContainerStyleSection
+          container={s.container || DEFAULT_WIDGET_CONTAINER}
+          onChange={(container) => onChange({ ...s, container })}
         />
       </div>
-
-      <ToggleSwitch
-        label="Show Dividers"
-        checked={s.style.divider}
-        onChange={(checked) => updateStyleField("divider", checked)}
-      />
-
-      {/* Container Style */}
-      <ContainerStyleSection
-        container={s.container || DEFAULT_WIDGET_CONTAINER}
-        onChange={(container) => onChange({ ...s, container })}
-      />
-    </div>
-  );
+    );
+  };
 
   // Advanced Tab
   const renderAdvancedTab = () => (

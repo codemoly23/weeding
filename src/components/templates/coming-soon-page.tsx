@@ -121,7 +121,7 @@ export function ComingSoonPage({ pageType, context }: ComingSoonPageProps) {
     e.preventDefault();
     if (email) {
       setIsSubmitted(true);
-      // TODO: Implement newsletter subscription API
+      // TODO: Implement email subscription API
     }
   };
 

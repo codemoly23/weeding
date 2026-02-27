@@ -49,6 +49,7 @@ export async function importThemeData(
     menuItems: 0,
     footerWidgets: 0,
     locationFees: 0,
+    tickers: 0,
   };
 
   await prisma.$transaction(
@@ -107,7 +108,9 @@ export async function importThemeData(
       await tx.legalPage.deleteMany({});
       // 20. Delete settings
       await tx.setting.deleteMany({});
-      // 21. Delete active theme
+      // 21. Delete tickers
+      await tx.ticker.deleteMany({});
+      // 22. Delete active theme
       await tx.activeTheme.deleteMany({});
 
       // =============================================
@@ -147,9 +150,10 @@ export async function importThemeData(
                 for (const widget of col.widgets ?? []) {
                   // Store the first occurrence of each widget type as the theme default
                   if (widget.type && widget.settings && !widgetDefaults[widget.type]) {
-                    // Always inject colors.useTheme: true for theme-aware widgets
-                    const settings = THEME_AWARE_WIDGETS.has(widget.type)
-                      ? { ...widget.settings, colors: { ...(widget.settings.colors as object ?? {}), useTheme: true } }
+                    // Inject colors.useTheme: true for theme-aware widgets, but respect explicit false
+                    const existingColors = (widget.settings as Record<string, unknown>).colors as Record<string, unknown> | undefined;
+                    const settings = THEME_AWARE_WIDGETS.has(widget.type) && existingColors?.useTheme !== false
+                      ? { ...widget.settings, colors: { ...(existingColors ?? {}), useTheme: true } }
                       : widget.settings;
                     widgetDefaults[widget.type] = settings;
                   }
@@ -165,6 +169,7 @@ export async function importThemeData(
             themeName: options.themeName || options.themeId,
             colorPalette: data.colorPalette as unknown as Prisma.InputJsonValue,
             originalColorPalette: data.colorPalette as unknown as Prisma.InputJsonValue,
+            fontConfig: ((data as any).fontConfig ?? undefined) as Prisma.InputJsonValue | undefined,
             widgetDefaults: widgetDefaults as Prisma.InputJsonValue,
           },
         });
@@ -421,6 +426,7 @@ export async function importThemeData(
 
           for (const block of page.blocks ?? []) {
             // Inject colors.useTheme: true into theme-aware widgets during import
+            // BUT respect explicit useTheme: false from theme data
             let blockSettings: unknown = block.settings;
             if (Array.isArray(blockSettings)) {
               blockSettings = (blockSettings as Array<{
@@ -431,11 +437,14 @@ export async function importThemeData(
                   ...col,
                   widgets: col.widgets?.map((widget) => {
                     if (!THEME_AWARE_WIDGETS.has(widget.type) || !widget.settings) return widget;
+                    const existingColors = widget.settings.colors as Record<string, unknown> | undefined;
+                    // If theme data explicitly sets useTheme: false, respect it
+                    if (existingColors?.useTheme === false) return widget;
                     return {
                       ...widget,
                       settings: {
                         ...widget.settings,
-                        colors: { ...(widget.settings.colors as object ?? {}), useTheme: true },
+                        colors: { ...(existingColors ?? {}), useTheme: true },
                       },
                     };
                   }),
@@ -808,6 +817,22 @@ export async function importThemeData(
             },
           });
           counts.locationFees++;
+        }
+      }
+
+      // ---- 21. Tickers ----
+      if (data.tickers) {
+        for (const ticker of data.tickers) {
+          await tx.ticker.create({
+            data: {
+              name: ticker.name,
+              isActive: ticker.isActive ?? true,
+              items: ticker.items as Prisma.InputJsonValue,
+              speed: ticker.speed ?? 28,
+              separator: ticker.separator ?? "·",
+            },
+          });
+          counts.tickers++;
         }
       }
     },

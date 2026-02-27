@@ -7,7 +7,8 @@
       "Bash(where:*)",
       "Bash(psql:*)",
       "Bash(npm run dev:*)",
-      "Bash(npx next dev)"
+      "Bash(npx next dev)",
+      "Bash(npm install dompurify @types/dompurify)"
     ]
   }
 }

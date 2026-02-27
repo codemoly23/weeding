@@ -33,7 +33,7 @@ function getBadgeStyles(
   colors: { bgColor?: string; textColor?: string; borderColor?: string }
 ) {
   const baseClasses =
-    "inline-flex items-center gap-1.5 px-3 py-1 text-sm font-medium";
+    "inline-flex items-center gap-1.5 px-3 py-1 text-sm font-medium font-display";
 
   switch (style) {
     case "outline":
@@ -709,7 +709,7 @@ function StepItem({
           {stepNumber.show && (
             <div
               className={cn(
-                "absolute flex items-center justify-center font-bold",
+                "absolute flex items-center justify-center font-bold font-display",
                 numberSizeClasses[stepNumber.size],
                 numberPositionClasses[stepNumber.position],
                 stepNumber.style === "circle" && "rounded-full",

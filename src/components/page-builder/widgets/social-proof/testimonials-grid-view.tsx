@@ -329,6 +329,7 @@ export function TestimonialsGridView({
                 <div>
                   <p
                     className={cn(
+                      "font-display",
                       nameFontSizeClasses[content.nameFontSize],
                       content.nameFontWeight === "medium" && "font-medium",
                       content.nameFontWeight === "semibold" && "font-semibold",

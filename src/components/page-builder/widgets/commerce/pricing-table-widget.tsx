@@ -683,7 +683,7 @@ function ComparisonTable({
                 >
                   {tableHeader.showPopularBadge && pkg.badgeText && (
                     <div
-                      className="absolute bottom-0 left-1/2 -translate-x-1/2 translate-y-1/2 px-3 py-1 text-xs font-semibold text-white rounded-full whitespace-nowrap z-10 shadow-sm"
+                      className="absolute bottom-0 left-1/2 -translate-x-1/2 translate-y-1/2 px-3 py-1 text-xs font-semibold font-display text-white rounded-full whitespace-nowrap z-10 shadow-sm"
                       style={{
                         backgroundColor: tableHeader.popularBadgeColor
                           ? tableHeader.popularBadgeColor
@@ -741,14 +741,14 @@ function ComparisonTable({
                             : { borderColor: "#e5e7eb", backgroundColor: "#f9fafb" }
                         }
                       >
-                        <span className="text-sm font-semibold text-gray-900">
+                        <span className="text-sm font-semibold font-display text-gray-900">
                           {pkg.name}
                         </span>
                       </div>
                     )}
 
                     {tableHeader.showPackagePrices && (
-                      <div className="text-2xl font-bold text-gray-900">
+                      <div className="text-2xl font-bold font-display text-gray-900">
                         {currencySymbol}{pkg.price}
                       </div>
                     )}
@@ -941,7 +941,7 @@ function MobilePackageCards({
 
               <div className="text-center mb-4">
                 <h3 className="text-xl font-semibold">{pkg.name}</h3>
-                <p className="text-3xl font-bold mt-1">{currencySymbol}{pkg.price}</p>
+                <p className="text-3xl font-bold font-display mt-1">{currencySymbol}{pkg.price}</p>
                 {locationFee > 0 && (
                   <p className="text-xs text-gray-500">+ {currencySymbol}{locationFee} {settings.stateFee.label?.toLowerCase() || "location fee"}</p>
                 )}

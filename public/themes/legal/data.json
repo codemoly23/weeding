@@ -45,6 +45,11 @@
       "ring": "#F97316"
     }
   },
+  "fontConfig": {
+    "headingFont": "Outfit",
+    "bodyFont": "Inter",
+    "accentFont": "Georgia"
+  },
   "settings": {
     "business.name": "LLCPad",
     "business.contact.phone": "",
@@ -2477,55 +2482,132 @@
                     {
                       "id": "blog_badge",
                       "type": "heading",
-                      "spacing": { "marginTop": 0, "marginBottom": 16 },
+                      "spacing": {
+                        "marginTop": 0,
+                        "marginBottom": 16
+                      },
                       "settings": {
                         "style": {
-                          "textFill": { "type": "solid", "color": "#ffffff" },
+                          "textFill": {
+                            "type": "solid",
+                            "color": "#ffffff"
+                          },
                           "alignment": "center",
-                          "typography": { "fontSize": 14, "fontStyle": "normal", "fontWeight": 500, "lineHeight": 1.4, "fontSizeUnit": "px", "letterSpacing": 0, "textTransform": "none", "textDecoration": "none" }
+                          "typography": {
+                            "fontSize": 14,
+                            "fontStyle": "normal",
+                            "fontWeight": 500,
+                            "lineHeight": 1.4,
+                            "fontSizeUnit": "px",
+                            "letterSpacing": 0,
+                            "textTransform": "none",
+                            "textDecoration": "none"
+                          }
                         },
-                        "content": { "text": "Resources", "htmlTag": "div" },
-                        "advanced": { "customClass": "mx-auto w-fit rounded-full border px-3 py-1 text-xs font-semibold bg-secondary text-secondary-foreground" }
+                        "content": {
+                          "text": "Resources",
+                          "htmlTag": "div"
+                        },
+                        "advanced": {
+                          "customClass": "mx-auto w-fit rounded-full border px-3 py-1 text-xs font-semibold bg-secondary text-secondary-foreground"
+                        }
                       }
                     },
                     {
                       "id": "blog_heading",
                       "type": "heading",
-                      "spacing": { "marginTop": 0, "marginBottom": 16 },
+                      "spacing": {
+                        "marginTop": 0,
+                        "marginBottom": 16
+                      },
                       "settings": {
                         "style": {
-                          "textFill": { "type": "solid", "color": "#0f172a" },
+                          "textFill": {
+                            "type": "solid",
+                            "color": "#0f172a"
+                          },
                           "alignment": "center",
-                          "typography": { "fontSize": 36, "fontStyle": "normal", "fontWeight": 700, "lineHeight": 1.2, "fontSizeUnit": "px", "letterSpacing": -0.5, "textTransform": "none", "textDecoration": "none" }
+                          "typography": {
+                            "fontSize": 36,
+                            "fontStyle": "normal",
+                            "fontWeight": 700,
+                            "lineHeight": 1.2,
+                            "fontSizeUnit": "px",
+                            "letterSpacing": -0.5,
+                            "textTransform": "none",
+                            "textDecoration": "none"
+                          }
                         },
-                        "content": { "text": "LLC Formation Guides & Tips", "htmlTag": "h1" },
+                        "content": {
+                          "text": "LLC Formation Guides & Tips",
+                          "htmlTag": "h1"
+                        },
                         "responsive": {
-                          "mobile": { "fontSize": 26, "lineHeight": 1.3, "fontSizeUnit": "px" },
-                          "tablet": { "fontSize": 30, "lineHeight": 1.3, "fontSizeUnit": "px" },
-                          "desktop": { "fontSize": 42, "lineHeight": 1.2, "fontSizeUnit": "px", "letterSpacing": -0.5 }
+                          "mobile": {
+                            "fontSize": 26,
+                            "lineHeight": 1.3,
+                            "fontSizeUnit": "px"
+                          },
+                          "tablet": {
+                            "fontSize": 30,
+                            "lineHeight": 1.3,
+                            "fontSizeUnit": "px"
+                          },
+                          "desktop": {
+                            "fontSize": 42,
+                            "lineHeight": 1.2,
+                            "fontSizeUnit": "px",
+                            "letterSpacing": -0.5
+                          }
                         }
                       }
                     },
                     {
                       "id": "blog_description",
                       "type": "text-block",
-                      "spacing": { "marginTop": 0, "marginBottom": 0 },
+                      "spacing": {
+                        "marginTop": 0,
+                        "marginBottom": 0
+                      },
                       "settings": {
-                        "editor": { "toolbar": "minimal", "minHeight": 60 },
+                        "editor": {
+                          "toolbar": "minimal",
+                          "minHeight": 60
+                        },
                         "content": "<p style=\"text-align: center\">Expert guides, tips, and insights for entrepreneurs starting their US business journey.</p>",
-                        "container": { "padding": 0, "borderRadius": 0 },
-                        "typography": { "color": "#64748b", "fontSize": 18, "linkColor": "#f97316", "lineHeight": 1.6 },
+                        "container": {
+                          "padding": 0,
+                          "borderRadius": 0
+                        },
+                        "typography": {
+                          "color": "#64748b",
+                          "fontSize": 18,
+                          "linkColor": "#f97316",
+                          "lineHeight": 1.6
+                        },
                         "paragraphSpacing": 16
                       }
                     }
                   ],
-                  "settings": { "padding": 0, "verticalAlign": "top" }
+                  "settings": {
+                    "padding": 0,
+                    "verticalAlign": "top"
+                  }
                 }
               ],
               "settings": {
-                "gap": 0, "maxWidth": "lg", "fullWidth": false, "isVisible": true,
-                "paddingTop": 64, "paddingLeft": 16, "paddingRight": 16, "paddingBottom": 32,
-                "background": { "type": "solid", "color": "transparent" }
+                "gap": 0,
+                "maxWidth": "lg",
+                "fullWidth": false,
+                "isVisible": true,
+                "paddingTop": 64,
+                "paddingLeft": 16,
+                "paddingRight": 16,
+                "paddingBottom": 32,
+                "background": {
+                  "type": "solid",
+                  "color": "transparent"
+                }
               }
             },
             {
@@ -2539,36 +2621,80 @@
                     {
                       "id": "blog_featured_post",
                       "type": "blog-featured-post",
-                      "spacing": { "marginTop": 0, "marginBottom": 0 },
+                      "spacing": {
+                        "marginTop": 0,
+                        "marginBottom": 0
+                      },
                       "settings": {
-                        "dataSource": { "source": "latest" },
+                        "dataSource": {
+                          "source": "latest"
+                        },
                         "layout": "split-left",
                         "height": "md",
                         "image": {
                           "aspectRatio": "16:9",
                           "borderRadius": 16,
                           "hoverEffect": "zoom",
-                          "overlay": { "enabled": true, "color": "#000000", "opacity": 0.4 }
+                          "overlay": {
+                            "enabled": true,
+                            "color": "#000000",
+                            "opacity": 0.4
+                          }
                         },
                         "content": {
-                          "categoryBadge": { "show": true, "style": "pill" },
-                          "title": { "size": "2xl", "fontWeight": 700, "maxLines": 3 },
-                          "excerpt": { "show": true, "maxLength": 200, "fontSize": "md" },
-                          "meta": { "show": true, "items": ["date", "readingTime", "category"], "dateFormat": "long" },
-                          "readMore": { "show": true, "text": "Read Full Article", "style": "button-primary" },
+                          "categoryBadge": {
+                            "show": true,
+                            "style": "pill"
+                          },
+                          "title": {
+                            "size": "2xl",
+                            "fontWeight": 700,
+                            "maxLines": 3
+                          },
+                          "excerpt": {
+                            "show": true,
+                            "maxLength": 200,
+                            "fontSize": "md"
+                          },
+                          "meta": {
+                            "show": true,
+                            "items": [
+                              "date",
+                              "readingTime",
+                              "category"
+                            ],
+                            "dateFormat": "long"
+                          },
+                          "readMore": {
+                            "show": true,
+                            "text": "Read Full Article",
+                            "style": "button-primary"
+                          },
                           "alignment": "left",
                           "verticalPosition": "center"
                         }
                       }
                     }
                   ],
-                  "settings": { "padding": 0, "verticalAlign": "top" }
+                  "settings": {
+                    "padding": 0,
+                    "verticalAlign": "top"
+                  }
                 }
               ],
               "settings": {
-                "gap": 0, "maxWidth": "xl", "fullWidth": false, "isVisible": true,
-                "paddingTop": 16, "paddingLeft": 16, "paddingRight": 16, "paddingBottom": 32,
-                "background": { "type": "solid", "color": "transparent" }
+                "gap": 0,
+                "maxWidth": "xl",
+                "fullWidth": false,
+                "isVisible": true,
+                "paddingTop": 16,
+                "paddingLeft": 16,
+                "paddingRight": 16,
+                "paddingBottom": 32,
+                "background": {
+                  "type": "solid",
+                  "color": "transparent"
+                }
               }
             },
             {
@@ -2582,13 +2708,23 @@
                     {
                       "id": "blog_post_grid",
                       "type": "blog-post-grid",
-                      "spacing": { "marginTop": 0, "marginBottom": 0 },
+                      "spacing": {
+                        "marginTop": 0,
+                        "marginBottom": 0
+                      },
                       "settings": {
                         "header": {
                           "show": true,
-                          "badge": { "show": false },
-                          "heading": { "text": "Recent Articles", "highlightWords": "" },
-                          "description": { "show": false }
+                          "badge": {
+                            "show": false
+                          },
+                          "heading": {
+                            "text": "Recent Articles",
+                            "highlightWords": ""
+                          },
+                          "description": {
+                            "show": false
+                          }
                         },
                         "dataSource": {
                           "source": "database",
@@ -2598,31 +2734,78 @@
                         },
                         "layout": {
                           "type": "grid",
-                          "columns": { "desktop": 3, "tablet": 2, "mobile": 1 },
+                          "columns": {
+                            "desktop": 3,
+                            "tablet": 2,
+                            "mobile": 1
+                          },
                           "gap": 24,
                           "equalHeight": true
                         },
                         "card": {
-                          "image": { "show": true, "aspectRatio": "16:9", "borderRadius": 12, "hoverEffect": "zoom" },
-                          "categoryBadge": { "show": true, "style": "pill" },
-                          "title": { "show": true, "maxLines": 2, "fontSize": "lg" },
-                          "excerpt": { "show": true, "maxLength": 120, "fontSize": "sm" },
-                          "meta": { "show": true, "items": ["date", "category"], "dateFormat": "short", "separator": "dot" },
-                          "readMore": { "show": false }
+                          "image": {
+                            "show": true,
+                            "aspectRatio": "16:9",
+                            "borderRadius": 12,
+                            "hoverEffect": "zoom"
+                          },
+                          "categoryBadge": {
+                            "show": true,
+                            "style": "pill"
+                          },
+                          "title": {
+                            "show": true,
+                            "maxLines": 2,
+                            "fontSize": "lg"
+                          },
+                          "excerpt": {
+                            "show": true,
+                            "maxLength": 120,
+                            "fontSize": "sm"
+                          },
+                          "meta": {
+                            "show": true,
+                            "items": [
+                              "date",
+                              "category"
+                            ],
+                            "dateFormat": "short",
+                            "separator": "dot"
+                          },
+                          "readMore": {
+                            "show": false
+                          }
                         },
                         "animation": {
-                          "entrance": { "enabled": true, "type": "fade-up", "stagger": true, "staggerDelay": 50 }
+                          "entrance": {
+                            "enabled": true,
+                            "type": "fade-up",
+                            "stagger": true,
+                            "staggerDelay": 50
+                          }
                         }
                       }
                     }
                   ],
-                  "settings": { "padding": 0, "verticalAlign": "top" }
+                  "settings": {
+                    "padding": 0,
+                    "verticalAlign": "top"
+                  }
                 }
               ],
               "settings": {
-                "gap": 0, "maxWidth": "xl", "fullWidth": false, "isVisible": true,
-                "paddingTop": 32, "paddingLeft": 16, "paddingRight": 16, "paddingBottom": 64,
-                "background": { "type": "solid", "color": "transparent" }
+                "gap": 0,
+                "maxWidth": "xl",
+                "fullWidth": false,
+                "isVisible": true,
+                "paddingTop": 32,
+                "paddingLeft": 16,
+                "paddingRight": 16,
+                "paddingBottom": 64,
+                "background": {
+                  "type": "solid",
+                  "color": "transparent"
+                }
               }
             }
           ]
@@ -2653,55 +2836,132 @@
                     {
                       "id": "about_badge",
                       "type": "heading",
-                      "spacing": { "marginTop": 0, "marginBottom": 16 },
+                      "spacing": {
+                        "marginTop": 0,
+                        "marginBottom": 16
+                      },
                       "settings": {
                         "style": {
-                          "textFill": { "type": "solid", "color": "#ffffff" },
+                          "textFill": {
+                            "type": "solid",
+                            "color": "#ffffff"
+                          },
                           "alignment": "center",
-                          "typography": { "fontSize": 14, "fontStyle": "normal", "fontWeight": 500, "lineHeight": 1.4, "fontSizeUnit": "px", "letterSpacing": 0, "textTransform": "none", "textDecoration": "none" }
+                          "typography": {
+                            "fontSize": 14,
+                            "fontStyle": "normal",
+                            "fontWeight": 500,
+                            "lineHeight": 1.4,
+                            "fontSizeUnit": "px",
+                            "letterSpacing": 0,
+                            "textTransform": "none",
+                            "textDecoration": "none"
+                          }
                         },
-                        "content": { "text": "About LLCPad", "htmlTag": "div" },
-                        "advanced": { "customClass": "mx-auto w-fit rounded-full border px-3 py-1 text-xs font-semibold bg-secondary text-secondary-foreground" }
+                        "content": {
+                          "text": "About LLCPad",
+                          "htmlTag": "div"
+                        },
+                        "advanced": {
+                          "customClass": "mx-auto w-fit rounded-full border px-3 py-1 text-xs font-semibold bg-secondary text-secondary-foreground"
+                        }
                       }
                     },
                     {
                       "id": "about_heading",
                       "type": "heading",
-                      "spacing": { "marginTop": 0, "marginBottom": 16 },
+                      "spacing": {
+                        "marginTop": 0,
+                        "marginBottom": 16
+                      },
                       "settings": {
                         "style": {
-                          "textFill": { "type": "solid", "color": "#0f172a" },
+                          "textFill": {
+                            "type": "solid",
+                            "color": "#0f172a"
+                          },
                           "alignment": "center",
-                          "typography": { "fontSize": 36, "fontStyle": "normal", "fontWeight": 700, "lineHeight": 1.2, "fontSizeUnit": "px", "letterSpacing": -0.5, "textTransform": "none", "textDecoration": "none" }
+                          "typography": {
+                            "fontSize": 36,
+                            "fontStyle": "normal",
+                            "fontWeight": 700,
+                            "lineHeight": 1.2,
+                            "fontSizeUnit": "px",
+                            "letterSpacing": -0.5,
+                            "textTransform": "none",
+                            "textDecoration": "none"
+                          }
                         },
-                        "content": { "text": "Empowering Global Entrepreneurs", "htmlTag": "h1" },
+                        "content": {
+                          "text": "Empowering Global Entrepreneurs",
+                          "htmlTag": "h1"
+                        },
                         "responsive": {
-                          "mobile": { "fontSize": 26, "lineHeight": 1.3, "fontSizeUnit": "px" },
-                          "tablet": { "fontSize": 30, "lineHeight": 1.3, "fontSizeUnit": "px" },
-                          "desktop": { "fontSize": 42, "lineHeight": 1.2, "fontSizeUnit": "px", "letterSpacing": -0.5 }
+                          "mobile": {
+                            "fontSize": 26,
+                            "lineHeight": 1.3,
+                            "fontSizeUnit": "px"
+                          },
+                          "tablet": {
+                            "fontSize": 30,
+                            "lineHeight": 1.3,
+                            "fontSizeUnit": "px"
+                          },
+                          "desktop": {
+                            "fontSize": 42,
+                            "lineHeight": 1.2,
+                            "fontSizeUnit": "px",
+                            "letterSpacing": -0.5
+                          }
                         }
                       }
                     },
                     {
                       "id": "about_description",
                       "type": "text-block",
-                      "spacing": { "marginTop": 0, "marginBottom": 0 },
+                      "spacing": {
+                        "marginTop": 0,
+                        "marginBottom": 0
+                      },
                       "settings": {
-                        "editor": { "toolbar": "minimal", "minHeight": 60 },
+                        "editor": {
+                          "toolbar": "minimal",
+                          "minHeight": 60
+                        },
                         "content": "<p style=\"text-align: center\">We're on a mission to make US business formation accessible to entrepreneurs worldwide. No matter where you are, we help you establish a legitimate US presence with zero complexity.</p>",
-                        "container": { "padding": 0, "borderRadius": 0 },
-                        "typography": { "color": "#64748b", "fontSize": 18, "linkColor": "#f97316", "lineHeight": 1.6 },
+                        "container": {
+                          "padding": 0,
+                          "borderRadius": 0
+                        },
+                        "typography": {
+                          "color": "#64748b",
+                          "fontSize": 18,
+                          "linkColor": "#f97316",
+                          "lineHeight": 1.6
+                        },
                         "paragraphSpacing": 16
                       }
                     }
                   ],
-                  "settings": { "padding": 0, "verticalAlign": "top" }
+                  "settings": {
+                    "padding": 0,
+                    "verticalAlign": "top"
+                  }
                 }
               ],
               "settings": {
-                "gap": 0, "maxWidth": "lg", "fullWidth": false, "isVisible": true,
-                "paddingTop": 64, "paddingLeft": 16, "paddingRight": 16, "paddingBottom": 16,
-                "background": { "type": "solid", "color": "transparent" }
+                "gap": 0,
+                "maxWidth": "lg",
+                "fullWidth": false,
+                "isVisible": true,
+                "paddingTop": 64,
+                "paddingLeft": 16,
+                "paddingRight": 16,
+                "paddingBottom": 16,
+                "background": {
+                  "type": "solid",
+                  "color": "transparent"
+                }
               }
             },
             {
@@ -2715,13 +2975,40 @@
                     {
                       "id": "about_stats_widget",
                       "type": "stats-section",
-                      "spacing": { "marginTop": 0, "marginBottom": 0 },
+                      "spacing": {
+                        "marginTop": 0,
+                        "marginBottom": 0
+                      },
                       "settings": {
                         "stats": [
-                          { "id": "stat_1", "value": "10000", "label": "LLCs Formed", "suffix": "+", "animate": true },
-                          { "id": "stat_2", "value": "50", "label": "Countries Served", "suffix": "+", "animate": true },
-                          { "id": "stat_3", "value": "4.9", "label": "Customer Rating", "suffix": "/5", "animate": true },
-                          { "id": "stat_4", "value": "5", "label": "Years Experience", "suffix": "+", "animate": true }
+                          {
+                            "id": "stat_1",
+                            "value": "10000",
+                            "label": "LLCs Formed",
+                            "suffix": "+",
+                            "animate": true
+                          },
+                          {
+                            "id": "stat_2",
+                            "value": "50",
+                            "label": "Countries Served",
+                            "suffix": "+",
+                            "animate": true
+                          },
+                          {
+                            "id": "stat_3",
+                            "value": "4.9",
+                            "label": "Customer Rating",
+                            "suffix": "/5",
+                            "animate": true
+                          },
+                          {
+                            "id": "stat_4",
+                            "value": "5",
+                            "label": "Years Experience",
+                            "suffix": "+",
+                            "animate": true
+                          }
                         ],
                         "columns": 4,
                         "style": {
@@ -2736,13 +3023,25 @@
                       }
                     }
                   ],
-                  "settings": { "padding": 0, "verticalAlign": "top" }
+                  "settings": {
+                    "padding": 0,
+                    "verticalAlign": "top"
+                  }
                 }
               ],
               "settings": {
-                "gap": 0, "maxWidth": "xl", "fullWidth": false, "isVisible": true,
-                "paddingTop": 48, "paddingLeft": 16, "paddingRight": 16, "paddingBottom": 48,
-                "background": { "type": "solid", "color": "transparent" }
+                "gap": 0,
+                "maxWidth": "xl",
+                "fullWidth": false,
+                "isVisible": true,
+                "paddingTop": 48,
+                "paddingLeft": 16,
+                "paddingRight": 16,
+                "paddingBottom": 48,
+                "background": {
+                  "type": "solid",
+                  "color": "transparent"
+                }
               }
             },
             {
@@ -2756,36 +3055,76 @@
                     {
                       "id": "about_story_heading",
                       "type": "heading",
-                      "spacing": { "marginTop": 0, "marginBottom": 24 },
+                      "spacing": {
+                        "marginTop": 0,
+                        "marginBottom": 24
+                      },
                       "settings": {
                         "style": {
-                          "textFill": { "type": "solid", "color": "#0f172a" },
+                          "textFill": {
+                            "type": "solid",
+                            "color": "#0f172a"
+                          },
                           "alignment": "left",
-                          "typography": { "fontSize": 30, "fontWeight": 700, "lineHeight": 1.2, "fontSizeUnit": "px" }
+                          "typography": {
+                            "fontSize": 30,
+                            "fontWeight": 700,
+                            "lineHeight": 1.2,
+                            "fontSizeUnit": "px"
+                          }
                         },
-                        "content": { "text": "Our Story", "htmlTag": "h2" }
+                        "content": {
+                          "text": "Our Story",
+                          "htmlTag": "h2"
+                        }
                       }
                     },
                     {
                       "id": "about_story_text",
                       "type": "text-block",
-                      "spacing": { "marginTop": 0, "marginBottom": 0 },
+                      "spacing": {
+                        "marginTop": 0,
+                        "marginBottom": 0
+                      },
                       "settings": {
-                        "editor": { "toolbar": "minimal", "minHeight": 200 },
+                        "editor": {
+                          "toolbar": "minimal",
+                          "minHeight": 200
+                        },
                         "content": "<p>LLCPad was founded in 2019 with a simple observation: while the US offers incredible business opportunities, the formation process was unnecessarily complicated for international entrepreneurs.</p><p>Our founder, Sarah Johnson, spent years as a corporate attorney helping foreign clients establish US businesses. She saw firsthand how confusing and expensive the process could be, especially for those unfamiliar with the US legal system.</p><p>That's why we built LLCPad — to provide a straightforward, affordable, and trustworthy service that handles all the complexity so you can focus on building your business.</p><p>Today, we've helped over 10,000 entrepreneurs from more than 50 countries establish their US presence. From solo e-commerce sellers to growing startups, we're proud to be part of their journey.</p>",
-                        "container": { "padding": 0, "borderRadius": 0 },
-                        "typography": { "color": "#64748b", "fontSize": 16, "lineHeight": 1.7, "linkColor": "#f97316" },
+                        "container": {
+                          "padding": 0,
+                          "borderRadius": 0
+                        },
+                        "typography": {
+                          "color": "#64748b",
+                          "fontSize": 16,
+                          "lineHeight": 1.7,
+                          "linkColor": "#f97316"
+                        },
                         "paragraphSpacing": 16
                       }
                     }
                   ],
-                  "settings": { "padding": 0, "verticalAlign": "top" }
+                  "settings": {
+                    "padding": 0,
+                    "verticalAlign": "top"
+                  }
                 }
               ],
               "settings": {
-                "gap": 0, "maxWidth": "lg", "fullWidth": false, "isVisible": true,
-                "paddingTop": 64, "paddingLeft": 16, "paddingRight": 16, "paddingBottom": 64,
-                "background": { "type": "solid", "color": "#f8fafc" }
+                "gap": 0,
+                "maxWidth": "lg",
+                "fullWidth": false,
+                "isVisible": true,
+                "paddingTop": 64,
+                "paddingLeft": 16,
+                "paddingRight": 16,
+                "paddingBottom": 64,
+                "background": {
+                  "type": "solid",
+                  "color": "#f8fafc"
+                }
               }
             },
             {
@@ -2799,38 +3138,88 @@
                     {
                       "id": "about_values_heading",
                       "type": "heading",
-                      "spacing": { "marginTop": 0, "marginBottom": 8 },
+                      "spacing": {
+                        "marginTop": 0,
+                        "marginBottom": 8
+                      },
                       "settings": {
                         "style": {
-                          "textFill": { "type": "solid", "color": "#0f172a" },
+                          "textFill": {
+                            "type": "solid",
+                            "color": "#0f172a"
+                          },
                           "alignment": "center",
-                          "typography": { "fontSize": 30, "fontWeight": 700, "lineHeight": 1.2, "fontSizeUnit": "px" }
+                          "typography": {
+                            "fontSize": 30,
+                            "fontWeight": 700,
+                            "lineHeight": 1.2,
+                            "fontSizeUnit": "px"
+                          }
                         },
-                        "content": { "text": "Our Values", "htmlTag": "h2" }
+                        "content": {
+                          "text": "Our Values",
+                          "htmlTag": "h2"
+                        }
                       }
                     },
                     {
                       "id": "about_values_desc",
                       "type": "text-block",
-                      "spacing": { "marginTop": 0, "marginBottom": 32 },
+                      "spacing": {
+                        "marginTop": 0,
+                        "marginBottom": 32
+                      },
                       "settings": {
-                        "editor": { "toolbar": "minimal", "minHeight": 40 },
+                        "editor": {
+                          "toolbar": "minimal",
+                          "minHeight": 40
+                        },
                         "content": "<p style=\"text-align: center\">The principles that guide everything we do</p>",
-                        "container": { "padding": 0, "borderRadius": 0 },
-                        "typography": { "color": "#64748b", "fontSize": 16, "lineHeight": 1.6 },
+                        "container": {
+                          "padding": 0,
+                          "borderRadius": 0
+                        },
+                        "typography": {
+                          "color": "#64748b",
+                          "fontSize": 16,
+                          "lineHeight": 1.6
+                        },
                         "paragraphSpacing": 16
                       }
                     },
                     {
                       "id": "about_values_badges",
                       "type": "trust-badges",
-                      "spacing": { "marginTop": 0, "marginBottom": 0 },
+                      "spacing": {
+                        "marginTop": 0,
+                        "marginBottom": 0
+                      },
                       "settings": {
                         "badges": [
-                          { "id": "val_1", "icon": "Shield", "text": "Trust & Transparency", "description": "No hidden fees, no surprises. We believe in clear communication and honest pricing." },
-                          { "id": "val_2", "icon": "Zap", "text": "Speed & Efficiency", "description": "We know your time is valuable. Most formations are completed within 24-48 hours." },
-                          { "id": "val_3", "icon": "Heart", "text": "Customer First", "description": "Your success is our success. Our support team is always ready to help you succeed." },
-                          { "id": "val_4", "icon": "Target", "text": "Expert Guidance", "description": "Specialized knowledge in helping international entrepreneurs navigate US business formation." }
+                          {
+                            "id": "val_1",
+                            "icon": "Shield",
+                            "text": "Trust & Transparency",
+                            "description": "No hidden fees, no surprises. We believe in clear communication and honest pricing."
+                          },
+                          {
+                            "id": "val_2",
+                            "icon": "Zap",
+                            "text": "Speed & Efficiency",
+                            "description": "We know your time is valuable. Most formations are completed within 24-48 hours."
+                          },
+                          {
+                            "id": "val_3",
+                            "icon": "Heart",
+                            "text": "Customer First",
+                            "description": "Your success is our success. Our support team is always ready to help you succeed."
+                          },
+                          {
+                            "id": "val_4",
+                            "icon": "Target",
+                            "text": "Expert Guidance",
+                            "description": "Specialized knowledge in helping international entrepreneurs navigate US business formation."
+                          }
                         ],
                         "layout": "grid",
                         "columns": 4,
@@ -2845,13 +3234,25 @@
                       }
                     }
                   ],
-                  "settings": { "padding": 0, "verticalAlign": "top" }
+                  "settings": {
+                    "padding": 0,
+                    "verticalAlign": "top"
+                  }
                 }
               ],
               "settings": {
-                "gap": 0, "maxWidth": "xl", "fullWidth": false, "isVisible": true,
-                "paddingTop": 64, "paddingLeft": 16, "paddingRight": 16, "paddingBottom": 64,
-                "background": { "type": "solid", "color": "transparent" }
+                "gap": 0,
+                "maxWidth": "xl",
+                "fullWidth": false,
+                "isVisible": true,
+                "paddingTop": 64,
+                "paddingLeft": 16,
+                "paddingRight": 16,
+                "paddingBottom": 64,
+                "background": {
+                  "type": "solid",
+                  "color": "transparent"
+                }
               }
             },
             {
@@ -2865,48 +3266,101 @@
                     {
                       "id": "about_team_heading",
                       "type": "heading",
-                      "spacing": { "marginTop": 0, "marginBottom": 8 },
+                      "spacing": {
+                        "marginTop": 0,
+                        "marginBottom": 8
+                      },
                       "settings": {
                         "style": {
-                          "textFill": { "type": "solid", "color": "#0f172a" },
+                          "textFill": {
+                            "type": "solid",
+                            "color": "#0f172a"
+                          },
                           "alignment": "center",
-                          "typography": { "fontSize": 30, "fontWeight": 700, "lineHeight": 1.2, "fontSizeUnit": "px" }
+                          "typography": {
+                            "fontSize": 30,
+                            "fontWeight": 700,
+                            "lineHeight": 1.2,
+                            "fontSizeUnit": "px"
+                          }
                         },
-                        "content": { "text": "Meet Our Team", "htmlTag": "h2" }
+                        "content": {
+                          "text": "Meet Our Team",
+                          "htmlTag": "h2"
+                        }
                       }
                     },
                     {
                       "id": "about_team_desc",
                       "type": "text-block",
-                      "spacing": { "marginTop": 0, "marginBottom": 32 },
+                      "spacing": {
+                        "marginTop": 0,
+                        "marginBottom": 32
+                      },
                       "settings": {
-                        "editor": { "toolbar": "minimal", "minHeight": 40 },
+                        "editor": {
+                          "toolbar": "minimal",
+                          "minHeight": 40
+                        },
                         "content": "<p style=\"text-align: center\">Dedicated professionals committed to your success</p>",
-                        "container": { "padding": 0, "borderRadius": 0 },
-                        "typography": { "color": "#64748b", "fontSize": 16, "lineHeight": 1.6 },
+                        "container": {
+                          "padding": 0,
+                          "borderRadius": 0
+                        },
+                        "typography": {
+                          "color": "#64748b",
+                          "fontSize": 16,
+                          "lineHeight": 1.6
+                        },
                         "paragraphSpacing": 16
                       }
                     },
                     {
                       "id": "about_team_cards",
                       "type": "text-block",
-                      "spacing": { "marginTop": 0, "marginBottom": 0 },
+                      "spacing": {
+                        "marginTop": 0,
+                        "marginBottom": 0
+                      },
                       "settings": {
-                        "editor": { "toolbar": "standard", "minHeight": 200 },
+                        "editor": {
+                          "toolbar": "standard",
+                          "minHeight": 200
+                        },
                         "content": "<div style=\"display: grid; grid-template-columns: repeat(4, 1fr); gap: 32px; text-align: center\"><div><div style=\"width: 96px; height: 96px; border-radius: 50%; background: #f973161a; margin: 0 auto 16px\"></div><h3 style=\"font-weight: 600; color: #0f172a; margin-bottom: 4px\">Sarah Johnson</h3><p style=\"font-size: 14px; color: #f97316; margin-bottom: 8px\">Founder & CEO</p><p style=\"font-size: 14px; color: #64748b\">Former corporate attorney with 15 years of experience in business formation.</p></div><div><div style=\"width: 96px; height: 96px; border-radius: 50%; background: #f973161a; margin: 0 auto 16px\"></div><h3 style=\"font-weight: 600; color: #0f172a; margin-bottom: 4px\">Michael Chen</h3><p style=\"font-size: 14px; color: #f97316; margin-bottom: 8px\">Head of Operations</p><p style=\"font-size: 14px; color: #64748b\">Operations expert who has streamlined our filing process to industry-leading speeds.</p></div><div><div style=\"width: 96px; height: 96px; border-radius: 50%; background: #f973161a; margin: 0 auto 16px\"></div><h3 style=\"font-weight: 600; color: #0f172a; margin-bottom: 4px\">Priya Patel</h3><p style=\"font-size: 14px; color: #f97316; margin-bottom: 8px\">Customer Success Lead</p><p style=\"font-size: 14px; color: #64748b\">Dedicated to ensuring every client has a smooth experience from start to finish.</p></div><div><div style=\"width: 96px; height: 96px; border-radius: 50%; background: #f973161a; margin: 0 auto 16px\"></div><h3 style=\"font-weight: 600; color: #0f172a; margin-bottom: 4px\">Ahmed Hassan</h3><p style=\"font-size: 14px; color: #f97316; margin-bottom: 8px\">International Relations</p><p style=\"font-size: 14px; color: #64748b\">Helps clients from South Asia and Middle East navigate US business requirements.</p></div></div>",
-                        "container": { "padding": 0, "borderRadius": 0 },
-                        "typography": { "color": "#334155", "fontSize": 14, "lineHeight": 1.6, "linkColor": "#f97316" },
+                        "container": {
+                          "padding": 0,
+                          "borderRadius": 0
+                        },
+                        "typography": {
+                          "color": "#334155",
+                          "fontSize": 14,
+                          "lineHeight": 1.6,
+                          "linkColor": "#f97316"
+                        },
                         "paragraphSpacing": 16
                       }
                     }
                   ],
-                  "settings": { "padding": 0, "verticalAlign": "top" }
+                  "settings": {
+                    "padding": 0,
+                    "verticalAlign": "top"
+                  }
                 }
               ],
               "settings": {
-                "gap": 0, "maxWidth": "xl", "fullWidth": false, "isVisible": true,
-                "paddingTop": 64, "paddingLeft": 16, "paddingRight": 16, "paddingBottom": 64,
-                "background": { "type": "solid", "color": "#f8fafc" }
+                "gap": 0,
+                "maxWidth": "xl",
+                "fullWidth": false,
+                "isVisible": true,
+                "paddingTop": 64,
+                "paddingLeft": 16,
+                "paddingRight": 16,
+                "paddingBottom": 64,
+                "background": {
+                  "type": "solid",
+                  "color": "#f8fafc"
+                }
               }
             },
             {
@@ -2920,45 +3374,87 @@
                     {
                       "id": "about_cta_heading",
                       "type": "heading",
-                      "spacing": { "marginTop": 0, "marginBottom": 8 },
+                      "spacing": {
+                        "marginTop": 0,
+                        "marginBottom": 8
+                      },
                       "settings": {
                         "style": {
-                          "textFill": { "type": "solid", "color": "#0f172a" },
+                          "textFill": {
+                            "type": "solid",
+                            "color": "#0f172a"
+                          },
                           "alignment": "center",
-                          "typography": { "fontSize": 30, "fontWeight": 700, "lineHeight": 1.2, "fontSizeUnit": "px" }
+                          "typography": {
+                            "fontSize": 30,
+                            "fontWeight": 700,
+                            "lineHeight": 1.2,
+                            "fontSizeUnit": "px"
+                          }
                         },
-                        "content": { "text": "Ready to Get Started?", "htmlTag": "h2" }
+                        "content": {
+                          "text": "Ready to Get Started?",
+                          "htmlTag": "h2"
+                        }
                       }
                     },
                     {
                       "id": "about_cta_desc",
                       "type": "text-block",
-                      "spacing": { "marginTop": 0, "marginBottom": 24 },
+                      "spacing": {
+                        "marginTop": 0,
+                        "marginBottom": 24
+                      },
                       "settings": {
-                        "editor": { "toolbar": "minimal", "minHeight": 40 },
+                        "editor": {
+                          "toolbar": "minimal",
+                          "minHeight": 40
+                        },
                         "content": "<p style=\"text-align: center\">Join thousands of entrepreneurs who've trusted LLCPad with their US business formation.</p>",
-                        "container": { "padding": 0, "borderRadius": 0 },
-                        "typography": { "color": "#64748b", "fontSize": 16, "lineHeight": 1.6 },
+                        "container": {
+                          "padding": 0,
+                          "borderRadius": 0
+                        },
+                        "typography": {
+                          "color": "#64748b",
+                          "fontSize": 16,
+                          "lineHeight": 1.6
+                        },
                         "paragraphSpacing": 16
                       }
                     },
                     {
                       "id": "about_cta_buttons",
                       "type": "button-group",
-                      "spacing": { "marginTop": 0, "marginBottom": 0 },
+                      "spacing": {
+                        "marginTop": 0,
+                        "marginBottom": 0
+                      },
                       "settings": {
                         "buttons": [
                           {
                             "id": "btn_start",
                             "text": "Start Your LLC",
                             "link": "/services/llc-formation",
-                            "style": { "bgColor": "#f97316", "textColor": "#ffffff", "borderRadius": 8, "hoverEffect": "shadow-lift" }
+                            "style": {
+                              "bgColor": "#f97316",
+                              "textColor": "#ffffff",
+                              "borderRadius": 8,
+                              "hoverEffect": "shadow-lift"
+                            }
                           },
                           {
                             "id": "btn_contact",
                             "text": "Contact Us",
                             "link": "/contact",
-                            "style": { "bgColor": "transparent", "textColor": "#0f172a", "borderRadius": 8, "borderColor": "#e2e8f0", "borderWidth": 1, "hoverEffect": "darken" }
+                            "style": {
+                              "bgColor": "transparent",
+                              "textColor": "#0f172a",
+                              "borderRadius": 8,
+                              "borderColor": "#e2e8f0",
+                              "borderWidth": 1,
+                              "hoverEffect": "darken"
+                            }
                           }
                         ],
                         "layout": "horizontal",
@@ -2967,13 +3463,25 @@
                       }
                     }
                   ],
-                  "settings": { "padding": 0, "verticalAlign": "top" }
+                  "settings": {
+                    "padding": 0,
+                    "verticalAlign": "top"
+                  }
                 }
               ],
               "settings": {
-                "gap": 0, "maxWidth": "lg", "fullWidth": false, "isVisible": true,
-                "paddingTop": 64, "paddingLeft": 16, "paddingRight": 16, "paddingBottom": 64,
-                "background": { "type": "solid", "color": "transparent" }
+                "gap": 0,
+                "maxWidth": "lg",
+                "fullWidth": false,
+                "isVisible": true,
+                "paddingTop": 64,
+                "paddingLeft": 16,
+                "paddingRight": 16,
+                "paddingBottom": 64,
+                "background": {
+                  "type": "solid",
+                  "color": "transparent"
+                }
               }
             }
           ]
@@ -3004,55 +3512,132 @@
                     {
                       "id": "pricing_badge",
                       "type": "heading",
-                      "spacing": { "marginTop": 0, "marginBottom": 16 },
+                      "spacing": {
+                        "marginTop": 0,
+                        "marginBottom": 16
+                      },
                       "settings": {
                         "style": {
-                          "textFill": { "type": "solid", "color": "#ffffff" },
+                          "textFill": {
+                            "type": "solid",
+                            "color": "#ffffff"
+                          },
                           "alignment": "center",
-                          "typography": { "fontSize": 14, "fontStyle": "normal", "fontWeight": 500, "lineHeight": 1.4, "fontSizeUnit": "px", "letterSpacing": 0, "textTransform": "none", "textDecoration": "none" }
+                          "typography": {
+                            "fontSize": 14,
+                            "fontStyle": "normal",
+                            "fontWeight": 500,
+                            "lineHeight": 1.4,
+                            "fontSizeUnit": "px",
+                            "letterSpacing": 0,
+                            "textTransform": "none",
+                            "textDecoration": "none"
+                          }
                         },
-                        "content": { "text": "Pricing", "htmlTag": "div" },
-                        "advanced": { "customClass": "mx-auto w-fit rounded-full border px-3 py-1 text-xs font-semibold bg-secondary text-secondary-foreground" }
+                        "content": {
+                          "text": "Pricing",
+                          "htmlTag": "div"
+                        },
+                        "advanced": {
+                          "customClass": "mx-auto w-fit rounded-full border px-3 py-1 text-xs font-semibold bg-secondary text-secondary-foreground"
+                        }
                       }
                     },
                     {
                       "id": "pricing_heading",
                       "type": "heading",
-                      "spacing": { "marginTop": 0, "marginBottom": 16 },
+                      "spacing": {
+                        "marginTop": 0,
+                        "marginBottom": 16
+                      },
                       "settings": {
                         "style": {
-                          "textFill": { "type": "solid", "color": "#0f172a" },
+                          "textFill": {
+                            "type": "solid",
+                            "color": "#0f172a"
+                          },
                           "alignment": "center",
-                          "typography": { "fontSize": 36, "fontStyle": "normal", "fontWeight": 700, "lineHeight": 1.2, "fontSizeUnit": "px", "letterSpacing": -0.5, "textTransform": "none", "textDecoration": "none" }
+                          "typography": {
+                            "fontSize": 36,
+                            "fontStyle": "normal",
+                            "fontWeight": 700,
+                            "lineHeight": 1.2,
+                            "fontSizeUnit": "px",
+                            "letterSpacing": -0.5,
+                            "textTransform": "none",
+                            "textDecoration": "none"
+                          }
                         },
-                        "content": { "text": "Simple, Transparent Pricing", "htmlTag": "h1" },
+                        "content": {
+                          "text": "Simple, Transparent Pricing",
+                          "htmlTag": "h1"
+                        },
                         "responsive": {
-                          "mobile": { "fontSize": 26, "lineHeight": 1.3, "fontSizeUnit": "px" },
-                          "tablet": { "fontSize": 30, "lineHeight": 1.3, "fontSizeUnit": "px" },
-                          "desktop": { "fontSize": 42, "lineHeight": 1.2, "fontSizeUnit": "px", "letterSpacing": -0.5 }
+                          "mobile": {
+                            "fontSize": 26,
+                            "lineHeight": 1.3,
+                            "fontSizeUnit": "px"
+                          },
+                          "tablet": {
+                            "fontSize": 30,
+                            "lineHeight": 1.3,
+                            "fontSizeUnit": "px"
+                          },
+                          "desktop": {
+                            "fontSize": 42,
+                            "lineHeight": 1.2,
+                            "fontSizeUnit": "px",
+                            "letterSpacing": -0.5
+                          }
                         }
                       }
                     },
                     {
                       "id": "pricing_description",
                       "type": "text-block",
-                      "spacing": { "marginTop": 0, "marginBottom": 0 },
+                      "spacing": {
+                        "marginTop": 0,
+                        "marginBottom": 0
+                      },
                       "settings": {
-                        "editor": { "toolbar": "minimal", "minHeight": 60 },
+                        "editor": {
+                          "toolbar": "minimal",
+                          "minHeight": 60
+                        },
                         "content": "<p style=\"text-align: center\">No hidden fees, no surprises. Choose the package that fits your needs and get started with your US LLC today.</p>",
-                        "container": { "padding": 0, "borderRadius": 0 },
-                        "typography": { "color": "#64748b", "fontSize": 18, "linkColor": "#f97316", "lineHeight": 1.6 },
+                        "container": {
+                          "padding": 0,
+                          "borderRadius": 0
+                        },
+                        "typography": {
+                          "color": "#64748b",
+                          "fontSize": 18,
+                          "linkColor": "#f97316",
+                          "lineHeight": 1.6
+                        },
                         "paragraphSpacing": 16
                       }
                     }
                   ],
-                  "settings": { "padding": 0, "verticalAlign": "top" }
+                  "settings": {
+                    "padding": 0,
+                    "verticalAlign": "top"
+                  }
                 }
               ],
               "settings": {
-                "gap": 0, "maxWidth": "lg", "fullWidth": false, "isVisible": true,
-                "paddingTop": 64, "paddingLeft": 16, "paddingRight": 16, "paddingBottom": 32,
-                "background": { "type": "solid", "color": "transparent" }
+                "gap": 0,
+                "maxWidth": "lg",
+                "fullWidth": false,
+                "isVisible": true,
+                "paddingTop": 64,
+                "paddingLeft": 16,
+                "paddingRight": 16,
+                "paddingBottom": 32,
+                "background": {
+                  "type": "solid",
+                  "color": "transparent"
+                }
               }
             },
             {
@@ -3066,10 +3651,15 @@
                     {
                       "id": "pricing_table_widget",
                       "type": "pricing-table",
-                      "spacing": { "marginTop": 0, "marginBottom": 0 },
+                      "spacing": {
+                        "marginTop": 0,
+                        "marginBottom": 0
+                      },
                       "settings": {
                         "viewMode": "table",
-                        "header": { "show": false },
+                        "header": {
+                          "show": false
+                        },
                         "dataSource": {
                           "type": "service",
                           "mode": "manual",
@@ -3109,19 +3699,37 @@
                           "showTooltips": true,
                           "alternateRowColors": true,
                           "rowHoverEffect": true,
-                          "booleanStyle": { "trueColor": "#22c55e", "falseColor": "#94a3b8" },
-                          "addonStyle": { "showPrice": true, "selectedColor": "#f97316" }
+                          "booleanStyle": {
+                            "trueColor": "#22c55e",
+                            "falseColor": "#94a3b8"
+                          },
+                          "addonStyle": {
+                            "showPrice": true,
+                            "selectedColor": "#f97316"
+                          }
                         }
                       }
                     }
                   ],
-                  "settings": { "padding": 0, "verticalAlign": "top" }
+                  "settings": {
+                    "padding": 0,
+                    "verticalAlign": "top"
+                  }
                 }
               ],
               "settings": {
-                "gap": 0, "maxWidth": "xl", "fullWidth": false, "isVisible": true,
-                "paddingTop": 16, "paddingLeft": 16, "paddingRight": 16, "paddingBottom": 48,
-                "background": { "type": "solid", "color": "transparent" }
+                "gap": 0,
+                "maxWidth": "xl",
+                "fullWidth": false,
+                "isVisible": true,
+                "paddingTop": 16,
+                "paddingLeft": 16,
+                "paddingRight": 16,
+                "paddingBottom": 48,
+                "background": {
+                  "type": "solid",
+                  "color": "transparent"
+                }
               }
             },
             {
@@ -3135,30 +3743,79 @@
                     {
                       "id": "pricing_included_heading",
                       "type": "heading",
-                      "spacing": { "marginTop": 0, "marginBottom": 24 },
+                      "spacing": {
+                        "marginTop": 0,
+                        "marginBottom": 24
+                      },
                       "settings": {
                         "style": {
-                          "textFill": { "type": "solid", "color": "#0f172a" },
+                          "textFill": {
+                            "type": "solid",
+                            "color": "#0f172a"
+                          },
                           "alignment": "center",
-                          "typography": { "fontSize": 24, "fontWeight": 700, "lineHeight": 1.3, "fontSizeUnit": "px" }
+                          "typography": {
+                            "fontSize": 24,
+                            "fontWeight": 700,
+                            "lineHeight": 1.3,
+                            "fontSizeUnit": "px"
+                          }
                         },
-                        "content": { "text": "All Packages Include", "htmlTag": "h2" }
+                        "content": {
+                          "text": "All Packages Include",
+                          "htmlTag": "h2"
+                        }
                       }
                     },
                     {
                       "id": "pricing_included_badges",
                       "type": "trust-badges",
-                      "spacing": { "marginTop": 0, "marginBottom": 0 },
+                      "spacing": {
+                        "marginTop": 0,
+                        "marginBottom": 0
+                      },
                       "settings": {
                         "badges": [
-                          { "id": "inc_1", "icon": "Headphones", "text": "Lifetime customer support" },
-                          { "id": "inc_2", "icon": "FolderOpen", "text": "Digital document storage" },
-                          { "id": "inc_3", "icon": "Bell", "text": "Compliance reminders" },
-                          { "id": "inc_4", "icon": "MessageCircle", "text": "Free consultation" },
-                          { "id": "inc_5", "icon": "Search", "text": "Name availability check" },
-                          { "id": "inc_6", "icon": "Zap", "text": "Fast processing" },
-                          { "id": "inc_7", "icon": "ShieldCheck", "text": "100% satisfaction guarantee" },
-                          { "id": "inc_8", "icon": "Eye", "text": "No hidden fees" }
+                          {
+                            "id": "inc_1",
+                            "icon": "Headphones",
+                            "text": "Lifetime customer support"
+                          },
+                          {
+                            "id": "inc_2",
+                            "icon": "FolderOpen",
+                            "text": "Digital document storage"
+                          },
+                          {
+                            "id": "inc_3",
+                            "icon": "Bell",
+                            "text": "Compliance reminders"
+                          },
+                          {
+                            "id": "inc_4",
+                            "icon": "MessageCircle",
+                            "text": "Free consultation"
+                          },
+                          {
+                            "id": "inc_5",
+                            "icon": "Search",
+                            "text": "Name availability check"
+                          },
+                          {
+                            "id": "inc_6",
+                            "icon": "Zap",
+                            "text": "Fast processing"
+                          },
+                          {
+                            "id": "inc_7",
+                            "icon": "ShieldCheck",
+                            "text": "100% satisfaction guarantee"
+                          },
+                          {
+                            "id": "inc_8",
+                            "icon": "Eye",
+                            "text": "No hidden fees"
+                          }
                         ],
                         "layout": "grid",
                         "columns": 4,
@@ -3173,13 +3830,25 @@
                       }
                     }
                   ],
-                  "settings": { "padding": 0, "verticalAlign": "top" }
+                  "settings": {
+                    "padding": 0,
+                    "verticalAlign": "top"
+                  }
                 }
               ],
               "settings": {
-                "gap": 0, "maxWidth": "xl", "fullWidth": false, "isVisible": true,
-                "paddingTop": 48, "paddingLeft": 16, "paddingRight": 16, "paddingBottom": 48,
-                "background": { "type": "solid", "color": "#f8fafc" }
+                "gap": 0,
+                "maxWidth": "xl",
+                "fullWidth": false,
+                "isVisible": true,
+                "paddingTop": 48,
+                "paddingLeft": 16,
+                "paddingRight": 16,
+                "paddingBottom": 48,
+                "background": {
+                  "type": "solid",
+                  "color": "#f8fafc"
+                }
               }
             },
             {
@@ -3193,36 +3862,76 @@
                     {
                       "id": "pricing_fees_heading",
                       "type": "heading",
-                      "spacing": { "marginTop": 0, "marginBottom": 24 },
+                      "spacing": {
+                        "marginTop": 0,
+                        "marginBottom": 24
+                      },
                       "settings": {
                         "style": {
-                          "textFill": { "type": "solid", "color": "#0f172a" },
+                          "textFill": {
+                            "type": "solid",
+                            "color": "#0f172a"
+                          },
                           "alignment": "left",
-                          "typography": { "fontSize": 24, "fontWeight": 700, "lineHeight": 1.3, "fontSizeUnit": "px" }
+                          "typography": {
+                            "fontSize": 24,
+                            "fontWeight": 700,
+                            "lineHeight": 1.3,
+                            "fontSizeUnit": "px"
+                          }
                         },
-                        "content": { "text": "Understanding State Fees", "htmlTag": "h2" }
+                        "content": {
+                          "text": "Understanding State Fees",
+                          "htmlTag": "h2"
+                        }
                       }
                     },
                     {
                       "id": "pricing_fees_text",
                       "type": "text-block",
-                      "spacing": { "marginTop": 0, "marginBottom": 0 },
+                      "spacing": {
+                        "marginTop": 0,
+                        "marginBottom": 0
+                      },
                       "settings": {
-                        "editor": { "toolbar": "standard", "minHeight": 200 },
+                        "editor": {
+                          "toolbar": "standard",
+                          "minHeight": 200
+                        },
                         "content": "<p>State filing fees are set by each state and are separate from our service fees. These fees go directly to the state to process your LLC formation.</p><div style=\"background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 16px; margin: 16px 0\"><h3 style=\"font-weight: 600; color: #0f172a; margin-bottom: 8px\">Popular State Filing Fees</h3><ul style=\"list-style: none; padding: 0; margin: 0; font-size: 14px; color: #64748b\"><li style=\"padding: 4px 0\">Wyoming: $100 (Recommended for privacy & low fees)</li><li style=\"padding: 4px 0\">Delaware: $140 (Popular for larger businesses)</li><li style=\"padding: 4px 0\">New Mexico: $50 (Lowest cost option)</li><li style=\"padding: 4px 0\">Texas: $300 (Good for Texas-based operations)</li><li style=\"padding: 4px 0\">Florida: $125 (Popular for e-commerce)</li></ul></div><p>We recommend Wyoming for most international entrepreneurs due to its low fees, strong privacy protections, and no state income tax.</p>",
-                        "container": { "padding": 0, "borderRadius": 0 },
-                        "typography": { "color": "#64748b", "fontSize": 16, "lineHeight": 1.7, "linkColor": "#f97316" },
+                        "container": {
+                          "padding": 0,
+                          "borderRadius": 0
+                        },
+                        "typography": {
+                          "color": "#64748b",
+                          "fontSize": 16,
+                          "lineHeight": 1.7,
+                          "linkColor": "#f97316"
+                        },
                         "paragraphSpacing": 16
                       }
                     }
                   ],
-                  "settings": { "padding": 0, "verticalAlign": "top" }
+                  "settings": {
+                    "padding": 0,
+                    "verticalAlign": "top"
+                  }
                 }
               ],
               "settings": {
-                "gap": 0, "maxWidth": "lg", "fullWidth": false, "isVisible": true,
-                "paddingTop": 48, "paddingLeft": 16, "paddingRight": 16, "paddingBottom": 48,
-                "background": { "type": "solid", "color": "transparent" }
+                "gap": 0,
+                "maxWidth": "lg",
+                "fullWidth": false,
+                "isVisible": true,
+                "paddingTop": 48,
+                "paddingLeft": 16,
+                "paddingRight": 16,
+                "paddingBottom": 48,
+                "background": {
+                  "type": "solid",
+                  "color": "transparent"
+                }
               }
             },
             {
@@ -3236,7 +3945,10 @@
                     {
                       "id": "pricing_faq_widget",
                       "type": "faq-accordion",
-                      "spacing": { "marginTop": 0, "marginBottom": 0 },
+                      "spacing": {
+                        "marginTop": 0,
+                        "marginBottom": 0
+                      },
                       "settings": {
                         "header": {
                           "show": true,
@@ -3255,13 +3967,25 @@
                       }
                     }
                   ],
-                  "settings": { "padding": 0, "verticalAlign": "top" }
+                  "settings": {
+                    "padding": 0,
+                    "verticalAlign": "top"
+                  }
                 }
               ],
               "settings": {
-                "gap": 0, "maxWidth": "xl", "fullWidth": false, "isVisible": true,
-                "paddingTop": 48, "paddingLeft": 16, "paddingRight": 16, "paddingBottom": 64,
-                "background": { "type": "solid", "color": "#f8fafc" }
+                "gap": 0,
+                "maxWidth": "xl",
+                "fullWidth": false,
+                "isVisible": true,
+                "paddingTop": 48,
+                "paddingLeft": 16,
+                "paddingRight": 16,
+                "paddingBottom": 64,
+                "background": {
+                  "type": "solid",
+                  "color": "#f8fafc"
+                }
               }
             }
           ]
@@ -3708,234 +4432,507 @@
           "isActive": true,
           "settings": [
             {
-              "id": "section_1769263029605_wdp09hjym",
+              "id": "section_hero_forge",
               "order": 0,
-              "layout": "1",
+              "layout": "1-1",
               "columns": [
                 {
-                  "id": "col_1769263029605_qd1a0tqi5",
+                  "id": "col_hero_left",
                   "widgets": [
                     {
-                      "id": "widget_1770900906050_i6vsm4b2n",
-                      "type": "lead-form",
+                      "id": "widget_hero_content",
+                      "type": "hero-content",
                       "settings": {
-                        "title": "inquiry",
-                        "fields": [
-                          {
-                            "id": "f1",
-                            "name": "name",
-                            "type": "text",
-                            "label": "Full Name",
-                            "required": true,
-                            "placeholder": "John Doe",
-                            "mapToLeadField": "firstName"
-                          },
-                          {
-                            "id": "f2",
-                            "name": "email",
-                            "type": "email",
-                            "label": "Email Address",
-                            "required": true,
-                            "placeholder": "john@example.com",
-                            "mapToLeadField": "email"
-                          },
-                          {
-                            "id": "f3",
-                            "name": "phone",
-                            "type": "phone",
-                            "label": "Phone Number",
-                            "required": false,
-                            "placeholder": "+1 (555) 000-0000",
-                            "mapToLeadField": "phone"
-                          },
-                          {
-                            "id": "f4",
-                            "name": "country",
-                            "type": "country_select",
-                            "label": "Country",
-                            "required": false,
-                            "placeholder": "Select your country",
-                            "mapToLeadField": "country"
-                          },
-                          {
-                            "id": "f5",
-                            "name": "company",
-                            "type": "text",
-                            "label": "Company Name",
-                            "required": false,
-                            "placeholder": "Acme Corp",
-                            "mapToLeadField": "company"
-                          },
-                          {
-                            "id": "f6",
-                            "name": "service",
-                            "type": "service_select",
-                            "label": "Service Interest",
-                            "required": false,
-                            "placeholder": "Select a service",
-                            "mapToLeadField": "interestedIn"
-                          },
-                          {
-                            "id": "f7",
-                            "name": "budget",
-                            "type": "select",
-                            "label": "Budget Range",
-                            "options": [
-                              "Under $500",
-                              "$500-$1000",
-                              "$1000-$2500",
-                              "$2500-$5000",
-                              "$5000+"
-                            ],
-                            "required": false,
-                            "placeholder": "Select budget",
-                            "mapToLeadField": "budget"
-                          },
-                          {
-                            "id": "f8",
-                            "name": "timeline",
-                            "type": "select",
-                            "label": "Timeline",
-                            "options": [
-                              "ASAP",
-                              "Within 1 week",
-                              "Within 1 month",
-                              "Within 3 months",
-                              "No rush"
-                            ],
-                            "required": false,
-                            "placeholder": "When do you need this?",
-                            "mapToLeadField": "timeline"
-                          },
-                          {
-                            "id": "f9",
-                            "name": "message",
-                            "type": "textarea",
-                            "label": "Message",
-                            "required": false,
-                            "placeholder": "How can we help you?",
-                            "mapToLeadField": "message"
-                          }
-                        ],
-                        "shadow": true,
-                        "padding": 24,
-                        "submitTo": "database",
-                        "labelColor": "#e2e8f0",
-                        "templateId": "cmlj6wdx50000p0c7jqve41ey",
-                        "titleColor": "#ffffff",
-                        "description": "Fill out the form below and we'll get back to you within 24 hours.",
-                        "borderRadius": 12,
-                        "submitButton": {
-                          "text": "Submit",
-                          "fullWidth": true
+                        "badge": {
+                          "show": true,
+                          "icon": "",
+                          "text": "Now serving 30+ countries worldwide",
+                          "style": "pill",
+                          "bgColor": "#ffffff",
+                          "textColor": "#4b5249",
+                          "borderColor": "rgba(14,17,9,0.1)",
+                          "boxShadow": "0 2px 8px rgba(0,0,0,0.05)",
+                          "dot": { "show": true, "color": "#e84c1e" }
                         },
-                        "inputTextColor": "#ffffff",
-                        "successMessage": "Thank you! We'll be in touch soon.",
-                        "backgroundColor": "#1e293b",
-                        "descriptionColor": "#94a3b8"
-                      }
-                    },
-                    {
-                      "id": "widget_1770900931140_8slzdjoe0",
-                      "type": "lead-form",
-                      "settings": {
-                        "title": "contact us",
-                        "fields": [
-                          {
-                            "id": "f1",
-                            "name": "name",
-                            "type": "text",
-                            "label": "Full Name",
-                            "required": true,
-                            "placeholder": "John Doe",
-                            "mapToLeadField": "firstName"
-                          },
-                          {
-                            "id": "f2",
-                            "name": "email",
-                            "type": "email",
-                            "label": "Email Address",
-                            "required": true,
-                            "placeholder": "john@example.com",
-                            "mapToLeadField": "email"
-                          },
-                          {
-                            "id": "f3",
-                            "name": "phone",
-                            "type": "phone",
-                            "label": "Phone Number",
-                            "required": false,
-                            "placeholder": "+1 (555) 000-0000",
-                            "mapToLeadField": "phone"
-                          }
-                        ],
-                        "shadow": true,
-                        "padding": 24,
-                        "submitTo": "database",
-                        "labelColor": "#e2e8f0",
-                        "templateId": "cmljg4asi0000gsc727yrseah",
-                        "titleColor": "#ffffff",
-                        "description": "Fill out the form below and we'll get back to you within 24 hours.",
-                        "borderRadius": 12,
-                        "submitButton": {
-                          "text": "Submit",
-                          "fullWidth": true
+                        "headline": {
+                          "text": "Form Your\\nUS LLC\\nFiled in 24 Hours.",
+                          "highlightWords": "US LLC",
+                          "highlightColor": "#1b3a2d",
+                          "underlineWords": "Filed in 24 Hours.",
+                          "underlineColor": "#e84c1e",
+                          "size": "2xl",
+                          "customFontSize": "clamp(44px, 6vw, 76px)",
+                          "color": "#0e1109",
+                          "fontWeight": 900,
+                          "letterSpacing": "-0.04em",
+                          "lineHeight": 1.0
                         },
-                        "inputTextColor": "#ffffff",
-                        "successMessage": "Thank you! We'll be in touch soon.",
-                        "backgroundColor": "#1e293b",
-                        "descriptionColor": "#94a3b8"
+                        "subheadline": {
+                          "text": "We handle every piece of paperwork — from state filing to EIN to business banking. You focus on building, we handle the bureaucracy.",
+                          "show": true,
+                          "size": "md",
+                          "color": "#4b5249",
+                          "lineHeight": 1.75,
+                          "maxWidth": 480
+                        },
+                        "features": {
+                          "show": false,
+                          "items": [],
+                          "columns": 3,
+                          "iconColor": "#22c55e",
+                          "iconPosition": "left",
+                          "layout": "list"
+                        },
+                        "primaryButton": {
+                          "show": true,
+                          "text": "Start My LLC — Free Consultation",
+                          "link": "/contact",
+                          "openInNewTab": false,
+                          "style": {
+                            "bgColor": "#e84c1e",
+                            "textColor": "#ffffff",
+                            "borderRadius": 10,
+                            "borderWidth": 0,
+                            "borderColor": "#e84c1e",
+                            "hoverBgColor": "#d13d10",
+                            "hoverShadow": "0 8px 24px rgba(232,76,30,0.35)",
+                            "hoverEffect": "default"
+                          }
+                        },
+                        "secondaryButton": {
+                          "show": true,
+                          "text": "How It Works",
+                          "link": "/services",
+                          "openInNewTab": false,
+                          "style": {
+                            "bgColor": "transparent",
+                            "textColor": "#1a1f16",
+                            "borderRadius": 10,
+                            "borderWidth": 1.5,
+                            "borderColor": "rgba(14,17,9,0.1)",
+                            "hoverBgColor": "rgba(27,58,45,0.07)",
+                            "hoverBorderColor": "#1a1f16",
+                            "hoverEffect": "default"
+                          }
+                        },
+                        "trustText": {
+                          "show": false,
+                          "rating": 4.9,
+                          "text": "",
+                          "textColor": "#9ca3af",
+                          "starColor": "#facc15"
+                        },
+                        "avatarGroup": {
+                          "show": true,
+                          "avatars": [
+                            {
+                              "id": "av_1",
+                              "initials": "RM",
+                              "color": "#059669"
+                            },
+                            {
+                              "id": "av_2",
+                              "initials": "PS",
+                              "color": "#7c3aed"
+                            },
+                            {
+                              "id": "av_3",
+                              "initials": "AK",
+                              "color": "#dc2626"
+                            },
+                            {
+                              "id": "av_4",
+                              "initials": "FH",
+                              "color": "#d97706"
+                            },
+                            {
+                              "id": "av_5",
+                              "initials": "CO",
+                              "color": "#0284c7"
+                            }
+                          ],
+                          "text": "<strong>1,200+ entrepreneurs</strong> already launched their US business",
+                          "textColor": "#4b5249",
+                          "boldColor": "#0e1109"
+                        },
+                        "alignment": "left",
+                        "spacing": {
+                          "badgeToHeadline": 28,
+                          "headlineToSub": 28,
+                          "subToButtons": 40,
+                          "buttonsToProof": 44,
+                          "buttonsGap": 12
+                        },
+                        "colors": {
+                          "useTheme": false
+                        }
                       }
                     }
                   ],
                   "settings": {
+                    "verticalAlign": "top",
                     "padding": 0,
-                    "verticalAlign": "top"
+                    "paddingBottom": 80
+                  }
+                },
+                {
+                  "id": "col_hero_right",
+                  "widgets": [
+                    {
+                      "id": "widget_app_tracker",
+                      "type": "custom-html",
+                      "settings": {
+                        "html": "<div class=\"hero__tracker\"><div class=\"ht-head\"><div class=\"ht-head__title\"><svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\"><circle cx=\"12\" cy=\"12\" r=\"10\"/><polyline points=\"12 6 12 12 16 14\"/></svg>Application Tracker</div><div class=\"ht-live\"><span class=\"ht-live-dot\"></span>Live</div></div><div class=\"ht-steps\"><div class=\"ht-step ht-step--done\"><div class=\"ht-step__left\"><div class=\"ht-step__circle\"><svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"3\"><path d=\"M20 6L9 17l-5-5\"/></svg></div><div class=\"ht-step__line\"></div></div><div class=\"ht-step__body\"><div class=\"ht-step__name\">Order Placed &amp; Verified</div><div class=\"ht-step__sub\">Documents prepared</div></div><div class=\"ht-step__badge ht-step__badge--done\">✓ Done</div></div><div class=\"ht-step ht-step--done\"><div class=\"ht-step__left\"><div class=\"ht-step__circle\"><svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"3\"><path d=\"M20 6L9 17l-5-5\"/></svg></div><div class=\"ht-step__line\"></div></div><div class=\"ht-step__body\"><div class=\"ht-step__name\">State Filing Submitted</div><div class=\"ht-step__sub\">Wyoming Secretary of State</div></div><div class=\"ht-step__badge ht-step__badge--done\">✓ Done</div></div><div class=\"ht-step ht-step--active\"><div class=\"ht-step__left\"><div class=\"ht-step__circle\"><svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\"><circle cx=\"12\" cy=\"12\" r=\"10\"/><polyline points=\"12 6 12 12 16 14\"/></svg></div><div class=\"ht-step__line\"></div></div><div class=\"ht-step__body\"><div class=\"ht-step__name\">EIN Application <span class=\"ht-step__tag\">(IRS)</span></div><div class=\"ht-step__sub\">Tax ID processing</div></div><div class=\"ht-step__badge ht-step__badge--active\">In Progress</div></div><div class=\"ht-step ht-step--pending\"><div class=\"ht-step__left\"><div class=\"ht-step__circle\"></div><div class=\"ht-step__line\"></div></div><div class=\"ht-step__body\"><div class=\"ht-step__name\">Documents Delivered</div><div class=\"ht-step__sub\">All certificates + Operating Agreement</div></div><div class=\"ht-step__badge ht-step__badge--pending\">~6 hrs</div></div></div><div class=\"ht-stats\"><div class=\"ht-stat\"><strong>1,200+</strong><span>LLCs Formed</span></div><div class=\"ht-stat-divider\"></div><div class=\"ht-stat\"><strong>30+</strong><span>Countries</span></div><div class=\"ht-stat-divider\"></div><div class=\"ht-stat\"><strong>4.9★</strong><span>Rating</span></div></div></div>",
+                        "css": "@keyframes pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.04)}}@keyframes ht-pulse{0%,100%{opacity:1}50%{opacity:.55}}.hero__tracker{background:#1b3a2d;border-radius:22px 22px 0 0;position:relative;overflow:hidden;box-shadow:0 24px 64px rgba(27,58,45,0.22)}.hero__tracker::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,#e84c1e,#ff6a3d,rgba(232,76,30,0))}.ht-head{display:flex;align-items:center;justify-content:space-between;padding:20px 24px 16px;border-bottom:1px solid rgba(255,255,255,0.07)}.ht-head__title{display:flex;align-items:center;gap:8px;font-family:'Outfit',sans-serif;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1.4px;color:rgba(250,248,244,0.4)}.ht-head__title svg{width:13px;height:13px;opacity:.45}.ht-live{display:flex;align-items:center;gap:6px;font-size:10px;font-weight:700;color:#4ade80;text-transform:uppercase;letter-spacing:1px}.ht-live-dot{width:7px;height:7px;border-radius:50%;background:#4ade80;animation:pulse 2s ease-in-out infinite;flex-shrink:0}.ht-steps{padding:18px 24px 10px;display:flex;flex-direction:column}.ht-step{display:flex;align-items:flex-start;gap:14px}.ht-step__left{display:flex;flex-direction:column;align-items:center;flex-shrink:0;width:32px}.ht-step__circle{width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0}.ht-step__line{width:1px;min-height:22px;flex:1;margin:4px 0}.ht-step:last-child .ht-step__line{display:none}.ht-step--done .ht-step__circle{background:#059669;border:2px solid #059669}.ht-step--done .ht-step__circle svg{width:13px;height:13px;color:#fff}.ht-step--done .ht-step__line{background:linear-gradient(to bottom,#059669,rgba(255,255,255,0.08))}.ht-step--active .ht-step__circle{background:rgba(251,191,36,0.1);border:2px solid #fbbf24}.ht-step--active .ht-step__circle svg{width:13px;height:13px;color:#fbbf24}.ht-step--active .ht-step__line{background:rgba(255,255,255,0.08)}.ht-step--pending .ht-step__circle{background:rgba(255,255,255,0.03);border:1.5px solid rgba(255,255,255,0.1)}.ht-step__body{flex:1;padding-top:5px;padding-bottom:18px}.ht-step__name{font-size:13px;font-weight:600;color:#faf8f4;line-height:1.3;margin-bottom:3px}.ht-step--pending .ht-step__name{color:rgba(250,248,244,0.3)}.ht-step__tag{color:rgba(250,248,244,0.4);font-weight:500;font-size:12px}.ht-step__sub{font-size:11px;color:rgba(250,248,244,0.38);line-height:1.4}.ht-step--pending .ht-step__sub{color:rgba(250,248,244,0.18)}.ht-step__badge{font-size:10px;font-weight:700;padding:3px 9px;border-radius:100px;white-space:nowrap;margin-top:7px;letter-spacing:.3px;align-self:flex-start;flex-shrink:0}.ht-step__badge--done{background:rgba(74,222,128,0.1);color:#4ade80}.ht-step__badge--active{background:rgba(251,191,36,0.12);color:#fbbf24;animation:ht-pulse 2s ease-in-out infinite}.ht-step__badge--pending{background:rgba(255,255,255,0.05);color:rgba(250,248,244,0.25)}.ht-stats{display:flex;align-items:center;justify-content:space-between;padding:14px 24px;border-top:1px solid rgba(255,255,255,0.07);background:rgba(0,0,0,0.14)}.ht-stat{text-align:center;flex:1}.ht-stat strong{font-family:'Outfit',sans-serif;font-size:18px;font-weight:800;color:#ff6a3d;display:block;letter-spacing:-0.02em;line-height:1.1;margin-bottom:2px}.ht-stat span{font-size:9px;color:rgba(250,248,244,0.38);text-transform:uppercase;letter-spacing:.6px;font-weight:600}.ht-stat-divider{width:1px;height:26px;background:rgba(255,255,255,0.09);flex-shrink:0}"
+                      }
+                    },
+                    {
+                      "id": "widget_tracker_cta",
+                      "type": "button-group",
+                      "settings": {
+                        "buttons": [
+                          {
+                            "id": "btn_tracker_cta",
+                            "text": "Start Your Own →",
+                            "link": "/contact",
+                            "style": {
+                              "bgColor": "#e84c1e",
+                              "textColor": "#ffffff",
+                              "borderRadius": 0,
+                              "hoverBgColor": "#c9431a"
+                            }
+                          }
+                        ],
+                        "layout": "stacked",
+                        "alignment": "center",
+                        "gap": 0
+                      }
+                    }
+                  ],
+                  "settings": {
+                    "verticalAlign": "bottom",
+                    "padding": 0
                   }
                 }
               ],
               "settings": {
-                "gap": 32,
-                "maxWidth": "xl",
-                "fullWidth": false,
+                "fullWidth": true,
                 "background": {
                   "type": "solid",
-                  "color": "#ffffff",
-                  "image": {
-                    "url": "",
-                    "size": "cover",
-                    "fixed": false,
-                    "repeat": "no-repeat",
-                    "position": "center"
-                  },
-                  "video": {
-                    "url": "",
-                    "loop": true,
-                    "muted": true
-                  },
-                  "overlay": {
-                    "color": "#000000",
-                    "enabled": false,
-                    "opacity": 0.5
-                  },
-                  "gradient": {
-                    "type": "linear",
-                    "angle": 180,
-                    "colors": [
-                      {
-                        "color": "#1e293b",
-                        "position": 0
-                      },
-                      {
-                        "color": "#0f172a",
-                        "position": 100
+                  "color": "#faf8f4"
+                },
+                "paddingTop": 80,
+                "paddingBottom": 0,
+                "paddingLeft": 0,
+                "paddingRight": 0,
+                "marginTop": 0,
+                "marginBottom": 0,
+                "gap": 64,
+                "maxWidth": "xl",
+                "isVisible": true,
+                "visibleOnMobile": true,
+                "visibleOnDesktop": true,
+                "customCSS": "& > .mx-auto { max-width: 1160px; padding-inline: 28px; } @media (min-width: 1024px) { & .grid { grid-template-columns: 1fr 420px; } }"
+              }
+            },
+            {
+              "id": "section_ticker_forge",
+              "order": 1,
+              "layout": "1",
+              "columns": [
+                {
+                  "id": "col_ticker",
+                  "widgets": [
+                    {
+                      "id": "widget_ticker",
+                      "type": "ticker-marquee",
+                      "settings": {
+                        "tickerName": "legal",
+                        "items": [
+                          {
+                            "id": "t_1",
+                            "boldText": "India",
+                            "text": "320+ clients"
+                          },
+                          {
+                            "id": "t_2",
+                            "boldText": "Pakistan",
+                            "text": "220+ clients"
+                          },
+                          {
+                            "id": "t_3",
+                            "boldText": "UAE",
+                            "text": "160+ clients"
+                          },
+                          {
+                            "id": "t_4",
+                            "boldText": "Nigeria",
+                            "text": "110+ clients"
+                          },
+                          {
+                            "id": "t_5",
+                            "boldText": "Philippines",
+                            "text": "90+ clients"
+                          },
+                          {
+                            "id": "t_6",
+                            "boldText": "Turkey",
+                            "text": "75+ clients"
+                          },
+                          {
+                            "id": "t_7",
+                            "boldText": "Egypt",
+                            "text": "60+ clients"
+                          },
+                          {
+                            "id": "t_8",
+                            "boldText": "Indonesia",
+                            "text": "50+ clients"
+                          }
+                        ],
+                        "speed": 28,
+                        "separator": "·",
+                        "textColor": "rgba(250,248,244,0.5)",
+                        "boldColor": "rgba(250,248,244,0.85)",
+                        "separatorColor": "#e84c1e",
+                        "colors": {
+                          "useTheme": false
+                        }
                       }
-                    ]
+                    }
+                  ],
+                  "settings": {
+                    "verticalAlign": "top",
+                    "padding": 0
+                  }
+                }
+              ],
+              "settings": {
+                "fullWidth": true,
+                "background": {
+                  "type": "solid",
+                  "color": "#0f2318"
+                },
+                "paddingTop": 16,
+                "paddingBottom": 16,
+                "paddingLeft": 0,
+                "paddingRight": 0,
+                "marginTop": 0,
+                "marginBottom": 0,
+                "gap": 0,
+                "maxWidth": "full",
+                "isVisible": true,
+                "visibleOnMobile": true,
+                "visibleOnDesktop": true
+              }
+            },
+            {
+              "id": "section_stats",
+              "order": 3,
+              "layout": "1-1",
+              "columns": [
+                {
+                  "id": "col_stats_left",
+                  "widgets": [
+                    {
+                      "id": "widget_stats_heading",
+                      "type": "heading",
+                      "settings": {
+                        "content": {
+                          "text": "Numbers that speak\nfor themselves",
+                          "htmlTag": "h2",
+                          "highlight": {
+                            "enabled": true,
+                            "words": "themselves",
+                            "style": "color"
+                          }
+                        },
+                        "style": {
+                          "alignment": "left",
+                          "typography": {
+                            "fontFamily": "Outfit",
+                            "fontSize": 48,
+                            "fontSizeUnit": "px",
+                            "fontWeight": 800,
+                            "fontStyle": "normal",
+                            "textTransform": "none",
+                            "textDecoration": "none",
+                            "lineHeight": 1.15,
+                            "letterSpacing": -0.025,
+                            "letterSpacingUnit": "em"
+                          },
+                          "textFill": {
+                            "type": "solid",
+                            "color": "#faf8f4"
+                          },
+                          "highlightStyle": {
+                            "color": "#ff6a3d"
+                          }
+                        }
+                      },
+                      "spacing": {
+                        "marginBottom": 20
+                      }
+                    },
+                    {
+                      "id": "widget_stats_text",
+                      "type": "text-block",
+                      "settings": {
+                        "content": "<p>We've helped over 1,200 international entrepreneurs navigate the US business formation process — from first-time founders to serial entrepreneurs scaling globally.</p>",
+                        "editor": {
+                          "toolbar": "minimal",
+                          "minHeight": 100
+                        },
+                        "typography": {
+                          "fontSize": 16,
+                          "lineHeight": 1.75,
+                          "color": "rgba(250,248,244,0.55)",
+                          "linkColor": "#ff6a3d"
+                        }
+                      },
+                      "spacing": {
+                        "marginBottom": 32
+                      }
+                    },
+                    {
+                      "id": "widget_stats_cta",
+                      "type": "button-group",
+                      "settings": {
+                        "buttons": [
+                          {
+                            "id": "btn_stats_talk",
+                            "text": "Talk to Our Team",
+                            "link": "#contact",
+                            "openInNewTab": false,
+                            "style": {
+                              "bgColor": "#e84c1e",
+                              "textColor": "#ffffff",
+                              "borderRadius": 10,
+                              "borderWidth": 0,
+                              "hoverBgColor": "#d13d10",
+                              "hoverShadow": "0 8px 24px rgba(232,76,30,0.35)",
+                              "hoverEffect": "shadow-lift"
+                            }
+                          }
+                        ],
+                        "alignment": "left",
+                        "layout": "horizontal",
+                        "gap": 12
+                      }
+                    }
+                  ],
+                  "settings": {
+                    "verticalAlign": "center",
+                    "padding": 0,
+                    "paddingLeft": 28,
+                    "paddingRight": 28
                   }
                 },
-                "paddingTop": 64,
-                "borderRadius": 0,
-                "paddingBottom": 64
+                {
+                  "id": "col_stats_right",
+                  "widgets": [
+                    {
+                      "id": "widget_stats_grid",
+                      "type": "stats-section",
+                      "settings": {
+                        "variant": "card-grid",
+                        "stats": [
+                          {
+                            "id": "stat_llcs",
+                            "value": "1200",
+                            "label": "US LLCs Formed",
+                            "suffix": "+",
+                            "animate": true
+                          },
+                          {
+                            "id": "stat_countries",
+                            "value": "30",
+                            "label": "Countries Served",
+                            "suffix": "+",
+                            "animate": true
+                          },
+                          {
+                            "id": "stat_rating",
+                            "value": "4.9",
+                            "label": "Avg. Rating",
+                            "suffix": "★",
+                            "animate": true
+                          },
+                          {
+                            "id": "stat_filing",
+                            "value": "24",
+                            "label": "We File Within",
+                            "suffix": "h",
+                            "animate": true
+                          }
+                        ],
+                        "columns": 2,
+                        "style": {
+                          "valueColor": "#faf8f4",
+                          "labelColor": "rgba(250,248,244,0.45)",
+                          "valueSize": "xl",
+                          "divider": false,
+                          "suffixColor": "#ff6a3d"
+                        },
+                        "cardGrid": {
+                          "borderRadius": 20,
+                          "gridGap": 1,
+                          "gridLineColor": "rgba(255,255,255,0.07)",
+                          "cellBackground": "rgba(255,255,255,0.04)",
+                          "cellPadding": "32px 28px",
+                          "valueFontWeight": 900,
+                          "valueFontSize": 48,
+                          "valueLetterSpacing": "-0.04em",
+                          "labelFontSize": 13,
+                          "labelFontWeight": 500,
+                          "labelLetterSpacing": "0.3px",
+                          "labelMarginTop": 8
+                        },
+                        "centered": false,
+                        "animateOnScroll": true,
+                        "colors": {
+                          "useTheme": false
+                        }
+                      }
+                    }
+                  ],
+                  "settings": {
+                    "verticalAlign": "center",
+                    "padding": 0,
+                    "paddingLeft": 28,
+                    "paddingRight": 28
+                  }
+                }
+              ],
+              "settings": {
+                "fullWidth": true,
+                "background": {
+                  "type": "solid",
+                  "color": "#1b3a2d"
+                },
+                "paddingTop": 80,
+                "paddingBottom": 80,
+                "paddingLeft": 0,
+                "paddingRight": 0,
+                "marginTop": 0,
+                "marginBottom": 0,
+                "gap": 64,
+                "maxWidth": "xl",
+                "isVisible": true,
+                "visibleOnMobile": true,
+                "visibleOnDesktop": true,
+                "watermark": {
+                  "enabled": true,
+                  "text": "LLC",
+                  "position": "right",
+                  "fontSize": 240,
+                  "fontWeight": 900,
+                  "color": "#ffffff",
+                  "opacity": 0.025,
+                  "rotation": 90,
+                  "offsetX": -40,
+                  "offsetY": 0
+                }
               }
             }
           ]
@@ -6770,6 +7767,24 @@
       "locationCode": "US-WI",
       "feeType": "ANNUAL",
       "amountUSD": 25
+    }
+  ],
+  "tickers": [
+    {
+      "name": "legal",
+      "isActive": true,
+      "items": [
+        { "id": "t_1", "content": "<strong>India</strong> · 320+ clients" },
+        { "id": "t_2", "content": "<strong>Pakistan</strong> · 220+ clients" },
+        { "id": "t_3", "content": "<strong>UAE</strong> · 160+ clients" },
+        { "id": "t_4", "content": "<strong>Nigeria</strong> · 110+ clients" },
+        { "id": "t_5", "content": "<strong>Philippines</strong> · 90+ clients" },
+        { "id": "t_6", "content": "<strong>Turkey</strong> · 75+ clients" },
+        { "id": "t_7", "content": "<strong>Egypt</strong> · 60+ clients" },
+        { "id": "t_8", "content": "<strong>Indonesia</strong> · 50+ clients" }
+      ],
+      "speed": 28,
+      "separator": "·"
     }
   ]
 }

@@ -129,6 +129,24 @@ export const dynamic = 'force-dynamic';
 | text-2xl | 24px | Section titles |
 | text-4xl | 36px | Page titles |
 
+### Font System (3-Category CSS Variables)
+
+Fonts are controlled via CSS variables set by the theme. **Never hardcode font-family names in widgets.**
+
+| CSS Variable | Category | Default | Used For |
+|-------------|----------|---------|----------|
+| `--font-heading` | Primary/Display | Outfit | Headings, stat numbers, prices, buttons, badges, logos |
+| `--font-sans` | Secondary/Body | Inter | Body text, paragraphs, descriptions, form labels |
+| `--font-accent` | Decorative | Georgia | Decorative serif elements (pull quotes, info icons) |
+
+**Rules when modifying widgets:**
+- `h1`–`h6` tags automatically inherit `--font-heading` via CSS — no inline font needed
+- For non-heading elements that should use the display font (badges, stat numbers, prices, button text), use `font-family: var(--font-heading)` or the `font-display` CSS class
+- Body text inherits `--font-sans` from the `<body>` tag — no action needed
+- **Never** write `fontFamily: "Outfit"` or `fontFamily: "Inter"` directly — always use the CSS variable so the theme customizer can override it
+- If a widget setting has a `fontFamily` field, leave it `undefined`/empty to inherit from the theme; only set it when the user explicitly overrides
+- Full details: see `docs/font.md`
+
 ### Color Contrast (WCAG AA)
 
 - Normal text: 4.5:1 minimum

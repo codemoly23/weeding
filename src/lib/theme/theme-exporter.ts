@@ -21,6 +21,7 @@ import type {
   ThemeFormTab,
   ThemeFormField,
   ThemeLocationFee,
+  ThemeTicker,
   ThemeSettings,
 } from "./theme-types";
 // ============================================
@@ -104,6 +105,9 @@ export async function exportThemeData(): Promise<ThemeData> {
     activeTheme?.colorPalette != null
       ? (activeTheme.colorPalette as unknown as ThemeColorPalette)
       : DEFAULT_COLOR_PALETTE;
+  const fontConfig = activeTheme?.fontConfig != null
+    ? (activeTheme.fontConfig as unknown as Record<string, string>)
+    : undefined;
 
   // ---- Service Categories ----
   const categoriesRaw = await prisma.serviceCategory.findMany({
@@ -495,9 +499,6 @@ export async function exportThemeData(): Promise<ThemeData> {
         borderColor: footerRaw.borderColor ?? undefined,
         presetId: footerRaw.presetId ?? undefined,
         // Include additional fields
-        newsletterEnabled: footerRaw.newsletterEnabled,
-        newsletterTitle: footerRaw.newsletterTitle,
-        newsletterSubtitle: footerRaw.newsletterSubtitle ?? undefined,
         showSocialLinks: footerRaw.showSocialLinks,
         socialPosition: footerRaw.socialPosition,
         showContactInfo: footerRaw.showContactInfo,
@@ -545,11 +546,24 @@ export async function exportThemeData(): Promise<ThemeData> {
     label: lf.label ?? undefined,
   }));
 
+  // ---- Tickers ----
+  const tickersRaw = await prisma.ticker.findMany({
+    orderBy: { createdAt: "asc" },
+  });
+  const tickers: ThemeTicker[] = tickersRaw.map((t) => ({
+    name: t.name,
+    isActive: t.isActive,
+    items: t.items as ThemeTicker["items"],
+    speed: t.speed,
+    separator: t.separator,
+  }));
+
   // ---- Final ThemeData ----
   return {
     version: "1.0",
     exportedAt: new Date().toISOString(),
     colorPalette,
+    ...(fontConfig && { fontConfig }),
     settings,
     serviceCategories,
     services,
@@ -565,5 +579,6 @@ export async function exportThemeData(): Promise<ThemeData> {
     footerWidgets,
     formTemplates,
     locationFees,
+    tickers,
   };
 }

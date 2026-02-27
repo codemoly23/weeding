@@ -148,7 +148,7 @@ export const blockCategories: Record<
   },
   "lead-capture": {
     name: "Lead Capture",
-    description: "Forms, newsletters, popups",
+    description: "Forms, popups, lead capture",
     icon: "Mail",
   },
 };

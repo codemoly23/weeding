@@ -1,7 +1,5 @@
 "use client";
 
-import { useState } from "react";
-import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { SmartLink } from "@/components/ui/smart-link";
 import { ArrowRight, ArrowUpRight, Star, CheckCircle } from "lucide-react";
@@ -62,8 +60,6 @@ function getLucideIcon(
 }
 
 export function HeroContentWidget({ settings: rawSettings, isPreview = false }: HeroContentWidgetProps) {
-  const [isHovered, setIsHovered] = useState(false);
-
   // Deep merge with defaults to guarantee all properties exist
   const settings: HeroContentWidgetSettings = {
     ...DEFAULT_HERO_CONTENT_SETTINGS,
@@ -79,6 +75,12 @@ export function HeroContentWidget({ settings: rawSettings, isPreview = false }: 
     primaryButton: { ...DEFAULT_HERO_CONTENT_SETTINGS.primaryButton, ...rawSettings.primaryButton },
     secondaryButton: { ...DEFAULT_HERO_CONTENT_SETTINGS.secondaryButton, ...rawSettings.secondaryButton },
     trustText: { ...DEFAULT_HERO_CONTENT_SETTINGS.trustText, ...rawSettings.trustText },
+    avatarGroup: {
+      ...DEFAULT_HERO_CONTENT_SETTINGS.avatarGroup!,
+      ...rawSettings.avatarGroup,
+      avatars: rawSettings.avatarGroup?.avatars ?? DEFAULT_HERO_CONTENT_SETTINGS.avatarGroup!.avatars,
+    },
+    spacing: { ...rawSettings.spacing },
   };
 
   // Theme-aware accent color
@@ -90,27 +92,40 @@ export function HeroContentWidget({ settings: rawSettings, isPreview = false }: 
   // Helper to check if color is hex
   const isHexColor = (color?: string) => color?.startsWith("#");
 
-  // Parse headline with highlight words (supports comma-separated)
+  // Parse underline words list
+  const underlineWords = settings.headline.underlineWords
+    ? settings.headline.underlineWords.split(",").map((w) => w.trim()).filter(Boolean)
+    : [];
+  const underlineColor = settings.headline.underlineColor || "#e84c1e";
+
+  // Parse headline with highlight words and underline words (supports comma-separated)
   const renderHeadline = () => {
     const { text, highlightWords, highlightColor } = settings.headline;
 
-    if (!highlightWords) {
-      return text;
-    }
+    // Collect all special words (highlight + underline)
+    const highlightList = highlightWords
+      ? highlightWords.split(",").map((w) => w.trim()).filter(Boolean)
+      : [];
+    const allSpecialWords = [...new Set([...highlightList, ...underlineWords])];
 
-    // Split highlight words by comma and trim
-    const words = highlightWords
-      .split(",")
-      .map((w) => w.trim())
-      .filter(Boolean);
+    // Process text: handle \n as line breaks
+    const processLineBreaks = (content: string) => {
+      if (!content.includes("\\n")) return content;
+      return content.split("\\n").map((line, i, arr) => (
+        <span key={i}>
+          {line}
+          {i < arr.length - 1 && <br />}
+        </span>
+      ));
+    };
 
-    if (words.length === 0) {
-      return text;
+    if (allSpecialWords.length === 0) {
+      return processLineBreaks(text);
     }
 
     // Create regex pattern
     const pattern = new RegExp(
-      `(${words.map((w) => w.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")).join("|")})`,
+      `(${allSpecialWords.map((w) => w.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")).join("|")})`,
       "gi"
     );
     const parts = text.split(pattern);
@@ -118,23 +133,47 @@ export function HeroContentWidget({ settings: rawSettings, isPreview = false }: 
     return (
       <>
         {parts.map((part, index) => {
-          const isHighlight = words.some(
+          const isHighlight = highlightList.some(
+            (word) => word.toLowerCase() === part.toLowerCase()
+          );
+          const isUnderline = underlineWords.some(
             (word) => word.toLowerCase() === part.toLowerCase()
           );
 
-          if (isHighlight) {
-            const effectiveHighlightColor = accentColor ?? highlightColor;
+          if (isHighlight || isUnderline) {
+            const effectiveHighlightColor = isHighlight
+              ? (accentColor ?? highlightColor)
+              : undefined;
             return (
               <span
                 key={index}
-                className={!isHexColor(effectiveHighlightColor) ? effectiveHighlightColor : undefined}
-                style={isHexColor(effectiveHighlightColor) || effectiveHighlightColor?.startsWith("var(") ? { color: effectiveHighlightColor } : undefined}
+                className={cn(
+                  isUnderline && "relative inline-block",
+                  isHighlight && !isHexColor(effectiveHighlightColor) && !effectiveHighlightColor?.startsWith("var(") ? effectiveHighlightColor : undefined,
+                )}
+                style={{
+                  ...(isHighlight && (isHexColor(effectiveHighlightColor) || effectiveHighlightColor?.startsWith("var("))
+                    ? { color: effectiveHighlightColor }
+                    : {}),
+                }}
               >
-                {part}
+                {processLineBreaks(part)}
+                {isUnderline && (
+                  <span
+                    className="absolute left-0 right-0"
+                    style={{
+                      bottom: "-4px",
+                      height: "6px",
+                      background: underlineColor,
+                      borderRadius: "3px",
+                      opacity: 0.7,
+                    }}
+                  />
+                )}
               </span>
             );
           }
-          return part;
+          return <span key={index}>{processLineBreaks(part)}</span>;
         })}
       </>
     );
@@ -151,6 +190,8 @@ export function HeroContentWidget({ settings: rawSettings, isPreview = false }: 
         return "text-3xl sm:text-4xl lg:text-5xl";
       case "xl":
         return "text-4xl sm:text-5xl lg:text-6xl";
+      case "2xl":
+        return "text-5xl sm:text-6xl lg:text-7xl";
       default:
         return "text-3xl sm:text-4xl lg:text-5xl";
     }
@@ -264,21 +305,23 @@ export function HeroContentWidget({ settings: rawSettings, isPreview = false }: 
           href={settings.primaryButton.link}
           openInNewTab={settings.primaryButton.openInNewTab}
           className={cn(
-            "inline-flex items-center justify-center px-6 py-3 text-base font-medium overflow-hidden",
+            "inline-flex items-center justify-center gap-2 text-[15px] font-semibold font-display overflow-hidden whitespace-nowrap",
             hoverClass,
-            hasComplex ? "transition-all duration-500 ease-out" : "transition-all duration-300"
+            hasComplex ? "transition-all duration-500 ease-out" : "transition-all duration-220 ease-out"
           )}
           style={{
+            padding: "16px 34px",
             background: getBackground(false),
             color: btnStyle.textColor || "#ffffff",
-            borderWidth: `${btnStyle.borderWidth ?? 1}px`,
+            borderWidth: `${btnStyle.borderWidth ?? 0}px`,
             borderStyle: "solid",
             borderColor: btnStyle.borderColor || btnStyle.bgColor || ORANGE_PRIMARY,
-            borderRadius: `${btnStyle.borderRadius ?? 6}px`,
+            borderRadius: `${btnStyle.borderRadius ?? 10}px`,
             ...(hasComplex ? complexNormalStyles : { boxShadow: btnStyle.shadow }),
           }}
           onMouseEnter={(e) => {
             if (isPreview) return;
+            e.currentTarget.style.transform = "translateY(-2px)";
             if (hasComplex) {
               if (complexHoverStyles.boxShadow) {
                 e.currentTarget.style.boxShadow = complexHoverStyles.boxShadow;
@@ -298,9 +341,13 @@ export function HeroContentWidget({ settings: rawSettings, isPreview = false }: 
             if (btnStyle.hoverTextColor) {
               e.currentTarget.style.color = btnStyle.hoverTextColor;
             }
+            if (btnStyle.hoverBorderColor) {
+              e.currentTarget.style.borderColor = btnStyle.hoverBorderColor;
+            }
           }}
           onMouseLeave={(e) => {
             if (isPreview) return;
+            e.currentTarget.style.transform = "";
             if (hasComplex) {
               if (complexNormalStyles.boxShadow !== undefined) {
                 e.currentTarget.style.boxShadow = complexNormalStyles.boxShadow;
@@ -313,6 +360,7 @@ export function HeroContentWidget({ settings: rawSettings, isPreview = false }: 
               e.currentTarget.style.boxShadow = btnStyle.shadow || "";
             }
             e.currentTarget.style.color = btnStyle.textColor || "#ffffff";
+            e.currentTarget.style.borderColor = btnStyle.borderColor || btnStyle.bgColor || ORANGE_PRIMARY;
           }}
         >
           {btnStyle.iconPosition === "left" && renderButtonIcon(btnStyle)}
@@ -452,17 +500,18 @@ export function HeroContentWidget({ settings: rawSettings, isPreview = false }: 
           href={settings.secondaryButton.link}
           openInNewTab={settings.secondaryButton.openInNewTab}
           className={cn(
-            "inline-flex items-center justify-center px-6 py-3 text-base font-medium overflow-hidden",
+            "inline-flex items-center justify-center gap-2 text-[15px] font-semibold font-display overflow-hidden whitespace-nowrap",
             hoverClass,
-            hasComplex ? "transition-all duration-500 ease-out" : "transition-all duration-300"
+            hasComplex ? "transition-all duration-500 ease-out" : "transition-all duration-220 ease-out"
           )}
           style={{
+            padding: "16px 34px",
             background: getBackground(false),
             color: btnStyle.textColor || "#ffffff",
-            borderWidth: `${btnStyle.borderWidth ?? 1}px`,
+            borderWidth: `${btnStyle.borderWidth ?? 1.5}px`,
             borderStyle: "solid",
-            borderColor: btnStyle.borderColor || btnStyle.bgColor || ORANGE_PRIMARY,
-            borderRadius: `${btnStyle.borderRadius ?? 6}px`,
+            borderColor: btnStyle.borderColor || "rgba(14,17,9,0.1)",
+            borderRadius: `${btnStyle.borderRadius ?? 10}px`,
             ...(hasComplex ? complexNormalStyles : { boxShadow: btnStyle.shadow }),
           }}
           onMouseEnter={(e) => {
@@ -478,13 +527,16 @@ export function HeroContentWidget({ settings: rawSettings, isPreview = false }: 
                 e.currentTarget.style.background = hoverBg;
               }
             } else {
-              e.currentTarget.style.background = hoverBg;
+              if (hoverBg) e.currentTarget.style.background = hoverBg;
               if (btnStyle.hoverShadow) {
                 e.currentTarget.style.boxShadow = btnStyle.hoverShadow;
               }
             }
             if (btnStyle.hoverTextColor) {
               e.currentTarget.style.color = btnStyle.hoverTextColor;
+            }
+            if (btnStyle.hoverBorderColor) {
+              e.currentTarget.style.borderColor = btnStyle.hoverBorderColor;
             }
           }}
           onMouseLeave={(e) => {
@@ -501,6 +553,7 @@ export function HeroContentWidget({ settings: rawSettings, isPreview = false }: 
               e.currentTarget.style.boxShadow = btnStyle.shadow || "";
             }
             e.currentTarget.style.color = btnStyle.textColor || "#ffffff";
+            e.currentTarget.style.borderColor = btnStyle.borderColor || "rgba(14,17,9,0.1)";
           }}
         >
           {btnStyle.iconPosition === "left" && renderButtonIcon(btnStyle)}
@@ -541,18 +594,19 @@ export function HeroContentWidget({ settings: rawSettings, isPreview = false }: 
 
   return (
     <WidgetContainer container={settings.container}>
-    <div className={cn("flex flex-col gap-6", getAlignmentClass())}>
+    <div className={cn("flex flex-col", getAlignmentClass())}>
       {/* Badge */}
       {settings.badge.show && (
-        <Badge
+        <div
           data-field-id="badge"
           className={cn(
-            "w-fit font-medium px-4 py-2 text-sm border",
+            "w-fit inline-flex items-center gap-2 font-medium text-[13px] border font-display",
             settings.badge.style === "pill" && "rounded-full",
             settings.badge.style === "outline" && "bg-transparent",
             settings.badge.style === "solid" && "rounded-md"
           )}
           style={{
+            padding: settings.badge.dot?.show ? "6px 14px 6px 8px" : "6px 14px",
             backgroundColor:
               settings.badge.style === "outline"
                 ? "transparent"
@@ -560,29 +614,50 @@ export function HeroContentWidget({ settings: rawSettings, isPreview = false }: 
             color: accentColor || settings.badge.textColor || "#fb923c",
             borderColor: accentBorder || settings.badge.borderColor || "#f9731980",
             borderWidth: settings.badge.style === "outline" ? "2px" : "1px",
+            boxShadow: settings.badge.boxShadow,
+            marginBottom: settings.spacing?.badgeToHeadline ? `${settings.spacing.badgeToHeadline}px` : undefined,
           }}
         >
-          {settings.badge.icon && (
-            <>
-              {(() => {
-                const Icon = getLucideIcon(settings.badge.icon);
-                return <Icon className="h-4 w-4 mr-2" />;
-              })()}
-            </>
+          {/* Pulsing dot indicator */}
+          {settings.badge.dot?.show && (
+            <span
+              className="shrink-0 rounded-full"
+              style={{
+                width: 8,
+                height: 8,
+                background: settings.badge.dot.color || "#e84c1e",
+                animation: "pulse 2s ease-in-out infinite",
+              }}
+            />
+          )}
+          {/* Lucide icon */}
+          {settings.badge.icon && !settings.badge.dot?.show && (
+            (() => {
+              const Icon = getLucideIcon(settings.badge.icon);
+              return <Icon className="h-4 w-4" />;
+            })()
           )}
           {settings.badge.text}
-        </Badge>
+        </div>
       )}
 
       {/* Headline */}
       <h1
         data-field-id="headline"
         className={cn(
-          "font-bold tracking-tight",
-          getHeadlineSize(),
+          !settings.headline.fontWeight && "font-bold",
+          !settings.headline.letterSpacing && "tracking-tight",
+          !settings.headline.customFontSize && getHeadlineSize(),
           !isHexColor(settings.headline.color) && (settings.headline.color || "text-white")
         )}
-        style={isHexColor(settings.headline.color) ? { color: settings.headline.color } : undefined}
+        style={{
+          ...(isHexColor(settings.headline.color) ? { color: settings.headline.color } : {}),
+          ...(settings.headline.customFontSize ? { fontSize: settings.headline.customFontSize } : {}),
+          ...(settings.headline.fontWeight ? { fontWeight: settings.headline.fontWeight } : {}),
+          ...(settings.headline.letterSpacing ? { letterSpacing: settings.headline.letterSpacing } : {}),
+          ...(settings.headline.lineHeight ? { lineHeight: settings.headline.lineHeight } : {}),
+          marginBottom: settings.spacing?.headlineToSub ? `${settings.spacing.headlineToSub}px` : undefined,
+        }}
       >
         {renderHeadline()}
       </h1>
@@ -597,7 +672,12 @@ export function HeroContentWidget({ settings: rawSettings, isPreview = false }: 
             settings.subheadline.size === "lg" && "text-lg sm:text-xl",
             !isHexColor(settings.subheadline.color) && (settings.subheadline.color || "text-slate-400")
           )}
-          style={isHexColor(settings.subheadline.color) ? { color: settings.subheadline.color } : undefined}
+          style={{
+            ...(isHexColor(settings.subheadline.color) ? { color: settings.subheadline.color } : {}),
+            ...(settings.subheadline.lineHeight ? { lineHeight: settings.subheadline.lineHeight } : {}),
+            ...(settings.subheadline.maxWidth ? { maxWidth: `${settings.subheadline.maxWidth}px` } : {}),
+            marginBottom: settings.spacing?.subToButtons ? `${settings.spacing.subToButtons}px` : undefined,
+          }}
         >
           {settings.subheadline.text}
         </p>
@@ -608,7 +688,6 @@ export function HeroContentWidget({ settings: rawSettings, isPreview = false }: 
         <div
           data-field-id="features"
           className={cn(
-            "mt-2",
             settings.features.layout === "list"
               ? "flex flex-col gap-3"
               : cn(
@@ -645,9 +724,13 @@ export function HeroContentWidget({ settings: rawSettings, isPreview = false }: 
       {/* Buttons */}
       <div
         className={cn(
-          "flex flex-col gap-4 mt-2",
+          "flex flex-col",
           settings.alignment === "center" ? "sm:flex-row sm:justify-center" : "sm:flex-row"
         )}
+        style={{
+          gap: settings.spacing?.buttonsGap ? `${settings.spacing.buttonsGap}px` : "16px",
+          marginBottom: settings.spacing?.buttonsToProof ? `${settings.spacing.buttonsToProof}px` : undefined,
+        }}
       >
         {settings.primaryButton.show && (
           <div data-field-id="primary-button">{renderPrimaryButton()}</div>
@@ -662,7 +745,7 @@ export function HeroContentWidget({ settings: rawSettings, isPreview = false }: 
       {settings.trustText.show && (
         <div
           data-field-id="trust-text"
-          className="flex items-center gap-2 text-sm mt-2"
+          className="flex items-center gap-2 text-sm"
           style={{ color: settings.trustText.textColor || "#9ca3af" }}
         >
           <div className="flex">
@@ -682,6 +765,51 @@ export function HeroContentWidget({ settings: rawSettings, isPreview = false }: 
             })}
           </div>
           <span>{settings.trustText.text}</span>
+        </div>
+      )}
+
+      {/* Avatar Group (Social Proof) */}
+      {settings.avatarGroup?.show && (
+        <div
+          data-field-id="avatar-group"
+          className={cn(
+            "flex items-center gap-4 flex-wrap",
+            settings.alignment === "center" && "justify-center",
+            settings.alignment === "right" && "justify-end",
+          )}
+        >
+          <div className="flex">
+            {settings.avatarGroup.avatars.map((avatar, idx) => (
+              <span
+                key={avatar.id}
+                className="flex items-center justify-center rounded-full text-xs font-bold text-white shrink-0 overflow-hidden"
+                style={{
+                  width: 36,
+                  height: 36,
+                  backgroundColor: avatar.imageUrl ? "transparent" : avatar.color,
+                  border: "2px solid var(--cream, #faf8f4)",
+                  marginLeft: idx === 0 ? 0 : -10,
+                  zIndex: settings.avatarGroup!.avatars.length - idx,
+                  position: "relative",
+                }}
+              >
+                {avatar.imageUrl ? (
+                  <img
+                    src={avatar.imageUrl}
+                    alt={avatar.initials}
+                    className="h-full w-full object-cover"
+                  />
+                ) : (
+                  avatar.initials
+                )}
+              </span>
+            ))}
+          </div>
+          <div
+            className="text-sm"
+            style={{ color: settings.avatarGroup.textColor || "#4b5249" }}
+            dangerouslySetInnerHTML={{ __html: settings.avatarGroup.text }}
+          />
         </div>
       )}
     </div>

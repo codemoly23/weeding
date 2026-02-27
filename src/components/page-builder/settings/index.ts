@@ -17,6 +17,12 @@ export { ServiceHeroWidgetSettingsPanel } from "./service-hero-settings";
 export { FaqAccordionWidgetSettingsPanel } from "./faq-accordion-settings";
 export { ButtonGroupWidgetSettingsPanel } from "./button-group-settings";
 
+// Advanced widget settings
+export { CustomHtmlWidgetSettingsPanel } from "./custom-html-settings";
+
+// Content widget settings
+export { TickerMarqueeWidgetSettingsPanel } from "./ticker-marquee-settings";
+
 // Blog widget settings
 export { BlogPostGridSettingsPanel } from "./blog/blog-post-grid-settings";
 export { BlogPostCarouselSettingsPanel } from "./blog/blog-post-carousel-settings";

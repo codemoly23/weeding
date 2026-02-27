@@ -330,7 +330,7 @@ export function TestimonialsCarouselView({
                     style={{ backgroundColor: avatar.backgroundColor }}
                   >
                     <span
-                      className="text-6xl font-bold"
+                      className="text-6xl font-bold font-display"
                       style={{ color: avatar.textColor }}
                     >
                       {currentTestimonial && getInitials(currentTestimonial.name)}
@@ -370,7 +370,7 @@ export function TestimonialsCarouselView({
                 {currentTestimonial && (
                   <div>
                     <p
-                      className="font-semibold"
+                      className="font-semibold font-display"
                       style={{ color: content.nameColor }}
                     >
                       — {currentTestimonial.name}
@@ -573,7 +573,7 @@ export function TestimonialsCarouselView({
                           <img src={t.avatar} alt={t.name} className="h-full w-full object-cover" />
                         ) : (
                           <div
-                            className="flex h-full w-full items-center justify-center text-sm font-bold"
+                            className="flex h-full w-full items-center justify-center text-sm font-bold font-display"
                             style={{ backgroundColor: avatar.backgroundColor, color: avatar.textColor }}
                           >
                             {getInitials(t.name)}
@@ -585,7 +585,7 @@ export function TestimonialsCarouselView({
 
                   {/* Name & Role */}
                   <div>
-                    <p className="font-semibold text-lg leading-tight" style={{ color: content.nameColor }}>
+                    <p className="font-semibold font-display text-lg leading-tight" style={{ color: content.nameColor }}>
                       {t.name}
                     </p>
                     <p className="text-sm" style={{ color: content.infoColor }}>

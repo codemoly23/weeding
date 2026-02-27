@@ -1,5 +1,6 @@
 import prisma from "@/lib/db";
 import type { ThemeColorPalette, ThemeFontConfig } from "./theme-types";
+import { SYSTEM_FONTS } from "./theme-types";
 
 interface ActiveThemeData {
   colorPalette: ThemeColorPalette | null;
@@ -43,10 +44,17 @@ function generateColorCSS(palette: ThemeColorPalette): string {
  * Generates CSS for custom font overrides.
  */
 function generateFontCSS(fontConfig: ThemeFontConfig): string {
-  const bodyFallback = "ui-sans-serif, system-ui, sans-serif";
-  const headingFallback = "ui-sans-serif, system-ui, sans-serif";
+  const sansFallback = "ui-sans-serif, system-ui, sans-serif";
+  const accentFallback = "serif";
 
-  return `:root {\n  --font-sans: "${fontConfig.bodyFont}", ${bodyFallback};\n  --font-heading: "${fontConfig.headingFont}", ${headingFallback};\n}`;
+  let css = `:root {\n`;
+  css += `  --font-sans: "${fontConfig.bodyFont}", ${sansFallback};\n`;
+  css += `  --font-heading: "${fontConfig.headingFont}", ${sansFallback};\n`;
+  if (fontConfig.accentFont) {
+    css += `  --font-accent: "${fontConfig.accentFont}", ${accentFallback};\n`;
+  }
+  css += `}`;
+  return css;
 }
 
 /**
@@ -54,10 +62,14 @@ function generateFontCSS(fontConfig: ThemeFontConfig): string {
  */
 function getGoogleFontsUrl(fontConfig: ThemeFontConfig): string {
   const families = new Set([fontConfig.bodyFont, fontConfig.headingFont]);
+  // Only add accent font if it's a Google Font (not a system font like Georgia)
+  if (fontConfig.accentFont && !SYSTEM_FONTS.includes(fontConfig.accentFont)) {
+    families.add(fontConfig.accentFont);
+  }
   const params = Array.from(families)
     .map(
       (f) =>
-        `family=${encodeURIComponent(f)}:wght@300;400;500;600;700;800`
+        `family=${encodeURIComponent(f)}:wght@300;400;500;600;700;800;900`
     )
     .join("&");
   return `https://fonts.googleapis.com/css2?${params}&display=swap`;

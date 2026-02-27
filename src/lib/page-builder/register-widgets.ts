@@ -32,10 +32,13 @@ import {
   DEFAULT_BLOG_POST_LIST_SETTINGS,
   DEFAULT_BLOG_RECENT_POSTS_SETTINGS,
   DEFAULT_BUTTON_GROUP_SETTINGS,
+  DEFAULT_CUSTOM_HTML_SETTINGS,
+  DEFAULT_TICKER_MARQUEE_SETTINGS,
 } from "./defaults";
 
 // Import widget components
-import { HeroContentWidget, ProcessStepsWidget, HeadingWidget, TextBlockWidget } from "@/components/page-builder/widgets/content";
+import { HeroContentWidget, ProcessStepsWidget, HeadingWidget, TextBlockWidget, TickerMarqueeWidget } from "@/components/page-builder/widgets/content";
+import { CustomHtmlWidget } from "@/components/page-builder/widgets/advanced";
 import { ImageWidget, ImageSliderWidget } from "@/components/page-builder/widgets/media";
 import {
   TrustBadgesWidget,
@@ -340,6 +343,27 @@ export function registerAllWidgets() {
     category: "blog",
     defaultSettings: DEFAULT_BLOG_RECENT_POSTS_SETTINGS,
     component: BlogRecentPostsWidget,
+  });
+
+  // Advanced Widgets
+  WidgetRegistry.register({
+    type: "custom-html",
+    name: "Custom HTML",
+    description: "Add custom HTML and CSS for any design",
+    icon: "Code",
+    category: "advanced",
+    defaultSettings: DEFAULT_CUSTOM_HTML_SETTINGS,
+    component: CustomHtmlWidget,
+  });
+
+  WidgetRegistry.register({
+    type: "ticker-marquee",
+    name: "Ticker Marquee",
+    description: "Infinite scrolling ticker bar with country/stat items",
+    icon: "MoveHorizontal",
+    category: "content",
+    defaultSettings: DEFAULT_TICKER_MARQUEE_SETTINGS,
+    component: TickerMarqueeWidget,
   });
 }
 
