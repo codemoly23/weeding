@@ -134,12 +134,15 @@ function SectionRenderer({ section }: SectionRendererProps) {
     ? Math.max(0, settings.borderRadius - (settings.gradientBorder!.width || 2))
     : settings.borderRadius;
 
+  const customCSSClass = settings.customCSS ? `section-custom-${section.id}` : undefined;
+
   const sectionContent = (
     <section
       className={cn(
         "relative w-full",
         visibilityClass,
         settings.className,
+        customCSSClass,
       )}
       style={{
         ...(settings.fullWidth ? backgroundStyles : {}),
@@ -151,8 +154,13 @@ function SectionRenderer({ section }: SectionRendererProps) {
         marginBottom: `${settings.marginBottom ?? 0}px`,
         minHeight: settings.minHeight ? `${settings.minHeight}px` : undefined,
         borderRadius: innerBorderRadius ? `${innerBorderRadius}px` : undefined,
+        isolation: settings.customCSS ? "isolate" : undefined,
       }}
     >
+      {/* Custom CSS (scoped to this section, z-index sandboxed via isolation) */}
+      {settings.customCSS && (
+        <style dangerouslySetInnerHTML={{ __html: `.section-custom-${section.id} { ${settings.customCSS} }` }} />
+      )}
       {/* Video Background */}
       {bg?.type === "video" && bg.video?.url && (
         <video

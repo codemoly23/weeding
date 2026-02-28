@@ -16,6 +16,8 @@ import {
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import { PricingCardsForge } from "./pricing-cards-forge";
+import { PricingTableForge } from "./pricing-table-forge";
 import {
   Card,
   CardContent,
@@ -220,7 +222,17 @@ function SectionHeader({ settings }: { settings: PricingTableWidgetSettings }) {
       style={{ marginBottom: `${rawHeader.marginBottom}px` }}
     >
       {badge.show && (
-        <span data-field-id="badge" className={badgeStyles.className} style={badgeStyles.style}>
+        <span
+          data-field-id="badge"
+          className={badgeStyles.className}
+          style={{
+            ...badgeStyles.style,
+            ...(badge.customFontSize ? { fontSize: badge.customFontSize } : {}),
+            ...(badge.fontWeight ? { fontWeight: badge.fontWeight } : {}),
+            ...(badge.letterSpacing ? { letterSpacing: badge.letterSpacing } : {}),
+            ...(badge.textTransform ? { textTransform: badge.textTransform as React.CSSProperties["textTransform"] } : {}),
+          }}
+        >
           {badge.text}
         </span>
       )}
@@ -228,10 +240,17 @@ function SectionHeader({ settings }: { settings: PricingTableWidgetSettings }) {
       <h2
         data-field-id="heading"
         className={cn(
-          "font-bold tracking-tight",
-          headingSizeClasses[heading.size]
+          !heading.fontWeight && "font-bold",
+          !heading.letterSpacing && "tracking-tight",
+          !heading.customFontSize && headingSizeClasses[heading.size]
         )}
-        style={{ color: heading.color || "#0f172a" }}
+        style={{
+          color: heading.color || "#0f172a",
+          ...(heading.customFontSize ? { fontSize: heading.customFontSize } : {}),
+          ...(heading.fontWeight ? { fontWeight: heading.fontWeight } : {}),
+          ...(heading.lineHeight ? { lineHeight: heading.lineHeight } : {}),
+          ...(heading.letterSpacing ? { letterSpacing: heading.letterSpacing } : {}),
+        }}
       >
         {renderHighlightedText(
           heading.text,
@@ -245,9 +264,13 @@ function SectionHeader({ settings }: { settings: PricingTableWidgetSettings }) {
           data-field-id="description"
           className={cn(
             "max-w-3xl",
-            descriptionSizeClasses[description.size]
+            !description.customFontSize && descriptionSizeClasses[description.size]
           )}
-          style={{ color: description.color || "#64748b" }}
+          style={{
+            color: description.color || "#64748b",
+            ...(description.customFontSize ? { fontSize: description.customFontSize } : {}),
+            ...(description.lineHeight ? { lineHeight: description.lineHeight } : {}),
+          }}
         >
           {description.text}
         </p>
@@ -1256,23 +1279,56 @@ export function PricingTableWidget({
       {/* View Mode: Cards */}
       {settings.viewMode === "cards" && (
         <div data-field-id="pricing-table">
-        <PricingCardsView
-          settings={settings}
-          features={serviceData.comparisonFeatures}
-          packages={serviceData.packages}
-          selectedPackageId={selectedPackageId}
-          onPackageSelect={handlePackageSelect}
-          selectedLocation={selectedLocation}
-          locationFee={locationFee}
-          serviceSlug={serviceData.slug}
-          currencySymbol={currencySymbol}
-        />
+        {settings.cardStyle?.cardVariant === "forge" ? (
+          <PricingCardsForge
+            settings={settings}
+            features={serviceData.comparisonFeatures}
+            packages={serviceData.packages}
+            selectedPackageId={selectedPackageId}
+            onPackageSelect={handlePackageSelect}
+            selectedLocation={selectedLocation}
+            locationFee={locationFee}
+            serviceSlug={serviceData.slug}
+            currencySymbol={currencySymbol}
+            selectedAddons={selectedAddons}
+            onToggleAddon={toggleAddon}
+            isAddonSelected={isAddonSelected}
+          />
+        ) : (
+          <PricingCardsView
+            settings={settings}
+            features={serviceData.comparisonFeatures}
+            packages={serviceData.packages}
+            selectedPackageId={selectedPackageId}
+            onPackageSelect={handlePackageSelect}
+            selectedLocation={selectedLocation}
+            locationFee={locationFee}
+            serviceSlug={serviceData.slug}
+            currencySymbol={currencySymbol}
+          />
+        )}
         </div>
       )}
 
       {/* View Mode: Table - Desktop Layout */}
       {settings.viewMode === "table" && (
         <div data-field-id="pricing-table">
+        {settings.tableVariant === "forge" ? (
+          <PricingTableForge
+            settings={settings}
+            features={serviceData.comparisonFeatures}
+            packages={serviceData.packages}
+            selectedPackageId={selectedPackageId}
+            onPackageSelect={handlePackageSelect}
+            selectedLocation={selectedLocation}
+            locationFee={locationFee}
+            serviceSlug={serviceData.slug}
+            currencySymbol={currencySymbol}
+            selectedAddons={selectedAddons}
+            onToggleAddon={toggleAddon}
+            isAddonSelected={isAddonSelected}
+          />
+        ) : (
         <>
           <div className="hidden lg:flex gap-6">
             <ComparisonTable
@@ -1328,6 +1384,7 @@ export function PricingTableWidget({
             />
           </div>
         </>
+        )}
         </div>
       )}
     </div>

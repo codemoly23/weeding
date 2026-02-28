@@ -20,6 +20,7 @@ import type {
   ThemeFormTemplate,
   ThemeFormTab,
   ThemeFormField,
+  ThemeLocation,
   ThemeLocationFee,
   ThemeTicker,
   ThemeSettings,
@@ -153,6 +154,7 @@ export async function exportThemeData(): Promise<ThemeData> {
     const packages: ThemeServicePackage[] = svc.packages.map((pkg) => ({
       name: pkg.name,
       price: decimalToNumber(pkg.priceUSD),
+      compareAtPrice: pkg.compareAtPriceUSD ? decimalToNumber(pkg.compareAtPriceUSD) : null,
       description: pkg.description ?? "",
       processingTime: pkg.processingTime ?? undefined,
       processingIcon: pkg.processingIcon ?? undefined,
@@ -188,6 +190,8 @@ export async function exportThemeData(): Promise<ThemeData> {
         return {
           text: feature.text,
           tooltip: feature.tooltip ?? undefined,
+          description: feature.description ?? undefined,
+          sortOrder: feature.sortOrder,
           packages: packagesMap,
         };
       }
@@ -223,6 +227,8 @@ export async function exportThemeData(): Promise<ThemeData> {
         answer: faq.answer,
       })),
       displayOptions,
+      hasLocationBasedPricing: svc.hasLocationBasedPricing || undefined,
+      locationFeeLabel: svc.locationFeeLabel ?? undefined,
     };
   });
 
@@ -537,6 +543,20 @@ export async function exportThemeData(): Promise<ThemeData> {
       }))
     : [];
 
+  // ---- Locations ----
+  const locationsRaw = await prisma.location.findMany({
+    where: { isActive: true },
+    orderBy: { sortOrder: "asc" },
+  });
+  const locations: ThemeLocation[] = locationsRaw.map((loc) => ({
+    code: loc.code,
+    name: loc.name,
+    country: loc.country,
+    type: loc.type,
+    isPopular: loc.isPopular || undefined,
+    sortOrder: loc.sortOrder,
+  }));
+
   // ---- Location Fees ----
   const locationFeesRaw = await prisma.locationFee.findMany({
     include: { service: true, location: true },
@@ -582,6 +602,7 @@ export async function exportThemeData(): Promise<ThemeData> {
     footerConfig,
     footerWidgets,
     formTemplates,
+    locations,
     locationFees,
     tickers,
   };

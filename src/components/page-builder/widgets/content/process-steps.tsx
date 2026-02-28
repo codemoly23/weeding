@@ -7,7 +7,6 @@ import type {
   ProcessStepsWidgetSettings,
   ProcessStep,
   BadgeStyle,
-  ConnectorAnimation,
 } from "@/lib/page-builder/types";
 import { DEFAULT_PROCESS_STEPS_SETTINGS } from "@/lib/page-builder/defaults";
 
@@ -136,7 +135,17 @@ function SectionHeader({ settings, accentColor }: { settings: ProcessStepsWidget
     >
       {/* Badge */}
       {badge.show && (
-        <span data-field-id="badge" className={badgeStyles.className} style={badgeStyles.style}>
+        <span
+          data-field-id="badge"
+          className={badgeStyles.className}
+          style={{
+            ...badgeStyles.style,
+            ...(badge.customFontSize ? { fontSize: badge.customFontSize } : {}),
+            ...(badge.fontWeight ? { fontWeight: badge.fontWeight } : {}),
+            ...(badge.letterSpacing ? { letterSpacing: badge.letterSpacing } : {}),
+            ...(badge.textTransform ? { textTransform: badge.textTransform as React.CSSProperties["textTransform"] } : {}),
+          }}
+        >
           {badge.text}
         </span>
       )}
@@ -145,10 +154,17 @@ function SectionHeader({ settings, accentColor }: { settings: ProcessStepsWidget
       <h2
         data-field-id="heading"
         className={cn(
-          "font-bold tracking-tight",
-          headingSizeClasses[heading.size]
+          !heading.fontWeight && "font-bold",
+          !heading.letterSpacing && "tracking-tight",
+          !heading.customFontSize && headingSizeClasses[heading.size]
         )}
-        style={{ color: heading.color || "#0f172a" }}
+        style={{
+          color: heading.color || "#0f172a",
+          ...(heading.customFontSize ? { fontSize: heading.customFontSize } : {}),
+          ...(heading.fontWeight ? { fontWeight: heading.fontWeight } : {}),
+          ...(heading.lineHeight ? { lineHeight: heading.lineHeight } : {}),
+          ...(heading.letterSpacing ? { letterSpacing: heading.letterSpacing } : {}),
+        }}
       >
         {renderHighlightedText(
           heading.text,
@@ -163,9 +179,13 @@ function SectionHeader({ settings, accentColor }: { settings: ProcessStepsWidget
           data-field-id="description"
           className={cn(
             "max-w-3xl",
-            descriptionSizeClasses[description.size]
+            !description.customFontSize && descriptionSizeClasses[description.size]
           )}
-          style={{ color: description.color || "#64748b" }}
+          style={{
+            color: description.color || "#64748b",
+            ...(description.customFontSize ? { fontSize: description.customFontSize } : {}),
+            ...(description.lineHeight ? { lineHeight: description.lineHeight } : {}),
+          }}
         >
           {description.text}
         </p>
@@ -741,16 +761,32 @@ function StepItem({
 
       {/* Title */}
       <h3
-        className={cn("font-semibold mb-2", titleSizeClasses[stepContent.titleSize])}
-        style={{ color: stepContent.titleColor || "#0f172a" }}
+        className={cn(
+          !stepContent.titleFontWeight && "font-semibold",
+          "mb-2",
+          !stepContent.customTitleFontSize && titleSizeClasses[stepContent.titleSize]
+        )}
+        style={{
+          color: stepContent.titleColor || "#0f172a",
+          ...(stepContent.customTitleFontSize ? { fontSize: stepContent.customTitleFontSize } : {}),
+          ...(stepContent.titleFontWeight ? { fontWeight: stepContent.titleFontWeight } : {}),
+          ...(stepContent.titleLetterSpacing ? { letterSpacing: stepContent.titleLetterSpacing } : {}),
+        }}
       >
         {step.title}
       </h3>
 
       {/* Description */}
       <p
-        className={cn("leading-relaxed", descSizeClasses[stepContent.descriptionSize])}
-        style={{ color: stepContent.descriptionColor || "#64748b" }}
+        className={cn(
+          !stepContent.descLineHeight && "leading-relaxed",
+          !stepContent.customDescFontSize && descSizeClasses[stepContent.descriptionSize]
+        )}
+        style={{
+          color: stepContent.descriptionColor || "#64748b",
+          ...(stepContent.customDescFontSize ? { fontSize: stepContent.customDescFontSize } : {}),
+          ...(stepContent.descLineHeight ? { lineHeight: stepContent.descLineHeight } : {}),
+        }}
       >
         {step.description}
       </p>

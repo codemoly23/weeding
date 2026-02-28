@@ -113,6 +113,7 @@ interface Package {
   price: number;
   priceUSD?: number;
   priceBDT: number | null;
+  compareAtPriceUSD: number | null;
   isPopular: boolean;
   isActive: boolean;
   sortOrder: number;
@@ -183,6 +184,7 @@ const defaultPackage: Package = {
   description: "",
   price: 0,
   priceBDT: null,
+  compareAtPriceUSD: null,
   isPopular: false,
   isActive: true,
   sortOrder: 0,
@@ -446,13 +448,42 @@ export default function ServiceEditorPage() {
     }
 
     if (editingPackageIndex !== null) {
-      // Update existing package
+      // Update existing package in local state
       setService((prev) => ({
         ...prev,
         packages: prev.packages.map((p, i) =>
           i === editingPackageIndex ? editingPackage : p
         ),
       }));
+
+      // Also save to API if package has an ID
+      if (editingPackage.id) {
+        try {
+          const response = await fetch(`/api/admin/packages/${editingPackage.id}`, {
+            method: "PUT",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              name: editingPackage.name,
+              description: editingPackage.description || null,
+              priceUSD: editingPackage.price,
+              priceBDT: editingPackage.priceBDT,
+              compareAtPriceUSD: editingPackage.compareAtPriceUSD,
+              isPopular: editingPackage.isPopular,
+              isActive: editingPackage.isActive,
+              sortOrder: editingPackage.sortOrder,
+            }),
+          });
+          if (response.ok) {
+            toast.success("Package updated");
+          } else {
+            const data = await response.json();
+            toast.error(data.error || "Failed to update package");
+          }
+        } catch (error) {
+          console.error("Error updating package:", error);
+          toast.error("Failed to update package");
+        }
+      }
     } else {
       // Add new package
       setService((prev) => ({
@@ -1287,6 +1318,9 @@ export default function ServiceEditorPage() {
                                 <div className="flex flex-col items-center gap-1">
                                   <span className="font-semibold">{pkg.name}</span>
                                   <span className="text-lg font-bold">{currencySymbol}{pkg.price}</span>
+                                  {pkg.compareAtPriceUSD != null && pkg.compareAtPriceUSD > pkg.price && (
+                                    <span className="text-xs text-muted-foreground line-through">{currencySymbol}{pkg.compareAtPriceUSD}</span>
+                                  )}
                                   {pkg.isPopular && (
                                     <Badge variant="default" className="text-xs">
                                       Popular
@@ -1656,19 +1690,37 @@ export default function ServiceEditorPage() {
           </DialogHeader>
           {editingPackage && (
             <div className="space-y-4">
-              <div className="grid gap-4 sm:grid-cols-2">
+              <div className="space-y-2">
+                <Label>Package Name *</Label>
+                <Input
+                  value={editingPackage.name}
+                  onChange={(e) =>
+                    setEditingPackage({ ...editingPackage, name: e.target.value })
+                  }
+                  placeholder="e.g., Essential"
+                />
+              </div>
+              <div className="grid gap-4 sm:grid-cols-3">
                 <div className="space-y-2">
-                  <Label>Package Name *</Label>
+                  <Label>Regular Price ({currencySymbol})</Label>
                   <Input
-                    value={editingPackage.name}
+                    type="number"
+                    min="0"
+                    value={editingPackage.compareAtPriceUSD ?? ""}
                     onChange={(e) =>
-                      setEditingPackage({ ...editingPackage, name: e.target.value })
+                      setEditingPackage({
+                        ...editingPackage,
+                        compareAtPriceUSD: e.target.value ? Number(e.target.value) : null,
+                      })
                     }
-                    placeholder="e.g., Basic"
+                    placeholder="e.g., 250"
                   />
+                  <p className="text-xs text-muted-foreground">
+                    Shown as strikethrough &quot;Was $X&quot;
+                  </p>
                 </div>
                 <div className="space-y-2">
-                  <Label>Price ({currencySymbol}) *</Label>
+                  <Label>Offer Price ({currencySymbol}) *</Label>
                   <Input
                     type="number"
                     min="0"
@@ -1680,6 +1732,17 @@ export default function ServiceEditorPage() {
                       })
                     }
                   />
+                  <p className="text-xs text-muted-foreground">
+                    Current selling price
+                  </p>
+                </div>
+                <div className="space-y-2">
+                  <Label className="text-muted-foreground">Savings</Label>
+                  <div className="h-9 flex items-center px-3 rounded-md border bg-muted text-sm text-muted-foreground">
+                    {editingPackage.compareAtPriceUSD && editingPackage.price < editingPackage.compareAtPriceUSD
+                      ? `${currencySymbol}${editingPackage.compareAtPriceUSD - editingPackage.price} off`
+                      : "—"}
+                  </div>
                 </div>
               </div>
 

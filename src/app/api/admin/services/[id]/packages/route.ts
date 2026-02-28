@@ -8,6 +8,7 @@ const packageSchema = z.object({
   description: z.string().optional(),
   priceUSD: z.number().min(0),
   priceBDT: z.number().optional(),
+  compareAtPriceUSD: z.number().optional().nullable(),
   isPopular: z.boolean().default(false),
   isActive: z.boolean().default(true),
   sortOrder: z.number().default(0),

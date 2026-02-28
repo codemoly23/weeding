@@ -89,6 +89,7 @@ export async function GET(
         description: p.description,
         price: Number(p.priceUSD),
         priceBDT: p.priceBDT ? Number(p.priceBDT) : null,
+        compareAtPriceUSD: p.compareAtPriceUSD ? Number(p.compareAtPriceUSD) : null,
         isPopular: p.isPopular,
         isActive: p.isActive,
         sortOrder: p.sortOrder,

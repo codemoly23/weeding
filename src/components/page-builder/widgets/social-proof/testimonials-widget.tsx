@@ -164,11 +164,25 @@ export function TestimonialsWidget({ settings: partialSettings, isPreview = fals
     const rawColor = heading.color || DEFAULT_TESTIMONIALS_SETTINGS.header.heading.color;
     const color = rawColor === "#ffffff" ? "#0f172a" : rawColor;
 
+    const headingStyle: React.CSSProperties = {
+      color,
+      ...(heading.customFontSize ? { fontSize: heading.customFontSize } : {}),
+      ...(heading.fontWeight ? { fontWeight: heading.fontWeight } : {}),
+      ...(heading.lineHeight ? { lineHeight: heading.lineHeight } : {}),
+      ...(heading.letterSpacing ? { letterSpacing: heading.letterSpacing } : {}),
+    };
+
+    const headingClassName = cn(
+      !heading.fontWeight && "font-bold",
+      !heading.letterSpacing && "tracking-tight",
+      !heading.customFontSize && headingSizeClasses[size]
+    );
+
     if (!highlightWords) {
       return (
         <h2
-          className={cn("font-bold tracking-tight", headingSizeClasses[size])}
-          style={{ color }}
+          className={headingClassName}
+          style={headingStyle}
         >
           {text}
         </h2>
@@ -188,8 +202,8 @@ export function TestimonialsWidget({ settings: partialSettings, isPreview = fals
 
     return (
       <h2
-        className={cn("font-bold tracking-tight", headingSizeClasses[size])}
-        style={{ color }}
+        className={headingClassName}
+        style={headingStyle}
         dangerouslySetInnerHTML={{ __html: result }}
       />
     );
@@ -304,6 +318,10 @@ export function TestimonialsWidget({ settings: partialSettings, isPreview = fals
                 color: badge.textColor || DEFAULT_TESTIMONIALS_SETTINGS.header.badge.textColor,
                 borderColor: badge.borderColor || DEFAULT_TESTIMONIALS_SETTINGS.header.badge.borderColor,
                 borderWidth: badge.style === "outline" ? 1 : 0,
+                ...(badge.customFontSize ? { fontSize: badge.customFontSize } : {}),
+                ...(badge.fontWeight ? { fontWeight: badge.fontWeight } : {}),
+                ...(badge.letterSpacing ? { letterSpacing: badge.letterSpacing } : {}),
+                ...(badge.textTransform ? { textTransform: badge.textTransform as React.CSSProperties["textTransform"] } : {}),
               }}
             >
               {badge.text || DEFAULT_TESTIMONIALS_SETTINGS.header.badge.text}
@@ -316,8 +334,15 @@ export function TestimonialsWidget({ settings: partialSettings, isPreview = fals
           {/* Description */}
           {description.show && (
             <p
-              className={cn("mt-4", descriptionSizeClasses[description.size || DEFAULT_TESTIMONIALS_SETTINGS.header.description.size])}
-              style={{ color: description.color || DEFAULT_TESTIMONIALS_SETTINGS.header.description.color }}
+              className={cn(
+                "mt-4",
+                !description.customFontSize && descriptionSizeClasses[description.size || DEFAULT_TESTIMONIALS_SETTINGS.header.description.size]
+              )}
+              style={{
+                color: description.color || DEFAULT_TESTIMONIALS_SETTINGS.header.description.color,
+                ...(description.customFontSize ? { fontSize: description.customFontSize } : {}),
+                ...(description.lineHeight ? { lineHeight: description.lineHeight } : {}),
+              }}
             >
               {description.text || DEFAULT_TESTIMONIALS_SETTINGS.header.description.text}
             </p>

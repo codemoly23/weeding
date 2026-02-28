@@ -1887,195 +1887,411 @@
       "features": [],
       "packages": [
         {
-          "name": "Basic",
-          "price": 0,
+          "name": "Essential",
+          "price": 149,
           "description": "State filing fee only - add services as needed",
-          "processingTime": "3 weeks",
+          "processingTime": "~3 weeks",
           "processingIcon": "clock",
           "badgeText": null,
           "badgeColor": null,
           "features": [],
           "notIncluded": [],
-          "isPopular": false
+          "isPopular": false,
+          "compareAtPrice": 250,
+          "sortOrder": 0
         },
         {
-          "name": "Standard",
+          "name": "Professional",
           "price": 299,
           "description": "Complete LLC formation with EIN and essential services",
-          "processingTime": "3 weeks",
+          "processingTime": "~3 weeks",
           "processingIcon": "clock",
-          "badgeText": "Recommended",
+          "badgeText": "Most Popular",
           "badgeColor": "orange",
           "features": [],
           "notIncluded": [],
-          "isPopular": true
+          "isPopular": true,
+          "compareAtPrice": 499,
+          "sortOrder": 1
         },
         {
-          "name": "Premium",
-          "price": 620,
+          "name": "Complete",
+          "price": 650,
           "description": "Full-service LLC with banking and business setup included",
-          "processingTime": "3 days",
+          "processingTime": "~3 days",
           "processingIcon": "zap",
           "badgeText": null,
           "badgeColor": null,
           "features": [],
           "notIncluded": [],
-          "isPopular": false
+          "isPopular": false,
+          "compareAtPrice": 899,
+          "sortOrder": 2
         }
       ],
       "comparisonFeatures": [
         {
-          "text": "New Mexico State Filing Fee",
-          "tooltip": "State filing fee for New Mexico LLC formation ($50)",
+          "text": "LLC Formation in your chosen state",
+          "sortOrder": 0,
           "packages": {
-            "Basic": {
+            "Essential": {
               "valueType": "BOOLEAN",
               "included": true
             },
-            "Standard": {
+            "Professional": {
               "valueType": "BOOLEAN",
               "included": true
             },
-            "Premium": {
+            "Complete": {
               "valueType": "BOOLEAN",
               "included": true
             }
-          }
+          },
+          "tooltip": "We prepare and file Articles of Organization with the Secretary of State in your chosen state."
         },
         {
-          "text": "Registered Agent (First Year)",
-          "tooltip": "A registered agent receives legal documents on behalf of your LLC. Included free for the first year.",
+          "text": "Operating Agreement",
+          "sortOrder": 1,
           "packages": {
-            "Basic": {
-              "valueType": "ADDON",
-              "included": false,
-              "addonPriceUSD": 99
-            },
-            "Standard": {
+            "Essential": {
               "valueType": "BOOLEAN",
               "included": true
             },
-            "Premium": {
+            "Professional": {
+              "valueType": "BOOLEAN",
+              "included": true
+            },
+            "Complete": {
               "valueType": "BOOLEAN",
               "included": true
             }
-          }
+          },
+          "tooltip": "Defines ownership structure, member responsibilities, and profit distribution for your LLC.",
+          "description": "worth $79"
         },
         {
-          "text": "EIN Application",
-          "tooltip": "Employer Identification Number (EIN) from the IRS - required for opening bank accounts and hiring employees",
+          "text": "Registered Agent for One Year",
+          "sortOrder": 2,
           "packages": {
-            "Basic": {
-              "valueType": "ADDON",
-              "included": false,
-              "addonPriceUSD": 70
-            },
-            "Standard": {
+            "Essential": {
               "valueType": "BOOLEAN",
               "included": true
             },
-            "Premium": {
+            "Professional": {
+              "valueType": "BOOLEAN",
+              "included": true
+            },
+            "Complete": {
               "valueType": "BOOLEAN",
               "included": true
             }
-          }
+          },
+          "tooltip": "Legally required in every US state. Your registered agent receives legal and government documents on your behalf.",
+          "description": "worth $99"
         },
         {
-          "text": "BOI Filing",
-          "tooltip": "Beneficial Ownership Information (BOI) report required by FinCEN for all LLCs",
+          "text": "Business Address & Mail Forwarding (1 yr)",
+          "sortOrder": 3,
           "packages": {
-            "Basic": {
-              "valueType": "ADDON",
-              "included": false,
-              "addonPriceUSD": 49
-            },
-            "Standard": {
+            "Essential": {
               "valueType": "BOOLEAN",
               "included": true
             },
-            "Premium": {
+            "Professional": {
               "valueType": "BOOLEAN",
               "included": true
-            }
-          }
-        },
-        {
-          "text": "US Business Address / Mail Forwarding",
-          "tooltip": "Professional US business address with mail scanning and forwarding services",
-          "packages": {
-            "Basic": {
-              "valueType": "ADDON",
-              "included": false,
-              "addonPriceUSD": 120
             },
-            "Standard": {
-              "valueType": "ADDON",
-              "included": false,
-              "addonPriceUSD": 120
-            },
-            "Premium": {
+            "Complete": {
               "valueType": "BOOLEAN",
               "included": true
             }
-          }
+          },
+          "tooltip": "A real US street address for your LLC. We scan and forward your business mail digitally."
         },
         {
-          "text": "US Business Phone Number",
-          "tooltip": "Dedicated US phone number for your business with call forwarding",
+          "text": "Employer Identification Number (EIN)",
+          "sortOrder": 4,
           "packages": {
-            "Basic": {
-              "valueType": "ADDON",
-              "included": false,
-              "addonPriceUSD": 60
+            "Essential": {
+              "valueType": "BOOLEAN",
+              "included": true
             },
-            "Standard": {
-              "valueType": "ADDON",
-              "included": false,
-              "addonPriceUSD": 60
+            "Professional": {
+              "valueType": "BOOLEAN",
+              "included": true
             },
-            "Premium": {
+            "Complete": {
               "valueType": "BOOLEAN",
               "included": true
             }
-          }
+          },
+          "tooltip": "Your LLC's federal Tax ID number from the IRS. Required for banking, taxes, and hiring.",
+          "description": "worth $99"
         },
         {
-          "text": "US Fintech Business Bank Account Setup",
-          "tooltip": "We'll help you open a Mercury business bank account - a modern fintech bank perfect for startups and online businesses",
+          "text": "Annual Compliance Guidance",
+          "sortOrder": 5,
           "packages": {
-            "Basic": {
-              "valueType": "DASH",
+            "Essential": {
+              "valueType": "BOOLEAN",
+              "included": true
+            },
+            "Professional": {
+              "valueType": "BOOLEAN",
+              "included": true
+            },
+            "Complete": {
+              "valueType": "BOOLEAN",
+              "included": true
+            }
+          },
+          "tooltip": "We guide you through yearly requirements — annual reports, franchise taxes, and filing deadlines."
+        },
+        {
+          "text": "BOI FinCEN Report",
+          "sortOrder": 6,
+          "packages": {
+            "Essential": {
+              "valueType": "BOOLEAN",
               "included": false
             },
-            "Standard": {
-              "valueType": "ADDON",
-              "included": false,
-              "addonPriceUSD": 99
+            "Professional": {
+              "valueType": "BOOLEAN",
+              "included": true
             },
-            "Premium": {
+            "Complete": {
               "valueType": "BOOLEAN",
               "included": true
             }
-          }
+          },
+          "tooltip": "FinCEN Beneficial Ownership Information report — mandatory for most LLCs since 2024. $500/day penalty for non-filing.",
+          "description": "$49"
         },
         {
-          "text": "Stripe Business Account Setup",
-          "tooltip": "We'll help you set up a Stripe account for accepting online payments globally",
+          "text": "Business Bank Account Opening (Fintech)",
+          "sortOrder": 7,
           "packages": {
-            "Basic": {
-              "valueType": "DASH",
+            "Essential": {
+              "valueType": "BOOLEAN",
               "included": false
             },
-            "Standard": {
-              "valueType": "ADDON",
-              "included": false,
-              "addonPriceUSD": 79
+            "Professional": {
+              "valueType": "BOOLEAN",
+              "included": true
             },
-            "Premium": {
+            "Complete": {
               "valueType": "BOOLEAN",
               "included": true
             }
-          }
+          },
+          "tooltip": "Open a Mercury or Relay business bank account — no SSN required, 100% remote. Includes setup assistance."
+        },
+        {
+          "text": "Stripe Account Setup",
+          "sortOrder": 8,
+          "packages": {
+            "Essential": {
+              "valueType": "BOOLEAN",
+              "included": false
+            },
+            "Professional": {
+              "valueType": "BOOLEAN",
+              "included": true
+            },
+            "Complete": {
+              "valueType": "BOOLEAN",
+              "included": true
+            }
+          },
+          "tooltip": "Set up Stripe merchant account for accepting online payments. We handle the application and verification."
+        },
+        {
+          "text": "Business Debit Card",
+          "sortOrder": 9,
+          "packages": {
+            "Essential": {
+              "valueType": "BOOLEAN",
+              "included": false
+            },
+            "Professional": {
+              "valueType": "BOOLEAN",
+              "included": true
+            },
+            "Complete": {
+              "valueType": "BOOLEAN",
+              "included": true
+            }
+          },
+          "tooltip": "Business debit card through your Fintech bank account — manage expenses and track spending."
+        },
+        {
+          "text": "Basic Tax Consultation",
+          "sortOrder": 10,
+          "packages": {
+            "Essential": {
+              "valueType": "BOOLEAN",
+              "included": false
+            },
+            "Professional": {
+              "valueType": "BOOLEAN",
+              "included": true
+            },
+            "Complete": {
+              "valueType": "BOOLEAN",
+              "included": true
+            }
+          },
+          "tooltip": "One-on-one consultation on tax obligations, estimated tax payments, and filing requirements for your LLC.",
+          "description": "$149"
+        },
+        {
+          "text": "ITIN (Individual Taxpayer ID)",
+          "sortOrder": 11,
+          "packages": {
+            "Essential": {
+              "valueType": "BOOLEAN",
+              "included": false
+            },
+            "Professional": {
+              "valueType": "BOOLEAN",
+              "included": false
+            },
+            "Complete": {
+              "valueType": "BOOLEAN",
+              "included": true
+            }
+          },
+          "tooltip": "Individual Taxpayer Identification Number from the IRS — required for non-US residents who need to file taxes."
+        },
+        {
+          "text": "PayPal Business Account Setup",
+          "sortOrder": 12,
+          "packages": {
+            "Essential": {
+              "valueType": "BOOLEAN",
+              "included": false
+            },
+            "Professional": {
+              "valueType": "BOOLEAN",
+              "included": false
+            },
+            "Complete": {
+              "valueType": "BOOLEAN",
+              "included": true
+            }
+          },
+          "tooltip": "Open and verify a PayPal Business account for receiving payments and sending invoices worldwide."
+        },
+        {
+          "text": "Form 5472 + Pro Forma 1120",
+          "sortOrder": 13,
+          "packages": {
+            "Essential": {
+              "valueType": "BOOLEAN",
+              "included": false
+            },
+            "Professional": {
+              "valueType": "BOOLEAN",
+              "included": false
+            },
+            "Complete": {
+              "valueType": "BOOLEAN",
+              "included": true
+            }
+          },
+          "tooltip": "Annual IRS filing for foreign-owned single-member LLCs. $25,000 penalty for late or non-filing."
+        },
+        {
+          "text": "Priority Support & Business Consultation",
+          "sortOrder": 14,
+          "packages": {
+            "Essential": {
+              "valueType": "BOOLEAN",
+              "included": false
+            },
+            "Professional": {
+              "valueType": "BOOLEAN",
+              "included": false
+            },
+            "Complete": {
+              "valueType": "BOOLEAN",
+              "included": true
+            }
+          },
+          "tooltip": "Dedicated account manager with priority response. Includes business strategy consultation for your US venture."
+        },
+        {
+          "text": "Expedited Filing (3-day)",
+          "sortOrder": 15,
+          "packages": {
+            "Essential": {
+              "valueType": "ADDON",
+              "included": false,
+              "customValue": "+$99",
+              "addonPriceUSD": 99
+            },
+            "Professional": {
+              "valueType": "ADDON",
+              "included": false,
+              "customValue": "+$99",
+              "addonPriceUSD": 99
+            },
+            "Complete": {
+              "valueType": "BOOLEAN",
+              "included": true
+            }
+          },
+          "tooltip": "Rush processing — your LLC formation is prioritized and filed within 3 business days."
+        },
+        {
+          "text": "Annual Report Service",
+          "sortOrder": 16,
+          "packages": {
+            "Essential": {
+              "valueType": "ADDON",
+              "included": false,
+              "customValue": "+$60/yr",
+              "addonPriceUSD": 60
+            },
+            "Professional": {
+              "valueType": "ADDON",
+              "included": false,
+              "customValue": "+$60/yr",
+              "addonPriceUSD": 60
+            },
+            "Complete": {
+              "valueType": "ADDON",
+              "included": false,
+              "customValue": "+$60/yr",
+              "addonPriceUSD": 60
+            }
+          },
+          "tooltip": "We file your LLC's annual report with the state on time, every year. Never miss a deadline."
+        },
+        {
+          "text": "Amazon Seller Setup",
+          "sortOrder": 17,
+          "packages": {
+            "Essential": {
+              "valueType": "ADDON",
+              "included": false,
+              "customValue": "+$249",
+              "addonPriceUSD": 249
+            },
+            "Professional": {
+              "valueType": "ADDON",
+              "included": false,
+              "customValue": "+$249",
+              "addonPriceUSD": 249
+            },
+            "Complete": {
+              "valueType": "ADDON",
+              "included": false,
+              "customValue": "+$249",
+              "addonPriceUSD": 249
+            }
+          },
+          "tooltip": "Complete Amazon Seller Central account setup — including brand registry, listing optimization, and compliance."
         }
       ],
       "faqs": [
@@ -2100,7 +2316,9 @@
         "checkoutBadgeText": "One time fee",
         "checkoutBadgeDescription": "Our formation fee is a one time payment"
       },
-      "sortOrder": 1
+      "sortOrder": 1,
+      "hasLocationBasedPricing": true,
+      "locationFeeLabel": "State Filing Fee"
     },
     {
       "slug": "dba-filing",
@@ -5686,7 +5904,14 @@
                           "labelColor": "rgba(250,248,244,0.45)",
                           "valueSize": "xl",
                           "divider": false,
-                          "suffixColor": "#ff6a3d"
+                          "suffixColor": "#ff6a3d",
+                          "customValueFontSize": "48px",
+                          "valueFontWeight": 900,
+                          "valueLetterSpacing": "-0.04em",
+                          "valueLineHeight": 1,
+                          "customLabelFontSize": "13px",
+                          "labelFontWeight": 500,
+                          "labelLetterSpacing": "0.3px"
                         },
                         "cardGrid": {
                           "borderRadius": 20,
@@ -5927,20 +6152,30 @@
                             "style": "pill",
                             "bgColor": "transparent",
                             "textColor": "#e84c1e",
-                            "borderColor": "transparent"
+                            "borderColor": "transparent",
+                            "customFontSize": "12px",
+                            "fontWeight": 700,
+                            "letterSpacing": "1.5px",
+                            "textTransform": "uppercase"
                           },
                           "heading": {
                             "text": "Every service your\nUS business needs",
                             "size": "xl",
                             "color": "#0e1109",
                             "highlightWords": "",
-                            "highlightColor": ""
+                            "highlightColor": "",
+                            "customFontSize": "clamp(30px, 4vw, 46px)",
+                            "fontWeight": 800,
+                            "lineHeight": 1.1,
+                            "letterSpacing": "-0.025em"
                           },
                           "description": {
                             "show": true,
                             "text": "From LLC formation to Amazon launch — 8 featured services, 30+ total. Formation, compliance, e-commerce, and tax — all delivered 100% remotely, no US travel needed.",
                             "size": "md",
-                            "color": "#4b5249"
+                            "color": "#4b5249",
+                            "customFontSize": "15px",
+                            "lineHeight": 1.7
                           },
                           "alignment": "left",
                           "marginBottom": 56
@@ -5974,7 +6209,12 @@
                           "showFeatures": false,
                           "maxFeatures": 3,
                           "showCategory": true,
-                          "showArrow": true
+                          "showArrow": true,
+                          "customTitleFontSize": "18px",
+                          "titleFontWeight": 700,
+                          "titleLetterSpacing": "-0.01em",
+                          "customDescFontSize": "13px",
+                          "descLineHeight": 1.65
                         },
                         "hover": {
                           "effect": "none",
@@ -6036,14 +6276,22 @@
                             "style": "outline",
                             "bgColor": "transparent",
                             "textColor": "#1b3a2d",
-                            "borderColor": "transparent"
+                            "borderColor": "transparent",
+                            "customFontSize": "12px",
+                            "fontWeight": 700,
+                            "letterSpacing": "1.5px",
+                            "textTransform": "uppercase"
                           },
                           "heading": {
                             "text": "From order to operational\nin 4 clean steps",
                             "highlightWords": "",
                             "highlightColor": "",
                             "size": "xl",
-                            "color": "#0e1109"
+                            "color": "#0e1109",
+                            "customFontSize": "clamp(30px, 4vw, 46px)",
+                            "fontWeight": 800,
+                            "lineHeight": 1.35,
+                            "letterSpacing": "-0.025em"
                           },
                           "description": {
                             "show": false,
@@ -6109,7 +6357,11 @@
                           "titleColor": "#0e1109",
                           "descriptionSize": "sm",
                           "descriptionColor": "#4b5249",
-                          "alignment": "center"
+                          "alignment": "center",
+                          "customTitleFontSize": "17px",
+                          "titleFontWeight": 700,
+                          "customDescFontSize": "13px",
+                          "descLineHeight": 1.65
                         },
                         "connector": {
                           "show": false,
@@ -6174,7 +6426,122 @@
                 "isVisible": true,
                 "visibleOnMobile": true,
                 "visibleOnDesktop": true,
-                "customCSS": "/* Overlay text 04 at bottom-right */\n&::after { content: \"04\"; position: absolute; right: -20px; bottom: 20px; font-family: var(--font-heading), sans-serif; font-size: 200px; font-weight: 900; color: rgba(27,58,45,0.04); pointer-events: none; line-height: 1; }\n/* Badge: plain uppercase text */\n& [data-field-id=\"badge\"] { font-size: 12px !important; font-weight: 700 !important; text-transform: uppercase; letter-spacing: 1.5px; padding: 0 !important; border: none !important; }\n/* Heading: exact reference typography */\n& [data-field-id=\"heading\"] { font-size: clamp(30px, 4vw, 46px) !important; font-weight: 800 !important; letter-spacing: -0.025em !important; white-space: pre-line; }\n/* Step card horizontal padding */\n& [data-field-id=\"steps\"] > div { padding: 0 20px; text-align: center; }\n/* Continuous dashed connector line through circles */\n& [data-field-id=\"steps\"]::before { content: \"\"; position: absolute; top: 40px; left: 12%; right: 12%; height: 0; border-top: 2px dashed rgba(27,58,45,0.15); pointer-events: none; z-index: 1; }\n/* Icon shadow + hover transition */\n& [data-field-id=\"steps\"] .group > div:first-child > div:first-child { box-shadow: 0 4px 16px rgba(0,0,0,0.05); transition: all 0.4s cubic-bezier(.16,1,.3,1) !important; }\n/* Icon hover: forest green bg */\n& [data-field-id=\"steps\"] .group:hover > div:first-child > div:first-child { background-color: #1b3a2d !important; border-color: #1b3a2d !important; box-shadow: 0 8px 28px rgba(27,58,45,0.2); }\n/* Icon SVG hover: cream */\n& [data-field-id=\"steps\"] .group:hover > div:first-child > div:first-child svg { color: #faf8f4 !important; }\n/* Step titles: Outfit 17px */\n& [data-field-id=\"steps\"] h3 { font-family: var(--font-heading) !important; font-size: 17px !important; font-weight: 700 !important; }\n/* Step descriptions: 13px */\n& [data-field-id=\"steps\"] p { font-size: 13px !important; line-height: 1.65 !important; }\n/* Hide connector and adjust padding on tablet/mobile */\n@media (max-width: 1023px) { & [data-field-id=\"steps\"]::before { display: none; } & [data-field-id=\"steps\"] > div { padding: 0 !important; } }"
+                "customCSS": "/* Overlay text 04 at bottom-right */\n&::after { content: \"04\"; position: absolute; right: -20px; bottom: 20px; font-family: var(--font-heading), sans-serif; font-size: 200px; font-weight: 900; color: rgba(27,58,45,0.04); pointer-events: none; line-height: 1; }\n/* Badge: padding/border cleanup */\n& [data-field-id=\"badge\"] { padding: 0 !important; border: none !important; }\n/* Heading: whitespace for line breaks */\n& [data-field-id=\"heading\"] { white-space: pre-line; }\n/* Step card horizontal padding */\n& [data-field-id=\"steps\"] > div { padding: 0 20px; text-align: center; }\n/* Continuous dashed connector line through circles */\n& [data-field-id=\"steps\"]::before { content: \"\"; position: absolute; top: 40px; left: 12%; right: 12%; height: 0; border-top: 2px dashed rgba(27,58,45,0.15); pointer-events: none; }\n/* Icon circle: z-index above line + shadow + hover */\n& [data-field-id=\"steps\"] .group > div:first-child > div:first-child { position: relative; z-index: 2; box-shadow: 0 4px 16px rgba(0,0,0,0.05); transition: all 0.4s cubic-bezier(.16,1,.3,1) !important; }\n/* Icon hover: forest green bg */\n& [data-field-id=\"steps\"] .group:hover > div:first-child > div:first-child { background-color: #1b3a2d !important; border-color: #1b3a2d !important; box-shadow: 0 8px 28px rgba(27,58,45,0.2); }\n/* Icon SVG hover: cream */\n& [data-field-id=\"steps\"] .group:hover > div:first-child > div:first-child svg { color: #faf8f4 !important; }\n/* Step titles: use heading font */\n& [data-field-id=\"steps\"] h3 { font-family: var(--font-heading) !important; }\n/* Hide connector and adjust padding on tablet/mobile */\n@media (max-width: 1023px) { & [data-field-id=\"steps\"]::before { display: none; } & [data-field-id=\"steps\"] > div { padding: 0 !important; } }"
+              }
+            },
+            {
+              "id": "sec_pricing_forge",
+              "order": 6,
+              "layout": "1",
+              "columns": [
+                {
+                  "id": "col_pricing_forge",
+                  "widgets": [
+                    {
+                      "id": "widget_pricing_forge",
+                      "type": "pricing-table",
+                      "settings": {
+                        "viewMode": "cards",
+                        "cardStyle": {
+                          "cardVariant": "forge",
+                          "columns": 3,
+                          "gap": 24,
+                          "borderRadius": 20,
+                          "borderWidth": 1.5,
+                          "borderColor": "rgba(14,17,9,0.08)",
+                          "shadow": "sm",
+                          "padding": 32,
+                          "popularBorderColor": "#2d6a4f",
+                          "popularBadgeBgColor": "#2d6a4f",
+                          "popularBadgeTextColor": "#ffffff"
+                        },
+                        "header": {
+                          "show": true,
+                          "badge": {
+                            "show": true,
+                            "text": "Pricing",
+                            "style": "pill",
+                            "bgColor": "rgba(45,106,79,0.08)",
+                            "textColor": "#2d6a4f",
+                            "borderColor": "transparent"
+                          },
+                          "heading": {
+                            "text": "Simple. Transparent. No surprises.",
+                            "size": "xl",
+                            "color": "#0e1109"
+                          },
+                          "description": {
+                            "show": true,
+                            "text": "One-time fees. No subscriptions. Click a plan, add what you need — see your total instantly.",
+                            "size": "md",
+                            "color": "#64748b"
+                          },
+                          "alignment": "center",
+                          "marginBottom": 48
+                        },
+                        "dataSource": {
+                          "type": "service",
+                          "mode": "manual",
+                          "serviceSlug": "llc-formation"
+                        },
+                        "stateFee": {
+                          "enabled": true,
+                          "label": "Select State"
+                        },
+                        "orderSummary": {
+                          "enabled": false
+                        },
+                        "forgeCardOverrides": [
+                          {
+                            "packageIndex": 0,
+                            "tierLabel": "STARTER",
+                            "tagline": "File your US LLC with everything you need to get started",
+                            "buttonVariant": "outline-dark",
+                            "priceNote": "Was $250 — complete formation package, no hidden fees"
+                          },
+                          {
+                            "packageIndex": 1,
+                            "tierLabel": "STANDARD",
+                            "tagline": "Everything international entrepreneurs need to launch and stay compliant",
+                            "savingsText": "Save $326+ · $625+ in bundled value",
+                            "buttonVariant": "forest",
+                            "priceNote": "Was $499 · No recurring charges · No hidden costs"
+                          },
+                          {
+                            "packageIndex": 2,
+                            "tierLabel": "PREMIUM",
+                            "tagline": "Full US business setup — LLC, banking, taxes, and priority support",
+                            "savingsText": "Save $549+ · $1,199+ total value",
+                            "buttonVariant": "coral",
+                            "priceNote": "Was $899 · Priority 3-day processing · One single order"
+                          }
+                        ]
+                      }
+                    }
+                  ],
+                  "settings": {
+                    "verticalAlign": "top",
+                    "padding": 0
+                  }
+                }
+              ],
+              "settings": {
+                "fullWidth": true,
+                "background": {
+                  "type": "solid",
+                  "color": "#ffffff"
+                },
+                "paddingTop": 80,
+                "paddingBottom": 80,
+                "paddingLeft": 28,
+                "paddingRight": 28,
+                "marginTop": 0,
+                "marginBottom": 0,
+                "maxWidth": "xl",
+                "gap": 0,
+                "isVisible": true,
+                "visibleOnMobile": true,
+                "visibleOnDesktop": true
               }
             }
           ]
@@ -8448,567 +8815,717 @@
   "locationFees": [
     {
       "serviceSlug": "llc-formation",
-      "locationCode": "US-DE",
-      "feeType": "ANNUAL",
-      "amountUSD": 300
-    },
-    {
-      "serviceSlug": "llc-formation",
-      "locationCode": "US-FL",
-      "feeType": "FILING",
-      "amountUSD": 125
-    },
-    {
-      "serviceSlug": "llc-formation",
-      "locationCode": "US-FL",
-      "feeType": "ANNUAL",
-      "amountUSD": 138
-    },
-    {
-      "serviceSlug": "llc-formation",
-      "locationCode": "US-NV",
-      "feeType": "FILING",
-      "amountUSD": 425
-    },
-    {
-      "serviceSlug": "llc-formation",
-      "locationCode": "US-NV",
-      "feeType": "ANNUAL",
-      "amountUSD": 350
-    },
-    {
-      "serviceSlug": "llc-formation",
-      "locationCode": "US-AL",
-      "feeType": "FILING",
-      "amountUSD": 200
-    },
-    {
-      "serviceSlug": "llc-formation",
-      "locationCode": "US-AL",
-      "feeType": "ANNUAL",
-      "amountUSD": 50
-    },
-    {
-      "serviceSlug": "llc-formation",
       "locationCode": "US-AK",
       "feeType": "FILING",
-      "amountUSD": 250
+      "amountUSD": 250,
+      "label": "Alaska Filing Fee"
     },
     {
       "serviceSlug": "llc-formation",
       "locationCode": "US-AK",
       "feeType": "ANNUAL",
-      "amountUSD": 100
+      "amountUSD": 100,
+      "label": "Alaska Annual Fee"
+    },
+    {
+      "serviceSlug": "llc-formation",
+      "locationCode": "US-AL",
+      "feeType": "FILING",
+      "amountUSD": 200,
+      "label": "Alabama Filing Fee"
+    },
+    {
+      "serviceSlug": "llc-formation",
+      "locationCode": "US-AL",
+      "feeType": "ANNUAL",
+      "amountUSD": 0,
+      "label": "Alabama Annual Fee"
+    },
+    {
+      "serviceSlug": "llc-formation",
+      "locationCode": "US-AR",
+      "feeType": "FILING",
+      "amountUSD": 45,
+      "label": "Arkansas Filing Fee"
+    },
+    {
+      "serviceSlug": "llc-formation",
+      "locationCode": "US-AR",
+      "feeType": "ANNUAL",
+      "amountUSD": 150,
+      "label": "Arkansas Annual Fee"
     },
     {
       "serviceSlug": "llc-formation",
       "locationCode": "US-AZ",
       "feeType": "FILING",
-      "amountUSD": 50
+      "amountUSD": 50,
+      "label": "Arizona Filing Fee"
     },
     {
       "serviceSlug": "llc-formation",
-      "locationCode": "US-AR",
+      "locationCode": "US-AZ",
       "feeType": "ANNUAL",
-      "amountUSD": 150
+      "amountUSD": 0,
+      "label": "Arizona Annual Fee"
     },
     {
       "serviceSlug": "llc-formation",
       "locationCode": "US-CA",
       "feeType": "FILING",
-      "amountUSD": 70
+      "amountUSD": 70,
+      "label": "California Filing Fee"
     },
     {
       "serviceSlug": "llc-formation",
       "locationCode": "US-CA",
       "feeType": "ANNUAL",
-      "amountUSD": 800
+      "amountUSD": 800,
+      "label": "California Annual Fee"
     },
     {
       "serviceSlug": "llc-formation",
       "locationCode": "US-CO",
       "feeType": "FILING",
-      "amountUSD": 50
+      "amountUSD": 50,
+      "label": "Colorado Filing Fee"
     },
     {
       "serviceSlug": "llc-formation",
       "locationCode": "US-CO",
       "feeType": "ANNUAL",
-      "amountUSD": 25
+      "amountUSD": 25,
+      "label": "Colorado Annual Fee"
     },
     {
       "serviceSlug": "llc-formation",
       "locationCode": "US-CT",
       "feeType": "FILING",
-      "amountUSD": 120
+      "amountUSD": 120,
+      "label": "Connecticut Filing Fee"
     },
     {
       "serviceSlug": "llc-formation",
       "locationCode": "US-CT",
       "feeType": "ANNUAL",
-      "amountUSD": 80
+      "amountUSD": 80,
+      "label": "Connecticut Annual Fee"
     },
     {
       "serviceSlug": "llc-formation",
-      "locationCode": "US-GA",
+      "locationCode": "US-DC",
       "feeType": "FILING",
-      "amountUSD": 100
+      "amountUSD": 99,
+      "label": "District of Columbia Filing Fee"
     },
     {
       "serviceSlug": "llc-formation",
-      "locationCode": "US-GA",
+      "locationCode": "US-DC",
       "feeType": "ANNUAL",
-      "amountUSD": 50
-    },
-    {
-      "serviceSlug": "llc-formation",
-      "locationCode": "US-HI",
-      "feeType": "FILING",
-      "amountUSD": 50
-    },
-    {
-      "serviceSlug": "llc-formation",
-      "locationCode": "US-HI",
-      "feeType": "ANNUAL",
-      "amountUSD": 15
-    },
-    {
-      "serviceSlug": "llc-formation",
-      "locationCode": "US-ID",
-      "feeType": "FILING",
-      "amountUSD": 100
-    },
-    {
-      "serviceSlug": "llc-formation",
-      "locationCode": "US-IL",
-      "feeType": "FILING",
-      "amountUSD": 150
-    },
-    {
-      "serviceSlug": "llc-formation",
-      "locationCode": "US-IL",
-      "feeType": "ANNUAL",
-      "amountUSD": 75
-    },
-    {
-      "serviceSlug": "llc-formation",
-      "locationCode": "US-IN",
-      "feeType": "FILING",
-      "amountUSD": 95
-    },
-    {
-      "serviceSlug": "llc-formation",
-      "locationCode": "US-IN",
-      "feeType": "ANNUAL",
-      "amountUSD": 30
-    },
-    {
-      "serviceSlug": "llc-formation",
-      "locationCode": "US-IA",
-      "feeType": "FILING",
-      "amountUSD": 50
-    },
-    {
-      "serviceSlug": "llc-formation",
-      "locationCode": "US-IA",
-      "feeType": "ANNUAL",
-      "amountUSD": 30
-    },
-    {
-      "serviceSlug": "llc-formation",
-      "locationCode": "US-KS",
-      "feeType": "FILING",
-      "amountUSD": 160
-    },
-    {
-      "serviceSlug": "llc-formation",
-      "locationCode": "US-KS",
-      "feeType": "ANNUAL",
-      "amountUSD": 50
-    },
-    {
-      "serviceSlug": "llc-formation",
-      "locationCode": "US-KY",
-      "feeType": "FILING",
-      "amountUSD": 40
-    },
-    {
-      "serviceSlug": "llc-formation",
-      "locationCode": "US-KY",
-      "feeType": "ANNUAL",
-      "amountUSD": 15
-    },
-    {
-      "serviceSlug": "llc-formation",
-      "locationCode": "US-LA",
-      "feeType": "FILING",
-      "amountUSD": 100
-    },
-    {
-      "serviceSlug": "llc-formation",
-      "locationCode": "US-LA",
-      "feeType": "ANNUAL",
-      "amountUSD": 35
-    },
-    {
-      "serviceSlug": "llc-formation",
-      "locationCode": "US-ME",
-      "feeType": "FILING",
-      "amountUSD": 175
-    },
-    {
-      "serviceSlug": "llc-formation",
-      "locationCode": "US-ME",
-      "feeType": "ANNUAL",
-      "amountUSD": 85
-    },
-    {
-      "serviceSlug": "llc-formation",
-      "locationCode": "US-MD",
-      "feeType": "FILING",
-      "amountUSD": 100
-    },
-    {
-      "serviceSlug": "llc-formation",
-      "locationCode": "US-MD",
-      "feeType": "ANNUAL",
-      "amountUSD": 300
-    },
-    {
-      "serviceSlug": "llc-formation",
-      "locationCode": "US-MA",
-      "feeType": "FILING",
-      "amountUSD": 500
-    },
-    {
-      "serviceSlug": "llc-formation",
-      "locationCode": "US-MA",
-      "feeType": "ANNUAL",
-      "amountUSD": 500
-    },
-    {
-      "serviceSlug": "llc-formation",
-      "locationCode": "US-MI",
-      "feeType": "FILING",
-      "amountUSD": 50
-    },
-    {
-      "serviceSlug": "llc-formation",
-      "locationCode": "US-MI",
-      "feeType": "ANNUAL",
-      "amountUSD": 25
-    },
-    {
-      "serviceSlug": "llc-formation",
-      "locationCode": "US-MN",
-      "feeType": "FILING",
-      "amountUSD": 155
-    },
-    {
-      "serviceSlug": "llc-formation",
-      "locationCode": "US-MS",
-      "feeType": "FILING",
-      "amountUSD": 50
-    },
-    {
-      "serviceSlug": "llc-formation",
-      "locationCode": "US-MO",
-      "feeType": "FILING",
-      "amountUSD": 50
-    },
-    {
-      "serviceSlug": "llc-formation",
-      "locationCode": "US-MT",
-      "feeType": "FILING",
-      "amountUSD": 35
-    },
-    {
-      "serviceSlug": "llc-formation",
-      "locationCode": "US-MT",
-      "feeType": "ANNUAL",
-      "amountUSD": 20
-    },
-    {
-      "serviceSlug": "llc-formation",
-      "locationCode": "US-NE",
-      "feeType": "FILING",
-      "amountUSD": 100
-    },
-    {
-      "serviceSlug": "llc-formation",
-      "locationCode": "US-NE",
-      "feeType": "ANNUAL",
-      "amountUSD": 13
-    },
-    {
-      "serviceSlug": "llc-formation",
-      "locationCode": "NY",
-      "feeType": "FILING",
-      "amountUSD": 500
+      "amountUSD": 300,
+      "label": "District of Columbia Annual Fee"
     },
     {
       "serviceSlug": "llc-formation",
       "locationCode": "US-DE",
       "feeType": "FILING",
-      "amountUSD": 110
+      "amountUSD": 110,
+      "label": "Delaware Filing Fee"
+    },
+    {
+      "serviceSlug": "llc-formation",
+      "locationCode": "US-DE",
+      "feeType": "ANNUAL",
+      "amountUSD": 300,
+      "label": "Delaware Annual Fee"
+    },
+    {
+      "serviceSlug": "llc-formation",
+      "locationCode": "US-FL",
+      "feeType": "FILING",
+      "amountUSD": 125,
+      "label": "Florida Filing Fee"
+    },
+    {
+      "serviceSlug": "llc-formation",
+      "locationCode": "US-FL",
+      "feeType": "ANNUAL",
+      "amountUSD": 138,
+      "label": "Florida Annual Fee"
+    },
+    {
+      "serviceSlug": "llc-formation",
+      "locationCode": "US-GA",
+      "feeType": "FILING",
+      "amountUSD": 110,
+      "label": "Georgia Filing Fee"
+    },
+    {
+      "serviceSlug": "llc-formation",
+      "locationCode": "US-GA",
+      "feeType": "ANNUAL",
+      "amountUSD": 60,
+      "label": "Georgia Annual Fee"
+    },
+    {
+      "serviceSlug": "llc-formation",
+      "locationCode": "US-HI",
+      "feeType": "FILING",
+      "amountUSD": 50,
+      "label": "Hawaii Filing Fee"
+    },
+    {
+      "serviceSlug": "llc-formation",
+      "locationCode": "US-HI",
+      "feeType": "ANNUAL",
+      "amountUSD": 15,
+      "label": "Hawaii Annual Fee"
+    },
+    {
+      "serviceSlug": "llc-formation",
+      "locationCode": "US-IA",
+      "feeType": "FILING",
+      "amountUSD": 50,
+      "label": "Iowa Filing Fee"
+    },
+    {
+      "serviceSlug": "llc-formation",
+      "locationCode": "US-IA",
+      "feeType": "ANNUAL",
+      "amountUSD": 30,
+      "label": "Iowa Annual Fee"
+    },
+    {
+      "serviceSlug": "llc-formation",
+      "locationCode": "US-ID",
+      "feeType": "FILING",
+      "amountUSD": 100,
+      "label": "Idaho Filing Fee"
+    },
+    {
+      "serviceSlug": "llc-formation",
+      "locationCode": "US-ID",
+      "feeType": "ANNUAL",
+      "amountUSD": 0,
+      "label": "Idaho Annual Fee"
+    },
+    {
+      "serviceSlug": "llc-formation",
+      "locationCode": "US-IL",
+      "feeType": "FILING",
+      "amountUSD": 150,
+      "label": "Illinois Filing Fee"
+    },
+    {
+      "serviceSlug": "llc-formation",
+      "locationCode": "US-IL",
+      "feeType": "ANNUAL",
+      "amountUSD": 75,
+      "label": "Illinois Annual Fee"
+    },
+    {
+      "serviceSlug": "llc-formation",
+      "locationCode": "US-IN",
+      "feeType": "FILING",
+      "amountUSD": 95,
+      "label": "Indiana Filing Fee"
+    },
+    {
+      "serviceSlug": "llc-formation",
+      "locationCode": "US-IN",
+      "feeType": "ANNUAL",
+      "amountUSD": 32,
+      "label": "Indiana Annual Fee"
+    },
+    {
+      "serviceSlug": "llc-formation",
+      "locationCode": "US-KS",
+      "feeType": "FILING",
+      "amountUSD": 160,
+      "label": "Kansas Filing Fee"
+    },
+    {
+      "serviceSlug": "llc-formation",
+      "locationCode": "US-KS",
+      "feeType": "ANNUAL",
+      "amountUSD": 50,
+      "label": "Kansas Annual Fee"
+    },
+    {
+      "serviceSlug": "llc-formation",
+      "locationCode": "US-KY",
+      "feeType": "FILING",
+      "amountUSD": 40,
+      "label": "Kentucky Filing Fee"
+    },
+    {
+      "serviceSlug": "llc-formation",
+      "locationCode": "US-KY",
+      "feeType": "ANNUAL",
+      "amountUSD": 15,
+      "label": "Kentucky Annual Fee"
+    },
+    {
+      "serviceSlug": "llc-formation",
+      "locationCode": "US-LA",
+      "feeType": "FILING",
+      "amountUSD": 100,
+      "label": "Louisiana Filing Fee"
+    },
+    {
+      "serviceSlug": "llc-formation",
+      "locationCode": "US-LA",
+      "feeType": "ANNUAL",
+      "amountUSD": 30,
+      "label": "Louisiana Annual Fee"
+    },
+    {
+      "serviceSlug": "llc-formation",
+      "locationCode": "US-MA",
+      "feeType": "FILING",
+      "amountUSD": 500,
+      "label": "Massachusetts Filing Fee"
+    },
+    {
+      "serviceSlug": "llc-formation",
+      "locationCode": "US-MA",
+      "feeType": "ANNUAL",
+      "amountUSD": 500,
+      "label": "Massachusetts Annual Fee"
+    },
+    {
+      "serviceSlug": "llc-formation",
+      "locationCode": "US-MD",
+      "feeType": "FILING",
+      "amountUSD": 100,
+      "label": "Maryland Filing Fee"
+    },
+    {
+      "serviceSlug": "llc-formation",
+      "locationCode": "US-MD",
+      "feeType": "ANNUAL",
+      "amountUSD": 300,
+      "label": "Maryland Annual Fee"
+    },
+    {
+      "serviceSlug": "llc-formation",
+      "locationCode": "US-ME",
+      "feeType": "FILING",
+      "amountUSD": 175,
+      "label": "Maine Filing Fee"
+    },
+    {
+      "serviceSlug": "llc-formation",
+      "locationCode": "US-ME",
+      "feeType": "ANNUAL",
+      "amountUSD": 85,
+      "label": "Maine Annual Fee"
+    },
+    {
+      "serviceSlug": "llc-formation",
+      "locationCode": "US-MI",
+      "feeType": "FILING",
+      "amountUSD": 50,
+      "label": "Michigan Filing Fee"
+    },
+    {
+      "serviceSlug": "llc-formation",
+      "locationCode": "US-MI",
+      "feeType": "ANNUAL",
+      "amountUSD": 25,
+      "label": "Michigan Annual Fee"
+    },
+    {
+      "serviceSlug": "llc-formation",
+      "locationCode": "US-MN",
+      "feeType": "FILING",
+      "amountUSD": 155,
+      "label": "Minnesota Filing Fee"
+    },
+    {
+      "serviceSlug": "llc-formation",
+      "locationCode": "US-MN",
+      "feeType": "ANNUAL",
+      "amountUSD": 0,
+      "label": "Minnesota Annual Fee"
+    },
+    {
+      "serviceSlug": "llc-formation",
+      "locationCode": "US-MO",
+      "feeType": "FILING",
+      "amountUSD": 50,
+      "label": "Missouri Filing Fee"
+    },
+    {
+      "serviceSlug": "llc-formation",
+      "locationCode": "US-MO",
+      "feeType": "ANNUAL",
+      "amountUSD": 0,
+      "label": "Missouri Annual Fee"
+    },
+    {
+      "serviceSlug": "llc-formation",
+      "locationCode": "US-MS",
+      "feeType": "FILING",
+      "amountUSD": 50,
+      "label": "Mississippi Filing Fee"
+    },
+    {
+      "serviceSlug": "llc-formation",
+      "locationCode": "US-MS",
+      "feeType": "ANNUAL",
+      "amountUSD": 0,
+      "label": "Mississippi Annual Fee"
+    },
+    {
+      "serviceSlug": "llc-formation",
+      "locationCode": "US-MT",
+      "feeType": "FILING",
+      "amountUSD": 35,
+      "label": "Montana Filing Fee"
+    },
+    {
+      "serviceSlug": "llc-formation",
+      "locationCode": "US-MT",
+      "feeType": "ANNUAL",
+      "amountUSD": 20,
+      "label": "Montana Annual Fee"
+    },
+    {
+      "serviceSlug": "llc-formation",
+      "locationCode": "US-NC",
+      "feeType": "FILING",
+      "amountUSD": 125,
+      "label": "North Carolina Filing Fee"
+    },
+    {
+      "serviceSlug": "llc-formation",
+      "locationCode": "US-NC",
+      "feeType": "ANNUAL",
+      "amountUSD": 200,
+      "label": "North Carolina Annual Fee"
+    },
+    {
+      "serviceSlug": "llc-formation",
+      "locationCode": "US-ND",
+      "feeType": "FILING",
+      "amountUSD": 135,
+      "label": "North Dakota Filing Fee"
+    },
+    {
+      "serviceSlug": "llc-formation",
+      "locationCode": "US-ND",
+      "feeType": "ANNUAL",
+      "amountUSD": 50,
+      "label": "North Dakota Annual Fee"
+    },
+    {
+      "serviceSlug": "llc-formation",
+      "locationCode": "US-NE",
+      "feeType": "FILING",
+      "amountUSD": 100,
+      "label": "Nebraska Filing Fee"
+    },
+    {
+      "serviceSlug": "llc-formation",
+      "locationCode": "US-NE",
+      "feeType": "ANNUAL",
+      "amountUSD": 13,
+      "label": "Nebraska Annual Fee"
+    },
+    {
+      "serviceSlug": "llc-formation",
+      "locationCode": "US-NH",
+      "feeType": "FILING",
+      "amountUSD": 100,
+      "label": "New Hampshire Filing Fee"
+    },
+    {
+      "serviceSlug": "llc-formation",
+      "locationCode": "US-NH",
+      "feeType": "ANNUAL",
+      "amountUSD": 100,
+      "label": "New Hampshire Annual Fee"
+    },
+    {
+      "serviceSlug": "llc-formation",
+      "locationCode": "US-NJ",
+      "feeType": "FILING",
+      "amountUSD": 125,
+      "label": "New Jersey Filing Fee"
+    },
+    {
+      "serviceSlug": "llc-formation",
+      "locationCode": "US-NJ",
+      "feeType": "ANNUAL",
+      "amountUSD": 75,
+      "label": "New Jersey Annual Fee"
     },
     {
       "serviceSlug": "llc-formation",
       "locationCode": "US-NM",
       "feeType": "FILING",
-      "amountUSD": 52
+      "amountUSD": 50,
+      "label": "New Mexico Filing Fee"
     },
     {
       "serviceSlug": "llc-formation",
-      "locationCode": "US-TX",
-      "feeType": "FILING",
-      "amountUSD": 300
-    },
-    {
-      "serviceSlug": "llc-formation",
-      "locationCode": "US-WY",
-      "feeType": "FILING",
-      "amountUSD": 100
-    },
-    {
-      "serviceSlug": "llc-formation",
-      "locationCode": "US-WY",
+      "locationCode": "US-NM",
       "feeType": "ANNUAL",
-      "amountUSD": 60
+      "amountUSD": 0,
+      "label": "New Mexico Annual Fee"
     },
     {
       "serviceSlug": "llc-formation",
-      "locationCode": "US-AR",
+      "locationCode": "US-NV",
       "feeType": "FILING",
-      "amountUSD": 45
+      "amountUSD": 425,
+      "label": "Nevada Filing Fee"
     },
     {
       "serviceSlug": "llc-formation",
-      "locationCode": "US-DC",
-      "feeType": "FILING",
-      "amountUSD": 99
-    },
-    {
-      "serviceSlug": "llc-formation",
-      "locationCode": "US-DC",
+      "locationCode": "US-NV",
       "feeType": "ANNUAL",
-      "amountUSD": 300
-    },
-    {
-      "serviceSlug": "llc-formation",
-      "locationCode": "US-NH",
-      "feeType": "FILING",
-      "amountUSD": 100
-    },
-    {
-      "serviceSlug": "llc-formation",
-      "locationCode": "US-NH",
-      "feeType": "ANNUAL",
-      "amountUSD": 100
-    },
-    {
-      "serviceSlug": "llc-formation",
-      "locationCode": "US-NJ",
-      "feeType": "FILING",
-      "amountUSD": 125
-    },
-    {
-      "serviceSlug": "llc-formation",
-      "locationCode": "US-NJ",
-      "feeType": "ANNUAL",
-      "amountUSD": 75
+      "amountUSD": 350,
+      "label": "Nevada Annual Fee"
     },
     {
       "serviceSlug": "llc-formation",
       "locationCode": "US-NY",
       "feeType": "FILING",
-      "amountUSD": 200
+      "amountUSD": 200,
+      "label": "New York Filing Fee"
     },
     {
       "serviceSlug": "llc-formation",
       "locationCode": "US-NY",
       "feeType": "ANNUAL",
-      "amountUSD": 9
-    },
-    {
-      "serviceSlug": "llc-formation",
-      "locationCode": "US-NC",
-      "feeType": "FILING",
-      "amountUSD": 125
-    },
-    {
-      "serviceSlug": "llc-formation",
-      "locationCode": "US-NC",
-      "feeType": "ANNUAL",
-      "amountUSD": 200
-    },
-    {
-      "serviceSlug": "llc-formation",
-      "locationCode": "US-ND",
-      "feeType": "FILING",
-      "amountUSD": 135
-    },
-    {
-      "serviceSlug": "llc-formation",
-      "locationCode": "US-ND",
-      "feeType": "ANNUAL",
-      "amountUSD": 50
+      "amountUSD": 9,
+      "label": "New York Annual Fee"
     },
     {
       "serviceSlug": "llc-formation",
       "locationCode": "US-OH",
       "feeType": "FILING",
-      "amountUSD": 99
+      "amountUSD": 99,
+      "label": "Ohio Filing Fee"
+    },
+    {
+      "serviceSlug": "llc-formation",
+      "locationCode": "US-OH",
+      "feeType": "ANNUAL",
+      "amountUSD": 0,
+      "label": "Ohio Annual Fee"
     },
     {
       "serviceSlug": "llc-formation",
       "locationCode": "US-OK",
       "feeType": "FILING",
-      "amountUSD": 100
+      "amountUSD": 100,
+      "label": "Oklahoma Filing Fee"
     },
     {
       "serviceSlug": "llc-formation",
       "locationCode": "US-OK",
       "feeType": "ANNUAL",
-      "amountUSD": 25
+      "amountUSD": 25,
+      "label": "Oklahoma Annual Fee"
     },
     {
       "serviceSlug": "llc-formation",
       "locationCode": "US-OR",
       "feeType": "FILING",
-      "amountUSD": 100
+      "amountUSD": 100,
+      "label": "Oregon Filing Fee"
     },
     {
       "serviceSlug": "llc-formation",
       "locationCode": "US-OR",
       "feeType": "ANNUAL",
-      "amountUSD": 100
+      "amountUSD": 100,
+      "label": "Oregon Annual Fee"
     },
     {
       "serviceSlug": "llc-formation",
       "locationCode": "US-PA",
       "feeType": "FILING",
-      "amountUSD": 125
+      "amountUSD": 125,
+      "label": "Pennsylvania Filing Fee"
     },
     {
       "serviceSlug": "llc-formation",
       "locationCode": "US-PA",
       "feeType": "ANNUAL",
-      "amountUSD": 7
+      "amountUSD": 7,
+      "label": "Pennsylvania Annual Fee"
     },
     {
       "serviceSlug": "llc-formation",
       "locationCode": "US-RI",
       "feeType": "FILING",
-      "amountUSD": 150
+      "amountUSD": 150,
+      "label": "Rhode Island Filing Fee"
     },
     {
       "serviceSlug": "llc-formation",
       "locationCode": "US-RI",
       "feeType": "ANNUAL",
-      "amountUSD": 50
+      "amountUSD": 50,
+      "label": "Rhode Island Annual Fee"
     },
     {
       "serviceSlug": "llc-formation",
       "locationCode": "US-SC",
       "feeType": "FILING",
-      "amountUSD": 110
+      "amountUSD": 110,
+      "label": "South Carolina Filing Fee"
+    },
+    {
+      "serviceSlug": "llc-formation",
+      "locationCode": "US-SC",
+      "feeType": "ANNUAL",
+      "amountUSD": 0,
+      "label": "South Carolina Annual Fee"
     },
     {
       "serviceSlug": "llc-formation",
       "locationCode": "US-SD",
       "feeType": "FILING",
-      "amountUSD": 150
+      "amountUSD": 150,
+      "label": "South Dakota Filing Fee"
     },
     {
       "serviceSlug": "llc-formation",
       "locationCode": "US-SD",
       "feeType": "ANNUAL",
-      "amountUSD": 55
+      "amountUSD": 55,
+      "label": "South Dakota Annual Fee"
     },
     {
       "serviceSlug": "llc-formation",
       "locationCode": "US-TN",
       "feeType": "FILING",
-      "amountUSD": 300
+      "amountUSD": 300,
+      "label": "Tennessee Filing Fee"
     },
     {
       "serviceSlug": "llc-formation",
       "locationCode": "US-TN",
       "feeType": "ANNUAL",
-      "amountUSD": 300
+      "amountUSD": 300,
+      "label": "Tennessee Annual Fee"
+    },
+    {
+      "serviceSlug": "llc-formation",
+      "locationCode": "US-TX",
+      "feeType": "FILING",
+      "amountUSD": 300,
+      "label": "Texas Filing Fee"
+    },
+    {
+      "serviceSlug": "llc-formation",
+      "locationCode": "US-TX",
+      "feeType": "ANNUAL",
+      "amountUSD": 0,
+      "label": "Texas Annual Fee"
     },
     {
       "serviceSlug": "llc-formation",
       "locationCode": "US-UT",
       "feeType": "FILING",
-      "amountUSD": 59
+      "amountUSD": 59,
+      "label": "Utah Filing Fee"
     },
     {
       "serviceSlug": "llc-formation",
       "locationCode": "US-UT",
       "feeType": "ANNUAL",
-      "amountUSD": 18
-    },
-    {
-      "serviceSlug": "llc-formation",
-      "locationCode": "US-VT",
-      "feeType": "FILING",
-      "amountUSD": 155
-    },
-    {
-      "serviceSlug": "llc-formation",
-      "locationCode": "US-VT",
-      "feeType": "ANNUAL",
-      "amountUSD": 45
+      "amountUSD": 18,
+      "label": "Utah Annual Fee"
     },
     {
       "serviceSlug": "llc-formation",
       "locationCode": "US-VA",
       "feeType": "FILING",
-      "amountUSD": 100
+      "amountUSD": 100,
+      "label": "Virginia Filing Fee"
     },
     {
       "serviceSlug": "llc-formation",
       "locationCode": "US-VA",
       "feeType": "ANNUAL",
-      "amountUSD": 50
+      "amountUSD": 50,
+      "label": "Virginia Annual Fee"
+    },
+    {
+      "serviceSlug": "llc-formation",
+      "locationCode": "US-VT",
+      "feeType": "FILING",
+      "amountUSD": 155,
+      "label": "Vermont Filing Fee"
+    },
+    {
+      "serviceSlug": "llc-formation",
+      "locationCode": "US-VT",
+      "feeType": "ANNUAL",
+      "amountUSD": 45,
+      "label": "Vermont Annual Fee"
     },
     {
       "serviceSlug": "llc-formation",
       "locationCode": "US-WA",
       "feeType": "FILING",
-      "amountUSD": 200
+      "amountUSD": 180,
+      "label": "Washington Filing Fee"
     },
     {
       "serviceSlug": "llc-formation",
       "locationCode": "US-WA",
       "feeType": "ANNUAL",
-      "amountUSD": 60
-    },
-    {
-      "serviceSlug": "llc-formation",
-      "locationCode": "US-WV",
-      "feeType": "FILING",
-      "amountUSD": 100
-    },
-    {
-      "serviceSlug": "llc-formation",
-      "locationCode": "US-WV",
-      "feeType": "ANNUAL",
-      "amountUSD": 25
+      "amountUSD": 70,
+      "label": "Washington Annual Fee"
     },
     {
       "serviceSlug": "llc-formation",
       "locationCode": "US-WI",
       "feeType": "FILING",
-      "amountUSD": 130
+      "amountUSD": 130,
+      "label": "Wisconsin Filing Fee"
     },
     {
       "serviceSlug": "llc-formation",
       "locationCode": "US-WI",
       "feeType": "ANNUAL",
-      "amountUSD": 25
+      "amountUSD": 25,
+      "label": "Wisconsin Annual Fee"
+    },
+    {
+      "serviceSlug": "llc-formation",
+      "locationCode": "US-WV",
+      "feeType": "FILING",
+      "amountUSD": 100,
+      "label": "West Virginia Filing Fee"
+    },
+    {
+      "serviceSlug": "llc-formation",
+      "locationCode": "US-WV",
+      "feeType": "ANNUAL",
+      "amountUSD": 25,
+      "label": "West Virginia Annual Fee"
+    },
+    {
+      "serviceSlug": "llc-formation",
+      "locationCode": "US-WY",
+      "feeType": "FILING",
+      "amountUSD": 100,
+      "label": "Wyoming Filing Fee"
+    },
+    {
+      "serviceSlug": "llc-formation",
+      "locationCode": "US-WY",
+      "feeType": "ANNUAL",
+      "amountUSD": 60,
+      "label": "Wyoming Annual Fee"
     }
   ],
   "tickers": [
@@ -9051,6 +9568,371 @@
       ],
       "speed": 28,
       "separator": "·"
+    }
+  ],
+  "locations": [
+    {
+      "code": "US-AL",
+      "name": "Alabama",
+      "country": "US",
+      "type": "STATE",
+      "sortOrder": 0
+    },
+    {
+      "code": "US-AK",
+      "name": "Alaska",
+      "country": "US",
+      "type": "STATE",
+      "sortOrder": 1
+    },
+    {
+      "code": "US-AZ",
+      "name": "Arizona",
+      "country": "US",
+      "type": "STATE",
+      "sortOrder": 2
+    },
+    {
+      "code": "US-AR",
+      "name": "Arkansas",
+      "country": "US",
+      "type": "STATE",
+      "sortOrder": 3
+    },
+    {
+      "code": "US-CA",
+      "name": "California",
+      "country": "US",
+      "type": "STATE",
+      "sortOrder": 4
+    },
+    {
+      "code": "US-CO",
+      "name": "Colorado",
+      "country": "US",
+      "type": "STATE",
+      "sortOrder": 5
+    },
+    {
+      "code": "US-CT",
+      "name": "Connecticut",
+      "country": "US",
+      "type": "STATE",
+      "sortOrder": 6
+    },
+    {
+      "code": "US-DE",
+      "name": "Delaware",
+      "country": "US",
+      "type": "STATE",
+      "sortOrder": 7,
+      "isPopular": true
+    },
+    {
+      "code": "US-DC",
+      "name": "District of Columbia",
+      "country": "US",
+      "type": "STATE",
+      "sortOrder": 8
+    },
+    {
+      "code": "US-FL",
+      "name": "Florida",
+      "country": "US",
+      "type": "STATE",
+      "sortOrder": 9,
+      "isPopular": true
+    },
+    {
+      "code": "US-GA",
+      "name": "Georgia",
+      "country": "US",
+      "type": "STATE",
+      "sortOrder": 10
+    },
+    {
+      "code": "US-HI",
+      "name": "Hawaii",
+      "country": "US",
+      "type": "STATE",
+      "sortOrder": 11
+    },
+    {
+      "code": "US-ID",
+      "name": "Idaho",
+      "country": "US",
+      "type": "STATE",
+      "sortOrder": 12
+    },
+    {
+      "code": "US-IL",
+      "name": "Illinois",
+      "country": "US",
+      "type": "STATE",
+      "sortOrder": 13
+    },
+    {
+      "code": "US-IN",
+      "name": "Indiana",
+      "country": "US",
+      "type": "STATE",
+      "sortOrder": 14
+    },
+    {
+      "code": "US-IA",
+      "name": "Iowa",
+      "country": "US",
+      "type": "STATE",
+      "sortOrder": 15
+    },
+    {
+      "code": "US-KS",
+      "name": "Kansas",
+      "country": "US",
+      "type": "STATE",
+      "sortOrder": 16
+    },
+    {
+      "code": "US-KY",
+      "name": "Kentucky",
+      "country": "US",
+      "type": "STATE",
+      "sortOrder": 17
+    },
+    {
+      "code": "US-LA",
+      "name": "Louisiana",
+      "country": "US",
+      "type": "STATE",
+      "sortOrder": 18
+    },
+    {
+      "code": "US-ME",
+      "name": "Maine",
+      "country": "US",
+      "type": "STATE",
+      "sortOrder": 19
+    },
+    {
+      "code": "US-MD",
+      "name": "Maryland",
+      "country": "US",
+      "type": "STATE",
+      "sortOrder": 20
+    },
+    {
+      "code": "US-MA",
+      "name": "Massachusetts",
+      "country": "US",
+      "type": "STATE",
+      "sortOrder": 21
+    },
+    {
+      "code": "US-MI",
+      "name": "Michigan",
+      "country": "US",
+      "type": "STATE",
+      "sortOrder": 22
+    },
+    {
+      "code": "US-MN",
+      "name": "Minnesota",
+      "country": "US",
+      "type": "STATE",
+      "sortOrder": 23
+    },
+    {
+      "code": "US-MS",
+      "name": "Mississippi",
+      "country": "US",
+      "type": "STATE",
+      "sortOrder": 24
+    },
+    {
+      "code": "US-MO",
+      "name": "Missouri",
+      "country": "US",
+      "type": "STATE",
+      "sortOrder": 25
+    },
+    {
+      "code": "US-MT",
+      "name": "Montana",
+      "country": "US",
+      "type": "STATE",
+      "sortOrder": 26
+    },
+    {
+      "code": "US-NE",
+      "name": "Nebraska",
+      "country": "US",
+      "type": "STATE",
+      "sortOrder": 27
+    },
+    {
+      "code": "US-NV",
+      "name": "Nevada",
+      "country": "US",
+      "type": "STATE",
+      "sortOrder": 28,
+      "isPopular": true
+    },
+    {
+      "code": "US-NH",
+      "name": "New Hampshire",
+      "country": "US",
+      "type": "STATE",
+      "sortOrder": 29
+    },
+    {
+      "code": "US-NJ",
+      "name": "New Jersey",
+      "country": "US",
+      "type": "STATE",
+      "sortOrder": 30
+    },
+    {
+      "code": "US-NM",
+      "name": "New Mexico",
+      "country": "US",
+      "type": "STATE",
+      "sortOrder": 31,
+      "isPopular": true
+    },
+    {
+      "code": "US-NY",
+      "name": "New York",
+      "country": "US",
+      "type": "STATE",
+      "sortOrder": 32
+    },
+    {
+      "code": "US-NC",
+      "name": "North Carolina",
+      "country": "US",
+      "type": "STATE",
+      "sortOrder": 33
+    },
+    {
+      "code": "US-ND",
+      "name": "North Dakota",
+      "country": "US",
+      "type": "STATE",
+      "sortOrder": 34
+    },
+    {
+      "code": "US-OH",
+      "name": "Ohio",
+      "country": "US",
+      "type": "STATE",
+      "sortOrder": 35
+    },
+    {
+      "code": "US-OK",
+      "name": "Oklahoma",
+      "country": "US",
+      "type": "STATE",
+      "sortOrder": 36
+    },
+    {
+      "code": "US-OR",
+      "name": "Oregon",
+      "country": "US",
+      "type": "STATE",
+      "sortOrder": 37
+    },
+    {
+      "code": "US-PA",
+      "name": "Pennsylvania",
+      "country": "US",
+      "type": "STATE",
+      "sortOrder": 38
+    },
+    {
+      "code": "US-RI",
+      "name": "Rhode Island",
+      "country": "US",
+      "type": "STATE",
+      "sortOrder": 39
+    },
+    {
+      "code": "US-SC",
+      "name": "South Carolina",
+      "country": "US",
+      "type": "STATE",
+      "sortOrder": 40
+    },
+    {
+      "code": "US-SD",
+      "name": "South Dakota",
+      "country": "US",
+      "type": "STATE",
+      "sortOrder": 41
+    },
+    {
+      "code": "US-TN",
+      "name": "Tennessee",
+      "country": "US",
+      "type": "STATE",
+      "sortOrder": 42
+    },
+    {
+      "code": "US-TX",
+      "name": "Texas",
+      "country": "US",
+      "type": "STATE",
+      "sortOrder": 43,
+      "isPopular": true
+    },
+    {
+      "code": "US-UT",
+      "name": "Utah",
+      "country": "US",
+      "type": "STATE",
+      "sortOrder": 44
+    },
+    {
+      "code": "US-VT",
+      "name": "Vermont",
+      "country": "US",
+      "type": "STATE",
+      "sortOrder": 45
+    },
+    {
+      "code": "US-VA",
+      "name": "Virginia",
+      "country": "US",
+      "type": "STATE",
+      "sortOrder": 46
+    },
+    {
+      "code": "US-WA",
+      "name": "Washington",
+      "country": "US",
+      "type": "STATE",
+      "sortOrder": 47
+    },
+    {
+      "code": "US-WV",
+      "name": "West Virginia",
+      "country": "US",
+      "type": "STATE",
+      "sortOrder": 48
+    },
+    {
+      "code": "US-WI",
+      "name": "Wisconsin",
+      "country": "US",
+      "type": "STATE",
+      "sortOrder": 49
+    },
+    {
+      "code": "US-WY",
+      "name": "Wyoming",
+      "country": "US",
+      "type": "STATE",
+      "sortOrder": 50,
+      "isPopular": true
     }
   ]
 }

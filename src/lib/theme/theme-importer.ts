@@ -48,6 +48,7 @@ export async function importThemeData(
     formTemplates: 0,
     menuItems: 0,
     footerWidgets: 0,
+    locations: 0,
     locationFees: 0,
     tickers: 0,
   };
@@ -224,6 +225,8 @@ export async function importThemeData(
               metaDescription: svc.metaDescription || null,
               displayOptions:
                 (svc.displayOptions as Prisma.InputJsonValue) ?? {},
+              hasLocationBasedPricing: svc.hasLocationBasedPricing ?? false,
+              locationFeeLabel: svc.locationFeeLabel ?? null,
             },
           });
           serviceSlugToId[svc.slug] = created.id;
@@ -257,6 +260,7 @@ export async function importThemeData(
                 processingIcon: pkg.processingIcon || null,
                 badgeText: pkg.badgeText || null,
                 badgeColor: pkg.badgeColor || null,
+                compareAtPriceUSD: pkg.compareAtPrice ? new Prisma.Decimal(pkg.compareAtPrice) : null,
               },
             });
             packageNameToId[packageKey(svc.slug, pkg.name)] = created.id;
@@ -280,13 +284,31 @@ export async function importThemeData(
                 serviceId,
                 text: cf.text,
                 tooltip: cf.tooltip || null,
+                description: cf.description || null,
                 sortOrder: fi,
               },
             });
 
+            // Build packages map — support both object format and legacy array format
+            let packagesMap = cf.packages;
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            const cfAny = cf as any;
+            if (!packagesMap && cfAny.packageMappings) {
+              packagesMap = {};
+              for (const m of cfAny.packageMappings as Array<{packageName: string; valueType?: string; included?: boolean; customValue?: string; addonPriceUSD?: number; addonPriceBDT?: number}>) {
+                packagesMap[m.packageName] = {
+                  valueType: (m.valueType as "BOOLEAN") ?? "BOOLEAN",
+                  included: m.included ?? false,
+                  customValue: m.customValue,
+                  addonPriceUSD: m.addonPriceUSD,
+                  addonPriceBDT: m.addonPriceBDT,
+                };
+              }
+            }
+
             // Create PackageFeatureMap for each package mapping
-            if (cf.packages) {
-              for (const [pkgName, mapping] of Object.entries(cf.packages)) {
+            if (packagesMap) {
+              for (const [pkgName, mapping] of Object.entries(packagesMap)) {
                 const pkgId = packageNameToId[packageKey(svc.slug, pkgName)];
                 if (!pkgId) continue;
 
@@ -795,7 +817,34 @@ export async function importThemeData(
         }
       }
 
-      // ---- 20. Location Fees ----
+      // ---- 20a. Locations (upsert by code) ----
+      if (data.locations) {
+        for (const loc of data.locations) {
+          await tx.location.upsert({
+            where: { code: loc.code },
+            create: {
+              code: loc.code,
+              name: loc.name,
+              country: loc.country,
+              type: (loc.type as "STATE") || "STATE",
+              isPopular: loc.isPopular ?? false,
+              isActive: true,
+              sortOrder: loc.sortOrder ?? 0,
+            },
+            update: {
+              name: loc.name,
+              country: loc.country,
+              type: (loc.type as "STATE") || "STATE",
+              isPopular: loc.isPopular ?? false,
+              isActive: true,
+              sortOrder: loc.sortOrder ?? 0,
+            },
+          });
+          counts.locations++;
+        }
+      }
+
+      // ---- 20b. Location Fees ----
       if (data.locationFees) {
         for (const fee of data.locationFees) {
           const serviceId = serviceSlugToId[fee.serviceSlug];

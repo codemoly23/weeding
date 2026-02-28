@@ -195,7 +195,16 @@ function SectionHeader({ settings, accentColor }: { settings: ServiceListWidgetS
     >
       {/* Badge */}
       {header.badge.show && (
-        <span className={badgeStyles.className} style={badgeStyles.style}>
+        <span
+          className={badgeStyles.className}
+          style={{
+            ...badgeStyles.style,
+            ...(header.badge.customFontSize ? { fontSize: header.badge.customFontSize } : {}),
+            ...(header.badge.fontWeight ? { fontWeight: header.badge.fontWeight } : {}),
+            ...(header.badge.letterSpacing ? { letterSpacing: header.badge.letterSpacing } : {}),
+            ...(header.badge.textTransform ? { textTransform: header.badge.textTransform as React.CSSProperties["textTransform"] } : {}),
+          }}
+        >
           {header.badge.text}
         </span>
       )}
@@ -203,10 +212,17 @@ function SectionHeader({ settings, accentColor }: { settings: ServiceListWidgetS
       {/* Heading */}
       <h2
         className={cn(
-          "font-bold tracking-tight",
-          headingSizeClasses[header.heading.size]
+          !header.heading.fontWeight && "font-bold",
+          !header.heading.letterSpacing && "tracking-tight",
+          !header.heading.customFontSize && headingSizeClasses[header.heading.size]
         )}
-        style={{ color: header.heading.color || "#ffffff" }}
+        style={{
+          color: header.heading.color || "#ffffff",
+          ...(header.heading.customFontSize ? { fontSize: header.heading.customFontSize } : {}),
+          ...(header.heading.fontWeight ? { fontWeight: header.heading.fontWeight } : {}),
+          ...(header.heading.lineHeight ? { lineHeight: header.heading.lineHeight } : {}),
+          ...(header.heading.letterSpacing ? { letterSpacing: header.heading.letterSpacing } : {}),
+        }}
       >
         {renderHighlightedText(
           header.heading.text,
@@ -220,9 +236,13 @@ function SectionHeader({ settings, accentColor }: { settings: ServiceListWidgetS
         <p
           className={cn(
             "max-w-3xl",
-            descriptionSizeClasses[header.description.size]
+            !header.description.customFontSize && descriptionSizeClasses[header.description.size]
           )}
-          style={{ color: header.description.color || "#94a3b8" }}
+          style={{
+            color: header.description.color || "#94a3b8",
+            ...(header.description.customFontSize ? { fontSize: header.description.customFontSize } : {}),
+            ...(header.description.lineHeight ? { lineHeight: header.description.lineHeight } : {}),
+          }}
         >
           {header.description.text}
         </p>

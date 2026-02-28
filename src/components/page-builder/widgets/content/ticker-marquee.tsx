@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import type { TickerMarqueeWidgetSettings, TickerMarqueeItem } from "@/lib/page-builder/types";
 import { DEFAULT_TICKER_MARQUEE_SETTINGS } from "@/lib/page-builder/defaults";
 import { WidgetContainer } from "@/components/page-builder/shared/widget-container";
+import { cn } from "@/lib/utils";
 
 interface TickerMarqueeWidgetProps {
   settings: TickerMarqueeWidgetSettings;
@@ -71,8 +72,16 @@ export function TickerMarqueeWidget({ settings: rawSettings }: TickerMarqueeWidg
           href={item.link}
           target={item.openInNewTab ? "_blank" : undefined}
           rel={`${item.openInNewTab ? "noopener noreferrer" : ""}${item.noFollow ? " nofollow" : ""}`.trim() || undefined}
-          className="flex items-center gap-2.5 whitespace-nowrap text-[13px] font-semibold font-display no-underline [&_strong]:font-bold"
-          style={sharedStyle}
+          className={cn(
+            "flex items-center gap-2.5 whitespace-nowrap font-display no-underline [&_strong]:font-bold",
+            !settings.customFontSize && "text-[13px]",
+            !settings.fontWeight && "font-semibold"
+          )}
+          style={{
+            ...sharedStyle,
+            ...(settings.customFontSize ? { fontSize: settings.customFontSize } : {}),
+            ...(settings.fontWeight ? { fontWeight: settings.fontWeight } : {}),
+          }}
           dangerouslySetInnerHTML={{ __html: html }}
         />
       );
@@ -81,8 +90,16 @@ export function TickerMarqueeWidget({ settings: rawSettings }: TickerMarqueeWidg
     return (
       <div
         key={`${item.id}_${idx}`}
-        className="flex items-center gap-2.5 whitespace-nowrap text-[13px] font-semibold font-display [&_strong]:font-bold"
-        style={sharedStyle}
+        className={cn(
+          "flex items-center gap-2.5 whitespace-nowrap font-display [&_strong]:font-bold",
+          !settings.customFontSize && "text-[13px]",
+          !settings.fontWeight && "font-semibold"
+        )}
+        style={{
+          ...sharedStyle,
+          ...(settings.customFontSize ? { fontSize: settings.customFontSize } : {}),
+          ...(settings.fontWeight ? { fontWeight: settings.fontWeight } : {}),
+        }}
         dangerouslySetInnerHTML={{ __html: html }}
       />
     );

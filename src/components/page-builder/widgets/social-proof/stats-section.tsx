@@ -117,6 +117,13 @@ function AnimatedStat({
   layout,
   globalIconColor,
   iconSize,
+  customValueFontSize,
+  valueFontWeight,
+  valueLetterSpacing,
+  valueLineHeight,
+  customLabelFontSize,
+  labelFontWeight,
+  labelLetterSpacing,
 }: {
   stat: StatItem;
   animate: boolean;
@@ -126,6 +133,13 @@ function AnimatedStat({
   layout: "vertical" | "horizontal";
   globalIconColor: string;
   iconSize: "sm" | "md" | "lg";
+  customValueFontSize?: string;
+  valueFontWeight?: number;
+  valueLetterSpacing?: string;
+  valueLineHeight?: number;
+  customLabelFontSize?: string;
+  labelFontWeight?: number;
+  labelLetterSpacing?: string;
 }) {
   const { value, label, prefix, suffix, icon, iconColor } = stat;
 
@@ -172,16 +186,35 @@ function AnimatedStat({
         )}
         <div className="flex flex-col">
           <span
-            className={cn("font-bold tabular-nums leading-tight font-display", getValueSizeClass())}
-            style={{ color: valueColor }}
+            className={cn(
+              !valueFontWeight && "font-bold",
+              "tabular-nums leading-tight font-display",
+              !customValueFontSize && getValueSizeClass()
+            )}
+            style={{
+              color: valueColor,
+              ...(customValueFontSize ? { fontSize: customValueFontSize } : {}),
+              ...(valueFontWeight ? { fontWeight: valueFontWeight } : {}),
+              ...(valueLetterSpacing ? { letterSpacing: valueLetterSpacing } : {}),
+              ...(valueLineHeight !== undefined ? { lineHeight: valueLineHeight } : {}),
+            }}
           >
             {prefix}
             {displayValue}
             {suffix}
           </span>
           <span
-            className="text-sm font-medium uppercase tracking-wide"
-            style={{ color: labelColor }}
+            className={cn(
+              !customLabelFontSize && "text-sm",
+              !labelFontWeight && "font-medium",
+              "uppercase tracking-wide"
+            )}
+            style={{
+              color: labelColor,
+              ...(customLabelFontSize ? { fontSize: customLabelFontSize } : {}),
+              ...(labelFontWeight ? { fontWeight: labelFontWeight } : {}),
+              ...(labelLetterSpacing ? { letterSpacing: labelLetterSpacing } : {}),
+            }}
           >
             {label}
           </span>
@@ -202,16 +235,35 @@ function AnimatedStat({
         </div>
       )}
       <span
-        className={cn("font-bold tabular-nums leading-tight font-display", getValueSizeClass())}
-        style={{ color: valueColor }}
+        className={cn(
+          !valueFontWeight && "font-bold",
+          "tabular-nums leading-tight font-display",
+          !customValueFontSize && getValueSizeClass()
+        )}
+        style={{
+          color: valueColor,
+          ...(customValueFontSize ? { fontSize: customValueFontSize } : {}),
+          ...(valueFontWeight ? { fontWeight: valueFontWeight } : {}),
+          ...(valueLetterSpacing ? { letterSpacing: valueLetterSpacing } : {}),
+          ...(valueLineHeight !== undefined ? { lineHeight: valueLineHeight } : {}),
+        }}
       >
         {prefix}
         {displayValue}
         {suffix}
       </span>
       <span
-        className="text-sm mt-2 font-medium uppercase tracking-wide"
-        style={{ color: labelColor }}
+        className={cn(
+          !customLabelFontSize && "text-sm",
+          !labelFontWeight && "font-medium",
+          "mt-2 uppercase tracking-wide"
+        )}
+        style={{
+          color: labelColor,
+          ...(customLabelFontSize ? { fontSize: customLabelFontSize } : {}),
+          ...(labelFontWeight ? { fontWeight: labelFontWeight } : {}),
+          ...(labelLetterSpacing ? { letterSpacing: labelLetterSpacing } : {}),
+        }}
       >
         {label}
       </span>
@@ -412,6 +464,13 @@ export function StatsSectionWidget({ settings, isPreview = false }: StatsSection
               layout={layout}
               globalIconColor={iconColor}
               iconSize={iconSize}
+              customValueFontSize={style.customValueFontSize}
+              valueFontWeight={style.valueFontWeight}
+              valueLetterSpacing={style.valueLetterSpacing}
+              valueLineHeight={style.valueLineHeight}
+              customLabelFontSize={style.customLabelFontSize}
+              labelFontWeight={style.labelFontWeight}
+              labelLetterSpacing={style.labelLetterSpacing}
             />
           </div>
         ))}

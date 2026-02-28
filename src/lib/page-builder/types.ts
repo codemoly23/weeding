@@ -992,6 +992,14 @@ export interface StatsSectionWidgetSettings {
     iconColor?: string;
     iconSize?: "sm" | "md" | "lg";
     suffixColor?: string;
+    // Custom typography overrides for default variant
+    customValueFontSize?: string;    // e.g., "48px"
+    valueFontWeight?: number;        // e.g., 900
+    valueLetterSpacing?: string;     // e.g., "-0.04em"
+    valueLineHeight?: number;        // e.g., 1
+    customLabelFontSize?: string;    // e.g., "13px"
+    labelFontWeight?: number;        // e.g., 500
+    labelLetterSpacing?: string;     // e.g., "0.3px"
   };
   cardGrid?: StatsCardGridConfig;
   centered: boolean;
@@ -1084,6 +1092,11 @@ export interface TestimonialsWidgetSettings {
       bgColor?: string;
       textColor?: string;
       borderColor?: string;
+      // Custom typography overrides
+      customFontSize?: string;
+      fontWeight?: number;
+      letterSpacing?: string;
+      textTransform?: string;
     };
     heading: {
       text: string;
@@ -1091,12 +1104,20 @@ export interface TestimonialsWidgetSettings {
       highlightColor?: string;
       size: "sm" | "md" | "lg" | "xl" | "2xl";
       color?: string;
+      // Custom typography overrides
+      customFontSize?: string;
+      fontWeight?: number;
+      lineHeight?: number;
+      letterSpacing?: string;
     };
     description: {
       show: boolean;
       text: string;
       size: "sm" | "md" | "lg";
       color?: string;
+      // Custom typography overrides
+      customFontSize?: string;
+      lineHeight?: number;
     };
     alignment: "left" | "center" | "right";
     marginBottom: number;
@@ -1736,6 +1757,11 @@ export interface ServiceCardWidgetSettings {
       bgColor?: string;
       textColor?: string;
       borderColor?: string;
+      // Custom typography overrides
+      customFontSize?: string;
+      fontWeight?: number;
+      letterSpacing?: string;
+      textTransform?: string;
     };
     heading: {
       text: string;
@@ -1743,12 +1769,20 @@ export interface ServiceCardWidgetSettings {
       highlightColor?: string;
       size: "sm" | "md" | "lg" | "xl" | "2xl";
       color?: string;
+      // Custom typography overrides
+      customFontSize?: string;
+      fontWeight?: number;
+      lineHeight?: number;
+      letterSpacing?: string;
     };
     description: {
       show: boolean;
       text: string;
       size: "sm" | "md" | "lg";
       color?: string;
+      // Custom typography overrides
+      customFontSize?: string;
+      lineHeight?: number;
     };
     alignment: "left" | "center" | "right";
     marginBottom: number;
@@ -1796,6 +1830,14 @@ export interface ServiceCardWidgetSettings {
     maxFeatures: 2 | 3 | 4;
     showCategory: boolean;
     showArrow: boolean;
+    // Custom typography overrides for card content
+    customTitleFontSize?: string;     // e.g., "18px"
+    titleFontWeight?: number;         // e.g., 700
+    titleLetterSpacing?: string;      // e.g., "-0.01em"
+    customDescFontSize?: string;      // e.g., "13px"
+    descLineHeight?: number;          // e.g., 1.65
+    customPriceFontSize?: string;     // e.g., "14px"
+    customTagFontSize?: string;       // e.g., "10px"
   };
 
   // Hover Effects
@@ -1953,6 +1995,11 @@ export interface ServiceListWidgetSettings {
       bgColor?: string;
       textColor?: string;
       borderColor?: string;
+      // Custom typography overrides
+      customFontSize?: string;
+      fontWeight?: number;
+      letterSpacing?: string;
+      textTransform?: string;
     };
     heading: {
       text: string;
@@ -1960,12 +2007,20 @@ export interface ServiceListWidgetSettings {
       color?: string;
       highlightWords?: string;
       highlightColor?: string;
+      // Custom typography overrides
+      customFontSize?: string;
+      fontWeight?: number;
+      lineHeight?: number;
+      letterSpacing?: string;
     };
     description: {
       show: boolean;
       text: string;
       size: "sm" | "md" | "lg";
       color?: string;
+      // Custom typography overrides
+      customFontSize?: string;
+      lineHeight?: number;
     };
     alignment: "left" | "center" | "right";
     marginBottom: number;
@@ -2118,6 +2173,11 @@ export interface ProcessStepsWidgetSettings {
       bgColor?: string;
       textColor?: string;
       borderColor?: string;
+      // Custom typography overrides
+      customFontSize?: string;     // e.g., "12px"
+      fontWeight?: number;         // e.g., 700
+      letterSpacing?: string;      // e.g., "1.5px"
+      textTransform?: string;      // e.g., "uppercase"
     };
     heading: {
       text: string;
@@ -2125,12 +2185,20 @@ export interface ProcessStepsWidgetSettings {
       highlightColor?: string;
       size: "sm" | "md" | "lg" | "xl" | "2xl";
       color?: string;
+      // Custom typography overrides (same pattern as hero-content)
+      customFontSize?: string;     // e.g., "clamp(30px, 4vw, 46px)" - overrides size when set
+      fontWeight?: number;         // e.g., 800
+      lineHeight?: number;         // e.g., 1.35
+      letterSpacing?: string;      // e.g., "-0.025em"
     };
     description: {
       show: boolean;
       text: string;
       size: "sm" | "md" | "lg";
       color?: string;
+      // Custom typography overrides
+      customFontSize?: string;     // e.g., "15px"
+      lineHeight?: number;         // e.g., 1.7
     };
     alignment: "left" | "center" | "right";
     marginBottom: number;
@@ -2176,6 +2244,12 @@ export interface ProcessStepsWidgetSettings {
     descriptionSize: "sm" | "md" | "lg";
     descriptionColor?: string;
     alignment: "left" | "center" | "right";
+    // Custom typography overrides
+    customTitleFontSize?: string;     // e.g., "17px"
+    titleFontWeight?: number;         // e.g., 700
+    titleLetterSpacing?: string;      // e.g., "-0.01em"
+    customDescFontSize?: string;      // e.g., "13px"
+    descLineHeight?: number;          // e.g., 1.65
   };
 
   // Connector Line
@@ -2393,6 +2467,17 @@ export interface PricingCardStyleConfig {
   priceSize: "sm" | "md" | "lg" | "xl";
   featureListStyle: "compact" | "spacious";
   ctaStyle: "full-width" | "auto";
+  cardVariant?: "default" | "forge";      // Card design variant
+}
+
+/** Per-card display overrides for forge card variant */
+export interface ForgeCardOverride {
+  packageIndex: number;
+  tierLabel: string;
+  tagline: string;
+  savingsText?: string;
+  buttonVariant: "outline-dark" | "forest" | "coral";
+  priceNote?: string;
 }
 
 /**
@@ -2415,6 +2500,11 @@ export interface PricingTableWidgetSettings {
       bgColor?: string;
       textColor?: string;
       borderColor?: string;
+      // Custom typography overrides
+      customFontSize?: string;
+      fontWeight?: number;
+      letterSpacing?: string;
+      textTransform?: string;
     };
     heading: {
       text: string;
@@ -2422,12 +2512,20 @@ export interface PricingTableWidgetSettings {
       highlightColor?: string;
       size: "sm" | "md" | "lg" | "xl" | "2xl";
       color?: string;
+      // Custom typography overrides
+      customFontSize?: string;
+      fontWeight?: number;
+      lineHeight?: number;
+      letterSpacing?: string;
     };
     description: {
       show: boolean;
       text: string;
       size: "sm" | "md" | "lg";
       color?: string;
+      // Custom typography overrides
+      customFontSize?: string;
+      lineHeight?: number;
     };
     alignment: "left" | "center" | "right";
     marginBottom: number;
@@ -2524,6 +2622,12 @@ export interface PricingTableWidgetSettings {
 
   // Container Style
   container?: WidgetContainerStyle;
+
+  // Forge card overrides (per-card display customization for forge variant)
+  forgeCardOverrides?: ForgeCardOverride[];
+
+  // Table design variant
+  tableVariant?: "default" | "forge";
 }
 
 // ============================================
@@ -2837,11 +2941,19 @@ export interface BlogSectionHeader {
     color?: string;
     highlightWords?: string;
     highlightColor?: string;
+    // Custom typography overrides
+    customFontSize?: string;
+    fontWeight?: number;
+    lineHeight?: number;
+    letterSpacing?: string;
   };
   subheading?: {
     show: boolean;
     text: string;
     color?: string;
+    // Custom typography overrides
+    customFontSize?: string;
+    lineHeight?: number;
   };
   viewAllLink: {
     show: boolean;
@@ -3180,6 +3292,9 @@ export interface TickerMarqueeWidgetSettings {
   textColor: string;
   boldColor: string;
   separatorColor: string;
+  // Custom typography overrides
+  customFontSize?: string;     // e.g., "13px" - overrides hardcoded text-[13px]
+  fontWeight?: number;         // e.g., 600
 
   // Theme color binding
   colors?: {

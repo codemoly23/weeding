@@ -1365,6 +1365,7 @@ export const DEFAULT_PRICING_TABLE_SETTINGS: PricingTableWidgetSettings = {
     priceSize: "lg",
     featureListStyle: "compact",
     ctaStyle: "full-width",
+    cardVariant: "default",
   },
 
   // Header Section

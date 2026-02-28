@@ -81,6 +81,7 @@ export type ThemeWidgetPresets = Record<string, Record<string, unknown>>;
 export interface ThemeServicePackage {
   name: string;
   price: number;
+  compareAtPrice?: number | null;
   description: string;
   processingTime?: string;
   processingIcon?: string;
@@ -94,6 +95,8 @@ export interface ThemeServicePackage {
 export interface ThemeComparisonFeature {
   text: string;
   tooltip?: string;
+  description?: string;
+  sortOrder?: number;
   packages: Record<
     string,
     {
@@ -131,6 +134,8 @@ export interface ThemeService {
   comparisonFeatures?: ThemeComparisonFeature[];
   faqs: ThemeServiceFAQ[];
   displayOptions?: Record<string, unknown>;
+  hasLocationBasedPricing?: boolean;
+  locationFeeLabel?: string | null;
 }
 
 export interface ThemeServiceCategory {
@@ -301,6 +306,17 @@ export interface ThemeFormTemplate {
   version: number;
 }
 
+// ---- Locations ----
+
+export interface ThemeLocation {
+  code: string;
+  name: string;
+  country: string;
+  type: string;
+  isPopular?: boolean;
+  sortOrder?: number;
+}
+
 // ---- Location Pricing ----
 
 export interface ThemeLocationFee {
@@ -366,6 +382,7 @@ export interface ThemeData {
   footerConfig: ThemeFooterConfig;
   footerWidgets: ThemeFooterWidget[];
   formTemplates?: ThemeFormTemplate[];
+  locations?: ThemeLocation[];
   locationFees?: ThemeLocationFee[];
   tickers?: ThemeTicker[];
 }

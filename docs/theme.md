@@ -384,6 +384,192 @@ Section settings panel e (**Advanced** tab er moddhe):
 
 ---
 
+## Custom Typography System (Per-Widget Font Control)
+
+### Problem
+
+Widgets use Tailwind size tokens (sm/md/lg/xl/2xl) that map to fixed breakpoint classes like `text-4xl md:text-5xl`. This doesn't support fluid typography (`clamp()`) and limits theme control — the same "xl" token maps to identical sizes everywhere, but a hero heading (76px) and a section heading (46px) need different values.
+
+### Solution
+
+Every widget supports optional custom typography fields in its settings JSON. When present, these fields apply as inline styles and override the default Tailwind token classes. When absent, the widget falls back to its original Tailwind behavior.
+
+### How It Works
+
+**Conditional class + inline style pattern:**
+```tsx
+<h2
+  className={cn(
+    !heading.fontWeight && "font-bold",        // Tailwind default only if no custom weight
+    !heading.letterSpacing && "tracking-tight", // Tailwind default only if no custom spacing
+    !heading.customFontSize && headingSizeClasses[heading.size] // Token class only if no custom size
+  )}
+  style={{
+    color: heading.color || "#0f172a",
+    ...(heading.customFontSize ? { fontSize: heading.customFontSize } : {}),
+    ...(heading.fontWeight ? { fontWeight: heading.fontWeight } : {}),
+    ...(heading.lineHeight ? { lineHeight: heading.lineHeight } : {}),
+    ...(heading.letterSpacing ? { letterSpacing: heading.letterSpacing } : {}),
+  }}
+>
+```
+
+When `customFontSize` is set (e.g., `"clamp(30px, 4vw, 46px)"`), the Tailwind size class is removed and the inline style takes over. When not set, the original token-based class applies.
+
+### Supported Fields by Widget
+
+#### SectionHeader widgets (service-card, service-list, pricing-table, process-steps)
+
+All four SectionHeader widgets support the same pattern for badge, heading, and description:
+
+```json
+{
+  "header": {
+    "badge": {
+      "text": "Our Services",
+      "customFontSize": "12px",
+      "fontWeight": 700,
+      "letterSpacing": "1.5px",
+      "textTransform": "uppercase"
+    },
+    "heading": {
+      "text": "Services We Offer",
+      "size": "lg",
+      "customFontSize": "clamp(30px, 4vw, 46px)",
+      "fontWeight": 800,
+      "lineHeight": 1.1,
+      "letterSpacing": "-0.025em"
+    },
+    "description": {
+      "text": "We handle everything...",
+      "size": "md",
+      "customFontSize": "15px",
+      "lineHeight": 1.7
+    }
+  }
+}
+```
+
+**Fields:**
+| Field | Applies to | Type | Example |
+|-------|-----------|------|---------|
+| `customFontSize` | badge, heading, description | string (CSS value) | `"clamp(30px, 4vw, 46px)"`, `"15px"` |
+| `fontWeight` | badge, heading | number | `800` |
+| `lineHeight` | heading, description | number | `1.35` |
+| `letterSpacing` | badge, heading | string (CSS value) | `"-0.025em"`, `"1.5px"` |
+| `textTransform` | badge | string | `"uppercase"` |
+
+#### service-card (card content)
+
+```json
+{
+  "content": {
+    "customTitleFontSize": "18px",
+    "titleFontWeight": 700,
+    "titleLetterSpacing": "-0.01em",
+    "customDescFontSize": "13px",
+    "descLineHeight": 1.65
+  }
+}
+```
+
+#### process-steps (step content)
+
+```json
+{
+  "stepContent": {
+    "customTitleFontSize": "17px",
+    "titleFontWeight": 700,
+    "customDescFontSize": "13px",
+    "descLineHeight": 1.65
+  }
+}
+```
+
+#### hero-content (headline)
+
+```json
+{
+  "headline": {
+    "customFontSize": "clamp(44px, 6vw, 76px)",
+    "fontWeight": 900,
+    "lineHeight": 1,
+    "letterSpacing": "-0.04em"
+  }
+}
+```
+
+#### stats-section (stat values and labels)
+
+```json
+{
+  "style": {
+    "customValueFontSize": "48px",
+    "valueFontWeight": 900,
+    "valueLetterSpacing": "-0.04em",
+    "valueLineHeight": 1,
+    "customLabelFontSize": "13px",
+    "labelFontWeight": 500,
+    "labelLetterSpacing": "0.3px"
+  }
+}
+```
+
+#### testimonials (header)
+
+Same pattern as SectionHeader widgets — `header.badge`, `header.heading`, `header.description` all support `customFontSize`, `fontWeight`, `lineHeight`, `letterSpacing`.
+
+#### blog-section-header
+
+```json
+{
+  "heading": {
+    "customFontSize": "clamp(24px, 3vw, 36px)",
+    "fontWeight": 800,
+    "lineHeight": 1.2,
+    "letterSpacing": "-0.02em"
+  },
+  "subheading": {
+    "customFontSize": "15px",
+    "lineHeight": 1.6
+  }
+}
+```
+
+#### ticker-marquee
+
+```json
+{
+  "customFontSize": "14px",
+  "fontWeight": 600
+}
+```
+
+### How to Use in Theme data.json
+
+1. Open `public/themes/<theme-name>/data.json`
+2. Find the widget settings for the section you want to customize
+3. Add the custom typography fields alongside existing settings
+4. Values are CSS strings — you can use `px`, `em`, `rem`, `clamp()`, `calc()`, etc.
+5. Activate the theme — the importer preserves all fields via spread operator
+
+### Backward Compatibility
+
+- All custom typography fields are **optional** (`?` in TypeScript)
+- If a field is missing or undefined, the widget uses its original Tailwind token behavior
+- Existing themes without custom typography continue to work identically
+- No database migration required — fields are stored in JSON settings
+
+### Best Practices for Theme Developers
+
+1. **Use `clamp()` for headings** to get fluid responsive sizing: `"clamp(30px, 4vw, 46px)"`
+2. **Use fixed `px` for small text** (badges, descriptions, labels): `"13px"`
+3. **Always set `lineHeight`** when changing `customFontSize` — default Tailwind line-heights may not match
+4. **Use negative `letterSpacing`** for large headings (tighter tracking): `"-0.025em"`
+5. **Use positive `letterSpacing`** for small uppercase text (badges): `"1.5px"`
+6. **Keep the `size` token** even when using `customFontSize` — it serves as fallback if the custom field is removed
+7. **Reference the HTML template** (e.g., `docs/home/1_home/v3-forge.html`) to extract exact values
+
 ## Key Technical Points
 
 1. **Widget rendering:** `src/components/page-builder/widgets/content/hero-content.tsx`

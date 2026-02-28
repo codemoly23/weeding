@@ -101,6 +101,22 @@ function getBadgeStyles(style: BadgeStyle, colors: { bgColor?: string; textColor
   }
 }
 
+// Get custom card typography inline styles from content settings
+function getCardTitleStyle(content: ServiceCardWidgetSettings["content"]): React.CSSProperties {
+  return {
+    ...(content.customTitleFontSize ? { fontSize: content.customTitleFontSize } : {}),
+    ...(content.titleFontWeight ? { fontWeight: content.titleFontWeight } : {}),
+    ...(content.titleLetterSpacing ? { letterSpacing: content.titleLetterSpacing } : {}),
+  };
+}
+
+function getCardDescStyle(content: ServiceCardWidgetSettings["content"]): React.CSSProperties {
+  return {
+    ...(content.customDescFontSize ? { fontSize: content.customDescFontSize } : {}),
+    ...(content.descLineHeight ? { lineHeight: content.descLineHeight } : {}),
+  };
+}
+
 // Render text with highlighted words
 function renderHighlightedText(
   text: string,
@@ -187,7 +203,16 @@ function SectionHeader({ settings }: { settings: ServiceCardWidgetSettings }) {
     >
       {/* Badge */}
       {badge.show && (
-        <span className={badgeStyles.className} style={badgeStyles.style}>
+        <span
+          className={badgeStyles.className}
+          style={{
+            ...badgeStyles.style,
+            ...(badge.customFontSize ? { fontSize: badge.customFontSize } : {}),
+            ...(badge.fontWeight ? { fontWeight: badge.fontWeight } : {}),
+            ...(badge.letterSpacing ? { letterSpacing: badge.letterSpacing } : {}),
+            ...(badge.textTransform ? { textTransform: badge.textTransform as React.CSSProperties["textTransform"] } : {}),
+          }}
+        >
           {badge.text}
         </span>
       )}
@@ -195,10 +220,17 @@ function SectionHeader({ settings }: { settings: ServiceCardWidgetSettings }) {
       {/* Heading */}
       <h2
         className={cn(
-          "font-bold tracking-tight",
-          headingSizeClasses[heading.size]
+          !heading.fontWeight && "font-bold",
+          !heading.letterSpacing && "tracking-tight",
+          !heading.customFontSize && headingSizeClasses[heading.size]
         )}
-        style={{ color: heading.color || "#ffffff" }}
+        style={{
+          color: heading.color || "#ffffff",
+          ...(heading.customFontSize ? { fontSize: heading.customFontSize } : {}),
+          ...(heading.fontWeight ? { fontWeight: heading.fontWeight } : {}),
+          ...(heading.lineHeight ? { lineHeight: heading.lineHeight } : {}),
+          ...(heading.letterSpacing ? { letterSpacing: heading.letterSpacing } : {}),
+        }}
       >
         {renderHighlightedText(
           heading.text,
@@ -212,9 +244,13 @@ function SectionHeader({ settings }: { settings: ServiceCardWidgetSettings }) {
         <p
           className={cn(
             "max-w-3xl",
-            descriptionSizeClasses[description.size]
+            !description.customFontSize && descriptionSizeClasses[description.size]
           )}
-          style={{ color: description.color || "#94a3b8" }}
+          style={{
+            color: description.color || "#94a3b8",
+            ...(description.customFontSize ? { fontSize: description.customFontSize } : {}),
+            ...(description.lineHeight ? { lineHeight: description.lineHeight } : {}),
+          }}
         >
           {description.text}
         </p>
@@ -476,20 +512,43 @@ function MinimalCard({
       {isInline ? (
         <div className="flex items-center gap-3">
           {renderIcon()}
-          <h3 className="font-semibold text-foreground">{service.name}</h3>
+          <h3
+            className="font-semibold text-foreground"
+            style={{
+              ...(settings.content.customTitleFontSize ? { fontSize: settings.content.customTitleFontSize } : {}),
+              ...(settings.content.titleFontWeight ? { fontWeight: settings.content.titleFontWeight } : {}),
+              ...(settings.content.titleLetterSpacing ? { letterSpacing: settings.content.titleLetterSpacing } : {}),
+            }}
+          >
+            {service.name}
+          </h3>
         </div>
       ) : (
-        <h3 className="font-semibold text-foreground">{service.name}</h3>
+        <h3
+          className="font-semibold text-foreground"
+          style={{
+            ...(settings.content.customTitleFontSize ? { fontSize: settings.content.customTitleFontSize } : {}),
+            ...(settings.content.titleFontWeight ? { fontWeight: settings.content.titleFontWeight } : {}),
+            ...(settings.content.titleLetterSpacing ? { letterSpacing: settings.content.titleLetterSpacing } : {}),
+          }}
+        >
+          {service.name}
+        </h3>
       )}
 
       {settings.content.showDescription && (
         <p
           className={cn(
-            "text-sm text-muted-foreground",
+            !settings.content.customDescFontSize && "text-sm",
+            "text-muted-foreground",
             settings.content.descriptionLines === 1 && "line-clamp-1",
             settings.content.descriptionLines === 2 && "line-clamp-2",
             settings.content.descriptionLines === 3 && "line-clamp-3"
           )}
+          style={{
+            ...(settings.content.customDescFontSize ? { fontSize: settings.content.customDescFontSize } : {}),
+            ...(settings.content.descLineHeight ? { lineHeight: settings.content.descLineHeight } : {}),
+          }}
         >
           {service.shortDesc}
         </p>
@@ -588,24 +647,26 @@ function ElevatedCard({
             <h3 className={cn(
               "text-lg font-semibold text-foreground",
               !settings.icon.show && hasBadge && "mt-4"
-            )}>{service.name}</h3>
+            )} style={getCardTitleStyle(settings.content)}>{service.name}</h3>
           </div>
         ) : (
           <h3 className={cn(
             "text-lg font-semibold text-foreground",
             !settings.icon.show && hasBadge && "mt-4"
-          )}>{service.name}</h3>
+          )} style={getCardTitleStyle(settings.content)}>{service.name}</h3>
         )}
       </div>
       <div className={cn("px-6 pb-6 space-y-4", isCentered && "text-center")}>
         {settings.content.showDescription && (
           <p
             className={cn(
-              "text-sm text-muted-foreground",
+              !settings.content.customDescFontSize && "text-sm",
+              "text-muted-foreground",
               settings.content.descriptionLines === 1 && "line-clamp-1",
               settings.content.descriptionLines === 2 && "line-clamp-2",
               settings.content.descriptionLines === 3 && "line-clamp-3"
             )}
+            style={getCardDescStyle(settings.content)}
           >
             {service.shortDesc}
           </p>
@@ -712,13 +773,13 @@ function GlassmorphismCard({
             <h3 className={cn(
               "text-lg font-semibold text-white",
               !settings.icon.show && hasBadge && "mt-4"
-            )}>{service.name}</h3>
+            )} style={getCardTitleStyle(settings.content)}>{service.name}</h3>
           </div>
         ) : (
           <h3 className={cn(
             "text-lg font-semibold text-white",
             !settings.icon.show && hasBadge && "mt-4"
-          )}>{service.name}</h3>
+          )} style={getCardTitleStyle(settings.content)}>{service.name}</h3>
         )}
         {settings.content.showCategory && service.category && (
           <span className="text-xs text-white/60">{service.category.name}</span>
@@ -728,11 +789,13 @@ function GlassmorphismCard({
         {settings.content.showDescription && (
           <p
             className={cn(
-              "text-sm text-white/70",
+              !settings.content.customDescFontSize && "text-sm",
+              "text-white/70",
               settings.content.descriptionLines === 1 && "line-clamp-1",
               settings.content.descriptionLines === 2 && "line-clamp-2",
               settings.content.descriptionLines === 3 && "line-clamp-3"
             )}
+            style={getCardDescStyle(settings.content)}
           >
             {service.shortDesc}
           </p>
@@ -843,24 +906,26 @@ function GradientBorderCard({
               <h3 className={cn(
                 "text-lg font-semibold text-foreground",
                 !settings.icon.show && hasBadge && "mt-4"
-              )}>{service.name}</h3>
+              )} style={getCardTitleStyle(settings.content)}>{service.name}</h3>
             </div>
           ) : (
             <h3 className={cn(
               "text-lg font-semibold text-foreground",
               !settings.icon.show && hasBadge && "mt-4"
-            )}>{service.name}</h3>
+            )} style={getCardTitleStyle(settings.content)}>{service.name}</h3>
           )}
         </div>
         <div className={cn("px-6 pb-6 space-y-4", isCentered && "text-center")}>
           {settings.content.showDescription && (
             <p
               className={cn(
-                "text-sm text-muted-foreground",
+                !settings.content.customDescFontSize && "text-sm",
+                "text-muted-foreground",
                 settings.content.descriptionLines === 1 && "line-clamp-1",
                 settings.content.descriptionLines === 2 && "line-clamp-2",
                 settings.content.descriptionLines === 3 && "line-clamp-3"
               )}
+              style={getCardDescStyle(settings.content)}
             >
               {service.shortDesc}
             </p>
@@ -969,24 +1034,26 @@ function SpotlightCard({
             <h3 className={cn(
               "text-lg font-semibold text-foreground",
               !settings.icon.show && hasBadge && "mt-4"
-            )}>{service.name}</h3>
+            )} style={getCardTitleStyle(settings.content)}>{service.name}</h3>
           </div>
         ) : (
           <h3 className={cn(
             "text-lg font-semibold text-foreground",
             !settings.icon.show && hasBadge && "mt-4"
-          )}>{service.name}</h3>
+          )} style={getCardTitleStyle(settings.content)}>{service.name}</h3>
         )}
       </div>
       <div className={cn("relative z-10 px-6 pb-6 space-y-4", isCentered && "text-center")}>
         {settings.content.showDescription && (
           <p
             className={cn(
-              "text-sm text-muted-foreground",
+              !settings.content.customDescFontSize && "text-sm",
+              "text-muted-foreground",
               settings.content.descriptionLines === 1 && "line-clamp-1",
               settings.content.descriptionLines === 2 && "line-clamp-2",
               settings.content.descriptionLines === 3 && "line-clamp-3"
             )}
+            style={getCardDescStyle(settings.content)}
           >
             {service.shortDesc}
           </p>
@@ -1122,6 +1189,7 @@ function NeonGlowCard({
                 color: glowColor,
                 // @ts-ignore
                 "--glow-color": glowColor,
+                ...getCardTitleStyle(settings.content),
               } as React.CSSProperties}
             >
               {service.name}
@@ -1137,6 +1205,7 @@ function NeonGlowCard({
               color: glowColor,
               // @ts-ignore
               "--glow-color": glowColor,
+              ...getCardTitleStyle(settings.content),
             } as React.CSSProperties}
           >
             {service.name}
@@ -1147,11 +1216,13 @@ function NeonGlowCard({
         {settings.content.showDescription && (
           <p
             className={cn(
-              "text-sm text-muted-foreground",
+              !settings.content.customDescFontSize && "text-sm",
+              "text-muted-foreground",
               settings.content.descriptionLines === 1 && "line-clamp-1",
               settings.content.descriptionLines === 2 && "line-clamp-2",
               settings.content.descriptionLines === 3 && "line-clamp-3"
             )}
+            style={getCardDescStyle(settings.content)}
           >
             {service.shortDesc}
           </p>
@@ -1252,8 +1323,10 @@ function ForgeCard({
         className="text-lg font-bold mb-2"
         style={{
           fontFamily: "var(--font-heading)",
-          color: "#0e1109",
-          letterSpacing: "-0.01em",
+          color: settings.colors?.titleColor || "#0e1109",
+          letterSpacing: settings.content.titleLetterSpacing || "-0.01em",
+          ...(settings.content.customTitleFontSize ? { fontSize: settings.content.customTitleFontSize } : {}),
+          ...(settings.content.titleFontWeight ? { fontWeight: settings.content.titleFontWeight } : {}),
         }}
       >
         {service.name}
@@ -1268,7 +1341,11 @@ function ForgeCard({
             settings.content.descriptionLines === 2 && "line-clamp-2",
             settings.content.descriptionLines === 3 && "line-clamp-3"
           )}
-          style={{ color: "#4b5249", lineHeight: 1.65 }}
+          style={{
+            color: settings.colors?.descriptionColor || "#4b5249",
+            lineHeight: settings.content.descLineHeight || 1.65,
+            ...(settings.content.customDescFontSize ? { fontSize: settings.content.customDescFontSize } : {}),
+          }}
         >
           {service.shortDesc}
         </p>

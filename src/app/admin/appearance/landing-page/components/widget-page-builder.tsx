@@ -257,6 +257,7 @@ export function WidgetPageBuilder({
 
     const borderRadius = settings.borderRadius ? `${settings.borderRadius}px` : undefined;
     const patternOverlay = background.patternOverlay;
+    const customCSSClass = settings.customCSS ? `section-custom-${section.id}` : undefined;
 
     // Visibility: hide in preview mode if section is not visible
     if (settings.isVisible === false && isPreviewMode) {
@@ -321,7 +322,9 @@ export function WidgetPageBuilder({
           const sectionContentDiv = (
             <div
               className={cn(
-                "relative w-full transition-all duration-200 overflow-hidden",
+                "relative w-full transition-all duration-200",
+                !settings.customCSS && "overflow-hidden",
+                customCSSClass,
                 isSelected && !isPreviewMode && !hasGradientBorder && "ring-2 ring-orange-500 ring-offset-2 ring-offset-slate-900"
               )}
               style={{
@@ -332,6 +335,7 @@ export function WidgetPageBuilder({
                 paddingRight: `${settings.paddingRight ?? 0}px`,
                 minHeight: settings.minHeight ? `${settings.minHeight}px` : undefined,
                 borderRadius: innerBorderRadius ? `${innerBorderRadius}px` : undefined,
+                isolation: settings.customCSS ? "isolate" as const : undefined,
               }}
               onClick={(e) => {
                 e.stopPropagation();
@@ -343,6 +347,11 @@ export function WidgetPageBuilder({
                 }
               }}
             >
+              {/* Custom CSS */}
+              {settings.customCSS && (
+                <style dangerouslySetInnerHTML={{ __html: `.section-custom-${section.id} { ${settings.customCSS} }` }} />
+              )}
+
               {/* Video Background */}
               {background.type === "video" && background.video?.url && (
                 <video

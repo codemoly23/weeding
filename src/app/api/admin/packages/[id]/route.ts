@@ -7,6 +7,7 @@ const updatePackageSchema = z.object({
   description: z.string().optional().nullable(),
   priceUSD: z.number().min(0).optional(),
   priceBDT: z.number().optional().nullable(),
+  compareAtPriceUSD: z.number().optional().nullable(),
   isPopular: z.boolean().optional(),
   isActive: z.boolean().optional(),
   sortOrder: z.number().optional(),

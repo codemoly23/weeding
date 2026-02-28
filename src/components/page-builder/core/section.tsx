@@ -103,6 +103,8 @@ export function Section({
   const patternOverlay = bg?.patternOverlay;
   const borderRadius = settings.borderRadius ? `${settings.borderRadius}px` : undefined;
 
+  const customCSSClass = settings.customCSS ? `section-custom-${section.id}` : undefined;
+
   return (
     <div
       className={cn(
@@ -110,6 +112,7 @@ export function Section({
         !isPreview && "group/section",
         isSelected && !isPreview && "ring-2 ring-orange-500 ring-offset-2 ring-offset-slate-900",
         settings.isVisible === false && !isPreview && "opacity-40",
+        customCSSClass,
       )}
       style={{
         ...(settings.fullWidth ? backgroundStyles : {}),
@@ -121,6 +124,7 @@ export function Section({
         marginBottom: `${settings.marginBottom ?? 0}px`,
         minHeight: settings.minHeight ? `${settings.minHeight}px` : undefined,
         borderRadius,
+        isolation: settings.customCSS ? "isolate" : undefined,
       }}
       onClick={(e) => {
         e.stopPropagation();
@@ -129,6 +133,10 @@ export function Section({
         }
       }}
     >
+      {/* Custom CSS (scoped to this section) */}
+      {settings.customCSS && (
+        <style dangerouslySetInnerHTML={{ __html: `.section-custom-${section.id} { ${settings.customCSS} }` }} />
+      )}
       {/* Video Background */}
       {bg?.type === "video" && bg.video?.url && (
         <video

@@ -216,10 +216,18 @@ export function BlogSectionHeader({ settings }: BlogSectionHeaderProps) {
           <div className="flex flex-col gap-1">
             <h2
               className={cn(
-                "font-bold tracking-tight text-slate-900 dark:text-white",
-                headingSizeClasses[heading.size]
+                !heading.fontWeight && "font-bold",
+                !heading.letterSpacing && "tracking-tight",
+                "text-slate-900 dark:text-white",
+                !heading.customFontSize && headingSizeClasses[heading.size]
               )}
-              style={{ color: heading.color || undefined }}
+              style={{
+                color: heading.color || undefined,
+                ...(heading.customFontSize ? { fontSize: heading.customFontSize } : {}),
+                ...(heading.fontWeight ? { fontWeight: heading.fontWeight } : {}),
+                ...(heading.lineHeight ? { lineHeight: heading.lineHeight } : {}),
+                ...(heading.letterSpacing ? { letterSpacing: heading.letterSpacing } : {}),
+              }}
             >
               {renderHighlightedText(
                 heading.text,
@@ -230,8 +238,15 @@ export function BlogSectionHeader({ settings }: BlogSectionHeaderProps) {
 
             {subheading?.show && subheading.text && (
               <p
-                className="max-w-2xl text-base text-slate-600 dark:text-slate-400"
-                style={{ color: subheading.color || undefined }}
+                className={cn(
+                  "max-w-2xl text-slate-600 dark:text-slate-400",
+                  !subheading.customFontSize && "text-base"
+                )}
+                style={{
+                  color: subheading.color || undefined,
+                  ...(subheading.customFontSize ? { fontSize: subheading.customFontSize } : {}),
+                  ...(subheading.lineHeight ? { lineHeight: subheading.lineHeight } : {}),
+                }}
               >
                 {subheading.text}
               </p>
@@ -266,10 +281,18 @@ export function BlogSectionHeader({ settings }: BlogSectionHeaderProps) {
       {/* Heading */}
       <h2
         className={cn(
-          "font-bold tracking-tight text-slate-900 dark:text-white",
-          headingSizeClasses[heading.size]
+          !heading.fontWeight && "font-bold",
+          !heading.letterSpacing && "tracking-tight",
+          "text-slate-900 dark:text-white",
+          !heading.customFontSize && headingSizeClasses[heading.size]
         )}
-        style={{ color: heading.color || undefined }}
+        style={{
+          color: heading.color || undefined,
+          ...(heading.customFontSize ? { fontSize: heading.customFontSize } : {}),
+          ...(heading.fontWeight ? { fontWeight: heading.fontWeight } : {}),
+          ...(heading.lineHeight ? { lineHeight: heading.lineHeight } : {}),
+          ...(heading.letterSpacing ? { letterSpacing: heading.letterSpacing } : {}),
+        }}
       >
         {renderHighlightedText(
           heading.text,
@@ -282,10 +305,15 @@ export function BlogSectionHeader({ settings }: BlogSectionHeaderProps) {
       {subheading?.show && subheading.text && (
         <p
           className={cn(
-            "max-w-3xl text-base text-slate-600 dark:text-slate-400",
+            "max-w-3xl text-slate-600 dark:text-slate-400",
+            !subheading.customFontSize && "text-base",
             alignment === "center" && "mx-auto"
           )}
-          style={{ color: subheading.color || undefined }}
+          style={{
+            color: subheading.color || undefined,
+            ...(subheading.customFontSize ? { fontSize: subheading.customFontSize } : {}),
+            ...(subheading.lineHeight ? { lineHeight: subheading.lineHeight } : {}),
+          }}
         >
           {subheading.text}
         </p>

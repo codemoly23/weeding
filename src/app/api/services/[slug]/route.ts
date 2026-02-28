@@ -110,6 +110,7 @@ export async function GET(
         processingIcon: p.processingIcon,
         badgeText: p.badgeText,
         badgeColor: p.badgeColor,
+        compareAtPrice: p.compareAtPriceUSD ? Number(p.compareAtPriceUSD) : null,
         // Legacy features
         features: p.features.map((f) => f.text),
         notIncluded: p.notIncluded.map((n) => n.text),
