@@ -1692,7 +1692,8 @@ export type ServiceCardStyle =
   | "glassmorphism"
   | "gradient-border"
   | "spotlight"
-  | "neon-glow";
+  | "neon-glow"
+  | "forge";
 
 export type ServiceCardHoverEffect =
   | "none"
@@ -1830,6 +1831,17 @@ export interface ServiceCardWidgetSettings {
     mobile: {
       columns: 1 | 2;
     };
+  };
+
+  // Header Layout
+  headerLayout?: "default" | "split";
+
+  // Forge-specific settings
+  forge?: {
+    gridSpans: number[];
+    defaultColor: string;
+    accentBarHeight: number;
+    cardPadding: string;
   };
 
   // Container Style

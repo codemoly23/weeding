@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import * as LucideIcons from "lucide-react";
 import { ArrowRight, Briefcase } from "lucide-react";
@@ -27,12 +27,15 @@ interface ServiceData {
   startingPrice: string | number;
   processingTime: string | null;
   isPopular: boolean;
+  badgeText?: string | null;
+  badgeColor?: string | null;
   isActive: boolean;
   sortOrder: number;
   category: {
     id: string;
     name: string;
     slug: string;
+    color: string | null;
   } | null;
   features?: {
     id: string;
@@ -104,8 +107,19 @@ function renderHighlightedText(
   highlightWords?: string,
   highlightColor?: string
 ) {
+  // Handle line breaks (\n → <br>)
+  const renderWithLineBreaks = (str: string, keyPrefix = "") => {
+    if (!str.includes("\n")) return str;
+    return str.split("\n").map((line, i, arr) => (
+      <React.Fragment key={`${keyPrefix}line-${i}`}>
+        {line}
+        {i < arr.length - 1 && <br />}
+      </React.Fragment>
+    ));
+  };
+
   if (!highlightWords) {
-    return text;
+    return renderWithLineBreaks(text);
   }
 
   const regex = new RegExp(`(${highlightWords})`, "gi");
@@ -118,11 +132,11 @@ function renderHighlightedText(
           key={index}
           style={{ color: highlightColor || "#f97316" }}
         >
-          {part}
+          {renderWithLineBreaks(part, `hl-${index}-`)}
         </span>
       );
     }
-    return part;
+    return renderWithLineBreaks(part, `p-${index}-`);
   });
 }
 
@@ -201,6 +215,62 @@ function SectionHeader({ settings }: { settings: ServiceCardWidgetSettings }) {
             descriptionSizeClasses[description.size]
           )}
           style={{ color: description.color || "#94a3b8" }}
+        >
+          {description.text}
+        </p>
+      )}
+    </div>
+  );
+}
+
+// Split header for Forge variant
+function ForgeSplitHeader({ settings }: { settings: ServiceCardWidgetSettings }) {
+  const rawHeader = settings.header;
+  if (!rawHeader?.show) return null;
+
+  const badge = { ...DEFAULT_SERVICE_CARD_SETTINGS.header.badge, ...rawHeader.badge };
+  const heading = { ...DEFAULT_SERVICE_CARD_SETTINGS.header.heading, ...rawHeader.heading };
+  const description = { ...DEFAULT_SERVICE_CARD_SETTINGS.header.description, ...rawHeader.description };
+
+  return (
+    <div
+      className="flex flex-col md:flex-row md:justify-between md:items-end gap-8"
+      style={{ marginBottom: `${rawHeader.marginBottom}px` }}
+    >
+      <div className="flex flex-col gap-3">
+        {badge.show && (
+          <span
+            className="text-xs font-bold uppercase"
+            style={{
+              color: badge.textColor || "#e84c1e",
+              letterSpacing: "1.5px",
+            }}
+          >
+            {badge.text}
+          </span>
+        )}
+        <h2
+          className="font-extrabold tracking-tight"
+          style={{
+            fontFamily: "var(--font-heading)",
+            fontSize: "clamp(30px, 4vw, 46px)",
+            letterSpacing: "-0.025em",
+            lineHeight: 1.1,
+            color: heading.color || "#0e1109",
+          }}
+        >
+          {renderHighlightedText(heading.text, heading.highlightWords, heading.highlightColor)}
+        </h2>
+      </div>
+
+      {description.show && (
+        <p
+          className="text-[15px] leading-relaxed shrink-0"
+          style={{
+            color: description.color || "#4b5249",
+            maxWidth: "340px",
+            lineHeight: 1.7,
+          }}
         >
           {description.text}
         </p>
@@ -449,7 +519,7 @@ function ElevatedCard({
   const iconStyle = getIconStyleClasses(settings.icon.style);
   const iconHoverEffect = getIconHoverEffectClasses(settings.hover.iconEffect);
   const iconAnimation = getIconAnimationClasses(settings.icon.hoverAnimation);
-  const hasBadge = settings.content.showBadge && service.isPopular;
+  const hasBadge = settings.content.showBadge && (service.isPopular || !!service.badgeText);
   const isInline = settings.icon.position === "inline";
   const isCentered = settings.icon.position === "top-center";
   const priceDisplay = getPriceDisplay(settings.content.pricePosition, formatPrice(service.startingPrice, cs));
@@ -482,15 +552,17 @@ function ElevatedCard({
 
   return (
     <>
-      {/* Popular Badge */}
+      {/* Service Badge */}
       {hasBadge && (
         <Badge
           className={cn(
-            "absolute top-3 z-10 bg-accent text-accent-foreground",
+            "absolute top-3 z-10",
+            !service.badgeColor && "bg-accent text-accent-foreground",
             settings.content.badgePosition === "top-left" ? "left-4" : "right-4"
           )}
+          style={service.badgeColor ? { backgroundColor: service.badgeColor, color: "#ffffff" } : undefined}
         >
-          Popular
+          {service.badgeText || "Popular"}
         </Badge>
       )}
 
@@ -568,7 +640,7 @@ function GlassmorphismCard({
   const iconStyle = getIconStyleClasses(settings.icon.style);
   const iconHoverEffect = getIconHoverEffectClasses(settings.hover.iconEffect);
   const iconAnimation = getIconAnimationClasses(settings.icon.hoverAnimation);
-  const hasBadge = settings.content.showBadge && service.isPopular;
+  const hasBadge = settings.content.showBadge && (service.isPopular || !!service.badgeText);
   const isInline = settings.icon.position === "inline";
   const isCentered = settings.icon.position === "top-center";
   const priceDisplay = getPriceDisplay(settings.content.pricePosition, formatPrice(service.startingPrice, cs));
@@ -604,15 +676,17 @@ function GlassmorphismCard({
 
   return (
     <>
-      {/* Popular Badge */}
+      {/* Service Badge */}
       {hasBadge && (
         <Badge
           className={cn(
-            "absolute top-3 z-10 bg-white/10 text-white backdrop-blur-sm border border-white/20",
+            "absolute top-3 z-10 backdrop-blur-sm border",
+            !service.badgeColor && "bg-white/10 text-white border-white/20",
             settings.content.badgePosition === "top-left" ? "left-4" : "right-4"
           )}
+          style={service.badgeColor ? { backgroundColor: service.badgeColor, color: "#ffffff", borderColor: `${service.badgeColor}80` } : undefined}
         >
-          Popular
+          {service.badgeText || "Popular"}
         </Badge>
       )}
 
@@ -693,7 +767,7 @@ function GradientBorderCard({
   const iconStyle = getIconStyleClasses(settings.icon.style);
   const iconHoverEffect = getIconHoverEffectClasses(settings.hover.iconEffect);
   const iconAnimation = getIconAnimationClasses(settings.icon.hoverAnimation);
-  const hasBadge = settings.content.showBadge && service.isPopular;
+  const hasBadge = settings.content.showBadge && (service.isPopular || !!service.badgeText);
   const isInline = settings.icon.position === "inline";
   const isCentered = settings.icon.position === "top-center";
   const priceDisplay = getPriceDisplay(settings.content.pricePosition, formatPrice(service.startingPrice, cs));
@@ -733,15 +807,17 @@ function GradientBorderCard({
         className="relative bg-card rounded-xl h-full"
         style={{ borderRadius: `${Math.max(0, settings.borderRadius - 2)}px` }}
       >
-        {/* Popular Badge */}
+        {/* Service Badge */}
         {hasBadge && (
           <Badge
             className={cn(
-              "absolute top-3 z-10 bg-gradient-to-r from-primary to-purple-500 text-white border-0",
+              "absolute top-3 z-10 border-0",
+              !service.badgeColor && "bg-linear-to-r from-primary to-purple-500 text-white",
               settings.content.badgePosition === "top-left" ? "left-4" : "right-4"
             )}
+            style={service.badgeColor ? { backgroundColor: service.badgeColor, color: "#ffffff" } : undefined}
           >
-            Popular
+            {service.badgeText || "Popular"}
           </Badge>
         )}
 
@@ -818,7 +894,7 @@ function SpotlightCard({
   const Icon = getLucideIcon(service.icon);
   const iconSize = getIconSizeClasses(settings.icon.size);
   const iconStyle = getIconStyleClasses(settings.icon.style);
-  const hasBadge = settings.content.showBadge && service.isPopular;
+  const hasBadge = settings.content.showBadge && (service.isPopular || !!service.badgeText);
   const isInline = settings.icon.position === "inline";
   const isCentered = settings.icon.position === "top-center";
   const priceDisplay = getPriceDisplay(settings.content.pricePosition, formatPrice(service.startingPrice, cs));
@@ -857,15 +933,17 @@ function SpotlightCard({
       {/* Spotlight gradient overlay on hover */}
       <div className="absolute inset-0 bg-gradient-to-br from-white/0 via-white/0 to-white/0 opacity-0 group-hover:opacity-100 group-hover:from-white/5 group-hover:via-transparent group-hover:to-transparent transition-opacity rounded-xl pointer-events-none" />
 
-      {/* Popular Badge */}
+      {/* Service Badge */}
       {hasBadge && (
         <Badge
           className={cn(
-            "absolute top-3 z-10 bg-accent text-accent-foreground",
+            "absolute top-3 z-10",
+            !service.badgeColor && "bg-accent text-accent-foreground",
             settings.content.badgePosition === "top-left" ? "left-4" : "right-4"
           )}
+          style={service.badgeColor ? { backgroundColor: service.badgeColor, color: "#ffffff" } : undefined}
         >
-          Popular
+          {service.badgeText || "Popular"}
         </Badge>
       )}
 
@@ -942,7 +1020,7 @@ function NeonGlowCard({
   const iconSize = getIconSizeClasses(settings.icon.size);
   const iconStyle = getIconStyleClasses(settings.icon.style);
   const glowColor = settings.hover.glowColor || "#f97316";
-  const hasBadge = settings.content.showBadge && service.isPopular;
+  const hasBadge = settings.content.showBadge && (service.isPopular || !!service.badgeText);
   const isInline = settings.icon.position === "inline";
   const isCentered = settings.icon.position === "top-center";
   const priceDisplay = getPriceDisplay(settings.content.pricePosition, formatPrice(service.startingPrice, cs));
@@ -996,16 +1074,20 @@ function NeonGlowCard({
         style={{ backgroundColor: glowColor, opacity: 0.3 }}
       />
 
-      {/* Popular Badge */}
+      {/* Service Badge */}
       {hasBadge && (
         <Badge
           className={cn(
-            "absolute top-3 z-10 bg-black/50 backdrop-blur-sm border",
+            "absolute top-3 z-10 backdrop-blur-sm border",
+            !service.badgeColor && "bg-black/50",
             settings.content.badgePosition === "top-left" ? "left-4" : "right-4"
           )}
-          style={{ borderColor: glowColor, color: glowColor }}
+          style={service.badgeColor
+            ? { backgroundColor: service.badgeColor, color: "#ffffff", borderColor: `${service.badgeColor}80` }
+            : { borderColor: glowColor, color: glowColor }
+          }
         >
-          Popular
+          {service.badgeText || "Popular"}
         </Badge>
       )}
 
@@ -1096,6 +1178,146 @@ function NeonGlowCard({
   );
 }
 
+// ============================================
+// FORGE CARD VARIANT
+// ============================================
+function ForgeCard({
+  service,
+  settings,
+  cs = "$",
+}: {
+  service: ServiceData;
+  settings: ServiceCardWidgetSettings;
+  cs?: string;
+}) {
+  const Icon = getLucideIcon(service.icon);
+  const categoryColor = service.category?.color || settings.forge?.defaultColor || "#1b3a2d";
+
+  // 8% opacity hex suffix
+  const colorLight = `${categoryColor}14`;
+
+  return (
+    <div
+      className="relative h-full overflow-hidden bg-white"
+      style={{
+        borderRadius: `${settings.borderRadius}px`,
+        padding: settings.forge?.cardPadding || "32px 28px",
+        border: `${settings.borderWidth}px solid rgba(14,17,9,0.1)`,
+        transition: "all .35s cubic-bezier(.16,1,.3,1)",
+      }}
+    >
+      {/* Meta row: category tag + badge */}
+      <div className="flex items-center justify-between gap-2 mb-4.5">
+        {settings.content.showCategory && service.category && (
+          <span
+            className="text-[10px] font-bold uppercase px-2.25 py-0.75 rounded-full whitespace-nowrap"
+            style={{
+              backgroundColor: colorLight,
+              color: categoryColor,
+              letterSpacing: "1px",
+            }}
+          >
+            {service.category.name}
+          </span>
+        )}
+        {settings.content.showBadge && (service.isPopular || !!service.badgeText) && (
+          <span
+            className="text-[10px] font-bold px-2.25 py-0.75 rounded-full whitespace-nowrap"
+            style={{
+              backgroundColor: service.badgeColor || categoryColor,
+              color: "#ffffff",
+              letterSpacing: "0.3px",
+            }}
+          >
+            {service.badgeText || "Popular"}
+          </span>
+        )}
+      </div>
+
+      {/* Icon */}
+      {settings.icon.show && (
+        <div
+          className="forge-icon flex items-center justify-center w-13 h-13 rounded-[14px] mb-4.5 transition-all duration-300"
+          style={{ backgroundColor: colorLight }}
+        >
+          <Icon
+            className="h-6 w-6 transition-colors duration-300"
+            style={{ color: categoryColor }}
+          />
+        </div>
+      )}
+
+      {/* Title */}
+      <h3
+        className="text-lg font-bold mb-2"
+        style={{
+          fontFamily: "var(--font-heading)",
+          color: "#0e1109",
+          letterSpacing: "-0.01em",
+        }}
+      >
+        {service.name}
+      </h3>
+
+      {/* Description */}
+      {settings.content.showDescription && (
+        <p
+          className={cn(
+            "text-[13px] leading-relaxed mb-4",
+            settings.content.descriptionLines === 1 && "line-clamp-1",
+            settings.content.descriptionLines === 2 && "line-clamp-2",
+            settings.content.descriptionLines === 3 && "line-clamp-3"
+          )}
+          style={{ color: "#4b5249", lineHeight: 1.65 }}
+        >
+          {service.shortDesc}
+        </p>
+      )}
+
+      {/* Footer: price + learn more */}
+      {(settings.content.showPrice || settings.content.showArrow) && (
+        <div
+          className="flex items-center justify-between pt-4"
+          style={{ borderTop: "1px solid rgba(14,17,9,0.1)" }}
+        >
+          {settings.content.showPrice && (
+            <span
+              className="text-sm font-bold"
+              style={{
+                fontFamily: "var(--font-heading)",
+                color: categoryColor,
+              }}
+            >
+              {formatPrice(service.startingPrice, cs)}
+            </span>
+          )}
+          {settings.content.showArrow && (
+            <span
+              className="forge-link text-[13px] font-semibold flex items-center gap-1 transition-colors duration-200"
+              style={{ color: "#8a9086" }}
+            >
+              Learn more
+              <ArrowRight className="h-3.5 w-3.5" />
+            </span>
+          )}
+        </div>
+      )}
+
+      {/* Bottom accent bar */}
+      <div
+        className="forge-accent absolute bottom-0 left-0 right-0 origin-left transition-transform duration-350"
+        style={{
+          height: `${settings.forge?.accentBarHeight || 3}px`,
+          background: categoryColor,
+          transform: "scaleX(0)",
+          transitionTimingFunction: "ease",
+          transitionDuration: "0.35s",
+        }}
+      />
+    </div>
+  );
+}
+
 // Render card based on style
 function ServiceCard({
   service,
@@ -1122,10 +1344,13 @@ function ServiceCard({
     "gradient-border": "", // Special handling in component
     spotlight: "border bg-card relative overflow-hidden",
     "neon-glow": "border bg-card/50 backdrop-blur-sm relative",
+    forge: "", // ForgeCard handles its own styling
   };
 
   const content = (() => {
     switch (settings.cardStyle) {
+      case "forge":
+        return <ForgeCard service={service} settings={settings} cs={cs} />;
       case "minimal":
         return <MinimalCard service={service} settings={settings} cs={cs} />;
       case "glassmorphism":
@@ -1141,6 +1366,20 @@ function ServiceCard({
         return <ElevatedCard service={service} settings={settings} cs={cs} />;
     }
   })();
+
+  // Forge has its own container with CSS custom property
+  if (settings.cardStyle === "forge") {
+    const categoryColor = service.category?.color || settings.forge?.defaultColor || "#1b3a2d";
+    return (
+      <Link
+        href={`/services/${service.slug}`}
+        className="forge-card-link block h-full"
+        style={{ "--forge-color": categoryColor } as React.CSSProperties}
+      >
+        {content}
+      </Link>
+    );
+  }
 
   // Gradient border has its own container
   if (settings.cardStyle === "gradient-border") {
@@ -1198,6 +1437,11 @@ export function ServiceCardWidget({ settings: partialSettings, isPreview = false
       ...partialSettings?.responsive,
       tablet: { ...DEFAULT_SERVICE_CARD_SETTINGS.responsive.tablet, ...partialSettings?.responsive?.tablet },
       mobile: { ...DEFAULT_SERVICE_CARD_SETTINGS.responsive.mobile, ...partialSettings?.responsive?.mobile },
+    },
+    headerLayout: partialSettings?.headerLayout || DEFAULT_SERVICE_CARD_SETTINGS.headerLayout,
+    forge: {
+      ...DEFAULT_SERVICE_CARD_SETTINGS.forge!,
+      ...partialSettings?.forge,
     },
   };
 
@@ -1299,6 +1543,70 @@ export function ServiceCardWidget({ settings: partialSettings, isPreview = false
           </p>
         </div>
       </div>
+      </WidgetContainer>
+    );
+  }
+
+  // Forge variant: 12-col masonry grid with per-category colors
+  if (settings.cardStyle === "forge") {
+    const gridSpans = settings.forge?.gridSpans || [5, 3, 4, 4, 4, 4, 6, 6];
+
+    return (
+      <WidgetContainer container={settings.container}>
+        <div>
+          {/* Forge hover CSS */}
+          <style>{`
+            .forge-card-link:hover .forge-accent{transform:scaleX(1)!important}
+            .forge-card-link:hover>div{border-color:var(--forge-color)!important;box-shadow:0 16px 48px rgba(27,58,45,0.1);transform:translateY(-4px)}
+            .forge-card-link:hover .forge-icon{background-color:var(--forge-color)!important}
+            .forge-card-link:hover .forge-icon svg{color:#faf8f4!important}
+            .forge-card-link:hover .forge-link{color:var(--forge-color)!important}
+          `}</style>
+
+          {/* Header */}
+          <div data-field-id="section-header">
+            {settings.headerLayout === "split" ? (
+              <ForgeSplitHeader settings={settings} />
+            ) : (
+              <SectionHeader settings={settings} />
+            )}
+          </div>
+
+          {/* 12-column Masonry Grid */}
+          <div
+            data-field-id="cards"
+            className="forge-grid grid"
+            style={{
+              gridTemplateColumns: "repeat(12, 1fr)",
+              gap: `${settings.layout.gap}px`,
+            }}
+          >
+            {services.map((service, index) => {
+              const span = gridSpans[index % gridSpans.length] || 4;
+              return (
+                <div
+                  key={service.id}
+                  className="forge-grid-cell"
+                  style={{ gridColumn: `span ${span}` }}
+                >
+                  <ServiceCard service={service} settings={settings} cs={currencySymbol} />
+                </div>
+              );
+            })}
+          </div>
+
+          {/* Responsive overrides */}
+          <style>{`
+            @media(max-width:1024px){
+              .forge-grid{grid-template-columns:repeat(2,1fr)!important}
+              .forge-grid-cell{grid-column:span 1!important}
+            }
+            @media(max-width:640px){
+              .forge-grid{grid-template-columns:1fr!important}
+              .forge-grid-cell{grid-column:span 1!important}
+            }
+          `}</style>
+        </div>
       </WidgetContainer>
     );
   }

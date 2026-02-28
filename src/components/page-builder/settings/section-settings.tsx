@@ -886,6 +886,23 @@ export function SectionSettingsPanel({
           )}
         </div>
       </AccordionSection>
+
+      {/* Custom CSS */}
+      <AccordionSection title="Custom CSS">
+        <div className="space-y-3">
+          <textarea
+            value={s.customCSS || ""}
+            onChange={(e) => updateField("customCSS", e.target.value || undefined)}
+            placeholder={`.section-custom-ID {\n  /* your CSS here */\n}`}
+            rows={6}
+            spellCheck={false}
+            className="w-full rounded-md border border-slate-300 bg-slate-50 px-3 py-2 text-sm text-slate-800 font-mono leading-relaxed placeholder:text-slate-400 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500 resize-y"
+          />
+          <p className="text-xs text-slate-400">
+            CSS rules applied within this section only. z-index is sandboxed via <code className="text-slate-300">isolation: isolate</code>.
+          </p>
+        </div>
+      </AccordionSection>
     </div>
   );
 }

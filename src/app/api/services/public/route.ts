@@ -61,6 +61,7 @@ export async function GET(request: NextRequest) {
             id: true,
             name: true,
             slug: true,
+            color: true,
           },
         },
         features: {
@@ -83,6 +84,8 @@ export async function GET(request: NextRequest) {
       startingPrice: Number(service.startingPrice),
       processingTime: service.processingTime,
       isPopular: service.isPopular,
+      badgeText: service.badgeText,
+      badgeColor: service.badgeColor,
       isActive: service.isActive,
       sortOrder: service.sortOrder,
       category: service.category,

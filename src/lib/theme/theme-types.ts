@@ -123,6 +123,9 @@ export interface ThemeService {
   startingPrice: number;
   categorySlug: string;
   isPopular: boolean;
+  badgeText?: string | null;
+  badgeColor?: string | null;
+  sortOrder?: number;
   features: string[];
   packages: ThemeServicePackage[];
   comparisonFeatures?: ThemeComparisonFeature[];
@@ -135,6 +138,7 @@ export interface ThemeServiceCategory {
   name: string;
   description: string;
   icon: string;
+  color?: string;
   sortOrder: number;
 }
 

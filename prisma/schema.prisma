@@ -92,6 +92,7 @@ model ServiceCategory {
   slug        String    @unique
   description String?
   icon        String?
+  color       String?
   sortOrder   Int       @default(0)
   isActive    Boolean   @default(true)
   createdAt   DateTime  @default(now())
@@ -113,6 +114,8 @@ model Service {
   startingPrice           Decimal              @default(0) @db.Decimal(10, 2)
   processingTime          String?
   isPopular               Boolean              @default(false)
+  badgeText               String?
+  badgeColor              String?
   isActive                Boolean              @default(true)
   sortOrder               Int                  @default(0)
   categoryId              String?

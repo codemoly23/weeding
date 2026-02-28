@@ -1059,6 +1059,18 @@ export const DEFAULT_SERVICE_CARD_SETTINGS: ServiceCardWidgetSettings = {
     tablet: { columns: 2 },
     mobile: { columns: 1 },
   },
+
+  // Header Layout
+  headerLayout: "default",
+
+  // Forge Settings
+  forge: {
+    gridSpans: [5, 3, 4, 4, 4, 4, 6, 6],
+    defaultColor: "#1b3a2d",
+    accentBarHeight: 3,
+    cardPadding: "32px 28px",
+  },
+
   // Container Style
   container: DEFAULT_WIDGET_CONTAINER,
 };

@@ -138,6 +138,8 @@ interface ServiceData {
   startingPrice: number;
   processingTime: string;
   isPopular: boolean;
+  badgeText: string;
+  badgeColor: string;
   isActive: boolean;
   sortOrder: number;
   categoryId: string;
@@ -163,6 +165,8 @@ const defaultService: ServiceData = {
   startingPrice: 0,
   processingTime: "",
   isPopular: false,
+  badgeText: "",
+  badgeColor: "",
   isActive: true,
   sortOrder: 0,
   categoryId: "",
@@ -1091,6 +1095,41 @@ export default function ServiceEditorPage() {
                       checked={service.isPopular}
                       onCheckedChange={(v) => handleInputChange("isPopular", v)}
                     />
+                  </div>
+
+                  <div className="space-y-2">
+                    <Label htmlFor="badgeText">Badge Text</Label>
+                    <Input
+                      id="badgeText"
+                      value={service.badgeText}
+                      onChange={(e) => handleInputChange("badgeText", e.target.value)}
+                      placeholder='e.g. "Emergency", "$25K Penalty Risk"'
+                    />
+                    <p className="text-xs text-muted-foreground">
+                      Custom badge shown on service card. Leave empty to show &quot;Popular&quot; when popular is on.
+                    </p>
+                  </div>
+
+                  <div className="space-y-2">
+                    <Label htmlFor="badgeColor">Badge Color</Label>
+                    <div className="flex gap-2">
+                      <Input
+                        id="badgeColor"
+                        type="color"
+                        value={service.badgeColor || "#dc2626"}
+                        onChange={(e) => handleInputChange("badgeColor", e.target.value)}
+                        className="w-12 h-9 p-1 cursor-pointer"
+                      />
+                      <Input
+                        value={service.badgeColor}
+                        onChange={(e) => handleInputChange("badgeColor", e.target.value)}
+                        placeholder="#dc2626"
+                        className="flex-1"
+                      />
+                    </div>
+                    <p className="text-xs text-muted-foreground">
+                      Badge background color. Leave empty for default theme accent color.
+                    </p>
                   </div>
 
                   <div className="flex items-center justify-between">

@@ -118,6 +118,7 @@ export async function exportThemeData(): Promise<ThemeData> {
     name: c.name,
     description: c.description ?? "",
     icon: c.icon ?? "",
+    color: c.color ?? "",
     sortOrder: c.sortOrder,
   }));
 
@@ -210,6 +211,9 @@ export async function exportThemeData(): Promise<ThemeData> {
       startingPrice: decimalToNumber(svc.startingPrice),
       categorySlug: svc.category?.slug ?? "",
       isPopular: svc.isPopular,
+      badgeText: svc.badgeText ?? null,
+      badgeColor: svc.badgeColor ?? null,
+      sortOrder: svc.sortOrder,
       features: svc.features.map((f) => f.text),
       packages,
       comparisonFeatures:

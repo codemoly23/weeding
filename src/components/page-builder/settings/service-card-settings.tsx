@@ -494,6 +494,7 @@ export function ServiceCardWidgetSettingsPanel({
             { value: "gradient-border", label: "Gradient Border" },
             { value: "spotlight", label: "Spotlight" },
             { value: "neon-glow", label: "Neon Glow" },
+            { value: "forge", label: "Forge (Masonry)" },
           ]}
         />
 
@@ -520,8 +521,49 @@ export function ServiceCardWidgetSettingsPanel({
         )}
       </AccordionSection>
 
+      {/* Forge Settings - only when forge style is selected */}
+      {s.cardStyle === "forge" && (
+        <AccordionSection title="Forge Layout">
+          <SelectInput
+            label="Header Layout"
+            value={s.headerLayout || "default"}
+            onChange={(v) => onChange({ ...s, headerLayout: v as "default" | "split" })}
+            options={[
+              { value: "default", label: "Default (Stacked)" },
+              { value: "split", label: "Split (Left/Right)" },
+            ]}
+          />
+          <TextInput
+            label="Grid Spans"
+            value={(s.forge?.gridSpans || [5, 3, 4, 4, 4, 4, 6, 6]).join(", ")}
+            onChange={(v) => {
+              const spans = v.split(",").map((n: string) => parseInt(n.trim())).filter((n: number) => !isNaN(n) && n > 0 && n <= 12);
+              if (spans.length > 0) {
+                onChange({ ...s, forge: { ...s.forge!, gridSpans: spans } });
+              }
+            }}
+            description="Column spans in 12-col grid (comma-separated)"
+          />
+          <NumberInput
+            label="Accent Bar Height"
+            value={s.forge?.accentBarHeight || 3}
+            onChange={(v) => onChange({ ...s, forge: { ...s.forge!, accentBarHeight: v } })}
+            min={0}
+            max={8}
+            step={1}
+            unit="px"
+          />
+          <ColorInput
+            label="Default Category Color"
+            value={s.forge?.defaultColor || "#1b3a2d"}
+            onChange={(v) => onChange({ ...s, forge: { ...s.forge!, defaultColor: v } })}
+          />
+        </AccordionSection>
+      )}
+
       {/* Layout Accordion */}
       <AccordionSection title="Layout">
+        {s.cardStyle !== "forge" && (
         <SelectInput
           label="Columns (Desktop)"
           value={s.layout.columns.toString()}
@@ -533,6 +575,7 @@ export function ServiceCardWidgetSettingsPanel({
             { value: "4", label: "4 Columns" },
           ]}
         />
+        )}
 
         <NumberInput
           label="Gap"

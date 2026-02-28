@@ -221,6 +221,81 @@ v3-forge.html er baki sections aste aste add hobe:
 
 ---
 
+## Section Alignment Rules (CRITICAL)
+
+### The Rule
+
+**All homepage sections MUST have identical horizontal alignment settings** so content edges line up on the same vertical line across sections.
+
+Required settings for every new section:
+
+```json
+{
+  "settings": {
+    "paddingLeft": 28,
+    "paddingRight": 28,
+    "maxWidth": "xl",
+    "fullWidth": true
+  }
+}
+```
+
+### What NOT to do
+
+1. **NEVER add `padding-inline` or extra `padding-left`/`padding-right` in customCSS on the `.mx-auto` container.** This creates double padding — the section already applies `paddingLeft/Right: 28px`, so adding more in customCSS will push content inward and break alignment.
+
+   ```css
+   /* BAD — causes double padding */
+   & > .mx-auto { padding-inline: 28px; }
+
+   /* BAD — overrides consistent maxWidth */
+   & > .mx-auto { max-width: 1160px; }
+   ```
+
+2. **NEVER set `max-width` in customCSS on the `.mx-auto` container.** Let `maxWidth: "xl"` handle it consistently. If you override it to a different value (e.g., `1160px`), that section's content will be narrower than others.
+
+3. **NEVER add horizontal padding at the column level** (`col.settings.paddingLeft/Right`) when the section already has `paddingLeft/Right`. This also causes double padding.
+
+### How the rendering works
+
+```
+<section style="padding-left: 28px; padding-right: 28px;">     ← section-level padding
+  <div class="mx-auto max-w-screen-xl">                        ← maxWidth container
+    <div class="grid ..." style="gap: ...">                    ← layout grid
+      <column 1>
+      <column 2>
+    </div>
+  </div>
+</section>
+```
+
+- `paddingLeft/Right` applies to the outer `<section>` element
+- `maxWidth: "xl"` maps to `max-w-screen-xl` (1280px) on the inner container
+- Column padding would add INSIDE the grid — avoid it for alignment
+
+### customCSS safe usage
+
+customCSS CAN override grid columns, style inner elements, etc. — just never touch the container's horizontal padding or max-width:
+
+```css
+/* SAFE — override grid columns for asymmetric layout */
+@media (min-width: 1024px) { & .grid { grid-template-columns: 1fr 420px; } }
+
+/* SAFE — style inner widget elements */
+& h2 { font-size: clamp(28px, 4vw, 44px) !important; }
+& a.group:hover { background: rgba(232, 76, 30, 0.06); }
+```
+
+### Bug history
+
+The hero section (`section_hero_forge`) had this customCSS:
+```css
+& > .mx-auto { max-width: 1160px; padding-inline: 28px; }
+```
+This added 28px extra padding inside the container ON TOP of the 28px section-level padding, causing hero content to be ~56px to the right of stats/services content. Fix was removing the `padding-inline` and `max-width` override from customCSS.
+
+---
+
 ## Section-Level Custom CSS
 
 ### Concept

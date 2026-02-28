@@ -1,7 +1,7 @@
 "use client";
 
 import { useId } from "react";
-import DOMPurify from "dompurify";
+import DOMPurify from "isomorphic-dompurify";
 import type { CustomHtmlWidgetSettings } from "@/lib/page-builder/types";
 import { DEFAULT_CUSTOM_HTML_SETTINGS } from "@/lib/page-builder/defaults";
 import { WidgetContainer } from "@/components/page-builder/shared/widget-container";

@@ -14,6 +14,8 @@ const serviceSchema = z.object({
   startingPrice: z.number().min(0),
   processingTime: z.string().optional(),
   isPopular: z.boolean().default(false),
+  badgeText: z.string().optional().nullable(),
+  badgeColor: z.string().optional().nullable(),
   isActive: z.boolean().default(true),
   sortOrder: z.number().default(0),
   categoryId: z.string().optional(),

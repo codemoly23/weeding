@@ -59,8 +59,8 @@
     "business.address.city": "",
     "business.address.state": "",
     "business.address.zip": "",
-    "business.address.country": "GB",
-    "business.currency": "EUR",
+    "business.address.country": "US",
+    "business.currency": "USD",
     "business.social.linkedin": "",
     "business.social.instagram": "",
     "business.social.tiktok": "",
@@ -96,34 +96,38 @@
       "name": "Formation & Legal",
       "description": "Start and maintain your US business entity",
       "icon": "Building2",
-      "sortOrder": 1
+      "sortOrder": 1,
+      "color": "#e84c1e"
     },
     {
       "slug": "compliance",
       "name": "Compliance & Documents",
       "description": "Keep your business in good standing",
       "icon": "FileCheck",
-      "sortOrder": 2
+      "sortOrder": 2,
+      "color": "#1b3a2d"
     },
     {
       "slug": "amazon",
       "name": "Amazon Services",
       "description": "Sell on Amazon with confidence",
       "icon": "ShoppingCart",
-      "sortOrder": 3
+      "sortOrder": 3,
+      "color": "#0064dc"
     },
     {
       "slug": "tax-finance",
       "name": "Tax & Finance",
       "description": "Financial and tax services for your business",
       "icon": "Calculator",
-      "sortOrder": 4
+      "sortOrder": 4,
+      "color": "#7c3aed"
     }
   ],
   "services": [
     {
       "slug": "trademark-registration",
-      "name": "Trademark Registration",
+      "name": "USPTO Trademark Registration",
       "shortDesc": "Protect your brand with USPTO trademark registration. Required for Amazon Brand Registry. Stop copycats and counterfeiters.",
       "metaTitle": "USPTO Trademark Registration Service | Protect Your Brand | LLCPad",
       "metaDescription": "Register your trademark with the USPTO. Comprehensive search, application filing, office action response. Required for Amazon Brand Registry. Protect your brand from copycats.",
@@ -132,7 +136,7 @@
       "image": "/images/services/trademark.jpg",
       "startingPrice": 599,
       "categorySlug": "formation",
-      "isPopular": true,
+      "isPopular": false,
       "features": [
         "Comprehensive Search",
         "USPTO Filing (1 Class)",
@@ -234,11 +238,12 @@
           "question": "Can I use my trademark before it's registered?",
           "answer": "Yes, you can use the ™ symbol immediately and switch to ® once registered."
         }
-      ]
+      ],
+      "sortOrder": 8
     },
     {
       "slug": "amazon-seller",
-      "name": "Amazon Seller Account",
+      "name": "Amazon Seller Account Setup",
       "shortDesc": "Complete Amazon seller account setup. We handle verification, tax interviews, and account configuration. Start selling in 7 days.",
       "metaTitle": "Amazon Seller Account Setup Service | Start Selling on Amazon Today | LLCPad",
       "metaDescription": "Professional Amazon seller account setup for international sellers. Document preparation, tax interview guidance, verification support. Avoid suspension risks. Start selling faster!",
@@ -328,11 +333,12 @@
           "question": "How long does Amazon verification take?",
           "answer": "Typically 3-7 days, but can vary. We ensure your documents are correct to minimize delays."
         }
-      ]
+      ],
+      "sortOrder": 4
     },
     {
       "slug": "ein-application",
-      "name": "EIN Application",
+      "name": "EIN for Non-US Residents",
       "shortDesc": "Get your EIN (Tax ID) without an SSN. Required for US bank accounts, Amazon seller accounts & tax filing. Fast processing for international business owners.",
       "metaTitle": "EIN Application Service for Non-US Residents | Get Your Tax ID Fast | LLCPad",
       "metaDescription": "Get your EIN (Employer Identification Number) without an SSN. Required for US bank accounts, Amazon seller accounts & tax filing. Fast processing for international business owners.",
@@ -341,7 +347,7 @@
       "image": "/images/services/ein-application.jpg",
       "startingPrice": 99,
       "categorySlug": "formation",
-      "isPopular": false,
+      "isPopular": true,
       "features": [
         "SS-4 Form Preparation",
         "IRS Fax Submission",
@@ -400,7 +406,8 @@
           "question": "How long does it take to get an EIN?",
           "answer": "For international applicants without an SSN, the IRS typically processes EIN applications within 4-6 weeks."
         }
-      ]
+      ],
+      "sortOrder": 2
     },
     {
       "slug": "registered-agent",
@@ -411,7 +418,7 @@
       "description": "<p>Every US LLC is legally required to have a registered agent in their state of formation. A registered agent is an individual or company designated to receive legal documents and official state correspondence on behalf of your business.</p>\n\n<h3>Why Do You Need a Registered Agent?</h3>\n<ul>\n  <li><strong>Legal Requirement:</strong> Every state requires LLCs to maintain a registered agent with a physical address.</li>\n  <li><strong>Privacy Protection:</strong> Use our address instead of your personal address on public records.</li>\n  <li><strong>Never Miss Important Documents:</strong> We receive and forward all legal notices, tax documents, and compliance reminders.</li>\n  <li><strong>Compliance Alerts:</strong> We notify you of annual report deadlines and other compliance requirements.</li>\n</ul>",
       "icon": "MapPin",
       "image": "/images/services/registered-agent.jpg",
-      "startingPrice": 99,
+      "startingPrice": 250,
       "categorySlug": "compliance",
       "isPopular": false,
       "features": [
@@ -472,7 +479,8 @@
           "question": "Can I be my own registered agent?",
           "answer": "Yes, but you must have a physical address in the state and be available during business hours. Using a professional service provides privacy and reliability."
         }
-      ]
+      ],
+      "sortOrder": 100
     },
     {
       "slug": "brand-registry",
@@ -544,7 +552,8 @@
           "question": "How long does Brand Registry enrollment take?",
           "answer": "Typically 1-2 weeks after submitting a complete application with valid trademark information."
         }
-      ]
+      ],
+      "sortOrder": 100
     },
     {
       "slug": "itin-application",
@@ -646,11 +655,12 @@
           "question": "Do I need an ITIN if I have an EIN?",
           "answer": "They serve different purposes. EIN is for your LLC. ITIN is for you personally if you need to file US taxes or claim treaty benefits. Many foreign LLC owners need both."
         }
-      ]
+      ],
+      "sortOrder": 100
     },
     {
       "slug": "business-banking",
-      "name": "Business Bank Account",
+      "name": "US Business Bank Account",
       "shortDesc": "Open a US business bank account remotely. No US visit required. Works for international LLC owners.",
       "metaTitle": "US Business Bank Account for Non-Residents | Remote Account Opening | LLCPad",
       "metaDescription": "Open a US business bank account without visiting America. Partner banks welcome international LLC owners. Debit card, online banking, wire transfers. Start accepting US payments.",
@@ -718,7 +728,8 @@
           "question": "What documents do I need?",
           "answer": "Typically: LLC documents, EIN letter, passport, and proof of address."
         }
-      ]
+      ],
+      "sortOrder": 7
     },
     {
       "slug": "bookkeeping",
@@ -812,7 +823,8 @@
           "question": "How do you access my financial data?",
           "answer": "We connect securely to your bank accounts and accounting software through read-only integrations."
         }
-      ]
+      ],
+      "sortOrder": 100
     },
     {
       "slug": "certificate-good-standing",
@@ -910,7 +922,8 @@
           "question": "Do I need an apostille for US banks?",
           "answer": "No, apostilles are only needed for international use. US banks accept standard Certificates of Good Standing without apostille."
         }
-      ]
+      ],
+      "sortOrder": 100
     },
     {
       "slug": "amendment-filing",
@@ -1008,7 +1021,8 @@
           "question": "Will I get new formation documents after an amendment?",
           "answer": "You'll receive a Certificate of Amendment or stamped Articles of Amendment. Your original Articles of Organization remain valid, supplemented by the amendment."
         }
-      ]
+      ],
+      "sortOrder": 100
     },
     {
       "slug": "llc-dissolution",
@@ -1087,7 +1101,8 @@
           "question": "What about my EIN after dissolution?",
           "answer": "Your EIN remains permanently assigned to your LLC - it cannot be transferred or reused. You should close the business account with the IRS by sending a letter, but the EIN itself stays on record."
         }
-      ]
+      ],
+      "sortOrder": 100
     },
     {
       "slug": "operating-agreement",
@@ -1186,7 +1201,8 @@
           "question": "Can I change my Operating Agreement later?",
           "answer": "Yes, Operating Agreements can be amended. We recommend reviewing and updating your agreement when there are ownership changes, major business changes, or annually."
         }
-      ]
+      ],
+      "sortOrder": 100
     },
     {
       "slug": "tax-filing",
@@ -1284,7 +1300,8 @@
           "question": "When is my LLC tax return due?",
           "answer": "For most single-member LLCs, the deadline is April 15 (or the next business day). You can request an automatic 6-month extension, but estimated taxes may still be due by the original deadline."
         }
-      ]
+      ],
+      "sortOrder": 100
     },
     {
       "slug": "reseller-certificate",
@@ -1382,7 +1399,8 @@
           "question": "What's the difference between reseller certificate and sales tax permit?",
           "answer": "They're related but different. A sales tax permit allows you to collect sales tax from customers. A reseller certificate (issued with the permit) allows you to buy inventory tax-exempt. You typically get both when registering."
         }
-      ]
+      ],
+      "sortOrder": 100
     },
     {
       "slug": "a-plus-content",
@@ -1482,7 +1500,8 @@
           "question": "Can I use A+ Content on all my listings?",
           "answer": "You can apply A+ Content to any ASIN under your registered brand. Once created, A+ Content can be reused across multiple ASINs with modifications."
         }
-      ]
+      ],
+      "sortOrder": 100
     },
     {
       "slug": "account-reinstatement",
@@ -1496,6 +1515,8 @@
       "startingPrice": 499,
       "categorySlug": "amazon",
       "isPopular": false,
+      "badgeText": "Emergency",
+      "badgeColor": "#dc2626",
       "features": [
         "Case Analysis",
         "POA Writing",
@@ -1582,7 +1603,8 @@
           "question": "Can you guarantee reinstatement?",
           "answer": "No one can guarantee reinstatement - anyone who does is misleading you. Amazon makes the final decision. However, our professional appeals significantly improve your chances compared to self-written appeals."
         }
-      ]
+      ],
+      "sortOrder": 3
     },
     {
       "slug": "virtual-address",
@@ -1676,7 +1698,8 @@
           "question": "How does mail forwarding work?",
           "answer": "We scan your mail and notify you. You can then request forwarding to your international address."
         }
-      ]
+      ],
+      "sortOrder": 100
     },
     {
       "slug": "annual-report",
@@ -1687,7 +1710,7 @@
       "description": "<p>Most states require LLCs to file an annual report to maintain good standing. We handle the entire filing process so you never miss a deadline.</p>\n\n<h3>Why Annual Reports Matter</h3>\n<ul>\n  <li><strong>Maintain Good Standing:</strong> Required to keep your LLC active and compliant.</li>\n  <li><strong>Avoid Penalties:</strong> Late filings result in fees and potential dissolution.</li>\n  <li><strong>Update State Records:</strong> Keep your registered agent and address current.</li>\n</ul>",
       "icon": "FileCheck",
       "image": "/images/services/annual-report.jpg",
-      "startingPrice": 75,
+      "startingPrice": 60,
       "categorySlug": "compliance",
       "isPopular": false,
       "features": [
@@ -1748,7 +1771,8 @@
           "question": "What happens if I miss my annual report deadline?",
           "answer": "Late filings typically incur penalties and can lead to administrative dissolution of your LLC."
         }
-      ]
+      ],
+      "sortOrder": 100
     },
     {
       "slug": "apostille-service",
@@ -1845,7 +1869,8 @@
           "question": "Can any document be apostilled?",
           "answer": "Only official documents or notarized documents can be apostilled. Private documents (like contracts or agreements) must first be notarized before they can receive an apostille."
         }
-      ]
+      ],
+      "sortOrder": 100
     },
     {
       "slug": "llc-formation",
@@ -1856,7 +1881,7 @@
       "description": "<p>Launch your American business in 24-48 hours. We handle all the paperwork while you focus on growing your business. <strong>No US residency or SSN required</strong> - we've helped over 10,000 entrepreneurs from 50+ countries establish their US presence.</p>\n\n<h3>Why Form a US LLC?</h3>\n<p>A Limited Liability Company (LLC) is the most popular business structure for international entrepreneurs entering the US market:</p>\n<ul>\n  <li><strong>Personal Asset Protection:</strong> Your personal assets (home, savings, investments) are legally separated from business liabilities.</li>\n  <li><strong>Tax Flexibility:</strong> LLCs enjoy \"pass-through\" taxation without corporate double-taxation.</li>\n  <li><strong>Global Credibility:</strong> A US LLC instantly boosts your business credibility.</li>\n  <li><strong>No Residency Required:</strong> Unlike many countries, the US allows non-residents to own and operate LLCs.</li>\n</ul>\n\n<h3>Which State Should You Choose?</h3>\n<ul>\n  <li><strong>Wyoming (Most Popular):</strong> Zero state income tax, strongest privacy protections, lowest annual fees ($62/year).</li>\n  <li><strong>Delaware:</strong> Home to 66% of Fortune 500 companies. Best for startups seeking investment.</li>\n  <li><strong>New Mexico:</strong> No annual report requirement, strong privacy, low formation cost.</li>\n</ul>",
       "icon": "Building2",
       "image": "/images/services/llc-formation.jpg",
-      "startingPrice": 0,
+      "startingPrice": 149,
       "categorySlug": "formation",
       "isPopular": true,
       "features": [],
@@ -2074,11 +2099,12 @@
       "displayOptions": {
         "checkoutBadgeText": "One time fee",
         "checkoutBadgeDescription": "Our formation fee is a one time payment"
-      }
+      },
+      "sortOrder": 1
     },
     {
       "slug": "dba-filing",
-      "name": "DBA/Trade Name",
+      "name": "DBA / Trade Name",
       "shortDesc": "Register a DBA (Doing Business As) or trade name for your LLC. Operate under multiple brand names legally.",
       "metaTitle": "DBA Filing Service | Register Your Trade Name | LLCPad",
       "metaDescription": "Register a DBA (Doing Business As) or trade name for your LLC. Operate under multiple brand names legally. Fast filing in all 50 states.",
@@ -2153,7 +2179,8 @@
           "question": "Can I use my DBA name on Amazon?",
           "answer": "Amazon uses your legal business name for verification. However, you can display your DBA as your storefront/brand name. For full brand protection, consider trademark registration."
         }
-      ]
+      ],
+      "sortOrder": 100
     },
     {
       "slug": "ppc-campaign-setup",
@@ -2253,11 +2280,12 @@
           "question": "Do you offer ongoing PPC management?",
           "answer": "Yes, we offer monthly PPC management services for ongoing optimization. This includes bid adjustments, keyword expansion, negative keyword management, and performance reporting."
         }
-      ]
+      ],
+      "sortOrder": 100
     },
     {
       "slug": "category-ungating",
-      "name": "Amazon Category Ungating",
+      "name": "Category Ungating",
       "shortDesc": "Get approved to sell in restricted Amazon categories. Professional ungating service for Grocery, Beauty, Health, and more.",
       "metaTitle": "Amazon Category Ungating Service | Get Approved Fast | LLCPad",
       "metaDescription": "Get approved to sell in restricted Amazon categories. Professional ungating service for Grocery, Beauty, Health, Topicals, and more. 90% success rate.",
@@ -2351,7 +2379,8 @@
           "question": "What if my ungating application is rejected?",
           "answer": "We'll analyze the rejection reason and resubmit with improved documentation. Our service includes follow-up support until approval or we identify a blocking issue."
         }
-      ]
+      ],
+      "sortOrder": 100
     },
     {
       "slug": "listing-optimization",
@@ -2454,7 +2483,791 @@
           "question": "What information do you need from me?",
           "answer": "We need access to your Seller Central account (or you can implement our recommendations), information about your target audience, key product features and benefits, and any brand guidelines."
         }
-      ]
+      ],
+      "sortOrder": 100
+    },
+    {
+      "slug": "boi-filing",
+      "name": "BOI Ownership Filing",
+      "shortDesc": "File your Beneficial Ownership Information report with FinCEN. Stay compliant and avoid penalties up to $591/day for non-filing.",
+      "metaTitle": "BOI Ownership Filing | FinCEN Beneficial Ownership Report | LLCPad",
+      "metaDescription": "File your Beneficial Ownership Information (BOI) report with FinCEN. Required for foreign-formed entities registered in the US. Avoid $591/day penalties.",
+      "description": "<p>The Beneficial Ownership Information (BOI) report is a federal filing requirement with FinCEN. We handle the entire process so you stay compliant and avoid costly penalties.</p>\n\n<h3>What is BOI Reporting?</h3>\n<p>FinCEN requires certain companies to report identifying information about individuals who ultimately own or control the company. This includes anyone with <strong>25% or more ownership</strong> or who exercises substantial control.</p>\n\n<h3>Who Needs to File?</h3>\n<ul>\n  <li><strong>Foreign-formed entities</strong> registered to do business in any US state</li>\n  <li>Entities formed before the rule change may still need to file initial or updated reports</li>\n  <li>Updates required within <strong>30 days</strong> of any ownership change</li>\n</ul>\n\n<h3>Penalties for Non-Filing</h3>\n<p>FinCEN can impose civil penalties of up to <strong>$591 per day</strong> (up to $10,000 total) and criminal penalties including up to 2 years in prison for willful violations.</p>",
+      "icon": "ClipboardCheck",
+      "image": "/images/services/boi-filing.jpg",
+      "startingPrice": 49,
+      "categorySlug": "compliance",
+      "isPopular": false,
+      "features": [
+        "BOI Report Preparation",
+        "Electronic Filing",
+        "All Owners Included",
+        "Filing Confirmation"
+      ],
+      "packages": [
+        {
+          "name": "Standard",
+          "price": 49,
+          "description": "Complete BOI report filing with FinCEN",
+          "badgeText": null,
+          "badgeColor": null,
+          "features": [
+            "BOI Report Preparation",
+            "Electronic Filing",
+            "All Owners Included",
+            "Filing Confirmation"
+          ],
+          "notIncluded": [
+            "Ongoing Monitoring"
+          ],
+          "isPopular": true
+        }
+      ],
+      "comparisonFeatures": [
+        {
+          "text": "FinCEN BOI report preparation",
+          "packages": {}
+        },
+        {
+          "text": "Electronic filing submission",
+          "packages": {}
+        },
+        {
+          "text": "All beneficial owners covered",
+          "packages": {}
+        },
+        {
+          "text": "Filing confirmation provided",
+          "packages": {}
+        },
+        {
+          "text": "Ownership change updates",
+          "packages": {}
+        },
+        {
+          "text": "Compliance monitoring",
+          "packages": {}
+        }
+      ],
+      "faqs": [
+        {
+          "question": "Does my US-formed LLC need to file a BOI report?",
+          "answer": "As of March 2025, FinCEN exempted all US-formed entities from BOI reporting. Only foreign-formed entities registered to do business in a US state are currently required to file. However, rules may change — we monitor updates and will advise you accordingly."
+        },
+        {
+          "question": "What happens if I don't file or file late?",
+          "answer": "FinCEN can impose civil penalties of up to $591 per day (up to $10,000 total) and criminal penalties including up to 2 years in prison for willful violations. It's critical to file on time."
+        },
+        {
+          "question": "What documents do I need to provide?",
+          "answer": "You'll need your LLC details (name, EIN, state of registration) and for each beneficial owner: full legal name, date of birth, residential address, and a government-issued photo ID (passport or driver's license)."
+        }
+      ],
+      "sortOrder": 100
+    },
+    {
+      "slug": "form-5472",
+      "name": "Form 5472 Filing",
+      "shortDesc": "IRS Form 5472 preparation for foreign-owned LLCs. Required annually even with zero activity. Avoid the $25,000 penalty for non-filing.",
+      "metaTitle": "Form 5472 Preparation | Foreign-Owned LLC Tax Filing | LLCPad",
+      "metaDescription": "Professional Form 5472 + pro forma 1120 preparation for foreign-owned single-member LLCs. Required annually even with $0 activity. Avoid $25,000 penalties.",
+      "description": "<p>IRS Form 5472 is <strong>mandatory</strong> for every foreign-owned single-member LLC — even if your business had zero transactions. We prepare and file it correctly so you avoid the steep $25,000 penalty.</p>\n\n<h3>What is Form 5472?</h3>\n<p>Form 5472 is an information return that reports transactions between your US LLC and its foreign owner or other related parties. It must be filed annually along with a pro forma Form 1120.</p>\n\n<h3>Reportable Transactions Include:</h3>\n<ul>\n  <li><strong>Capital contributions</strong> — money you put into the LLC</li>\n  <li><strong>Distributions</strong> — money you take out of the LLC</li>\n  <li><strong>Loans</strong> — between you and the LLC</li>\n  <li><strong>Expense payments</strong> — LLC expenses paid from personal funds</li>\n  <li><strong>Service payments</strong> — payments between the LLC and related parties</li>\n</ul>\n\n<h3>Important Details</h3>\n<ul>\n  <li><strong>Deadline:</strong> April 15 annually (6-month extension available via Form 7004)</li>\n  <li><strong>Filing method:</strong> Paper mail to IRS Ogden, UT office (cannot be e-filed for this entity type)</li>\n  <li><strong>Penalty:</strong> $25,000 per form, per year for late or non-filing</li>\n</ul>",
+      "icon": "FileText",
+      "image": "/images/services/form-5472.jpg",
+      "startingPrice": 149,
+      "categorySlug": "compliance",
+      "isPopular": false,
+      "badgeText": "$25K Penalty Risk",
+      "badgeColor": "#dc2626",
+      "features": [
+        "Form 5472 Preparation",
+        "Pro Forma 1120",
+        "Transaction Review",
+        "Paper Filing to IRS"
+      ],
+      "packages": [
+        {
+          "name": "Standard",
+          "price": 149,
+          "description": "Form 5472 + pro forma 1120 preparation and filing",
+          "badgeText": null,
+          "badgeColor": null,
+          "features": [
+            "Form 5472 Preparation",
+            "Pro Forma 1120",
+            "Transaction Review",
+            "Paper Filing to IRS"
+          ],
+          "notIncluded": [
+            "State Tax Returns",
+            "Tax Consultation"
+          ],
+          "isPopular": true
+        }
+      ],
+      "comparisonFeatures": [
+        {
+          "text": "Form 5472 preparation",
+          "packages": {}
+        },
+        {
+          "text": "Pro forma 1120 included",
+          "packages": {}
+        },
+        {
+          "text": "Zero-activity filing supported",
+          "packages": {}
+        },
+        {
+          "text": "Transaction analysis",
+          "packages": {}
+        },
+        {
+          "text": "Paper filing handled",
+          "packages": {}
+        },
+        {
+          "text": "Extension filing available",
+          "packages": {}
+        }
+      ],
+      "faqs": [
+        {
+          "question": "My LLC had no income and no transactions. Do I still need to file?",
+          "answer": "Yes. The IRS requires Form 5472 and pro forma 1120 every year regardless of whether the LLC had any activity. Even a $0 filing is mandatory, and failure to file triggers the $25,000 penalty."
+        },
+        {
+          "question": "Can I e-file Form 5472?",
+          "answer": "No. Foreign-owned disregarded entities must file Form 5472 with the pro forma 1120 by paper mail to the IRS Ogden, Utah processing center. This is one of the few IRS forms that cannot be e-filed for this entity type."
+        },
+        {
+          "question": "What's the difference between this and the Tax Filing Service?",
+          "answer": "This service focuses specifically on Form 5472 + pro forma 1120 for foreign-owned single-member LLCs. Our Tax Filing Service is a more comprehensive package that includes state returns, multi-member LLC filings, and tax planning consultations."
+        }
+      ],
+      "sortOrder": 6
+    },
+    {
+      "slug": "s-corp-election",
+      "name": "S-Corp Election",
+      "shortDesc": "File IRS Form 2553 to elect S-Corporation tax status for your LLC. Reduce self-employment taxes and save thousands annually.",
+      "metaTitle": "S-Corp Election | File Form 2553 for LLC Tax Savings | LLCPad",
+      "metaDescription": "Elect S-Corp tax status for your LLC by filing IRS Form 2553. Save on self-employment taxes. Available for US citizens and resident aliens.",
+      "description": "<p>S-Corp election changes how the IRS taxes your LLC — potentially saving you <strong>thousands in self-employment taxes</strong>. Your LLC remains an LLC legally; only the tax treatment changes.</p>\n\n<h3>How S-Corp Tax Savings Work</h3>\n<p>As an S-Corp, you split your LLC income between:</p>\n<ul>\n  <li><strong>Reasonable salary</strong> — subject to payroll taxes (15.3%)</li>\n  <li><strong>Distributions</strong> — NOT subject to self-employment tax</li>\n</ul>\n<p>If your LLC earns $100,000 and you pay yourself $50,000 salary, you save self-employment tax on the other $50,000 — roughly <strong>$7,650 per year</strong>.</p>\n\n<h3>Eligibility Requirements</h3>\n<ul>\n  <li><strong>US citizens, green card holders, or resident aliens only</strong> — nonresident aliens cannot be S-Corp shareholders</li>\n  <li>100 or fewer shareholders</li>\n  <li>Only one class of stock</li>\n  <li>Must be a domestic entity</li>\n</ul>\n\n<h3>Filing Deadline</h3>\n<p>Form 2553 must be filed within <strong>2 months and 15 days</strong> of the beginning of the tax year (March 15 for calendar year). Late election relief is available with reasonable cause.</p>",
+      "icon": "FileSignature",
+      "image": "/images/services/s-corp-election.jpg",
+      "startingPrice": 149,
+      "categorySlug": "compliance",
+      "isPopular": false,
+      "features": [
+        "Form 2553 Preparation",
+        "Eligibility Check",
+        "IRS Filing",
+        "CP261 Confirmation Tracking"
+      ],
+      "packages": [
+        {
+          "name": "Standard",
+          "price": 149,
+          "description": "Complete Form 2553 preparation and IRS filing",
+          "badgeText": null,
+          "badgeColor": null,
+          "features": [
+            "Form 2553 Preparation",
+            "Eligibility Check",
+            "IRS Filing",
+            "CP261 Confirmation Tracking"
+          ],
+          "notIncluded": [
+            "Payroll Setup",
+            "1120-S Filing"
+          ],
+          "isPopular": true
+        }
+      ],
+      "comparisonFeatures": [
+        {
+          "text": "Form 2553 preparation and filing",
+          "packages": {}
+        },
+        {
+          "text": "Eligibility verification",
+          "packages": {}
+        },
+        {
+          "text": "Operating agreement review",
+          "packages": {}
+        },
+        {
+          "text": "Late election relief available",
+          "packages": {}
+        },
+        {
+          "text": "IRS confirmation tracking",
+          "packages": {}
+        },
+        {
+          "text": "Timely filing guarantee",
+          "packages": {}
+        }
+      ],
+      "faqs": [
+        {
+          "question": "Can I elect S-Corp if I'm a nonresident alien living outside the US?",
+          "answer": "No. The IRS strictly prohibits nonresident aliens from being S-Corporation shareholders. This service is only available to US citizens, green card holders, or resident aliens meeting the Substantial Presence Test."
+        },
+        {
+          "question": "When does S-Corp election become beneficial?",
+          "answer": "Generally when your LLC's net income exceeds $40,000-$50,000 annually. Below that threshold, the administrative costs of running payroll and additional tax filings may outweigh the savings. We recommend consulting with a tax advisor for your specific situation."
+        },
+        {
+          "question": "What changes after the IRS approves my S-Corp election?",
+          "answer": "You'll receive a CP261 notice confirming acceptance. Going forward, you must file Form 1120-S annually, run payroll for owner-employees, pay reasonable salaries, and issue W-2s and K-1s. The LLC continues operating the same way legally."
+        }
+      ],
+      "sortOrder": 100
+    },
+    {
+      "slug": "sales-tax-registration",
+      "name": "Sales Tax Registration",
+      "shortDesc": "Register for sales tax permits in any US state. Nexus analysis, application filing, and compliance calendar setup included.",
+      "metaTitle": "Sales Tax Registration | State Sales Tax Permits for LLCs | LLCPad",
+      "metaDescription": "Register for sales tax permits in any US state. Includes nexus analysis, application filing, and compliance calendar. $149 per state.",
+      "description": "<p>If your business sells taxable goods or services in the US, you need to collect and remit sales tax in states where you have <strong>nexus</strong>. We handle the registration process across all 45 sales-tax states.</p>\n\n<h3>When Do You Need Sales Tax Registration?</h3>\n<ul>\n  <li><strong>Physical nexus:</strong> Office, warehouse, employees, or inventory in a state</li>\n  <li><strong>Economic nexus:</strong> Sales exceed state thresholds (commonly $100,000 or 200 transactions/year)</li>\n  <li><strong>Amazon FBA sellers:</strong> Inventory stored in Amazon warehouses creates nexus in those states</li>\n</ul>\n\n<h3>What's Included</h3>\n<ul>\n  <li>Nexus analysis to determine which states you need to register in</li>\n  <li>Complete application preparation and submission</li>\n  <li>Sales tax permit and reseller certificate issuance</li>\n  <li>Compliance calendar with filing frequencies and due dates</li>\n</ul>\n\n<h3>States Without Sales Tax</h3>\n<p>Five states have no sales tax: Alaska, Delaware, Montana, New Hampshire, and Oregon. All other 45 states plus Washington D.C. require registration if you have nexus.</p>",
+      "icon": "Receipt",
+      "image": "/images/services/sales-tax-registration.jpg",
+      "startingPrice": 149,
+      "categorySlug": "compliance",
+      "isPopular": false,
+      "features": [
+        "Nexus Analysis",
+        "State Application Filing",
+        "Sales Tax Permit",
+        "Compliance Calendar"
+      ],
+      "packages": [
+        {
+          "name": "Single State",
+          "price": 149,
+          "description": "Sales tax registration for one state",
+          "badgeText": null,
+          "badgeColor": null,
+          "features": [
+            "Nexus Analysis",
+            "State Application Filing",
+            "Sales Tax Permit",
+            "Compliance Calendar"
+          ],
+          "notIncluded": [
+            "Additional States",
+            "Sales Tax Filing"
+          ],
+          "isPopular": true
+        },
+        {
+          "name": "Multi-State",
+          "price": 349,
+          "description": "Sales tax registration for up to 3 states",
+          "badgeText": null,
+          "badgeColor": null,
+          "features": [
+            "Everything in Single State",
+            "Up to 3 States",
+            "SST Registration (if eligible)",
+            "Priority Processing"
+          ],
+          "notIncluded": [],
+          "isPopular": false
+        }
+      ],
+      "comparisonFeatures": [
+        {
+          "text": "Nexus analysis included",
+          "packages": {}
+        },
+        {
+          "text": "Complete application filing",
+          "packages": {}
+        },
+        {
+          "text": "Sales tax permit issuance",
+          "packages": {}
+        },
+        {
+          "text": "Multi-state registration",
+          "packages": {}
+        },
+        {
+          "text": "Compliance calendar setup",
+          "packages": {}
+        },
+        {
+          "text": "Filing frequency guidance",
+          "packages": {}
+        }
+      ],
+      "faqs": [
+        {
+          "question": "How do I know which states I need to register in?",
+          "answer": "You need to register in any state where you have nexus — physical nexus (office, warehouse, employees, inventory) or economic nexus (sales exceeding state thresholds, commonly $100,000 or 200 transactions/year). For Amazon FBA sellers, inventory in Amazon warehouses creates nexus in those states. Our nexus analysis identifies your obligations."
+        },
+        {
+          "question": "Does the state charge a fee for the sales tax permit?",
+          "answer": "Most states issue permits for free. A few charge small fees (e.g., Arizona $12, Arkansas $50, Connecticut $100). We inform you of any state fees before filing."
+        },
+        {
+          "question": "What happens after I get my sales tax permit?",
+          "answer": "You must collect sales tax from customers at the correct rate, file returns on the schedule assigned by the state (monthly, quarterly, or annually), and remit the collected tax. Failure to collect and remit can result in penalties and back-tax assessments."
+        }
+      ],
+      "sortOrder": 100
+    },
+    {
+      "slug": "tiktok-shop-setup",
+      "name": "TikTok Shop US Setup",
+      "shortDesc": "Set up your TikTok Shop seller account for the US market. Full verification, product listing, and compliance with TikTok seller policies.",
+      "metaTitle": "TikTok Shop US Setup | Sell on TikTok from Anywhere | LLCPad",
+      "metaDescription": "Complete TikTok Shop seller account setup for the US market. We handle registration, verification, and product listing. Start selling via social commerce.",
+      "description": "<p>TikTok Shop is the fastest-growing social commerce platform in the US. We handle the complete seller account setup so you can start selling directly within the TikTok app.</p>\n\n<h3>Why Sell on TikTok Shop?</h3>\n<ul>\n  <li><strong>Massive reach:</strong> Over 150 million US users spend an average of 95 minutes/day on TikTok</li>\n  <li><strong>Social commerce:</strong> Products sell through short videos, live streams, and the in-app shop</li>\n  <li><strong>Lower competition:</strong> Fewer sellers compared to Amazon, with higher organic reach</li>\n  <li><strong>Creator partnerships:</strong> Connect with influencers who promote your products</li>\n</ul>\n\n<h3>Requirements for International Sellers</h3>\n<ul>\n  <li>US-registered LLC with EIN</li>\n  <li>US-issued ID or ITIN</li>\n  <li>US warehouse/return address (we can recommend 3PL partners)</li>\n  <li>US bank account for payouts</li>\n  <li>W-9 form completed</li>\n</ul>\n\n<h3>What We Handle</h3>\n<p>From TikTok Seller Center registration to verification approval, document preparation, and initial product catalog setup — we manage the entire process.</p>",
+      "icon": "Video",
+      "image": "/images/services/tiktok-shop.jpg",
+      "startingPrice": 199,
+      "categorySlug": "amazon",
+      "isPopular": false,
+      "features": [
+        "Account Registration",
+        "Document Preparation",
+        "Verification Support",
+        "Initial Product Setup"
+      ],
+      "packages": [
+        {
+          "name": "Standard",
+          "price": 199,
+          "description": "Complete TikTok Shop seller account setup",
+          "badgeText": null,
+          "badgeColor": null,
+          "features": [
+            "Account Registration",
+            "Document Preparation",
+            "Verification Support",
+            "Initial Product Setup"
+          ],
+          "notIncluded": [
+            "Ongoing Management",
+            "Ad Campaign Setup"
+          ],
+          "isPopular": true
+        }
+      ],
+      "comparisonFeatures": [
+        {
+          "text": "Seller Center registration",
+          "packages": {}
+        },
+        {
+          "text": "Document preparation and review",
+          "packages": {}
+        },
+        {
+          "text": "Identity verification handling",
+          "packages": {}
+        },
+        {
+          "text": "Product listing assistance",
+          "packages": {}
+        },
+        {
+          "text": "Fulfillment setup guidance",
+          "packages": {}
+        },
+        {
+          "text": "7-day post-setup support",
+          "packages": {}
+        }
+      ],
+      "faqs": [
+        {
+          "question": "Can I set up a TikTok Shop if I live outside the US?",
+          "answer": "Yes, but you must have a US-registered LLC, an EIN, an ITIN or SSN, a US bank account, and a US warehouse/return address. TikTok requires US-based identification and a USPS-verifiable warehouse address. We help you navigate all of these requirements."
+        },
+        {
+          "question": "What type of ID does TikTok accept?",
+          "answer": "TikTok accepts US Passport, US Passport Card, US Driver's License, State ID, or Permanent Resident Card. All documents must be unexpired with full clear images. International passports alone are typically not accepted for the US marketplace."
+        },
+        {
+          "question": "How long does it take to get approved?",
+          "answer": "With properly prepared documents, TikTok typically approves seller accounts within 24-48 hours. Incomplete or inconsistent documentation will cause delays. Our service ensures everything is accurate before submission."
+        }
+      ],
+      "sortOrder": 5
+    },
+    {
+      "slug": "walmart-seller",
+      "name": "Walmart Seller Account",
+      "shortDesc": "Get approved on Walmart Marketplace. Professional application preparation, document verification, and product catalog setup.",
+      "metaTitle": "Walmart Seller Account Setup | Sell on Walmart Marketplace | LLCPad",
+      "metaDescription": "Get approved to sell on Walmart Marketplace. We handle application preparation, document verification, and initial product listing. Third-largest US e-commerce platform.",
+      "description": "<p>Walmart Marketplace is the <strong>third-largest e-commerce platform in the US</strong>, offering access to Walmart's massive customer base. Unlike Amazon, Walmart is selective about sellers — we help you get approved.</p>\n\n<h3>Why Sell on Walmart?</h3>\n<ul>\n  <li><strong>120+ million monthly visitors</strong> to Walmart.com</li>\n  <li><strong>Lower competition:</strong> ~150,000 sellers vs. Amazon's 2+ million</li>\n  <li><strong>No monthly fees:</strong> Only pay referral fees (6-20%) on actual sales</li>\n  <li><strong>Walmart Fulfillment Services (WFS):</strong> Similar to Amazon FBA</li>\n</ul>\n\n<h3>Approval Requirements</h3>\n<ul>\n  <li>Registered business entity with US EIN</li>\n  <li>E-commerce track record (Amazon, eBay, Shopify, etc.)</li>\n  <li>Products with GS1-verified UPC codes</li>\n  <li>US warehouse or WFS enrollment for fulfillment</li>\n  <li>Competitive pricing and strong customer reviews</li>\n</ul>\n\n<h3>Our Approach</h3>\n<p>We craft a compelling application that highlights your business strengths, verify all documentation matches IRS records, and present your e-commerce history in the best light to maximize approval chances.</p>",
+      "icon": "Store",
+      "image": "/images/services/walmart-seller.jpg",
+      "startingPrice": 199,
+      "categorySlug": "amazon",
+      "isPopular": false,
+      "features": [
+        "Application Preparation",
+        "Document Verification",
+        "Profile Optimization",
+        "Setup Configuration"
+      ],
+      "packages": [
+        {
+          "name": "Standard",
+          "price": 199,
+          "description": "Complete Walmart Marketplace application and setup",
+          "badgeText": null,
+          "badgeColor": null,
+          "features": [
+            "Application Preparation",
+            "Document Verification",
+            "Profile Optimization",
+            "Setup Configuration"
+          ],
+          "notIncluded": [
+            "Product Listing",
+            "Ongoing Management"
+          ],
+          "isPopular": true
+        },
+        {
+          "name": "Premium",
+          "price": 399,
+          "description": "Full Walmart setup with product listings and optimization",
+          "badgeText": null,
+          "badgeColor": null,
+          "features": [
+            "Everything in Standard",
+            "Up to 20 Product Listings",
+            "WFS Enrollment",
+            "14-Day Support"
+          ],
+          "notIncluded": [],
+          "isPopular": false
+        }
+      ],
+      "comparisonFeatures": [
+        {
+          "text": "Application preparation",
+          "packages": {}
+        },
+        {
+          "text": "Document verification",
+          "packages": {}
+        },
+        {
+          "text": "E-commerce profile optimization",
+          "packages": {}
+        },
+        {
+          "text": "Product catalog setup",
+          "packages": {}
+        },
+        {
+          "text": "WFS enrollment guidance",
+          "packages": {}
+        },
+        {
+          "text": "Approval follow-up support",
+          "packages": {}
+        }
+      ],
+      "faqs": [
+        {
+          "question": "Can I sell on Walmart from Bangladesh, India, or Pakistan?",
+          "answer": "Walmart supports international sellers from specific countries. If your country isn't on the eligible list, having a US-registered LLC with an EIN allows you to apply as a US-based business entity. We assess your specific situation and advise on the best approach."
+        },
+        {
+          "question": "Do I need a US warehouse to sell on Walmart?",
+          "answer": "You need either a US warehouse/return address or enrollment in Walmart Fulfillment Services (WFS), where Walmart handles storage, shipping, and returns. WFS is often the better option for international sellers."
+        },
+        {
+          "question": "What are the chances of getting approved?",
+          "answer": "Walmart is selective. Approval chances increase with an established e-commerce track record (at least 1 year), strong reviews, competitive pricing, and products with valid UPC codes. Our professional application preparation significantly improves your chances."
+        }
+      ],
+      "sortOrder": 100
+    },
+    {
+      "slug": "shopify-store-setup",
+      "name": "Shopify Store Setup",
+      "shortDesc": "Professional done-for-you Shopify store setup. Theme customization, product upload, payment integration, and SEO configuration included.",
+      "metaTitle": "Shopify Store Setup | Professional E-Commerce Store Design | LLCPad",
+      "metaDescription": "Professional Shopify store setup service. Custom theme, product catalog, payment integration, shipping configuration, and SEO. Launch your store in 10-14 days.",
+      "description": "<p>Get a <strong>professional, fully functional Shopify store</strong> without the technical headaches. We handle everything from theme customization to payment integration so you can focus on selling.</p>\n\n<h3>What's Included</h3>\n<ul>\n  <li><strong>Theme selection and customization</strong> — matching your brand identity</li>\n  <li><strong>Product catalog upload</strong> — up to 50 products with optimized descriptions</li>\n  <li><strong>Payment gateway setup</strong> — Shopify Payments, Stripe, PayPal configured</li>\n  <li><strong>Shipping and tax configuration</strong> — zones, rates, and auto-calculation</li>\n  <li><strong>Essential apps</strong> — up to 5 key apps installed and configured</li>\n  <li><strong>Mobile-responsive design</strong> — tested on all devices</li>\n</ul>\n\n<h3>Why Shopify?</h3>\n<ul>\n  <li><strong>4+ million stores</strong> powered by Shopify worldwide</li>\n  <li><strong>No coding required</strong> — easy to manage after setup</li>\n  <li><strong>Built-in SEO</strong> — optimized for search engine visibility</li>\n  <li><strong>Multi-currency</strong> — sell globally with localized checkout</li>\n</ul>\n\n<h3>Post-Launch Support</h3>\n<p>After launch, you receive a video walkthrough of store management plus <strong>14 days of email support</strong> for any questions.</p>",
+      "icon": "ShoppingBag",
+      "image": "/images/services/shopify-store.jpg",
+      "startingPrice": 399,
+      "categorySlug": "amazon",
+      "isPopular": false,
+      "features": [
+        "Theme Customization",
+        "50 Product Uploads",
+        "Payment & Shipping Setup",
+        "Basic SEO Setup"
+      ],
+      "packages": [
+        {
+          "name": "Standard",
+          "price": 399,
+          "description": "Complete Shopify store setup with up to 50 products",
+          "badgeText": null,
+          "badgeColor": null,
+          "features": [
+            "Theme Customization",
+            "50 Product Uploads",
+            "Payment & Shipping Setup",
+            "Basic SEO Setup"
+          ],
+          "notIncluded": [
+            "Shopify Subscription",
+            "Custom Development"
+          ],
+          "isPopular": true
+        },
+        {
+          "name": "Premium",
+          "price": 699,
+          "description": "Full store setup with advanced features and branding",
+          "badgeText": null,
+          "badgeColor": null,
+          "features": [
+            "Everything in Standard",
+            "Up to 150 Products",
+            "Custom Homepage Design",
+            "5 Essential Apps Setup",
+            "Google Analytics Integration"
+          ],
+          "notIncluded": [],
+          "isPopular": false
+        }
+      ],
+      "comparisonFeatures": [
+        {
+          "text": "Custom theme setup",
+          "packages": {}
+        },
+        {
+          "text": "Up to 50 product uploads",
+          "packages": {}
+        },
+        {
+          "text": "Payment gateway integration",
+          "packages": {}
+        },
+        {
+          "text": "Shipping and tax config",
+          "packages": {}
+        },
+        {
+          "text": "Essential app installation",
+          "packages": {}
+        },
+        {
+          "text": "14-day post-launch support",
+          "packages": {}
+        }
+      ],
+      "faqs": [
+        {
+          "question": "Do I need a Shopify account before using this service?",
+          "answer": "No. We can create your Shopify account as part of the service, or work with your existing account. You'll need to select a Shopify plan (starting at $39/month) — the subscription is paid directly to Shopify and is not included in our setup fee."
+        },
+        {
+          "question": "How many products can you upload?",
+          "answer": "The Standard package includes up to 50 products. The Premium package covers up to 150 products. For larger catalogs, we can add products at an additional per-product fee. You'll also receive training on adding products yourself."
+        },
+        {
+          "question": "Can I sell internationally from my Shopify store?",
+          "answer": "Absolutely. Shopify supports multi-currency checkout, international shipping zones, and localized payment methods. We configure your store for the US market and can set up additional markets as needed."
+        }
+      ],
+      "sortOrder": 100
+    },
+    {
+      "slug": "stripe-paypal-setup",
+      "name": "Stripe / PayPal Setup",
+      "shortDesc": "Set up Stripe and PayPal business accounts for your US LLC. Complete verification, bank linking, and payment integration ready.",
+      "metaTitle": "Stripe & PayPal Setup for US LLC | Payment Processing | LLCPad",
+      "metaDescription": "Set up Stripe and PayPal business payment accounts for your US LLC. Complete verification, US bank account linking, and payout configuration. Works for non-residents.",
+      "description": "<p>Getting approved for US payment processors is one of the <strong>biggest hurdles for international entrepreneurs</strong>. We handle the complete setup and verification of Stripe and/or PayPal for your US LLC.</p>\n\n<h3>Why You Need US Payment Processing</h3>\n<ul>\n  <li><strong>Accept credit/debit cards</strong> on your website or marketplace</li>\n  <li><strong>Invoice clients</strong> and receive payments professionally</li>\n  <li><strong>Connect to Shopify, WooCommerce, and other platforms</strong></li>\n  <li><strong>Send and receive international payments</strong></li>\n</ul>\n\n<h3>What We Handle</h3>\n<ul>\n  <li><strong>Account creation</strong> — Stripe and/or PayPal Business accounts</li>\n  <li><strong>Identity verification</strong> — documents prepared to pass verification on first try</li>\n  <li><strong>Bank account linking</strong> — US bank account connected for payouts</li>\n  <li><strong>Payout configuration</strong> — schedules set per your preferences</li>\n  <li><strong>Test transaction</strong> — verified end-to-end before handoff</li>\n</ul>\n\n<h3>Requirements</h3>\n<ul>\n  <li>US LLC with EIN</li>\n  <li>US business bank account</li>\n  <li>SSN or ITIN (strongly recommended for PayPal)</li>\n  <li>Government-issued photo ID</li>\n</ul>",
+      "icon": "CreditCard",
+      "image": "/images/services/stripe-paypal.jpg",
+      "startingPrice": 99,
+      "categorySlug": "tax-finance",
+      "isPopular": false,
+      "features": [
+        "Account Creation",
+        "Verification Support",
+        "Bank Account Linking",
+        "Test Transaction"
+      ],
+      "packages": [
+        {
+          "name": "Standard",
+          "price": 99,
+          "description": "Stripe and/or PayPal business account setup",
+          "badgeText": null,
+          "badgeColor": null,
+          "features": [
+            "Account Creation",
+            "Verification Support",
+            "Bank Account Linking",
+            "Test Transaction"
+          ],
+          "notIncluded": [
+            "Website Integration",
+            "Ongoing Support"
+          ],
+          "isPopular": true
+        }
+      ],
+      "comparisonFeatures": [
+        {
+          "text": "Stripe account setup",
+          "packages": {}
+        },
+        {
+          "text": "PayPal Business setup",
+          "packages": {}
+        },
+        {
+          "text": "Identity verification assistance",
+          "packages": {}
+        },
+        {
+          "text": "US bank account linking",
+          "packages": {}
+        },
+        {
+          "text": "Payout configuration",
+          "packages": {}
+        },
+        {
+          "text": "Test transaction verification",
+          "packages": {}
+        }
+      ],
+      "faqs": [
+        {
+          "question": "Can I open US Stripe/PayPal without an SSN?",
+          "answer": "For Stripe, you can often complete setup with your EIN and passport. For PayPal, an ITIN is strongly recommended — PayPal needs to verify both the business (EIN) and the individual owner (SSN or ITIN). Without an ITIN, your PayPal account may have limited functionality."
+        },
+        {
+          "question": "Do I need a US bank account?",
+          "answer": "Yes. Both Stripe and PayPal require a US bank account in your LLC's name for payouts. Several online banks (Mercury, Relay, Novo) allow non-resident LLC owners to open accounts remotely. We can recommend the best option."
+        },
+        {
+          "question": "What are the transaction fees?",
+          "answer": "Stripe charges 2.9% + $0.30 per successful card transaction. PayPal charges 2.99% + $0.49 per transaction. Both have additional fees for international cards and currency conversion. Our $99 setup fee covers account creation only — transaction fees are paid directly to Stripe/PayPal."
+        }
+      ],
+      "sortOrder": 100
+    },
+    {
+      "slug": "financial-report",
+      "name": "Financial Report Preparation",
+      "shortDesc": "Professional financial statements for your US LLC. Income statements, balance sheets, and cash flow reports for banking, tax, and investor needs.",
+      "metaTitle": "Financial Report Preparation | LLC Financial Statements | LLCPad",
+      "metaDescription": "Professional financial report preparation for US LLCs. Income Statement, Balance Sheet, and Cash Flow Statement. Bank-ready and investor-ready formats.",
+      "description": "<p>Professional financial statements are essential for <strong>tax filing, bank loans, investor presentations, and business management</strong>. We prepare accurate, formatted reports from your business records.</p>\n\n<h3>Reports Included</h3>\n<ul>\n  <li><strong>Income Statement (P&L):</strong> Revenue, expenses, and net income for the period</li>\n  <li><strong>Balance Sheet:</strong> Assets, liabilities, and owner's equity at a point in time</li>\n  <li><strong>Cash Flow Statement:</strong> Cash inflows and outflows from operations, investing, and financing</li>\n</ul>\n\n<h3>Use Cases</h3>\n<ul>\n  <li><strong>Bank loan applications</strong> — formatted to meet lender requirements</li>\n  <li><strong>Investor presentations</strong> — clear financial picture for fundraising</li>\n  <li><strong>Tax preparation</strong> — aligned with your tax filing needs</li>\n  <li><strong>Business decisions</strong> — understand your margins, cash flow, and profitability</li>\n</ul>\n\n<h3>What We Need From You</h3>\n<p>Bank statements, payment processor reports (Stripe, PayPal, Amazon), expense receipts, and any existing accounting software data. We organize everything into professional financial statements.</p>",
+      "icon": "BarChart3",
+      "image": "/images/services/financial-report.jpg",
+      "startingPrice": 149,
+      "categorySlug": "tax-finance",
+      "isPopular": false,
+      "features": [
+        "Income Statement",
+        "Balance Sheet",
+        "Cash Flow Statement",
+        "Executive Summary"
+      ],
+      "packages": [
+        {
+          "name": "Quarterly",
+          "price": 149,
+          "description": "Financial reports for one quarter",
+          "badgeText": null,
+          "badgeColor": null,
+          "features": [
+            "Income Statement",
+            "Balance Sheet",
+            "Cash Flow Statement",
+            "Executive Summary"
+          ],
+          "notIncluded": [
+            "Comparative Analysis",
+            "Monthly Breakdowns"
+          ],
+          "isPopular": true
+        },
+        {
+          "name": "Annual",
+          "price": 349,
+          "description": "Comprehensive annual financial reports",
+          "badgeText": null,
+          "badgeColor": null,
+          "features": [
+            "Everything in Quarterly",
+            "Year-over-Year Comparison",
+            "Monthly Breakdowns",
+            "Key Metrics Dashboard",
+            "Tax-Ready Format"
+          ],
+          "notIncluded": [],
+          "isPopular": false
+        }
+      ],
+      "comparisonFeatures": [
+        {
+          "text": "Income Statement (P&L)",
+          "packages": {}
+        },
+        {
+          "text": "Balance Sheet",
+          "packages": {}
+        },
+        {
+          "text": "Cash Flow Statement",
+          "packages": {}
+        },
+        {
+          "text": "Bank and investor ready",
+          "packages": {}
+        },
+        {
+          "text": "Expense categorization",
+          "packages": {}
+        },
+        {
+          "text": "Comparative analysis",
+          "packages": {}
+        }
+      ],
+      "faqs": [
+        {
+          "question": "What types of financial reports will I receive?",
+          "answer": "The standard package includes three core reports: Income Statement (Profit & Loss), Balance Sheet, and Cash Flow Statement. Additional reports like accounts receivable aging, budget vs. actual, and key metrics dashboards are available in the Annual package or upon request."
+        },
+        {
+          "question": "Do I need accounting software?",
+          "answer": "While not required, using software like QuickBooks or Xero makes the process faster and less expensive. If you're tracking everything in spreadsheets or bank statements, we can work with that. We strongly recommend migrating to proper accounting software and can help with setup."
+        },
+        {
+          "question": "How often should I get financial reports?",
+          "answer": "For most small LLCs, quarterly reports are the minimum recommendation. Monthly reports are ideal for active cash flow management or if you're seeking funding. Annual reports are needed at minimum for tax preparation."
+        }
+      ],
+      "sortOrder": 100
     }
   ],
   "pages": [
@@ -4452,7 +5265,10 @@
                           "textColor": "#4b5249",
                           "borderColor": "rgba(14,17,9,0.1)",
                           "boxShadow": "0 2px 8px rgba(0,0,0,0.05)",
-                          "dot": { "show": true, "color": "#e84c1e" }
+                          "dot": {
+                            "show": true,
+                            "color": "#e84c1e"
+                          }
                         },
                         "headline": {
                           "text": "Form Your\\nUS LLC\\nFiled in 24 Hours.",
@@ -4465,7 +5281,7 @@
                           "color": "#0e1109",
                           "fontWeight": 900,
                           "letterSpacing": "-0.04em",
-                          "lineHeight": 1.0
+                          "lineHeight": 1
                         },
                         "subheadline": {
                           "text": "We handle every piece of paperwork — from state filing to EIN to business banking. You focus on building, we handle the bureaucracy.",
@@ -4623,8 +5439,8 @@
                 },
                 "paddingTop": 80,
                 "paddingBottom": 0,
-                "paddingLeft": 0,
-                "paddingRight": 0,
+                "paddingLeft": 28,
+                "paddingRight": 28,
                 "marginTop": 0,
                 "marginBottom": 0,
                 "gap": 64,
@@ -4632,7 +5448,7 @@
                 "isVisible": true,
                 "visibleOnMobile": true,
                 "visibleOnDesktop": true,
-                "customCSS": "& > .mx-auto { max-width: 1160px; padding-inline: 28px; } @media (min-width: 1024px) { & .grid { grid-template-columns: 1fr 420px; } }"
+                "customCSS": "@media (min-width: 1024px) { & .grid { grid-template-columns: 1fr 420px; } }"
               }
             },
             {
@@ -4728,7 +5544,7 @@
             },
             {
               "id": "section_stats",
-              "order": 3,
+              "order": 2,
               "layout": "1-1",
               "columns": [
                 {
@@ -4823,9 +5639,7 @@
                   ],
                   "settings": {
                     "verticalAlign": "center",
-                    "padding": 0,
-                    "paddingLeft": 28,
-                    "paddingRight": 28
+                    "padding": 0
                   }
                 },
                 {
@@ -4898,9 +5712,7 @@
                   ],
                   "settings": {
                     "verticalAlign": "center",
-                    "padding": 0,
-                    "paddingLeft": 28,
-                    "paddingRight": 28
+                    "padding": 0
                   }
                 }
               ],
@@ -4912,8 +5724,8 @@
                 },
                 "paddingTop": 80,
                 "paddingBottom": 80,
-                "paddingLeft": 0,
-                "paddingRight": 0,
+                "paddingLeft": 28,
+                "paddingRight": 28,
                 "marginTop": 0,
                 "marginBottom": 0,
                 "gap": 64,
@@ -4933,6 +5745,436 @@
                   "offsetX": -40,
                   "offsetY": 0
                 }
+              }
+            },
+            {
+              "id": "section_all_services",
+              "order": 3,
+              "layout": "full",
+              "settings": {
+                "isVisible": true,
+                "visibleOnMobile": true,
+                "visibleOnDesktop": true,
+                "fullWidth": true,
+                "background": {
+                  "type": "solid",
+                  "color": "#faf8f4"
+                },
+                "paddingTop": 100,
+                "paddingBottom": 100,
+                "paddingLeft": 28,
+                "paddingRight": 28,
+                "marginTop": 0,
+                "marginBottom": 0,
+                "maxWidth": "xl",
+                "gap": 0,
+                "customCSS": "/* ── Badge: uppercase eyebrow ── */\n& [data-field-id=\"section-header\"] span {\n  text-transform: uppercase;\n  font-size: 12px !important;\n  font-weight: 700 !important;\n  letter-spacing: 1.5px;\n  border: none !important;\n  padding: 0 !important;\n  margin-bottom: 12px;\n}\n\n/* ── Heading: clamp size, 800 weight, tight tracking ── */\n& [data-field-id=\"section-header\"] h2 {\n  font-size: clamp(28px, 4vw, 44px) !important;\n  font-weight: 800 !important;\n  letter-spacing: -0.025em;\n}\n\n/* ── Description: 16px, margin-top 10px ── */\n& [data-field-id=\"section-header\"] p {\n  font-size: 16px !important;\n  margin-top: 10px;\n}\n\n/* ── Category card header: 20px margin-bottom ── */\n& .flex.items-start.gap-3.mb-4 {\n  padding-bottom: 16px;\n  border-bottom: 1px solid rgba(14, 17, 9, 0.1);\n  margin-bottom: 20px !important;\n  gap: 12px !important;\n}\n\n/* ── Category icon: 42x42, 11px radius ── */\n& .flex.items-start.gap-3.mb-4 .shrink-0 {\n  width: 42px !important;\n  height: 42px !important;\n  min-width: 42px !important;\n  border-radius: 11px !important;\n}\n\n/* ── Category name: Outfit, 15px, 800 ── */\n& .flex.items-start.gap-3.mb-4 h3 {\n  font-family: var(--font-heading);\n  font-size: 15px !important;\n  font-weight: 800 !important;\n  color: #0e1109 !important;\n  margin-bottom: 3px;\n}\n\n/* ── Category tagline: 11px ── */\n& .flex.items-start.gap-3.mb-4 p {\n  font-size: 11px !important;\n  color: #8a9086 !important;\n  line-height: 1.4;\n}\n\n/* ── Service row: 13px font, left accent bar + smooth hover ── */\n& a.group {\n  position: relative;\n  overflow: hidden;\n  font-size: 13px !important;\n  border-bottom: 1px solid rgba(14, 17, 9, 0.06);\n  border-radius: 7px;\n  padding: 8px 10px !important;\n  transition: background 0.2s ease, padding-left 0.25s cubic-bezier(0.16, 1, 0.3, 1);\n}\n& a.group:last-child {\n  border-bottom: none;\n}\n\n/* ── Service name: default style ── */\n& a.group span:first-child {\n  font-weight: 500;\n  font-size: 13px !important;\n  color: #1a1f16 !important;\n  transition: color 0.2s ease, font-weight 0.2s ease;\n}\n\n/* ── Price: heading font, 13px, bold ── */\n& a.group span:last-child {\n  font-family: var(--font-heading);\n  font-size: 13px !important;\n  font-weight: 700 !important;\n  white-space: nowrap;\n  margin-left: 8px;\n  transition: transform 0.2s ease;\n}\n\n/* Left accent bar (hidden by default) */\n& a.group::before {\n  content: '';\n  position: absolute;\n  left: 0;\n  top: 0;\n  bottom: 0;\n  width: 3px;\n  border-radius: 0 2px 2px 0;\n  transform: scaleY(0);\n  transform-origin: center;\n  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);\n}\n\n& a.group:hover {\n  padding-left: 18px !important;\n}\n& a.group:hover::before {\n  transform: scaleY(1);\n}\n\n/* Service name hover: bolder + darker */\n& a.group:hover span:first-child {\n  font-weight: 600;\n  color: #0e1109 !important;\n}\n\n/* Price hover: slight scale */\n& a.group:hover span:last-child {\n  transform: scale(1.06);\n}\n\n/* ── Card padding: 26px 22px ── */\n& [data-field-id=\"cards\"] > div {\n  padding: 26px 22px !important;\n}\n\n/* ═══ Category 1: Formation & Legal — CORAL #e84c1e ═══ */\n& [data-field-id=\"cards\"] > div:nth-child(1) a.group::before {\n  background: #e84c1e;\n}\n& [data-field-id=\"cards\"] > div:nth-child(1) a.group:hover {\n  background: rgba(232, 76, 30, 0.06);\n}\n& [data-field-id=\"cards\"] > div:nth-child(1) a.group span:last-child {\n  color: #e84c1e !important;\n}\n\n/* ═══ Category 2: Compliance & Documents — FOREST #1b3a2d ═══ */\n& [data-field-id=\"cards\"] > div:nth-child(2) a.group::before {\n  background: #1b3a2d;\n}\n& [data-field-id=\"cards\"] > div:nth-child(2) a.group:hover {\n  background: rgba(42, 94, 62, 0.06);\n}\n& [data-field-id=\"cards\"] > div:nth-child(2) a.group span:last-child {\n  color: #1b3a2d !important;\n}\n\n/* ═══ Category 3: E-Commerce Setup — BLUE #0064dc ═══ */\n& [data-field-id=\"cards\"] > div:nth-child(3) a.group::before {\n  background: #0064dc;\n}\n& [data-field-id=\"cards\"] > div:nth-child(3) a.group:hover {\n  background: rgba(0, 100, 220, 0.06);\n}\n& [data-field-id=\"cards\"] > div:nth-child(3) a.group span:last-child {\n  color: #0064dc !important;\n}\n\n/* ═══ Category 4: Tax & Finance — PURPLE #7c3aed ═══ */\n& [data-field-id=\"cards\"] > div:nth-child(4) a.group::before {\n  background: #7c3aed;\n}\n& [data-field-id=\"cards\"] > div:nth-child(4) a.group:hover {\n  background: rgba(124, 58, 237, 0.06);\n}\n& [data-field-id=\"cards\"] > div:nth-child(4) a.group span:last-child {\n  color: #7c3aed !important;\n}\n\n/* ═══ Per-category icon colors ═══ */\n& [data-field-id=\"cards\"] > div:nth-child(1) .flex.items-start.gap-3.mb-4 .shrink-0 {\n  background: rgba(232, 76, 30, 0.08) !important;\n}\n& [data-field-id=\"cards\"] > div:nth-child(1) .flex.items-start.gap-3.mb-4 .shrink-0 svg {\n  color: #e84c1e !important;\n}\n& [data-field-id=\"cards\"] > div:nth-child(2) .flex.items-start.gap-3.mb-4 .shrink-0 {\n  background: rgba(27, 58, 45, 0.08) !important;\n}\n& [data-field-id=\"cards\"] > div:nth-child(2) .flex.items-start.gap-3.mb-4 .shrink-0 svg {\n  color: #1b3a2d !important;\n}\n& [data-field-id=\"cards\"] > div:nth-child(3) .flex.items-start.gap-3.mb-4 .shrink-0 {\n  background: rgba(0, 100, 220, 0.08) !important;\n}\n& [data-field-id=\"cards\"] > div:nth-child(3) .flex.items-start.gap-3.mb-4 .shrink-0 svg {\n  color: #0064dc !important;\n}\n& [data-field-id=\"cards\"] > div:nth-child(4) .flex.items-start.gap-3.mb-4 .shrink-0 {\n  background: rgba(124, 58, 237, 0.08) !important;\n}\n& [data-field-id=\"cards\"] > div:nth-child(4) .flex.items-start.gap-3.mb-4 .shrink-0 svg {\n  color: #7c3aed !important;\n}"
+              },
+              "columns": [
+                {
+                  "id": "col_service_list",
+                  "settings": {
+                    "verticalAlign": "top",
+                    "padding": 0
+                  },
+                  "widgets": [
+                    {
+                      "id": "widget_service_list_all",
+                      "type": "service-list",
+                      "settings": {
+                        "header": {
+                          "show": true,
+                          "badge": {
+                            "show": true,
+                            "text": "ALL SERVICES",
+                            "style": "outline",
+                            "bgColor": "transparent",
+                            "textColor": "#e84c1e",
+                            "borderColor": "transparent"
+                          },
+                          "heading": {
+                            "text": "Explore our complete range of business services",
+                            "highlightWords": "",
+                            "highlightColor": "#e84c1e",
+                            "size": "xl",
+                            "color": "#0e1109"
+                          },
+                          "description": {
+                            "show": true,
+                            "text": "Transparent pricing — no hidden fees, no surprises.",
+                            "size": "md",
+                            "color": "#8a9086"
+                          },
+                          "alignment": "center",
+                          "marginBottom": 48
+                        },
+                        "filters": {
+                          "showAllCategories": true,
+                          "categories": [],
+                          "limitServicesPerCategory": 0,
+                          "sortServicesBy": "sort-order",
+                          "activeOnly": true
+                        },
+                        "layout": {
+                          "columns": 4,
+                          "gap": 20,
+                          "cardStyle": "bordered"
+                        },
+                        "categoryCard": {
+                          "showIcon": true,
+                          "iconStyle": "rounded",
+                          "iconSize": "sm",
+                          "iconBgColor": "#fff7ed",
+                          "iconColor": "#f97316",
+                          "showTagline": true,
+                          "titleSize": "sm",
+                          "borderRadius": 18,
+                          "borderWidth": 1.5,
+                          "borderColor": "rgba(14, 17, 9, 0.1)",
+                          "backgroundColor": "#ffffff",
+                          "padding": 24
+                        },
+                        "serviceItem": {
+                          "showPrice": true,
+                          "priceColor": "#64748b",
+                          "nameColor": "#1a1f16",
+                          "hoverEffect": "none",
+                          "divider": false,
+                          "dividerColor": "#e2e8f0",
+                          "padding": 8,
+                          "fontSize": "sm"
+                        },
+                        "cta": {
+                          "show": false,
+                          "text": "",
+                          "textColor": "#64748b",
+                          "primaryButton": {
+                            "show": false,
+                            "text": "View All Services",
+                            "link": "/services",
+                            "openInNewTab": false,
+                            "style": {}
+                          },
+                          "secondaryButton": {
+                            "show": false,
+                            "text": "",
+                            "link": "",
+                            "openInNewTab": false,
+                            "style": {}
+                          },
+                          "alignment": "center",
+                          "marginTop": 48
+                        },
+                        "responsive": {
+                          "tablet": {
+                            "columns": 2
+                          },
+                          "mobile": {
+                            "columns": 1
+                          }
+                        },
+                        "colors": {
+                          "useTheme": false
+                        },
+                        "container": {}
+                      }
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "section_forge_services",
+              "order": 4,
+              "layout": "1",
+              "settings": {
+                "isVisible": true,
+                "visibleOnMobile": true,
+                "visibleOnDesktop": true,
+                "fullWidth": true,
+                "background": {
+                  "type": "solid",
+                  "color": "#ffffff"
+                },
+                "paddingTop": 100,
+                "paddingBottom": 100,
+                "paddingLeft": 28,
+                "paddingRight": 28,
+                "marginTop": 0,
+                "marginBottom": 0,
+                "maxWidth": "xl",
+                "gap": 0
+              },
+              "columns": [
+                {
+                  "id": "col_forge_services",
+                  "settings": {
+                    "verticalAlign": "top",
+                    "padding": 0
+                  },
+                  "widgets": [
+                    {
+                      "id": "widget_forge_services",
+                      "type": "service-card",
+                      "settings": {
+                        "cardStyle": "forge",
+                        "headerLayout": "split",
+                        "header": {
+                          "show": true,
+                          "badge": {
+                            "show": true,
+                            "text": "What We Do",
+                            "style": "pill",
+                            "bgColor": "transparent",
+                            "textColor": "#e84c1e",
+                            "borderColor": "transparent"
+                          },
+                          "heading": {
+                            "text": "Every service your\nUS business needs",
+                            "size": "xl",
+                            "color": "#0e1109",
+                            "highlightWords": "",
+                            "highlightColor": ""
+                          },
+                          "description": {
+                            "show": true,
+                            "text": "From LLC formation to Amazon launch — 8 featured services, 30+ total. Formation, compliance, e-commerce, and tax — all delivered 100% remotely, no US travel needed.",
+                            "size": "md",
+                            "color": "#4b5249"
+                          },
+                          "alignment": "left",
+                          "marginBottom": 56
+                        },
+                        "filters": {
+                          "categories": [],
+                          "limit": 8,
+                          "sortBy": "sort-order",
+                          "popularOnly": false,
+                          "activeOnly": true
+                        },
+                        "layout": {
+                          "columns": 4,
+                          "gap": 20,
+                          "cardAlignment": "stretch"
+                        },
+                        "icon": {
+                          "show": true,
+                          "style": "rounded",
+                          "size": "md",
+                          "position": "top-left",
+                          "hoverAnimation": "none"
+                        },
+                        "content": {
+                          "showDescription": true,
+                          "descriptionLines": 3,
+                          "showPrice": true,
+                          "pricePosition": "bottom",
+                          "showBadge": true,
+                          "badgePosition": "inline",
+                          "showFeatures": false,
+                          "maxFeatures": 3,
+                          "showCategory": true,
+                          "showArrow": true
+                        },
+                        "hover": {
+                          "effect": "none",
+                          "iconEffect": "invert",
+                          "transitionDuration": 350
+                        },
+                        "colors": {
+                          "useTheme": false
+                        },
+                        "borderRadius": 16,
+                        "borderWidth": 1.5,
+                        "forge": {
+                          "gridSpans": [
+                            5,
+                            3,
+                            4,
+                            4,
+                            4,
+                            4,
+                            6,
+                            6
+                          ],
+                          "defaultColor": "#1b3a2d",
+                          "accentBarHeight": 3,
+                          "cardPadding": "32px 28px"
+                        },
+                        "responsive": {
+                          "tablet": {
+                            "columns": 2
+                          },
+                          "mobile": {
+                            "columns": 1
+                          }
+                        },
+                        "container": {}
+                      }
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "sec_process_steps",
+              "order": 5,
+              "layout": "1",
+              "columns": [
+                {
+                  "id": "col_process_steps",
+                  "widgets": [
+                    {
+                      "id": "widget_process_steps",
+                      "type": "process-steps",
+                      "settings": {
+                        "header": {
+                          "show": true,
+                          "badge": {
+                            "show": true,
+                            "text": "How It Works",
+                            "style": "outline",
+                            "bgColor": "transparent",
+                            "textColor": "#1b3a2d",
+                            "borderColor": "transparent"
+                          },
+                          "heading": {
+                            "text": "From order to operational\nin 4 clean steps",
+                            "highlightWords": "",
+                            "highlightColor": "",
+                            "size": "xl",
+                            "color": "#0e1109"
+                          },
+                          "description": {
+                            "show": false,
+                            "text": "",
+                            "size": "md",
+                            "color": "#64748b"
+                          },
+                          "alignment": "center",
+                          "marginBottom": 60
+                        },
+                        "steps": [
+                          {
+                            "id": "step_ps_1",
+                            "icon": "ClipboardList",
+                            "title": "Tell Us Your Goal",
+                            "description": "LLC formation, Amazon launch, TikTok Shop, tax compliance — fill our 5-minute intake form and pick exactly the services you need."
+                          },
+                          {
+                            "id": "step_ps_2",
+                            "icon": "Shield",
+                            "title": "We Handle Every Detail",
+                            "description": "Our team prepares and submits every document with 100% accuracy — state filing, IRS, BOI report, Amazon account, sales tax registration, and more."
+                          },
+                          {
+                            "id": "step_ps_3",
+                            "icon": "Monitor",
+                            "title": "Live Updates, Zero Chasing",
+                            "description": "Track every milestone in your client dashboard. Get notified via email and WhatsApp the moment each service step is completed."
+                          },
+                          {
+                            "id": "step_ps_4",
+                            "icon": "Rocket",
+                            "title": "Launch, Sell & Scale",
+                            "description": "Receive all documents digitally. Activate your US bank account, go live on Amazon, TikTok Shop, or Shopify — and start building your US revenue."
+                          }
+                        ],
+                        "layout": {
+                          "type": "horizontal",
+                          "columns": 4,
+                          "gap": 0,
+                          "verticalSpacing": 48
+                        },
+                        "stepNumber": {
+                          "show": true,
+                          "style": "circle",
+                          "size": "sm",
+                          "bgColor": "#e84c1e",
+                          "textColor": "#ffffff",
+                          "borderColor": "#e84c1e",
+                          "position": "top-right"
+                        },
+                        "stepIcon": {
+                          "show": true,
+                          "style": "circle-outline",
+                          "size": "lg",
+                          "bgColor": "#ffffff",
+                          "iconColor": "#1b3a2d",
+                          "borderColor": "rgba(14,17,9,0.1)",
+                          "hoverAnimation": "none"
+                        },
+                        "stepContent": {
+                          "titleSize": "md",
+                          "titleColor": "#0e1109",
+                          "descriptionSize": "sm",
+                          "descriptionColor": "#4b5249",
+                          "alignment": "center"
+                        },
+                        "connector": {
+                          "show": false,
+                          "style": "dashed",
+                          "animation": "none",
+                          "thickness": 2,
+                          "color": "rgba(27,58,45,0.15)",
+                          "animationSpeed": "medium",
+                          "animationDirection": "forward"
+                        },
+                        "card": {
+                          "show": false,
+                          "backgroundColor": "transparent",
+                          "backgroundType": "solid",
+                          "borderRadius": 0,
+                          "borderWidth": 0,
+                          "borderColor": "transparent",
+                          "padding": 0,
+                          "shadow": "none",
+                          "hoverEffect": "none"
+                        },
+                        "responsive": {
+                          "tablet": {
+                            "layout": "horizontal",
+                            "columns": 2
+                          },
+                          "mobile": {
+                            "layout": "vertical",
+                            "columns": 1
+                          }
+                        },
+                        "animation": {
+                          "staggerDelay": 150,
+                          "animateOnScroll": true
+                        },
+                        "colors": {
+                          "useTheme": false
+                        }
+                      }
+                    }
+                  ],
+                  "settings": {
+                    "verticalAlign": "top",
+                    "padding": 0
+                  }
+                }
+              ],
+              "settings": {
+                "fullWidth": true,
+                "background": {
+                  "type": "solid",
+                  "color": "#f0ede5"
+                },
+                "paddingTop": 100,
+                "paddingBottom": 100,
+                "paddingLeft": 28,
+                "paddingRight": 28,
+                "marginTop": 0,
+                "marginBottom": 0,
+                "maxWidth": "xl",
+                "gap": 0,
+                "isVisible": true,
+                "visibleOnMobile": true,
+                "visibleOnDesktop": true,
+                "customCSS": "/* Overlay text 04 at bottom-right */\n&::after { content: \"04\"; position: absolute; right: -20px; bottom: 20px; font-family: var(--font-heading), sans-serif; font-size: 200px; font-weight: 900; color: rgba(27,58,45,0.04); pointer-events: none; line-height: 1; }\n/* Badge: plain uppercase text */\n& [data-field-id=\"badge\"] { font-size: 12px !important; font-weight: 700 !important; text-transform: uppercase; letter-spacing: 1.5px; padding: 0 !important; border: none !important; }\n/* Heading: exact reference typography */\n& [data-field-id=\"heading\"] { font-size: clamp(30px, 4vw, 46px) !important; font-weight: 800 !important; letter-spacing: -0.025em !important; white-space: pre-line; }\n/* Step card horizontal padding */\n& [data-field-id=\"steps\"] > div { padding: 0 20px; text-align: center; }\n/* Continuous dashed connector line through circles */\n& [data-field-id=\"steps\"]::before { content: \"\"; position: absolute; top: 40px; left: 12%; right: 12%; height: 0; border-top: 2px dashed rgba(27,58,45,0.15); pointer-events: none; z-index: 1; }\n/* Icon shadow + hover transition */\n& [data-field-id=\"steps\"] .group > div:first-child > div:first-child { box-shadow: 0 4px 16px rgba(0,0,0,0.05); transition: all 0.4s cubic-bezier(.16,1,.3,1) !important; }\n/* Icon hover: forest green bg */\n& [data-field-id=\"steps\"] .group:hover > div:first-child > div:first-child { background-color: #1b3a2d !important; border-color: #1b3a2d !important; box-shadow: 0 8px 28px rgba(27,58,45,0.2); }\n/* Icon SVG hover: cream */\n& [data-field-id=\"steps\"] .group:hover > div:first-child > div:first-child svg { color: #faf8f4 !important; }\n/* Step titles: Outfit 17px */\n& [data-field-id=\"steps\"] h3 { font-family: var(--font-heading) !important; font-size: 17px !important; font-weight: 700 !important; }\n/* Step descriptions: 13px */\n& [data-field-id=\"steps\"] p { font-size: 13px !important; line-height: 1.65 !important; }\n/* Hide connector and adjust padding on tablet/mobile */\n@media (max-width: 1023px) { & [data-field-id=\"steps\"]::before { display: none; } & [data-field-id=\"steps\"] > div { padding: 0 !important; } }"
               }
             }
           ]
@@ -7774,14 +9016,38 @@
       "name": "legal",
       "isActive": true,
       "items": [
-        { "id": "t_1", "content": "<strong>India</strong> · 320+ clients" },
-        { "id": "t_2", "content": "<strong>Pakistan</strong> · 220+ clients" },
-        { "id": "t_3", "content": "<strong>UAE</strong> · 160+ clients" },
-        { "id": "t_4", "content": "<strong>Nigeria</strong> · 110+ clients" },
-        { "id": "t_5", "content": "<strong>Philippines</strong> · 90+ clients" },
-        { "id": "t_6", "content": "<strong>Turkey</strong> · 75+ clients" },
-        { "id": "t_7", "content": "<strong>Egypt</strong> · 60+ clients" },
-        { "id": "t_8", "content": "<strong>Indonesia</strong> · 50+ clients" }
+        {
+          "id": "t_1",
+          "content": "<strong>India</strong> · 320+ clients"
+        },
+        {
+          "id": "t_2",
+          "content": "<strong>Pakistan</strong> · 220+ clients"
+        },
+        {
+          "id": "t_3",
+          "content": "<strong>UAE</strong> · 160+ clients"
+        },
+        {
+          "id": "t_4",
+          "content": "<strong>Nigeria</strong> · 110+ clients"
+        },
+        {
+          "id": "t_5",
+          "content": "<strong>Philippines</strong> · 90+ clients"
+        },
+        {
+          "id": "t_6",
+          "content": "<strong>Turkey</strong> · 75+ clients"
+        },
+        {
+          "id": "t_7",
+          "content": "<strong>Egypt</strong> · 60+ clients"
+        },
+        {
+          "id": "t_8",
+          "content": "<strong>Indonesia</strong> · 50+ clients"
+        }
       ],
       "speed": 28,
       "separator": "·"
