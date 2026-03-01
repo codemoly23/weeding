@@ -55,6 +55,13 @@ interface Package {
   badgeColor?: string | null;
 }
 
+interface SelectedAddon {
+  featureId: string;
+  packageId: string;
+  featureText: string;
+  price: number;
+}
+
 interface PricingCardsViewProps {
   settings: PricingTableWidgetSettings;
   features: ComparisonFeature[];
@@ -65,6 +72,7 @@ interface PricingCardsViewProps {
   locationFee: number;
   serviceSlug: string;
   currencySymbol?: string;
+  selectedAddons?: SelectedAddon[];
 }
 
 // =============================================================================
@@ -81,6 +89,7 @@ export function PricingCardsView({
   locationFee,
   serviceSlug,
   currencySymbol = "$",
+  selectedAddons = [],
 }: PricingCardsViewProps) {
   const { cardStyle, ctaButtons, colors } = settings;
   const useTheme = settings.colors?.useTheme !== false;
@@ -91,9 +100,10 @@ export function PricingCardsView({
   };
 
   const getCheckoutUrl = (pkg: Package) => {
+    const pkgAddons = selectedAddons.filter((a) => a.packageId === pkg.id);
     return `/checkout/${serviceSlug}?package=${getPackageSlug(pkg)}${
       selectedLocation?.code ? `&location=${selectedLocation.code}` : ""
-    }`;
+    }${pkgAddons.length > 0 ? `&addons=${pkgAddons.map((a) => a.featureId).join(",")}` : ""}`;
   };
 
   // Get features for a specific package

@@ -1,5 +1,6 @@
 "use client";
 
+import type React from "react";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
 import type { BlogSectionHeader, BadgeStyle } from "@/lib/page-builder/types";
@@ -58,23 +59,39 @@ function renderHighlightedText(
   highlightWords?: string,
   highlightColor?: string
 ) {
-  if (!highlightWords) return text;
+  // Split by \n first to handle line breaks
+  const lines = text.split("\n");
+  const elements: React.ReactNode[] = [];
 
-  // Escape regex special chars
-  const escaped = highlightWords.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
-  const regex = new RegExp(`(${escaped})`, "gi");
-  const parts = text.split(regex);
-
-  return parts.map((part, index) => {
-    if (part.toLowerCase() === highlightWords.toLowerCase()) {
-      return (
-        <span key={index} style={{ color: highlightColor || "#f97316" }}>
-          {part}
-        </span>
-      );
+  lines.forEach((line, lineIdx) => {
+    if (lineIdx > 0) {
+      elements.push(<br key={`br-${lineIdx}`} />);
     }
-    return part;
+
+    if (!highlightWords) {
+      elements.push(line);
+      return;
+    }
+
+    // Escape regex special chars
+    const escaped = highlightWords.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+    const regex = new RegExp(`(${escaped})`, "gi");
+    const parts = line.split(regex);
+
+    parts.forEach((part, partIdx) => {
+      if (part.toLowerCase() === highlightWords.toLowerCase()) {
+        elements.push(
+          <span key={`hl-${lineIdx}-${partIdx}`} style={{ color: highlightColor || "#f97316" }}>
+            {part}
+          </span>
+        );
+      } else {
+        elements.push(part);
+      }
+    });
   });
+
+  return elements;
 }
 
 // ── Size maps ───────────────────────────────────────────────────────
@@ -182,7 +199,16 @@ function BadgeElement({
   });
 
   return (
-    <span className={badgeStyles.className} style={badgeStyles.style}>
+    <span
+      className={badgeStyles.className}
+      style={{
+        ...badgeStyles.style,
+        ...(badge.customFontSize ? { fontSize: badge.customFontSize } : {}),
+        ...(badge.fontWeight ? { fontWeight: badge.fontWeight } : {}),
+        ...(badge.letterSpacing ? { letterSpacing: badge.letterSpacing } : {}),
+        ...(badge.textTransform ? { textTransform: badge.textTransform as React.CSSProperties["textTransform"] } : {}),
+      }}
+    >
       {badge.icon && <span className="text-sm">{badge.icon}</span>}
       {badge.text}
     </span>

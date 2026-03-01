@@ -292,13 +292,14 @@ export function TestimonialsWidgetSettingsPanel({
                   value={s.carouselView.layout}
                   onChange={(value) =>
                     updateCarouselView({
-                      layout: value as "standard" | "split" | "centered",
+                      layout: value as "standard" | "split" | "centered" | "rail",
                     })
                   }
                   options={[
                     { label: "Standard", value: "standard" },
                     { label: "Split (Large Photo)", value: "split" },
                     { label: "Centered", value: "centered" },
+                    { label: "Rail (Multi-card Slider)", value: "rail" },
                   ]}
                 />
 
@@ -523,13 +524,14 @@ export function TestimonialsWidgetSettingsPanel({
                     value={s.header.alignment}
                     onChange={(value) =>
                       updateHeader({
-                        alignment: value as "left" | "center" | "right",
+                        alignment: value as "left" | "center" | "right" | "space-between",
                       })
                     }
                     options={[
                       { label: "Left", value: "left" },
                       { label: "Center", value: "center" },
                       { label: "Right", value: "right" },
+                      { label: "Space Between", value: "space-between" },
                     ]}
                   />
                 </>

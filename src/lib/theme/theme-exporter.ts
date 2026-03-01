@@ -325,6 +325,7 @@ export async function exportThemeData(): Promise<ThemeData> {
     slug: post.slug,
     content: post.content,
     excerpt: post.excerpt ?? undefined,
+    coverImage: post.coverImage ?? undefined,
     categorySlug: post.categories.length > 0 ? post.categories[0].slug : undefined,
     published: post.status === "PUBLISHED",
     metaTitle: post.metaTitle ?? undefined,
@@ -355,6 +356,10 @@ export async function exportThemeData(): Promise<ThemeData> {
     isActive: t.isActive,
     sortOrder: t.sortOrder,
     avatar: t.avatar ?? undefined,
+    type: t.type as "PHOTO" | "VIDEO",
+    videoUrl: t.videoUrl ?? undefined,
+    thumbnailUrl: t.thumbnailUrl ?? undefined,
+    tags: t.tags?.length ? t.tags : undefined,
   }));
 
   // ---- Legal Pages ----

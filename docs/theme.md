@@ -1208,3 +1208,185 @@ After implementing the code changes:
 | `src/components/page-builder/widgets/social-proof/stats-section.tsx` | Add card-grid rendering branch |
 | `src/components/page-builder/settings/stats-section-settings.tsx` | Add variant selector + card-grid style settings |
 | `public/themes/legal/data.json` | Add stats section to home page blocks |
+
+---
+
+## Blog Section — "Free Guides for Global Founders" (Order 9)
+
+### Reference Design
+
+```
+┌──────────────────────────────────────────────────────────────────────────────┐
+│  Background: White (#ffffff)                                                  │
+│  Padding: 100px top/bottom, 28px left/right                                  │
+│                                                                               │
+│  [Insights]        Free guides for              [Browse All Articles →]       │
+│                    global founders                                            │
+│                                                                               │
+│  ┌─────────────────┬──────────────────┬──────────────────┐                   │
+│  │  FEATURED CARD   │  Card 2           │  Card 3           │                   │
+│  │  (dark forest bg │  Form 5472:       │  US Bank Account   │                   │
+│  │  1.15fr, 2 rows) │  The $25,000...   │  for Non-Residents │                   │
+│  │                   ├──────────────────┼──────────────────┤                   │
+│  │  Wyoming vs       │  Card 4           │  Card 5           │                   │
+│  │  Delaware LLC     │  2026 Remittance  │  TikTok Shop      │                   │
+│  │  for Non-Residents│  Tax              │  Setup             │                   │
+│  └─────────────────┴──────────────────┴──────────────────┘                   │
+│                                                                               │
+│  [EIN Without SSN] [Form 5472 Guide] [US Banking Guide] [Amazon Seller 101]  │
+│  [ITIN Application] [TikTok Shop Setup]                                       │
+│                                                                               │
+└──────────────────────────────────────────────────────────────────────────────┘
+```
+
+### Approach: Existing Widget + Section customCSS
+
+**No new widget code needed.** Uses existing `blog-post-grid` widget. The bento grid layout
+is achieved entirely through section-level `customCSS` which overrides the default
+3-column grid into a bento layout with the first card spanning 2 rows.
+
+### Section Configuration
+
+| Setting | Value |
+|---------|-------|
+| Section ID | `sec_blog_forge` |
+| Order | 9 (after testimonials at 8) |
+| Layout | `"1"` (single column) |
+| Background | Solid `#ffffff` (white) |
+| paddingTop / paddingBottom | 100 / 100 |
+| paddingLeft / paddingRight | 28 / 28 |
+| maxWidth | `"xl"` |
+| fullWidth | true |
+
+### Widgets in This Section
+
+#### Widget 1: `blog-post-grid` (ID: `widget_blog_grid_forge`)
+
+**Header settings:**
+- Badge: "Insights" — coral text (#e84c1e), uppercase, 12px, 700 weight
+- Heading: "Free guides for\nglobal founders" — ink (#0e1109), clamp(28px,3.5vw,42px), 800 weight
+- View All: "Browse All Articles" → `/blog`, button-outline style, forest green (#1b3a2d)
+- Alignment: `space-between`
+- marginBottom: 56
+
+**Data source:** `source: "all"`, `postCount: 5`, `orderBy: "date"`, `orderDirection: "desc"`
+
+**Layout:** grid, 3 cols desktop / 2 tablet / 1 mobile, gap 20, equalHeight true
+
+**Card settings:**
+- Style: `bordered`, borderRadius: 20, hoverEffect: `lift`, contentPadding: 24
+- Image: show true, aspectRatio `16:9`, hoverEffect `zoom`
+- Category badge: show true, position `above-title`, style `pill`
+- Title: fontSize `md`, fontWeight 700, maxLines 2
+- Excerpt: fontSize `sm`, maxLength 140
+- Meta: items `["readingTime"]`, separator `dot`, fontSize `xs`
+- Read more: show false (handled by customCSS hover)
+
+#### Widget 2: `heading` (ID: `widget_blog_topics`)
+
+Topic tag pills rendered as HTML `<a>` links with inline styles. Tags: EIN Without SSN, Form 5472 Guide, US Banking Guide, Amazon Seller 101, ITIN Application, TikTok Shop Setup.
+
+### Section customCSS (Bento Grid Transformation)
+
+The key CSS selectors target the blog widget's DOM structure:
+
+```
+section.section-custom-sec_blog_forge
+  └── div[data-field-id="posts"]           ← the grid container
+        └── div                             ← animation wrapper per card
+              └── a.group                   ← BlogCard link
+                    ├── div (image)
+                    └── div (content: badge, h3, p, meta)
+```
+
+**What the CSS does:**
+
+1. **Bento grid override:** Changes `grid-template-columns` from `repeat(3, 1fr)` to `1.15fr 1fr 1fr` with 2 rows
+2. **Featured first card:** `grid-row: 1 / -1` spans full height; dark forest bg (#0f2318); image becomes absolute overlay at 0.18 opacity
+3. **Featured card text:** White title (clamp 22-28px), muted excerpt (rgba 0.5), muted meta (rgba 0.35)
+4. **Featured badge:** Dark pill style (rgba bg, light text)
+5. **All headings:** `font-family: var(--font-heading)`, weight 800, tight tracking
+6. **Regular card hover:** translateY(-6px), box-shadow, title color changes to forest green
+7. **Regular badges:** Transparent bg, uppercase 11px, 1px border
+8. **Responsive:** Tablet (1fr 1fr, featured spans full width) → Mobile (1fr single column)
+
+### Blog Categories (Theme Data)
+
+Added to `data.json.blogCategories`:
+
+| Slug | Name | sortOrder |
+|------|------|-----------|
+| llc-guide | LLC Guide | 0 |
+| tax-compliance | Tax & Compliance | 1 |
+| banking | Banking | 2 |
+| new-law | New Law | 3 |
+| e-commerce | E-Commerce | 4 |
+
+### Blog Posts (Theme Data)
+
+Added to `data.json.blogs` — 5 SEO-optimized posts with full HTML content (1500-2500 words each):
+
+| # | Title | Slug | Category | Cover Image |
+|---|-------|------|----------|-------------|
+| 1 | Wyoming vs Delaware LLC for Non-Residents: Which State Should You Choose in 2026? | wyoming-vs-delaware-llc-non-residents-2026 | llc-guide | Unsplash (US map) |
+| 2 | Form 5472: The $25,000 Filing Every Foreign LLC Owner Must Know | form-5472-foreign-llc-owner-guide | tax-compliance | Unsplash (tax docs) |
+| 3 | US Bank Account for Non-Residents: What Changed in 2026 | us-bank-account-non-residents-2026 | banking | Unsplash (banking) |
+| 4 | The 2026 Remittance Tax: What Every Foreign LLC Owner Needs to Know | 2026-remittance-tax-foreign-llc-owners-guide | new-law | Unsplash (currency) |
+| 5 | How to Set Up TikTok Shop in the US as a Non-Resident | tiktok-shop-us-non-resident-setup-guide | e-commerce | Unsplash (TikTok) |
+
+Each post includes: metaTitle (≤60 chars), metaDescription (≤160 chars), excerpt, coverImage URL, categorySlug, internal links to service pages.
+
+### Theme Import Flow for Blog Data
+
+When theme is activated, `theme-importer.ts` handles blog data:
+
+1. **Delete phase:** All existing `BlogCategory` and `BlogPost` records are deleted
+2. **blogCategories:** Creates categories (2-pass: first creates all, then sets parentSlug relationships)
+3. **blogs:** Creates posts with `categorySlug` → category connection, sets `coverImage`, `status: PUBLISHED`, `publishedAt: new Date()`
+
+Fields imported per blog post: `title`, `slug`, `content`, `excerpt`, `coverImage`, `status`, `publishedAt`, `metaTitle`, `metaDescription`, `categories` (via categorySlug connection)
+
+---
+
+## Complete Theme Section Registry (Home Page)
+
+All homepage sections bound to the "Legal & Business Services" theme:
+
+| Order | Section ID | Widget(s) | Description |
+|-------|-----------|-----------|-------------|
+| 0 | section_hero_forge | hero-content + custom-html | Hero with badge, headline, CTAs, social proof + Application Tracker card |
+| 1 | section_ticker_forge | ticker-marquee | Country stats marquee (dark forest bg, 14 items via "clients-marquee" ticker) |
+| 2 | section_stats | heading + stats-section | "Numbers that speak for themselves" — watermark + 4 stat cards |
+| 3 | section_services_forge | service-card | 8 service cards in 2-column masonry grid (cream bg) |
+| 4 | sec_process_forge | process-steps | 4-step process "How it works" (white bg) |
+| 5 | section_why_forge | heading + text-block + custom-html | "Why global founders trust us" bento grid (dark bg) |
+| 6 | sec_pricing_forge | pricing-cards | 3-tier pricing comparison (cream bg) |
+| 7 | sec_clients_marquee | ticker-marquee | Client logos marquee (white bg, fade edges) |
+| 8 | sec_testimonials_rail | testimonials-carousel | Rail carousel with 9 testimonials (dark bg, gradient) |
+| 9 | sec_blog_forge | blog-post-grid + heading | Blog bento grid with 5 posts + topic pills (white bg) |
+
+### Data Deleted on Theme Reset/Activation
+
+When "Reset & Activate" is triggered, these database tables are wiped and recreated from `data.json`:
+
+| Data Type | data.json Key | Database Model | Notes |
+|-----------|--------------|----------------|-------|
+| Settings | `settings` | SiteSettings | Global site config |
+| Color Palette | `colorPalette` | ActiveTheme | Light + dark CSS vars |
+| Font Config | `fontConfig` | ActiveTheme | heading/body/accent fonts |
+| Service Categories | `serviceCategories` | ServiceCategory | Category hierarchy |
+| Services + Packages | `services` | Service, ServicePackage, ComparisonFeature | Full service data |
+| Pages + Sections | `pages` | LandingPage, LandingPageBlock | All page builder content |
+| Blog Categories | `blogCategories` | BlogCategory | Category slugs + names |
+| Blog Posts | `blogs` | BlogPost | Full content + SEO metadata |
+| FAQs | `faqs` | FAQ | Questions + answers |
+| Testimonials | `testimonials` | Testimonial | Reviews + ratings |
+| Legal Pages | `legalPages` | LegalPage | Privacy, terms, refund |
+| Header Config | `headerConfig` | HeaderConfig | Navigation settings |
+| Menu Items | `menuItems` | MenuItem | Nav menu hierarchy |
+| Footer Config | `footerConfig` | FooterConfig | Footer layout |
+| Footer Widgets | `footerWidgets` | FooterWidget | Footer columns content |
+| Tickers | `tickers` | Ticker, TickerItem | Marquee content |
+| Locations | `locations` | Location | Service locations |
+| Location Fees | `locationFees` | LocationFee | Per-location pricing |
+| Form Templates | `formTemplates` | FormTemplate | Lead form configs |

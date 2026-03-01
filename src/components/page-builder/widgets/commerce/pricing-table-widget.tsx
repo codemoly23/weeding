@@ -1272,6 +1272,11 @@ export function PricingTableWidget({
             feeLabel={settings.stateFee.label || "fee"}
             className="w-64"
             currencySymbol={currencySymbol}
+            accentColor={
+              settings.cardStyle?.cardVariant === "forge" || settings.tableVariant === "forge"
+                ? "#1b3a2d"
+                : undefined
+            }
           />
         </div>
       )}
@@ -1305,6 +1310,7 @@ export function PricingTableWidget({
             locationFee={locationFee}
             serviceSlug={serviceData.slug}
             currencySymbol={currencySymbol}
+            selectedAddons={selectedAddons}
           />
         )}
         </div>

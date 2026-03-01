@@ -10,6 +10,7 @@ import {
   SelectInput,
   ColorInput,
   NumberInput,
+  ToggleSwitch,
 } from "@/app/admin/appearance/landing-page/components/ui/form-controls";
 import { ExternalLink } from "lucide-react";
 
@@ -106,6 +107,12 @@ export function TickerMarqueeWidgetSettingsPanel({
             min={5}
             max={120}
             step={1}
+          />
+          <ToggleSwitch
+            label="Pause on Hover"
+            description="Pause the marquee when hovering over it"
+            checked={settings.pauseOnHover ?? true}
+            onChange={(v) => updateField("pauseOnHover", v)}
           />
         </AccordionSection>
       </div>

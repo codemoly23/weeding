@@ -8,6 +8,7 @@ import type { TestimonialsWidgetSettings, TestimonialItem } from "@/lib/page-bui
 import { DEFAULT_TESTIMONIALS_SETTINGS } from "@/lib/page-builder/defaults";
 import { TestimonialsGridView } from "./testimonials-grid-view";
 import { TestimonialsCarouselView } from "./testimonials-carousel-view";
+import { TestimonialsRailView } from "./testimonials-rail-view";
 import { TestimonialsVideoView } from "./testimonials-video-view";
 import { cn } from "@/lib/utils";
 import { WidgetContainer } from "@/components/page-builder/shared/widget-container";
@@ -178,27 +179,19 @@ export function TestimonialsWidget({ settings: partialSettings, isPreview = fals
       !heading.customFontSize && headingSizeClasses[size]
     );
 
-    if (!highlightWords) {
-      return (
-        <h2
-          className={headingClassName}
-          style={headingStyle}
-        >
-          {text}
-        </h2>
-      );
+    // Convert \n to <br/> for line breaks in headings
+    let result = text.replace(/\n/g, "<br/>");
+
+    if (highlightWords) {
+      const words = highlightWords.split(",").map((w) => w.trim());
+      words.forEach((word) => {
+        const regex = new RegExp(`(${word})`, "gi");
+        result = result.replace(
+          regex,
+          `<span style="color: ${highlightColor}">$1</span>`
+        );
+      });
     }
-
-    const words = highlightWords.split(",").map((w) => w.trim());
-    let result = text;
-
-    words.forEach((word) => {
-      const regex = new RegExp(`(${word})`, "gi");
-      result = result.replace(
-        regex,
-        `<span style="color: ${highlightColor}">$1</span>`
-      );
-    });
 
     return (
       <h2
@@ -285,10 +278,11 @@ export function TestimonialsWidget({ settings: partialSettings, isPreview = fals
   };
 
   // Alignment classes for header
-  const alignmentClasses = {
+  const alignmentClasses: Record<string, string> = {
     left: "text-left",
     center: "text-center mx-auto",
     right: "text-right ml-auto",
+    "space-between": "text-left",
   };
 
   // Get header settings with fallbacks
@@ -302,7 +296,54 @@ export function TestimonialsWidget({ settings: partialSettings, isPreview = fals
     <WidgetContainer container={settings.container}>
     <div className="w-full">
       {/* Header Section */}
-      {(header.show !== false) && (
+      {(header.show !== false) && headerAlignment === "space-between" ? (
+        <div
+          data-field-id="header"
+          className="flex justify-between items-end gap-8"
+          style={{ marginBottom: headerMarginBottom }}
+        >
+          {/* Left side: Badge + Heading */}
+          <div>
+            {badge.show && (
+              <Badge
+                variant="secondary"
+                className="mb-3"
+                style={{
+                  backgroundColor: badge.bgColor || DEFAULT_TESTIMONIALS_SETTINGS.header.badge.bgColor,
+                  color: badge.textColor || DEFAULT_TESTIMONIALS_SETTINGS.header.badge.textColor,
+                  borderColor: badge.borderColor || DEFAULT_TESTIMONIALS_SETTINGS.header.badge.borderColor,
+                  borderWidth: badge.style === "outline" ? 1 : 0,
+                  ...(badge.customFontSize ? { fontSize: badge.customFontSize } : {}),
+                  ...(badge.fontWeight ? { fontWeight: badge.fontWeight } : {}),
+                  ...(badge.letterSpacing ? { letterSpacing: badge.letterSpacing } : {}),
+                  ...(badge.textTransform ? { textTransform: badge.textTransform as React.CSSProperties["textTransform"] } : {}),
+                }}
+              >
+                {badge.text || DEFAULT_TESTIMONIALS_SETTINGS.header.badge.text}
+              </Badge>
+            )}
+            {renderHeading()}
+          </div>
+          {/* Right side: Description */}
+          {description.show && (
+            <div
+              className={cn(
+                "shrink-0 max-w-[320px]",
+                !description.customFontSize && descriptionSizeClasses[description.size || DEFAULT_TESTIMONIALS_SETTINGS.header.description.size]
+              )}
+              style={{
+                color: description.color || DEFAULT_TESTIMONIALS_SETTINGS.header.description.color,
+                ...(description.customFontSize ? { fontSize: description.customFontSize } : {}),
+                ...(description.lineHeight ? { lineHeight: description.lineHeight } : {}),
+              }}
+              dangerouslySetInnerHTML={{
+                __html: (description.text || DEFAULT_TESTIMONIALS_SETTINGS.header.description.text)
+                  .replace(/\*\*(.*?)\*\*/g, "<strong>$1</strong>"),
+              }}
+            />
+          )}
+        </div>
+      ) : (header.show !== false) && (
         <div
           data-field-id="header"
           className={cn("max-w-2xl", alignmentClasses[headerAlignment])}
@@ -372,8 +413,19 @@ export function TestimonialsWidget({ settings: partialSettings, isPreview = fals
             />
           )}
 
-          {/* Carousel View */}
-          {(settings.viewMode === "carousel" || settings.viewMode === "masonry") && (
+          {/* Rail Carousel View */}
+          {(settings.viewMode === "carousel" || settings.viewMode === "masonry") &&
+            settings.carouselView.layout === "rail" && (
+            <TestimonialsRailView
+              testimonials={testimonials}
+              settings={settings}
+              isPreview={isPreview}
+            />
+          )}
+
+          {/* Carousel View (standard/split/centered) */}
+          {(settings.viewMode === "carousel" || settings.viewMode === "masonry") &&
+            settings.carouselView.layout !== "rail" && (
             <TestimonialsCarouselView
               testimonials={testimonials}
               settings={settings}

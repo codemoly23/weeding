@@ -27,6 +27,8 @@ interface LocationSelectorProps {
   feeLabel?: string;
   className?: string;
   currencySymbol?: string;
+  accentColor?: string;
+  accentTextColor?: string;
 }
 
 const ITEMS_PER_PAGE = 10;
@@ -40,6 +42,8 @@ export function LocationSelector({
   feeLabel = "fee",
   className,
   currencySymbol = "$",
+  accentColor,
+  accentTextColor = "#ffffff",
 }: LocationSelectorProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [search, setSearch] = useState("");
@@ -192,7 +196,7 @@ export function LocationSelector({
         onClick={() => setIsOpen(!isOpen)}
         className={cn(
           "flex h-10 w-full items-center justify-between rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background",
-          "hover:bg-accent hover:text-accent-foreground",
+          "hover:border-primary",
           "focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2",
           "disabled:cursor-not-allowed disabled:opacity-50",
           isOpen && "ring-2 ring-ring ring-offset-2"
@@ -200,7 +204,7 @@ export function LocationSelector({
       >
         {value ? (
           <span className="flex items-center gap-2">
-            <MapPin className="h-4 w-4 text-primary" />
+            <MapPin className={cn("h-4 w-4", !accentColor && "text-primary")} style={accentColor ? { color: accentColor } : undefined} />
             <span className="font-medium">{value.name}</span>
             {value.fee > 0 && (
               <span className="text-muted-foreground">
@@ -260,10 +264,29 @@ export function LocationSelector({
                     onClick={() => handleSelect(loc)}
                     className={cn(
                       "rounded-full border px-2.5 py-1 text-xs font-medium transition-colors",
-                      "hover:bg-primary hover:text-primary-foreground",
-                      value?.code === loc.code &&
+                      !accentColor && "hover:bg-primary hover:text-primary-foreground",
+                      !accentColor && value?.code === loc.code &&
                         "bg-primary text-primary-foreground"
                     )}
+                    style={accentColor ? {
+                      ...(value?.code === loc.code
+                        ? { backgroundColor: accentColor, color: accentTextColor, borderColor: accentColor }
+                        : {}),
+                    } : undefined}
+                    onMouseEnter={accentColor ? (e) => {
+                      if (value?.code !== loc.code) {
+                        e.currentTarget.style.backgroundColor = accentColor;
+                        e.currentTarget.style.color = accentTextColor;
+                        e.currentTarget.style.borderColor = accentColor;
+                      }
+                    } : undefined}
+                    onMouseLeave={accentColor ? (e) => {
+                      if (value?.code !== loc.code) {
+                        e.currentTarget.style.backgroundColor = "";
+                        e.currentTarget.style.color = "";
+                        e.currentTarget.style.borderColor = "";
+                      }
+                    } : undefined}
                   >
                     {getShortCode(loc.code)}
                   </button>
@@ -298,10 +321,14 @@ export function LocationSelector({
                   <span
                     className={cn(
                       "flex h-6 w-8 items-center justify-center rounded text-xs font-semibold",
-                      value?.code === loc.code
+                      !accentColor && (value?.code === loc.code
                         ? "bg-primary text-primary-foreground"
-                        : "bg-muted"
+                        : "bg-muted"),
+                      accentColor && value?.code !== loc.code && "bg-muted"
                     )}
+                    style={accentColor && value?.code === loc.code
+                      ? { backgroundColor: accentColor, color: accentTextColor }
+                      : undefined}
                   >
                     {getShortCode(loc.code)}
                   </span>
@@ -319,7 +346,7 @@ export function LocationSelector({
             {/* Loading Indicator */}
             {isLoading && (
               <div className="flex items-center justify-center gap-2 py-3">
-                <Loader2 className="h-4 w-4 animate-spin text-primary" />
+                <Loader2 className={cn("h-4 w-4 animate-spin", !accentColor && "text-primary")} style={accentColor ? { color: accentColor } : undefined} />
                 <span className="text-sm text-muted-foreground">Loading...</span>
               </div>
             )}

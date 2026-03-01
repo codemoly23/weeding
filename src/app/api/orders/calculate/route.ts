@@ -44,7 +44,7 @@ interface PriceBreakdown {
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
-    const { packageId, locationCode, stateCode, couponCode } = calculateSchema.parse(body);
+    const { packageId, locationCode, stateCode, addons, couponCode } = calculateSchema.parse(body);
 
     if (!packageId) {
       return NextResponse.json(
@@ -156,8 +156,37 @@ export async function POST(request: NextRequest) {
       }
     }
 
-    // TODO: Add addon support when addon model is ready
-    // For now, addons are empty
+    // Resolve add-ons from PackageFeatureMap
+    if (addons && addons.length > 0) {
+      const addonFeatureIds = addons.map((a) => a.id);
+      const featureMaps = await prisma.packageFeatureMap.findMany({
+        where: {
+          packageId,
+          featureId: { in: addonFeatureIds },
+          valueType: "ADDON",
+        },
+        include: {
+          feature: { select: { id: true, text: true } },
+        },
+      });
+
+      for (const fm of featureMaps) {
+        if (fm.addonPriceUSD != null) {
+          const quantity = addons.find((a) => a.id === fm.featureId)?.quantity || 1;
+          const price = Number(fm.addonPriceUSD);
+          breakdown.addons.push({
+            id: fm.featureId,
+            name: fm.feature.text,
+            price,
+            quantity,
+          });
+          breakdown.addonsTotal += price * quantity;
+        }
+      }
+
+      breakdown.subtotal += breakdown.addonsTotal;
+      breakdown.total += breakdown.addonsTotal;
+    }
 
     // Apply coupon if provided
     if (couponCode) {

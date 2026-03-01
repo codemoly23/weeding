@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import type { TickerMarqueeWidgetSettings, TickerMarqueeItem } from "@/lib/page-builder/types";
 import { DEFAULT_TICKER_MARQUEE_SETTINGS } from "@/lib/page-builder/defaults";
 import { WidgetContainer } from "@/components/page-builder/shared/widget-container";
@@ -105,13 +105,36 @@ export function TickerMarqueeWidget({ settings: rawSettings }: TickerMarqueeWidg
     );
   }
 
+  const pauseOnHover = settings.pauseOnHover ?? true;
+  const trackRef = useRef<HTMLDivElement>(null);
+
+  const handleMouseEnter = useCallback(() => {
+    if (pauseOnHover && trackRef.current) {
+      trackRef.current.style.animationPlayState = "paused";
+    }
+  }, [pauseOnHover]);
+
+  const handleMouseLeave = useCallback(() => {
+    if (pauseOnHover && trackRef.current) {
+      trackRef.current.style.animationPlayState = "running";
+    }
+  }, [pauseOnHover]);
+
   return (
     <WidgetContainer container={settings.container}>
-      <div className="overflow-hidden">
+      <div
+        className="overflow-hidden"
+        onMouseEnter={handleMouseEnter}
+        onMouseLeave={handleMouseLeave}
+      >
         <div
+          ref={trackRef}
           className="flex w-max"
           style={{
-            animation: `ticker-marquee ${speed}s linear infinite`,
+            animationName: "ticker-marquee",
+            animationDuration: `${speed}s`,
+            animationTimingFunction: "linear",
+            animationIterationCount: "infinite",
             gap: 0,
           }}
         >

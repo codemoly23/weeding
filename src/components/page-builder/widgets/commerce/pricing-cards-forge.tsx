@@ -222,7 +222,8 @@ export function PricingCardsForge({
         const { inheritedFeatures, newFeatures, addonFeatures, prevPkgName } =
           getPackageFeatureGroups(pkg, index);
 
-        const checkoutUrl = `/checkout/${serviceSlug}?package=${encodeURIComponent(pkg.name.toLowerCase())}${selectedLocation ? `&location=${selectedLocation.code}` : ""}`;
+        const pkgAddons = selectedAddons.filter((a) => a.packageId === pkg.id);
+        const checkoutUrl = `/checkout/${serviceSlug}?package=${encodeURIComponent(pkg.name.toLowerCase())}${selectedLocation ? `&location=${selectedLocation.code}` : ""}${pkgAddons.length > 0 ? `&addons=${pkgAddons.map((a) => a.featureId).join(",")}` : ""}`;
 
         return (
           <div
@@ -318,7 +319,7 @@ export function PricingCardsForge({
               const addonTotal = selectedAddons
                 .filter((a) => a.packageId === pkg.id)
                 .reduce((sum, a) => sum + a.price, 0);
-              const displayPrice = Math.floor(pkg.price + addonTotal);
+              const displayPrice = Math.floor(pkg.price + addonTotal + locationFee);
 
               return (
                 <div className="mb-1.5">
@@ -333,7 +334,9 @@ export function PricingCardsForge({
                     {displayPrice}
                   </span>
                   <sub className="text-[16px] font-medium ml-0.5" style={{ color: TEXT_MID }}>
-                    +state fee
+                    {locationFee > 0
+                      ? `+${currencySymbol}${locationFee} state fee`
+                      : "+state fee"}
                   </sub>
                   {addonTotal > 0 && (
                     <div className="text-[11px] mt-1" style={{ color: FOREST }}>

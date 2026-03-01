@@ -537,6 +537,7 @@ export async function importThemeData(
               slug: post.slug,
               content: post.content,
               excerpt: post.excerpt || null,
+              coverImage: post.coverImage || null,
               status: post.published ? "PUBLISHED" : "DRAFT",
               publishedAt: post.published ? new Date() : null,
               metaTitle: post.metaTitle || null,
@@ -567,16 +568,22 @@ export async function importThemeData(
       // ---- 14. Testimonials ----
       if (data.testimonials) {
         for (const t of data.testimonials) {
+          // Check if avatar is a color string (used for initials bg) — don't store as image URL
+          const isColorAvatar = /^rgba?\(/.test(t.avatar || "");
           await tx.testimonial.create({
             data: {
               name: t.name,
               company: t.company || null,
               country: t.country || null,
-              avatar: t.avatar || null,
+              avatar: isColorAvatar ? null : (t.avatar || null),
               content: t.content,
               rating: t.rating ?? 5,
               isActive: t.isActive ?? true,
               sortOrder: t.sortOrder ?? 0,
+              type: (t.type as any) || "PHOTO",
+              videoUrl: t.videoUrl || null,
+              thumbnailUrl: t.thumbnailUrl || null,
+              tags: t.tags || [],
             },
           });
           counts.testimonials++;

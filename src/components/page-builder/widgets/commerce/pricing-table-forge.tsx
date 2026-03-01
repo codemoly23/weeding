@@ -145,9 +145,11 @@ export function PricingTableForge({
     setExpandedAddons((prev) => ({ ...prev, [key]: !prev[key] }));
 
   const getCheckoutUrl = useCallback(
-    (pkg: Package) =>
-      `/checkout/${serviceSlug}?package=${encodeURIComponent(pkg.name.toLowerCase())}${selectedLocation ? `&location=${selectedLocation.code}` : ""}`,
-    [serviceSlug, selectedLocation]
+    (pkg: Package) => {
+      const pkgAddons = selectedAddons.filter((a) => a.packageId === pkg.id);
+      return `/checkout/${serviceSlug}?package=${encodeURIComponent(pkg.name.toLowerCase())}${selectedLocation ? `&location=${selectedLocation.code}` : ""}${pkgAddons.length > 0 ? `&addons=${pkgAddons.map((a) => a.featureId).join(",")}` : ""}`;
+    },
+    [serviceSlug, selectedLocation, selectedAddons]
   );
 
   // Button variant styles
@@ -260,7 +262,7 @@ export function PricingTableForge({
                                 )}
                                 style={{ fontFamily: "var(--font-heading, Outfit, sans-serif)" }}
                               >
-                                {currencySymbol}{Math.floor(pkg.price + addonTotal)}
+                                {currencySymbol}{Math.floor(pkg.price + addonTotal + locationFee)}
                               </span>
                             );
                           })()}
@@ -282,7 +284,9 @@ export function PricingTableForge({
                               isActive ? "text-[rgba(250,248,244,0.5)]" : "text-[#8a9086]"
                             )}
                           >
-                            + state fee
+                            {locationFee > 0
+                              ? `+${currencySymbol}${locationFee} state fee`
+                              : "+ state fee"}
                           </sub>
                         </span>
 

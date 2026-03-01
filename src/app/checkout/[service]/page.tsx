@@ -165,12 +165,37 @@ function ServiceCheckoutForm() {
     notIncluded: string[];
   }
 
+  interface PackageFeatureMapping {
+    id: string;
+    packageId: string;
+    included: boolean;
+    customValue: string | null;
+    valueType: string;
+    addonPriceUSD: number | null;
+    addonPriceBDT: number | null;
+  }
+
+  interface ComparisonFeature {
+    id: string;
+    text: string;
+    tooltip: string | null;
+    description: string | null;
+    packageMappings: PackageFeatureMapping[];
+  }
+
+  interface SelectedAddon {
+    featureId: string;
+    featureText: string;
+    price: number;
+  }
+
   interface ServiceInfo {
     id: string;
     slug: string;
     name: string;
     shortDesc: string;
     packages: ServicePackage[];
+    comparisonFeatures?: ComparisonFeature[];
     displayOptions?: {
       checkoutBadgeText?: string;
       checkoutBadgeDescription?: string;
@@ -217,6 +242,7 @@ function ServiceCheckoutForm() {
   const [dynamicTemplate, setDynamicTemplate] = useState<DynamicFormTemplate | null>(null);
   const [isLoadingService, setIsLoadingService] = useState(true);
   const [currencySymbol, setCurrencySymbol] = useState("$");
+  const [selectedAddons, setSelectedAddons] = useState<SelectedAddon[]>([]);
 
   // Fetch service data and dynamic form from API
   useEffect(() => {
@@ -233,6 +259,74 @@ function ServiceCheckoutForm() {
         if (serviceResponse.ok) {
           const data = await serviceResponse.json();
           setService(data);
+
+          // Resolve add-ons from URL params
+          const addonParam = searchParams.get("addons");
+          if (addonParam && data.comparisonFeatures) {
+            const addonIds = addonParam.split(",").filter(Boolean);
+            const resolved: SelectedAddon[] = [];
+
+            for (const featureId of addonIds) {
+              const feature = (data.comparisonFeatures as ComparisonFeature[]).find(
+                (f) => f.id === featureId
+              );
+              if (!feature) continue;
+
+              // Find the package mapping for the selected package
+              const selectedPkg = (data.packages as ServicePackage[]).find(
+                (p) => p.name.toLowerCase().replace(/\s+/g, "-") === selectedPackageSlug.toLowerCase()
+              ) || data.packages?.[0];
+
+              if (!selectedPkg) continue;
+
+              const mapping = feature.packageMappings.find(
+                (m) => m.packageId === selectedPkg.id
+              );
+
+              if (mapping?.valueType === "ADDON" && mapping.addonPriceUSD != null) {
+                resolved.push({
+                  featureId: feature.id,
+                  featureText: feature.text,
+                  price: mapping.addonPriceUSD,
+                });
+              }
+            }
+
+            setSelectedAddons(resolved);
+          }
+
+          // Resolve location from URL params
+          const locationParam = searchParams.get("location");
+          if (locationParam && data.id) {
+            try {
+              const locRes = await fetch(
+                `/api/locations?search=${encodeURIComponent(locationParam)}&serviceId=${data.id}&limit=1`
+              );
+              if (locRes.ok) {
+                const locData = await locRes.json();
+                const loc = locData.locations?.[0];
+                if (loc && loc.code === locationParam) {
+                  const locationItem: LocationItem = {
+                    code: loc.code,
+                    name: loc.name,
+                    country: loc.country,
+                    type: loc.type,
+                    isPopular: loc.isPopular,
+                    fee: loc.fee || 0,
+                  };
+                  setSelectedLocation(locationItem);
+                  // Pre-fill the form field too
+                  setFormValues((prev) => ({
+                    ...prev,
+                    formationState: locationParam,
+                    state: locationParam,
+                  }));
+                }
+              }
+            } catch {
+              // Location fetch failed, user can still select manually
+            }
+          }
         }
 
         if (formResponse.ok) {
@@ -509,6 +603,8 @@ function ServiceCheckoutForm() {
     (p) => p.name.toLowerCase().replace(/\s+/g, "-") === selectedPackageSlug.toLowerCase()
   ) || service?.packages[0];
   const serviceFee = selectedPackage?.price || 0;
+  const addonsTotal = selectedAddons.reduce((sum, a) => sum + a.price, 0);
+  const orderTotal = serviceFee + (selectedLocation?.fee || 0) + addonsTotal;
 
   // Check if a field should be visible based on conditional logic
   const isFieldVisible = (field: FormField): boolean => {
@@ -822,10 +918,15 @@ function ServiceCheckoutForm() {
           packageName: selectedPackage?.name,
           packagePrice: serviceFee,
           formData: formValues,
-          totalAmount: serviceFee + (selectedLocation?.fee || 0),
+          totalAmount: orderTotal,
           locationCode: selectedLocation?.code,
           locationName: selectedLocation?.name,
           stateCode: selectedLocation?.code, // backward compat
+          addons: selectedAddons.map((a) => ({
+            featureId: a.featureId,
+            name: a.featureText,
+            price: a.price,
+          })),
           ...(loggedInUser
             ? { userId: loggedInUser.id }
             : {
@@ -885,7 +986,7 @@ function ServiceCheckoutForm() {
       } else if (selectedGateway === "paypal") {
         // Show PayPal button overlay
         setCreatedOrderNumber(orderNumber);
-        setCreatedOrderTotal(serviceFee + (selectedLocation?.fee || 0));
+        setCreatedOrderTotal(orderTotal);
         setShowPayPalOverlay(true);
         setIsLoading(false);
         return;
@@ -1813,8 +1914,8 @@ function ServiceCheckoutForm() {
                       <>
                         <Check className="mr-2 h-4 w-4" />
                         {enabledGateways.length > 0
-                          ? `Complete Order — ${currencySymbol}${serviceFee + (selectedLocation?.fee || 0)}`
-                          : `Submit Order — ${currencySymbol}${serviceFee + (selectedLocation?.fee || 0)}`}
+                          ? `Complete Order — ${currencySymbol}${orderTotal}`
+                          : `Submit Order — ${currencySymbol}${orderTotal}`}
                       </>
                     )}
                   </Button>
@@ -1908,6 +2009,12 @@ function ServiceCheckoutForm() {
                         <span className="font-medium">{currencySymbol}{selectedLocation.fee}</span>
                       </div>
                     )}
+                    {selectedAddons.map((addon) => (
+                      <div key={addon.featureId} className="flex justify-between gap-2">
+                        <span className="text-muted-foreground truncate">{addon.featureText}</span>
+                        <span className="font-medium shrink-0">{currencySymbol}{addon.price}</span>
+                      </div>
+                    ))}
                   </div>
 
                   <Separator />
@@ -1915,7 +2022,7 @@ function ServiceCheckoutForm() {
                   <div className="flex justify-between text-lg font-semibold">
                     <span>Total</span>
                     <span className="text-primary">
-                      {currencySymbol}{serviceFee + (selectedLocation?.fee || 0)}
+                      {currencySymbol}{orderTotal}
                     </span>
                   </div>
 

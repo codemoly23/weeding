@@ -24,6 +24,10 @@ const nextConfig: NextConfig = {
         protocol: "https",
         hostname: "cdn.llcpad.com", // R2 CDN for uploaded files
       },
+      {
+        protocol: "https",
+        hostname: "images.unsplash.com", // Blog post cover images
+      },
     ],
   },
 

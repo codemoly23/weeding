@@ -185,6 +185,7 @@ export interface ThemeBlogPost {
   slug: string;
   content: string;
   excerpt?: string;
+  coverImage?: string;
   categorySlug?: string;
   published: boolean;
   metaTitle?: string;
@@ -270,6 +271,10 @@ export interface ThemeTestimonial {
   isActive: boolean;
   sortOrder: number;
   avatar?: string;
+  type?: "PHOTO" | "VIDEO";
+  videoUrl?: string;
+  thumbnailUrl?: string;
+  tags?: string[];
 }
 
 // ---- Legal Pages ----

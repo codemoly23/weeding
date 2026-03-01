@@ -4,7 +4,32 @@ import { useEffect, useRef, useState, useMemo } from "react";
 import { cn } from "@/lib/utils";
 import { SmartLink } from "@/components/ui/smart-link";
 import type { HeadingWidgetSettings } from "@/lib/page-builder/types";
+import { DEFAULT_HEADING_SETTINGS } from "@/lib/page-builder/defaults";
 import { WidgetContainer } from "@/components/page-builder/shared/widget-container";
+
+// Deep merge utility — fills in missing nested defaults
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+function deepMerge(defaults: any, overrides: any): any {
+  if (!overrides) return defaults;
+  const result = { ...defaults };
+  for (const key of Object.keys(overrides)) {
+    const val = overrides[key];
+    if (
+      val !== null &&
+      val !== undefined &&
+      typeof val === "object" &&
+      !Array.isArray(val) &&
+      typeof result[key] === "object" &&
+      result[key] !== null &&
+      !Array.isArray(result[key])
+    ) {
+      result[key] = deepMerge(result[key], val);
+    } else if (val !== undefined) {
+      result[key] = val;
+    }
+  }
+  return result;
+}
 
 interface HeadingWidgetProps {
   settings: HeadingWidgetSettings;
@@ -204,7 +229,13 @@ function getHoverAnimationClass(
   return animationClasses[animation.type] || "";
 }
 
-export function HeadingWidget({ settings, isPreview = false }: HeadingWidgetProps) {
+export function HeadingWidget({ settings: rawSettings, isPreview = false }: HeadingWidgetProps) {
+  // Merge with defaults so partial settings (e.g. from data.json) don't crash
+  const settings: HeadingWidgetSettings = useMemo(
+    () => deepMerge(DEFAULT_HEADING_SETTINGS, rawSettings) as HeadingWidgetSettings,
+    [rawSettings]
+  );
+
   const ref = useRef<HTMLElement>(null);
   const [isVisible, setIsVisible] = useState(false);
   const [animationKey, setAnimationKey] = useState(0);

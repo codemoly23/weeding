@@ -39,6 +39,13 @@ const serviceOrderSchema = z.object({
     country: z.string().optional(),
   }).optional(),
 
+  // Add-ons selected from pricing page
+  addons: z.array(z.object({
+    featureId: z.string(),
+    name: z.string(),
+    price: z.number(),
+  })).optional(),
+
   // For logged-in users
   userId: z.string().optional(),
 });
@@ -217,11 +224,19 @@ export async function POST(request: NextRequest) {
               packageId: packageRecord?.id || undefined,
               name: data.serviceName,
               description: `${data.packageName ? data.packageName + " - " : ""}${data.serviceName}${data.locationName || data.stateName ? ` - ${data.locationName || data.stateName}` : ""}`.trim(),
-              priceUSD: data.totalAmount,
+              priceUSD: data.packagePrice || 0,
               stateFee: 0,
               locationCode: data.locationCode || (data.stateCode ? `US-${data.stateCode}` : undefined),
               locationName: data.locationName || data.stateName,
             },
+            // Add-on items as separate line items
+            ...(data.addons || []).map((addon) => ({
+              serviceId: service.id,
+              name: addon.name,
+              description: `Add-on: ${addon.name}`,
+              priceUSD: addon.price,
+              stateFee: 0,
+            })),
           ],
         },
         notes: {

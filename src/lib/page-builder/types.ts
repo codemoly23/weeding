@@ -1062,7 +1062,7 @@ export type TestimonialType = "photo" | "video" | "mixed";
 export type TestimonialCardStyle = "minimal" | "elevated" | "glassmorphism" | "bordered" | "gradient-border";
 export type TestimonialAvatarStyle = "initials" | "photo" | "none";
 export type TestimonialAvatarShape = "circle" | "rounded" | "square";
-export type CarouselLayout = "standard" | "split" | "centered";
+export type CarouselLayout = "standard" | "split" | "centered" | "rail";
 export type CarouselEffect = "slide" | "fade" | "cards" | "coverflow";
 
 // Manual testimonial item for widget settings
@@ -1119,7 +1119,7 @@ export interface TestimonialsWidgetSettings {
       customFontSize?: string;
       lineHeight?: number;
     };
-    alignment: "left" | "center" | "right";
+    alignment: "left" | "center" | "right" | "space-between";
     marginBottom: number;
   };
 
@@ -2934,6 +2934,11 @@ export interface BlogSectionHeader {
     bgColor?: string;
     textColor?: string;
     borderColor?: string;
+    // Custom typography overrides
+    customFontSize?: string;
+    fontWeight?: number;
+    letterSpacing?: string;
+    textTransform?: string;
   };
   heading: {
     text: string;
@@ -3295,6 +3300,9 @@ export interface TickerMarqueeWidgetSettings {
   // Custom typography overrides
   customFontSize?: string;     // e.g., "13px" - overrides hardcoded text-[13px]
   fontWeight?: number;         // e.g., 600
+
+  // Interaction
+  pauseOnHover?: boolean;      // Pause marquee animation on mouse hover
 
   // Theme color binding
   colors?: {

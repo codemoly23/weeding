@@ -6543,6 +6543,435 @@
                 "visibleOnMobile": true,
                 "visibleOnDesktop": true
               }
+            },
+            {
+              "id": "sec_clients_marquee",
+              "order": 7,
+              "layout": "1",
+              "columns": [
+                {
+                  "id": "col_clients_marquee",
+                  "widgets": [
+                    {
+                      "id": "widget_clients_label",
+                      "type": "heading",
+                      "spacing": {
+                        "marginTop": 0,
+                        "marginBottom": 24
+                      },
+                      "settings": {
+                        "content": {
+                          "text": "Trusted by 1,200+ entrepreneurs from companies worldwide",
+                          "htmlTag": "p",
+                          "highlight": {
+                            "enabled": false
+                          }
+                        },
+                        "style": {
+                          "alignment": "center",
+                          "typography": {
+                            "fontSize": 12,
+                            "fontSizeUnit": "px",
+                            "fontWeight": 700,
+                            "letterSpacing": 1.5,
+                            "letterSpacingUnit": "px",
+                            "lineHeight": 1.4,
+                            "textTransform": "uppercase"
+                          },
+                          "textFill": {
+                            "type": "solid",
+                            "color": "rgba(14,17,9,0.35)"
+                          }
+                        }
+                      }
+                    },
+                    {
+                      "id": "widget_clients_ticker",
+                      "type": "ticker-marquee",
+                      "settings": {
+                        "tickerName": "clients-marquee",
+                        "speed": 35,
+                        "separator": "·",
+                        "textColor": "rgba(14,17,9,0.18)",
+                        "boldColor": "rgba(14,17,9,0.18)",
+                        "separatorColor": "#e84c1e",
+                        "customFontSize": "16px",
+                        "fontWeight": 800,
+                        "pauseOnHover": true,
+                        "colors": {
+                          "useTheme": false
+                        }
+                      }
+                    }
+                  ],
+                  "settings": {
+                    "verticalAlign": "top",
+                    "padding": 0
+                  }
+                }
+              ],
+              "settings": {
+                "fullWidth": true,
+                "background": {
+                  "type": "solid",
+                  "color": "#ffffff"
+                },
+                "paddingTop": 28,
+                "paddingBottom": 28,
+                "paddingLeft": 0,
+                "paddingRight": 0,
+                "marginTop": 0,
+                "marginBottom": 0,
+                "maxWidth": "xl",
+                "gap": 0,
+                "isVisible": true,
+                "visibleOnMobile": true,
+                "visibleOnDesktop": true,
+                "customCSS": "border-top: 1px solid rgba(0,0,0,0.06); border-bottom: 1px solid rgba(0,0,0,0.06); & .overflow-hidden { mask-image: linear-gradient(90deg, transparent, black 12%, black 88%, transparent); -webkit-mask-image: linear-gradient(90deg, transparent, black 12%, black 88%, transparent); } & .font-display { border-right-color: rgba(0,0,0,0.06) !important; letter-spacing: -0.02em; transition: color 0.3s; } & .font-display:hover { color: #1b3a2d !important; }"
+              }
+            },
+            {
+              "id": "sec_testimonials_rail",
+              "order": 8,
+              "layout": "1",
+              "columns": [
+                {
+                  "id": "col_testimonials_rail",
+                  "widgets": [
+                    {
+                      "id": "widget_testimonials_rail",
+                      "type": "testimonials-carousel",
+                      "settings": {
+                        "header": {
+                          "show": true,
+                          "badge": {
+                            "show": true,
+                            "text": "Client Stories",
+                            "style": "pill",
+                            "bgColor": "transparent",
+                            "textColor": "#ff6a3d",
+                            "borderColor": "transparent",
+                            "customFontSize": "12px",
+                            "fontWeight": 700,
+                            "letterSpacing": "1.5px",
+                            "textTransform": "uppercase"
+                          },
+                          "heading": {
+                            "text": "Trusted by founders\nworldwide",
+                            "highlightWords": "",
+                            "highlightColor": "#ff6a3d",
+                            "size": "xl",
+                            "color": "#faf8f4",
+                            "customFontSize": "clamp(28px, 3.5vw, 42px)",
+                            "fontWeight": 800,
+                            "lineHeight": 1.15,
+                            "letterSpacing": "-0.025em"
+                          },
+                          "description": {
+                            "show": true,
+                            "text": "Verified reviews from entrepreneurs across <strong style=\"color:#ffffff\">30+ countries</strong> who built their US businesses with LLCPad.",
+                            "size": "md",
+                            "color": "rgba(250,248,244,0.45)",
+                            "customFontSize": "15px",
+                            "lineHeight": 1.7
+                          },
+                          "alignment": "space-between",
+                          "marginBottom": 56
+                        },
+                        "viewMode": "carousel",
+                        "testimonialType": "photo",
+                        "dataSource": {
+                          "limit": 10,
+                          "sortBy": "sort-order",
+                          "testimonialType": "all"
+                        },
+                        "carouselView": {
+                          "layout": "rail",
+                          "effect": "slide",
+                          "autoplay": true,
+                          "autoplayDelay": 5000,
+                          "loop": true,
+                          "slidesPerView": 3,
+                          "spaceBetween": 24,
+                          "navigation": {
+                            "arrows": {
+                              "enabled": false,
+                              "style": "default",
+                              "size": "md",
+                              "position": "sides",
+                              "showOnHover": false
+                            },
+                            "pagination": {
+                              "enabled": true,
+                              "type": "dots",
+                              "activeColor": "#ff6a3d",
+                              "inactiveColor": "rgba(255,255,255,0.2)"
+                            }
+                          }
+                        },
+                        "cardStyle": {
+                          "style": "minimal",
+                          "borderRadius": 16,
+                          "borderWidth": 1,
+                          "borderColor": "rgba(255,255,255,0.08)",
+                          "backgroundColor": "rgba(255,255,255,0.03)",
+                          "shadow": "none",
+                          "padding": 32,
+                          "hoverEffect": "lift"
+                        },
+                        "avatar": {
+                          "style": "initials",
+                          "shape": "circle",
+                          "size": "lg",
+                          "borderWidth": 2,
+                          "borderColor": "rgba(255,255,255,0.1)",
+                          "backgroundColor": "rgba(232,76,30,0.7)",
+                          "textColor": "#ffffff"
+                        },
+                        "content": {
+                          "showRating": true,
+                          "ratingStyle": "stars",
+                          "ratingColor": "#ff6a3d",
+                          "showCompany": true,
+                          "showCountry": true,
+                          "countryFlag": true,
+                          "quoteMaxLines": 0,
+                          "quoteFontSize": "md",
+                          "quoteColor": "rgba(250,248,244,0.75)",
+                          "quoteStyle": "normal",
+                          "nameFontSize": "md",
+                          "nameColor": "#faf8f4",
+                          "nameFontWeight": "bold",
+                          "infoColor": "rgba(250,248,244,0.5)",
+                          "infoFontSize": "sm"
+                        },
+                        "trustFooter": {
+                          "show": false,
+                          "showAvatarStack": false,
+                          "avatarStackCount": 4,
+                          "customerCountText": "",
+                          "showAverageRating": false,
+                          "averageRating": 4.9,
+                          "totalReviews": "",
+                          "alignment": "center",
+                          "marginTop": 0
+                        },
+                        "animation": {
+                          "enabled": true,
+                          "entrance": "fade",
+                          "staggerDelay": 100,
+                          "duration": 500
+                        },
+                        "responsive": {
+                          "tablet": {
+                            "columns": 2,
+                            "slidesPerView": 2
+                          },
+                          "mobile": {
+                            "columns": 1,
+                            "slidesPerView": 1
+                          }
+                        }
+                      }
+                    }
+                  ],
+                  "settings": {
+                    "verticalAlign": "top",
+                    "padding": 0
+                  }
+                }
+              ],
+              "settings": {
+                "fullWidth": true,
+                "background": {
+                  "type": "solid",
+                  "color": "#1b3a2d"
+                },
+                "paddingTop": 100,
+                "paddingBottom": 100,
+                "paddingLeft": 28,
+                "paddingRight": 28,
+                "marginTop": 0,
+                "marginBottom": 0,
+                "maxWidth": "xl",
+                "gap": 0,
+                "isVisible": true,
+                "visibleOnMobile": true,
+                "visibleOnDesktop": true
+              }
+            },
+            {
+              "id": "sec_blog_forge",
+              "order": 9,
+              "layout": "1",
+              "columns": [
+                {
+                  "id": "col_blog_forge",
+                  "widgets": [
+                    {
+                      "id": "widget_blog_grid_forge",
+                      "type": "blog-post-grid",
+                      "settings": {
+                        "header": {
+                          "show": true,
+                          "badge": {
+                            "show": true,
+                            "text": "Insights",
+                            "style": "pill",
+                            "bgColor": "transparent",
+                            "textColor": "#e84c1e",
+                            "borderColor": "transparent",
+                            "customFontSize": "12px",
+                            "fontWeight": 700,
+                            "letterSpacing": "1.5px",
+                            "textTransform": "uppercase"
+                          },
+                          "heading": {
+                            "text": "Free guides for\nglobal founders",
+                            "size": "xl",
+                            "color": "#0e1109",
+                            "customFontSize": "clamp(28px, 3.5vw, 42px)",
+                            "fontWeight": 800,
+                            "lineHeight": 1.15,
+                            "letterSpacing": "-0.025em",
+                            "highlightWords": "",
+                            "highlightColor": "#e84c1e"
+                          },
+                          "viewAllLink": {
+                            "show": true,
+                            "text": "Browse All Articles",
+                            "url": "/blog",
+                            "style": "button-outline",
+                            "color": "#1b3a2d"
+                          },
+                          "alignment": "space-between",
+                          "marginBottom": 56
+                        },
+                        "dataSource": {
+                          "source": "all",
+                          "postCount": 5,
+                          "offset": 0,
+                          "orderBy": "date",
+                          "orderDirection": "desc",
+                          "excludeCurrentPost": false
+                        },
+                        "layout": {
+                          "type": "grid",
+                          "columns": {
+                            "desktop": 3,
+                            "tablet": 2,
+                            "mobile": 1
+                          },
+                          "gap": 20,
+                          "equalHeight": true
+                        },
+                        "card": {
+                          "style": "bordered",
+                          "borderRadius": 20,
+                          "shadow": "none",
+                          "hoverEffect": "lift",
+                          "contentPadding": 28,
+                          "image": {
+                            "show": true,
+                            "aspectRatio": "16:9",
+                            "borderRadius": 0,
+                            "hoverEffect": "zoom"
+                          },
+                          "categoryBadge": {
+                            "show": true,
+                            "position": "above-title",
+                            "style": "pill"
+                          },
+                          "title": {
+                            "show": true,
+                            "fontSize": "md",
+                            "fontWeight": 700,
+                            "maxLines": 2
+                          },
+                          "excerpt": {
+                            "show": true,
+                            "fontSize": "sm",
+                            "maxLength": 160
+                          },
+                          "meta": {
+                            "show": true,
+                            "items": [
+                              "readingTime",
+                              "date"
+                            ],
+                            "separator": "dot",
+                            "fontSize": "xs",
+                            "dateFormat": "short"
+                          },
+                          "readMore": {
+                            "show": true,
+                            "text": "",
+                            "style": "arrow-only"
+                          }
+                        },
+                        "filterTabs": {
+                          "show": false,
+                          "style": "pills",
+                          "showAll": true,
+                          "allText": "All",
+                          "categories": []
+                        },
+                        "pagination": {
+                          "type": "none",
+                          "postsPerLoad": 5,
+                          "loadMoreText": "Load More"
+                        },
+                        "emptyState": {
+                          "title": "No articles found",
+                          "description": "Check back later for new content"
+                        },
+                        "animation": {
+                          "entrance": {
+                            "enabled": true,
+                            "type": "fade-up",
+                            "stagger": true,
+                            "staggerDelay": 100
+                          }
+                        }
+                      }
+                    },
+                    {
+                      "id": "widget_blog_topics",
+                      "type": "custom-html",
+                      "spacing": {
+                        "marginTop": 36,
+                        "marginBottom": 0
+                      },
+                      "settings": {
+                        "html": "<div style='display:flex;gap:10px;flex-wrap:wrap'><a href='/blog' style='display:inline-flex;align-items:center;gap:6px;padding:8px 18px;border-radius:999px;font-size:12.5px;font-weight:600;color:#5c615a;background:#faf8f4;border:1px solid rgba(14,17,9,0.08);text-decoration:none;font-family:var(--font-heading);transition:all .25s;white-space:nowrap'>EIN Without SSN</a><a href='/blog' style='display:inline-flex;align-items:center;gap:6px;padding:8px 18px;border-radius:999px;font-size:12.5px;font-weight:600;color:#5c615a;background:#faf8f4;border:1px solid rgba(14,17,9,0.08);text-decoration:none;font-family:var(--font-heading);transition:all .25s;white-space:nowrap'>Form 5472 Guide</a><a href='/blog' style='display:inline-flex;align-items:center;gap:6px;padding:8px 18px;border-radius:999px;font-size:12.5px;font-weight:600;color:#5c615a;background:#faf8f4;border:1px solid rgba(14,17,9,0.08);text-decoration:none;font-family:var(--font-heading);transition:all .25s;white-space:nowrap'>US Banking Guide</a><a href='/blog' style='display:inline-flex;align-items:center;gap:6px;padding:8px 18px;border-radius:999px;font-size:12.5px;font-weight:600;color:#5c615a;background:#faf8f4;border:1px solid rgba(14,17,9,0.08);text-decoration:none;font-family:var(--font-heading);transition:all .25s;white-space:nowrap'>Amazon Seller 101</a><a href='/blog' style='display:inline-flex;align-items:center;gap:6px;padding:8px 18px;border-radius:999px;font-size:12.5px;font-weight:600;color:#5c615a;background:#faf8f4;border:1px solid rgba(14,17,9,0.08);text-decoration:none;font-family:var(--font-heading);transition:all .25s;white-space:nowrap'>ITIN Application</a><a href='/blog' style='display:inline-flex;align-items:center;gap:6px;padding:8px 18px;border-radius:999px;font-size:12.5px;font-weight:600;color:#5c615a;background:#faf8f4;border:1px solid rgba(14,17,9,0.08);text-decoration:none;font-family:var(--font-heading);transition:all .25s;white-space:nowrap'>TikTok Shop Setup</a></div>",
+                        "css": ""
+                      }
+                    }
+                  ],
+                  "settings": {
+                    "verticalAlign": "top"
+                  }
+                }
+              ],
+              "settings": {
+                "fullWidth": true,
+                "background": {
+                  "type": "solid",
+                  "color": "#ffffff"
+                },
+                "paddingTop": 100,
+                "paddingBottom": 100,
+                "paddingLeft": 28,
+                "paddingRight": 28,
+                "marginTop": 0,
+                "marginBottom": 0,
+                "maxWidth": "xl",
+                "gap": 0,
+                "isVisible": true,
+                "visibleOnMobile": true,
+                "visibleOnDesktop": true,
+                "customCSS": "/* Bento Grid */\n& [data-field-id='posts'] { grid-template-columns: 1.15fr 1fr 1fr !important; grid-template-rows: 1fr 1fr; gap: 20px !important; }\n\n/* All cards base */\n& [data-field-id='posts'] > div > a { border-radius: 20px !important; border: 1px solid rgba(14,17,9,0.1) !important; position: relative; overflow: hidden; transition: transform 0.35s cubic-bezier(0.4,0,0.2,1), box-shadow 0.35s, border-color 0.35s; }\n& [data-field-id='posts'] > div > a:hover { transform: translateY(-6px) !important; box-shadow: 0 20px 40px rgba(0,0,0,0.06); border-color: transparent !important; }\n\n/* Accent line bottom */\n& [data-field-id='posts'] > div > a::after { content: ''; position: absolute; bottom: 0; left: 0; width: 0; height: 3px; background: #e84c1e; border-radius: 0 3px 0 0; transition: width 0.45s cubic-bezier(0.4,0,0.2,1); z-index: 10; }\n& [data-field-id='posts'] > div > a:hover::after { width: 100%; }\n\n/* Title typography */\n& [data-field-id='posts'] h3 { font-family: var(--font-heading) !important; font-weight: 800 !important; font-size: 17px !important; letter-spacing: -0.02em; line-height: 1.3 !important; margin-bottom: 10px; transition: color 0.3s; }\n\n/* === Featured card === */\n& [data-field-id='posts'] > div:first-child { grid-row: 1 / -1; }\n& [data-field-id='posts'] > div:first-child > a { background: #0f2318 !important; border-color: transparent !important; height: 100%; }\n& [data-field-id='posts'] > div:first-child > a::after { height: 4px; background: #ff6a3d; }\n& [data-field-id='posts'] > div:first-child > a:hover { box-shadow: 0 24px 50px rgba(0,0,0,0.2); }\n\n/* Featured image as bg overlay */\n& [data-field-id='posts'] > div:first-child > a > div:first-child { position: absolute !important; inset: 0 !important; width: 100% !important; height: 100% !important; aspect-ratio: unset !important; z-index: 0; border-radius: 0 !important; }\n& [data-field-id='posts'] > div:first-child > a > div:first-child img { opacity: 0.18 !important; width: 100% !important; height: 100% !important; object-fit: cover !important; transition: opacity 0.5s, transform 0.8s cubic-bezier(0.4,0,0.2,1) !important; transform: none !important; }\n& [data-field-id='posts'] > div:first-child > a:hover > div:first-child img { opacity: 0.25 !important; transform: scale(1.04) !important; }\n& [data-field-id='posts'] > div:first-child > a > div:first-child::after { content: ''; position: absolute; inset: 0; background: linear-gradient(to top, #0f2318 25%, rgba(15,35,24,0.6)); z-index: 1; }\n\n/* Featured content layer */\n& [data-field-id='posts'] > div:first-child > a > div:nth-child(2) { position: relative; z-index: 2; flex: 1; display: flex; flex-direction: column; padding: 36px 32px 32px !important; }\n\n/* Featured text */\n& [data-field-id='posts'] > div:first-child h3 { color: #faf8f4 !important; font-size: clamp(22px, 2.2vw, 28px) !important; }\n& [data-field-id='posts'] > div:first-child > a:hover h3 { color: #ff6a3d !important; }\n& [data-field-id='posts'] > div:first-child p { color: rgba(250,248,244,0.5) !important; font-size: 15px !important; line-height: 1.75 !important; flex-grow: 1; }\n\n/* Featured badge */\n& [data-field-id='posts'] > div:first-child .inline-block.rounded-full { background: rgba(250,248,244,0.1) !important; color: rgba(250,248,244,0.65) !important; border: 1px solid rgba(250,248,244,0.08) !important; }\n\n/* Featured meta footer */\n& [data-field-id='posts'] > div:first-child .flex.flex-wrap.items-center { color: rgba(250,248,244,0.35) !important; border-top: 1px solid rgba(255,255,255,0.07); padding-top: 16px; margin-top: auto; }\n& [data-field-id='posts'] > div:first-child .flex.flex-wrap.items-center svg { color: rgba(250,248,244,0.35) !important; }\n\n/* Featured arrow circle */\n& [data-field-id='posts'] > div:first-child .mt-1 { position: absolute; right: 32px; bottom: 32px; z-index: 3; margin: 0 !important; }\n& [data-field-id='posts'] > div:first-child .mt-1 > span { width: 32px; height: 32px; border-radius: 50%; display: flex !important; align-items: center; justify-content: center; background: rgba(250,248,244,0.08); transition: background 0.3s, transform 0.3s; }\n& [data-field-id='posts'] > div:first-child .mt-1 svg { color: #ff6a3d !important; width: 15px !important; height: 15px !important; transition: color 0.3s, transform 0.35s cubic-bezier(0.4,0,0.2,1); }\n& [data-field-id='posts'] > div:first-child > a:hover .mt-1 > span { background: #e84c1e; }\n& [data-field-id='posts'] > div:first-child > a:hover .mt-1 svg { color: #fff !important; transform: translateX(2px); }\n\n/* === Regular cards === */\n& [data-field-id='posts'] > div:not(:first-child) > a { background: #fff !important; }\n\n/* Regular image — bleed to edges */\n& [data-field-id='posts'] > div:not(:first-child) > a > div:first-child { margin: 0 !important; border-radius: 19px 19px 0 0 !important; height: 150px; aspect-ratio: unset !important; }\n& [data-field-id='posts'] > div:not(:first-child) > a > div:first-child img { transition: transform 0.6s cubic-bezier(0.4,0,0.2,1) !important; }\n& [data-field-id='posts'] > div:not(:first-child) > a:hover > div:first-child img { transform: scale(1.06) !important; }\n\n/* Regular content */\n& [data-field-id='posts'] > div:not(:first-child) > a > div:nth-child(2) { padding: 28px 28px 24px !important; }\n\n/* Regular badge — outline uppercase */\n& [data-field-id='posts'] > div:not(:first-child) .inline-block.rounded-full { background: transparent !important; color: #8a9086 !important; border: 1px solid rgba(14,17,9,0.1) !important; font-size: 11px !important; font-weight: 700 !important; text-transform: uppercase; letter-spacing: 0.8px; padding: 4px 12px !important; margin-bottom: 16px; transition: color 0.3s, border-color 0.3s, background 0.3s; }\n\n/* Regular title hover */\n& [data-field-id='posts'] > div:not(:first-child):hover h3 { color: #1b3a2d !important; }\n\n/* Regular excerpt */\n& [data-field-id='posts'] > div:not(:first-child) p { font-size: 14px !important; color: #4b5249 !important; line-height: 1.65 !important; flex-grow: 1; }\n\n/* Regular footer (meta) */\n& [data-field-id='posts'] > div:not(:first-child) .flex.flex-wrap.items-center { border-top: 1px solid rgba(14,17,9,0.1); padding-top: 16px; margin-top: auto; color: #8a9086 !important; font-weight: 500; }\n\n/* Regular arrow circle */\n& [data-field-id='posts'] > div:not(:first-child) .mt-1 { position: absolute; right: 28px; bottom: 24px; z-index: 3; margin: 0 !important; }\n& [data-field-id='posts'] > div:not(:first-child) .mt-1 > span { width: 32px; height: 32px; border-radius: 50%; display: flex !important; align-items: center; justify-content: center; background: rgba(27,58,45,0.07); flex-shrink: 0; transition: background 0.3s cubic-bezier(0.4,0,0.2,1), transform 0.3s; }\n& [data-field-id='posts'] > div:not(:first-child) .mt-1 svg { width: 15px !important; height: 15px !important; color: #1b3a2d !important; transition: color 0.3s, transform 0.35s cubic-bezier(0.4,0,0.2,1); }\n& [data-field-id='posts'] > div:not(:first-child) > a:hover .mt-1 > span { background: #1b3a2d; }\n& [data-field-id='posts'] > div:not(:first-child) > a:hover .mt-1 svg { color: #faf8f4 !important; transform: translateX(2px); }\n\n/* === Responsive === */\n@media (max-width: 1023px) { & [data-field-id='posts'] { grid-template-columns: 1fr 1fr !important; grid-template-rows: auto !important; } & [data-field-id='posts'] > div:first-child { grid-row: auto; grid-column: 1 / -1; } }\n@media (max-width: 767px) { & [data-field-id='posts'] { grid-template-columns: 1fr !important; } }"
+              }
             }
           ]
         }
@@ -7780,8 +8209,90 @@
       ]
     }
   ],
-  "blogCategories": [],
-  "blogs": [],
+  "blogCategories": [
+    {
+      "name": "LLC Guide",
+      "slug": "llc-guide",
+      "sortOrder": 0
+    },
+    {
+      "name": "Tax & Compliance",
+      "slug": "tax-compliance",
+      "sortOrder": 1
+    },
+    {
+      "name": "Banking",
+      "slug": "banking",
+      "sortOrder": 2
+    },
+    {
+      "name": "New Law",
+      "slug": "new-law",
+      "sortOrder": 3
+    },
+    {
+      "name": "E-Commerce",
+      "slug": "e-commerce",
+      "sortOrder": 4
+    }
+  ],
+  "blogs": [
+    {
+      "title": "Wyoming vs Delaware LLC for Non-Residents: Which State Should You Choose in 2026?",
+      "slug": "wyoming-vs-delaware-llc-non-residents-2026",
+      "categorySlug": "llc-guide",
+      "published": true,
+      "coverImage": "https://images.unsplash.com/photo-1515861209048-dae6a1e1ed56?auto=format&fit=crop&w=800&q=80",
+      "excerpt": "Privacy, fees, annual costs, and tax implications — we break down the real differences that matter when forming a US LLC from abroad.",
+      "metaTitle": "Wyoming vs Delaware LLC for Non-Residents (2026)",
+      "metaDescription": "Compare Wyoming vs Delaware LLC for non-residents. Privacy, fees, taxes, annual costs — find the best state for your foreign-owned LLC in 2026.",
+      "content": "<p class=\"mb-4\">If you are forming a US LLC from outside the United States, you have probably seen the same two states recommended everywhere: <strong>Wyoming</strong> and <strong>Delaware</strong>. Both are genuinely excellent choices for non-resident LLC owners, but they are not interchangeable. The right pick depends on your business type, your budget, and how much you value privacy.</p><p class=\"mb-4\">In this guide, we will walk through the real, practical differences between Wyoming and Delaware LLCs in 2026 — not the recycled marketing copy you find on most formation sites. By the end, you will know exactly which state fits your situation.</p><h2 class=\"mt-8 mb-4\">Quick Comparison: Wyoming vs Delaware LLC</h2><p class=\"mb-4\">Before we dive into the details, here is a side-by-side snapshot of the key differences that matter most to non-resident LLC owners.</p><table class=\"w-full border-collapse mb-6\"><thead><tr><th class=\"border border-slate-200 px-4 py-2 text-left\">Feature</th><th class=\"border border-slate-200 px-4 py-2 text-left\">Wyoming</th><th class=\"border border-slate-200 px-4 py-2 text-left\">Delaware</th></tr></thead><tbody><tr><td class=\"border border-slate-200 px-4 py-2\">Formation Fee</td><td class=\"border border-slate-200 px-4 py-2\">$100</td><td class=\"border border-slate-200 px-4 py-2\">$90</td></tr><tr><td class=\"border border-slate-200 px-4 py-2\">Annual Report / Franchise Tax</td><td class=\"border border-slate-200 px-4 py-2\">$60/year (minimum)</td><td class=\"border border-slate-200 px-4 py-2\">$300/year flat tax</td></tr><tr><td class=\"border border-slate-200 px-4 py-2\">State Income Tax</td><td class=\"border border-slate-200 px-4 py-2\">None</td><td class=\"border border-slate-200 px-4 py-2\">None (for out-of-state activity)</td></tr><tr><td class=\"border border-slate-200 px-4 py-2\">Privacy (Public Records)</td><td class=\"border border-slate-200 px-4 py-2\">Members/managers not listed</td><td class=\"border border-slate-200 px-4 py-2\">Members/managers not listed</td></tr><tr><td class=\"border border-slate-200 px-4 py-2\">Registered Agent Required</td><td class=\"border border-slate-200 px-4 py-2\">Yes</td><td class=\"border border-slate-200 px-4 py-2\">Yes</td></tr><tr><td class=\"border border-slate-200 px-4 py-2\">Court System Reputation</td><td class=\"border border-slate-200 px-4 py-2\">Standard</td><td class=\"border border-slate-200 px-4 py-2\">Court of Chancery (gold standard)</td></tr><tr><td class=\"border border-slate-200 px-4 py-2\">Asset Protection</td><td class=\"border border-slate-200 px-4 py-2\">Strongest in the US</td><td class=\"border border-slate-200 px-4 py-2\">Strong</td></tr><tr><td class=\"border border-slate-200 px-4 py-2\">BOI Reporting (FinCEN)</td><td class=\"border border-slate-200 px-4 py-2\">Required (federal)</td><td class=\"border border-slate-200 px-4 py-2\">Required (federal)</td></tr><tr><td class=\"border border-slate-200 px-4 py-2\">Best For</td><td class=\"border border-slate-200 px-4 py-2\">Small businesses, e-commerce, freelancers</td><td class=\"border border-slate-200 px-4 py-2\">Investor-funded startups, holding companies</td></tr></tbody></table><h2 class=\"mt-8 mb-4\">Formation Costs and Annual Fees</h2><p class=\"mb-4\">This is where the rubber meets the road for most non-resident founders. When you are running an online business from Bangladesh, India, Pakistan, or the UAE, every dollar counts — especially in the early stages.</p><h3 class=\"mt-6 mb-3\">Wyoming: The Budget-Friendly Option</h3><p class=\"mb-4\">Wyoming charges a <strong>$100 formation fee</strong> for LLCs. Your annual report costs a minimum of <strong>$60 per year</strong>, calculated based on your assets in Wyoming. If you run a service business or an online store with no physical assets in the state (which describes most non-resident LLCs), you will pay that $60 minimum.</p><p class=\"mb-4\">Total first-year cost with the state: roughly $100. Total ongoing cost: $60 per year. That is genuinely hard to beat.</p><h3 class=\"mt-6 mb-3\">Delaware: The Premium Choice</h3><p class=\"mb-4\">Delaware's formation fee is slightly lower at <strong>$90</strong>, but the annual franchise tax for LLCs is a flat <strong>$300 per year</strong> — no exceptions, no reductions for small businesses. Whether you earn $0 or $10 million, you pay $300.</p><p class=\"mb-4\">Over five years, that is a difference of <strong>$1,200</strong> in state fees alone ($300 vs $1,500 for Delaware versus $300 vs $500 for Wyoming). Add in registered agent fees, and the gap becomes meaningful for bootstrapped founders.</p><h2 class=\"mt-8 mb-4\">Privacy Protections</h2><p class=\"mb-4\">Privacy is often the number-one concern for non-resident LLC owners, and both states deliver well here — but Wyoming has a slight edge.</p><h3 class=\"mt-6 mb-3\">Wyoming Privacy</h3><ul class=\"list-disc pl-6 mb-4 space-y-2\"><li>LLC members and managers are <strong>not listed</strong> in public formation documents</li><li>Only the registered agent's name and address appear on the Articles of Organization</li><li>Wyoming was the first state to create the LLC structure (1977) and has consistently strengthened privacy protections</li><li>Nominee services can add another layer if needed, though most non-residents do not require this</li></ul><h3 class=\"mt-6 mb-3\">Delaware Privacy</h3><ul class=\"list-disc pl-6 mb-4 space-y-2\"><li>Members and managers are also <strong>not listed</strong> publicly</li><li>The Certificate of Formation only requires the LLC name and registered agent</li><li>Delaware's privacy is functionally equivalent to Wyoming's for most purposes</li></ul><p class=\"mb-4\">One important note for 2026: <strong>Beneficial Ownership Information (BOI) reporting</strong> is a federal requirement that applies regardless of which state you choose. All LLCs must report their beneficial owners to FinCEN. This does not change the state-level privacy picture, but it means complete anonymity is no longer possible at the federal level.</p><h2 class=\"mt-8 mb-4\">Tax Implications for Foreign Owners</h2><p class=\"mb-4\">Here is some good news: neither Wyoming nor Delaware imposes a state-level income tax on LLC income earned outside the state. For non-residents running online businesses, this means <strong>zero state income tax</strong> in either case.</p><p class=\"mb-4\">However, you still have federal obligations:</p><ul class=\"list-disc pl-6 mb-4 space-y-2\"><li><strong>Form 5472 + Pro Forma 1120:</strong> Every foreign-owned single-member LLC must file this annually with the IRS, even if you earned zero income. The penalty for not filing is $25,000 per form. <a href=\"/blog/form-5472-foreign-llc-owner-guide\">Read our complete Form 5472 guide</a> to understand your obligations.</li><li><strong>EIN (Employer Identification Number):</strong> Required for tax filing, banking, and most business activities. You can <a href=\"/services/ein-application\">apply for an EIN through LLCPad</a> — the process takes about 4-6 weeks for non-residents with no SSN.</li><li><strong>ITIN:</strong> Some foreign owners need an Individual Taxpayer Identification Number, though this depends on your specific situation and whether you have US-source income.</li></ul><p class=\"mb-4\">The bottom line on taxes: your state choice does not significantly change your federal tax obligations. Both Wyoming and Delaware are neutral in this regard.</p><h2 class=\"mt-8 mb-4\">Asset Protection</h2><p class=\"mb-4\">If asset protection matters to you — and it should if you are building anything of value — <strong>Wyoming is the clear winner</strong>.</p><p class=\"mb-4\">Wyoming offers what is called a <strong>charging order protection</strong> that is among the strongest in the country. In plain English, this means that if someone sues you personally, they cannot easily seize your LLC's assets. A creditor can only obtain a \"charging order\" against your LLC interest, which is essentially a lien on distributions — not ownership.</p><p class=\"mb-4\">Delaware also offers charging order protection, but Wyoming's statutes are considered more protective, particularly for single-member LLCs. Some legal scholars argue that Delaware's protection for single-member LLCs is weaker because of certain court precedents.</p><h2 class=\"mt-8 mb-4\">The Delaware Court of Chancery Advantage</h2><p class=\"mb-4\">Delaware has one genuine, significant advantage: its <strong>Court of Chancery</strong>. This is a specialized business court with over 200 years of case law. Judges are experts in corporate and LLC disputes, and decisions tend to be more predictable and sophisticated.</p><p class=\"mb-4\">This matters if:</p><ul class=\"list-disc pl-6 mb-4 space-y-2\"><li>You are raising venture capital or outside investment</li><li>Your LLC has multiple members with complex operating agreements</li><li>You anticipate business disputes that could end up in court</li><li>You plan to convert to a corporation later for an IPO or acquisition</li></ul><p class=\"mb-4\">For a solo founder running an e-commerce store or freelance business? The Court of Chancery is unlikely to be relevant. This advantage is real but niche.</p><h2 class=\"mt-8 mb-4\">Which State Is Best for Your Business Type?</h2><h3 class=\"mt-6 mb-3\">E-Commerce and Amazon Sellers</h3><p class=\"mb-4\"><strong>Recommendation: Wyoming.</strong> You need low costs, strong privacy, and straightforward compliance. Wyoming delivers all three. Most Amazon seller accounts, Shopify stores, and e-commerce businesses do not need Delaware's court system or investor-friendly reputation. <a href=\"/services/llc-formation\">Start your Wyoming LLC formation here</a>.</p><h3 class=\"mt-6 mb-3\">Freelancers and Service Businesses</h3><p class=\"mb-4\"><strong>Recommendation: Wyoming.</strong> If you are a consultant, developer, designer, or any kind of service provider billing international clients through a US LLC, Wyoming's $60/year annual fee and zero state income tax make it the obvious choice.</p><h3 class=\"mt-6 mb-3\">Startups Seeking Investment</h3><p class=\"mb-4\"><strong>Recommendation: Delaware.</strong> If you plan to raise money from US-based investors, they will often expect (or require) a Delaware entity. Venture capital term sheets, SAFE notes, and convertible notes are typically drafted with Delaware law in mind. The $300/year premium is worth it for the credibility and legal infrastructure.</p><h3 class=\"mt-6 mb-3\">Holding Companies</h3><p class=\"mb-4\"><strong>Recommendation: Wyoming or Delaware — depends on complexity.</strong> For simple holding structures (holding IP, real estate, or other LLCs), Wyoming's low fees win. For complex multi-entity structures with potential investor involvement, Delaware's legal precedents provide more certainty.</p><h2 class=\"mt-8 mb-4\">Annual Filing Requirements</h2><p class=\"mb-4\">Staying compliant is just as important as choosing the right state. Here is what you need to file each year:</p><h3 class=\"mt-6 mb-3\">Wyoming Annual Requirements</h3><ol class=\"list-decimal pl-6 mb-4 space-y-2\"><li><strong>Annual Report:</strong> Due on the first day of the month your LLC was formed. Fee: $60 minimum (based on Wyoming assets).</li><li><strong>Registered Agent:</strong> Must maintain a Wyoming registered agent at all times.</li><li><strong>Federal Filings:</strong> Form 5472 + Pro Forma 1120 (due April 15, can extend to October 15).</li><li><strong>BOI Report:</strong> File with FinCEN within 90 days of formation (existing LLCs had a January 1, 2025 deadline, now subject to ongoing updates).</li></ol><h3 class=\"mt-6 mb-3\">Delaware Annual Requirements</h3><ol class=\"list-decimal pl-6 mb-4 space-y-2\"><li><strong>Annual Franchise Tax:</strong> Due June 1 each year. Fee: $300 flat.</li><li><strong>Registered Agent:</strong> Must maintain a Delaware registered agent at all times.</li><li><strong>Federal Filings:</strong> Same as Wyoming — Form 5472 + Pro Forma 1120.</li><li><strong>BOI Report:</strong> Same federal requirement as Wyoming.</li></ol><p class=\"mb-4\">Missing your annual report or franchise tax can result in your LLC being administratively dissolved. LLCPad offers <a href=\"/services/registered-agent\">registered agent services</a> that include compliance reminders so you never miss a deadline.</p><h2 class=\"mt-8 mb-4\">BOI Reporting in 2026: What You Need to Know</h2><p class=\"mb-4\">The <strong>Beneficial Ownership Information (BOI)</strong> reporting requirement under the Corporate Transparency Act applies to both Wyoming and Delaware LLCs equally. As a non-resident owner, you must report:</p><ul class=\"list-disc pl-6 mb-4 space-y-2\"><li>Your full legal name</li><li>Date of birth</li><li>Current residential address</li><li>A unique identifying number from a passport or government-issued ID</li></ul><p class=\"mb-4\">This information goes to FinCEN (the Financial Crimes Enforcement Network) and is not publicly accessible. It is shared only with law enforcement and certain financial institutions. The requirement exists regardless of which state your LLC is formed in.</p><h2 class=\"mt-8 mb-4\">Our Recommendation for Most Non-Residents</h2><p class=\"mb-4\">For the majority of non-resident entrepreneurs — especially those running e-commerce businesses, Amazon stores, freelance practices, or online service companies — <strong>Wyoming is the better choice</strong>. Here is why:</p><ul class=\"list-disc pl-6 mb-4 space-y-2\"><li><strong>80% lower annual costs</strong> ($60 vs $300)</li><li><strong>Stronger asset protection</strong> for single-member LLCs</li><li><strong>Equivalent privacy</strong> at the state level</li><li><strong>Same federal tax obligations</strong> regardless of state</li><li><strong>Simpler compliance</strong> with fewer gotchas</li></ul><p class=\"mb-4\">Choose Delaware only if you have a specific, concrete reason: raising VC funding, setting up a complex multi-member structure, or an investor specifically requiring it.</p><h2 class=\"mt-8 mb-4\">How LLCPad Makes It Easy</h2><p class=\"mb-4\">Whether you choose Wyoming or Delaware, LLCPad handles the entire formation process for non-residents:</p><ul class=\"list-disc pl-6 mb-4 space-y-2\"><li><strong>State filing:</strong> We prepare and file your Articles of Organization</li><li><strong>Registered agent:</strong> Included in your formation package for the first year</li><li><strong>EIN application:</strong> We obtain your Employer Identification Number from the IRS</li><li><strong>Operating Agreement:</strong> Custom-drafted for your business structure</li><li><strong>Compliance calendar:</strong> Automated reminders for annual filings and deadlines</li></ul><p class=\"mb-4\">Ready to get started? <a href=\"/services/llc-formation\">Form your LLC today</a> and we will guide you through every step — from state selection to your first bank account.</p><p class=\"mb-4\"><em>Disclaimer: LLCPad is not a law firm and does not provide legal or tax advice. This guide is for informational purposes only. Consult a qualified attorney or CPA for advice specific to your situation.</em></p>"
+    },
+    {
+      "title": "Form 5472: The $25,000 Filing Every Foreign LLC Owner Must Know",
+      "slug": "form-5472-foreign-llc-owner-guide",
+      "categorySlug": "tax-compliance",
+      "published": true,
+      "coverImage": "https://images.unsplash.com/photo-1450101499163-c8848c66ca85?auto=format&fit=crop&w=800&q=80",
+      "excerpt": "Even with zero income, this IRS filing is mandatory for foreign-owned LLCs. Miss it, and you face $25,000 in penalties per form.",
+      "metaTitle": "Form 5472 Guide for Foreign LLC Owners (2026)",
+      "metaDescription": "Complete guide to IRS Form 5472 for foreign-owned LLCs. Filing requirements, $25,000 penalty, deadlines, and step-by-step instructions.",
+      "content": "<p class=\"mb-4\">If you own a US LLC as a non-resident, there is one IRS filing that you absolutely cannot afford to ignore: <strong>Form 5472</strong>. Even if your LLC earned zero revenue last year, even if you have not started doing business yet, this filing is almost certainly required — and the penalty for skipping it is <strong>$25,000 per form, per year</strong>.</p><p class=\"mb-4\">That is not a typo. Twenty-five thousand dollars. For a form that many foreign LLC owners have never heard of until it is too late.</p><p class=\"mb-4\">This guide will explain exactly what Form 5472 is, who needs to file, what information is required, and how to avoid the most common mistakes that trigger IRS penalties.</p><h2 class=\"mt-8 mb-4\">What Is Form 5472?</h2><p class=\"mb-4\">Form 5472, officially titled <strong>\"Information Return of a 25% Foreign-Owned U.S. Corporation or a Foreign Corporation Engaged in a U.S. Trade or Business,\"</strong> is an information return filed with the IRS. It reports transactions between a US entity and its foreign owners or related foreign parties.</p><p class=\"mb-4\">For our purposes, here is what matters: if you are a non-US person who owns a single-member LLC in the United States, the IRS treats your LLC as a <strong>\"reporting corporation\"</strong> and requires you to file Form 5472 along with a pro forma (placeholder) Form 1120.</p><p class=\"mb-4\">This requirement was expanded significantly by Treasury Regulations finalized in 2017. Before that, single-member LLCs owned by foreigners were largely invisible to the IRS. Now, they are firmly on the radar.</p><h2 class=\"mt-8 mb-4\">Who Must File Form 5472?</h2><p class=\"mb-4\">You must file Form 5472 if <strong>all</strong> of the following are true:</p><ol class=\"list-decimal pl-6 mb-4 space-y-2\"><li>You are a <strong>non-US person</strong> (not a US citizen, green card holder, or tax resident)</li><li>You own <strong>25% or more</strong> of a US LLC (if you are the sole owner, you own 100%)</li><li>The LLC had <strong>reportable transactions</strong> during the tax year (this is broader than you might think — see below)</li></ol><p class=\"mb-4\">In practice, this covers virtually every foreign-owned single-member LLC, because the definition of \"reportable transactions\" is extremely broad.</p><h2 class=\"mt-8 mb-4\">What Counts as a Reportable Transaction?</h2><p class=\"mb-4\">This is where most people get caught off guard. \"Reportable transactions\" does not just mean revenue or sales. The IRS defines reportable transactions to include:</p><ul class=\"list-disc pl-6 mb-4 space-y-2\"><li><strong>Capital contributions:</strong> Any money you transfer into your LLC's bank account, including the initial deposit to open the account</li><li><strong>Distributions:</strong> Any money you withdraw from the LLC for personal use</li><li><strong>Loans:</strong> Any loans between you and the LLC, in either direction</li><li><strong>Payments for services:</strong> If you provide services to the LLC or the LLC pays you</li><li><strong>Rent and lease payments:</strong> If the LLC pays you rent or you provide property to the LLC</li><li><strong>Sales of goods or property:</strong> Between you and the LLC</li><li><strong>Commissions and fees:</strong> Paid between you and the LLC</li><li><strong>Insurance premiums:</strong> Paid between related parties</li></ul><p class=\"mb-4\">Here is the critical point: <strong>if you deposited even $1 into your LLC's bank account, you have a reportable transaction</strong>. If you used personal funds to pay for the LLC's registered agent, domain name, or any other business expense, that is a reportable transaction.</p><p class=\"mb-4\">This means that even a completely dormant LLC — one that has never earned a penny — typically has reportable transactions and must file Form 5472.</p><h2 class=\"mt-8 mb-4\">Form 5472 Filing Requirements: Step by Step</h2><h3 class=\"mt-6 mb-3\">Step 1: Gather Your Information</h3><p class=\"mb-4\">Before you start filling out Form 5472, collect the following:</p><ul class=\"list-disc pl-6 mb-4 space-y-2\"><li><strong>LLC details:</strong> Legal name, EIN (Employer Identification Number), address, state of formation, date of incorporation</li><li><strong>Owner details:</strong> Your full legal name, country of citizenship, foreign taxpayer identification number (if any), address</li><li><strong>Transaction records:</strong> A complete record of every transaction between you and the LLC during the tax year (January 1 through December 31)</li></ul><p class=\"mb-4\">If you do not have an EIN yet, you must obtain one before filing. <a href=\"/services/ein-application\">LLCPad can help you get your EIN</a> — the process typically takes 4-6 weeks for non-residents.</p><h3 class=\"mt-6 mb-3\">Step 2: Complete the Pro Forma Form 1120</h3><p class=\"mb-4\">Foreign-owned single-member LLCs file Form 5472 <strong>attached to a pro forma Form 1120</strong> (U.S. Corporation Income Tax Return). \"Pro forma\" means it is a placeholder — you are not actually filing as a corporation.</p><p class=\"mb-4\">On the Form 1120, you will:</p><ul class=\"list-disc pl-6 mb-4 space-y-2\"><li>Write the LLC's name, EIN, and address at the top</li><li>Check the box indicating this is a pro forma return</li><li>Enter zeros on all income and deduction lines (unless advised otherwise by your CPA)</li><li>Attach Form 5472 as a required schedule</li></ul><h3 class=\"mt-6 mb-3\">Step 3: Fill Out Form 5472 Itself</h3><p class=\"mb-4\">Form 5472 has several parts:</p><ul class=\"list-disc pl-6 mb-4 space-y-2\"><li><strong>Part I — Reporting Corporation:</strong> Your LLC's information (name, EIN, address, date and country of incorporation, total assets)</li><li><strong>Part II — 25% Foreign Shareholder:</strong> Your personal information as the foreign owner (name, address, country of citizenship, taxpayer ID)</li><li><strong>Part III — Related Party:</strong> Usually the same as Part II if you are the sole owner</li><li><strong>Part IV — Monetary Transactions:</strong> This is the core of the form. You report the dollar amounts of each category of transaction between you and the LLC. Common entries include capital contributions (line 14), distributions (line 20), and other transactions.</li><li><strong>Part V — Reportable Transactions of a Foreign-Owned U.S. DE:</strong> This section is specifically for disregarded entities (single-member LLCs). Report the total amounts by category.</li><li><strong>Part VI — Additional Information:</strong> Various questions about the nature of the reporting corporation and its activities.</li></ul><h3 class=\"mt-6 mb-3\">Step 4: File by the Deadline</h3><p class=\"mb-4\">The filing deadline for Form 5472 with the pro forma 1120 is <strong>April 15</strong> of the year following the tax year. For the 2025 tax year, the deadline is <strong>April 15, 2026</strong>.</p><p class=\"mb-4\">You can request an automatic <strong>6-month extension</strong> by filing Form 7004 before the April 15 deadline. This extends your filing deadline to <strong>October 15</strong>. The extension is for the filing only — it does not extend the time to pay any taxes owed (though most foreign-owned single-member LLCs owe no income tax).</p><h3 class=\"mt-6 mb-3\">Step 5: Mail the Return</h3><p class=\"mb-4\">Unlike most IRS forms, the pro forma 1120 with Form 5472 <strong>cannot be e-filed</strong>. You must mail a paper return to:</p><p class=\"mb-4\"><strong>Department of the Treasury<br>Internal Revenue Service Center<br>Ogden, UT 84201-0012</strong></p><p class=\"mb-4\">Use a trackable mailing service (USPS Certified Mail, FedEx, or UPS) so you have proof of timely filing. Keep copies of everything you send.</p><h2 class=\"mt-8 mb-4\">The $25,000 Penalty: What Happens If You Do Not File</h2><p class=\"mb-4\">The penalty for failing to file Form 5472, or filing one that is substantially incomplete, is <strong>$25,000 per form, per year</strong>. If the IRS sends you a notice and you still do not file within 90 days, an additional $25,000 penalty is assessed for each 30-day period of continued noncompliance.</p><p class=\"mb-4\">This can add up horrifyingly fast. Two years of non-filing could result in $50,000 or more in penalties — for a form that might report nothing more than a $500 capital contribution.</p><p class=\"mb-4\">The IRS has increased enforcement of international information returns in recent years. Automated systems now flag missing Form 5472 filings, and penalty notices are being issued more aggressively.</p><h3 class=\"mt-6 mb-3\">Can You Get the Penalty Abated?</h3><p class=\"mb-4\">Yes, in some cases. The IRS may abate (cancel) the penalty if you can demonstrate <strong>reasonable cause</strong> — meaning you had a legitimate reason for the failure and it was not due to willful neglect. Common reasonable cause arguments include:</p><ul class=\"list-disc pl-6 mb-4 space-y-2\"><li>You relied on a tax professional who gave you incorrect advice</li><li>You were unaware of the filing requirement despite acting in good faith</li><li>Circumstances beyond your control prevented timely filing (illness, natural disaster, etc.)</li></ul><p class=\"mb-4\">However, abatement is not guaranteed, and the process can take months. It is far better to file correctly and on time.</p><h2 class=\"mt-8 mb-4\">Common Mistakes That Trigger Penalties</h2><p class=\"mb-4\">Over the years, we have seen the same errors come up repeatedly among foreign LLC owners:</p><h3 class=\"mt-6 mb-3\">Mistake 1: Not Knowing the Form Exists</h3><p class=\"mb-4\">This is by far the most common problem. Many formation companies will set up your LLC and get your EIN but never mention Form 5472. You discover the requirement two or three years later, with $50,000-$75,000 in potential penalties hanging over your head.</p><h3 class=\"mt-6 mb-3\">Mistake 2: Assuming a Dormant LLC Does Not Need to File</h3><p class=\"mb-4\">As we explained above, even transferring money into the LLC's bank account creates a reportable transaction. A dormant LLC still needs to file Form 5472 in almost every case.</p><h3 class=\"mt-6 mb-3\">Mistake 3: Trying to E-File</h3><p class=\"mb-4\">The pro forma 1120 with Form 5472 must be paper-filed. Attempting to e-file will result in a rejection, and if you do not follow up with a paper filing, you will miss the deadline.</p><h3 class=\"mt-6 mb-3\">Mistake 4: Incomplete Transaction Reporting</h3><p class=\"mb-4\">Forgetting to include certain categories of transactions — like capital contributions or payments for the LLC's expenses from personal funds — can make your filing \"substantially incomplete,\" which triggers the same $25,000 penalty as not filing at all.</p><h3 class=\"mt-6 mb-3\">Mistake 5: Wrong EIN or Name</h3><p class=\"mb-4\">Simple data entry errors — a transposed digit in the EIN, or the LLC name not matching IRS records exactly — can cause processing issues and potential penalty notices.</p><h2 class=\"mt-8 mb-4\">Record-Keeping Requirements</h2><p class=\"mb-4\">The IRS requires you to maintain records of all reportable transactions for at least <strong>7 years</strong> from the date of filing. These records should include:</p><ul class=\"list-disc pl-6 mb-4 space-y-2\"><li>Bank statements showing all deposits and withdrawals</li><li>Records of any transfers between your personal accounts and the LLC</li><li>Invoices and receipts for business expenses</li><li>Loan agreements between you and the LLC</li><li>Documentation of any property transfers</li></ul><p class=\"mb-4\">Good record-keeping is your best defense if the IRS ever questions your filing. Use a separate bank account for your LLC — <a href=\"/blog/us-bank-account-non-residents-2026\">read our guide to opening a US bank account</a> as a non-resident — and keep personal and business finances completely separate.</p><h2 class=\"mt-8 mb-4\">Do You Need a CPA to File Form 5472?</h2><p class=\"mb-4\">Technically, no — you can fill out the form yourself. But practically, we strongly recommend working with a tax professional who has experience with international filings. Here is why:</p><ul class=\"list-disc pl-6 mb-4 space-y-2\"><li>The penalties for errors are disproportionately high ($25,000 for a mistake on a form that might report $500 in transactions)</li><li>The interaction between Form 5472, the pro forma 1120, and other potential filings (FBAR, Form 8858, etc.) can be complex</li><li>A CPA's signature on the return provides some protection under the \"reasonable cause\" defense if issues arise</li><li>The cost of professional preparation ($300-$600 per year) is a tiny fraction of the potential penalty</li></ul><h2 class=\"mt-8 mb-4\">Key Deadlines for 2026</h2><table class=\"w-full border-collapse mb-6\"><thead><tr><th class=\"border border-slate-200 px-4 py-2 text-left\">Deadline</th><th class=\"border border-slate-200 px-4 py-2 text-left\">Action</th></tr></thead><tbody><tr><td class=\"border border-slate-200 px-4 py-2\">April 15, 2026</td><td class=\"border border-slate-200 px-4 py-2\">File Form 5472 + Pro Forma 1120 for tax year 2025 (or file Form 7004 for extension)</td></tr><tr><td class=\"border border-slate-200 px-4 py-2\">October 15, 2026</td><td class=\"border border-slate-200 px-4 py-2\">Extended deadline for Form 5472 + Pro Forma 1120 (if Form 7004 was filed)</td></tr><tr><td class=\"border border-slate-200 px-4 py-2\">Ongoing</td><td class=\"border border-slate-200 px-4 py-2\">Maintain records of all reportable transactions throughout the year</td></tr></tbody></table><h2 class=\"mt-8 mb-4\">How LLCPad Helps With Compliance</h2><p class=\"mb-4\">We built LLCPad specifically for non-resident LLC owners, and we know that compliance is one of the most stressful parts of running a US business from abroad. Here is how we help:</p><ul class=\"list-disc pl-6 mb-4 space-y-2\"><li><strong>Compliance reminders:</strong> Automated alerts before every filing deadline so you never face a surprise penalty</li><li><strong>EIN procurement:</strong> We handle the <a href=\"/services/ein-application\">EIN application process</a> so you have the foundation for all IRS filings</li><li><strong>Tax professional referrals:</strong> We partner with CPAs who specialize in foreign-owned LLC tax compliance</li><li><strong>Document organization:</strong> Our platform helps you keep formation documents, annual reports, and tax filings organized and accessible</li><li><strong>Full formation packages:</strong> When you <a href=\"/services/llc-formation\">form your LLC through LLCPad</a>, we make sure you understand every compliance obligation from day one — not two years later when the penalties have stacked up</li></ul><h2 class=\"mt-8 mb-4\">Frequently Asked Questions</h2><h3 class=\"mt-6 mb-3\">What if my LLC had no income and no transactions?</h3><p class=\"mb-4\">If your LLC truly had zero transactions — no bank deposits, no expenses paid, no capital contributions of any kind — you may not need to file. However, this situation is extremely rare. Even paying for a registered agent or LLC formation fees through the LLC creates a reportable transaction. When in doubt, file.</p><h3 class=\"mt-6 mb-3\">Do multi-member LLCs also need to file Form 5472?</h3><p class=\"mb-4\">Yes, if any member is a foreign person owning 25% or more. Multi-member LLCs also have additional filing requirements (Form 1065, K-1s, etc.).</p><h3 class=\"mt-6 mb-3\">What if I just close the LLC instead of filing?</h3><p class=\"mb-4\">Dissolving the LLC does not eliminate your filing obligation for the years it was active. You would still owe Form 5472 for every year the LLC existed and had reportable transactions.</p><h3 class=\"mt-6 mb-3\">Can the IRS actually collect penalties from foreign persons?</h3><p class=\"mb-4\">Yes. The IRS has multiple enforcement mechanisms, including withholding from US-source income, levying US bank accounts, and international tax treaties. Additionally, outstanding IRS penalties can affect your ability to obtain US visas and conduct business in the US.</p><p class=\"mb-4\"><em>Disclaimer: LLCPad is not a law firm, CPA firm, or tax advisory service. This guide is for informational purposes only and does not constitute tax advice. Consult a qualified tax professional for advice specific to your situation.</em></p>"
+    },
+    {
+      "title": "US Bank Account for Non-Residents: What Changed in 2026",
+      "slug": "us-bank-account-non-residents-2026",
+      "categorySlug": "banking",
+      "published": true,
+      "coverImage": "https://images.unsplash.com/photo-1563013544-824ae1b704d3?auto=format&fit=crop&w=800&q=80",
+      "excerpt": "Mercury and Relay have new rules. Here's which banks still accept non-resident LLC owners and how to open an account remotely.",
+      "metaTitle": "US Bank Account for Non-Residents in 2026",
+      "metaDescription": "Open a US bank account as a non-resident LLC owner in 2026. Compare Mercury, Relay, and traditional banks. Updated requirements and tips.",
+      "content": "<p class=\"mb-4\">Opening a US bank account is one of the first — and most frustrating — tasks for non-resident LLC owners. You need it to accept payments, pay vendors, and establish your business as a legitimate US entity. But in 2026, the landscape has shifted considerably. Banks that were once welcoming to foreign entrepreneurs have tightened their requirements, while new options have emerged.</p><p class=\"mb-4\">This guide covers your realistic options, what documents you need, and how to maximize your chances of approval — based on what is actually working right now, not outdated advice from 2023.</p><h2 class=\"mt-8 mb-4\">Why You Need a US Bank Account</h2><p class=\"mb-4\">Before we get into the how, let us be clear about the why. A US bank account is not optional for most foreign-owned LLCs — it is practically essential:</p><ul class=\"list-disc pl-6 mb-4 space-y-2\"><li><strong>Payment processing:</strong> Stripe, PayPal, and most US payment processors require a US bank account for payouts</li><li><strong>Amazon seller accounts:</strong> Amazon requires a US bank account (or a supported international bank) for disbursements</li><li><strong>Business credibility:</strong> Clients and vendors take you more seriously with a US bank account on invoices</li><li><strong>Tax compliance:</strong> Keeping US business income in a US account makes Form 5472 reporting much simpler. <a href=\"/blog/form-5472-foreign-llc-owner-guide\">Learn about Form 5472 requirements here</a>.</li><li><strong>Clean bookkeeping:</strong> Separating business and personal finances is critical for maintaining your LLC's liability protection</li></ul><h2 class=\"mt-8 mb-4\">The 2026 Banking Landscape: What Changed</h2><p class=\"mb-4\">Over the past two years, the banking environment for non-resident LLC owners has undergone some significant shifts:</p><h3 class=\"mt-6 mb-3\">Tighter KYC Requirements</h3><p class=\"mb-4\">Banks and fintech companies have substantially increased their <strong>Know Your Customer (KYC)</strong> and <strong>Anti-Money Laundering (AML)</strong> compliance efforts. The Corporate Transparency Act's BOI reporting requirements have made banks more cautious about onboarding foreign-owned entities. You now need more documentation, and the review process takes longer.</p><h3 class=\"mt-6 mb-3\">Mercury's Policy Changes</h3><p class=\"mb-4\">Mercury, once the go-to recommendation for non-resident LLC owners, has <strong>tightened its approval criteria</strong> in 2025-2026. While Mercury still accepts non-resident applicants, approval rates have dropped. Applications from certain countries face additional scrutiny, and Mercury now requires more detailed business documentation during the onboarding process. Many applicants who would have been approved in 2023 are now being rejected or asked for supplementary information.</p><h3 class=\"mt-6 mb-3\">Relay's Adjusted Stance</h3><p class=\"mb-4\">Relay Financial has similarly adjusted its policies. The company still serves non-residents but has introduced additional verification steps and may require a US phone number or US address verification beyond your registered agent address.</p><h3 class=\"mt-6 mb-3\">New Entrants and Alternatives</h3><p class=\"mb-4\">On the positive side, several newer fintech platforms have entered the market specifically targeting international entrepreneurs. The competition is creating more options, even as individual banks become pickier.</p><h2 class=\"mt-8 mb-4\">Your Options: Fintech vs Traditional Banks</h2><h3 class=\"mt-6 mb-3\">Option 1: Mercury</h3><p class=\"mb-4\">Mercury remains one of the best options for non-resident LLC owners, despite the stricter requirements. Here is the current picture:</p><table class=\"w-full border-collapse mb-6\"><thead><tr><th class=\"border border-slate-200 px-4 py-2 text-left\">Feature</th><th class=\"border border-slate-200 px-4 py-2 text-left\">Details</th></tr></thead><tbody><tr><td class=\"border border-slate-200 px-4 py-2\">Accepts Non-Residents</td><td class=\"border border-slate-200 px-4 py-2\">Yes (with stricter review)</td></tr><tr><td class=\"border border-slate-200 px-4 py-2\">In-Person Visit Required</td><td class=\"border border-slate-200 px-4 py-2\">No — fully remote</td></tr><tr><td class=\"border border-slate-200 px-4 py-2\">Monthly Fees</td><td class=\"border border-slate-200 px-4 py-2\">Free (standard account)</td></tr><tr><td class=\"border border-slate-200 px-4 py-2\">EIN Required</td><td class=\"border border-slate-200 px-4 py-2\">Yes</td></tr><tr><td class=\"border border-slate-200 px-4 py-2\">Debit Card</td><td class=\"border border-slate-200 px-4 py-2\">Yes (shipped internationally)</td></tr><tr><td class=\"border border-slate-200 px-4 py-2\">Wire Transfers</td><td class=\"border border-slate-200 px-4 py-2\">Domestic and international</td></tr><tr><td class=\"border border-slate-200 px-4 py-2\">Integration</td><td class=\"border border-slate-200 px-4 py-2\">Stripe, QuickBooks, Xero</td></tr><tr><td class=\"border border-slate-200 px-4 py-2\">Approval Time</td><td class=\"border border-slate-200 px-4 py-2\">1-3 weeks (up from 1-3 days)</td></tr></tbody></table><p class=\"mb-4\"><strong>Pros:</strong> Excellent user interface, free account, good integrations, international wire support, physical debit card shipped worldwide.</p><p class=\"mb-4\"><strong>Cons:</strong> Approval is no longer guaranteed. Applications from certain high-risk countries may face additional review. Mercury has been known to close accounts with little warning if compliance concerns arise.</p><h3 class=\"mt-6 mb-3\">Option 2: Relay Financial</h3><p class=\"mb-4\">Relay is a strong alternative that many non-resident founders overlook:</p><table class=\"w-full border-collapse mb-6\"><thead><tr><th class=\"border border-slate-200 px-4 py-2 text-left\">Feature</th><th class=\"border border-slate-200 px-4 py-2 text-left\">Details</th></tr></thead><tbody><tr><td class=\"border border-slate-200 px-4 py-2\">Accepts Non-Residents</td><td class=\"border border-slate-200 px-4 py-2\">Yes (case by case)</td></tr><tr><td class=\"border border-slate-200 px-4 py-2\">In-Person Visit Required</td><td class=\"border border-slate-200 px-4 py-2\">No — fully remote</td></tr><tr><td class=\"border border-slate-200 px-4 py-2\">Monthly Fees</td><td class=\"border border-slate-200 px-4 py-2\">Free (standard), $39/mo (Pro)</td></tr><tr><td class=\"border border-slate-200 px-4 py-2\">EIN Required</td><td class=\"border border-slate-200 px-4 py-2\">Yes</td></tr><tr><td class=\"border border-slate-200 px-4 py-2\">Multiple Accounts</td><td class=\"border border-slate-200 px-4 py-2\">Up to 20 sub-accounts (free)</td></tr><tr><td class=\"border border-slate-200 px-4 py-2\">Debit Card</td><td class=\"border border-slate-200 px-4 py-2\">Yes</td></tr><tr><td class=\"border border-slate-200 px-4 py-2\">Wire Transfers</td><td class=\"border border-slate-200 px-4 py-2\">Domestic (international via Wise integration)</td></tr><tr><td class=\"border border-slate-200 px-4 py-2\">Approval Time</td><td class=\"border border-slate-200 px-4 py-2\">1-2 weeks</td></tr></tbody></table><p class=\"mb-4\"><strong>Pros:</strong> Multiple sub-accounts for organizing finances (great for separating revenue streams), profit-first budgeting tools, clean interface, good customer support.</p><p class=\"mb-4\"><strong>Cons:</strong> International wire transfers require workarounds (Wise integration), non-resident approval is not automatic, limited international shipping for debit cards in some regions.</p><h3 class=\"mt-6 mb-3\">Option 3: Wise Business (Formerly TransferWise)</h3><p class=\"mb-4\">Wise is not a bank in the traditional sense, but it offers something valuable: <strong>US account details (routing and account numbers)</strong> that work for receiving payments.</p><table class=\"w-full border-collapse mb-6\"><thead><tr><th class=\"border border-slate-200 px-4 py-2 text-left\">Feature</th><th class=\"border border-slate-200 px-4 py-2 text-left\">Details</th></tr></thead><tbody><tr><td class=\"border border-slate-200 px-4 py-2\">Accepts Non-Residents</td><td class=\"border border-slate-200 px-4 py-2\">Yes (widely available)</td></tr><tr><td class=\"border border-slate-200 px-4 py-2\">EIN Required</td><td class=\"border border-slate-200 px-4 py-2\">Yes (for business account)</td></tr><tr><td class=\"border border-slate-200 px-4 py-2\">Monthly Fees</td><td class=\"border border-slate-200 px-4 py-2\">Free (pay per transaction)</td></tr><tr><td class=\"border border-slate-200 px-4 py-2\">Multi-Currency</td><td class=\"border border-slate-200 px-4 py-2\">50+ currencies</td></tr><tr><td class=\"border border-slate-200 px-4 py-2\">US Banking Details</td><td class=\"border border-slate-200 px-4 py-2\">Yes (ACH routing number + account number)</td></tr><tr><td class=\"border border-slate-200 px-4 py-2\">Debit Card</td><td class=\"border border-slate-200 px-4 py-2\">Yes (international shipping)</td></tr><tr><td class=\"border border-slate-200 px-4 py-2\">Approval Time</td><td class=\"border border-slate-200 px-4 py-2\">3-7 days</td></tr></tbody></table><p class=\"mb-4\"><strong>Pros:</strong> Fastest approval for non-residents, multi-currency support is unmatched, excellent exchange rates, debit card available worldwide, broadly accepted by payment processors.</p><p class=\"mb-4\"><strong>Cons:</strong> Not a full bank account (no checks, limited lending), some payment processors may not accept Wise account details, transaction fees on currency conversion.</p><h3 class=\"mt-6 mb-3\">Option 4: Traditional US Banks</h3><p class=\"mb-4\">Traditional banks like Chase, Bank of America, and Wells Fargo generally <strong>require an in-person visit</strong> to a US branch for non-resident account opening. Some community banks and credit unions are exceptions, but they are increasingly rare.</p><p class=\"mb-4\">If you plan to visit the US, opening a traditional bank account in person is worth considering for the stability and full-feature banking. Bring your passport, LLC formation documents, EIN letter, and operating agreement. Call ahead to confirm the specific branch handles business accounts for non-residents.</p><h2 class=\"mt-8 mb-4\">Documents You Need (For Any Bank)</h2><p class=\"mb-4\">Regardless of which bank or fintech you choose, have these documents ready:</p><ol class=\"list-decimal pl-6 mb-4 space-y-2\"><li><strong>Articles of Organization:</strong> The state-filed formation document for your LLC. You receive this after <a href=\"/services/llc-formation\">forming your LLC</a>.</li><li><strong>EIN Confirmation Letter (CP 575):</strong> The official letter from the IRS confirming your Employer Identification Number. <a href=\"/services/ein-application\">Apply for your EIN through LLCPad</a> if you have not already.</li><li><strong>Operating Agreement:</strong> The internal governance document for your LLC. Even single-member LLCs should have one — banks want to see it.</li><li><strong>Passport:</strong> A clear color copy or scan of your passport's photo page.</li><li><strong>Proof of Address:</strong> A utility bill, bank statement, or government document showing your home address in your country of residence.</li><li><strong>Business Description:</strong> A clear explanation of what your LLC does, who your customers are, and how you generate revenue.</li><li><strong>Website or Online Presence:</strong> Banks want to verify your business is real. A website, active social media, or marketplace profile (Amazon, Shopify) strengthens your application.</li></ol><h2 class=\"mt-8 mb-4\">The EIN Requirement: Do Not Skip This</h2><p class=\"mb-4\">Every bank or fintech that offers business accounts requires an <strong>EIN (Employer Identification Number)</strong>. This is your LLC's tax ID number, issued by the IRS.</p><p class=\"mb-4\">For non-residents without a Social Security Number, the EIN application process takes <strong>4-6 weeks</strong> when done by mail or fax (the online application requires an SSN or ITIN). LLCPad handles this process for you as part of our <a href=\"/services/llc-formation\">LLC formation packages</a>.</p><p class=\"mb-4\">Do not attempt to open a bank account before receiving your EIN — your application will be immediately rejected.</p><h2 class=\"mt-8 mb-4\">Step-by-Step: Opening Your Account</h2><p class=\"mb-4\">Here is the process we recommend for the highest chance of success:</p><h3 class=\"mt-6 mb-3\">Step 1: Get Your LLC and EIN First</h3><p class=\"mb-4\">Form your LLC, receive your formation documents from the state, and obtain your EIN from the IRS. Have your Operating Agreement prepared and signed. This entire process typically takes 4-8 weeks.</p><h3 class=\"mt-6 mb-3\">Step 2: Set Up a Business Website</h3><p class=\"mb-4\">Even a simple one-page website at your business domain significantly improves your approval odds. Banks check your online presence during the review process. Make sure the website clearly describes your business and matches the information on your application.</p><h3 class=\"mt-6 mb-3\">Step 3: Apply to Multiple Banks Simultaneously</h3><p class=\"mb-4\">Do not put all your eggs in one basket. Apply to Mercury, Relay, and Wise Business at the same time. If one rejects you, you still have options. There is no penalty for multiple applications.</p><h3 class=\"mt-6 mb-3\">Step 4: Write a Clear Business Description</h3><p class=\"mb-4\">When filling out the application, describe your business in plain, specific terms. Avoid vague descriptions like \"consulting\" or \"online business.\" Instead, write something like: \"We sell custom phone accessories through our Shopify store and Amazon, targeting customers in the United States and Europe.\"</p><h3 class=\"mt-6 mb-3\">Step 5: Respond to Verification Requests Promptly</h3><p class=\"mb-4\">Banks will often ask follow-up questions or request additional documents. Respond within 24-48 hours with clear, complete answers. Delays in responding are one of the top reasons applications get rejected.</p><h3 class=\"mt-6 mb-3\">Step 6: Make an Initial Deposit</h3><p class=\"mb-4\">Once approved, fund your account promptly. An account that sits at $0 for weeks may trigger compliance flags. Even a small deposit ($100-$500) shows the account is active and legitimate.</p><h2 class=\"mt-8 mb-4\">Common Rejection Reasons (And How to Avoid Them)</h2><p class=\"mb-4\">Understanding why banks reject applications helps you avoid the same mistakes:</p><h3 class=\"mt-6 mb-3\">1. Vague or Inconsistent Business Description</h3><p class=\"mb-4\">If your application says \"marketing services\" but your website says \"cryptocurrency consulting,\" that inconsistency will flag your application. Make sure all information matches across your application, website, and LLC documents.</p><h3 class=\"mt-6 mb-3\">2. High-Risk Business Categories</h3><p class=\"mb-4\">Certain business types face automatic additional scrutiny or outright rejection: cryptocurrency, gambling, adult content, firearms, and certain financial services. If your business touches any of these areas, be upfront about it and emphasize your compliance measures.</p><h3 class=\"mt-6 mb-3\">3. Incomplete Documentation</h3><p class=\"mb-4\">Submitting blurry passport scans, unsigned operating agreements, or missing documents is an easy way to get rejected. Take the time to prepare clean, complete documentation before applying.</p><h3 class=\"mt-6 mb-3\">4. No Online Presence</h3><p class=\"mb-4\">A business with no website, no social media, and no verifiable online presence looks suspicious to compliance teams. Even a basic LinkedIn company page or a simple website helps.</p><h3 class=\"mt-6 mb-3\">5. Country of Residence</h3><p class=\"mb-4\">Banks assess risk partly based on your country of residence. Applicants from countries on OFAC sanctions lists will be automatically rejected. Applicants from countries with higher perceived financial crime risk may face additional scrutiny — this is not something you can change, but you can compensate by providing thorough documentation and a clear business case.</p><h2 class=\"mt-8 mb-4\">Our Recommended Strategy for 2026</h2><p class=\"mb-4\">Based on current approval rates and features, here is what we recommend:</p><ol class=\"list-decimal pl-6 mb-4 space-y-2\"><li><strong>Primary account: Mercury</strong> — Best all-around option for non-resident LLC owners. Full banking features, no monthly fees, good integrations.</li><li><strong>Backup account: Wise Business</strong> — Highest approval rate, excellent for multi-currency needs and international transfers. Open this alongside Mercury as a backup and for currency conversion.</li><li><strong>If Mercury rejects you: Relay</strong> — Strong alternative with unique features like sub-accounts for budgeting.</li><li><strong>If visiting the US: Open a Chase or Bank of America account</strong> — The stability of a major bank is valuable, and in-person opening has a much higher approval rate for non-residents.</li></ol><h2 class=\"mt-8 mb-4\">Tips to Maximize Your Chances</h2><ul class=\"list-disc pl-6 mb-4 space-y-2\"><li><strong>Apply early in the week</strong> (Monday-Wednesday). Support teams are more responsive if issues come up.</li><li><strong>Have a US phone number</strong> if possible. Google Voice works for some banks. Others may require a physical SIM or VoIP service.</li><li><strong>Use a professional email address</strong> matching your business domain (e.g., yourname@yourbusiness.com), not a Gmail or Yahoo address.</li><li><strong>Keep your initial application simple.</strong> If you have multiple business activities, lead with the most straightforward one.</li><li><strong>Do not mention personal use.</strong> These are business accounts — frame everything in terms of your LLC's operations.</li><li><strong>Be patient.</strong> Approval times have increased across the board. If your application is \"under review\" for two weeks, that is normal — do not open a new application or contact support repeatedly.</li></ul><h2 class=\"mt-8 mb-4\">How LLCPad Helps</h2><p class=\"mb-4\">Banking is one of the most common pain points our clients face. Here is how we smooth the process:</p><ul class=\"list-disc pl-6 mb-4 space-y-2\"><li><strong>Complete formation documents:</strong> When you <a href=\"/services/llc-formation\">form your LLC through LLCPad</a>, you receive all the documents banks require — Articles of Organization, Operating Agreement, and EIN — formatted and organized for bank applications.</li><li><strong>EIN procurement:</strong> Our <a href=\"/services/ein-application\">EIN application service</a> ensures you have the tax ID number every bank requires, without navigating the IRS process yourself.</li><li><strong>Banking guidance:</strong> We provide updated recommendations on which banks are currently accepting non-resident applications and any special requirements.</li><li><strong>Virtual address:</strong> If you need a US address beyond your registered agent, our <a href=\"/services/virtual-address\">virtual address service</a> provides a physical US mailing address for your LLC.</li></ul><p class=\"mb-4\">Ready to set the foundation? <a href=\"/services/llc-formation\">Start your LLC formation</a> today, and we will make sure you have everything you need to open a US bank account with confidence.</p><p class=\"mb-4\"><em>Disclaimer: LLCPad is not affiliated with Mercury, Relay, Wise, or any bank mentioned in this article. Banking policies change frequently. This information is current as of early 2026 but may not reflect the latest policies. Always verify requirements directly with your chosen bank.</em></p>"
+    },
+    {
+      "title": "The 2026 Remittance Tax: What Every Foreign LLC Owner Needs to Know",
+      "slug": "2026-remittance-tax-foreign-llc-owners-guide",
+      "categorySlug": "new-law",
+      "published": true,
+      "coverImage": "https://images.unsplash.com/photo-1526304640581-d334cdbbf45e?auto=format&fit=crop&w=800&q=80",
+      "excerpt": "The new 1% excise tax on outbound remittances could impact how you move money from your US LLC. Here's what changed and how to plan.",
+      "metaTitle": "2026 Remittance Tax: Impact on Foreign LLC Owners",
+      "metaDescription": "Understand the 2026 remittance excise tax and how it affects foreign-owned US LLCs. Exemptions, planning strategies, and compliance tips.",
+      "content": "<h2 class=\"mt-8 mb-4\">A New Tax on Moving Money Out of the United States</h2>\n<p class=\"mb-4\">If you own a US LLC from abroad, you have probably heard rumblings about a new tax on money leaving the country. Starting January 1, 2026, the United States began enforcing a <strong>1% federal excise tax on certain outbound remittance transfers</strong> under Section 4475 of the Internal Revenue Code. This was enacted as part of the <em>One, Big, Beautiful Bill Act</em> (Public Law 119-21), signed into law on July 4, 2025.</p>\n<p class=\"mb-4\">For foreign entrepreneurs who formed a US LLC to run an Amazon store, freelance business, or e-commerce operation, this law raises real questions. Will it cost you more to send your profits home? Are there exemptions? And what can you do to minimize the impact?</p>\n<p class=\"mb-4\">This guide breaks down the remittance tax 2026 in plain English, explains exactly who is affected, and walks you through practical strategies to keep more of your hard-earned money.</p>\n\n<h2 class=\"mt-8 mb-4\">What Exactly Is the Remittance Excise Tax?</h2>\n<p class=\"mb-4\">The remittance excise tax is a <strong>1% fee levied on certain cross-border money transfers</strong> sent from the United States to recipients in foreign countries. The tax is collected by <em>remittance transfer providers</em> (companies like Western Union, MoneyGram, and similar services) at the point of the transaction and then deposited with the IRS on a semimonthly basis.</p>\n<p class=\"mb-4\">The key word here is \"certain.\" Not every international transfer triggers this tax. The law specifically targets transfers funded by:</p>\n<ul class=\"list-disc pl-6 mb-4 space-y-2\">\n<li><strong>Cash</strong> handed to a remittance provider</li>\n<li><strong>Money orders</strong></li>\n<li><strong>Cashier's checks</strong></li>\n<li><strong>Other similar physical instruments</strong></li>\n</ul>\n<p class=\"mb-4\">This is a critical distinction. The tax was designed primarily to capture informal, cash-based remittances rather than standard electronic banking transactions. We will get into the exemptions shortly, because they matter enormously for LLC owners.</p>\n\n<h2 class=\"mt-8 mb-4\">Legislative Background: How We Got Here</h2>\n<p class=\"mb-4\">The remittance tax began as a proposal within broader budget reconciliation legislation in early 2025. The original drafts floated a rate as high as <strong>5%</strong>, which caused significant alarm among immigrant communities, expat organizations, and foreign business owners alike.</p>\n<p class=\"mb-4\">Through the legislative process, the rate was reduced from 5% to 3.5%, and then further lowered to the final <strong>1%</strong> in the Senate version. The One, Big, Beautiful Bill Act was signed by the President on July 4, 2025, with the remittance tax provision taking effect on January 1, 2026.</p>\n<p class=\"mb-4\">The stated purpose of the tax is to generate federal revenue from outbound capital flows. Supporters argue it helps offset other tax cuts in the legislation. Critics, including the American Citizens Abroad organization, have raised concerns about its impact on lower-income remittance senders and the compliance burden on transfer providers.</p>\n\n<h3 class=\"mt-6 mb-3\">Key Timeline</h3>\n<table class=\"w-full border-collapse mb-6\">\n<thead>\n<tr>\n<th class=\"border border-slate-200 px-4 py-2\">Date</th>\n<th class=\"border border-slate-200 px-4 py-2\">Event</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td class=\"border border-slate-200 px-4 py-2\">Early 2025</td>\n<td class=\"border border-slate-200 px-4 py-2\">Initial proposal at 5% rate</td>\n</tr>\n<tr>\n<td class=\"border border-slate-200 px-4 py-2\">Mid 2025</td>\n<td class=\"border border-slate-200 px-4 py-2\">Rate reduced to 3.5%, then 1%</td>\n</tr>\n<tr>\n<td class=\"border border-slate-200 px-4 py-2\">July 4, 2025</td>\n<td class=\"border border-slate-200 px-4 py-2\">One, Big, Beautiful Bill Act signed into law</td>\n</tr>\n<tr>\n<td class=\"border border-slate-200 px-4 py-2\">January 1, 2026</td>\n<td class=\"border border-slate-200 px-4 py-2\">Excise tax takes effect</td>\n</tr>\n<tr>\n<td class=\"border border-slate-200 px-4 py-2\">January 29, 2026</td>\n<td class=\"border border-slate-200 px-4 py-2\">First semimonthly deposit due from providers</td>\n</tr>\n<tr>\n<td class=\"border border-slate-200 px-4 py-2\">Q1-Q3 2026</td>\n<td class=\"border border-slate-200 px-4 py-2\">IRS penalty relief period for providers (Notice 2025-55)</td>\n</tr>\n</tbody>\n</table>\n\n<h2 class=\"mt-8 mb-4\">Who Is Affected by the Remittance Tax?</h2>\n<p class=\"mb-4\">Here is where things get nuanced. The foreign LLC remittance excise tax applies to <strong>any sender in the United States</strong> making a covered remittance transfer to a foreign country. This includes:</p>\n<ul class=\"list-disc pl-6 mb-4 space-y-2\">\n<li><strong>US citizens</strong> sending money to family abroad</li>\n<li><strong>Green card holders</strong> remitting funds overseas</li>\n<li><strong>Non-resident visa holders</strong> working in the US</li>\n<li><strong>Foreign-owned business entities</strong> transferring profits abroad</li>\n</ul>\n<p class=\"mb-4\">Notably, the tax does <strong>not</strong> discriminate based on citizenship or immigration status. If you are sending money from US soil through a covered method, the tax can apply. The legislation also includes <strong>anti-conduit provisions</strong> under Section 7701(l) to prevent people from routing transfers through intermediaries to avoid the tax.</p>\n\n<h3 class=\"mt-6 mb-3\">Are LLC Profit Distributions Affected?</h3>\n<p class=\"mb-4\">This is the question most foreign LLC owners are asking. The answer depends on <strong>how</strong> you move your profits, not whether you are moving them. If you withdraw cash from your LLC's earnings, walk into a Western Union office, and send it abroad, you would owe the 1% tax. But if you transfer those same profits electronically from your US business bank account, you are most likely exempt. More on that below.</p>\n\n<h2 class=\"mt-8 mb-4\">The Exemptions That Matter Most</h2>\n<p class=\"mb-4\">The good news for most foreign LLC owners is that the law includes <strong>significant exemptions</strong> that effectively remove the tax burden from standard business banking operations. The 1% excise tax does <strong>not</strong> apply when the transfer is funded by:</p>\n<ul class=\"list-disc pl-6 mb-4 space-y-2\">\n<li><strong>A withdrawal from a US bank or credit union account</strong> that is subject to Bank Secrecy Act (BSA) regulations</li>\n<li><strong>A US-issued debit card</strong></li>\n<li><strong>A US-issued credit card</strong></li>\n<li><strong>Transfers of $15 or less</strong></li>\n</ul>\n<p class=\"mb-4\">In other words, if you are using your <a href=\"/services/business-banking\">US business bank account</a> to wire profits to your home country bank account, you are generally <strong>exempt</strong> from this tax. The exemption for BSA-regulated financial institution accounts covers the vast majority of standard banking wire transfers.</p>\n<p class=\"mb-4\">This is why having a proper US bank account for your LLC is no longer just convenient — it is a genuine financial advantage.</p>\n\n<h2 class=\"mt-8 mb-4\">How the Tax Impacts Foreign LLC Profit Repatriation</h2>\n<p class=\"mb-4\">Let us walk through a few common scenarios to show the practical impact:</p>\n\n<h3 class=\"mt-6 mb-3\">Scenario 1: Cash-Based Transfer (Taxed)</h3>\n<p class=\"mb-4\">You earn $10,000 in your LLC. You withdraw cash and send it home through a remittance service like Western Union. The provider collects a <strong>$100 excise tax</strong> (1% of $10,000) on top of their regular fees. Over a year, if you send $50,000 this way, you lose $500 to the excise tax alone.</p>\n\n<h3 class=\"mt-6 mb-3\">Scenario 2: Bank Wire Transfer (Exempt)</h3>\n<p class=\"mb-4\">You earn the same $10,000. You initiate an international wire transfer from your US LLC's bank account (Mercury, Relay, Chase, etc.) to your personal bank account in Bangladesh, India, or Pakistan. Because the funds are coming from a BSA-regulated bank account, the <strong>excise tax does not apply</strong>. You pay only the bank's standard wire fee, typically $15–40.</p>\n\n<h3 class=\"mt-6 mb-3\">Scenario 3: Wise or Payoneer (Generally Exempt)</h3>\n<p class=\"mb-4\">You use a service like Wise (formerly TransferWise) or Payoneer to move funds. If you are funding the transfer from your US bank account or using a US-issued debit card linked to your LLC, the exemption applies. The key is the <strong>funding source</strong>, not the transfer provider.</p>\n\n<table class=\"w-full border-collapse mb-6\">\n<thead>\n<tr>\n<th class=\"border border-slate-200 px-4 py-2\">Transfer Method</th>\n<th class=\"border border-slate-200 px-4 py-2\">Subject to 1% Tax?</th>\n<th class=\"border border-slate-200 px-4 py-2\">Notes</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td class=\"border border-slate-200 px-4 py-2\">Cash at remittance office</td>\n<td class=\"border border-slate-200 px-4 py-2\">Yes</td>\n<td class=\"border border-slate-200 px-4 py-2\">Tax collected by provider</td>\n</tr>\n<tr>\n<td class=\"border border-slate-200 px-4 py-2\">Money order</td>\n<td class=\"border border-slate-200 px-4 py-2\">Yes</td>\n<td class=\"border border-slate-200 px-4 py-2\">Treated same as cash</td>\n</tr>\n<tr>\n<td class=\"border border-slate-200 px-4 py-2\">Cashier's check</td>\n<td class=\"border border-slate-200 px-4 py-2\">Yes</td>\n<td class=\"border border-slate-200 px-4 py-2\">Physical instrument</td>\n</tr>\n<tr>\n<td class=\"border border-slate-200 px-4 py-2\">Bank wire transfer</td>\n<td class=\"border border-slate-200 px-4 py-2\">No</td>\n<td class=\"border border-slate-200 px-4 py-2\">BSA-regulated account exempt</td>\n</tr>\n<tr>\n<td class=\"border border-slate-200 px-4 py-2\">US debit card transfer</td>\n<td class=\"border border-slate-200 px-4 py-2\">No</td>\n<td class=\"border border-slate-200 px-4 py-2\">US-issued card exempt</td>\n</tr>\n<tr>\n<td class=\"border border-slate-200 px-4 py-2\">US credit card transfer</td>\n<td class=\"border border-slate-200 px-4 py-2\">No</td>\n<td class=\"border border-slate-200 px-4 py-2\">US-issued card exempt</td>\n</tr>\n<tr>\n<td class=\"border border-slate-200 px-4 py-2\">Wise/Payoneer from bank</td>\n<td class=\"border border-slate-200 px-4 py-2\">No</td>\n<td class=\"border border-slate-200 px-4 py-2\">Funded from BSA account</td>\n</tr>\n</tbody>\n</table>\n\n<h2 class=\"mt-8 mb-4\">Planning Strategies for Foreign LLC Owners</h2>\n<p class=\"mb-4\">Now that you understand the mechanics, here are actionable steps to ensure the remittance tax has minimal impact on your business.</p>\n\n<h3 class=\"mt-6 mb-3\">1. Open a US Business Bank Account (If You Have Not Already)</h3>\n<p class=\"mb-4\">This is the single most important step. A US business bank account at a BSA-regulated institution gives you an automatic exemption for all outbound transfers funded from that account. Services like Mercury, Relay, and Bluevine welcome foreign-owned LLCs. If you need help, our <a href=\"/services/business-banking\">business banking assistance service</a> walks you through the entire process.</p>\n\n<h3 class=\"mt-6 mb-3\">2. Always Fund Transfers Electronically</h3>\n<p class=\"mb-4\">Even if you use a remittance provider, make sure you are funding the transfer with a bank withdrawal or US-issued debit card rather than cash. The tax trigger is the <strong>funding method</strong>, not the service provider.</p>\n\n<h3 class=\"mt-6 mb-3\">3. Consider Reinvesting in Your US Business</h3>\n<p class=\"mb-4\">If you do not need profits immediately, reinvesting them into inventory, marketing, or expanding your product line keeps the money in the US and growing. This is especially relevant for <a href=\"/services/amazon-seller\">Amazon sellers</a> who can reinvest in new ASINs or PPC campaigns.</p>\n\n<h3 class=\"mt-6 mb-3\">4. Consolidate Transfers</h3>\n<p class=\"mb-4\">Rather than making many small transfers (which may accumulate fees even if exempt from the excise tax), consolidate into fewer, larger transfers. This reduces banking fees and simplifies your bookkeeping.</p>\n\n<h3 class=\"mt-6 mb-3\">5. Keep Clean Records</h3>\n<p class=\"mb-4\">Document every outbound transfer, the funding source, and the amount. If you are audited or questioned, having clear records showing your transfers were funded from a BSA-regulated account makes compliance straightforward. Our <a href=\"/services/bookkeeping\">bookkeeping service</a> can help you maintain organized financial records.</p>\n\n<h3 class=\"mt-6 mb-3\">6. Stay Current on IRS Guidance</h3>\n<p class=\"mb-4\">The IRS has already issued Notice 2025-55 providing penalty relief for the first three quarters of 2026. Additional guidance, clarifications, and potentially updated regulations are expected. We recommend subscribing to IRS updates or following a qualified tax professional who specializes in non-resident tax matters.</p>\n\n<h2 class=\"mt-8 mb-4\">How Does This Compare to Other Countries?</h2>\n<p class=\"mb-4\">The US is not the first country to tax outbound remittances, but the approach is distinctive. Here is how it compares:</p>\n<table class=\"w-full border-collapse mb-6\">\n<thead>\n<tr>\n<th class=\"border border-slate-200 px-4 py-2\">Country</th>\n<th class=\"border border-slate-200 px-4 py-2\">Remittance Tax</th>\n<th class=\"border border-slate-200 px-4 py-2\">Rate</th>\n<th class=\"border border-slate-200 px-4 py-2\">Scope</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td class=\"border border-slate-200 px-4 py-2\">United States (2026)</td>\n<td class=\"border border-slate-200 px-4 py-2\">Excise tax</td>\n<td class=\"border border-slate-200 px-4 py-2\">1%</td>\n<td class=\"border border-slate-200 px-4 py-2\">Cash-funded remittances only</td>\n</tr>\n<tr>\n<td class=\"border border-slate-200 px-4 py-2\">India (TCS)</td>\n<td class=\"border border-slate-200 px-4 py-2\">Tax Collected at Source</td>\n<td class=\"border border-slate-200 px-4 py-2\">5–20%</td>\n<td class=\"border border-slate-200 px-4 py-2\">All outbound remittances over ₹7 lakh</td>\n</tr>\n<tr>\n<td class=\"border border-slate-200 px-4 py-2\">Saudi Arabia</td>\n<td class=\"border border-slate-200 px-4 py-2\">Levy on transfers</td>\n<td class=\"border border-slate-200 px-4 py-2\">Proposed (shelved)</td>\n<td class=\"border border-slate-200 px-4 py-2\">Was planned for foreign workers</td>\n</tr>\n<tr>\n<td class=\"border border-slate-200 px-4 py-2\">UAE</td>\n<td class=\"border border-slate-200 px-4 py-2\">None</td>\n<td class=\"border border-slate-200 px-4 py-2\">0%</td>\n<td class=\"border border-slate-200 px-4 py-2\">No outbound remittance tax</td>\n</tr>\n</tbody>\n</table>\n<p class=\"mb-4\">Compared to India's Tax Collected at Source (TCS), which can reach 20% on certain foreign remittances, the US 1% excise tax is relatively modest and much narrower in scope because of the cash-only trigger. The banking exemption makes the US approach far less burdensome for established business owners who use formal financial channels.</p>\n\n<h2 class=\"mt-8 mb-4\">Common Questions About the Remittance Tax</h2>\n\n<h3 class=\"mt-6 mb-3\">Does this tax apply to business-to-business wire transfers?</h3>\n<p class=\"mb-4\">If your LLC sends a wire transfer from its US bank account to pay an overseas supplier, the transfer is funded from a BSA-regulated institution and would generally be exempt. However, the anti-conduit rules mean you cannot route personal cash-based transfers through a business entity to avoid the tax.</p>\n\n<h3 class=\"mt-6 mb-3\">What if I use PayPal or Stripe to receive payments?</h3>\n<p class=\"mb-4\">Receiving payments is not affected. The tax only applies to <strong>outbound</strong> transfers from the US. Your customers paying you through PayPal or Stripe is an inbound transaction and is not covered by Section 4475.</p>\n\n<h3 class=\"mt-6 mb-3\">Do I need to file anything extra for this tax?</h3>\n<p class=\"mb-4\">As an individual sender, no. The <strong>remittance transfer provider</strong> is responsible for collecting the tax and remitting it to the IRS. They file quarterly returns. You do not need to separately report remittance tax on your personal or business tax returns. However, you should keep records of your transfers and funding methods for your own protection.</p>\n\n<h3 class=\"mt-6 mb-3\">Is there a minimum transfer amount?</h3>\n<p class=\"mb-4\">Transfers of <strong>$15 or less</strong> are excluded from the tax. Beyond that threshold, the 1% applies to the full amount of any covered transfer.</p>\n\n<h2 class=\"mt-8 mb-4\">How LLCPad Helps You Stay Ahead</h2>\n<p class=\"mb-4\">At LLCPad, we help international entrepreneurs build their US businesses on a solid foundation. That foundation includes the banking and compliance infrastructure that makes the remittance tax largely irrelevant to your operations.</p>\n<ul class=\"list-disc pl-6 mb-4 space-y-2\">\n<li><a href=\"/services/llc-formation\"><strong>LLC Formation</strong></a> — We set up your Wyoming or New Mexico LLC with all the documentation you need to open a US bank account.</li>\n<li><a href=\"/services/ein-application\"><strong>EIN Application</strong></a> — Your Employer Identification Number is required for banking and tax compliance.</li>\n<li><a href=\"/services/business-banking\"><strong>Business Banking Assistance</strong></a> — We guide you through opening a US business bank account, which provides the BSA exemption from the remittance tax.</li>\n<li><a href=\"/services/bookkeeping\"><strong>Bookkeeping</strong></a> — We keep your financial records organized so every transfer is documented and audit-ready.</li>\n<li><a href=\"/services/tax-filing\"><strong>Tax Filing</strong></a> — Our team ensures your LLC meets all federal and state tax obligations, including the <a href=\"/blog/form-5472-foreign-llc-owner-guide\">Form 5472</a> required for foreign-owned single-member LLCs.</li>\n</ul>\n\n<h2 class=\"mt-8 mb-4\">The Bottom Line</h2>\n<p class=\"mb-4\">The 2026 remittance excise tax sounds alarming at first, but for foreign LLC owners who use proper banking channels, the practical impact is <strong>close to zero</strong>. The 1% tax targets cash-based, informal remittances. If you are running a legitimate US business with a US bank account, your profit transfers are exempt.</p>\n<p class=\"mb-4\">The real takeaway is this: having the right business infrastructure — an LLC, an EIN, a US bank account, and proper bookkeeping — does not just make your business look professional. It actively saves you money and keeps you compliant as laws evolve.</p>\n<p class=\"mb-4\"><strong>Disclaimer:</strong> This article is for informational purposes only and does not constitute legal or tax advice. LLCPad is not a law firm or accounting firm. Consult a qualified tax professional for advice specific to your situation.</p>"
+    },
+    {
+      "title": "How to Set Up TikTok Shop in the US as a Non-Resident",
+      "slug": "tiktok-shop-us-non-resident-setup-guide",
+      "categorySlug": "e-commerce",
+      "published": true,
+      "coverImage": "https://images.unsplash.com/photo-1611162616475-46b635cb6868?auto=format&fit=crop&w=800&q=80",
+      "excerpt": "LLC, EIN, Letter of Authorization, seller verification — the complete playbook for launching your TikTok Shop from abroad in 2026.",
+      "metaTitle": "TikTok Shop US Setup for Non-Residents (2026)",
+      "metaDescription": "Step-by-step guide to setting up TikTok Shop in the US as a non-resident. LLC requirements, EIN, verification, and seller tips for 2026.",
+      "content": "<h2 class=\"mt-8 mb-4\">Why TikTok Shop Is the Biggest E-Commerce Opportunity in 2026</h2>\n<p class=\"mb-4\">TikTok Shop has exploded from a novelty feature into a serious sales channel. In 2025, TikTok Shop generated billions in US gross merchandise value, and 2026 is shaping up to be even bigger. The platform's algorithm-driven discovery engine means a single viral video can generate thousands of sales overnight — something that takes months of optimization on Amazon or Shopify.</p>\n<p class=\"mb-4\">For international entrepreneurs, the opportunity is massive. But there is a catch: selling on TikTok Shop in the US requires a <strong>US business entity</strong>. You cannot simply sign up with a foreign passport and start listing products. TikTok enforces strict identity verification, business documentation checks, and banking requirements.</p>\n<p class=\"mb-4\">The good news? With the right setup, non-residents can absolutely sell on TikTok Shop from abroad. This guide walks you through every step, from LLC formation to your first product listing.</p>\n\n<h2 class=\"mt-8 mb-4\">The US LLC Requirement: Why You Need One</h2>\n<p class=\"mb-4\">TikTok Shop's US marketplace requires sellers to register as either an individual with a US Social Security Number (SSN) or as a <strong>US-registered business entity</strong>. Since non-residents typically do not have an SSN, the business entity path is the way forward.</p>\n<p class=\"mb-4\">A <strong>US Limited Liability Company (LLC)</strong> is the preferred structure for several reasons:</p>\n<ul class=\"list-disc pl-6 mb-4 space-y-2\">\n<li><strong>Legal separation</strong> — Your personal assets are protected from business liabilities</li>\n<li><strong>Tax flexibility</strong> — Single-member LLCs owned by non-resident aliens can benefit from favorable tax treatment on non-US-sourced income</li>\n<li><strong>Banking access</strong> — US banks require a US business entity to open a business account</li>\n<li><strong>Platform compliance</strong> — TikTok, Amazon, Walmart, and Shopify all accept US LLCs from foreign owners</li>\n</ul>\n<p class=\"mb-4\">We recommend forming your LLC in <strong>Wyoming</strong> or <strong>New Mexico</strong>, as both states are friendly to non-resident owners, have no state income tax on out-of-state income, and offer strong privacy protections. Our <a href=\"/services/llc-formation\">LLC formation service</a> handles the entire process for you.</p>\n\n<h2 class=\"mt-8 mb-4\">Step-by-Step: From Zero to TikTok Shop Seller</h2>\n<p class=\"mb-4\">Here is the complete roadmap. Each step builds on the previous one, so follow them in order.</p>\n\n<h3 class=\"mt-6 mb-3\">Step 1: Form Your US LLC</h3>\n<p class=\"mb-4\">This is the foundation. You need Articles of Organization filed with a US state, a registered agent in that state, and an Operating Agreement. The process typically takes 3–7 business days depending on the state.</p>\n<p class=\"mb-4\">Critical detail: the <strong>legal name on your Articles of Organization</strong> must exactly match what you later enter in TikTok's Seller Center, on your EIN documentation, and on your bank account. Even a small discrepancy (like \"LLC\" vs. \"L.L.C.\") can trigger a manual review that delays your application by weeks.</p>\n<p class=\"mb-4\"><a href=\"/services/llc-formation\">Start your LLC formation here</a> — we ensure all your documents are consistent and verification-ready.</p>\n\n<h3 class=\"mt-6 mb-3\">Step 2: Get Your EIN (Employer Identification Number)</h3>\n<p class=\"mb-4\">Your EIN is essentially your business's tax ID number, issued by the IRS. TikTok Shop requires it during seller verification. You will receive an <strong>IRS Notice CP 575</strong> confirming your EIN, and this is one of the documents TikTok accepts as proof of your business identity.</p>\n<p class=\"mb-4\">For non-residents without an SSN or ITIN, the EIN application is done by fax or mail (Form SS-4), which typically takes 4–6 weeks through the IRS. Our <a href=\"/services/ein-application\">EIN application service</a> handles the paperwork and follow-up so you do not have to navigate IRS phone lines.</p>\n\n<h3 class=\"mt-6 mb-3\">Step 3: Open a US Business Bank Account</h3>\n<p class=\"mb-4\">TikTok Shop deposits your earnings into a US bank account. You need one. TikTok also cross-references your banking details against your LLC name and EIN, so everything must match.</p>\n<p class=\"mb-4\">Popular options for non-resident LLC owners include:</p>\n<ul class=\"list-disc pl-6 mb-4 space-y-2\">\n<li><strong>Mercury</strong> — Popular with startups and e-commerce sellers; remote-friendly application</li>\n<li><strong>Relay</strong> — Free business banking with no minimum balance</li>\n<li><strong>Bluevine</strong> — Offers checking with interest</li>\n</ul>\n<p class=\"mb-4\">Our <a href=\"/services/business-banking\">business banking assistance</a> guides you through the application and ensures your documents are in order before you apply.</p>\n\n<h3 class=\"mt-6 mb-3\">Step 4: Apply for an ITIN (If Needed)</h3>\n<p class=\"mb-4\">While an EIN is for your business, TikTok may also require a personal tax identification number for the <strong>Primary Business Representative</strong>. If you do not have an SSN, you will need an <a href=\"/services/itin-application\">ITIN (Individual Taxpayer Identification Number)</a>. This is used for the W-9 form that TikTok requires for tax reporting.</p>\n\n<h3 class=\"mt-6 mb-3\">Step 5: Register on TikTok Seller Center</h3>\n<p class=\"mb-4\">Now for the actual TikTok Shop registration. Go to <strong>seller-us.tiktok.com</strong> and select \"Sign Up\" as a business seller. You will need:</p>\n<ul class=\"list-disc pl-6 mb-4 space-y-2\">\n<li>Your LLC's legal name (exactly as on your Articles of Organization)</li>\n<li>Your EIN and IRS CP 575 notice</li>\n<li>A US business address (your <a href=\"/services/registered-agent\">registered agent address</a> or <a href=\"/services/virtual-address\">virtual address</a> works)</li>\n<li>US bank account details</li>\n<li>A W-9 form</li>\n</ul>\n<p class=\"mb-4\">TikTok cross-checks three independent data points: your entity name on the Articles of Organization, the EIN on your CP 575, and the legal name on your bank account. All three <strong>must match exactly</strong>.</p>\n\n<h3 class=\"mt-6 mb-3\">Step 6: Appoint a Primary Business Representative</h3>\n<p class=\"mb-4\">This is the step that trips up most non-resident sellers. Every TikTok Shop needs a <strong>US-based Primary Business Representative (PBR)</strong> — a person authorized to act on behalf of the company. The PBR must provide:</p>\n<ul class=\"list-disc pl-6 mb-4 space-y-2\">\n<li>A US government-issued photo ID (driver's license or state ID)</li>\n<li>A Social Security Number</li>\n<li>A live selfie video for identity verification</li>\n<li>A US residential address (not a PO Box)</li>\n</ul>\n<p class=\"mb-4\">If you are the LLC owner but live abroad, you will need to appoint someone in the US as your PBR. This is where the <strong>Letter of Authorization (LOA)</strong> comes in.</p>\n\n<h3 class=\"mt-6 mb-3\">Step 7: Prepare Your Letter of Authorization</h3>\n<p class=\"mb-4\">A Letter of Authorization is a written document confirming that a person of authority (you, the LLC owner) has granted permission for another person (the PBR) to act on behalf of your business on TikTok Shop. TikTok may request this document during verification.</p>\n<p class=\"mb-4\">Your LOA should include:</p>\n<ul class=\"list-disc pl-6 mb-4 space-y-2\">\n<li>Your LLC's full legal name and EIN</li>\n<li>The name and role of the person being authorized</li>\n<li>A clear statement of what they are authorized to do</li>\n<li>The LLC owner's or manager's signature</li>\n<li>Date of authorization</li>\n</ul>\n<p class=\"mb-4\">TikTok sometimes provides a template for this. If they do not, a professionally formatted letter on your company letterhead works.</p>\n\n<h2 class=\"mt-8 mb-4\">Identity Verification: What to Expect</h2>\n<p class=\"mb-4\">TikTok's verification process has become stricter in 2026. The platform verifies your business at multiple levels:</p>\n<ol class=\"list-decimal pl-6 mb-4 space-y-2\">\n<li><strong>Business Entity Verification</strong> — Confirming your LLC is real and active with your state</li>\n<li><strong>Tax Identity Verification</strong> — Matching your EIN and W-9 information</li>\n<li><strong>Primary Business Representative Verification</strong> — ID check, SSN verification, and live selfie</li>\n<li><strong>Beneficial Ownership Disclosure</strong> — Any owner with 25% or more ownership must be disclosed</li>\n<li><strong>Bank Account Verification</strong> — Confirming the account matches your business name</li>\n</ol>\n<p class=\"mb-4\">Typical approval time is <strong>24–48 hours</strong> if all documents are clean and consistent. Some sellers report approval in as little as 19 hours.</p>\n\n<h2 class=\"mt-8 mb-4\">Common Rejection Reasons (and How to Avoid Them)</h2>\n<p class=\"mb-4\">Understanding why applications get rejected will save you weeks of frustration. Here are the most common issues:</p>\n<table class=\"w-full border-collapse mb-6\">\n<thead>\n<tr>\n<th class=\"border border-slate-200 px-4 py-2\">Rejection Reason</th>\n<th class=\"border border-slate-200 px-4 py-2\">What It Means</th>\n<th class=\"border border-slate-200 px-4 py-2\">How to Fix It</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td class=\"border border-slate-200 px-4 py-2\">Business information inconsistent</td>\n<td class=\"border border-slate-200 px-4 py-2\">Name or address mismatch between documents</td>\n<td class=\"border border-slate-200 px-4 py-2\">Ensure LLC name is identical on all documents</td>\n</tr>\n<tr>\n<td class=\"border border-slate-200 px-4 py-2\">Uploaded documents unclear</td>\n<td class=\"border border-slate-200 px-4 py-2\">Scans were blurry, cropped, or low resolution</td>\n<td class=\"border border-slate-200 px-4 py-2\">Upload high-resolution, full-page scans</td>\n</tr>\n<tr>\n<td class=\"border border-slate-200 px-4 py-2\">ID information does not match</td>\n<td class=\"border border-slate-200 px-4 py-2\">PBR's name or date of birth entered incorrectly</td>\n<td class=\"border border-slate-200 px-4 py-2\">Double-check all personal details against the ID</td>\n</tr>\n<tr>\n<td class=\"border border-slate-200 px-4 py-2\">PBR address mismatch</td>\n<td class=\"border border-slate-200 px-4 py-2\">PBR's ID address does not match portal entry</td>\n<td class=\"border border-slate-200 px-4 py-2\">Use the exact address shown on the PBR's ID</td>\n</tr>\n<tr>\n<td class=\"border border-slate-200 px-4 py-2\">Bank account name mismatch</td>\n<td class=\"border border-slate-200 px-4 py-2\">Bank account name differs from LLC legal name</td>\n<td class=\"border border-slate-200 px-4 py-2\">Open bank account using exact LLC legal name</td>\n</tr>\n</tbody>\n</table>\n<p class=\"mb-4\">The golden rule: <strong>consistency is everything</strong>. Before submitting your application, lay out your Articles of Organization, CP 575 letter, bank statement, and W-9 side by side. The business name, address, and EIN should be identical across all of them.</p>\n\n<h2 class=\"mt-8 mb-4\">Fulfillment Options: FBT vs. Third-Party Logistics</h2>\n<p class=\"mb-4\">Once approved, you need to figure out how to actually get products to customers. As a non-resident seller, you have two main options.</p>\n\n<h3 class=\"mt-6 mb-3\">Fulfilled by TikTok (FBT)</h3>\n<p class=\"mb-4\">FBT is TikTok's in-house fulfillment service, similar to Amazon's FBA. You ship inventory to TikTok's fulfillment centers, and they handle storage, picking, packing, and shipping.</p>\n<ul class=\"list-disc pl-6 mb-4 space-y-2\">\n<li><strong>Pros:</strong> Faster delivery (3-day delivery badge boosts visibility), 20–35% shipping savings, 60 days free storage, reduced operational burden</li>\n<li><strong>Cons:</strong> Less control over packaging and branding, storage fees increase after 60 days, limited value-added services</li>\n<li><strong>Costs:</strong> Starting at $3.58 per single-unit order and $2.86 per item for multi-unit orders (as of January 2026)</li>\n</ul>\n\n<h3 class=\"mt-6 mb-3\">Third-Party Logistics (3PL)</h3>\n<p class=\"mb-4\">A 3PL warehouse receives, stores, and ships your products on your behalf. Popular 3PLs for TikTok Shop sellers include ShipBob, ShipHero, and Deliverr.</p>\n<ul class=\"list-disc pl-6 mb-4 space-y-2\">\n<li><strong>Pros:</strong> Custom packaging and inserts, multi-channel fulfillment (sell on TikTok, Amazon, and Shopify from one warehouse), more flexible storage terms, often lower long-term storage costs</li>\n<li><strong>Cons:</strong> No \"Free 3-Day Delivery\" badge, may have higher per-order costs for small volumes, requires more setup</li>\n</ul>\n<p class=\"mb-4\">For sellers just starting out, <strong>FBT is the easier choice</strong>. The free 3-day delivery badge significantly improves your product's visibility in TikTok's algorithm. As your business grows and you want more control over the customer experience, transitioning to a 3PL gives you more flexibility.</p>\n\n<h2 class=\"mt-8 mb-4\">Product Listing Tips for TikTok Shop Success</h2>\n<p class=\"mb-4\">Getting approved is half the battle. Here are practical tips to make your products actually sell.</p>\n\n<h3 class=\"mt-6 mb-3\">Optimize for Discovery</h3>\n<ul class=\"list-disc pl-6 mb-4 space-y-2\">\n<li>Use <strong>keyword-rich product titles</strong> that match what shoppers search for on TikTok</li>\n<li>Write detailed product descriptions with benefits, not just features</li>\n<li>Upload at least <strong>5 high-quality product images</strong> with white backgrounds and lifestyle shots</li>\n<li>Add a <strong>product video</strong> (even a simple 15-second demo) — listings with videos get significantly more engagement</li>\n</ul>\n\n<h3 class=\"mt-6 mb-3\">Price Competitively</h3>\n<p class=\"mb-4\">TikTok shoppers expect deals. Factor in TikTok's <strong>6% referral fee</strong> (3% for your first 30 days), fulfillment costs, and your product cost to set a price that is competitive while still profitable. The sweet spot for TikTok Shop products tends to be $15–$50.</p>\n\n<h3 class=\"mt-6 mb-3\">Leverage Creator Partnerships</h3>\n<p class=\"mb-4\">TikTok Shop's affiliate program lets creators promote your products in their videos. You set a commission rate, and creators who drive sales earn that commission. This is one of the most powerful features of TikTok Shop and costs you nothing unless a sale is made.</p>\n\n<h2 class=\"mt-8 mb-4\">TikTok Shop Seller Fees at a Glance</h2>\n<table class=\"w-full border-collapse mb-6\">\n<thead>\n<tr>\n<th class=\"border border-slate-200 px-4 py-2\">Fee Type</th>\n<th class=\"border border-slate-200 px-4 py-2\">Rate</th>\n<th class=\"border border-slate-200 px-4 py-2\">Notes</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td class=\"border border-slate-200 px-4 py-2\">Referral fee (most categories)</td>\n<td class=\"border border-slate-200 px-4 py-2\">6%</td>\n<td class=\"border border-slate-200 px-4 py-2\">3% promotional rate for first 30 days</td>\n</tr>\n<tr>\n<td class=\"border border-slate-200 px-4 py-2\">Referral fee (jewelry/collectibles)</td>\n<td class=\"border border-slate-200 px-4 py-2\">5%</td>\n<td class=\"border border-slate-200 px-4 py-2\">Category-specific rate</td>\n</tr>\n<tr>\n<td class=\"border border-slate-200 px-4 py-2\">FBT fulfillment (single unit)</td>\n<td class=\"border border-slate-200 px-4 py-2\">From $3.58</td>\n<td class=\"border border-slate-200 px-4 py-2\">Varies by weight tier</td>\n</tr>\n<tr>\n<td class=\"border border-slate-200 px-4 py-2\">FBT fulfillment (multi-unit)</td>\n<td class=\"border border-slate-200 px-4 py-2\">From $2.86/item</td>\n<td class=\"border border-slate-200 px-4 py-2\">Up to 24% discount on multi-unit orders</td>\n</tr>\n<tr>\n<td class=\"border border-slate-200 px-4 py-2\">FBT storage (first 60 days)</td>\n<td class=\"border border-slate-200 px-4 py-2\">Free</td>\n<td class=\"border border-slate-200 px-4 py-2\">Fees apply after 60 days</td>\n</tr>\n<tr>\n<td class=\"border border-slate-200 px-4 py-2\">Affiliate commission</td>\n<td class=\"border border-slate-200 px-4 py-2\">You set the rate</td>\n<td class=\"border border-slate-200 px-4 py-2\">Typically 10–20% for creator partnerships</td>\n</tr>\n</tbody>\n</table>\n\n<h2 class=\"mt-8 mb-4\">The Numbers That Should Excite You</h2>\n<p class=\"mb-4\">TikTok Shop is still in its growth phase in the US, which means <strong>less competition and more algorithmic support for new sellers</strong> compared to saturated marketplaces like Amazon. Consider these facts:</p>\n<ul class=\"list-disc pl-6 mb-4 space-y-2\">\n<li>TikTok has over <strong>170 million US users</strong>, and shopping features are integrated directly into the For You feed</li>\n<li>The average TikTok user spends <strong>95 minutes per day</strong> on the app — that is 95 minutes of potential product discovery</li>\n<li>New sellers get a <strong>promotional 3% referral rate</strong> for their first 30 days, saving you half the standard fee</li>\n<li>Products with the <strong>FBT 3-day delivery badge</strong> see measurably higher conversion rates</li>\n</ul>\n\n<h2 class=\"mt-8 mb-4\">How LLCPad Makes This Entire Process Simple</h2>\n<p class=\"mb-4\">Setting up a TikTok Shop from abroad involves multiple moving pieces: LLC formation, EIN, banking, ITIN, and then the TikTok application itself. At LLCPad, we have helped hundreds of international entrepreneurs launch on US e-commerce platforms, and we offer a streamlined path:</p>\n<ul class=\"list-disc pl-6 mb-4 space-y-2\">\n<li><a href=\"/services/llc-formation\"><strong>LLC Formation</strong></a> — We file your LLC and ensure all documents are consistent for platform verification</li>\n<li><a href=\"/services/ein-application\"><strong>EIN Application</strong></a> — We handle the IRS paperwork and get your CP 575 notice</li>\n<li><a href=\"/services/registered-agent\"><strong>Registered Agent</strong></a> — A US address for your LLC's legal correspondence</li>\n<li><a href=\"/services/virtual-address\"><strong>Virtual Address</strong></a> — A US business address for your TikTok Shop profile</li>\n<li><a href=\"/services/business-banking\"><strong>Business Banking</strong></a> — We guide you through opening a US bank account remotely</li>\n<li><a href=\"/services/itin-application\"><strong>ITIN Application</strong></a> — For personal tax ID when you do not have an SSN</li>\n<li><a href=\"/services/tiktok-shop-setup\"><strong>TikTok Shop Setup</strong></a> — We walk you through the entire seller registration and verification process</li>\n</ul>\n\n<h2 class=\"mt-8 mb-4\">Ready to Start Selling?</h2>\n<p class=\"mb-4\">TikTok Shop represents a rare window of opportunity for international sellers willing to do the setup work. The platform is actively recruiting sellers, offering promotional fee rates, and investing heavily in its fulfillment infrastructure. The sellers who get in now, while the marketplace is still growing, will have a significant advantage over those who wait.</p>\n<p class=\"mb-4\">The setup process is not trivial — it requires a real US business entity, proper documentation, and attention to detail during verification. But with the right guidance, it is absolutely achievable from anywhere in the world.</p>\n<p class=\"mb-4\"><a href=\"/services/llc-formation\"><strong>Start your LLC formation today</strong></a> and take the first step toward building your TikTok Shop business.</p>\n<p class=\"mb-4\"><strong>Disclaimer:</strong> This article is for informational purposes only and does not constitute legal or tax advice. LLCPad is not a law firm. Platform requirements and fees may change. Always verify current requirements directly with TikTok Shop's Seller Center.</p>"
+    }
+  ],
   "faqs": [
     {
       "question": "I'm from Bangladesh. Can I form a US LLC?",
@@ -7870,31 +8381,94 @@
   ],
   "testimonials": [
     {
-      "name": "Rahman Ahmed",
-      "country": "Bangladesh",
-      "company": "TechBD Solutions",
-      "content": "LLCPad made forming my US LLC incredibly easy. The team was responsive and guided me through every step. Highly recommended!",
+      "name": "Priya Sharma",
+      "country": "🇮🇳 Mumbai, India",
+      "company": "SaaS Founder",
+      "avatar": "rgba(232,76,30,0.7)",
+      "content": "The Premium package was worth every penny. Delaware LLC, EIN, US bank, Stripe — everything set up in 48 hours. My SaaS is now selling to US customers with a proper legal entity behind it. Couldn’t be happier.",
       "rating": 5,
       "isActive": true,
       "sortOrder": 1
     },
     {
-      "name": "Sarah Chen",
-      "country": "China",
-      "company": "Global Imports Co",
-      "content": "Professional service with excellent communication. Got my Wyoming LLC and EIN within 2 weeks. Very satisfied!",
+      "name": "Ahmed Khan",
+      "country": "🇵🇰 Karachi, Pakistan",
+      "company": "E-commerce Entrepreneur",
+      "avatar": "rgba(5,150,105,0.7)",
+      "content": "From Karachi, getting a US company with a real bank account felt impossible. LLCPad proved me wrong. The team handled my Amazon seller verification too — after two previous failed attempts with other services.",
       "rating": 5,
       "isActive": true,
       "sortOrder": 2
     },
     {
-      "name": "Mohammed Al-Farsi",
-      "country": "UAE",
-      "company": "Gulf Trading LLC",
-      "content": "The premium package was worth every penny. They helped me set up everything including my Amazon seller account.",
+      "name": "Fatima Al-Rashid",
+      "country": "🇦🇪 Dubai, UAE",
+      "company": "Brand Owner",
+      "avatar": "rgba(5,150,105,0.6)",
+      "content": "The trademark registration was seamless. LLCPad handled everything from USPTO application to Amazon Brand Registry enrollment. My brand is now fully protected in the US market. Worth every dollar.",
       "rating": 5,
       "isActive": true,
       "sortOrder": 3
+    },
+    {
+      "name": "Chioma Obi",
+      "country": "🇳🇬 Lagos, Nigeria",
+      "company": "Fashion Entrepreneur",
+      "avatar": "rgba(220,38,38,0.6)",
+      "content": "I was skeptical about remote LLC formation but LLCPad’s team walked me through every step. My Lagos-based clothing brand now has a Wyoming LLC, US bank account, and I’m processing international payments via Stripe.",
+      "rating": 5,
+      "isActive": true,
+      "sortOrder": 4
+    },
+    {
+      "name": "Mohammad Hassan",
+      "country": "🇵🇭 Manila, Philippines",
+      "company": "Amazon Seller",
+      "avatar": "rgba(217,119,6,0.6)",
+      "content": "My Amazon category ungating issue was resolved in 5 days. Other services told me it was impossible. LLCPad’s Amazon specialists know exactly what documentation Amazon needs. Highly recommend.",
+      "rating": 5,
+      "isActive": true,
+      "sortOrder": 5
+    },
+    {
+      "name": "Selin Kaplan",
+      "country": "🇹🇷 Istanbul, Turkey",
+      "company": "Digital Agency Owner",
+      "avatar": "rgba(147,51,234,0.6)",
+      "content": "I needed Form 5472 filed urgently to avoid penalties. LLCPad’s team handled everything within 48 hours and explained every detail in simple terms. The peace of mind alone was worth the investment.",
+      "rating": 5,
+      "isActive": true,
+      "sortOrder": 6
+    },
+    {
+      "name": "Yusuf Ali",
+      "country": "🇪🇬 Cairo, Egypt",
+      "company": "FBA Seller",
+      "avatar": "rgba(239,68,68,0.6)",
+      "content": "After my Amazon account got suspended, I was panicking. LLCPad’s reinstatement service drafted a perfect Plan of Action and got my account back in 72 hours. They literally saved my business.",
+      "rating": 5,
+      "isActive": true,
+      "sortOrder": 7
+    },
+    {
+      "name": "Dewi Lestari",
+      "country": "🇮🇩 Jakarta, Indonesia",
+      "company": "TikTok Shop Seller",
+      "avatar": "rgba(16,185,129,0.6)",
+      "content": "Setting up TikTok Shop US seemed impossible from Indonesia. LLCPad not only helped me get the LLC and EIN, but also guided me through the entire TikTok seller verification. Now doing $15k/month in sales!",
+      "rating": 5,
+      "isActive": true,
+      "sortOrder": 8
+    },
+    {
+      "name": "Rajesh Desai",
+      "country": "🇮🇳 Bangalore, India",
+      "company": "Consulting Firm Owner",
+      "avatar": "rgba(59,130,246,0.6)",
+      "content": "The registered agent and virtual address service is exactly what I needed as a non-resident owner. My LLC stays compliant, all documents are scanned and forwarded instantly. Zero hassle for over 2 years now.",
+      "rating": 5,
+      "isActive": true,
+      "sortOrder": 9
     }
   ],
   "legalPages": [
@@ -9529,6 +10103,70 @@
     }
   ],
   "tickers": [
+    {
+      "name": "clients-marquee",
+      "isActive": true,
+      "items": [
+        {
+          "id": "cl_1",
+          "content": "<span style=\"display:inline-block;width:5px;height:5px;border-radius:50%;background:#e84c1e;opacity:0.5;flex-shrink:0\"></span> ShopNest BD"
+        },
+        {
+          "id": "cl_2",
+          "content": "<span style=\"display:inline-block;width:5px;height:5px;border-radius:50%;background:#e84c1e;opacity:0.5;flex-shrink:0\"></span> Apex Apparel"
+        },
+        {
+          "id": "cl_3",
+          "content": "<span style=\"display:inline-block;width:5px;height:5px;border-radius:50%;background:#e84c1e;opacity:0.5;flex-shrink:0\"></span> DesertBloom LLC"
+        },
+        {
+          "id": "cl_4",
+          "content": "<span style=\"display:inline-block;width:5px;height:5px;border-radius:50%;background:#e84c1e;opacity:0.5;flex-shrink:0\"></span> MapleTrade LLC"
+        },
+        {
+          "id": "cl_5",
+          "content": "<span style=\"display:inline-block;width:5px;height:5px;border-radius:50%;background:#e84c1e;opacity:0.5;flex-shrink:0\"></span> SpiceRoute LLC"
+        },
+        {
+          "id": "cl_6",
+          "content": "<span style=\"display:inline-block;width:5px;height:5px;border-radius:50%;background:#e84c1e;opacity:0.5;flex-shrink:0\"></span> KiwiCart LLC"
+        },
+        {
+          "id": "cl_7",
+          "content": "<span style=\"display:inline-block;width:5px;height:5px;border-radius:50%;background:#e84c1e;opacity:0.5;flex-shrink:0\"></span> PeakVenture LLC"
+        },
+        {
+          "id": "cl_8",
+          "content": "<span style=\"display:inline-block;width:5px;height:5px;border-radius:50%;background:#e84c1e;opacity:0.5;flex-shrink:0\"></span> EagleEcom"
+        },
+        {
+          "id": "cl_9",
+          "content": "<span style=\"display:inline-block;width:5px;height:5px;border-radius:50%;background:#e84c1e;opacity:0.5;flex-shrink:0\"></span> Zara Ventures"
+        },
+        {
+          "id": "cl_10",
+          "content": "<span style=\"display:inline-block;width:5px;height:5px;border-radius:50%;background:#e84c1e;opacity:0.5;flex-shrink:0\"></span> Pinnacle Goods"
+        },
+        {
+          "id": "cl_11",
+          "content": "<span style=\"display:inline-block;width:5px;height:5px;border-radius:50%;background:#e84c1e;opacity:0.5;flex-shrink:0\"></span> Orion Commerce"
+        },
+        {
+          "id": "cl_12",
+          "content": "<span style=\"display:inline-block;width:5px;height:5px;border-radius:50%;background:#e84c1e;opacity:0.5;flex-shrink:0\"></span> RapidShip Co"
+        },
+        {
+          "id": "cl_13",
+          "content": "<span style=\"display:inline-block;width:5px;height:5px;border-radius:50%;background:#e84c1e;opacity:0.5;flex-shrink:0\"></span> DeltaStore"
+        },
+        {
+          "id": "cl_14",
+          "content": "<span style=\"display:inline-block;width:5px;height:5px;border-radius:50%;background:#e84c1e;opacity:0.5;flex-shrink:0\"></span> Kazi Digital"
+        }
+      ],
+      "speed": 35,
+      "separator": "·"
+    },
     {
       "name": "legal",
       "isActive": true,

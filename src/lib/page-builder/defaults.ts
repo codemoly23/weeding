@@ -2244,6 +2244,7 @@ export const DEFAULT_TICKER_MARQUEE_SETTINGS: TickerMarqueeWidgetSettings = {
   textColor: "rgba(250,248,244,0.5)",
   boldColor: "rgba(250,248,244,0.85)",
   separatorColor: "#e84c1e",
+  pauseOnHover: true,
   colors: { useTheme: false },
   container: DEFAULT_WIDGET_CONTAINER,
 };
