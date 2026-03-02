@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { Calendar, Clock, Tag, ImageIcon } from "lucide-react";
@@ -146,13 +146,18 @@ export function BlogFeaturedPostWidget({
   settings: rawSettings,
   isPreview,
 }: BlogFeaturedPostWidgetProps) {
-  const s = mergeSettings(rawSettings);
+  const s = useMemo(() => mergeSettings(rawSettings), [rawSettings]);
   const [post, setPost] = useState<BlogPostData | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
+  // Stable key for the featured post fetch - uses primitives only
+  const fetchKey = `${s.dataSource.source}|${s.dataSource.postId ?? ""}|${s.dataSource.categorySlug ?? ""}`;
+
   // Fetch featured post
   useEffect(() => {
+    let cancelled = false;
+
     async function fetchPost() {
       setLoading(true);
       setError(null);
@@ -184,7 +189,9 @@ export function BlogFeaturedPostWidget({
         const res = await fetch(url);
         if (!res.ok) throw new Error("Failed to fetch featured post");
 
+        if (cancelled) return;
         const data = await res.json();
+        if (cancelled) return;
 
         // Handle single post vs list response
         if (data.posts) {
@@ -195,16 +202,24 @@ export function BlogFeaturedPostWidget({
           setPost(null);
         }
       } catch (err) {
+        if (cancelled) return;
         setError(
           err instanceof Error ? err.message : "Failed to load featured post"
         );
       } finally {
-        setLoading(false);
+        if (!cancelled) {
+          setLoading(false);
+        }
       }
     }
 
     fetchPost();
-  }, [s.dataSource.source, s.dataSource.postId, s.dataSource.categorySlug]);
+
+    return () => {
+      cancelled = true;
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [fetchKey]);
 
   // Loading skeleton
   if (loading) {

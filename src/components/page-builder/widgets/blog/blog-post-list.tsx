@@ -1,5 +1,6 @@
 "use client";
 
+import { useMemo } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { Calendar, Clock, Tag, ImageIcon } from "lucide-react";
@@ -131,7 +132,7 @@ interface BlogPostListWidgetProps {
 export function BlogPostListWidget({
   settings: rawSettings,
 }: BlogPostListWidgetProps) {
-  const s = mergeSettings(rawSettings);
+  const s = useMemo(() => mergeSettings(rawSettings), [rawSettings]);
 
   const { posts, total, hasMore, loading, error, loadMore } = useBlogData({
     dataSource: s.dataSource,

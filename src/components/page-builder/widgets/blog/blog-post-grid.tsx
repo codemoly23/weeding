@@ -68,7 +68,7 @@ interface BlogPostGridWidgetProps {
 export function BlogPostGridWidget({
   settings: rawSettings,
 }: BlogPostGridWidgetProps) {
-  const s = mergeSettings(rawSettings);
+  const s = useMemo(() => mergeSettings(rawSettings), [rawSettings]);
   const gridId = useId().replace(/:/g, "");
 
   // Filter tabs state

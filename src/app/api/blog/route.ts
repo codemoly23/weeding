@@ -1,10 +1,29 @@
 import { NextRequest, NextResponse } from "next/server";
 import prisma from "@/lib/db";
 
+// Simple in-memory response cache to prevent rapid-fire duplicate requests
+// (e.g., from stale browser tabs with buggy client code)
+// Use globalThis to survive Turbopack module reloads in dev mode
+const CACHE_TTL_MS = 2000; // Cache identical requests for 2 seconds
+const globalCache = globalThis as unknown as {
+  __blogApiCache?: Map<string, { data: unknown; timestamp: number }>;
+};
+if (!globalCache.__blogApiCache) {
+  globalCache.__blogApiCache = new Map();
+}
+const responseCache = globalCache.__blogApiCache;
+
 // GET published blog posts (public - no auth required)
 export async function GET(request: NextRequest) {
   try {
     const { searchParams } = new URL(request.url);
+
+    // Check response cache for identical request
+    const cacheKey = searchParams.toString();
+    const cached = responseCache.get(cacheKey);
+    if (cached && Date.now() - cached.timestamp < CACHE_TTL_MS) {
+      return NextResponse.json(cached.data);
+    }
 
     // Query params
     const category = searchParams.get("category");
@@ -109,11 +128,24 @@ export async function GET(request: NextRequest) {
       createdAt: post.createdAt,
     }));
 
-    return NextResponse.json({
+    const responseData = {
       posts: postsWithoutContent,
       total,
       hasMore: offset + limit < total,
-    });
+    };
+
+    // Cache the response to short-circuit duplicate rapid-fire requests
+    responseCache.set(cacheKey, { data: responseData, timestamp: Date.now() });
+
+    // Clean up old cache entries periodically
+    if (responseCache.size > 50) {
+      const now = Date.now();
+      for (const [key, val] of responseCache) {
+        if (now - val.timestamp > CACHE_TTL_MS * 5) responseCache.delete(key);
+      }
+    }
+
+    return NextResponse.json(responseData);
   } catch (error) {
     console.error("Error fetching blog posts:", error);
     return NextResponse.json(

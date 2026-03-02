@@ -1,5 +1,6 @@
 "use client";
 
+import { useMemo } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation, Pagination, Autoplay } from "swiper/modules";
 import "swiper/css";
@@ -76,7 +77,7 @@ interface BlogPostCarouselWidgetProps {
 export function BlogPostCarouselWidget({
   settings: rawSettings,
 }: BlogPostCarouselWidgetProps) {
-  const s = mergeSettings(rawSettings);
+  const s = useMemo(() => mergeSettings(rawSettings), [rawSettings]);
 
   // Fetch blog data
   const { posts, loading, error } = useBlogData({

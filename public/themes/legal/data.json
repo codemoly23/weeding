@@ -6934,18 +6934,6 @@
                           }
                         }
                       }
-                    },
-                    {
-                      "id": "widget_blog_topics",
-                      "type": "custom-html",
-                      "spacing": {
-                        "marginTop": 36,
-                        "marginBottom": 0
-                      },
-                      "settings": {
-                        "html": "<div style='display:flex;gap:10px;flex-wrap:wrap'><a href='/blog' style='display:inline-flex;align-items:center;gap:6px;padding:8px 18px;border-radius:999px;font-size:12.5px;font-weight:600;color:#5c615a;background:#faf8f4;border:1px solid rgba(14,17,9,0.08);text-decoration:none;font-family:var(--font-heading);transition:all .25s;white-space:nowrap'>EIN Without SSN</a><a href='/blog' style='display:inline-flex;align-items:center;gap:6px;padding:8px 18px;border-radius:999px;font-size:12.5px;font-weight:600;color:#5c615a;background:#faf8f4;border:1px solid rgba(14,17,9,0.08);text-decoration:none;font-family:var(--font-heading);transition:all .25s;white-space:nowrap'>Form 5472 Guide</a><a href='/blog' style='display:inline-flex;align-items:center;gap:6px;padding:8px 18px;border-radius:999px;font-size:12.5px;font-weight:600;color:#5c615a;background:#faf8f4;border:1px solid rgba(14,17,9,0.08);text-decoration:none;font-family:var(--font-heading);transition:all .25s;white-space:nowrap'>US Banking Guide</a><a href='/blog' style='display:inline-flex;align-items:center;gap:6px;padding:8px 18px;border-radius:999px;font-size:12.5px;font-weight:600;color:#5c615a;background:#faf8f4;border:1px solid rgba(14,17,9,0.08);text-decoration:none;font-family:var(--font-heading);transition:all .25s;white-space:nowrap'>Amazon Seller 101</a><a href='/blog' style='display:inline-flex;align-items:center;gap:6px;padding:8px 18px;border-radius:999px;font-size:12.5px;font-weight:600;color:#5c615a;background:#faf8f4;border:1px solid rgba(14,17,9,0.08);text-decoration:none;font-family:var(--font-heading);transition:all .25s;white-space:nowrap'>ITIN Application</a><a href='/blog' style='display:inline-flex;align-items:center;gap:6px;padding:8px 18px;border-radius:999px;font-size:12.5px;font-weight:600;color:#5c615a;background:#faf8f4;border:1px solid rgba(14,17,9,0.08);text-decoration:none;font-family:var(--font-heading);transition:all .25s;white-space:nowrap'>TikTok Shop Setup</a></div>",
-                        "css": ""
-                      }
                     }
                   ],
                   "settings": {
@@ -6970,7 +6958,159 @@
                 "isVisible": true,
                 "visibleOnMobile": true,
                 "visibleOnDesktop": true,
-                "customCSS": "/* Bento Grid */\n& [data-field-id='posts'] { grid-template-columns: 1.15fr 1fr 1fr !important; grid-template-rows: 1fr 1fr; gap: 20px !important; }\n\n/* All cards base */\n& [data-field-id='posts'] > div > a { border-radius: 20px !important; border: 1px solid rgba(14,17,9,0.1) !important; position: relative; overflow: hidden; transition: transform 0.35s cubic-bezier(0.4,0,0.2,1), box-shadow 0.35s, border-color 0.35s; }\n& [data-field-id='posts'] > div > a:hover { transform: translateY(-6px) !important; box-shadow: 0 20px 40px rgba(0,0,0,0.06); border-color: transparent !important; }\n\n/* Accent line bottom */\n& [data-field-id='posts'] > div > a::after { content: ''; position: absolute; bottom: 0; left: 0; width: 0; height: 3px; background: #e84c1e; border-radius: 0 3px 0 0; transition: width 0.45s cubic-bezier(0.4,0,0.2,1); z-index: 10; }\n& [data-field-id='posts'] > div > a:hover::after { width: 100%; }\n\n/* Title typography */\n& [data-field-id='posts'] h3 { font-family: var(--font-heading) !important; font-weight: 800 !important; font-size: 17px !important; letter-spacing: -0.02em; line-height: 1.3 !important; margin-bottom: 10px; transition: color 0.3s; }\n\n/* === Featured card === */\n& [data-field-id='posts'] > div:first-child { grid-row: 1 / -1; }\n& [data-field-id='posts'] > div:first-child > a { background: #0f2318 !important; border-color: transparent !important; height: 100%; }\n& [data-field-id='posts'] > div:first-child > a::after { height: 4px; background: #ff6a3d; }\n& [data-field-id='posts'] > div:first-child > a:hover { box-shadow: 0 24px 50px rgba(0,0,0,0.2); }\n\n/* Featured image as bg overlay */\n& [data-field-id='posts'] > div:first-child > a > div:first-child { position: absolute !important; inset: 0 !important; width: 100% !important; height: 100% !important; aspect-ratio: unset !important; z-index: 0; border-radius: 0 !important; }\n& [data-field-id='posts'] > div:first-child > a > div:first-child img { opacity: 0.18 !important; width: 100% !important; height: 100% !important; object-fit: cover !important; transition: opacity 0.5s, transform 0.8s cubic-bezier(0.4,0,0.2,1) !important; transform: none !important; }\n& [data-field-id='posts'] > div:first-child > a:hover > div:first-child img { opacity: 0.25 !important; transform: scale(1.04) !important; }\n& [data-field-id='posts'] > div:first-child > a > div:first-child::after { content: ''; position: absolute; inset: 0; background: linear-gradient(to top, #0f2318 25%, rgba(15,35,24,0.6)); z-index: 1; }\n\n/* Featured content layer */\n& [data-field-id='posts'] > div:first-child > a > div:nth-child(2) { position: relative; z-index: 2; flex: 1; display: flex; flex-direction: column; padding: 36px 32px 32px !important; }\n\n/* Featured text */\n& [data-field-id='posts'] > div:first-child h3 { color: #faf8f4 !important; font-size: clamp(22px, 2.2vw, 28px) !important; }\n& [data-field-id='posts'] > div:first-child > a:hover h3 { color: #ff6a3d !important; }\n& [data-field-id='posts'] > div:first-child p { color: rgba(250,248,244,0.5) !important; font-size: 15px !important; line-height: 1.75 !important; flex-grow: 1; }\n\n/* Featured badge */\n& [data-field-id='posts'] > div:first-child .inline-block.rounded-full { background: rgba(250,248,244,0.1) !important; color: rgba(250,248,244,0.65) !important; border: 1px solid rgba(250,248,244,0.08) !important; }\n\n/* Featured meta footer */\n& [data-field-id='posts'] > div:first-child .flex.flex-wrap.items-center { color: rgba(250,248,244,0.35) !important; border-top: 1px solid rgba(255,255,255,0.07); padding-top: 16px; margin-top: auto; }\n& [data-field-id='posts'] > div:first-child .flex.flex-wrap.items-center svg { color: rgba(250,248,244,0.35) !important; }\n\n/* Featured arrow circle */\n& [data-field-id='posts'] > div:first-child .mt-1 { position: absolute; right: 32px; bottom: 32px; z-index: 3; margin: 0 !important; }\n& [data-field-id='posts'] > div:first-child .mt-1 > span { width: 32px; height: 32px; border-radius: 50%; display: flex !important; align-items: center; justify-content: center; background: rgba(250,248,244,0.08); transition: background 0.3s, transform 0.3s; }\n& [data-field-id='posts'] > div:first-child .mt-1 svg { color: #ff6a3d !important; width: 15px !important; height: 15px !important; transition: color 0.3s, transform 0.35s cubic-bezier(0.4,0,0.2,1); }\n& [data-field-id='posts'] > div:first-child > a:hover .mt-1 > span { background: #e84c1e; }\n& [data-field-id='posts'] > div:first-child > a:hover .mt-1 svg { color: #fff !important; transform: translateX(2px); }\n\n/* === Regular cards === */\n& [data-field-id='posts'] > div:not(:first-child) > a { background: #fff !important; }\n\n/* Regular image — bleed to edges */\n& [data-field-id='posts'] > div:not(:first-child) > a > div:first-child { margin: 0 !important; border-radius: 19px 19px 0 0 !important; height: 150px; aspect-ratio: unset !important; }\n& [data-field-id='posts'] > div:not(:first-child) > a > div:first-child img { transition: transform 0.6s cubic-bezier(0.4,0,0.2,1) !important; }\n& [data-field-id='posts'] > div:not(:first-child) > a:hover > div:first-child img { transform: scale(1.06) !important; }\n\n/* Regular content */\n& [data-field-id='posts'] > div:not(:first-child) > a > div:nth-child(2) { padding: 28px 28px 24px !important; }\n\n/* Regular badge — outline uppercase */\n& [data-field-id='posts'] > div:not(:first-child) .inline-block.rounded-full { background: transparent !important; color: #8a9086 !important; border: 1px solid rgba(14,17,9,0.1) !important; font-size: 11px !important; font-weight: 700 !important; text-transform: uppercase; letter-spacing: 0.8px; padding: 4px 12px !important; margin-bottom: 16px; transition: color 0.3s, border-color 0.3s, background 0.3s; }\n\n/* Regular title hover */\n& [data-field-id='posts'] > div:not(:first-child):hover h3 { color: #1b3a2d !important; }\n\n/* Regular excerpt */\n& [data-field-id='posts'] > div:not(:first-child) p { font-size: 14px !important; color: #4b5249 !important; line-height: 1.65 !important; flex-grow: 1; }\n\n/* Regular footer (meta) */\n& [data-field-id='posts'] > div:not(:first-child) .flex.flex-wrap.items-center { border-top: 1px solid rgba(14,17,9,0.1); padding-top: 16px; margin-top: auto; color: #8a9086 !important; font-weight: 500; }\n\n/* Regular arrow circle */\n& [data-field-id='posts'] > div:not(:first-child) .mt-1 { position: absolute; right: 28px; bottom: 24px; z-index: 3; margin: 0 !important; }\n& [data-field-id='posts'] > div:not(:first-child) .mt-1 > span { width: 32px; height: 32px; border-radius: 50%; display: flex !important; align-items: center; justify-content: center; background: rgba(27,58,45,0.07); flex-shrink: 0; transition: background 0.3s cubic-bezier(0.4,0,0.2,1), transform 0.3s; }\n& [data-field-id='posts'] > div:not(:first-child) .mt-1 svg { width: 15px !important; height: 15px !important; color: #1b3a2d !important; transition: color 0.3s, transform 0.35s cubic-bezier(0.4,0,0.2,1); }\n& [data-field-id='posts'] > div:not(:first-child) > a:hover .mt-1 > span { background: #1b3a2d; }\n& [data-field-id='posts'] > div:not(:first-child) > a:hover .mt-1 svg { color: #faf8f4 !important; transform: translateX(2px); }\n\n/* === Responsive === */\n@media (max-width: 1023px) { & [data-field-id='posts'] { grid-template-columns: 1fr 1fr !important; grid-template-rows: auto !important; } & [data-field-id='posts'] > div:first-child { grid-row: auto; grid-column: 1 / -1; } }\n@media (max-width: 767px) { & [data-field-id='posts'] { grid-template-columns: 1fr !important; } }"
+                "customCSS": "/* Bento Grid */\n& [data-field-id='posts'] { grid-template-columns: 1.15fr 1fr 1fr !important; grid-template-rows: 1fr 1fr; gap: 20px !important; }\n\n/* All cards base */\n& [data-field-id='posts'] > div > a { border-radius: 20px !important; border: 1px solid rgba(14,17,9,0.1) !important; position: relative; overflow: hidden; transition: transform 0.35s cubic-bezier(0.4,0,0.2,1), box-shadow 0.35s, border-color 0.35s; }\n& [data-field-id='posts'] > div > a:hover { transform: translateY(-6px) !important; box-shadow: 0 20px 40px rgba(0,0,0,0.06); border-color: transparent !important; }\n\n/* Accent line bottom */\n& [data-field-id='posts'] > div > a::after { content: ''; position: absolute; bottom: 0; left: 0; width: 0; height: 3px; background: #e84c1e; border-radius: 0 3px 0 0; transition: width 0.45s cubic-bezier(0.4,0,0.2,1); z-index: 10; }\n& [data-field-id='posts'] > div > a:hover::after { width: 100%; }\n\n/* Title typography */\n& [data-field-id='posts'] h3 { font-family: var(--font-heading) !important; font-weight: 800 !important; font-size: 17px !important; letter-spacing: -0.02em; line-height: 1.3 !important; margin-bottom: 10px; transition: color 0.3s; color: #0e1109 !important; }\n\n/* === Featured card === */\n& [data-field-id='posts'] > div:first-child { grid-row: 1 / -1; }\n& [data-field-id='posts'] > div:first-child > a { background: #0f2318 !important; border-color: transparent !important; height: 100%; }\n& [data-field-id='posts'] > div:first-child > a::after { height: 4px; background: #ff6a3d; }\n& [data-field-id='posts'] > div:first-child > a:hover { box-shadow: 0 24px 50px rgba(0,0,0,0.2); }\n\n/* Featured image at top */\n& [data-field-id='posts'] > div:first-child > a > div:first-child { height: 190px; overflow: hidden; border-radius: 19px 19px 0 0 !important; aspect-ratio: unset !important; position: relative !important; width: 100% !important; flex-shrink: 0; }\n& [data-field-id='posts'] > div:first-child > a > div:first-child img { opacity: 1 !important; width: 100% !important; height: 100% !important; object-fit: cover !important; transition: transform 0.6s cubic-bezier(0.4,0,0.2,1) !important; transform: none !important; }\n& [data-field-id='posts'] > div:first-child > a:hover > div:first-child img { opacity: 1 !important; transform: scale(1.06) !important; }\n\n/* Featured content layer */\n& [data-field-id='posts'] > div:first-child > a > div:nth-child(2) { flex: 1; display: flex; flex-direction: column; padding: 28px 28px 24px !important; }\n\n/* Featured text */\n& [data-field-id='posts'] > div:first-child h3 { color: #faf8f4 !important; font-size: clamp(22px, 2.2vw, 28px) !important; }\n& [data-field-id='posts'] > div:first-child > a:hover h3 { color: #ff6a3d !important; }\n& [data-field-id='posts'] > div:first-child p { color: rgba(250,248,244,0.5) !important; font-size: 15px !important; line-height: 1.75 !important; flex-grow: 1; }\n\n/* Featured badge */\n& [data-field-id='posts'] > div:first-child .inline-block.rounded-full { background: rgba(250,248,244,0.1) !important; color: rgba(250,248,244,0.65) !important; border: 1px solid rgba(250,248,244,0.08) !important; }\n\n/* Featured meta footer */\n& [data-field-id='posts'] > div:first-child .flex.flex-wrap.items-center { color: rgba(250,248,244,0.35) !important; border-top: 1px solid rgba(255,255,255,0.07); padding-top: 16px; margin-top: auto; }\n& [data-field-id='posts'] > div:first-child .flex.flex-wrap.items-center svg { color: rgba(250,248,244,0.35) !important; }\n\n/* Featured arrow circle */\n& [data-field-id='posts'] > div:first-child .mt-1 { position: absolute; right: 32px; bottom: 32px; z-index: 3; margin: 0 !important; }\n& [data-field-id='posts'] > div:first-child .mt-1 > span { width: 32px; height: 32px; border-radius: 50%; display: flex !important; align-items: center; justify-content: center; background: rgba(250,248,244,0.08); transition: background 0.3s, transform 0.3s; }\n& [data-field-id='posts'] > div:first-child .mt-1 svg { color: #ff6a3d !important; width: 15px !important; height: 15px !important; transition: color 0.3s, transform 0.35s cubic-bezier(0.4,0,0.2,1); }\n& [data-field-id='posts'] > div:first-child > a:hover .mt-1 > span { background: #e84c1e; }\n& [data-field-id='posts'] > div:first-child > a:hover .mt-1 svg { color: #fff !important; transform: translateX(2px); }\n\n/* === Regular cards === */\n& [data-field-id='posts'] > div:not(:first-child) > a { background: #fff !important; }\n\n/* Regular image — bleed to edges */\n& [data-field-id='posts'] > div:not(:first-child) > a > div:first-child { margin: 0 !important; border-radius: 19px 19px 0 0 !important; height: 150px; aspect-ratio: unset !important; }\n& [data-field-id='posts'] > div:not(:first-child) > a > div:first-child img { transition: transform 0.6s cubic-bezier(0.4,0,0.2,1) !important; }\n& [data-field-id='posts'] > div:not(:first-child) > a:hover > div:first-child img { transform: scale(1.06) !important; }\n\n/* Regular content */\n& [data-field-id='posts'] > div:not(:first-child) > a > div:nth-child(2) { padding: 28px 28px 24px !important; }\n\n/* Regular badge — outline uppercase */\n& [data-field-id='posts'] > div:not(:first-child) .inline-block.rounded-full { background: transparent !important; color: #8a9086 !important; border: 1px solid rgba(14,17,9,0.1) !important; font-size: 11px !important; font-weight: 700 !important; text-transform: uppercase; letter-spacing: 0.8px; padding: 4px 12px !important; margin-bottom: 16px; transition: color 0.3s, border-color 0.3s, background 0.3s; }\n\n/* Regular title hover */\n& [data-field-id='posts'] > div:not(:first-child):hover h3 { color: #1b3a2d !important; }\n\n/* Regular excerpt */\n& [data-field-id='posts'] > div:not(:first-child) p { font-size: 14px !important; color: #4b5249 !important; line-height: 1.65 !important; flex-grow: 1; }\n\n/* Regular footer (meta) */\n& [data-field-id='posts'] > div:not(:first-child) .flex.flex-wrap.items-center { border-top: 1px solid rgba(14,17,9,0.1); padding-top: 16px; margin-top: auto; color: #8a9086 !important; font-weight: 500; }\n\n/* Regular arrow circle */\n& [data-field-id='posts'] > div:not(:first-child) .mt-1 { position: absolute; right: 28px; bottom: 24px; z-index: 3; margin: 0 !important; }\n& [data-field-id='posts'] > div:not(:first-child) .mt-1 > span { width: 32px; height: 32px; border-radius: 50%; display: flex !important; align-items: center; justify-content: center; background: rgba(27,58,45,0.07); flex-shrink: 0; transition: background 0.3s cubic-bezier(0.4,0,0.2,1), transform 0.3s; }\n& [data-field-id='posts'] > div:not(:first-child) .mt-1 svg { width: 15px !important; height: 15px !important; color: #1b3a2d !important; transition: color 0.3s, transform 0.35s cubic-bezier(0.4,0,0.2,1); }\n& [data-field-id='posts'] > div:not(:first-child) > a:hover .mt-1 > span { background: #1b3a2d; }\n& [data-field-id='posts'] > div:not(:first-child) > a:hover .mt-1 svg { color: #faf8f4 !important; transform: translateX(2px); }\n\n/* === Responsive === */\n@media (max-width: 1023px) { & [data-field-id='posts'] { grid-template-columns: 1fr 1fr !important; grid-template-rows: auto !important; } & [data-field-id='posts'] > div:first-child { grid-row: auto; grid-column: 1 / -1; } }\n@media (max-width: 767px) { & [data-field-id='posts'] { grid-template-columns: 1fr !important; } }"
+              }
+            },
+            {
+              "id": "sec_contact_forge",
+              "order": 10,
+              "layout": "1-1",
+              "columns": [
+                {
+                  "id": "col_contact_left",
+                  "widgets": [
+                    {
+                      "id": "widget_contact_left_html",
+                      "type": "custom-html",
+                      "settings": {
+                        "html": "<div><div style='font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:#e84c1e;margin-bottom:14px;font-family:var(--font-heading)'>Get in Touch</div><h2 style='font-family:var(--font-heading);font-size:clamp(28px,3.5vw,42px);font-weight:800;color:#0e1109;letter-spacing:-0.025em;line-height:1.15;margin-bottom:18px'>Start your US business<br>journey today</h2><p style='font-size:16px;color:#4b5249;line-height:1.75;margin-bottom:36px'>Tell us about your goals and we'll recommend the right services. Most clients hear back within 2 business hours.</p><div style='display:flex;flex-direction:column;gap:20px'><div style='display:flex;align-items:flex-start;gap:14px'><div style='width:42px;height:42px;border-radius:12px;background:rgba(27,58,45,0.06);border:1px solid rgba(27,58,45,0.12);display:flex;align-items:center;justify-content:center;flex-shrink:0'><svg width='18' height='18' viewBox='0 0 24 24' fill='none' stroke='#1b3a2d' stroke-width='2'><circle cx='12' cy='12' r='10'/><polyline points='12 6 12 12 16 14'/></svg></div><div><div style='font-size:14px;font-weight:700;color:#0e1109;margin-bottom:3px;font-family:var(--font-heading)'>Response in &lt;2 business hours</div><div style='font-size:13px;color:#4b5249;line-height:1.55'>Our team is available Mon–Sat, 9am–9pm (GMT+6)</div></div></div><div style='display:flex;align-items:flex-start;gap:14px'><div style='width:42px;height:42px;border-radius:12px;background:rgba(2,132,199,0.07);border:1px solid rgba(2,132,199,0.15);display:flex;align-items:center;justify-content:center;flex-shrink:0'><svg width='18' height='18' viewBox='0 0 24 24' fill='none' stroke='#0284c7' stroke-width='2'><path d='M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z'/></svg></div><div><div style='font-size:14px;font-weight:700;color:#0e1109;margin-bottom:3px;font-family:var(--font-heading)'>100% confidential</div><div style='font-size:13px;color:#4b5249;line-height:1.55'>Your information is never shared with third parties</div></div></div><div style='display:flex;align-items:flex-start;gap:14px'><div style='width:42px;height:42px;border-radius:12px;background:rgba(124,58,237,0.07);border:1px solid rgba(124,58,237,0.15);display:flex;align-items:center;justify-content:center;flex-shrink:0'><svg width='18' height='18' viewBox='0 0 24 24' fill='none' stroke='#7c3aed' stroke-width='2'><path d='M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2'/><circle cx='9' cy='7' r='4'/></svg></div><div><div style='font-size:14px;font-weight:700;color:#0e1109;margin-bottom:3px;font-family:var(--font-heading)'>Expert consultation</div><div style='font-size:13px;color:#4b5249;line-height:1.55'>Speak directly with a formation specialist, not a bot</div></div></div><div style='display:flex;align-items:flex-start;gap:14px'><div style='width:42px;height:42px;border-radius:12px;background:rgba(217,119,6,0.07);border:1px solid rgba(217,119,6,0.18);display:flex;align-items:center;justify-content:center;flex-shrink:0'><svg width='18' height='18' viewBox='0 0 24 24' fill='none' stroke='#d97706' stroke-width='2'><polygon points='12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2'/></svg></div><div><div style='font-size:14px;font-weight:700;color:#0e1109;margin-bottom:3px;font-family:var(--font-heading)'>Rated 4.9★ by 1,200+ clients</div><div style='font-size:13px;color:#4b5249;line-height:1.55'>Trusted by founders from India, Pakistan, UAE, Nigeria, and 30+ countries</div></div></div></div></div>",
+                        "css": ""
+                      }
+                    }
+                  ],
+                  "settings": {
+                    "verticalAlign": "center"
+                  }
+                },
+                {
+                  "id": "col_contact_right",
+                  "widgets": [
+                    {
+                      "id": "widget_lead_form_forge",
+                      "type": "lead-form",
+                      "settings": {
+                        "title": "Request a Free Consultation",
+                        "description": "We'll review your goals and recommend the best plan — no commitment required.",
+                        "fields": [
+                          {
+                            "id": "cf_firstName",
+                            "type": "text",
+                            "name": "firstName",
+                            "label": "First Name",
+                            "placeholder": "e.g. Rahim",
+                            "required": true,
+                            "width": "half",
+                            "mapToLeadField": "firstName"
+                          },
+                          {
+                            "id": "cf_lastName",
+                            "type": "text",
+                            "name": "lastName",
+                            "label": "Last Name",
+                            "placeholder": "e.g. Miah",
+                            "required": false,
+                            "width": "half",
+                            "mapToLeadField": "lastName"
+                          },
+                          {
+                            "id": "cf_email",
+                            "type": "email",
+                            "name": "email",
+                            "label": "Email Address",
+                            "placeholder": "your@email.com",
+                            "required": true,
+                            "width": "full",
+                            "mapToLeadField": "email"
+                          },
+                          {
+                            "id": "cf_phone",
+                            "type": "phone",
+                            "name": "phone",
+                            "label": "Phone / WhatsApp",
+                            "placeholder": "+880 1700 000000",
+                            "required": false,
+                            "width": "half",
+                            "mapToLeadField": "phone"
+                          },
+                          {
+                            "id": "cf_country",
+                            "type": "country_select",
+                            "name": "country",
+                            "label": "Your Country",
+                            "placeholder": "Select country...",
+                            "required": false,
+                            "width": "half",
+                            "mapToLeadField": "country"
+                          },
+                          {
+                            "id": "cf_service",
+                            "type": "service_select",
+                            "name": "service",
+                            "label": "Service I'm Interested In",
+                            "placeholder": "Select a service...",
+                            "required": false,
+                            "width": "full",
+                            "mapToLeadField": "interestedIn"
+                          },
+                          {
+                            "id": "cf_message",
+                            "type": "textarea",
+                            "name": "message",
+                            "label": "Tell us about your business goals (optional)",
+                            "placeholder": "e.g. I want to sell on Amazon and need an LLC with a bank account...",
+                            "required": false,
+                            "width": "full",
+                            "mapToLeadField": "message"
+                          }
+                        ],
+                        "submitButton": {
+                          "text": "Send My Request",
+                          "icon": "Send",
+                          "fullWidth": true,
+                          "style": {
+                            "bgColor": "#e84c1e",
+                            "textColor": "#ffffff",
+                            "borderRadius": 12,
+                            "hoverBgColor": "#c43d17"
+                          }
+                        },
+                        "successMessage": "Thank you! We'll be in touch within 2 business hours.",
+                        "footerText": "By submitting this form you agree to our <a href='/privacy-policy' style='color:inherit;text-decoration:underline'>Privacy Policy</a>. We'll never spam you.<br><span style='display:inline-flex;gap:16px;justify-content:center;margin-top:10px;flex-wrap:wrap;font-weight:700;font-size:11px;letter-spacing:0.5px;text-transform:uppercase'><span>🔒 SSL Secured</span><span>🛡️ Privacy Protected</span><span>⭐ 4.9/5 Rated</span></span>",
+                        "submitTo": "database",
+                        "backgroundColor": "#ffffff",
+                        "titleColor": "#0e1109",
+                        "descriptionColor": "#4b5249",
+                        "labelColor": "#5c615a",
+                        "inputTextColor": "#0e1109",
+                        "padding": 40,
+                        "borderRadius": 24,
+                        "shadow": true
+                      }
+                    }
+                  ],
+                  "settings": {
+                    "verticalAlign": "top"
+                  }
+                }
+              ],
+              "settings": {
+                "fullWidth": true,
+                "background": {
+                  "type": "solid",
+                  "color": "#f0ede5"
+                },
+                "paddingTop": 100,
+                "paddingBottom": 100,
+                "paddingLeft": 28,
+                "paddingRight": 28,
+                "marginTop": 0,
+                "marginBottom": 0,
+                "gap": 80,
+                "maxWidth": "xl",
+                "isVisible": true,
+                "visibleOnMobile": true,
+                "visibleOnDesktop": true,
+                "customCSS": "@media (min-width: 1024px) { & .grid { grid-template-columns: 1fr 1.1fr; align-items: flex-start; } } @media (max-width: 767px) { & .grid { gap: 48px; } }"
               }
             }
           ]

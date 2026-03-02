@@ -144,7 +144,7 @@ export async function verifyLicenseToken(
     // Handle specific JWT errors
     const errorMessage = error instanceof Error ? error.message : String(error);
 
-    if (errorMessage.includes("expired")) {
+    if (errorMessage.includes("expired") || errorMessage.includes('"exp"')) {
       return {
         valid: false,
         error: "Token has expired, please re-verify your license",

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { ImageIcon } from "lucide-react";
@@ -113,12 +113,18 @@ interface BlogRecentPostsWidgetProps {
 export function BlogRecentPostsWidget({
   settings: rawSettings,
 }: BlogRecentPostsWidgetProps) {
-  const s = mergeSettings(rawSettings);
+  const s = useMemo(() => mergeSettings(rawSettings), [rawSettings]);
   const [posts, setPosts] = useState<BlogPostData[]>([]);
   const [loading, setLoading] = useState(true);
 
+  // Stable key for categories to prevent infinite re-fetches
+  const categoriesKey = s.dataSource.categories?.join(",") ?? "";
+  const fetchKey = `${s.dataSource.postCount}|${s.dataSource.orderBy}|${categoriesKey}`;
+
   // Simple fetch for recent posts
   useEffect(() => {
+    let cancelled = false;
+
     async function fetchPosts() {
       setLoading(true);
       try {
@@ -134,17 +140,27 @@ export function BlogRecentPostsWidget({
         const res = await fetch(`/api/blog?${params.toString()}`);
         if (!res.ok) throw new Error("Failed to fetch");
 
+        if (cancelled) return;
         const data = await res.json();
+        if (cancelled) return;
         setPosts(data.posts || []);
       } catch {
+        if (cancelled) return;
         setPosts([]);
       } finally {
-        setLoading(false);
+        if (!cancelled) {
+          setLoading(false);
+        }
       }
     }
 
     fetchPosts();
-  }, [s.dataSource.postCount, s.dataSource.orderBy, s.dataSource.categories]);
+
+    return () => {
+      cancelled = true;
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [fetchKey]);
 
   // Loading skeleton
   if (loading) {
