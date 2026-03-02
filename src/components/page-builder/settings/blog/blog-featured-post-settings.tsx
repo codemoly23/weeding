@@ -20,12 +20,14 @@ interface BlogFeaturedPostSettingsProps {
   settings: BlogFeaturedPostWidgetSettings;
   onChange: (settings: BlogFeaturedPostWidgetSettings) => void;
   activeFieldId?: string | null;
+  activeTab?: "content" | "style" | "advanced";
 }
 
 export function BlogFeaturedPostSettingsPanel({
   settings,
   onChange,
   activeFieldId,
+  activeTab = "content",
 }: BlogFeaturedPostSettingsProps) {
   const { getAccordionProps } = useFieldAccordion(activeFieldId);
   // Deep merge with defaults
@@ -136,7 +138,7 @@ export function BlogFeaturedPostSettingsPanel({
     updateContentMeta("items", newItems);
   };
 
-  return (
+  const renderContentTab = () => (
     <div className="space-y-3">
       {/* Data Source */}
       <AccordionSection title="Data Source">
@@ -169,7 +171,11 @@ export function BlogFeaturedPostSettingsPanel({
           />
         )}
       </AccordionSection>
+    </div>
+  );
 
+  const renderStyleTab = () => (
+    <div className="space-y-3">
       {/* Layout */}
       <AccordionSection title="Layout">
         <SelectInput
@@ -439,5 +445,17 @@ export function BlogFeaturedPostSettingsPanel({
         />
       </AccordionSection>
     </div>
+  );
+
+  const renderAdvancedTab = () => {
+    return null;
+  };
+
+  return (
+    <>
+      {activeTab === "content" && renderContentTab()}
+      {activeTab === "style" && renderStyleTab()}
+      {activeTab === "advanced" && renderAdvancedTab()}
+    </>
   );
 }

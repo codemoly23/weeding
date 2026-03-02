@@ -609,6 +609,7 @@ function EditMode({ widget, section, columnId, activeFieldId, onBack, onUpdateSe
             <BlogPostGridSettingsPanel
               settings={widget.settings as any}
               onChange={onUpdateSettings}
+              activeTab={activeTab}
               activeFieldId={activeFieldId}
             />
           )}
@@ -618,6 +619,7 @@ function EditMode({ widget, section, columnId, activeFieldId, onBack, onUpdateSe
             <BlogPostCarouselSettingsPanel
               settings={widget.settings as any}
               onChange={onUpdateSettings}
+              activeTab={activeTab}
               activeFieldId={activeFieldId}
             />
           )}
@@ -627,6 +629,7 @@ function EditMode({ widget, section, columnId, activeFieldId, onBack, onUpdateSe
             <BlogFeaturedPostSettingsPanel
               settings={widget.settings as any}
               onChange={onUpdateSettings}
+              activeTab={activeTab}
               activeFieldId={activeFieldId}
             />
           )}
@@ -636,6 +639,7 @@ function EditMode({ widget, section, columnId, activeFieldId, onBack, onUpdateSe
             <BlogPostListSettingsPanel
               settings={widget.settings as any}
               onChange={onUpdateSettings}
+              activeTab={activeTab}
               activeFieldId={activeFieldId}
             />
           )}
@@ -645,6 +649,7 @@ function EditMode({ widget, section, columnId, activeFieldId, onBack, onUpdateSe
             <BlogRecentPostsSettingsPanel
               settings={widget.settings as any}
               onChange={onUpdateSettings}
+              activeTab={activeTab}
               activeFieldId={activeFieldId}
             />
           )}

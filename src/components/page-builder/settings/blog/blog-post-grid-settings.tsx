@@ -21,12 +21,14 @@ import { Label } from "@/components/ui/label";
 interface BlogPostGridSettingsProps {
   settings: BlogPostGridWidgetSettings;
   onChange: (settings: BlogPostGridWidgetSettings) => void;
+  activeTab?: "content" | "style" | "advanced";
   activeFieldId?: string | null;
 }
 
 export function BlogPostGridSettingsPanel({
   settings,
   onChange,
+  activeTab = "content",
   activeFieldId,
 }: BlogPostGridSettingsProps) {
   const { getAccordionProps } = useFieldAccordion(activeFieldId);
@@ -235,7 +237,8 @@ export function BlogPostGridSettingsPanel({
     updateCardMeta("items", newItems);
   };
 
-  return (
+  // ─── CONTENT TAB ───
+  const renderContentTab = () => (
     <div className="space-y-3">
       {/* Data Source */}
       <AccordionSection title="Data Source">
@@ -284,6 +287,154 @@ export function BlogPostGridSettingsPanel({
         />
       </AccordionSection>
 
+      {/* Header */}
+      <AccordionSection title="Header" {...getAccordionProps("header")}>
+        <ToggleSwitch
+          label="Show Header"
+          checked={s.header.show}
+          onChange={(checked) => updateHeader({ show: checked })}
+        />
+
+        {s.header.show && (
+          <>
+            <TextInput
+              label="Heading"
+              value={s.header.heading.text}
+              onChange={(v) => updateHeaderHeading({ text: v })}
+              placeholder="Latest Articles"
+            />
+
+            <ToggleSwitch
+              label="Show Subheading"
+              checked={s.header.subheading?.show ?? false}
+              onChange={(checked) => updateHeaderSubheading({ show: checked })}
+            />
+
+            {s.header.subheading?.show && (
+              <TextInput
+                label="Subheading Text"
+                value={s.header.subheading?.text ?? ""}
+                onChange={(v) => updateHeaderSubheading({ text: v })}
+                placeholder="Insights and guides"
+              />
+            )}
+
+            <ToggleSwitch
+              label="Show View All Link"
+              checked={s.header.viewAllLink.show}
+              onChange={(checked) => updateHeaderViewAllLink({ show: checked })}
+            />
+
+            {s.header.viewAllLink.show && (
+              <>
+                <TextInput
+                  label="View All Text"
+                  value={s.header.viewAllLink.text}
+                  onChange={(v) => updateHeaderViewAllLink({ text: v })}
+                  placeholder="View All Articles"
+                />
+
+                <TextInput
+                  label="View All URL"
+                  value={s.header.viewAllLink.url}
+                  onChange={(v) => updateHeaderViewAllLink({ url: v })}
+                  placeholder="/blog"
+                />
+              </>
+            )}
+
+            <SelectInput
+              label="Alignment"
+              value={s.header.alignment}
+              onChange={(v) => updateHeader({ alignment: v as BlogSectionHeader["alignment"] })}
+              options={[
+                { value: "left", label: "Left" },
+                { value: "center", label: "Center" },
+                { value: "space-between", label: "Space Between" },
+              ]}
+            />
+          </>
+        )}
+      </AccordionSection>
+
+      {/* Filter Tabs */}
+      <AccordionSection title="Filter Tabs">
+        <ToggleSwitch
+          label="Show Filter Tabs"
+          checked={s.filterTabs.show}
+          onChange={(checked) => updateFilterTabs("show", checked)}
+        />
+
+        {s.filterTabs.show && (
+          <>
+            <SelectInput
+              label="Style"
+              value={s.filterTabs.style}
+              onChange={(v) => updateFilterTabs("style", v)}
+              options={[
+                { value: "pills", label: "Pills" },
+                { value: "underline", label: "Underline" },
+                { value: "buttons", label: "Buttons" },
+              ]}
+            />
+
+            <ToggleSwitch
+              label='Show "All" Tab'
+              checked={s.filterTabs.showAll}
+              onChange={(checked) => updateFilterTabs("showAll", checked)}
+            />
+
+            {s.filterTabs.showAll && (
+              <TextInput
+                label="All Tab Text"
+                value={s.filterTabs.allText}
+                onChange={(v) => updateFilterTabs("allText", v)}
+                placeholder="All"
+              />
+            )}
+          </>
+        )}
+      </AccordionSection>
+
+      {/* Pagination */}
+      <AccordionSection title="Pagination">
+        <SelectInput
+          label="Type"
+          value={s.pagination.type}
+          onChange={(v) => updatePagination("type", v)}
+          options={[
+            { value: "none", label: "None" },
+            { value: "load-more", label: "Load More" },
+            { value: "numbered", label: "Numbered" },
+          ]}
+        />
+
+        {s.pagination.type === "load-more" && (
+          <>
+            <NumberInput
+              label="Posts Per Load"
+              value={s.pagination.postsPerLoad}
+              onChange={(v) => updatePagination("postsPerLoad", v)}
+              min={1}
+              max={12}
+              step={1}
+            />
+
+            <TextInput
+              label="Load More Text"
+              value={s.pagination.loadMoreText}
+              onChange={(v) => updatePagination("loadMoreText", v)}
+              placeholder="Load More Articles"
+            />
+          </>
+        )}
+      </AccordionSection>
+    </div>
+  );
+
+  // ─── STYLE TAB ───
+  const renderStyleTab = () => (
+    <div className="space-y-3">
       {/* Layout */}
       <AccordionSection title="Layout">
         <SelectInput
@@ -394,41 +545,7 @@ export function BlogPostGridSettingsPanel({
           ]}
         />
 
-        {/* Image */}
-        <ToggleSwitch
-          label="Show Image"
-          checked={s.card.image.show}
-          onChange={(checked) => updateCardImage("show", checked)}
-        />
-
-        {s.card.image.show && (
-          <>
-            <SelectInput
-              label="Image Aspect Ratio"
-              value={s.card.image.aspectRatio}
-              onChange={(v) => updateCardImage("aspectRatio", v)}
-              options={[
-                { value: "16:9", label: "16:9" },
-                { value: "4:3", label: "4:3" },
-                { value: "3:2", label: "3:2" },
-                { value: "1:1", label: "1:1" },
-              ]}
-            />
-
-            <SelectInput
-              label="Image Hover Effect"
-              value={s.card.image.hoverEffect}
-              onChange={(v) => updateCardImage("hoverEffect", v)}
-              options={[
-                { value: "none", label: "None" },
-                { value: "zoom", label: "Zoom" },
-                { value: "brighten", label: "Brighten" },
-              ]}
-            />
-          </>
-        )}
-
-        {/* Title */}
+        {/* Title Style */}
         <SelectInput
           label="Title Font Size"
           value={s.card.title.fontSize}
@@ -450,7 +567,7 @@ export function BlogPostGridSettingsPanel({
           step={1}
         />
 
-        {/* Excerpt */}
+        {/* Excerpt Style */}
         <ToggleSwitch
           label="Show Excerpt"
           checked={s.card.excerpt.show}
@@ -468,36 +585,7 @@ export function BlogPostGridSettingsPanel({
           />
         )}
 
-        {/* Meta Items */}
-        <ToggleSwitch
-          label="Show Meta"
-          checked={s.card.meta.show}
-          onChange={(checked) => updateCardMeta("show", checked)}
-        />
-
-        {s.card.meta.show && (
-          <div className="space-y-2">
-            <Label className="text-xs font-medium text-muted-foreground">
-              Meta Items
-            </Label>
-            <div className="space-y-2 rounded-md border p-2">
-              {(["date", "category", "readingTime"] as const).map((item) => (
-                <div key={item} className="flex items-center gap-2">
-                  <Checkbox
-                    id={`meta-${item}`}
-                    checked={s.card.meta.items.includes(item)}
-                    onCheckedChange={() => toggleMetaItem(item)}
-                  />
-                  <label htmlFor={`meta-${item}`} className="text-sm cursor-pointer flex-1">
-                    {item === "readingTime" ? "Reading Time" : item.charAt(0).toUpperCase() + item.slice(1)}
-                  </label>
-                </div>
-              ))}
-            </div>
-          </div>
-        )}
-
-        {/* Read More */}
+        {/* Read More Style */}
         <ToggleSwitch
           label="Show Read More"
           checked={s.card.readMore.show}
@@ -521,6 +609,42 @@ export function BlogPostGridSettingsPanel({
                 { value: "link", label: "Link" },
                 { value: "button-sm", label: "Small Button" },
                 { value: "arrow-only", label: "Arrow Only" },
+              ]}
+            />
+          </>
+        )}
+      </AccordionSection>
+
+      {/* Image */}
+      <AccordionSection title="Image">
+        <ToggleSwitch
+          label="Show Image"
+          checked={s.card.image.show}
+          onChange={(checked) => updateCardImage("show", checked)}
+        />
+
+        {s.card.image.show && (
+          <>
+            <SelectInput
+              label="Aspect Ratio"
+              value={s.card.image.aspectRatio}
+              onChange={(v) => updateCardImage("aspectRatio", v)}
+              options={[
+                { value: "16:9", label: "16:9" },
+                { value: "4:3", label: "4:3" },
+                { value: "3:2", label: "3:2" },
+                { value: "1:1", label: "1:1" },
+              ]}
+            />
+
+            <SelectInput
+              label="Hover Effect"
+              value={s.card.image.hoverEffect}
+              onChange={(v) => updateCardImage("hoverEffect", v)}
+              options={[
+                { value: "none", label: "None" },
+                { value: "zoom", label: "Zoom" },
+                { value: "brighten", label: "Brighten" },
               ]}
             />
           </>
@@ -562,146 +686,34 @@ export function BlogPostGridSettingsPanel({
         )}
       </AccordionSection>
 
-      {/* Filter Tabs */}
-      <AccordionSection title="Filter Tabs">
+      {/* Meta Items */}
+      <AccordionSection title="Meta Items">
         <ToggleSwitch
-          label="Show Filter Tabs"
-          checked={s.filterTabs.show}
-          onChange={(checked) => updateFilterTabs("show", checked)}
+          label="Show Meta"
+          checked={s.card.meta.show}
+          onChange={(checked) => updateCardMeta("show", checked)}
         />
 
-        {s.filterTabs.show && (
-          <>
-            <SelectInput
-              label="Style"
-              value={s.filterTabs.style}
-              onChange={(v) => updateFilterTabs("style", v)}
-              options={[
-                { value: "pills", label: "Pills" },
-                { value: "underline", label: "Underline" },
-                { value: "buttons", label: "Buttons" },
-              ]}
-            />
-
-            <ToggleSwitch
-              label='Show "All" Tab'
-              checked={s.filterTabs.showAll}
-              onChange={(checked) => updateFilterTabs("showAll", checked)}
-            />
-
-            {s.filterTabs.showAll && (
-              <TextInput
-                label="All Tab Text"
-                value={s.filterTabs.allText}
-                onChange={(v) => updateFilterTabs("allText", v)}
-                placeholder="All"
-              />
-            )}
-          </>
-        )}
-      </AccordionSection>
-
-      {/* Pagination */}
-      <AccordionSection title="Pagination">
-        <SelectInput
-          label="Type"
-          value={s.pagination.type}
-          onChange={(v) => updatePagination("type", v)}
-          options={[
-            { value: "none", label: "None" },
-            { value: "load-more", label: "Load More" },
-            { value: "numbered", label: "Numbered" },
-          ]}
-        />
-
-        {s.pagination.type === "load-more" && (
-          <>
-            <NumberInput
-              label="Posts Per Load"
-              value={s.pagination.postsPerLoad}
-              onChange={(v) => updatePagination("postsPerLoad", v)}
-              min={1}
-              max={12}
-              step={1}
-            />
-
-            <TextInput
-              label="Load More Text"
-              value={s.pagination.loadMoreText}
-              onChange={(v) => updatePagination("loadMoreText", v)}
-              placeholder="Load More Articles"
-            />
-          </>
-        )}
-      </AccordionSection>
-
-      {/* Header */}
-      <AccordionSection title="Header" {...getAccordionProps("header")}>
-        <ToggleSwitch
-          label="Show Header"
-          checked={s.header.show}
-          onChange={(checked) => updateHeader({ show: checked })}
-        />
-
-        {s.header.show && (
-          <>
-            <TextInput
-              label="Heading"
-              value={s.header.heading.text}
-              onChange={(v) => updateHeaderHeading({ text: v })}
-              placeholder="Latest Articles"
-            />
-
-            <ToggleSwitch
-              label="Show Subheading"
-              checked={s.header.subheading?.show ?? false}
-              onChange={(checked) => updateHeaderSubheading({ show: checked })}
-            />
-
-            {s.header.subheading?.show && (
-              <TextInput
-                label="Subheading Text"
-                value={s.header.subheading?.text ?? ""}
-                onChange={(v) => updateHeaderSubheading({ text: v })}
-                placeholder="Insights and guides"
-              />
-            )}
-
-            <ToggleSwitch
-              label="Show View All Link"
-              checked={s.header.viewAllLink.show}
-              onChange={(checked) => updateHeaderViewAllLink({ show: checked })}
-            />
-
-            {s.header.viewAllLink.show && (
-              <>
-                <TextInput
-                  label="View All Text"
-                  value={s.header.viewAllLink.text}
-                  onChange={(v) => updateHeaderViewAllLink({ text: v })}
-                  placeholder="View All Articles"
-                />
-
-                <TextInput
-                  label="View All URL"
-                  value={s.header.viewAllLink.url}
-                  onChange={(v) => updateHeaderViewAllLink({ url: v })}
-                  placeholder="/blog"
-                />
-              </>
-            )}
-
-            <SelectInput
-              label="Alignment"
-              value={s.header.alignment}
-              onChange={(v) => updateHeader({ alignment: v as BlogSectionHeader["alignment"] })}
-              options={[
-                { value: "left", label: "Left" },
-                { value: "center", label: "Center" },
-                { value: "space-between", label: "Space Between" },
-              ]}
-            />
-          </>
+        {s.card.meta.show && (
+          <div className="space-y-2">
+            <Label className="text-xs font-medium text-muted-foreground">
+              Visible Items
+            </Label>
+            <div className="space-y-2 rounded-md border p-2">
+              {(["date", "category", "readingTime"] as const).map((item) => (
+                <div key={item} className="flex items-center gap-2">
+                  <Checkbox
+                    id={`meta-${item}`}
+                    checked={s.card.meta.items.includes(item)}
+                    onCheckedChange={() => toggleMetaItem(item)}
+                  />
+                  <label htmlFor={`meta-${item}`} className="text-sm cursor-pointer flex-1">
+                    {item === "readingTime" ? "Reading Time" : item.charAt(0).toUpperCase() + item.slice(1)}
+                  </label>
+                </div>
+              ))}
+            </div>
+          </div>
         )}
       </AccordionSection>
 
@@ -747,5 +759,17 @@ export function BlogPostGridSettingsPanel({
         )}
       </AccordionSection>
     </div>
+  );
+
+  // ─── ADVANCED TAB ───
+  // Advanced tab spacing is handled by the parent widget-builder-panel
+  const renderAdvancedTab = () => null;
+
+  return (
+    <>
+      {activeTab === "content" && renderContentTab()}
+      {activeTab === "style" && renderStyleTab()}
+      {activeTab === "advanced" && renderAdvancedTab()}
+    </>
   );
 }

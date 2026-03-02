@@ -21,12 +21,14 @@ interface BlogPostCarouselSettingsProps {
   settings: BlogPostCarouselWidgetSettings;
   onChange: (settings: BlogPostCarouselWidgetSettings) => void;
   activeFieldId?: string | null;
+  activeTab?: "content" | "style" | "advanced";
 }
 
 export function BlogPostCarouselSettingsPanel({
   settings,
   onChange,
   activeFieldId,
+  activeTab = "content",
 }: BlogPostCarouselSettingsProps) {
   const { getAccordionProps } = useFieldAccordion(activeFieldId);
   // Deep merge with defaults - defaults guarantee all required fields exist
@@ -207,7 +209,7 @@ export function BlogPostCarouselSettingsPanel({
     updateCardMeta("items", newItems);
   };
 
-  return (
+  const renderContentTab = () => (
     <div className="space-y-3">
       {/* Data Source */}
       <AccordionSection title="Data Source">
@@ -256,6 +258,80 @@ export function BlogPostCarouselSettingsPanel({
         />
       </AccordionSection>
 
+      {/* Header */}
+      <AccordionSection title="Header" {...getAccordionProps("header")}>
+        <ToggleSwitch
+          label="Show Header"
+          checked={s.header.show}
+          onChange={(checked) => updateHeader({ show: checked })}
+        />
+
+        {s.header.show && (
+          <>
+            <TextInput
+              label="Heading"
+              value={s.header.heading.text}
+              onChange={(v) => updateHeaderHeading({ text: v })}
+              placeholder="Latest Articles"
+            />
+
+            <ToggleSwitch
+              label="Show Subheading"
+              checked={s.header.subheading?.show ?? false}
+              onChange={(checked) => updateHeaderSubheading({ show: checked })}
+            />
+
+            {s.header.subheading?.show && (
+              <TextInput
+                label="Subheading Text"
+                value={s.header.subheading?.text ?? ""}
+                onChange={(v) => updateHeaderSubheading({ text: v })}
+                placeholder="Insights and guides"
+              />
+            )}
+
+            <ToggleSwitch
+              label="Show View All Link"
+              checked={s.header.viewAllLink.show}
+              onChange={(checked) => updateHeaderViewAllLink({ show: checked })}
+            />
+
+            {s.header.viewAllLink.show && (
+              <>
+                <TextInput
+                  label="View All Text"
+                  value={s.header.viewAllLink.text}
+                  onChange={(v) => updateHeaderViewAllLink({ text: v })}
+                  placeholder="View All Articles"
+                />
+
+                <TextInput
+                  label="View All URL"
+                  value={s.header.viewAllLink.url}
+                  onChange={(v) => updateHeaderViewAllLink({ url: v })}
+                  placeholder="/blog"
+                />
+              </>
+            )}
+
+            <SelectInput
+              label="Alignment"
+              value={s.header.alignment}
+              onChange={(v) => updateHeader({ alignment: v as BlogSectionHeader["alignment"] })}
+              options={[
+                { value: "left", label: "Left" },
+                { value: "center", label: "Center" },
+                { value: "space-between", label: "Space Between" },
+              ]}
+            />
+          </>
+        )}
+      </AccordionSection>
+    </div>
+  );
+
+  const renderStyleTab = () => (
+    <div className="space-y-3">
       {/* Carousel Settings */}
       <AccordionSection title="Carousel" {...getAccordionProps("carousel")}>
         <SelectInput
@@ -594,76 +670,18 @@ export function BlogPostCarouselSettingsPanel({
           </>
         )}
       </AccordionSection>
-
-      {/* Header */}
-      <AccordionSection title="Header" {...getAccordionProps("header")}>
-        <ToggleSwitch
-          label="Show Header"
-          checked={s.header.show}
-          onChange={(checked) => updateHeader({ show: checked })}
-        />
-
-        {s.header.show && (
-          <>
-            <TextInput
-              label="Heading"
-              value={s.header.heading.text}
-              onChange={(v) => updateHeaderHeading({ text: v })}
-              placeholder="Latest Articles"
-            />
-
-            <ToggleSwitch
-              label="Show Subheading"
-              checked={s.header.subheading?.show ?? false}
-              onChange={(checked) => updateHeaderSubheading({ show: checked })}
-            />
-
-            {s.header.subheading?.show && (
-              <TextInput
-                label="Subheading Text"
-                value={s.header.subheading?.text ?? ""}
-                onChange={(v) => updateHeaderSubheading({ text: v })}
-                placeholder="Insights and guides"
-              />
-            )}
-
-            <ToggleSwitch
-              label="Show View All Link"
-              checked={s.header.viewAllLink.show}
-              onChange={(checked) => updateHeaderViewAllLink({ show: checked })}
-            />
-
-            {s.header.viewAllLink.show && (
-              <>
-                <TextInput
-                  label="View All Text"
-                  value={s.header.viewAllLink.text}
-                  onChange={(v) => updateHeaderViewAllLink({ text: v })}
-                  placeholder="View All Articles"
-                />
-
-                <TextInput
-                  label="View All URL"
-                  value={s.header.viewAllLink.url}
-                  onChange={(v) => updateHeaderViewAllLink({ url: v })}
-                  placeholder="/blog"
-                />
-              </>
-            )}
-
-            <SelectInput
-              label="Alignment"
-              value={s.header.alignment}
-              onChange={(v) => updateHeader({ alignment: v as BlogSectionHeader["alignment"] })}
-              options={[
-                { value: "left", label: "Left" },
-                { value: "center", label: "Center" },
-                { value: "space-between", label: "Space Between" },
-              ]}
-            />
-          </>
-        )}
-      </AccordionSection>
     </div>
+  );
+
+  const renderAdvancedTab = () => {
+    return null;
+  };
+
+  return (
+    <>
+      {activeTab === "content" && renderContentTab()}
+      {activeTab === "style" && renderStyleTab()}
+      {activeTab === "advanced" && renderAdvancedTab()}
+    </>
   );
 }

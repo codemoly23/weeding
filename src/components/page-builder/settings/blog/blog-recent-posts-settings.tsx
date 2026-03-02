@@ -18,12 +18,14 @@ interface BlogRecentPostsSettingsProps {
   settings: BlogRecentPostsWidgetSettings;
   onChange: (settings: BlogRecentPostsWidgetSettings) => void;
   activeFieldId?: string | null;
+  activeTab?: "content" | "style" | "advanced";
 }
 
 export function BlogRecentPostsSettingsPanel({
   settings,
   onChange,
   activeFieldId,
+  activeTab = "content",
 }: BlogRecentPostsSettingsProps) {
   const { getAccordionProps } = useFieldAccordion(activeFieldId);
   // Deep merge with defaults
@@ -95,7 +97,7 @@ export function BlogRecentPostsSettingsPanel({
 
   const showThumbnail = s.display.style === "thumbnail";
 
-  return (
+  const renderContentTab = () => (
     <div className="space-y-3">
       {/* Header */}
       <AccordionSection title="Header" {...getAccordionProps("header")}>
@@ -158,6 +160,45 @@ export function BlogRecentPostsSettingsPanel({
         />
       </AccordionSection>
 
+      {/* View All Link */}
+      <AccordionSection title="View All Link">
+        <ToggleSwitch
+          label="Show View All"
+          checked={s.viewAllLink.show}
+          onChange={(checked) => updateViewAllLink("show", checked)}
+        />
+
+        {s.viewAllLink.show && (
+          <>
+            <TextInput
+              label="Link Text"
+              value={s.viewAllLink.text}
+              onChange={(v) => updateViewAllLink("text", v)}
+              placeholder="View All Posts"
+            />
+
+            <TextInput
+              label="Link URL"
+              value={s.viewAllLink.url}
+              onChange={(v) => updateViewAllLink("url", v)}
+              placeholder="/blog"
+            />
+
+            {s.viewAllLink.color && (
+              <ColorInput
+                label="Link Color"
+                value={s.viewAllLink.color}
+                onChange={(v) => updateViewAllLink("color", v)}
+              />
+            )}
+          </>
+        )}
+      </AccordionSection>
+    </div>
+  );
+
+  const renderStyleTab = () => (
+    <div className="space-y-3">
       {/* Display */}
       <AccordionSection title="Display" {...getAccordionProps("posts")}>
         <SelectInput
@@ -262,41 +303,18 @@ export function BlogRecentPostsSettingsPanel({
           />
         )}
       </AccordionSection>
-
-      {/* View All Link */}
-      <AccordionSection title="View All Link">
-        <ToggleSwitch
-          label="Show View All"
-          checked={s.viewAllLink.show}
-          onChange={(checked) => updateViewAllLink("show", checked)}
-        />
-
-        {s.viewAllLink.show && (
-          <>
-            <TextInput
-              label="Link Text"
-              value={s.viewAllLink.text}
-              onChange={(v) => updateViewAllLink("text", v)}
-              placeholder="View All Posts"
-            />
-
-            <TextInput
-              label="Link URL"
-              value={s.viewAllLink.url}
-              onChange={(v) => updateViewAllLink("url", v)}
-              placeholder="/blog"
-            />
-
-            {s.viewAllLink.color && (
-              <ColorInput
-                label="Link Color"
-                value={s.viewAllLink.color}
-                onChange={(v) => updateViewAllLink("color", v)}
-              />
-            )}
-          </>
-        )}
-      </AccordionSection>
     </div>
+  );
+
+  const renderAdvancedTab = () => {
+    return null;
+  };
+
+  return (
+    <>
+      {activeTab === "content" && renderContentTab()}
+      {activeTab === "style" && renderStyleTab()}
+      {activeTab === "advanced" && renderAdvancedTab()}
+    </>
   );
 }

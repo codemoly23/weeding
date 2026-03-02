@@ -539,7 +539,7 @@ export async function importThemeData(
               excerpt: post.excerpt || null,
               coverImage: post.coverImage || null,
               status: post.published ? "PUBLISHED" : "DRAFT",
-              publishedAt: post.published ? new Date() : null,
+              publishedAt: post.publishedAt ? new Date(post.publishedAt) : (post.published ? new Date() : null),
               metaTitle: post.metaTitle || null,
               metaDescription: post.metaDescription || null,
               categories: categoryConnect,
