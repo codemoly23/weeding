@@ -1390,3 +1390,91 @@ When "Reset & Activate" is triggered, these database tables are wiped and recrea
 | Locations | `locations` | Location | Service locations |
 | Location Fees | `locationFees` | LocationFee | Per-location pricing |
 | Form Templates | `formTemplates` | FormTemplate | Lead form configs |
+
+---
+
+## Widget Development Rules — Avoiding Infinite Loops & Re-render Bugs
+
+### The Problem
+
+Client-side widgets that merge default settings with incoming props can cause **infinite API call loops** and **unnecessary re-renders** if object references aren't stabilized. This happened in `testimonials-widget.tsx` (continuous `/api/testimonials` calls) and was also found in `service-list-widget.tsx` and `lead-form-widget.tsx`.
+
+### Root Cause
+
+```tsx
+// BAD — creates new object reference EVERY render
+const settings = deepMerge(DEFAULTS, partialSettings);
+
+useEffect(() => {
+  fetch(`/api/something?limit=${settings.dataSource.limit}`);
+}, [settings.dataSource]); // ← object reference changes every render → infinite loop
+```
+
+**Cycle:** render → new object → useEffect sees "changed" dep → fetch → setState → re-render → repeat forever
+
+### Rules for All New Widgets
+
+#### Rule 1: Always memoize merged settings
+
+```tsx
+// CORRECT — useMemo prevents new object on every render
+const settings = useMemo(
+  () => deepMerge(DEFAULTS, partialSettings),
+  [JSON.stringify(partialSettings)]
+);
+```
+
+Or if the widget uses a `mergeSettings()` helper (like blog widgets do):
+
+```tsx
+const settings = useMemo(() => mergeSettings(rawSettings), [rawSettings]);
+```
+
+#### Rule 2: useEffect dependencies must be primitives
+
+Never put an object or array directly in a useEffect dependency array. Extract primitive values first:
+
+```tsx
+// BAD
+useEffect(() => { ... }, [settings.dataSource, settings.filters]);
+
+// CORRECT — extract stable primitives
+const fetchLimit = settings.dataSource.limit;
+const fetchSortBy = settings.dataSource.sortBy;
+const fetchType = settings.dataSource.testimonialType || "all";
+const fetchTags = settings.dataSource.filterByTags?.join(",") || "";
+
+useEffect(() => { ... }, [fetchLimit, fetchSortBy, fetchType, fetchTags]);
+```
+
+For arrays, convert to a string key: `array.join(",")` — this gives a stable primitive for comparison.
+
+#### Rule 3: useCallback dependencies — use refs for state that changes after fetch
+
+If a `useCallback` fetches data and then conditionally sets state based on current state, use a ref to avoid circular dependency:
+
+```tsx
+// BAD — selectedItem in deps → setSelectedItem inside callback → identity change → re-fetch
+const fetchData = useCallback(async () => {
+  const data = await fetch(...);
+  if (!selectedItem) setSelectedItem(data[0]);
+}, [selectedItem]); // ← changes when selectedItem is set
+
+// CORRECT — ref doesn't cause identity change
+const selectedItemRef = useRef(selectedItem);
+selectedItemRef.current = selectedItem;
+
+const fetchData = useCallback(async () => {
+  const data = await fetch(...);
+  if (!selectedItemRef.current) setSelectedItem(data[0]);
+}, []); // ← stable, no circular dependency
+```
+
+### Quick Checklist for New Widget PRs
+
+- [ ] Settings merge wrapped in `useMemo`?
+- [ ] `useEffect` deps are all primitives (string, number, boolean)?
+- [ ] No object/array directly in `useEffect` dependency array?
+- [ ] `useCallback` doesn't depend on state it sets inside itself?
+- [ ] No `deepMerge()` / spread merge outside of `useMemo`?
+- [ ] Test: open the page, check Network tab — API should fire ONCE, not continuously?
