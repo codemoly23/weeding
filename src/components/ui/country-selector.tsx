@@ -23,19 +23,14 @@ interface CountrySelectorProps {
   placeholder?: string;
   className?: string;
   disabled?: boolean;
+  inputStyle?: React.CSSProperties;
+  inputClasses?: string;
 }
 
-// Comprehensive list of countries eligible for US LLC formation
+// Comprehensive list of countries eligible for US LLC formation (alphabetical)
 // EXCLUDED: OFAC sanctioned countries (Cuba, Iran, North Korea, Syria, Russia, Belarus)
 // EXCLUDED: High-risk countries where banking is nearly impossible (Afghanistan, Sudan, South Sudan, Somalia, Yemen, Libya, Myanmar, Venezuela)
 const ELIGIBLE_COUNTRIES: Country[] = [
-  // Popular/Target Markets (shown first)
-  { code: "BD", name: "Bangladesh", flag: "🇧🇩" },
-  { code: "IN", name: "India", flag: "🇮🇳" },
-  { code: "PK", name: "Pakistan", flag: "🇵🇰" },
-  { code: "AE", name: "United Arab Emirates", flag: "🇦🇪" },
-  { code: "SA", name: "Saudi Arabia", flag: "🇸🇦" },
-
   // A
   { code: "AL", name: "Albania", flag: "🇦🇱" },
   { code: "DZ", name: "Algeria", flag: "🇩🇿" },
@@ -51,6 +46,7 @@ const ELIGIBLE_COUNTRIES: Country[] = [
   // B
   { code: "BS", name: "Bahamas", flag: "🇧🇸" },
   { code: "BH", name: "Bahrain", flag: "🇧🇭" },
+  { code: "BD", name: "Bangladesh", flag: "🇧🇩" },
   { code: "BB", name: "Barbados", flag: "🇧🇧" },
   { code: "BE", name: "Belgium", flag: "🇧🇪" },
   { code: "BZ", name: "Belize", flag: "🇧🇿" },
@@ -124,6 +120,7 @@ const ELIGIBLE_COUNTRIES: Country[] = [
 
   // I
   { code: "IS", name: "Iceland", flag: "🇮🇸" },
+  { code: "IN", name: "India", flag: "🇮🇳" },
   { code: "ID", name: "Indonesia", flag: "🇮🇩" },
   { code: "IQ", name: "Iraq", flag: "🇮🇶" },
   { code: "IE", name: "Ireland", flag: "🇮🇪" },
@@ -189,6 +186,7 @@ const ELIGIBLE_COUNTRIES: Country[] = [
   { code: "OM", name: "Oman", flag: "🇴🇲" },
 
   // P
+  { code: "PK", name: "Pakistan", flag: "🇵🇰" },
   { code: "PW", name: "Palau", flag: "🇵🇼" },
   { code: "PS", name: "Palestine", flag: "🇵🇸" },
   { code: "PA", name: "Panama", flag: "🇵🇦" },
@@ -213,6 +211,7 @@ const ELIGIBLE_COUNTRIES: Country[] = [
   { code: "WS", name: "Samoa", flag: "🇼🇸" },
   { code: "SM", name: "San Marino", flag: "🇸🇲" },
   { code: "ST", name: "Sao Tome and Principe", flag: "🇸🇹" },
+  { code: "SA", name: "Saudi Arabia", flag: "🇸🇦" },
   { code: "SN", name: "Senegal", flag: "🇸🇳" },
   { code: "RS", name: "Serbia", flag: "🇷🇸" },
   { code: "SC", name: "Seychelles", flag: "🇸🇨" },
@@ -246,6 +245,7 @@ const ELIGIBLE_COUNTRIES: Country[] = [
   // U
   { code: "UG", name: "Uganda", flag: "🇺🇬" },
   { code: "UA", name: "Ukraine", flag: "🇺🇦" },
+  { code: "AE", name: "United Arab Emirates", flag: "🇦🇪" },
   { code: "GB", name: "United Kingdom", flag: "🇬🇧" },
   { code: "US", name: "United States", flag: "🇺🇸" },
   { code: "UY", name: "Uruguay", flag: "🇺🇾" },
@@ -270,6 +270,8 @@ export function CountrySelector({
   placeholder = "Select your country...",
   className,
   disabled = false,
+  inputStyle,
+  inputClasses,
 }: CountrySelectorProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [search, setSearch] = useState("");
@@ -368,8 +370,10 @@ export function CountrySelector({
           "hover:bg-accent hover:text-accent-foreground",
           "focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2",
           "disabled:cursor-not-allowed disabled:opacity-50",
-          isOpen && "ring-2 ring-ring ring-offset-2"
+          isOpen && "ring-2 ring-ring ring-offset-2",
+          inputClasses,
         )}
+        style={inputStyle}
       >
         {selectedCountry ? (
           <span className="flex items-center gap-2">

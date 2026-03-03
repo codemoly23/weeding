@@ -51,6 +51,7 @@ export async function importThemeData(
     locations: 0,
     locationFees: 0,
     tickers: 0,
+    leadFormTemplates: 0,
   };
 
   await prisma.$transaction(
@@ -113,6 +114,12 @@ export async function importThemeData(
       await tx.ticker.deleteMany({});
       // 22. Delete active theme
       await tx.activeTheme.deleteMany({});
+      // 23. Delete system lead form templates (preserve user-created ones)
+      await tx.lead.updateMany({
+        where: { formTemplate: { isSystem: true } },
+        data: { formTemplateId: null },
+      });
+      await tx.leadFormTemplate.deleteMany({ where: { isSystem: true } });
 
       // =============================================
       // IMPORT PHASE - Order matters for FK references
@@ -434,6 +441,30 @@ export async function importThemeData(
         }
       }
 
+      // ---- 9b. Lead Form Templates ----
+      const leadFormSlugToId: Record<string, string> = {};
+
+      if (data.leadFormTemplates) {
+        for (const lft of data.leadFormTemplates) {
+          const created = await tx.leadFormTemplate.create({
+            data: {
+              name: lft.name,
+              description: lft.description || null,
+              fields: lft.fields as unknown as Prisma.InputJsonValue,
+              defaultStyling: lft.defaultStyling
+                ? (lft.defaultStyling as Prisma.InputJsonValue)
+                : undefined,
+              successMessage: lft.successMessage || null,
+              successRedirect: lft.successRedirect || null,
+              isSystem: true,
+              isActive: true,
+            },
+          });
+          leadFormSlugToId[lft.slug] = created.id;
+          counts.leadFormTemplates++;
+        }
+      }
+
       // ---- 10. Pages ----
       if (data.pages) {
         for (const page of data.pages) {
@@ -462,17 +493,34 @@ export async function importThemeData(
                 columns: section.columns?.map((col) => ({
                   ...col,
                   widgets: col.widgets?.map((widget) => {
-                    if (!THEME_AWARE_WIDGETS.has(widget.type) || !widget.settings) return widget;
-                    const existingColors = widget.settings.colors as Record<string, unknown> | undefined;
-                    // If theme data explicitly sets useTheme: false, respect it
-                    if (existingColors?.useTheme === false) return widget;
-                    return {
-                      ...widget,
-                      settings: {
-                        ...widget.settings,
-                        colors: { ...(existingColors ?? {}), useTheme: true },
-                      },
-                    };
+                    // Theme color injection for theme-aware widgets
+                    if (THEME_AWARE_WIDGETS.has(widget.type) && widget.settings) {
+                      const existingColors = widget.settings.colors as Record<string, unknown> | undefined;
+                      // If theme data explicitly sets useTheme: false, respect it
+                      if (existingColors?.useTheme !== false) {
+                        return {
+                          ...widget,
+                          settings: {
+                            ...widget.settings,
+                            colors: { ...(existingColors ?? {}), useTheme: true },
+                          },
+                        };
+                      }
+                    }
+
+                    // Lead form template slug → ID resolution
+                    if (widget.type === "lead-form" && widget.settings?.templateSlug) {
+                      const templateId = leadFormSlugToId[widget.settings.templateSlug as string];
+                      if (templateId) {
+                        const { templateSlug: _slug, ...restSettings } = widget.settings;
+                        return {
+                          ...widget,
+                          settings: { ...restSettings, templateId },
+                        };
+                      }
+                    }
+
+                    return widget;
                   }),
                 })),
               }));

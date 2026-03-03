@@ -1364,6 +1364,8 @@ All homepage sections bound to the "Legal & Business Services" theme:
 | 7 | sec_clients_marquee | ticker-marquee | Client logos marquee (white bg, fade edges) |
 | 8 | sec_testimonials_rail | testimonials-carousel | Rail carousel with 9 testimonials (dark bg, gradient) |
 | 9 | sec_blog_forge | blog-post-grid + heading | Blog bento grid with 5 posts + topic pills (white bg) |
+| 10 | sec_contact_forge | custom-html + lead-form | Contact / consultation form (cream bg) |
+| 11 | sec_cta_forge | hero-content + 2× custom-html | Pre-footer CTA "Your US business starts today" (dark forest bg, animated orbs) |
 
 ### Data Deleted on Theme Reset/Activation
 
@@ -1478,3 +1480,340 @@ const fetchData = useCallback(async () => {
 - [ ] `useCallback` doesn't depend on state it sets inside itself?
 - [ ] No `deepMerge()` / spread merge outside of `useMemo`?
 - [ ] Test: open the page, check Network tab — API should fire ONCE, not continuously?
+
+---
+
+## Lead Form Widget — Complete Reference
+
+### Overview
+
+`lead-form` widget ekta full-featured contact/consultation form render kore. Form fields template theke ase, button unified `StyledButton` system use kore (same as hero-content, button-group, header, footer), ar input/label styling widget settings diye customize kora jay.
+
+### Form Templates (leadFormTemplates)
+
+Theme `data.json` te `leadFormTemplates` array thake — theme activate hole ei templates DB te create hoy (`LeadFormTemplate` model, `isSystem: true`). Form widget `templateSlug` diye template reference kore, importer slug → ID resolve kore.
+
+```json
+"leadFormTemplates": [
+  {
+    "slug": "consultation-form",
+    "name": "Consultation Request Form",
+    "description": "Homepage lead capture form",
+    "fields": [
+      {
+        "id": "cf_firstName",
+        "type": "text",
+        "name": "firstName",
+        "label": "First Name",
+        "placeholder": "e.g. John",
+        "required": true,
+        "width": "half",
+        "mapToLeadField": "firstName"
+      }
+    ],
+    "successMessage": "Thank you!",
+    "isActive": true
+  }
+]
+```
+
+**Field types:** `text`, `email`, `phone`, `number`, `date`, `textarea`, `select`, `radio`, `checkbox`, `country_select`, `service_select`
+**Width:** `"full"` (default) or `"half"` (two half-width fields stack side-by-side)
+**mapToLeadField:** Maps to Lead model fields: `firstName`, `lastName`, `email`, `phone`, `company`, `country`, `city`, `interestedIn`, `budget`, `timeline`, `message`
+
+### Widget Settings — All Keys
+
+#### Content Settings
+
+| Key | Type | Default | Description |
+|-----|------|---------|-------------|
+| `templateSlug` | string | — | Template slug (theme transport only, resolved to `templateId` on import) |
+| `templateId` | string | — | DB template ID (set by importer) |
+| `title` | string | `""` | Form title text |
+| `description` | string | `""` | Description below title |
+| `fields` | LeadFormField[] | default 4 fields | Form fields array (from template or manual) |
+| `submitButton` | object | see below | Button configuration |
+| `footerText` | string | — | HTML footer text (privacy policy links, trust badges etc.) |
+| `successMessage` | string | `"Thank you..."` | Post-submit success message |
+| `submitTo` | `"database"` \| `"webhook"` \| `"email"` | `"database"` | Submission target |
+| `webhookUrl` | string | — | Webhook URL (when submitTo = "webhook") |
+| `emailTo` | string | — | Email address (when submitTo = "email") |
+
+#### Color Settings
+
+| Key | Type | Default | Description |
+|-----|------|---------|-------------|
+| `backgroundColor` | string | `"#1e293b"` | Form card background |
+| `titleColor` | string | `"#ffffff"` | Title text color |
+| `descriptionColor` | string | `"#94a3b8"` | Description text color |
+| `labelColor` | string | auto (light/dark) | Label text color |
+| `inputTextColor` | string | auto | Input field text color |
+
+#### Input Styling (NEW)
+
+| Key | Type | Default | Description |
+|-----|------|---------|-------------|
+| `inputBgColor` | string | auto-detect | Input background color (e.g. `"#faf8f4"` for cream) |
+| `inputBorderColor` | string | auto-detect | Input border color (e.g. `"rgba(14,17,9,0.1)"`) |
+| `inputBorderRadius` | number | browser default | Input corner radius in px (e.g. `10`) |
+| `placeholderColor` | string | auto-detect | Placeholder text color (applied via scoped CSS) |
+
+When `inputBgColor` / `inputBorderColor` are **not set**, the widget auto-detects light/dark background and uses appropriate Tailwind classes (gray-50 for light, slate-800 for dark). When set, inline styles override the auto-detect classes.
+
+#### Label Styling (NEW)
+
+| Key | Type | Default | Description |
+|-----|------|---------|-------------|
+| `labelTextTransform` | `"none"` \| `"uppercase"` \| `"capitalize"` | `"none"` | Label text transform |
+| `labelFontSize` | string | `"text-sm"` (14px) | Custom font size (e.g. `"12px"`) |
+| `labelLetterSpacing` | string | — | Letter spacing (e.g. `"0.8px"`) |
+| `labelFontWeight` | number | 500 (font-medium) | Font weight (300–800) |
+
+#### Layout Settings
+
+| Key | Type | Default | Description |
+|-----|------|---------|-------------|
+| `padding` | number | `32` | Form card inner padding in px |
+| `borderRadius` | number | `12` | Form card border radius in px |
+| `shadow` | boolean | `true` | Drop shadow on form card |
+| `formMaxWidth` | number | `0` | Max width in px (0 = full) |
+| `formAlignment` | `"left"` \| `"center"` \| `"right"` | `"center"` | Form card alignment |
+| `buttonLayout` | `"horizontal"` \| `"vertical"` \| `"stacked"` | `"vertical"` | Submit button layout direction |
+| `buttonAlignment` | `"left"` \| `"center"` \| `"right"` | `"center"` | Submit button alignment |
+| `buttonGap` | number | `12` | Gap between buttons in px |
+| `buttonWidth` | number | `0` | Fixed button width (0 = auto) |
+| `buttonSize` | `"sm"` \| `"md"` \| `"lg"` | `"md"` | Button size passed to StyledButton |
+
+### Submit Button — Unified Button System
+
+Submit button uses the shared `StyledButton` component + `ButtonCustomStyle` — same system used by hero-content, button-group, header CTA, and footer buttons. This means all hover effects, icons, presets are available.
+
+```json
+"submitButton": {
+  "text": "Send My Request",
+  "fullWidth": true,
+  "style": {
+    "bgColor": "#e84c1e",
+    "textColor": "#ffffff",
+    "borderRadius": 12,
+    "hoverBgColor": "#c43d17",
+    "hoverEffect": "shadow-lift",
+    "icon": "arrow-right",
+    "iconPosition": "right"
+  }
+}
+```
+
+**Available hover effects:** `"none"`, `"darken"`, `"lighten"`, `"shadow-lift"`, `"scale"`, `"glow"`, `"slide-right"`, `"slide-up"`, `"border-grow"`, `"craft-expand"`, `"craft-expand-reverse"`, `"flow-border"`, `"neural"`
+
+**Icon:** Any Lucide icon name (e.g. `"arrow-right"`, `"send"`, `"check"`) or `"custom"` with `customIconSvg`.
+
+**Legacy migration:** Old `submitButton.icon` (top-level) is auto-migrated to `submitButton.style.icon` at render time.
+
+### Reference Design Values (v3-forge.html)
+
+For the "Legal & Business Services" theme, the homepage consultation form uses:
+
+```json
+{
+  "backgroundColor": "#ffffff",
+  "titleColor": "#0e1109",
+  "descriptionColor": "#4b5249",
+  "labelColor": "#4b5249",
+  "inputTextColor": "#0e1109",
+  "inputBgColor": "#faf8f4",
+  "inputBorderColor": "rgba(14,17,9,0.1)",
+  "inputBorderRadius": 10,
+  "placeholderColor": "#8a9086",
+  "labelTextTransform": "uppercase",
+  "labelFontSize": "12px",
+  "labelLetterSpacing": "0.8px",
+  "labelFontWeight": 600,
+  "buttonSize": "lg",
+  "padding": 40,
+  "borderRadius": 24,
+  "shadow": true
+}
+```
+
+CSS reference variables: `--cream: #faf8f4`, `--ink: #0e1109`, `--text-mid: #4b5249`, `--text-faint: #8a9086`, `--border-light: rgba(14,17,9,0.1)`
+
+### Country Selector
+
+The `country_select` field type renders a searchable dropdown with 183+ countries. Countries are listed **strictly alphabetically** — no priority ordering. The component accepts `inputStyle` and `inputClasses` props from the form widget to match the form's input styling.
+
+### Service Select
+
+The `service_select` field type fetches services from `/api/services/search` and renders a searchable virtualized dropdown. Stores selected value by service `slug`. Also accepts `inputStyle` and `inputClasses` for consistent styling.
+
+### Placeholder Guidelines
+
+Form placeholders should use **neutral/US examples**, not country-specific:
+- Name: `"e.g. John"`, `"e.g. Smith"`
+- Phone: `"+1 (555) 000-0000"`
+- Email: `"your@email.com"`
+
+### Theme data.json Example — Full Form Widget
+
+```json
+{
+  "id": "widget_lead_form_forge",
+  "type": "lead-form",
+  "settings": {
+    "templateSlug": "consultation-form",
+    "title": "Request a Free Consultation",
+    "description": "We'll review your goals and recommend the best plan — no commitment required.",
+    "fields": [ /* ... from template ... */ ],
+    "submitButton": {
+      "text": "Send My Request",
+      "fullWidth": true,
+      "style": {
+        "bgColor": "#e84c1e",
+        "textColor": "#ffffff",
+        "borderRadius": 12,
+        "hoverBgColor": "#c43d17",
+        "hoverEffect": "shadow-lift",
+        "icon": "arrow-right",
+        "iconPosition": "right"
+      }
+    },
+    "footerText": "By submitting this form you agree to our <a href='/privacy-policy'>Privacy Policy</a>.",
+    "successMessage": "Thank you! We'll be in touch within 2 business hours.",
+    "submitTo": "database",
+    "backgroundColor": "#ffffff",
+    "titleColor": "#0e1109",
+    "descriptionColor": "#4b5249",
+    "labelColor": "#4b5249",
+    "inputTextColor": "#0e1109",
+    "inputBgColor": "#faf8f4",
+    "inputBorderColor": "rgba(14,17,9,0.1)",
+    "inputBorderRadius": 10,
+    "placeholderColor": "#8a9086",
+    "labelTextTransform": "uppercase",
+    "labelFontSize": "12px",
+    "labelLetterSpacing": "0.8px",
+    "labelFontWeight": 600,
+    "buttonSize": "lg",
+    "padding": 40,
+    "borderRadius": 24,
+    "shadow": true
+  }
+}
+```
+
+---
+
+## Pre-Footer CTA Section — Complete Reference
+
+### Overview
+
+`sec_cta_forge` — Pre-footer CTA section ("Your US business starts today") with dark forest green background, animated gradient orbs, dot grid overlay, and 3D stacked journey cards.
+
+### Section Layout
+
+```
+┌──────────────────────────────────────────────────────────────────────────┐
+│  Background: #0f2318 (dark forest) + animated orbs + dot grid           │
+│                                                                          │
+│  ┌──────── LEFT (66%) ──────────────┐  ┌───── RIGHT (33%) ─────────────┐│
+│  │                                   │  │                                ││
+│  │  (PS)(AK)(FA)(CO)(DL)            │  │  ┌─ LLC Formation ──────┐     ││
+│  │  1,200+ founders from 30+...     │  │  │ Step 1 — Complete ✓  │     ││
+│  │                                   │  │  │ Wyoming, USA · ...   │     ││
+│  │  Your US business                 │  │  └──────────────────────┘     ││
+│  │  starts today.                    │  │    ┌─ EIN / Tax ID ──────┐   ││
+│  │  ^^^^^^^^^^^^^^^                  │  │    │ Step 2 — Complete ✓ │   ││
+│  │  (coral gradient)                 │  │    └─────────────────────┘   ││
+│  │                                   │  │  ┌─ US Bank Account ────┐   ││
+│  │  LLC filed within 24 hours...     │  │  │ Step 3 — Complete ✓  │   ││
+│  │                                   │  │  └──────────────────────┘   ││
+│  │  [Start My LLC] [See Pricing →]   │  │  (glass-morphism, rotated)  ││
+│  │                                   │  │                                ││
+│  │  🛡Error-Free ✓No Fees ⏰24h ⭐4.9│  │                                ││
+│  └───────────────────────────────────┘  └────────────────────────────────┘│
+└──────────────────────────────────────────────────────────────────────────┘
+```
+
+### Widgets Used
+
+| Widget | Type | Purpose |
+|--------|------|---------|
+| `widget_cta_hero` | `hero-content` | Left column — avatars, heading, subtitle, 2 CTA buttons |
+| `widget_cta_trust` | `custom-html` | Left column — 4 trust badges with SVG icons |
+| `widget_cta_cards` | `custom-html` | Right column — 3 stacked glass-morphism journey cards |
+
+### Section Settings
+
+| Setting | Value | Notes |
+|---------|-------|-------|
+| Layout | `"2-1"` | 66/33 split |
+| Background | Solid `#0f2318` | Dark forest green |
+| paddingTop | 110 | |
+| paddingBottom | 100 | |
+| paddingLeft / paddingRight | 28 | Standard alignment |
+| maxWidth | `"xl"` | Standard alignment |
+| gap | 60 | Between columns |
+| fullWidth | true | |
+
+### Section customCSS — Background Effects
+
+The section uses `customCSS` for:
+1. **Animated coral orb** (`::before`): 600x600px radial gradient, top-right, 80px blur, 12s float animation
+2. **Animated green orb** (`::after`): 450x450px radial gradient, bottom-left, 60px blur, 10s float animation
+3. **Dot grid overlay** (`.mx-auto::before`): `radial-gradient` dots at 32px spacing, 3.5% opacity
+4. **z-index layering**: Grid content at z-index 2, above background effects
+
+### hero-content Settings (Left Column)
+
+Key differences from the hero section:
+- **Badge**: hidden (`show: false`)
+- **Headline**: cream text (`#faf8f4`), "starts today." highlighted with gradient (`#ff6a3d` → `#ff8a5c`)
+- **Subheadline**: `rgba(250,248,244,0.5)` — semi-transparent cream
+- **Primary button**: Same coral style as hero
+- **Secondary button**: Cream outline (`rgba(250,248,244,0.3)` border, `#faf8f4` text)
+- **Avatar group**: Different initials (PS, AK, FA, CO, DL), text at 45% cream opacity
+- **Spacing**: `buttonsToProof: 36`, `buttonsGap: 14`
+
+### Journey Cards (Right Column) — CSS Classes
+
+| Class | Purpose |
+|-------|---------|
+| `.pfc-cards` | Container with `perspective: 800px`, height 340px |
+| `.pfc-card` | Glass card: `rgba(250,248,244,0.05)` bg, `backdrop-filter: blur(16px)`, 16px radius |
+| `.pfc-card:nth-child(1/2/3)` | Stacked positions with slight rotation (-2deg, 1.2deg, -1deg) |
+| `.pfc-card:hover` | Straightens, lifts 6px, gains shadow |
+| `.pfc-card__title` | Uses `var(--font-heading)`, 16px, weight 800, cream color |
+| `.pfc-card__bar-fill` | Gradient progress bar: `#ff6a3d` → `#4ade80` |
+| `.pfc-card__check` | Green circle with checkmark icon |
+
+### Trust Badges (Left Column Below Buttons)
+
+4 trust items with inline SVG icons:
+1. Shield → "Error-Free Guarantee"
+2. Checkmark → "No Hidden Fees"
+3. Clock → "Filed in 24h"
+4. Star → "4.9/5 Rating"
+
+All at `font-size: 12px`, `font-weight: 600`, `color: rgba(250,248,244,0.3)`.
+
+### Responsive Behavior
+
+- At 640px: Grid collapses to single column, text centers, cards container shrinks to 260px width
+- Trust badges wrap and center
+- Card positions adjust for narrower viewport
+
+### Reference Values (from v3-forge.html)
+
+| Element | Property | Value |
+|---------|----------|-------|
+| Section bg | background | `#0f2318` |
+| Heading | font-size | `clamp(38px, 5vw, 62px)` |
+| Heading | font-weight | 900 |
+| Heading | letter-spacing | `-0.04em` |
+| Gradient text | gradient | `135deg, #ff6a3d → #ff8a5c` |
+| Subtitle | color | `rgba(250,248,244,0.5)` |
+| Button primary | bgColor | `#e84c1e` |
+| Button secondary | borderColor | `rgba(250,248,244,0.3)` |
+| Cards | backdrop-filter | `blur(16px)` |
+| Cards | border | `1px solid rgba(250,248,244,0.08)` |
+| Progress bar | gradient | `90deg, #ff6a3d → #4ade80` |

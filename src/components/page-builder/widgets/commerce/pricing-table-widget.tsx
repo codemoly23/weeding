@@ -386,13 +386,13 @@ function OrderSummary({
             className="w-full font-semibold py-6"
             style={{
               backgroundColor:
-                orderSummary.ctaButton.bgColor || effectiveBgColor,
+                orderSummary.ctaButton?.bgColor || effectiveBgColor,
               color:
-                orderSummary.ctaButton.textColor || ctaButtons.defaultTextColor,
+                orderSummary.ctaButton?.textColor || ctaButtons.defaultTextColor,
             }}
             asChild
           >
-            <Link href={checkoutUrl}>{orderSummary.ctaButton.text}</Link>
+            <Link href={checkoutUrl}>{orderSummary.ctaButton?.text || "Proceed to Checkout"}</Link>
           </Button>
           {checkoutBadgeText && (
             <div className="flex items-center justify-center gap-2 text-xs text-gray-500">
@@ -496,9 +496,9 @@ function MobileOrderSummary({
           className="w-full"
           style={{
             backgroundColor:
-              orderSummary.ctaButton.bgColor || effectiveBgColor,
+              orderSummary.ctaButton?.bgColor || effectiveBgColor,
             color:
-              orderSummary.ctaButton.textColor || ctaButtons.defaultTextColor,
+              orderSummary.ctaButton?.textColor || ctaButtons.defaultTextColor,
           }}
           asChild
         >
@@ -1041,7 +1041,26 @@ export function PricingTableWidget({
   settings: propsSettings,
   isPreview = false,
 }: PricingTableWidgetProps) {
-  const settings = { ...DEFAULT_PRICING_TABLE_SETTINGS, ...propsSettings };
+  const settings = useMemo(() => ({
+    ...DEFAULT_PRICING_TABLE_SETTINGS,
+    ...propsSettings,
+    orderSummary: {
+      ...DEFAULT_PRICING_TABLE_SETTINGS.orderSummary,
+      ...propsSettings.orderSummary,
+      ctaButton: {
+        ...DEFAULT_PRICING_TABLE_SETTINGS.orderSummary.ctaButton,
+        ...propsSettings.orderSummary?.ctaButton,
+      },
+    },
+    ctaButtons: {
+      ...DEFAULT_PRICING_TABLE_SETTINGS.ctaButtons,
+      ...propsSettings.ctaButtons,
+    },
+    dataSource: {
+      ...DEFAULT_PRICING_TABLE_SETTINGS.dataSource,
+      ...propsSettings.dataSource,
+    },
+  }), [propsSettings]);
 
   // Auto mode: resolve slug from ServiceContext
   const serviceContext = useOptionalServiceContext();

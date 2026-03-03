@@ -1,5 +1,6 @@
 "use client";
 
+import { useMemo } from "react";
 import { Button } from "@/components/ui/button";
 import { SmartLink } from "@/components/ui/smart-link";
 import { ArrowRight, ArrowUpRight, Star, CheckCircle } from "lucide-react";
@@ -61,7 +62,8 @@ function getLucideIcon(
 
 export function HeroContentWidget({ settings: rawSettings, isPreview = false }: HeroContentWidgetProps) {
   // Deep merge with defaults to guarantee all properties exist
-  const settings: HeroContentWidgetSettings = {
+  // Wrapped in useMemo to stabilize object reference (Rule 1 & 5)
+  const settings: HeroContentWidgetSettings = useMemo(() => ({
     ...DEFAULT_HERO_CONTENT_SETTINGS,
     ...rawSettings,
     badge: { ...DEFAULT_HERO_CONTENT_SETTINGS.badge, ...rawSettings.badge },
@@ -81,7 +83,7 @@ export function HeroContentWidget({ settings: rawSettings, isPreview = false }: 
       avatars: rawSettings.avatarGroup?.avatars ?? DEFAULT_HERO_CONTENT_SETTINGS.avatarGroup!.avatars,
     },
     spacing: { ...rawSettings.spacing },
-  };
+  }), [rawSettings]);
 
   // Theme-aware accent color
   const useTheme = rawSettings.colors?.useTheme !== false;
@@ -90,7 +92,10 @@ export function HeroContentWidget({ settings: rawSettings, isPreview = false }: 
   const accentBorder = useTheme ? "color-mix(in srgb, var(--color-primary) 30%, transparent)" : undefined;
 
   // Helper to check if color is hex
-  const isHexColor = (color?: string) => color?.startsWith("#");
+  const isCssColor = (color?: string) =>
+    color?.startsWith("#") || color?.startsWith("rgb") || color?.startsWith("hsl") || color?.startsWith("var(");
+  // Keep isHexColor as alias for backward compat within this file
+  const isHexColor = isCssColor;
 
   // Parse underline words list
   const underlineWords = settings.headline.underlineWords
@@ -679,7 +684,9 @@ export function HeroContentWidget({ settings: rawSettings, isPreview = false }: 
             marginBottom: settings.spacing?.subToButtons ? `${settings.spacing.subToButtons}px` : undefined,
           }}
         >
-          {settings.subheadline.text}
+          {/<[a-z][\s\S]*>/i.test(settings.subheadline.text)
+            ? <span dangerouslySetInnerHTML={{ __html: settings.subheadline.text }} />
+            : settings.subheadline.text}
         </p>
       )}
 

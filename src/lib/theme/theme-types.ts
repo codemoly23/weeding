@@ -312,6 +312,28 @@ export interface ThemeFormTemplate {
   version: number;
 }
 
+// ---- Lead Form Templates ----
+
+export interface ThemeLeadFormTemplate {
+  slug: string;
+  name: string;
+  description?: string;
+  fields: Array<{
+    id: string;
+    type: string;
+    name: string;
+    label: string;
+    placeholder?: string;
+    required: boolean;
+    options?: string[];
+    mapToLeadField?: string;
+    width?: "full" | "half";
+  }>;
+  successMessage?: string;
+  successRedirect?: string;
+  defaultStyling?: Record<string, unknown>;
+}
+
 // ---- Locations ----
 
 export interface ThemeLocation {
@@ -391,6 +413,7 @@ export interface ThemeData {
   locations?: ThemeLocation[];
   locationFees?: ThemeLocationFee[];
   tickers?: ThemeTicker[];
+  leadFormTemplates?: ThemeLeadFormTemplate[];
 }
 
 // ---- API Response Types ----
@@ -419,6 +442,7 @@ export interface ImportResult {
     footerWidgets: number;
     locationFees: number;
     tickers: number;
+    leadFormTemplates: number;
   };
   themeId?: string;
   duration: number; // ms

@@ -23,7 +23,7 @@ import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Button } from "@/components/ui/button";
 import { StyledButton } from "@/components/ui/styled-button";
-import { CheckCircle, Send, Search, ChevronDown, Check } from "lucide-react";
+import { CheckCircle, Search, ChevronDown, Check } from "lucide-react";
 import { trackLeadFormSubmit } from "@/lib/tracking-events";
 import { CountrySelector } from "@/components/ui/country-selector";
 
@@ -60,14 +60,6 @@ function groupFieldsByWidth(
   return result;
 }
 
-// Button icon mapping
-const BUTTON_ICONS: Record<
-  string,
-  React.ComponentType<{ className?: string }>
-> = {
-  Send,
-};
-
 // --- ServiceSelectField sub-component (virtualized + searchable) ---
 interface ServiceOption {
   id: string;
@@ -83,14 +75,14 @@ function ServiceSelectField({
   value,
   onChange,
   disabled,
-  inputTextColor,
+  inputStyle,
   inputClasses,
 }: {
   field: LeadFormField;
   value: string;
   onChange: (value: string) => void;
   disabled?: boolean;
-  inputTextColor?: string;
+  inputStyle: React.CSSProperties;
   inputClasses: string;
 }) {
   const [services, setServices] = useState<ServiceOption[]>([]);
@@ -198,11 +190,12 @@ function ServiceSelectField({
         onClick={() => !disabled && !loading && setIsOpen(!isOpen)}
         disabled={disabled || loading}
         className={cn(
+          "h-10 w-full rounded-md border px-3 py-2 text-sm",
           inputClasses,
           "flex items-center justify-between text-left",
           "disabled:cursor-not-allowed disabled:opacity-50"
         )}
-        style={{ color: inputTextColor || "#ffffff" }}
+        style={inputStyle}
       >
         <span className={cn("truncate", !selectedService && "opacity-60")}>
           {loading
@@ -353,6 +346,15 @@ export function LeadFormWidget({
     buttonAlignment,
     buttonGap,
     buttonWidth,
+    inputBgColor,
+    inputBorderColor,
+    inputBorderRadius,
+    placeholderColor,
+    labelTextTransform,
+    labelFontSize,
+    labelLetterSpacing,
+    labelFontWeight,
+    buttonSize,
   } = settings;
 
   // Container gradient background → apply directly to form div
@@ -377,32 +379,56 @@ export function LeadFormWidget({
     : containerSolidBg || backgroundColor || "transparent";
 
   // Strip background from container passed to WidgetContainer (form handles it)
-  const widgetContainerSettings = settings.container
+  const widgetContainerSettings = useMemo(() => settings.container
     ? {
         ...settings.container,
         backgroundType: "solid" as const,
         backgroundColor: undefined,
         gradientBackground: undefined,
       }
-    : settings.container;
+    : settings.container, [settings.container]);
 
   // Adaptive input styling based on effective background color
   const effectiveBgColor = hasContainerGradientBg
     ? containerGradientColors![0]
     : containerSolidBg || backgroundColor || "#1e293b";
   const lightBg = isLightColor(effectiveBgColor);
-  const inputClasses = lightBg
-    ? "bg-gray-50/50 border-gray-200 placeholder:text-gray-400 focus:border-primary focus:ring-primary"
-    : "bg-slate-800/50 border-slate-700 placeholder:text-slate-500 focus:border-primary focus:ring-primary";
-  const selectTriggerClasses = lightBg
-    ? "bg-gray-50/50 border-gray-200"
-    : "bg-slate-800/50 border-slate-700";
-  const radioCheckboxBorder = lightBg ? "border-gray-300" : "border-slate-600";
 
-  // Resolve button icon
-  const ButtonIcon = submitButton.icon
-    ? BUTTON_ICONS[submitButton.icon]
-    : null;
+  // Use explicit settings when provided, fall back to auto-detect light/dark
+  const hasCustomInput = !!(inputBgColor || inputBorderColor);
+  const inputClasses = hasCustomInput
+    ? "border focus:border-primary focus:ring-primary"
+    : lightBg
+      ? "bg-gray-50/50 border-gray-200 placeholder:text-gray-400 focus:border-primary focus:ring-primary"
+      : "bg-slate-800/50 border-slate-700 placeholder:text-slate-500 focus:border-primary focus:ring-primary";
+  const selectTriggerClasses = hasCustomInput
+    ? "border"
+    : lightBg
+      ? "bg-gray-50/50 border-gray-200"
+      : "bg-slate-800/50 border-slate-700";
+  const radioCheckboxBorder = hasCustomInput
+    ? ""
+    : lightBg ? "border-gray-300" : "border-slate-600";
+
+  // Shared inline styles for all input/select/textarea elements
+  const inputInlineStyle: React.CSSProperties = useMemo(() => ({
+    color: inputTextColor || (lightBg ? "#0e1109" : "#ffffff"),
+    ...(inputBgColor ? { backgroundColor: inputBgColor } : {}),
+    ...(inputBorderColor ? { borderColor: inputBorderColor } : {}),
+    ...(inputBorderRadius != null ? { borderRadius: `${inputBorderRadius}px` } : {}),
+  }), [inputTextColor, lightBg, inputBgColor, inputBorderColor, inputBorderRadius]);
+
+  // Stable unique ID for scoped placeholder color styling
+  const formId = useMemo(() => `lf_${Math.random().toString(36).slice(2, 8)}`, []);
+
+  // Merge legacy submitButton.icon into style.icon for backward compatibility
+  const buttonStyle = useMemo(() => submitButton.style
+    ? submitButton.icon && !submitButton.style.icon
+      ? { ...submitButton.style, icon: submitButton.icon.toLowerCase(), iconPosition: submitButton.style.iconPosition || "right" as const }
+      : submitButton.style
+    : submitButton.icon
+      ? { icon: submitButton.icon.toLowerCase(), iconPosition: "right" as const }
+      : undefined, [submitButton.style, submitButton.icon]);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -542,7 +568,7 @@ export function LeadFormWidget({
             required={field.required}
             disabled={isPreview || isSubmitting}
             className={inputClasses}
-            style={{ color: inputTextColor || "#ffffff" }}
+            style={inputInlineStyle}
           />
         );
       case "email":
@@ -555,7 +581,7 @@ export function LeadFormWidget({
             required={field.required}
             disabled={isPreview || isSubmitting}
             className={inputClasses}
-            style={{ color: inputTextColor || "#ffffff" }}
+            style={inputInlineStyle}
           />
         );
       case "phone":
@@ -568,7 +594,7 @@ export function LeadFormWidget({
             required={field.required}
             disabled={isPreview || isSubmitting}
             className={inputClasses}
-            style={{ color: inputTextColor || "#ffffff" }}
+            style={inputInlineStyle}
           />
         );
       case "number":
@@ -581,7 +607,7 @@ export function LeadFormWidget({
             required={field.required}
             disabled={isPreview || isSubmitting}
             className={inputClasses}
-            style={{ color: inputTextColor || "#ffffff" }}
+            style={inputInlineStyle}
           />
         );
       case "date":
@@ -593,7 +619,7 @@ export function LeadFormWidget({
             required={field.required}
             disabled={isPreview || isSubmitting}
             className={inputClasses}
-            style={{ color: inputTextColor || "#ffffff" }}
+            style={inputInlineStyle}
           />
         );
       case "textarea":
@@ -606,7 +632,7 @@ export function LeadFormWidget({
             disabled={isPreview || isSubmitting}
             rows={4}
             className={cn(inputClasses, "resize-none")}
-            style={{ color: inputTextColor || "#ffffff" }}
+            style={inputInlineStyle}
           />
         );
       case "select":
@@ -620,7 +646,7 @@ export function LeadFormWidget({
           >
             <SelectTrigger
               className={selectTriggerClasses}
-              style={{ color: inputTextColor || "#ffffff" }}
+              style={inputInlineStyle}
             >
               <SelectValue
                 placeholder={field.placeholder || "Select..."}
@@ -655,7 +681,7 @@ export function LeadFormWidget({
                 <Label
                   htmlFor={`${field.id}_${idx}`}
                   className="text-sm font-normal cursor-pointer"
-                  style={{ color: inputTextColor || "#ffffff" }}
+                  style={{ color: inputInlineStyle.color }}
                 >
                   {option}
                 </Label>
@@ -692,7 +718,7 @@ export function LeadFormWidget({
                   <Label
                     htmlFor={`${field.id}_${idx}`}
                     className="text-sm font-normal cursor-pointer"
-                    style={{ color: inputTextColor || "#ffffff" }}
+                    style={{ color: inputInlineStyle.color }}
                   >
                     {option}
                   </Label>
@@ -710,6 +736,8 @@ export function LeadFormWidget({
             }
             placeholder={field.placeholder || "Select your country"}
             disabled={isPreview || isSubmitting}
+            inputStyle={inputInlineStyle}
+            inputClasses={selectTriggerClasses}
           />
         );
       case "service_select":
@@ -721,7 +749,7 @@ export function LeadFormWidget({
               setSelectValues((prev) => ({ ...prev, [field.name]: value }))
             }
             disabled={isPreview || isSubmitting}
-            inputTextColor={inputTextColor}
+            inputStyle={inputInlineStyle}
             inputClasses={selectTriggerClasses}
           />
         );
@@ -730,13 +758,25 @@ export function LeadFormWidget({
     }
   };
 
+  // Label style object
+  const labelStyle: React.CSSProperties = useMemo(() => ({
+    color: labelColor || (lightBg ? "#334155" : "#e2e8f0"),
+    ...(labelTextTransform && labelTextTransform !== "none" ? { textTransform: labelTextTransform } : {}),
+    ...(labelFontSize ? { fontSize: labelFontSize } : {}),
+    ...(labelLetterSpacing ? { letterSpacing: labelLetterSpacing } : {}),
+    ...(labelFontWeight ? { fontWeight: labelFontWeight } : {}),
+  }), [labelColor, lightBg, labelTextTransform, labelFontSize, labelLetterSpacing, labelFontWeight]);
+
   // Render a single field with label + input
   const renderField = (field: LeadFormField) => (
     <div key={field.id} className="space-y-1.5">
       <Label
         htmlFor={field.id}
-        className="text-sm font-medium"
-        style={{ color: labelColor || "#e2e8f0" }}
+        className={cn(
+          !labelFontSize && "text-sm",
+          !labelFontWeight && "font-medium",
+        )}
+        style={labelStyle}
       >
         {field.label}
         {field.required && <span className="text-red-500 ml-1">*</span>}
@@ -795,7 +835,11 @@ export function LeadFormWidget({
 
   return (
     <WidgetContainer container={widgetContainerSettings}>
+    {placeholderColor && (
+      <style dangerouslySetInnerHTML={{ __html: `[data-form-id="${formId}"] input::placeholder, [data-form-id="${formId}"] textarea::placeholder { color: ${placeholderColor} !important; }` }} />
+    )}
     <div
+      data-form-id={formId}
       className={cn(
         "w-full",
         shadow && "shadow-lg",
@@ -869,20 +913,22 @@ export function LeadFormWidget({
           )}
           style={{ gap: `${buttonGap ?? 12}px` }}
         >
-          <div style={buttonWidth && buttonWidth > 0 ? { width: `${buttonWidth}px` } : undefined}>
+          <div
+            className={cn(submitButton.fullWidth && "w-full")}
+            style={buttonWidth && buttonWidth > 0 ? { width: `${buttonWidth}px` } : undefined}
+          >
             <StyledButton
               as="button"
               type="submit"
-              style={submitButton.style}
+              style={buttonStyle}
               disabled={isPreview || isSubmitting}
               loading={isSubmitting}
               loadingText="Submitting..."
               fullWidth={buttonLayout === "stacked" || submitButton.fullWidth || (buttonWidth !== undefined && buttonWidth > 0)}
-              size="md"
+              size={buttonSize || "md"}
               isPreview={isPreview}
             >
               {submitButton.text}
-              {ButtonIcon && <ButtonIcon className="ml-2 h-4 w-4" />}
             </StyledButton>
           </div>
         </div>

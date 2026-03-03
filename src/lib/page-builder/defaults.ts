@@ -432,6 +432,18 @@ export const DEFAULT_LEAD_FORM_SETTINGS: LeadFormWidgetSettings = {
   padding: 24,
   borderRadius: 12,
   shadow: true,
+  // Input Styling (undefined = auto-detect from background)
+  inputBgColor: undefined,
+  inputBorderColor: undefined,
+  inputBorderRadius: undefined,
+  placeholderColor: undefined,
+  // Label Styling (undefined = inherit defaults)
+  labelTextTransform: "none",
+  labelFontSize: undefined,
+  labelLetterSpacing: undefined,
+  labelFontWeight: undefined,
+  // Button
+  buttonSize: "md",
   // Container Style
   container: DEFAULT_WIDGET_CONTAINER,
 };

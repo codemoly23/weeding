@@ -5397,22 +5397,32 @@
                         "submitTo": "database",
                         "footerText": "By submitting this form, you agree to our <a href=\"/privacy-policy\" style=\"color: #f97316; text-decoration: underline\">Privacy Policy</a>.",
                         "labelColor": "#334155",
-                        "templateId": "cmljg4asi0000gsc727yrseah",
+                        "templateSlug": "contact-form",
                         "titleColor": "#0f172a",
                         "description": "",
                         "borderRadius": 12,
                         "submitButton": {
-                          "icon": "Send",
                           "text": "Send Message",
                           "style": {
                             "bgColor": "#f97316",
                             "textColor": "#ffffff",
                             "hoverEffect": "darken",
-                            "borderRadius": 8
+                            "borderRadius": 8,
+                            "icon": "send",
+                            "iconPosition": "right"
                           },
                           "fullWidth": true
                         },
                         "inputTextColor": "#0f172a",
+                        "inputBgColor": "#faf8f4",
+                        "inputBorderColor": "rgba(14,17,9,0.1)",
+                        "inputBorderRadius": 10,
+                        "placeholderColor": "#8a9086",
+                        "labelTextTransform": "uppercase",
+                        "labelFontSize": "12px",
+                        "labelLetterSpacing": "0.8px",
+                        "labelFontWeight": 600,
+                        "buttonSize": "lg",
                         "successMessage": "Thank you for reaching out! We'll get back to you within 24 hours.",
                         "backgroundColor": "#ffffff",
                         "descriptionColor": "#64748b"
@@ -6989,6 +6999,7 @@
                       "id": "widget_lead_form_forge",
                       "type": "lead-form",
                       "settings": {
+                        "templateSlug": "consultation-form",
                         "title": "Request a Free Consultation",
                         "description": "We'll review your goals and recommend the best plan — no commitment required.",
                         "fields": [
@@ -6997,7 +7008,7 @@
                             "type": "text",
                             "name": "firstName",
                             "label": "First Name",
-                            "placeholder": "e.g. Rahim",
+                            "placeholder": "e.g. John",
                             "required": true,
                             "width": "half",
                             "mapToLeadField": "firstName"
@@ -7007,7 +7018,7 @@
                             "type": "text",
                             "name": "lastName",
                             "label": "Last Name",
-                            "placeholder": "e.g. Miah",
+                            "placeholder": "e.g. Smith",
                             "required": false,
                             "width": "half",
                             "mapToLeadField": "lastName"
@@ -7027,7 +7038,7 @@
                             "type": "phone",
                             "name": "phone",
                             "label": "Phone / WhatsApp",
-                            "placeholder": "+880 1700 000000",
+                            "placeholder": "+1 (555) 000-0000",
                             "required": false,
                             "width": "half",
                             "mapToLeadField": "phone"
@@ -7065,13 +7076,15 @@
                         ],
                         "submitButton": {
                           "text": "Send My Request",
-                          "icon": "Send",
                           "fullWidth": true,
                           "style": {
                             "bgColor": "#e84c1e",
                             "textColor": "#ffffff",
                             "borderRadius": 12,
-                            "hoverBgColor": "#c43d17"
+                            "hoverBgColor": "#c43d17",
+                            "hoverEffect": "shadow-lift",
+                            "icon": "arrow-right",
+                            "iconPosition": "right"
                           }
                         },
                         "successMessage": "Thank you! We'll be in touch within 2 business hours.",
@@ -7080,8 +7093,17 @@
                         "backgroundColor": "#ffffff",
                         "titleColor": "#0e1109",
                         "descriptionColor": "#4b5249",
-                        "labelColor": "#5c615a",
+                        "labelColor": "#4b5249",
                         "inputTextColor": "#0e1109",
+                        "inputBgColor": "#faf8f4",
+                        "inputBorderColor": "rgba(14,17,9,0.1)",
+                        "inputBorderRadius": 10,
+                        "placeholderColor": "#8a9086",
+                        "labelTextTransform": "uppercase",
+                        "labelFontSize": "12px",
+                        "labelLetterSpacing": "0.8px",
+                        "labelFontWeight": 600,
+                        "buttonSize": "lg",
                         "padding": 40,
                         "borderRadius": 24,
                         "shadow": true
@@ -7111,6 +7133,159 @@
                 "visibleOnMobile": true,
                 "visibleOnDesktop": true,
                 "customCSS": "@media (min-width: 1024px) { & .grid { grid-template-columns: 1fr 1.1fr; align-items: flex-start; } } @media (max-width: 767px) { & .grid { gap: 48px; } }"
+              }
+            },
+            {
+              "id": "sec_cta_forge",
+              "order": 11,
+              "layout": "2-1",
+              "columns": [
+                {
+                  "id": "col_cta_left",
+                  "widgets": [
+                    {
+                      "id": "widget_cta_hero",
+                      "type": "hero-content",
+                      "settings": {
+                        "badge": {
+                          "show": false
+                        },
+                        "headline": {
+                          "text": "Your US business\\nstarts today.",
+                          "highlightWords": "starts today.",
+                          "highlightColor": "#ff6a3d",
+                          "highlightGradient": {
+                            "enabled": true,
+                            "from": "#ff6a3d",
+                            "to": "#ff8a5c",
+                            "angle": 135
+                          },
+                          "size": "2xl",
+                          "customFontSize": "clamp(38px, 5vw, 62px)",
+                          "color": "#faf8f4",
+                          "fontWeight": 900,
+                          "letterSpacing": "-0.04em",
+                          "lineHeight": 1.05
+                        },
+                        "subheadline": {
+                          "text": "<strong>LLC filed within 24 hours.</strong> EIN, bank account & compliance — all handled remotely, step by step. No US travel, no hidden fees.",
+                          "show": true,
+                          "size": "md",
+                          "color": "rgba(250,248,244,0.5)",
+                          "lineHeight": 1.75,
+                          "maxWidth": 460
+                        },
+                        "features": {
+                          "show": false,
+                          "items": [],
+                          "columns": 3,
+                          "iconColor": "#22c55e",
+                          "iconPosition": "left",
+                          "layout": "list"
+                        },
+                        "primaryButton": {
+                          "show": true,
+                          "text": "Start My LLC — Free Consultation",
+                          "link": "/contact",
+                          "openInNewTab": false,
+                          "style": {
+                            "bgColor": "#e84c1e",
+                            "textColor": "#ffffff",
+                            "borderRadius": 10,
+                            "borderWidth": 0,
+                            "borderColor": "#e84c1e",
+                            "hoverBgColor": "#d13d10",
+                            "hoverShadow": "0 8px 32px rgba(232,76,30,0.35)",
+                            "hoverEffect": "default"
+                          }
+                        },
+                        "secondaryButton": {
+                          "show": true,
+                          "text": "See Pricing →",
+                          "link": "/pricing",
+                          "openInNewTab": false,
+                          "style": {
+                            "bgColor": "transparent",
+                            "textColor": "#faf8f4",
+                            "borderRadius": 10,
+                            "borderWidth": 1.5,
+                            "borderColor": "rgba(250,248,244,0.3)",
+                            "hoverBgColor": "rgba(250,248,244,0.1)",
+                            "hoverBorderColor": "rgba(250,248,244,0.6)",
+                            "hoverEffect": "default"
+                          }
+                        },
+                        "trustText": {
+                          "show": false,
+                          "rating": 4.9,
+                          "text": "",
+                          "textColor": "#9ca3af",
+                          "starColor": "#facc15"
+                        },
+                        "avatarGroup": {
+                          "show": false
+                        },
+                        "alignment": "left",
+                        "spacing": {
+                          "badgeToHeadline": 0,
+                          "headlineToSub": 20,
+                          "subToButtons": 36,
+                          "buttonsToProof": 36,
+                          "buttonsGap": 14
+                        },
+                        "colors": {
+                          "useTheme": false
+                        }
+                      }
+                    },
+                    {
+                      "id": "widget_cta_trust",
+                      "type": "custom-html",
+                      "settings": {
+                        "html": "<div class=\"pfc-trust\"><span><svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\"><path d=\"M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z\"/></svg>Error-Free Guarantee</span><span><svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\"><path d=\"M20 6L9 17l-5-5\"/></svg>No Hidden Fees</span><span><svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\"><circle cx=\"12\" cy=\"12\" r=\"10\"/><polyline points=\"12 6 12 12 16 14\"/></svg>Filed in 24h</span><span><svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\"><path d=\"M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z\"/></svg>4.9/5 Rating</span></div>",
+                        "css": ".pfc-trust{display:flex;gap:20px;flex-wrap:wrap}.pfc-trust span{font-size:12px;color:rgba(250,248,244,0.3);font-weight:600;display:flex;align-items:center;gap:5px}.pfc-trust svg{width:13px;height:13px;flex-shrink:0}@media(max-width:640px){.pfc-trust{justify-content:center}}"
+                      }
+                    }
+                  ],
+                  "settings": {
+                    "verticalAlign": "center"
+                  }
+                },
+                {
+                  "id": "col_cta_right",
+                  "widgets": [
+                    {
+                      "id": "widget_cta_cards",
+                      "type": "custom-html",
+                      "settings": {
+                        "html": "<div class=\"pfc-cards\"><div class=\"pfc-card\"><div class=\"pfc-card__top\"><span class=\"pfc-card__step\">Step 1 — Complete</span><div class=\"pfc-card__check\"><svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"3\"><path d=\"M20 6L9 17l-5-5\"/></svg></div></div><div class=\"pfc-card__title\">LLC Formation</div><div class=\"pfc-card__detail\">Wyoming, USA · Articles of Organization filed</div><div class=\"pfc-card__bar\"><div class=\"pfc-card__bar-fill\"></div></div></div><div class=\"pfc-card\"><div class=\"pfc-card__top\"><span class=\"pfc-card__step\">Step 2 — Complete</span><div class=\"pfc-card__check\"><svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"3\"><path d=\"M20 6L9 17l-5-5\"/></svg></div></div><div class=\"pfc-card__title\">EIN / Tax ID</div><div class=\"pfc-card__detail\">IRS Approved · No SSN required</div><div class=\"pfc-card__bar\"><div class=\"pfc-card__bar-fill\"></div></div></div><div class=\"pfc-card\"><div class=\"pfc-card__top\"><span class=\"pfc-card__step\">Step 3 — Complete</span><div class=\"pfc-card__check\"><svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"3\"><path d=\"M20 6L9 17l-5-5\"/></svg></div></div><div class=\"pfc-card__title\">US Bank Account</div><div class=\"pfc-card__detail\">Mercury Business · 100% online setup</div><div class=\"pfc-card__bar\"><div class=\"pfc-card__bar-fill\"></div></div></div></div>",
+                        "css": ".pfc-cards{position:relative;height:340px;perspective:800px}.pfc-card{position:absolute;width:300px;background:rgba(250,248,244,0.05);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border:1px solid rgba(250,248,244,0.08);border-radius:16px;padding:20px 22px;transition:transform .5s cubic-bezier(.4,0,.2,1),box-shadow .4s,border-color .3s}.pfc-card:nth-child(1){top:0;left:10px;transform:rotate(-2deg);z-index:3}.pfc-card:nth-child(2){top:90px;left:50px;transform:rotate(1.2deg);z-index:2}.pfc-card:nth-child(3){top:180px;left:24px;transform:rotate(-1deg);z-index:1}.pfc-card:hover{transform:rotate(0deg) translateY(-6px) !important;box-shadow:0 20px 48px rgba(0,0,0,0.25);border-color:rgba(250,248,244,0.15);z-index:10}.pfc-card__top{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}.pfc-card__step{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:rgba(250,248,244,0.3)}.pfc-card__check{width:22px;height:22px;border-radius:50%;background:rgba(74,222,128,0.15);display:flex;align-items:center;justify-content:center}.pfc-card__check svg{width:12px;height:12px;color:#4ade80}.pfc-card__title{font-family:var(--font-heading);font-size:16px;font-weight:800;color:#faf8f4;letter-spacing:-0.01em;margin-bottom:4px}.pfc-card__detail{font-size:12px;color:rgba(250,248,244,0.4);font-weight:500}.pfc-card__bar{height:3px;border-radius:2px;background:rgba(250,248,244,0.06);margin-top:12px;overflow:hidden}.pfc-card__bar-fill{height:100%;border-radius:2px;background:linear-gradient(90deg,#ff6a3d,#4ade80);width:100%}@media(max-width:640px){.pfc-cards{height:260px;max-width:300px;margin:0 auto}.pfc-card{width:260px;padding:16px 18px}.pfc-card:nth-child(1){left:5px;top:0}.pfc-card:nth-child(2){left:20px;top:75px}.pfc-card:nth-child(3){left:10px;top:150px}}"
+                      }
+                    }
+                  ],
+                  "settings": {
+                    "verticalAlign": "center"
+                  }
+                }
+              ],
+              "settings": {
+                "fullWidth": true,
+                "background": {
+                  "type": "solid",
+                  "color": "#0f2318"
+                },
+                "paddingTop": 110,
+                "paddingBottom": 100,
+                "paddingLeft": 28,
+                "paddingRight": 28,
+                "marginTop": 0,
+                "marginBottom": 0,
+                "gap": 60,
+                "maxWidth": "xl",
+                "isVisible": true,
+                "visibleOnMobile": true,
+                "visibleOnDesktop": true,
+                "customCSS": "& { position: relative; overflow: hidden; }\n&::before { content: ''; position: absolute; top: -200px; right: -100px; width: 600px; height: 600px; border-radius: 50%; background: radial-gradient(circle, rgba(232,76,30,0.12), transparent 65%); pointer-events: none; filter: blur(80px); animation: pfcOrb1 12s ease-in-out infinite alternate; }\n&::after { content: ''; position: absolute; bottom: -150px; left: -80px; width: 450px; height: 450px; border-radius: 50%; background: radial-gradient(circle, rgba(27,58,45,0.5), transparent 65%); pointer-events: none; filter: blur(60px); animation: pfcOrb2 10s ease-in-out infinite alternate; }\n@keyframes pfcOrb1 { 0% { transform: translate(0, 0); } 100% { transform: translate(-40px, 30px); } }\n@keyframes pfcOrb2 { 0% { transform: translate(0, 0); } 100% { transform: translate(30px, -20px); } }\n& > .mx-auto::before { content: ''; position: absolute; inset: 0; background-image: radial-gradient(circle, rgba(250,248,244,0.035) 1px, transparent 1px); background-size: 32px 32px; pointer-events: none; z-index: 0; }\n& > .mx-auto { position: relative; }\n& > .mx-auto > .grid { position: relative; z-index: 2; }\n& [data-field-id='subheadline'] strong { color: rgba(250,248,244,0.75); }\n@media(max-width:640px) { & > .mx-auto > .grid { text-align: center; } }"
               }
             }
           ]
@@ -9358,7 +9533,7 @@
               "name": "ownerPhone",
               "label": "Phone Number",
               "type": "PHONE",
-              "placeholder": "+880 1XXX XXXXXX",
+              "placeholder": "+1 (555) XXX-XXXX",
               "required": true,
               "width": "HALF",
               "helpText": "Include country code for international numbers"
@@ -10716,6 +10891,156 @@
       "type": "STATE",
       "sortOrder": 50,
       "isPopular": true
+    }
+  ],
+  "leadFormTemplates": [
+    {
+      "slug": "consultation-form",
+      "name": "Consultation Request Form",
+      "description": "Homepage lead capture form for free consultation requests",
+      "fields": [
+        {
+          "id": "cf_firstName",
+          "type": "text",
+          "name": "firstName",
+          "label": "First Name",
+          "placeholder": "e.g. John",
+          "required": true,
+          "width": "half",
+          "mapToLeadField": "firstName"
+        },
+        {
+          "id": "cf_lastName",
+          "type": "text",
+          "name": "lastName",
+          "label": "Last Name",
+          "placeholder": "e.g. Smith",
+          "required": false,
+          "width": "half",
+          "mapToLeadField": "lastName"
+        },
+        {
+          "id": "cf_email",
+          "type": "email",
+          "name": "email",
+          "label": "Email Address",
+          "placeholder": "your@email.com",
+          "required": true,
+          "width": "full",
+          "mapToLeadField": "email"
+        },
+        {
+          "id": "cf_phone",
+          "type": "phone",
+          "name": "phone",
+          "label": "Phone / WhatsApp",
+          "placeholder": "+1 (555) 000-0000",
+          "required": false,
+          "width": "half",
+          "mapToLeadField": "phone"
+        },
+        {
+          "id": "cf_country",
+          "type": "country_select",
+          "name": "country",
+          "label": "Your Country",
+          "placeholder": "Select country...",
+          "required": false,
+          "width": "half",
+          "mapToLeadField": "country"
+        },
+        {
+          "id": "cf_service",
+          "type": "service_select",
+          "name": "service",
+          "label": "Service I'm Interested In",
+          "placeholder": "Select a service...",
+          "required": false,
+          "width": "full",
+          "mapToLeadField": "interestedIn"
+        },
+        {
+          "id": "cf_message",
+          "type": "textarea",
+          "name": "message",
+          "label": "Tell us about your business goals (optional)",
+          "placeholder": "e.g. I want to sell on Amazon and need an LLC with a bank account...",
+          "required": false,
+          "width": "full",
+          "mapToLeadField": "message"
+        }
+      ],
+      "successMessage": "Thank you! We'll be in touch within 2 business hours."
+    },
+    {
+      "slug": "contact-form",
+      "name": "Contact Page Form",
+      "description": "General contact/inquiry form for the contact page",
+      "fields": [
+        {
+          "id": "contact_firstName",
+          "type": "text",
+          "name": "firstName",
+          "label": "First Name",
+          "placeholder": "John",
+          "required": true,
+          "width": "half",
+          "mapToLeadField": "firstName"
+        },
+        {
+          "id": "contact_lastName",
+          "type": "text",
+          "name": "lastName",
+          "label": "Last Name",
+          "placeholder": "Doe",
+          "required": true,
+          "width": "half",
+          "mapToLeadField": "lastName"
+        },
+        {
+          "id": "contact_email",
+          "type": "email",
+          "name": "email",
+          "label": "Email",
+          "placeholder": "john@example.com",
+          "required": true,
+          "width": "half",
+          "mapToLeadField": "email"
+        },
+        {
+          "id": "contact_phone",
+          "type": "phone",
+          "name": "phone",
+          "label": "Phone (Optional)",
+          "placeholder": "+1 234 567 890",
+          "required": false,
+          "width": "half",
+          "mapToLeadField": "phone"
+        },
+        {
+          "id": "contact_subject",
+          "type": "select",
+          "name": "subject",
+          "label": "Subject",
+          "placeholder": "Select a subject",
+          "required": true,
+          "options": [
+            "General Inquiry",
+            "Existing Order Support",
+            "Partnership Opportunity"
+          ]
+        },
+        {
+          "id": "contact_message",
+          "type": "textarea",
+          "name": "message",
+          "label": "Message",
+          "placeholder": "Tell us how we can help you...",
+          "required": true,
+          "mapToLeadField": "message"
+        }
+      ],
+      "successMessage": "Thank you for reaching out! We'll get back to you within 24 hours."
     }
   ]
 }

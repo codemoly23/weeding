@@ -287,6 +287,31 @@ export function LeadFormWidgetSettingsPanel({
             checked={settings.submitButton.fullWidth}
             onChange={(checked) => updateSubmitButton("fullWidth", checked)}
           />
+          <SelectInput
+            label="Button Size"
+            value={settings.buttonSize || "md"}
+            onChange={(v) => updateField("buttonSize", v as "sm" | "md" | "lg")}
+            options={[
+              { value: "sm", label: "Small" },
+              { value: "md", label: "Medium" },
+              { value: "lg", label: "Large" },
+            ]}
+          />
+        </div>
+      </AccordionSection>
+
+      {/* Footer Text */}
+      <AccordionSection title="Footer Text">
+        <div className="space-y-3">
+          <TextInput
+            label="Footer Text (HTML)"
+            value={settings.footerText || ""}
+            onChange={(v) => updateField("footerText", v || undefined)}
+            placeholder='By submitting this form, you agree to our <a href="/privacy-policy">Privacy Policy</a>.'
+          />
+          <p className="text-[10px] text-muted-foreground">
+            Supports HTML. Use &lt;a href=&quot;...&quot;&gt; for links.
+          </p>
         </div>
       </AccordionSection>
 
@@ -425,6 +450,72 @@ export function LeadFormWidgetSettingsPanel({
             label="Shadow"
             checked={settings.shadow}
             onChange={(checked) => updateField("shadow", checked)}
+          />
+        </div>
+      </AccordionSection>
+
+      {/* Input Style */}
+      <AccordionSection title="Input Style">
+        <div className="space-y-3">
+          <ColorInput
+            label="Input Background"
+            value={settings.inputBgColor || ""}
+            onChange={(v) => updateField("inputBgColor", v || undefined)}
+          />
+          <ColorInput
+            label="Input Border Color"
+            value={settings.inputBorderColor || ""}
+            onChange={(v) => updateField("inputBorderColor", v || undefined)}
+          />
+          <NumberInput
+            label="Input Border Radius"
+            value={settings.inputBorderRadius ?? 6}
+            onChange={(v) => updateField("inputBorderRadius", v)}
+            min={0}
+            max={24}
+            step={1}
+            unit="px"
+          />
+          <ColorInput
+            label="Placeholder Color"
+            value={settings.placeholderColor || ""}
+            onChange={(v) => updateField("placeholderColor", v || undefined)}
+          />
+        </div>
+      </AccordionSection>
+
+      {/* Label Style */}
+      <AccordionSection title="Label Style">
+        <div className="space-y-3">
+          <SelectInput
+            label="Text Transform"
+            value={settings.labelTextTransform || "none"}
+            onChange={(v) => updateField("labelTextTransform", v as "none" | "uppercase" | "capitalize")}
+            options={[
+              { value: "none", label: "None" },
+              { value: "uppercase", label: "Uppercase" },
+              { value: "capitalize", label: "Capitalize" },
+            ]}
+          />
+          <TextInput
+            label="Font Size"
+            value={settings.labelFontSize || ""}
+            onChange={(v) => updateField("labelFontSize", v || undefined)}
+            placeholder="e.g. 12px"
+          />
+          <TextInput
+            label="Letter Spacing"
+            value={settings.labelLetterSpacing || ""}
+            onChange={(v) => updateField("labelLetterSpacing", v || undefined)}
+            placeholder="e.g. 0.8px"
+          />
+          <NumberInput
+            label="Font Weight"
+            value={settings.labelFontWeight ?? 500}
+            onChange={(v) => updateField("labelFontWeight", v)}
+            min={300}
+            max={800}
+            step={100}
           />
         </div>
       </AccordionSection>

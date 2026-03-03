@@ -901,6 +901,18 @@ export interface LeadFormWidgetSettings {
   padding: number;
   borderRadius: number;
   shadow: boolean;
+  // Input Styling
+  inputBgColor?: string;
+  inputBorderColor?: string;
+  inputBorderRadius?: number;
+  placeholderColor?: string;
+  // Label Styling
+  labelTextTransform?: "none" | "uppercase" | "capitalize";
+  labelFontSize?: string;
+  labelLetterSpacing?: string;
+  labelFontWeight?: number;
+  // Button Size
+  buttonSize?: "sm" | "md" | "lg";
 
   // Container Style
   container?: WidgetContainerStyle;

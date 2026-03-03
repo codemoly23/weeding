@@ -24,6 +24,7 @@ import type {
   ThemeLocationFee,
   ThemeTicker,
   ThemeSettings,
+  ThemeLeadFormTemplate,
 } from "./theme-types";
 // ============================================
 // HELPER: Convert Prisma Decimal to number
@@ -587,6 +588,57 @@ export async function exportThemeData(): Promise<ThemeData> {
     separator: t.separator,
   }));
 
+  // ---- Lead Form Templates ----
+  const leadFormTemplatesRaw = await prisma.leadFormTemplate.findMany({
+    where: { isSystem: true },
+    orderBy: { createdAt: "asc" },
+  });
+
+  // Build id → slug map for replacing templateId in page widgets
+  const leadFormIdToSlug: Record<string, string> = {};
+
+  const leadFormTemplates: ThemeLeadFormTemplate[] = leadFormTemplatesRaw.map((lft) => {
+    // Derive slug from name (lowercase, hyphenated)
+    const slug = lft.name
+      .toLowerCase()
+      .replace(/[^a-z0-9]+/g, "-")
+      .replace(/^-|-$/g, "");
+    leadFormIdToSlug[lft.id] = slug;
+    return {
+      slug,
+      name: lft.name,
+      description: lft.description ?? undefined,
+      fields: lft.fields as ThemeLeadFormTemplate["fields"],
+      successMessage: lft.successMessage ?? undefined,
+      successRedirect: lft.successRedirect ?? undefined,
+      defaultStyling: lft.defaultStyling
+        ? (lft.defaultStyling as Record<string, unknown>)
+        : undefined,
+    };
+  });
+
+  // Post-process pages: replace templateId with templateSlug in lead-form widgets
+  for (const page of pages) {
+    for (const block of page.blocks) {
+      if (!Array.isArray(block.settings)) continue;
+      for (const section of block.settings as Array<{
+        columns?: Array<{ widgets?: Array<{ type: string; settings?: Record<string, unknown> }> }>;
+      }>) {
+        for (const col of section.columns ?? []) {
+          for (const widget of col.widgets ?? []) {
+            if (widget.type === "lead-form" && widget.settings?.templateId) {
+              const slug = leadFormIdToSlug[widget.settings.templateId as string];
+              if (slug) {
+                widget.settings.templateSlug = slug;
+                delete widget.settings.templateId;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+
   // ---- Final ThemeData ----
   return {
     version: "1.0",
@@ -610,5 +662,6 @@ export async function exportThemeData(): Promise<ThemeData> {
     locations,
     locationFees,
     tickers,
+    leadFormTemplates: leadFormTemplates.length > 0 ? leadFormTemplates : undefined,
   };
 }
