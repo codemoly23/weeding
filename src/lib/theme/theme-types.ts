@@ -188,6 +188,7 @@ export interface ThemeBlogPost {
   coverImage?: string;
   categorySlug?: string;
   published: boolean;
+  publishedAt?: string;
   metaTitle?: string;
   metaDescription?: string;
 }

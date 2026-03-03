@@ -319,8 +319,8 @@ export function LeadFormWidget({
   >({});
   const formRef = useRef<HTMLFormElement>(null);
 
-  // Merge with defaults (deep-merge container so gradient border/bg work)
-  const settings: LeadFormWidgetSettings = {
+  // Memoize merged settings to prevent new object references every render
+  const settings: LeadFormWidgetSettings = useMemo(() => ({
     ...DEFAULT_LEAD_FORM_SETTINGS,
     ...partialSettings,
     container: {
@@ -332,7 +332,7 @@ export function LeadFormWidget({
       },
       gradientBackground: partialSettings?.container?.gradientBackground ?? DEFAULT_WIDGET_CONTAINER.gradientBackground,
     },
-  };
+  }), [partialSettings]);
 
   const {
     title,

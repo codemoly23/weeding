@@ -52,6 +52,8 @@ export function ServiceSelector({
   const loadMoreRef = useRef<HTMLDivElement>(null);
   const dropdownRef = useRef<HTMLDivElement>(null);
   const fetchingRef = useRef(false);
+  const selectedServiceRef = useRef(selectedService);
+  selectedServiceRef.current = selectedService;
   const [dropdownStyle, setDropdownStyle] = useState<React.CSSProperties>({});
 
   // Debounce search input
@@ -102,7 +104,7 @@ export function ServiceSelector({
         setHasInitialLoad(true);
 
         // If we have a value but no selectedService, find it
-        if (value && !selectedService) {
+        if (value && !selectedServiceRef.current) {
           const found = data.services.find((s: Service) => s.slug === value);
           if (found) {
             setSelectedService(found);
@@ -115,7 +117,7 @@ export function ServiceSelector({
         fetchingRef.current = false;
       }
     },
-    [value, selectedService]
+    [value]
   );
 
   // Initial fetch when dropdown opens
@@ -127,10 +129,10 @@ export function ServiceSelector({
 
   // Load selected service on mount if value is provided
   useEffect(() => {
-    if (value && !selectedService) {
+    if (value && !selectedServiceRef.current) {
       fetchServices("", 0, false);
     }
-  }, [value, selectedService, fetchServices]);
+  }, [value, fetchServices]);
 
   // Intersection Observer for infinite scroll
   useEffect(() => {

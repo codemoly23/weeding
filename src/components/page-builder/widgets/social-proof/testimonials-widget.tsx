@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Star, Quote } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -97,30 +97,37 @@ export function StarRating({
 }
 
 export function TestimonialsWidget({ settings: partialSettings, isPreview = false }: TestimonialsWidgetProps) {
-  // Merge with defaults to ensure all required properties exist
-  const settings = deepMerge(DEFAULT_TESTIMONIALS_SETTINGS, partialSettings);
+  // Memoize merged settings to prevent new object reference on every render
+  const settings = useMemo(
+    () => deepMerge(DEFAULT_TESTIMONIALS_SETTINGS, partialSettings),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [JSON.stringify(partialSettings)]
+  );
 
   const [testimonials, setTestimonials] = useState<TestimonialItem[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+
+  // Stable primitive values for useEffect dependency
+  const fetchLimit = settings.dataSource.limit;
+  const fetchSortBy = settings.dataSource.sortBy;
+  const fetchType = settings.dataSource.testimonialType || settings.testimonialType || "all";
+  const fetchTags = settings.dataSource.filterByTags?.join(",") || "";
 
   // Fetch testimonials from database API
   useEffect(() => {
     async function fetchTestimonials() {
       try {
         const params = new URLSearchParams({
-          limit: settings.dataSource.limit.toString(),
-          sortBy: settings.dataSource.sortBy,
+          limit: fetchLimit.toString(),
+          sortBy: fetchSortBy,
         });
 
-        // Add type filter (from dataSource or fallback to widget testimonialType)
-        const typeFilter = settings.dataSource.testimonialType || settings.testimonialType || "all";
-        if (typeFilter && typeFilter !== "all") {
-          params.set("type", typeFilter);
+        if (fetchType && fetchType !== "all") {
+          params.set("type", fetchType);
         }
 
-        // Add tags filter
-        if (settings.dataSource.filterByTags && settings.dataSource.filterByTags.length > 0) {
-          params.set("tags", settings.dataSource.filterByTags.join(","));
+        if (fetchTags) {
+          params.set("tags", fetchTags);
         }
 
         const response = await fetch(`/api/testimonials?${params}`);
@@ -136,7 +143,7 @@ export function TestimonialsWidget({ settings: partialSettings, isPreview = fals
     }
 
     fetchTestimonials();
-  }, [settings.dataSource, settings.testimonialType]);
+  }, [fetchLimit, fetchSortBy, fetchType, fetchTags]);
 
   // Heading size classes
   const headingSizeClasses = {

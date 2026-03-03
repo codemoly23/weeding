@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 import * as LucideIcons from "lucide-react";
 import { Briefcase, ArrowRight, ArrowUpRight } from "lucide-react";
@@ -695,31 +695,40 @@ export function ServiceListWidget({
   // Theme-aware accent color
   const accentColor = settings.colors?.useTheme !== false ? "var(--color-primary)" : undefined;
 
-  // Deep merge with defaults to guarantee all properties exist
-  const filters = {
+  // Memoize merged settings to prevent new object references every render
+  const filters = useMemo(() => ({
     ...DEFAULT_SERVICE_LIST_SETTINGS.filters,
     ...settings.filters,
-  };
-  const layout = {
+  }), [settings.filters]);
+
+  const layout = useMemo(() => ({
     ...DEFAULT_SERVICE_LIST_SETTINGS.layout,
     ...settings.layout,
-  };
-  const responsive = {
+  }), [settings.layout]);
+
+  const responsive = useMemo(() => ({
     tablet: { ...DEFAULT_SERVICE_LIST_SETTINGS.responsive.tablet, ...settings.responsive?.tablet },
     mobile: { ...DEFAULT_SERVICE_LIST_SETTINGS.responsive.mobile, ...settings.responsive?.mobile },
-  };
-  const categoryCard = {
+  }), [settings.responsive?.tablet, settings.responsive?.mobile]);
+
+  const categoryCard = useMemo(() => ({
     ...DEFAULT_SERVICE_LIST_SETTINGS.categoryCard,
     ...settings.categoryCard,
-  };
-  const serviceItem = {
+  }), [settings.categoryCard]);
+
+  const serviceItem = useMemo(() => ({
     ...DEFAULT_SERVICE_LIST_SETTINGS.serviceItem,
     ...settings.serviceItem,
-  };
+  }), [settings.serviceItem]);
 
   const [categories, setCategories] = useState<CategoryData[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+
+  // Stable primitive values for useEffect dependency
+  const showAllCategories = filters.showAllCategories;
+  const activeOnly = filters.activeOnly;
+  const filterCategoriesKey = filters.categories?.join(",") || "";
 
   useEffect(() => {
     async function fetchCategories() {
@@ -737,7 +746,7 @@ export function ServiceListWidget({
 
         // Filter categories if specific ones are selected
         if (
-          !filters.showAllCategories &&
+          !showAllCategories &&
           filters.categories.length > 0
         ) {
           fetchedCategories = fetchedCategories.filter((cat) =>
@@ -746,7 +755,7 @@ export function ServiceListWidget({
         }
 
         // Filter out categories with no services if activeOnly
-        if (filters.activeOnly) {
+        if (activeOnly) {
           fetchedCategories = fetchedCategories.filter(
             (cat) => cat.services.length > 0
           );
@@ -762,11 +771,7 @@ export function ServiceListWidget({
     }
 
     fetchCategories();
-  }, [
-    filters?.showAllCategories,
-    filters?.categories,
-    filters?.activeOnly,
-  ]);
+  }, [showAllCategories, filterCategoriesKey, activeOnly, filters.categories]);
 
   if (loading) {
     return (
