@@ -243,13 +243,13 @@ button{cursor:pointer;font-family:inherit}
 .price-head h2{font-family:'Space Grotesk',sans-serif;font-size:clamp(28px,3.8vw,44px);font-weight:700;color:var(--text-ink);letter-spacing:-0.025em;margin-bottom:14px}
 .price-head p{font-size:16px;color:var(--text-mid);max-width:480px;margin:0 auto}
 
-.prc-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+.prc-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;padding-top:20px}
 .prc{border-radius:20px;padding:36px 28px;background:var(--white);border:1.5px solid var(--border-light);display:flex;flex-direction:column;position:relative;transition:all .4s cubic-bezier(.16,1,.3,1)}
 .prc:hover{transform:translateY(-6px);box-shadow:0 20px 60px rgba(0,0,0,0.08)}
 .prc--blue{border-color:var(--blue);background:linear-gradient(170deg,var(--blue-pale) 0%,var(--white) 50%)}
 .prc--blue:hover{box-shadow:0 20px 60px rgba(37,99,235,0.15);border-color:var(--blue)}
-.prc--blue::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--blue),var(--blue-light));border-radius:20px 20px 0 0}
-.prc__crown{position:absolute;top:-13px;left:50%;transform:translateX(-50%);background:var(--blue);color:#fff;padding:5px 18px;border-radius:999px;font-size:11px;font-weight:700;letter-spacing:.6px;text-transform:uppercase;white-space:nowrap;font-family:'Space Grotesk',sans-serif}
+.prc--blue::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,transparent,var(--blue),var(--blue-light),var(--blue),transparent);border-radius:20px 20px 0 0}
+.prc__crown{position:absolute;top:-14px;left:50%;transform:translateX(-50%);background:var(--blue);color:#fff;padding:5px 18px;border-radius:999px;font-size:11px;font-weight:700;letter-spacing:.6px;text-transform:uppercase;white-space:nowrap;font-family:'Space Grotesk',sans-serif;z-index:2}
 .prc__tier{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1.2px;color:var(--text-faint);margin-bottom:8px}
 .prc__name{font-family:'Space Grotesk',sans-serif;font-size:26px;font-weight:700;color:var(--text-ink);margin-bottom:6px}
 .prc__tagline{font-size:14px;color:var(--text-mid);margin-bottom:28px;line-height:1.4}
@@ -260,6 +260,7 @@ button{cursor:pointer;font-family:inherit}
 .prc__list{list-style:none;flex:1;display:flex;flex-direction:column;gap:2px;margin-bottom:28px}
 .prc__list li{display:flex;align-items:flex-start;gap:10px;padding:7px 0;font-size:14px}
 .prc__list li svg{width:17px;height:17px;flex-shrink:0;margin-top:2px}
+.prc__list .y{color:var(--text-ink)}
 .prc__list .y svg{color:var(--blue)}
 .prc__list .n{color:var(--text-faint);opacity:.6}
 .prc__list .n svg{color:var(--gray-200)}
