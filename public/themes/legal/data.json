@@ -9444,7 +9444,7 @@
     "socialBgStyle": "subtle",
     "paddingTop": 80,
     "paddingBottom": 0,
-    "containerWidth": "boxed",
+    "containerWidth": "full",
     "bottomBarEnabled": true,
     "bottomBarLayout": "split",
     "showDisclaimer": true,

@@ -2052,13 +2052,13 @@ export function Footer() {
 }
 
 // ============== Brand Reveal Scene (Page-lift effect) ==============
-// Matches v3-forge: #pageLift wraps all page content (with bg), #brandScene is fixed behind.
-// As user scrolls past the footer, the page lifts up to reveal brand text underneath.
+// Exact replica of v3-forge pattern:
+//   #pageLift  = layout wrapper (.min-h-screen) — position:relative, z-index:1, bg opaque
+//   #brandScene = fixed at bottom, z-index:0, same bg as footer
+//   #liftSpacer = OUTSIDE pageLift, adds extra scroll space
+// When user scrolls to the very bottom, pageLift translates up to reveal brandScene.
 function BrandRevealScene({ text, color, bgColor }: { text: string; color: string; bgColor: string }) {
   const [mounted, setMounted] = useState(false);
-  const spacerRef = useRef<HTMLDivElement>(null);
-  const sceneElRef = useRef<HTMLDivElement | null>(null);
-  const pageLiftRef = useRef<HTMLElement | null>(null);
 
   useEffect(() => {
     setMounted(true);
@@ -2067,7 +2067,11 @@ function BrandRevealScene({ text, color, bgColor }: { text: string; color: strin
   useEffect(() => {
     if (!mounted) return;
 
-    // Create brand scene element and append to body (outside layout wrapper)
+    // Find the layout wrapper (= pageLift in v3-forge)
+    const pageLift = document.querySelector(".min-h-screen.bg-background") as HTMLElement;
+    if (!pageLift) return;
+
+    // === Create #brandScene (fixed behind page) ===
     const scene = document.createElement("div");
     scene.id = "brand-reveal-scene";
     scene.setAttribute("aria-hidden", "true");
@@ -2080,10 +2084,11 @@ function BrandRevealScene({ text, color, bgColor }: { text: string; color: strin
       background: bgColor,
       padding: "0 0 24px",
       pointerEvents: "none",
+      overflow: "hidden",
     });
 
-    const brandText = document.createElement("span");
-    Object.assign(brandText.style, {
+    const brandSpan = document.createElement("span");
+    Object.assign(brandSpan.style, {
       display: "block",
       fontFamily: "var(--font-heading, 'Outfit', sans-serif)",
       fontSize: "clamp(100px, 22vw, 360px)",
@@ -2097,41 +2102,47 @@ function BrandRevealScene({ text, color, bgColor }: { text: string; color: strin
       padding: "0 28px",
       userSelect: "none",
     });
-    brandText.textContent = text;
-    scene.appendChild(brandText);
-    document.body.appendChild(scene);
-    sceneElRef.current = scene;
+    brandSpan.textContent = text;
+    scene.appendChild(brandSpan);
 
-    // Find the layout wrapper
-    const layoutWrapper = document.querySelector(".min-h-screen.bg-background") as HTMLElement;
-    if (!layoutWrapper) return;
-    pageLiftRef.current = layoutWrapper;
+    // === Create #liftSpacer (adds scroll room, OUTSIDE pageLift) ===
+    const spacer = document.createElement("div");
+    spacer.id = "brand-reveal-spacer";
+    spacer.style.height = "0";
 
-    // Set up the page-lift layer (like #pageLift in v3-forge)
-    layoutWrapper.style.position = "relative";
-    layoutWrapper.style.zIndex = "1";
+    // Insert scene and spacer AFTER pageLift (as siblings, not children)
+    pageLift.insertAdjacentElement("afterend", scene);
+    scene.insertAdjacentElement("afterend", spacer);
 
-    const spacer = spacerRef.current;
+    // === Style pageLift (opaque cover over brandScene) ===
+    pageLift.style.position = "relative";
+    pageLift.style.zIndex = "1";
+    // Ensure background is set (covers the fixed brandScene)
+    if (!pageLift.style.background) {
+      pageLift.style.background = "var(--color-background, #ffffff)";
+    }
+
+    // === Scroll math (identical to v3-forge) ===
     let brandH = 0;
     let scrollDist = 0;
     let transformPx = 0;
 
     function computeLift() {
       brandH = scene.offsetHeight;
+      // Split: half from natural scroll, half from transform
       scrollDist = Math.ceil(brandH * 0.5);
       transformPx = brandH - scrollDist;
-      if (spacer) spacer.style.height = scrollDist + "px";
+      spacer.style.height = scrollDist + "px";
     }
 
     function update() {
-      const lw = pageLiftRef.current;
-      if (!lw) return;
       const scrollY = window.scrollY;
       const winH = window.innerHeight;
-      const liftStart = lw.offsetHeight - winH;
+      // pageLift.offsetHeight does NOT include spacer (spacer is a sibling)
+      const liftStart = pageLift.offsetHeight - winH;
       const progress = Math.max(0, Math.min(1, (scrollY - liftStart) / scrollDist));
 
-      lw.style.transform = progress > 0
+      pageLift.style.transform = progress > 0
         ? `translateY(-${progress * transformPx}px)`
         : "";
       scene.style.pointerEvents = progress > 0.95 ? "auto" : "none";
@@ -2149,20 +2160,15 @@ function BrandRevealScene({ text, color, bgColor }: { text: string; color: strin
     return () => {
       window.removeEventListener("scroll", onScroll);
       window.removeEventListener("resize", onResize);
-      // Clean up
       scene.remove();
-      const lw = pageLiftRef.current;
-      if (lw) {
-        lw.style.position = "";
-        lw.style.zIndex = "";
-        lw.style.transform = "";
-      }
+      spacer.remove();
+      pageLift.style.position = "";
+      pageLift.style.zIndex = "";
+      pageLift.style.transform = "";
+      pageLift.style.background = "";
     };
   }, [mounted, text, color, bgColor]);
 
-  if (!mounted) return null;
-
-  // The spacer lives INSIDE the layout wrapper (as part of footer component)
-  // to add scroll distance for the reveal
-  return <div ref={spacerRef} style={{ height: 0 }} />;
+  // This component renders nothing in React tree — all DOM manipulation is imperative
+  return null;
 }
