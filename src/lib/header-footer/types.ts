@@ -260,7 +260,8 @@ export type FooterWidgetType =
   | "TESTIMONIAL"
   | "COUNTDOWN"
   | "CTA_BANNER"
-  | "BUTTON"; // Custom styled button widget
+  | "BUTTON"
+  | "NEWSLETTER";
 
 export interface BottomLink {
   label: string;
@@ -410,6 +411,8 @@ export interface FooterConfig {
   topBorderStyle?: string;
   topBorderHeight?: number;
   topBorderColor?: string | null;
+  topBorderGradientFrom?: string | null;
+  topBorderGradientTo?: string | null;
 
   // Shadow & Border Radius
   shadow?: string;
@@ -418,6 +421,12 @@ export interface FooterConfig {
   // Spacing
   paddingTop: number;
   paddingBottom: number;
+
+  // Brand Reveal
+  brandRevealEnabled?: boolean;
+  brandRevealText?: string | null;
+  brandRevealColor?: string | null;
+  brandRevealOpacity?: number | null;
 
   // Advanced
   customCSS?: string | null;
@@ -570,6 +579,8 @@ export interface PublicFooterResponse {
     topBorderStyle?: string;
     topBorderHeight?: number;
     topBorderColor?: string;
+    topBorderGradientFrom?: string;
+    topBorderGradientTo?: string;
 
     // Shadow & Border
     shadow?: string;
@@ -586,5 +597,14 @@ export interface PublicFooterResponse {
     // Spacing
     paddingTop: number;
     paddingBottom: number;
+
+    // Brand Reveal
+    brandRevealEnabled?: boolean;
+    brandRevealText?: string;
+    brandRevealColor?: string;
+    brandRevealOpacity?: number;
+
+    // Custom CSS
+    customCSS?: string;
   };
 }

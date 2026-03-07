@@ -42,6 +42,7 @@ const widgetSchema = z.object({
     "COUNTDOWN",
     "CTA_BANNER",
     "BUTTON",
+    "NEWSLETTER",
   ]),
   title: z.string().optional().nullable(),
   showTitle: z.boolean().default(true),

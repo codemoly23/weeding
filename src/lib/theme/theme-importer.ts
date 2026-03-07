@@ -804,24 +804,71 @@ export async function importThemeData(
       let footerId: string | null = null;
 
       if (data.footerConfig) {
-        const fc = data.footerConfig;
+        const fc = data.footerConfig as Record<string, unknown>;
+        const s = (key: string, def?: string) => (typeof fc[key] === "string" ? fc[key] : def) || null;
+        const n = (key: string, def: number) => (typeof fc[key] === "number" ? fc[key] : def);
+        const b = (key: string, def: boolean) => (typeof fc[key] === "boolean" ? fc[key] : def);
+
         const footer = await tx.footerConfig.create({
           data: {
             name: "Default Footer",
             isActive: true,
-            layout: (fc.layout as "MULTI_COLUMN") || "MULTI_COLUMN",
-            columns: fc.columns ?? 4,
-            bgColor: fc.bgColor || null,
-            textColor: fc.textColor || null,
-            linkColor: fc.linkColor || null,
-            linkHoverColor: fc.linkHoverColor || null,
-            headingColor: fc.headingColor || null,
-            accentColor: fc.accentColor || null,
-            borderColor: fc.borderColor || null,
-            presetId: fc.presetId || null,
+            layout: (s("layout", "MULTI_COLUMN") as "MULTI_COLUMN") || "MULTI_COLUMN",
+            columns: n("columns", 4),
+            bgType: s("bgType", "solid") as string,
+            bgColor: s("bgColor"),
+            textColor: s("textColor"),
+            linkColor: s("linkColor"),
+            linkHoverColor: s("linkHoverColor"),
+            headingColor: s("headingColor"),
+            accentColor: s("accentColor"),
+            borderColor: s("borderColor"),
+            dividerColor: s("dividerColor"),
+            dividerStyle: s("dividerStyle", "solid") as string,
+            headingSize: s("headingSize", "sm") as string,
+            headingWeight: s("headingWeight", "semibold") as string,
+            headingStyle: s("headingStyle", "normal") as string,
+            topBorderStyle: s("topBorderStyle", "none") as string,
+            topBorderHeight: n("topBorderHeight", 4),
+            topBorderColor: s("topBorderColor"),
+            socialShape: s("socialShape", "circle") as string,
+            socialSize: s("socialSize", "md") as string,
+            socialColorMode: s("socialColorMode", "brand") as string,
+            socialHoverEffect: s("socialHoverEffect", "scale") as string,
+            socialBgStyle: s("socialBgStyle", "subtle") as string,
+            showSocialLinks: b("showSocialLinks", true),
+            socialPosition: s("socialPosition", "brand") as string,
+            paddingTop: n("paddingTop", 48),
+            paddingBottom: n("paddingBottom", 32),
+            containerWidth: s("containerWidth", "full") as string,
+            bottomBarEnabled: b("bottomBarEnabled", true),
+            bottomBarLayout: s("bottomBarLayout", "split") as string,
+            showDisclaimer: b("showDisclaimer", false),
+            copyrightText: s("copyrightText"),
+            disclaimerText: s("disclaimerText"),
+            presetId: s("presetId"),
           },
         });
         footerId = footer.id;
+
+        // Update extra fields via raw SQL (avoids Prisma client cache issues)
+        const gradFrom = s("topBorderGradientFrom");
+        const gradTo = s("topBorderGradientTo");
+        const brEnabled = b("brandRevealEnabled", false);
+        const brText = s("brandRevealText");
+        const brColor = s("brandRevealColor");
+        const brOpacity = n("brandRevealOpacity", 0.08);
+        await tx.$executeRawUnsafe(
+          `UPDATE "FooterConfig" SET
+            "topBorderGradientFrom" = $1,
+            "topBorderGradientTo" = $2,
+            "brandRevealEnabled" = $3,
+            "brandRevealText" = $4,
+            "brandRevealColor" = $5,
+            "brandRevealOpacity" = $6
+          WHERE id = $7`,
+          gradFrom, gradTo, brEnabled, brText, brColor, brOpacity, footer.id
+        );
       }
 
       // ---- 19. Footer Widgets ----
@@ -831,6 +878,8 @@ export async function importThemeData(
             data: {
               footerId,
               type: widget.type as "BRAND",
+              title: widget.title || null,
+              showTitle: widget.showTitle ?? (widget.type === "LINKS"),
               column: widget.column ?? 1,
               sortOrder: widget.sortOrder ?? 0,
               content: widget.content as Prisma.InputJsonValue,
@@ -838,33 +887,34 @@ export async function importThemeData(
           });
 
           // For LINKS type widgets, create MenuItem entries
-          if (
+          // Links can be in widget.links (data.json) or widget.content.links
+          let links: Array<{ label: string; url: string; sortOrder?: number }> | undefined;
+
+          if (Array.isArray(widget.links)) {
+            links = widget.links;
+          } else if (
             widget.type === "LINKS" &&
             widget.content &&
             typeof widget.content === "object"
           ) {
-            const links = (widget.content as Record<string, unknown>)
-              .links as Array<{
-              label: string;
-              url: string;
-              sortOrder?: number;
-            }> | undefined;
+            links = (widget.content as Record<string, unknown>)
+              .links as typeof links;
+          }
 
-            if (Array.isArray(links)) {
-              for (let li = 0; li < links.length; li++) {
-                const link = links[li];
-                await tx.menuItem.create({
-                  data: {
-                    footerWidgetId: createdWidget.id,
-                    label: link.label,
-                    url: link.url || null,
-                    sortOrder: link.sortOrder ?? li,
-                    isVisible: true,
-                    visibleOnMobile: true,
-                  },
-                });
-                counts.menuItems++;
-              }
+          if (Array.isArray(links)) {
+            for (let li = 0; li < links.length; li++) {
+              const link = links[li];
+              await tx.menuItem.create({
+                data: {
+                  footerWidgetId: createdWidget.id,
+                  label: link.label,
+                  url: link.url || null,
+                  sortOrder: link.sortOrder ?? li,
+                  isVisible: true,
+                  visibleOnMobile: true,
+                },
+              });
+              counts.menuItems++;
             }
           }
 

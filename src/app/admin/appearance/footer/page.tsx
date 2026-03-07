@@ -136,6 +136,7 @@ const widgetTypes: { value: FooterWidgetType; label: string; icon: React.ReactNo
   { value: "STATES", label: "States (Auto)", icon: <MapPin className="h-4 w-4" /> },
   { value: "CUSTOM_HTML", label: "Custom HTML", icon: <Code className="h-4 w-4" /> },
   { value: "BUTTON", label: "Button", icon: <MousePointerClick className="h-4 w-4" /> },
+  { value: "NEWSLETTER", label: "Newsletter", icon: <Send className="h-4 w-4" /> },
 ];
 
 // Gradient direction options for button styling
@@ -649,6 +650,8 @@ export default function FooterBuilderPage() {
     topBorderStyle: "none",
     topBorderHeight: 1,
     topBorderColor: "",
+    topBorderGradientFrom: "",
+    topBorderGradientTo: "",
     // Shadow & Border radius
     shadow: "none",
     borderRadius: 0,
@@ -662,6 +665,13 @@ export default function FooterBuilderPage() {
     // Spacing
     paddingTop: 48,
     paddingBottom: 32,
+    // Brand Reveal
+    brandRevealEnabled: false,
+    brandRevealText: "",
+    brandRevealColor: "",
+    brandRevealOpacity: 0.08,
+    // Custom CSS
+    customCSS: "",
   });
 
   useEffect(() => {
@@ -731,6 +741,8 @@ export default function FooterBuilderPage() {
           topBorderStyle: activeFooter.topBorderStyle || "none",
           topBorderHeight: activeFooter.topBorderHeight || 1,
           topBorderColor: activeFooter.topBorderColor || "",
+          topBorderGradientFrom: activeFooter.topBorderGradientFrom || "",
+          topBorderGradientTo: activeFooter.topBorderGradientTo || "",
           // Shadow & Border radius
           shadow: activeFooter.shadow || "none",
           borderRadius: activeFooter.borderRadius || 0,
@@ -744,6 +756,13 @@ export default function FooterBuilderPage() {
           // Spacing
           paddingTop: activeFooter.paddingTop,
           paddingBottom: activeFooter.paddingBottom,
+          // Brand Reveal
+          brandRevealEnabled: activeFooter.brandRevealEnabled || false,
+          brandRevealText: activeFooter.brandRevealText || "",
+          brandRevealColor: activeFooter.brandRevealColor || "",
+          brandRevealOpacity: activeFooter.brandRevealOpacity || 0.08,
+          // Custom CSS
+          customCSS: activeFooter.customCSS || "",
         });
       }
     } catch (error) {
@@ -818,6 +837,8 @@ export default function FooterBuilderPage() {
           topBorderStyle: formData.topBorderStyle,
           topBorderHeight: formData.topBorderHeight,
           topBorderColor: formData.topBorderColor || null,
+          topBorderGradientFrom: formData.topBorderGradientFrom || null,
+          topBorderGradientTo: formData.topBorderGradientTo || null,
           // Shadow & Border radius
           shadow: formData.shadow,
           borderRadius: formData.borderRadius,
@@ -831,6 +852,13 @@ export default function FooterBuilderPage() {
           // Spacing
           paddingTop: formData.paddingTop,
           paddingBottom: formData.paddingBottom,
+          // Brand Reveal
+          brandRevealEnabled: formData.brandRevealEnabled,
+          brandRevealText: formData.brandRevealText || null,
+          brandRevealColor: formData.brandRevealColor || null,
+          brandRevealOpacity: formData.brandRevealOpacity,
+          // Custom CSS
+          customCSS: formData.customCSS || null,
         }),
       });
 
@@ -1210,7 +1238,7 @@ export default function FooterBuilderPage() {
       </div>
 
       {/* Live Preview - Sticky */}
-      <Card className="sticky top-4 z-10 shadow-lg">
+      <Card className="shadow-lg">
         <CardHeader className="pb-3">
           <div className="flex items-center justify-between">
             <CardTitle className="text-base">Live Preview</CardTitle>
@@ -1614,7 +1642,16 @@ export default function FooterBuilderPage() {
                                       <FooterButtonPreview style={(widget.content as { style?: ButtonCustomStyle })?.style || {}} />
                                     </div>
                                   )}
-                                  {widget.type !== "LINKS" && widget.type !== "SOCIAL" && widget.type !== "BRAND" && widget.type !== "BUTTON" && <span className="italic">{widget.type}</span>}
+                                  {widget.type === "NEWSLETTER" && (
+                                    <div className="mt-2 space-y-1">
+                                      <p className="text-xs opacity-60">{(widget.content as { text?: string })?.text || "Get LLC tips & US business insights"}</p>
+                                      <div className="flex gap-1">
+                                        <div className="h-6 flex-1 rounded border border-white/20 bg-white/5 px-2 text-xs leading-6 opacity-40">{(widget.content as { placeholder?: string })?.placeholder || "your@email.com"}</div>
+                                        <div className="h-6 rounded bg-orange-500 px-2 text-xs font-medium leading-6 text-white">{(widget.content as { buttonText?: string })?.buttonText || "Subscribe"}</div>
+                                      </div>
+                                    </div>
+                                  )}
+                                  {widget.type !== "LINKS" && widget.type !== "SOCIAL" && widget.type !== "BRAND" && widget.type !== "BUTTON" && widget.type !== "NEWSLETTER" && <span className="italic">{widget.type}</span>}
                                 </div>
                               </div>
                             ))
@@ -3238,6 +3275,237 @@ export default function FooterBuilderPage() {
               </div>
             </CardContent>
           </Card>
+
+          {/* Top Border */}
+          <Card>
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <Maximize2 className="h-5 w-5" />
+                Top Border
+              </CardTitle>
+              <CardDescription>Decorative border at top of footer</CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <div className="space-y-2">
+                <Label>Border Style</Label>
+                <Select
+                  value={formData.topBorderStyle}
+                  onValueChange={(value) => setFormData({ ...formData, topBorderStyle: value })}
+                >
+                  <SelectTrigger><SelectValue /></SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="none">None</SelectItem>
+                    <SelectItem value="solid">Solid</SelectItem>
+                    <SelectItem value="gradient">Gradient</SelectItem>
+                    <SelectItem value="wave">Wave</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+
+              {formData.topBorderStyle !== "none" && (
+                <>
+                  <div className="space-y-2">
+                    <div className="flex items-center justify-between">
+                      <Label>Height</Label>
+                      <span className="text-sm text-muted-foreground">{formData.topBorderHeight}px</span>
+                    </div>
+                    <Slider
+                      value={[formData.topBorderHeight]}
+                      onValueChange={(value) => setFormData({ ...formData, topBorderHeight: value[0] })}
+                      min={1}
+                      max={8}
+                      step={1}
+                    />
+                  </div>
+
+                  {formData.topBorderStyle === "solid" && (
+                    <div className="space-y-2">
+                      <Label>Color</Label>
+                      <div className="flex items-center gap-2">
+                        <input
+                          type="color"
+                          value={formData.topBorderColor || "#F97316"}
+                          onChange={(e) => setFormData({ ...formData, topBorderColor: e.target.value })}
+                          className="h-10 w-10 cursor-pointer rounded border"
+                        />
+                        <Input
+                          value={formData.topBorderColor}
+                          onChange={(e) => setFormData({ ...formData, topBorderColor: e.target.value })}
+                          placeholder="#F97316"
+                        />
+                      </div>
+                    </div>
+                  )}
+
+                  {formData.topBorderStyle === "gradient" && (
+                    <div className="grid gap-4 sm:grid-cols-2">
+                      <div className="space-y-2">
+                        <Label>Gradient Start</Label>
+                        <div className="flex items-center gap-2">
+                          <input
+                            type="color"
+                            value={formData.topBorderGradientFrom || "#e84c1e"}
+                            onChange={(e) => setFormData({ ...formData, topBorderGradientFrom: e.target.value })}
+                            className="h-10 w-10 cursor-pointer rounded border"
+                          />
+                          <Input
+                            value={formData.topBorderGradientFrom}
+                            onChange={(e) => setFormData({ ...formData, topBorderGradientFrom: e.target.value })}
+                            placeholder="#e84c1e"
+                          />
+                        </div>
+                      </div>
+                      <div className="space-y-2">
+                        <Label>Gradient End</Label>
+                        <div className="flex items-center gap-2">
+                          <input
+                            type="color"
+                            value={formData.topBorderGradientTo || "#253d30"}
+                            onChange={(e) => setFormData({ ...formData, topBorderGradientTo: e.target.value })}
+                            className="h-10 w-10 cursor-pointer rounded border"
+                          />
+                          <Input
+                            value={formData.topBorderGradientTo}
+                            onChange={(e) => setFormData({ ...formData, topBorderGradientTo: e.target.value })}
+                            placeholder="#253d30"
+                          />
+                        </div>
+                      </div>
+                      {/* Gradient preview */}
+                      <div className="col-span-2">
+                        <div
+                          className="h-4 w-full rounded"
+                          style={{
+                            background: `linear-gradient(90deg, ${formData.topBorderGradientFrom || "#e84c1e"}, ${formData.topBorderGradientTo || "#253d30"})`,
+                          }}
+                        />
+                      </div>
+                    </div>
+                  )}
+
+                  {formData.topBorderStyle === "wave" && (
+                    <div className="space-y-2">
+                      <Label>Color</Label>
+                      <div className="flex items-center gap-2">
+                        <input
+                          type="color"
+                          value={formData.topBorderColor || "#F97316"}
+                          onChange={(e) => setFormData({ ...formData, topBorderColor: e.target.value })}
+                          className="h-10 w-10 cursor-pointer rounded border"
+                        />
+                        <Input
+                          value={formData.topBorderColor}
+                          onChange={(e) => setFormData({ ...formData, topBorderColor: e.target.value })}
+                          placeholder="#F97316"
+                        />
+                      </div>
+                    </div>
+                  )}
+                </>
+              )}
+            </CardContent>
+          </Card>
+
+          {/* Brand Reveal */}
+          <Card>
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <Type className="h-5 w-5" />
+                Brand Reveal
+              </CardTitle>
+              <CardDescription>Large brand name text at the bottom of the footer</CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <div className="flex items-center justify-between rounded-lg border p-4">
+                <div>
+                  <p className="font-medium">Enable Brand Reveal</p>
+                  <p className="text-sm text-muted-foreground">Show large brand name at footer bottom</p>
+                </div>
+                <Switch
+                  checked={formData.brandRevealEnabled}
+                  onCheckedChange={(checked) => setFormData({ ...formData, brandRevealEnabled: checked })}
+                />
+              </div>
+
+              {formData.brandRevealEnabled && (
+                <>
+                  <div className="space-y-2">
+                    <Label>Custom Text</Label>
+                    <Input
+                      value={formData.brandRevealText}
+                      onChange={(e) => setFormData({ ...formData, brandRevealText: e.target.value })}
+                      placeholder="Leave empty to use business name"
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <Label>Text Color</Label>
+                    <div className="flex items-center gap-2">
+                      <input
+                        type="color"
+                        value={formData.brandRevealColor || "#ffffff"}
+                        onChange={(e) => setFormData({ ...formData, brandRevealColor: e.target.value })}
+                        className="h-10 w-10 cursor-pointer rounded border"
+                      />
+                      <Input
+                        value={formData.brandRevealColor}
+                        onChange={(e) => setFormData({ ...formData, brandRevealColor: e.target.value })}
+                        placeholder="#ffffff"
+                      />
+                    </div>
+                  </div>
+                  <div className="space-y-2">
+                    <div className="flex items-center justify-between">
+                      <Label>Opacity</Label>
+                      <span className="text-sm text-muted-foreground">{(formData.brandRevealOpacity * 100).toFixed(0)}%</span>
+                    </div>
+                    <Slider
+                      value={[formData.brandRevealOpacity * 100]}
+                      onValueChange={(value) => setFormData({ ...formData, brandRevealOpacity: value[0] / 100 })}
+                      min={2}
+                      max={20}
+                      step={1}
+                    />
+                  </div>
+                  {/* Preview */}
+                  <div className="relative overflow-hidden rounded-lg border bg-gray-900 p-4 text-center">
+                    <p className="text-xs text-muted-foreground mb-2">Preview:</p>
+                    <span
+                      className="text-4xl font-black tracking-tighter uppercase"
+                      style={{
+                        color: formData.brandRevealColor || "#ffffff",
+                        opacity: formData.brandRevealOpacity,
+                      }}
+                    >
+                      {formData.brandRevealText || "LLCPAD"}
+                    </span>
+                  </div>
+                </>
+              )}
+            </CardContent>
+          </Card>
+
+          {/* Custom CSS */}
+          <Card>
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <Code className="h-5 w-5" />
+                Custom CSS
+              </CardTitle>
+              <CardDescription>Add custom styles scoped to the footer</CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <Textarea
+                value={formData.customCSS}
+                onChange={(e) => setFormData({ ...formData, customCSS: e.target.value })}
+                placeholder={`.footer-dynamic-styles {\n  /* Your custom CSS here */\n}`}
+                rows={8}
+                className="font-mono text-sm"
+              />
+              <p className="text-xs text-muted-foreground">
+                Styles are automatically scoped to the footer element. Use <code>.footer-dynamic-styles</code> as the parent selector.
+              </p>
+            </CardContent>
+          </Card>
         </TabsContent>
       </Tabs>
 
@@ -3415,6 +3683,51 @@ export default function FooterBuilderPage() {
                 />
                 <p className="text-xs text-muted-foreground">
                   Be careful with custom HTML. Ensure it&apos;s valid and doesn&apos;t break the page layout.
+                </p>
+              </div>
+            )}
+
+            {/* NEWSLETTER widget content */}
+            {widgetFormData.type === "NEWSLETTER" && (
+              <div className="space-y-4">
+                <div className="space-y-2">
+                  <Label htmlFor="newsletterText">Description Text</Label>
+                  <Input
+                    id="newsletterText"
+                    value={(widgetFormData.content as { text?: string })?.text || ""}
+                    onChange={(e) => setWidgetFormData({
+                      ...widgetFormData,
+                      content: { ...widgetFormData.content, text: e.target.value },
+                    })}
+                    placeholder="Get LLC tips & US business insights"
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="newsletterPlaceholder">Input Placeholder</Label>
+                  <Input
+                    id="newsletterPlaceholder"
+                    value={(widgetFormData.content as { placeholder?: string })?.placeholder || ""}
+                    onChange={(e) => setWidgetFormData({
+                      ...widgetFormData,
+                      content: { ...widgetFormData.content, placeholder: e.target.value },
+                    })}
+                    placeholder="your@email.com"
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="newsletterButton">Button Text</Label>
+                  <Input
+                    id="newsletterButton"
+                    value={(widgetFormData.content as { buttonText?: string })?.buttonText || ""}
+                    onChange={(e) => setWidgetFormData({
+                      ...widgetFormData,
+                      content: { ...widgetFormData.content, buttonText: e.target.value },
+                    })}
+                    placeholder="Subscribe"
+                  />
+                </div>
+                <p className="text-xs text-muted-foreground">
+                  Newsletter subscription functionality will be configured separately. This sets up the visual form only.
                 </p>
               </div>
             )}

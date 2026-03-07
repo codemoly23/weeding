@@ -1,6 +1,7 @@
 // ============================================
 // SERVICE HERO WIDGET
 // Displays service title, description, price badge, and CTA buttons
+// Supports "single" (legacy) and "two-column" (new) layouts
 // ============================================
 
 "use client";
@@ -8,10 +9,9 @@
 import { useState, useEffect } from "react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, Check, ShieldCheck, Clock, Globe } from "lucide-react";
 import Link from "next/link";
 import {
-  useServiceContext,
   useOptionalServiceContext,
   resolvePlaceholders,
 } from "@/lib/page-builder/contexts/service-context";
@@ -25,13 +25,22 @@ import { getCurrencySymbol } from "@/components/ui/currency-selector";
 // ============================================
 
 const DEFAULT_SETTINGS: ServiceHeroWidgetSettings = {
+  layout: "single",
+
   // Content Source
   titleSource: "auto",
   subtitleSource: "auto",
 
-  // Price Badge
+  // Category Badge
+  showCategoryBadge: false,
+  categoryBadgeTag: "Most Popular",
+
+  // Price Badge (single mode)
   showPriceBadge: true,
   priceBadgeText: "From ${{service.startingPrice}}",
+
+  // Price Hero (two-column mode)
+  showPriceHero: false,
 
   // Primary Button
   primaryCtaText: "Get Started",
@@ -43,6 +52,24 @@ const DEFAULT_SETTINGS: ServiceHeroWidgetSettings = {
   secondaryCtaText: "Ask a Question",
   secondaryCtaLink: "/contact",
 
+  // Trust Items
+  showTrustItems: false,
+  trustItems: [
+    { text: "Filing accuracy guaranteed" },
+    { text: "Filed in 24 hours" },
+    { text: "100% remote" },
+  ],
+
+  // Right Card
+  rightCardShow: false,
+  rightCardTitle: "What You Get",
+  rightCardAutoItems: true,
+  rightCardStats: [
+    { value: "1,200+", label: "Clients Served" },
+    { value: "30+", label: "Countries" },
+    { value: "4.9★", label: "Rating" },
+  ],
+
   // Appearance
   backgroundType: "none",
   textAlignment: "center",
@@ -51,7 +78,7 @@ const DEFAULT_SETTINGS: ServiceHeroWidgetSettings = {
 };
 
 // ============================================
-// WIDGET PROPS
+// WIDGET COMPONENT
 // ============================================
 
 interface ServiceHeroWidgetProps {
@@ -59,21 +86,15 @@ interface ServiceHeroWidgetProps {
   isPreview?: boolean;
 }
 
-// ============================================
-// WIDGET COMPONENT
-// ============================================
-
 export function ServiceHeroWidget({
   settings: partialSettings,
   isPreview = false,
 }: ServiceHeroWidgetProps) {
-  // Merge with defaults
   const settings: ServiceHeroWidgetSettings = {
     ...DEFAULT_SETTINGS,
     ...partialSettings,
   };
 
-  // Currency symbol
   const [currencySymbol, setCurrencySymbol] = useState("$");
 
   useEffect(() => {
@@ -85,145 +106,103 @@ export function ServiceHeroWidget({
       .catch(() => {});
   }, []);
 
-  // Get service context
   const serviceContext = useOptionalServiceContext();
 
-  // If no service context, show placeholder (works in Page Builder admin)
   if (!serviceContext) {
-    return <WidgetContainer container={settings.container}><ServiceHeroPlaceholder settings={settings} /></WidgetContainer>;
+    return (
+      <WidgetContainer container={settings.container}>
+        <ServiceHeroPlaceholder settings={settings} />
+      </WidgetContainer>
+    );
   }
 
   const { service } = serviceContext;
 
-  // Resolve content
-  const title = settings.titleSource === "auto"
-    ? service.name
-    : settings.customTitle || service.name;
+  const title =
+    settings.titleSource === "auto"
+      ? service.name
+      : settings.customTitle || service.name;
 
-  const subtitle = settings.subtitleSource === "auto"
-    ? service.shortDesc
-    : settings.customSubtitle || service.shortDesc;
+  const subtitle =
+    settings.subtitleSource === "auto"
+      ? service.shortDesc
+      : settings.customSubtitle || service.shortDesc;
 
-  // Resolve placeholders in links and text
   const primaryLink = resolvePlaceholders(settings.primaryCtaLink, service);
   const secondaryLink = resolvePlaceholders(settings.secondaryCtaLink, service);
   const priceBadgeText = resolvePlaceholders(settings.priceBadgeText, service);
 
-  // Format price for button
-  const formattedPrice = service.startingPrice === 0
-    ? `${currencySymbol}0`
-    : `${currencySymbol}${Number(service.startingPrice).toLocaleString()}`;
+  const formattedPrice =
+    service.startingPrice === 0
+      ? `${currencySymbol}0`
+      : `${currencySymbol}${Number(service.startingPrice).toLocaleString()}`;
 
-  // Build background classes
-  const getBackgroundClasses = () => {
-    switch (settings.backgroundType) {
-      case "gradient":
-        return settings.backgroundGradient || "bg-gradient-to-b from-orange-50 to-white";
-      case "solid":
-        return "";
-      case "image":
-        return "bg-cover bg-center bg-no-repeat";
-      default:
-        return "";
-    }
-  };
+  if (settings.layout === "two-column") {
+    return (
+      <WidgetContainer container={settings.container}>
+        <TwoColumnHero
+          settings={settings}
+          service={service}
+          title={title}
+          subtitle={subtitle}
+          primaryLink={primaryLink}
+          secondaryLink={secondaryLink}
+          currencySymbol={currencySymbol}
+          formattedPrice={formattedPrice}
+        />
+      </WidgetContainer>
+    );
+  }
 
-  // Build background styles
-  const getBackgroundStyles = (): React.CSSProperties => {
-    const styles: React.CSSProperties = {};
-
-    if (settings.backgroundType === "solid" && settings.backgroundColor) {
-      styles.backgroundColor = settings.backgroundColor;
-    }
-
-    if (settings.backgroundType === "image" && settings.backgroundImage) {
-      styles.backgroundImage = `url(${settings.backgroundImage})`;
-    }
-
-    return styles;
-  };
-
-  // Spacing classes (extra padding on top of the section's built-in paddingTop/paddingBottom)
-  const spacingClasses = {
-    sm: "",
-    md: "py-4",
-    lg: "py-8",
-    xl: "py-12 lg:py-16",
-  };
-
-  // Title size classes
+  // ── Single column (legacy) ──────────────────────────────────────────────
+  const spacingClasses = { sm: "", md: "py-4", lg: "py-8", xl: "py-12 lg:py-16" };
   const titleSizeClasses = {
     default: "text-4xl md:text-5xl",
     large: "text-5xl md:text-6xl",
     xl: "text-6xl md:text-7xl",
   };
-
-  // Alignment classes
   const alignmentClasses = {
     left: "text-left items-start",
     center: "text-center items-center",
     right: "text-right items-end",
   };
 
+  const getBackgroundClasses = () => {
+    if (settings.backgroundType === "gradient") return settings.backgroundGradient || "bg-gradient-to-b from-orange-50 to-white";
+    return "";
+  };
+  const getBackgroundStyles = (): React.CSSProperties => {
+    if (settings.backgroundType === "solid" && settings.backgroundColor) return { backgroundColor: settings.backgroundColor };
+    if (settings.backgroundType === "image" && settings.backgroundImage) return { backgroundImage: `url(${settings.backgroundImage})`, backgroundSize: "cover", backgroundPosition: "center" };
+    return {};
+  };
+
   return (
     <WidgetContainer container={settings.container}>
-    <section
-      className={cn(
-        "relative",
-        spacingClasses[settings.spacing],
-        getBackgroundClasses()
-      )}
-      style={getBackgroundStyles()}
-    >
-      <div className={cn(
-        "mx-auto max-w-4xl px-4 flex flex-col",
-        alignmentClasses[settings.textAlignment]
-      )}>
-        {/* Service Icon */}
-        {service.icon && (
-          <div className="mb-6 flex h-16 w-16 items-center justify-center rounded-2xl bg-primary/10 text-primary">
-            <ServiceIcon name={service.icon} className="h-8 w-8" />
-          </div>
-        )}
-
-        {/* Price Badge */}
-        {settings.showPriceBadge && (
-          <span data-field-id="price-badge" className="inline-block px-4 py-1.5 bg-primary/10 text-primary rounded-full text-sm font-medium mb-4">
-            {priceBadgeText}
-          </span>
-        )}
-
-        {/* Title */}
-        <h1
-          data-field-id="title"
-          className={cn(
-            "font-bold tracking-tight text-foreground",
-            titleSizeClasses[settings.titleSize]
+      <section
+        className={cn("relative", spacingClasses[settings.spacing], getBackgroundClasses())}
+        style={getBackgroundStyles()}
+      >
+        <div className={cn("mx-auto max-w-4xl px-4 flex flex-col", alignmentClasses[settings.textAlignment])}>
+          {service.icon && (
+            <div className="mb-6 flex h-16 w-16 items-center justify-center rounded-2xl bg-primary/10 text-primary">
+              <ServiceIcon name={service.icon} className="h-8 w-8" />
+            </div>
           )}
-        >
-          {title}
-        </h1>
-
-        {/* Subtitle */}
-        {subtitle && (
-          <p
-            data-field-id="subtitle"
-            className={cn(
-              "mt-4 text-xl text-muted-foreground max-w-2xl",
-              settings.textAlignment === "center" && "mx-auto"
-            )}
-          >
-            {subtitle}
-          </p>
-        )}
-
-        {/* CTA Buttons */}
-        <div className={cn(
-          "mt-8 flex flex-wrap gap-4",
-          settings.textAlignment === "center" && "justify-center",
-          settings.textAlignment === "right" && "justify-end"
-        )}>
-          <div data-field-id="primary-button">
+          {settings.showPriceBadge && (
+            <span className="inline-block px-4 py-1.5 bg-primary/10 text-primary rounded-full text-sm font-medium mb-4">
+              {priceBadgeText}
+            </span>
+          )}
+          <h1 className={cn("font-bold tracking-tight text-foreground", titleSizeClasses[settings.titleSize])}>
+            {title}
+          </h1>
+          {subtitle && (
+            <p className={cn("mt-4 text-xl text-muted-foreground max-w-2xl", settings.textAlignment === "center" && "mx-auto")}>
+              {subtitle}
+            </p>
+          )}
+          <div className={cn("mt-8 flex flex-wrap gap-4", settings.textAlignment === "center" && "justify-center", settings.textAlignment === "right" && "justify-end")}>
             <Button size="lg" asChild>
               <Link href={primaryLink}>
                 {settings.primaryCtaText}
@@ -231,147 +210,777 @@ export function ServiceHeroWidget({
                 <ArrowRight className="ml-2 h-4 w-4" />
               </Link>
             </Button>
-          </div>
-
-          {settings.showSecondaryButton && (
-            <div data-field-id="secondary-button">
+            {settings.showSecondaryButton && (
               <Button size="lg" variant="outline" asChild>
-                <Link href={secondaryLink}>
-                  {settings.secondaryCtaText}
-                </Link>
+                <Link href={secondaryLink}>{settings.secondaryCtaText}</Link>
               </Button>
-            </div>
-          )}
+            )}
+          </div>
         </div>
-      </div>
-    </section>
+      </section>
     </WidgetContainer>
   );
 }
 
 // ============================================
-// PLACEHOLDER FOR PREVIEW (NO SERVICE CONTEXT)
+// TWO-COLUMN HERO
 // ============================================
 
-function ServiceHeroPlaceholder({
-  settings,
-}: {
+interface TwoColumnHeroProps {
   settings: ServiceHeroWidgetSettings;
-}) {
-  const spacingClasses = {
-    sm: "",
-    md: "py-4",
-    lg: "py-8",
-    xl: "py-12 lg:py-16",
+  service: NonNullable<ReturnType<typeof useOptionalServiceContext>>["service"];
+  title: string;
+  subtitle: string | null | undefined;
+  primaryLink: string;
+  secondaryLink: string;
+  currencySymbol: string;
+  formattedPrice: string;
+}
+
+function TwoColumnHero({
+  settings,
+  service,
+  title,
+  subtitle,
+  primaryLink,
+  secondaryLink,
+  currencySymbol,
+}: TwoColumnHeroProps) {
+  // Build title with visual effects
+  const renderTitle = () => {
+    const highlightWord = settings.titleHighlightWord?.trim();
+    const underlineWord = settings.titleUnderlineWord?.trim();
+
+    if (!highlightWord && !underlineWord) {
+      return <>{title}</>;
+    }
+
+    // Replace words with styled spans
+    const parts = title.split(/(\s+)/);
+    return (
+      <>
+        {parts.map((part, i) => {
+          const word = part.trim();
+          if (highlightWord && word.toLowerCase() === highlightWord.toLowerCase()) {
+            return (
+              <span key={i} style={{ color: "var(--sh-forest, #1b3a2d)" }}>
+                {part}
+              </span>
+            );
+          }
+          if (underlineWord && word.toLowerCase() === underlineWord.toLowerCase()) {
+            return (
+              <span
+                key={i}
+                style={{ position: "relative", display: "inline-block" }}
+              >
+                {part}
+                <span
+                  style={{
+                    position: "absolute",
+                    bottom: "-2px",
+                    left: 0,
+                    right: 0,
+                    height: "5px",
+                    background: "var(--sh-coral, #e84c1e)",
+                    borderRadius: "3px",
+                    opacity: 0.6,
+                  }}
+                />
+              </span>
+            );
+          }
+          return <span key={i}>{part}</span>;
+        })}
+      </>
+    );
   };
 
+  // Checklist items for right card
+  const checklist: Array<{ text: string; tag: string; tagType: "included" | "free" | "addon" }> =
+    settings.rightCardAutoItems
+      ? (service.features || []).slice(0, 5).map((f) => ({
+          text: typeof f === "string" ? f : (f as { text?: string }).text || String(f),
+          tag: "Included",
+          tagType: "included" as const,
+        }))
+      : (settings.rightCardItems || []);
+
+  const stats = settings.rightCardStats || [];
+  const trustItems = settings.trustItems || [];
+
+  return (
+    <section
+      style={{
+        background: "var(--sh-bg, #faf8f4)",
+        padding: "64px 0 80px",
+        position: "relative",
+        overflow: "hidden",
+        // Define local CSS vars for this section
+        "--sh-forest": "#1b3a2d",
+        "--sh-coral": "#e84c1e",
+        "--sh-bg": "#faf8f4",
+        "--sh-cream": "#faf8f4",
+      } as React.CSSProperties}
+    >
+      {/* Decorative circles */}
+      <div
+        style={{
+          position: "absolute",
+          top: "-100px",
+          right: "-120px",
+          width: "500px",
+          height: "500px",
+          borderRadius: "50%",
+          border: "1px solid rgba(27,58,45,0.15)",
+          opacity: 0.3,
+          pointerEvents: "none",
+        }}
+      />
+      <div
+        style={{
+          position: "absolute",
+          bottom: "-80px",
+          left: "-60px",
+          width: "350px",
+          height: "350px",
+          borderRadius: "50%",
+          border: "1px solid rgba(27,58,45,0.15)",
+          opacity: 0.2,
+          pointerEvents: "none",
+        }}
+      />
+
+      <div style={{ maxWidth: "1160px", margin: "0 auto", padding: "0 28px" }}>
+        <div
+          style={{
+            display: "grid",
+            gridTemplateColumns: "1fr 420px",
+            gap: "64px",
+            alignItems: "center",
+          }}
+          className="svc-hero-grid"
+        >
+          {/* ── LEFT: Content ───────────────────────── */}
+          <div>
+            {/* Category Badge */}
+            {settings.showCategoryBadge && (
+              <div
+                style={{
+                  display: "inline-flex",
+                  alignItems: "center",
+                  gap: "8px",
+                  padding: "6px 14px 6px 8px",
+                  background: "#fff",
+                  border: "1px solid rgba(14,17,9,0.1)",
+                  borderRadius: "999px",
+                  fontSize: "12px",
+                  fontWeight: 600,
+                  color: "#4b5249",
+                  marginBottom: "24px",
+                  boxShadow: "0 2px 8px rgba(0,0,0,0.04)",
+                }}
+              >
+                <span
+                  style={{
+                    width: "8px",
+                    height: "8px",
+                    borderRadius: "50%",
+                    background: "#059669",
+                    animation: "pulse 2s ease-in-out infinite",
+                    flexShrink: 0,
+                  }}
+                />
+                {settings.categoryBadgeText || service.category?.name || "Service"}
+                {settings.categoryBadgeTag && (
+                  <span
+                    style={{
+                      fontSize: "10px",
+                      fontWeight: 700,
+                      textTransform: "uppercase",
+                      letterSpacing: "0.8px",
+                      padding: "2px 8px",
+                      borderRadius: "999px",
+                      background: "#e84c1e",
+                      color: "#fff",
+                      marginLeft: "4px",
+                    }}
+                  >
+                    {settings.categoryBadgeTag}
+                  </span>
+                )}
+              </div>
+            )}
+
+            {/* Title */}
+            <h1
+              style={{
+                fontFamily: "var(--font-heading, 'Outfit', sans-serif)",
+                fontSize: "clamp(36px, 5vw, 56px)",
+                fontWeight: 900,
+                letterSpacing: "-0.04em",
+                lineHeight: 1.05,
+                color: "#0e1109",
+                marginBottom: "20px",
+              }}
+            >
+              {renderTitle()}
+            </h1>
+
+            {/* Subtitle */}
+            {subtitle && (
+              <p
+                style={{
+                  fontSize: "17px",
+                  color: "#4b5249",
+                  lineHeight: 1.75,
+                  maxWidth: "520px",
+                  marginBottom: "28px",
+                }}
+              >
+                {subtitle}
+              </p>
+            )}
+
+            {/* Price Hero */}
+            {settings.showPriceHero && (
+              <div
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  gap: "16px",
+                  marginBottom: "32px",
+                  flexWrap: "wrap",
+                }}
+              >
+                <div
+                  style={{
+                    fontFamily: "var(--font-heading, 'Outfit', sans-serif)",
+                    fontSize: "36px",
+                    fontWeight: 900,
+                    color: "#0e1109",
+                    letterSpacing: "-0.03em",
+                  }}
+                >
+                  <sup style={{ fontSize: "18px", verticalAlign: "top", marginTop: "6px" }}>
+                    {currencySymbol}
+                  </sup>
+                  {Number(service.startingPrice).toLocaleString()}
+                </div>
+                {settings.priceHeroNote && (
+                  <div
+                    style={{
+                      fontSize: "12px",
+                      color: "#8a9086",
+                      lineHeight: 1.5,
+                    }}
+                  >
+                    {settings.priceHeroNote}
+                  </div>
+                )}
+              </div>
+            )}
+
+            {/* CTA Buttons */}
+            <div
+              style={{
+                display: "flex",
+                gap: "12px",
+                flexWrap: "wrap",
+                marginBottom: "32px",
+              }}
+            >
+              <Link
+                href={primaryLink}
+                style={{
+                  display: "inline-flex",
+                  alignItems: "center",
+                  gap: "8px",
+                  padding: "16px 34px",
+                  borderRadius: "10px",
+                  fontSize: "15px",
+                  fontWeight: 600,
+                  background: "#e84c1e",
+                  color: "#fff",
+                  border: "none",
+                  cursor: "pointer",
+                  textDecoration: "none",
+                  transition: "all 0.22s ease",
+                  fontFamily: "inherit",
+                  whiteSpace: "nowrap",
+                }}
+              >
+                {settings.primaryCtaText}
+                <ArrowRight style={{ width: "16px", height: "16px", flexShrink: 0 }} />
+              </Link>
+              {settings.showSecondaryButton && (
+                <Link
+                  href={secondaryLink}
+                  style={{
+                    display: "inline-flex",
+                    alignItems: "center",
+                    gap: "8px",
+                    padding: "16px 34px",
+                    borderRadius: "10px",
+                    fontSize: "15px",
+                    fontWeight: 600,
+                    background: "transparent",
+                    color: "#1a1f16",
+                    border: "1.5px solid rgba(14,17,9,0.1)",
+                    cursor: "pointer",
+                    textDecoration: "none",
+                    transition: "all 0.22s ease",
+                    fontFamily: "inherit",
+                    whiteSpace: "nowrap",
+                  }}
+                >
+                  {settings.secondaryCtaText}
+                </Link>
+              )}
+            </div>
+
+            {/* Trust Items */}
+            {settings.showTrustItems && trustItems.length > 0 && (
+              <div style={{ display: "flex", alignItems: "center", flexWrap: "wrap" }}>
+                {trustItems.map((item, i) => (
+                  <div
+                    key={i}
+                    style={{
+                      display: "flex",
+                      alignItems: "center",
+                      gap: "5px",
+                      fontSize: "12px",
+                      color: "#8a9086",
+                      fontWeight: 600,
+                      padding: i === 0 ? "0 14px 0 0" : "0 14px",
+                      borderLeft: i > 0 ? "1px solid rgba(14,17,9,0.1)" : "none",
+                    }}
+                  >
+                    <Check style={{ width: "13px", height: "13px", color: "#1b3a2d", flexShrink: 0 }} />
+                    {item.text}
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+
+          {/* ── RIGHT: What You Get Card ─────────────── */}
+          {settings.rightCardShow && (
+            <div style={{ position: "relative" }}>
+              <div
+                style={{
+                  background: "#1b3a2d",
+                  borderRadius: "20px",
+                  padding: "32px",
+                  color: "#faf8f4",
+                  position: "relative",
+                  overflow: "hidden",
+                  boxShadow: "0 24px 64px rgba(27,58,45,0.22)",
+                }}
+              >
+                {/* Coral top line */}
+                <div
+                  style={{
+                    position: "absolute",
+                    top: 0,
+                    left: 0,
+                    right: 0,
+                    height: "3px",
+                    background: "linear-gradient(90deg, #e84c1e, #ff6a3d, transparent)",
+                  }}
+                />
+
+                {/* Card Title */}
+                <div
+                  style={{
+                    fontFamily: "var(--font-heading, 'Outfit', sans-serif)",
+                    fontSize: "11px",
+                    fontWeight: 700,
+                    textTransform: "uppercase",
+                    letterSpacing: "1.4px",
+                    color: "rgba(250,248,244,0.4)",
+                    marginBottom: "20px",
+                    display: "flex",
+                    alignItems: "center",
+                    gap: "8px",
+                  }}
+                >
+                  <Check style={{ width: "13px", height: "13px", opacity: 0.45 }} />
+                  {settings.rightCardTitle}
+                </div>
+
+                {/* Checklist */}
+                <div style={{ display: "flex", flexDirection: "column", gap: "10px", marginBottom: "24px" }}>
+                  {checklist.map((item, i) => (
+                    <div
+                      key={i}
+                      style={{
+                        display: "flex",
+                        alignItems: "center",
+                        gap: "12px",
+                        padding: "12px 14px",
+                        borderRadius: "10px",
+                        background: "rgba(255,255,255,0.06)",
+                        border: "1px solid rgba(255,255,255,0.08)",
+                      }}
+                    >
+                      <div
+                        style={{
+                          width: "28px",
+                          height: "28px",
+                          borderRadius: "8px",
+                          background: "#059669",
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "center",
+                          flexShrink: 0,
+                        }}
+                      >
+                        <Check style={{ width: "14px", height: "14px", color: "#fff" }} />
+                      </div>
+                      <span
+                        style={{
+                          fontSize: "13px",
+                          fontWeight: 600,
+                          color: "#faf8f4",
+                          flex: 1,
+                          lineHeight: 1.4,
+                        }}
+                      >
+                        {item.text}
+                      </span>
+                      {item.tag && (
+                        <span
+                          style={{
+                            fontSize: "10px",
+                            fontWeight: 700,
+                            padding: "2px 8px",
+                            borderRadius: "100px",
+                            whiteSpace: "nowrap",
+                            background:
+                              item.tagType === "free"
+                                ? "rgba(251,191,36,0.15)"
+                                : "rgba(74,222,128,0.15)",
+                            color: item.tagType === "free" ? "#fbbf24" : "#4ade80",
+                          }}
+                        >
+                          {item.tag}
+                        </span>
+                      )}
+                    </div>
+                  ))}
+                </div>
+
+                {/* Stats */}
+                {stats.length > 0 && (
+                  <div
+                    style={{
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "space-between",
+                      paddingTop: "20px",
+                      borderTop: "1px solid rgba(255,255,255,0.08)",
+                    }}
+                  >
+                    {stats.map((stat, i) => (
+                      <div key={i} style={{ textAlign: "center" }}>
+                        <strong
+                          style={{
+                            fontFamily: "var(--font-heading, 'Outfit', sans-serif)",
+                            fontSize: "20px",
+                            fontWeight: 800,
+                            color: "#ff6a3d",
+                            display: "block",
+                            letterSpacing: "-0.02em",
+                          }}
+                        >
+                          {stat.value}
+                        </strong>
+                        <span
+                          style={{
+                            fontSize: "10px",
+                            color: "rgba(250,248,244,0.4)",
+                            textTransform: "uppercase",
+                            letterSpacing: "0.5px",
+                            fontWeight: 600,
+                          }}
+                        >
+                          {stat.label}
+                        </span>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+            </div>
+          )}
+        </div>
+      </div>
+
+      {/* Responsive grid styles */}
+      <style>{`
+        @keyframes pulse {
+          0%, 100% { transform: scale(1); opacity: 1; }
+          50% { transform: scale(1.2); opacity: 0.7; }
+        }
+        @media (max-width: 1024px) {
+          .svc-hero-grid {
+            grid-template-columns: 1fr !important;
+          }
+        }
+      `}</style>
+    </section>
+  );
+}
+
+// ============================================
+// PLACEHOLDER FOR ADMIN PREVIEW
+// ============================================
+
+function ServiceHeroPlaceholder({ settings }: { settings: ServiceHeroWidgetSettings }) {
+  const spacingClasses = { sm: "", md: "py-4", lg: "py-8", xl: "py-12 lg:py-16" };
   const titleSizeClasses = {
     default: "text-4xl md:text-5xl",
     large: "text-5xl md:text-6xl",
     xl: "text-6xl md:text-7xl",
   };
-
   const alignmentClasses = {
     left: "text-left items-start",
     center: "text-center items-center",
     right: "text-right items-end",
   };
 
-  // Extract price from priceBadgeText for button preview
-  // e.g., "$500" from "From $500" or use priceBadgeText directly if it's just "$500"
-  const extractPriceForButton = () => {
-    const badgeText = settings.priceBadgeText || "From $199";
-    // Try to extract price pattern like $123 or $1,234
-    const priceMatch = badgeText.match(/\$[\d,]+/);
-    return priceMatch ? priceMatch[0] : "$199";
-  };
-
-  // Get background styles for placeholder
-  const getBackgroundStyles = (): React.CSSProperties => {
-    if (settings.backgroundType === "solid" && settings.backgroundColor) {
-      return { backgroundColor: settings.backgroundColor };
-    }
-    return {};
-  };
-
-  const getBackgroundClasses = () => {
-    if (settings.backgroundType === "gradient" && settings.backgroundGradient) {
-      return settings.backgroundGradient;
-    }
-    if (settings.backgroundType === "none" || settings.backgroundType === "solid") {
-      return "";
-    }
-    return "bg-gradient-to-b from-slate-100 to-slate-50";
-  };
+  if (settings.layout === "two-column") {
+    return (
+      <section
+        style={{
+          background: "#faf8f4",
+          padding: "64px 0 80px",
+          position: "relative",
+          overflow: "hidden",
+        }}
+      >
+        <div style={{ maxWidth: "1160px", margin: "0 auto", padding: "0 28px" }}>
+          <div
+            style={{
+              display: "grid",
+              gridTemplateColumns: "1fr 420px",
+              gap: "64px",
+              alignItems: "center",
+            }}
+            className="svc-hero-grid"
+          >
+            <div>
+              {settings.showCategoryBadge && (
+                <div
+                  style={{
+                    display: "inline-flex",
+                    alignItems: "center",
+                    gap: "8px",
+                    padding: "6px 14px 6px 8px",
+                    background: "#fff",
+                    border: "1px solid rgba(14,17,9,0.1)",
+                    borderRadius: "999px",
+                    fontSize: "12px",
+                    fontWeight: 600,
+                    color: "#4b5249",
+                    marginBottom: "24px",
+                  }}
+                >
+                  <span
+                    style={{
+                      width: "8px",
+                      height: "8px",
+                      borderRadius: "50%",
+                      background: "#059669",
+                      flexShrink: 0,
+                    }}
+                  />
+                  {settings.categoryBadgeText || "Formation & Legal"}
+                  {settings.categoryBadgeTag && (
+                    <span
+                      style={{
+                        fontSize: "10px",
+                        fontWeight: 700,
+                        padding: "2px 8px",
+                        borderRadius: "999px",
+                        background: "#e84c1e",
+                        color: "#fff",
+                        marginLeft: "4px",
+                      }}
+                    >
+                      {settings.categoryBadgeTag}
+                    </span>
+                  )}
+                </div>
+              )}
+              <h1
+                style={{
+                  fontFamily: "var(--font-heading, 'Outfit', sans-serif)",
+                  fontSize: "clamp(36px, 5vw, 56px)",
+                  fontWeight: 900,
+                  letterSpacing: "-0.04em",
+                  lineHeight: 1.05,
+                  color: "#0e1109",
+                  marginBottom: "20px",
+                }}
+              >
+                {settings.titleSource === "custom" && settings.customTitle
+                  ? settings.customTitle
+                  : "{{service.name}}"}
+              </h1>
+              <p style={{ fontSize: "17px", color: "#4b5249", lineHeight: 1.75, maxWidth: "520px", marginBottom: "28px" }}>
+                {settings.subtitleSource === "custom" && settings.customSubtitle
+                  ? settings.customSubtitle
+                  : "{{service.shortDesc}}"}
+              </p>
+              <div style={{ display: "flex", gap: "12px", flexWrap: "wrap", marginBottom: "32px" }}>
+                <span
+                  style={{
+                    display: "inline-flex",
+                    alignItems: "center",
+                    gap: "8px",
+                    padding: "16px 34px",
+                    borderRadius: "10px",
+                    fontSize: "15px",
+                    fontWeight: 600,
+                    background: "#e84c1e",
+                    color: "#fff",
+                  }}
+                >
+                  {settings.primaryCtaText}
+                </span>
+                {settings.showSecondaryButton && (
+                  <span
+                    style={{
+                      display: "inline-flex",
+                      alignItems: "center",
+                      gap: "8px",
+                      padding: "16px 34px",
+                      borderRadius: "10px",
+                      fontSize: "15px",
+                      fontWeight: 600,
+                      border: "1.5px solid rgba(14,17,9,0.1)",
+                      color: "#1a1f16",
+                    }}
+                  >
+                    {settings.secondaryCtaText}
+                  </span>
+                )}
+              </div>
+              <p className="text-xs text-muted-foreground mt-2">Preview — service data loads dynamically</p>
+            </div>
+            {settings.rightCardShow && (
+              <div
+                style={{
+                  background: "#1b3a2d",
+                  borderRadius: "20px",
+                  padding: "32px",
+                  color: "#faf8f4",
+                }}
+              >
+                <div
+                  style={{
+                    fontSize: "11px",
+                    fontWeight: 700,
+                    textTransform: "uppercase",
+                    letterSpacing: "1.4px",
+                    color: "rgba(250,248,244,0.4)",
+                    marginBottom: "20px",
+                  }}
+                >
+                  {settings.rightCardTitle}
+                </div>
+                {(settings.rightCardItems || [
+                  { text: "Articles of Organization", tag: "Included", tagType: "included" as const },
+                  { text: "Operating Agreement", tag: "Free ($79 value)", tagType: "free" as const },
+                  { text: "State Filing & Processing", tag: "Included", tagType: "included" as const },
+                  { text: "Compliance Checklist", tag: "Included", tagType: "included" as const },
+                  { text: "Digital Document Delivery", tag: "Included", tagType: "included" as const },
+                ]).map((item, i) => (
+                  <div
+                    key={i}
+                    style={{
+                      display: "flex",
+                      alignItems: "center",
+                      gap: "12px",
+                      padding: "12px 14px",
+                      borderRadius: "10px",
+                      background: "rgba(255,255,255,0.06)",
+                      border: "1px solid rgba(255,255,255,0.08)",
+                      marginBottom: "10px",
+                    }}
+                  >
+                    <div
+                      style={{
+                        width: "28px",
+                        height: "28px",
+                        borderRadius: "8px",
+                        background: "#059669",
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        flexShrink: 0,
+                      }}
+                    >
+                      <Check style={{ width: "14px", height: "14px", color: "#fff" }} />
+                    </div>
+                    <span style={{ fontSize: "13px", fontWeight: 600, color: "#faf8f4", flex: 1 }}>
+                      {item.text}
+                    </span>
+                    <span
+                      style={{
+                        fontSize: "10px",
+                        fontWeight: 700,
+                        padding: "2px 8px",
+                        borderRadius: "100px",
+                        background: item.tagType === "free" ? "rgba(251,191,36,0.15)" : "rgba(74,222,128,0.15)",
+                        color: item.tagType === "free" ? "#fbbf24" : "#4ade80",
+                      }}
+                    >
+                      {item.tag}
+                    </span>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+        </div>
+        <style>{`@media (max-width: 1024px) { .svc-hero-grid { grid-template-columns: 1fr !important; } }`}</style>
+      </section>
+    );
+  }
 
   return (
     <section
-      className={cn(
-        "relative",
-        spacingClasses[settings.spacing],
-        getBackgroundClasses()
-      )}
-      style={getBackgroundStyles()}
+      className={cn("relative", spacingClasses[settings.spacing])}
     >
-      <div className={cn(
-        "mx-auto max-w-4xl px-4 flex flex-col",
-        alignmentClasses[settings.textAlignment]
-      )}>
-        {/* Placeholder Icon */}
+      <div className={cn("mx-auto max-w-4xl px-4 flex flex-col", alignmentClasses[settings.textAlignment])}>
         <div className="mb-6 flex h-16 w-16 items-center justify-center rounded-2xl bg-primary/10 text-primary">
           <span className="text-2xl">🏢</span>
         </div>
-
-        {/* Price Badge */}
         {settings.showPriceBadge && (
           <span className="inline-block px-4 py-1.5 bg-primary/10 text-primary rounded-full text-sm font-medium mb-4">
             {settings.priceBadgeText || "From $199"}
           </span>
         )}
-
-        {/* Title */}
-        <h1 className={cn(
-          "font-bold tracking-tight text-foreground",
-          titleSizeClasses[settings.titleSize]
-        )}>
-          {settings.titleSource === "custom" && settings.customTitle
-            ? settings.customTitle
-            : "{{service.name}}"}
+        <h1 className={cn("font-bold tracking-tight text-foreground", titleSizeClasses[settings.titleSize])}>
+          {settings.titleSource === "custom" && settings.customTitle ? settings.customTitle : "{{service.name}}"}
         </h1>
-
-        {/* Subtitle */}
-        <p className={cn(
-          "mt-4 text-xl text-muted-foreground max-w-2xl",
-          settings.textAlignment === "center" && "mx-auto"
-        )}>
-          {settings.subtitleSource === "custom" && settings.customSubtitle
-            ? settings.customSubtitle
-            : "{{service.shortDesc}}"}
+        <p className={cn("mt-4 text-xl text-muted-foreground max-w-2xl", settings.textAlignment === "center" && "mx-auto")}>
+          {settings.subtitleSource === "custom" && settings.customSubtitle ? settings.customSubtitle : "{{service.shortDesc}}"}
         </p>
-
-        {/* CTA Buttons */}
-        <div className={cn(
-          "mt-8 flex flex-wrap gap-4",
-          settings.textAlignment === "center" && "justify-center",
-          settings.textAlignment === "right" && "justify-end"
-        )}>
+        <div className={cn("mt-8 flex flex-wrap gap-4", settings.textAlignment === "center" && "justify-center")}>
           <Button size="lg" disabled className="cursor-not-allowed">
             {settings.primaryCtaText}
-            {settings.showPriceInButton && ` - ${extractPriceForButton()}`}
-            <ArrowRight className="ml-2 h-4 w-4" />
           </Button>
-
           {settings.showSecondaryButton && (
             <Button size="lg" variant="outline" disabled className="cursor-not-allowed">
               {settings.secondaryCtaText}
             </Button>
           )}
         </div>
-
-        {/* Preview Notice */}
-        <p className="mt-6 text-xs text-muted-foreground">
-          Preview mode - Service data will be loaded dynamically
-        </p>
+        <p className="mt-6 text-xs text-muted-foreground">Preview mode — Service data will be loaded dynamically</p>
       </div>
     </section>
   );

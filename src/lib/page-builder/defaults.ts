@@ -1784,13 +1784,23 @@ export const DEFAULT_IMAGE_SLIDER_SETTINGS: ImageSliderWidgetSettings = {
 // ============================================
 
 export const DEFAULT_SERVICE_HERO_SETTINGS: import("./types").ServiceHeroWidgetSettings = {
+  // Layout
+  layout: "single",
+
   // Content Source
   titleSource: "auto",
   subtitleSource: "auto",
 
+  // Category Badge
+  showCategoryBadge: false,
+  categoryBadgeTag: "Most Popular",
+
   // Price Badge
   showPriceBadge: true,
   priceBadgeText: "From ${{service.startingPrice}}",
+
+  // Price Hero
+  showPriceHero: false,
 
   // Primary Button
   primaryCtaText: "Get Started",
@@ -1801,6 +1811,24 @@ export const DEFAULT_SERVICE_HERO_SETTINGS: import("./types").ServiceHeroWidgetS
   showSecondaryButton: true,
   secondaryCtaText: "Ask a Question",
   secondaryCtaLink: "/contact",
+
+  // Trust Items
+  showTrustItems: false,
+  trustItems: [
+    { text: "Filing accuracy guaranteed" },
+    { text: "Filed in 24 hours" },
+    { text: "100% remote" },
+  ],
+
+  // Right Card
+  rightCardShow: false,
+  rightCardTitle: "What You Get",
+  rightCardAutoItems: true,
+  rightCardStats: [
+    { value: "1,200+", label: "Clients Served" },
+    { value: "30+", label: "Countries" },
+    { value: "4.9★", label: "Rating" },
+  ],
 
   // Appearance
   backgroundType: "none",

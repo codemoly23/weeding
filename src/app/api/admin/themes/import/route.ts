@@ -88,8 +88,9 @@ export async function POST(request: NextRequest) {
     });
   } catch (error) {
     console.error("[POST /api/admin/themes/import]", error);
+    const errorMessage = error instanceof Error ? error.message : String(error);
     return NextResponse.json(
-      { error: "Failed to import theme" },
+      { error: "Failed to import theme", details: errorMessage },
       { status: 500 }
     );
   }

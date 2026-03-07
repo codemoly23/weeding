@@ -65,6 +65,13 @@ const footerConfigSchema = z.object({
   topBorderStyle: z.string().default("none"),
   topBorderHeight: z.number().default(1),
   topBorderColor: z.string().nullable().optional(),
+  topBorderGradientFrom: z.string().nullable().optional(),
+  topBorderGradientTo: z.string().nullable().optional(),
+  // Brand Reveal
+  brandRevealEnabled: z.boolean().default(false),
+  brandRevealText: z.string().nullable().optional(),
+  brandRevealColor: z.string().nullable().optional(),
+  brandRevealOpacity: z.number().nullable().optional(),
   // Shadow & Border Radius
   shadow: z.string().default("none"),
   borderRadius: z.number().default(0),
@@ -165,7 +172,10 @@ export async function POST(request: NextRequest) {
 
     const body = await request.json();
     const validatedData = footerConfigSchema.parse(body);
-    const { bottomLinks, trustBadges, bgGradient, responsiveColumns, sectionOrder, ...footerData } = validatedData;
+    const { bottomLinks, trustBadges, bgGradient, responsiveColumns, sectionOrder,
+      topBorderGradientFrom, topBorderGradientTo,
+      brandRevealEnabled, brandRevealText, brandRevealColor, brandRevealOpacity,
+      ...footerData } = validatedData;
 
     const footer = await prisma.footerConfig.create({
       data: {
@@ -177,6 +187,18 @@ export async function POST(request: NextRequest) {
         sectionOrder: sectionOrder || [],
       },
     });
+
+    // Apply extra fields via raw SQL (Prisma client cache workaround)
+    await prisma.$executeRawUnsafe(
+      `UPDATE "FooterConfig" SET
+        "topBorderGradientFrom" = $1, "topBorderGradientTo" = $2,
+        "brandRevealEnabled" = $3, "brandRevealText" = $4,
+        "brandRevealColor" = $5, "brandRevealOpacity" = $6
+      WHERE id = $7`,
+      topBorderGradientFrom ?? null, topBorderGradientTo ?? null,
+      brandRevealEnabled ?? false, brandRevealText ?? null,
+      brandRevealColor ?? null, brandRevealOpacity ?? 0.08, footer.id
+    );
 
     return NextResponse.json(footer, { status: 201 });
   } catch (error) {
@@ -213,7 +235,10 @@ export async function PUT(request: NextRequest) {
     }
 
     const validatedData = footerConfigSchema.partial().parse(data);
-    const { bottomLinks, trustBadges, bgGradient, responsiveColumns, sectionOrder, ...footerData } = validatedData;
+    const { bottomLinks, trustBadges, bgGradient, responsiveColumns, sectionOrder,
+      topBorderGradientFrom, topBorderGradientTo,
+      brandRevealEnabled, brandRevealText, brandRevealColor, brandRevealOpacity,
+      ...footerData } = validatedData;
 
     // If setting this footer as active, deactivate others
     if (footerData.isActive === true) {
@@ -234,6 +259,25 @@ export async function PUT(request: NextRequest) {
         ...(sectionOrder !== undefined && { sectionOrder: sectionOrder || [] }),
       },
     });
+
+    // Apply extra fields via raw SQL
+    const rawUpdates: string[] = [];
+    const rawValues: unknown[] = [];
+    let paramIdx = 1;
+    if (topBorderGradientFrom !== undefined) { rawUpdates.push(`"topBorderGradientFrom" = $${paramIdx++}`); rawValues.push(topBorderGradientFrom); }
+    if (topBorderGradientTo !== undefined) { rawUpdates.push(`"topBorderGradientTo" = $${paramIdx++}`); rawValues.push(topBorderGradientTo); }
+    if (brandRevealEnabled !== undefined) { rawUpdates.push(`"brandRevealEnabled" = $${paramIdx++}`); rawValues.push(brandRevealEnabled); }
+    if (brandRevealText !== undefined) { rawUpdates.push(`"brandRevealText" = $${paramIdx++}`); rawValues.push(brandRevealText); }
+    if (brandRevealColor !== undefined) { rawUpdates.push(`"brandRevealColor" = $${paramIdx++}`); rawValues.push(brandRevealColor); }
+    if (brandRevealOpacity !== undefined) { rawUpdates.push(`"brandRevealOpacity" = $${paramIdx++}`); rawValues.push(brandRevealOpacity); }
+
+    if (rawUpdates.length > 0) {
+      rawValues.push(id);
+      await prisma.$executeRawUnsafe(
+        `UPDATE "FooterConfig" SET ${rawUpdates.join(", ")} WHERE id = $${paramIdx}`,
+        ...rawValues
+      );
+    }
 
     return NextResponse.json(footer);
   } catch (error) {

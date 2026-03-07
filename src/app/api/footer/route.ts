@@ -113,6 +113,8 @@ export async function GET() {
         topBorderStyle: footer.topBorderStyle,
         topBorderHeight: footer.topBorderHeight,
         topBorderColor: footer.topBorderColor,
+        topBorderGradientFrom: footer.topBorderGradientFrom,
+        topBorderGradientTo: footer.topBorderGradientTo,
         dividerStyle: footer.dividerStyle,
         dividerColor: footer.dividerColor,
         // Animation
@@ -127,6 +129,13 @@ export async function GET() {
         cornerRadiusTR: footer.cornerRadiusTR || 0,
         cornerRadiusBL: footer.cornerRadiusBL || 0,
         cornerRadiusBR: footer.cornerRadiusBR || 0,
+        // Brand Reveal
+        brandRevealEnabled: footer.brandRevealEnabled,
+        brandRevealText: footer.brandRevealText,
+        brandRevealColor: footer.brandRevealColor,
+        brandRevealOpacity: footer.brandRevealOpacity,
+        // Custom CSS
+        customCSS: footer.customCSS,
       },
       social: {
         show: footer.showSocialLinks,

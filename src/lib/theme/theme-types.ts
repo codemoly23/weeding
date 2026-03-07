@@ -256,9 +256,12 @@ export interface ThemeFooterConfig {
 
 export interface ThemeFooterWidget {
   type: string;
+  title?: string;
+  showTitle?: boolean;
   column: number;
   sortOrder: number;
-  content: Record<string, unknown>;
+  content?: Record<string, unknown>;
+  links?: Array<{ label: string; url: string; sortOrder?: number }>;
 }
 
 // ---- Testimonial Data ----

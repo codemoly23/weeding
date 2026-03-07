@@ -683,6 +683,42 @@ function FooterWidgetRenderer({
         </div>
       );
 
+    case "NEWSLETTER":
+      const nlContent = widget.content as {
+        text?: string;
+        placeholder?: string;
+        buttonText?: string;
+      } | null;
+      return (
+        <div>
+          {widget.showTitle && widget.title && (
+            <h3 className={headingClasses}>{widget.title}</h3>
+          )}
+          <div className={widget.showTitle && widget.title ? "mt-4" : ""}>
+            <p className="text-sm opacity-60 mb-3">
+              {nlContent?.text || "Get LLC tips & US business insights"}
+            </p>
+            <form
+              onSubmit={(e) => { e.preventDefault(); }}
+              className="flex gap-0 newsletter-form"
+            >
+              <input
+                type="email"
+                placeholder={nlContent?.placeholder || "your@email.com"}
+                className="flex-1 rounded-l-lg border border-white/15 bg-white/5 px-4 py-2.5 text-sm text-inherit placeholder:opacity-40 focus:outline-none focus:ring-1 focus:ring-white/30"
+                aria-label="Email address"
+              />
+              <button
+                type="submit"
+                className="rounded-r-lg bg-(--footer-accent-color,#e84c1e) px-5 py-2.5 text-sm font-semibold text-white transition-colors hover:opacity-90"
+              >
+                {nlContent?.buttonText || "Subscribe"}
+              </button>
+            </form>
+          </div>
+        </div>
+      );
+
     default:
       return null;
   }
@@ -919,12 +955,14 @@ export function Footer() {
     const color = styling?.topBorderColor || styling?.accentColor || ORANGE_PRIMARY;
 
     if (borderStyle === "gradient") {
+      const gradFrom = styling?.topBorderGradientFrom || color;
+      const gradTo = styling?.topBorderGradientTo || color;
       return (
         <div
           className="absolute top-0 left-0 right-0"
           style={{
             height: `${height}px`,
-            background: `linear-gradient(90deg, ${color}, ${color}66, ${color})`,
+            background: `linear-gradient(90deg, ${gradFrom}, ${gradTo})`,
           }}
           aria-hidden="true"
         />
@@ -1975,6 +2013,11 @@ export function Footer() {
 
         <BottomBar />
       </div>
+
+      {/* Custom CSS */}
+      {styling?.customCSS && (
+        <style dangerouslySetInnerHTML={{ __html: styling.customCSS }} />
+      )}
     </footer>
   );
 
@@ -1983,9 +2026,143 @@ export function Footer() {
     return (
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         {footerElement}
+        {styling?.brandRevealEnabled && (
+          <BrandRevealScene
+            text={styling.brandRevealText || businessConfig.name || "BRAND"}
+            color={styling.brandRevealColor || "#ffffff"}
+            bgColor={styling.bgColor || "#0f2318"}
+          />
+        )}
       </div>
     );
   }
 
-  return footerElement;
+  return (
+    <>
+      {footerElement}
+      {styling?.brandRevealEnabled && (
+        <BrandRevealScene
+          text={styling.brandRevealText || businessConfig.name || "BRAND"}
+          color={styling.brandRevealColor || "#ffffff"}
+          bgColor={styling.bgColor || "#0f2318"}
+        />
+      )}
+    </>
+  );
+}
+
+// ============== Brand Reveal Scene (Page-lift effect) ==============
+// Matches v3-forge: #pageLift wraps all page content (with bg), #brandScene is fixed behind.
+// As user scrolls past the footer, the page lifts up to reveal brand text underneath.
+function BrandRevealScene({ text, color, bgColor }: { text: string; color: string; bgColor: string }) {
+  const [mounted, setMounted] = useState(false);
+  const spacerRef = useRef<HTMLDivElement>(null);
+  const sceneElRef = useRef<HTMLDivElement | null>(null);
+  const pageLiftRef = useRef<HTMLElement | null>(null);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  useEffect(() => {
+    if (!mounted) return;
+
+    // Create brand scene element and append to body (outside layout wrapper)
+    const scene = document.createElement("div");
+    scene.id = "brand-reveal-scene";
+    scene.setAttribute("aria-hidden", "true");
+    Object.assign(scene.style, {
+      position: "fixed",
+      bottom: "0",
+      left: "0",
+      width: "100%",
+      zIndex: "0",
+      background: bgColor,
+      padding: "0 0 24px",
+      pointerEvents: "none",
+    });
+
+    const brandText = document.createElement("span");
+    Object.assign(brandText.style, {
+      display: "block",
+      fontFamily: "var(--font-heading, 'Outfit', sans-serif)",
+      fontSize: "clamp(100px, 22vw, 360px)",
+      fontWeight: "900",
+      letterSpacing: "-0.04em",
+      color: color,
+      textTransform: "uppercase",
+      lineHeight: "0.85",
+      maxWidth: "1160px",
+      margin: "0 auto",
+      padding: "0 28px",
+      userSelect: "none",
+    });
+    brandText.textContent = text;
+    scene.appendChild(brandText);
+    document.body.appendChild(scene);
+    sceneElRef.current = scene;
+
+    // Find the layout wrapper
+    const layoutWrapper = document.querySelector(".min-h-screen.bg-background") as HTMLElement;
+    if (!layoutWrapper) return;
+    pageLiftRef.current = layoutWrapper;
+
+    // Set up the page-lift layer (like #pageLift in v3-forge)
+    layoutWrapper.style.position = "relative";
+    layoutWrapper.style.zIndex = "1";
+
+    const spacer = spacerRef.current;
+    let brandH = 0;
+    let scrollDist = 0;
+    let transformPx = 0;
+
+    function computeLift() {
+      brandH = scene.offsetHeight;
+      scrollDist = Math.ceil(brandH * 0.5);
+      transformPx = brandH - scrollDist;
+      if (spacer) spacer.style.height = scrollDist + "px";
+    }
+
+    function update() {
+      const lw = pageLiftRef.current;
+      if (!lw) return;
+      const scrollY = window.scrollY;
+      const winH = window.innerHeight;
+      const liftStart = lw.offsetHeight - winH;
+      const progress = Math.max(0, Math.min(1, (scrollY - liftStart) / scrollDist));
+
+      lw.style.transform = progress > 0
+        ? `translateY(-${progress * transformPx}px)`
+        : "";
+      scene.style.pointerEvents = progress > 0.95 ? "auto" : "none";
+    }
+
+    computeLift();
+    update();
+
+    const onScroll = () => update();
+    const onResize = () => { computeLift(); update(); };
+
+    window.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("resize", onResize, { passive: true });
+
+    return () => {
+      window.removeEventListener("scroll", onScroll);
+      window.removeEventListener("resize", onResize);
+      // Clean up
+      scene.remove();
+      const lw = pageLiftRef.current;
+      if (lw) {
+        lw.style.position = "";
+        lw.style.zIndex = "";
+        lw.style.transform = "";
+      }
+    };
+  }, [mounted, text, color, bgColor]);
+
+  if (!mounted) return null;
+
+  // The spacer lives INSIDE the layout wrapper (as part of footer component)
+  // to add scroll distance for the reveal
+  return <div ref={spacerRef} style={{ height: 0 }} />;
 }

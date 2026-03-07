@@ -953,8 +953,14 @@ model FooterConfig {
   socialShape          String         @default("circle")
   socialSize           String         @default("md")
   topBorderColor       String?
+  topBorderGradientFrom String?
+  topBorderGradientTo  String?
   topBorderHeight      Int            @default(4)
   topBorderStyle       String         @default("none")
+  brandRevealEnabled   Boolean        @default(false)
+  brandRevealText      String?
+  brandRevealColor     String?
+  brandRevealOpacity   Float?         @default(0.08)
   preset               FooterPreset?  @relation(fields: [presetId], references: [id])
   widgets              FooterWidget[]
 }
@@ -1534,6 +1540,7 @@ enum FooterWidgetType {
   COUNTDOWN
   CTA_BANNER
   BUTTON
+  NEWSLETTER
 }
 
 enum PageTemplateType {

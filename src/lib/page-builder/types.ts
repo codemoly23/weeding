@@ -2652,15 +2652,31 @@ export interface PricingTableWidgetSettings {
  * Displays service title, description, price badge, and CTA buttons
  */
 export interface ServiceHeroWidgetSettings {
+  // Layout
+  layout: "single" | "two-column";
+
   // Content Source
   titleSource: "auto" | "custom";
   customTitle?: string;
   subtitleSource: "auto" | "custom";
   customSubtitle?: string;
 
-  // Price Badge
+  // Category Badge (shown above title in two-column mode)
+  showCategoryBadge: boolean;
+  categoryBadgeText?: string; // custom text; auto uses service category name
+  categoryBadgeTag?: string; // e.g. "Most Popular", "New"
+
+  // Title Visual Effects (two-column)
+  titleHighlightWord?: string; // word to color in primary/forest
+  titleUnderlineWord?: string; // word to show with coral underline
+
+  // Price Badge (single-column legacy)
   showPriceBadge: boolean;
   priceBadgeText: string; // Supports {{service.startingPrice}}
+
+  // Price Hero (two-column prominent display)
+  showPriceHero: boolean;
+  priceHeroNote?: string; // e.g. "Essential plan — was $250"
 
   // Primary Button
   primaryCtaText: string;
@@ -2671,6 +2687,17 @@ export interface ServiceHeroWidgetSettings {
   showSecondaryButton: boolean;
   secondaryCtaText: string;
   secondaryCtaLink: string;
+
+  // Trust Items (shown below CTAs in two-column)
+  showTrustItems: boolean;
+  trustItems?: Array<{ text: string }>;
+
+  // Right Card (two-column only — "What You Get" dark card)
+  rightCardShow: boolean;
+  rightCardTitle: string;
+  rightCardAutoItems: boolean; // auto-populate from service.features
+  rightCardItems?: Array<{ text: string; tag: string; tagType: "included" | "free" | "addon" }>;
+  rightCardStats?: Array<{ value: string; label: string }>;
 
   // Appearance
   backgroundType: "none" | "solid" | "gradient" | "image";

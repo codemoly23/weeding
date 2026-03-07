@@ -20,7 +20,7 @@
   --nav-h:72px;
 }
 html{scroll-behavior:smooth;overflow-x:hidden}
-body{font-family:'Inter',system-ui,sans-serif;background:var(--cream);color:var(--text-dark);line-height:1.65;overflow-x:hidden;-webkit-font-smoothing:antialiased}
+body{font-family:'Inter',system-ui,sans-serif;background:var(--forest-2);color:var(--text-dark);line-height:1.65;overflow-x:hidden;-webkit-font-smoothing:antialiased}
 a{color:inherit;text-decoration:none}
 button{cursor:pointer;font-family:inherit}
 ::-webkit-scrollbar{width:5px}
@@ -618,7 +618,6 @@ li.addon.addon--open .addon-toggle svg{transform:rotate(45deg)}
 .footer{background:var(--forest-2);color:var(--cream);padding:80px 0 0}
 .footer__top{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:56px;padding-bottom:60px;border-bottom:1px solid rgba(255,255,255,0.07)}
 
-.footer__brand{}
 .footer__wordmark{font-family:'Outfit',sans-serif;font-size:32px;font-weight:900;letter-spacing:-0.04em;color:var(--cream);margin-bottom:14px;line-height:1}
 .footer__wordmark span{color:var(--coral-2)}
 .footer__tagline{font-size:15px;color:rgba(250,248,244,0.45);line-height:1.7;max-width:280px;margin-bottom:28px}
@@ -647,6 +646,10 @@ li.addon.addon--open .addon-toggle svg{transform:rotate(45deg)}
 .footer__countries{font-size:13px;color:rgba(250,248,244,0.35);display:flex;align-items:center;gap:8px;flex-wrap:wrap}
 .footer__countries span{background:rgba(255,255,255,0.05);padding:3px 10px;border-radius:5px;font-size:12px}
 
+#pageLift{position:relative;z-index:1;background:var(--cream)}
+#brandScene{position:fixed;bottom:0;left:0;width:100%;z-index:0;background:var(--forest-2);padding:0 0 24px}
+#brandScene .brand-text{display:block;font-size:clamp(100px,22vw,360px);font-weight:900;letter-spacing:-0.04em;color:var(--cream);text-transform:uppercase;font-family:'Outfit',sans-serif;line-height:0.85;max-width:1160px;margin:0 auto;padding:0 28px}
+#liftSpacer{height:0}
 .footer__bottom{padding:24px 0;display:flex;justify-content:space-between;align-items:flex-start;gap:24px;flex-wrap:wrap}
 .footer__copy{font-size:13px;color:rgba(250,248,244,0.3)}
 .footer__legal{display:flex;gap:20px;flex-wrap:wrap}
@@ -907,7 +910,7 @@ li.addon.addon--open .addon-toggle svg{transform:rotate(45deg)}
 </style>
 </head>
 <body>
-
+<div id="pageLift">
 <!-- ANNOUNCEMENT BAR -->
 <div class="announce" id="announce">
   🎉 Limited offer: <a href="#pricing">Get a free Registered Agent year</a> with any Standard or Premium plan. Ends soon.
@@ -965,7 +968,7 @@ li.addon.addon--open .addon-toggle svg{transform:rotate(45deg)}
         <h1 class="hero__title" style="animation:slideUp .7s .1s ease both">
           Form Your<br>
           <span class="line2">US LLC</span><br>
-          <span class="underline-coral">in 24 Hours.</span>
+          <span class="underline-coral">Filed in 24 Hours.</span>
         </h1>
         <p class="hero__sub" style="animation:slideUp .7s .2s ease both">
           We handle every piece of paperwork — from state filing to EIN to business banking. You focus on building, we handle the bureaucracy.
@@ -1127,7 +1130,7 @@ li.addon.addon--open .addon-toggle svg{transform:rotate(45deg)}
         <div class="stat-box"><div class="stat-box__num"><span class="ctr" data-target="1200" data-decimals="0" data-suffix="">1,200</span><em>+</em></div><div class="stat-box__label">US LLCs Formed</div></div>
         <div class="stat-box"><div class="stat-box__num"><span class="ctr" data-target="30" data-decimals="0" data-suffix="">30</span><em>+</em></div><div class="stat-box__label">Countries Served</div></div>
         <div class="stat-box"><div class="stat-box__num"><span class="ctr" data-target="4.9" data-decimals="1" data-suffix="">4.9</span><em>★</em></div><div class="stat-box__label">Avg. Rating</div></div>
-        <div class="stat-box"><div class="stat-box__num"><span class="ctr" data-target="24" data-decimals="0" data-suffix="">24</span><em>h</em></div><div class="stat-box__label">Processing Time</div></div>
+        <div class="stat-box"><div class="stat-box__num"><span class="ctr" data-target="24" data-decimals="0" data-suffix="">24</span><em>h</em></div><div class="stat-box__label">We File Within</div></div>
       </div>
     </div>
   </div>
@@ -1148,7 +1151,7 @@ li.addon.addon--open .addon-toggle svg{transform:rotate(45deg)}
           <div><div class="svc-cat__name">Formation & Legal</div><div class="svc-cat__desc">Start and maintain your US business entity</div></div>
         </div>
         <ul class="svc-cat__list">
-          <li class="svc-cat__row"><a href="service-llc-formation.html" style="display:flex;align-items:center;justify-content:space-between;width:100%;text-decoration:none;color:inherit"><span class="svc-cat__rname">LLC Formation</span><span class="svc-cat__rprice">$0 + state fee</span></a></li>
+          <li class="svc-cat__row"><a href="service-llc-formation.html" style="display:flex;align-items:center;justify-content:space-between;width:100%;text-decoration:none;color:inherit"><span class="svc-cat__rname">LLC Formation</span><span class="svc-cat__rprice">From $149 + state fee</span></a></li>
           <li class="svc-cat__row"><span class="svc-cat__rname">EIN Application</span><span class="svc-cat__rprice">$99</span></li>
           <li class="svc-cat__row"><span class="svc-cat__rname">Operating Agreement</span><span class="svc-cat__rprice">$79</span></li>
           <li class="svc-cat__row"><span class="svc-cat__rname">DBA / Trade Name</span><span class="svc-cat__rprice">$99</span></li>
@@ -1161,12 +1164,12 @@ li.addon.addon--open .addon-toggle svg{transform:rotate(45deg)}
           <div><div class="svc-cat__name">Compliance & Documents</div><div class="svc-cat__desc">Keep your business in good standing</div></div>
         </div>
         <ul class="svc-cat__list">
-          <li class="svc-cat__row"><span class="svc-cat__rname">Registered Agent</span><span class="svc-cat__rprice">$99/yr</span></li>
+          <li class="svc-cat__row"><span class="svc-cat__rname">Registered Agent</span><span class="svc-cat__rprice">$250/yr</span></li>
           <li class="svc-cat__row"><span class="svc-cat__rname">Certificate of Good Standing</span><span class="svc-cat__rprice">$75</span></li>
           <li class="svc-cat__row"><span class="svc-cat__rname">Amendment Filing</span><span class="svc-cat__rprice">$99</span></li>
           <li class="svc-cat__row"><span class="svc-cat__rname">LLC Dissolution</span><span class="svc-cat__rprice">$149</span></li>
           <li class="svc-cat__row"><span class="svc-cat__rname">Virtual Business Address</span><span class="svc-cat__rprice">$149/yr</span></li>
-          <li class="svc-cat__row"><span class="svc-cat__rname">Annual Report Filing</span><span class="svc-cat__rprice">$75</span></li>
+          <li class="svc-cat__row"><span class="svc-cat__rname">Annual Report Filing</span><span class="svc-cat__rprice">$60/yr</span></li>
           <li class="svc-cat__row"><span class="svc-cat__rname">BOI Ownership Filing</span><span class="svc-cat__rprice">$49</span></li>
           <li class="svc-cat__row"><span class="svc-cat__rname">Apostille Service</span><span class="svc-cat__rprice">$149</span></li>
           <li class="svc-cat__row"><span class="svc-cat__rname">Form 5472 Preparation</span><span class="svc-cat__rprice">$149</span></li>
@@ -1232,7 +1235,7 @@ li.addon.addon--open .addon-toggle svg{transform:rotate(45deg)}
         <h3>LLC Formation</h3>
         <p>Start your US LLC from anywhere — no US travel, no SSN needed. We handle all state paperwork, Articles of Organization, and operating agreement. The first step to everything — banking, Amazon, Stripe, and more.</p>
         <div class="svc__foot">
-          <div class="svc__price">From $0 + state fee</div>
+          <div class="svc__price">From $149 + state fee</div>
           <div class="svc__link">Learn more <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></div>
         </div>
       </a>
@@ -1372,10 +1375,10 @@ li.addon.addon--open .addon-toggle svg{transform:rotate(45deg)}
         <div class="wb__big-text">From India, Pakistan, UAE, Nigeria, and 26+ other countries — we know every pain point, every requirement, every workaround.</div>
       </div>
 
-      <!-- Metric: 30-day money-back -->
+      <!-- Metric: approval rate -->
       <div class="wb wb--metric r d2">
-        <div class="wb__num"><span data-count="30" class="why-counter">0</span><sub>-day</sub></div>
-        <div class="wb__label">Money-back guarantee</div>
+        <div class="wb__num"><span data-count="98" class="why-counter">0</span><sub>%</sub></div>
+        <div class="wb__label">First-attempt approval rate</div>
       </div>
 
       <!-- Metric: 100% remote -->
@@ -1397,8 +1400,8 @@ li.addon.addon--open .addon-toggle svg{transform:rotate(45deg)}
       <div class="wb wb--reason r d3">
         <div class="wb__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div>
         <div>
-          <h4>24-Hour Processing</h4>
-          <p>Industry-leading speed — from order to delivered documents in one day.</p>
+          <h4>Filed in 24 Hours</h4>
+          <p>We submit your LLC paperwork to the state within 24 hours of your order.</p>
         </div>
       </div>
 
@@ -1426,7 +1429,7 @@ li.addon.addon--open .addon-toggle svg{transform:rotate(45deg)}
     <div class="why-cta r d5">
       <div class="why-cta__badges">
         <div class="why-cta__badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg> Secure & confidential</div>
-        <div class="why-cta__badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg> 24-hour processing</div>
+        <div class="why-cta__badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg> Filed in 24 hours</div>
         <div class="why-cta__badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 014 10 15.3 15.3 0 01-4 10 15.3 15.3 0 01-4-10 15.3 15.3 0 014-10z"/></svg> 30+ countries served</div>
         <div class="why-cta__badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg> Trusted by 1,200+ founders</div>
       </div>
@@ -1448,74 +1451,85 @@ li.addon.addon--open .addon-toggle svg{transform:rotate(45deg)}
     <div class="pricing-grid">
 
       <!-- ESSENTIAL -->
-      <div class="pc r d1" data-plan-id="essential" data-price="0" data-value="79">
+      <div class="pc r d1" data-plan-id="essential" data-price="149" data-value="426">
         <div class="pc__sel"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M20 6L9 17l-5-5"/></svg></div>
         <div class="pc__tier">Starter</div>
         <div class="pc__name">Essential</div>
-        <div class="pc__tagline">File your US LLC from anywhere — no US address needed</div>
-        <div class="pc__price"><sup>$</sup>0 <sub>+ state fee</sub></div>
-        <div class="pc__note">No service fee — you only pay the government filing cost</div>
+        <div class="pc__tagline">File your US LLC with everything you need to get started</div>
+        <div class="pc__price"><sup>$</sup>149 <sub>+ state fee</sub></div>
+        <div class="pc__note">Was $250 — complete formation package, no hidden fees</div>
         <ul class="pc__list">
-          <li class="y"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg>Articles of Organization<button class="info-icon" tabindex="0">i<span class="info-tip">The official state document that legally creates your LLC. We prepare and file this directly with the state on your behalf.</span></button></li>
+          <li class="y"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg>LLC Formation (Articles of Organization)<button class="info-icon" tabindex="0">i<span class="info-tip">The official state document that legally creates your LLC. We prepare and file this directly with the state on your behalf.</span></button></li>
           <li class="y"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg>Operating Agreement <em style="font-size:11px;color:var(--text-faint);font-style:normal">(worth $79)</em><button class="info-icon" tabindex="0">i<span class="info-tip">Defines ownership structure, voting rights, and operating rules. Required by most banks to open a business account.</span></button></li>
-          <li class="y"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg>Compliance checklist</li>
+          <li class="y"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg>Registered Agent — 1 yr <em style="font-size:11px;color:var(--text-faint);font-style:normal">(worth $99)</em><button class="info-icon" tabindex="0">i<span class="info-tip">Legally required for every US LLC. Receives official legal notices and government mail on your behalf at a real US address.</span></button></li>
+          <li class="y"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg>Business Address &amp; Mail Forwarding — 1 yr<button class="info-icon" tabindex="0">i<span class="info-tip">A real US street address for your business — required for Amazon seller verification and accepted by banks and the IRS.</span></button></li>
+          <li class="y"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg>EIN / Tax ID <em style="font-size:11px;color:var(--text-faint);font-style:normal">(worth $99)</em><button class="info-icon" tabindex="0">i<span class="info-tip">Your LLC's federal tax ID. Required to open a US bank account, file taxes, and register as an Amazon seller. No SSN needed.</span></button></li>
+          <li class="y"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg>Annual Compliance Guidance</li>
           <li class="addon">
-            <div class="addon-top"><button class="addon-toggle" aria-label="More info"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 5v14M5 12h14"/></svg></button><span class="addon-label">Registered Agent</span><span class="addon-ptag">$99/yr</span><button class="add-btn" data-addon-id="ra">+ Add</button></div>
-            <div class="addon-expand"><div class="addon-expand-inner">Legally required for every US LLC. We provide a real street address in Wyoming or Delaware to receive legal notices and government mail on your behalf.</div></div>
+            <div class="addon-top"><button class="addon-toggle" aria-label="More info"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 5v14M5 12h14"/></svg></button><span class="addon-label">Expedited Filing (3-day)</span><span class="addon-ptag">$99</span><button class="add-btn" data-addon-id="expedited">+ Add</button></div>
+            <div class="addon-expand"><div class="addon-expand-inner">Upgrade to priority 3-day state processing. Standard filing takes 2–3 weeks; expedited gets your LLC approved in as little as 3 business days.</div></div>
           </li>
           <li class="addon">
-            <div class="addon-top"><button class="addon-toggle" aria-label="More info"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 5v14M5 12h14"/></svg></button><span class="addon-label">EIN / Tax ID</span><span class="addon-ptag">$99</span><button class="add-btn" data-addon-id="ein">+ Add</button></div>
-            <div class="addon-expand"><div class="addon-expand-inner">Required to open a US bank account, file taxes, and register as an Amazon seller. We handle the IRS SS-4 form — no SSN required.</div></div>
+            <div class="addon-top"><button class="addon-toggle" aria-label="More info"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 5v14M5 12h14"/></svg></button><span class="addon-label">Annual Report Service</span><span class="addon-ptag">$60/yr</span><button class="add-btn" data-addon-id="annual-report">+ Add</button></div>
+            <div class="addon-expand"><div class="addon-expand-inner">We prepare and file your state annual report on your behalf each year to keep your LLC in good standing and avoid penalties.</div></div>
           </li>
           <li class="addon">
-            <div class="addon-top"><button class="addon-toggle" aria-label="More info"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 5v14M5 12h14"/></svg></button><span class="addon-label">US Banking Setup</span><span class="addon-ptag">$199</span><button class="add-btn" data-addon-id="banking">+ Add</button></div>
-            <div class="addon-expand"><div class="addon-expand-inner">Step-by-step guidance to open a Mercury or Relay business account — 100% online, no SSN or US visit required. Works with Stripe, PayPal, and Wise.</div></div>
+            <div class="addon-top"><button class="addon-toggle" aria-label="More info"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 5v14M5 12h14"/></svg></button><span class="addon-label">Amazon Seller Setup</span><span class="addon-ptag">$249</span><button class="add-btn" data-addon-id="amazon-setup">+ Add</button></div>
+            <div class="addon-expand"><div class="addon-expand-inner">Full Amazon seller account setup — document prep, identity verification, tax interview, and post-approval review. For non-US residents selling on Amazon US.</div></div>
           </li>
         </ul>
         <a href="#contact" class="btn btn--outline-dark" onclick="event.stopPropagation()">Get Started →</a>
       </div>
 
       <!-- PROFESSIONAL -->
-      <div class="pc pc--mid r d2" data-plan-id="professional" data-price="299" data-value="326">
+      <div class="pc pc--mid r d2" data-plan-id="professional" data-price="299" data-value="625">
         <div class="pc__cap">Most Popular</div>
         <div class="pc__sel"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M20 6L9 17l-5-5"/></svg></div>
         <div class="pc__tier">Standard</div>
         <div class="pc__name">Professional</div>
         <div class="pc__tagline">Everything international entrepreneurs need to launch and stay compliant</div>
-        <div class="pc__save"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg>$326+ in bundled value</div>
+        <div class="pc__save"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg>Save $326+ · $625+ in bundled value</div>
         <div class="pc__price"><sup>$</sup>299 <sub>+ state fee</sub></div>
-        <div class="pc__note">One-time fee · No recurring charges · No hidden costs</div>
+        <div class="pc__note">Was $499 · No recurring charges · No hidden costs</div>
         <ul class="pc__list">
-          <li class="y"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg>Articles of Organization<button class="info-icon" tabindex="0">i<span class="info-tip">The official state document that legally creates your LLC. We prepare and file this directly with the state on your behalf.</span></button></li>
-          <li class="y"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg>Operating Agreement<button class="info-icon" tabindex="0">i<span class="info-tip">Defines ownership structure, voting rights, and operating rules. Required by most banks to open a business account.</span></button></li>
-          <li class="y"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg>Registered Agent — 1 yr free <em style="font-size:11px;color:var(--text-faint);font-style:normal">($99)</em><button class="info-icon" tabindex="0">i<span class="info-tip">Legally required for every LLC. Receives official legal notices and government mail on your behalf at a real US address.</span></button></li>
-          <li class="y"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg>EIN / Tax ID Application <em style="font-size:11px;color:var(--text-faint);font-style:normal">($99)</em><button class="info-icon" tabindex="0">i<span class="info-tip">Your LLC's federal tax ID. Required to open a US bank account, file taxes, and register as an Amazon seller. No SSN needed.</span></button></li>
-          <li class="y"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg>BOI Beneficial Ownership Filing <em style="font-size:11px;color:var(--text-faint);font-style:normal">($49)</em><button class="info-icon" tabindex="0">i<span class="info-tip">Federally required since Jan 2024. All LLCs must report beneficial owners to FinCEN. Failure triggers $500/day in penalties.</span></button></li>
+          <li class="y"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg>All Essential plan features included<button class="info-icon" tabindex="0">i<span class="info-tip">Includes LLC Formation, Operating Agreement, Registered Agent (1 yr), Business Address, EIN, and Annual Compliance Guidance.</span></button></li>
+          <li class="y"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg>BOI FinCEN Report <em style="font-size:11px;color:var(--text-faint);font-style:normal">($49)</em><button class="info-icon" tabindex="0">i<span class="info-tip">Federally required since Jan 2024. All LLCs must report beneficial owners to FinCEN. Failure triggers $500/day in penalties.</span></button></li>
+          <li class="y"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg>Bank Account Opening — Mercury/Relay<button class="info-icon" tabindex="0">i<span class="info-tip">Step-by-step guidance to open a fintech business account — 100% online, no SSN or US visit required. Works with Stripe, PayPal, and Wise.</span></button></li>
+          <li class="y"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg>Stripe Account Setup</li>
+          <li class="y"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg>Business Debit Card</li>
+          <li class="y"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg>Basic Tax Consultation <em style="font-size:11px;color:var(--text-faint);font-style:normal">($149)</em></li>
           <li class="addon">
-            <div class="addon-top"><button class="addon-toggle" aria-label="More info"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 5v14M5 12h14"/></svg></button><span class="addon-label">US Banking Setup</span><span class="addon-ptag">$199</span><button class="add-btn" data-addon-id="banking">+ Add</button></div>
-            <div class="addon-expand"><div class="addon-expand-inner">Step-by-step guidance to open a Mercury or Relay business account — 100% online, no SSN or US visit required. Works with Stripe, PayPal, and Wise.</div></div>
+            <div class="addon-top"><button class="addon-toggle" aria-label="More info"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 5v14M5 12h14"/></svg></button><span class="addon-label">Expedited Filing (3-day)</span><span class="addon-ptag">$99</span><button class="add-btn" data-addon-id="expedited">+ Add</button></div>
+            <div class="addon-expand"><div class="addon-expand-inner">Upgrade to priority 3-day state processing. Standard filing takes 2–3 weeks; expedited gets your LLC approved in as little as 3 business days.</div></div>
+          </li>
+          <li class="addon">
+            <div class="addon-top"><button class="addon-toggle" aria-label="More info"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 5v14M5 12h14"/></svg></button><span class="addon-label">Annual Report Service</span><span class="addon-ptag">$60/yr</span><button class="add-btn" data-addon-id="annual-report">+ Add</button></div>
+            <div class="addon-expand"><div class="addon-expand-inner">We prepare and file your state annual report on your behalf each year to keep your LLC in good standing and avoid penalties.</div></div>
+          </li>
+          <li class="addon">
+            <div class="addon-top"><button class="addon-toggle" aria-label="More info"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 5v14M5 12h14"/></svg></button><span class="addon-label">Amazon Seller Setup</span><span class="addon-ptag">$249</span><button class="add-btn" data-addon-id="amazon-setup">+ Add</button></div>
+            <div class="addon-expand"><div class="addon-expand-inner">Full Amazon seller account setup — document prep, identity verification, tax interview, and post-approval review. For non-US residents selling on Amazon US.</div></div>
           </li>
         </ul>
         <a href="#contact" class="btn btn--forest" onclick="event.stopPropagation()">Get Started →</a>
       </div>
 
       <!-- COMPLETE -->
-      <div class="pc r d3" data-plan-id="complete" data-price="620" data-value="773">
+      <div class="pc r d3" data-plan-id="complete" data-price="650" data-value="1199">
         <div class="pc__sel"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M20 6L9 17l-5-5"/></svg></div>
         <div class="pc__tier">Premium</div>
         <div class="pc__name">Complete</div>
-        <div class="pc__tagline">Full US business setup for international entrepreneurs — in 48 hours</div>
-        <div class="pc__save"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg>Save $153 · $773+ total value</div>
-        <div class="pc__price"><sup>$</sup>620 <sub>+ state fee</sub></div>
-        <div class="pc__note">All-inclusive · Priority 24h processing · One single order</div>
+        <div class="pc__tagline">Full US business setup — LLC, banking, taxes, and priority support</div>
+        <div class="pc__save"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg>Save $549+ · $1,199+ total value</div>
+        <div class="pc__price"><sup>$</sup>650 <sub>+ state fee</sub></div>
+        <div class="pc__note">Was $899 · Priority 3-day processing · One single order</div>
         <ul class="pc__list">
-          <li class="y"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg>Articles of Organization + BOI + EIN<button class="info-icon" tabindex="0">i<span class="info-tip">Includes the state LLC filing, federal Beneficial Ownership Report (FinCEN), and EIN (Tax ID) — all handled together in one order.</span></button></li>
-          <li class="y"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg>Operating Agreement<button class="info-icon" tabindex="0">i<span class="info-tip">Defines ownership structure, voting rights, and operating rules. Required by most banks to open a business account.</span></button></li>
-          <li class="y"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg>Registered Agent — 1 yr free<button class="info-icon" tabindex="0">i<span class="info-tip">Legally required for every LLC. Receives official legal notices and government mail on your behalf at a real US address.</span></button></li>
-          <li class="y"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg>Virtual US Address — 1 year <em style="font-size:11px;color:var(--text-faint);font-style:normal">($149)</em><button class="info-icon" tabindex="0">i<span class="info-tip">A real US street address for your business — required for Amazon seller verification and accepted by banks and the IRS.</span></button></li>
-          <li class="y"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg>US Business Bank Account Setup <em style="font-size:11px;color:var(--text-faint);font-style:normal">($199)</em><button class="info-icon" tabindex="0">i<span class="info-tip">Step-by-step guidance to open a Mercury or Relay account — 100% online, no SSN or US visit. Works with Stripe, PayPal, and Wise.</span></button></li>
-          <li class="y"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg>Stripe + PayPal Setup <em style="font-size:11px;color:var(--text-faint);font-style:normal">($99)</em></li>
-          <li class="y"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg>Priority 24h processing + Dedicated manager</li>
+          <li class="y"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg>All Professional plan features included<button class="info-icon" tabindex="0">i<span class="info-tip">Includes everything in Essential + BOI Report, Bank Account, Stripe Setup, Business Debit Card, and Basic Tax Consultation.</span></button></li>
+          <li class="y"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg>ITIN Application<button class="info-icon" tabindex="0">i<span class="info-tip">Individual Taxpayer Identification Number — required for non-US founders to file US taxes, open certain accounts, and receive US income.</span></button></li>
+          <li class="y"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg>PayPal Business Account Setup</li>
+          <li class="y"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg>Form 5472 + Pro Forma 1120<button class="info-icon" tabindex="0">i<span class="info-tip">Required IRS filings for foreign-owned single-member LLCs. Failure to file triggers $25,000 per-year penalties. Renewal offered from Year 2.</span></button></li>
+          <li class="y"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg>Priority Support &amp; Business Consultation</li>
+          <li class="y"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg>Expedited 3-day Processing — <strong>Included</strong></li>
         </ul>
         <a href="#contact" class="btn btn--coral" onclick="event.stopPropagation()">Get Started →</a>
       </div>
@@ -1821,7 +1835,7 @@ li.addon.addon--open .addon-toggle svg{transform:rotate(45deg)}
                 <option>LLC Formation</option>
                 <option>LLC + EIN Bundle</option>
                 <option>Standard Package ($299)</option>
-                <option>Premium Package ($620)</option>
+                <option>Premium Package ($650)</option>
                 <option>Amazon Seller Account</option>
                 <option>Business Banking Setup</option>
                 <option>Trademark Registration</option>
@@ -1868,7 +1882,7 @@ li.addon.addon--open .addon-toggle svg{transform:rotate(45deg)}
         </div>
 
         <h2 class="pfc-h2">Your US business<br><span class="pfc-gradient">starts today.</span></h2>
-        <p class="pfc-sub"><strong>LLC + EIN + Bank Account</strong> — delivered in as fast as 24 hours. No US travel, no confusion, no hidden fees.</p>
+        <p class="pfc-sub"><strong>LLC filed within 24 hours.</strong> EIN, bank account &amp; compliance — all handled remotely, step by step. No US travel, no hidden fees.</p>
 
         <div class="pfc-actions">
           <a href="#contact" class="btn btn--coral btn--lg">Start My LLC — Free Consultation</a>
@@ -1876,9 +1890,9 @@ li.addon.addon--open .addon-toggle svg{transform:rotate(45deg)}
         </div>
 
         <div class="pfc-trust">
-          <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>30-Day Money-Back</span>
+          <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>Error-Free Guarantee</span>
           <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6L9 17l-5-5"/></svg>No Hidden Fees</span>
-          <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>24h Processing</span>
+          <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>Filed in 24h</span>
           <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>4.9/5 Rating</span>
         </div>
       </div>
@@ -1976,21 +1990,8 @@ li.addon.addon--open .addon-toggle svg{transform:rotate(45deg)}
           <li><a href="#">Affiliates</a></li>
           <li><a href="#">Privacy Policy</a></li>
           <li><a href="#">Terms of Service</a></li>
-          <li><a href="#">Refund Policy</a></li>
+          <li><a href="#">Filing Guarantee</a></li>
         </ul>
-      </div>
-    </div>
-
-    <div class="footer__mid">
-      <div class="footer__badges">
-        <div class="footer__badge">🔒 SSL Secured</div>
-        <div class="footer__badge">✓ GDPR Compliant</div>
-        <div class="footer__badge">⭐ 4.9/5 Rated</div>
-        <div class="footer__badge">🛡 SOC 2</div>
-        <div class="footer__badge">💰 30-Day Guarantee</div>
-      </div>
-      <div class="footer__countries">
-        <span>🇧🇩 BD</span><span>🇮🇳 IN</span><span>🇵🇰 PK</span><span>🇦🇪 AE</span><span>🇳🇬 NG</span><span>🇵🇭 PH</span><span>🇹🇷 TR</span><span>🇪🇬 EG</span>
       </div>
     </div>
 
@@ -2002,15 +2003,58 @@ li.addon.addon--open .addon-toggle svg{transform:rotate(45deg)}
       <div class="footer__legal">
         <a href="#">Privacy</a>
         <a href="#">Terms</a>
-        <a href="#">Refunds</a>
+        <a href="#">Guarantee</a>
         <a href="#">Disclaimer</a>
         <a href="#">Sitemap</a>
       </div>
     </div>
+
   </div>
 </footer>
+</div><!-- /pageLift -->
+
+<div id="brandScene">
+  <span class="brand-text">LLCPad</span>
+</div>
+<div id="liftSpacer"></div>
 
 <script>
+// Page lift — brand reveal (auto-height, no 100vh gap)
+(function(){
+  const pageLift   = document.getElementById('pageLift');
+  const brandScene = document.getElementById('brandScene');
+  const spacer     = document.getElementById('liftSpacer');
+  if(!pageLift || !brandScene) return;
+
+  var brandH = 0;
+  var scrollDist = 0;
+  var transformPx = 0;
+
+  function computeLift(){
+    brandH = brandScene.offsetHeight;
+    // Split the reveal: half from natural scroll, half from transform
+    // This ensures pageLift bottom aligns exactly with brandScene top (gap ≈ 0)
+    scrollDist  = Math.ceil(brandH * 0.5);
+    transformPx = brandH - scrollDist;
+    if(spacer) spacer.style.height = scrollDist + 'px';
+  }
+  computeLift();
+
+  function update(){
+    var scrollY  = window.scrollY;
+    var winH     = window.innerHeight;
+    var liftStart = pageLift.offsetHeight - winH;
+    var progress = Math.max(0, Math.min(1, (scrollY - liftStart) / scrollDist));
+
+    pageLift.style.transform       = progress > 0 ? 'translateY(-' + (progress * transformPx) + 'px)' : '';
+    brandScene.style.pointerEvents = progress > 0.95 ? 'auto' : 'none';
+  }
+
+  window.addEventListener('scroll', update, { passive: true });
+  window.addEventListener('resize', function(){ computeLift(); update(); }, { passive: true });
+  update();
+})();
+
 // Mobile nav
 document.getElementById('hBurger').addEventListener('click',()=>document.getElementById('mobNav').classList.add('open'));
 document.getElementById('mobX').addEventListener('click',()=>document.getElementById('mobNav').classList.remove('open'));
@@ -2164,8 +2208,8 @@ function handleHeroForm(e){
 /* ===== PRICING INTERACTIVE ===== */
 (function(){
   const INCLUDED_IN = {
-    professional: ['ra','ein'],
-    complete:     ['ra','ein','banking']
+    professional: [],
+    complete:     ['expedited','annual-report','amazon-setup']
   };
 
   let selPlan   = 'professional';

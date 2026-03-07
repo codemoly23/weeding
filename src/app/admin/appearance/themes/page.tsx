@@ -100,7 +100,8 @@ export default function ThemeGalleryPage() {
 
       if (!response.ok) {
         const errorData = await response.json().catch(() => ({}));
-        throw new Error(errorData.error || "Failed to import theme");
+        const msg = errorData.details ? `${errorData.error}: ${errorData.details}` : (errorData.error || "Failed to import theme");
+        throw new Error(msg);
       }
 
       const data = await response.json();
