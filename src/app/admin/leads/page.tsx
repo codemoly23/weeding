@@ -169,6 +169,7 @@ const sourceLabels: Record<string, string> = {
   SOCIAL_MEDIA: "Social Media",
   DIRECT: "Direct",
   COLD_OUTREACH: "Cold Outreach",
+  NEWSLETTER: "Newsletter",
   OTHER: "Other",
 };
 
@@ -773,6 +774,7 @@ export default function LeadsPage() {
                 <SelectItem value="FACEBOOK_ADS">Facebook Ads</SelectItem>
                 <SelectItem value="SOCIAL_MEDIA">Social Media</SelectItem>
                 <SelectItem value="DIRECT">Direct</SelectItem>
+                <SelectItem value="NEWSLETTER">Newsletter</SelectItem>
               </SelectContent>
             </Select>
             <Select value={priorityFilter} onValueChange={(v) => { setPriorityFilter(v); setPage(1); }}>
@@ -999,6 +1001,7 @@ export default function LeadsPage() {
                     <SelectItem value="SOCIAL_MEDIA">Social Media</SelectItem>
                     <SelectItem value="DIRECT">Direct</SelectItem>
                     <SelectItem value="COLD_OUTREACH">Cold Outreach</SelectItem>
+                    <SelectItem value="NEWSLETTER">Newsletter</SelectItem>
                     <SelectItem value="OTHER">Other</SelectItem>
                   </SelectContent>
                 </Select>

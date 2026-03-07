@@ -23,6 +23,7 @@ import {
   Target,
   Paintbrush,
   Database,
+  Megaphone,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useBusinessConfig } from "@/hooks/use-business-config";
@@ -110,6 +111,15 @@ const navItems: NavItem[] = [
     title: "Users",
     href: "/admin/users",
     icon: UserCog,
+  },
+  {
+    title: "Marketing",
+    icon: Megaphone,
+    children: [
+      { title: "Newsletter", href: "/admin/marketing/newsletter" },
+      { title: "Campaigns", href: "/admin/marketing/campaigns" },
+      { title: "Email Templates", href: "/admin/marketing/templates" },
+    ],
   },
   {
     title: "Appearance",

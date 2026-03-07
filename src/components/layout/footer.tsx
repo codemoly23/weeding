@@ -344,6 +344,86 @@ function BackgroundPattern({
   );
 }
 
+// Newsletter subscription widget with API integration
+function NewsletterWidget({ widget, headingClasses }: { widget: FooterWidget; headingClasses?: string }) {
+  const [email, setEmail] = useState("");
+  const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
+  const [message, setMessage] = useState("");
+
+  const nlContent = widget.content as {
+    text?: string;
+    placeholder?: string;
+    buttonText?: string;
+  } | null;
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!email || status === "loading") return;
+
+    setStatus("loading");
+    try {
+      const res = await fetch("/api/newsletter/subscribe", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email }),
+      });
+      const data = await res.json();
+      if (data.success) {
+        setStatus("success");
+        setMessage(data.message || "Successfully subscribed!");
+        setEmail("");
+      } else {
+        setStatus("error");
+        setMessage(data.error || "Something went wrong");
+      }
+    } catch {
+      setStatus("error");
+      setMessage("Something went wrong. Please try again.");
+    }
+  };
+
+  return (
+    <div>
+      {widget.showTitle && widget.title && (
+        <h3 className={headingClasses}>{widget.title}</h3>
+      )}
+      <div className={widget.showTitle && widget.title ? "mt-4" : ""}>
+        <p className="text-sm opacity-60 mb-3">
+          {nlContent?.text || "Get LLC tips & US business insights"}
+        </p>
+        {status === "success" ? (
+          <p className="text-sm text-green-400">{message}</p>
+        ) : (
+          <>
+            <form onSubmit={handleSubmit} className="flex gap-0 newsletter-form">
+              <input
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                placeholder={nlContent?.placeholder || "your@email.com"}
+                className="flex-1 rounded-l-lg border border-white/15 bg-white/5 px-4 py-2.5 text-sm text-inherit placeholder:opacity-40 focus:outline-none focus:ring-1 focus:ring-white/30"
+                aria-label="Email address"
+                required
+                disabled={status === "loading"}
+              />
+              <button
+                type="submit"
+                disabled={status === "loading"}
+                className="rounded-r-lg bg-(--footer-accent-color,#e84c1e) px-5 py-2.5 text-sm font-semibold text-white transition-colors hover:opacity-90 disabled:opacity-50"
+              >
+                {status === "loading" ? "..." : nlContent?.buttonText || "Subscribe"}
+              </button>
+            </form>
+            {status === "error" && (
+              <p className="text-sm text-red-400 mt-2">{message}</p>
+            )}
+          </>
+        )}
+      </div>
+    </div>
+  );
+}
+
 // Widget renderer component
 function FooterWidgetRenderer({
   widget,
@@ -684,40 +764,7 @@ function FooterWidgetRenderer({
       );
 
     case "NEWSLETTER":
-      const nlContent = widget.content as {
-        text?: string;
-        placeholder?: string;
-        buttonText?: string;
-      } | null;
-      return (
-        <div>
-          {widget.showTitle && widget.title && (
-            <h3 className={headingClasses}>{widget.title}</h3>
-          )}
-          <div className={widget.showTitle && widget.title ? "mt-4" : ""}>
-            <p className="text-sm opacity-60 mb-3">
-              {nlContent?.text || "Get LLC tips & US business insights"}
-            </p>
-            <form
-              onSubmit={(e) => { e.preventDefault(); }}
-              className="flex gap-0 newsletter-form"
-            >
-              <input
-                type="email"
-                placeholder={nlContent?.placeholder || "your@email.com"}
-                className="flex-1 rounded-l-lg border border-white/15 bg-white/5 px-4 py-2.5 text-sm text-inherit placeholder:opacity-40 focus:outline-none focus:ring-1 focus:ring-white/30"
-                aria-label="Email address"
-              />
-              <button
-                type="submit"
-                className="rounded-r-lg bg-(--footer-accent-color,#e84c1e) px-5 py-2.5 text-sm font-semibold text-white transition-colors hover:opacity-90"
-              >
-                {nlContent?.buttonText || "Subscribe"}
-              </button>
-            </form>
-          </div>
-        </div>
-      );
+      return <NewsletterWidget widget={widget} headingClasses={headingClasses} />;
 
     default:
       return null;
@@ -810,6 +857,11 @@ export function Footer() {
 
   // Get styling from footer config
   const styling = footerConfig?.styling;
+
+  // Don't render anything until config loads (prevents flash of default footer)
+  if (isConfigLoading) {
+    return null;
+  }
 
   // Build background style
   const getBackgroundStyle = (): React.CSSProperties => {
@@ -1812,7 +1864,7 @@ export function Footer() {
       ref={footerRef}
       className={cn(
         "relative overflow-hidden footer-dynamic-styles",
-        !isBoxed && "border-t",
+        !isBoxed && (!styling?.topBorderStyle || styling.topBorderStyle === "none") && "border-t",
         animationClasses
       )}
       style={footerStyle}
@@ -2101,6 +2153,7 @@ function BrandRevealScene({ text, color, bgColor }: { text: string; color: strin
       margin: "0 auto",
       padding: "0 28px",
       userSelect: "none",
+      textAlign: "center",
     });
     brandSpan.textContent = text;
     scene.appendChild(brandSpan);

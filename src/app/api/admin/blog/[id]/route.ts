@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import prisma from "@/lib/db";
 import { checkContentAccess, checkAdminOnly, authError } from "@/lib/admin-auth";
+import { triggerBlogAutoEmail } from "@/lib/newsletter/blog-auto-email";
 
 // GET single blog post
 export async function GET(
@@ -91,6 +92,11 @@ export async function PUT(
         categories: true,
       },
     });
+
+    // Trigger auto-email if blog post is being published for the first time
+    if (body.status === "PUBLISHED" && existingPost?.status !== "PUBLISHED") {
+      triggerBlogAutoEmail(post.id).catch(console.error);
+    }
 
     return NextResponse.json(post);
   } catch (error) {

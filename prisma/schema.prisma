@@ -1203,9 +1203,13 @@ model Lead {
   updatedAt        DateTime          @updatedAt
   formTemplateId   String?
   formTemplateName String?
+  newsletterSubscribed Boolean          @default(false)
+  newsletterToken      String?          @unique
+  newsletterUnsubAt    DateTime?
   assignedTo       User?             @relation("AssignedLeads", fields: [assignedToId], references: [id])
   formTemplate     LeadFormTemplate? @relation(fields: [formTemplateId], references: [id])
   activities       LeadActivity[]
+  campaignRecipients EmailCampaignRecipient[]
   leadNotes        LeadNote[]
 
   @@index([email])
@@ -1216,6 +1220,7 @@ model Lead {
   @@index([createdAt])
   @@index([priority])
   @@index([formTemplateId])
+  @@index([newsletterSubscribed])
 }
 
 model LeadActivity {
@@ -1583,6 +1588,7 @@ enum LeadSource {
   SOCIAL_MEDIA
   DIRECT
   COLD_OUTREACH
+  NEWSLETTER
   OTHER
 }
 
@@ -1591,4 +1597,80 @@ enum LeadPriority {
   MEDIUM
   HIGH
   URGENT
+}
+
+// ─── Newsletter & Email Campaigns ───────────────────────────────────
+
+enum CampaignStatus {
+  DRAFT
+  SCHEDULED
+  SENDING
+  SENT
+  CANCELLED
+  FAILED
+}
+
+model EmailTemplate {
+  id        String   @id @default(cuid())
+  name      String
+  subject   String
+  body      String
+  variables String[]
+  isDefault Boolean  @default(false)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  campaigns EmailCampaign[]
+
+  @@index([isDefault])
+}
+
+model EmailCampaign {
+  id              String         @id @default(cuid())
+  subject         String
+  previewText     String?
+  body            String
+  templateId      String?
+  template        EmailTemplate? @relation(fields: [templateId], references: [id], onDelete: SetNull)
+  status          CampaignStatus @default(DRAFT)
+  scheduledAt     DateTime?
+  sentAt          DateTime?
+  createdById     String?
+  audienceFilter  Json?
+  totalRecipients Int            @default(0)
+  sentCount       Int            @default(0)
+  openCount       Int            @default(0)
+  clickCount      Int            @default(0)
+  blogPostId      String?
+  createdAt       DateTime       @default(now())
+  updatedAt       DateTime       @updatedAt
+  recipients      EmailCampaignRecipient[]
+
+  @@index([status])
+  @@index([scheduledAt])
+  @@index([blogPostId])
+  @@index([createdAt])
+}
+
+model EmailCampaignRecipient {
+  id           String        @id @default(cuid())
+  campaignId   String
+  campaign     EmailCampaign @relation(fields: [campaignId], references: [id], onDelete: Cascade)
+  leadId       String
+  lead         Lead          @relation(fields: [leadId], references: [id], onDelete: Cascade)
+  email        String
+  firstName    String?
+  status       String        @default("PENDING")
+  sentAt       DateTime?
+  errorMessage String?
+  openedAt     DateTime?
+  openCount    Int           @default(0)
+  clickedAt    DateTime?
+  clickCount   Int           @default(0)
+  unsubscribed Boolean       @default(false)
+  createdAt    DateTime      @default(now())
+
+  @@unique([campaignId, leadId])
+  @@index([campaignId])
+  @@index([leadId])
+  @@index([status])
 }
