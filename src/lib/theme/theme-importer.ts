@@ -292,6 +292,9 @@ export async function importThemeData(
                 text: cf.text,
                 tooltip: cf.tooltip || null,
                 description: cf.description || null,
+                tag: cf.tag || null,
+                tagType: cf.tagType || null,
+                icon: cf.icon || null,
                 sortOrder: fi,
               },
             });

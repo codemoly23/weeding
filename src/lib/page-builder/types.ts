@@ -223,6 +223,7 @@ export type WidgetType =
   | "service-requirements"
   | "service-deliverables"
   | "service-timeline"
+  | "service-checklist-card"
   | "related-services"
   | "service-testimonials"
   | "service-cta"
@@ -2717,6 +2718,41 @@ export interface ServiceHeroWidgetSettings {
 }
 
 /**
+ * Service Checklist Card Widget Settings
+ * Dark card with feature checklist and stats — standalone widget for hero section
+ */
+export interface ServiceChecklistCardWidgetSettings {
+  // Card Header
+  cardTitle: string;
+
+  // Item Source
+  autoItems: boolean;
+  manualItems?: Array<{
+    text: string;
+    tag: string;
+    tagType: "included" | "free" | "addon" | "premium" | "custom";
+  }>;
+
+  // Scroll & Limit
+  scrollable: boolean;
+  maxHeight: number;
+  itemLimit: number;
+
+  // Stats Row
+  showStats: boolean;
+  stats: Array<{ value: string; label: string }>;
+
+  // Card Style
+  backgroundColor: string;
+  accentColor: string;
+  borderRadius: number;
+  shadow: string;
+
+  // Container Style
+  container?: WidgetContainerStyle;
+}
+
+/**
  * Shared widget header settings pattern
  */
 export interface WidgetHeaderSettings {
@@ -2724,6 +2760,8 @@ export interface WidgetHeaderSettings {
   heading: string;
   description: string;
   alignment: "left" | "center";
+  eyebrow?: string;
+  eyebrowColor?: string;
 }
 
 /**
@@ -2732,12 +2770,13 @@ export interface WidgetHeaderSettings {
  */
 export interface ServiceFeaturesWidgetSettings {
   header: WidgetHeaderSettings;
-  variant: "minimal-checkmark" | "cards" | "compact-grid" | "highlighted";
+  variant: "minimal-checkmark" | "cards" | "compact-grid" | "highlighted" | "detailed-cards";
   columns: 1 | 2 | 3 | 4;
   showIcons: boolean;
   iconStyle: "check" | "circle-check" | "badge-check";
   iconColor: string;
   showDescriptions: boolean;
+  showTags: boolean;
 
   // Container Style
   container?: WidgetContainerStyle;

@@ -73,6 +73,10 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { cn } from "@/lib/utils";
 import { getCurrencySymbol } from "@/components/ui/currency-selector";
 import { Minus, DollarSign, MapPin, Search as SearchIcon, ChevronsUpDown } from "lucide-react";
+import { DndContext, closestCenter, type DragEndEvent } from "@dnd-kit/core";
+import { SortableContext, verticalListSortingStrategy, useSortable } from "@dnd-kit/sortable";
+import { CSS } from "@dnd-kit/utilities";
+import { ServiceIcon } from "@/components/ui/service-icon";
 
 interface Category {
   id: string;
@@ -91,6 +95,9 @@ interface ServiceFeature {
   text: string;
   description?: string | null;
   tooltip?: string | null;
+  tag?: string | null;
+  tagType?: string | null;
+  icon?: string | null;
   sortOrder: number;
   packageMappings?: PackageFeatureMapping[];
 }
@@ -372,7 +379,7 @@ export default function ServiceEditorPage() {
         : `/api/admin/services/${serviceSlug}`;
       const method = isNew ? "POST" : "PUT";
 
-      // Don't send features for existing services - they're managed via Features tab
+      // Don't send features for existing services - they're managed via Comparison Table tab
       // This prevents losing PackageFeatureMap data on save
       const { features: _features, ...serviceWithoutFeatures } = service;
 
@@ -403,28 +410,6 @@ export default function ServiceEditorPage() {
     } finally {
       setIsSaving(false);
     }
-  };
-
-  // Feature management
-  const addFeature = () => {
-    setService((prev) => ({
-      ...prev,
-      features: [...prev.features, { text: "" }],
-    }));
-  };
-
-  const updateFeature = (index: number, text: string) => {
-    setService((prev) => ({
-      ...prev,
-      features: prev.features.map((f, i) => (i === index ? { ...f, text } : f)),
-    }));
-  };
-
-  const removeFeature = (index: number) => {
-    setService((prev) => ({
-      ...prev,
-      features: prev.features.filter((_, i) => i !== index),
-    }));
   };
 
   // Package management
@@ -642,6 +627,9 @@ export default function ServiceEditorPage() {
         text: "",
         description: null,
         tooltip: null,
+        tag: null,
+        tagType: null,
+        icon: null,
         sortOrder: masterFeatures.length,
       });
     }
@@ -666,6 +654,9 @@ export default function ServiceEditorPage() {
             text: editingFeature.text,
             description: editingFeature.description,
             tooltip: editingFeature.tooltip,
+            tag: editingFeature.tag,
+            tagType: editingFeature.tagType,
+            icon: editingFeature.icon,
           }),
         });
 
@@ -684,6 +675,9 @@ export default function ServiceEditorPage() {
             text: editingFeature.text,
             description: editingFeature.description,
             tooltip: editingFeature.tooltip,
+            tag: editingFeature.tag,
+            tagType: editingFeature.tagType,
+            icon: editingFeature.icon,
           }),
         });
 
@@ -718,6 +712,34 @@ export default function ServiceEditorPage() {
     } catch (error) {
       console.error("Error deleting feature:", error);
       toast.error("Failed to delete feature");
+    }
+  };
+
+  const handleFeatureDragEnd = async (event: DragEndEvent) => {
+    const { active, over } = event;
+    if (!over || active.id === over.id || !serviceSlug) return;
+
+    const oldIndex = masterFeatures.findIndex((f) => f.id === active.id);
+    const newIndex = masterFeatures.findIndex((f) => f.id === over.id);
+    if (oldIndex === -1 || newIndex === -1) return;
+
+    // Optimistic reorder
+    const reordered = [...masterFeatures];
+    const [moved] = reordered.splice(oldIndex, 1);
+    reordered.splice(newIndex, 0, moved);
+    setMasterFeatures(reordered);
+
+    // Persist sort order
+    try {
+      await fetch(`/api/admin/services/${serviceSlug}/features`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          featureOrders: reordered.map((f, i) => ({ id: f.id, sortOrder: i })),
+        }),
+      });
+    } catch {
+      fetchMasterFeatures(); // revert on error
     }
   };
 
@@ -931,7 +953,7 @@ export default function ServiceEditorPage() {
           <TabsTrigger value="basic">Basic Info</TabsTrigger>
           {!isNew && (
             <TabsTrigger value="features">
-              Features ({masterFeatures.length})
+              Comparison Table ({masterFeatures.length})
             </TabsTrigger>
           )}
           <TabsTrigger value="packages" className="relative">
@@ -1009,50 +1031,7 @@ export default function ServiceEditorPage() {
                 </CardContent>
               </Card>
 
-              {/* Features */}
-              <Card>
-                <CardHeader>
-                  <div className="flex items-center justify-between">
-                    <div>
-                      <CardTitle>Service Features</CardTitle>
-                      <CardDescription>
-                        Key features displayed on service cards
-                      </CardDescription>
-                    </div>
-                    <Button variant="outline" size="sm" onClick={addFeature}>
-                      <Plus className="mr-2 h-4 w-4" />
-                      Add Feature
-                    </Button>
-                  </div>
-                </CardHeader>
-                <CardContent>
-                  {service.features.length === 0 ? (
-                    <p className="py-4 text-center text-sm text-muted-foreground">
-                      No features added yet
-                    </p>
-                  ) : (
-                    <div className="space-y-2">
-                      {service.features.map((feature, index) => (
-                        <div key={index} className="flex items-center gap-2">
-                          <GripVertical className="h-4 w-4 cursor-grab text-muted-foreground" />
-                          <Input
-                            value={feature.text}
-                            onChange={(e) => updateFeature(index, e.target.value)}
-                            placeholder="Feature description..."
-                          />
-                          <Button
-                            variant="ghost"
-                            size="icon"
-                            onClick={() => removeFeature(index)}
-                          >
-                            <X className="h-4 w-4" />
-                          </Button>
-                        </div>
-                      ))}
-                    </div>
-                  )}
-                </CardContent>
-              </Card>
+              {/* Features managed in Comparison Table tab */}
             </div>
 
             {/* Sidebar */}
@@ -1218,9 +1197,10 @@ export default function ServiceEditorPage() {
               <CardHeader>
                 <div className="flex items-center justify-between">
                   <div>
-                    <CardTitle>Master Feature List</CardTitle>
+                    <CardTitle>Package Comparison Features</CardTitle>
                     <CardDescription>
-                      Define all features for comparison table. Order matters - features appear in this order.
+                      Define features for the pricing comparison table. Drag to reorder.
+                      Each feature can be mapped to packages as included, add-on, or custom text.
                     </CardDescription>
                   </div>
                   <Button onClick={() => openFeatureDialog()}>
@@ -1235,42 +1215,24 @@ export default function ServiceEditorPage() {
                     No features defined yet. Add features to create comparison table.
                   </p>
                 ) : (
-                  <div className="space-y-2">
-                    {masterFeatures.map((feature, index) => (
-                      <div
-                        key={feature.id}
-                        className="flex items-center gap-3 rounded-lg border p-3 hover:bg-muted/50"
-                      >
-                        <GripVertical className="h-4 w-4 shrink-0 cursor-grab text-muted-foreground" />
-                        <span className="text-sm text-muted-foreground">{index + 1}.</span>
-                        <div className="flex-1 min-w-0">
-                          <p className="font-medium truncate">{feature.text}</p>
-                          {feature.tooltip && (
-                            <p className="text-xs text-muted-foreground truncate">{feature.tooltip}</p>
-                          )}
-                        </div>
-                        <div className="flex items-center gap-1">
-                          <Button
-                            variant="ghost"
-                            size="icon"
-                            onClick={() => openFeatureDialog(feature)}
-                          >
-                            <Pencil className="h-4 w-4" />
-                          </Button>
-                          <Button
-                            variant="ghost"
-                            size="icon"
-                            onClick={() => removeMasterFeature(feature.id)}
-                          >
-                            <Trash2 className="h-4 w-4" />
-                          </Button>
-                        </div>
+                  <DndContext collisionDetection={closestCenter} onDragEnd={handleFeatureDragEnd}>
+                    <SortableContext items={masterFeatures.map((f) => f.id)} strategy={verticalListSortingStrategy}>
+                      <div className="space-y-2">
+                        {masterFeatures.map((feature, index) => (
+                          <SortableFeatureRow
+                            key={feature.id}
+                            feature={feature}
+                            index={index}
+                            onEdit={() => openFeatureDialog(feature)}
+                            onDelete={() => removeMasterFeature(feature.id)}
+                          />
+                        ))}
                       </div>
-                    ))}
-                  </div>
+                    </SortableContext>
+                  </DndContext>
                 )}
                 <p className="mt-4 text-xs text-muted-foreground">
-                  Tip: Drag to reorder features. The order determines how they appear in the comparison table.
+                  Drag to reorder features. The order determines how they appear in the comparison table and feature widgets.
                 </p>
               </CardContent>
             </Card>
@@ -1535,7 +1497,7 @@ export default function ServiceEditorPage() {
 
                   {masterFeatures.length === 0 && (
                     <p className="text-sm text-muted-foreground text-center py-4">
-                      Add features in the Features tab to see the comparison table.
+                      Add features in the Comparison Table tab to see the comparison table.
                     </p>
                   )}
                 </div>
@@ -1782,7 +1744,7 @@ export default function ServiceEditorPage() {
               </div>
 
               <p className="text-xs text-muted-foreground">
-                Note: Feature inclusion is managed from the Features tab using the comparison table.
+                Note: Feature inclusion is managed from the Comparison Table tab using the comparison table.
               </p>
             </div>
           )}
@@ -1922,6 +1884,75 @@ export default function ServiceEditorPage() {
                   placeholder="Brief tooltip text..."
                 />
               </div>
+
+              <div className="grid grid-cols-2 gap-4">
+                <div className="space-y-2">
+                  <Label>Tag Badge</Label>
+                  <Select
+                    value={editingFeature.tagType || ""}
+                    onValueChange={(val) => {
+                      const presets: Record<string, string> = {
+                        included: "Included",
+                        free: "Free",
+                        addon: "Add-on",
+                        premium: "Premium",
+                      };
+                      setEditingFeature({
+                        ...editingFeature,
+                        tagType: val || null,
+                        tag: val === "custom" ? (editingFeature.tag || "") : (presets[val] || null),
+                      });
+                    }}
+                  >
+                    <SelectTrigger>
+                      <SelectValue placeholder="No tag" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="">No tag</SelectItem>
+                      <SelectItem value="included">Included</SelectItem>
+                      <SelectItem value="free">Free</SelectItem>
+                      <SelectItem value="addon">Add-on</SelectItem>
+                      <SelectItem value="premium">Premium</SelectItem>
+                      <SelectItem value="custom">Custom...</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+                <div className="space-y-2">
+                  <Label>Icon (Lucide name)</Label>
+                  <Input
+                    value={editingFeature.icon || ""}
+                    onChange={(e) =>
+                      setEditingFeature({
+                        ...editingFeature,
+                        icon: e.target.value || null,
+                      })
+                    }
+                    placeholder="e.g., FileText, Shield"
+                  />
+                  {editingFeature.icon && (
+                    <div className="flex items-center gap-2 text-xs text-muted-foreground">
+                      <ServiceIcon name={editingFeature.icon} className="h-4 w-4" />
+                      <span>Preview</span>
+                    </div>
+                  )}
+                </div>
+              </div>
+
+              {editingFeature.tagType && editingFeature.tagType !== "" && (
+                <div className="space-y-2">
+                  <Label>Tag Text</Label>
+                  <Input
+                    value={editingFeature.tag || ""}
+                    onChange={(e) =>
+                      setEditingFeature({
+                        ...editingFeature,
+                        tag: e.target.value,
+                      })
+                    }
+                    placeholder={editingFeature.tagType === "custom" ? "Custom tag text..." : "Override tag text..."}
+                  />
+                </div>
+              )}
             </div>
           )}
           <DialogFooter>
@@ -1932,6 +1963,78 @@ export default function ServiceEditorPage() {
           </DialogFooter>
         </DialogContent>
       </Dialog>
+    </div>
+  );
+}
+
+// ============ Sortable Feature Row Component ============
+
+const TAG_COLORS: Record<string, string> = {
+  included: "bg-emerald-100 text-emerald-700",
+  free: "bg-amber-100 text-amber-700",
+  addon: "bg-orange-100 text-orange-700",
+  premium: "bg-purple-100 text-purple-700",
+  custom: "bg-gray-100 text-gray-700",
+};
+
+function SortableFeatureRow({
+  feature,
+  index,
+  onEdit,
+  onDelete,
+}: {
+  feature: ServiceFeature;
+  index: number;
+  onEdit: () => void;
+  onDelete: () => void;
+}) {
+  const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({
+    id: feature.id,
+  });
+
+  const style = {
+    transform: CSS.Transform.toString(transform),
+    transition,
+    opacity: isDragging ? 0.5 : 1,
+  };
+
+  return (
+    <div
+      ref={setNodeRef}
+      style={style}
+      className="flex items-center gap-3 rounded-lg border p-3 hover:bg-muted/50"
+    >
+      <button {...attributes} {...listeners} className="cursor-grab touch-none">
+        <GripVertical className="h-4 w-4 shrink-0 text-muted-foreground" />
+      </button>
+      <span className="text-sm text-muted-foreground">{index + 1}.</span>
+      {feature.icon && (
+        <div className="flex h-7 w-7 items-center justify-center rounded-md bg-muted">
+          <ServiceIcon name={feature.icon} className="h-4 w-4 text-muted-foreground" />
+        </div>
+      )}
+      <div className="flex-1 min-w-0">
+        <p className="font-medium truncate">{feature.text}</p>
+        {feature.description && (
+          <p className="text-xs text-muted-foreground truncate">{feature.description}</p>
+        )}
+      </div>
+      {feature.tag && feature.tagType && (
+        <span className={cn(
+          "text-[10px] font-bold uppercase tracking-wide px-2 py-0.5 rounded-full whitespace-nowrap",
+          TAG_COLORS[feature.tagType] || TAG_COLORS.custom,
+        )}>
+          {feature.tag}
+        </span>
+      )}
+      <div className="flex items-center gap-1">
+        <Button variant="ghost" size="icon" onClick={onEdit}>
+          <Pencil className="h-4 w-4" />
+        </Button>
+        <Button variant="ghost" size="icon" onClick={onDelete}>
+          <Trash2 className="h-4 w-4" />
+        </Button>
+      </div>
     </div>
   );
 }

@@ -21,6 +21,7 @@ import {
   DEFAULT_PROCESS_STEPS_SETTINGS,
   DEFAULT_PRICING_TABLE_SETTINGS,
   DEFAULT_SERVICE_HERO_SETTINGS,
+  DEFAULT_SERVICE_CHECKLIST_CARD_SETTINGS,
   DEFAULT_FAQ_ACCORDION_SETTINGS,
   DEFAULT_SERVICE_FEATURES_SETTINGS,
   DEFAULT_SERVICE_DESCRIPTION_SETTINGS,
@@ -51,6 +52,7 @@ import { LeadFormWidget } from "@/components/page-builder/widgets/forms";
 import { ButtonGroupWidget } from "@/components/page-builder/widgets/cta";
 import {
   ServiceHeroWidget,
+  ServiceChecklistCardWidget,
   ServiceFeaturesWidget,
   ServiceDescriptionWidget,
   ServiceBreadcrumbWidget,
@@ -253,6 +255,16 @@ export function registerAllWidgets() {
     category: "service",
     defaultSettings: DEFAULT_SERVICE_HERO_SETTINGS,
     component: ServiceHeroWidget,
+  });
+
+  WidgetRegistry.register({
+    type: "service-checklist-card",
+    name: "Service Checklist Card",
+    description: "Dark card with feature checklist and stats — for hero sections",
+    icon: "CheckSquare",
+    category: "service",
+    defaultSettings: DEFAULT_SERVICE_CHECKLIST_CARD_SETTINGS,
+    component: ServiceChecklistCardWidget,
   });
 
   WidgetRegistry.register({

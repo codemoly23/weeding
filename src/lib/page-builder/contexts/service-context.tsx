@@ -29,6 +29,9 @@ export interface ServiceFeatureData {
   text: string;
   description?: string | null;
   tooltip?: string | null;
+  tag?: string | null;
+  tagType?: string | null;
+  icon?: string | null;
   sortOrder: number;
 }
 

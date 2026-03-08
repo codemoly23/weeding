@@ -52,6 +52,7 @@ import {
   TestimonialsWidgetSettingsPanel,
   LeadFormWidgetSettingsPanel,
   ServiceHeroWidgetSettingsPanel,
+  ServiceChecklistCardSettingsPanel,
   FaqAccordionWidgetSettingsPanel,
   BlogPostGridSettingsPanel,
   BlogPostCarouselSettingsPanel,
@@ -587,6 +588,16 @@ function EditMode({ widget, section, columnId, activeFieldId, onBack, onUpdateSe
           {/* Service Hero Widget */}
           {widget.type === "service-hero" && (
             <ServiceHeroWidgetSettingsPanel
+              settings={widget.settings as any}
+              onChange={onUpdateSettings}
+              activeTab={activeTab}
+              activeFieldId={activeFieldId}
+            />
+          )}
+
+          {/* Service Checklist Card Widget */}
+          {widget.type === "service-checklist-card" && (
+            <ServiceChecklistCardSettingsPanel
               settings={widget.settings as any}
               onChange={onUpdateSettings}
               activeTab={activeTab}

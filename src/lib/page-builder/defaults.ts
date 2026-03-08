@@ -1844,6 +1844,30 @@ export const DEFAULT_SERVICE_HERO_SETTINGS: import("./types").ServiceHeroWidgetS
 };
 
 // ============================================
+// SERVICE CHECKLIST CARD WIDGET DEFAULTS
+// ============================================
+
+export const DEFAULT_SERVICE_CHECKLIST_CARD_SETTINGS: import("./types").ServiceChecklistCardWidgetSettings = {
+  cardTitle: "What You Get",
+  autoItems: true,
+  manualItems: [],
+  scrollable: false,
+  maxHeight: 320,
+  itemLimit: 5,
+  showStats: true,
+  stats: [
+    { value: "1,200+", label: "Clients Served" },
+    { value: "30+", label: "Countries" },
+    { value: "4.9★", label: "Rating" },
+  ],
+  backgroundColor: "#1b3a2d",
+  accentColor: "#e84c1e",
+  borderRadius: 20,
+  shadow: "0 24px 64px rgba(27,58,45,0.22)",
+  container: DEFAULT_WIDGET_CONTAINER,
+};
+
+// ============================================
 // FAQ ACCORDION WIDGET DEFAULTS
 // ============================================
 
@@ -1896,6 +1920,7 @@ export const DEFAULT_SERVICE_FEATURES_SETTINGS: ServiceFeaturesWidgetSettings = 
   iconStyle: "circle-check",
   iconColor: "#22C55E",
   showDescriptions: false,
+  showTags: false,
   // Container Style
   container: DEFAULT_WIDGET_CONTAINER,
 };
@@ -2312,6 +2337,7 @@ export const WIDGET_DEFAULTS: Record<string, unknown> = {
   "process-steps": DEFAULT_PROCESS_STEPS_SETTINGS,
   "pricing-table": DEFAULT_PRICING_TABLE_SETTINGS,
   "service-hero": DEFAULT_SERVICE_HERO_SETTINGS,
+  "service-checklist-card": DEFAULT_SERVICE_CHECKLIST_CARD_SETTINGS,
   "service-features": DEFAULT_SERVICE_FEATURES_SETTINGS,
   "service-description": DEFAULT_SERVICE_DESCRIPTION_SETTINGS,
   "service-breadcrumb": DEFAULT_SERVICE_BREADCRUMB_SETTINGS,

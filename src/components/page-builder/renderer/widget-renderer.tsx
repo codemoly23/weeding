@@ -29,6 +29,7 @@ import { ServiceListWidget } from "../widgets/commerce/service-list-widget";
 
 // Service widgets
 import { ServiceHeroWidget } from "../widgets/service/service-hero";
+import { ServiceChecklistCardWidget } from "../widgets/service/service-checklist-card";
 import { ServiceFeaturesWidget } from "../widgets/service/service-features";
 import { ServiceDescriptionWidget } from "../widgets/service/service-description";
 import { ServiceBreadcrumbWidget } from "../widgets/service/service-breadcrumb";
@@ -85,6 +86,7 @@ const WIDGET_COMPONENTS: Partial<Record<WidgetType, React.ComponentType<any>>> =
 
   // Service widgets
   "service-hero": ServiceHeroWidget,
+  "service-checklist-card": ServiceChecklistCardWidget,
   "service-features": ServiceFeaturesWidget,
   "service-description": ServiceDescriptionWidget,
   "service-breadcrumb": ServiceBreadcrumbWidget,

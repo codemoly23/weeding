@@ -9,7 +9,7 @@
 import { useState, useEffect } from "react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
-import { ArrowRight, Check, ShieldCheck, Clock, Globe } from "lucide-react";
+import { ArrowRight, Check } from "lucide-react";
 import Link from "next/link";
 import {
   useOptionalServiceContext,
@@ -148,7 +148,6 @@ export function ServiceHeroWidget({
           primaryLink={primaryLink}
           secondaryLink={secondaryLink}
           currencySymbol={currencySymbol}
-          formattedPrice={formattedPrice}
         />
       </WidgetContainer>
     );
@@ -234,7 +233,6 @@ interface TwoColumnHeroProps {
   primaryLink: string;
   secondaryLink: string;
   currencySymbol: string;
-  formattedPrice: string;
 }
 
 function TwoColumnHero({
@@ -255,7 +253,6 @@ function TwoColumnHero({
       return <>{title}</>;
     }
 
-    // Replace words with styled spans
     const parts = title.split(/(\s+)/);
     return (
       <>
@@ -296,437 +293,224 @@ function TwoColumnHero({
     );
   };
 
-  // Checklist items for right card
-  const checklist: Array<{ text: string; tag: string; tagType: "included" | "free" | "addon" }> =
-    settings.rightCardAutoItems
-      ? (service.features || []).slice(0, 5).map((f) => ({
-          text: typeof f === "string" ? f : (f as { text?: string }).text || String(f),
-          tag: "Included",
-          tagType: "included" as const,
-        }))
-      : (settings.rightCardItems || []);
-
-  const stats = settings.rightCardStats || [];
   const trustItems = settings.trustItems || [];
 
   return (
     <section
       style={{
-        background: "var(--sh-bg, #faf8f4)",
-        padding: "64px 0 80px",
         position: "relative",
         overflow: "hidden",
-        // Define local CSS vars for this section
         "--sh-forest": "#1b3a2d",
         "--sh-coral": "#e84c1e",
         "--sh-bg": "#faf8f4",
         "--sh-cream": "#faf8f4",
       } as React.CSSProperties}
     >
-      {/* Decorative circles */}
-      <div
-        style={{
-          position: "absolute",
-          top: "-100px",
-          right: "-120px",
-          width: "500px",
-          height: "500px",
-          borderRadius: "50%",
-          border: "1px solid rgba(27,58,45,0.15)",
-          opacity: 0.3,
-          pointerEvents: "none",
-        }}
-      />
-      <div
-        style={{
-          position: "absolute",
-          bottom: "-80px",
-          left: "-60px",
-          width: "350px",
-          height: "350px",
-          borderRadius: "50%",
-          border: "1px solid rgba(27,58,45,0.15)",
-          opacity: 0.2,
-          pointerEvents: "none",
-        }}
-      />
-
-      <div style={{ maxWidth: "1160px", margin: "0 auto", padding: "0 28px" }}>
+      {/* Category Badge */}
+      {settings.showCategoryBadge && (
         <div
           style={{
-            display: "grid",
-            gridTemplateColumns: "1fr 420px",
-            gap: "64px",
+            display: "inline-flex",
             alignItems: "center",
+            gap: "8px",
+            padding: "6px 14px 6px 8px",
+            background: "#fff",
+            border: "1px solid rgba(14,17,9,0.1)",
+            borderRadius: "999px",
+            fontSize: "12px",
+            fontWeight: 600,
+            color: "#4b5249",
+            marginBottom: "24px",
+            boxShadow: "0 2px 8px rgba(0,0,0,0.04)",
           }}
-          className="svc-hero-grid"
         >
-          {/* ── LEFT: Content ───────────────────────── */}
-          <div>
-            {/* Category Badge */}
-            {settings.showCategoryBadge && (
-              <div
-                style={{
-                  display: "inline-flex",
-                  alignItems: "center",
-                  gap: "8px",
-                  padding: "6px 14px 6px 8px",
-                  background: "#fff",
-                  border: "1px solid rgba(14,17,9,0.1)",
-                  borderRadius: "999px",
-                  fontSize: "12px",
-                  fontWeight: 600,
-                  color: "#4b5249",
-                  marginBottom: "24px",
-                  boxShadow: "0 2px 8px rgba(0,0,0,0.04)",
-                }}
-              >
-                <span
-                  style={{
-                    width: "8px",
-                    height: "8px",
-                    borderRadius: "50%",
-                    background: "#059669",
-                    animation: "pulse 2s ease-in-out infinite",
-                    flexShrink: 0,
-                  }}
-                />
-                {settings.categoryBadgeText || service.category?.name || "Service"}
-                {settings.categoryBadgeTag && (
-                  <span
-                    style={{
-                      fontSize: "10px",
-                      fontWeight: 700,
-                      textTransform: "uppercase",
-                      letterSpacing: "0.8px",
-                      padding: "2px 8px",
-                      borderRadius: "999px",
-                      background: "#e84c1e",
-                      color: "#fff",
-                      marginLeft: "4px",
-                    }}
-                  >
-                    {settings.categoryBadgeTag}
-                  </span>
-                )}
-              </div>
-            )}
-
-            {/* Title */}
-            <h1
+          <span
+            style={{
+              width: "8px",
+              height: "8px",
+              borderRadius: "50%",
+              background: "#059669",
+              animation: "pulse 2s ease-in-out infinite",
+              flexShrink: 0,
+            }}
+          />
+          {settings.categoryBadgeText || service.category?.name || "Service"}
+          {settings.categoryBadgeTag && (
+            <span
               style={{
-                fontFamily: "var(--font-heading, 'Outfit', sans-serif)",
-                fontSize: "clamp(36px, 5vw, 56px)",
-                fontWeight: 900,
-                letterSpacing: "-0.04em",
-                lineHeight: 1.05,
-                color: "#0e1109",
-                marginBottom: "20px",
+                fontSize: "10px",
+                fontWeight: 700,
+                textTransform: "uppercase",
+                letterSpacing: "0.8px",
+                padding: "2px 8px",
+                borderRadius: "999px",
+                background: "#e84c1e",
+                color: "#fff",
+                marginLeft: "4px",
               }}
             >
-              {renderTitle()}
-            </h1>
+              {settings.categoryBadgeTag}
+            </span>
+          )}
+        </div>
+      )}
 
-            {/* Subtitle */}
-            {subtitle && (
-              <p
-                style={{
-                  fontSize: "17px",
-                  color: "#4b5249",
-                  lineHeight: 1.75,
-                  maxWidth: "520px",
-                  marginBottom: "28px",
-                }}
-              >
-                {subtitle}
-              </p>
-            )}
+      {/* Title */}
+      <h1
+        style={{
+          fontFamily: "var(--font-heading, 'Outfit', sans-serif)",
+          fontSize: "clamp(36px, 5vw, 56px)",
+          fontWeight: 900,
+          letterSpacing: "-0.04em",
+          lineHeight: 1.05,
+          color: "#0e1109",
+          marginBottom: "20px",
+        }}
+      >
+        {renderTitle()}
+      </h1>
 
-            {/* Price Hero */}
-            {settings.showPriceHero && (
-              <div
-                style={{
-                  display: "flex",
-                  alignItems: "center",
-                  gap: "16px",
-                  marginBottom: "32px",
-                  flexWrap: "wrap",
-                }}
-              >
-                <div
-                  style={{
-                    fontFamily: "var(--font-heading, 'Outfit', sans-serif)",
-                    fontSize: "36px",
-                    fontWeight: 900,
-                    color: "#0e1109",
-                    letterSpacing: "-0.03em",
-                  }}
-                >
-                  <sup style={{ fontSize: "18px", verticalAlign: "top", marginTop: "6px" }}>
-                    {currencySymbol}
-                  </sup>
-                  {Number(service.startingPrice).toLocaleString()}
-                </div>
-                {settings.priceHeroNote && (
-                  <div
-                    style={{
-                      fontSize: "12px",
-                      color: "#8a9086",
-                      lineHeight: 1.5,
-                    }}
-                  >
-                    {settings.priceHeroNote}
-                  </div>
-                )}
-              </div>
-            )}
+      {/* Subtitle */}
+      {subtitle && (
+        <p
+          style={{
+            fontSize: "17px",
+            color: "#4b5249",
+            lineHeight: 1.75,
+            maxWidth: "520px",
+            marginBottom: "28px",
+          }}
+        >
+          {subtitle}
+        </p>
+      )}
 
-            {/* CTA Buttons */}
+      {/* Price Hero */}
+      {settings.showPriceHero && (
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            gap: "16px",
+            marginBottom: "32px",
+            flexWrap: "wrap",
+          }}
+        >
+          <div
+            style={{
+              fontFamily: "var(--font-heading, 'Outfit', sans-serif)",
+              fontSize: "36px",
+              fontWeight: 900,
+              color: "#0e1109",
+              letterSpacing: "-0.03em",
+            }}
+          >
+            <sup style={{ fontSize: "18px", verticalAlign: "top", marginTop: "6px" }}>
+              {currencySymbol}
+            </sup>
+            {Number(service.startingPrice).toLocaleString()}
+          </div>
+          {settings.priceHeroNote && (
             <div
               style={{
-                display: "flex",
-                gap: "12px",
-                flexWrap: "wrap",
-                marginBottom: "32px",
+                fontSize: "12px",
+                color: "#8a9086",
+                lineHeight: 1.5,
               }}
             >
-              <Link
-                href={primaryLink}
-                style={{
-                  display: "inline-flex",
-                  alignItems: "center",
-                  gap: "8px",
-                  padding: "16px 34px",
-                  borderRadius: "10px",
-                  fontSize: "15px",
-                  fontWeight: 600,
-                  background: "#e84c1e",
-                  color: "#fff",
-                  border: "none",
-                  cursor: "pointer",
-                  textDecoration: "none",
-                  transition: "all 0.22s ease",
-                  fontFamily: "inherit",
-                  whiteSpace: "nowrap",
-                }}
-              >
-                {settings.primaryCtaText}
-                <ArrowRight style={{ width: "16px", height: "16px", flexShrink: 0 }} />
-              </Link>
-              {settings.showSecondaryButton && (
-                <Link
-                  href={secondaryLink}
-                  style={{
-                    display: "inline-flex",
-                    alignItems: "center",
-                    gap: "8px",
-                    padding: "16px 34px",
-                    borderRadius: "10px",
-                    fontSize: "15px",
-                    fontWeight: 600,
-                    background: "transparent",
-                    color: "#1a1f16",
-                    border: "1.5px solid rgba(14,17,9,0.1)",
-                    cursor: "pointer",
-                    textDecoration: "none",
-                    transition: "all 0.22s ease",
-                    fontFamily: "inherit",
-                    whiteSpace: "nowrap",
-                  }}
-                >
-                  {settings.secondaryCtaText}
-                </Link>
-              )}
-            </div>
-
-            {/* Trust Items */}
-            {settings.showTrustItems && trustItems.length > 0 && (
-              <div style={{ display: "flex", alignItems: "center", flexWrap: "wrap" }}>
-                {trustItems.map((item, i) => (
-                  <div
-                    key={i}
-                    style={{
-                      display: "flex",
-                      alignItems: "center",
-                      gap: "5px",
-                      fontSize: "12px",
-                      color: "#8a9086",
-                      fontWeight: 600,
-                      padding: i === 0 ? "0 14px 0 0" : "0 14px",
-                      borderLeft: i > 0 ? "1px solid rgba(14,17,9,0.1)" : "none",
-                    }}
-                  >
-                    <Check style={{ width: "13px", height: "13px", color: "#1b3a2d", flexShrink: 0 }} />
-                    {item.text}
-                  </div>
-                ))}
-              </div>
-            )}
-          </div>
-
-          {/* ── RIGHT: What You Get Card ─────────────── */}
-          {settings.rightCardShow && (
-            <div style={{ position: "relative" }}>
-              <div
-                style={{
-                  background: "#1b3a2d",
-                  borderRadius: "20px",
-                  padding: "32px",
-                  color: "#faf8f4",
-                  position: "relative",
-                  overflow: "hidden",
-                  boxShadow: "0 24px 64px rgba(27,58,45,0.22)",
-                }}
-              >
-                {/* Coral top line */}
-                <div
-                  style={{
-                    position: "absolute",
-                    top: 0,
-                    left: 0,
-                    right: 0,
-                    height: "3px",
-                    background: "linear-gradient(90deg, #e84c1e, #ff6a3d, transparent)",
-                  }}
-                />
-
-                {/* Card Title */}
-                <div
-                  style={{
-                    fontFamily: "var(--font-heading, 'Outfit', sans-serif)",
-                    fontSize: "11px",
-                    fontWeight: 700,
-                    textTransform: "uppercase",
-                    letterSpacing: "1.4px",
-                    color: "rgba(250,248,244,0.4)",
-                    marginBottom: "20px",
-                    display: "flex",
-                    alignItems: "center",
-                    gap: "8px",
-                  }}
-                >
-                  <Check style={{ width: "13px", height: "13px", opacity: 0.45 }} />
-                  {settings.rightCardTitle}
-                </div>
-
-                {/* Checklist */}
-                <div style={{ display: "flex", flexDirection: "column", gap: "10px", marginBottom: "24px" }}>
-                  {checklist.map((item, i) => (
-                    <div
-                      key={i}
-                      style={{
-                        display: "flex",
-                        alignItems: "center",
-                        gap: "12px",
-                        padding: "12px 14px",
-                        borderRadius: "10px",
-                        background: "rgba(255,255,255,0.06)",
-                        border: "1px solid rgba(255,255,255,0.08)",
-                      }}
-                    >
-                      <div
-                        style={{
-                          width: "28px",
-                          height: "28px",
-                          borderRadius: "8px",
-                          background: "#059669",
-                          display: "flex",
-                          alignItems: "center",
-                          justifyContent: "center",
-                          flexShrink: 0,
-                        }}
-                      >
-                        <Check style={{ width: "14px", height: "14px", color: "#fff" }} />
-                      </div>
-                      <span
-                        style={{
-                          fontSize: "13px",
-                          fontWeight: 600,
-                          color: "#faf8f4",
-                          flex: 1,
-                          lineHeight: 1.4,
-                        }}
-                      >
-                        {item.text}
-                      </span>
-                      {item.tag && (
-                        <span
-                          style={{
-                            fontSize: "10px",
-                            fontWeight: 700,
-                            padding: "2px 8px",
-                            borderRadius: "100px",
-                            whiteSpace: "nowrap",
-                            background:
-                              item.tagType === "free"
-                                ? "rgba(251,191,36,0.15)"
-                                : "rgba(74,222,128,0.15)",
-                            color: item.tagType === "free" ? "#fbbf24" : "#4ade80",
-                          }}
-                        >
-                          {item.tag}
-                        </span>
-                      )}
-                    </div>
-                  ))}
-                </div>
-
-                {/* Stats */}
-                {stats.length > 0 && (
-                  <div
-                    style={{
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "space-between",
-                      paddingTop: "20px",
-                      borderTop: "1px solid rgba(255,255,255,0.08)",
-                    }}
-                  >
-                    {stats.map((stat, i) => (
-                      <div key={i} style={{ textAlign: "center" }}>
-                        <strong
-                          style={{
-                            fontFamily: "var(--font-heading, 'Outfit', sans-serif)",
-                            fontSize: "20px",
-                            fontWeight: 800,
-                            color: "#ff6a3d",
-                            display: "block",
-                            letterSpacing: "-0.02em",
-                          }}
-                        >
-                          {stat.value}
-                        </strong>
-                        <span
-                          style={{
-                            fontSize: "10px",
-                            color: "rgba(250,248,244,0.4)",
-                            textTransform: "uppercase",
-                            letterSpacing: "0.5px",
-                            fontWeight: 600,
-                          }}
-                        >
-                          {stat.label}
-                        </span>
-                      </div>
-                    ))}
-                  </div>
-                )}
-              </div>
+              {settings.priceHeroNote}
             </div>
           )}
         </div>
+      )}
+
+      {/* CTA Buttons */}
+      <div
+        style={{
+          display: "flex",
+          gap: "12px",
+          flexWrap: "wrap",
+          marginBottom: "32px",
+        }}
+      >
+        <Link
+          href={primaryLink}
+          style={{
+            display: "inline-flex",
+            alignItems: "center",
+            gap: "8px",
+            padding: "16px 34px",
+            borderRadius: "10px",
+            fontSize: "15px",
+            fontWeight: 600,
+            background: "#e84c1e",
+            color: "#fff",
+            border: "none",
+            cursor: "pointer",
+            textDecoration: "none",
+            transition: "all 0.22s ease",
+            fontFamily: "inherit",
+            whiteSpace: "nowrap",
+          }}
+        >
+          {settings.primaryCtaText}
+          <ArrowRight style={{ width: "16px", height: "16px", flexShrink: 0 }} />
+        </Link>
+        {settings.showSecondaryButton && (
+          <Link
+            href={secondaryLink}
+            style={{
+              display: "inline-flex",
+              alignItems: "center",
+              gap: "8px",
+              padding: "16px 34px",
+              borderRadius: "10px",
+              fontSize: "15px",
+              fontWeight: 600,
+              background: "transparent",
+              color: "#1a1f16",
+              border: "1.5px solid rgba(14,17,9,0.1)",
+              cursor: "pointer",
+              textDecoration: "none",
+              transition: "all 0.22s ease",
+              fontFamily: "inherit",
+              whiteSpace: "nowrap",
+            }}
+          >
+            {settings.secondaryCtaText}
+          </Link>
+        )}
       </div>
 
-      {/* Responsive grid styles */}
+      {/* Trust Items */}
+      {settings.showTrustItems && trustItems.length > 0 && (
+        <div style={{ display: "flex", alignItems: "center", flexWrap: "wrap" }}>
+          {trustItems.map((item, i) => (
+            <div
+              key={i}
+              style={{
+                display: "flex",
+                alignItems: "center",
+                gap: "5px",
+                fontSize: "12px",
+                color: "#8a9086",
+                fontWeight: 600,
+                padding: i === 0 ? "0 14px 0 0" : "0 14px",
+                borderLeft: i > 0 ? "1px solid rgba(14,17,9,0.1)" : "none",
+              }}
+            >
+              <Check style={{ width: "13px", height: "13px", color: "#1b3a2d", flexShrink: 0 }} />
+              {item.text}
+            </div>
+          ))}
+        </div>
+      )}
+
+      {/* Keyframes for pulse animation */}
       <style>{`
         @keyframes pulse {
           0%, 100% { transform: scale(1); opacity: 1; }
           50% { transform: scale(1.2); opacity: 0.7; }
-        }
-        @media (max-width: 1024px) {
-          .svc-hero-grid {
-            grid-template-columns: 1fr !important;
-          }
         }
       `}</style>
     </section>
@@ -752,201 +536,49 @@ function ServiceHeroPlaceholder({ settings }: { settings: ServiceHeroWidgetSetti
 
   if (settings.layout === "two-column") {
     return (
-      <section
-        style={{
-          background: "#faf8f4",
-          padding: "64px 0 80px",
-          position: "relative",
-          overflow: "hidden",
-        }}
-      >
-        <div style={{ maxWidth: "1160px", margin: "0 auto", padding: "0 28px" }}>
+      <section style={{ position: "relative", overflow: "hidden" }}>
+        {settings.showCategoryBadge && (
           <div
             style={{
-              display: "grid",
-              gridTemplateColumns: "1fr 420px",
-              gap: "64px",
+              display: "inline-flex",
               alignItems: "center",
+              gap: "8px",
+              padding: "6px 14px 6px 8px",
+              background: "#fff",
+              border: "1px solid rgba(14,17,9,0.1)",
+              borderRadius: "999px",
+              fontSize: "12px",
+              fontWeight: 600,
+              color: "#4b5249",
+              marginBottom: "24px",
             }}
-            className="svc-hero-grid"
           >
-            <div>
-              {settings.showCategoryBadge && (
-                <div
-                  style={{
-                    display: "inline-flex",
-                    alignItems: "center",
-                    gap: "8px",
-                    padding: "6px 14px 6px 8px",
-                    background: "#fff",
-                    border: "1px solid rgba(14,17,9,0.1)",
-                    borderRadius: "999px",
-                    fontSize: "12px",
-                    fontWeight: 600,
-                    color: "#4b5249",
-                    marginBottom: "24px",
-                  }}
-                >
-                  <span
-                    style={{
-                      width: "8px",
-                      height: "8px",
-                      borderRadius: "50%",
-                      background: "#059669",
-                      flexShrink: 0,
-                    }}
-                  />
-                  {settings.categoryBadgeText || "Formation & Legal"}
-                  {settings.categoryBadgeTag && (
-                    <span
-                      style={{
-                        fontSize: "10px",
-                        fontWeight: 700,
-                        padding: "2px 8px",
-                        borderRadius: "999px",
-                        background: "#e84c1e",
-                        color: "#fff",
-                        marginLeft: "4px",
-                      }}
-                    >
-                      {settings.categoryBadgeTag}
-                    </span>
-                  )}
-                </div>
-              )}
-              <h1
-                style={{
-                  fontFamily: "var(--font-heading, 'Outfit', sans-serif)",
-                  fontSize: "clamp(36px, 5vw, 56px)",
-                  fontWeight: 900,
-                  letterSpacing: "-0.04em",
-                  lineHeight: 1.05,
-                  color: "#0e1109",
-                  marginBottom: "20px",
-                }}
-              >
-                {settings.titleSource === "custom" && settings.customTitle
-                  ? settings.customTitle
-                  : "{{service.name}}"}
-              </h1>
-              <p style={{ fontSize: "17px", color: "#4b5249", lineHeight: 1.75, maxWidth: "520px", marginBottom: "28px" }}>
-                {settings.subtitleSource === "custom" && settings.customSubtitle
-                  ? settings.customSubtitle
-                  : "{{service.shortDesc}}"}
-              </p>
-              <div style={{ display: "flex", gap: "12px", flexWrap: "wrap", marginBottom: "32px" }}>
-                <span
-                  style={{
-                    display: "inline-flex",
-                    alignItems: "center",
-                    gap: "8px",
-                    padding: "16px 34px",
-                    borderRadius: "10px",
-                    fontSize: "15px",
-                    fontWeight: 600,
-                    background: "#e84c1e",
-                    color: "#fff",
-                  }}
-                >
-                  {settings.primaryCtaText}
-                </span>
-                {settings.showSecondaryButton && (
-                  <span
-                    style={{
-                      display: "inline-flex",
-                      alignItems: "center",
-                      gap: "8px",
-                      padding: "16px 34px",
-                      borderRadius: "10px",
-                      fontSize: "15px",
-                      fontWeight: 600,
-                      border: "1.5px solid rgba(14,17,9,0.1)",
-                      color: "#1a1f16",
-                    }}
-                  >
-                    {settings.secondaryCtaText}
-                  </span>
-                )}
-              </div>
-              <p className="text-xs text-muted-foreground mt-2">Preview — service data loads dynamically</p>
-            </div>
-            {settings.rightCardShow && (
-              <div
-                style={{
-                  background: "#1b3a2d",
-                  borderRadius: "20px",
-                  padding: "32px",
-                  color: "#faf8f4",
-                }}
-              >
-                <div
-                  style={{
-                    fontSize: "11px",
-                    fontWeight: 700,
-                    textTransform: "uppercase",
-                    letterSpacing: "1.4px",
-                    color: "rgba(250,248,244,0.4)",
-                    marginBottom: "20px",
-                  }}
-                >
-                  {settings.rightCardTitle}
-                </div>
-                {(settings.rightCardItems || [
-                  { text: "Articles of Organization", tag: "Included", tagType: "included" as const },
-                  { text: "Operating Agreement", tag: "Free ($79 value)", tagType: "free" as const },
-                  { text: "State Filing & Processing", tag: "Included", tagType: "included" as const },
-                  { text: "Compliance Checklist", tag: "Included", tagType: "included" as const },
-                  { text: "Digital Document Delivery", tag: "Included", tagType: "included" as const },
-                ]).map((item, i) => (
-                  <div
-                    key={i}
-                    style={{
-                      display: "flex",
-                      alignItems: "center",
-                      gap: "12px",
-                      padding: "12px 14px",
-                      borderRadius: "10px",
-                      background: "rgba(255,255,255,0.06)",
-                      border: "1px solid rgba(255,255,255,0.08)",
-                      marginBottom: "10px",
-                    }}
-                  >
-                    <div
-                      style={{
-                        width: "28px",
-                        height: "28px",
-                        borderRadius: "8px",
-                        background: "#059669",
-                        display: "flex",
-                        alignItems: "center",
-                        justifyContent: "center",
-                        flexShrink: 0,
-                      }}
-                    >
-                      <Check style={{ width: "14px", height: "14px", color: "#fff" }} />
-                    </div>
-                    <span style={{ fontSize: "13px", fontWeight: 600, color: "#faf8f4", flex: 1 }}>
-                      {item.text}
-                    </span>
-                    <span
-                      style={{
-                        fontSize: "10px",
-                        fontWeight: 700,
-                        padding: "2px 8px",
-                        borderRadius: "100px",
-                        background: item.tagType === "free" ? "rgba(251,191,36,0.15)" : "rgba(74,222,128,0.15)",
-                        color: item.tagType === "free" ? "#fbbf24" : "#4ade80",
-                      }}
-                    >
-                      {item.tag}
-                    </span>
-                  </div>
-                ))}
-              </div>
+            <span style={{ width: "8px", height: "8px", borderRadius: "50%", background: "#059669", flexShrink: 0 }} />
+            {settings.categoryBadgeText || "Formation & Legal"}
+            {settings.categoryBadgeTag && (
+              <span style={{ fontSize: "10px", fontWeight: 700, padding: "2px 8px", borderRadius: "999px", background: "#e84c1e", color: "#fff", marginLeft: "4px" }}>
+                {settings.categoryBadgeTag}
+              </span>
             )}
           </div>
+        )}
+        <h1 style={{ fontFamily: "var(--font-heading, 'Outfit', sans-serif)", fontSize: "clamp(36px, 5vw, 56px)", fontWeight: 900, letterSpacing: "-0.04em", lineHeight: 1.05, color: "#0e1109", marginBottom: "20px" }}>
+          {settings.titleSource === "custom" && settings.customTitle ? settings.customTitle : "{{service.name}}"}
+        </h1>
+        <p style={{ fontSize: "17px", color: "#4b5249", lineHeight: 1.75, maxWidth: "520px", marginBottom: "28px" }}>
+          {settings.subtitleSource === "custom" && settings.customSubtitle ? settings.customSubtitle : "{{service.shortDesc}}"}
+        </p>
+        <div style={{ display: "flex", gap: "12px", flexWrap: "wrap", marginBottom: "32px" }}>
+          <span style={{ display: "inline-flex", alignItems: "center", gap: "8px", padding: "16px 34px", borderRadius: "10px", fontSize: "15px", fontWeight: 600, background: "#e84c1e", color: "#fff" }}>
+            {settings.primaryCtaText}
+          </span>
+          {settings.showSecondaryButton && (
+            <span style={{ display: "inline-flex", alignItems: "center", gap: "8px", padding: "16px 34px", borderRadius: "10px", fontSize: "15px", fontWeight: 600, border: "1.5px solid rgba(14,17,9,0.1)", color: "#1a1f16" }}>
+              {settings.secondaryCtaText}
+            </span>
+          )}
         </div>
-        <style>{`@media (max-width: 1024px) { .svc-hero-grid { grid-template-columns: 1fr !important; } }`}</style>
+        <p className="text-xs text-muted-foreground mt-2">Preview — service data loads dynamically</p>
       </section>
     );
   }

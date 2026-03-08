@@ -14,6 +14,7 @@ export { PricingTableWidgetSettingsPanel } from "./pricing-table-settings";
 export { TestimonialsWidgetSettingsPanel } from "./testimonials-settings";
 export { LeadFormWidgetSettingsPanel } from "./lead-form-settings";
 export { ServiceHeroWidgetSettingsPanel } from "./service-hero-settings";
+export { ServiceChecklistCardSettingsPanel } from "./service-checklist-card-settings";
 export { FaqAccordionWidgetSettingsPanel } from "./faq-accordion-settings";
 export { ButtonGroupWidgetSettingsPanel } from "./button-group-settings";
 

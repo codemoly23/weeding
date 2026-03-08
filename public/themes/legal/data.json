@@ -1933,6 +1933,10 @@
         {
           "text": "LLC Formation in your chosen state",
           "sortOrder": 0,
+          "tag": "All Plans",
+          "tagType": "included",
+          "icon": "FileText",
+          "description": "The official document that creates your LLC. We prepare and file Articles of Organization with the Secretary of State in your chosen state.",
           "packages": {
             "Essential": {
               "valueType": "BOOLEAN",
@@ -1952,6 +1956,10 @@
         {
           "text": "Operating Agreement",
           "sortOrder": 1,
+          "tag": "All Plans \u2022 Free ($79 value)",
+          "tagType": "free",
+          "icon": "Shield",
+          "description": "Defines ownership structure, member responsibilities, and profit distribution. Required by banks and the IRS.",
           "packages": {
             "Essential": {
               "valueType": "BOOLEAN",
@@ -1972,6 +1980,9 @@
         {
           "text": "Registered Agent for One Year",
           "sortOrder": 2,
+          "tag": "All Plans",
+          "tagType": "included",
+          "icon": "UserCheck",
           "packages": {
             "Essential": {
               "valueType": "BOOLEAN",
@@ -1987,11 +1998,15 @@
             }
           },
           "tooltip": "Legally required in every US state. Your registered agent receives legal and government documents on your behalf.",
-          "description": "worth $99"
+          "description": "Legally required in every US state. Receives legal and government documents on your behalf for one full year."
         },
         {
           "text": "Business Address & Mail Forwarding (1 yr)",
           "sortOrder": 3,
+          "tag": "All Plans",
+          "tagType": "included",
+          "icon": "MapPin",
+          "description": "A real US street address for your LLC. We scan and forward your business mail digitally.",
           "packages": {
             "Essential": {
               "valueType": "BOOLEAN",
@@ -2011,6 +2026,10 @@
         {
           "text": "Employer Identification Number (EIN)",
           "sortOrder": 4,
+          "tag": "All Plans",
+          "tagType": "included",
+          "icon": "CreditCard",
+          "description": "Your LLC's federal Tax ID number from the IRS. Required for banking, taxes, and hiring.",
           "packages": {
             "Essential": {
               "valueType": "BOOLEAN",
@@ -2031,6 +2050,10 @@
         {
           "text": "Annual Compliance Guidance",
           "sortOrder": 5,
+          "tag": "All Plans",
+          "tagType": "included",
+          "icon": "ClipboardCheck",
+          "description": "We guide you through yearly requirements — annual reports, franchise taxes, and filing deadlines.",
           "packages": {
             "Essential": {
               "valueType": "BOOLEAN",
@@ -2050,6 +2073,10 @@
         {
           "text": "BOI FinCEN Report",
           "sortOrder": 6,
+          "tag": "Professional & Complete",
+          "tagType": "addon",
+          "icon": "FileSearch",
+          "description": "FinCEN Beneficial Ownership Information report — mandatory for most LLCs since 2024. $500/day penalty for non-filing.",
           "packages": {
             "Essential": {
               "valueType": "BOOLEAN",
@@ -8212,7 +8239,7 @@
             {
               "id": "section_1772640043105_d20bdm05",
               "order": 0,
-              "layout": "1",
+              "layout": "2-1",
               "columns": [
                 {
                   "id": "col_1772640043105_7byqsoir",
@@ -8221,7 +8248,7 @@
                       "id": "widget_1772640043105_o361jrb3",
                       "type": "service-hero",
                       "settings": {
-                        "layout": "two-column",
+                        "layout": "single",
                         "titleSource": "auto",
                         "subtitleSource": "auto",
                         "showCategoryBadge": true,
@@ -8248,10 +8275,27 @@
                             "text": "100% remote"
                           }
                         ],
-                        "rightCardShow": true,
-                        "rightCardTitle": "What You Get",
-                        "rightCardAutoItems": true,
-                        "rightCardStats": [
+                        "backgroundType": "none",
+                        "textAlignment": "left",
+                        "titleSize": "large",
+                        "spacing": "md"
+                      }
+                    }
+                  ]
+                },
+                {
+                  "id": "col_1772640043105_checklist",
+                  "widgets": [
+                    {
+                      "id": "widget_1772640043105_checklist",
+                      "type": "service-checklist-card",
+                      "settings": {
+                        "cardTitle": "What You Get",
+                        "autoItems": true,
+                        "scrollable": false,
+                        "itemLimit": 5,
+                        "showStats": true,
+                        "stats": [
                           {
                             "value": "1,200+",
                             "label": "Clients Served"
@@ -8265,10 +8309,10 @@
                             "label": "Rating"
                           }
                         ],
-                        "backgroundType": "none",
-                        "textAlignment": "left",
-                        "titleSize": "large",
-                        "spacing": "md"
+                        "backgroundColor": "#1b3a2d",
+                        "accentColor": "#e84c1e",
+                        "borderRadius": 20,
+                        "shadow": "0 24px 64px rgba(27,58,45,0.22)"
                       }
                     }
                   ]
@@ -8278,8 +8322,9 @@
                 "background": "transparent",
                 "backgroundColor": "",
                 "backgroundType": "none",
-                "paddingTop": 0,
-                "paddingBottom": 0,
+                "paddingTop": 40,
+                "paddingBottom": 60,
+                "gap": 32,
                 "fullWidth": false
               }
             },
@@ -8297,28 +8342,31 @@
                       "settings": {
                         "header": {
                           "show": true,
+                          "eyebrow": "What's Included",
+                          "eyebrowColor": "#e84c1e",
                           "heading": "Everything you need to legally form your US LLC",
                           "alignment": "center",
                           "description": "Every plan includes the foundational documents required by the state. Higher tiers add EIN, registered agent, and compliance services."
                         },
                         "columns": 3,
-                        "variant": "cards",
+                        "variant": "detailed-cards",
                         "iconColor": "#1b3a2d",
                         "iconStyle": "circle-check",
                         "showIcons": true,
-                        "showDescriptions": true
+                        "showDescriptions": true,
+                        "showTags": true
                       }
                     }
                   ]
                 }
               ],
               "settings": {
-                "background": "transparent",
-                "backgroundColor": "",
-                "backgroundType": "none",
-                "paddingTop": 0,
-                "paddingBottom": 0,
-                "fullWidth": false
+                "background": { "type": "solid", "color": "#ffffff" },
+                "backgroundColor": "#ffffff",
+                "backgroundType": "solid",
+                "paddingTop": 100,
+                "paddingBottom": 100,
+                "fullWidth": true
               }
             },
             {
@@ -8465,12 +8513,12 @@
                 }
               ],
               "settings": {
-                "background": "transparent",
-                "backgroundColor": "",
-                "backgroundType": "none",
-                "paddingTop": 0,
-                "paddingBottom": 0,
-                "fullWidth": false
+                "background": { "type": "solid", "color": "#f0ede5" },
+                "backgroundColor": "#f0ede5",
+                "backgroundType": "solid",
+                "paddingTop": 100,
+                "paddingBottom": 100,
+                "fullWidth": true
               }
             },
             {
@@ -8494,12 +8542,12 @@
                 }
               ],
               "settings": {
-                "background": "transparent",
-                "backgroundColor": "",
-                "backgroundType": "none",
-                "paddingTop": 0,
-                "paddingBottom": 0,
-                "fullWidth": false
+                "background": { "type": "solid", "color": "#ffffff" },
+                "backgroundColor": "#ffffff",
+                "backgroundType": "solid",
+                "paddingTop": 100,
+                "paddingBottom": 100,
+                "fullWidth": true
               }
             },
             {
@@ -8570,12 +8618,12 @@
                 }
               ],
               "settings": {
-                "background": "transparent",
-                "backgroundColor": "",
-                "backgroundType": "none",
-                "paddingTop": 0,
-                "paddingBottom": 0,
-                "fullWidth": false
+                "background": { "type": "solid", "color": "#f0ede5" },
+                "backgroundColor": "#f0ede5",
+                "backgroundType": "solid",
+                "paddingTop": 100,
+                "paddingBottom": 100,
+                "fullWidth": true
               }
             },
             {
@@ -8679,12 +8727,12 @@
                 }
               ],
               "settings": {
-                "background": "transparent",
-                "backgroundColor": "",
-                "backgroundType": "none",
-                "paddingTop": 0,
-                "paddingBottom": 0,
-                "fullWidth": false
+                "background": { "type": "solid", "color": "#1b3a2d" },
+                "backgroundColor": "#1b3a2d",
+                "backgroundType": "solid",
+                "paddingTop": 100,
+                "paddingBottom": 100,
+                "fullWidth": true
               }
             },
             {
@@ -8708,12 +8756,12 @@
                 }
               ],
               "settings": {
-                "background": "transparent",
-                "backgroundColor": "",
-                "backgroundType": "none",
-                "paddingTop": 0,
-                "paddingBottom": 0,
-                "fullWidth": false
+                "background": { "type": "solid", "color": "#ffffff" },
+                "backgroundColor": "#ffffff",
+                "backgroundType": "solid",
+                "paddingTop": 100,
+                "paddingBottom": 100,
+                "fullWidth": true
               }
             },
             {
@@ -8748,12 +8796,12 @@
                 }
               ],
               "settings": {
-                "background": "transparent",
-                "backgroundColor": "",
-                "backgroundType": "none",
-                "paddingTop": 0,
-                "paddingBottom": 0,
-                "fullWidth": false
+                "background": { "type": "solid", "color": "#f0ede5" },
+                "backgroundColor": "#f0ede5",
+                "backgroundType": "solid",
+                "paddingTop": 100,
+                "paddingBottom": 100,
+                "fullWidth": true
               }
             },
             {
@@ -8787,12 +8835,12 @@
                 }
               ],
               "settings": {
-                "background": "transparent",
-                "backgroundColor": "",
-                "backgroundType": "none",
-                "paddingTop": 0,
-                "paddingBottom": 0,
-                "fullWidth": false
+                "background": { "type": "solid", "color": "#ffffff" },
+                "backgroundColor": "#ffffff",
+                "backgroundType": "solid",
+                "paddingTop": 100,
+                "paddingBottom": 100,
+                "fullWidth": true
               }
             },
             {
@@ -8821,7 +8869,7 @@
                 "backgroundType": "none",
                 "paddingTop": 0,
                 "paddingBottom": 0,
-                "fullWidth": false
+                "fullWidth": true
               }
             }
           ]

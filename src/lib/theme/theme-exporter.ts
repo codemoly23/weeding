@@ -192,6 +192,9 @@ export async function exportThemeData(): Promise<ThemeData> {
           text: feature.text,
           tooltip: feature.tooltip ?? undefined,
           description: feature.description ?? undefined,
+          tag: feature.tag ?? undefined,
+          tagType: feature.tagType ?? undefined,
+          icon: feature.icon ?? undefined,
           sortOrder: feature.sortOrder,
           packages: packagesMap,
         };

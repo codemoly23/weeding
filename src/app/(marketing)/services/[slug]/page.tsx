@@ -52,6 +52,9 @@ interface MasterFeature {
   text: string;
   tooltip: string | null;
   description: string | null;
+  tag: string | null;
+  tagType: string | null;
+  icon: string | null;
   packageMappings: PackageFeatureMapping[];
 }
 
@@ -115,6 +118,9 @@ async function getService(slug: string): Promise<ServiceData | null> {
             text: true,
             tooltip: true,
             description: true,
+            tag: true,
+            tagType: true,
+            icon: true,
             packageMappings: {
               select: {
                 id: true,
@@ -172,6 +178,9 @@ async function getService(slug: string): Promise<ServiceData | null> {
         text: f.text,
         tooltip: f.tooltip,
         description: f.description,
+        tag: f.tag,
+        tagType: f.tagType,
+        icon: f.icon,
         packageMappings: f.packageMappings.map((m) => ({
           id: m.id,
           packageId: m.packageId,
@@ -312,6 +321,9 @@ export default async function ServicePage({ params }: PageProps) {
       text: f.text,
       description: f.description,
       tooltip: f.tooltip,
+      tag: f.tag,
+      tagType: f.tagType,
+      icon: f.icon,
       sortOrder: 0,
     })),
     faqs: service.faqs.map((f) => ({

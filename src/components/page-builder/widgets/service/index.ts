@@ -4,6 +4,7 @@
 // ============================================
 
 export { ServiceHeroWidget } from "./service-hero";
+export { ServiceChecklistCardWidget } from "./service-checklist-card";
 export { ServiceFeaturesWidget } from "./service-features";
 export { ServiceDescriptionWidget } from "./service-description";
 export { ServiceBreadcrumbWidget } from "./service-breadcrumb";

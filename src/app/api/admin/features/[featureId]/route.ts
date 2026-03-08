@@ -56,7 +56,7 @@ export async function PUT(
     const { featureId } = await params;
     const body = await request.json();
 
-    const { text, description, tooltip } = body;
+    const { text, description, tooltip, tag, tagType, icon } = body;
 
     if (!text?.trim()) {
       return NextResponse.json(
@@ -71,6 +71,9 @@ export async function PUT(
         text: text.trim(),
         description: description?.trim() || null,
         tooltip: tooltip?.trim() || null,
+        tag: tag?.trim() || null,
+        tagType: tagType?.trim() || null,
+        icon: icon?.trim() || null,
       },
     });
 

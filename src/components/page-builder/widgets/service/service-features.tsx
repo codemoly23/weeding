@@ -7,6 +7,7 @@
 
 import { cn } from "@/lib/utils";
 import { Check, CircleCheck, BadgeCheck } from "lucide-react";
+import { ServiceIcon } from "@/components/ui/service-icon";
 import {
   useOptionalServiceContext,
   resolvePlaceholders,
@@ -76,6 +77,8 @@ export function ServiceFeaturesWidget({
       heading: resolveString(settings?.header?.heading, "What's Included"),
       description: resolveString(settings?.header?.description, ""),
       alignment: settings?.header?.alignment ?? "left",
+      eyebrow: settings?.header?.eyebrow,
+      eyebrowColor: settings?.header?.eyebrowColor,
     },
     variant: settings?.variant ?? "minimal-checkmark",
     columns: settings?.columns ?? 2,
@@ -83,6 +86,7 @@ export function ServiceFeaturesWidget({
     iconStyle: settings?.iconStyle ?? "check",
     iconColor: settings?.iconColor ?? "#10b981",
     showDescriptions: settings?.showDescriptions ?? false,
+    showTags: settings?.showTags ?? false,
   };
 
   // Get service context
@@ -109,6 +113,14 @@ export function ServiceFeaturesWidget({
       {/* Header */}
       {s.header.show && (
         <div className={cn("mb-8", s.header.alignment === "center" ? "text-center" : "text-left")}>
+          {s.header.eyebrow && (
+            <span
+              style={{ color: s.header.eyebrowColor || "#e84c1e" }}
+              className="block text-xs font-bold uppercase tracking-[1.5px] mb-3"
+            >
+              {s.header.eyebrow}
+            </span>
+          )}
           <h2 className="text-2xl font-bold tracking-tight sm:text-3xl">{resolvedHeading}</h2>
           {s.header.description && (
             <p className="mt-2 text-muted-foreground">
@@ -209,8 +221,102 @@ export function ServiceFeaturesWidget({
           ))}
         </div>
       )}
+
+      {/* Variant: detailed-cards — Reference "What's Included" section */}
+      {s.variant === "detailed-cards" && (
+        <div
+          className={cn(
+            "grid grid-cols-1 gap-5",
+            s.columns >= 2 && "sm:grid-cols-2",
+            s.columns >= 3 && "lg:grid-cols-3",
+          )}
+        >
+          {features.map((feature) => (
+            <DetailedFeatureCard
+              key={feature.id}
+              feature={feature}
+              showIcon={s.showIcons}
+              showTag={s.showTags}
+            />
+          ))}
+        </div>
+      )}
     </section>
     </WidgetContainer>
+  );
+}
+
+// ============================================
+// DETAILED FEATURE CARD COMPONENT
+// Matches reference: icon + title + description + tag badge
+// ============================================
+
+const TAG_CARD_COLORS: Record<string, { bg: string; text: string }> = {
+  included: { bg: "rgba(27,58,45,0.08)", text: "#1b3a2d" },
+  free: { bg: "rgba(27,58,45,0.08)", text: "#1b3a2d" },
+  addon: { bg: "rgba(232,76,30,0.1)", text: "#e84c1e" },
+  premium: { bg: "rgba(168,85,247,0.1)", text: "#9333ea" },
+  custom: { bg: "rgba(107,114,128,0.1)", text: "#4b5563" },
+};
+
+function DetailedFeatureCard({
+  feature,
+  showIcon,
+  showTag,
+}: {
+  feature: { id: string; text: string; description?: string | null; tag?: string | null; tagType?: string | null; icon?: string | null };
+  showIcon: boolean;
+  showTag: boolean;
+}) {
+  const tagColors = TAG_CARD_COLORS[feature.tagType || "custom"] || TAG_CARD_COLORS.custom;
+
+  return (
+    <div className="group relative overflow-hidden rounded-[18px] border-[1.5px] border-border bg-white p-8 transition-all duration-[350ms] ease-[cubic-bezier(.16,1,.3,1)] hover:border-[#1b3a2d] hover:shadow-[0_16px_48px_rgba(27,58,45,0.1)] hover:-translate-y-1">
+      {/* Bottom accent bar on hover */}
+      <div className="absolute bottom-0 left-0 right-0 h-[3px] bg-[#1b3a2d] origin-left scale-x-0 transition-transform duration-[350ms] ease-out group-hover:scale-x-100" />
+
+      {/* Icon */}
+      {showIcon && (
+        <div className="mb-[18px] flex h-[52px] w-[52px] items-center justify-center rounded-[14px] bg-[rgba(27,58,45,0.07)] transition-all duration-300 group-hover:bg-[#1b3a2d]">
+          {feature.icon ? (
+            <ServiceIcon
+              name={feature.icon}
+              className="h-6 w-6 text-[#1b3a2d] transition-colors duration-300 group-hover:text-[#faf8f4]"
+            />
+          ) : (
+            <CircleCheck className="h-6 w-6 text-[#1b3a2d] transition-colors duration-300 group-hover:text-[#faf8f4]" />
+          )}
+        </div>
+      )}
+
+      {/* Title */}
+      <h3
+        style={{ fontFamily: "var(--font-heading, 'Outfit', sans-serif)" }}
+        className="text-[17px] font-bold tracking-[-0.01em] text-[#0e1109] mb-2"
+      >
+        {feature.text}
+      </h3>
+
+      {/* Description */}
+      {feature.description && (
+        <p className="text-[13px] leading-[1.65] text-[#4b5249]">
+          {feature.description}
+        </p>
+      )}
+
+      {/* Tag Badge */}
+      {showTag && feature.tag && (
+        <span
+          className="mt-3 inline-flex text-[10px] font-bold uppercase tracking-[0.8px] px-2.5 py-[3px] rounded-full"
+          style={{
+            background: tagColors.bg,
+            color: tagColors.text,
+          }}
+        >
+          {feature.tag}
+        </span>
+      )}
+    </div>
   );
 }
 
@@ -219,12 +325,12 @@ export function ServiceFeaturesWidget({
 // ============================================
 
 const PLACEHOLDER_FEATURES = [
-  { id: "p1", text: "Company Name Availability Check", sortOrder: 1 },
-  { id: "p2", text: "Articles of Organization Filing", sortOrder: 2 },
-  { id: "p3", text: "Registered Agent (1st Year Free)", sortOrder: 3 },
-  { id: "p4", text: "Operating Agreement Template", sortOrder: 4 },
-  { id: "p5", text: "EIN / Tax ID Number", sortOrder: 5 },
-  { id: "p6", text: "Compliance Calendar Reminders", sortOrder: 6 },
+  { id: "p1", text: "Articles of Organization", description: "The official state document that legally creates your LLC.", icon: "FileText", tag: "All Plans", tagType: "included", sortOrder: 1 },
+  { id: "p2", text: "Operating Agreement", description: "Defines ownership structure and operating rules.", icon: "Shield", tag: "All Plans \u2022 Free ($79 value)", tagType: "free", sortOrder: 2 },
+  { id: "p3", text: "EIN / Tax ID Application", description: "Your LLC\u2019s federal Employer Identification Number.", icon: "CreditCard", tag: "Professional & Complete", tagType: "addon", sortOrder: 3 },
+  { id: "p4", text: "Registered Agent \u2014 1 Year Free", description: "Receives official legal notices and government mail.", icon: "Building2", tag: "Professional & Complete", tagType: "addon", sortOrder: 4 },
+  { id: "p5", text: "BOI Ownership Filing", description: "FinCEN\u2019s Beneficial Ownership Information report.", icon: "FileText", tag: "Professional & Complete", tagType: "addon", sortOrder: 5 },
+  { id: "p6", text: "US Business Banking Guidance", description: "Step-by-step help opening a Mercury or Relay account.", icon: "Building2", tag: "Complete Plan", tagType: "premium", sortOrder: 6 },
 ];
 
 function ServiceFeaturesPlaceholder({
@@ -236,6 +342,8 @@ function ServiceFeaturesPlaceholder({
       heading: string;
       description: string;
       alignment: "left" | "center";
+      eyebrow?: string;
+      eyebrowColor?: string;
     };
     variant: ServiceFeaturesWidgetSettings["variant"];
     columns: ServiceFeaturesWidgetSettings["columns"];
@@ -243,6 +351,7 @@ function ServiceFeaturesPlaceholder({
     iconStyle: ServiceFeaturesWidgetSettings["iconStyle"];
     iconColor: string;
     showDescriptions: boolean;
+    showTags: boolean;
   };
 }) {
   return (
@@ -250,6 +359,14 @@ function ServiceFeaturesPlaceholder({
       {/* Header */}
       {s.header.show && (
         <div className={cn("mb-8", s.header.alignment === "center" ? "text-center" : "text-left")}>
+          {s.header.eyebrow && (
+            <span
+              style={{ color: s.header.eyebrowColor || "#e84c1e" }}
+              className="block text-xs font-bold uppercase tracking-[1.5px] mb-3"
+            >
+              {s.header.eyebrow}
+            </span>
+          )}
           <h2 className="text-2xl font-bold tracking-tight sm:text-3xl">{s.header.heading}</h2>
           {s.header.description && (
             <p className="mt-2 text-muted-foreground">{s.header.description}</p>
@@ -335,6 +452,26 @@ function ServiceFeaturesPlaceholder({
               )}
               {feature.text}
             </span>
+          ))}
+        </div>
+      )}
+
+      {/* Variant: detailed-cards (placeholder) */}
+      {s.variant === "detailed-cards" && (
+        <div
+          className={cn(
+            "grid grid-cols-1 gap-5",
+            s.columns >= 2 && "sm:grid-cols-2",
+            s.columns >= 3 && "lg:grid-cols-3",
+          )}
+        >
+          {PLACEHOLDER_FEATURES.map((feature) => (
+            <DetailedFeatureCard
+              key={feature.id}
+              feature={feature}
+              showIcon={s.showIcons}
+              showTag={s.showTags}
+            />
           ))}
         </div>
       )}

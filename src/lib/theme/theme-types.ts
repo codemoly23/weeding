@@ -96,6 +96,9 @@ export interface ThemeComparisonFeature {
   text: string;
   tooltip?: string;
   description?: string;
+  tag?: string;
+  tagType?: string;
+  icon?: string;
   sortOrder?: number;
   packages: Record<
     string,
