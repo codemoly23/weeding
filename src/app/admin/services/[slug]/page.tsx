@@ -201,8 +201,8 @@ const defaultFaq: FAQ = {
 export default function ServiceEditorPage() {
   const params = useParams();
   const router = useRouter();
-  const isNew = params.id === "new";
-  const serviceId = isNew ? null : (params.id as string);
+  const isNew = params.slug === "new";
+  const serviceSlug = isNew ? null : (params.slug as string);
 
   const [service, setService] = useState<ServiceData>(defaultService);
   const [categories, setCategories] = useState<Category[]>([]);
@@ -235,11 +235,11 @@ export default function ServiceEditorPage() {
   const [isSavingMappings, setIsSavingMappings] = useState(false);
 
   const fetchService = useCallback(async () => {
-    if (!serviceId) return;
+    if (!serviceSlug) return;
 
     setIsLoading(true);
     try {
-      const response = await fetch(`/api/admin/services/${serviceId}`);
+      const response = await fetch(`/api/admin/services/${serviceSlug}`);
       const data = await response.json();
 
       if (response.ok) {
@@ -279,7 +279,7 @@ export default function ServiceEditorPage() {
     } finally {
       setIsLoading(false);
     }
-  }, [serviceId, router]);
+  }, [serviceSlug, router]);
 
   const fetchCategories = useCallback(async () => {
     try {
@@ -294,9 +294,9 @@ export default function ServiceEditorPage() {
   }, []);
 
   const fetchMasterFeatures = useCallback(async () => {
-    if (!serviceId) return;
+    if (!serviceSlug) return;
     try {
-      const response = await fetch(`/api/admin/services/${serviceId}/features`);
+      const response = await fetch(`/api/admin/services/${serviceSlug}/features`);
       const data = await response.json();
       if (response.ok) {
         setMasterFeatures(data.features || []);
@@ -304,7 +304,7 @@ export default function ServiceEditorPage() {
     } catch (error) {
       console.error("Error fetching master features:", error);
     }
-  }, [serviceId]);
+  }, [serviceSlug]);
 
   useEffect(() => {
     fetchCategories();
@@ -369,7 +369,7 @@ export default function ServiceEditorPage() {
 
       const url = isNew
         ? "/api/admin/services"
-        : `/api/admin/services/${serviceId}`;
+        : `/api/admin/services/${serviceSlug}`;
       const method = isNew ? "POST" : "PUT";
 
       // Don't send features for existing services - they're managed via Features tab
@@ -392,7 +392,7 @@ export default function ServiceEditorPage() {
       if (response.ok) {
         toast.success(isNew ? "Service created" : "Service updated");
         if (isNew) {
-          router.push(`/admin/services/${data.id}`);
+          router.push(`/admin/services/${data.slug}`);
         }
       } else {
         toast.error(data.error || "Failed to save service");
@@ -497,9 +497,9 @@ export default function ServiceEditorPage() {
     setEditingPackageIndex(null);
 
     // If service exists, save package to API
-    if (serviceId && editingPackageIndex === null) {
+    if (serviceSlug && editingPackageIndex === null) {
       try {
-        const response = await fetch(`/api/admin/services/${serviceId}/packages`, {
+        const response = await fetch(`/api/admin/services/${serviceSlug}/packages`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
@@ -586,9 +586,9 @@ export default function ServiceEditorPage() {
     setEditingFaqIndex(null);
 
     // If service exists, save FAQ to API
-    if (serviceId && editingFaqIndex === null) {
+    if (serviceSlug && editingFaqIndex === null) {
       try {
-        const response = await fetch(`/api/admin/services/${serviceId}/faqs`, {
+        const response = await fetch(`/api/admin/services/${serviceSlug}/faqs`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify(editingFaq),
@@ -649,7 +649,7 @@ export default function ServiceEditorPage() {
   };
 
   const saveMasterFeature = async () => {
-    if (!editingFeature || !serviceId) return;
+    if (!editingFeature || !serviceSlug) return;
 
     if (!editingFeature.text.trim()) {
       toast.error("Feature text is required");
@@ -677,7 +677,7 @@ export default function ServiceEditorPage() {
         }
       } else {
         // Create new
-        const response = await fetch(`/api/admin/services/${serviceId}/features`, {
+        const response = await fetch(`/api/admin/services/${serviceSlug}/features`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
@@ -903,7 +903,7 @@ export default function ServiceEditorPage() {
         <div className="flex gap-2">
           {!isNew && (
             <Button variant="outline" asChild>
-              <Link href={`/admin/services/${serviceId}/form-builder`}>
+              <Link href={`/admin/services/${serviceSlug}/form-builder`}>
                 <FormInput className="mr-2 h-4 w-4" />
                 Form Builder
               </Link>
@@ -1132,7 +1132,7 @@ export default function ServiceEditorPage() {
                     <Label htmlFor="badgeText">Badge Text</Label>
                     <Input
                       id="badgeText"
-                      value={service.badgeText}
+                      value={service.badgeText ?? ""}
                       onChange={(e) => handleInputChange("badgeText", e.target.value)}
                       placeholder='e.g. "Emergency", "$25K Penalty Risk"'
                     />
@@ -1152,7 +1152,7 @@ export default function ServiceEditorPage() {
                         className="w-12 h-9 p-1 cursor-pointer"
                       />
                       <Input
-                        value={service.badgeColor}
+                        value={service.badgeColor ?? ""}
                         onChange={(e) => handleInputChange("badgeColor", e.target.value)}
                         placeholder="#dc2626"
                         className="flex-1"
@@ -1606,9 +1606,9 @@ export default function ServiceEditorPage() {
         </TabsContent>
 
         {/* Location Pricing Tab */}
-        {!isNew && serviceId && (
+        {!isNew && serviceSlug && (
           <TabsContent value="location-pricing">
-            <LocationPricingTab serviceId={serviceId} currencySymbol={currencySymbol} />
+            <LocationPricingTab serviceSlug={serviceSlug} currencySymbol={currencySymbol} />
           </TabsContent>
         )}
 
@@ -1950,7 +1950,7 @@ interface LocationFeeRow {
   isActive: boolean;
 }
 
-function LocationPricingTab({ serviceId, currencySymbol }: { serviceId: string; currencySymbol: string }) {
+function LocationPricingTab({ serviceSlug, currencySymbol }: { serviceSlug: string; currencySymbol: string }) {
   const [isEnabled, setIsEnabled] = useState(false);
   const [feeLabel, setFeeLabel] = useState("State Fee");
   const [fees, setFees] = useState<LocationFeeRow[]>([]);
@@ -1970,7 +1970,7 @@ function LocationPricingTab({ serviceId, currencySymbol }: { serviceId: string; 
     setIsLoading(true);
     try {
       const [feesRes, locationsRes] = await Promise.all([
-        fetch(`/api/admin/services/${serviceId}/location-fees`),
+        fetch(`/api/admin/services/${serviceSlug}/location-fees`),
         fetch("/api/admin/location-pricing"),
       ]);
 
@@ -2029,7 +2029,7 @@ function LocationPricingTab({ serviceId, currencySymbol }: { serviceId: string; 
     } finally {
       setIsLoading(false);
     }
-  }, [serviceId]);
+  }, [serviceSlug]);
 
   useEffect(() => {
     fetchData();
@@ -2112,7 +2112,7 @@ function LocationPricingTab({ serviceId, currencySymbol }: { serviceId: string; 
     // Also delete from server
     try {
       await fetch(
-        `/api/admin/services/${serviceId}/location-fees?locationId=${locationId}`,
+        `/api/admin/services/${serviceSlug}/location-fees?locationId=${locationId}`,
         { method: "DELETE" }
       );
     } catch (error) {
@@ -2146,7 +2146,7 @@ function LocationPricingTab({ serviceId, currencySymbol }: { serviceId: string; 
       }
 
       const response = await fetch(
-        `/api/admin/services/${serviceId}/location-fees`,
+        `/api/admin/services/${serviceSlug}/location-fees`,
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },

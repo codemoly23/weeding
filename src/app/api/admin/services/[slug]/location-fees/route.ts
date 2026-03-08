@@ -3,10 +3,10 @@ import prisma from "@/lib/db";
 import { z } from "zod";
 import { checkAdminOnly, authError } from "@/lib/admin-auth";
 
-// GET /api/admin/services/[id]/location-fees - Get all location fees for a service
+// GET /api/admin/services/[slug]/location-fees - Get all location fees for a service
 export async function GET(
   request: NextRequest,
-  { params }: { params: Promise<{ id: string }> }
+  { params }: { params: Promise<{ slug: string }> }
 ) {
   try {
     const accessCheck = await checkAdminOnly();
@@ -14,11 +14,11 @@ export async function GET(
       return authError(accessCheck);
     }
 
-    const { id: serviceId } = await params;
+    const { slug } = await params;
 
     // Verify service exists
     const service = await prisma.service.findUnique({
-      where: { id: serviceId },
+      where: { slug },
       select: {
         id: true,
         name: true,
@@ -36,7 +36,7 @@ export async function GET(
 
     // Get all location fees for this service with location details
     const fees = await prisma.locationFee.findMany({
-      where: { serviceId },
+      where: { serviceId: service.id },
       include: {
         location: {
           select: {
@@ -111,10 +111,10 @@ const bulkUpsertSchema = z.object({
   locationFeeLabel: z.string().optional().nullable(),
 });
 
-// POST /api/admin/services/[id]/location-fees - Bulk upsert location fees
+// POST /api/admin/services/[slug]/location-fees - Bulk upsert location fees
 export async function POST(
   request: NextRequest,
-  { params }: { params: Promise<{ id: string }> }
+  { params }: { params: Promise<{ slug: string }> }
 ) {
   try {
     const accessCheck = await checkAdminOnly();
@@ -122,13 +122,14 @@ export async function POST(
       return authError(accessCheck);
     }
 
-    const { id: serviceId } = await params;
+    const { slug } = await params;
     const body = await request.json();
     const data = bulkUpsertSchema.parse(body);
 
     // Verify service exists
     const service = await prisma.service.findUnique({
-      where: { id: serviceId },
+      where: { slug },
+      select: { id: true },
     });
 
     if (!service) {
@@ -138,13 +139,15 @@ export async function POST(
       );
     }
 
+    const serviceId = service.id;
+
     // Update service-level settings if provided
     if (
       data.hasLocationBasedPricing !== undefined ||
       data.locationFeeLabel !== undefined
     ) {
       await prisma.service.update({
-        where: { id: serviceId },
+        where: { slug },
         data: {
           ...(data.hasLocationBasedPricing !== undefined && {
             hasLocationBasedPricing: data.hasLocationBasedPricing,
@@ -215,10 +218,10 @@ export async function POST(
   }
 }
 
-// DELETE /api/admin/services/[id]/location-fees - Delete specific fees
+// DELETE /api/admin/services/[slug]/location-fees - Delete specific fees
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: Promise<{ id: string }> }
+  { params }: { params: Promise<{ slug: string }> }
 ) {
   try {
     const accessCheck = await checkAdminOnly();
@@ -226,20 +229,32 @@ export async function DELETE(
       return authError(accessCheck);
     }
 
-    const { id: serviceId } = await params;
+    const { slug } = await params;
     const { searchParams } = new URL(request.url);
     const feeId = searchParams.get("feeId");
     const locationId = searchParams.get("locationId");
 
+    const service = await prisma.service.findUnique({
+      where: { slug },
+      select: { id: true },
+    });
+
+    if (!service) {
+      return NextResponse.json(
+        { error: "Service not found" },
+        { status: 404 }
+      );
+    }
+
     if (feeId) {
       // Delete specific fee by ID
       await prisma.locationFee.delete({
-        where: { id: feeId, serviceId },
+        where: { id: feeId, serviceId: service.id },
       });
     } else if (locationId) {
       // Delete all fees for a location in this service
       await prisma.locationFee.deleteMany({
-        where: { serviceId, locationId },
+        where: { serviceId: service.id, locationId },
       });
     } else {
       return NextResponse.json(

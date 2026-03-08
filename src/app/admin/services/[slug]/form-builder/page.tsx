@@ -368,8 +368,10 @@ function SortableFieldItem({
 export default function FormBuilderPage() {
   const params = useParams();
   const router = useRouter();
-  const serviceId = params.id as string;
+  const serviceSlug = params.slug as string;
 
+  // serviceId is resolved from slug via initial fetch — used for form-template API calls
+  const [serviceId, setServiceId] = useState<string | null>(null);
   const [service, setService] = useState<ServiceInfo | null>(null);
   const [template, setTemplate] = useState<FormTemplate | null>(null);
   const [isLoading, setIsLoading] = useState(true);
@@ -487,7 +489,23 @@ export default function FormBuilderPage() {
   const fetchTemplate = useCallback(async () => {
     setIsLoading(true);
     try {
-      const response = await fetch(`/api/admin/form-templates/${serviceId}`);
+      // First resolve slug to service ID if not already known
+      let resolvedId = serviceId;
+      if (!resolvedId) {
+        const svcRes = await fetch(`/api/admin/services/${serviceSlug}`);
+        if (svcRes.ok) {
+          const svcData = await svcRes.json();
+          resolvedId = svcData.id;
+          setServiceId(resolvedId);
+          setService({ id: svcData.id, name: svcData.name, slug: svcData.slug });
+        } else {
+          toast.error("Service not found");
+          setIsLoading(false);
+          return;
+        }
+      }
+
+      const response = await fetch(`/api/admin/form-templates/${resolvedId}`);
       const data = await response.json();
 
       if (response.ok) {
@@ -502,7 +520,7 @@ export default function FormBuilderPage() {
     } finally {
       setIsLoading(false);
     }
-  }, [serviceId]);
+  }, [serviceSlug, serviceId]);
 
   useEffect(() => {
     fetchTemplate();
@@ -801,7 +819,7 @@ export default function FormBuilderPage() {
       <div className="space-y-6">
         <div className="flex items-center gap-4">
           <Button variant="ghost" size="icon" asChild>
-            <Link href={`/admin/services/${serviceId}`}>
+            <Link href={`/admin/services/${serviceSlug}`}>
               <ArrowLeft className="h-5 w-5" />
             </Link>
           </Button>
@@ -847,7 +865,7 @@ export default function FormBuilderPage() {
             </Link>
           </Button>
           <Button variant="outline" asChild>
-            <Link href={`/admin/services/${serviceId}`}>
+            <Link href={`/admin/services/${serviceSlug}`}>
               <ArrowLeft className="mr-2 h-4 w-4" />
               Back
             </Link>

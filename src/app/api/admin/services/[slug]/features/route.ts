@@ -5,7 +5,7 @@ import { checkAdminOnly, authError } from "@/lib/admin-auth";
 // GET - List all features for a service
 export async function GET(
   request: NextRequest,
-  { params }: { params: Promise<{ id: string }> }
+  { params }: { params: Promise<{ slug: string }> }
 ) {
   try {
     const accessCheck = await checkAdminOnly();
@@ -13,10 +13,22 @@ export async function GET(
       return authError(accessCheck);
     }
 
-    const { id: serviceId } = await params;
+    const { slug } = await params;
+
+    const service = await prisma.service.findUnique({
+      where: { slug },
+      select: { id: true },
+    });
+
+    if (!service) {
+      return NextResponse.json(
+        { error: "Service not found" },
+        { status: 404 }
+      );
+    }
 
     const features = await prisma.serviceFeature.findMany({
-      where: { serviceId },
+      where: { serviceId: service.id },
       orderBy: { sortOrder: "asc" },
       include: {
         packageMappings: {
@@ -55,7 +67,7 @@ export async function GET(
 // POST - Create a new feature
 export async function POST(
   request: NextRequest,
-  { params }: { params: Promise<{ id: string }> }
+  { params }: { params: Promise<{ slug: string }> }
 ) {
   try {
     const accessCheck = await checkAdminOnly();
@@ -63,7 +75,7 @@ export async function POST(
       return authError(accessCheck);
     }
 
-    const { id: serviceId } = await params;
+    const { slug } = await params;
     const body = await request.json();
 
     const { text, description, tooltip } = body;
@@ -75,9 +87,21 @@ export async function POST(
       );
     }
 
+    const service = await prisma.service.findUnique({
+      where: { slug },
+      select: { id: true },
+    });
+
+    if (!service) {
+      return NextResponse.json(
+        { error: "Service not found" },
+        { status: 404 }
+      );
+    }
+
     // Get max sortOrder
     const maxOrder = await prisma.serviceFeature.findFirst({
-      where: { serviceId },
+      where: { serviceId: service.id },
       orderBy: { sortOrder: "desc" },
       select: { sortOrder: true },
     });
@@ -88,13 +112,13 @@ export async function POST(
         description: description?.trim() || null,
         tooltip: tooltip?.trim() || null,
         sortOrder: (maxOrder?.sortOrder ?? -1) + 1,
-        serviceId,
+        serviceId: service.id,
       },
     });
 
     // Create PackageFeatureMap entries for all packages of this service
     const packages = await prisma.package.findMany({
-      where: { serviceId },
+      where: { serviceId: service.id },
       select: { id: true },
     });
 
@@ -121,7 +145,7 @@ export async function POST(
 // PUT - Update feature order (bulk)
 export async function PUT(
   request: NextRequest,
-  { params }: { params: Promise<{ id: string }> }
+  { params }: { params: Promise<{ slug: string }> }
 ) {
   try {
     const accessCheck = await checkAdminOnly();

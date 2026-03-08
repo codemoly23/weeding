@@ -20,7 +20,7 @@
   --nav-h:72px;
 }
 html{scroll-behavior:smooth;overflow-x:hidden}
-body{font-family:'Inter',system-ui,sans-serif;background:var(--forest-2);color:var(--text-dark);line-height:1.65;overflow-x:hidden;-webkit-font-smoothing:antialiased}
+body{font-family:'Inter',system-ui,sans-serif;background:var(--cream);color:var(--text-dark);line-height:1.65;overflow-x:hidden;-webkit-font-smoothing:antialiased}
 a{color:inherit;text-decoration:none}
 button{cursor:pointer;font-family:inherit}
 ::-webkit-scrollbar{width:5px}
@@ -618,6 +618,7 @@ li.addon.addon--open .addon-toggle svg{transform:rotate(45deg)}
 .footer{background:var(--forest-2);color:var(--cream);padding:80px 0 0}
 .footer__top{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:56px;padding-bottom:60px;border-bottom:1px solid rgba(255,255,255,0.07)}
 
+.footer__brand{}
 .footer__wordmark{font-family:'Outfit',sans-serif;font-size:32px;font-weight:900;letter-spacing:-0.04em;color:var(--cream);margin-bottom:14px;line-height:1}
 .footer__wordmark span{color:var(--coral-2)}
 .footer__tagline{font-size:15px;color:rgba(250,248,244,0.45);line-height:1.7;max-width:280px;margin-bottom:28px}
@@ -646,16 +647,17 @@ li.addon.addon--open .addon-toggle svg{transform:rotate(45deg)}
 .footer__countries{font-size:13px;color:rgba(250,248,244,0.35);display:flex;align-items:center;gap:8px;flex-wrap:wrap}
 .footer__countries span{background:rgba(255,255,255,0.05);padding:3px 10px;border-radius:5px;font-size:12px}
 
-#pageLift{position:relative;z-index:1;background:var(--cream)}
-#brandScene{position:fixed;bottom:0;left:0;width:100%;z-index:0;background:var(--forest-2);padding:0 0 24px}
-#brandScene .brand-text{display:block;font-size:clamp(100px,22vw,360px);font-weight:900;letter-spacing:-0.04em;color:var(--cream);text-transform:uppercase;font-family:'Outfit',sans-serif;line-height:0.85;max-width:1160px;margin:0 auto;padding:0 28px}
-#liftSpacer{height:0}
-.footer__bottom{padding:24px 0;display:flex;justify-content:space-between;align-items:flex-start;gap:24px;flex-wrap:wrap}
-.footer__copy{font-size:13px;color:rgba(250,248,244,0.3)}
-.footer__legal{display:flex;gap:20px;flex-wrap:wrap}
-.footer__legal a{font-size:13px;color:rgba(250,248,244,0.3);transition:color .2s}
-.footer__legal a:hover{color:rgba(250,248,244,0.6)}
-.footer__disclaimer{font-size:11px;color:rgba(250,248,244,0.2);max-width:700px;line-height:1.6;margin-top:4px}
+/* ── Footer Bottom: Shutter Reveal ── */
+.footer__shutter-bar{display:flex;justify-content:space-between;align-items:center;padding:24px 0;border-top:1px solid rgba(255,255,255,0.07);flex-wrap:wrap;gap:12px}
+.footer__shutter-bar .footer__copy{font-size:13px;color:rgba(250,248,244,0.3)}
+.footer__shutter-bar .footer__legal{display:flex;gap:20px;flex-wrap:wrap}
+.footer__shutter-bar .footer__legal a{font-size:13px;color:rgba(250,248,244,0.3);transition:color .2s}
+.footer__shutter-bar .footer__legal a:hover{color:rgba(250,248,244,0.6)}
+
+.footer__shutter{position:relative;overflow:hidden;padding:0}
+.footer__shutter-brand{display:flex;align-items:center;justify-content:center;padding:0}
+.footer__shutter-text{font-family:'Outfit',sans-serif;font-weight:900;font-size:clamp(100px,18vw,280px);letter-spacing:-0.05em;line-height:1;color:var(--coral-2);white-space:nowrap;user-select:none;text-align:center;width:100%;clip-path:inset(100% 0 0 0);padding:20px 0 30px}
+.footer__shutter-text span{color:var(--cream)}
 
 /* ===== RESPONSIVE ===== */
 @media(max-width:1024px){
@@ -910,7 +912,7 @@ li.addon.addon--open .addon-toggle svg{transform:rotate(45deg)}
 </style>
 </head>
 <body>
-<div id="pageLift">
+
 <!-- ANNOUNCEMENT BAR -->
 <div class="announce" id="announce">
   🎉 Limited offer: <a href="#pricing">Get a free Registered Agent year</a> with any Standard or Premium plan. Ends soon.
@@ -1995,11 +1997,9 @@ li.addon.addon--open .addon-toggle svg{transform:rotate(45deg)}
       </div>
     </div>
 
-    <div class="footer__bottom">
-      <div>
-        <div class="footer__copy">© 2026 LLCPad. All rights reserved. Not a law firm.</div>
-        <div class="footer__disclaimer">LLCPad is not a law firm and does not provide legal, tax, or financial advice. Formation services are document preparation services only. State filing fees are separate. All prices are in USD.</div>
-      </div>
+    <!-- Copyright + Legal links BEFORE brand reveal -->
+    <div class="footer__shutter-bar">
+      <div class="footer__copy">&copy; 2026 LLCPad. All rights reserved. Not a law firm.</div>
       <div class="footer__legal">
         <a href="#">Privacy</a>
         <a href="#">Terms</a>
@@ -2009,52 +2009,16 @@ li.addon.addon--open .addon-toggle svg{transform:rotate(45deg)}
       </div>
     </div>
 
+    <!-- Shutter Reveal Brand -->
+    <div class="footer__shutter">
+      <div class="footer__shutter-brand">
+        <div class="footer__shutter-text" id="shutterText"><span>LLC</span>Pad</div>
+      </div>
+    </div>
   </div>
 </footer>
-</div><!-- /pageLift -->
-
-<div id="brandScene">
-  <span class="brand-text">LLCPad</span>
-</div>
-<div id="liftSpacer"></div>
 
 <script>
-// Page lift — brand reveal (auto-height, no 100vh gap)
-(function(){
-  const pageLift   = document.getElementById('pageLift');
-  const brandScene = document.getElementById('brandScene');
-  const spacer     = document.getElementById('liftSpacer');
-  if(!pageLift || !brandScene) return;
-
-  var brandH = 0;
-  var scrollDist = 0;
-  var transformPx = 0;
-
-  function computeLift(){
-    brandH = brandScene.offsetHeight;
-    // Split the reveal: half from natural scroll, half from transform
-    // This ensures pageLift bottom aligns exactly with brandScene top (gap ≈ 0)
-    scrollDist  = Math.ceil(brandH * 0.5);
-    transformPx = brandH - scrollDist;
-    if(spacer) spacer.style.height = scrollDist + 'px';
-  }
-  computeLift();
-
-  function update(){
-    var scrollY  = window.scrollY;
-    var winH     = window.innerHeight;
-    var liftStart = pageLift.offsetHeight - winH;
-    var progress = Math.max(0, Math.min(1, (scrollY - liftStart) / scrollDist));
-
-    pageLift.style.transform       = progress > 0 ? 'translateY(-' + (progress * transformPx) + 'px)' : '';
-    brandScene.style.pointerEvents = progress > 0.95 ? 'auto' : 'none';
-  }
-
-  window.addEventListener('scroll', update, { passive: true });
-  window.addEventListener('resize', function(){ computeLift(); update(); }, { passive: true });
-  update();
-})();
-
 // Mobile nav
 document.getElementById('hBurger').addEventListener('click',()=>document.getElementById('mobNav').classList.add('open'));
 document.getElementById('mobX').addEventListener('click',()=>document.getElementById('mobNav').classList.remove('open'));
@@ -2261,6 +2225,28 @@ function handleHeroForm(e){
   });
 
   update();
+})();
+
+// Shutter reveal for footer brand
+(function(){
+  const el = document.getElementById('shutterText');
+  if(!el) return;
+  const container = el.closest('.footer__shutter');
+
+  function onScroll(){
+    const rect = container.getBoundingClientRect();
+    const windowH = window.innerHeight;
+    // Start revealing when the shutter section enters the viewport
+    // Full reveal when the bottom of the section reaches ~middle of viewport
+    const start = windowH; // section top hits viewport bottom
+    const end = windowH * 0.3; // section top is 30% from top
+    const progress = 1 - Math.max(0, Math.min(1, (rect.top - end) / (start - end)));
+    const clip = 100 - (progress * 100);
+    el.style.clipPath = 'inset(' + clip + '% 0 0 0)';
+  }
+
+  window.addEventListener('scroll', onScroll, {passive:true});
+  onScroll();
 })();
 </script>
 </body>

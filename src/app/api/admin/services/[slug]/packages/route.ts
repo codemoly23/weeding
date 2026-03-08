@@ -16,10 +16,10 @@ const packageSchema = z.object({
   notIncluded: z.array(z.string()).default([]),
 });
 
-// POST /api/admin/services/[id]/packages - Add package to service
+// POST /api/admin/services/[slug]/packages - Add package to service
 export async function POST(
   request: NextRequest,
-  { params }: { params: Promise<{ id: string }> }
+  { params }: { params: Promise<{ slug: string }> }
 ) {
   try {
     const accessCheck = await checkContentAccess();
@@ -27,13 +27,14 @@ export async function POST(
       return authError(accessCheck);
     }
 
-    const { id: serviceId } = await params;
+    const { slug } = await params;
     const body = await request.json();
     const { features, notIncluded, ...packageData } = packageSchema.parse(body);
 
     // Check if service exists
     const service = await prisma.service.findUnique({
-      where: { id: serviceId },
+      where: { slug },
+      select: { id: true },
     });
 
     if (!service) {
@@ -47,7 +48,7 @@ export async function POST(
     const pkg = await prisma.package.create({
       data: {
         ...packageData,
-        serviceId,
+        serviceId: service.id,
         features: {
           create: features.map((text, index) => ({
             text,

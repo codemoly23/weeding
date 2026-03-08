@@ -9,10 +9,10 @@ const faqSchema = z.object({
   sortOrder: z.number().default(0),
 });
 
-// POST /api/admin/services/[id]/faqs - Add FAQ to service
+// POST /api/admin/services/[slug]/faqs - Add FAQ to service
 export async function POST(
   request: NextRequest,
-  { params }: { params: Promise<{ id: string }> }
+  { params }: { params: Promise<{ slug: string }> }
 ) {
   try {
     const accessCheck = await checkContentAccess();
@@ -20,13 +20,14 @@ export async function POST(
       return authError(accessCheck);
     }
 
-    const { id: serviceId } = await params;
+    const { slug } = await params;
     const body = await request.json();
     const validatedData = faqSchema.parse(body);
 
     // Check if service exists
     const service = await prisma.service.findUnique({
-      where: { id: serviceId },
+      where: { slug },
+      select: { id: true },
     });
 
     if (!service) {
@@ -39,7 +40,7 @@ export async function POST(
     const faq = await prisma.serviceFAQ.create({
       data: {
         ...validatedData,
-        serviceId,
+        serviceId: service.id,
       },
     });
 

@@ -25,10 +25,10 @@ const updateServiceSchema = z.object({
   displayOptions: z.record(z.string(), z.unknown()).optional(),
 });
 
-// GET /api/admin/services/[id] - Get single service for editing
+// GET /api/admin/services/[slug] - Get single service for editing
 export async function GET(
   request: NextRequest,
-  { params }: { params: Promise<{ id: string }> }
+  { params }: { params: Promise<{ slug: string }> }
 ) {
   try {
     const accessCheck = await checkContentAccess();
@@ -36,10 +36,10 @@ export async function GET(
       return authError(accessCheck);
     }
 
-    const { id } = await params;
+    const { slug } = await params;
 
     const service = await prisma.service.findUnique({
-      where: { id },
+      where: { slug },
       include: {
         category: true,
         features: { orderBy: { sortOrder: "asc" } },
@@ -114,10 +114,10 @@ export async function GET(
   }
 }
 
-// PUT /api/admin/services/[id] - Update service
+// PUT /api/admin/services/[slug] - Update service
 export async function PUT(
   request: NextRequest,
-  { params }: { params: Promise<{ id: string }> }
+  { params }: { params: Promise<{ slug: string }> }
 ) {
   try {
     const accessCheck = await checkContentAccess();
@@ -125,14 +125,14 @@ export async function PUT(
       return authError(accessCheck);
     }
 
-    const { id } = await params;
+    const { slug } = await params;
     const body = await request.json();
     const validatedData = updateServiceSchema.parse(body);
     const { features, ...serviceData } = validatedData;
 
     // Check if service exists
     const existingService = await prisma.service.findUnique({
-      where: { id },
+      where: { slug },
     });
 
     if (!existingService) {
@@ -162,13 +162,13 @@ export async function PUT(
     if (features !== undefined) {
       // Delete existing features
       await prisma.serviceFeature.deleteMany({
-        where: { serviceId: id },
+        where: { serviceId: existingService.id },
       });
 
       // Create new features
       await prisma.serviceFeature.createMany({
         data: features.map((text, index) => ({
-          serviceId: id,
+          serviceId: existingService.id,
           text,
           sortOrder: index,
         })),
@@ -176,7 +176,7 @@ export async function PUT(
     }
 
     const service = await prisma.service.update({
-      where: { id },
+      where: { slug },
       data: updateData,
       include: {
         category: true,
@@ -200,10 +200,10 @@ export async function PUT(
   }
 }
 
-// DELETE /api/admin/services/[id] - Delete service (Admin only)
+// DELETE /api/admin/services/[slug] - Delete service (Admin only)
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: Promise<{ id: string }> }
+  { params }: { params: Promise<{ slug: string }> }
 ) {
   try {
     const accessCheck = await checkAdminOnly();
@@ -211,11 +211,11 @@ export async function DELETE(
       return authError(accessCheck);
     }
 
-    const { id } = await params;
+    const { slug } = await params;
 
     // Check if service exists
     const existingService = await prisma.service.findUnique({
-      where: { id },
+      where: { slug },
       include: { orderItems: { take: 1 } },
     });
 
@@ -236,7 +236,7 @@ export async function DELETE(
 
     // Delete service (cascades to features, packages, FAQs)
     await prisma.service.delete({
-      where: { id },
+      where: { slug },
     });
 
     return NextResponse.json({ success: true });

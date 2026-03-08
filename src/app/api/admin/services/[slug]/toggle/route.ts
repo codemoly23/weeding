@@ -2,10 +2,10 @@ import { NextRequest, NextResponse } from "next/server";
 import prisma from "@/lib/db";
 import { checkContentAccess, authError } from "@/lib/admin-auth";
 
-// PATCH /api/admin/services/[id]/toggle - Toggle service active status
+// PATCH /api/admin/services/[slug]/toggle - Toggle service active status
 export async function PATCH(
   request: NextRequest,
-  { params }: { params: Promise<{ id: string }> }
+  { params }: { params: Promise<{ slug: string }> }
 ) {
   try {
     const accessCheck = await checkContentAccess();
@@ -13,10 +13,10 @@ export async function PATCH(
       return authError(accessCheck);
     }
 
-    const { id } = await params;
+    const { slug } = await params;
 
     const service = await prisma.service.findUnique({
-      where: { id },
+      where: { slug },
       select: { isActive: true },
     });
 
@@ -28,7 +28,7 @@ export async function PATCH(
     }
 
     const updatedService = await prisma.service.update({
-      where: { id },
+      where: { slug },
       data: { isActive: !service.isActive },
       select: { id: true, name: true, isActive: true },
     });

@@ -413,15 +413,15 @@ export function WidgetPageBuilder({
                         key={column.id}
                         className={cn(
                           "relative flex flex-col min-h-[100px] transition-all duration-200",
-                          column.settings.verticalAlign === "center" && "justify-center",
-                          column.settings.verticalAlign === "bottom" && "justify-end",
+                          column.settings?.verticalAlign === "center" && "justify-center",
+                          column.settings?.verticalAlign === "bottom" && "justify-end",
                           !isPreviewMode && "group/column",
                           isColumnSelected && !isPreviewMode && "ring-2 ring-blue-500 ring-offset-1 ring-offset-slate-900 rounded-md",
                           columnSpan
                         )}
                         style={{
-                          padding: column.settings.padding ? `${column.settings.padding}px` : undefined,
-                          backgroundColor: column.settings.backgroundColor,
+                          padding: column.settings?.padding ? `${column.settings.padding}px` : undefined,
+                          backgroundColor: column.settings?.backgroundColor,
                         }}
                         onClick={(e) => {
                           e.stopPropagation();

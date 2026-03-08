@@ -160,7 +160,7 @@ export default function AdminServicesPage() {
 
   const handleToggleActive = async (service: Service) => {
     try {
-      const response = await fetch(`/api/admin/services/${service.id}/toggle`, {
+      const response = await fetch(`/api/admin/services/${service.slug}/toggle`, {
         method: "PATCH",
       });
 
@@ -188,7 +188,7 @@ export default function AdminServicesPage() {
 
     try {
       const response = await fetch(
-        `/api/admin/services/${serviceToDelete.id}`,
+        `/api/admin/services/${serviceToDelete.slug}`,
         {
           method: "DELETE",
         }
@@ -363,7 +363,7 @@ export default function AdminServicesPage() {
                         <div>
                           <div className="flex items-center gap-2">
                             <Link
-                              href={`/admin/services/${service.id}`}
+                              href={`/admin/services/${service.slug}`}
                               className="font-medium hover:underline"
                             >
                               {service.name}
@@ -432,7 +432,7 @@ export default function AdminServicesPage() {
                             </Link>
                           </DropdownMenuItem>
                           <DropdownMenuItem asChild>
-                            <Link href={`/admin/services/${service.id}`}>
+                            <Link href={`/admin/services/${service.slug}`}>
                               <Edit className="mr-2 h-4 w-4" />
                               Edit Service
                             </Link>

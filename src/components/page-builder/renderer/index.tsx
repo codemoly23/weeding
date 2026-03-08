@@ -288,12 +288,12 @@ function ColumnRenderer({ column, spanClass }: ColumnRendererProps) {
       className={cn(
         "flex flex-col",
         spanClass,
-        alignmentClasses[settings.verticalAlign],
-        settings.className
+        alignmentClasses[settings?.verticalAlign ?? 'top'],
+        settings?.className
       )}
       style={{
-        padding: settings.padding ? `${settings.padding}px` : undefined,
-        backgroundColor: settings.backgroundColor,
+        padding: settings?.padding ? `${settings.padding}px` : undefined,
+        backgroundColor: settings?.backgroundColor,
       }}
     >
       {widgets.map((widget) => (
