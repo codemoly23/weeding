@@ -1956,10 +1956,10 @@
         {
           "text": "Operating Agreement",
           "sortOrder": 1,
-          "tag": "All Plans \u2022 Free ($79 value)",
+          "tag": "All Plans • Free ($79 value)",
           "tagType": "free",
           "icon": "Shield",
-          "description": "Defines ownership structure, member responsibilities, and profit distribution. Required by banks and the IRS.",
+          "description": "worth $79",
           "packages": {
             "Essential": {
               "valueType": "BOOLEAN",
@@ -1974,8 +1974,7 @@
               "included": true
             }
           },
-          "tooltip": "Defines ownership structure, member responsibilities, and profit distribution for your LLC.",
-          "description": "worth $79"
+          "tooltip": "Defines ownership structure, member responsibilities, and profit distribution for your LLC."
         },
         {
           "text": "Registered Agent for One Year",
@@ -2029,7 +2028,7 @@
           "tag": "All Plans",
           "tagType": "included",
           "icon": "CreditCard",
-          "description": "Your LLC's federal Tax ID number from the IRS. Required for banking, taxes, and hiring.",
+          "description": "worth $99",
           "packages": {
             "Essential": {
               "valueType": "BOOLEAN",
@@ -2044,8 +2043,7 @@
               "included": true
             }
           },
-          "tooltip": "Your LLC's federal Tax ID number from the IRS. Required for banking, taxes, and hiring.",
-          "description": "worth $99"
+          "tooltip": "Your LLC's federal Tax ID number from the IRS. Required for banking, taxes, and hiring."
         },
         {
           "text": "Annual Compliance Guidance",
@@ -2076,7 +2074,7 @@
           "tag": "Professional & Complete",
           "tagType": "addon",
           "icon": "FileSearch",
-          "description": "FinCEN Beneficial Ownership Information report — mandatory for most LLCs since 2024. $500/day penalty for non-filing.",
+          "description": "$49",
           "packages": {
             "Essential": {
               "valueType": "BOOLEAN",
@@ -2091,8 +2089,7 @@
               "included": true
             }
           },
-          "tooltip": "FinCEN Beneficial Ownership Information report — mandatory for most LLCs since 2024. $500/day penalty for non-filing.",
-          "description": "$49"
+          "tooltip": "FinCEN Beneficial Ownership Information report — mandatory for most LLCs since 2024. $500/day penalty for non-filing."
         },
         {
           "text": "Business Bank Account Opening (Fintech)",
@@ -8228,12 +8225,15 @@
                 }
               ],
               "settings": {
-                "background": "transparent",
+                "background": {
+                  "type": "solid",
+                  "color": "#faf8f4"
+                },
                 "backgroundColor": "",
                 "backgroundType": "none",
-                "paddingTop": 0,
-                "paddingBottom": 0,
-                "fullWidth": false
+                "paddingTop": 16,
+                "paddingBottom": 16,
+                "fullWidth": true
               }
             },
             {
@@ -8278,7 +8278,9 @@
                         "backgroundType": "none",
                         "textAlignment": "left",
                         "titleSize": "large",
-                        "spacing": "md"
+                        "spacing": "md",
+                        "titleHighlightWord": "",
+                        "titleUnderlineWord": ""
                       }
                     }
                   ]
@@ -8319,13 +8321,16 @@
                 }
               ],
               "settings": {
-                "background": "transparent",
+                "background": {
+                  "type": "solid",
+                  "color": "#faf8f4"
+                },
                 "backgroundColor": "",
                 "backgroundType": "none",
-                "paddingTop": 40,
-                "paddingBottom": 60,
+                "paddingTop": 60,
+                "paddingBottom": 80,
                 "gap": 32,
-                "fullWidth": false
+                "fullWidth": true
               }
             },
             {
@@ -8361,7 +8366,10 @@
                 }
               ],
               "settings": {
-                "background": { "type": "solid", "color": "#ffffff" },
+                "background": {
+                  "type": "solid",
+                  "color": "#ffffff"
+                },
                 "backgroundColor": "#ffffff",
                 "backgroundType": "solid",
                 "paddingTop": 100,
@@ -8513,7 +8521,10 @@
                 }
               ],
               "settings": {
-                "background": { "type": "solid", "color": "#f0ede5" },
+                "background": {
+                  "type": "solid",
+                  "color": "#f0ede5"
+                },
                 "backgroundColor": "#f0ede5",
                 "backgroundType": "solid",
                 "paddingTop": 100,
@@ -8542,7 +8553,10 @@
                 }
               ],
               "settings": {
-                "background": { "type": "solid", "color": "#ffffff" },
+                "background": {
+                  "type": "solid",
+                  "color": "#ffffff"
+                },
                 "backgroundColor": "#ffffff",
                 "backgroundType": "solid",
                 "paddingTop": 100,
@@ -8618,7 +8632,10 @@
                 }
               ],
               "settings": {
-                "background": { "type": "solid", "color": "#f0ede5" },
+                "background": {
+                  "type": "solid",
+                  "color": "#f0ede5"
+                },
                 "backgroundColor": "#f0ede5",
                 "backgroundType": "solid",
                 "paddingTop": 100,
@@ -8727,7 +8744,10 @@
                 }
               ],
               "settings": {
-                "background": { "type": "solid", "color": "#1b3a2d" },
+                "background": {
+                  "type": "solid",
+                  "color": "#1b3a2d"
+                },
                 "backgroundColor": "#1b3a2d",
                 "backgroundType": "solid",
                 "paddingTop": 100,
@@ -8756,7 +8776,10 @@
                 }
               ],
               "settings": {
-                "background": { "type": "solid", "color": "#ffffff" },
+                "background": {
+                  "type": "solid",
+                  "color": "#ffffff"
+                },
                 "backgroundColor": "#ffffff",
                 "backgroundType": "solid",
                 "paddingTop": 100,
@@ -8796,7 +8819,10 @@
                 }
               ],
               "settings": {
-                "background": { "type": "solid", "color": "#f0ede5" },
+                "background": {
+                  "type": "solid",
+                  "color": "#f0ede5"
+                },
                 "backgroundColor": "#f0ede5",
                 "backgroundType": "solid",
                 "paddingTop": 100,
@@ -8835,7 +8861,10 @@
                 }
               ],
               "settings": {
-                "background": { "type": "solid", "color": "#ffffff" },
+                "background": {
+                  "type": "solid",
+                  "color": "#ffffff"
+                },
                 "backgroundColor": "#ffffff",
                 "backgroundType": "solid",
                 "paddingTop": 100,
@@ -9510,13 +9539,19 @@
       "type": "BRAND",
       "column": 1,
       "sortOrder": 0,
-      "content": { "logoMode": "auto" }
+      "content": {
+        "logoMode": "auto"
+      }
     },
     {
       "type": "NEWSLETTER",
       "column": 1,
       "sortOrder": 1,
-      "content": { "text": "Get LLC tips & US business insights", "placeholder": "your@email.com", "buttonText": "Subscribe" }
+      "content": {
+        "text": "Get LLC tips & US business insights",
+        "placeholder": "your@email.com",
+        "buttonText": "Subscribe"
+      }
     },
     {
       "type": "LINKS",
@@ -9525,14 +9560,38 @@
       "column": 2,
       "sortOrder": 0,
       "links": [
-        { "label": "LLC Formation", "url": "/services/llc-formation" },
-        { "label": "EIN Application", "url": "/services/ein-application" },
-        { "label": "Registered Agent", "url": "/services/registered-agent" },
-        { "label": "Amazon Seller", "url": "/services/amazon-seller-account" },
-        { "label": "Brand Registry", "url": "/services/brand-registry" },
-        { "label": "Trademark", "url": "/services/trademark" },
-        { "label": "Business Banking", "url": "/services/business-banking" },
-        { "label": "Virtual Address", "url": "/services/virtual-address" }
+        {
+          "label": "LLC Formation",
+          "url": "/services/llc-formation"
+        },
+        {
+          "label": "EIN Application",
+          "url": "/services/ein-application"
+        },
+        {
+          "label": "Registered Agent",
+          "url": "/services/registered-agent"
+        },
+        {
+          "label": "Amazon Seller",
+          "url": "/services/amazon-seller-account"
+        },
+        {
+          "label": "Brand Registry",
+          "url": "/services/brand-registry"
+        },
+        {
+          "label": "Trademark",
+          "url": "/services/trademark"
+        },
+        {
+          "label": "Business Banking",
+          "url": "/services/business-banking"
+        },
+        {
+          "label": "Virtual Address",
+          "url": "/services/virtual-address"
+        }
       ]
     },
     {
@@ -9542,13 +9601,34 @@
       "column": 3,
       "sortOrder": 0,
       "links": [
-        { "label": "How to Form an LLC", "url": "/blog" },
-        { "label": "Wyoming vs Delaware", "url": "/blog" },
-        { "label": "EIN Guide for Non-US", "url": "/blog" },
-        { "label": "Amazon Seller Guide", "url": "/blog" },
-        { "label": "US Banking Guide", "url": "/blog" },
-        { "label": "Blog", "url": "/blog" },
-        { "label": "FAQ", "url": "/faq" }
+        {
+          "label": "How to Form an LLC",
+          "url": "/blog"
+        },
+        {
+          "label": "Wyoming vs Delaware",
+          "url": "/blog"
+        },
+        {
+          "label": "EIN Guide for Non-US",
+          "url": "/blog"
+        },
+        {
+          "label": "Amazon Seller Guide",
+          "url": "/blog"
+        },
+        {
+          "label": "US Banking Guide",
+          "url": "/blog"
+        },
+        {
+          "label": "Blog",
+          "url": "/blog"
+        },
+        {
+          "label": "FAQ",
+          "url": "/faq"
+        }
       ]
     },
     {
@@ -9558,11 +9638,26 @@
       "column": 4,
       "sortOrder": 0,
       "links": [
-        { "label": "About LLCPad", "url": "/about" },
-        { "label": "Our Team", "url": "/about" },
-        { "label": "Reviews", "url": "/about" },
-        { "label": "Privacy Policy", "url": "/privacy" },
-        { "label": "Terms of Service", "url": "/terms" }
+        {
+          "label": "About LLCPad",
+          "url": "/about"
+        },
+        {
+          "label": "Our Team",
+          "url": "/about"
+        },
+        {
+          "label": "Reviews",
+          "url": "/about"
+        },
+        {
+          "label": "Privacy Policy",
+          "url": "/privacy"
+        },
+        {
+          "label": "Terms of Service",
+          "url": "/terms"
+        }
       ]
     }
   ],

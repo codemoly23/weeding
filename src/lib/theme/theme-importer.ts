@@ -145,11 +145,10 @@ export async function importThemeData(
 
       if (options?.themeId) {
 
-        // Extract widget defaults from home page sections
+        // Extract widget defaults from ALL pages (home + service + blog etc.)
         const widgetDefaults: Record<string, unknown> = {};
-        const homePage = data.pages?.find((p) => p.slug === "home");
-        if (homePage) {
-          for (const block of homePage.blocks ?? []) {
+        for (const page of data.pages ?? []) {
+          for (const block of page.blocks ?? []) {
             if (!Array.isArray(block.settings)) continue;
             for (const section of block.settings as Array<{
               columns?: Array<{ widgets?: Array<{ type: string; settings?: Record<string, unknown> }> }>;

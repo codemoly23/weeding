@@ -119,6 +119,11 @@ model Service {
   isActive                Boolean              @default(true)
   sortOrder               Int                  @default(0)
   categoryId              String?
+  // Hero overrides (per-service custom hero content)
+  heroTitle               String?
+  heroHighlightWord       String?
+  heroUnderlineWord       String?
+
   metaTitle               String?
   metaDescription         String?
   keywords                String[]

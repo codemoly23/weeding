@@ -14,6 +14,8 @@ import {
   SelectInput,
   ColorInput,
 } from "@/app/admin/appearance/landing-page/components/ui/form-controls";
+import { ButtonStyleEditor } from "@/components/admin/button-style-editor";
+import type { ButtonCustomStyle } from "@/lib/header-footer/types";
 
 interface ServiceHeroWidgetSettingsProps {
   settings: ServiceHeroWidgetSettings;
@@ -29,10 +31,12 @@ export function ServiceHeroWidgetSettingsPanel({
   activeFieldId,
 }: ServiceHeroWidgetSettingsProps) {
   const { getAccordionProps } = useFieldAccordion(activeFieldId);
-  // Merge with defaults
+  // Merge with defaults (deep merge for nested button objects)
   const s: ServiceHeroWidgetSettings = {
     ...DEFAULT_SERVICE_HERO_SETTINGS,
     ...settings,
+    primaryButton: { ...DEFAULT_SERVICE_HERO_SETTINGS.primaryButton, ...settings?.primaryButton },
+    secondaryButton: { ...DEFAULT_SERVICE_HERO_SETTINGS.secondaryButton, ...settings?.secondaryButton },
     container: { ...DEFAULT_WIDGET_CONTAINER, ...settings?.container },
   };
 
@@ -45,6 +49,23 @@ export function ServiceHeroWidgetSettingsPanel({
         ...s,
         [key]: value,
       });
+    },
+    [s, onChange]
+  );
+
+  const updateNested = useCallback(
+    <K extends keyof ServiceHeroWidgetSettings>(
+      parentKey: K,
+      childKey: string,
+      value: unknown
+    ) => {
+      const parent = s[parentKey];
+      if (typeof parent === "object" && parent !== null) {
+        onChange({
+          ...s,
+          [parentKey]: { ...(parent as Record<string, unknown>), [childKey]: value },
+        });
+      }
     },
     [s, onChange]
   );
@@ -71,6 +92,20 @@ export function ServiceHeroWidgetSettingsPanel({
             placeholder="Enter custom title..."
           />
         )}
+        <TextInput
+          label="Highlight Phrase"
+          value={s.titleHighlightWord || ""}
+          onChange={(v) => updateField("titleHighlightWord", v)}
+          placeholder="US LLC"
+          description="Text colored in forest green"
+        />
+        <TextInput
+          label="Underline Phrase"
+          value={s.titleUnderlineWord || ""}
+          onChange={(v) => updateField("titleUnderlineWord", v)}
+          placeholder="Anywhere."
+          description="Text with coral underline accent"
+        />
       </AccordionSection>
 
       {/* Subtitle Section */}
@@ -115,49 +150,89 @@ export function ServiceHeroWidgetSettingsPanel({
 
       {/* Primary Button Section */}
       <AccordionSection title="Primary Button" {...getAccordionProps("primary-button")}>
-        <TextInput
-          label="Button Text"
-          value={s.primaryCtaText}
-          onChange={(v) => updateField("primaryCtaText", v)}
-          placeholder="Get Started"
-        />
-        <LinkInput
-          label="Button Link"
-          value={s.primaryCtaLink}
-          onChange={(v) => updateField("primaryCtaLink", v)}
-          placeholder="/checkout/{{service.slug}}"
-        />
-        <p className="text-xs text-muted-foreground mt-1">
-          Use {"{{service.slug}}"} for dynamic service slug
-        </p>
         <ToggleSwitch
-          label="Show Price in Button"
-          checked={s.showPriceInButton}
-          onChange={(checked) => updateField("showPriceInButton", checked)}
+          label="Show Primary Button"
+          checked={s.primaryButton.show}
+          onChange={(checked) => updateNested("primaryButton", "show", checked)}
         />
+        {s.primaryButton.show && (
+          <>
+            <TextInput
+              label="Button Text"
+              value={s.primaryButton.text}
+              onChange={(v) => updateNested("primaryButton", "text", v)}
+              placeholder="Get Started — ${{service.startingPrice}} + State Fee"
+            />
+            <LinkInput
+              label="Link URL"
+              value={s.primaryButton.link}
+              onChange={(v) => updateNested("primaryButton", "link", v)}
+              placeholder="/checkout/{{service.slug}}"
+              openInNewTab={s.primaryButton.openInNewTab}
+              onOpenInNewTabChange={(v) => updateNested("primaryButton", "openInNewTab", v)}
+            />
+            <p className="text-xs text-muted-foreground mt-1">
+              Use {"{{service.slug}}"} for dynamic service slug
+            </p>
+            <TextInput
+              label="Badge Text (optional)"
+              value={s.primaryButton.badge || ""}
+              onChange={(v) => updateNested("primaryButton", "badge", v)}
+              placeholder="From $199"
+            />
+            <div className="mt-4 pt-4 border-t">
+              <ButtonStyleEditor
+                style={(s.primaryButton.style as ButtonCustomStyle) || {}}
+                onChange={(style: ButtonCustomStyle) => updateNested("primaryButton", "style", style)}
+                buttonText={s.primaryButton.text || "Button"}
+                showPreview={true}
+                showPresets={true}
+                compact={true}
+              />
+            </div>
+          </>
+        )}
       </AccordionSection>
 
       {/* Secondary Button Section */}
       <AccordionSection title="Secondary Button" {...getAccordionProps("secondary-button")}>
         <ToggleSwitch
           label="Show Secondary Button"
-          checked={s.showSecondaryButton}
-          onChange={(checked) => updateField("showSecondaryButton", checked)}
+          checked={s.secondaryButton.show}
+          onChange={(checked) => updateNested("secondaryButton", "show", checked)}
         />
-        {s.showSecondaryButton && (
+        {s.secondaryButton.show && (
           <>
             <TextInput
               label="Button Text"
-              value={s.secondaryCtaText}
-              onChange={(v) => updateField("secondaryCtaText", v)}
-              placeholder="Ask a Question"
+              value={s.secondaryButton.text}
+              onChange={(v) => updateNested("secondaryButton", "text", v)}
+              placeholder="Book Free Consultation"
             />
             <LinkInput
-              label="Button Link"
-              value={s.secondaryCtaLink}
-              onChange={(v) => updateField("secondaryCtaLink", v)}
+              label="Link URL"
+              value={s.secondaryButton.link}
+              onChange={(v) => updateNested("secondaryButton", "link", v)}
               placeholder="/contact"
+              openInNewTab={s.secondaryButton.openInNewTab}
+              onOpenInNewTabChange={(v) => updateNested("secondaryButton", "openInNewTab", v)}
             />
+            <TextInput
+              label="Badge Text (optional)"
+              value={s.secondaryButton.badge || ""}
+              onChange={(v) => updateNested("secondaryButton", "badge", v)}
+              placeholder=""
+            />
+            <div className="mt-4 pt-4 border-t">
+              <ButtonStyleEditor
+                style={(s.secondaryButton.style as ButtonCustomStyle) || {}}
+                onChange={(style: ButtonCustomStyle) => updateNested("secondaryButton", "style", style)}
+                buttonText={s.secondaryButton.text || "Button"}
+                showPreview={true}
+                showPresets={true}
+                compact={true}
+              />
+            </div>
           </>
         )}
       </AccordionSection>

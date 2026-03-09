@@ -107,6 +107,11 @@ export interface ServiceData {
   features: ServiceFeatureData[];
   faqs: ServiceFAQData[];
 
+  // Hero overrides (per-service custom hero content)
+  heroTitle?: string | null;
+  heroHighlightWord?: string | null;
+  heroUnderlineWord?: string | null;
+
   // SEO
   metaTitle?: string | null;
   metaDescription?: string | null;

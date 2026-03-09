@@ -62,6 +62,7 @@ import {
   ButtonGroupWidgetSettingsPanel,
   CustomHtmlWidgetSettingsPanel,
   TickerMarqueeWidgetSettingsPanel,
+  ServiceFeaturesWidgetSettingsPanel,
 } from "@/components/page-builder/settings";
 import { NumberInput } from "@/app/admin/appearance/landing-page/components/ui/form-controls";
 import { AccordionSection } from "@/app/admin/appearance/landing-page/components/ui/accordion-section";
@@ -598,6 +599,16 @@ function EditMode({ widget, section, columnId, activeFieldId, onBack, onUpdateSe
           {/* Service Checklist Card Widget */}
           {widget.type === "service-checklist-card" && (
             <ServiceChecklistCardSettingsPanel
+              settings={widget.settings as any}
+              onChange={onUpdateSettings}
+              activeTab={activeTab}
+              activeFieldId={activeFieldId}
+            />
+          )}
+
+          {/* Service Features Widget */}
+          {widget.type === "service-features" && (
+            <ServiceFeaturesWidgetSettingsPanel
               settings={widget.settings as any}
               onChange={onUpdateSettings}
               activeTab={activeTab}

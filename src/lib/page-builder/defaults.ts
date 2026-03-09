@@ -114,7 +114,7 @@ export const DEFAULT_SECTION_WATERMARK: SectionWatermark = {
 };
 
 export const DEFAULT_SECTION_SETTINGS: SectionSettings = {
-  fullWidth: false,
+  fullWidth: true,
   background: DEFAULT_SECTION_BACKGROUND,
   paddingTop: 64,
   paddingBottom: 64,
@@ -1784,9 +1784,6 @@ export const DEFAULT_IMAGE_SLIDER_SETTINGS: ImageSliderWidgetSettings = {
 // ============================================
 
 export const DEFAULT_SERVICE_HERO_SETTINGS: import("./types").ServiceHeroWidgetSettings = {
-  // Layout
-  layout: "single",
-
   // Content Source
   titleSource: "auto",
   subtitleSource: "auto",
@@ -1803,14 +1800,24 @@ export const DEFAULT_SERVICE_HERO_SETTINGS: import("./types").ServiceHeroWidgetS
   showPriceHero: false,
 
   // Primary Button
-  primaryCtaText: "Get Started",
-  primaryCtaLink: "/checkout/{{service.slug}}",
-  showPriceInButton: true,
+  primaryButton: {
+    show: true,
+    text: "Get Started — ${{service.startingPrice}} + State Fee",
+    link: "/checkout/{{service.slug}}",
+    badge: undefined,
+    style: undefined,
+    openInNewTab: false,
+  },
 
   // Secondary Button
-  showSecondaryButton: true,
-  secondaryCtaText: "Ask a Question",
-  secondaryCtaLink: "/contact",
+  secondaryButton: {
+    show: true,
+    text: "Book Free Consultation",
+    link: "/contact",
+    badge: undefined,
+    style: undefined,
+    openInNewTab: false,
+  },
 
   // Trust Items
   showTrustItems: false,
@@ -1818,16 +1825,6 @@ export const DEFAULT_SERVICE_HERO_SETTINGS: import("./types").ServiceHeroWidgetS
     { text: "Filing accuracy guaranteed" },
     { text: "Filed in 24 hours" },
     { text: "100% remote" },
-  ],
-
-  // Right Card
-  rightCardShow: false,
-  rightCardTitle: "What You Get",
-  rightCardAutoItems: true,
-  rightCardStats: [
-    { value: "1,200+", label: "Clients Served" },
-    { value: "30+", label: "Countries" },
-    { value: "4.9★", label: "Rating" },
   ],
 
   // Appearance
@@ -1852,8 +1849,10 @@ export const DEFAULT_SERVICE_CHECKLIST_CARD_SETTINGS: import("./types").ServiceC
   autoItems: true,
   manualItems: [],
   scrollable: false,
+  autoScroll: true,
+  autoScrollSpeed: 15,
   maxHeight: 320,
-  itemLimit: 5,
+  itemLimit: 0,
   showStats: true,
   stats: [
     { value: "1,200+", label: "Clients Served" },
@@ -1911,16 +1910,19 @@ export const DEFAULT_SERVICE_FEATURES_SETTINGS: ServiceFeaturesWidgetSettings = 
   header: {
     show: true,
     heading: "What's Included",
-    description: "Everything you get with this service",
-    alignment: "center",
+    description: "Everything you need to legally form your US LLC",
+    alignment: "left",
+    eyebrow: "WHAT'S INCLUDED",
+    eyebrowColor: "#e84c1e",
   },
-  variant: "minimal-checkmark",
+  variant: "detailed-cards",
   columns: 3,
   showIcons: true,
   iconStyle: "circle-check",
   iconColor: "#22C55E",
-  showDescriptions: false,
-  showTags: false,
+  showDescriptions: true,
+  showTags: true,
+  itemLimit: 6,
   // Container Style
   container: DEFAULT_WIDGET_CONTAINER,
 };

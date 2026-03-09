@@ -87,6 +87,7 @@ export function ServiceFeaturesWidget({
     iconColor: settings?.iconColor ?? "#10b981",
     showDescriptions: settings?.showDescriptions ?? false,
     showTags: settings?.showTags ?? false,
+    itemLimit: settings?.itemLimit ?? 6,
   };
 
   // Get service context
@@ -98,7 +99,8 @@ export function ServiceFeaturesWidget({
   }
 
   const { service } = serviceContext;
-  const features = [...service.features].sort((a, b) => a.sortOrder - b.sortOrder);
+  const allFeatures = [...service.features].sort((a, b) => a.sortOrder - b.sortOrder);
+  const features = s.itemLimit > 0 ? allFeatures.slice(0, s.itemLimit) : allFeatures;
 
   // Resolve heading placeholders
   const resolvedHeading = resolvePlaceholders(s.header.heading, service);

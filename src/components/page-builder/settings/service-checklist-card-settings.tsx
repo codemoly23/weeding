@@ -82,22 +82,33 @@ export function ServiceChecklistCardSettingsPanel({
             label="Item Limit"
             value={settings.itemLimit}
             onChange={(v) => updateField("itemLimit", v)}
-            min={1}
-            max={20}
+            min={0}
+            max={50}
+            description="0 = show all features"
           />
           <ToggleSwitch
-            label="Scrollable"
-            checked={settings.scrollable}
-            onChange={(v) => updateField("scrollable", v)}
+            label="Auto-scroll (marquee)"
+            checked={settings.autoScroll}
+            onChange={(v) => updateField("autoScroll", v)}
           />
-          {settings.scrollable && (
-            <NumberInput
-              label="Max Height (px)"
-              value={settings.maxHeight}
-              onChange={(v) => updateField("maxHeight", v)}
-              min={100}
-              max={600}
-            />
+          {settings.autoScroll && (
+            <>
+              <NumberInput
+                label="Scroll Speed (seconds)"
+                value={settings.autoScrollSpeed}
+                onChange={(v) => updateField("autoScrollSpeed", v)}
+                min={5}
+                max={60}
+                description="Full cycle duration — higher = slower"
+              />
+              <NumberInput
+                label="Visible Height (px)"
+                value={settings.maxHeight}
+                onChange={(v) => updateField("maxHeight", v)}
+                min={100}
+                max={600}
+              />
+            </>
           )}
         </div>
       </AccordionSection>

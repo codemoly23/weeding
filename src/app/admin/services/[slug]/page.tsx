@@ -89,7 +89,7 @@ interface Feature {
   text: string;
 }
 
-// Master feature list for comparison table
+// Master feature list for feature list
 interface ServiceFeature {
   id: string;
   text: string;
@@ -153,6 +153,9 @@ interface ServiceData {
   categoryId: string;
   metaTitle: string;
   metaDescription: string;
+  heroTitle: string;
+  heroHighlightWord: string;
+  heroUnderlineWord: string;
   features: Feature[];
   packages: Package[];
   faqs: FAQ[];
@@ -180,6 +183,9 @@ const defaultService: ServiceData = {
   categoryId: "",
   metaTitle: "",
   metaDescription: "",
+  heroTitle: "",
+  heroHighlightWord: "",
+  heroUnderlineWord: "",
   features: [],
   packages: [],
   faqs: [],
@@ -227,7 +233,7 @@ export default function ServiceEditorPage() {
   const [editingFaqIndex, setEditingFaqIndex] = useState<number | null>(null);
   const [faqPreviewMode, setFaqPreviewMode] = useState(false);
 
-  // Master feature list state (for comparison table)
+  // Master feature list state (for feature list)
   const [masterFeatures, setMasterFeatures] = useState<ServiceFeature[]>([]);
   const [featureDialogOpen, setFeatureDialogOpen] = useState(false);
   const [editingFeature, setEditingFeature] = useState<ServiceFeature | null>(null);
@@ -264,6 +270,9 @@ export default function ServiceEditorPage() {
           categoryId: data.categoryId || "",
           metaTitle: data.metaTitle || "",
           metaDescription: data.metaDescription || "",
+          heroTitle: data.heroTitle || "",
+          heroHighlightWord: data.heroHighlightWord || "",
+          heroUnderlineWord: data.heroUnderlineWord || "",
           features: data.features || [],
           packages: (data.packages || []).map((pkg: Package) => ({
             ...pkg,
@@ -379,7 +388,7 @@ export default function ServiceEditorPage() {
         : `/api/admin/services/${serviceSlug}`;
       const method = isNew ? "POST" : "PUT";
 
-      // Don't send features for existing services - they're managed via Comparison Table tab
+      // Don't send features for existing services - they're managed via Features tab
       // This prevents losing PackageFeatureMap data on save
       const { features: _features, ...serviceWithoutFeatures } = service;
 
@@ -617,7 +626,7 @@ export default function ServiceEditorPage() {
     }));
   };
 
-  // Master Feature management (for comparison table)
+  // Master Feature management (for feature list)
   const openFeatureDialog = (feature?: ServiceFeature) => {
     if (feature) {
       setEditingFeature({ ...feature });
@@ -953,7 +962,7 @@ export default function ServiceEditorPage() {
           <TabsTrigger value="basic">Basic Info</TabsTrigger>
           {!isNew && (
             <TabsTrigger value="features">
-              Comparison Table ({masterFeatures.length})
+              Features ({masterFeatures.length})
             </TabsTrigger>
           )}
           <TabsTrigger value="packages" className="relative">
@@ -1010,14 +1019,57 @@ export default function ServiceEditorPage() {
                   </div>
 
                   <div className="space-y-2">
-                    <Label htmlFor="shortDesc">Short Description *</Label>
+                    <Label htmlFor="shortDesc">Subtitle / Short Description *</Label>
                     <Textarea
                       id="shortDesc"
                       value={service.shortDesc}
                       onChange={(e) => handleInputChange("shortDesc", e.target.value)}
-                      placeholder="Brief description for service cards..."
+                      placeholder="Used as hero subtitle and on service cards..."
                       rows={3}
                     />
+                    <p className="text-xs text-muted-foreground">
+                      Shown as the hero subtitle and on service cards/listings.
+                    </p>
+                  </div>
+
+                  <div className="space-y-2">
+                    <Label htmlFor="heroTitle">Hero Title</Label>
+                    <Input
+                      id="heroTitle"
+                      value={service.heroTitle}
+                      onChange={(e) => handleInputChange("heroTitle", e.target.value)}
+                      placeholder="e.g. Form Your US LLC from Anywhere."
+                    />
+                    <p className="text-xs text-muted-foreground">
+                      Optional custom hero heading. Leave blank to use service name.
+                    </p>
+                  </div>
+
+                  <div className="grid gap-4 sm:grid-cols-2">
+                    <div className="space-y-2">
+                      <Label htmlFor="heroHighlightWord">Highlight Phrase</Label>
+                      <Input
+                        id="heroHighlightWord"
+                        value={service.heroHighlightWord}
+                        onChange={(e) => handleInputChange("heroHighlightWord", e.target.value)}
+                        placeholder="e.g. US LLC"
+                      />
+                      <p className="text-xs text-muted-foreground">
+                        Colored highlight in hero title
+                      </p>
+                    </div>
+                    <div className="space-y-2">
+                      <Label htmlFor="heroUnderlineWord">Underline Phrase</Label>
+                      <Input
+                        id="heroUnderlineWord"
+                        value={service.heroUnderlineWord}
+                        onChange={(e) => handleInputChange("heroUnderlineWord", e.target.value)}
+                        placeholder="e.g. Anywhere."
+                      />
+                      <p className="text-xs text-muted-foreground">
+                        Decorative underline in hero title
+                      </p>
+                    </div>
                   </div>
 
                   <div className="space-y-2">
@@ -1031,7 +1083,7 @@ export default function ServiceEditorPage() {
                 </CardContent>
               </Card>
 
-              {/* Features managed in Comparison Table tab */}
+              {/* Features managed in Features tab */}
             </div>
 
             {/* Sidebar */}
@@ -1199,7 +1251,7 @@ export default function ServiceEditorPage() {
                   <div>
                     <CardTitle>Package Comparison Features</CardTitle>
                     <CardDescription>
-                      Define features for the pricing comparison table. Drag to reorder.
+                      Define features for the pricing feature list. Drag to reorder.
                       Each feature can be mapped to packages as included, add-on, or custom text.
                     </CardDescription>
                   </div>
@@ -1212,7 +1264,7 @@ export default function ServiceEditorPage() {
               <CardContent>
                 {masterFeatures.length === 0 ? (
                   <p className="py-8 text-center text-muted-foreground">
-                    No features defined yet. Add features to create comparison table.
+                    No features defined yet. Add features to create feature list.
                   </p>
                 ) : (
                   <DndContext collisionDetection={closestCenter} onDragEnd={handleFeatureDragEnd}>
@@ -1232,7 +1284,7 @@ export default function ServiceEditorPage() {
                   </DndContext>
                 )}
                 <p className="mt-4 text-xs text-muted-foreground">
-                  Drag to reorder features. The order determines how they appear in the comparison table and feature widgets.
+                  Drag to reorder features. The order determines how they appear in the feature list and feature widgets.
                 </p>
               </CardContent>
             </Card>
@@ -1263,7 +1315,7 @@ export default function ServiceEditorPage() {
                 </p>
               ) : (
                 <div className="space-y-6">
-                  {/* Comparison Table View */}
+                  {/* Features View */}
                   {masterFeatures.length > 0 && (
                     <div className="overflow-x-auto">
                       <table className="w-full border-collapse">
@@ -1497,7 +1549,7 @@ export default function ServiceEditorPage() {
 
                   {masterFeatures.length === 0 && (
                     <p className="text-sm text-muted-foreground text-center py-4">
-                      Add features in the Comparison Table tab to see the comparison table.
+                      Add features in the Features tab to see the feature list.
                     </p>
                   )}
                 </div>
@@ -1744,7 +1796,7 @@ export default function ServiceEditorPage() {
               </div>
 
               <p className="text-xs text-muted-foreground">
-                Note: Feature inclusion is managed from the Comparison Table tab using the comparison table.
+                Note: Feature inclusion is managed from the Features tab using the feature list.
               </p>
             </div>
           )}
@@ -1842,7 +1894,7 @@ export default function ServiceEditorPage() {
               {editingFeature?.id ? "Edit Feature" : "Add Feature"}
             </DialogTitle>
             <DialogDescription>
-              Define a feature for the comparison table
+              Define a feature for the feature list
             </DialogDescription>
           </DialogHeader>
           {editingFeature && (
@@ -1889,7 +1941,7 @@ export default function ServiceEditorPage() {
                 <div className="space-y-2">
                   <Label>Tag Badge</Label>
                   <Select
-                    value={editingFeature.tagType || ""}
+                    value={editingFeature.tagType || "none"}
                     onValueChange={(val) => {
                       const presets: Record<string, string> = {
                         included: "Included",
@@ -1897,9 +1949,10 @@ export default function ServiceEditorPage() {
                         addon: "Add-on",
                         premium: "Premium",
                       };
+                      const actualVal = val === "none" ? null : val;
                       setEditingFeature({
                         ...editingFeature,
-                        tagType: val || null,
+                        tagType: actualVal,
                         tag: val === "custom" ? (editingFeature.tag || "") : (presets[val] || null),
                       });
                     }}
@@ -1908,7 +1961,7 @@ export default function ServiceEditorPage() {
                       <SelectValue placeholder="No tag" />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="">No tag</SelectItem>
+                      <SelectItem value="none">No tag</SelectItem>
                       <SelectItem value="included">Included</SelectItem>
                       <SelectItem value="free">Free</SelectItem>
                       <SelectItem value="addon">Add-on</SelectItem>

@@ -21,6 +21,9 @@ const serviceSchema = z.object({
   categoryId: z.string().optional(),
   metaTitle: z.string().optional(),
   metaDescription: z.string().optional(),
+  heroTitle: z.string().optional().nullable(),
+  heroHighlightWord: z.string().optional().nullable(),
+  heroUnderlineWord: z.string().optional().nullable(),
   features: z.array(z.string()).default([]),
 });
 

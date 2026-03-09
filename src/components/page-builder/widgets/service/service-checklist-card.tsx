@@ -6,6 +6,7 @@
 
 "use client";
 
+import { useId } from "react";
 import { Check } from "lucide-react";
 import {
   useOptionalServiceContext,
@@ -34,8 +35,10 @@ const DEFAULTS: ServiceChecklistCardWidgetSettings = {
   autoItems: true,
   manualItems: [],
   scrollable: false,
+  autoScroll: true,
+  autoScrollSpeed: 15,
   maxHeight: 320,
-  itemLimit: 5,
+  itemLimit: 0,
   showStats: true,
   stats: [
     { value: "1,200+", label: "Clients Served" },
@@ -77,10 +80,10 @@ export function ServiceChecklistCardWidget({
       }))
     : (settings.manualItems || []);
 
-  // Apply scroll/limit logic
-  const displayItems = settings.scrollable
-    ? allItems
-    : allItems.slice(0, settings.itemLimit || 5);
+  // Apply limit logic (0 = show all)
+  const displayItems = settings.itemLimit > 0
+    ? allItems.slice(0, settings.itemLimit)
+    : allItems;
 
   const stats = settings.stats || [];
 
@@ -106,27 +109,38 @@ export function ServiceChecklistCardWidget({
   // No items at all — hide
   if (displayItems.length === 0 && !isPreview) return null;
 
+  const useAutoScroll = settings.autoScroll && displayItems.length > 3;
+
   return (
     <WidgetContainer container={settings.container}>
       <ChecklistCardShell settings={settings}>
-        <div
-          style={{
-            display: "flex",
-            flexDirection: "column",
-            gap: "10px",
-            marginBottom: settings.showStats && stats.length > 0 ? "24px" : 0,
-            ...(settings.scrollable
-              ? {
-                  overflowY: "auto",
-                  maxHeight: `${settings.maxHeight}px`,
-                }
-              : {}),
-          }}
-        >
-          {displayItems.map((item, i) => (
-            <ChecklistItem key={i} text={item.text} tag={item.tag} tagType={item.tagType} />
-          ))}
-        </div>
+        {useAutoScroll ? (
+          <AutoScrollList
+            items={displayItems}
+            maxHeight={settings.maxHeight}
+            speed={settings.autoScrollSpeed || 15}
+            hasStats={settings.showStats && stats.length > 0}
+          />
+        ) : (
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              gap: "10px",
+              marginBottom: settings.showStats && stats.length > 0 ? "24px" : 0,
+              ...(settings.scrollable
+                ? {
+                    overflowY: "auto",
+                    maxHeight: `${settings.maxHeight}px`,
+                  }
+                : {}),
+            }}
+          >
+            {displayItems.map((item, i) => (
+              <ChecklistItem key={i} text={item.text} tag={item.tag} tagType={item.tagType} />
+            ))}
+          </div>
+        )}
         {settings.showStats && stats.length > 0 && <StatsRow stats={stats} />}
       </ChecklistCardShell>
     </WidgetContainer>
@@ -306,6 +320,57 @@ function StatsRow({ stats }: { stats: Array<{ value: string; label: string }> })
           </span>
         </div>
       ))}
+    </div>
+  );
+}
+
+// ============================================
+// AUTO-SCROLL MARQUEE LIST
+// ============================================
+
+function AutoScrollList({
+  items,
+  maxHeight,
+  speed,
+  hasStats,
+}: {
+  items: Array<{ text: string; tag: string; tagType: string }>;
+  maxHeight: number;
+  speed: number;
+  hasStats: boolean;
+}) {
+  const id = useId().replace(/:/g, "_");
+
+  return (
+    <div
+      style={{
+        overflow: "hidden",
+        maxHeight: `${maxHeight}px`,
+        marginBottom: hasStats ? "24px" : 0,
+        position: "relative",
+        maskImage: "linear-gradient(to bottom, transparent 0%, black 8%, black 88%, transparent 100%)",
+        WebkitMaskImage: "linear-gradient(to bottom, transparent 0%, black 8%, black 88%, transparent 100%)",
+      }}
+    >
+      <style dangerouslySetInnerHTML={{ __html: `
+        @keyframes checklist_scroll_${id} {
+          0% { transform: translateY(0); }
+          100% { transform: translateY(-50%); }
+        }
+      `}} />
+      <div
+        style={{
+          display: "flex",
+          flexDirection: "column",
+          gap: "10px",
+          animation: `checklist_scroll_${id} ${speed}s linear infinite`,
+        }}
+      >
+        {/* Render items twice for seamless loop */}
+        {[...items, ...items].map((item, i) => (
+          <ChecklistItem key={i} text={item.text} tag={item.tag} tagType={item.tagType} />
+        ))}
+      </div>
     </div>
   );
 }

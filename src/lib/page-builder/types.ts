@@ -2653,52 +2653,52 @@ export interface PricingTableWidgetSettings {
  * Displays service title, description, price badge, and CTA buttons
  */
 export interface ServiceHeroWidgetSettings {
-  // Layout
-  layout: "single" | "two-column";
-
   // Content Source
   titleSource: "auto" | "custom";
   customTitle?: string;
   subtitleSource: "auto" | "custom";
   customSubtitle?: string;
 
-  // Category Badge (shown above title in two-column mode)
+  // Category Badge (shown above title)
   showCategoryBadge: boolean;
   categoryBadgeText?: string; // custom text; auto uses service category name
   categoryBadgeTag?: string; // e.g. "Most Popular", "New"
 
-  // Title Visual Effects (two-column)
+  // Title Visual Effects
   titleHighlightWord?: string; // word to color in primary/forest
   titleUnderlineWord?: string; // word to show with coral underline
 
-  // Price Badge (single-column legacy)
+  // Price Badge
   showPriceBadge: boolean;
   priceBadgeText: string; // Supports {{service.startingPrice}}
 
-  // Price Hero (two-column prominent display)
+  // Price Hero (prominent display)
   showPriceHero: boolean;
   priceHeroNote?: string; // e.g. "Essential plan — was $250"
 
-  // Primary Button
-  primaryCtaText: string;
-  primaryCtaLink: string; // Supports {{service.slug}}
-  showPriceInButton: boolean;
+  // Primary Button (shared ButtonCustomStyle system)
+  primaryButton: {
+    show: boolean;
+    text: string;
+    link: string;
+    badge?: string;
+    style?: ButtonCustomStyle;
+    openInNewTab?: boolean;
+  };
 
-  // Secondary Button
-  showSecondaryButton: boolean;
-  secondaryCtaText: string;
-  secondaryCtaLink: string;
+  // Secondary Button (shared ButtonCustomStyle system)
+  secondaryButton: {
+    show: boolean;
+    text: string;
+    link: string;
+    badge?: string;
+    style?: ButtonCustomStyle;
+    openInNewTab?: boolean;
+  };
 
-  // Trust Items (shown below CTAs in two-column)
+  // Trust Items (shown below CTAs)
   showTrustItems: boolean;
   trustItems?: Array<{ text: string }>;
-
-  // Right Card (two-column only — "What You Get" dark card)
-  rightCardShow: boolean;
-  rightCardTitle: string;
-  rightCardAutoItems: boolean; // auto-populate from service.features
-  rightCardItems?: Array<{ text: string; tag: string; tagType: "included" | "free" | "addon" }>;
-  rightCardStats?: Array<{ value: string; label: string }>;
 
   // Appearance
   backgroundType: "none" | "solid" | "gradient" | "image";
@@ -2735,8 +2735,10 @@ export interface ServiceChecklistCardWidgetSettings {
 
   // Scroll & Limit
   scrollable: boolean;
+  autoScroll: boolean;             // auto-scroll items bottom→top (marquee style)
+  autoScrollSpeed: number;         // seconds per full cycle (higher = slower)
   maxHeight: number;
-  itemLimit: number;
+  itemLimit: number;               // 0 = show all
 
   // Stats Row
   showStats: boolean;
@@ -2777,6 +2779,7 @@ export interface ServiceFeaturesWidgetSettings {
   iconColor: string;
   showDescriptions: boolean;
   showTags: boolean;
+  itemLimit: number;              // 0 = show all, otherwise limit to N features
 
   // Container Style
   container?: WidgetContainerStyle;
