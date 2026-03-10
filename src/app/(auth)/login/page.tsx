@@ -25,21 +25,22 @@ function LoginForm() {
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     setIsLoading(true);
     setError("");
 
-    const formData = new FormData(e.currentTarget);
-    const email = formData.get("email") as string;
-    const password = formData.get("password") as string;
+    const currentEmail = email;
+    const currentPassword = password;
 
     try {
       // Use NextAuth signIn for proper session management
       const result = await signIn("credentials", {
-        email,
-        password,
+        email: currentEmail,
+        password: currentPassword,
         redirect: false,
       });
 
@@ -101,6 +102,8 @@ function LoginForm() {
                 className="pl-10"
                 required
                 disabled={isLoading}
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
               />
             </div>
           </div>
@@ -125,6 +128,8 @@ function LoginForm() {
                 className="pl-10 pr-10"
                 required
                 disabled={isLoading}
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
               />
               <button
                 type="button"
@@ -159,6 +164,39 @@ function LoginForm() {
           </Button>
         </form>
 
+        <div className="mt-4 rounded-md border border-dashed border-muted-foreground/30 p-3">
+          <p className="mb-2 text-center text-xs font-medium text-muted-foreground">Demo Credentials</p>
+          <div className="space-y-1.5 text-xs">
+            {[
+              { label: "Admin", email: "admin@llcpad.com" },
+              { label: "Customer", email: "customer@llcpad.com" },
+              { label: "Content", email: "content@llcpad.com" },
+              { label: "Sales", email: "sales@llcpad.com" },
+              { label: "Support", email: "support@llcpad.com" },
+            ].map((demo) => (
+              <div key={demo.email} className="flex items-center justify-between">
+                <span className="text-muted-foreground">
+                  {demo.label}: <span className="font-mono">{demo.email}</span>
+                </span>
+                <Button
+                  type="button"
+                  variant="outline"
+                  size="sm"
+                  className="h-6 px-2 text-xs"
+                  onClick={() => {
+                    setEmail(demo.email);
+                    setPassword("Demo@123");
+                  }}
+                >
+                  Fill
+                </Button>
+              </div>
+            ))}
+            <p className="pt-1 text-center text-muted-foreground">
+              Password: <span className="font-mono">Demo@123</span>
+            </p>
+          </div>
+        </div>
       </CardContent>
       <CardFooter className="justify-center">
         <p className="text-sm text-muted-foreground">

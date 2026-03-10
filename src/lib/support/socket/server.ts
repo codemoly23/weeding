@@ -122,6 +122,8 @@ export function initializeSocketServer(
       origin: [
         "http://localhost:3000",
         "http://127.0.0.1:3000",
+        "http://localhost:3005",
+        "http://127.0.0.1:3005",
         process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000",
       ],
       credentials: true,
@@ -135,6 +137,15 @@ export function initializeSocketServer(
   io.on("connection", (socket: Socket) => {
     const authSocket = socket as AuthenticatedSocket;
     console.log(`[Chat] Client connected: ${socket.id}`);
+
+    // Send current agents status immediately to the new socket
+    const onlineCount = Array.from(connectedAgents.values()).filter(
+      (a) => a.status === "online"
+    ).length;
+    socket.emit(CHAT_EVENTS.AGENTS_STATUS, {
+      online: onlineCount > 0,
+      count: onlineCount,
+    });
 
     registerAuthHandlers(io, authSocket);
     registerChatHandlers(io, authSocket);
