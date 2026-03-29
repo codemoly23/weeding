@@ -1859,12 +1859,16 @@ async function main() {
         const feature = comparisonFeatures[i];
 
         // Create the master feature
+        const featureAny = feature as { text: string; tooltip?: string; description?: string; tag?: string; tagType?: string; icon?: string; packages: Record<string, unknown> };
         const createdFeature = await prisma.serviceFeature.create({
           data: {
             serviceId: service.id,
             text: feature.text,
             tooltip: feature.tooltip || null,
-            description: (feature as { description?: string }).description || null,
+            description: featureAny.description || null,
+            tag: featureAny.tag || null,
+            tagType: featureAny.tagType || null,
+            icon: featureAny.icon || null,
             sortOrder: i,
           },
         });

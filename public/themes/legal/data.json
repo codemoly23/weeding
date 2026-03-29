@@ -206,26 +206,62 @@
       "comparisonFeatures": [
         {
           "text": "Comprehensive trademark search",
+          "sortOrder": 0,
+          "tag": "ALL PLANS",
+          "tagType": "included",
+          "icon": "Search",
+          "description": "We search the USPTO database and common law sources for conflicting marks.",
+          "tooltip": "A thorough search reduces the risk of office actions and opposition proceedings.",
           "packages": {}
         },
         {
           "text": "USPTO application filing",
+          "sortOrder": 1,
+          "tag": "ALL PLANS",
+          "tagType": "included",
+          "icon": "Shield",
+          "description": "We prepare and file your trademark application with the US Patent and Trademark Office.",
+          "tooltip": "A properly filed USPTO application establishes your priority date for the mark.",
           "packages": {}
         },
         {
           "text": "Office action response (Standard+)",
+          "sortOrder": 2,
+          "tag": "STANDARD & ABOVE",
+          "tagType": "premium",
+          "icon": "MessageSquare",
+          "description": "We draft and submit responses to USPTO office actions to keep your application moving.",
+          "tooltip": "Office actions are requests from the USPTO examiner for clarification or amendments.",
           "packages": {}
         },
         {
           "text": "Registration certificate",
+          "sortOrder": 3,
+          "tag": "ALL PLANS",
+          "tagType": "included",
+          "icon": "Award",
+          "description": "Receive your official USPTO trademark registration certificate upon approval.",
+          "tooltip": "The registration certificate is proof of your federally protected trademark rights.",
           "packages": {}
         },
         {
           "text": "Trademark monitoring",
+          "sortOrder": 4,
+          "tag": "PREMIUM",
+          "tagType": "premium",
+          "icon": "Eye",
+          "description": "We monitor new trademark filings that may conflict with your registered mark.",
+          "tooltip": "Monitoring helps you catch and oppose potentially infringing trademark applications.",
           "packages": {}
         },
         {
           "text": "Amazon Brand Registry ready",
+          "sortOrder": 5,
+          "tag": "BONUS",
+          "tagType": "free",
+          "icon": "ShoppingCart",
+          "description": "Your trademark qualifies you for Amazon Brand Registry and brand protection tools.",
+          "tooltip": "Brand Registry unlocks A+ Content, Sponsored Brands, and counterfeit reporting.",
           "packages": {}
         }
       ],
@@ -301,26 +337,62 @@
       "comparisonFeatures": [
         {
           "text": "Professional seller account setup",
+          "sortOrder": 0,
+          "tag": "ALL PLANS",
+          "tagType": "included",
+          "icon": "ShoppingCart",
+          "description": "We create and configure your Amazon Professional Seller Central account from scratch.",
+          "tooltip": "Professional accounts unlock Buy Box eligibility, advertising, and bulk listing tools.",
           "packages": {}
         },
         {
           "text": "Identity verification support",
+          "sortOrder": 1,
+          "tag": "ALL PLANS",
+          "tagType": "included",
+          "icon": "UserCheck",
+          "description": "We guide you through Amazon's identity verification with proper documentation.",
+          "tooltip": "Amazon requires government ID, bank statements, and utility bills for verification.",
           "packages": {}
         },
         {
           "text": "Tax interview (W-8BEN-E) completion",
+          "sortOrder": 2,
+          "tag": "ALL PLANS",
+          "tagType": "included",
+          "icon": "FileText",
+          "description": "We complete your W-8BEN-E tax form to establish your foreign entity tax status.",
+          "tooltip": "The W-8BEN-E certifies foreign status for US tax withholding purposes on Amazon.",
           "packages": {}
         },
         {
           "text": "Account configuration",
+          "sortOrder": 3,
+          "tag": "ALL PLANS",
+          "tagType": "included",
+          "icon": "Settings",
+          "description": "We configure your seller settings including return policy, shipping, and notifications.",
+          "tooltip": "Proper account configuration prevents common issues with orders and customer service.",
           "packages": {}
         },
         {
           "text": "Shipping settings setup",
+          "sortOrder": 4,
+          "tag": "ALL PLANS",
+          "tagType": "included",
+          "icon": "Truck",
+          "description": "We configure your FBA or FBM shipping templates and fulfillment preferences.",
+          "tooltip": "Correct shipping setup ensures accurate delivery estimates and customer satisfaction.",
           "packages": {}
         },
         {
           "text": "7-day setup guarantee",
+          "sortOrder": 5,
+          "tag": "GUARANTEED",
+          "tagType": "premium",
+          "icon": "Clock",
+          "description": "Your Amazon seller account will be fully set up and ready within 7 business days.",
+          "tooltip": "We guarantee a complete, verified account setup within one week of starting.",
           "packages": {}
         }
       ],
@@ -374,26 +446,62 @@
       "comparisonFeatures": [
         {
           "text": "Complete SS-4 form preparation",
+          "sortOrder": 0,
+          "tag": "ALL PLANS",
+          "tagType": "included",
+          "icon": "FileText",
+          "description": "We accurately complete IRS Form SS-4 with your LLC details for federal tax ID issuance.",
+          "tooltip": "The SS-4 is the IRS application form required to obtain an Employer Identification Number.",
           "packages": {}
         },
         {
           "text": "IRS submission handling",
+          "sortOrder": 1,
+          "tag": "ALL PLANS",
+          "tagType": "included",
+          "icon": "Send",
+          "description": "We submit your application directly to the IRS via fax or mail on your behalf.",
+          "tooltip": "We handle the entire submission process so you don't need to contact the IRS yourself.",
           "packages": {}
         },
         {
           "text": "Official EIN confirmation letter",
+          "sortOrder": 2,
+          "tag": "ALL PLANS",
+          "tagType": "included",
+          "icon": "BadgeCheck",
+          "description": "Receive your IRS CP 575 confirmation letter with your assigned EIN number.",
+          "tooltip": "The CP 575 is the official IRS letter confirming your Employer Identification Number.",
           "packages": {}
         },
         {
           "text": "EIN verification letter for banking",
+          "sortOrder": 3,
+          "tag": "ALL PLANS",
+          "tagType": "included",
+          "icon": "Landmark",
+          "description": "Get an IRS 147C verification letter — required by most US banks to open an account.",
+          "tooltip": "Banks require the 147C letter to verify your EIN when opening a business bank account.",
           "packages": {}
         },
         {
           "text": "No SSN/ITIN required",
+          "sortOrder": 4,
+          "tag": "NON-US FRIENDLY",
+          "tagType": "free",
+          "icon": "Globe",
+          "description": "Non-US residents can obtain an EIN without a Social Security or ITIN number.",
+          "tooltip": "Foreign-owned LLCs are eligible for EIN without US tax identification numbers.",
           "packages": {}
         },
         {
           "text": "Support until EIN received",
+          "sortOrder": 5,
+          "tag": "ALL PLANS",
+          "tagType": "included",
+          "icon": "Headphones",
+          "description": "Our team follows up with the IRS and supports you until your EIN is confirmed.",
+          "tooltip": "We track your application status and handle any IRS follow-ups on your behalf.",
           "packages": {}
         }
       ],
@@ -447,26 +555,62 @@
       "comparisonFeatures": [
         {
           "text": "Physical address in your LLC state",
+          "sortOrder": 0,
+          "tag": "ALL PLANS",
+          "tagType": "included",
+          "icon": "MapPin",
+          "description": "A real street address in your LLC's state to serve as your registered agent address.",
+          "tooltip": "Every LLC must have a registered agent with a physical address (no P.O. boxes) in the state.",
           "packages": {}
         },
         {
           "text": "Receive legal documents on your behalf",
+          "sortOrder": 1,
+          "tag": "ALL PLANS",
+          "tagType": "included",
+          "icon": "Mail",
+          "description": "We accept service of process, lawsuits, and official government correspondence.",
+          "tooltip": "Your registered agent receives legal documents during business hours on your behalf.",
           "packages": {}
         },
         {
           "text": "Forward documents to your address",
+          "sortOrder": 2,
+          "tag": "ALL PLANS",
+          "tagType": "included",
+          "icon": "Forward",
+          "description": "All received documents are scanned and forwarded to your email or physical address.",
+          "tooltip": "Digital forwarding ensures you receive important documents regardless of your location.",
           "packages": {}
         },
         {
           "text": "Compliance calendar reminders",
+          "sortOrder": 3,
+          "tag": "INCLUDED",
+          "tagType": "free",
+          "icon": "CalendarCheck",
+          "description": "Automated reminders for annual reports, tax deadlines, and compliance obligations.",
+          "tooltip": "Never miss a filing deadline with our proactive compliance notification system.",
           "packages": {}
         },
         {
           "text": "Online document portal access",
+          "sortOrder": 4,
+          "tag": "ALL PLANS",
+          "tagType": "included",
+          "icon": "FolderOpen",
+          "description": "Access all your received documents anytime through our secure online portal.",
+          "tooltip": "The portal stores all documents digitally, organized by date and type.",
           "packages": {}
         },
         {
           "text": "Same-day email notifications",
+          "sortOrder": 5,
+          "tag": "ALL PLANS",
+          "tagType": "included",
+          "icon": "Zap",
+          "description": "Receive instant email alerts the same day any document is received at your address.",
+          "tooltip": "Same-day notifications ensure you're immediately aware of any legal correspondence.",
           "packages": {}
         }
       ],
@@ -520,26 +664,62 @@
       "comparisonFeatures": [
         {
           "text": "Brand Registry enrollment",
+          "sortOrder": 0,
+          "tag": "ALL PLANS",
+          "tagType": "included",
+          "icon": "Shield",
+          "description": "We handle the complete Amazon Brand Registry application and enrollment process.",
+          "tooltip": "Brand Registry requires an active or pending trademark with the USPTO.",
           "packages": {}
         },
         {
           "text": "Trademark verification",
+          "sortOrder": 1,
+          "tag": "ALL PLANS",
+          "tagType": "included",
+          "icon": "BadgeCheck",
+          "description": "We verify your trademark eligibility and prepare it for Brand Registry submission.",
+          "tooltip": "Amazon accepts word marks and design marks registered with government trademark offices.",
           "packages": {}
         },
         {
           "text": "A+ Content access",
+          "sortOrder": 2,
+          "tag": "UNLOCKED",
+          "tagType": "free",
+          "icon": "Layout",
+          "description": "Unlock Enhanced Brand Content (A+) to create rich product detail pages.",
+          "tooltip": "A+ Content can increase conversion rates by 3-10% with enhanced visuals and copy.",
           "packages": {}
         },
         {
           "text": "Brand protection tools",
+          "sortOrder": 3,
+          "tag": "UNLOCKED",
+          "tagType": "free",
+          "icon": "ShieldCheck",
+          "description": "Access Amazon's brand protection suite to report counterfeit and IP violations.",
+          "tooltip": "Report violations through Transparency, Project Zero, and IP Accelerator programs.",
           "packages": {}
         },
         {
           "text": "Sponsored Brands eligibility",
+          "sortOrder": 4,
+          "tag": "UNLOCKED",
+          "tagType": "free",
+          "icon": "Megaphone",
+          "description": "Run Sponsored Brands ads with your logo, headline, and custom creatives.",
+          "tooltip": "Sponsored Brands appear at the top of search results and drive brand awareness.",
           "packages": {}
         },
         {
           "text": "Brand Analytics access",
+          "sortOrder": 5,
+          "tag": "UNLOCKED",
+          "tagType": "free",
+          "icon": "BarChart3",
+          "description": "Access Amazon Brand Analytics for search term reports and customer demographics.",
+          "tooltip": "Brand Analytics reveals what customers search for and how they discover your products.",
           "packages": {}
         }
       ],
@@ -615,26 +795,62 @@
       "comparisonFeatures": [
         {
           "text": "Form W-7 preparation",
+          "sortOrder": 0,
+          "tag": "ALL PLANS",
+          "tagType": "included",
+          "icon": "FileText",
+          "description": "We accurately complete IRS Form W-7 with your information for ITIN issuance.",
+          "tooltip": "Form W-7 is the IRS application to obtain an Individual Taxpayer Identification Number.",
           "packages": {}
         },
         {
           "text": "CAA document certification",
+          "sortOrder": 1,
+          "tag": "INCLUDED",
+          "tagType": "free",
+          "icon": "BadgeCheck",
+          "description": "Our Certifying Acceptance Agent verifies your documents — no need to mail originals.",
+          "tooltip": "CAAs are IRS-authorized to certify identity documents, eliminating passport mailing risk.",
           "packages": {}
         },
         {
           "text": "No need to mail original passport",
+          "sortOrder": 2,
+          "tag": "SAFE & SECURE",
+          "tagType": "free",
+          "icon": "ShieldCheck",
+          "description": "Keep your passport — our CAA certification eliminates the need to mail it to the IRS.",
+          "tooltip": "Without a CAA, applicants must mail their original passport to the IRS for 6-14 weeks.",
           "packages": {}
         },
         {
           "text": "Tax return preparation included",
+          "sortOrder": 3,
+          "tag": "INCLUDED",
+          "tagType": "free",
+          "icon": "Calculator",
+          "description": "We prepare the required tax return that must accompany your ITIN application.",
+          "tooltip": "ITIN applications must include a federal tax return showing the need for an ITIN.",
           "packages": {}
         },
         {
           "text": "IRS submission handling",
+          "sortOrder": 4,
+          "tag": "ALL PLANS",
+          "tagType": "included",
+          "icon": "Send",
+          "description": "We submit your complete ITIN application package directly to the IRS.",
+          "tooltip": "We handle the entire submission process including mailing to the IRS ITIN unit.",
           "packages": {}
         },
         {
           "text": "Application tracking",
+          "sortOrder": 5,
+          "tag": "ALL PLANS",
+          "tagType": "included",
+          "icon": "MapPin",
+          "description": "We track your ITIN application status and notify you when your number is issued.",
+          "tooltip": "ITIN processing typically takes 7-11 weeks — we follow up with the IRS on your behalf.",
           "packages": {}
         }
       ],
@@ -696,26 +912,62 @@
       "comparisonFeatures": [
         {
           "text": "Remote account opening",
+          "sortOrder": 0,
+          "tag": "ALL PLANS",
+          "tagType": "included",
+          "icon": "Laptop",
+          "description": "Open a US business bank account entirely online — no branch visit needed.",
+          "tooltip": "We partner with fintech banks that support 100% remote account opening for LLCs.",
           "packages": {}
         },
         {
           "text": "No US visit required",
+          "sortOrder": 1,
+          "tag": "NON-US FRIENDLY",
+          "tagType": "free",
+          "icon": "Globe",
+          "description": "Complete the entire process from your home country — no travel to the US needed.",
+          "tooltip": "Our banking partners accept international clients without requiring US presence.",
           "packages": {}
         },
         {
           "text": "Multiple bank options",
+          "sortOrder": 2,
+          "tag": "ALL PLANS",
+          "tagType": "included",
+          "icon": "Building2",
+          "description": "Choose from Mercury, Relay, or other business-friendly banks based on your needs.",
+          "tooltip": "We recommend the best bank based on your business type, volume, and requirements.",
           "packages": {}
         },
         {
           "text": "Debit card included",
+          "sortOrder": 3,
+          "tag": "INCLUDED",
+          "tagType": "free",
+          "icon": "CreditCard",
+          "description": "Receive a US business debit card for online and in-person payments worldwide.",
+          "tooltip": "Business debit cards work globally and help separate personal and business expenses.",
           "packages": {}
         },
         {
           "text": "Online banking access",
+          "sortOrder": 4,
+          "tag": "ALL PLANS",
+          "tagType": "included",
+          "icon": "Monitor",
+          "description": "Full online banking dashboard to manage transfers, payments, and account settings.",
+          "tooltip": "Modern banking dashboards offer real-time transaction tracking and integrations.",
           "packages": {}
         },
         {
           "text": "International wire transfers",
+          "sortOrder": 5,
+          "tag": "ALL PLANS",
+          "tagType": "included",
+          "icon": "ArrowLeftRight",
+          "description": "Send and receive international wire transfers directly from your US business account.",
+          "tooltip": "International wires enable receiving payments from global clients and marketplaces.",
           "packages": {}
         }
       ],
@@ -791,26 +1043,62 @@
       "comparisonFeatures": [
         {
           "text": "Monthly transaction recording",
+          "sortOrder": 0,
+          "tag": "ALL PLANS",
+          "tagType": "included",
+          "icon": "BookOpen",
+          "description": "We record and categorize all your business transactions on a monthly basis.",
+          "tooltip": "Accurate transaction recording is the foundation of clean financial books.",
           "packages": {}
         },
         {
           "text": "Expense categorization",
+          "sortOrder": 1,
+          "tag": "ALL PLANS",
+          "tagType": "included",
+          "icon": "Tags",
+          "description": "Every expense is properly categorized for tax deductions and financial clarity.",
+          "tooltip": "Correct categorization maximizes your tax deductions and simplifies tax filing.",
           "packages": {}
         },
         {
           "text": "Profit & Loss statements",
+          "sortOrder": 2,
+          "tag": "ALL PLANS",
+          "tagType": "included",
+          "icon": "TrendingUp",
+          "description": "Monthly P&L statements showing revenue, expenses, and net profit/loss.",
+          "tooltip": "P&L statements help you understand your business profitability at a glance.",
           "packages": {}
         },
         {
           "text": "Balance sheet",
+          "sortOrder": 3,
+          "tag": "ALL PLANS",
+          "tagType": "included",
+          "icon": "Scale",
+          "description": "Monthly balance sheet showing your assets, liabilities, and owner's equity.",
+          "tooltip": "Balance sheets provide a snapshot of your company's financial position.",
           "packages": {}
         },
         {
           "text": "Bank reconciliation",
+          "sortOrder": 4,
+          "tag": "ALL PLANS",
+          "tagType": "included",
+          "icon": "CheckCircle",
+          "description": "We reconcile your books with bank statements monthly to catch discrepancies.",
+          "tooltip": "Bank reconciliation ensures every transaction is accounted for accurately.",
           "packages": {}
         },
         {
           "text": "Tax-ready financials",
+          "sortOrder": 5,
+          "tag": "TAX READY",
+          "tagType": "free",
+          "icon": "Calculator",
+          "description": "Your financials are organized and ready for your accountant at tax time.",
+          "tooltip": "Tax-ready books save your accountant time and reduce your tax preparation costs.",
           "packages": {}
         }
       ],
@@ -886,26 +1174,62 @@
       "comparisonFeatures": [
         {
           "text": "Official state certificate",
+          "sortOrder": 0,
+          "tag": "ALL PLANS",
+          "tagType": "included",
+          "icon": "Award",
+          "description": "We obtain your Certificate of Good Standing directly from your LLC's home state.",
+          "tooltip": "This certificate proves your LLC is compliant and authorized to conduct business.",
           "packages": {}
         },
         {
           "text": "Current date certification",
+          "sortOrder": 1,
+          "tag": "ALL PLANS",
+          "tagType": "included",
+          "icon": "Calendar",
+          "description": "Your certificate reflects the current date confirming your LLC's active status.",
+          "tooltip": "Banks and partners typically require certificates issued within the last 30-90 days.",
           "packages": {}
         },
         {
           "text": "Digital and physical copies",
+          "sortOrder": 2,
+          "tag": "ALL PLANS",
+          "tagType": "included",
+          "icon": "Copy",
+          "description": "Receive both a digital PDF and physical copy of your good standing certificate.",
+          "tooltip": "Digital copies work for online applications; physical copies for in-person verification.",
           "packages": {}
         },
         {
           "text": "Rush processing available",
+          "sortOrder": 3,
+          "tag": "ADD-ON",
+          "tagType": "addon",
+          "icon": "Zap",
+          "description": "Need it fast? Rush processing delivers your certificate in 1-2 business days.",
+          "tooltip": "Rush processing is available for most states with expedited state fees included.",
           "packages": {}
         },
         {
           "text": "Apostille add-on option",
+          "sortOrder": 4,
+          "tag": "ADD-ON",
+          "tagType": "addon",
+          "icon": "Globe",
+          "description": "Add apostille certification to use your certificate internationally.",
+          "tooltip": "Apostille authentication is required for official document use in foreign countries.",
           "packages": {}
         },
         {
           "text": "Bank-ready format",
+          "sortOrder": 5,
+          "tag": "ALL PLANS",
+          "tagType": "included",
+          "icon": "Landmark",
+          "description": "Certificate formatted to meet US and international bank verification requirements.",
+          "tooltip": "Banks have specific requirements for good standing certificates — we ensure compliance.",
           "packages": {}
         }
       ],
@@ -985,26 +1309,62 @@
       "comparisonFeatures": [
         {
           "text": "Articles of Amendment preparation",
+          "sortOrder": 0,
+          "tag": "ALL PLANS",
+          "tagType": "included",
+          "icon": "FileEdit",
+          "description": "We draft your Articles of Amendment reflecting your LLC's approved changes.",
+          "tooltip": "Amendments are required when changing LLC name, address, members, or structure.",
           "packages": {}
         },
         {
           "text": "State filing submission",
+          "sortOrder": 1,
+          "tag": "ALL PLANS",
+          "tagType": "included",
+          "icon": "Send",
+          "description": "We submit your amendment to the Secretary of State in your LLC's home state.",
+          "tooltip": "Filing requirements and fees vary by state — we handle the details for you.",
           "packages": {}
         },
         {
           "text": "Certified copy of amendment",
+          "sortOrder": 2,
+          "tag": "ALL PLANS",
+          "tagType": "included",
+          "icon": "FileCheck",
+          "description": "Receive a state-certified copy of your filed Articles of Amendment.",
+          "tooltip": "Certified copies serve as official proof of the changes made to your LLC.",
           "packages": {}
         },
         {
           "text": "Internal document updates",
+          "sortOrder": 3,
+          "tag": "ALL PLANS",
+          "tagType": "included",
+          "icon": "Files",
+          "description": "We update your Operating Agreement and other internal documents to reflect changes.",
+          "tooltip": "Keeping internal documents consistent with state filings prevents legal issues.",
           "packages": {}
         },
         {
           "text": "Compliance verification",
+          "sortOrder": 4,
+          "tag": "ALL PLANS",
+          "tagType": "included",
+          "icon": "CheckCircle",
+          "description": "We verify your LLC remains in good standing after the amendment is filed.",
+          "tooltip": "Post-amendment verification ensures no compliance gaps with your state.",
           "packages": {}
         },
         {
           "text": "Follow-up support",
+          "sortOrder": 5,
+          "tag": "ALL PLANS",
+          "tagType": "included",
+          "icon": "Headphones",
+          "description": "We handle any state follow-up requests or additional documentation needed.",
+          "tooltip": "Some states may request additional information after amendment submission.",
           "packages": {}
         }
       ],
@@ -1065,26 +1425,62 @@
       "comparisonFeatures": [
         {
           "text": "Articles of Dissolution preparation",
+          "sortOrder": 0,
+          "tag": "ALL PLANS",
+          "tagType": "included",
+          "icon": "FileX",
+          "description": "We prepare your Articles of Dissolution for filing with the Secretary of State.",
+          "tooltip": "Articles of Dissolution formally end your LLC's existence with the state.",
           "packages": {}
         },
         {
           "text": "State filing submission",
+          "sortOrder": 1,
+          "tag": "ALL PLANS",
+          "tagType": "included",
+          "icon": "Send",
+          "description": "We submit your dissolution documents to the appropriate state office.",
+          "tooltip": "Each state has specific dissolution filing requirements and fees.",
           "packages": {}
         },
         {
           "text": "Tax clearance assistance",
+          "sortOrder": 2,
+          "tag": "ALL PLANS",
+          "tagType": "included",
+          "icon": "FileCheck",
+          "description": "We help obtain tax clearance certificates required by some states for dissolution.",
+          "tooltip": "States like California and New York require tax clearance before approving dissolution.",
           "packages": {}
         },
         {
           "text": "IRS notification guidance",
+          "sortOrder": 3,
+          "tag": "ALL PLANS",
+          "tagType": "included",
+          "icon": "Bell",
+          "description": "We guide you through notifying the IRS and closing your EIN account.",
+          "tooltip": "The IRS should be notified when an LLC is dissolved to close the tax account.",
           "packages": {}
         },
         {
           "text": "Account closure checklist",
+          "sortOrder": 4,
+          "tag": "INCLUDED",
+          "tagType": "free",
+          "icon": "ClipboardCheck",
+          "description": "Comprehensive checklist to close bank accounts, licenses, and registrations.",
+          "tooltip": "Proper closure of all accounts prevents ongoing fees and compliance issues.",
           "packages": {}
         },
         {
           "text": "Dissolution certificate",
+          "sortOrder": 5,
+          "tag": "ALL PLANS",
+          "tagType": "included",
+          "icon": "Award",
+          "description": "Receive your official Certificate of Dissolution from the state.",
+          "tooltip": "The dissolution certificate is proof that your LLC has been formally terminated.",
           "packages": {}
         }
       ],
@@ -1165,26 +1561,62 @@
       "comparisonFeatures": [
         {
           "text": "Customized Operating Agreement",
+          "sortOrder": 0,
+          "tag": "ALL PLANS",
+          "tagType": "included",
+          "icon": "FileText",
+          "description": "A professionally drafted Operating Agreement tailored to your LLC's specific needs.",
+          "tooltip": "Operating Agreements define ownership, management, and financial structures of your LLC.",
           "packages": {}
         },
         {
           "text": "Single or multi-member options",
+          "sortOrder": 1,
+          "tag": "ALL PLANS",
+          "tagType": "included",
+          "icon": "Users",
+          "description": "We prepare agreements for single-member or multi-member LLC structures.",
+          "tooltip": "Multi-member agreements include additional provisions for voting, distributions, and disputes.",
           "packages": {}
         },
         {
           "text": "Management structure defined",
+          "sortOrder": 2,
+          "tag": "ALL PLANS",
+          "tagType": "included",
+          "icon": "GitBranch",
+          "description": "Clearly define whether your LLC is member-managed or manager-managed.",
+          "tooltip": "Management structure affects who can sign contracts and make business decisions.",
           "packages": {}
         },
         {
           "text": "Profit distribution rules",
+          "sortOrder": 3,
+          "tag": "ALL PLANS",
+          "tagType": "included",
+          "icon": "PieChart",
+          "description": "Establish clear rules for how profits and losses are allocated among members.",
+          "tooltip": "Distribution rules prevent disputes and clarify each member's financial rights.",
           "packages": {}
         },
         {
           "text": "Member rights and duties",
+          "sortOrder": 4,
+          "tag": "ALL PLANS",
+          "tagType": "included",
+          "icon": "UserCheck",
+          "description": "Define each member's rights, responsibilities, and obligations within the LLC.",
+          "tooltip": "Clear roles prevent misunderstandings and provide legal protection for all members.",
           "packages": {}
         },
         {
           "text": "Dissolution procedures",
+          "sortOrder": 5,
+          "tag": "ALL PLANS",
+          "tagType": "included",
+          "icon": "FileX",
+          "description": "Outline the process for dissolving the LLC if members decide to close the business.",
+          "tooltip": "Pre-agreed dissolution procedures prevent costly legal disputes when closing an LLC.",
           "packages": {}
         }
       ],
@@ -1264,26 +1696,62 @@
       "comparisonFeatures": [
         {
           "text": "Form 5472 preparation",
+          "sortOrder": 0,
+          "tag": "ALL PLANS",
+          "tagType": "included",
+          "icon": "FileText",
+          "description": "We prepare IRS Form 5472 for reporting transactions between your LLC and foreign owner.",
+          "tooltip": "Foreign-owned LLCs must file Form 5472 annually — failure to file incurs a $25,000 penalty.",
           "packages": {}
         },
         {
           "text": "LLC tax return filing",
+          "sortOrder": 1,
+          "tag": "ALL PLANS",
+          "tagType": "included",
+          "icon": "Calculator",
+          "description": "We prepare and file your LLC's federal tax return with the IRS.",
+          "tooltip": "Single-member LLCs file Schedule C or Form 1120 depending on their tax election.",
           "packages": {}
         },
         {
           "text": "State tax compliance",
+          "sortOrder": 2,
+          "tag": "ALL PLANS",
+          "tagType": "included",
+          "icon": "Building2",
+          "description": "We handle state-level tax filings and franchise tax returns where required.",
+          "tooltip": "States like California, Delaware, and Texas have separate LLC tax requirements.",
           "packages": {}
         },
         {
           "text": "IRS e-filing",
+          "sortOrder": 3,
+          "tag": "ALL PLANS",
+          "tagType": "included",
+          "icon": "Upload",
+          "description": "We e-file your returns directly with the IRS for faster processing and confirmation.",
+          "tooltip": "E-filed returns are processed faster and provide immediate acknowledgment from the IRS.",
           "packages": {}
         },
         {
           "text": "Deadline tracking",
+          "sortOrder": 4,
+          "tag": "INCLUDED",
+          "tagType": "free",
+          "icon": "CalendarCheck",
+          "description": "We track all your tax deadlines and file extensions when needed to avoid penalties.",
+          "tooltip": "Missing tax deadlines can result in penalties, interest, and loss of good standing.",
           "packages": {}
         },
         {
           "text": "Audit support",
+          "sortOrder": 5,
+          "tag": "PREMIUM",
+          "tagType": "premium",
+          "icon": "Shield",
+          "description": "If the IRS questions your return, we provide support and representation.",
+          "tooltip": "Audit support includes preparing responses and communicating with the IRS on your behalf.",
           "packages": {}
         }
       ],
@@ -1363,26 +1831,62 @@
       "comparisonFeatures": [
         {
           "text": "State registration",
+          "sortOrder": 0,
+          "tag": "ALL PLANS",
+          "tagType": "included",
+          "icon": "Building2",
+          "description": "We register your business with the state revenue department for sales tax collection.",
+          "tooltip": "State registration is required before you can collect and remit sales tax.",
           "packages": {}
         },
         {
           "text": "Sales tax permit application",
+          "sortOrder": 1,
+          "tag": "ALL PLANS",
+          "tagType": "included",
+          "icon": "FileText",
+          "description": "We prepare and submit your sales tax permit application with the state.",
+          "tooltip": "A sales tax permit authorizes your business to collect sales tax from customers.",
           "packages": {}
         },
         {
           "text": "Reseller certificate issuance",
+          "sortOrder": 2,
+          "tag": "ALL PLANS",
+          "tagType": "included",
+          "icon": "Award",
+          "description": "Receive your official reseller certificate to purchase inventory tax-free.",
+          "tooltip": "A reseller certificate exempts you from paying sales tax on goods purchased for resale.",
           "packages": {}
         },
         {
           "text": "Exemption certificate forms",
+          "sortOrder": 3,
+          "tag": "INCLUDED",
+          "tagType": "free",
+          "icon": "FileCheck",
+          "description": "We provide completed exemption certificate forms to give to your suppliers.",
+          "tooltip": "Suppliers require exemption certificates to sell you goods without charging sales tax.",
           "packages": {}
         },
         {
           "text": "Compliance guidance",
+          "sortOrder": 4,
+          "tag": "ALL PLANS",
+          "tagType": "included",
+          "icon": "BookOpen",
+          "description": "We guide you on sales tax collection, reporting, and filing requirements.",
+          "tooltip": "Understanding sales tax obligations helps you avoid penalties and interest charges.",
           "packages": {}
         },
         {
           "text": "Renewal reminders",
+          "sortOrder": 5,
+          "tag": "ALL PLANS",
+          "tagType": "included",
+          "icon": "Bell",
+          "description": "We remind you when your reseller certificate or sales tax permit needs renewal.",
+          "tooltip": "Some states require periodic renewal of sales tax permits and reseller certificates.",
           "packages": {}
         }
       ],
@@ -1464,26 +1968,62 @@
       "comparisonFeatures": [
         {
           "text": "Custom module design",
+          "sortOrder": 0,
+          "tag": "ALL PLANS",
+          "tagType": "included",
+          "icon": "Layout",
+          "description": "We design custom A+ Content modules that showcase your brand story and product benefits.",
+          "tooltip": "A+ Content modules replace the standard product description with rich media layouts.",
           "packages": {}
         },
         {
           "text": "Professional copywriting",
+          "sortOrder": 1,
+          "tag": "ALL PLANS",
+          "tagType": "included",
+          "icon": "PenTool",
+          "description": "Our writers craft compelling, conversion-focused copy for each content module.",
+          "tooltip": "Professional copy highlights key benefits and addresses customer pain points.",
           "packages": {}
         },
         {
           "text": "Up to 7 modules",
+          "sortOrder": 2,
+          "tag": "ALL PLANS",
+          "tagType": "included",
+          "icon": "LayoutGrid",
+          "description": "Your A+ Content can include up to 7 rich media modules for maximum impact.",
+          "tooltip": "Amazon allows up to 7 modules per A+ Content submission for enhanced listings.",
           "packages": {}
         },
         {
           "text": "Comparison charts",
+          "sortOrder": 3,
+          "tag": "STANDARD & ABOVE",
+          "tagType": "premium",
+          "icon": "Table",
+          "description": "Product comparison charts help customers understand differences between your variants.",
+          "tooltip": "Comparison charts reduce returns by setting clear expectations about product features.",
           "packages": {}
         },
         {
           "text": "Brand story section",
+          "sortOrder": 4,
+          "tag": "PREMIUM",
+          "tagType": "premium",
+          "icon": "BookOpen",
+          "description": "A dedicated brand story module builds trust and emotional connection with buyers.",
+          "tooltip": "Brand stories appear across all your product listings and reinforce brand identity.",
           "packages": {}
         },
         {
           "text": "2 revision rounds",
+          "sortOrder": 5,
+          "tag": "INCLUDED",
+          "tagType": "free",
+          "icon": "RefreshCw",
+          "description": "Includes two rounds of revisions to perfect your A+ Content before publishing.",
+          "tooltip": "We refine the design and copy based on your feedback to match your brand vision.",
           "packages": {}
         }
       ],
@@ -1567,26 +2107,62 @@
       "comparisonFeatures": [
         {
           "text": "Full account analysis",
+          "sortOrder": 0,
+          "tag": "ALL PLANS",
+          "tagType": "included",
+          "icon": "Search",
+          "description": "We perform a comprehensive review of your suspension notice, account health, and history.",
+          "tooltip": "Understanding the exact reason for suspension is critical for a successful appeal.",
           "packages": {}
         },
         {
           "text": "Root cause assessment",
+          "sortOrder": 1,
+          "tag": "ALL PLANS",
+          "tagType": "included",
+          "icon": "Target",
+          "description": "We identify the specific policy violations or issues that triggered your suspension.",
+          "tooltip": "Amazon requires you to address the root cause in your Plan of Action.",
           "packages": {}
         },
         {
           "text": "Professional POA writing",
+          "sortOrder": 2,
+          "tag": "ALL PLANS",
+          "tagType": "included",
+          "icon": "PenTool",
+          "description": "Our experts write a compelling Plan of Action tailored to your specific suspension reason.",
+          "tooltip": "A well-crafted POA demonstrates understanding, accountability, and corrective measures.",
           "packages": {}
         },
         {
           "text": "Appeal submission",
+          "sortOrder": 3,
+          "tag": "ALL PLANS",
+          "tagType": "included",
+          "icon": "Send",
+          "description": "We submit your appeal through the proper Amazon channels for maximum effectiveness.",
+          "tooltip": "Correct submission format and channel selection significantly impact approval rates.",
           "packages": {}
         },
         {
           "text": "Unlimited revisions",
+          "sortOrder": 4,
+          "tag": "UNLIMITED",
+          "tagType": "free",
+          "icon": "RefreshCw",
+          "description": "We revise your Plan of Action as many times as needed until Amazon accepts it.",
+          "tooltip": "Some appeals require multiple rounds of revision based on Amazon's feedback.",
           "packages": {}
         },
         {
           "text": "Follow-up support",
+          "sortOrder": 5,
+          "tag": "ALL PLANS",
+          "tagType": "included",
+          "icon": "Headphones",
+          "description": "We monitor your appeal status and handle any follow-up requests from Amazon.",
+          "tooltip": "Amazon may request additional information or clarification during the review process.",
           "packages": {}
         }
       ],
@@ -1666,26 +2242,62 @@
       "comparisonFeatures": [
         {
           "text": "Real US street address",
+          "sortOrder": 0,
+          "tag": "ALL PLANS",
+          "tagType": "included",
+          "icon": "MapPin",
+          "description": "A legitimate US street address for your LLC — not a P.O. box or virtual mailbox.",
+          "tooltip": "A real street address is required for LLC registration, banking, and credibility.",
           "packages": {}
         },
         {
           "text": "Mail receiving & scanning",
+          "sortOrder": 1,
+          "tag": "ALL PLANS",
+          "tagType": "included",
+          "icon": "ScanLine",
+          "description": "We receive your business mail and scan it digitally for you to view online.",
+          "tooltip": "Digital mail scanning lets you read your mail from anywhere in the world.",
           "packages": {}
         },
         {
           "text": "Package acceptance",
+          "sortOrder": 2,
+          "tag": "ALL PLANS",
+          "tagType": "included",
+          "icon": "Package",
+          "description": "We accept packages and parcels delivered to your business address.",
+          "tooltip": "Package acceptance includes USPS, UPS, FedEx, and DHL deliveries.",
           "packages": {}
         },
         {
           "text": "Mail forwarding available",
+          "sortOrder": 3,
+          "tag": "ADD-ON",
+          "tagType": "addon",
+          "icon": "Forward",
+          "description": "We can forward your physical mail to any address worldwide upon request.",
+          "tooltip": "Mail forwarding is available domestically and internationally for an additional shipping fee.",
           "packages": {}
         },
         {
           "text": "Use for LLC registration",
+          "sortOrder": 4,
+          "tag": "ALL PLANS",
+          "tagType": "included",
+          "icon": "Building2",
+          "description": "Use this address as your LLC's principal address on state filings and documents.",
+          "tooltip": "A US business address is required on LLC formation documents and annual reports.",
           "packages": {}
         },
         {
           "text": "Online mail management",
+          "sortOrder": 5,
+          "tag": "ALL PLANS",
+          "tagType": "included",
+          "icon": "Monitor",
+          "description": "Manage all your mail online — view scans, request forwarding, or shred junk mail.",
+          "tooltip": "The online dashboard gives you full control over your mail from any device.",
           "packages": {}
         }
       ],
@@ -1739,26 +2351,62 @@
       "comparisonFeatures": [
         {
           "text": "Timely annual report filing",
+          "sortOrder": 0,
+          "tag": "ALL PLANS",
+          "tagType": "included",
+          "icon": "CalendarCheck",
+          "description": "We file your annual/biennial report before the state deadline to avoid penalties.",
+          "tooltip": "Missing annual report deadlines can result in fines or administrative dissolution.",
           "packages": {}
         },
         {
           "text": "State fee included",
+          "sortOrder": 1,
+          "tag": "INCLUDED",
+          "tagType": "free",
+          "icon": "DollarSign",
+          "description": "State filing fees are included — no hidden charges or surprise costs.",
+          "tooltip": "State fees vary by jurisdiction; we cover the filing fee as part of our service.",
           "packages": {}
         },
         {
           "text": "Good standing maintenance",
+          "sortOrder": 2,
+          "tag": "ALL PLANS",
+          "tagType": "included",
+          "icon": "ShieldCheck",
+          "description": "Keep your LLC in good standing with the state through timely report submission.",
+          "tooltip": "Good standing is required for banking, contracts, and operating in other states.",
           "packages": {}
         },
         {
           "text": "Filing confirmation",
+          "sortOrder": 3,
+          "tag": "ALL PLANS",
+          "tagType": "included",
+          "icon": "BadgeCheck",
+          "description": "Receive official confirmation from the state that your report has been accepted.",
+          "tooltip": "We provide proof of filing for your records and compliance documentation.",
           "packages": {}
         },
         {
           "text": "Compliance reminders",
+          "sortOrder": 4,
+          "tag": "ALL PLANS",
+          "tagType": "included",
+          "icon": "Bell",
+          "description": "We send reminders before your next annual report deadline so you never miss it.",
+          "tooltip": "Proactive reminders prevent accidental lapses in your LLC's compliance status.",
           "packages": {}
         },
         {
           "text": "No missed deadlines",
+          "sortOrder": 5,
+          "tag": "GUARANTEED",
+          "tagType": "premium",
+          "icon": "Clock",
+          "description": "Our tracking system ensures your filing is submitted well before the due date.",
+          "tooltip": "We monitor state deadlines and begin preparation weeks in advance.",
           "packages": {}
         }
       ],
@@ -1833,26 +2481,62 @@
       "comparisonFeatures": [
         {
           "text": "Document review and preparation",
+          "sortOrder": 0,
+          "tag": "ALL PLANS",
+          "tagType": "included",
+          "icon": "FileSearch",
+          "description": "We review your documents to ensure they meet apostille requirements for your target country.",
+          "tooltip": "Not all documents are eligible for apostille — we verify before processing.",
           "packages": {}
         },
         {
           "text": "Notarization if required",
+          "sortOrder": 1,
+          "tag": "INCLUDED",
+          "tagType": "free",
+          "icon": "Stamp",
+          "description": "We arrange notarization for documents that require it before apostille processing.",
+          "tooltip": "Some documents must be notarized by a commissioned notary before apostille.",
           "packages": {}
         },
         {
           "text": "State apostille processing",
+          "sortOrder": 2,
+          "tag": "ALL PLANS",
+          "tagType": "included",
+          "icon": "Award",
+          "description": "We obtain the apostille certification from the Secretary of State's office.",
+          "tooltip": "State-level apostilles authenticate documents issued within that state.",
           "packages": {}
         },
         {
           "text": "Federal apostille available",
+          "sortOrder": 3,
+          "tag": "ADD-ON",
+          "tagType": "addon",
+          "icon": "Building",
+          "description": "For federal documents, we process apostilles through the US Department of State.",
+          "tooltip": "Federal apostilles are required for FBI background checks and federal court documents.",
           "packages": {}
         },
         {
           "text": "International shipping",
+          "sortOrder": 4,
+          "tag": "ALL PLANS",
+          "tagType": "included",
+          "icon": "Plane",
+          "description": "We ship your apostilled documents worldwide via tracked courier service.",
+          "tooltip": "Documents are shipped via DHL, FedEx, or UPS with full tracking and insurance.",
           "packages": {}
         },
         {
           "text": "Multiple document discounts",
+          "sortOrder": 5,
+          "tag": "SAVE MORE",
+          "tagType": "free",
+          "icon": "Percent",
+          "description": "Save when processing multiple documents — bulk pricing available.",
+          "tooltip": "Per-document cost decreases when you submit multiple documents for apostille.",
           "packages": {}
         }
       ],
@@ -1937,6 +2621,7 @@
           "tagType": "included",
           "icon": "FileText",
           "description": "The official document that creates your LLC. We prepare and file Articles of Organization with the Secretary of State in your chosen state.",
+          "tooltip": "We prepare and file Articles of Organization with the Secretary of State in your chosen state.",
           "packages": {
             "Essential": {
               "valueType": "BOOLEAN",
@@ -1950,8 +2635,7 @@
               "valueType": "BOOLEAN",
               "included": true
             }
-          },
-          "tooltip": "We prepare and file Articles of Organization with the Secretary of State in your chosen state."
+          }
         },
         {
           "text": "Operating Agreement",
@@ -1960,6 +2644,7 @@
           "tagType": "free",
           "icon": "Shield",
           "description": "worth $79",
+          "tooltip": "Defines ownership structure, member responsibilities, and profit distribution for your LLC.",
           "packages": {
             "Essential": {
               "valueType": "BOOLEAN",
@@ -1973,8 +2658,7 @@
               "valueType": "BOOLEAN",
               "included": true
             }
-          },
-          "tooltip": "Defines ownership structure, member responsibilities, and profit distribution for your LLC."
+          }
         },
         {
           "text": "Registered Agent for One Year",
@@ -1982,6 +2666,8 @@
           "tag": "All Plans",
           "tagType": "included",
           "icon": "UserCheck",
+          "description": "Legally required in every US state. Receives legal and government documents on your behalf for one full year.",
+          "tooltip": "Legally required in every US state. Your registered agent receives legal and government documents on your behalf.",
           "packages": {
             "Essential": {
               "valueType": "BOOLEAN",
@@ -1995,9 +2681,7 @@
               "valueType": "BOOLEAN",
               "included": true
             }
-          },
-          "tooltip": "Legally required in every US state. Your registered agent receives legal and government documents on your behalf.",
-          "description": "Legally required in every US state. Receives legal and government documents on your behalf for one full year."
+          }
         },
         {
           "text": "Business Address & Mail Forwarding (1 yr)",
@@ -2006,6 +2690,7 @@
           "tagType": "included",
           "icon": "MapPin",
           "description": "A real US street address for your LLC. We scan and forward your business mail digitally.",
+          "tooltip": "A real US street address for your LLC. We scan and forward your business mail digitally.",
           "packages": {
             "Essential": {
               "valueType": "BOOLEAN",
@@ -2019,8 +2704,7 @@
               "valueType": "BOOLEAN",
               "included": true
             }
-          },
-          "tooltip": "A real US street address for your LLC. We scan and forward your business mail digitally."
+          }
         },
         {
           "text": "Employer Identification Number (EIN)",
@@ -2029,6 +2713,7 @@
           "tagType": "included",
           "icon": "CreditCard",
           "description": "worth $99",
+          "tooltip": "Your LLC's federal Tax ID number from the IRS. Required for banking, taxes, and hiring.",
           "packages": {
             "Essential": {
               "valueType": "BOOLEAN",
@@ -2042,8 +2727,7 @@
               "valueType": "BOOLEAN",
               "included": true
             }
-          },
-          "tooltip": "Your LLC's federal Tax ID number from the IRS. Required for banking, taxes, and hiring."
+          }
         },
         {
           "text": "Annual Compliance Guidance",
@@ -2052,6 +2736,7 @@
           "tagType": "included",
           "icon": "ClipboardCheck",
           "description": "We guide you through yearly requirements — annual reports, franchise taxes, and filing deadlines.",
+          "tooltip": "We guide you through yearly requirements — annual reports, franchise taxes, and filing deadlines.",
           "packages": {
             "Essential": {
               "valueType": "BOOLEAN",
@@ -2065,8 +2750,7 @@
               "valueType": "BOOLEAN",
               "included": true
             }
-          },
-          "tooltip": "We guide you through yearly requirements — annual reports, franchise taxes, and filing deadlines."
+          }
         },
         {
           "text": "BOI FinCEN Report",
@@ -2075,6 +2759,7 @@
           "tagType": "addon",
           "icon": "FileSearch",
           "description": "$49",
+          "tooltip": "FinCEN Beneficial Ownership Information report — mandatory for most LLCs since 2024. $500/day penalty for non-filing.",
           "packages": {
             "Essential": {
               "valueType": "BOOLEAN",
@@ -2088,12 +2773,16 @@
               "valueType": "BOOLEAN",
               "included": true
             }
-          },
-          "tooltip": "FinCEN Beneficial Ownership Information report — mandatory for most LLCs since 2024. $500/day penalty for non-filing."
+          }
         },
         {
           "text": "Business Bank Account Opening (Fintech)",
           "sortOrder": 7,
+          "tag": null,
+          "tagType": null,
+          "icon": null,
+          "description": null,
+          "tooltip": "Open a Mercury or Relay business bank account — no SSN required, 100% remote. Includes setup assistance.",
           "packages": {
             "Essential": {
               "valueType": "BOOLEAN",
@@ -2107,12 +2796,16 @@
               "valueType": "BOOLEAN",
               "included": true
             }
-          },
-          "tooltip": "Open a Mercury or Relay business bank account — no SSN required, 100% remote. Includes setup assistance."
+          }
         },
         {
           "text": "Stripe Account Setup",
           "sortOrder": 8,
+          "tag": null,
+          "tagType": null,
+          "icon": null,
+          "description": null,
+          "tooltip": "Set up Stripe merchant account for accepting online payments. We handle the application and verification.",
           "packages": {
             "Essential": {
               "valueType": "BOOLEAN",
@@ -2126,12 +2819,16 @@
               "valueType": "BOOLEAN",
               "included": true
             }
-          },
-          "tooltip": "Set up Stripe merchant account for accepting online payments. We handle the application and verification."
+          }
         },
         {
           "text": "Business Debit Card",
           "sortOrder": 9,
+          "tag": null,
+          "tagType": null,
+          "icon": null,
+          "description": null,
+          "tooltip": "Business debit card through your Fintech bank account — manage expenses and track spending.",
           "packages": {
             "Essential": {
               "valueType": "BOOLEAN",
@@ -2145,12 +2842,16 @@
               "valueType": "BOOLEAN",
               "included": true
             }
-          },
-          "tooltip": "Business debit card through your Fintech bank account — manage expenses and track spending."
+          }
         },
         {
           "text": "Basic Tax Consultation",
           "sortOrder": 10,
+          "tag": null,
+          "tagType": null,
+          "icon": null,
+          "description": "$149",
+          "tooltip": "One-on-one consultation on tax obligations, estimated tax payments, and filing requirements for your LLC.",
           "packages": {
             "Essential": {
               "valueType": "BOOLEAN",
@@ -2164,13 +2865,16 @@
               "valueType": "BOOLEAN",
               "included": true
             }
-          },
-          "tooltip": "One-on-one consultation on tax obligations, estimated tax payments, and filing requirements for your LLC.",
-          "description": "$149"
+          }
         },
         {
           "text": "ITIN (Individual Taxpayer ID)",
           "sortOrder": 11,
+          "tag": null,
+          "tagType": null,
+          "icon": null,
+          "description": null,
+          "tooltip": "Individual Taxpayer Identification Number from the IRS — required for non-US residents who need to file taxes.",
           "packages": {
             "Essential": {
               "valueType": "BOOLEAN",
@@ -2184,12 +2888,16 @@
               "valueType": "BOOLEAN",
               "included": true
             }
-          },
-          "tooltip": "Individual Taxpayer Identification Number from the IRS — required for non-US residents who need to file taxes."
+          }
         },
         {
           "text": "PayPal Business Account Setup",
           "sortOrder": 12,
+          "tag": null,
+          "tagType": null,
+          "icon": null,
+          "description": null,
+          "tooltip": "Open and verify a PayPal Business account for receiving payments and sending invoices worldwide.",
           "packages": {
             "Essential": {
               "valueType": "BOOLEAN",
@@ -2203,12 +2911,16 @@
               "valueType": "BOOLEAN",
               "included": true
             }
-          },
-          "tooltip": "Open and verify a PayPal Business account for receiving payments and sending invoices worldwide."
+          }
         },
         {
           "text": "Form 5472 + Pro Forma 1120",
           "sortOrder": 13,
+          "tag": null,
+          "tagType": null,
+          "icon": null,
+          "description": null,
+          "tooltip": "Annual IRS filing for foreign-owned single-member LLCs. $25,000 penalty for late or non-filing.",
           "packages": {
             "Essential": {
               "valueType": "BOOLEAN",
@@ -2222,12 +2934,16 @@
               "valueType": "BOOLEAN",
               "included": true
             }
-          },
-          "tooltip": "Annual IRS filing for foreign-owned single-member LLCs. $25,000 penalty for late or non-filing."
+          }
         },
         {
           "text": "Priority Support & Business Consultation",
           "sortOrder": 14,
+          "tag": null,
+          "tagType": null,
+          "icon": null,
+          "description": null,
+          "tooltip": "Dedicated account manager with priority response. Includes business strategy consultation for your US venture.",
           "packages": {
             "Essential": {
               "valueType": "BOOLEAN",
@@ -2241,12 +2957,16 @@
               "valueType": "BOOLEAN",
               "included": true
             }
-          },
-          "tooltip": "Dedicated account manager with priority response. Includes business strategy consultation for your US venture."
+          }
         },
         {
           "text": "Expedited Filing (3-day)",
           "sortOrder": 15,
+          "tag": null,
+          "tagType": null,
+          "icon": null,
+          "description": null,
+          "tooltip": "Rush processing — your LLC formation is prioritized and filed within 3 business days.",
           "packages": {
             "Essential": {
               "valueType": "ADDON",
@@ -2264,12 +2984,16 @@
               "valueType": "BOOLEAN",
               "included": true
             }
-          },
-          "tooltip": "Rush processing — your LLC formation is prioritized and filed within 3 business days."
+          }
         },
         {
           "text": "Annual Report Service",
           "sortOrder": 16,
+          "tag": null,
+          "tagType": null,
+          "icon": null,
+          "description": null,
+          "tooltip": "We file your LLC's annual report with the state on time, every year. Never miss a deadline.",
           "packages": {
             "Essential": {
               "valueType": "ADDON",
@@ -2289,12 +3013,16 @@
               "customValue": "+$60/yr",
               "addonPriceUSD": 60
             }
-          },
-          "tooltip": "We file your LLC's annual report with the state on time, every year. Never miss a deadline."
+          }
         },
         {
           "text": "Amazon Seller Setup",
           "sortOrder": 17,
+          "tag": null,
+          "tagType": null,
+          "icon": null,
+          "description": null,
+          "tooltip": "Complete Amazon Seller Central account setup — including brand registry, listing optimization, and compliance.",
           "packages": {
             "Essential": {
               "valueType": "ADDON",
@@ -2314,8 +3042,7 @@
               "customValue": "+$249",
               "addonPriceUSD": 249
             }
-          },
-          "tooltip": "Complete Amazon Seller Central account setup — including brand registry, listing optimization, and compliance."
+          }
         }
       ],
       "faqs": [
@@ -2385,26 +3112,62 @@
       "comparisonFeatures": [
         {
           "text": "State DBA registration",
+          "sortOrder": 0,
+          "tag": "ALL PLANS",
+          "tagType": "included",
+          "icon": "Building2",
+          "description": "We register your DBA (Doing Business As) name with your state or county.",
+          "tooltip": "A DBA lets your LLC operate under a different name without forming a new entity.",
           "packages": {}
         },
         {
           "text": "Name availability search",
+          "sortOrder": 1,
+          "tag": "ALL PLANS",
+          "tagType": "included",
+          "icon": "Search",
+          "description": "We search state records to confirm your desired business name is available.",
+          "tooltip": "Name availability varies by state — we check databases before filing.",
           "packages": {}
         },
         {
           "text": "Filing with state/county",
+          "sortOrder": 2,
+          "tag": "ALL PLANS",
+          "tagType": "included",
+          "icon": "Send",
+          "description": "We handle the complete filing process with the appropriate state or county office.",
+          "tooltip": "DBA filing requirements differ by state — some require county-level registration.",
           "packages": {}
         },
         {
           "text": "DBA certificate",
+          "sortOrder": 3,
+          "tag": "ALL PLANS",
+          "tagType": "included",
+          "icon": "FileCheck",
+          "description": "Receive your official DBA certificate as proof of your registered trade name.",
+          "tooltip": "The DBA certificate is needed to open bank accounts under your trade name.",
           "packages": {}
         },
         {
           "text": "Publication if required",
+          "sortOrder": 4,
+          "tag": "IF REQUIRED",
+          "tagType": "addon",
+          "icon": "Newspaper",
+          "description": "In states that require it, we handle newspaper publication of your DBA notice.",
+          "tooltip": "Some states like New York require DBA publication in local newspapers.",
           "packages": {}
         },
         {
           "text": "Renewal reminders",
+          "sortOrder": 5,
+          "tag": "ALL PLANS",
+          "tagType": "included",
+          "icon": "Bell",
+          "description": "We send reminders before your DBA registration expires so you can renew on time.",
+          "tooltip": "DBA registrations typically expire after 5 years and must be renewed.",
           "packages": {}
         }
       ],
@@ -2486,26 +3249,62 @@
       "comparisonFeatures": [
         {
           "text": "Keyword research",
+          "sortOrder": 0,
+          "tag": "ALL PLANS",
+          "tagType": "included",
+          "icon": "Search",
+          "description": "We research high-converting keywords using Amazon search data and competitor analysis.",
+          "tooltip": "Targeted keywords ensure your ads appear for the most relevant customer searches.",
           "packages": {}
         },
         {
           "text": "Campaign structure design",
+          "sortOrder": 1,
+          "tag": "ALL PLANS",
+          "tagType": "included",
+          "icon": "GitBranch",
+          "description": "We build a structured campaign hierarchy optimized for performance and scalability.",
+          "tooltip": "Proper campaign structure separates branded, generic, and competitor targeting.",
           "packages": {}
         },
         {
           "text": "Sponsored Products setup",
+          "sortOrder": 2,
+          "tag": "ALL PLANS",
+          "tagType": "included",
+          "icon": "Package",
+          "description": "We create Sponsored Products campaigns targeting your most profitable keywords.",
+          "tooltip": "Sponsored Products are the highest-converting ad type on Amazon.",
           "packages": {}
         },
         {
           "text": "Sponsored Brands setup",
+          "sortOrder": 3,
+          "tag": "STANDARD & ABOVE",
+          "tagType": "premium",
+          "icon": "Megaphone",
+          "description": "We set up Sponsored Brands campaigns with your logo and custom headline.",
+          "tooltip": "Sponsored Brands appear at the top of search results and build brand visibility.",
           "packages": {}
         },
         {
           "text": "Bid optimization",
+          "sortOrder": 4,
+          "tag": "ALL PLANS",
+          "tagType": "included",
+          "icon": "TrendingUp",
+          "description": "We set strategic bid amounts based on keyword competition and profit margins.",
+          "tooltip": "Optimal bids balance ad visibility with ACoS (Advertising Cost of Sale) targets.",
           "packages": {}
         },
         {
           "text": "7-day check-in",
+          "sortOrder": 5,
+          "tag": "INCLUDED",
+          "tagType": "free",
+          "icon": "CalendarCheck",
+          "description": "We review your campaign performance 7 days after launch and make adjustments.",
+          "tooltip": "Early optimization catches underperforming keywords and adjusts bids for better ROI.",
           "packages": {}
         }
       ],
@@ -2585,26 +3384,62 @@
       "comparisonFeatures": [
         {
           "text": "Category analysis",
+          "sortOrder": 0,
+          "tag": "ALL PLANS",
+          "tagType": "included",
+          "icon": "Search",
+          "description": "We analyze the requirements for your desired Amazon category or brand approval.",
+          "tooltip": "Each restricted category has specific documentation and approval requirements.",
           "packages": {}
         },
         {
           "text": "Documentation preparation",
+          "sortOrder": 1,
+          "tag": "ALL PLANS",
+          "tagType": "included",
+          "icon": "FileCheck",
+          "description": "We prepare compliant invoices, certifications, and letters required for ungating.",
+          "tooltip": "Amazon requires invoices from authorized distributors meeting specific criteria.",
           "packages": {}
         },
         {
           "text": "Application submission",
+          "sortOrder": 2,
+          "tag": "ALL PLANS",
+          "tagType": "included",
+          "icon": "Send",
+          "description": "We submit your ungating application through Seller Central with all required documents.",
+          "tooltip": "Proper formatting and submission increase first-attempt approval rates significantly.",
           "packages": {}
         },
         {
           "text": "Follow-up handling",
+          "sortOrder": 3,
+          "tag": "ALL PLANS",
+          "tagType": "included",
+          "icon": "MessageSquare",
+          "description": "We handle any Amazon follow-up requests or additional documentation needs.",
+          "tooltip": "Amazon may request additional invoices or clarification during the review process.",
           "packages": {}
         },
         {
           "text": "Multiple category discounts",
+          "sortOrder": 4,
+          "tag": "SAVE MORE",
+          "tagType": "free",
+          "icon": "Percent",
+          "description": "Save when applying for multiple categories — bulk pricing available.",
+          "tooltip": "Per-category cost decreases when you submit multiple ungating requests together.",
           "packages": {}
         },
         {
           "text": "Success guarantee",
+          "sortOrder": 5,
+          "tag": "GUARANTEED",
+          "tagType": "premium",
+          "icon": "ShieldCheck",
+          "description": "If your ungating application is denied, we rework and resubmit at no extra cost.",
+          "tooltip": "Our success guarantee means we keep working until you're approved or refund your fee.",
           "packages": {}
         }
       ],
@@ -2689,26 +3524,62 @@
       "comparisonFeatures": [
         {
           "text": "Keyword research report",
+          "sortOrder": 0,
+          "tag": "ALL PLANS",
+          "tagType": "included",
+          "icon": "Search",
+          "description": "Comprehensive keyword research identifying high-volume, relevant search terms.",
+          "tooltip": "We analyze search volume, relevance, and competition for each target keyword.",
           "packages": {}
         },
         {
           "text": "Optimized title",
+          "sortOrder": 1,
+          "tag": "ALL PLANS",
+          "tagType": "included",
+          "icon": "Type",
+          "description": "SEO-optimized product title with primary keywords placed for maximum visibility.",
+          "tooltip": "The title is the most important ranking factor in Amazon's search algorithm.",
           "packages": {}
         },
         {
           "text": "5 bullet points",
+          "sortOrder": 2,
+          "tag": "ALL PLANS",
+          "tagType": "included",
+          "icon": "List",
+          "description": "Five keyword-rich bullet points highlighting benefits and key product features.",
+          "tooltip": "Bullet points drive conversion by addressing customer questions and pain points.",
           "packages": {}
         },
         {
           "text": "Product description",
+          "sortOrder": 3,
+          "tag": "ALL PLANS",
+          "tagType": "included",
+          "icon": "AlignLeft",
+          "description": "Compelling product description with embedded keywords and persuasive copy.",
+          "tooltip": "The description provides additional space for keywords and detailed product information.",
           "packages": {}
         },
         {
           "text": "Backend keywords",
+          "sortOrder": 4,
+          "tag": "ALL PLANS",
+          "tagType": "included",
+          "icon": "Code",
+          "description": "Hidden backend search terms to capture additional keyword rankings.",
+          "tooltip": "Backend keywords index your listing for searches not visible on the product page.",
           "packages": {}
         },
         {
           "text": "Image recommendations",
+          "sortOrder": 5,
+          "tag": "BONUS",
+          "tagType": "free",
+          "icon": "Image",
+          "description": "Detailed recommendations for product images that boost click-through and conversions.",
+          "tooltip": "Optimized images improve CTR from search results and help customers make purchase decisions.",
           "packages": {}
         }
       ],
@@ -2768,26 +3639,62 @@
       "comparisonFeatures": [
         {
           "text": "FinCEN BOI report preparation",
+          "sortOrder": 0,
+          "tag": "ALL PLANS",
+          "tagType": "included",
+          "icon": "FileText",
+          "description": "We prepare your Beneficial Ownership Information report per FinCEN requirements.",
+          "tooltip": "The Corporate Transparency Act requires most LLCs to file BOI reports with FinCEN.",
           "packages": {}
         },
         {
           "text": "Electronic filing submission",
+          "sortOrder": 1,
+          "tag": "ALL PLANS",
+          "tagType": "included",
+          "icon": "Upload",
+          "description": "We submit your BOI report electronically through FinCEN's secure filing system.",
+          "tooltip": "Electronic filing provides instant confirmation and faster processing.",
           "packages": {}
         },
         {
           "text": "All beneficial owners covered",
+          "sortOrder": 2,
+          "tag": "ALL PLANS",
+          "tagType": "included",
+          "icon": "Users",
+          "description": "We collect and report information for all beneficial owners of your company.",
+          "tooltip": "FinCEN requires reporting for anyone who owns 25%+ or exercises substantial control.",
           "packages": {}
         },
         {
           "text": "Filing confirmation provided",
+          "sortOrder": 3,
+          "tag": "ALL PLANS",
+          "tagType": "included",
+          "icon": "BadgeCheck",
+          "description": "Receive your FinCEN filing confirmation with a unique BOI report identifier.",
+          "tooltip": "Keep your filing confirmation for your records — it proves compliance with the CTA.",
           "packages": {}
         },
         {
           "text": "Ownership change updates",
+          "sortOrder": 4,
+          "tag": "ADD-ON",
+          "tagType": "addon",
+          "icon": "UserPlus",
+          "description": "We file updated BOI reports when your company's ownership or control changes.",
+          "tooltip": "Changes in beneficial ownership must be reported to FinCEN within 30 days.",
           "packages": {}
         },
         {
           "text": "Compliance monitoring",
+          "sortOrder": 5,
+          "tag": "ALL PLANS",
+          "tagType": "included",
+          "icon": "Bell",
+          "description": "We track BOI deadlines and notify you when filings or updates are due.",
+          "tooltip": "Failing to file or update BOI reports can result in significant civil and criminal penalties.",
           "packages": {}
         }
       ],
@@ -2850,26 +3757,62 @@
       "comparisonFeatures": [
         {
           "text": "Form 5472 preparation",
+          "sortOrder": 0,
+          "tag": "ALL PLANS",
+          "tagType": "included",
+          "icon": "FileText",
+          "description": "We prepare IRS Form 5472 reporting transactions between your LLC and foreign owner.",
+          "tooltip": "Foreign-owned single-member LLCs must file Form 5472 annually with the IRS.",
           "packages": {}
         },
         {
           "text": "Pro forma 1120 included",
+          "sortOrder": 1,
+          "tag": "INCLUDED",
+          "tagType": "free",
+          "icon": "Files",
+          "description": "We file the required Pro Forma Form 1120 that accompanies your Form 5472.",
+          "tooltip": "Single-member LLCs filing Form 5472 must attach it to a Pro Forma 1120 return.",
           "packages": {}
         },
         {
           "text": "Zero-activity filing supported",
+          "sortOrder": 2,
+          "tag": "ALL PLANS",
+          "tagType": "included",
+          "icon": "FileX",
+          "description": "Even if your LLC had no transactions, we file the required zero-activity return.",
+          "tooltip": "LLCs with no activity must still file Form 5472 to avoid the $25,000 penalty.",
           "packages": {}
         },
         {
           "text": "Transaction analysis",
+          "sortOrder": 3,
+          "tag": "ALL PLANS",
+          "tagType": "included",
+          "icon": "BarChart3",
+          "description": "We review all reportable transactions between you and your LLC for accurate reporting.",
+          "tooltip": "Reportable transactions include capital contributions, loans, and expense payments.",
           "packages": {}
         },
         {
           "text": "Paper filing handled",
+          "sortOrder": 4,
+          "tag": "ALL PLANS",
+          "tagType": "included",
+          "icon": "Mail",
+          "description": "We handle the required paper filing and mailing of Form 5472 to the IRS.",
+          "tooltip": "Form 5472 cannot be e-filed and must be submitted by mail to the IRS.",
           "packages": {}
         },
         {
           "text": "Extension filing available",
+          "sortOrder": 5,
+          "tag": "ADD-ON",
+          "tagType": "addon",
+          "icon": "CalendarPlus",
+          "description": "Need more time? We can file a 6-month extension to avoid late filing penalties.",
+          "tooltip": "Form 7004 grants an automatic 6-month extension for Form 5472 filing.",
           "packages": {}
         }
       ],
@@ -2930,26 +3873,62 @@
       "comparisonFeatures": [
         {
           "text": "Form 2553 preparation and filing",
+          "sortOrder": 0,
+          "tag": "ALL PLANS",
+          "tagType": "included",
+          "icon": "FileText",
+          "description": "We prepare and file IRS Form 2553 to elect S Corporation tax treatment for your LLC.",
+          "tooltip": "S-Corp election can reduce self-employment taxes by splitting income into salary and distributions.",
           "packages": {}
         },
         {
           "text": "Eligibility verification",
+          "sortOrder": 1,
+          "tag": "ALL PLANS",
+          "tagType": "included",
+          "icon": "CheckCircle",
+          "description": "We verify your LLC meets all IRS requirements for S Corporation election.",
+          "tooltip": "S-Corp eligibility requires US ownership, single class of stock, and ≤100 shareholders.",
           "packages": {}
         },
         {
           "text": "Operating agreement review",
+          "sortOrder": 2,
+          "tag": "ALL PLANS",
+          "tagType": "included",
+          "icon": "FileSearch",
+          "description": "We review your Operating Agreement to ensure compatibility with S-Corp tax structure.",
+          "tooltip": "S-Corp elections may require amendments to profit distribution and management clauses.",
           "packages": {}
         },
         {
           "text": "Late election relief available",
+          "sortOrder": 3,
+          "tag": "IF NEEDED",
+          "tagType": "addon",
+          "icon": "Clock",
+          "description": "Missed the deadline? We can file for late election relief under IRS Revenue Procedure.",
+          "tooltip": "The IRS allows late S-Corp elections if you meet reasonable cause requirements.",
           "packages": {}
         },
         {
           "text": "IRS confirmation tracking",
+          "sortOrder": 4,
+          "tag": "ALL PLANS",
+          "tagType": "included",
+          "icon": "MapPin",
+          "description": "We track your election status and confirm acceptance with the IRS.",
+          "tooltip": "The IRS sends a determination letter confirming or denying your S-Corp election.",
           "packages": {}
         },
         {
           "text": "Timely filing guarantee",
+          "sortOrder": 5,
+          "tag": "GUARANTEED",
+          "tagType": "premium",
+          "icon": "ShieldCheck",
+          "description": "We guarantee your Form 2553 is filed before the IRS deadline for the election year.",
+          "tooltip": "Form 2553 must be filed within 75 days of formation or by March 15 for existing LLCs.",
           "packages": {}
         }
       ],
@@ -3025,26 +4004,62 @@
       "comparisonFeatures": [
         {
           "text": "Nexus analysis included",
+          "sortOrder": 0,
+          "tag": "ALL PLANS",
+          "tagType": "included",
+          "icon": "Map",
+          "description": "We analyze where your business has sales tax nexus based on activities and revenue.",
+          "tooltip": "Nexus determines in which states you're required to collect and remit sales tax.",
           "packages": {}
         },
         {
           "text": "Complete application filing",
+          "sortOrder": 1,
+          "tag": "ALL PLANS",
+          "tagType": "included",
+          "icon": "FileText",
+          "description": "We prepare and submit sales tax registration applications in your nexus states.",
+          "tooltip": "Each state has its own registration process, forms, and requirements.",
           "packages": {}
         },
         {
           "text": "Sales tax permit issuance",
+          "sortOrder": 2,
+          "tag": "ALL PLANS",
+          "tagType": "included",
+          "icon": "Award",
+          "description": "Receive your official sales tax permit authorizing tax collection in each state.",
+          "tooltip": "Sales tax permits are required before you can legally collect tax from customers.",
           "packages": {}
         },
         {
           "text": "Multi-state registration",
+          "sortOrder": 3,
+          "tag": "MULTI-STATE",
+          "tagType": "premium",
+          "icon": "Globe",
+          "description": "We handle registration across multiple states if your business has nexus in several.",
+          "tooltip": "E-commerce businesses often have economic nexus in many states due to sales volume.",
           "packages": {}
         },
         {
           "text": "Compliance calendar setup",
+          "sortOrder": 4,
+          "tag": "INCLUDED",
+          "tagType": "free",
+          "icon": "CalendarCheck",
+          "description": "We set up a calendar tracking all your sales tax filing due dates by state.",
+          "tooltip": "Filing frequencies vary by state — monthly, quarterly, or annually.",
           "packages": {}
         },
         {
           "text": "Filing frequency guidance",
+          "sortOrder": 5,
+          "tag": "ALL PLANS",
+          "tagType": "included",
+          "icon": "Clock",
+          "description": "We advise on your filing frequency and help you understand reporting requirements.",
+          "tooltip": "States assign filing frequencies based on your estimated sales tax liability.",
           "packages": {}
         }
       ],
@@ -3105,26 +4120,62 @@
       "comparisonFeatures": [
         {
           "text": "Seller Center registration",
+          "sortOrder": 0,
+          "tag": "ALL PLANS",
+          "tagType": "included",
+          "icon": "Store",
+          "description": "We register and set up your TikTok Shop Seller Center account with proper business details.",
+          "tooltip": "TikTok Seller Center is the dashboard where you manage products, orders, and analytics.",
           "packages": {}
         },
         {
           "text": "Document preparation and review",
+          "sortOrder": 1,
+          "tag": "ALL PLANS",
+          "tagType": "included",
+          "icon": "FileCheck",
+          "description": "We prepare all required business documents for TikTok's verification process.",
+          "tooltip": "TikTok requires LLC documents, EIN, bank statements, and product certifications.",
           "packages": {}
         },
         {
           "text": "Identity verification handling",
+          "sortOrder": 2,
+          "tag": "ALL PLANS",
+          "tagType": "included",
+          "icon": "UserCheck",
+          "description": "We guide you through TikTok's identity verification with proper documentation.",
+          "tooltip": "TikTok requires government-issued ID and business verification for seller accounts.",
           "packages": {}
         },
         {
           "text": "Product listing assistance",
+          "sortOrder": 3,
+          "tag": "ALL PLANS",
+          "tagType": "included",
+          "icon": "Package",
+          "description": "We help create your initial product listings with optimized titles and descriptions.",
+          "tooltip": "Well-optimized listings improve visibility in TikTok's product search and discovery.",
           "packages": {}
         },
         {
           "text": "Fulfillment setup guidance",
+          "sortOrder": 4,
+          "tag": "ALL PLANS",
+          "tagType": "included",
+          "icon": "Truck",
+          "description": "We configure your shipping and fulfillment settings for US domestic delivery.",
+          "tooltip": "Proper fulfillment setup ensures fast shipping times and positive customer reviews.",
           "packages": {}
         },
         {
           "text": "7-day post-setup support",
+          "sortOrder": 5,
+          "tag": "SUPPORT",
+          "tagType": "premium",
+          "icon": "Headphones",
+          "description": "We provide dedicated support for 7 days after setup to resolve any issues.",
+          "tooltip": "Post-launch support covers troubleshooting, optimization tips, and account questions.",
           "packages": {}
         }
       ],
@@ -3200,26 +4251,62 @@
       "comparisonFeatures": [
         {
           "text": "Application preparation",
+          "sortOrder": 0,
+          "tag": "ALL PLANS",
+          "tagType": "included",
+          "icon": "FileText",
+          "description": "We prepare your Walmart Marketplace seller application with all required information.",
+          "tooltip": "Walmart has a selective approval process — a well-prepared application increases approval odds.",
           "packages": {}
         },
         {
           "text": "Document verification",
+          "sortOrder": 1,
+          "tag": "ALL PLANS",
+          "tagType": "included",
+          "icon": "FileCheck",
+          "description": "We verify and organize all documents needed for Walmart's review process.",
+          "tooltip": "Walmart requires business registration, tax info, and e-commerce performance data.",
           "packages": {}
         },
         {
           "text": "E-commerce profile optimization",
+          "sortOrder": 2,
+          "tag": "ALL PLANS",
+          "tagType": "included",
+          "icon": "BarChart3",
+          "description": "We optimize your e-commerce profile to meet Walmart's approval criteria.",
+          "tooltip": "Walmart evaluates your existing e-commerce presence and product catalog quality.",
           "packages": {}
         },
         {
           "text": "Product catalog setup",
+          "sortOrder": 3,
+          "tag": "ALL PLANS",
+          "tagType": "included",
+          "icon": "Package",
+          "description": "We set up your initial product catalog on Walmart Seller Center with optimized listings.",
+          "tooltip": "Product listings are configured with proper categories, attributes, and pricing.",
           "packages": {}
         },
         {
           "text": "WFS enrollment guidance",
+          "sortOrder": 4,
+          "tag": "OPTIONAL",
+          "tagType": "addon",
+          "icon": "Truck",
+          "description": "We guide you through Walmart Fulfillment Services (WFS) enrollment and setup.",
+          "tooltip": "WFS is Walmart's fulfillment program — similar to Amazon FBA — handling storage and shipping.",
           "packages": {}
         },
         {
           "text": "Approval follow-up support",
+          "sortOrder": 5,
+          "tag": "ALL PLANS",
+          "tagType": "included",
+          "icon": "Headphones",
+          "description": "We follow up with Walmart on your application status and handle any requests.",
+          "tooltip": "Walmart may request additional information or clarification during the review process.",
           "packages": {}
         }
       ],
@@ -3296,26 +4383,62 @@
       "comparisonFeatures": [
         {
           "text": "Custom theme setup",
+          "sortOrder": 0,
+          "tag": "ALL PLANS",
+          "tagType": "included",
+          "icon": "Palette",
+          "description": "We install and customize a professional Shopify theme matching your brand identity.",
+          "tooltip": "A well-designed theme builds trust and provides a smooth shopping experience.",
           "packages": {}
         },
         {
           "text": "Up to 50 product uploads",
+          "sortOrder": 1,
+          "tag": "ALL PLANS",
+          "tagType": "included",
+          "icon": "Package",
+          "description": "We upload and configure up to 50 products with titles, descriptions, and images.",
+          "tooltip": "Products are set up with SEO-optimized content, variants, and inventory tracking.",
           "packages": {}
         },
         {
           "text": "Payment gateway integration",
+          "sortOrder": 2,
+          "tag": "ALL PLANS",
+          "tagType": "included",
+          "icon": "CreditCard",
+          "description": "We integrate Shopify Payments, Stripe, PayPal, and other payment providers.",
+          "tooltip": "Multiple payment options increase checkout conversion and reduce cart abandonment.",
           "packages": {}
         },
         {
           "text": "Shipping and tax config",
+          "sortOrder": 3,
+          "tag": "ALL PLANS",
+          "tagType": "included",
+          "icon": "Truck",
+          "description": "We configure shipping rates, zones, and automatic tax calculation for your store.",
+          "tooltip": "Accurate shipping and tax settings prevent checkout errors and customer complaints.",
           "packages": {}
         },
         {
           "text": "Essential app installation",
+          "sortOrder": 4,
+          "tag": "INCLUDED",
+          "tagType": "free",
+          "icon": "AppWindow",
+          "description": "We install and configure essential Shopify apps for analytics, SEO, and email marketing.",
+          "tooltip": "The right apps extend Shopify's functionality and help grow your store.",
           "packages": {}
         },
         {
           "text": "14-day post-launch support",
+          "sortOrder": 5,
+          "tag": "SUPPORT",
+          "tagType": "premium",
+          "icon": "Headphones",
+          "description": "Two weeks of dedicated support after launch to fix issues and answer questions.",
+          "tooltip": "Post-launch support covers troubleshooting, minor adjustments, and training.",
           "packages": {}
         }
       ],
@@ -3376,26 +4499,62 @@
       "comparisonFeatures": [
         {
           "text": "Stripe account setup",
+          "sortOrder": 0,
+          "tag": "ALL PLANS",
+          "tagType": "included",
+          "icon": "CreditCard",
+          "description": "We create and configure your Stripe account for accepting online payments globally.",
+          "tooltip": "Stripe supports 135+ currencies and offers instant payouts to US bank accounts.",
           "packages": {}
         },
         {
           "text": "PayPal Business setup",
+          "sortOrder": 1,
+          "tag": "ALL PLANS",
+          "tagType": "included",
+          "icon": "Wallet",
+          "description": "We set up your PayPal Business account linked to your US LLC and bank account.",
+          "tooltip": "PayPal Business provides invoicing, recurring payments, and buyer/seller protection.",
           "packages": {}
         },
         {
           "text": "Identity verification assistance",
+          "sortOrder": 2,
+          "tag": "ALL PLANS",
+          "tagType": "included",
+          "icon": "UserCheck",
+          "description": "We guide you through Stripe and PayPal's identity verification requirements.",
+          "tooltip": "Payment processors require identity verification to comply with KYC/AML regulations.",
           "packages": {}
         },
         {
           "text": "US bank account linking",
+          "sortOrder": 3,
+          "tag": "ALL PLANS",
+          "tagType": "included",
+          "icon": "Landmark",
+          "description": "We link your US business bank account for receiving payouts from Stripe and PayPal.",
+          "tooltip": "A linked US bank account enables fast domestic transfers and reduces conversion fees.",
           "packages": {}
         },
         {
           "text": "Payout configuration",
+          "sortOrder": 4,
+          "tag": "ALL PLANS",
+          "tagType": "included",
+          "icon": "ArrowDownToLine",
+          "description": "We configure automatic payouts on your preferred schedule — daily, weekly, or monthly.",
+          "tooltip": "Payout settings control how often your payment processor sends funds to your bank.",
           "packages": {}
         },
         {
           "text": "Test transaction verification",
+          "sortOrder": 5,
+          "tag": "INCLUDED",
+          "tagType": "free",
+          "icon": "CheckCircle",
+          "description": "We run test transactions to verify everything works before you start selling.",
+          "tooltip": "Test transactions confirm payment processing, webhooks, and receipt emails all function correctly.",
           "packages": {}
         }
       ],
@@ -3472,26 +4631,62 @@
       "comparisonFeatures": [
         {
           "text": "Income Statement (P&L)",
+          "sortOrder": 0,
+          "tag": "ALL PLANS",
+          "tagType": "included",
+          "icon": "TrendingUp",
+          "description": "Detailed Profit & Loss statement showing revenue, costs, and net income.",
+          "tooltip": "Income statements reveal your business profitability over a specific period.",
           "packages": {}
         },
         {
           "text": "Balance Sheet",
+          "sortOrder": 1,
+          "tag": "ALL PLANS",
+          "tagType": "included",
+          "icon": "Scale",
+          "description": "Complete balance sheet showing assets, liabilities, and owner's equity.",
+          "tooltip": "Balance sheets show your company's financial position at a specific point in time.",
           "packages": {}
         },
         {
           "text": "Cash Flow Statement",
+          "sortOrder": 2,
+          "tag": "ALL PLANS",
+          "tagType": "included",
+          "icon": "ArrowLeftRight",
+          "description": "Cash flow analysis showing operating, investing, and financing activities.",
+          "tooltip": "Cash flow statements show how money moves in and out of your business.",
           "packages": {}
         },
         {
           "text": "Bank and investor ready",
+          "sortOrder": 3,
+          "tag": "PROFESSIONAL",
+          "tagType": "premium",
+          "icon": "Landmark",
+          "description": "Reports formatted to meet bank loan and investor presentation standards.",
+          "tooltip": "Properly formatted financials are essential for securing funding and credit lines.",
           "packages": {}
         },
         {
           "text": "Expense categorization",
+          "sortOrder": 4,
+          "tag": "ALL PLANS",
+          "tagType": "included",
+          "icon": "Tags",
+          "description": "All expenses properly categorized following standard accounting practices.",
+          "tooltip": "Accurate categorization ensures meaningful financial analysis and tax optimization.",
           "packages": {}
         },
         {
           "text": "Comparative analysis",
+          "sortOrder": 5,
+          "tag": "STANDARD & ABOVE",
+          "tagType": "premium",
+          "icon": "BarChart3",
+          "description": "Period-over-period comparison to track your business growth and trends.",
+          "tooltip": "Comparing periods reveals growth patterns, seasonal trends, and areas for improvement.",
           "packages": {}
         }
       ],
