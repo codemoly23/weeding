@@ -240,16 +240,16 @@ function SectionRenderer({ section }: SectionRendererProps) {
               className={cn(
                 "flex flex-col",
                 columnSpanClasses[index] || "col-span-12",
-                column.settings.verticalAlign === "center" && "justify-center",
-                column.settings.verticalAlign === "bottom" && "justify-end",
+                column.settings?.verticalAlign === "center" && "justify-center",
+                column.settings?.verticalAlign === "bottom" && "justify-end",
               )}
               style={{
-                padding: column.settings.padding ? `${column.settings.padding}px` : undefined,
-                paddingTop: column.settings.paddingTop ? `${column.settings.paddingTop}px` : undefined,
-                paddingBottom: column.settings.paddingBottom ? `${column.settings.paddingBottom}px` : undefined,
-                paddingLeft: column.settings.paddingLeft ? `${column.settings.paddingLeft}px` : undefined,
-                paddingRight: column.settings.paddingRight ? `${column.settings.paddingRight}px` : undefined,
-                backgroundColor: column.settings.backgroundColor,
+                padding: column.settings?.padding ? `${column.settings.padding}px` : undefined,
+                paddingTop: column.settings?.paddingTop ? `${column.settings.paddingTop}px` : undefined,
+                paddingBottom: column.settings?.paddingBottom ? `${column.settings.paddingBottom}px` : undefined,
+                paddingLeft: column.settings?.paddingLeft ? `${column.settings.paddingLeft}px` : undefined,
+                paddingRight: column.settings?.paddingRight ? `${column.settings.paddingRight}px` : undefined,
+                backgroundColor: column.settings?.backgroundColor,
               }}
             >
               {column.widgets.map((widget) => (

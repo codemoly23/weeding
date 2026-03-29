@@ -53,6 +53,7 @@ import type {
   WidgetType,
   BuilderSelection,
 } from "@/lib/page-builder/types";
+import { DEFAULT_COLUMN_SETTINGS } from "@/lib/page-builder/defaults";
 import { createSection, createWidget, WidgetRegistry } from "@/lib/page-builder/widget-registry";
 
 // Reuse existing components from landing-page builder
@@ -407,6 +408,7 @@ export default function PageEditorPage({ params }: { params: Promise<{ slug: str
         columns: section.columns.map((col) => ({
           ...col,
           id: `col_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
+          settings: { ...DEFAULT_COLUMN_SETTINGS, ...col.settings },
           widgets: col.widgets.map((w) => ({
             ...w,
             id: `widget_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,

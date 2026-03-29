@@ -1,6 +1,7 @@
 import prisma from "@/lib/db";
 import type { PageTemplateType } from "@prisma/client";
 import type { Section } from "@/lib/page-builder/types";
+import { DEFAULT_COLUMN_SETTINGS } from "@/lib/page-builder/defaults";
 
 interface TemplateData {
   id: string;
@@ -41,9 +42,16 @@ export async function getActiveTemplate(
 
     // Extract sections from widget-page-sections block
     const widgetBlock = page.blocks.find((b) => b.type === "widget-page-sections");
-    const sections = Array.isArray(widgetBlock?.settings)
+    const rawSections = Array.isArray(widgetBlock?.settings)
       ? (widgetBlock.settings as unknown as Section[])
       : [];
+    const sections = rawSections.map((s) => ({
+      ...s,
+      columns: s.columns.map((col) => ({
+        ...col,
+        settings: { ...DEFAULT_COLUMN_SETTINGS, ...col.settings },
+      })),
+    }));
 
     // Only return if there are sections
     if (sections.length === 0) {

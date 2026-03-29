@@ -5,6 +5,7 @@ import { Badge } from "@/components/ui/badge";
 import { formatDate } from "@/lib/utils";
 import { WidgetSectionsRenderer } from "@/components/landing-page/widget-sections-renderer";
 import type { Section } from "@/lib/page-builder/types";
+import { DEFAULT_COLUMN_SETTINGS } from "@/lib/page-builder/defaults";
 
 // Force dynamic rendering - these pages depend on database content
 export const dynamic = "force-dynamic";
@@ -95,7 +96,14 @@ export default async function DynamicPage({ params }: PageProps) {
   if (landingPage) {
     // Get sections from the widget-page-sections block
     const sectionsBlock = landingPage.blocks[0];
-    const sections = (sectionsBlock?.settings as unknown as Section[]) || [];
+    const rawSections = (sectionsBlock?.settings as unknown as Section[]) || [];
+    const sections = rawSections.map((s) => ({
+      ...s,
+      columns: s.columns.map((col) => ({
+        ...col,
+        settings: { ...DEFAULT_COLUMN_SETTINGS, ...col.settings },
+      })),
+    }));
 
     return <WidgetSectionsRenderer sections={sections} />;
   }
