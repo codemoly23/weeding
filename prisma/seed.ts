@@ -123,25 +123,75 @@ const servicesData = [
     slug: "llc-formation",
     name: "LLC Formation",
     shortDesc: "Launch your US business in 24-48 hours. No SSN required. Trusted by 10,000+ international entrepreneurs from Bangladesh, India, Pakistan & 50+ countries.",
-    metaTitle: "LLC Formation Service USA - Form Your LLC in 24-48 Hours | LLCPad",
-    metaDescription: "Form your US LLC from anywhere in the world. No SSN required. Includes Articles of Organization, Operating Agreement & compliance support. Trusted by 10,000+ entrepreneurs.",
-    description: `<p>Launch your American business in 24-48 hours. We handle all the paperwork while you focus on growing your business. <strong>No US residency or SSN required</strong> - we've helped over 10,000 entrepreneurs from 50+ countries establish their US presence.</p>
+    metaTitle: "Form a US LLC Online for Non-Residents | LLCPad",
+    metaDescription: "Start your US LLC from anywhere — no SSN or US address required. Wyoming, Delaware & New Mexico options. Fast formation for international entrepreneurs.",
+    description: `<p>Starting a <strong>US LLC (Limited Liability Company)</strong> is the fastest way for international entrepreneurs to access the American market, open US bank accounts, and accept global payments. Whether you're based in <strong>Bangladesh, India, Pakistan, or the UAE</strong>, LLCPad handles the entire formation process — no SSN or US address required.</p>
 
-<h3>Why Form a US LLC?</h3>
-<p>A Limited Liability Company (LLC) is the most popular business structure for international entrepreneurs entering the US market:</p>
+<h3>Why You Need a US LLC</h3>
 <ul>
-  <li><strong>Personal Asset Protection:</strong> Your personal assets (home, savings, investments) are legally separated from business liabilities.</li>
-  <li><strong>Tax Flexibility:</strong> LLCs enjoy "pass-through" taxation without corporate double-taxation.</li>
-  <li><strong>Global Credibility:</strong> A US LLC instantly boosts your business credibility.</li>
-  <li><strong>No Residency Required:</strong> Unlike many countries, the US allows non-residents to own and operate LLCs.</li>
+  <li><strong>Asset Protection:</strong> Your personal assets are legally separated from business liabilities, shielding you from lawsuits and debts.</li>
+  <li><strong>US Banking &amp; Payments:</strong> Open a US business bank account and accept payments via Stripe, PayPal, and Wise with a legitimate US entity.</li>
+  <li><strong>Tax Flexibility:</strong> Single-member LLCs owned by non-residents can benefit from pass-through taxation with zero US federal income tax on foreign-sourced income.</li>
+  <li><strong>Global Credibility:</strong> A US-registered business builds trust with American and international clients, partners, and platforms like Amazon and Shopify.</li>
 </ul>
 
-<h3>Which State Should You Choose?</h3>
-<ul>
-  <li><strong>Wyoming (Most Popular):</strong> Zero state income tax, strongest privacy protections, lowest annual fees ($62/year).</li>
-  <li><strong>Delaware:</strong> Home to 66% of Fortune 500 companies. Best for startups seeking investment.</li>
-  <li><strong>New Mexico:</strong> No annual report requirement, strong privacy, low formation cost.</li>
-</ul>`,
+<div style="overflow-x:auto;margin:32px 0;padding-top:20px">
+<table style="width:100%;border-collapse:separate;border-spacing:0;border-radius:12px;font-size:15px;border:1px solid #e8e5dd">
+<thead><tr style="background:#1b3a2d;color:#faf8f4">
+<th style="padding:14px 20px;text-align:left;font-weight:700;text-transform:uppercase;font-size:12px;letter-spacing:1px">Feature</th>
+<th style="padding:14px 20px;text-align:center;font-weight:700;text-transform:uppercase;font-size:12px;letter-spacing:1px;position:relative"><span style="position:absolute;top:-14px;left:50%;transform:translateX(-50%);background:#e84c1e;color:#fff;font-size:10px;padding:2px 10px;border-radius:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;white-space:nowrap">Recommended</span>Wyoming</th>
+<th style="padding:14px 20px;text-align:center;font-weight:700;text-transform:uppercase;font-size:12px;letter-spacing:1px">Delaware</th>
+<th style="padding:14px 20px;text-align:center;font-weight:700;text-transform:uppercase;font-size:12px;letter-spacing:1px">New Mexico</th>
+</tr></thead>
+<tbody>
+<tr style="border-bottom:1px solid #e8e5dd">
+<td style="padding:13px 20px;font-weight:600;background:#f8f7f4">State Filing Fee</td>
+<td style="padding:13px 20px;text-align:center;background:#f0faf5;color:#1b3a2d;font-weight:700">$100</td>
+<td style="padding:13px 20px;text-align:center">$110</td>
+<td style="padding:13px 20px;text-align:center">$50</td>
+</tr>
+<tr style="border-bottom:1px solid #e8e5dd">
+<td style="padding:13px 20px;font-weight:600;background:#f8f7f4">Annual Report Cost</td>
+<td style="padding:13px 20px;text-align:center;background:#f0faf5;color:#1b3a2d;font-weight:700">$60/yr</td>
+<td style="padding:13px 20px;text-align:center">$300/yr</td>
+<td style="padding:13px 20px;text-align:center">$0/yr</td>
+</tr>
+<tr style="border-bottom:1px solid #e8e5dd">
+<td style="padding:13px 20px;font-weight:600;background:#f8f7f4">Owner Privacy</td>
+<td style="padding:13px 20px;text-align:center;background:#f0faf5;color:#1b3a2d;font-weight:700"><span style="color:#1b3a2d">&#10003;</span> Full Privacy</td>
+<td style="padding:13px 20px;text-align:center"><span style="color:#1b3a2d">&#10003;</span> Full Privacy</td>
+<td style="padding:13px 20px;text-align:center"><span style="color:#1b3a2d">&#10003;</span> Full Privacy</td>
+</tr>
+<tr style="border-bottom:1px solid #e8e5dd">
+<td style="padding:13px 20px;font-weight:600;background:#f8f7f4">Banking Friendly</td>
+<td style="padding:13px 20px;text-align:center;background:#f0faf5;color:#1b3a2d;font-weight:700"><span style="color:#1b3a2d">&#10003;</span> Excellent</td>
+<td style="padding:13px 20px;text-align:center"><span style="color:#1b3a2d">&#10003;</span> Good</td>
+<td style="padding:13px 20px;text-align:center"><span style="color:#dc2626">&#10007;</span> Limited</td>
+</tr>
+<tr style="border-bottom:1px solid #e8e5dd">
+<td style="padding:13px 20px;font-weight:600;background:#f8f7f4">No State Income Tax</td>
+<td style="padding:13px 20px;text-align:center;background:#f0faf5;color:#1b3a2d;font-weight:700"><span style="color:#1b3a2d">&#10003;</span> Yes</td>
+<td style="padding:13px 20px;text-align:center"><span style="color:#dc2626">&#10007;</span> Franchise Tax</td>
+<td style="padding:13px 20px;text-align:center"><span style="color:#1b3a2d">&#10003;</span> Yes</td>
+</tr>
+<tr>
+<td style="padding:13px 20px;font-weight:600;background:#f8f7f4">Best For</td>
+<td style="padding:13px 20px;text-align:center;background:#f0faf5;color:#1b3a2d;font-weight:700">Non-US Residents</td>
+<td style="padding:13px 20px;text-align:center">VC-Funded Startups</td>
+<td style="padding:13px 20px;text-align:center">Budget-Conscious</td>
+</tr>
+</tbody>
+</table>
+</div>
+
+<h3>How It Works</h3>
+<ol>
+  <li><strong>Choose Your State:</strong> Select Wyoming (recommended for non-residents), Delaware, or New Mexico based on your business goals and budget.</li>
+  <li><strong>Submit Your Details:</strong> Provide your company name, member information, and business purpose — we handle all state paperwork and filing.</li>
+  <li><strong>Receive Your Documents:</strong> Get your Articles of Organization, Operating Agreement, and EIN — everything you need to open a bank account and start operating.</li>
+</ol>
+
+<p style="margin-top:24px;padding:16px 20px;background:#f0faf5;border-left:4px solid #1b3a2d;border-radius:0 8px 8px 0;font-size:14px;color:#1b3a2d"><strong>Important:</strong> LLCPad is a business filing service, not a law firm. We do not provide legal or tax advice. Formation timelines vary by state — Wyoming typically processes filings within 2–5 business days.</p>`,
     icon: "Building2",
     image: "/images/services/llc-formation.jpg",
     startingPrice: 0,
@@ -221,19 +271,69 @@ const servicesData = [
     slug: "ein-application",
     name: "EIN Application",
     shortDesc: "Get your EIN (Tax ID) without an SSN. Required for US bank accounts, Amazon seller accounts & tax filing. Fast processing for international business owners.",
-    metaTitle: "EIN Application Service for Non-US Residents | Get Your Tax ID Fast | LLCPad",
-    metaDescription: "Get your EIN (Employer Identification Number) without an SSN. Required for US bank accounts, Amazon seller accounts & tax filing. Fast processing for international business owners.",
-    description: `<p>Your EIN is your business's Social Security Number. We handle the entire IRS application process, <strong>even without an SSN or ITIN</strong>.</p>
+    metaTitle: "Get an EIN Number Online — No SSN Required | LLCPad",
+    metaDescription: "Apply for a US EIN (Tax ID) without an SSN. Fast IRS processing for non-US residents. Required for banking, taxes & hiring. Start your application today.",
+    description: `<p>An <strong>EIN (Employer Identification Number)</strong> is a nine-digit tax identification number issued by the IRS for your US business. Every LLC needs an EIN to <strong>open a US bank account, file taxes, and hire employees</strong>. If you're a non-US resident without a Social Security Number, LLCPad handles the entire IRS application on your behalf — no SSN required.</p>
 
-<h3>What is an EIN and Why Do You Need One?</h3>
-<p>An Employer Identification Number (EIN) is a unique 9-digit number assigned by the IRS to identify your business.</p>
-<h4>You Need an EIN To:</h4>
+<h3>Why You Need an EIN</h3>
 <ul>
-  <li><strong>Open a US Business Bank Account:</strong> Every US bank requires an EIN.</li>
-  <li><strong>Set Up Amazon Seller Account:</strong> Amazon requires an EIN during seller verification.</li>
-  <li><strong>Accept Payments via Stripe/PayPal:</strong> Payment processors require your EIN for tax reporting.</li>
-  <li><strong>File Business Taxes:</strong> The IRS uses your EIN to track your business taxes.</li>
-</ul>`,
+  <li><strong>US Bank Account:</strong> Banks require an EIN to open a business checking account — it's the first thing they ask for after your formation documents.</li>
+  <li><strong>Tax Compliance:</strong> The IRS uses your EIN to track business tax filings, and payment processors like Stripe and PayPal require it for payouts.</li>
+  <li><strong>Hire Contractors &amp; Employees:</strong> You cannot issue W-9 forms or 1099s to US-based contractors without a valid EIN.</li>
+  <li><strong>Business Credibility:</strong> An EIN separates your personal and business identities, which is essential for building credit and signing contracts.</li>
+</ul>
+
+<div style="overflow-x:auto;margin:32px 0;padding-top:20px">
+<table style="width:100%;border-collapse:separate;border-spacing:0;border-radius:12px;font-size:15px;border:1px solid #e8e5dd">
+<thead><tr style="background:#1b3a2d;color:#faf8f4">
+<th style="padding:14px 20px;text-align:left;font-weight:700;text-transform:uppercase;font-size:12px;letter-spacing:1px">Feature</th>
+<th style="padding:14px 20px;text-align:center;font-weight:700;text-transform:uppercase;font-size:12px;letter-spacing:1px;position:relative"><span style="position:absolute;top:-14px;left:50%;transform:translateX(-50%);background:#e84c1e;color:#fff;font-size:10px;padding:2px 10px;border-radius:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;white-space:nowrap">Recommended</span>EIN</th>
+<th style="padding:14px 20px;text-align:center;font-weight:700;text-transform:uppercase;font-size:12px;letter-spacing:1px">ITIN</th>
+<th style="padding:14px 20px;text-align:center;font-weight:700;text-transform:uppercase;font-size:12px;letter-spacing:1px">SSN</th>
+</tr></thead>
+<tbody>
+<tr style="border-bottom:1px solid #e8e5dd">
+<td style="padding:13px 20px;font-weight:600;background:#f8f7f4">Who Needs It</td>
+<td style="padding:13px 20px;text-align:center;background:#f0faf5;color:#1b3a2d;font-weight:700">Businesses &amp; LLCs</td>
+<td style="padding:13px 20px;text-align:center">Individuals (tax filing)</td>
+<td style="padding:13px 20px;text-align:center">US Citizens &amp; Residents</td>
+</tr>
+<tr style="border-bottom:1px solid #e8e5dd">
+<td style="padding:13px 20px;font-weight:600;background:#f8f7f4">Issued By</td>
+<td style="padding:13px 20px;text-align:center;background:#f0faf5;color:#1b3a2d;font-weight:700">IRS</td>
+<td style="padding:13px 20px;text-align:center">IRS</td>
+<td style="padding:13px 20px;text-align:center">SSA</td>
+</tr>
+<tr style="border-bottom:1px solid #e8e5dd">
+<td style="padding:13px 20px;font-weight:600;background:#f8f7f4">Format</td>
+<td style="padding:13px 20px;text-align:center;background:#f0faf5;color:#1b3a2d;font-weight:700">XX-XXXXXXX</td>
+<td style="padding:13px 20px;text-align:center">9XX-XX-XXXX</td>
+<td style="padding:13px 20px;text-align:center">XXX-XX-XXXX</td>
+</tr>
+<tr style="border-bottom:1px solid #e8e5dd">
+<td style="padding:13px 20px;font-weight:600;background:#f8f7f4">Processing Time</td>
+<td style="padding:13px 20px;text-align:center;background:#f0faf5;color:#1b3a2d;font-weight:700">1–4 weeks (by mail)</td>
+<td style="padding:13px 20px;text-align:center">7–11 weeks</td>
+<td style="padding:13px 20px;text-align:center">Immediate (in person)</td>
+</tr>
+<tr>
+<td style="padding:13px 20px;font-weight:600;background:#f8f7f4">SSN Required</td>
+<td style="padding:13px 20px;text-align:center;background:#f0faf5;color:#1b3a2d;font-weight:700"><span style="color:#dc2626">&#10007;</span> No</td>
+<td style="padding:13px 20px;text-align:center"><span style="color:#dc2626">&#10007;</span> No</td>
+<td style="padding:13px 20px;text-align:center">N/A</td>
+</tr>
+</tbody>
+</table>
+</div>
+
+<h3>How It Works</h3>
+<ol>
+  <li><strong>Provide Your LLC Details:</strong> Share your LLC name, formation state, and responsible party information — we prepare IRS Form SS-4 on your behalf.</li>
+  <li><strong>We File with the IRS:</strong> Our team submits your EIN application directly to the IRS using the appropriate method for non-US applicants (fax or mail).</li>
+  <li><strong>Receive Your EIN:</strong> Once approved, you receive your official IRS EIN confirmation letter (CP 575) — ready to use for banking and tax filing.</li>
+</ol>
+
+<p style="margin-top:24px;padding:16px 20px;background:#f0faf5;border-left:4px solid #1b3a2d;border-radius:0 8px 8px 0;font-size:14px;color:#1b3a2d"><strong>Important:</strong> Non-US residents cannot apply for an EIN online through the IRS website. The IRS requires fax or mail submissions for foreign applicants, which typically takes 1–4 weeks for processing.</p>`,
     icon: "FileText",
     image: "/images/services/ein-application.jpg",
     startingPrice: 99,
@@ -272,17 +372,69 @@ const servicesData = [
     slug: "registered-agent",
     name: "Registered Agent",
     shortDesc: "Professional registered agent service in all 50 US states. Required for every LLC. Receive legal documents and state mail on your behalf.",
-    metaTitle: "Registered Agent Service USA - All 50 States | Compliance Made Easy | LLCPad",
-    metaDescription: "Professional registered agent service in all 50 US states. Same-day document scanning, online portal access, compliance alerts. Only $99/year. Keep your LLC in good standing.",
-    description: `<p>Every US LLC is legally required to have a registered agent in their state of formation. A registered agent is an individual or company designated to receive legal documents and official state correspondence on behalf of your business.</p>
+    metaTitle: "US Registered Agent Service — All 50 States | LLCPad",
+    metaDescription: "Professional registered agent service in all 50 US states. Mail forwarding, compliance alerts & document scanning for non-US LLC owners. Stay compliant.",
+    description: `<p>Every US LLC is <strong>legally required to have a registered agent</strong> — a person or service with a physical address in your formation state who receives legal documents, tax notices, and government correspondence on your behalf. For <strong>non-US residents who don't have a US address</strong>, a professional registered agent service is essential to keep your LLC in good standing.</p>
 
-<h3>Why Do You Need a Registered Agent?</h3>
+<h3>Why You Need a Registered Agent</h3>
 <ul>
-  <li><strong>Legal Requirement:</strong> Every state requires LLCs to maintain a registered agent with a physical address.</li>
-  <li><strong>Privacy Protection:</strong> Use our address instead of your personal address on public records.</li>
-  <li><strong>Never Miss Important Documents:</strong> We receive and forward all legal notices, tax documents, and compliance reminders.</li>
-  <li><strong>Compliance Alerts:</strong> We notify you of annual report deadlines and other compliance requirements.</li>
-</ul>`,
+  <li><strong>Legal Requirement:</strong> All 50 states require LLCs to maintain a registered agent with a physical street address (PO boxes are not accepted) during business hours.</li>
+  <li><strong>Privacy Protection:</strong> Your registered agent's address appears on public filings instead of your personal address, keeping your home address private.</li>
+  <li><strong>Never Miss a Deadline:</strong> Receive timely compliance alerts for annual reports, franchise tax filings, and other state deadlines that could dissolve your LLC.</li>
+  <li><strong>Service of Process:</strong> If your LLC is ever named in a lawsuit, your registered agent receives the legal papers and notifies you immediately.</li>
+</ul>
+
+<div style="overflow-x:auto;margin:32px 0;padding-top:20px">
+<table style="width:100%;border-collapse:separate;border-spacing:0;border-radius:12px;font-size:15px;border:1px solid #e8e5dd">
+<thead><tr style="background:#1b3a2d;color:#faf8f4">
+<th style="padding:14px 20px;text-align:left;font-weight:700;text-transform:uppercase;font-size:12px;letter-spacing:1px">Feature</th>
+<th style="padding:14px 20px;text-align:center;font-weight:700;text-transform:uppercase;font-size:12px;letter-spacing:1px;position:relative"><span style="position:absolute;top:-14px;left:50%;transform:translateX(-50%);background:#e84c1e;color:#fff;font-size:10px;padding:2px 10px;border-radius:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;white-space:nowrap">Recommended</span>LLCPad</th>
+<th style="padding:14px 20px;text-align:center;font-weight:700;text-transform:uppercase;font-size:12px;letter-spacing:1px">Basic Provider</th>
+<th style="padding:14px 20px;text-align:center;font-weight:700;text-transform:uppercase;font-size:12px;letter-spacing:1px">DIY (Self)</th>
+</tr></thead>
+<tbody>
+<tr style="border-bottom:1px solid #e8e5dd">
+<td style="padding:13px 20px;font-weight:600;background:#f8f7f4">Mail Forwarding</td>
+<td style="padding:13px 20px;text-align:center;background:#f0faf5;color:#1b3a2d;font-weight:700"><span style="color:#1b3a2d">&#10003;</span> Included</td>
+<td style="padding:13px 20px;text-align:center"><span style="color:#dc2626">&#10007;</span> Extra Fee</td>
+<td style="padding:13px 20px;text-align:center"><span style="color:#dc2626">&#10007;</span> N/A</td>
+</tr>
+<tr style="border-bottom:1px solid #e8e5dd">
+<td style="padding:13px 20px;font-weight:600;background:#f8f7f4">Compliance Alerts</td>
+<td style="padding:13px 20px;text-align:center;background:#f0faf5;color:#1b3a2d;font-weight:700"><span style="color:#1b3a2d">&#10003;</span> Automated</td>
+<td style="padding:13px 20px;text-align:center"><span style="color:#1b3a2d">&#10003;</span> Email Only</td>
+<td style="padding:13px 20px;text-align:center"><span style="color:#dc2626">&#10007;</span> Manual</td>
+</tr>
+<tr style="border-bottom:1px solid #e8e5dd">
+<td style="padding:13px 20px;font-weight:600;background:#f8f7f4">Annual Report Reminders</td>
+<td style="padding:13px 20px;text-align:center;background:#f0faf5;color:#1b3a2d;font-weight:700"><span style="color:#1b3a2d">&#10003;</span> 60-Day Advance</td>
+<td style="padding:13px 20px;text-align:center"><span style="color:#1b3a2d">&#10003;</span> 30-Day</td>
+<td style="padding:13px 20px;text-align:center"><span style="color:#dc2626">&#10007;</span> None</td>
+</tr>
+<tr style="border-bottom:1px solid #e8e5dd">
+<td style="padding:13px 20px;font-weight:600;background:#f8f7f4">Document Scanning</td>
+<td style="padding:13px 20px;text-align:center;background:#f0faf5;color:#1b3a2d;font-weight:700"><span style="color:#1b3a2d">&#10003;</span> Same-Day Digital</td>
+<td style="padding:13px 20px;text-align:center"><span style="color:#dc2626">&#10007;</span> Not Included</td>
+<td style="padding:13px 20px;text-align:center"><span style="color:#dc2626">&#10007;</span> N/A</td>
+</tr>
+<tr>
+<td style="padding:13px 20px;font-weight:600;background:#f8f7f4">State Coverage</td>
+<td style="padding:13px 20px;text-align:center;background:#f0faf5;color:#1b3a2d;font-weight:700">All 50 States</td>
+<td style="padding:13px 20px;text-align:center">Select States</td>
+<td style="padding:13px 20px;text-align:center">1 State Only</td>
+</tr>
+</tbody>
+</table>
+</div>
+
+<h3>How It Works</h3>
+<ol>
+  <li><strong>Select Your State:</strong> Choose the state where your LLC is registered — we provide a registered agent address in that state immediately.</li>
+  <li><strong>We Handle Your Mail:</strong> All legal documents, tax notices, and state correspondence are received at our office, scanned, and forwarded to your dashboard.</li>
+  <li><strong>Stay Compliant Automatically:</strong> Receive advance reminders for annual reports and state filings so your LLC never falls out of good standing.</li>
+</ol>
+
+<p style="margin-top:24px;padding:16px 20px;background:#f0faf5;border-left:4px solid #1b3a2d;border-radius:0 8px 8px 0;font-size:14px;color:#1b3a2d"><strong>Important:</strong> If your LLC loses its registered agent, most states will send a notice and eventually dissolve or revoke your business. Maintaining continuous registered agent coverage is critical for non-US owners who cannot serve as their own agent.</p>`,
     icon: "MapPin",
     image: "/images/services/registered-agent.jpg",
     startingPrice: 99,
@@ -321,17 +473,69 @@ const servicesData = [
     slug: "trademark-registration",
     name: "Trademark Registration",
     shortDesc: "Protect your brand with USPTO trademark registration. Required for Amazon Brand Registry. Stop copycats and counterfeiters.",
-    metaTitle: "USPTO Trademark Registration Service | Protect Your Brand | LLCPad",
-    metaDescription: "Register your trademark with the USPTO. Comprehensive search, application filing, office action response. Required for Amazon Brand Registry. Protect your brand from copycats.",
-    description: `<p>A registered trademark gives you <strong>exclusive nationwide rights</strong> to your brand name, logo, or slogan. Stop copycats, qualify for Amazon Brand Registry, and build lasting brand value.</p>
+    metaTitle: "US Trademark Registration — USPTO Filing | LLCPad",
+    metaDescription: "Register your trademark with the USPTO. Protect your brand name & logo in the US. Full filing service for international business owners. Start today.",
+    description: `<p><strong>US trademark registration</strong> with the USPTO (United States Patent and Trademark Office) gives you <strong>exclusive legal rights to your brand name, logo, or slogan</strong> across all 50 states. For international entrepreneurs selling in the US market, a registered trademark prevents competitors from using your brand and is essential for platforms like <strong>Amazon Brand Registry</strong>.</p>
 
-<h3>Why Register a Trademark?</h3>
+<h3>Why You Need a Trademark</h3>
 <ul>
-  <li><strong>Legal Protection:</strong> Exclusive right to use your brand name/logo nationwide.</li>
-  <li><strong>Amazon Brand Registry:</strong> Required to enroll in Brand Registry.</li>
-  <li><strong>Deter Copycats:</strong> The ® symbol signals federal registration.</li>
-  <li><strong>Business Value:</strong> Trademarks are valuable intellectual property assets.</li>
-</ul>`,
+  <li><strong>Nationwide Brand Protection:</strong> A federal trademark gives you exclusive rights to your brand name in your registered class of goods or services across the entire United States.</li>
+  <li><strong>Amazon Brand Registry:</strong> You must have a registered (or pending) US trademark to enroll in Amazon Brand Registry, which unlocks A+ Content, brand analytics, and counterfeit protection.</li>
+  <li><strong>Legal Enforcement:</strong> With a registered trademark, you can file cease-and-desist letters, DMCA takedowns, and federal lawsuits against infringers — and recover statutory damages.</li>
+  <li><strong>Asset Value:</strong> A registered trademark is an intangible asset that increases your business valuation and can be licensed or sold independently of the business.</li>
+</ul>
+
+<div style="overflow-x:auto;margin:32px 0;padding-top:20px">
+<table style="width:100%;border-collapse:separate;border-spacing:0;border-radius:12px;font-size:15px;border:1px solid #e8e5dd">
+<thead><tr style="background:#1b3a2d;color:#faf8f4">
+<th style="padding:14px 20px;text-align:left;font-weight:700;text-transform:uppercase;font-size:12px;letter-spacing:1px">Feature</th>
+<th style="padding:14px 20px;text-align:center;font-weight:700;text-transform:uppercase;font-size:12px;letter-spacing:1px;position:relative"><span style="position:absolute;top:-14px;left:50%;transform:translateX(-50%);background:#e84c1e;color:#fff;font-size:10px;padding:2px 10px;border-radius:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;white-space:nowrap">Recommended</span>Trademark</th>
+<th style="padding:14px 20px;text-align:center;font-weight:700;text-transform:uppercase;font-size:12px;letter-spacing:1px">Copyright</th>
+<th style="padding:14px 20px;text-align:center;font-weight:700;text-transform:uppercase;font-size:12px;letter-spacing:1px">Patent</th>
+</tr></thead>
+<tbody>
+<tr style="border-bottom:1px solid #e8e5dd">
+<td style="padding:13px 20px;font-weight:600;background:#f8f7f4">What It Protects</td>
+<td style="padding:13px 20px;text-align:center;background:#f0faf5;color:#1b3a2d;font-weight:700">Brand names, logos, slogans</td>
+<td style="padding:13px 20px;text-align:center">Creative works (books, art, code)</td>
+<td style="padding:13px 20px;text-align:center">Inventions &amp; processes</td>
+</tr>
+<tr style="border-bottom:1px solid #e8e5dd">
+<td style="padding:13px 20px;font-weight:600;background:#f8f7f4">Duration</td>
+<td style="padding:13px 20px;text-align:center;background:#f0faf5;color:#1b3a2d;font-weight:700">Indefinite (renew every 10 yrs)</td>
+<td style="padding:13px 20px;text-align:center">Life + 70 years</td>
+<td style="padding:13px 20px;text-align:center">20 years</td>
+</tr>
+<tr style="border-bottom:1px solid #e8e5dd">
+<td style="padding:13px 20px;font-weight:600;background:#f8f7f4">Filing Cost (USPTO)</td>
+<td style="padding:13px 20px;text-align:center;background:#f0faf5;color:#1b3a2d;font-weight:700">$250–$350 per class</td>
+<td style="padding:13px 20px;text-align:center">$45–$65</td>
+<td style="padding:13px 20px;text-align:center">$1,600+</td>
+</tr>
+<tr style="border-bottom:1px solid #e8e5dd">
+<td style="padding:13px 20px;font-weight:600;background:#f8f7f4">Filing Authority</td>
+<td style="padding:13px 20px;text-align:center;background:#f0faf5;color:#1b3a2d;font-weight:700">USPTO</td>
+<td style="padding:13px 20px;text-align:center">US Copyright Office</td>
+<td style="padding:13px 20px;text-align:center">USPTO</td>
+</tr>
+<tr>
+<td style="padding:13px 20px;font-weight:600;background:#f8f7f4">Processing Time</td>
+<td style="padding:13px 20px;text-align:center;background:#f0faf5;color:#1b3a2d;font-weight:700">8–12 months</td>
+<td style="padding:13px 20px;text-align:center">1–6 months</td>
+<td style="padding:13px 20px;text-align:center">1–3 years</td>
+</tr>
+</tbody>
+</table>
+</div>
+
+<h3>How It Works</h3>
+<ol>
+  <li><strong>Trademark Search:</strong> We conduct a comprehensive search of the USPTO database and common law sources to check if your desired brand name or logo is available for registration.</li>
+  <li><strong>File Your Application:</strong> Our team prepares and files your trademark application with the USPTO, selecting the correct international class(es) for your goods or services.</li>
+  <li><strong>Monitor &amp; Respond:</strong> We track your application through the USPTO examination process, respond to any Office Actions from the examining attorney, and guide you through publication and registration.</li>
+</ol>
+
+<p style="margin-top:24px;padding:16px 20px;background:#f0faf5;border-left:4px solid #1b3a2d;border-radius:0 8px 8px 0;font-size:14px;color:#1b3a2d"><strong>Important:</strong> Non-US applicants must appoint a US-licensed attorney to file a trademark application with the USPTO. LLCPad works with licensed trademark attorneys to ensure your application meets all legal requirements. The entire process typically takes 8–12 months from filing to registration.</p>`,
     icon: "Stamp",
     image: "/images/services/trademark.jpg",
     startingPrice: 599,
@@ -386,17 +590,68 @@ const servicesData = [
     slug: "amazon-seller",
     name: "Amazon Seller Account",
     shortDesc: "Complete Amazon seller account setup. We handle verification, tax interviews, and account configuration. Start selling in 7 days.",
-    metaTitle: "Amazon Seller Account Setup Service | Start Selling on Amazon Today | LLCPad",
-    metaDescription: "Professional Amazon seller account setup for international sellers. Document preparation, tax interview guidance, verification support. Avoid suspension risks. Start selling faster!",
-    description: `<p>Start your Amazon selling journey the right way. We handle the complex verification process, tax interview, and initial account configuration so you can focus on sourcing products.</p>
+    metaTitle: "Amazon Seller Account Setup for Non-US | LLCPad",
+    metaDescription: "Set up your Amazon Seller account as a non-US resident. Compare Individual vs Professional plans and start selling on Amazon.com. Get started with LLCPad.",
+    description: `<p>Selling on <strong>Amazon.com</strong> is one of the fastest ways for international entrepreneurs to access the world's largest e-commerce market. Whether you're based in <strong>Bangladesh, India, Pakistan, or the UAE</strong>, setting up a US Amazon Seller account gives you direct access to over 300 million active customers. LLCPad handles the entire setup process so you can focus on sourcing products and growing your business.</p>
 
-<h3>What's Included</h3>
+<h3>Why You Need an Amazon Seller Account</h3>
 <ul>
-  <li><strong>Account Creation:</strong> We set up your Professional Seller account correctly.</li>
-  <li><strong>Verification Support:</strong> Navigate the identity and business verification process.</li>
-  <li><strong>Tax Interview:</strong> Complete the W-8BEN-E form correctly for international sellers.</li>
-  <li><strong>Account Configuration:</strong> Set up shipping, return policies, and business information.</li>
-</ul>`,
+  <li><strong>Access the US Market:</strong> The US Amazon marketplace generates over $400 billion in annual sales — the single largest e-commerce opportunity globally.</li>
+  <li><strong>Built-In Customer Trust:</strong> Buyers already trust Amazon, so you skip the brand-building phase that independent stores require.</li>
+  <li><strong>Fulfillment by Amazon (FBA):</strong> Ship inventory to Amazon's warehouses and let them handle storage, packing, shipping, and customer service.</li>
+  <li><strong>Scalable from Day One:</strong> Start with a handful of products and scale to thousands without building your own logistics infrastructure.</li>
+</ul>
+
+<div style="overflow-x:auto;margin:32px 0;padding-top:20px">
+<table style="width:100%;border-collapse:separate;border-spacing:0;border-radius:12px;font-size:15px;border:1px solid #e8e5dd">
+<thead><tr style="background:#1b3a2d;color:#faf8f4">
+<th style="padding:14px 20px;text-align:left;font-weight:700;text-transform:uppercase;font-size:12px;letter-spacing:1px">Feature</th>
+<th style="padding:14px 20px;text-align:center;font-weight:700;text-transform:uppercase;font-size:12px;letter-spacing:1px;position:relative"><span style="position:absolute;top:-14px;left:50%;transform:translateX(-50%);background:#e84c1e;color:#fff;font-size:10px;padding:2px 10px;border-radius:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;white-space:nowrap">Recommended</span>Professional</th>
+<th style="padding:14px 20px;text-align:center;font-weight:700;text-transform:uppercase;font-size:12px;letter-spacing:1px">Individual</th>
+</tr></thead>
+<tbody>
+<tr style="border-bottom:1px solid #e8e5dd">
+<td style="padding:13px 20px;font-weight:600;background:#f8f7f4">Monthly Fee</td>
+<td style="padding:13px 20px;text-align:center;background:#f0faf5;color:#1b3a2d;font-weight:700">$39.99/month</td>
+<td style="padding:13px 20px;text-align:center">$0/month</td>
+</tr>
+<tr style="border-bottom:1px solid #e8e5dd">
+<td style="padding:13px 20px;font-weight:600;background:#f8f7f4">Per-Item Listing Fee</td>
+<td style="padding:13px 20px;text-align:center;background:#f0faf5;color:#1b3a2d;font-weight:700">None</td>
+<td style="padding:13px 20px;text-align:center">$0.99 per item sold</td>
+</tr>
+<tr style="border-bottom:1px solid #e8e5dd">
+<td style="padding:13px 20px;font-weight:600;background:#f8f7f4">Buy Box Eligibility</td>
+<td style="padding:13px 20px;text-align:center;background:#f0faf5;color:#1b3a2d;font-weight:700"><span style="color:#1b3a2d">✓</span> Eligible</td>
+<td style="padding:13px 20px;text-align:center"><span style="color:#dc2626">✗</span> Not Eligible</td>
+</tr>
+<tr style="border-bottom:1px solid #e8e5dd">
+<td style="padding:13px 20px;font-weight:600;background:#f8f7f4">Amazon Advertising (PPC)</td>
+<td style="padding:13px 20px;text-align:center;background:#f0faf5;color:#1b3a2d;font-weight:700"><span style="color:#1b3a2d">✓</span> Full Access</td>
+<td style="padding:13px 20px;text-align:center"><span style="color:#dc2626">✗</span> Not Available</td>
+</tr>
+<tr style="border-bottom:1px solid #e8e5dd">
+<td style="padding:13px 20px;font-weight:600;background:#f8f7f4">Brand Registry Eligibility</td>
+<td style="padding:13px 20px;text-align:center;background:#f0faf5;color:#1b3a2d;font-weight:700"><span style="color:#1b3a2d">✓</span> Eligible</td>
+<td style="padding:13px 20px;text-align:center"><span style="color:#dc2626">✗</span> Not Eligible</td>
+</tr>
+<tr>
+<td style="padding:13px 20px;font-weight:600;background:#f8f7f4">Best For</td>
+<td style="padding:13px 20px;text-align:center;background:#f0faf5;color:#1b3a2d;font-weight:700">Serious sellers (40+ items/mo)</td>
+<td style="padding:13px 20px;text-align:center">Testing with &lt;40 items/mo</td>
+</tr>
+</tbody>
+</table>
+</div>
+
+<h3>How It Works</h3>
+<ol>
+  <li><strong>Entity Verification:</strong> We confirm your US LLC is properly set up with an EIN and US address — the prerequisites Amazon requires from non-US residents.</li>
+  <li><strong>Account Registration:</strong> We create your Seller Central account, configure tax settings, link your payment method, and complete identity verification on your behalf.</li>
+  <li><strong>Launch Preparation:</strong> You receive your fully activated account with step-by-step guidance on listing your first product and shipping inventory to FBA.</li>
+</ol>
+
+<p style="margin-top:24px;padding:16px 20px;background:#f0faf5;border-left:4px solid #1b3a2d;border-radius:0 8px 8px 0;font-size:14px;color:#1b3a2d"><strong>Important:</strong> Amazon requires a Professional Seller account ($39.99/month) to access advertising, win the Buy Box, and enroll in Brand Registry. We strongly recommend starting with Professional if you plan to build a serious business.</p>`,
     icon: "ShoppingCart",
     image: "/images/services/amazon-seller.jpg",
     startingPrice: 299,
@@ -443,17 +698,61 @@ const servicesData = [
     slug: "virtual-address",
     name: "Virtual Business Address",
     shortDesc: "Get a professional US business address. Use for your LLC, receive mail & packages, and look professional to customers.",
-    metaTitle: "Virtual US Address for Business | Mail Scanning & Forwarding | LLCPad",
-    metaDescription: "Get a real US street address for your business. Mail scanning, forwarding, package receiving. Perfect for international entrepreneurs. Use for banking, Amazon, and business presence.",
-    description: `<p>Get a professional US business address for your LLC. We provide a real street address (not a PO Box) that you can use on your LLC documents, website, and marketing materials.</p>
+    metaTitle: "Virtual US Business Address Service | LLCPad",
+    metaDescription: "Get a real US business address for LLC registration, Amazon seller accounts, and business banking. Mail scanning included. Start with LLCPad.",
+    description: `<p>A <strong>virtual US business address</strong> is one of the most essential building blocks for international entrepreneurs operating a US-based business. You need a real US street address (not a PO Box) for <strong>LLC registration</strong>, Amazon Seller Central verification, business bank account applications, and receiving official government correspondence. Our virtual address service provides a legitimate commercial address with mail handling — so you can run your US business from anywhere in the world.</p>
 
-<h3>Benefits</h3>
+<h3>Why You Need a Virtual US Address</h3>
 <ul>
-  <li><strong>Professional Image:</strong> A US business address builds trust with customers.</li>
-  <li><strong>Privacy Protection:</strong> Keep your personal address off public records.</li>
-  <li><strong>Mail Handling:</strong> We receive, scan, and forward your business mail.</li>
-  <li><strong>Package Receiving:</strong> Accept packages from USPS, UPS, FedEx, and DHL.</li>
-</ul>`,
+  <li><strong>LLC Registration Requirement:</strong> Most states require a US street address for your LLC's principal office or mailing address on formation documents.</li>
+  <li><strong>Amazon Seller Verification:</strong> Amazon may request utility bills or bank statements showing a US address during seller account verification.</li>
+  <li><strong>Business Banking:</strong> US banks require a domestic address on file. A virtual address satisfies this requirement for online banking applications.</li>
+  <li><strong>Professional Presence:</strong> A US commercial address on your website and invoices builds trust with American customers and business partners.</li>
+</ul>
+
+<div style="overflow-x:auto;margin:32px 0;padding-top:20px">
+<table style="width:100%;border-collapse:separate;border-spacing:0;border-radius:12px;font-size:15px;border:1px solid #e8e5dd">
+<thead><tr style="background:#1b3a2d;color:#faf8f4">
+<th style="padding:14px 20px;text-align:left;font-weight:700;text-transform:uppercase;font-size:12px;letter-spacing:1px">Feature</th>
+<th style="padding:14px 20px;text-align:center;font-weight:700;text-transform:uppercase;font-size:12px;letter-spacing:1px">Details</th>
+</tr></thead>
+<tbody>
+<tr style="border-bottom:1px solid #e8e5dd">
+<td style="padding:13px 20px;font-weight:600;background:#f8f7f4">Mail Scanning</td>
+<td style="padding:13px 20px;text-align:center"><span style="color:#1b3a2d">✓</span> Envelope exterior scanned &amp; notified</td>
+</tr>
+<tr style="border-bottom:1px solid #e8e5dd">
+<td style="padding:13px 20px;font-weight:600;background:#f8f7f4">Mail Forwarding</td>
+<td style="padding:13px 20px;text-align:center"><span style="color:#1b3a2d">✓</span> Domestic &amp; international forwarding available</td>
+</tr>
+<tr style="border-bottom:1px solid #e8e5dd">
+<td style="padding:13px 20px;font-weight:600;background:#f8f7f4">Registered Agent Included</td>
+<td style="padding:13px 20px;text-align:center"><span style="color:#1b3a2d">✓</span> Accepts legal &amp; state documents on your behalf</td>
+</tr>
+<tr style="border-bottom:1px solid #e8e5dd">
+<td style="padding:13px 20px;font-weight:600;background:#f8f7f4">State Options</td>
+<td style="padding:13px 20px;text-align:center">Wyoming, Delaware, Florida, New Mexico &amp; more</td>
+</tr>
+<tr style="border-bottom:1px solid #e8e5dd">
+<td style="padding:13px 20px;font-weight:600;background:#f8f7f4">Business Registration Use</td>
+<td style="padding:13px 20px;text-align:center"><span style="color:#1b3a2d">✓</span> Accepted for LLC &amp; EIN filings</td>
+</tr>
+<tr>
+<td style="padding:13px 20px;font-weight:600;background:#f8f7f4">Banking Accepted</td>
+<td style="padding:13px 20px;text-align:center"><span style="color:#1b3a2d">✓</span> Accepted by Mercury, Relay, and most US banks</td>
+</tr>
+</tbody>
+</table>
+</div>
+
+<h3>How It Works</h3>
+<ol>
+  <li><strong>Address Assignment:</strong> We assign you a real US commercial street address with a unique suite number in your chosen state — ready to use on all official documents.</li>
+  <li><strong>USPS Form 1583:</strong> We guide you through the notarized USPS Form 1583 (required for mail receiving authorization), which can be completed online with a digital notary.</li>
+  <li><strong>Ongoing Mail Handling:</strong> All mail received at your address is scanned, and you're notified instantly. You can request forwarding, content scanning, or secure shredding from your dashboard.</li>
+</ol>
+
+<p style="margin-top:24px;padding:16px 20px;background:#f0faf5;border-left:4px solid #1b3a2d;border-radius:0 8px 8px 0;font-size:14px;color:#1b3a2d"><strong>Important:</strong> A virtual address is different from a registered agent address. Your registered agent receives legal service of process, while your virtual address serves as your business mailing address. We recommend having both — and our packages can bundle them together for convenience.</p>`,
     icon: "MapPin",
     image: "/images/services/virtual-address.jpg",
     startingPrice: 149,
@@ -500,17 +799,75 @@ const servicesData = [
     slug: "business-banking",
     name: "Business Bank Account",
     shortDesc: "Open a US business bank account remotely. No US visit required. Works for international LLC owners.",
-    metaTitle: "US Business Bank Account for Non-Residents | Remote Account Opening | LLCPad",
-    metaDescription: "Open a US business bank account without visiting America. Partner banks welcome international LLC owners. Debit card, online banking, wire transfers. Start accepting US payments.",
-    description: `<p>Opening a US business bank account is essential for your LLC. We partner with banks that welcome international business owners and offer remote account opening.</p>
+    metaTitle: "US Business Bank Account for Non-Residents | LLCPad",
+    metaDescription: "Open a US business bank account remotely as a non-resident. Mercury, Relay, Wise compared. No SSN required. Apply with our guidance today.",
+    description: `<p>A <strong>US business bank account</strong> is essential for operating your LLC — you need it to receive payments, pay expenses, and maintain the legal separation between personal and business finances. As a <strong>non-US resident</strong>, opening a bank account can be challenging, but several fintech banks now offer <strong>remote account opening</strong> without requiring an SSN or a US visit. Our service guides you through the entire process and ensures your application is approved.</p>
 
-<h3>Why You Need a US Bank Account</h3>
+<h3>Why You Need a US Business Bank Account</h3>
 <ul>
-  <li><strong>Accept USD Payments:</strong> Receive payments from US customers directly.</li>
-  <li><strong>Amazon Disbursements:</strong> Required for Amazon seller payouts.</li>
-  <li><strong>Payment Processors:</strong> Connect Stripe, PayPal, and other payment platforms.</li>
-  <li><strong>Build Business Credit:</strong> Establish US business credit history.</li>
-</ul>`,
+<li><strong>Receive US Payments:</strong> Accept ACH transfers, wire payments, and Stripe/PayPal payouts directly into a US-based business account with a routing and account number.</li>
+<li><strong>Maintain LLC Protection:</strong> Mixing personal and business funds can pierce your LLC's liability protection. A dedicated business account keeps finances properly separated.</li>
+<li><strong>Payment Processor Requirement:</strong> Stripe, PayPal, and other US payment processors require a US bank account to deposit your funds.</li>
+<li><strong>Build US Financial History:</strong> A well-maintained US bank account establishes financial credibility for future credit, loans, and business partnerships.</li>
+</ul>
+
+<div style="overflow-x:auto;margin:32px 0;padding-top:20px">
+<table style="width:100%;border-collapse:separate;border-spacing:0;border-radius:12px;font-size:15px;border:1px solid #e8e5dd">
+<thead><tr style="background:#1b3a2d;color:#faf8f4">
+<th style="padding:14px 20px;text-align:left;font-weight:700;text-transform:uppercase;font-size:12px;letter-spacing:1px">Feature</th>
+<th style="padding:14px 20px;text-align:center;font-weight:700;text-transform:uppercase;font-size:12px;letter-spacing:1px;position:relative"><span style="position:absolute;top:-14px;left:50%;transform:translateX(-50%);background:#e84c1e;color:#fff;font-size:10px;padding:2px 10px;border-radius:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;white-space:nowrap">Recommended</span>Mercury</th>
+<th style="padding:14px 20px;text-align:center;font-weight:700;text-transform:uppercase;font-size:12px;letter-spacing:1px">Relay</th>
+<th style="padding:14px 20px;text-align:center;font-weight:700;text-transform:uppercase;font-size:12px;letter-spacing:1px">Wise Business</th>
+</tr></thead>
+<tbody>
+<tr style="border-bottom:1px solid #e8e5dd">
+<td style="padding:13px 20px;font-weight:600;background:#f8f7f4">Minimum Deposit</td>
+<td style="padding:13px 20px;text-align:center;background:#f0faf5;color:#1b3a2d;font-weight:700">$0</td>
+<td style="padding:13px 20px;text-align:center">$0</td>
+<td style="padding:13px 20px;text-align:center">$0</td>
+</tr>
+<tr style="border-bottom:1px solid #e8e5dd">
+<td style="padding:13px 20px;font-weight:600;background:#f8f7f4">Monthly Fee</td>
+<td style="padding:13px 20px;text-align:center;background:#f0faf5;color:#1b3a2d;font-weight:700">$0</td>
+<td style="padding:13px 20px;text-align:center">$0</td>
+<td style="padding:13px 20px;text-align:center">$0</td>
+</tr>
+<tr style="border-bottom:1px solid #e8e5dd">
+<td style="padding:13px 20px;font-weight:600;background:#f8f7f4">International Transfers</td>
+<td style="padding:13px 20px;text-align:center;background:#f0faf5;color:#1b3a2d;font-weight:700">Domestic wires + ACH (use Wise for international)</td>
+<td style="padding:13px 20px;text-align:center">Domestic ACH + wires</td>
+<td style="padding:13px 20px;text-align:center;font-weight:600">Best rates — multi-currency native</td>
+</tr>
+<tr style="border-bottom:1px solid #e8e5dd">
+<td style="padding:13px 20px;font-weight:600;background:#f8f7f4">Debit Card</td>
+<td style="padding:13px 20px;text-align:center;background:#f0faf5;color:#1b3a2d;font-weight:700"><span style="color:#1b3a2d">✓</span> Virtual + Physical</td>
+<td style="padding:13px 20px;text-align:center"><span style="color:#1b3a2d">✓</span> Virtual + Physical</td>
+<td style="padding:13px 20px;text-align:center"><span style="color:#1b3a2d">✓</span> Virtual + Physical</td>
+</tr>
+<tr style="border-bottom:1px solid #e8e5dd">
+<td style="padding:13px 20px;font-weight:600;background:#f8f7f4">Non-Resident Friendly</td>
+<td style="padding:13px 20px;text-align:center;background:#f0faf5;color:#1b3a2d;font-weight:700"><span style="color:#1b3a2d">✓</span> Most popular for non-residents</td>
+<td style="padding:13px 20px;text-align:center"><span style="color:#1b3a2d">✓</span> Accepts non-residents</td>
+<td style="padding:13px 20px;text-align:center"><span style="color:#1b3a2d">✓</span> Accepts non-residents</td>
+</tr>
+<tr>
+<td style="padding:13px 20px;font-weight:600;background:#f8f7f4">Best For</td>
+<td style="padding:13px 20px;text-align:center;background:#f0faf5;color:#1b3a2d;font-weight:700">Primary US business banking</td>
+<td style="padding:13px 20px;text-align:center">Businesses needing multiple sub-accounts</td>
+<td style="padding:13px 20px;text-align:center">International payments and multi-currency</td>
+</tr>
+</tbody>
+</table>
+</div>
+
+<h3>How It Works</h3>
+<ol>
+<li><strong>Gather Your Documents:</strong> You will need your EIN letter, Articles of Organization, Operating Agreement, passport, and proof of address. We provide a checklist and review your documents before submission.</li>
+<li><strong>We Guide Your Application:</strong> Follow our step-by-step instructions to submit your application to your chosen bank. We help you answer business verification questions correctly to maximize approval chances.</li>
+<li><strong>Account Setup and Integration:</strong> Once approved, we help you configure your account, order debit cards, and connect it to payment processors like Stripe and PayPal.</li>
+</ol>
+
+<p style="margin-top:24px;padding:16px 20px;background:#f0faf5;border-left:4px solid #1b3a2d;border-radius:0 8px 8px 0;font-size:14px;color:#1b3a2d"><strong>Important:</strong> Many non-resident LLC owners use Mercury as their primary US bank account alongside Wise for international transfers. Both can be opened 100% remotely. Approval is not guaranteed — having proper LLC formation documents and a clear business description significantly improves your chances.</p>`,
     icon: "Landmark",
     image: "/images/services/business-banking.jpg",
     startingPrice: 199,
@@ -549,16 +906,78 @@ const servicesData = [
     slug: "annual-report",
     name: "Annual Report Filing",
     shortDesc: "Stay compliant with state annual report requirements. We file on time so your LLC stays in good standing.",
-    metaTitle: "LLC Annual Report Filing Service | Stay Compliant | LLCPad",
-    metaDescription: "Never miss an LLC deadline again. We handle annual reports and state filings. Keep your LLC in good standing. Avoid penalties and dissolution.",
-    description: `<p>Most states require LLCs to file an annual report to maintain good standing. We handle the entire filing process so you never miss a deadline.</p>
+    metaTitle: "LLC Annual Report Filing Service | LLCPad",
+    metaDescription: "File your LLC annual report on time and stay compliant. LLCPad handles annual reports for non-US residents in all 50 states. Get started today.",
+    description: `<p>Every US LLC must file an <strong>annual report</strong> (or equivalent periodic report) with its state of formation to remain in <strong>good standing</strong>. Missing this filing can lead to <strong>administrative dissolution</strong>, late fees, and loss of liability protection. LLCPad handles the entire annual report process so international business owners can stay compliant without worrying about state deadlines.</p>
 
-<h3>Why Annual Reports Matter</h3>
+<h3>Why You Need Annual Report Filing</h3>
 <ul>
-  <li><strong>Maintain Good Standing:</strong> Required to keep your LLC active and compliant.</li>
-  <li><strong>Avoid Penalties:</strong> Late filings result in fees and potential dissolution.</li>
-  <li><strong>Update State Records:</strong> Keep your registered agent and address current.</li>
-</ul>`,
+  <li><strong>Maintain Good Standing:</strong> States require annual or biennial reports to confirm your LLC's information is current. Failing to file can result in your LLC being involuntarily dissolved.</li>
+  <li><strong>Avoid Late Penalties:</strong> Many states impose late fees ranging from $50 to $200 on top of the standard filing fee. California charges an additional penalty for late franchise tax payments.</li>
+  <li><strong>Preserve Liability Protection:</strong> An LLC that loses good standing may lose the personal liability shield that protects its members' personal assets.</li>
+  <li><strong>Keep Banking &amp; Contracts Active:</strong> Banks and business partners often verify good standing status. A lapsed report can freeze your business bank account or void contractual agreements.</li>
+</ul>
+
+<div style="overflow-x:auto;margin:32px 0;padding-top:20px">
+<table style="width:100%;border-collapse:separate;border-spacing:0;border-radius:12px;font-size:15px;border:1px solid #e8e5dd">
+<thead><tr style="background:#1b3a2d;color:#faf8f4">
+<th style="padding:14px 20px;text-align:left;font-weight:700;text-transform:uppercase;font-size:12px;letter-spacing:1px">State</th>
+<th style="padding:14px 20px;text-align:center;font-weight:700;text-transform:uppercase;font-size:12px;letter-spacing:1px;position:relative"><span style="position:absolute;top:-14px;left:50%;transform:translateX(-50%);background:#e84c1e;color:#fff;font-size:10px;padding:2px 10px;border-radius:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;white-space:nowrap">Recommended</span>Wyoming</th>
+<th style="padding:14px 20px;text-align:center;font-weight:700;text-transform:uppercase;font-size:12px;letter-spacing:1px">Delaware</th>
+<th style="padding:14px 20px;text-align:center;font-weight:700;text-transform:uppercase;font-size:12px;letter-spacing:1px">New Mexico</th>
+<th style="padding:14px 20px;text-align:center;font-weight:700;text-transform:uppercase;font-size:12px;letter-spacing:1px">Florida</th>
+<th style="padding:14px 20px;text-align:center;font-weight:700;text-transform:uppercase;font-size:12px;letter-spacing:1px">Texas</th>
+<th style="padding:14px 20px;text-align:center;font-weight:700;text-transform:uppercase;font-size:12px;letter-spacing:1px">California</th>
+</tr></thead>
+<tbody>
+<tr style="border-bottom:1px solid #e8e5dd">
+<td style="padding:13px 20px;font-weight:600;background:#f8f7f4">Annual Fee</td>
+<td style="padding:13px 20px;text-align:center;background:#f0faf5;color:#1b3a2d;font-weight:700">$60/yr</td>
+<td style="padding:13px 20px;text-align:center">$300/yr</td>
+<td style="padding:13px 20px;text-align:center">$0</td>
+<td style="padding:13px 20px;text-align:center">$138.75/yr</td>
+<td style="padding:13px 20px;text-align:center">$0</td>
+<td style="padding:13px 20px;text-align:center">$800/yr</td>
+</tr>
+<tr style="border-bottom:1px solid #e8e5dd">
+<td style="padding:13px 20px;font-weight:600;background:#f8f7f4">Fee Type</td>
+<td style="padding:13px 20px;text-align:center;background:#f0faf5;color:#1b3a2d;font-weight:700">Annual Report</td>
+<td style="padding:13px 20px;text-align:center">Franchise Tax</td>
+<td style="padding:13px 20px;text-align:center">No Report</td>
+<td style="padding:13px 20px;text-align:center">Annual Report</td>
+<td style="padding:13px 20px;text-align:center">No Fee Report</td>
+<td style="padding:13px 20px;text-align:center">Franchise Tax</td>
+</tr>
+<tr style="border-bottom:1px solid #e8e5dd">
+<td style="padding:13px 20px;font-weight:600;background:#f8f7f4">Due Date</td>
+<td style="padding:13px 20px;text-align:center;background:#f0faf5;color:#1b3a2d;font-weight:700">1st day of anniv. month</td>
+<td style="padding:13px 20px;text-align:center">June 1</td>
+<td style="padding:13px 20px;text-align:center">N/A</td>
+<td style="padding:13px 20px;text-align:center">May 1</td>
+<td style="padding:13px 20px;text-align:center">May 15</td>
+<td style="padding:13px 20px;text-align:center">April 15</td>
+</tr>
+<tr>
+<td style="padding:13px 20px;font-weight:600;background:#f8f7f4">Late Penalty</td>
+<td style="padding:13px 20px;text-align:center;background:#f0faf5;color:#1b3a2d;font-weight:700">$50 or dissolution</td>
+<td style="padding:13px 20px;text-align:center">$200 + 1.5%/mo</td>
+<td style="padding:13px 20px;text-align:center">N/A</td>
+<td style="padding:13px 20px;text-align:center">$400 supplement</td>
+<td style="padding:13px 20px;text-align:center">Forfeiture</td>
+<td style="padding:13px 20px;text-align:center">$250 penalty</td>
+</tr>
+</tbody>
+</table>
+</div>
+
+<h3>How It Works</h3>
+<ol>
+  <li><strong>Share Your LLC Details:</strong> Provide your LLC name, state of formation, and current registered agent information through our secure portal.</li>
+  <li><strong>We Prepare &amp; File:</strong> Our compliance team prepares your annual report with accurate information and files it directly with the Secretary of State before the deadline.</li>
+  <li><strong>Receive Confirmation:</strong> You get a filed copy of the annual report and confirmation that your LLC remains in good standing.</li>
+</ol>
+
+<p style="margin-top:24px;padding:16px 20px;background:#f0faf5;border-left:4px solid #1b3a2d;border-radius:0 8px 8px 0;font-size:14px;color:#1b3a2d"><strong>Important:</strong> Annual report deadlines vary by state and are strictly enforced. If your LLC misses its filing window, the state may administratively dissolve your company — requiring costly reinstatement. We recommend setting up annual filing reminders at least 60 days before your due date.</p>`,
     icon: "FileCheck",
     image: "/images/services/annual-report.jpg",
     startingPrice: 75,
@@ -597,17 +1016,68 @@ const servicesData = [
     slug: "brand-registry",
     name: "Amazon Brand Registry",
     shortDesc: "Enroll in Amazon Brand Registry. Protect your brand, access A+ Content, and unlock Sponsored Brands advertising.",
-    metaTitle: "Amazon Brand Registry Service | Enroll & Protect Your Brand | LLCPad",
-    metaDescription: "Enroll in Amazon Brand Registry with expert assistance. Access A+ Content, Brand Analytics, and protection tools. Trademark guidance included. Protect your Amazon brand today.",
-    description: `<p>Amazon Brand Registry is essential for protecting your brand on Amazon and unlocking powerful selling tools. We help you enroll quickly and correctly.</p>
+    metaTitle: "Amazon Brand Registry Enrollment | LLCPad",
+    metaDescription: "Enroll in Amazon Brand Registry to protect your brand and unlock A+ Content, Brand Analytics, and more. Non-US sellers welcome. Start with LLCPad.",
+    description: `<p><strong>Amazon Brand Registry</strong> gives you powerful tools to protect your brand, enhance your product listings, and gain insights into customer behavior. For international sellers building a <strong>private label brand</strong> on Amazon.com, Brand Registry is essential — it unlocks features that directly increase conversion rates and defend your listings from hijackers and counterfeiters.</p>
 
-<h3>Brand Registry Benefits</h3>
+<h3>Why You Need Brand Registry</h3>
 <ul>
-  <li><strong>Brand Protection:</strong> Report and remove counterfeit listings.</li>
-  <li><strong>A+ Content:</strong> Create enhanced product descriptions with images and comparison charts.</li>
-  <li><strong>Sponsored Brands:</strong> Run headline search ads featuring your brand logo.</li>
-  <li><strong>Brand Analytics:</strong> Access detailed customer search and purchase data.</li>
-</ul>`,
+  <li><strong>Listing Protection:</strong> Prevent unauthorized sellers from modifying your product titles, images, and descriptions — a common problem for successful brands.</li>
+  <li><strong>A+ Content Access:</strong> Create rich, image-heavy product descriptions that can boost conversion rates by 5–10% compared to plain-text listings.</li>
+  <li><strong>Brand Analytics:</strong> Access search term data, market basket analysis, and repeat purchase behavior to make data-driven decisions.</li>
+  <li><strong>Counterfeit Prevention:</strong> Use tools like Transparency and Project Zero to proactively remove counterfeit products from the marketplace.</li>
+</ul>
+
+<div style="overflow-x:auto;margin:32px 0;padding-top:20px">
+<table style="width:100%;border-collapse:separate;border-spacing:0;border-radius:12px;font-size:15px;border:1px solid #e8e5dd">
+<thead><tr style="background:#1b3a2d;color:#faf8f4">
+<th style="padding:14px 20px;text-align:left;font-weight:700;text-transform:uppercase;font-size:12px;letter-spacing:1px">Benefit</th>
+<th style="padding:14px 20px;text-align:center;font-weight:700;text-transform:uppercase;font-size:12px;letter-spacing:1px">Access</th>
+<th style="padding:14px 20px;text-align:center;font-weight:700;text-transform:uppercase;font-size:12px;letter-spacing:1px">Cost</th>
+</tr></thead>
+<tbody>
+<tr style="border-bottom:1px solid #e8e5dd">
+<td style="padding:13px 20px;font-weight:600;background:#f8f7f4">A+ Content (Enhanced Brand Content)</td>
+<td style="padding:13px 20px;text-align:center"><span style="color:#1b3a2d">✓</span> Included</td>
+<td style="padding:13px 20px;text-align:center;color:#1b3a2d;font-weight:700">Free</td>
+</tr>
+<tr style="border-bottom:1px solid #e8e5dd">
+<td style="padding:13px 20px;font-weight:600;background:#f8f7f4">Brand Analytics</td>
+<td style="padding:13px 20px;text-align:center"><span style="color:#1b3a2d">✓</span> Included</td>
+<td style="padding:13px 20px;text-align:center;color:#1b3a2d;font-weight:700">Free</td>
+</tr>
+<tr style="border-bottom:1px solid #e8e5dd">
+<td style="padding:13px 20px;font-weight:600;background:#f8f7f4">Sponsored Brands Ads</td>
+<td style="padding:13px 20px;text-align:center"><span style="color:#1b3a2d">✓</span> Included</td>
+<td style="padding:13px 20px;text-align:center">Pay-per-click</td>
+</tr>
+<tr style="border-bottom:1px solid #e8e5dd">
+<td style="padding:13px 20px;font-weight:600;background:#f8f7f4">Transparency (Anti-Counterfeit)</td>
+<td style="padding:13px 20px;text-align:center"><span style="color:#1b3a2d">✓</span> Included</td>
+<td style="padding:13px 20px;text-align:center">Per-unit label cost</td>
+</tr>
+<tr style="border-bottom:1px solid #e8e5dd">
+<td style="padding:13px 20px;font-weight:600;background:#f8f7f4">Project Zero (Self-Service Removal)</td>
+<td style="padding:13px 20px;text-align:center"><span style="color:#1b3a2d">✓</span> By invitation</td>
+<td style="padding:13px 20px;text-align:center;color:#1b3a2d;font-weight:700">Free</td>
+</tr>
+<tr>
+<td style="padding:13px 20px;font-weight:600;background:#f8f7f4">Virtual Bundles</td>
+<td style="padding:13px 20px;text-align:center"><span style="color:#1b3a2d">✓</span> Included</td>
+<td style="padding:13px 20px;text-align:center;color:#1b3a2d;font-weight:700">Free</td>
+</tr>
+</tbody>
+</table>
+</div>
+
+<h3>How It Works</h3>
+<ol>
+  <li><strong>Trademark Verification:</strong> We verify you have an active or pending US trademark (required by Amazon). If you don't have one, we can help you file.</li>
+  <li><strong>Application Submission:</strong> We complete the Brand Registry application through Amazon's portal, linking your trademark to your Seller Central account.</li>
+  <li><strong>Activation &amp; Setup:</strong> Once approved (typically 2–4 weeks), we help you activate A+ Content, Brand Analytics, and Sponsored Brands on your account.</li>
+</ol>
+
+<p style="margin-top:24px;padding:16px 20px;background:#f0faf5;border-left:4px solid #1b3a2d;border-radius:0 8px 8px 0;font-size:14px;color:#1b3a2d"><strong>Important:</strong> Brand Registry requires a registered or pending trademark with the USPTO. The trademark must match the brand name on your product packaging. We recommend filing your trademark early, as the process can take 8–12 months for full registration.</p>`,
     icon: "BadgeCheck",
     image: "/images/services/brand-registry.jpg",
     startingPrice: 199,
@@ -646,17 +1116,75 @@ const servicesData = [
     slug: "bookkeeping",
     name: "Bookkeeping Services",
     shortDesc: "Professional bookkeeping for your US LLC. Monthly statements, expense tracking, and tax-ready financials.",
-    metaTitle: "Bookkeeping Services for US LLC | Tax-Ready Financials | LLCPad",
-    metaDescription: "Professional bookkeeping for your US LLC. Monthly statements, expense tracking, and tax-ready financials. Keep your business finances organized.",
-    description: `<p>Keep your LLC finances organized with professional bookkeeping. We track income, expenses, and prepare financial statements so you're always tax-ready.</p>
+    metaTitle: "LLC Bookkeeping Services for Non-Residents | LLCPad",
+    metaDescription: "Professional bookkeeping for US LLCs owned by non-residents. Monthly, quarterly, or annual plans. Stay tax-ready year-round. Get started.",
+    description: `<p>Accurate <strong>bookkeeping</strong> is the foundation of a healthy US LLC. Whether you run an e-commerce store, offer freelance services, or operate a SaaS business, our <strong>bookkeeping service for non-resident LLC owners</strong> keeps your financial records organized, IRS-compliant, and ready for tax season — so you never scramble to find receipts or reconcile transactions at the last minute.</p>
 
-<h3>What's Included</h3>
+<h3>Why You Need Professional Bookkeeping</h3>
 <ul>
-  <li><strong>Transaction Recording:</strong> Categorize all income and expenses.</li>
-  <li><strong>Monthly Statements:</strong> Profit & Loss and Balance Sheet.</li>
-  <li><strong>Bank Reconciliation:</strong> Match bank transactions with records.</li>
-  <li><strong>Tax Preparation:</strong> Year-end financials ready for tax filing.</li>
-</ul>`,
+<li><strong>IRS Compliance:</strong> The IRS requires all LLCs to maintain adequate books and records. Without proper bookkeeping, you risk penalties during audits and cannot substantiate deductions.</li>
+<li><strong>Tax-Ready Financials:</strong> When tax season arrives, organized books mean faster filing, lower preparation costs, and fewer errors on your returns.</li>
+<li><strong>Business Decisions:</strong> Clear financial data helps you understand profitability, manage cash flow, and make informed decisions about scaling your business.</li>
+<li><strong>Bank and Investor Requirements:</strong> US banks, payment processors, and potential investors expect professional financial records. Proper bookkeeping strengthens your credibility.</li>
+</ul>
+
+<div style="overflow-x:auto;margin:32px 0;padding-top:20px">
+<table style="width:100%;border-collapse:separate;border-spacing:0;border-radius:12px;font-size:15px;border:1px solid #e8e5dd">
+<thead><tr style="background:#1b3a2d;color:#faf8f4">
+<th style="padding:14px 20px;text-align:left;font-weight:700;text-transform:uppercase;font-size:12px;letter-spacing:1px">Feature</th>
+<th style="padding:14px 20px;text-align:center;font-weight:700;text-transform:uppercase;font-size:12px;letter-spacing:1px;position:relative"><span style="position:absolute;top:-14px;left:50%;transform:translateX(-50%);background:#e84c1e;color:#fff;font-size:10px;padding:2px 10px;border-radius:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;white-space:nowrap">Recommended</span>Monthly</th>
+<th style="padding:14px 20px;text-align:center;font-weight:700;text-transform:uppercase;font-size:12px;letter-spacing:1px">Quarterly</th>
+<th style="padding:14px 20px;text-align:center;font-weight:700;text-transform:uppercase;font-size:12px;letter-spacing:1px">Annual</th>
+</tr></thead>
+<tbody>
+<tr style="border-bottom:1px solid #e8e5dd">
+<td style="padding:13px 20px;font-weight:600;background:#f8f7f4">Transaction Categorization</td>
+<td style="padding:13px 20px;text-align:center;background:#f0faf5;color:#1b3a2d;font-weight:700">Every month</td>
+<td style="padding:13px 20px;text-align:center">Every 3 months</td>
+<td style="padding:13px 20px;text-align:center">Once at year-end</td>
+</tr>
+<tr style="border-bottom:1px solid #e8e5dd">
+<td style="padding:13px 20px;font-weight:600;background:#f8f7f4">Bank Reconciliation</td>
+<td style="padding:13px 20px;text-align:center;background:#f0faf5;color:#1b3a2d;font-weight:700">Monthly</td>
+<td style="padding:13px 20px;text-align:center">Quarterly</td>
+<td style="padding:13px 20px;text-align:center">Annual</td>
+</tr>
+<tr style="border-bottom:1px solid #e8e5dd">
+<td style="padding:13px 20px;font-weight:600;background:#f8f7f4">Financial Reports</td>
+<td style="padding:13px 20px;text-align:center;background:#f0faf5;color:#1b3a2d;font-weight:700">Monthly P&L + Balance Sheet</td>
+<td style="padding:13px 20px;text-align:center">Quarterly summaries</td>
+<td style="padding:13px 20px;text-align:center">Year-end only</td>
+</tr>
+<tr style="border-bottom:1px solid #e8e5dd">
+<td style="padding:13px 20px;font-weight:600;background:#f8f7f4">Best For</td>
+<td style="padding:13px 20px;text-align:center;background:#f0faf5;color:#1b3a2d;font-weight:700">Active businesses, 50+ transactions/month</td>
+<td style="padding:13px 20px;text-align:center">Moderate activity, 20–50 transactions/month</td>
+<td style="padding:13px 20px;text-align:center">Low activity, under 20 transactions/month</td>
+</tr>
+<tr style="border-bottom:1px solid #e8e5dd">
+<td style="padding:13px 20px;font-weight:600;background:#f8f7f4">Tax Readiness</td>
+<td style="padding:13px 20px;text-align:center;background:#f0faf5;color:#1b3a2d;font-weight:700">Always ready — no year-end rush</td>
+<td style="padding:13px 20px;text-align:center">Mostly ready — minor catch-up needed</td>
+<td style="padding:13px 20px;text-align:center">Requires significant year-end work</td>
+</tr>
+<tr>
+<td style="padding:13px 20px;font-weight:600;background:#f8f7f4">Cost Efficiency</td>
+<td style="padding:13px 20px;text-align:center;background:#f0faf5;color:#1b3a2d;font-weight:700">Highest value — prevents costly errors</td>
+<td style="padding:13px 20px;text-align:center">Good balance of cost and coverage</td>
+<td style="padding:13px 20px;text-align:center">Lowest upfront cost</td>
+</tr>
+</tbody>
+</table>
+</div>
+
+<h3>How It Works</h3>
+<ol>
+<li><strong>Connect Your Accounts:</strong> Grant read-only access to your US business bank account and payment processors. We securely import your transactions for categorization.</li>
+<li><strong>We Organize Your Books:</strong> Our team categorizes every transaction, reconciles bank statements, and maintains your general ledger using industry-standard accounting practices.</li>
+<li><strong>Receive Reports and Tax Packages:</strong> Get clear financial reports on your chosen schedule. At year-end, we deliver a complete tax-ready package to your accountant or our tax filing team.</li>
+</ol>
+
+<p style="margin-top:24px;padding:16px 20px;background:#f0faf5;border-left:4px solid #1b3a2d;border-radius:0 8px 8px 0;font-size:14px;color:#1b3a2d"><strong>Important:</strong> Mixing personal and business expenses is one of the most common mistakes for non-resident LLC owners. Always use a dedicated US business bank account for LLC transactions. This makes bookkeeping more accurate and protects your limited liability status.</p>`,
     icon: "Calculator",
     image: "/images/services/bookkeeping.jpg",
     startingPrice: 149,
@@ -704,26 +1232,68 @@ const servicesData = [
     slug: "itin-application",
     name: "ITIN Application",
     shortDesc: "Get your Individual Taxpayer Identification Number (ITIN) for US tax filing. Required for foreign nationals without SSN. CAA-assisted processing.",
-    metaTitle: "ITIN Application Service | Get Your US Tax ID Number | LLCPad",
-    metaDescription: "Get your Individual Taxpayer Identification Number (ITIN) for US tax filing. CAA-assisted processing - no need to mail your original passport. Fast processing for foreign nationals.",
-    description: `<p>An Individual Taxpayer Identification Number (ITIN) is a tax processing number issued by the IRS for individuals who need to file US taxes but are not eligible for a Social Security Number.</p>
+    metaTitle: "ITIN Application for Non-US Residents | LLCPad",
+    metaDescription: "Apply for a US ITIN (Individual Taxpayer ID) without visiting the US. Required for tax filing & treaty benefits. CAA-assisted processing for non-residents.",
+    description: `<p>An <strong>ITIN (Individual Taxpayer Identification Number)</strong> is a tax processing number issued by the IRS to individuals who are required to file US taxes but are <strong>not eligible for a Social Security Number</strong>. If you're a non-US resident who owns a US LLC, an ITIN allows you to file personal tax returns, claim tax treaty benefits, and meet withholding requirements.</p>
 
-<h3>Who Needs an ITIN?</h3>
+<h3>Why You Need an ITIN</h3>
 <ul>
-  <li><strong>Foreign LLC Owners:</strong> Required if you receive US-source income and need to file taxes.</li>
-  <li><strong>Tax Treaty Benefits:</strong> Claim reduced withholding rates under US tax treaties.</li>
-  <li><strong>Bank Account Requirements:</strong> Some banks require ITIN for account opening.</li>
-  <li><strong>Real Estate Transactions:</strong> Required for property purchases and rental income.</li>
+  <li><strong>US Tax Filing:</strong> Non-resident LLC owners who earn US-sourced income must file a US tax return — and you need either an SSN or ITIN to do so.</li>
+  <li><strong>Tax Treaty Benefits:</strong> An ITIN lets you claim reduced withholding rates under the US tax treaty with your home country (available for India, Bangladesh, Pakistan, and many others).</li>
+  <li><strong>Avoid 30% Withholding:</strong> Without an ITIN, payment processors and banks may withhold 30% of your US income for backup withholding — an ITIN can reduce or eliminate this.</li>
+  <li><strong>Build US Financial History:</strong> Some US financial institutions accept an ITIN for credit applications, helping you build a US financial footprint over time.</li>
 </ul>
 
-<h3>ITIN vs EIN</h3>
-<ul>
-  <li><strong>EIN:</strong> For your business entity (LLC). Required for business banking and Amazon.</li>
-  <li><strong>ITIN:</strong> For you personally as a foreign individual. Required for personal tax filing.</li>
-</ul>
+<div style="overflow-x:auto;margin:32px 0;padding-top:20px">
+<table style="width:100%;border-collapse:separate;border-spacing:0;border-radius:12px;font-size:15px;border:1px solid #e8e5dd">
+<thead><tr style="background:#1b3a2d;color:#faf8f4">
+<th style="padding:14px 20px;text-align:left;font-weight:700;text-transform:uppercase;font-size:12px;letter-spacing:1px">Feature</th>
+<th style="padding:14px 20px;text-align:center;font-weight:700;text-transform:uppercase;font-size:12px;letter-spacing:1px;position:relative"><span style="position:absolute;top:-14px;left:50%;transform:translateX(-50%);background:#e84c1e;color:#fff;font-size:10px;padding:2px 10px;border-radius:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;white-space:nowrap">Recommended</span>ITIN</th>
+<th style="padding:14px 20px;text-align:center;font-weight:700;text-transform:uppercase;font-size:12px;letter-spacing:1px">EIN</th>
+</tr></thead>
+<tbody>
+<tr style="border-bottom:1px solid #e8e5dd">
+<td style="padding:13px 20px;font-weight:600;background:#f8f7f4">Purpose</td>
+<td style="padding:13px 20px;text-align:center;background:#f0faf5;color:#1b3a2d;font-weight:700">Personal tax filing</td>
+<td style="padding:13px 20px;text-align:center">Business tax identification</td>
+</tr>
+<tr style="border-bottom:1px solid #e8e5dd">
+<td style="padding:13px 20px;font-weight:600;background:#f8f7f4">Who Needs It</td>
+<td style="padding:13px 20px;text-align:center;background:#f0faf5;color:#1b3a2d;font-weight:700">Non-resident individuals</td>
+<td style="padding:13px 20px;text-align:center">Businesses &amp; LLCs</td>
+</tr>
+<tr style="border-bottom:1px solid #e8e5dd">
+<td style="padding:13px 20px;font-weight:600;background:#f8f7f4">Format</td>
+<td style="padding:13px 20px;text-align:center;background:#f0faf5;color:#1b3a2d;font-weight:700">9XX-XX-XXXX</td>
+<td style="padding:13px 20px;text-align:center">XX-XXXXXXX</td>
+</tr>
+<tr style="border-bottom:1px solid #e8e5dd">
+<td style="padding:13px 20px;font-weight:600;background:#f8f7f4">Processing Time</td>
+<td style="padding:13px 20px;text-align:center;background:#f0faf5;color:#1b3a2d;font-weight:700">7–11 weeks</td>
+<td style="padding:13px 20px;text-align:center">1–4 weeks</td>
+</tr>
+<tr style="border-bottom:1px solid #e8e5dd">
+<td style="padding:13px 20px;font-weight:600;background:#f8f7f4">Required Documents</td>
+<td style="padding:13px 20px;text-align:center;background:#f0faf5;color:#1b3a2d;font-weight:700">Passport + W-7 form + tax return</td>
+<td style="padding:13px 20px;text-align:center">SS-4 form + LLC docs</td>
+</tr>
+<tr>
+<td style="padding:13px 20px;font-weight:600;background:#f8f7f4">Issued By</td>
+<td style="padding:13px 20px;text-align:center;background:#f0faf5;color:#1b3a2d;font-weight:700">IRS</td>
+<td style="padding:13px 20px;text-align:center">IRS</td>
+</tr>
+</tbody>
+</table>
+</div>
 
-<h3>Our CAA-Assisted Process</h3>
-<p>We work with IRS-authorized Certifying Acceptance Agents (CAAs) who can verify your identity documents without sending original passports to the IRS.</p>`,
+<h3>How It Works</h3>
+<ol>
+  <li><strong>Gather Your Documents:</strong> You need a valid passport (or certified copies) and the completed IRS Form W-7 — our team prepares the W-7 for you based on your information.</li>
+  <li><strong>CAA-Assisted Processing:</strong> We work with IRS-authorized Certifying Acceptance Agents (CAAs) who can certify your passport copies, so you don't need to mail your original passport to the IRS.</li>
+  <li><strong>Receive Your ITIN:</strong> The IRS mails your ITIN assignment letter (CP 565) once processing is complete — typically 7 to 11 weeks after submission.</li>
+</ol>
+
+<p style="margin-top:24px;padding:16px 20px;background:#f0faf5;border-left:4px solid #1b3a2d;border-radius:0 8px 8px 0;font-size:14px;color:#1b3a2d"><strong>Important:</strong> An ITIN is for tax purposes only — it does not authorize work in the US or affect your immigration status. ITINs must be renewed if not used on a federal tax return for three consecutive years.</p>`,
     icon: "UserCheck",
     image: "/images/services/itin.jpg",
     startingPrice: 299,
@@ -779,20 +1349,63 @@ const servicesData = [
     slug: "dba-filing",
     name: "DBA/Trade Name",
     shortDesc: "Register a DBA (Doing Business As) or trade name for your LLC. Operate under multiple brand names legally.",
-    metaTitle: "DBA Filing Service | Register Your Trade Name | LLCPad",
-    metaDescription: "Register a DBA (Doing Business As) or trade name for your LLC. Operate under multiple brand names legally. Fast filing in all 50 states.",
-    description: `<p>A DBA (Doing Business As), also called a trade name or fictitious business name, allows your LLC to operate under a different name than its legal name.</p>
+    metaTitle: "DBA Filing / Trade Name Registration | LLCPad",
+    metaDescription: "Register a DBA (Doing Business As) for your US LLC. Operate under a different brand name legally. Fast filing for non-US business owners.",
+    description: `<p>A <strong>DBA (Doing Business As)</strong>, also called a trade name or fictitious business name, lets your LLC operate under a <strong>different brand name</strong> without forming a new legal entity. If you want your LLC named "Global Ventures LLC" to sell products under "QuickShip Store," a DBA makes that possible — legally and professionally.</p>
 
-<h3>Why Register a DBA?</h3>
+<h3>Why You Need a DBA</h3>
 <ul>
-  <li><strong>Multiple Brands:</strong> Run multiple businesses or brands under one LLC.</li>
-  <li><strong>Marketing Flexibility:</strong> Use a more marketable name than your legal LLC name.</li>
-  <li><strong>Bank Accounts:</strong> Open bank accounts and accept payments under your DBA name.</li>
-  <li><strong>Professional Image:</strong> Create a distinct brand identity for each business line.</li>
+  <li><strong>Brand Flexibility:</strong> Launch multiple brands, storefronts, or product lines under a single LLC without creating separate legal entities for each.</li>
+  <li><strong>Professional Banking:</strong> Accept payments and open bank accounts in your DBA name, so customers see your brand name — not your LLC's legal name.</li>
+  <li><strong>Legal Compliance:</strong> Most states require you to register a DBA if you conduct business under any name other than your LLC's exact legal name.</li>
+  <li><strong>Cost Efficiency:</strong> Running multiple brands under one LLC with DBAs is far cheaper than forming separate LLCs for each brand.</li>
 </ul>
 
-<h3>DBA vs New LLC</h3>
-<p>A DBA is simpler and cheaper than forming a new LLC. However, it doesn't provide separate liability protection. All DBAs under your LLC share the same liability umbrella.</p>`,
+<div style="overflow-x:auto;margin:32px 0;padding-top:20px">
+<table style="width:100%;border-collapse:separate;border-spacing:0;border-radius:12px;font-size:15px;border:1px solid #e8e5dd">
+<thead><tr style="background:#1b3a2d;color:#faf8f4">
+<th style="padding:14px 20px;text-align:left;font-weight:700;text-transform:uppercase;font-size:12px;letter-spacing:1px">Feature</th>
+<th style="padding:14px 20px;text-align:center;font-weight:700;text-transform:uppercase;font-size:12px;letter-spacing:1px">LLC Legal Name</th>
+<th style="padding:14px 20px;text-align:center;font-weight:700;text-transform:uppercase;font-size:12px;letter-spacing:1px;position:relative"><span style="position:absolute;top:-14px;left:50%;transform:translateX(-50%);background:#e84c1e;color:#fff;font-size:10px;padding:2px 10px;border-radius:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;white-space:nowrap">Recommended</span>DBA Name</th>
+</tr></thead>
+<tbody>
+<tr style="border-bottom:1px solid #e8e5dd">
+<td style="padding:13px 20px;font-weight:600;background:#f8f7f4">Legal Protection</td>
+<td style="padding:13px 20px;text-align:center"><span style="color:#1b3a2d">&#10003;</span> Full LLC protection</td>
+<td style="padding:13px 20px;text-align:center;background:#f0faf5;color:#1b3a2d;font-weight:700"><span style="color:#1b3a2d">&#10003;</span> Inherits LLC protection</td>
+</tr>
+<tr style="border-bottom:1px solid #e8e5dd">
+<td style="padding:13px 20px;font-weight:600;background:#f8f7f4">Filing Cost</td>
+<td style="padding:13px 20px;text-align:center">Included with formation</td>
+<td style="padding:13px 20px;text-align:center;background:#f0faf5;color:#1b3a2d;font-weight:700">$10–$100 (varies by state)</td>
+</tr>
+<tr style="border-bottom:1px solid #e8e5dd">
+<td style="padding:13px 20px;font-weight:600;background:#f8f7f4">Filing Location</td>
+<td style="padding:13px 20px;text-align:center">Secretary of State</td>
+<td style="padding:13px 20px;text-align:center;background:#f0faf5;color:#1b3a2d;font-weight:700">State or county level</td>
+</tr>
+<tr style="border-bottom:1px solid #e8e5dd">
+<td style="padding:13px 20px;font-weight:600;background:#f8f7f4">Brand Flexibility</td>
+<td style="padding:13px 20px;text-align:center"><span style="color:#dc2626">&#10007;</span> One name only</td>
+<td style="padding:13px 20px;text-align:center;background:#f0faf5;color:#1b3a2d;font-weight:700"><span style="color:#1b3a2d">&#10003;</span> Unlimited brand names</td>
+</tr>
+<tr>
+<td style="padding:13px 20px;font-weight:600;background:#f8f7f4">Separate Bank Account</td>
+<td style="padding:13px 20px;text-align:center"><span style="color:#1b3a2d">&#10003;</span> Yes</td>
+<td style="padding:13px 20px;text-align:center;background:#f0faf5;color:#1b3a2d;font-weight:700"><span style="color:#1b3a2d">&#10003;</span> Yes, under DBA name</td>
+</tr>
+</tbody>
+</table>
+</div>
+
+<h3>How It Works</h3>
+<ol>
+  <li><strong>Choose Your Brand Name:</strong> Tell us the trade name you want to operate under — we perform a name availability search in your filing state.</li>
+  <li><strong>We File the DBA:</strong> Our team prepares and submits the DBA registration to the appropriate state or county office, handling any publication requirements.</li>
+  <li><strong>Start Using Your Brand:</strong> Once approved, you receive your DBA certificate — use it to open a branded bank account, accept payments, and market your business.</li>
+</ol>
+
+<p style="margin-top:24px;padding:16px 20px;background:#f0faf5;border-left:4px solid #1b3a2d;border-radius:0 8px 8px 0;font-size:14px;color:#1b3a2d"><strong>Important:</strong> A DBA does not create a new legal entity or provide trademark protection. If you want exclusive rights to your brand name nationwide, consider pairing your DBA with a federal trademark registration.</p>`,
     icon: "Tag",
     image: "/images/services/dba.jpg",
     startingPrice: 99,
@@ -836,23 +1449,62 @@ const servicesData = [
     slug: "operating-agreement",
     name: "Operating Agreement",
     shortDesc: "Custom LLC Operating Agreement drafted for your business. Required by banks and essential for multi-member LLCs.",
-    metaTitle: "LLC Operating Agreement Service | Bank-Ready Documents | LLCPad",
-    metaDescription: "Custom LLC Operating Agreement drafted for your business. Required by banks for account opening. Single-member and multi-member options available.",
-    description: `<p>An Operating Agreement is an internal document that outlines how your LLC will be run, including ownership percentages, profit distribution, and decision-making procedures.</p>
+    metaTitle: "LLC Operating Agreement — Custom Drafted | LLCPad",
+    metaDescription: "Get a custom LLC Operating Agreement for single or multi-member LLCs. Required for banking & legal protection. Drafted for non-US LLC owners.",
+    description: `<p>An <strong>LLC Operating Agreement</strong> is a legal document that defines the ownership structure, management rules, and financial arrangements of your company. While not always required by the state, <strong>US banks will ask for your Operating Agreement</strong> when you open a business account — making it an essential document for every non-US LLC owner.</p>
 
 <h3>Why You Need an Operating Agreement</h3>
 <ul>
-  <li><strong>Bank Requirement:</strong> Most US banks require an Operating Agreement to open a business account.</li>
-  <li><strong>Legal Protection:</strong> Separates personal and business assets, strengthening liability protection.</li>
-  <li><strong>Dispute Prevention:</strong> Clear rules prevent conflicts between members.</li>
-  <li><strong>State Requirements:</strong> Some states legally require LLCs to have an Operating Agreement.</li>
+  <li><strong>Bank Account Requirement:</strong> US banks like Mercury, Relay, and Chase require an Operating Agreement to verify your LLC's ownership before opening an account.</li>
+  <li><strong>Liability Protection:</strong> Without an Operating Agreement, courts may disregard your LLC's liability protection — a concept known as "piercing the corporate veil."</li>
+  <li><strong>Clear Ownership Rules:</strong> Define member percentages, voting rights, and what happens if a member leaves — preventing disputes before they arise.</li>
+  <li><strong>Tax Election Support:</strong> Your Operating Agreement documents how profits and losses are distributed, which is critical for proper tax filing.</li>
 </ul>
 
-<h3>Single vs Multi-Member</h3>
-<ul>
-  <li><strong>Single-Member:</strong> Simpler document establishing your LLC's operating procedures.</li>
-  <li><strong>Multi-Member:</strong> More complex, covering ownership splits, voting rights, buyout procedures, and profit distribution.</li>
-</ul>`,
+<div style="overflow-x:auto;margin:32px 0;padding-top:20px">
+<table style="width:100%;border-collapse:separate;border-spacing:0;border-radius:12px;font-size:15px;border:1px solid #e8e5dd">
+<thead><tr style="background:#1b3a2d;color:#faf8f4">
+<th style="padding:14px 20px;text-align:left;font-weight:700;text-transform:uppercase;font-size:12px;letter-spacing:1px">Feature</th>
+<th style="padding:14px 20px;text-align:center;font-weight:700;text-transform:uppercase;font-size:12px;letter-spacing:1px;position:relative"><span style="position:absolute;top:-14px;left:50%;transform:translateX(-50%);background:#e84c1e;color:#fff;font-size:10px;padding:2px 10px;border-radius:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;white-space:nowrap">Recommended</span>Single-Member</th>
+<th style="padding:14px 20px;text-align:center;font-weight:700;text-transform:uppercase;font-size:12px;letter-spacing:1px">Multi-Member</th>
+</tr></thead>
+<tbody>
+<tr style="border-bottom:1px solid #e8e5dd">
+<td style="padding:13px 20px;font-weight:600;background:#f8f7f4">Management</td>
+<td style="padding:13px 20px;text-align:center;background:#f0faf5;color:#1b3a2d;font-weight:700">Sole owner manages</td>
+<td style="padding:13px 20px;text-align:center">Member or manager-managed</td>
+</tr>
+<tr style="border-bottom:1px solid #e8e5dd">
+<td style="padding:13px 20px;font-weight:600;background:#f8f7f4">Profit Distribution</td>
+<td style="padding:13px 20px;text-align:center;background:#f0faf5;color:#1b3a2d;font-weight:700">100% to single member</td>
+<td style="padding:13px 20px;text-align:center">Per ownership % or custom split</td>
+</tr>
+<tr style="border-bottom:1px solid #e8e5dd">
+<td style="padding:13px 20px;font-weight:600;background:#f8f7f4">Tax Implications</td>
+<td style="padding:13px 20px;text-align:center;background:#f0faf5;color:#1b3a2d;font-weight:700">Disregarded entity (simpler)</td>
+<td style="padding:13px 20px;text-align:center">Partnership tax return (Form 1065)</td>
+</tr>
+<tr style="border-bottom:1px solid #e8e5dd">
+<td style="padding:13px 20px;font-weight:600;background:#f8f7f4">Complexity</td>
+<td style="padding:13px 20px;text-align:center;background:#f0faf5;color:#1b3a2d;font-weight:700">Simple &amp; straightforward</td>
+<td style="padding:13px 20px;text-align:center">Requires detailed provisions</td>
+</tr>
+<tr>
+<td style="padding:13px 20px;font-weight:600;background:#f8f7f4">Required States</td>
+<td style="padding:13px 20px;text-align:center;background:#f0faf5;color:#1b3a2d;font-weight:700" colspan="2">California, Delaware, Maine, Missouri, New York (legally required); all other states strongly recommended</td>
+</tr>
+</tbody>
+</table>
+</div>
+
+<h3>How It Works</h3>
+<ol>
+  <li><strong>Tell Us Your LLC Structure:</strong> Specify whether you have a single-member or multi-member LLC, along with ownership percentages and management preferences.</li>
+  <li><strong>We Draft Your Agreement:</strong> Our team creates a state-compliant Operating Agreement tailored to your LLC's structure, including dissolution and amendment clauses.</li>
+  <li><strong>Review &amp; Sign:</strong> Receive your completed Operating Agreement ready for signing — use it immediately for bank account applications and legal protection.</li>
+</ol>
+
+<p style="margin-top:24px;padding:16px 20px;background:#f0faf5;border-left:4px solid #1b3a2d;border-radius:0 8px 8px 0;font-size:14px;color:#1b3a2d"><strong>Important:</strong> Most non-US entrepreneurs form single-member LLCs, which are treated as "disregarded entities" by the IRS. This means simpler tax filing — but you still need a properly drafted Operating Agreement to prove your LLC's legitimacy to banks and the courts.</p>`,
     icon: "FileText",
     image: "/images/services/operating-agreement.jpg",
     startingPrice: 79,
@@ -904,21 +1556,68 @@ const servicesData = [
     slug: "certificate-good-standing",
     name: "Certificate of Good Standing",
     shortDesc: "Get an official Certificate of Good Standing for your LLC. Required for banking, contracts, and foreign registration.",
-    metaTitle: "Certificate of Good Standing | Official State Document | LLCPad",
-    metaDescription: "Get an official Certificate of Good Standing for your LLC. Required for banking, contracts, and foreign registration. Rush processing available.",
-    description: `<p>A Certificate of Good Standing (also called Certificate of Existence or Certificate of Status) is an official state document confirming your LLC is active and compliant with all state requirements.</p>
+    metaTitle: "Certificate of Good Standing Service | LLCPad",
+    metaDescription: "Get your LLC Certificate of Good Standing fast. Essential for banking, contracts, and foreign qualification. LLCPad serves non-US LLC owners.",
+    description: `<p>A <strong>Certificate of Good Standing</strong> (also called a Certificate of Existence or Certificate of Status) is an official state document confirming that your LLC is <strong>properly registered, compliant with all filings, and authorized to do business</strong>. Banks, government agencies, and business partners frequently require this document. LLCPad obtains your certificate directly from the state so you don't have to navigate unfamiliar government portals.</p>
 
-<h3>When You Need a Certificate of Good Standing</h3>
+<h3>Why You Need a Certificate of Good Standing</h3>
 <ul>
-  <li><strong>Bank Account Opening:</strong> Many banks require a recent Certificate of Good Standing.</li>
-  <li><strong>Business Contracts:</strong> Vendors and partners may require proof your LLC is active.</li>
-  <li><strong>Foreign Registration:</strong> Required when registering your LLC in another state.</li>
-  <li><strong>Loans and Credit:</strong> Lenders verify your LLC status before approving financing.</li>
-  <li><strong>Business Sale:</strong> Buyers verify the LLC is in good standing during due diligence.</li>
+  <li><strong>Open or Maintain Bank Accounts:</strong> US banks routinely request a recent Certificate of Good Standing before opening business accounts or during annual reviews — especially for non-US owned LLCs.</li>
+  <li><strong>Win Contracts &amp; Partnerships:</strong> Many business partners, vendors, and government agencies require proof of good standing before entering into contracts or issuing permits.</li>
+  <li><strong>Foreign Qualification:</strong> If you want to register your LLC to do business in another US state, that state will require a Certificate of Good Standing from your home state.</li>
+  <li><strong>Annual Renewals &amp; Licensing:</strong> Certain business licenses, professional permits, and state registrations require a current good standing certificate for renewal.</li>
 </ul>
 
-<h3>Apostille Service</h3>
-<p>For international use, your Certificate of Good Standing may need an apostille - a form of authentication for documents used in countries that are part of the Hague Convention.</p>`,
+<div style="overflow-x:auto;margin:32px 0;padding-top:20px">
+<table style="width:100%;border-collapse:separate;border-spacing:0;border-radius:12px;font-size:15px;border:1px solid #e8e5dd">
+<thead><tr style="background:#1b3a2d;color:#faf8f4">
+<th style="padding:14px 20px;text-align:left;font-weight:700;text-transform:uppercase;font-size:12px;letter-spacing:1px">When You Need It</th>
+<th style="padding:14px 20px;text-align:center;font-weight:700;text-transform:uppercase;font-size:12px;letter-spacing:1px">Wyoming</th>
+<th style="padding:14px 20px;text-align:center;font-weight:700;text-transform:uppercase;font-size:12px;letter-spacing:1px">Delaware</th>
+<th style="padding:14px 20px;text-align:center;font-weight:700;text-transform:uppercase;font-size:12px;letter-spacing:1px">New Mexico</th>
+<th style="padding:14px 20px;text-align:center;font-weight:700;text-transform:uppercase;font-size:12px;letter-spacing:1px">Florida</th>
+</tr></thead>
+<tbody>
+<tr style="border-bottom:1px solid #e8e5dd">
+<td style="padding:13px 20px;font-weight:600;background:#f8f7f4">Banking &amp; Financial</td>
+<td style="padding:13px 20px;text-align:center">1 – 3 days</td>
+<td style="padding:13px 20px;text-align:center">Same day (online)</td>
+<td style="padding:13px 20px;text-align:center">3 – 5 days</td>
+<td style="padding:13px 20px;text-align:center">1 – 3 days (online)</td>
+</tr>
+<tr style="border-bottom:1px solid #e8e5dd">
+<td style="padding:13px 20px;font-weight:600;background:#f8f7f4">Contracts &amp; Partnerships</td>
+<td style="padding:13px 20px;text-align:center">1 – 3 days</td>
+<td style="padding:13px 20px;text-align:center">Same day (online)</td>
+<td style="padding:13px 20px;text-align:center">3 – 5 days</td>
+<td style="padding:13px 20px;text-align:center">1 – 3 days (online)</td>
+</tr>
+<tr style="border-bottom:1px solid #e8e5dd">
+<td style="padding:13px 20px;font-weight:600;background:#f8f7f4">Foreign Qualification</td>
+<td style="padding:13px 20px;text-align:center">1 – 3 days</td>
+<td style="padding:13px 20px;text-align:center">Same day (online)</td>
+<td style="padding:13px 20px;text-align:center">3 – 5 days</td>
+<td style="padding:13px 20px;text-align:center">1 – 3 days (online)</td>
+</tr>
+<tr>
+<td style="padding:13px 20px;font-weight:600;background:#f8f7f4">Annual Renewal / Licensing</td>
+<td style="padding:13px 20px;text-align:center">1 – 3 days</td>
+<td style="padding:13px 20px;text-align:center">Same day (online)</td>
+<td style="padding:13px 20px;text-align:center">3 – 5 days</td>
+<td style="padding:13px 20px;text-align:center">1 – 3 days (online)</td>
+</tr>
+</tbody>
+</table>
+</div>
+
+<h3>How It Works</h3>
+<ol>
+  <li><strong>Submit Your LLC Information:</strong> Provide your LLC name, state of formation, and filing number so we can locate your entity in the state database.</li>
+  <li><strong>We Request the Certificate:</strong> Our team submits the request directly to the Secretary of State and pays any applicable state fees on your behalf.</li>
+  <li><strong>Receive Your Certificate:</strong> You get the official Certificate of Good Standing as a digital copy, with the option for a mailed physical copy if needed.</li>
+</ol>
+
+<p style="margin-top:24px;padding:16px 20px;background:#f0faf5;border-left:4px solid #1b3a2d;border-radius:0 8px 8px 0;font-size:14px;color:#1b3a2d"><strong>Important:</strong> A Certificate of Good Standing is only valid for a limited time — most banks and agencies require one issued within the last 30 to 90 days. If your LLC has any outstanding annual reports or unpaid fees, the state will deny the request until those are resolved. Make sure your filings are current before ordering.</p>`,
     icon: "Award",
     image: "/images/services/good-standing.jpg",
     startingPrice: 75,
@@ -970,27 +1669,63 @@ const servicesData = [
     slug: "amendment-filing",
     name: "Amendment Filing",
     shortDesc: "File amendments to update your LLC's registered information. Name changes, address changes, member changes, and more.",
-    metaTitle: "LLC Amendment Filing Service | Update Your LLC Records | LLCPad",
-    metaDescription: "File amendments to update your LLC's registered information. Name changes, address changes, member changes, and more. Fast processing in all states.",
-    description: `<p>When your LLC's information changes, you need to file an amendment with the state to update your official records. We handle all types of LLC amendments.</p>
+    metaTitle: "LLC Amendment Filing Service | LLCPad",
+    metaDescription: "File LLC amendments for name changes, address updates, and member changes. Fast processing for non-US residents. Start your amendment with LLCPad.",
+    description: `<p>When your LLC's information changes — whether it's a <strong>new business name</strong>, updated <strong>principal address</strong>, or a change in <strong>members or managers</strong> — you must file an <strong>Articles of Amendment</strong> (or Certificate of Amendment) with your state. LLCPad handles the entire amendment process for international LLC owners, ensuring your state records stay accurate and your LLC remains compliant.</p>
 
-<h3>Common Amendment Types</h3>
+<h3>Why You Need Amendment Filing</h3>
 <ul>
-  <li><strong>Name Change:</strong> Change your LLC's legal name.</li>
-  <li><strong>Address Change:</strong> Update principal office or mailing address.</li>
-  <li><strong>Registered Agent Change:</strong> Change your registered agent or their address.</li>
-  <li><strong>Member/Manager Change:</strong> Add or remove members or managers (if listed in Articles).</li>
-  <li><strong>Purpose Change:</strong> Modify your LLC's stated business purpose.</li>
+  <li><strong>Legal Compliance:</strong> Most states require you to update your formation documents within 30–90 days of any material change. Failure to file can result in penalties or loss of good standing.</li>
+  <li><strong>Accurate Public Records:</strong> Your LLC's state filing is a public record. Outdated information can cause issues with banking, contracts, and government agencies.</li>
+  <li><strong>Protect Your Brand:</strong> If you're changing your LLC name, the amendment officially reserves your new name with the state and prevents others from using it.</li>
+  <li><strong>Maintain Banking Access:</strong> Banks verify LLC information against state records. Mismatched details (especially name or member changes) can freeze your account.</li>
 </ul>
 
-<h3>Amendment Process</h3>
+<div style="overflow-x:auto;margin:32px 0;padding-top:20px">
+<table style="width:100%;border-collapse:separate;border-spacing:0;border-radius:12px;font-size:15px;border:1px solid #e8e5dd">
+<thead><tr style="background:#1b3a2d;color:#faf8f4">
+<th style="padding:14px 20px;text-align:left;font-weight:700;text-transform:uppercase;font-size:12px;letter-spacing:1px">Amendment Type</th>
+<th style="padding:14px 20px;text-align:center;font-weight:700;text-transform:uppercase;font-size:12px;letter-spacing:1px">Typical State Fee</th>
+<th style="padding:14px 20px;text-align:center;font-weight:700;text-transform:uppercase;font-size:12px;letter-spacing:1px">Processing Time</th>
+<th style="padding:14px 20px;text-align:center;font-weight:700;text-transform:uppercase;font-size:12px;letter-spacing:1px">Urgency</th>
+</tr></thead>
+<tbody>
+<tr style="border-bottom:1px solid #e8e5dd">
+<td style="padding:13px 20px;font-weight:600;background:#f8f7f4">LLC Name Change</td>
+<td style="padding:13px 20px;text-align:center">$50 – $150</td>
+<td style="padding:13px 20px;text-align:center">3 – 10 business days</td>
+<td style="padding:13px 20px;text-align:center;color:#e84c1e;font-weight:600">High</td>
+</tr>
+<tr style="border-bottom:1px solid #e8e5dd">
+<td style="padding:13px 20px;font-weight:600;background:#f8f7f4">Principal Address Change</td>
+<td style="padding:13px 20px;text-align:center">$25 – $100</td>
+<td style="padding:13px 20px;text-align:center">3 – 7 business days</td>
+<td style="padding:13px 20px;text-align:center;color:#d97706;font-weight:600">Medium</td>
+</tr>
+<tr style="border-bottom:1px solid #e8e5dd">
+<td style="padding:13px 20px;font-weight:600;background:#f8f7f4">Member / Manager Change</td>
+<td style="padding:13px 20px;text-align:center">$25 – $100</td>
+<td style="padding:13px 20px;text-align:center">5 – 15 business days</td>
+<td style="padding:13px 20px;text-align:center;color:#e84c1e;font-weight:600">High</td>
+</tr>
+<tr>
+<td style="padding:13px 20px;font-weight:600;background:#f8f7f4">Registered Agent Change</td>
+<td style="padding:13px 20px;text-align:center">$25 – $75</td>
+<td style="padding:13px 20px;text-align:center">1 – 5 business days</td>
+<td style="padding:13px 20px;text-align:center;color:#d97706;font-weight:600">Medium</td>
+</tr>
+</tbody>
+</table>
+</div>
+
+<h3>How It Works</h3>
 <ol>
-  <li>Determine what needs to be changed</li>
-  <li>Prepare Articles of Amendment</li>
-  <li>File with the state</li>
-  <li>Update internal documents (Operating Agreement, etc.)</li>
-  <li>Update external records (bank, IRS, etc.)</li>
-</ol>`,
+  <li><strong>Tell Us What Changed:</strong> Select the type of amendment you need and provide the updated information through our secure order form.</li>
+  <li><strong>We Draft &amp; File:</strong> Our team prepares the Articles of Amendment with the correct state-specific form and files it with the Secretary of State on your behalf.</li>
+  <li><strong>Receive Your Updated Documents:</strong> Once approved, you receive the stamped amendment confirmation and updated formation documents for your records.</li>
+</ol>
+
+<p style="margin-top:24px;padding:16px 20px;background:#f0faf5;border-left:4px solid #1b3a2d;border-radius:0 8px 8px 0;font-size:14px;color:#1b3a2d"><strong>Important:</strong> After filing a state amendment, remember to update your Operating Agreement, EIN records with the IRS (if applicable), bank accounts, and any business licenses. A name change in particular requires updating your EIN letter by submitting IRS Form SS-4 or calling the IRS directly.</p>`,
     icon: "FileEdit",
     image: "/images/services/amendment.jpg",
     startingPrice: 99,
@@ -1042,27 +1777,68 @@ const servicesData = [
     slug: "llc-dissolution",
     name: "LLC Dissolution",
     shortDesc: "Properly dissolve your LLC when closing your business. Avoid ongoing fees and compliance obligations.",
-    metaTitle: "LLC Dissolution Service | Close Your Business Properly | LLCPad",
-    metaDescription: "Properly dissolve your LLC when closing your business. Avoid ongoing fees and compliance obligations. Articles of Dissolution filing in all states.",
-    description: `<p>When you're ready to close your LLC, proper dissolution is essential. Without formal dissolution, you may continue to owe annual fees and be liable for compliance requirements.</p>
+    metaTitle: "LLC Dissolution & Closing Service | LLCPad",
+    metaDescription: "Properly dissolve your US LLC and avoid ongoing fees. LLCPad handles dissolution filing for non-US residents. Close your LLC the right way.",
+    description: `<p>If you no longer need your US LLC, it's critical to <strong>formally dissolve</strong> it with the state rather than simply abandoning it. Without proper dissolution, you may continue to owe <strong>annual fees, franchise taxes, and state penalties</strong> indefinitely. LLCPad manages the full dissolution process so international LLC owners can close their business cleanly and avoid lingering liabilities.</p>
 
-<h3>Why Proper Dissolution Matters</h3>
+<h3>Why You Need Proper LLC Dissolution</h3>
 <ul>
-  <li><strong>Stop Ongoing Fees:</strong> Annual reports and franchise taxes continue until formally dissolved.</li>
-  <li><strong>Avoid Penalties:</strong> Non-compliance while "abandoning" an LLC can result in penalties.</li>
-  <li><strong>Legal Closure:</strong> Formal dissolution provides clean legal closure.</li>
-  <li><strong>Protect Your Record:</strong> Administrative dissolution (by the state) looks worse than voluntary dissolution.</li>
+  <li><strong>Stop Ongoing Fees:</strong> States continue charging annual report fees and franchise taxes until your LLC is formally dissolved. In California, that means $800/year even if you earn nothing.</li>
+  <li><strong>Avoid Accumulating Penalties:</strong> Unpaid state fees accumulate with interest and late penalties. Some states report delinquent entities to collections agencies.</li>
+  <li><strong>Protect Your Personal Credit:</strong> In certain cases, unpaid state obligations tied to your LLC can affect your ability to form new businesses or obtain state permits.</li>
+  <li><strong>Clean Legal Record:</strong> A properly dissolved LLC shows as "Dissolved" rather than "Delinquent" or "Revoked" in state records, which reflects well on you as a business owner.</li>
 </ul>
 
-<h3>Dissolution Process</h3>
+<div style="overflow-x:auto;margin:32px 0;padding-top:20px">
+<table style="width:100%;border-collapse:separate;border-spacing:0;border-radius:12px;font-size:15px;border:1px solid #e8e5dd">
+<thead><tr style="background:#1b3a2d;color:#faf8f4">
+<th style="padding:14px 20px;text-align:left;font-weight:700;text-transform:uppercase;font-size:12px;letter-spacing:1px">Requirement</th>
+<th style="padding:14px 20px;text-align:center;font-weight:700;text-transform:uppercase;font-size:12px;letter-spacing:1px;position:relative"><span style="position:absolute;top:-14px;left:50%;transform:translateX(-50%);background:#e84c1e;color:#fff;font-size:10px;padding:2px 10px;border-radius:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;white-space:nowrap">Recommended</span>Wyoming</th>
+<th style="padding:14px 20px;text-align:center;font-weight:700;text-transform:uppercase;font-size:12px;letter-spacing:1px">Delaware</th>
+<th style="padding:14px 20px;text-align:center;font-weight:700;text-transform:uppercase;font-size:12px;letter-spacing:1px">New Mexico</th>
+<th style="padding:14px 20px;text-align:center;font-weight:700;text-transform:uppercase;font-size:12px;letter-spacing:1px">Florida</th>
+</tr></thead>
+<tbody>
+<tr style="border-bottom:1px solid #e8e5dd">
+<td style="padding:13px 20px;font-weight:600;background:#f8f7f4">State Filing Fee</td>
+<td style="padding:13px 20px;text-align:center;background:#f0faf5;color:#1b3a2d;font-weight:700">$0</td>
+<td style="padding:13px 20px;text-align:center">$204</td>
+<td style="padding:13px 20px;text-align:center">$0</td>
+<td style="padding:13px 20px;text-align:center">$25</td>
+</tr>
+<tr style="border-bottom:1px solid #e8e5dd">
+<td style="padding:13px 20px;font-weight:600;background:#f8f7f4">Tax Clearance Needed</td>
+<td style="padding:13px 20px;text-align:center;background:#f0faf5;color:#1b3a2d;font-weight:700"><span style="color:#1b3a2d">✗ No</span></td>
+<td style="padding:13px 20px;text-align:center"><span style="color:#dc2626">✓ Yes</span></td>
+<td style="padding:13px 20px;text-align:center"><span style="color:#1b3a2d">✗ No</span></td>
+<td style="padding:13px 20px;text-align:center"><span style="color:#1b3a2d">✗ No</span></td>
+</tr>
+<tr style="border-bottom:1px solid #e8e5dd">
+<td style="padding:13px 20px;font-weight:600;background:#f8f7f4">Final Annual Report Due</td>
+<td style="padding:13px 20px;text-align:center;background:#f0faf5;color:#1b3a2d;font-weight:700"><span style="color:#1b3a2d">✗ No</span></td>
+<td style="padding:13px 20px;text-align:center"><span style="color:#dc2626">✓ Yes</span></td>
+<td style="padding:13px 20px;text-align:center"><span style="color:#1b3a2d">✗ No report</span></td>
+<td style="padding:13px 20px;text-align:center"><span style="color:#dc2626">✓ Yes</span></td>
+</tr>
+<tr>
+<td style="padding:13px 20px;font-weight:600;background:#f8f7f4">Typical Timeline</td>
+<td style="padding:13px 20px;text-align:center;background:#f0faf5;color:#1b3a2d;font-weight:700">2 – 3 weeks</td>
+<td style="padding:13px 20px;text-align:center">4 – 8 weeks</td>
+<td style="padding:13px 20px;text-align:center">1 – 2 weeks</td>
+<td style="padding:13px 20px;text-align:center">3 – 5 weeks</td>
+</tr>
+</tbody>
+</table>
+</div>
+
+<h3>How It Works</h3>
 <ol>
-  <li>Member approval of dissolution</li>
-  <li>Tax clearance (if required by state)</li>
-  <li>Settle debts and distribute assets</li>
-  <li>File Articles of Dissolution</li>
-  <li>Cancel registrations and accounts</li>
-  <li>Final tax returns</li>
-</ol>`,
+  <li><strong>Confirm Your LLC Status:</strong> We verify your LLC's current standing and identify any outstanding fees, reports, or tax obligations that must be cleared before dissolution.</li>
+  <li><strong>File Articles of Dissolution:</strong> Our team prepares and files the Articles of Dissolution (or Certificate of Cancellation) with the appropriate state agency.</li>
+  <li><strong>Receive Dissolution Confirmation:</strong> Once processed, you receive the official dissolution confirmation document and guidance on closing your EIN with the IRS.</li>
+</ol>
+
+<p style="margin-top:24px;padding:16px 20px;background:#f0faf5;border-left:4px solid #1b3a2d;border-radius:0 8px 8px 0;font-size:14px;color:#1b3a2d"><strong>Important:</strong> Dissolution does not cancel your EIN with the IRS. You should also file a final federal tax return (Form 1065 or appropriate form), close your business bank account, and send a letter to the IRS to close your EIN. If you have outstanding state taxes, those must be settled before the state will accept dissolution.</p>`,
     icon: "FileX",
     image: "/images/services/dissolution.jpg",
     startingPrice: 149,
@@ -1106,30 +1882,69 @@ const servicesData = [
     slug: "apostille-service",
     name: "Apostille Service",
     shortDesc: "Get apostille certification for your US documents. Required for international legal recognition of your LLC documents.",
-    metaTitle: "Apostille Service for US Documents | International Authentication | LLCPad",
-    metaDescription: "Get apostille certification for your US documents. Required for international legal recognition. Fast processing for LLC documents, good standing certificates, and more.",
-    description: `<p>An apostille is a form of authentication issued for documents used internationally. If you need to use your US LLC documents in another country, they likely need an apostille.</p>
+    metaTitle: "Apostille Service for US LLC Documents | LLCPad",
+    metaDescription: "Get apostille certification for US LLC documents. Use your formation papers internationally. LLCPad apostille service for non-US entrepreneurs.",
+    description: `<p>An <strong>apostille</strong> is an international certification that authenticates US documents for use in foreign countries under the <strong>Hague Apostille Convention</strong>. If you need to use your LLC formation documents, certificates, or legal paperwork in <strong>Bangladesh, India, UAE, Pakistan</strong>, or any other Hague member country, an apostille is required. LLCPad handles the complete apostille process — from document preparation to authentication by the US Secretary of State.</p>
 
-<h3>What is an Apostille?</h3>
-<p>An apostille is a certificate that authenticates a document for use in countries that are part of the Hague Apostille Convention (over 120 countries). It confirms the document is legitimate and was properly signed by the issuing authority.</p>
-
-<h3>Documents That Can Be Apostilled</h3>
+<h3>Why You Need Apostille Service</h3>
 <ul>
-  <li>Articles of Organization / Certificate of Formation</li>
-  <li>Certificate of Good Standing</li>
-  <li>Operating Agreement (must be notarized first)</li>
-  <li>EIN Confirmation Letter (with notarization)</li>
-  <li>Corporate Resolutions</li>
-  <li>Other notarized business documents</li>
+  <li><strong>International Business Use:</strong> Foreign banks, government agencies, and business partners require apostilled documents to verify the legitimacy of your US LLC.</li>
+  <li><strong>Open Foreign Bank Accounts:</strong> If you're opening a business bank account in your home country using your US LLC, the bank will typically require apostilled formation documents.</li>
+  <li><strong>Legal Proceedings Abroad:</strong> Court proceedings, property transactions, or regulatory filings in other countries require US documents to be apostilled for legal validity.</li>
+  <li><strong>Government Registrations:</strong> Many countries require apostilled documents when registering a foreign-owned company, applying for trade licenses, or filing tax registrations.</li>
 </ul>
 
-<h3>When You Need an Apostille</h3>
-<ul>
-  <li>Opening a bank account in another country</li>
-  <li>Registering your LLC in a foreign country</li>
-  <li>International business contracts</li>
-  <li>Legal proceedings abroad</li>
-</ul>`,
+<div style="overflow-x:auto;margin:32px 0;padding-top:20px">
+<table style="width:100%;border-collapse:separate;border-spacing:0;border-radius:12px;font-size:15px;border:1px solid #e8e5dd">
+<thead><tr style="background:#1b3a2d;color:#faf8f4">
+<th style="padding:14px 20px;text-align:left;font-weight:700;text-transform:uppercase;font-size:12px;letter-spacing:1px">Document</th>
+<th style="padding:14px 20px;text-align:center;font-weight:700;text-transform:uppercase;font-size:12px;letter-spacing:1px">Common Use Case</th>
+<th style="padding:14px 20px;text-align:center;font-weight:700;text-transform:uppercase;font-size:12px;letter-spacing:1px">Processing Time</th>
+<th style="padding:14px 20px;text-align:center;font-weight:700;text-transform:uppercase;font-size:12px;letter-spacing:1px">Notarization Needed</th>
+</tr></thead>
+<tbody>
+<tr style="border-bottom:1px solid #e8e5dd">
+<td style="padding:13px 20px;font-weight:600;background:#f8f7f4">Certificate of Formation</td>
+<td style="padding:13px 20px;text-align:center">Foreign bank accounts, trade licenses</td>
+<td style="padding:13px 20px;text-align:center">5 – 10 business days</td>
+<td style="padding:13px 20px;text-align:center"><span style="color:#1b3a2d">✗ No (state-issued)</span></td>
+</tr>
+<tr style="border-bottom:1px solid #e8e5dd">
+<td style="padding:13px 20px;font-weight:600;background:#f8f7f4">Certificate of Good Standing</td>
+<td style="padding:13px 20px;text-align:center">Annual bank verification, contracts</td>
+<td style="padding:13px 20px;text-align:center">5 – 10 business days</td>
+<td style="padding:13px 20px;text-align:center"><span style="color:#1b3a2d">✗ No (state-issued)</span></td>
+</tr>
+<tr style="border-bottom:1px solid #e8e5dd">
+<td style="padding:13px 20px;font-weight:600;background:#f8f7f4">Operating Agreement</td>
+<td style="padding:13px 20px;text-align:center">Proof of ownership, partner disputes</td>
+<td style="padding:13px 20px;text-align:center">7 – 15 business days</td>
+<td style="padding:13px 20px;text-align:center"><span style="color:#dc2626">✓ Yes (notarize first)</span></td>
+</tr>
+<tr style="border-bottom:1px solid #e8e5dd">
+<td style="padding:13px 20px;font-weight:600;background:#f8f7f4">EIN Confirmation Letter</td>
+<td style="padding:13px 20px;text-align:center">Tax registration in home country</td>
+<td style="padding:13px 20px;text-align:center">7 – 15 business days</td>
+<td style="padding:13px 20px;text-align:center"><span style="color:#dc2626">✓ Yes (notarize first)</span></td>
+</tr>
+<tr>
+<td style="padding:13px 20px;font-weight:600;background:#f8f7f4">Power of Attorney</td>
+<td style="padding:13px 20px;text-align:center">Authorize representatives abroad</td>
+<td style="padding:13px 20px;text-align:center">7 – 15 business days</td>
+<td style="padding:13px 20px;text-align:center"><span style="color:#dc2626">✓ Yes (notarize first)</span></td>
+</tr>
+</tbody>
+</table>
+</div>
+
+<h3>How It Works</h3>
+<ol>
+  <li><strong>Send Us Your Documents:</strong> Upload or mail the documents you need apostilled. We'll review them and advise if notarization is required before apostille.</li>
+  <li><strong>We Notarize &amp; Apostille:</strong> If needed, we arrange notarization through a licensed US notary, then submit the documents to the appropriate Secretary of State for apostille certification.</li>
+  <li><strong>Receive Apostilled Documents:</strong> Your authenticated documents are shipped to your international address via express courier with tracking, or delivered as certified digital copies where accepted.</li>
+</ol>
+
+<p style="margin-top:24px;padding:16px 20px;background:#f0faf5;border-left:4px solid #1b3a2d;border-radius:0 8px 8px 0;font-size:14px;color:#1b3a2d"><strong>Important:</strong> Apostilles only work for countries that are part of the Hague Apostille Convention. For non-Hague countries, documents require embassy legalization instead (a longer process). Also note that federal documents (like IRS letters) must be apostilled by the US Department of State in Washington, DC — not the state Secretary of State.</p>`,
     icon: "Stamp",
     image: "/images/services/apostille.jpg",
     startingPrice: 149,
@@ -1181,27 +1996,69 @@ const servicesData = [
     slug: "tax-filing",
     name: "Tax Filing Service",
     shortDesc: "Professional US tax filing for LLCs. We handle Forms 1120, 1065, 5472, and individual returns for foreign owners.",
-    metaTitle: "LLC Tax Filing Service | Form 5472 & Business Tax Returns | LLCPad",
-    metaDescription: "Professional US tax filing for LLCs. We handle Forms 1120, 1065, 5472, and individual returns for foreign owners. Avoid $25,000 penalties for non-filing.",
-    description: `<p>US tax obligations for foreign-owned LLCs can be complex. We provide professional tax preparation and filing services specifically designed for international entrepreneurs.</p>
+    metaTitle: "LLC Tax Filing for Foreign Owners | LLCPad",
+    metaDescription: "Professional US LLC tax filing for non-residents. Form 5472, 1120, 1065 preparation with IRS compliance. Avoid $25,000 penalties. Start today.",
+    description: `<p>If you own a US LLC as a <strong>non-US resident</strong>, you are required to file specific tax returns with the IRS every year — even if your LLC earned zero income. Our <strong>LLC Tax Filing service</strong> ensures your company stays fully compliant with federal obligations, helping you avoid costly penalties that start at <strong>$25,000 per missed form</strong>.</p>
 
-<h3>LLC Tax Filing Requirements</h3>
+<h3>Why You Need Professional Tax Filing</h3>
 <ul>
-  <li><strong>Form 5472:</strong> Required for foreign-owned LLCs with reportable transactions (even $0).</li>
-  <li><strong>Form 1120:</strong> If your LLC elected corporate taxation.</li>
-  <li><strong>Form 1065:</strong> For multi-member LLCs (partnership taxation).</li>
-  <li><strong>Form 1040-NR:</strong> Personal return for foreign individuals with US income.</li>
+<li><strong>Avoid IRS Penalties:</strong> Late or missing filings can trigger penalties of $25,000 or more per form, per year — the IRS does not offer leniency for foreign owners who were unaware of requirements.</li>
+<li><strong>Stay in Good Standing:</strong> Consistent tax compliance protects your LLC status, EIN, bank accounts, and ability to operate in the US market.</li>
+<li><strong>Filing Varies by LLC Type:</strong> Single-member foreign-owned LLCs, multi-member LLCs, and S-Corps each have different form requirements and deadlines that must be followed precisely.</li>
+<li><strong>Focus on Your Business:</strong> Let experienced professionals handle the complexity of US tax law so you can concentrate on growing revenue.</li>
 </ul>
 
-<h3>Important Deadlines</h3>
-<ul>
-  <li><strong>March 15:</strong> Partnership returns (Form 1065)</li>
-  <li><strong>April 15:</strong> Corporate returns (Form 1120) and individual returns</li>
-  <li><strong>Extensions available:</strong> 6-month extensions for most returns</li>
-</ul>
+<div style="overflow-x:auto;margin:32px 0;padding-top:20px">
+<table style="width:100%;border-collapse:separate;border-spacing:0;border-radius:12px;font-size:15px;border:1px solid #e8e5dd">
+<thead><tr style="background:#1b3a2d;color:#faf8f4">
+<th style="padding:14px 20px;text-align:left;font-weight:700;text-transform:uppercase;font-size:12px;letter-spacing:1px">Requirement</th>
+<th style="padding:14px 20px;text-align:center;font-weight:700;text-transform:uppercase;font-size:12px;letter-spacing:1px;position:relative"><span style="position:absolute;top:-14px;left:50%;transform:translateX(-50%);background:#e84c1e;color:#fff;font-size:10px;padding:2px 10px;border-radius:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;white-space:nowrap">Most Common</span>Single-Member (Foreign)</th>
+<th style="padding:14px 20px;text-align:center;font-weight:700;text-transform:uppercase;font-size:12px;letter-spacing:1px">Multi-Member</th>
+<th style="padding:14px 20px;text-align:center;font-weight:700;text-transform:uppercase;font-size:12px;letter-spacing:1px">S-Corp Election</th>
+</tr></thead>
+<tbody>
+<tr style="border-bottom:1px solid #e8e5dd">
+<td style="padding:13px 20px;font-weight:600;background:#f8f7f4">Required Forms</td>
+<td style="padding:13px 20px;text-align:center;background:#f0faf5;color:#1b3a2d;font-weight:700">Form 5472 + Pro-forma 1120</td>
+<td style="padding:13px 20px;text-align:center">Form 1065 + Schedule K-1</td>
+<td style="padding:13px 20px;text-align:center">Form 1120-S + Schedule K-1</td>
+</tr>
+<tr style="border-bottom:1px solid #e8e5dd">
+<td style="padding:13px 20px;font-weight:600;background:#f8f7f4">Filing Deadline</td>
+<td style="padding:13px 20px;text-align:center;background:#f0faf5;color:#1b3a2d;font-weight:700">April 15</td>
+<td style="padding:13px 20px;text-align:center">March 15</td>
+<td style="padding:13px 20px;text-align:center">March 15</td>
+</tr>
+<tr style="border-bottom:1px solid #e8e5dd">
+<td style="padding:13px 20px;font-weight:600;background:#f8f7f4">Extension Available</td>
+<td style="padding:13px 20px;text-align:center;background:#f0faf5;color:#1b3a2d;font-weight:700">Yes — to October 15</td>
+<td style="padding:13px 20px;text-align:center">Yes — to September 15</td>
+<td style="padding:13px 20px;text-align:center">Yes — to September 15</td>
+</tr>
+<tr style="border-bottom:1px solid #e8e5dd">
+<td style="padding:13px 20px;font-weight:600;background:#f8f7f4">Late Filing Penalty</td>
+<td style="padding:13px 20px;text-align:center;background:#f0faf5;color:#1b3a2d;font-weight:700">$25,000 per form</td>
+<td style="padding:13px 20px;text-align:center">$220/partner per month</td>
+<td style="padding:13px 20px;text-align:center">$220/shareholder per month</td>
+</tr>
+<tr>
+<td style="padding:13px 20px;font-weight:600;background:#f8f7f4">US Income Tax Owed</td>
+<td style="padding:13px 20px;text-align:center;background:#f0faf5;color:#1b3a2d;font-weight:700">Generally none (if no US-source income)</td>
+<td style="padding:13px 20px;text-align:center">Depends on member residency</td>
+<td style="padding:13px 20px;text-align:center">Corporate-level tax may apply</td>
+</tr>
+</tbody>
+</table>
+</div>
 
-<h3>Penalties for Non-Filing</h3>
-<p>The IRS takes foreign reporting seriously. Penalties for late or missing Form 5472 are $25,000 per form, per year. Don't risk it - let us handle your compliance.</p>`,
+<h3>How It Works</h3>
+<ol>
+<li><strong>Share Your LLC Details:</strong> Provide your EIN, Articles of Organization, and any financial records from the tax year. We identify exactly which forms your LLC requires.</li>
+<li><strong>We Prepare Your Returns:</strong> Our team completes all necessary forms, calculates any obligations, and prepares your filing package for IRS submission.</li>
+<li><strong>Review and File:</strong> You review the completed returns, approve them, and we e-file or mail them to the IRS before the deadline — with confirmation of receipt.</li>
+</ol>
+
+<p style="margin-top:24px;padding:16px 20px;background:#f0faf5;border-left:4px solid #1b3a2d;border-radius:0 8px 8px 0;font-size:14px;color:#1b3a2d"><strong>Important:</strong> Even if your LLC had no income or transactions during the year, foreign-owned single-member LLCs must still file Form 5472 and a pro-forma 1120. Failure to file carries a minimum penalty of $25,000. Do not assume a zero-revenue year means zero filing obligations.</p>`,
     icon: "Receipt",
     image: "/images/services/tax-filing.jpg",
     startingPrice: 299,
@@ -1253,31 +2110,75 @@ const servicesData = [
     slug: "category-ungating",
     name: "Amazon Category Ungating",
     shortDesc: "Get approved to sell in restricted Amazon categories. Professional ungating service for Grocery, Beauty, Health, and more.",
-    metaTitle: "Amazon Category Ungating Service | Get Approved Fast | LLCPad",
-    metaDescription: "Get approved to sell in restricted Amazon categories. Professional ungating service for Grocery, Beauty, Health, Topicals, and more. 90% success rate.",
-    description: `<p>Many profitable Amazon categories are "gated" - restricted to approved sellers only. Our ungating service helps you get approved to sell in these lucrative categories.</p>
+    metaTitle: "Amazon Category Ungating Service | LLCPad",
+    metaDescription: "Get ungated in restricted Amazon categories like Grocery, Beauty, and Toys. We prepare invoices and applications for non-US sellers. Start today.",
+    description: `<p><strong>Amazon Category Ungating</strong> removes the selling restrictions that block your access to some of the most profitable product categories. Many high-demand categories on Amazon.com — including Grocery, Beauty, Toys, and Health — are <strong>gated by default</strong>, meaning you need approval before listing products. For international sellers, navigating these requirements can be especially challenging without US-based supplier relationships.</p>
 
-<h3>Popular Restricted Categories</h3>
+<h3>Why You Need Category Ungating</h3>
 <ul>
-  <li><strong>Grocery & Gourmet:</strong> High demand, recurring purchases</li>
-  <li><strong>Health & Personal Care:</strong> Large market with brand opportunities</li>
-  <li><strong>Beauty:</strong> High margins, loyal customers</li>
-  <li><strong>Topicals:</strong> Skincare, lotions, and topical products</li>
-  <li><strong>Baby:</strong> Growing market with recurring sales</li>
-  <li><strong>Pet Supplies:</strong> Passionate customer base</li>
+  <li><strong>Access Profitable Niches:</strong> Restricted categories often have less competition and higher profit margins because most sellers never bother to get approved.</li>
+  <li><strong>Expand Your Catalog:</strong> Selling in multiple categories diversifies your revenue streams and reduces dependency on a single product line.</li>
+  <li><strong>Competitive Advantage:</strong> While your competitors remain locked out, you can capture market share in gated categories early.</li>
+  <li><strong>Seasonal Opportunities:</strong> Categories like Toys become essential during Q4 holiday season — the highest-revenue period on Amazon.</li>
 </ul>
 
-<h3>Why Categories Are Restricted</h3>
-<p>Amazon restricts categories to ensure product quality and customer safety. They require sellers to prove they can meet quality standards through documentation and sometimes product testing.</p>
+<div style="overflow-x:auto;margin:32px 0;padding-top:20px">
+<table style="width:100%;border-collapse:separate;border-spacing:0;border-radius:12px;font-size:15px;border:1px solid #e8e5dd">
+<thead><tr style="background:#1b3a2d;color:#faf8f4">
+<th style="padding:14px 20px;text-align:left;font-weight:700;text-transform:uppercase;font-size:12px;letter-spacing:1px">Category</th>
+<th style="padding:14px 20px;text-align:center;font-weight:700;text-transform:uppercase;font-size:12px;letter-spacing:1px">Difficulty</th>
+<th style="padding:14px 20px;text-align:center;font-weight:700;text-transform:uppercase;font-size:12px;letter-spacing:1px">Requirements</th>
+<th style="padding:14px 20px;text-align:center;font-weight:700;text-transform:uppercase;font-size:12px;letter-spacing:1px">Timeline</th>
+</tr></thead>
+<tbody>
+<tr style="border-bottom:1px solid #e8e5dd">
+<td style="padding:13px 20px;font-weight:600;background:#f8f7f4">Grocery &amp; Gourmet</td>
+<td style="padding:13px 20px;text-align:center;color:#e84c1e;font-weight:700">Hard</td>
+<td style="padding:13px 20px;text-align:center">Invoices, FDA compliance, COA</td>
+<td style="padding:13px 20px;text-align:center">2–4 weeks</td>
+</tr>
+<tr style="border-bottom:1px solid #e8e5dd">
+<td style="padding:13px 20px;font-weight:600;background:#f8f7f4">Topicals &amp; Beauty</td>
+<td style="padding:13px 20px;text-align:center;color:#e84c1e;font-weight:700">Hard</td>
+<td style="padding:13px 20px;text-align:center">Invoices, product images, SDS</td>
+<td style="padding:13px 20px;text-align:center">2–4 weeks</td>
+</tr>
+<tr style="border-bottom:1px solid #e8e5dd">
+<td style="padding:13px 20px;font-weight:600;background:#f8f7f4">Toys &amp; Games</td>
+<td style="padding:13px 20px;text-align:center;color:#d97706;font-weight:700">Medium</td>
+<td style="padding:13px 20px;text-align:center">Invoices, CPC certificates</td>
+<td style="padding:13px 20px;text-align:center">1–3 weeks</td>
+</tr>
+<tr style="border-bottom:1px solid #e8e5dd">
+<td style="padding:13px 20px;font-weight:600;background:#f8f7f4">Clothing &amp; Apparel</td>
+<td style="padding:13px 20px;text-align:center;color:#d97706;font-weight:700">Medium</td>
+<td style="padding:13px 20px;text-align:center">Invoices, brand verification</td>
+<td style="padding:13px 20px;text-align:center">1–2 weeks</td>
+</tr>
+<tr style="border-bottom:1px solid #e8e5dd">
+<td style="padding:13px 20px;font-weight:600;background:#f8f7f4">Health &amp; Household</td>
+<td style="padding:13px 20px;text-align:center;color:#e84c1e;font-weight:700">Hard</td>
+<td style="padding:13px 20px;text-align:center">Invoices, FDA letters, lab reports</td>
+<td style="padding:13px 20px;text-align:center">2–5 weeks</td>
+</tr>
+<tr>
+<td style="padding:13px 20px;font-weight:600;background:#f8f7f4">Automotive</td>
+<td style="padding:13px 20px;text-align:center;color:#d97706;font-weight:700">Medium</td>
+<td style="padding:13px 20px;text-align:center">Invoices, brand authorization</td>
+<td style="padding:13px 20px;text-align:center">1–3 weeks</td>
+</tr>
+</tbody>
+</table>
+</div>
 
-<h3>Our Ungating Process</h3>
+<h3>How It Works</h3>
 <ol>
-  <li>Review your seller account status</li>
-  <li>Identify categories you want to unlock</li>
-  <li>Prepare required documentation</li>
-  <li>Submit ungating application</li>
-  <li>Handle any follow-up requests</li>
-</ol>`,
+  <li><strong>Category Assessment:</strong> We review which restricted categories align with your business goals and evaluate your current account health and eligibility.</li>
+  <li><strong>Document Preparation:</strong> We help you source compliant invoices from authorized suppliers and prepare all required documentation, including compliance certificates.</li>
+  <li><strong>Application &amp; Follow-Up:</strong> We submit your ungating application to Amazon and handle any follow-up requests until your category access is approved.</li>
+</ol>
+
+<p style="margin-top:24px;padding:16px 20px;background:#f0faf5;border-left:4px solid #1b3a2d;border-radius:0 8px 8px 0;font-size:14px;color:#1b3a2d"><strong>Important:</strong> Amazon requires invoices from US-based or authorized distributors for most gated categories. Invoices must show a minimum quantity (typically 10+ units), your business name matching your seller account, and recent dates (within 180 days).</p>`,
     icon: "Unlock",
     image: "/images/services/category-ungating.jpg",
     startingPrice: 199,
@@ -1329,35 +2230,73 @@ const servicesData = [
     slug: "listing-optimization",
     name: "Product Listing Optimization",
     shortDesc: "Optimize your Amazon product listings for higher rankings and conversions. Keyword research, copywriting, and image guidance.",
-    metaTitle: "Amazon Listing Optimization Service | Rank Higher, Sell More | LLCPad",
-    metaDescription: "Optimize your Amazon product listings for higher rankings and conversions. Professional keyword research, copywriting, and backend optimization.",
-    description: `<p>Your Amazon listing is your storefront. Optimized listings rank higher in search results and convert more browsers into buyers. Our optimization service improves both visibility and conversion.</p>
+    metaTitle: "Amazon Listing Optimization Service | LLCPad",
+    metaDescription: "Optimize your Amazon listings for higher rankings and conversions. Keyword research, A+ Content, and image strategy for non-US sellers. Get started now.",
+    description: `<p>Your <strong>Amazon product listing</strong> is your digital storefront — and most international sellers leave money on the table with poorly optimized titles, weak bullet points, and missing backend keywords. Professional <strong>listing optimization</strong> combines keyword research, persuasive copywriting, and strategic image placement to increase your visibility in Amazon search results and convert more browsers into buyers.</p>
 
-<h3>What We Optimize</h3>
+<h3>Why You Need Listing Optimization</h3>
 <ul>
-  <li><strong>Title:</strong> Strategic keyword placement for search visibility</li>
-  <li><strong>Bullet Points:</strong> Benefit-focused copy that sells</li>
-  <li><strong>Description:</strong> Compelling storytelling with keywords</li>
-  <li><strong>Backend Keywords:</strong> Hidden keywords for additional discoverability</li>
-  <li><strong>Image Recommendations:</strong> Guidance on image optimization</li>
+  <li><strong>Higher Search Rankings:</strong> Amazon's A9 algorithm rewards listings that contain relevant keywords in the right fields — title, bullets, backend, and description.</li>
+  <li><strong>Increased Conversion Rates:</strong> Optimized listings with compelling copy and professional images convert 2–3x better than generic ones.</li>
+  <li><strong>Lower Advertising Costs:</strong> Better organic ranking means less reliance on PPC, reducing your overall cost per sale.</li>
+  <li><strong>Competitive Edge:</strong> Most sellers — especially international ones — never invest in proper optimization, so you can outperform them with better content.</li>
 </ul>
 
-<h3>Our Process</h3>
+<div style="overflow-x:auto;margin:32px 0;padding-top:20px">
+<table style="width:100%;border-collapse:separate;border-spacing:0;border-radius:12px;font-size:15px;border:1px solid #e8e5dd">
+<thead><tr style="background:#1b3a2d;color:#faf8f4">
+<th style="padding:14px 20px;text-align:left;font-weight:700;text-transform:uppercase;font-size:12px;letter-spacing:1px">Element</th>
+<th style="padding:14px 20px;text-align:center;font-weight:700;text-transform:uppercase;font-size:12px;letter-spacing:1px;position:relative"><span style="position:absolute;top:-14px;left:50%;transform:translateX(-50%);background:#e84c1e;color:#fff;font-size:10px;padding:2px 10px;border-radius:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;white-space:nowrap">Recommended</span>Optimized</th>
+<th style="padding:14px 20px;text-align:center;font-weight:700;text-transform:uppercase;font-size:12px;letter-spacing:1px">Unoptimized</th>
+</tr></thead>
+<tbody>
+<tr style="border-bottom:1px solid #e8e5dd">
+<td style="padding:13px 20px;font-weight:600;background:#f8f7f4">Product Title</td>
+<td style="padding:13px 20px;text-align:center;background:#f0faf5;color:#1b3a2d;font-weight:700">Keyword-rich, structured, 150–200 chars</td>
+<td style="padding:13px 20px;text-align:center">Generic brand name only</td>
+</tr>
+<tr style="border-bottom:1px solid #e8e5dd">
+<td style="padding:13px 20px;font-weight:600;background:#f8f7f4">Bullet Points</td>
+<td style="padding:13px 20px;text-align:center;background:#f0faf5;color:#1b3a2d;font-weight:700">Benefit-driven with keywords</td>
+<td style="padding:13px 20px;text-align:center">Feature-only, no keywords</td>
+</tr>
+<tr style="border-bottom:1px solid #e8e5dd">
+<td style="padding:13px 20px;font-weight:600;background:#f8f7f4">Description</td>
+<td style="padding:13px 20px;text-align:center;background:#f0faf5;color:#1b3a2d;font-weight:700">HTML-formatted, persuasive copy</td>
+<td style="padding:13px 20px;text-align:center">Plain text, minimal info</td>
+</tr>
+<tr style="border-bottom:1px solid #e8e5dd">
+<td style="padding:13px 20px;font-weight:600;background:#f8f7f4">Images</td>
+<td style="padding:13px 20px;text-align:center;background:#f0faf5;color:#1b3a2d;font-weight:700">7–9 images with infographics</td>
+<td style="padding:13px 20px;text-align:center">1–3 basic photos</td>
+</tr>
+<tr style="border-bottom:1px solid #e8e5dd">
+<td style="padding:13px 20px;font-weight:600;background:#f8f7f4">A+ Content</td>
+<td style="padding:13px 20px;text-align:center;background:#f0faf5;color:#1b3a2d;font-weight:700"><span style="color:#1b3a2d">✓</span> Rich brand story</td>
+<td style="padding:13px 20px;text-align:center"><span style="color:#dc2626">✗</span> Not used</td>
+</tr>
+<tr style="border-bottom:1px solid #e8e5dd">
+<td style="padding:13px 20px;font-weight:600;background:#f8f7f4">Backend Keywords</td>
+<td style="padding:13px 20px;text-align:center;background:#f0faf5;color:#1b3a2d;font-weight:700">250 bytes fully utilized</td>
+<td style="padding:13px 20px;text-align:center">Empty or duplicated</td>
+</tr>
+<tr>
+<td style="padding:13px 20px;font-weight:600;background:#f8f7f4">Conversion Rate Impact</td>
+<td style="padding:13px 20px;text-align:center;background:#f0faf5;color:#1b3a2d;font-weight:700">+50–150% improvement</td>
+<td style="padding:13px 20px;text-align:center">Baseline</td>
+</tr>
+</tbody>
+</table>
+</div>
+
+<h3>How It Works</h3>
 <ol>
-  <li><strong>Keyword Research:</strong> Identify high-volume, relevant search terms</li>
-  <li><strong>Competitor Analysis:</strong> Understand what top sellers are doing</li>
-  <li><strong>Copy Creation:</strong> Write compelling, keyword-rich content</li>
-  <li><strong>Backend Optimization:</strong> Maximize hidden keyword fields</li>
-  <li><strong>Review & Revise:</strong> Refine based on your feedback</li>
+  <li><strong>Keyword Research:</strong> We use professional tools to identify high-volume, relevant search terms your target customers are actually typing into Amazon.</li>
+  <li><strong>Copy &amp; Content Creation:</strong> We rewrite your title, bullet points, description, and backend keywords using proven copywriting frameworks tailored for Amazon's algorithm.</li>
+  <li><strong>Image &amp; A+ Strategy:</strong> We provide an image shot list and A+ Content layout to maximize visual impact and tell your brand story below the fold.</li>
 </ol>
 
-<h3>Results You Can Expect</h3>
-<ul>
-  <li>Higher organic search rankings</li>
-  <li>Increased click-through rates</li>
-  <li>Better conversion rates</li>
-  <li>Lower PPC costs (better relevancy)</li>
-</ul>`,
+<p style="margin-top:24px;padding:16px 20px;background:#f0faf5;border-left:4px solid #1b3a2d;border-radius:0 8px 8px 0;font-size:14px;color:#1b3a2d"><strong>Important:</strong> Listing optimization is not a one-time task. Amazon's algorithm and competitor landscape change constantly. We recommend reviewing and updating your listings quarterly to maintain ranking positions and conversion rates.</p>`,
     icon: "Search",
     image: "/images/services/listing-optimization.jpg",
     startingPrice: 149,
@@ -1409,29 +2348,68 @@ const servicesData = [
     slug: "a-plus-content",
     name: "A+ Content Creation",
     shortDesc: "Professional Amazon A+ Content design. Increase conversions with enhanced brand content, comparison charts, and rich media.",
-    metaTitle: "Amazon A+ Content Design Service | Boost Conversions | LLCPad",
-    metaDescription: "Professional Amazon A+ Content design. Increase conversions with enhanced brand content, comparison charts, and rich media. Brand Registry required.",
-    description: `<p>A+ Content (formerly Enhanced Brand Content) allows brand-registered sellers to add rich media, images, and comparison charts to their product descriptions. Studies show A+ Content increases conversions by 5-10%.</p>
+    metaTitle: "Amazon A+ Content Creation Service | LLCPad",
+    metaDescription: "Create stunning Amazon A+ Content to boost conversions by up to 20%. Professional design for non-US sellers. Enhance your listings with LLCPad today.",
+    description: `<p><strong>Amazon A+ Content</strong> (formerly Enhanced Brand Content) replaces your plain-text product description with a visually rich, image-heavy section that tells your brand story and highlights product benefits. Sellers enrolled in Brand Registry can access Basic A+ for free, while <strong>Premium A+ Content</strong> unlocks advanced modules like video and interactive carousels. Studies show A+ Content can increase conversion rates by <strong>5–20%</strong>.</p>
 
-<h3>A+ Content Benefits</h3>
+<h3>Why You Need A+ Content</h3>
 <ul>
-  <li><strong>Higher Conversions:</strong> Rich content helps customers understand your product better</li>
-  <li><strong>Brand Story:</strong> Tell your brand story and build customer connection</li>
-  <li><strong>Reduced Returns:</strong> Better product understanding means fewer returns</li>
-  <li><strong>Cross-Selling:</strong> Comparison charts showcase your product line</li>
+  <li><strong>Higher Conversions:</strong> Rich visuals and comparison charts help customers make faster buying decisions, directly increasing your conversion rate.</li>
+  <li><strong>Brand Storytelling:</strong> A+ Content lets you communicate your brand's mission, quality standards, and unique value proposition below the fold.</li>
+  <li><strong>Reduced Returns:</strong> Detailed visual content sets accurate expectations, leading to fewer returns and better customer satisfaction.</li>
+  <li><strong>Competitive Differentiation:</strong> Most sellers still use plain-text descriptions. A+ Content makes your listing stand out and appear more professional.</li>
 </ul>
 
-<h3>What's Included</h3>
-<ul>
-  <li>Custom graphic design</li>
-  <li>Compelling copywriting</li>
-  <li>Product comparison charts</li>
-  <li>Brand story modules</li>
-  <li>Multiple revision rounds</li>
-</ul>
+<div style="overflow-x:auto;margin:32px 0;padding-top:20px">
+<table style="width:100%;border-collapse:separate;border-spacing:0;border-radius:12px;font-size:15px;border:1px solid #e8e5dd">
+<thead><tr style="background:#1b3a2d;color:#faf8f4">
+<th style="padding:14px 20px;text-align:left;font-weight:700;text-transform:uppercase;font-size:12px;letter-spacing:1px">Feature</th>
+<th style="padding:14px 20px;text-align:center;font-weight:700;text-transform:uppercase;font-size:12px;letter-spacing:1px">Basic A+</th>
+<th style="padding:14px 20px;text-align:center;font-weight:700;text-transform:uppercase;font-size:12px;letter-spacing:1px;position:relative"><span style="position:absolute;top:-14px;left:50%;transform:translateX(-50%);background:#e84c1e;color:#fff;font-size:10px;padding:2px 10px;border-radius:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;white-space:nowrap">Recommended</span>Premium A+</th>
+</tr></thead>
+<tbody>
+<tr style="border-bottom:1px solid #e8e5dd">
+<td style="padding:13px 20px;font-weight:600;background:#f8f7f4">Content Modules</td>
+<td style="padding:13px 20px;text-align:center">5 standard modules</td>
+<td style="padding:13px 20px;text-align:center;background:#f0faf5;color:#1b3a2d;font-weight:700">7 enhanced modules</td>
+</tr>
+<tr style="border-bottom:1px solid #e8e5dd">
+<td style="padding:13px 20px;font-weight:600;background:#f8f7f4">Video Support</td>
+<td style="padding:13px 20px;text-align:center"><span style="color:#dc2626">✗</span> Not available</td>
+<td style="padding:13px 20px;text-align:center;background:#f0faf5;color:#1b3a2d;font-weight:700"><span style="color:#1b3a2d">✓</span> Full video modules</td>
+</tr>
+<tr style="border-bottom:1px solid #e8e5dd">
+<td style="padding:13px 20px;font-weight:600;background:#f8f7f4">Image Size</td>
+<td style="padding:13px 20px;text-align:center">Standard (970px wide)</td>
+<td style="padding:13px 20px;text-align:center;background:#f0faf5;color:#1b3a2d;font-weight:700">Full-width (1464px wide)</td>
+</tr>
+<tr style="border-bottom:1px solid #e8e5dd">
+<td style="padding:13px 20px;font-weight:600;background:#f8f7f4">Brand Story</td>
+<td style="padding:13px 20px;text-align:center"><span style="color:#1b3a2d">✓</span> Basic brand card</td>
+<td style="padding:13px 20px;text-align:center;background:#f0faf5;color:#1b3a2d;font-weight:700"><span style="color:#1b3a2d">✓</span> Rich brand narrative</td>
+</tr>
+<tr style="border-bottom:1px solid #e8e5dd">
+<td style="padding:13px 20px;font-weight:600;background:#f8f7f4">Interactive Carousel</td>
+<td style="padding:13px 20px;text-align:center"><span style="color:#dc2626">✗</span> Not available</td>
+<td style="padding:13px 20px;text-align:center;background:#f0faf5;color:#1b3a2d;font-weight:700"><span style="color:#1b3a2d">✓</span> Swipeable carousels</td>
+</tr>
+<tr>
+<td style="padding:13px 20px;font-weight:600;background:#f8f7f4">Estimated Conversion Lift</td>
+<td style="padding:13px 20px;text-align:center">+5–8%</td>
+<td style="padding:13px 20px;text-align:center;background:#f0faf5;color:#1b3a2d;font-weight:700">+15–20%</td>
+</tr>
+</tbody>
+</table>
+</div>
 
-<h3>A+ Premium (A++ Content)</h3>
-<p>Eligible sellers can access A+ Premium with interactive features, video, and carousel modules. Ask us about eligibility and pricing.</p>`,
+<h3>How It Works</h3>
+<ol>
+  <li><strong>Brand &amp; Product Review:</strong> We analyze your product, target audience, and competitive landscape to plan the A+ Content layout and messaging strategy.</li>
+  <li><strong>Design &amp; Copywriting:</strong> Our team creates professional image modules, comparison charts, and persuasive copy that aligns with your brand identity.</li>
+  <li><strong>Upload &amp; Approval:</strong> We upload the content to your Seller Central account and manage the Amazon review process until your A+ Content goes live.</li>
+</ol>
+
+<p style="margin-top:24px;padding:16px 20px;background:#f0faf5;border-left:4px solid #1b3a2d;border-radius:0 8px 8px 0;font-size:14px;color:#1b3a2d"><strong>Important:</strong> Basic A+ Content is free for all Brand Registry-enrolled sellers. Premium A+ is currently available by invitation to sellers who have published A+ Brand Story on all ASINs in their catalog. Amazon occasionally opens Premium A+ to all Brand Registry members during promotional periods.</p>`,
     icon: "Sparkles",
     image: "/images/services/a-plus-content.jpg",
     startingPrice: 299,
@@ -1483,34 +2461,69 @@ const servicesData = [
     slug: "ppc-campaign-setup",
     name: "Amazon PPC Setup",
     shortDesc: "Professional Amazon PPC campaign setup. Sponsored Products, Brands, and Display campaigns configured for optimal performance.",
-    metaTitle: "Amazon PPC Campaign Setup Service | Maximize Ad ROI | LLCPad",
-    metaDescription: "Professional Amazon PPC campaign setup. Sponsored Products, Brands, and Display campaigns configured for optimal performance. Start advertising the right way.",
-    description: `<p>Amazon advertising is essential for product visibility. Our PPC setup service creates well-structured campaigns that maximize your advertising ROI from day one.</p>
+    metaTitle: "Amazon PPC Campaign Setup Service | LLCPad",
+    metaDescription: "Launch profitable Amazon PPC campaigns. Sponsored Products, Brands, and Display ads set up for non-US sellers. Maximize ROI with expert setup from LLCPad.",
+    description: `<p><strong>Amazon PPC (Pay-Per-Click) advertising</strong> is the primary lever for driving visibility and sales on the platform — especially for new products with no organic ranking history. For international sellers, understanding the nuances of Sponsored Products, Sponsored Brands, and Sponsored Display can mean the difference between a <strong>profitable launch</strong> and wasted ad spend. We set up your campaigns with proven structures from day one.</p>
 
-<h3>Campaign Types We Set Up</h3>
+<h3>Why You Need Professional PPC Setup</h3>
 <ul>
-  <li><strong>Sponsored Products:</strong> Keyword and product targeting for individual products</li>
-  <li><strong>Sponsored Brands:</strong> Banner ads featuring your logo and multiple products</li>
-  <li><strong>Sponsored Display:</strong> Retargeting and audience-based advertising</li>
+  <li><strong>Launch Velocity:</strong> New products have zero organic ranking — PPC is the only way to get your product in front of buyers immediately after launch.</li>
+  <li><strong>Data-Driven Structure:</strong> Properly structured campaigns separate research, exact, and broad match types, making optimization far more effective over time.</li>
+  <li><strong>Budget Efficiency:</strong> Poor campaign structure wastes 40–60% of ad spend on irrelevant clicks. Professional setup eliminates this from day one.</li>
+  <li><strong>Competitive Intelligence:</strong> We analyze competitor keywords and bidding patterns to position your products strategically in the marketplace.</li>
 </ul>
 
-<h3>Our Setup Process</h3>
+<div style="overflow-x:auto;margin:32px 0;padding-top:20px">
+<table style="width:100%;border-collapse:separate;border-spacing:0;border-radius:12px;font-size:15px;border:1px solid #e8e5dd">
+<thead><tr style="background:#1b3a2d;color:#faf8f4">
+<th style="padding:14px 20px;text-align:left;font-weight:700;text-transform:uppercase;font-size:12px;letter-spacing:1px">Feature</th>
+<th style="padding:14px 20px;text-align:center;font-weight:700;text-transform:uppercase;font-size:12px;letter-spacing:1px;position:relative"><span style="position:absolute;top:-14px;left:50%;transform:translateX(-50%);background:#e84c1e;color:#fff;font-size:10px;padding:2px 10px;border-radius:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;white-space:nowrap">Recommended</span>Sponsored Products</th>
+<th style="padding:14px 20px;text-align:center;font-weight:700;text-transform:uppercase;font-size:12px;letter-spacing:1px">Sponsored Brands</th>
+<th style="padding:14px 20px;text-align:center;font-weight:700;text-transform:uppercase;font-size:12px;letter-spacing:1px">Sponsored Display</th>
+</tr></thead>
+<tbody>
+<tr style="border-bottom:1px solid #e8e5dd">
+<td style="padding:13px 20px;font-weight:600;background:#f8f7f4">Placement</td>
+<td style="padding:13px 20px;text-align:center;background:#f0faf5;color:#1b3a2d;font-weight:700">Search results &amp; product pages</td>
+<td style="padding:13px 20px;text-align:center">Top of search results</td>
+<td style="padding:13px 20px;text-align:center">On &amp; off Amazon</td>
+</tr>
+<tr style="border-bottom:1px solid #e8e5dd">
+<td style="padding:13px 20px;font-weight:600;background:#f8f7f4">Targeting</td>
+<td style="padding:13px 20px;text-align:center;background:#f0faf5;color:#1b3a2d;font-weight:700">Keyword &amp; product targeting</td>
+<td style="padding:13px 20px;text-align:center">Keyword &amp; category</td>
+<td style="padding:13px 20px;text-align:center">Audience &amp; remarketing</td>
+</tr>
+<tr style="border-bottom:1px solid #e8e5dd">
+<td style="padding:13px 20px;font-weight:600;background:#f8f7f4">Avg. Cost-Per-Click</td>
+<td style="padding:13px 20px;text-align:center;background:#f0faf5;color:#1b3a2d;font-weight:700">$0.50–$2.00</td>
+<td style="padding:13px 20px;text-align:center">$0.75–$3.00</td>
+<td style="padding:13px 20px;text-align:center">$0.30–$1.50</td>
+</tr>
+<tr style="border-bottom:1px solid #e8e5dd">
+<td style="padding:13px 20px;font-weight:600;background:#f8f7f4">Brand Registry Required</td>
+<td style="padding:13px 20px;text-align:center;background:#f0faf5;color:#1b3a2d;font-weight:700"><span style="color:#dc2626">✗</span> No</td>
+<td style="padding:13px 20px;text-align:center"><span style="color:#1b3a2d">✓</span> Yes</td>
+<td style="padding:13px 20px;text-align:center"><span style="color:#dc2626">✗</span> No</td>
+</tr>
+<tr>
+<td style="padding:13px 20px;font-weight:600;background:#f8f7f4">Best For</td>
+<td style="padding:13px 20px;text-align:center;background:#f0faf5;color:#1b3a2d;font-weight:700">All sellers — core campaign type</td>
+<td style="padding:13px 20px;text-align:center">Brand awareness &amp; visibility</td>
+<td style="padding:13px 20px;text-align:center">Retargeting &amp; off-Amazon reach</td>
+</tr>
+</tbody>
+</table>
+</div>
+
+<h3>How It Works</h3>
 <ol>
-  <li><strong>Account Audit:</strong> Review current campaigns and identify opportunities</li>
-  <li><strong>Keyword Research:</strong> Build comprehensive keyword lists</li>
-  <li><strong>Campaign Architecture:</strong> Create organized, scalable structure</li>
-  <li><strong>Bid Strategy:</strong> Set competitive bids for your goals</li>
-  <li><strong>Launch & Monitor:</strong> Launch campaigns and initial optimization</li>
+  <li><strong>Keyword &amp; Competitor Analysis:</strong> We research your niche, identify high-converting keywords, and map competitor strategies to find opportunities.</li>
+  <li><strong>Campaign Architecture:</strong> We build a structured campaign framework with separate ad groups for automatic, broad, phrase, and exact match types — plus negative keyword lists.</li>
+  <li><strong>Launch &amp; Optimization Handoff:</strong> Campaigns go live with recommended daily budgets and bids. You receive a management guide for ongoing bid adjustments and keyword harvesting.</li>
 </ol>
 
-<h3>What You'll Get</h3>
-<ul>
-  <li>Properly structured campaigns</li>
-  <li>Automatic and manual campaigns</li>
-  <li>Negative keyword lists</li>
-  <li>Budget recommendations</li>
-  <li>7-day optimization check-in</li>
-</ul>`,
+<p style="margin-top:24px;padding:16px 20px;background:#f0faf5;border-left:4px solid #1b3a2d;border-radius:0 8px 8px 0;font-size:14px;color:#1b3a2d"><strong>Important:</strong> PPC requires a Professional Seller account ($39.99/month). We recommend starting with a minimum daily budget of $25–$50 per product during the launch phase. Target ACoS (Advertising Cost of Sale) typically stabilizes at 15–30% after 4–6 weeks of optimization.</p>`,
     icon: "Target",
     image: "/images/services/ppc-setup.jpg",
     startingPrice: 349,
@@ -1562,36 +2575,63 @@ const servicesData = [
     slug: "account-reinstatement",
     name: "Amazon Account Reinstatement",
     shortDesc: "Professional Amazon seller account reinstatement service. Suspension appeals, Plan of Action writing, and account recovery.",
-    metaTitle: "Amazon Account Reinstatement Service | Suspension Appeals | LLCPad",
-    metaDescription: "Professional Amazon seller account reinstatement service. Suspension appeals, Plan of Action writing, and account recovery. 85% success rate on first appeal.",
-    description: `<p>Amazon account suspension can be devastating. Our reinstatement experts have helped hundreds of sellers recover their accounts with professionally written appeals and Plans of Action.</p>
+    metaTitle: "Amazon Account Reinstatement Service | LLCPad",
+    metaDescription: "Get your suspended Amazon seller account reinstated fast. Expert appeal writing for non-US sellers facing suspension. Contact LLCPad for urgent help.",
+    description: `<p>An <strong>Amazon account suspension</strong> can halt your entire business overnight — and for international sellers, navigating the appeals process without understanding Amazon's internal review system often leads to repeated denials. Whether your account was suspended for policy violations, performance issues, or IP complaints, a professional <strong>Plan of Action (POA)</strong> is your best path to reinstatement. Time is critical — every day your account is down means lost revenue and declining rankings.</p>
 
-<h3>Common Suspension Reasons</h3>
+<h3>Why You Need Professional Reinstatement Help</h3>
 <ul>
-  <li><strong>Authenticity Complaints:</strong> Customers or brands claim products are fake</li>
-  <li><strong>Policy Violations:</strong> Listing policy, review manipulation, multiple accounts</li>
-  <li><strong>Performance Issues:</strong> High ODR, late shipments, cancellations</li>
-  <li><strong>Inauthentic Items:</strong> Amazon believes products may not be genuine</li>
-  <li><strong>Intellectual Property:</strong> Copyright, trademark, or patent complaints</li>
+  <li><strong>Expert Appeal Writing:</strong> Amazon reviewers evaluate thousands of appeals daily. A poorly written POA gets rejected in seconds — we know exactly what they look for.</li>
+  <li><strong>Root Cause Analysis:</strong> We identify the actual reason for your suspension (which is often different from what the notification says) and address it directly.</li>
+  <li><strong>Faster Resolution:</strong> Self-written appeals average 3–5 attempts. Professional appeals typically succeed in 1–2 submissions, saving weeks of lost sales.</li>
+  <li><strong>Prevention Strategy:</strong> After reinstatement, we provide a compliance framework to prevent future suspensions and keep your account in good standing.</li>
 </ul>
 
-<h3>Our Reinstatement Process</h3>
+<div style="overflow-x:auto;margin:32px 0;padding-top:20px">
+<table style="width:100%;border-collapse:separate;border-spacing:0;border-radius:12px;font-size:15px;border:1px solid #e8e5dd">
+<thead><tr style="background:#1b3a2d;color:#faf8f4">
+<th style="padding:14px 20px;text-align:left;font-weight:700;text-transform:uppercase;font-size:12px;letter-spacing:1px">Suspension Reason</th>
+<th style="padding:14px 20px;text-align:center;font-weight:700;text-transform:uppercase;font-size:12px;letter-spacing:1px">Severity</th>
+<th style="padding:14px 20px;text-align:center;font-weight:700;text-transform:uppercase;font-size:12px;letter-spacing:1px">Typical Timeline</th>
+</tr></thead>
+<tbody>
+<tr style="border-bottom:1px solid #e8e5dd">
+<td style="padding:13px 20px;font-weight:600;background:#f8f7f4">Inauthentic Product Claims</td>
+<td style="padding:13px 20px;text-align:center;color:#e84c1e;font-weight:700">High</td>
+<td style="padding:13px 20px;text-align:center">1–4 weeks</td>
+</tr>
+<tr style="border-bottom:1px solid #e8e5dd">
+<td style="padding:13px 20px;font-weight:600;background:#f8f7f4">Policy Violation (Listing / Review)</td>
+<td style="padding:13px 20px;text-align:center;color:#d97706;font-weight:700">Medium–High</td>
+<td style="padding:13px 20px;text-align:center">1–3 weeks</td>
+</tr>
+<tr style="border-bottom:1px solid #e8e5dd">
+<td style="padding:13px 20px;font-weight:600;background:#f8f7f4">Linked / Related Accounts</td>
+<td style="padding:13px 20px;text-align:center;color:#dc2626;font-weight:700">Very High</td>
+<td style="padding:13px 20px;text-align:center">2–6 weeks</td>
+</tr>
+<tr style="border-bottom:1px solid #e8e5dd">
+<td style="padding:13px 20px;font-weight:600;background:#f8f7f4">Performance Metrics (ODR, Late Shipment)</td>
+<td style="padding:13px 20px;text-align:center;color:#d97706;font-weight:700">Medium</td>
+<td style="padding:13px 20px;text-align:center">1–2 weeks</td>
+</tr>
+<tr>
+<td style="padding:13px 20px;font-weight:600;background:#f8f7f4">Rights Owner / IP Complaint</td>
+<td style="padding:13px 20px;text-align:center;color:#e84c1e;font-weight:700">High</td>
+<td style="padding:13px 20px;text-align:center">1–4 weeks</td>
+</tr>
+</tbody>
+</table>
+</div>
+
+<h3>How It Works</h3>
 <ol>
-  <li><strong>Case Analysis:</strong> Review suspension notice, account health, and history</li>
-  <li><strong>Root Cause Identification:</strong> Determine exactly what triggered suspension</li>
-  <li><strong>Plan of Action:</strong> Write compelling POA addressing Amazon's concerns</li>
-  <li><strong>Appeal Submission:</strong> Submit through proper channels</li>
-  <li><strong>Follow-Up:</strong> Handle Amazon's responses and additional requests</li>
+  <li><strong>Account Audit:</strong> We review your suspension notification, account health metrics, and performance history to identify the exact root cause and contributing factors.</li>
+  <li><strong>Plan of Action (POA):</strong> We write a comprehensive appeal that addresses the root cause, details corrective actions already taken, and outlines preventive measures.</li>
+  <li><strong>Submission &amp; Escalation:</strong> We submit your appeal through the proper channels and escalate if needed — including executive seller relations — until your account is reinstated.</li>
 </ol>
 
-<h3>What Makes a Successful Appeal</h3>
-<ul>
-  <li>Clear acknowledgment of the issue</li>
-  <li>Specific root cause analysis</li>
-  <li>Concrete corrective actions taken</li>
-  <li>Preventive measures for the future</li>
-  <li>Professional, non-emotional tone</li>
-</ul>`,
+<p style="margin-top:24px;padding:16px 20px;background:#f0faf5;border-left:4px solid #1b3a2d;border-radius:0 8px 8px 0;font-size:14px;color:#1b3a2d"><strong>Important:</strong> Do not submit multiple appeals without professional guidance. Each rejected appeal makes the next one harder to succeed. If your account has already been denied, share your previous appeal and Amazon's responses so we can adjust our strategy accordingly.</p>`,
     icon: "ShieldCheck",
     image: "/images/services/reinstatement.jpg",
     startingPrice: 499,
@@ -1643,23 +2683,69 @@ const servicesData = [
     slug: "reseller-certificate",
     name: "Reseller Certificate",
     shortDesc: "Get your state reseller certificate (sales tax permit). Buy wholesale without paying sales tax on inventory purchases.",
-    metaTitle: "Reseller Certificate Service | Sales Tax Permit | LLCPad",
-    metaDescription: "Get your state reseller certificate (sales tax permit). Buy wholesale without paying sales tax on inventory purchases. Essential for Amazon sellers.",
-    description: `<p>A reseller certificate (also called a sales tax permit or resale certificate) allows you to purchase inventory for resale without paying sales tax. This is essential for maintaining healthy margins.</p>
+    metaTitle: "Reseller Certificate & Sales Tax Permit | LLCPad",
+    metaDescription: "Get your reseller certificate and buy inventory tax-free. LLCPad helps non-US LLC owners obtain sales tax permits across US states.",
+    description: `<p>A <strong>reseller certificate</strong> (also called a <strong>sales tax permit</strong> or resale certificate) allows your LLC to purchase goods for resale <strong>without paying sales tax</strong> to the supplier. Instead, you collect sales tax from the end customer and remit it to the state. For international entrepreneurs selling physical products through Amazon, Shopify, or other US channels, a reseller certificate is essential for <strong>legal tax compliance</strong> and maximizing profit margins.</p>
 
-<h3>How Reseller Certificates Work</h3>
-<p>When you buy products wholesale for resale, you shouldn't pay sales tax on those purchases. Instead, you collect sales tax from your end customers. The reseller certificate exempts you from paying tax to your suppliers.</p>
-
-<h3>When You Need a Reseller Certificate</h3>
+<h3>Why You Need a Reseller Certificate</h3>
 <ul>
-  <li><strong>Wholesale Purchases:</strong> Buy from US wholesalers and distributors</li>
-  <li><strong>Trade Shows:</strong> Purchase inventory at trade shows</li>
-  <li><strong>Amazon FBA:</strong> States where you have inventory (nexus)</li>
-  <li><strong>Dropshipping:</strong> Needed if you have nexus in supplier's state</li>
+  <li><strong>Buy Inventory Tax-Free:</strong> Without a reseller certificate, you pay sales tax on every wholesale purchase — an unnecessary cost that cuts into your margins when you resell those products.</li>
+  <li><strong>Legal Sales Tax Compliance:</strong> If your LLC has sales tax nexus in a state (physical or economic), you're legally required to collect and remit sales tax. A reseller certificate is the foundation of this compliance.</li>
+  <li><strong>Amazon &amp; Marketplace Requirements:</strong> Amazon and other marketplaces may request your reseller certificate or sales tax permit number during seller registration or tax configuration.</li>
+  <li><strong>Avoid Audit Penalties:</strong> States actively audit businesses for sales tax compliance. Operating without proper permits can result in back taxes, penalties of 10–25%, and interest charges.</li>
 </ul>
 
-<h3>State-by-State Registration</h3>
-<p>Reseller certificates are issued by state. If you have nexus (tax presence) in multiple states, you need a certificate in each state. Common nexus triggers include inventory storage, employees, and significant sales.</p>`,
+<div style="overflow-x:auto;margin:32px 0;padding-top:20px">
+<table style="width:100%;border-collapse:separate;border-spacing:0;border-radius:12px;font-size:15px;border:1px solid #e8e5dd">
+<thead><tr style="background:#1b3a2d;color:#faf8f4">
+<th style="padding:14px 20px;text-align:left;font-weight:700;text-transform:uppercase;font-size:12px;letter-spacing:1px">State</th>
+<th style="padding:14px 20px;text-align:center;font-weight:700;text-transform:uppercase;font-size:12px;letter-spacing:1px">Economic Nexus Threshold</th>
+<th style="padding:14px 20px;text-align:center;font-weight:700;text-transform:uppercase;font-size:12px;letter-spacing:1px">Effective Date</th>
+<th style="padding:14px 20px;text-align:center;font-weight:700;text-transform:uppercase;font-size:12px;letter-spacing:1px">Transaction Threshold</th>
+</tr></thead>
+<tbody>
+<tr style="border-bottom:1px solid #e8e5dd">
+<td style="padding:13px 20px;font-weight:600;background:#f8f7f4">California</td>
+<td style="padding:13px 20px;text-align:center">$500,000</td>
+<td style="padding:13px 20px;text-align:center">April 1, 2019</td>
+<td style="padding:13px 20px;text-align:center">None</td>
+</tr>
+<tr style="border-bottom:1px solid #e8e5dd">
+<td style="padding:13px 20px;font-weight:600;background:#f8f7f4">Texas</td>
+<td style="padding:13px 20px;text-align:center">$500,000</td>
+<td style="padding:13px 20px;text-align:center">October 1, 2019</td>
+<td style="padding:13px 20px;text-align:center">None</td>
+</tr>
+<tr style="border-bottom:1px solid #e8e5dd">
+<td style="padding:13px 20px;font-weight:600;background:#f8f7f4">New York</td>
+<td style="padding:13px 20px;text-align:center">$500,000</td>
+<td style="padding:13px 20px;text-align:center">June 21, 2018</td>
+<td style="padding:13px 20px;text-align:center">100 transactions</td>
+</tr>
+<tr style="border-bottom:1px solid #e8e5dd">
+<td style="padding:13px 20px;font-weight:600;background:#f8f7f4">Florida</td>
+<td style="padding:13px 20px;text-align:center">$100,000</td>
+<td style="padding:13px 20px;text-align:center">July 1, 2021</td>
+<td style="padding:13px 20px;text-align:center">None</td>
+</tr>
+<tr>
+<td style="padding:13px 20px;font-weight:600;background:#f8f7f4">Washington</td>
+<td style="padding:13px 20px;text-align:center">$100,000</td>
+<td style="padding:13px 20px;text-align:center">October 1, 2018</td>
+<td style="padding:13px 20px;text-align:center">None</td>
+</tr>
+</tbody>
+</table>
+</div>
+
+<h3>How It Works</h3>
+<ol>
+  <li><strong>Identify Your Nexus States:</strong> We help you determine which states require you to register based on your sales volume, warehouse locations, or marketplace activity.</li>
+  <li><strong>We Register Your LLC:</strong> Our team completes the state sales tax registration application and obtains your reseller certificate / sales tax permit on your behalf.</li>
+  <li><strong>Start Buying Tax-Free:</strong> Use your reseller certificate with suppliers to purchase inventory without paying sales tax, and begin collecting tax from your customers as required.</li>
+</ol>
+
+<p style="margin-top:24px;padding:16px 20px;background:#f0faf5;border-left:4px solid #1b3a2d;border-radius:0 8px 8px 0;font-size:14px;color:#1b3a2d"><strong>Important:</strong> Economic nexus thresholds are based on the previous 12 months of sales into a state. If you sell on Amazon FBA, your inventory stored in Amazon warehouses creates physical nexus in those states regardless of sales volume. Marketplace facilitator laws mean Amazon collects tax in most states, but you may still need to register and file $0 returns.</p>`,
     icon: "FileBadge",
     image: "/images/services/reseller-certificate.jpg",
     startingPrice: 99,

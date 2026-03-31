@@ -1,0 +1,162 @@
+/* ============================================
+   Service Prose — Rich Content Rendering
+   ============================================
+   Applied to the service-description widget so
+   that ANY styled HTML (tables, lists, callouts,
+   headings, inline styles) renders beautifully
+   within the Tailwind Typography "prose" wrapper.
+
+   Rationale:
+   • Tailwind prose uses `:where()` selectors (zero specificity)
+     which can lose to utility classes on parent elements.
+   • Prose's default weights (600 for strong) are too subtle
+     with the Inter / Outfit font pairing.
+   • Prose resets table padding / borders, clobbering our
+     inline-styled comparison tables.
+   • Tables have `overflow:hidden` for border-radius, clipping
+     absolute-positioned badges ("Recommended").
+   ============================================ */
+
+.service-prose {
+
+  /* ------------------------------------------------
+     STRONG / BOLD — explicit dark color + true 700
+     ------------------------------------------------ */
+  & :where(strong) {
+    color: var(--color-foreground, #0f172a);
+    font-weight: 700;
+  }
+
+  /* ------------------------------------------------
+     HEADINGS — display font, tighter tracking
+     ------------------------------------------------ */
+  & :where(h2, h3, h4) {
+    font-family: var(--font-heading);
+    letter-spacing: -0.02em;
+    color: var(--color-foreground, #0f172a);
+  }
+
+  & :where(h3) {
+    font-size: 1.375em;
+    font-weight: 700;
+    margin-top: 1.8em;
+    margin-bottom: 0.75em;
+  }
+
+  /* ------------------------------------------------
+     PARAGRAPHS — comfortable reading
+     ------------------------------------------------ */
+  & :where(p) {
+    color: var(--color-foreground, #0f172a);
+    line-height: 1.75;
+  }
+
+  /* ------------------------------------------------
+     LISTS — branded markers, tighter spacing
+     ------------------------------------------------ */
+  & :where(ul, ol) {
+    padding-left: 1.625em;
+    margin-top: 1em;
+    margin-bottom: 1em;
+  }
+
+  & :where(li) {
+    margin-top: 0.375em;
+    margin-bottom: 0.375em;
+    padding-left: 0.375em;
+    line-height: 1.7;
+  }
+
+  /* Ordered list: branded counter */
+  & :where(ol > li)::marker {
+    color: var(--color-primary, #e84c1e);
+    font-weight: 700;
+    font-family: var(--font-heading);
+  }
+
+  /* Unordered list: branded bullet */
+  & :where(ul > li)::marker {
+    color: var(--color-primary, #e84c1e);
+  }
+
+  /* ------------------------------------------------
+     TABLES — respect inline styles, fix badge overflow
+     ------------------------------------------------ */
+
+  /* Wrapper div: allow badge to overflow vertically */
+  & > div[style*="overflow"] {
+    overflow: visible !important;
+    overflow-x: auto !important;
+  }
+
+  /* Table: remove prose margin overrides, respect inline sizing */
+  & :where(table) {
+    margin-top: 0;
+    margin-bottom: 0;
+    font-size: inherit;
+    line-height: inherit;
+    overflow: visible !important;
+  }
+
+  /* Corner cells get individual border-radius (replaces table overflow:hidden) */
+  & :where(table thead tr:first-child th:first-child) {
+    border-top-left-radius: 12px;
+  }
+  & :where(table thead tr:first-child th:last-child) {
+    border-top-right-radius: 12px;
+  }
+  & :where(table tbody tr:last-child td:first-child) {
+    border-bottom-left-radius: 12px;
+  }
+  & :where(table tbody tr:last-child td:last-child) {
+    border-bottom-right-radius: 12px;
+  }
+
+  /* Don't let prose override inline th/td padding or borders */
+  & :where(th),
+  & :where(td) {
+    padding: revert;
+    border-bottom-width: 0;
+    vertical-align: middle;
+  }
+
+  /* Remove prose's thead bottom border (our rows use inline borders) */
+  & :where(thead) {
+    border-bottom-width: 0;
+  }
+
+  & :where(thead th) {
+    padding: revert;
+    color: inherit;
+    font-weight: inherit;
+    vertical-align: middle;
+  }
+
+  /* Remove prose's tbody tr borders (our rows use inline borders) */
+  & :where(tbody tr) {
+    border-bottom-width: 0;
+  }
+
+  /* ------------------------------------------------
+     CALLOUT BOX — ensure inline styles work cleanly
+     ------------------------------------------------
+     Callouts use: <p style="background:...;border-left:...">
+     Prose resets margins on p — we keep them intact.
+   */
+  & > :where(p[style*="border-left"]) {
+    border-radius: 0 8px 8px 0;
+    line-height: 1.7;
+  }
+
+  /* ------------------------------------------------
+     LINKS — primary color, underline on hover
+     ------------------------------------------------ */
+  & :where(a) {
+    color: var(--color-primary, #e84c1e);
+    text-decoration: none;
+    font-weight: 500;
+  }
+  & :where(a:hover) {
+    text-decoration: underline;
+  }
+}

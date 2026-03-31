@@ -540,7 +540,7 @@ export default async function ServicePage({ params }: PageProps) {
         <section className="mx-auto mt-16 max-w-4xl">
           <h2 className="text-2xl font-bold">About {service.name}</h2>
           <div
-            className="prose prose-slate mt-6 max-w-none dark:prose-invert prose-headings:font-semibold prose-p:text-muted-foreground prose-li:text-muted-foreground"
+            className="prose dark:prose-invert mt-6 max-w-none service-prose"
             dangerouslySetInnerHTML={{ __html: service.description }}
           />
         </section>

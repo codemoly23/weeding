@@ -2,6 +2,7 @@
 @plugin "@tailwindcss/typography";
 @import "../styles/heading-animations.css";
 @import "../styles/text-block.css";
+@import "../styles/service-prose.css";
 
 @theme inline {
   /* Heartbeat Animation */

@@ -9,7 +9,8 @@
       "Bash(npm run dev:*)",
       "Bash(npx next dev)",
       "Bash(npm install dompurify @types/dompurify)",
-      "Bash(npx prisma migrate dev --name add-compare-at-price)"
+      "Bash(npx prisma migrate dev --name add-compare-at-price)",
+      "Bash(git pull:*)"
     ]
   }
 }

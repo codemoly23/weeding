@@ -119,10 +119,8 @@ export function ServiceDescriptionWidget({
         {headerElement}
         <div
           className={cn(
-            "prose dark:prose-invert max-w-none",
+            "prose dark:prose-invert max-w-none service-prose",
             fontSizeClass,
-            "prose-headings:font-semibold prose-a:text-primary prose-li:marker:text-primary",
-            "prose-p:text-foreground prose-li:text-foreground prose-headings:text-foreground"
           )}
           dangerouslySetInnerHTML={{ __html: service.description }}
         />
@@ -138,9 +136,8 @@ export function ServiceDescriptionWidget({
         <div className="rounded-xl border border-l-4 border-l-primary bg-card p-8">
           <div
             className={cn(
-              "prose dark:prose-invert max-w-none",
+              "prose dark:prose-invert max-w-none service-prose",
               fontSizeClass,
-              "prose-p:text-foreground prose-li:text-foreground prose-headings:text-foreground"
             )}
             dangerouslySetInnerHTML={{ __html: service.description }}
           />
@@ -157,9 +154,8 @@ export function ServiceDescriptionWidget({
         {/* Content (2/3) */}
         <div
           className={cn(
-            "lg:col-span-2 prose dark:prose-invert max-w-none",
+            "lg:col-span-2 prose dark:prose-invert max-w-none service-prose",
             fontSizeClass,
-            "prose-p:text-foreground prose-li:text-foreground prose-headings:text-foreground"
           )}
           dangerouslySetInnerHTML={{ __html: service.description }}
         />

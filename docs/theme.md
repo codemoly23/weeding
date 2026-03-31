@@ -1367,6 +1367,38 @@ All homepage sections bound to the "Legal & Business Services" theme:
 | 10 | sec_contact_forge | custom-html + lead-form | Contact / consultation form (cream bg) |
 | 11 | sec_cta_forge | hero-content + 2× custom-html | Pre-footer CTA "Your US business starts today" (dark forest bg, animated orbs) |
 
+## Complete Theme Section Registry (Service Details Page)
+
+All service details page sections bound to the "Legal & Business Services" theme:
+
+| Order | Section ID | Widget(s) | Description |
+|-------|-----------|-----------|-------------|
+| 0 | section_…_z4az9ihk | process-steps | 4-step "How It Works" process (cream #f0ede5 bg, custom CSS with dashed connector, hover effects) |
+| 1 | section_…_rmj39zja | faq-accordion | Service FAQ accordion |
+| 2+ | (dynamic) | related-services, testimonials, etc. | Additional service detail widgets |
+
+### Process Steps — Custom CSS (Shared Between Home & Service Pages)
+
+The `process-steps` section on both **home** and **service details** pages uses identical custom CSS injected at the **section level** (`settings.customCSS`). This ensures visual consistency when the Legal theme is active.
+
+**Custom CSS rules applied:**
+
+| Rule | Selector | Effect |
+|------|----------|--------|
+| Watermark "04" | `&::after` | 200px ghost number at bottom-right (`rgba(27,58,45,0.04)`) |
+| Badge cleanup | `& [data-field-id="badge"]` | Remove padding/border from badge |
+| Heading line breaks | `& [data-field-id="heading"]` | `white-space: pre-line` for `\n` support |
+| Step card padding | `& [data-field-id="steps"] > div` | `padding: 0 20px; text-align: center` |
+| Dashed connector | `& [data-field-id="steps"]::before` | Horizontal dashed line through icon circles (`top: 40px`, 12% inset) |
+| Icon circle styling | `.group > div:first-child > div:first-child` | `z-index: 2`, shadow, smooth transition |
+| Icon hover | `.group:hover > ...` | Forest green bg `#1b3a2d`, cream SVG `#faf8f4` |
+| Heading font | `& [data-field-id="steps"] h3` | Forces `var(--font-heading)` on step titles |
+| Responsive | `@media (max-width: 1023px)` | Hides connector line, removes extra padding |
+
+**Important:** This CSS is stored in `data.json` → page → section → `settings.customCSS`, NOT in the widget settings. When the Legal theme is activated, the theme importer loads these section-level settings automatically.
+
+---
+
 ### Data Deleted on Theme Reset/Activation
 
 When "Reset & Activate" is triggered, these database tables are wiped and recreated from `data.json`:
