@@ -16,6 +16,11 @@ export async function GET(
         orderBy: { createdAt: "desc" },
         take: 20,
       },
+      availability: {
+        where: { date: { gte: new Date() } },
+        orderBy: { date: "asc" },
+        take: 90,
+      },
     },
   });
 

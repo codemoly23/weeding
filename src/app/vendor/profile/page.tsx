@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { Save, Loader2, CheckCircle } from "lucide-react";
+import { Save, Loader2, CheckCircle, Plus, Trash2, ChevronLeft, ChevronRight } from "lucide-react";
 
 const CATEGORIES = [
   { value: "VENUE", label: "Venue", emoji: "🏛️" },
@@ -19,6 +19,11 @@ const CATEGORIES = [
   { value: "OTHER", label: "Other", emoji: "🎊" },
 ];
 
+interface FaqItem {
+  question: string;
+  answer: string;
+}
+
 interface ProfileData {
   businessName: string;
   category: string;
@@ -26,16 +31,21 @@ interface ProfileData {
   description: string;
   city: string;
   country: string;
+  lat: string;
+  lng: string;
   phone: string;
   website: string;
   instagram: string;
   facebook: string;
+  pinterest: string;
+  slaHours: string;
   priceMin: string;
   priceMax: string;
   currency: string;
   photos: string[];
   isAvailable: boolean;
   status: string;
+  faqItems: FaqItem[];
 }
 
 const defaultProfile: ProfileData = {
@@ -45,16 +55,21 @@ const defaultProfile: ProfileData = {
   description: "",
   city: "",
   country: "",
+  lat: "",
+  lng: "",
   phone: "",
   website: "",
   instagram: "",
   facebook: "",
+  pinterest: "",
+  slaHours: "",
   priceMin: "",
   priceMax: "",
   currency: "USD",
   photos: [],
   isAvailable: true,
   status: "PENDING",
+  faqItems: [],
 };
 
 export default function VendorProfilePage() {
@@ -63,6 +78,14 @@ export default function VendorProfilePage() {
   const [saving, setSaving] = useState(false);
   const [saved, setSaved] = useState(false);
   const [error, setError] = useState("");
+
+  // Availability calendar state
+  const [calMonth, setCalMonth] = useState<Date>(() => {
+    const d = new Date();
+    return new Date(d.getFullYear(), d.getMonth(), 1);
+  });
+  const [availability, setAvailability] = useState<{ date: string; status: string; note: string | null }[]>([]);
+  const [calSaving, setCalSaving] = useState<string | null>(null);
 
   useEffect(() => {
     fetch("/api/vendor/profile")
@@ -74,7 +97,14 @@ export default function VendorProfilePage() {
             ...data.profile,
             priceMin: data.profile.priceMin?.toString() ?? "",
             priceMax: data.profile.priceMax?.toString() ?? "",
+            slaHours: data.profile.slaHours?.toString() ?? "",
+            lat: data.profile.lat?.toString() ?? "",
+            lng: data.profile.lng?.toString() ?? "",
             photos: data.profile.photos ?? [],
+            instagram: data.profile.instagram ?? "",
+            facebook: data.profile.facebook ?? "",
+            pinterest: data.profile.pinterest ?? "",
+            faqItems: data.profile.faqItems ?? [],
           });
         }
       })
@@ -82,9 +112,59 @@ export default function VendorProfilePage() {
       .finally(() => setLoading(false));
   }, []);
 
+  // Load availability for current calendar month
+  useEffect(() => {
+    const y = calMonth.getFullYear();
+    const m = String(calMonth.getMonth() + 1).padStart(2, "0");
+    fetch(`/api/vendor/availability?month=${y}-${m}`)
+      .then((r) => r.ok ? r.json() : null)
+      .then((data) => {
+        if (data?.availability) setAvailability(data.availability);
+      })
+      .catch(() => {});
+  }, [calMonth]);
+
   function set(field: keyof ProfileData, value: unknown) {
     setProfile((p) => ({ ...p, [field]: value }));
     setSaved(false);
+  }
+
+  async function handleCalendarClick(dateStr: string) {
+    const existing = availability.find((a) => a.date.slice(0, 10) === dateStr);
+    const statuses = ["AVAILABLE", "BOOKED", "TENTATIVE"] as const;
+    let nextStatus: string;
+    if (!existing) {
+      nextStatus = "AVAILABLE";
+    } else {
+      const idx = statuses.indexOf(existing.status as typeof statuses[number]);
+      if (idx === statuses.length - 1) {
+        // Remove entry
+        setCalSaving(dateStr);
+        await fetch("/api/vendor/availability", {
+          method: "DELETE",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ date: dateStr }),
+        });
+        setAvailability((prev) => prev.filter((a) => a.date.slice(0, 10) !== dateStr));
+        setCalSaving(null);
+        return;
+      }
+      nextStatus = statuses[idx + 1];
+    }
+    setCalSaving(dateStr);
+    const res = await fetch("/api/vendor/availability", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ date: dateStr, status: nextStatus }),
+    });
+    if (res.ok) {
+      const data = await res.json();
+      setAvailability((prev) => {
+        const filtered = prev.filter((a) => a.date.slice(0, 10) !== dateStr);
+        return [...filtered, data.entry];
+      });
+    }
+    setCalSaving(null);
   }
 
   async function handleSave(e: React.FormEvent) {
@@ -99,6 +179,10 @@ export default function VendorProfilePage() {
           ...profile,
           priceMin: profile.priceMin ? parseFloat(profile.priceMin) : null,
           priceMax: profile.priceMax ? parseFloat(profile.priceMax) : null,
+          slaHours: profile.slaHours ? parseInt(profile.slaHours) : null,
+          lat: profile.lat ? parseFloat(profile.lat) : null,
+          lng: profile.lng ? parseFloat(profile.lng) : null,
+          faqItems: profile.faqItems,
         }),
       });
       if (!res.ok) {
@@ -195,7 +279,7 @@ export default function VendorProfilePage() {
                 onChange={(e) => set("city", e.target.value)}
                 className="input"
                 required
-                placeholder="New York"
+                placeholder="Dhaka"
               />
             </Field>
             <Field label="Country" required>
@@ -205,10 +289,35 @@ export default function VendorProfilePage() {
                 onChange={(e) => set("country", e.target.value)}
                 className="input"
                 required
-                placeholder="USA"
+                placeholder="Bangladesh"
+              />
+            </Field>
+            <Field label="Latitude">
+              <input
+                type="number"
+                step="any"
+                value={profile.lat}
+                onChange={(e) => set("lat", e.target.value)}
+                className="input"
+                placeholder="23.8103"
+              />
+            </Field>
+            <Field label="Longitude">
+              <input
+                type="number"
+                step="any"
+                value={profile.lng}
+                onChange={(e) => set("lng", e.target.value)}
+                className="input"
+                placeholder="90.4125"
               />
             </Field>
           </div>
+          <p className="text-xs text-gray-400 mt-1">
+            Latitude &amp; Longitude are used to show your business on the map view. Find yours at{" "}
+            <a href="https://maps.google.com" target="_blank" rel="noopener noreferrer" className="text-purple-500 hover:underline">maps.google.com</a>
+            {" "}— right-click any location and copy the coordinates.
+          </p>
         </Section>
 
         {/* Contact */}
@@ -250,12 +359,32 @@ export default function VendorProfilePage() {
                 placeholder="facebook.com/yourpage"
               />
             </Field>
+            <Field label="Pinterest">
+              <input
+                type="text"
+                value={profile.pinterest}
+                onChange={(e) => set("pinterest", e.target.value)}
+                className="input"
+                placeholder="pinterest.com/yourboard"
+              />
+            </Field>
           </div>
         </Section>
 
-        {/* Pricing */}
-        <Section title="Pricing">
-          <div className="grid sm:grid-cols-3 gap-4">
+        {/* Pricing & Response Time */}
+        <Section title="Pricing & Response Time">
+          <div className="grid sm:grid-cols-4 gap-4">
+            <Field label="Response Time (hours)">
+              <input
+                type="number"
+                value={profile.slaHours}
+                onChange={(e) => set("slaHours", e.target.value)}
+                className="input"
+                placeholder="24"
+                min="1"
+                max="168"
+              />
+            </Field>
             <Field label="Minimum Price">
               <input
                 type="number"
@@ -308,6 +437,117 @@ export default function VendorProfilePage() {
             </div>
           </label>
         </Section>
+
+        {/* Calendar availability */}
+        <div className="bg-white rounded-xl border border-gray-200 p-5">
+          <h2 className="text-sm font-semibold text-gray-900 mb-1">Calendar Availability</h2>
+          <p className="text-xs text-gray-500 mb-4">Click a date to cycle: blank → Available → Booked → Tentative → blank</p>
+          <div className="flex items-center justify-between mb-3">
+            <button type="button" onClick={() => setCalMonth(new Date(calMonth.getFullYear(), calMonth.getMonth() - 1, 1))} className="p-1.5 rounded-lg hover:bg-gray-100 text-gray-500">
+              <ChevronLeft className="w-4 h-4" />
+            </button>
+            <span className="text-sm font-medium text-gray-700">
+              {calMonth.toLocaleDateString("en-US", { month: "long", year: "numeric" })}
+            </span>
+            <button type="button" onClick={() => setCalMonth(new Date(calMonth.getFullYear(), calMonth.getMonth() + 1, 1))} className="p-1.5 rounded-lg hover:bg-gray-100 text-gray-500">
+              <ChevronRight className="w-4 h-4" />
+            </button>
+          </div>
+          <div className="grid grid-cols-7 gap-1 text-center mb-1">
+            {["Su","Mo","Tu","We","Th","Fr","Sa"].map(d => (
+              <div key={d} className="text-xs text-gray-400 font-medium py-1">{d}</div>
+            ))}
+          </div>
+          <div className="grid grid-cols-7 gap-1">
+            {(() => {
+              const year = calMonth.getFullYear();
+              const month = calMonth.getMonth();
+              const firstDay = new Date(year, month, 1).getDay();
+              const daysInMonth = new Date(year, month + 1, 0).getDate();
+              const cells = [...Array(firstDay).fill(null), ...Array.from({ length: daysInMonth }, (_, i) => i + 1)];
+              const statusColor: Record<string, string> = {
+                AVAILABLE: "bg-emerald-100 text-emerald-800",
+                BOOKED: "bg-red-100 text-red-700",
+                TENTATIVE: "bg-amber-100 text-amber-800",
+              };
+              return cells.map((day, idx) => {
+                if (!day) return <div key={idx} />;
+                const dateStr = `${year}-${String(month + 1).padStart(2, "0")}-${String(day).padStart(2, "0")}`;
+                const entry = availability.find((a) => a.date.slice(0, 10) === dateStr);
+                const isSaving = calSaving === dateStr;
+                return (
+                  <button
+                    type="button"
+                    key={idx}
+                    onClick={() => handleCalendarClick(dateStr)}
+                    disabled={isSaving}
+                    title={entry?.status ?? "Click to mark"}
+                    className={`rounded-lg py-1.5 text-xs text-center transition-all cursor-pointer select-none ${
+                      entry ? statusColor[entry.status] : "text-gray-600 hover:bg-gray-100"
+                    } ${isSaving ? "opacity-50" : ""}`}
+                  >
+                    {day}
+                  </button>
+                );
+              });
+            })()}
+          </div>
+          <div className="flex items-center gap-4 mt-4 text-xs text-gray-500">
+            <span className="flex items-center gap-1.5"><span className="w-3 h-3 rounded bg-emerald-100 inline-block" />Available</span>
+            <span className="flex items-center gap-1.5"><span className="w-3 h-3 rounded bg-red-100 inline-block" />Booked</span>
+            <span className="flex items-center gap-1.5"><span className="w-3 h-3 rounded bg-amber-100 inline-block" />Tentative</span>
+          </div>
+        </div>
+
+        {/* FAQ Editor */}
+        <div className="bg-white rounded-xl border border-gray-200 p-5">
+          <h2 className="text-sm font-semibold text-gray-900 mb-1">FAQ</h2>
+          <p className="text-xs text-gray-500 mb-4">Add frequently asked questions shown on your public profile.</p>
+          <div className="space-y-3">
+            {profile.faqItems.map((item, idx) => (
+              <div key={idx} className="border border-gray-100 rounded-xl p-3 space-y-2 bg-gray-50">
+                <div className="flex items-start gap-2">
+                  <input
+                    type="text"
+                    value={item.question}
+                    onChange={(e) => {
+                      const updated = [...profile.faqItems];
+                      updated[idx] = { ...item, question: e.target.value };
+                      set("faqItems", updated);
+                    }}
+                    placeholder="Question"
+                    className="input flex-1 text-sm"
+                  />
+                  <button
+                    type="button"
+                    onClick={() => set("faqItems", profile.faqItems.filter((_, j) => j !== idx))}
+                    className="mt-0.5 text-red-400 hover:text-red-600 transition-colors"
+                  >
+                    <Trash2 className="w-4 h-4" />
+                  </button>
+                </div>
+                <textarea
+                  value={item.answer}
+                  onChange={(e) => {
+                    const updated = [...profile.faqItems];
+                    updated[idx] = { ...item, answer: e.target.value };
+                    set("faqItems", updated);
+                  }}
+                  placeholder="Answer"
+                  rows={2}
+                  className="input text-sm resize-none"
+                />
+              </div>
+            ))}
+            <button
+              type="button"
+              onClick={() => set("faqItems", [...profile.faqItems, { question: "", answer: "" }])}
+              className="flex items-center gap-1.5 text-sm text-purple-600 hover:text-purple-800 font-medium"
+            >
+              <Plus className="w-4 h-4" /> Add FAQ item
+            </button>
+          </div>
+        </div>
 
         {/* Photos */}
         <Section title="Photos">

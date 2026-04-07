@@ -97,7 +97,7 @@ export async function getEmailConfig(): Promise<EmailConfig> {
       password: smtpPassword,
     },
     fromEmail: settingsMap[EMAIL_SETTINGS.FROM_EMAIL] || "",
-    fromName: settingsMap[EMAIL_SETTINGS.FROM_NAME] || "LLCPad",
+    fromName: settingsMap[EMAIL_SETTINGS.FROM_NAME] || "Ceremoney",
     replyTo: settingsMap[EMAIL_SETTINGS.REPLY_TO] || "",
     adminEmail: settingsMap[EMAIL_SETTINGS.ADMIN_EMAIL] || "",
     notifications: {
@@ -198,8 +198,8 @@ export async function testEmailConnection(): Promise<{ success: boolean; message
     await transporter.sendMail({
       from: `"${config.fromName}" <${config.fromEmail || config.smtp.user}>`,
       to: config.adminEmail || config.smtp.user,
-      subject: "LLCPad Email Test",
-      html: "<p>This is a test email from LLCPad. If you received this, your email configuration is working correctly!</p>",
+      subject: "Ceremoney Email Test",
+      html: "<p>This is a test email from Ceremoney. If you received this, your email configuration is working correctly!</p>",
     });
 
     return { success: true, message: "Test email sent successfully" };

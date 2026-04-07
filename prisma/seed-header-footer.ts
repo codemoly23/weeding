@@ -1,8 +1,7 @@
 /**
  * Seed Header & Footer Configuration
  *
- * This script creates the default header and footer configuration
- * matching the existing hardcoded design.
+ * Default header and footer for Ceremoney — wedding & event planning platform.
  */
 
 import prisma from "../src/lib/db";
@@ -15,13 +14,11 @@ async function seedHeaderFooter() {
   // ==========================================
   console.log("📌 Creating Header Configuration...");
 
-  // Delete existing header config
   await prisma.menuItem.deleteMany({
     where: { headerId: { not: null } },
   });
   await prisma.headerConfig.deleteMany({});
 
-  // Create default header
   const header = await prisma.headerConfig.create({
     data: {
       name: "Default Header",
@@ -34,15 +31,15 @@ async function seedHeaderFooter() {
       logoMaxHeight: 56,
       showAuthButtons: true,
       loginText: "Sign In",
-      registerText: "Get Started",
-      registerUrl: "/services/llc-formation",
+      registerText: "Start Planning",
+      registerUrl: "/register",
       searchEnabled: false,
       mobileBreakpoint: 1024,
       height: 80,
       ctaButtons: JSON.stringify([
         {
-          text: "Get Started",
-          url: "/services/llc-formation",
+          text: "Start Planning",
+          url: "/register",
           variant: "primary",
         },
       ]),
@@ -56,12 +53,11 @@ async function seedHeaderFooter() {
   // ==========================================
   console.log("\n📌 Creating Header Menu Items...");
 
-  // Main navigation items
   const menuItems = [
     { label: "Home", url: "/", sortOrder: 0 },
-    { label: "Services", url: "/services", sortOrder: 1, isMegaMenu: true },
-    { label: "Pricing", url: "/pricing", sortOrder: 2 },
-    { label: "About", url: "/about", sortOrder: 3 },
+    { label: "Features", url: "/#features", sortOrder: 1, isMegaMenu: true },
+    { label: "Vendors", url: "/vendors", sortOrder: 2 },
+    { label: "Pricing", url: "/pricing", sortOrder: 3 },
     { label: "Blog", url: "/blog", sortOrder: 4 },
     { label: "Contact", url: "/contact", sortOrder: 5 },
   ];
@@ -78,78 +74,72 @@ async function seedHeaderFooter() {
     console.log(`   ✓ Created menu item: ${item.label}`);
   }
 
-  // Get Services menu item for mega menu children
-  const servicesMenuItem = await prisma.menuItem.findFirst({
-    where: { headerId: header.id, label: "Services" },
+  // Mega menu under Features
+  const featuresMenuItem = await prisma.menuItem.findFirst({
+    where: { headerId: header.id, label: "Features" },
   });
 
-  if (servicesMenuItem) {
-    // Mega Menu Categories and Items
+  if (featuresMenuItem) {
     const megaMenuData = [
       {
-        categoryName: "Formation & Legal",
-        categoryIcon: "building-2",
-        categoryDesc: "Start your US business",
+        categoryName: "Planning Tools",
+        categoryIcon: "calendar",
+        categoryDesc: "Everything you need to plan",
         sortOrder: 0,
         items: [
-          { label: "LLC Formation", url: "/services/llc-formation", badge: "Popular", sortOrder: 0 },
-          { label: "EIN Application", url: "/services/ein-application", sortOrder: 1 },
-          { label: "ITIN Application", url: "/services/itin-application", sortOrder: 2 },
-          { label: "Trademark Registration", url: "/services/trademark-registration", badge: "Popular", sortOrder: 3 },
-          { label: "DBA / Trade Name", url: "/services/dba-filing", sortOrder: 4 },
-          { label: "Operating Agreement", url: "/services/operating-agreement", sortOrder: 5 },
+          { label: "Guest Management", url: "/#guests", badge: "Core", sortOrder: 0 },
+          { label: "Seating Chart Editor", url: "/#seating", badge: "Popular", sortOrder: 1 },
+          { label: "12-Month Checklist", url: "/#checklist", sortOrder: 2 },
+          { label: "Budget Tracker", url: "/#budget", sortOrder: 3 },
+          { label: "Event Itinerary", url: "/#itinerary", sortOrder: 4 },
         ],
       },
       {
-        categoryName: "Compliance & Documents",
-        categoryIcon: "shield",
-        categoryDesc: "Keep your business compliant",
+        categoryName: "Event Website",
+        categoryIcon: "globe",
+        categoryDesc: "Beautiful public event pages",
         sortOrder: 1,
         items: [
-          { label: "Registered Agent", url: "/services/registered-agent", sortOrder: 0 },
-          { label: "Annual Compliance", url: "/services/compliance", sortOrder: 1 },
-          { label: "Virtual US Address", url: "/services/virtual-address", sortOrder: 2 },
-          { label: "Amendment Filing", url: "/services/amendment-filing", sortOrder: 3 },
-          { label: "Certificate of Good Standing", url: "/services/certificate-good-standing", sortOrder: 4 },
-          { label: "Apostille Service", url: "/services/apostille-service", sortOrder: 5 },
+          { label: "RSVP Forms", url: "/#rsvp", badge: "Popular", sortOrder: 0 },
+          { label: "Website Builder", url: "/#website", sortOrder: 1 },
+          { label: "Invitation Designer", url: "/#invitations", sortOrder: 2 },
+          { label: "Countdown Timer", url: "/#countdown", sortOrder: 3 },
+          { label: "Photo Gallery", url: "/#gallery", sortOrder: 4 },
         ],
       },
       {
-        categoryName: "Amazon Services",
-        categoryIcon: "shopping-cart",
-        categoryDesc: "Sell on Amazon with confidence",
+        categoryName: "Vendor Tools",
+        categoryIcon: "store",
+        categoryDesc: "Find and manage vendors",
         sortOrder: 2,
         items: [
-          { label: "Amazon Seller Account", url: "/services/amazon-seller", badge: "Popular", sortOrder: 0 },
-          { label: "Brand Registry", url: "/services/brand-registry", badge: "Popular", sortOrder: 1 },
-          { label: "Category Ungating", url: "/services/category-ungating", sortOrder: 2 },
-          { label: "Listing Optimization", url: "/services/product-listing-optimization", sortOrder: 3 },
-          { label: "A+ Content Creation", url: "/services/a-plus-content", sortOrder: 4 },
-          { label: "Account Reinstatement", url: "/services/account-reinstatement", sortOrder: 5 },
+          { label: "Vendor Directory", url: "/vendors", badge: "Popular", sortOrder: 0 },
+          { label: "Vendor Inquiries", url: "/#inquiries", sortOrder: 1 },
+          { label: "Vendor Reviews", url: "/#reviews", sortOrder: 2 },
         ],
       },
       {
-        categoryName: "Tax & Finance",
-        categoryIcon: "calculator",
-        categoryDesc: "Financial services",
+        categoryName: "Advanced",
+        categoryIcon: "sparkles",
+        categoryDesc: "Elite plan features",
         sortOrder: 3,
         items: [
-          { label: "Business Banking", url: "/services/business-banking", badge: "Popular", sortOrder: 0 },
-          { label: "Bookkeeping", url: "/services/bookkeeping", sortOrder: 1 },
-          { label: "Tax Filing", url: "/services/tax-filing", sortOrder: 2 },
+          { label: "Stationery Engine", url: "/#stationery", badge: "Elite", sortOrder: 0 },
+          { label: "QR Entrance Mode", url: "/#qr", badge: "Elite", sortOrder: 1 },
+          { label: "Collaborators", url: "/#collaborators", badge: "Elite", sortOrder: 2 },
+          { label: "SMS Credits", url: "/#sms", badge: "Elite", sortOrder: 3 },
         ],
       },
     ];
 
     for (const category of megaMenuData) {
-      // Create category as a child of Services
       const categoryItem = await prisma.menuItem.create({
         data: {
           label: category.categoryName,
           categoryName: category.categoryName,
           categoryIcon: category.categoryIcon,
           categoryDesc: category.categoryDesc,
-          parentId: servicesMenuItem.id,
+          parentId: featuresMenuItem.id,
           headerId: header.id,
           sortOrder: category.sortOrder,
           isVisible: true,
@@ -157,7 +147,6 @@ async function seedHeaderFooter() {
       });
       console.log(`   ✓ Created category: ${category.categoryName}`);
 
-      // Create service items under this category
       for (const item of category.items) {
         await prisma.menuItem.create({
           data: {
@@ -171,7 +160,7 @@ async function seedHeaderFooter() {
           },
         });
       }
-      console.log(`      → Added ${category.items.length} service items`);
+      console.log(`      → Added ${category.items.length} items`);
     }
   }
 
@@ -180,30 +169,28 @@ async function seedHeaderFooter() {
   // ==========================================
   console.log("\n📌 Creating Footer Configuration...");
 
-  // Delete existing footer config
   await prisma.menuItem.deleteMany({
     where: { footerWidgetId: { not: null } },
   });
   await prisma.footerWidget.deleteMany({});
   await prisma.footerConfig.deleteMany({});
 
-  // Create default footer
   const footer = await prisma.footerConfig.create({
     data: {
       name: "Default Footer",
       isActive: true,
       layout: "MULTI_COLUMN",
-      columns: 6,
+      columns: 5,
       newsletterEnabled: true,
-      newsletterTitle: "Subscribe to our newsletter",
-      newsletterSubtitle: "Get updates on new services and offers",
+      newsletterTitle: "Stay inspired",
+      newsletterSubtitle: "Get wedding tips, planning guides, and product updates.",
       showSocialLinks: true,
       socialPosition: "brand",
       showContactInfo: true,
       contactPosition: "brand",
       bottomBarEnabled: true,
       showDisclaimer: true,
-      disclaimerText: "LLCPad is not a law firm and does not provide legal advice. The information provided is for general informational purposes only.",
+      disclaimerText: "© Ceremoney. All rights reserved. Ceremoney is a wedding and event planning platform, not a legal or financial service.",
       bottomLinks: JSON.stringify([
         { label: "Privacy Policy", url: "/privacy" },
         { label: "Terms of Service", url: "/terms" },
@@ -221,8 +208,8 @@ async function seedHeaderFooter() {
   // ==========================================
   console.log("\n📌 Creating Footer Widgets...");
 
-  // Widget 1: Brand (Column 1-2)
-  const brandWidget = await prisma.footerWidget.create({
+  // Widget 1: Brand (Column 1)
+  await prisma.footerWidget.create({
     data: {
       footerId: footer.id,
       type: "BRAND",
@@ -240,40 +227,62 @@ async function seedHeaderFooter() {
   });
   console.log("   ✓ Created BRAND widget (Column 1)");
 
-  // Widget 2: Services (Column 3)
-  const servicesWidget = await prisma.footerWidget.create({
+  // Widget 2: Features (Column 2)
+  const featuresWidget = await prisma.footerWidget.create({
     data: {
       footerId: footer.id,
       type: "LINKS",
-      title: "Services",
+      title: "Features",
+      showTitle: true,
+      column: 2,
+      sortOrder: 0,
+    },
+  });
+
+  const featureLinks = [
+    { label: "Guest Management", url: "/#guests", sortOrder: 0 },
+    { label: "Seating Chart", url: "/#seating", sortOrder: 1 },
+    { label: "Event Website", url: "/#website", sortOrder: 2 },
+    { label: "RSVP Forms", url: "/#rsvp", sortOrder: 3 },
+    { label: "Budget Tracker", url: "/#budget", sortOrder: 4 },
+    { label: "Vendor Directory", url: "/vendors", sortOrder: 5 },
+  ];
+
+  for (const link of featureLinks) {
+    await prisma.menuItem.create({
+      data: { ...link, footerWidgetId: featuresWidget.id, isVisible: true },
+    });
+  }
+  console.log("   ✓ Created LINKS widget: Features (Column 2)");
+
+  // Widget 3: Event Types (Column 3)
+  const eventTypesWidget = await prisma.footerWidget.create({
+    data: {
+      footerId: footer.id,
+      type: "LINKS",
+      title: "Event Types",
       showTitle: true,
       column: 3,
       sortOrder: 0,
     },
   });
 
-  // Add services links to widget
-  const serviceLinks = [
-    { label: "LLC Formation", url: "/services/llc-formation", sortOrder: 0 },
-    { label: "EIN Application", url: "/services/ein-application", sortOrder: 1 },
-    { label: "Amazon Seller Account", url: "/services/amazon-seller", sortOrder: 2 },
-    { label: "Registered Agent", url: "/services/registered-agent", sortOrder: 3 },
-    { label: "Virtual Address", url: "/services/virtual-address", sortOrder: 4 },
-    { label: "Business Banking", url: "/services/business-banking", sortOrder: 5 },
+  const eventTypeLinks = [
+    { label: "Wedding Planning", url: "/planner/create?type=wedding", sortOrder: 0 },
+    { label: "Baptism Planning", url: "/planner/create?type=baptism", sortOrder: 1 },
+    { label: "Party Planning", url: "/planner/create?type=party", sortOrder: 2 },
+    { label: "Corporate Events", url: "/planner/create?type=corporate", sortOrder: 3 },
+    { label: "White Label", url: "/pricing#white-label", sortOrder: 4 },
   ];
 
-  for (const link of serviceLinks) {
+  for (const link of eventTypeLinks) {
     await prisma.menuItem.create({
-      data: {
-        ...link,
-        footerWidgetId: servicesWidget.id,
-        isVisible: true,
-      },
+      data: { ...link, footerWidgetId: eventTypesWidget.id, isVisible: true },
     });
   }
-  console.log("   ✓ Created LINKS widget: Services (Column 3)");
+  console.log("   ✓ Created LINKS widget: Event Types (Column 3)");
 
-  // Widget 3: Company (Column 4)
+  // Widget 4: Company (Column 4)
   const companyWidget = await prisma.footerWidget.create({
     data: {
       footerId: footer.id,
@@ -291,59 +300,23 @@ async function seedHeaderFooter() {
     { label: "Blog", url: "/blog", sortOrder: 2 },
     { label: "FAQs", url: "/faq", sortOrder: 3 },
     { label: "Contact", url: "/contact", sortOrder: 4 },
-    { label: "Testimonials", url: "/testimonials", sortOrder: 5 },
   ];
 
   for (const link of companyLinks) {
     await prisma.menuItem.create({
-      data: {
-        ...link,
-        footerWidgetId: companyWidget.id,
-        isVisible: true,
-      },
+      data: { ...link, footerWidgetId: companyWidget.id, isVisible: true },
     });
   }
   console.log("   ✓ Created LINKS widget: Company (Column 4)");
 
-  // Widget 4: Popular States (Column 5)
-  const statesWidget = await prisma.footerWidget.create({
-    data: {
-      footerId: footer.id,
-      type: "LINKS",
-      title: "Popular States",
-      showTitle: true,
-      column: 5,
-      sortOrder: 0,
-    },
-  });
-
-  const stateLinks = [
-    { label: "Wyoming LLC", url: "/llc/wyoming", sortOrder: 0 },
-    { label: "Delaware LLC", url: "/llc/delaware", sortOrder: 1 },
-    { label: "New Mexico LLC", url: "/llc/new-mexico", sortOrder: 2 },
-    { label: "Texas LLC", url: "/llc/texas", sortOrder: 3 },
-    { label: "Florida LLC", url: "/llc/florida", sortOrder: 4 },
-  ];
-
-  for (const link of stateLinks) {
-    await prisma.menuItem.create({
-      data: {
-        ...link,
-        footerWidgetId: statesWidget.id,
-        isVisible: true,
-      },
-    });
-  }
-  console.log("   ✓ Created LINKS widget: Popular States (Column 5)");
-
-  // Widget 5: Legal (Column 6)
+  // Widget 5: Legal (Column 5)
   const legalWidget = await prisma.footerWidget.create({
     data: {
       footerId: footer.id,
       type: "LINKS",
       title: "Legal",
       showTitle: true,
-      column: 6,
+      column: 5,
       sortOrder: 0,
     },
   });
@@ -357,14 +330,10 @@ async function seedHeaderFooter() {
 
   for (const link of legalLinks) {
     await prisma.menuItem.create({
-      data: {
-        ...link,
-        footerWidgetId: legalWidget.id,
-        isVisible: true,
-      },
+      data: { ...link, footerWidgetId: legalWidget.id, isVisible: true },
     });
   }
-  console.log("   ✓ Created LINKS widget: Legal (Column 6)");
+  console.log("   ✓ Created LINKS widget: Legal (Column 5)");
 
   // ==========================================
   // SUMMARY

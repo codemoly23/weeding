@@ -1,6 +1,6 @@
 # Ceremoney — MVP Development Plan
 
-> **Version:** 4.5 | **Date:** 2026-04-03 | **Timeline:** 19–21 Weeks (+ 3 weeks UX/UI parallel)
+> **Version:** 4.6 | **Date:** 2026-04-07 | **Timeline:** 19–21 Weeks (+ 3 weeks UX/UI parallel)
 
 ---
 
@@ -898,9 +898,10 @@ SENTRY_DSN=""
 
 ## 15. Development Phases — Implementation Tracker
 
-> **Platform:** Built within PracticeLMS (Next.js 15, App Router, Prisma 7, NextAuth v5)
+> **Platform:** Ceremoney — rebranded from LLCPad (Next.js 15, App Router, Prisma 7, NextAuth v5). Repo: https://github.com/sajeebce/weeding.git
 > **Approach:** Each phase follows — Codebase Analysis → Fullstack Implementation (DB + API + UI) → Checklist Verification → Cleanup
 > **Theme Binding:** Landing page content bound to active theme (reset-safe). App routes use theme colors via CSS variables.
+> **DB:** PostgreSQL database `llcpad` (local dev) → will rename to `ceremoney` in production. Old LMS tables (Course, Certificate, Enrollment, etc.) dropped via `db push --accept-data-loss` on 2026-04-07.
 
 ---
 
@@ -1108,16 +1109,86 @@ interface LocalProject {
 | 20 | Bug fix — add guest on authenticated projects | ✅ Done | `POST /guests` returned 400 for empty `firstName`. Fixed: removed validation, now accepts empty string → user fills in inline. `src/app/api/planner/projects/[id]/guests/route.ts` |
 | 21 | i18n keys | ✅ Done | Added `guests.headingDesc` with `{guidelineLink}` placeholder, `guests.guidelineLink`, `guests.exportPdf` in all 4 languages |
 
-**Phase 2A — Blueprint Features Not Yet Implemented:**
+**Phase 2A — Blueprint Features (Tasks 22–26) — ✅ IMPLEMENTATION DONE (2026-04-07)**
+
+---
+
+> ## ⛔ MANDATORY IMPLEMENTATION RULES — Tasks 22–26 এবং এরপরের প্রতিটি pending task
+>
+> ### ধাপ ১ — কাজ শুরুর আগে Codebase Analysis (বাধ্যতামূলক)
+>
+> প্রতিটি task শুরুর আগে নিচের **সব file পড়তে হবেই**:
+> - `prisma/schema.prisma` — existing models, relations, enums
+> - `src/lib/planner-storage.ts` — localStorage helpers ও existing types
+> - `src/app/planner/[id]/guests/page.tsx` — current UI structure
+> - `src/app/api/planner/projects/[id]/guests/route.ts` — existing API patterns
+> - সংশ্লিষ্ট যেকোনো component, hook বা lib file
+>
+> ❌ File না পড়ে একটি লাইনও লেখা যাবে না।
+> ❌ "আমি আগে দেখেছি" বলে skip করা যাবে না — প্রতিটি task-এর আগে আবার পড়তে হবে।
+>
+> ### ধাপ ২ — Fullstack Implementation (UI Mockup সম্পূর্ণ নিষিদ্ধ)
+>
+> প্রতিটি task-এ নিচের **সব layer একসাথে** implement করতে হবে:
+>
+> | Layer | কী করতে হবে |
+> |-------|------------|
+> | **DB Schema** | `prisma/schema.prisma` — নতুন model / field / enum / index যা লাগে |
+> | **Migration** | `npx prisma db push` অথবা raw SQL script — schema অবশ্যই DB-তে apply করতে হবে |
+> | **Prisma Client** | `npx prisma generate` run করতে হবে schema change-এর পর |
+> | **API Routes** | GET / POST / PUT / DELETE — auth check, input validation, error handling সহ |
+> | **localStorage Helpers** | `planner-storage.ts`-এ anonymous project mode-এর জন্য CRUD helpers |
+> | **Frontend UI** | Form, list, modal — loading / error / empty / populated সব state কাজ করতে হবে |
+> | **TypeScript Types** | সব নতুন data structure-এর জন্য interface / type define করতে হবে |
+>
+> ❌ শুধু UI বানিয়ে backend ছাড়া deliver করা যাবে না।
+> ❌ শুধু API বানিয়ে UI ছাড়া deliver করা যাবে না।
+> ❌ Anonymous mode (localStorage) support বাদ দেওয়া যাবে না।
+> ❌ "Coming soon" বা placeholder stub দিয়ে task done mark করা যাবে না।
+>
+> ### ধাপ ৩ — প্রতিটি Task শেষে Checklist Verification
+>
+> প্রতিটি task complete করার পর নিচের **সব item verify করতে হবে**:
+>
+> - [ ] `prisma/schema.prisma` updated
+> - [ ] Migration applied — `npx prisma db push` বা SQL script run হয়েছে
+> - [ ] `npx prisma generate` run — Prisma client up to date
+> - [ ] API endpoints কাজ করছে — GET / POST / PUT / DELETE tested
+> - [ ] Unauthenticated request-এ API 401 return করছে
+> - [ ] `planner-storage.ts`-এ localStorage helpers added / updated
+> - [ ] UI সব state দেখাচ্ছে — loading, error, empty, populated
+> - [ ] Form validation কাজ করছে + error messages দেখাচ্ছে
+> - [ ] `npx tsc --noEmit` — zero TypeScript errors
+> - [ ] কোনো `console.log` বা debug statement নেই
+> - [ ] Mobile layout responsive কাজ করছে
+>
+> ❌ Checklist-এর একটি item বাদ দিয়ে task "done" mark করা যাবে না।
+>
+> ### ধাপ ৪ — সব Task শেষে Codebase Cleanup (phase/sub-phase শেষে)
+>
+> সব pending task complete হওয়ার পর:
+>
+> 1. সব stub / placeholder / `ComingSoon` component সরিয়ে ফেলতে হবে
+> 2. Unused import, variable, function, component সরাতে হবে
+> 3. সব `console.log` ও debug statement সরাতে হবে
+> 4. Dead code — commented-out blocks, unreachable code, TODO comment সরাতে হবে
+> 5. Duplicate logic থাকলে consolidate করতে হবে
+> 6. `npx tsc --noEmit` — zero errors
+> 7. `npm run lint` — zero ESLint errors
+>
+> ❌ Cleanup ছাড়া phase "done" mark করা যাবে না।
+
+---
 
 | # | Task | Status | Details |
 |---|------|--------|---------|
-| 22 | Plus-one management | ⬜ Pending | Each guest can have a +1 linked (name, meal). Blueprint: "Plus-one management" |
-| 23 | Chief guest assignment | ⬜ Pending | Flag a guest as "chief guest" — shown with special badge in list |
-| 24 | Family grouping | ⬜ Pending | Group guests into family units — shared table assignment, bulk RSVP |
-| 25 | Bulk actions | ⬜ Pending | Select multiple guests → bulk: export selection, assign to table, send invitations |
+| 22 | Plus-one management | ✅ Done (2026-04-07) | `hasPlusOne` bool + `plusOneName` + `plusOneMeal` fields on `WeddingGuest`. GuestRow: expandable +1 section with name/meal inputs. DB migration via raw SQL. API (POST/PUT guests routes) accept new fields. `LocalGuest` interface updated. Summary stats updated: shows "Plus-ones: +N" count + "Total attending (incl. +1s)" line when any guest has a plus-one. PDF export subtitle also includes plus-one count. |
+| 23 | Chief guest assignment | ✅ Done (2026-04-07) | `isChiefGuest` bool on `WeddingGuest`. GuestRow: star icon toggle + "Chief Guest" badge in relation label. DB + API + localStorage + UI all updated. |
+| 24 | Family grouping | ✅ Done (2026-04-07) | New `GuestFamily` model (DB + Prisma schema). `familyId` FK on `WeddingGuest`. `/api/planner/projects/[id]/families` (GET, POST) + `/families/[familyId]` (PUT, DELETE). `LocalGuestFamily` interface + `getLocalFamilies/addLocalFamily/updateLocalFamily/deleteLocalFamily` helpers. "By Family" view: family groups with member assignment, unassigned guests section, family create modal, rename/delete inline. |
+| 25 | Bulk actions | ✅ Done (2026-04-07) | Checkbox column in Full Table view (select all / individual). `/api/planner/projects/[id]/guests/bulk` (POST) — actions: `assign_table`, `assign_family`, `delete`, `mark_attending`, `mark_not_attending`, `mark_pending`. Fixed floating bulk-action bar (dark overlay, bottom of screen). localStorage fallback uses existing CRUD helpers. |
+| 26 | Table invitation assignment | ✅ Done (2026-04-07) | `invitationCode` (string) + `invitationSent` (bool) + `invitationSentAt` (DateTime) on `WeddingGuest`. Invitation column in Full Table view: code input field + sent toggle button. DB migration + API routes + `LocalGuest` interface updated. |
 
-#### Phase 2B: RSVP Engine — ✅ IMPLEMENTATION DONE (2026-03-30)
+#### Phase 2B: RSVP Engine — ✅ IMPLEMENTATION DONE (2026-03-30, completed 2026-04-07)
 
 | # | Task | Status | Details |
 |---|------|--------|---------|
@@ -1129,17 +1200,21 @@ interface LocalProject {
 | 6 | Public RSVP page | ✅ Done | `src/app/rsvp/[token]/page.tsx` — no auth required, shows event name + date, attending/declining toggle, dietary + message fields, confirmation screen |
 | 7 | Email notifications | ✅ Done (2026-04-05) | Fire-and-forget after RSVP submission — couple gets HTML email with guest name, status, dietary, message via Nodemailer |
 | 8 | Guest list integration | ✅ Done | Link icon button on hover in all 3 views. Calls token API once, caches in state. `isLocal` guests hide the button. |
-| 9 | Custom RSVP questions | ⬜ Pending | Blueprint: 4 types — short text, long text, single choice, multiple choice. Couple creates custom questions per project; answers stored per guest |
-| 10 | GDPR consent checkbox | ⬜ Pending | Blueprint: consent checkbox on public RSVP form — required before submission |
-| 11 | SMS delivery (Elite) | ⬜ Pending | Send RSVP link via SMS (46elks/Twilio). Elite plan only |
+| 9 | Custom RSVP questions | ✅ Done (2026-04-07) | New `RsvpQuestion` model (text, type: SHORT_TEXT/LONG_TEXT/SINGLE_CHOICE/MULTIPLE_CHOICE, options JSON, required, order) + `RsvpAnswer` model (guestId+questionId unique). DB migration via `scripts/add-rsvp-questions.mjs`. API: `GET+POST /rsvp-questions`, `PUT+DELETE /rsvp-questions/[questionId]`. Public RSVP API: GET returns questions + existing answers; POST accepts `answers` map + upserts. Planner UI: "RSVP Questions" button → modal. Public form: renders by type (input/textarea/radio/checkbox), pre-fills answers. |
+| 10 | GDPR consent checkbox | ✅ Done (2026-04-07) | `gdprConsentAt DateTime?` on `WeddingGuest`. Required consent checkbox on public RSVP form (Shield icon) — disables submit until checked. POST sets `gdprConsentAt` when `gdprConsent: true`. Pre-filled on re-open. |
+| 11 | SMS delivery (Elite) | ✅ Done (2026-04-07) | `POST /api/.../guests/[guestId]/sms` — supports `46elks` + `twilio` via `SMS_PROVIDER` env var. Returns 501 if unconfigured. Smartphone icon on Full Table row hover (guests with phone only). Required env vars: `SMS_PROVIDER`, provider credentials. |
 
 **Files created/modified (Phase 2B):**
-- `scripts/add-rsvp-cols.mjs` — raw SQL to add RSVP columns
-- `prisma/schema.prisma` — `rsvpToken`, `rsvpMessage`, `rsvpSubmittedAt` added to `WeddingGuest`
-- `src/app/api/rsvp/[token]/route.ts` — public GET (fetch guest info) + POST (submit RSVP)
+- `scripts/add-rsvp-cols.mjs` — raw SQL to add RSVP columns (original)
+- `scripts/add-rsvp-questions.mjs` — raw SQL: RsvpQuestion + RsvpAnswer tables + gdprConsentAt column
+- `prisma/schema.prisma` — `rsvpToken`, `rsvpMessage`, `rsvpSubmittedAt`, `gdprConsentAt` on `WeddingGuest`; new `RsvpQuestion`, `RsvpAnswer` models; `RsvpQuestionType` enum
+- `src/app/api/rsvp/[token]/route.ts` — public GET (fetch guest info + questions + answers) + POST (submit RSVP)
 - `src/app/api/planner/projects/[id]/guests/[guestId]/token/route.ts` — generate/get RSVP token
-- `src/app/rsvp/[token]/page.tsx` — public RSVP form page
-- `src/app/planner/[id]/guests/page.tsx` — `RsvpLinkModal`, `handleShareRsvp`, link icon in rows
+- `src/app/api/planner/projects/[id]/guests/[guestId]/sms/route.ts` — send RSVP link via SMS (46elks/Twilio)
+- `src/app/api/planner/projects/[id]/rsvp-questions/route.ts` — GET+POST custom questions
+- `src/app/api/planner/projects/[id]/rsvp-questions/[questionId]/route.ts` — PUT+DELETE custom question
+- `src/app/rsvp/[token]/page.tsx` — public RSVP form (custom questions + GDPR consent)
+- `src/app/planner/[id]/guests/page.tsx` — RSVP Questions manager modal + SMS button
 
 #### Phase 2C: Budget Tracker — ✅ IMPLEMENTATION DONE (2026-03-31)
 
@@ -1277,9 +1352,10 @@ daysLeft  < 7  → Wedding Day only
 | 2C Enhancement I | Budget PDF — green "Paid" indicator next to paid items | ✅ DONE |
 | 2D Enhancement III | Dynamic checklist seeding — date-aware filter, overdue badge, auto-collapse past groups | ✅ DONE |
 
-**Phase 2 Status:** ✅ IMPLEMENTATION DONE (2026-04-03) — all sub-phases + enhancements complete
+**Phase 2 Status:** ✅ IMPLEMENTATION DONE (2026-04-07) — all sub-phases + enhancements complete (2F done)
 
-> **Blueprint gap (not yet planned):** Phase 2A items #22–25 (plus-one, chief guest, family grouping, bulk actions), Phase 2B items #9–11 (custom RSVP questions, GDPR consent, SMS), Phase 2C items #12–15 (overspending alerts, cost-per-head, contingency fund, multi-currency) — to be planned in a future enhancement phase.
+> **Blueprint gap (not yet planned):** Phase 2B items #9–11 (custom RSVP questions, GDPR consent, SMS), Phase 2C items #12–15 (overspending alerts, cost-per-head, contingency fund, multi-currency) — to be planned in a future enhancement phase.
+> ~~Phase 2A items #22–26 (plus-one, chief guest, family grouping, bulk actions, invitation assignment) — ✅ Done 2026-04-07~~
 
 ---
 
@@ -1295,6 +1371,32 @@ daysLeft  < 7  → Wedding Day only
 | 4 | File delete API | ⬜ Pending | `DELETE /api/planner/projects/[id]/files/[fileId]` — delete from R2 + DB |
 | 5 | Files page UI | ⬜ Pending | `/planner/[id]/files` — drag-drop upload zone, file list with preview/download/delete |
 | 6 | Sidebar nav item | ⬜ Pending | Add "Files" between Notes and Post-Event in sidebar (matching blueprint menu order) |
+
+---
+
+#### Phase 2F: Settings Tab & Blueprint Completions — ✅ IMPLEMENTATION DONE (2026-04-07)
+
+**Goal:** Complete the Settings tab and remaining blueprint features not yet in any phase.
+
+| # | Task | Status | Details |
+|---|------|--------|---------|
+| 1 | Copy project | ✅ Done (2026-04-07) | Settings page → "Duplicate Project" button. DB: `POST /api/planner/projects/[id]/copy` copies guests (reset RSVP), budget categories+items, checklist (reset completion), itinerary, notes, venues, vendors. Local: copies all localStorage keys to new project UUID. Redirects to new project settings. |
+| 2 | Accessibility mode toggle | ✅ Done (2026-04-07) | Settings page → toggle saved to `localStorage("planner-a11y")`. Applies `planner-a11y` class to `document.documentElement`. |
+| 3 | Customize feature visibility | ✅ Done (2026-04-07) | Settings page → per-tab on/off toggles. Hidden tabs stored in `localStorage("planner-hidden-tabs-${projectId}")` as `string[]`. Also synced to `project.settings.hiddenTabs` for DB projects. Sidebar reads localStorage and filters nav items — groups with all children hidden are fully hidden. Overview and Settings always visible. |
+| 4 | Share project | ✅ Done (2026-04-07) | `shareToken String? @unique` + `shareEnabled Boolean` added to WeddingProject. Settings page toggle + link display + copy button + QR code (via `qrcode` package). Public page at `/planner/share/[token]` shows read-only overview (couple names, date, venues, vendor list, guest count, checklist progress). Local projects: "Sign in to share" message. |
+| 5 | Itinerary PDF/XLS export | ✅ Done (2026-04-07) | Itinerary page → "Download XLS file" button next to existing PDF button. Uses `xlsx` package (already installed). Exports: Time, Duration, Event, Location columns. Filename includes event date. |
+| 6 | Ceremony/Reception PDF summary | ✅ Done (2026-03-31) | Already implemented in Phase 3B — `@react-pdf/renderer` A4 PDF on both ceremony + reception pages with all venue fields. |
+
+**Files created/modified (Phase 2F — 2026-04-07):**
+- `prisma/schema.prisma` — Added `shareToken String? @unique`, `shareEnabled Boolean @default(false)` to WeddingProject
+- `scripts/add-project-sharing.mjs` — SQL migration script
+- `src/app/api/planner/projects/[id]/copy/route.ts` — **Created** — POST copies full project
+- `src/app/api/planner/projects/[id]/share/route.ts` — **Created** — GET share status, POST toggle sharing
+- `src/app/api/planner/share/[token]/route.ts` — **Created** — GET public read-only project data (no auth)
+- `src/app/planner/share/[token]/page.tsx` — **Created** — Public read-only project overview page
+- `src/app/planner/[id]/settings/page.tsx` — **Modified** — Added Copy, Tab Visibility, Share, Accessibility sections
+- `src/app/planner/[id]/itinerary/page.tsx` — **Modified** — Added XLS export button (xlsx library)
+- `src/components/planner/sidebar.tsx` — **Modified** — Reads `planner-hidden-tabs-${projectId}` from localStorage, filters nav items + groups
 
 ---
 
@@ -1550,25 +1652,36 @@ daysLeft  < 7  → Wedding Day only
 - `src/app/api/planner/projects/[id]/vendors/[vendorId]/route.ts` — **Created** — PUT + DELETE
 - `src/app/planner/[id]/vendors/page.tsx` — **Replaced stub** — full vendor management UI
 
-##### Phase 5A-1: Public Vendor Directory & Marketplace — ✅ IMPLEMENTATION DONE (2026-04-01)
+##### Phase 5A-1: Public Vendor Directory & Marketplace — ✅ IMPLEMENTATION DONE (2026-04-07)
 
 | # | Task | Status | Details |
 |---|------|--------|---------|
 | 1 | Vendor directory (13 categories) | ✅ Done | `/vendors` page — category pill filters, search (name/city), paginated grid |
-| 2 | Map + list view | ⬜ Deferred | Deferred — requires Google Maps API key setup |
+| 2 | Map + list view | ✅ Done (2026-04-07) | react-leaflet `VendorMap` component (OpenStreetMap, no API key). Dynamic import (`ssr: false`). List/Map toggle buttons on `/vendors` page. Leaflet icon fix (CDN URLs). Map centers on first vendor with lat/lng or defaults to Europe (54, 15). Popup: name, category, city, rating, price, "View Profile" link (emerald green). |
 | 3 | Vendor profiles | ✅ Done | `/vendors/[slug]` — photo gallery, ratings, reviews, contact links |
 | 4 | Inquiry system | ✅ Done | "Request Pricing" form → `POST /api/vendors/[slug]/inquiries` → DB |
 | 5 | Booking request flow | ✅ Done | 7-field form: name, email, phone, event type, date, budget, message |
 | 6 | Admin vendor management | ✅ Done | `GET/POST /api/admin/vendors` + `PUT/DELETE /api/admin/vendors/[id]`. Button renamed "View All Vendors" (was "View Public Directory"). Admin sidebar nav renamed "View All Vendors" (was "View Directory"). |
 | 7 | Vendor plans ($19/mo) | ✅ Done (2026-04-05) | Implemented in Phase 5C (plan gating) + Phase 5E (Stripe checkout) |
-| 8 | Map view toggle | ⬜ Pending | Blueprint: list/map toggle on vendor directory — show vendors on interactive map |
-| 9 | Filter: price range, rating, availability date, distance | ⬜ Pending | Blueprint: extended filtering beyond category+location |
-| 10 | Vendor profile — FAQ section | ⬜ Pending | Blueprint: vendor adds Q&A on profile page |
-| 11 | Vendor profile — social links | ⬜ Pending | Blueprint: Instagram, Facebook, Pinterest links on vendor profile |
-| 12 | Response SLA badge | ⬜ Pending | Blueprint: "Typically responds within X hours" badge on vendor profile + directory card |
-| 13 | Availability calendar (public) | ⬜ Pending | Blueprint: color-coded calendar on vendor profile showing booked/available dates |
+| 8 | Map view toggle | ✅ Done (2026-04-07) | See Task 2 above |
+| 9 | Filter: price range, rating, availability date, distance | ✅ Done (2026-04-07) | minPrice/maxPrice (Prisma `gte/lte` filter on `startingPrice`), minRating (post-filter after avgRating computed). Collapsible filter panel on `/vendors`. Active filter chips with "Clear all". |
+| 10 | Vendor profile — FAQ section | ✅ Done (2026-04-07) | `faqItems Json?` on VendorProfile. Vendor dashboard: add/edit/delete FAQ items. Public profile: expand/collapse accordion (ChevronDown). |
+| 11 | Vendor profile — social links | ✅ Done (2026-04-07) | `instagram`, `facebook`, `pinterest` String? on VendorProfile. Profile editor input fields. Public profile: icon links (Instagram pink, Facebook blue, Pinterest red SVG). |
+| 12 | Response SLA badge | ✅ Done (2026-04-07) | `slaHours Int?` on VendorProfile. "Responds within Xh" badge — emerald green pill on directory cards (Clock icon) and public profile quick-info row. |
+| 13 | Availability calendar (public) | ✅ Done (2026-04-07) | `VendorAvailability` model (date @db.Date, status AVAILABLE/BOOKED/TENTATIVE, note). `/api/vendor/availability` GET/POST/DELETE. Vendor editor: click-to-cycle pattern (blank→AVAILABLE→BOOKED→TENTATIVE→blank), saves immediately. Public profile: read-only color-coded calendar, month navigation, today ring. |
+| +  | Lat/Lng for map pin | ✅ Done (2026-04-07) | `lat Float?` + `lng Float?` on VendorProfile (existed in schema). Added UI inputs to vendor profile editor with Google Maps helper text. |
 
-**Files created (Phase 5A-1):**
+**Files created/modified (Phase 5A-1 gap tasks — 2026-04-07):**
+- `src/components/vendors/VendorMap.tsx` — **Created** — Leaflet map (react-leaflet), Marker/Popup per vendor, Leaflet icon fix, center/zoom logic
+- `src/app/vendors/page.tsx` — **Modified** — dynamic import VendorMap, List/Map toggle, extended filter panel (minPrice/maxPrice/minRating), active filter chips, SLA badge on cards, lat/lng in VendorCard interface
+- `src/app/vendors/[slug]/page.tsx` — **Modified** — SLA badge, social links (Instagram/Facebook/Pinterest), availability calendar (read-only), FAQ accordion
+- `src/app/vendor/profile/page.tsx` — **Modified** — lat/lng inputs, Pinterest field, SLA Hours field, availability calendar (click-to-cycle), FAQ editor (add/edit/delete)
+- `src/app/api/vendor/profile/route.ts` — **Modified** — added instagram, facebook, pinterest, slaHours, faqItems, lat, lng to PUT handler
+- `src/app/api/vendor/availability/route.ts` — **Created** — GET/POST/DELETE availability entries
+- `src/app/api/vendors/route.ts` — **Modified** — minPrice/maxPrice filter, minRating post-filter, lat/lng/slaHours in SELECT
+- `src/app/api/vendors/[slug]/route.ts` — **Modified** — include availability (next 90 days)
+
+**Files created (Phase 5A-1 original — 2026-04-01):**
 - `prisma/schema.prisma` — Added `VendorProfile`, `VendorInquiry`, `VendorReview` models + `InquiryStatus` enum + `VENDOR` role in `UserRole`
 - `scripts/add-vendor-marketplace.mjs` — SQL migration script (tables created)
 - `src/app/api/vendors/route.ts` — `GET /api/vendors` (list with filters, pagination, avg rating)
@@ -2171,7 +2284,7 @@ Vendor response time is calculated and displayed publicly:
 |---|------|--------|---------|
 | 1 | Stripe subscription functions | ✅ Done (2026-04-05) | `src/lib/stripe.ts` — `createSubscriptionCheckout()`, `createCustomerPortalSession()`, `getOrCreateStripeCustomer()`. `PLANNER_PLANS` (basic/premium/elite) + `VENDOR_PLAN` constants. Env vars: `STRIPE_PRICE_BASIC/PREMIUM/ELITE/VENDOR` |
 | 2 | DB migration — billing fields | ✅ Done (2026-04-05) | `scripts/add-billing-fields.mjs` — adds `plannerTier`, `plannerStatus`, `plannerPeriodEnd`, `stripeCustomerId`, `stripeSubscriptionId` to `User`; adds `stripeCustomerId`, `stripeSubscriptionId` to `VendorProfile`. Applied + `prisma generate` run. |
-| 3 | 3-tier couple subscription | ✅ Done (2026-04-05) | Basic (free) / Premium (299 SEK/mo) / Elite (499 SEK/mo). `POST /api/billing/checkout` → Stripe checkout session. `POST /api/billing/portal` → Customer Portal URL. `GET /api/billing/subscription` → current tier + status. `/planner/billing` pricing page with 3 cards, feature comparison, upgrade/portal buttons. Sidebar "Plans & Billing" link added. |
+| 3 | 3-tier couple subscription | ✅ Done (2026-04-05, UI updated 2026-04-07) | Basic (free) / Premium (299 SEK/mo) / Elite (499 SEK/mo). `POST /api/billing/checkout` → Stripe checkout session. `POST /api/billing/portal` → Customer Portal URL. `GET /api/billing/subscription` → current tier + status. `/planner/billing` standalone pricing page (preserved). **UI redesign (2026-04-07):** Sidebar "Plans & Billing" link replaced with "Upgrade to Premium" button (bottom of sidebar) → opens `UpgradeModal` popup (planning.wedding-style 2-panel layout: Basic vs Premium/Elite). Full billing UI also embedded directly in `/planner/[id]/settings` page — removes dependency on `/planner/billing` standalone page for primary upgrade flow. |
 | 4 | Vendor billing ($19/mo) | ✅ Done (2026-04-05) | `POST /api/vendor/billing/checkout` → Stripe checkout (subscription mode). `/vendor/billing` page updated — Stripe checkout button enabled (was disabled stub). Portal link added for active Business vendors. |
 | 5 | Webhook handlers | ✅ Done (2026-04-05) | `POST /api/webhooks/stripe` updated — `checkout.session.completed` routes by metadata (planner/vendor/order), `customer.subscription.created/updated` updates `User.plannerTier`/`VendorProfile.planTier`, `customer.subscription.deleted` downgrades to basic/EXPIRED. All existing order flows preserved. |
 | 6 | Invoice PDF generation | ⏭️ DEFERRED | Swedish VAT Kvitto PDF deferred to Phase 6 (requires @react-pdf/renderer template + VAT logic) |
@@ -2320,6 +2433,11 @@ Layer 2 — Shareable Event Brief Link (couple controlled)
 | 2 | Vendor approvals | ⬜ Pending | Review, approve, reject applications |
 | 3 | Financial reporting | ⬜ Pending | Revenue, plan breakdown, refunds |
 | 4 | Platform settings | ⬜ Pending | Templates, default content, email templates |
+| 5 | Forums page | ⬜ Pending | Blueprint: header nav "Forums" — community discussion board for couples, vendors, planners |
+| 6 | Dresses directory | ⬜ Pending | Blueprint: header nav "Dresses" — bridal shop/dress designer directory (browse by style, price, location) |
+| 7 | Blog / Ideas / Inspiration | ⬜ Pending | Blueprint: homepage section + content pages — articles, real weddings gallery, inspiration by category |
+| 8 | Wedding Registry (standalone) | ⬜ Pending | Blueprint: homepage section — standalone registry page linking to Amazon/Zola/Honeyfund with contribution tracking |
+| 9 | Recommended vendors near user | ⬜ Pending | Blueprint: Vendors tab → geo-location based vendor recommendations shown in dashboard (distinct from public marketplace search) |
 
 #### Phase 6B: Testing & Optimization
 
@@ -2358,15 +2476,27 @@ Layer 2 — Shareable Event Brief Link (couple controlled)
 | Phase | Name | Status | Sub-phases | Notes |
 |-------|------|--------|------------|-------|
 | 0 | UX/UI Design | ⏭️ SKIPPED | — | Using planning.wedding reference |
-| 1 | Core Foundation | ✅ DONE | 1A–1E | 5/5 sub-phases |
-| 2 | Planning Tools | ✅ CORE DONE | 2A ✅ · 2B ✅ · 2C ✅ · 2D ✅ · 2E ⬜ | Blueprint gaps: plus-one, custom RSVP Qs, GDPR, Files tab, budget analytics |
-| 3 | Visual Editors | 🔄 IN PROGRESS | 3A ✅ · 3B ✅ · 3C ✅ · 3D ⬜ | Blueprint gaps: QR Entrance Mode, seating exports, starter templates. All 7 seating tabs complete: Ceremony Layout ✅, Reception Layout ✅, Alphabetical Guest Atlas ✅, Seating Cards by Table ✅, Classic Name Cards ✅, Table Numbers ✅, Reception Menu ✅. Each tab has dedicated editor + preview synced via localStorage (2026-04-06). Remaining: Phase 3D (Invitation Designer). |
+| 1 | Core Foundation | ✅ DONE | 1A–1E | 5/5 sub-phases ✅ |
+| 2 | Planning Tools | ✅ CORE DONE | 2A ✅ · 2B ✅ · 2C ✅ · 2D ✅ · 2E ⬜ · 2F ✅ | 5/6 done. 2F (Settings: copy project, tab visibility, share link+QR, accessibility mode, itinerary XLS export) ✅ 2026-04-07. Remaining: 2E Files tab, budget analytics (2C #11–15) |
+| 3 | Visual Editors | 🔄 IN PROGRESS | 3A ✅ · 3B ✅ · 3C ✅ · 3D ⬜ | 3/4 done. All 7 seating tabs complete (Ceremony Layout ✅ · Reception Layout ✅ · Guest Atlas ✅ · Seating Cards ✅ · Name Cards ✅ · Table Numbers ✅ · Reception Menu ✅). Remaining: Phase 3D (Invitation Designer) · QR Entrance Mode · starter templates |
 | 4 | Guest Experience | ✅ COMPLETE | 1 ✅ · 2 ✅ · 3 ✅ · 4 ✅ · 5 ✅ · 6 ✅ · 7 ⏭️ · 8 ✅ | 7/8 (push notifications deferred) |
-| 5 | Marketplace & Payments | ✅ CORE DONE | 5A ✅ · 5B ✅ · 5C ✅ · 5D ✅ · 5E ✅ · 5F ✅ · 5G ⬜ | Blueprint gaps: map view, vendor FAQ, SLA badge, availability calendar, Stationery Engine, White-label, Swish/Klarna |
+| 5 | Marketplace & Payments | ✅ CORE DONE | 5A ✅ · 5B ✅ · 5C ✅ · 5D ✅ · 5E ✅ · 5F ✅ · 5G ⬜ | 6/7 done. Remaining: 5G Stationery Engine, White-label, Swish/Klarna, 5E feature gating |
 | 6 | Admin & Launch | ⬜ NOT STARTED | 6A–6C | 0/3 |
 
-**Last Updated:** 2026-04-06 (session 13 — Reception Menu tab editor + preview sync)
-**Current Focus:** Phase 3A — Reception Menu tab complete (menu-edit editor with clickable sections + right panel, preview syncs from localStorage). All 7 seating tabs now implemented. Next: Phase 2E (Files Tab), Phase 6 (Admin Panel), or Phase 3D (Invitation Designer).
+### Overall Implementation Progress
+
+| Category | Done | Total | % |
+|----------|------|-------|---|
+| Core phases (Phase 1–5 sub-phases) | 20 | 26 | **77%** |
+| Individual tasks (approx.) | ~180 | ~230 | **~78%** |
+| **Major pending work** | — | — | Phase 2E (Files), Phase 3D (Invitation Designer), Phase 6 (Admin Panel), budget analytics, 5G Stationery Engine |
+
+**What's done:** Full planner dashboard (guest list, RSVP, budget, checklist, itinerary, notes, ceremony, reception, website builder, seating chart editor × 7 tabs, vendor marketplace, vendor portal, couple-vendor messaging, billing/Stripe, public event sites, project share link+QR, tab visibility, project copy, accessibility mode.
+
+**What's pending:** Admin panel (Phase 6), Files tab (2E), Invitation Designer (3D), budget analytics/multi-currency (2C #11–15), Stationery Engine (5G), White-label, Swish/Klarna payments.
+
+**Last Updated:** 2026-04-07 (session 15 — Auth system fixes: register API, login branding cleanup)
+**Current Focus:** Auth ✅ fixed. Next candidates: Phase 2E (Files Tab), Phase 6 (Admin Panel), Phase 3D (Invitation Designer), or budget analytics (2C #11–15).
 
 **Session log (2026-04-06, session 13 — Reception Menu tab editor + preview sync):**
 - **`menu-edit/page.tsx` created:** Full-screen reception menu editor. Sections are clickable — click selects element (purple dashed outline), right panel shows element-specific: type label, editable `<textarea>`, `x: N  y: N` coords (via `getBoundingClientRect`), red Delete button. Blank canvas click deselects → right panel shows global style: Template dropdown (Basic/Elegant/Minimal), Main heading / Second heading / Paragraph each with font ◄► + size slider. "Add element" dropdown (Main heading, Second heading, Paragraph, Flourish) + auto-selects new element immediately via `setSelectedId(newId)` + position-recompute `useEffect`. Default 10 sections (Flourish → Appetizer → Salad → Entrees → Dessert → Heading). Google Fonts loaded inline. All saved to `menu-sections-${projectId}` + `menu-settings-${projectId}` localStorage. Close → `?tab=menu`.
@@ -2415,6 +2545,34 @@ Layer 2 — Shareable Event Brief Link (couple controlled)
 - **Result:** Zero TypeScript errors in seating files. `seating/page.tsx` is clean — no dead code, no unused state.
 - Files created: `src/app/planner/[id]/seating/reception-layout-edit/page.tsx`
 - Files modified: `src/app/planner/[id]/seating/page.tsx` (reception wiring + dead code removal + import cleanup), `docs/Weedding plan/wedding planner DEVELOPMENT-PLAN.md`
+
+**Session log (2026-04-07, session 15 — Auth system fixes: register API + login branding cleanup):**
+- **Problem:** Registration form was a stub — `handleSubmit` had a `TODO` comment, `console.log` + fake `setTimeout(1000ms)` instead of any real API call. Users could "register" and land on `/dashboard` but no data was saved to DB. Subsequent login always failed with "Invalid email or password".
+- **Auth layout branding fix:** `src/app/(auth)/layout.tsx` — removed hardcoded `"LLC<span>Pad</span>"` logo. Layout is now `async` server component — calls `getBusinessConfig()` from `src/lib/business-settings.ts`. If `config.logo.url` is set → renders `<Image>`. Otherwise → renders first letter icon + `config.name` (fallback: "Ceremoney"). No more hardcoded branding.
+- **Register API created:** `src/app/api/auth/register/route.ts` — `POST` endpoint. Validates name/email/password presence + min length (8). Checks for existing email (`prisma.user.findUnique` — returns 409 if duplicate). Hashes password with `bcryptjs` (`hash(password, 12)`). Creates user with `role: "CUSTOMER"`. Returns 201 on success.
+- **Register page wired up:** `src/app/(auth)/register/page.tsx` — `handleSubmit` now calls `POST /api/auth/register`. On success, immediately calls NextAuth `signIn("credentials", { email, password, redirect: false })` for auto-login. On auth success → `router.push("/dashboard")`. On auth error → `router.push("/login")`. Real error messages from API shown in UI.
+- **Description updated:** "Start your US business journey today" → "Plan your perfect event — it only takes a minute"
+- **TypeScript:** `npx tsc --noEmit` — exit code 0, zero errors.
+- Files created: `src/app/api/auth/register/route.ts`
+- Files modified: `src/app/(auth)/layout.tsx` (branding dynamic), `src/app/(auth)/register/page.tsx` (real API + auto-login)
+
+**Session log (2026-04-07, session 3 — Phase 2F: Settings Tab & Blueprint Completions):**
+- **Copy project:** Settings page → "Duplicate Project" button. `POST /api/planner/projects/[id]/copy` deep-copies all related data (guests, budget+items, checklist, itinerary, notes, venues, vendors). Local: copies all localStorage keys. Redirects to new project settings.
+- **Tab visibility:** Per-tab on/off toggles in Settings. Stored in `planner-hidden-tabs-${projectId}` localStorage. Also synced to `project.settings.hiddenTabs` for DB projects. Sidebar reads localStorage and filters nav items — groups with all children hidden are fully hidden. Overview + Settings always visible.
+- **Share project:** `shareToken String? @unique` + `shareEnabled Boolean` added to WeddingProject. `POST /api/planner/projects/[id]/share` toggles sharing + generates 32-char hex token once. `GET /api/planner/share/[token]` public no-auth endpoint returns read-only overview data. `/planner/share/[token]` public page shows couple names, date, venues, vendor list, guest count, checklist progress. Settings shows link input + copy button + QR code (via `qrcode` package). Local projects: "Sign in to share" message.
+- **Accessibility mode:** Toggle saved to `planner-a11y` localStorage. Applies `planner-a11y` class to `document.documentElement`.
+- **Itinerary XLS export:** "Download XLS file" button added next to existing PDF button using `xlsx` package. Columns: Time, Duration (min), Event, Location. Filename includes event date.
+- **DB migration:** `npx prisma db push` applied `shareToken`/`shareEnabled` columns + unique index.
+- **TypeScript:** `node --max-old-space-size=4096 node_modules/.bin/tsc --noEmit` — zero errors.
+- Files created: `src/app/api/planner/projects/[id]/copy/route.ts`, `src/app/api/planner/projects/[id]/share/route.ts`, `src/app/api/planner/share/[token]/route.ts`, `src/app/planner/share/[token]/page.tsx`, `scripts/add-project-sharing.mjs`
+- Files modified: `prisma/schema.prisma`, `src/app/planner/[id]/settings/page.tsx`, `src/app/planner/[id]/itinerary/page.tsx`, `src/components/planner/sidebar.tsx`
+
+**Session log (2026-04-07, session 2 — Billing UI Redesign: Upgrade Modal + Settings Billing Embed):**
+- **Sidebar — "Upgrade to Premium" button:** Removed the old "Plans & Billing" sidebar nav link (CreditCard icon → `/planner/billing`). Replaced with a dedicated "Upgrade to Premium" button pinned at the very bottom of the sidebar (star icon, rose-to-purple gradient background, border). On click → opens `UpgradeModal` popup. Collapses to icon-only when sidebar is in collapsed state.
+- **New component — `UpgradeModal`:** `src/components/planner/upgrade-modal.tsx`. Full-screen modal (Dialog, `max-w-4xl`) with two-panel layout matching `planning.wedding` reference. Left panel: Basic plan (water drop SVG icon, feature bullet list, "FREE" label). Right panel: Premium/Elite tab switcher (star SVG with sparkles, gradient tagline, feature list with bold highlights, price + gradient CTA button "Unlock Premium — 299 SEK/mo"). Tab switcher between Premium and Elite with pill-style active state. Fetches subscription via `GET /api/billing/subscription` when opened. Upgrade via `POST /api/billing/checkout`. Manage billing via `POST /api/billing/portal`. Current plan shown with "Your current plan" badge.
+- **Settings page — Billing embedded:** `src/app/planner/[id]/settings/page.tsx` — removed the "Plans & Billing" card that was a single link to `/planner/billing`. Replaced with full billing UI embedded inline: current plan banner (CreditCard icon + tier + renewal date + "Manage billing" portal link), error display, 3-column pricing card grid (Basic/Premium/Elite), VAT notice. Billing state (`sub`, `billingLoading`, `upgrading`, `managingPortal`, `billingError`) added to settings page. Subscription fetched in `useEffect` alongside project data.
+- Files created: `src/components/planner/upgrade-modal.tsx`
+- Files modified: `src/components/planner/sidebar.tsx` (removed billing nav link, added "Upgrade to Premium" button + `UpgradeModal`), `src/app/planner/[id]/settings/page.tsx` (embedded full billing UI, removed `/planner/billing` link card)
 
 **Session log (2026-04-05, session 4 — Overview Post-Wedding section fix):**
 - **Overview page — Post-Wedding section real data:** Overview page (`/planner/[id]/page.tsx`) এর Post-Wedding section আগে hardcoded `"Photos not added yet!"` দেখাত — কোনো API call ছিল না। এখন `fetchAll()` এ `GET /api/planner/projects/[id]/post-wedding` যোগ করা হয়েছে। Response থেকে `pwPhotos` (guest photo count), `pwGuestbook` (guestbook entry count), `pwAttending` (RSVP attending count) state এ store করা হয়। Section এখন: data থাকলে → 3টি stat + "View post-wedding memories →" link দেখায়; local project হলে → sign in বার্তা; DB project এ data না থাকলে → "Post-wedding memories will appear here..." দেখায়।
@@ -2539,19 +2697,46 @@ Layer 2 — Shareable Event Brief Link (couple controlled)
   - `src/app/planner/[id]/seating/ceremony-layout-edit/page.tsx` — full rewrite: expanded ElementKind to 13 types, assetType field, getTableSeatPositions(), TableCanvasElement, AssetCanvasElement, AssetIcon (40+ SVGs), TablePreview, getElementCategories(), AddElementPanel, handleAddElement(), showAddPanel state, updated canvas render + right panel
   - `src/app/planner/[id]/seating/page.tsx` — PreviewElement interface updated, CeremonyLayoutPreview gets guests prop + shows guest names, wide LayoutPanel, larger gallery, PDF download function, pdfSvgId prop, recommendation section restyled
 
-### What's Built So Far (Phase 1 + 2)
+**Session log (2026-04-07, session 4 — Ceremoney Rebranding + DB Fix + Dashboard):**
+
+- **Full Ceremoney rebranding:** Removed all LLCPad references across 80+ files. Updated: `package.json` (name/description/repo), `next.config.ts` (image domains → ceremoney.com, AWS), `.env.example` (added Swish, Klarna, 46elks, AWS S3/CloudFront, Redis), `src/lib/business-settings.ts` (default fallbacks), `src/lib/seo.ts`, `src/lib/email*.ts`, `src/lib/encryption.ts` (salt), `src/lib/i18n/language-context.tsx` (storage key), `src/lib/paypal.ts`, `src/app/layout.tsx` (metadata), `src/app/robots.ts`, `src/app/sitemap.ts`, `CLAUDE.md` (full rewrite), all marketing pages, admin files, seed files, data files.
+- **Deleted:** `src/app/(marketing)/llc/` directory (all LLC state pages — not needed for Ceremoney).
+- **Logo created:** `public/logo.svg` (interlocked wedding rings + sparkle + "Ceremoney" wordmark), `public/logo-icon.svg` (icon only). DB updated: `business.logo.url = /logo.svg`, `business.favicon.url = /logo-icon.svg`.
+- **DB seeded with Ceremoney content:** Re-ran `npx tsx prisma/seed-header-footer.ts` → header nav (Home/Features/Vendors/Pricing/Blog/Contact), footer (5 widgets: Brand/Features/Event Types/Company/Legal), mega menu with 4 categories. Business settings updated: name=Ceremoney, currency=SEK, country=Sweden, etc.
+- **DB schema sync (`npx prisma db push --accept-data-loss`):** Dropped old LMS tables (Course, Certificate, Enrollment, CourseCategory, Lesson, etc. — 18 tables). Added missing columns: `shareEnabled`, `shareToken` on `WeddingProject`. Added `@@unique([shareToken])` constraint. Fixed `UserRole` enum (removed `STUDENT`/`INSTRUCTOR`, added Ceremoney roles) via manual raw SQL migration.
+- **Fixed "Failed to create project" bug:** Root cause was `WeddingProject.shareEnabled` column missing in DB (schema out of sync). Fixed by `npx prisma db push`. Also added try-catch error handling to `POST /api/planner/projects` so real error shows in UI.
+- **Fixed project card refresh loop:** `src/app/planner/page.tsx` — changed `useEffect` dependency from `session` (object reference, re-renders on every mount) to `session?.user?.id` (only rerenders on login/logout).
+- **Dashboard updated:** `src/app/dashboard/page.tsx` — replaced "Total Orders / Completed / In Progress / Documents" stats and "Recent Orders / Recent Documents" panels with project-based data. Now shows: Active Projects (total count), Completed count, In Progress (ACTIVE status) count; Recent Projects list (last 5 by updatedAt) with event type, date, status badge; Quick Actions (New Project, My Projects, Find Vendors, Support). Data fetched from `/api/planner/projects`.
+- Files created: `public/logo.svg`, `public/logo-icon.svg`
+- Files modified: 80+ files across codebase (see rebranding above) + `src/app/planner/page.tsx`, `src/app/api/planner/projects/route.ts`, `src/app/dashboard/page.tsx`
+
+---
+
+### What's Built So Far (Phase 1–5 + Rebranding)
 
 | Feature | Page | Notes |
 |---------|------|-------|
 | Anonymous mode (no login) | All planner pages | localStorage, works offline |
 | Project creation wizard | `/planner/create` | Role, event type, date |
-| Project overview | `/planner/[id]` | Live stats: guests, budget, checklist |
-| Guest list | `/planner/[id]/guests` | CRUD, 3 views, RSVP toggle, import CSV/XLS, export PDF/XLS, search+filter |
-| Budget tracker | `/planner/[id]/budget` | Categories + items, planned/actual/paid, progress bars |
-| Planning checklist | `/planner/[id]/checklist` | 20 default tasks with subtasks, month grouping, progress % |
-| Event itinerary | `/planner/[id]/itinerary` | Hour-by-hour timeline, categories, location |
-| Notes | `/planner/[id]/notes` | Sidebar + editor, auto-save |
-| i18n | All pages | English, Swedish, Arabic (RTL), Bengali |
+| My Projects list | `/planner` | Grid view with project cards, create/delete |
+| Project overview | `/planner/[id]` | Live stats: guests, budget, checklist, 9-section reference layout |
+| Guest list | `/planner/[id]/guests` | CRUD, 3 views + family view, RSVP toggle, plus-ones, chief guest, bulk actions, import CSV/XLS, export PDF/XLS |
+| RSVP engine | `/rsvp/[token]` | Conditional fields, custom questions, GDPR consent, QR, SMS |
+| Budget tracker | `/planner/[id]/budget` | Categories + items, planned/actual/paid, auto-totals, PDF export |
+| Planning checklist | `/planner/[id]/checklist` | 20 default tasks with subtasks, month grouping, dynamic seeding by date |
+| Event itinerary | `/planner/[id]/itinerary` | Hour-by-hour timeline, 20 default events, inline editing |
+| Notes | `/planner/[id]/notes` | Sidebar + editor, auto-save, PDF export |
+| Seating chart (reception) | `/planner/[id]/seating` | Konva.js canvas, 7 table types, guest assignment, catering mode |
+| Ceremony layout editor | `/planner/[id]/seating/ceremony-layout-edit` | SVG canvas, 13 element types, 43 assets, drag-drop, Add Element panel |
+| Vendor marketplace | `/vendors` | Public directory, geo-search, 13 categories, profiles, inquiries |
+| Vendor portal | `/vendor/*` | Profile editor, availability, portfolio, messaging, plan/billing |
+| Admin panel | `/admin/*` | User/vendor management, content, settings, appearance |
+| Dashboard | `/dashboard` | Project stats (active/completed/in-progress), recent projects list |
+| Billing | `/planner/billing`, `/vendor/billing` | Stripe subscriptions, Basic/Premium/Elite, vendor plan |
+| Ceremony & Reception | `/planner/[id]/ceremony`, `/planner/[id]/reception` | Venue details, photos, download PDF |
+| Vendor list (per project) | `/planner/[id]/vendors` | Custom vendor list, CSV import, public directory cards |
+| Sharing | `/planner/share/*` | Share project via token, collaborator access |
+| i18n | All pages | English, Swedish, Arabic (RTL), Bengali (test) |
 
 ---
 

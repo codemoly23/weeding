@@ -147,13 +147,13 @@ export function HeroContentWidgetSettingsPanel({
           label="Text"
           value={s.headline.text}
           onChange={(v) => updateNested("headline", "text", v)}
-          placeholder="Start Your US LLC in 24 Hours"
+          placeholder="Plan Your Perfect Wedding with Ease"
         />
         <TextInput
           label="Highlight Words"
           value={s.headline.highlightWords}
           onChange={(v) => updateNested("headline", "highlightWords", v)}
-          placeholder="US LLC, 24 Hours"
+          placeholder="Wedding, Perfect"
           description="Separate multiple words with comma"
         />
       </AccordionSection>

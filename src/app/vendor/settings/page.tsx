@@ -105,7 +105,7 @@ export default function VendorSettingsPage() {
           Contact support if you need to deactivate your vendor account.
         </p>
         <a
-          href="mailto:support@llcpad.com"
+          href="mailto:support@ceremoney.com"
           className="text-sm text-red-600 hover:text-red-700 underline"
         >
           Contact support

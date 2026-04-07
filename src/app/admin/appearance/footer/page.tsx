@@ -1468,7 +1468,7 @@ export default function FooterBuilderPage() {
                                   <LogoPreview size="lg" logoMode={logoMode} />
                                   <span className="font-semibold preview-heading">{businessConfig.name}</span>
                                   <p className="max-w-xs text-center" style={{ color: "var(--link-color)" }}>
-                                    {brandContent?.tagline || "Your trusted partner for LLC formation and business services."}
+                                    {brandContent?.tagline || "Your all-in-one wedding planning platform."}
                                   </p>
                                   {brandContent?.subtitle && (
                                     <p className="max-w-md text-[10px] opacity-60 text-center">
@@ -1635,7 +1635,7 @@ export default function FooterBuilderPage() {
                       <LogoPreview size="md" />
                       <span className="font-semibold">{businessConfig.name}</span>
                     </div>
-                    <p className="text-xs text-muted-foreground max-w-md mx-auto">Your trusted partner for LLC formation</p>
+                    <p className="text-xs text-muted-foreground max-w-md mx-auto">Your all-in-one wedding planning platform</p>
                   </div>
                   {/* Widget Grid */}
                   <div
@@ -1834,7 +1834,7 @@ export default function FooterBuilderPage() {
                         <p className="text-xs text-muted-foreground">{businessConfig.tagline}</p>
                       </div>
                     </div>
-                    <p className="text-sm text-muted-foreground">Professional LLC formation services for entrepreneurs worldwide.</p>
+                    <p className="text-sm text-muted-foreground">Beautiful wedding planning tools for couples and professional planners worldwide.</p>
                     {formData.showSocialLinks && <SocialIconsPreview size="lg" />}
                   </div>
                   {/* Right section (1/3) - Links */}
@@ -1861,8 +1861,8 @@ export default function FooterBuilderPage() {
                 <div className="space-y-6">
                   {/* Featured CTA Banner */}
                   <div className="rounded-lg p-4 text-center" style={{ backgroundColor: formData.accentColor || "#3b82f6", color: "#fff" }}>
-                    <p className="font-semibold">Start Your LLC Today - Special Offer!</p>
-                    <p className="text-xs opacity-90">Use code SAVE20 for 20% off</p>
+                    <p className="font-semibold">Start Planning Your Wedding Today - Free!</p>
+                    <p className="text-xs opacity-90">No credit card required to get started</p>
                   </div>
                   {/* Widget Grid */}
                   <div
@@ -4132,7 +4132,7 @@ export default function FooterBuilderPage() {
                   {widgetFormData.type === "LINKS" && "Add links above. They will be displayed as a list in the footer."}
                   {widgetFormData.type === "BRAND" && "Shows logo, description, and contact info from settings."}
                   {widgetFormData.type === "SERVICES" && "Auto-populated from your active services."}
-                  {widgetFormData.type === "STATES" && "Auto-populated list of popular LLC states."}
+                  {widgetFormData.type === "STATES" && "Auto-populated list of popular locations/regions."}
                   {widgetFormData.type === "NEWSLETTER" && "Email subscription form."}
                   {widgetFormData.type === "SOCIAL" && "Social media links from settings."}
                   {widgetFormData.type === "CONTACT" && "Contact information from settings."}

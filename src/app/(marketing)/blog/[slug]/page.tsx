@@ -32,7 +32,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   }
 
   return {
-    title: `${post.title} | LLCPad Blog`,
+    title: `${post.title} | Ceremoney Blog`,
     description: post.excerpt,
     keywords: post.tags,
     openGraph: {
@@ -86,7 +86,7 @@ export default async function BlogPostPage({ params }: PageProps) {
       "@type": "BlogPosting",
       headline: post.title,
       description: post.excerpt,
-      image: `https://llcpad.com${post.coverImage}`,
+      image: `https://ceremoney.com${post.coverImage}`,
       datePublished: post.publishedAt,
       dateModified: post.publishedAt,
       author: {
@@ -95,15 +95,15 @@ export default async function BlogPostPage({ params }: PageProps) {
       },
       publisher: {
         "@type": "Organization",
-        name: "LLCPad",
+        name: "Ceremoney",
         logo: {
           "@type": "ImageObject",
-          url: "https://llcpad.com/logo.png",
+          url: "https://ceremoney.com/logo.png",
         },
       },
       mainEntityOfPage: {
         "@type": "WebPage",
-        "@id": `https://llcpad.com/blog/${slug}`,
+        "@id": `https://ceremoney.com/blog/${slug}`,
       },
     },
   ];
@@ -201,7 +201,7 @@ export default async function BlogPostPage({ params }: PageProps) {
             <div className="flex gap-2">
               <Button variant="outline" size="sm" asChild>
                 <a
-                  href={`https://twitter.com/intent/tweet?text=${encodeURIComponent(post.title)}&url=${encodeURIComponent(`https://llcpad.com/blog/${slug}`)}`}
+                  href={`https://twitter.com/intent/tweet?text=${encodeURIComponent(post.title)}&url=${encodeURIComponent(`https://ceremoney.com/blog/${slug}`)}`}
                   target="_blank"
                   rel="noopener noreferrer"
                 >
@@ -210,7 +210,7 @@ export default async function BlogPostPage({ params }: PageProps) {
               </Button>
               <Button variant="outline" size="sm" asChild>
                 <a
-                  href={`https://www.linkedin.com/shareArticle?mini=true&url=${encodeURIComponent(`https://llcpad.com/blog/${slug}`)}&title=${encodeURIComponent(post.title)}`}
+                  href={`https://www.linkedin.com/shareArticle?mini=true&url=${encodeURIComponent(`https://ceremoney.com/blog/${slug}`)}&title=${encodeURIComponent(post.title)}`}
                   target="_blank"
                   rel="noopener noreferrer"
                 >
@@ -258,10 +258,10 @@ export default async function BlogPostPage({ params }: PageProps) {
         <div className="mx-auto mt-16 max-w-2xl">
           <Card className="border-primary/20 bg-primary/5">
             <CardContent className="p-8 text-center">
-              <h2 className="text-2xl font-bold">Ready to Start Your LLC?</h2>
+              <h2 className="text-2xl font-bold">Ready to Plan Your Perfect Wedding?</h2>
               <p className="mt-2 text-muted-foreground">
-                Get your US LLC formed quickly and easily. Our team handles
-                everything for you.
+                Start free with Ceremoney — guest list, seating chart, wedding
+                website, and more in one place.
               </p>
               <div className="mt-6 flex flex-wrap justify-center gap-4">
                 <Button asChild>

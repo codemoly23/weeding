@@ -21,7 +21,7 @@ const headerConfigSchema = z.object({
   loginUrl: z.string().default("/login"),
   loginStyle: z.any().optional(),
   registerText: z.string().default("Get Started"),
-  registerUrl: z.string().default("/services/llc-formation"),
+  registerUrl: z.string().default("/register"),
   registerStyle: z.any().optional(),
   searchEnabled: z.boolean().default(false),
   showLanguageSwitcher: z.boolean().default(false),

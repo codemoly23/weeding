@@ -62,7 +62,7 @@ const defaultSettings: EmailSettings = {
   "email.smtp.user": "",
   "email.smtp.password": "",
   "email.from.email": "",
-  "email.from.name": "LLCPad",
+  "email.from.name": "Ceremoney",
   "email.replyTo": "",
   "email.admin.email": "",
   "email.notify.adminNewOrder": true,
@@ -452,7 +452,7 @@ export default function EmailSettingsPage() {
                 onChange={(e) =>
                   updateSetting("email.from.name", e.target.value)
                 }
-                placeholder="LLCPad"
+                placeholder="Ceremoney"
               />
             </div>
           </div>

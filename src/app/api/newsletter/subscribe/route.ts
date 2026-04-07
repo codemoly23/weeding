@@ -42,7 +42,7 @@ async function addToBrevo(email: string, name?: string, listId?: string) {
       body: JSON.stringify({
         ...payload,
         templateId: 1, // Default DOI template
-        redirectionUrl: process.env.NEXT_PUBLIC_APP_URL || "https://llcpad.com",
+        redirectionUrl: process.env.NEXT_PUBLIC_APP_URL || "https://ceremoney.com",
       }),
     });
 

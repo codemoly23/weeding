@@ -246,7 +246,7 @@ export function MobileMenu({
                 </SheetClose>
                 <SheetClose asChild>
                   <Button asChild className="w-full">
-                    <Link href={ctaButtons?.[0]?.url || "/services/llc-formation"}>
+                    <Link href={ctaButtons?.[0]?.url || "/register"}>
                       {ctaButtons?.[0]?.text || "Get Started"}
                     </Link>
                   </Button>

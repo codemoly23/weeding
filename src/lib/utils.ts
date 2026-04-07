@@ -90,10 +90,11 @@ export const INPUT_LIMITS = {
   zipCode: { min: 5, max: 10 },
   country: { min: 2, max: 100 },
 
-  // Business Information
-  llcName: { min: 3, max: 150 },
+  // Business / Event Information
+  llcName: { min: 3, max: 150 }, // kept for backward compat
   businessName: { min: 3, max: 150 },
   businessIndustry: { min: 2, max: 100 },
+  eventName: { min: 3, max: 150 },
 
   // Document Numbers
   passportNumber: { min: 5, max: 20 },
@@ -255,7 +256,7 @@ export function handleEmailInput(
  * Generate a camelCase field name from a label
  * Examples:
  *   "Brand Name" → "brandName"
- *   "Amazon Seller ID" → "amazonSellerId"
+ *   "Guest List Size" → "guestListSize"
  *   "Contact Email" → "contactEmail"
  *   "LLC Name (Required)" → "llcNameRequired"
  */

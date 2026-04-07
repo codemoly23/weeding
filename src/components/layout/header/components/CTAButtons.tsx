@@ -365,7 +365,7 @@ export function CTAButtons({
         ))
       ) : (
         <Button asChild>
-          <SmartLink href="/services/llc-formation">Get Started</SmartLink>
+          <SmartLink href="/register">Get Started</SmartLink>
         </Button>
       )}
     </div>

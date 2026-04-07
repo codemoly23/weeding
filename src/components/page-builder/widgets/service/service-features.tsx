@@ -219,12 +219,12 @@ export function ServiceFeaturesWidget({
 // ============================================
 
 const PLACEHOLDER_FEATURES = [
-  { id: "p1", text: "Company Name Availability Check", sortOrder: 1 },
-  { id: "p2", text: "Articles of Organization Filing", sortOrder: 2 },
-  { id: "p3", text: "Registered Agent (1st Year Free)", sortOrder: 3 },
-  { id: "p4", text: "Operating Agreement Template", sortOrder: 4 },
-  { id: "p5", text: "EIN / Tax ID Number", sortOrder: 5 },
-  { id: "p6", text: "Compliance Calendar Reminders", sortOrder: 6 },
+  { id: "p1", text: "Guest List with RSVP Tracking", sortOrder: 1 },
+  { id: "p2", text: "Drag-and-Drop Seating Chart", sortOrder: 2 },
+  { id: "p3", text: "Custom Wedding Website", sortOrder: 3 },
+  { id: "p4", text: "Online RSVP Collection", sortOrder: 4 },
+  { id: "p5", text: "Vendor Directory Access", sortOrder: 5 },
+  { id: "p6", text: "Wedding Planning Checklist", sortOrder: 6 },
 ];
 
 function ServiceFeaturesPlaceholder({

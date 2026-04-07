@@ -144,21 +144,21 @@ export const DEFAULT_HERO_CONTENT_SETTINGS: HeroContentWidgetSettings = {
   badge: {
     show: true,
     icon: "Flag",
-    text: "🇺🇸 Trusted by 10,000+ International Entrepreneurs",
+    text: "💍 Trusted by 5,000+ Couples & Wedding Planners",
     style: "pill",
     bgColor: "#f9731633",
     textColor: "#fb923c",
     borderColor: "#f9731680",
   },
   headline: {
-    text: "Start Your US LLC in 24 Hours",
-    highlightWords: "US LLC",
+    text: "Plan Your Perfect Wedding with Ease",
+    highlightWords: "Wedding",
     highlightColor: "#f97316",
     size: "xl",
     color: "#000000",
   },
   subheadline: {
-    text: "Launch your American dream from anywhere in the world. We handle everything from LLC formation to EIN, Amazon seller accounts, and business banking — so you can focus on growing your business.",
+    text: "Ceremoney brings your guest list, seating charts, event website, RSVP collection, and vendor coordination into one beautiful platform — so you can focus on enjoying every moment.",
     show: true,
     size: "lg",
     color: "#94a3b8",
@@ -166,9 +166,9 @@ export const DEFAULT_HERO_CONTENT_SETTINGS: HeroContentWidgetSettings = {
   features: {
     show: true,
     items: [
-      { id: "feat_1", icon: "CheckCircle", text: "Fast 24-48 hour processing" },
-      { id: "feat_2", icon: "CheckCircle", text: "100% Compliance guaranteed" },
-      { id: "feat_3", icon: "CheckCircle", text: "Dedicated support team" },
+      { id: "feat_1", icon: "CheckCircle", text: "Beautiful event websites with RSVP" },
+      { id: "feat_2", icon: "CheckCircle", text: "Drag-and-drop seating charts" },
+      { id: "feat_3", icon: "CheckCircle", text: "Vendor directory & coordination" },
     ],
     columns: 3,
     iconColor: "#22c55e",
@@ -177,8 +177,8 @@ export const DEFAULT_HERO_CONTENT_SETTINGS: HeroContentWidgetSettings = {
   },
   primaryButton: {
     show: true,
-    text: "Start Your LLC Now",
-    link: "/services/llc-formation",
+    text: "Start Planning Free",
+    link: "/register",
     openInNewTab: false,
   },
   secondaryButton: {
@@ -395,7 +395,7 @@ export const DEFAULT_BUTTON_GROUP_SETTINGS: ButtonGroupWidgetSettings = {
     {
       id: "btn_1",
       text: "Get Started",
-      link: "/services/llc-formation",
+      link: "/register",
       style: {
         bgColor: "#F97316",
         textColor: "#ffffff",
@@ -468,7 +468,7 @@ export const DEFAULT_TESTIMONIALS_SETTINGS: TestimonialsWidgetSettings = {
     },
     description: {
       show: true,
-      text: "See what our customers from around the world have to say about their experience with LLCPad.",
+      text: "See what couples and event hosts from around the world have to say about their experience with Ceremoney.",
       size: "md",
       color: "#94a3b8",
     },
@@ -941,7 +941,7 @@ export const DEFAULT_SERVICE_CARD_SETTINGS: ServiceCardWidgetSettings = {
     },
     description: {
       show: true,
-      text: "From LLC formation to Amazon seller accounts, we provide end-to-end support for international entrepreneurs.",
+      text: "From guest list to seating chart, event website to vendor coordination, Ceremoney brings every part of your wedding planning into one place.",
       size: "lg",
       color: "#94a3b8",
     },
@@ -1171,26 +1171,26 @@ export const DEFAULT_PROCESS_STEPS_SETTINGS: ProcessStepsWidgetSettings = {
     {
       id: "step_1",
       icon: "ClipboardList",
-      title: "Choose Your Package",
-      description: "Select the LLC formation package that fits your needs. Pick your state and provide basic information about your business.",
+      title: "Create Your Event",
+      description: "Sign up for free, create your wedding event, and set your date. It only takes a minute to get started.",
     },
     {
       id: "step_2",
-      icon: "FileCheck",
-      title: "We Handle the Paperwork",
-      description: "Our team prepares and files all necessary documents with the state. We ensure everything is accurate and compliant.",
+      icon: "Users",
+      title: "Add Your Guests",
+      description: "Import your guest list from a spreadsheet or add guests one by one. Organize them into families and groups with ease.",
     },
     {
       id: "step_3",
-      icon: "FileText",
-      title: "Receive Your Documents",
-      description: "Get your LLC approval, Articles of Organization, Operating Agreement, and EIN delivered to your email within 24-48 hours.",
+      icon: "Globe",
+      title: "Launch Your Wedding Website",
+      description: "Publish your beautiful event website in one click. Guests can RSVP, check details, and confirm meal preferences — all online.",
     },
     {
       id: "step_4",
       icon: "Rocket",
-      title: "Launch Your Business",
-      description: "Open your US business bank account, set up your Amazon seller account, and start accepting payments. You're ready to go!",
+      title: "Enjoy Your Day",
+      description: "Finalize your seating chart, coordinate your vendors, and walk down the aisle knowing every detail is organized.",
     },
   ],
 

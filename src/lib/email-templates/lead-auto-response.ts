@@ -23,7 +23,7 @@ export function getLeadAutoResponseEmail(params: LeadAutoResponseParams): EmailC
     firstName,
     interestedIn,
     siteUrl,
-    companyName = "LLCPad",
+    companyName = "Ceremoney",
   } = params;
 
   const serviceText = interestedIn && interestedIn.length > 0
@@ -78,7 +78,7 @@ export function getLeadAutoResponseEmail(params: LeadAutoResponseParams): EmailC
 
   <div style="background: #f9fafb; padding: 20px; border-radius: 0 0 12px 12px; border: 1px solid #e5e7eb; border-top: none; text-align: center;">
     <p style="color: #6b7280; margin: 0; font-size: 14px;">
-      ${companyName} - Professional LLC Formation & Business Services
+      ${companyName} - Wedding Planning Made Simple
     </p>
     <p style="color: #9ca3af; margin: 8px 0 0 0; font-size: 12px;">
       This is an automated email. Please do not mark it as spam.
@@ -104,7 +104,7 @@ export function getLeadAutoResponseEmail(params: LeadAutoResponseParams): EmailC
     "",
     "If you have any urgent questions, feel free to reply to this email.",
     "",
-    `${companyName} - Professional LLC Formation & Business Services`,
+    `${companyName} - Wedding Planning Made Simple`,
   ].filter((line) => line !== undefined);
 
   const text = textLines.join("\n");

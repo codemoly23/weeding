@@ -213,7 +213,7 @@ export default function StateFeesPage() {
           <div>
             <h1 className="text-2xl font-bold">State Fees</h1>
             <p className="text-muted-foreground">
-              Manage LLC formation fees for each state
+              Manage location-based fees and filing costs
             </p>
           </div>
         </div>
@@ -361,7 +361,7 @@ export default function StateFeesPage() {
               {editingFee ? "Edit State Fee" : "Add State Fee"}
             </DialogTitle>
             <DialogDescription>
-              Configure LLC formation fee for this state
+              Configure the filing or location fee for this entry
             </DialogDescription>
           </DialogHeader>
           <div className="space-y-4">

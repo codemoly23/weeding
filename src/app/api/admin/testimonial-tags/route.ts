@@ -6,12 +6,12 @@ const TESTIMONIAL_TAGS_KEY = "testimonial.tags";
 // Default tags if none exist
 const DEFAULT_TAGS = [
   { value: "general", label: "General" },
-  { value: "llc", label: "LLC Formation" },
-  { value: "ein", label: "EIN Application" },
-  { value: "amazon", label: "Amazon Services" },
-  { value: "banking", label: "Business Banking" },
-  { value: "trademark", label: "Trademark" },
-  { value: "compliance", label: "Compliance" },
+  { value: "guest-management", label: "Guest Management" },
+  { value: "seating-chart", label: "Seating Chart" },
+  { value: "wedding-website", label: "Wedding Website" },
+  { value: "vendors", label: "Vendors & Venues" },
+  { value: "budget", label: "Budget Planning" },
+  { value: "white-label", label: "White-Label" },
 ];
 
 // GET - Fetch all testimonial tags

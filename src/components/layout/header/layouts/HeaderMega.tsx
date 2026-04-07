@@ -114,18 +114,18 @@ function FullWidthMegaMenu({ categories, isOpen }: FullWidthMegaMenuProps) {
         {/* Bottom CTA row */}
         <div className="mt-8 flex items-center justify-between border-t pt-6">
           <div className="flex items-center gap-4">
-            <span className="text-sm font-medium text-foreground">Popular Picks:</span>
+            <span className="text-sm font-medium text-foreground">Popular:</span>
             <Link
-              href="/services/llc-formation"
+              href="/register"
               className="rounded-full bg-primary px-4 py-2 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/90"
             >
-              Form Your LLC
+              Start Planning Free
             </Link>
             <Link
-              href="/services/amazon-seller"
+              href="/features/seating-chart"
               className="rounded-full bg-secondary px-4 py-2 text-sm font-medium text-secondary-foreground transition-colors hover:bg-secondary/80"
             >
-              Amazon Seller Account
+              Seating Chart Editor
             </Link>
           </div>
           <Link href="/contact" className="text-sm font-medium text-primary hover:underline">
@@ -196,7 +196,7 @@ export function HeaderMega({
                 loginUrl: config.auth?.loginUrl || "/login",
                 loginStyle: config.auth?.loginStyle,
                 registerText: config.auth?.registerText || "Get Started",
-                registerUrl: config.auth?.registerUrl || "/services/llc-formation",
+                registerUrl: config.auth?.registerUrl || "/register",
               }}
               user={user}
               session={session}
@@ -218,7 +218,7 @@ export function HeaderMega({
                   showButtons: config.auth?.showButtons ?? true,
                   loginText: config.auth?.loginText || "Sign In",
                   registerText: config.auth?.registerText || "Get Started",
-                  registerUrl: config.auth?.registerUrl || "/services/llc-formation",
+                  registerUrl: config.auth?.registerUrl || "/register",
                 }}
                 ctaButtons={config.cta || []}
                 onLogout={onLogout}

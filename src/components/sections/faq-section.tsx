@@ -14,51 +14,51 @@ import prisma from "@/lib/db";
 const fallbackFaqs = [
   {
     id: "1",
-    question: "Can I form a US LLC as a non-US resident?",
+    question: "Is Ceremoney free to use?",
     answer:
-      "Yes, absolutely! US LLCs are available to anyone regardless of citizenship or residency. You don't need to be a US citizen, have a US address, or even visit the US to form and operate a US LLC. This is one of the reasons why US LLCs are so popular among international entrepreneurs.",
+      "Yes! Ceremoney offers a free Basic plan that includes an event website, basic RSVP form, checklist, and access to the vendor directory. Premium and Elite plans unlock advanced features like guest list management, seating chart editor, custom domain, stationery engine, and more.",
   },
   {
     id: "2",
-    question: "Which state should I choose for my LLC?",
+    question: "What event types does Ceremoney support?",
     answer:
-      "Wyoming and Delaware are the most popular choices for international entrepreneurs due to their business-friendly laws, privacy protections, and low fees. Wyoming has no state income tax and offers strong asset protection. Delaware is known for its established business court system. New Mexico is also a great affordable option. We can help you choose the best state based on your specific needs.",
+      "Ceremoney supports weddings, baptisms, parties (birthday, anniversary), and corporate events. Each event type has tailored components — for example, weddings include couple names, ceremony + reception layout, registry, and 'Our Story' widget. Baptisms include godparent widgets and religious elements.",
   },
   {
     id: "3",
-    question: "How long does LLC formation take?",
+    question: "Can guests RSVP online through Ceremoney?",
     answer:
-      "With our standard service, LLC formation typically takes 24-48 hours after state filing. Some states like Wyoming and New Mexico process filings within 24 hours. Delaware may take 2-3 business days. Expedited options are available for most states if you need faster processing.",
+      "Yes! Every event created on Ceremoney gets a beautiful mobile-first event website with an RSVP form. Guests can RSVP, indicate dietary requirements, add plus-ones, and leave messages in the guestbook. Premium and Elite plans offer advanced conditional RSVP forms.",
   },
   {
     id: "4",
-    question: "What is an EIN and do I need one?",
+    question: "How does the seating chart editor work?",
     answer:
-      "An EIN (Employer Identification Number) is a unique 9-digit number assigned by the IRS for tax purposes. Think of it as a Social Security Number for your business. You'll need an EIN to open a business bank account, file taxes, hire employees, and in many cases, to get an Amazon seller account. Yes, as an international business owner, you will need an EIN.",
+      "The seating chart editor is a drag-and-drop canvas tool built with Konva.js. You can create tables, assign guests to seats, and visualize your entire venue layout. It's available on Premium and Elite plans. Elite users can also share QR codes so guests can look up their own seats.",
   },
   {
     id: "5",
-    question: "Can I open a US business bank account remotely?",
+    question: "Can I find and contact vendors through Ceremoney?",
     answer:
-      "Yes, several US banks allow remote account opening for foreign-owned LLCs. We have partnerships with banks that specialize in serving international entrepreneurs. The requirements typically include your LLC documents, EIN, passport, and proof of address. Our Premium package includes business banking assistance.",
+      "Yes! Ceremoney has a vendor directory with geo-search, category filters, and date availability. You can browse photographer, venue, florist, catering, and other vendors, view their portfolios and reviews, and send inquiries directly through the platform.",
   },
   {
     id: "6",
-    question: "What do I need to start selling on Amazon US?",
+    question: "Does Ceremoney support Swedish (Swish) and international payments?",
     answer:
-      "To sell on Amazon US as an international seller, you'll need: 1) A US LLC or business entity, 2) An EIN number, 3) A US business bank account, 4) Valid identification documents, and 5) A credit card for Amazon fees. Our Premium package includes everything you need to get started on Amazon.",
+      "Yes. Ceremoney supports Stripe for global card payments, Swish for Swedish mobile payments, and Klarna for buy-now-pay-later options. All invoices include proper Swedish VAT (Moms 25%) and PDF receipts with Org.nr for Swedish users.",
   },
   {
     id: "7",
-    question: "What are the ongoing costs after forming an LLC?",
+    question: "Can I collaborate with my partner or wedding planner?",
     answer:
-      "After formation, typical ongoing costs include: Annual registered agent fee ($99-149/year), state annual report fees ($50-300 depending on state), and potentially a franchise tax in some states. Wyoming has a $60 annual report fee, while Delaware has an annual franchise tax of $300. We'll keep you informed about all compliance requirements.",
+      "Yes! Elite plan users can invite collaborators to their event project. Collaborators can view and edit the guest list with role-based permissions. Real-time sync keeps everyone up to date. White-label plan users (professional planners) can manage multiple events for their clients.",
   },
   {
     id: "8",
-    question: "Do you provide legal or tax advice?",
+    question: "Is Arabic (RTL) supported?",
     answer:
-      "LLCPad is a document filing service and does not provide legal or tax advice. For specific legal questions, we recommend consulting with an attorney. For tax matters, especially international tax implications, please consult with a CPA or tax professional who specializes in US-international business taxation.",
+      "Yes, Ceremoney fully supports Arabic with right-to-left (RTL) layout. You can create your entire event in Arabic, and guests will see a fully RTL experience on the event website. Swedish, English, and Arabic are all supported from launch.",
   },
 ];
 
@@ -97,8 +97,8 @@ export async function FAQSection() {
               Frequently Asked Questions
             </h2>
             <p className="mt-4 text-muted-foreground">
-              Get answers to the most common questions about US LLC formation
-              for international entrepreneurs.
+              Get answers to the most common questions about planning your
+              wedding or event with Ceremoney.
             </p>
             <Button className="group mt-6" variant="outline" asChild>
               <Link href="/faq">

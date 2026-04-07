@@ -53,7 +53,7 @@ function calculateLeadScore(data: {
 
   // Service interest (max 20)
   if (data.interestedIn && data.interestedIn.length > 0) {
-    const highValue = ["llc-formation", "amazon-seller"];
+    const highValue = ["premium", "elite", "white-label"];
     const hasHighValue = data.interestedIn.some((s) => highValue.includes(s));
     if (hasHighValue) score += 15;
     if (data.interestedIn.length > 1) score += 5;

@@ -23,7 +23,11 @@ export async function PUT(
   if (!guest) return NextResponse.json({ error: "Guest not found" }, { status: 404 });
 
   const body = await req.json();
-  const { firstName, lastName, title, side, relation, email, phone, dietary, rsvpStatus, tableNumber, notes } = body;
+  const {
+    firstName, lastName, title, side, relation, email, phone, dietary, rsvpStatus, tableNumber, notes,
+    hasPlusOne, plusOneName, plusOneMeal, isChiefGuest, familyId,
+    invitationCode, invitationSent, invitationSentAt,
+  } = body;
 
   const updated = await prisma.weddingGuest.update({
     where: { id: guestId },
@@ -39,6 +43,14 @@ export async function PUT(
       ...(rsvpStatus !== undefined && { rsvpStatus }),
       ...(tableNumber !== undefined && { tableNumber: tableNumber ? Number(tableNumber) : null }),
       ...(notes !== undefined && { notes: notes?.trim() || null }),
+      ...(hasPlusOne !== undefined && { hasPlusOne }),
+      ...(plusOneName !== undefined && { plusOneName: plusOneName?.trim() || null }),
+      ...(plusOneMeal !== undefined && { plusOneMeal: plusOneMeal?.trim() || null }),
+      ...(isChiefGuest !== undefined && { isChiefGuest }),
+      ...(familyId !== undefined && { familyId: familyId || null }),
+      ...(invitationCode !== undefined && { invitationCode: invitationCode?.trim() || null }),
+      ...(invitationSent !== undefined && { invitationSent }),
+      ...(invitationSentAt !== undefined && { invitationSentAt: invitationSentAt ? new Date(invitationSentAt) : null }),
     },
   });
 

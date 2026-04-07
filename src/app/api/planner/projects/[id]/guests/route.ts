@@ -41,7 +41,11 @@ export async function POST(
   if (!project) return NextResponse.json({ error: "Not found" }, { status: 404 });
 
   const body = await req.json();
-  const { firstName, lastName, title, side, relation, email, phone, dietary, tableNumber, notes } = body;
+  const {
+    firstName, lastName, title, side, relation, email, phone, dietary, tableNumber, notes,
+    hasPlusOne, plusOneName, plusOneMeal, isChiefGuest, familyId,
+    invitationCode, invitationSent, invitationSentAt,
+  } = body;
 
   const guest = await prisma.weddingGuest.create({
     data: {
@@ -56,6 +60,14 @@ export async function POST(
       dietary: dietary?.trim() || null,
       tableNumber: tableNumber ? Number(tableNumber) : null,
       notes: notes?.trim() || null,
+      hasPlusOne: hasPlusOne ?? false,
+      plusOneName: plusOneName?.trim() || null,
+      plusOneMeal: plusOneMeal?.trim() || null,
+      isChiefGuest: isChiefGuest ?? false,
+      familyId: familyId || null,
+      invitationCode: invitationCode?.trim() || null,
+      invitationSent: invitationSent ?? false,
+      invitationSentAt: invitationSentAt ? new Date(invitationSentAt) : null,
     },
   });
 

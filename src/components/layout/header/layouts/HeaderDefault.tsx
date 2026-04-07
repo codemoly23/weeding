@@ -69,7 +69,7 @@ export function HeaderDefault({
             loginUrl: config.auth?.loginUrl || "/login",
             loginStyle: config.auth?.loginStyle,
             registerText: config.auth?.registerText || "Get Started",
-            registerUrl: config.auth?.registerUrl || "/services/llc-formation",
+            registerUrl: config.auth?.registerUrl || "/register",
           }}
           user={user}
           session={session}
@@ -90,7 +90,7 @@ export function HeaderDefault({
             showButtons: config.auth?.showButtons ?? true,
             loginText: config.auth?.loginText || "Sign In",
             registerText: config.auth?.registerText || "Get Started",
-            registerUrl: config.auth?.registerUrl || "/services/llc-formation",
+            registerUrl: config.auth?.registerUrl || "/register",
           }}
           ctaButtons={config.cta || []}
           onLogout={onLogout}

@@ -749,6 +749,31 @@ We are a document filing service. For legal advice, please consult a licensed at
 
 ---
 
+## ✅ Vendor Marketplace — Implementation Status
+
+**Last Updated**: 2026-04-07
+
+### Phase 5A-1: Core Vendor Marketplace ✅ COMPLETE
+
+| # | Task | Status | Details |
+|---|------|--------|---------|
+| 1 | DB schema + migration | ✅ Done | VendorProfile, VendorReview, VendorAvailability models; slug, isApproved, isActive, isFeatured |
+| 2 | Vendor registration flow | ✅ Done | `/vendor/register` page + POST `/api/vendor/register` |
+| 3 | Vendor dashboard | ✅ Done | `/vendor/dashboard` — stats, plan tier, quick links |
+| 4 | Vendor profile editor | ✅ Done | `/vendor/profile` — full edit form (name, category, bio, photos, pricing) |
+| 5 | Public vendor listing | ✅ Done | `/vendors` — search, category filter, sort, pagination |
+| 6 | Public vendor profile | ✅ Done | `/vendors/[slug]` — cover, gallery, reviews, booking CTA |
+| 7 | Admin vendor management | ✅ Done | `/admin/vendors` — approve/reject, feature, status toggle |
+| 8 | Map view on `/vendors` | ✅ Done | react-leaflet `VendorMap` component, List/Map toggle, dynamic import (SSR-safe) |
+| 9 | Extended filters | ✅ Done | minPrice, maxPrice (Prisma range), minRating (post-filter), active filter chips |
+| 10 | SLA badge | ✅ Done | "Responds within Xh" on vendor cards + public profile (emerald pill) |
+| 11 | Social links | ✅ Done | Instagram, Facebook, Pinterest — profile editor + public profile page |
+| 12 | Availability calendar | ✅ Done | Vendor: click-to-cycle (AVAILABLE/BOOKED/TENTATIVE) via `/api/vendor/availability`; Public: read-only color-coded calendar |
+| 13 | FAQ accordion | ✅ Done | Vendor: add/edit/delete FAQ items in profile editor; Public: expand/collapse accordion |
+| +  | Lat/Lng for map pin | ✅ Done | lat/lng fields added to vendor profile editor with Google Maps helper |
+
+---
+
 ## 🚀 14️⃣ Future Enhancements (Phase 2+)
 
 | Feature | Description | Priority |

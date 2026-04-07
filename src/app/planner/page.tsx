@@ -68,7 +68,7 @@ export default function MyProjectsPage() {
   useEffect(() => {
     loadProjects();
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [session]);
+  }, [session?.user?.id]);
 
   async function loadProjects() {
     setLoading(true);

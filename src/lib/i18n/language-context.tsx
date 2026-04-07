@@ -17,7 +17,7 @@ export function flagUrl(countryCode: string, width: 20 | 40 = 20): string {
 
 export type LangCode = (typeof LANGUAGES)[number]["code"];
 
-const STORAGE_KEY = "llcpad_lang";
+const STORAGE_KEY = "ceremoney_lang";
 
 // ── Translations ───────────────────────────────────────────────────────────────
 const translations: Record<LangCode, Record<string, string>> = {

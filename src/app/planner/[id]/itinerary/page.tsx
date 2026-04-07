@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useCallback, useRef } from "react";
 import { useParams } from "next/navigation";
-import { FileText, RotateCcw, Plus, MoreVertical, X, Check } from "lucide-react";
+import { FileText, RotateCcw, Plus, MoreVertical, X, Check, Table2 } from "lucide-react";
 import { useLanguage } from "@/lib/i18n/language-context";
 import {
   getLocalItinerary,
@@ -643,14 +643,40 @@ export default function ItineraryPage() {
                 )}
               </div>
 
-              {/* Download PDF */}
-              <div className="mt-8 flex justify-center">
+              {/* Export buttons */}
+              <div className="mt-8 flex flex-wrap justify-center gap-3">
                 <button
                   onClick={() => window.print()}
                   className="flex items-center gap-2 rounded-xl border border-[#c5c2db] bg-white/70 px-6 py-2.5 text-sm text-[#6b6890] shadow-sm hover:bg-white transition-colors"
                 >
                   <FileText className="h-4 w-4 text-red-400" />
                   Download PDF file
+                </button>
+                <button
+                  onClick={() => {
+                    import("xlsx").then((XLSX) => {
+                      const rows = sorted.map((ev) => {
+                        const dur = getDuration(ev.startTime, ev.endTime);
+                        const { hm, ampm } = timeParts(ev.startTime, use24h);
+                        return {
+                          Time: `${hm}${ampm ? " " + ampm : ""}`,
+                          "Duration (min)": dur > 0 ? dur : "",
+                          Event: ev.title,
+                          Location: ev.location || "",
+                        };
+                      });
+                      const ws = XLSX.utils.json_to_sheet(rows);
+                      ws["!cols"] = [{ wch: 12 }, { wch: 16 }, { wch: 32 }, { wch: 24 }];
+                      const wb = XLSX.utils.book_new();
+                      XLSX.utils.book_append_sheet(wb, ws, "Itinerary");
+                      const filename = `wedding-itinerary${eventDate ? "-" + new Date(eventDate).toISOString().split("T")[0] : ""}.xlsx`;
+                      XLSX.writeFile(wb, filename);
+                    });
+                  }}
+                  className="flex items-center gap-2 rounded-xl border border-[#c5c2db] bg-white/70 px-6 py-2.5 text-sm text-[#6b6890] shadow-sm hover:bg-white transition-colors"
+                >
+                  <Table2 className="h-4 w-4 text-emerald-500" />
+                  Download XLS file
                 </button>
               </div>
             </>

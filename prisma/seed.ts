@@ -9,185 +9,184 @@ const pool = new Pool({ connectionString: process.env.DATABASE_URL });
 const adapter = new PrismaPg(pool);
 const prisma = new PrismaClient({ adapter });
 
-// Service Categories
+// ─── Service Categories ────────────────────────────────────────────────────────
 const serviceCategories = [
   {
-    slug: "formation",
-    name: "Formation & Legal",
-    description: "Start and maintain your US business entity",
-    icon: "Building2",
+    slug: "subscriptions",
+    name: "Subscription Plans",
+    description: "Choose a Ceremoney plan that fits your wedding size and needs",
+    icon: "Sparkles",
     sortOrder: 1,
   },
   {
-    slug: "compliance",
-    name: "Compliance & Documents",
-    description: "Keep your business in good standing",
-    icon: "FileCheck",
+    slug: "addons",
+    name: "Add-ons",
+    description: "Enhance your plan with individual features and extras",
+    icon: "PlusCircle",
     sortOrder: 2,
   },
   {
-    slug: "amazon",
-    name: "Amazon Services",
-    description: "Sell on Amazon with confidence",
-    icon: "ShoppingCart",
+    slug: "professional",
+    name: "Professional Tools",
+    description: "Advanced tools and white-label solutions for wedding planners",
+    icon: "Briefcase",
     sortOrder: 3,
   },
+];
+
+// ─── Premium plan comparison features ─────────────────────────────────────────
+// Used on the main subscription comparison table (Basic / Premium / Elite)
+const subscriptionComparisonFeatures = [
   {
-    slug: "tax-finance",
-    name: "Tax & Finance",
-    description: "Financial and tax services for your business",
-    icon: "Calculator",
-    sortOrder: 4,
+    text: "Event Website",
+    tooltip: "A beautiful, shareable wedding website with countdown, story, and gallery",
+    packages: {
+      Basic:   { valueType: "BOOLEAN" as FeatureValueType, included: true },
+      Premium: { valueType: "BOOLEAN" as FeatureValueType, included: true },
+      Elite:   { valueType: "BOOLEAN" as FeatureValueType, included: true },
+    },
+  },
+  {
+    text: "Basic RSVP Collection",
+    tooltip: "Collect yes/no RSVPs from guests via your event website",
+    packages: {
+      Basic:   { valueType: "BOOLEAN" as FeatureValueType, included: true },
+      Premium: { valueType: "BOOLEAN" as FeatureValueType, included: true },
+      Elite:   { valueType: "BOOLEAN" as FeatureValueType, included: true },
+    },
+  },
+  {
+    text: "Wedding Checklist",
+    tooltip: "Guided checklist covering every task from 12 months out to the big day",
+    packages: {
+      Basic:   { valueType: "BOOLEAN" as FeatureValueType, included: true },
+      Premium: { valueType: "BOOLEAN" as FeatureValueType, included: true },
+      Elite:   { valueType: "BOOLEAN" as FeatureValueType, included: true },
+    },
+  },
+  {
+    text: "Vendor Directory Access",
+    tooltip: "Browse vetted photographers, florists, caterers, and venues",
+    packages: {
+      Basic:   { valueType: "BOOLEAN" as FeatureValueType, included: true },
+      Premium: { valueType: "BOOLEAN" as FeatureValueType, included: true },
+      Elite:   { valueType: "BOOLEAN" as FeatureValueType, included: true },
+    },
+  },
+  {
+    text: "Guest List Management",
+    tooltip: "Add, organise, and track guests with contact details and dietary notes",
+    packages: {
+      Basic:   { valueType: "DASH" as FeatureValueType, included: false },
+      Premium: { valueType: "BOOLEAN" as FeatureValueType, included: true },
+      Elite:   { valueType: "BOOLEAN" as FeatureValueType, included: true },
+    },
+  },
+  {
+    text: "Seating Chart Builder",
+    tooltip: "Interactive drag-and-drop seating chart with table and seat assignments",
+    packages: {
+      Basic:   { valueType: "DASH" as FeatureValueType, included: false },
+      Premium: { valueType: "BOOLEAN" as FeatureValueType, included: true },
+      Elite:   { valueType: "BOOLEAN" as FeatureValueType, included: true },
+    },
+  },
+  {
+    text: "Custom Domain",
+    tooltip: "Connect your own domain (e.g. emma-and-lucas.com) to your event website",
+    packages: {
+      Basic:   { valueType: "DASH" as FeatureValueType, included: false },
+      Premium: { valueType: "BOOLEAN" as FeatureValueType, included: true },
+      Elite:   { valueType: "BOOLEAN" as FeatureValueType, included: true },
+    },
+  },
+  {
+    text: "Digital Stationery",
+    tooltip: "Design and send digital save-the-dates and invitations",
+    packages: {
+      Basic:   { valueType: "DASH" as FeatureValueType, included: false },
+      Premium: { valueType: "BOOLEAN" as FeatureValueType, included: true },
+      Elite:   { valueType: "BOOLEAN" as FeatureValueType, included: true },
+    },
+  },
+  {
+    text: "Collaborators",
+    tooltip: "Invite parents, bridesmaids, or other helpers to co-manage the planning",
+    packages: {
+      Basic:   { valueType: "DASH" as FeatureValueType, included: false },
+      Premium: { valueType: "ADDON" as FeatureValueType, included: false, addonPriceUSD: 5 },
+      Elite:   { valueType: "BOOLEAN" as FeatureValueType, included: true },
+    },
+  },
+  {
+    text: "QR Code Entrance Check-in",
+    tooltip: "Generate unique QR codes per guest for fast, contactless door check-in",
+    packages: {
+      Basic:   { valueType: "DASH" as FeatureValueType, included: false },
+      Premium: { valueType: "DASH" as FeatureValueType, included: false },
+      Elite:   { valueType: "BOOLEAN" as FeatureValueType, included: true },
+    },
+  },
+  {
+    text: "Advanced RSVP Forms",
+    tooltip: "Custom RSVP questions: meal choices, song requests, shuttle needs, and more",
+    packages: {
+      Basic:   { valueType: "DASH" as FeatureValueType, included: false },
+      Premium: { valueType: "DASH" as FeatureValueType, included: false },
+      Elite:   { valueType: "BOOLEAN" as FeatureValueType, included: true },
+    },
+  },
+  {
+    text: "Priority Support",
+    tooltip: "Dedicated support queue with guaranteed response within 4 business hours",
+    packages: {
+      Basic:   { valueType: "DASH" as FeatureValueType, included: false },
+      Premium: { valueType: "DASH" as FeatureValueType, included: false },
+      Elite:   { valueType: "BOOLEAN" as FeatureValueType, included: true },
+    },
   },
 ];
 
-// LLC Formation comparison table features - New Mexico LLC package structure
-const llcFormationComparisonFeatures = [
-  {
-    text: "New Mexico State Filing Fee",
-    tooltip: "State filing fee for New Mexico LLC formation ($50)",
-    packages: {
-      Basic: { valueType: "BOOLEAN" as FeatureValueType, included: true },
-      Standard: { valueType: "BOOLEAN" as FeatureValueType, included: true },
-      Premium: { valueType: "BOOLEAN" as FeatureValueType, included: true },
-    },
-  },
-  {
-    text: "Registered Agent (First Year)",
-    tooltip: "A registered agent receives legal documents on behalf of your LLC. Included free for the first year.",
-    packages: {
-      Basic: { valueType: "ADDON" as FeatureValueType, included: false, addonPriceUSD: 99 },
-      Standard: { valueType: "BOOLEAN" as FeatureValueType, included: true },
-      Premium: { valueType: "BOOLEAN" as FeatureValueType, included: true },
-    },
-  },
-  {
-    text: "EIN Application",
-    tooltip: "Employer Identification Number (EIN) from the IRS - required for opening bank accounts and hiring employees",
-    packages: {
-      Basic: { valueType: "ADDON" as FeatureValueType, included: false, addonPriceUSD: 70 },
-      Standard: { valueType: "BOOLEAN" as FeatureValueType, included: true },
-      Premium: { valueType: "BOOLEAN" as FeatureValueType, included: true },
-    },
-  },
-  {
-    text: "BOI Filing",
-    tooltip: "Beneficial Ownership Information (BOI) report required by FinCEN for all LLCs",
-    packages: {
-      Basic: { valueType: "ADDON" as FeatureValueType, included: false, addonPriceUSD: 49 },
-      Standard: { valueType: "BOOLEAN" as FeatureValueType, included: true },
-      Premium: { valueType: "BOOLEAN" as FeatureValueType, included: true },
-    },
-  },
-  {
-    text: "US Business Address / Mail Forwarding",
-    tooltip: "Professional US business address with mail scanning and forwarding services",
-    packages: {
-      Basic: { valueType: "ADDON" as FeatureValueType, included: false, addonPriceUSD: 120 },
-      Standard: { valueType: "ADDON" as FeatureValueType, included: false, addonPriceUSD: 120 },
-      Premium: { valueType: "BOOLEAN" as FeatureValueType, included: true },
-    },
-  },
-  {
-    text: "US Business Phone Number",
-    tooltip: "Dedicated US phone number for your business with call forwarding",
-    packages: {
-      Basic: { valueType: "ADDON" as FeatureValueType, included: false, addonPriceUSD: 60 },
-      Standard: { valueType: "ADDON" as FeatureValueType, included: false, addonPriceUSD: 60 },
-      Premium: { valueType: "BOOLEAN" as FeatureValueType, included: true },
-    },
-  },
-  {
-    text: "US Fintech Business Bank Account Setup",
-    tooltip: "We'll help you open a Mercury business bank account - a modern fintech bank perfect for startups and online businesses",
-    packages: {
-      Basic: { valueType: "DASH" as FeatureValueType, included: false },
-      Standard: { valueType: "ADDON" as FeatureValueType, included: false, addonPriceUSD: 99 },
-      Premium: { valueType: "BOOLEAN" as FeatureValueType, included: true },
-    },
-  },
-  {
-    text: "Stripe Business Account Setup",
-    tooltip: "We'll help you set up a Stripe account for accepting online payments globally",
-    packages: {
-      Basic: { valueType: "DASH" as FeatureValueType, included: false },
-      Standard: { valueType: "ADDON" as FeatureValueType, included: false, addonPriceUSD: 79 },
-      Premium: { valueType: "BOOLEAN" as FeatureValueType, included: true },
-    },
-  },
-];
-
-// Full services data
+// ─── Full services data ────────────────────────────────────────────────────────
 const servicesData = [
+  // ── SUBSCRIPTION PLANS ──────────────────────────────────────────────────────
   {
-    slug: "llc-formation",
-    name: "LLC Formation",
-    shortDesc: "Launch your US business in 24-48 hours. No SSN required. Trusted by 10,000+ international entrepreneurs from Bangladesh, India, Pakistan & 50+ countries.",
-    metaTitle: "LLC Formation Service USA - Form Your LLC in 24-48 Hours | LLCPad",
-    metaDescription: "Form your US LLC from anywhere in the world. No SSN required. Includes Articles of Organization, Operating Agreement & compliance support. Trusted by 10,000+ entrepreneurs.",
-    description: `<p>Launch your American business in 24-48 hours. We handle all the paperwork while you focus on growing your business. <strong>No US residency or SSN required</strong> - we've helped over 10,000 entrepreneurs from 50+ countries establish their US presence.</p>
+    slug: "plan-basic",
+    name: "Basic Plan",
+    shortDesc: "Everything you need to get started — free forever. Build your event website, collect RSVPs, and access our vendor directory.",
+    metaTitle: "Basic Plan (Free) | Ceremoney – Wedding Planning Made Simple",
+    metaDescription: "Start planning your wedding for free. Ceremoney's Basic plan includes an event website, RSVP collection, a guided checklist, and access to our vendor directory. No credit card required.",
+    description: `<p>Start planning your wedding with Ceremoney at no cost. The Basic plan gives you the essential tools to begin organising your big day — no credit card required, no time limit.</p>
 
-<h3>Why Form a US LLC?</h3>
-<p>A Limited Liability Company (LLC) is the most popular business structure for international entrepreneurs entering the US market:</p>
+<h3>What's Included</h3>
 <ul>
-  <li><strong>Personal Asset Protection:</strong> Your personal assets (home, savings, investments) are legally separated from business liabilities.</li>
-  <li><strong>Tax Flexibility:</strong> LLCs enjoy "pass-through" taxation without corporate double-taxation.</li>
-  <li><strong>Global Credibility:</strong> A US LLC instantly boosts your business credibility.</li>
-  <li><strong>No Residency Required:</strong> Unlike many countries, the US allows non-residents to own and operate LLCs.</li>
+  <li><strong>Event Website:</strong> A beautiful, mobile-friendly wedding website with countdown, love story, photo gallery, and venue map.</li>
+  <li><strong>Basic RSVP:</strong> Collect simple yes/no RSVPs from guests directly through your event website.</li>
+  <li><strong>Wedding Checklist:</strong> A guided task list covering everything from 12 months before the wedding down to the final week.</li>
+  <li><strong>Vendor Directory:</strong> Browse and shortlist vetted photographers, florists, caterers, DJs, and venues.</li>
 </ul>
 
-<h3>Which State Should You Choose?</h3>
-<ul>
-  <li><strong>Wyoming (Most Popular):</strong> Zero state income tax, strongest privacy protections, lowest annual fees ($62/year).</li>
-  <li><strong>Delaware:</strong> Home to 66% of Fortune 500 companies. Best for startups seeking investment.</li>
-  <li><strong>New Mexico:</strong> No annual report requirement, strong privacy, low formation cost.</li>
-</ul>`,
-    icon: "Building2",
-    image: "/images/services/llc-formation.jpg",
+<h3>When Should You Upgrade?</h3>
+<p>The Basic plan is perfect for couples in the early stages of planning. When you're ready to manage your full guest list, build a seating chart, or send digital invitations, upgrade to Premium or Elite.</p>`,
+    icon: "Sparkles",
+    image: "/images/services/plan-basic.jpg",
     startingPrice: 0,
-    categorySlug: "formation",
-    isPopular: true,
+    categorySlug: "subscriptions",
+    isPopular: false,
     features: [
-      "LLC formation in all 50 US states",
-      "Articles of Organization filed with state",
-      "Customized Operating Agreement included",
-      "Free name availability search",
-      "Lifetime digital document storage",
-      "Compliance calendar with reminders",
-      "24/7 customer support",
-      "100% satisfaction guarantee",
+      "Event website (unlimited pages)",
+      "Basic RSVP collection",
+      "Guided wedding checklist",
+      "Vendor directory access",
+      "Mobile-friendly design",
+      "Ceremoney subdomain included",
     ],
-    // New package structure with comparison table support
     packages: [
       {
         name: "Basic",
         price: 0,
-        description: "State filing fee only - add services as needed",
-        processingTime: "3 weeks",
-        processingIcon: "clock",
-        badgeText: null,
-        badgeColor: null,
-        features: [],
-        notIncluded: [],
-        isPopular: false,
-      },
-      {
-        name: "Standard",
-        price: 299,
-        description: "Complete LLC formation with EIN and essential services",
-        processingTime: "3 weeks",
-        processingIcon: "clock",
-        badgeText: "Recommended",
-        badgeColor: "orange",
-        features: [],
-        notIncluded: [],
-        isPopular: true,
-      },
-      {
-        name: "Premium",
-        price: 620,
-        description: "Full-service LLC with banking and business setup included",
-        processingTime: "3 days",
+        description: "Free forever — no credit card required",
+        processingTime: "Instant",
         processingIcon: "zap",
         badgeText: null,
         badgeColor: null,
@@ -196,1532 +195,610 @@ const servicesData = [
         isPopular: false,
       },
     ],
-    // Use new comparison features
-    comparisonFeatures: llcFormationComparisonFeatures,
+    comparisonFeatures: subscriptionComparisonFeatures,
     faqs: [
       {
-        question: "Can non-US residents form a US LLC?",
-        answer: "Absolutely! US LLCs are available to anyone regardless of citizenship or residency. You don't need a visa, green card, SSN, or ITIN to form and operate a US LLC.",
+        question: "Is the Basic plan really free forever?",
+        answer: "Yes. The Basic plan is completely free with no hidden fees and no time limit. You can stay on the Basic plan for as long as you need.",
       },
       {
-        question: "Which state is best for my LLC - Wyoming or Delaware?",
-        answer: "For most international entrepreneurs, Wyoming is the best choice. It offers zero state income tax, the lowest annual fees ($62/year), and strongest privacy protections.",
+        question: "Do I need a credit card to sign up?",
+        answer: "No credit card is required for the Basic plan. Simply create an account and start planning.",
       },
       {
-        question: "How long does LLC formation take?",
-        answer: "Most LLCs are approved within 24-48 hours after we submit to the state. Wyoming and New Mexico are typically the fastest.",
-      },
-      {
-        question: "Do I need to visit the US to form an LLC?",
-        answer: "No! The entire process can be completed 100% online from anywhere in the world.",
+        question: "Can I upgrade from Basic to Premium at any time?",
+        answer: "Absolutely. You can upgrade to Premium or Elite at any time from your dashboard. Your existing data, website, and RSVPs are preserved when you upgrade.",
       },
     ],
   },
   {
-    slug: "ein-application",
-    name: "EIN Application",
-    shortDesc: "Get your EIN (Tax ID) without an SSN. Required for US bank accounts, Amazon seller accounts & tax filing. Fast processing for international business owners.",
-    metaTitle: "EIN Application Service for Non-US Residents | Get Your Tax ID Fast | LLCPad",
-    metaDescription: "Get your EIN (Employer Identification Number) without an SSN. Required for US bank accounts, Amazon seller accounts & tax filing. Fast processing for international business owners.",
-    description: `<p>Your EIN is your business's Social Security Number. We handle the entire IRS application process, <strong>even without an SSN or ITIN</strong>.</p>
+    slug: "plan-premium",
+    name: "Premium Plan",
+    shortDesc: "The complete wedding planning toolkit. Guest list, seating chart, custom domain, and digital stationery — everything a couple needs.",
+    metaTitle: "Premium Plan | 399 SEK/month | Ceremoney Wedding Planning",
+    metaDescription: "Upgrade to Ceremoney Premium for 399 SEK/month. Get full guest list management, an interactive seating chart builder, custom domain support, and digital save-the-dates and invitations.",
+    description: `<p>Ceremoney Premium gives you everything in Basic plus the full suite of tools you need to plan a seamless wedding. Manage your complete guest list, build your seating chart, and send beautiful digital stationery — all in one place.</p>
 
-<h3>What is an EIN and Why Do You Need One?</h3>
-<p>An Employer Identification Number (EIN) is a unique 9-digit number assigned by the IRS to identify your business.</p>
-<h4>You Need an EIN To:</h4>
+<h3>Everything in Basic, Plus:</h3>
 <ul>
-  <li><strong>Open a US Business Bank Account:</strong> Every US bank requires an EIN.</li>
-  <li><strong>Set Up Amazon Seller Account:</strong> Amazon requires an EIN during seller verification.</li>
-  <li><strong>Accept Payments via Stripe/PayPal:</strong> Payment processors require your EIN for tax reporting.</li>
-  <li><strong>File Business Taxes:</strong> The IRS uses your EIN to track your business taxes.</li>
-</ul>`,
-    icon: "FileText",
-    image: "/images/services/ein-application.jpg",
-    startingPrice: 99,
-    categorySlug: "formation",
-    isPopular: false,
-    features: [
-      "Complete SS-4 form preparation",
-      "IRS submission handling",
-      "Official EIN confirmation letter",
-      "EIN verification letter for banking",
-      "No SSN/ITIN required",
-      "Support until EIN received",
-    ],
-    packages: [
-      {
-        name: "Standard",
-        price: 99,
-        description: "Complete EIN application service for international applicants",
-        features: ["SS-4 Form Preparation", "IRS Fax Submission", "Official EIN Letter", "Banking Verification Letter"],
-        notIncluded: [],
-        isPopular: false,
-      },
-    ],
-    faqs: [
-      {
-        question: "Do I need an SSN or ITIN to get an EIN?",
-        answer: "No! International business owners can obtain an EIN without an SSN or ITIN.",
-      },
-      {
-        question: "How long does it take to get an EIN?",
-        answer: "For international applicants without an SSN, the IRS typically processes EIN applications within 4-6 weeks.",
-      },
-    ],
-  },
-  {
-    slug: "registered-agent",
-    name: "Registered Agent",
-    shortDesc: "Professional registered agent service in all 50 US states. Required for every LLC. Receive legal documents and state mail on your behalf.",
-    metaTitle: "Registered Agent Service USA - All 50 States | Compliance Made Easy | LLCPad",
-    metaDescription: "Professional registered agent service in all 50 US states. Same-day document scanning, online portal access, compliance alerts. Only $99/year. Keep your LLC in good standing.",
-    description: `<p>Every US LLC is legally required to have a registered agent in their state of formation. A registered agent is an individual or company designated to receive legal documents and official state correspondence on behalf of your business.</p>
+  <li><strong>Guest List Management:</strong> Add unlimited guests with contact details, dietary requirements, plus/minus tracking, and RSVP status at a glance.</li>
+  <li><strong>Seating Chart Builder:</strong> Drag-and-drop tables and seats. Auto-assign guests or arrange them manually. Export to PDF for your venue coordinator.</li>
+  <li><strong>Custom Domain:</strong> Connect your own domain (e.g. emma-and-lucas.com) to your Ceremoney event website.</li>
+  <li><strong>Digital Stationery:</strong> Design and send personalised save-the-dates and invitations. Track opens and delivery status.</li>
+</ul>
 
-<h3>Why Do You Need a Registered Agent?</h3>
+<h3>Pricing</h3>
 <ul>
-  <li><strong>Legal Requirement:</strong> Every state requires LLCs to maintain a registered agent with a physical address.</li>
-  <li><strong>Privacy Protection:</strong> Use our address instead of your personal address on public records.</li>
-  <li><strong>Never Miss Important Documents:</strong> We receive and forward all legal notices, tax documents, and compliance reminders.</li>
-  <li><strong>Compliance Alerts:</strong> We notify you of annual report deadlines and other compliance requirements.</li>
+  <li><strong>Monthly:</strong> 399 SEK/month — cancel any time</li>
+  <li><strong>Annual:</strong> 3 588 SEK/year (equiv. 299 SEK/month — save 25%)</li>
 </ul>`,
-    icon: "MapPin",
-    image: "/images/services/registered-agent.jpg",
-    startingPrice: 99,
-    categorySlug: "compliance",
-    isPopular: false,
-    features: [
-      "Physical address in your LLC state",
-      "Receive legal documents on your behalf",
-      "Forward documents to your address",
-      "Compliance calendar reminders",
-      "Online document portal access",
-      "Same-day email notifications",
-    ],
-    packages: [
-      {
-        name: "Annual",
-        price: 99,
-        description: "1 year registered agent service",
-        features: ["Physical Address", "Document Forwarding", "Email Notifications", "Online Portal Access"],
-        notIncluded: [],
-        isPopular: true,
-      },
-    ],
-    faqs: [
-      {
-        question: "Do I need a registered agent for my LLC?",
-        answer: "Yes, every LLC is required by law to have a registered agent in their state of formation.",
-      },
-      {
-        question: "Can I be my own registered agent?",
-        answer: "Yes, but you must have a physical address in the state and be available during business hours. Using a professional service provides privacy and reliability.",
-      },
-    ],
-  },
-  {
-    slug: "trademark-registration",
-    name: "Trademark Registration",
-    shortDesc: "Protect your brand with USPTO trademark registration. Required for Amazon Brand Registry. Stop copycats and counterfeiters.",
-    metaTitle: "USPTO Trademark Registration Service | Protect Your Brand | LLCPad",
-    metaDescription: "Register your trademark with the USPTO. Comprehensive search, application filing, office action response. Required for Amazon Brand Registry. Protect your brand from copycats.",
-    description: `<p>A registered trademark gives you <strong>exclusive nationwide rights</strong> to your brand name, logo, or slogan. Stop copycats, qualify for Amazon Brand Registry, and build lasting brand value.</p>
-
-<h3>Why Register a Trademark?</h3>
-<ul>
-  <li><strong>Legal Protection:</strong> Exclusive right to use your brand name/logo nationwide.</li>
-  <li><strong>Amazon Brand Registry:</strong> Required to enroll in Brand Registry.</li>
-  <li><strong>Deter Copycats:</strong> The ® symbol signals federal registration.</li>
-  <li><strong>Business Value:</strong> Trademarks are valuable intellectual property assets.</li>
-</ul>`,
-    icon: "Stamp",
-    image: "/images/services/trademark.jpg",
-    startingPrice: 599,
-    categorySlug: "formation",
+    icon: "Crown",
+    image: "/images/services/plan-premium.jpg",
+    startingPrice: 399,
+    categorySlug: "subscriptions",
     isPopular: true,
     features: [
-      "Comprehensive trademark search",
-      "USPTO application filing",
-      "Office action response (Standard+)",
-      "Registration certificate",
-      "Trademark monitoring",
-      "Amazon Brand Registry ready",
+      "Everything in Basic",
+      "Guest list management (unlimited guests)",
+      "Interactive seating chart builder",
+      "Custom domain support",
+      "Digital save-the-dates & invitations",
+      "PDF export for venue coordinators",
+      "25% discount on annual billing",
     ],
     packages: [
       {
-        name: "Basic",
-        price: 599,
-        description: "Trademark search + filing (USPTO fees extra)",
-        features: ["Comprehensive Search", "USPTO Filing (1 Class)", "Application Monitoring", "Digital Certificate"],
-        notIncluded: ["Office Action Response", "Monitoring"],
-        isPopular: false,
-      },
-      {
-        name: "Standard",
-        price: 799,
-        description: "Complete trademark service - Most Popular",
-        features: ["Everything in Basic", "Office Action Response", "Priority Support", "90-Day Monitoring"],
-        notIncluded: ["1-Year Monitoring"],
+        name: "Premium",
+        price: 399,
+        description: "Monthly billing — cancel any time",
+        processingTime: "Instant activation",
+        processingIcon: "zap",
+        badgeText: "Most Popular",
+        badgeColor: "rose",
+        features: [],
+        notIncluded: [],
         isPopular: true,
       },
       {
-        name: "Premium",
-        price: 999,
-        description: "Full protection package with ongoing monitoring",
-        features: ["Everything in Standard", "1-Year Trademark Monitoring", "Infringement Alerts", "Dedicated Account Manager"],
+        name: "Premium Annual",
+        price: 299,
+        description: "Annual billing — 3 588 SEK/year (save 25%)",
+        processingTime: "Instant activation",
+        processingIcon: "zap",
+        badgeText: "Best Value",
+        badgeColor: "green",
+        features: [],
         notIncluded: [],
         isPopular: false,
       },
     ],
     faqs: [
       {
-        question: "How long does trademark registration take?",
-        answer: "The USPTO process typically takes 8-12 months from filing to registration.",
+        question: "How many guests can I add to the guest list?",
+        answer: "Premium supports unlimited guests. There is no cap on the number of contacts you can add to your guest list.",
       },
       {
-        question: "Can I use my trademark before it's registered?",
-        answer: "Yes, you can use the ™ symbol immediately and switch to ® once registered.",
+        question: "How does custom domain support work?",
+        answer: "You point your domain's DNS records to Ceremoney (we provide the values) and your event website will be accessible at your chosen domain, typically within a few hours.",
+      },
+      {
+        question: "Can I cancel my Premium subscription at any time?",
+        answer: "Yes. Monthly subscribers can cancel at any time and retain access until the end of the billing period. Annual subscribers can cancel renewal; access continues until the annual period ends.",
+      },
+      {
+        question: "What happens to my data if I downgrade?",
+        answer: "Your data is preserved. If you downgrade to Basic, your guest list and seating chart data are saved but become read-only until you upgrade again.",
       },
     ],
   },
   {
-    slug: "amazon-seller",
-    name: "Amazon Seller Account",
-    shortDesc: "Complete Amazon seller account setup. We handle verification, tax interviews, and account configuration. Start selling in 7 days.",
-    metaTitle: "Amazon Seller Account Setup Service | Start Selling on Amazon Today | LLCPad",
-    metaDescription: "Professional Amazon seller account setup for international sellers. Document preparation, tax interview guidance, verification support. Avoid suspension risks. Start selling faster!",
-    description: `<p>Start your Amazon selling journey the right way. We handle the complex verification process, tax interview, and initial account configuration so you can focus on sourcing products.</p>
+    slug: "plan-elite",
+    name: "Elite Plan",
+    shortDesc: "The ultimate experience. Everything in Premium plus collaborators, QR entrance check-in, advanced RSVP forms, and priority support.",
+    metaTitle: "Elite Plan | 799 SEK/month | Ceremoney Wedding Planning",
+    metaDescription: "Ceremoney Elite for 799 SEK/month. Includes all Premium features plus multi-collaborator access, QR code door check-in, fully customisable RSVP forms, and priority 4-hour support.",
+    description: `<p>Ceremoney Elite is the premium tier for couples who want the full experience — and for families and wedding parties with multiple stakeholders involved in the planning process.</p>
+
+<h3>Everything in Premium, Plus:</h3>
+<ul>
+  <li><strong>Collaborators:</strong> Invite parents, bridesmaids, best man, or a professional planner to co-manage the event. Assign roles and permissions per collaborator.</li>
+  <li><strong>QR Code Entrance Check-in:</strong> Each guest receives a unique QR code. Scan at the door for instant, contactless attendance tracking. Export attendance reports post-event.</li>
+  <li><strong>Advanced RSVP Forms:</strong> Go beyond yes/no. Collect meal preferences, dietary restrictions, song requests, shuttle bookings, hotel room sharing, allergies, and any custom question you need.</li>
+  <li><strong>Priority Support:</strong> Skip the general queue. Elite subscribers receive guaranteed responses within 4 business hours from our dedicated team.</li>
+</ul>
+
+<h3>Pricing</h3>
+<ul>
+  <li><strong>Monthly:</strong> 799 SEK/month — cancel any time</li>
+  <li><strong>Annual:</strong> 7 188 SEK/year (equiv. 599 SEK/month — save 25%)</li>
+</ul>`,
+    icon: "Star",
+    image: "/images/services/plan-elite.jpg",
+    startingPrice: 799,
+    categorySlug: "subscriptions",
+    isPopular: false,
+    features: [
+      "Everything in Premium",
+      "Unlimited collaborators with role-based access",
+      "QR code entrance check-in",
+      "Advanced & fully customisable RSVP forms",
+      "Post-event attendance export",
+      "Priority support (4-hour response)",
+      "25% discount on annual billing",
+    ],
+    packages: [
+      {
+        name: "Elite",
+        price: 799,
+        description: "Monthly billing — cancel any time",
+        processingTime: "Instant activation",
+        processingIcon: "zap",
+        badgeText: null,
+        badgeColor: null,
+        features: [],
+        notIncluded: [],
+        isPopular: false,
+      },
+      {
+        name: "Elite Annual",
+        price: 599,
+        description: "Annual billing — 7 188 SEK/year (save 25%)",
+        processingTime: "Instant activation",
+        processingIcon: "zap",
+        badgeText: "Best Value",
+        badgeColor: "green",
+        features: [],
+        notIncluded: [],
+        isPopular: false,
+      },
+    ],
+    faqs: [
+      {
+        question: "How many collaborators can I invite?",
+        answer: "Elite allows unlimited collaborators. You can assign different roles — view-only, editor, or co-host — to each person you invite.",
+      },
+      {
+        question: "How does QR code check-in work on the day?",
+        answer: "Each guest receives a unique QR code in their invitation or confirmation email. On the day, door staff scan the code with any smartphone or tablet. The attendance list updates in real time in your dashboard.",
+      },
+      {
+        question: "Can I build custom RSVP questions?",
+        answer: "Yes. The advanced RSVP form builder lets you add text fields, dropdowns, checkboxes, and rating questions. You can make questions required or optional and set different questions for adults vs. children.",
+      },
+      {
+        question: "What does 4-hour priority support mean?",
+        answer: "Elite subscribers are placed in a dedicated support queue. Our team commits to a first response within 4 business hours. During business hours (Mon–Fri, 08:00–17:00 CET) response times are typically much faster.",
+      },
+    ],
+  },
+  {
+    slug: "plan-white-label",
+    name: "White-Label Plan",
+    shortDesc: "For professional wedding planners. Multi-event management, client portals, custom branding, and enterprise integrations. Contact us for pricing.",
+    metaTitle: "White-Label Plan for Wedding Planners | Ceremoney Professional",
+    metaDescription: "Ceremoney White-Label lets professional wedding planners manage multiple events under their own brand. Client portals, custom domain, priority onboarding, and API access. Contact for pricing.",
+    description: `<p>Ceremoney White-Label is designed for professional wedding planners and agencies who manage multiple events for clients. Run all your events under your own brand on a single, powerful platform.</p>
+
+<h3>Key Features</h3>
+<ul>
+  <li><strong>Multi-Event Management:</strong> Manage unlimited client events from one dashboard. Switch between projects instantly.</li>
+  <li><strong>Client Portals:</strong> Give each couple their own branded portal to track progress, approve proposals, and communicate with you.</li>
+  <li><strong>Custom Branding:</strong> Full white-label: your logo, your colours, your domain. Your clients see your brand, not Ceremoney.</li>
+  <li><strong>All Elite Features Included:</strong> Every feature from the Elite plan — collaborators, QR check-in, advanced forms, and priority support — available for all your clients.</li>
+  <li><strong>API Access:</strong> Integrate Ceremoney data with your CRM, accounting software, or custom tools via REST API.</li>
+  <li><strong>Dedicated Onboarding:</strong> A dedicated account manager helps you migrate existing clients and configure your workspace.</li>
+</ul>
+
+<h3>Pricing</h3>
+<p>White-Label pricing is based on the number of active events and team members. <strong>Contact us</strong> for a personalised quote.</p>`,
+    icon: "Briefcase",
+    image: "/images/services/plan-white-label.jpg",
+    startingPrice: 0,
+    categorySlug: "professional",
+    isPopular: false,
+    features: [
+      "Unlimited client events",
+      "Branded client portals",
+      "Full white-label (logo, colours, domain)",
+      "All Elite features for every event",
+      "REST API access",
+      "Dedicated account manager",
+      "Priority SLA and phone support",
+      "Custom integrations available",
+    ],
+    packages: [
+      {
+        name: "White-Label",
+        price: 0,
+        description: "Custom pricing — contact us for a quote",
+        processingTime: "Onboarding within 3 days",
+        processingIcon: "clock",
+        badgeText: "Enterprise",
+        badgeColor: "purple",
+        features: [
+          "Unlimited events",
+          "Branded client portals",
+          "Full white-label UI",
+          "All Elite features",
+          "REST API",
+          "Dedicated account manager",
+        ],
+        notIncluded: [],
+        isPopular: false,
+      },
+    ],
+    faqs: [
+      {
+        question: "How is White-Label pricing structured?",
+        answer: "Pricing is customised based on the number of active events, team members, and any special integrations required. Contact our sales team at sales@ceremoney.com for a quote.",
+      },
+      {
+        question: "Can my clients access Ceremoney features without knowing it's Ceremoney?",
+        answer: "Yes. With full white-labelling, your clients see only your brand — your logo, colours, and domain. Ceremoney branding is completely hidden.",
+      },
+      {
+        question: "Is there an API for integrating with my existing tools?",
+        answer: "Yes. White-Label includes REST API access with documentation and sandbox environment. We support webhooks for real-time event data.",
+      },
+      {
+        question: "What does the dedicated onboarding process look like?",
+        answer: "You'll be assigned a dedicated account manager who will guide you through workspace setup, branding configuration, client migration, and training for your team — typically completed within 3 business days.",
+      },
+    ],
+  },
+  // ── ADD-ONS ──────────────────────────────────────────────────────────────────
+  {
+    slug: "addon-extra-collaborators",
+    name: "Extra Collaborators",
+    shortDesc: "Add more co-planners to your Premium account. Invite parents, bridesmaids, or a hired coordinator with controlled permissions.",
+    metaTitle: "Extra Collaborators Add-on | Ceremoney Premium",
+    metaDescription: "Add collaborators to your Ceremoney Premium account. Invite up to 5 people to co-manage your wedding planning with view or edit permissions. Upgrade or add on at any time.",
+    description: `<p>On the Premium plan, collaborators are available as an add-on. Invite people you trust to help with your planning — each with their own login and customisable permission level.</p>
+
+<h3>Permission Levels</h3>
+<ul>
+  <li><strong>View Only:</strong> Can see all planning details but cannot make changes. Perfect for parents who want to stay informed.</li>
+  <li><strong>Editor:</strong> Can update the guest list, RSVP responses, and checklist. Ideal for a maid of honour or best man.</li>
+  <li><strong>Co-Host:</strong> Full access equivalent to the account owner, except billing settings.</li>
+</ul>
+
+<p>Note: Collaborators are included as a standard feature on the Elite plan. This add-on is for Premium subscribers who need them.</p>`,
+    icon: "Users",
+    image: "/images/services/addon-collaborators.jpg",
+    startingPrice: 49,
+    categorySlug: "addons",
+    isPopular: false,
+    features: [
+      "Up to 5 additional collaborators",
+      "Role-based permissions (View / Edit / Co-Host)",
+      "Individual logins per collaborator",
+      "Real-time collaboration on guest list and checklist",
+      "Audit log of changes per collaborator",
+    ],
+    packages: [
+      {
+        name: "5 Collaborators",
+        price: 49,
+        description: "Add up to 5 collaborators to your Premium plan",
+        features: ["5 Extra Logins", "View / Edit / Co-Host Roles", "Audit Log"],
+        notIncluded: [],
+        isPopular: true,
+      },
+    ],
+    faqs: [
+      {
+        question: "Do collaborators need their own Ceremoney account?",
+        answer: "Yes. Each collaborator creates a free Ceremoney account. Once they've registered, you can send them an invitation from your dashboard.",
+      },
+      {
+        question: "Can I remove a collaborator after adding them?",
+        answer: "Yes. You can revoke a collaborator's access at any time from your account settings.",
+      },
+    ],
+  },
+  {
+    slug: "addon-print-stationery",
+    name: "Printed Stationery Package",
+    shortDesc: "Professional print-ready stationery files. Save-the-dates, invitations, RSVP cards, menus, and place cards delivered as print-ready PDFs.",
+    metaTitle: "Printed Stationery Add-on | Ceremoney Wedding Stationery",
+    metaDescription: "Upgrade to professionally designed print-ready wedding stationery. Includes save-the-dates, invitations, RSVP cards, menus, and place cards delivered as PDF files ready for your local printer.",
+    description: `<p>Complement your digital planning with beautiful, professionally designed printed stationery. All designs are delivered as print-ready PDFs — take them to any local printer or online print service.</p>
 
 <h3>What's Included</h3>
 <ul>
-  <li><strong>Account Creation:</strong> We set up your Professional Seller account correctly.</li>
-  <li><strong>Verification Support:</strong> Navigate the identity and business verification process.</li>
-  <li><strong>Tax Interview:</strong> Complete the W-8BEN-E form correctly for international sellers.</li>
-  <li><strong>Account Configuration:</strong> Set up shipping, return policies, and business information.</li>
-</ul>`,
-    icon: "ShoppingCart",
-    image: "/images/services/amazon-seller.jpg",
-    startingPrice: 299,
-    categorySlug: "amazon",
-    isPopular: true,
-    features: [
-      "Professional seller account setup",
-      "Identity verification support",
-      "Tax interview (W-8BEN-E) completion",
-      "Account configuration",
-      "Shipping settings setup",
-      "7-day setup guarantee",
-    ],
-    packages: [
-      {
-        name: "Standard",
-        price: 299,
-        description: "Complete Amazon seller account setup",
-        features: ["Account Creation", "Verification Support", "Tax Interview", "Basic Configuration"],
-        notIncluded: ["Brand Registry", "Listing Optimization"],
-        isPopular: true,
-      },
-      {
-        name: "Premium",
-        price: 499,
-        description: "Full Amazon business setup",
-        features: ["Everything in Standard", "Brand Registry Enrollment", "5 Product Listings", "Listing Optimization"],
-        notIncluded: [],
-        isPopular: false,
-      },
-    ],
-    faqs: [
-      {
-        question: "Do I need an LLC to sell on Amazon?",
-        answer: "While not required, having a US LLC provides credibility, liability protection, and makes tax reporting easier.",
-      },
-      {
-        question: "How long does Amazon verification take?",
-        answer: "Typically 3-7 days, but can vary. We ensure your documents are correct to minimize delays.",
-      },
-    ],
-  },
-  {
-    slug: "virtual-address",
-    name: "Virtual Business Address",
-    shortDesc: "Get a professional US business address. Use for your LLC, receive mail & packages, and look professional to customers.",
-    metaTitle: "Virtual US Address for Business | Mail Scanning & Forwarding | LLCPad",
-    metaDescription: "Get a real US street address for your business. Mail scanning, forwarding, package receiving. Perfect for international entrepreneurs. Use for banking, Amazon, and business presence.",
-    description: `<p>Get a professional US business address for your LLC. We provide a real street address (not a PO Box) that you can use on your LLC documents, website, and marketing materials.</p>
+  <li>Save-the-date card (front + back)</li>
+  <li>Wedding invitation suite (invitation, details card, envelope liner)</li>
+  <li>RSVP card</li>
+  <li>Ceremony programme (4-page)</li>
+  <li>Dinner menu card</li>
+  <li>Place card template</li>
+</ul>
 
-<h3>Benefits</h3>
-<ul>
-  <li><strong>Professional Image:</strong> A US business address builds trust with customers.</li>
-  <li><strong>Privacy Protection:</strong> Keep your personal address off public records.</li>
-  <li><strong>Mail Handling:</strong> We receive, scan, and forward your business mail.</li>
-  <li><strong>Package Receiving:</strong> Accept packages from USPS, UPS, FedEx, and DHL.</li>
-</ul>`,
-    icon: "MapPin",
-    image: "/images/services/virtual-address.jpg",
-    startingPrice: 149,
-    categorySlug: "compliance",
+<h3>Process</h3>
+<ol>
+  <li>Choose your design template from our library</li>
+  <li>Fill in your event details via a simple form</li>
+  <li>Review a digital proof within 3 business days</li>
+  <li>Approve and receive your print-ready PDFs</li>
+  <li>Print locally or through your preferred print service</li>
+</ol>`,
+    icon: "Mail",
+    image: "/images/services/addon-stationery.jpg",
+    startingPrice: 599,
+    categorySlug: "addons",
     isPopular: false,
     features: [
-      "Real US street address",
-      "Mail receiving & scanning",
-      "Package acceptance",
-      "Mail forwarding available",
-      "Use for LLC registration",
-      "Online mail management",
+      "Save-the-date card design",
+      "Full invitation suite",
+      "RSVP card",
+      "Ceremony programme",
+      "Dinner menu card",
+      "Place card template",
+      "2 rounds of revisions",
+      "Print-ready PDF delivery",
     ],
     packages: [
       {
-        name: "Standard",
-        price: 149,
-        description: "Virtual address with mail scanning",
-        features: ["US Street Address", "Mail Receiving", "Mail Scanning", "30-Day Mail Storage"],
-        notIncluded: ["Package Forwarding", "Mail Forwarding"],
-        isPopular: true,
+        name: "Essential",
+        price: 599,
+        description: "Save-the-date + Invitation suite + RSVP card",
+        features: ["Save-the-date", "Invitation Suite", "RSVP Card", "2 Revisions", "Print-ready PDFs"],
+        notIncluded: ["Menu Card", "Place Cards", "Ceremony Programme"],
+        isPopular: false,
       },
       {
-        name: "Premium",
-        price: 249,
-        description: "Full mail handling service",
-        features: ["Everything in Standard", "Package Receiving", "Mail Forwarding", "90-Day Mail Storage"],
+        name: "Full Suite",
+        price: 990,
+        description: "Complete printed stationery collection",
+        features: [
+          "Everything in Essential",
+          "Ceremony Programme",
+          "Dinner Menu Card",
+          "Place Card Template",
+          "Unlimited Revisions",
+        ],
         notIncluded: [],
-        isPopular: false,
+        isPopular: true,
       },
     ],
     faqs: [
       {
-        question: "Can I use this address for my LLC registration?",
-        answer: "Yes, you can use our address as your LLC's principal business address.",
+        question: "Can I customise the colours and fonts?",
+        answer: "Yes. During the design brief, you specify your colour palette, preferred fonts, and any design notes. Our designers will match your wedding aesthetic.",
       },
       {
-        question: "How does mail forwarding work?",
-        answer: "We scan your mail and notify you. You can then request forwarding to your international address.",
+        question: "Do you offer printing, or just the digital files?",
+        answer: "We deliver print-ready PDF and PNG files. Printing is not included — you arrange printing with your preferred local or online printer using our files.",
+      },
+      {
+        question: "How long does the stationery design process take?",
+        answer: "You'll receive your first digital proof within 3 business days of submitting your design brief. Each revision round takes 1–2 business days.",
       },
     ],
   },
   {
-    slug: "business-banking",
-    name: "Business Bank Account",
-    shortDesc: "Open a US business bank account remotely. No US visit required. Works for international LLC owners.",
-    metaTitle: "US Business Bank Account for Non-Residents | Remote Account Opening | LLCPad",
-    metaDescription: "Open a US business bank account without visiting America. Partner banks welcome international LLC owners. Debit card, online banking, wire transfers. Start accepting US payments.",
-    description: `<p>Opening a US business bank account is essential for your LLC. We partner with banks that welcome international business owners and offer remote account opening.</p>
+    slug: "addon-wedding-website-premium-theme",
+    name: "Premium Website Theme",
+    shortDesc: "Unlock an exclusive, fully customisable event website theme with animated transitions, advanced photo galleries, and bespoke typography.",
+    metaTitle: "Premium Wedding Website Theme | Ceremoney Add-on",
+    metaDescription: "Upgrade your Ceremoney event website with a premium theme. Animated page transitions, advanced photo galleries, video backgrounds, and fully customisable colours and fonts.",
+    description: `<p>Your event website is often the first impression guests have of your wedding. Premium themes take it to the next level — with cinematic animations, advanced galleries, and full colour and font customisation.</p>
 
-<h3>Why You Need a US Bank Account</h3>
+<h3>What's Included</h3>
 <ul>
-  <li><strong>Accept USD Payments:</strong> Receive payments from US customers directly.</li>
-  <li><strong>Amazon Disbursements:</strong> Required for Amazon seller payouts.</li>
-  <li><strong>Payment Processors:</strong> Connect Stripe, PayPal, and other payment platforms.</li>
-  <li><strong>Build Business Credit:</strong> Establish US business credit history.</li>
+  <li><strong>Animated Page Transitions:</strong> Smooth fade and slide animations that set a romantic mood.</li>
+  <li><strong>Video Background Hero:</strong> Display a short video or cinematic slideshow on your homepage hero section.</li>
+  <li><strong>Advanced Gallery:</strong> Masonry, lightbox, and carousel gallery layouts with lazy loading.</li>
+  <li><strong>Custom Colour & Font Control:</strong> Full access to the theme editor — choose any Google Font and custom brand colours.</li>
+  <li><strong>Password Protected Pages:</strong> Keep parts of your website private (e.g. accommodation details visible only to invited guests).</li>
 </ul>`,
-    icon: "Landmark",
-    image: "/images/services/business-banking.jpg",
+    icon: "Palette",
+    image: "/images/services/addon-theme.jpg",
     startingPrice: 199,
-    categorySlug: "tax-finance",
+    categorySlug: "addons",
     isPopular: false,
     features: [
-      "Remote account opening",
-      "No US visit required",
-      "Multiple bank options",
-      "Debit card included",
-      "Online banking access",
-      "International wire transfers",
+      "Exclusive animated website theme",
+      "Video background hero section",
+      "Advanced masonry & lightbox gallery",
+      "Full colour and font customisation",
+      "Password protected page sections",
+      "Mobile-optimised & fast-loading",
     ],
     packages: [
       {
-        name: "Standard",
+        name: "Premium Theme",
         price: 199,
-        description: "Business bank account setup assistance",
-        features: ["Bank Application Preparation", "Document Review", "Application Submission", "Follow-up Support"],
+        description: "One-time purchase — yours for the lifetime of your event",
+        features: [
+          "Exclusive Theme",
+          "Video Hero",
+          "Advanced Gallery",
+          "Theme Editor Access",
+          "Password Protected Sections",
+        ],
         notIncluded: [],
         isPopular: true,
       },
     ],
     faqs: [
       {
-        question: "Can I open a US bank account without visiting the US?",
-        answer: "Yes, our partner banks offer remote account opening for qualified LLC owners.",
+        question: "Is this a subscription or a one-time purchase?",
+        answer: "It is a one-time purchase. Once you buy a premium theme, it is unlocked for the full duration of your Ceremoney account — no recurring fees.",
       },
       {
-        question: "What documents do I need?",
-        answer: "Typically: LLC documents, EIN letter, passport, and proof of address.",
+        question: "Can I switch themes after purchasing?",
+        answer: "Yes. You can switch between your standard theme and premium themes at any time. Your content (text, photos, guest list) is preserved across theme switches.",
       },
     ],
   },
+  // ── PROFESSIONAL TOOLS ───────────────────────────────────────────────────────
   {
-    slug: "annual-report",
-    name: "Annual Report Filing",
-    shortDesc: "Stay compliant with state annual report requirements. We file on time so your LLC stays in good standing.",
-    metaTitle: "LLC Annual Report Filing Service | Stay Compliant | LLCPad",
-    metaDescription: "Never miss an LLC deadline again. We handle annual reports and state filings. Keep your LLC in good standing. Avoid penalties and dissolution.",
-    description: `<p>Most states require LLCs to file an annual report to maintain good standing. We handle the entire filing process so you never miss a deadline.</p>
+    slug: "vendor-verified-listing",
+    name: "Verified Vendor Listing",
+    shortDesc: "Get listed in the Ceremoney vendor directory as a verified supplier. Reach couples actively planning their wedding.",
+    metaTitle: "Vendor Directory Listing | Ceremoney Verified Vendor",
+    metaDescription: "List your wedding business in the Ceremoney vendor directory. Get discovered by couples planning their wedding. Includes verified badge, portfolio photos, reviews, and inquiry management.",
+    description: `<p>The Ceremoney vendor directory is where couples go to discover and shortlist their wedding suppliers. A verified listing puts your business in front of actively planning couples and gives you a professional profile to showcase your work.</p>
 
-<h3>Why Annual Reports Matter</h3>
+<h3>What's Included</h3>
 <ul>
-  <li><strong>Maintain Good Standing:</strong> Required to keep your LLC active and compliant.</li>
-  <li><strong>Avoid Penalties:</strong> Late filings result in fees and potential dissolution.</li>
-  <li><strong>Update State Records:</strong> Keep your registered agent and address current.</li>
-</ul>`,
-    icon: "FileCheck",
-    image: "/images/services/annual-report.jpg",
-    startingPrice: 75,
-    categorySlug: "compliance",
-    isPopular: false,
-    features: [
-      "Timely annual report filing",
-      "State fee included",
-      "Good standing maintenance",
-      "Filing confirmation",
-      "Compliance reminders",
-      "No missed deadlines",
-    ],
-    packages: [
-      {
-        name: "Standard",
-        price: 75,
-        description: "Annual report filing (+ state fee)",
-        features: ["Report Preparation", "State Filing", "Confirmation Letter", "Compliance Calendar"],
-        notIncluded: [],
-        isPopular: true,
-      },
-    ],
-    faqs: [
-      {
-        question: "Do all states require annual reports?",
-        answer: "Most states do, but requirements vary. Wyoming requires an annual report ($62), while New Mexico has no annual report requirement.",
-      },
-      {
-        question: "What happens if I miss my annual report deadline?",
-        answer: "Late filings typically incur penalties and can lead to administrative dissolution of your LLC.",
-      },
-    ],
-  },
-  {
-    slug: "brand-registry",
-    name: "Amazon Brand Registry",
-    shortDesc: "Enroll in Amazon Brand Registry. Protect your brand, access A+ Content, and unlock Sponsored Brands advertising.",
-    metaTitle: "Amazon Brand Registry Service | Enroll & Protect Your Brand | LLCPad",
-    metaDescription: "Enroll in Amazon Brand Registry with expert assistance. Access A+ Content, Brand Analytics, and protection tools. Trademark guidance included. Protect your Amazon brand today.",
-    description: `<p>Amazon Brand Registry is essential for protecting your brand on Amazon and unlocking powerful selling tools. We help you enroll quickly and correctly.</p>
-
-<h3>Brand Registry Benefits</h3>
-<ul>
-  <li><strong>Brand Protection:</strong> Report and remove counterfeit listings.</li>
-  <li><strong>A+ Content:</strong> Create enhanced product descriptions with images and comparison charts.</li>
-  <li><strong>Sponsored Brands:</strong> Run headline search ads featuring your brand logo.</li>
-  <li><strong>Brand Analytics:</strong> Access detailed customer search and purchase data.</li>
+  <li><strong>Verified Badge:</strong> A visual trust indicator shown on your listing and in search results.</li>
+  <li><strong>Full Portfolio:</strong> Upload up to 50 photos and 3 video reels to showcase your work.</li>
+  <li><strong>Review Management:</strong> Collect and respond to couple reviews directly from your vendor dashboard.</li>
+  <li><strong>Inquiry Inbox:</strong> Receive and manage couple enquiries without giving out your personal email.</li>
+  <li><strong>Analytics:</strong> See how many couples viewed your listing, saved you to their shortlist, and sent enquiries.</li>
 </ul>`,
     icon: "BadgeCheck",
-    image: "/images/services/brand-registry.jpg",
-    startingPrice: 199,
-    categorySlug: "amazon",
+    image: "/images/services/vendor-listing.jpg",
+    startingPrice: 249,
+    categorySlug: "professional",
     isPopular: false,
     features: [
-      "Brand Registry enrollment",
-      "Trademark verification",
-      "A+ Content access",
-      "Brand protection tools",
-      "Sponsored Brands eligibility",
-      "Brand Analytics access",
+      "Verified vendor badge",
+      "Portfolio (50 photos + 3 videos)",
+      "Couple review system",
+      "Inquiry inbox",
+      "Listing analytics dashboard",
+      "Featured placement option",
     ],
     packages: [
       {
-        name: "Standard",
-        price: 199,
-        description: "Brand Registry enrollment service",
-        features: ["Enrollment Application", "Trademark Verification", "Account Configuration", "Setup Support"],
-        notIncluded: [],
-        isPopular: true,
-      },
-    ],
-    faqs: [
-      {
-        question: "Do I need a registered trademark for Brand Registry?",
-        answer: "You need either a registered trademark or a pending trademark application with a serial number.",
-      },
-      {
-        question: "How long does Brand Registry enrollment take?",
-        answer: "Typically 1-2 weeks after submitting a complete application with valid trademark information.",
-      },
-    ],
-  },
-  {
-    slug: "bookkeeping",
-    name: "Bookkeeping Services",
-    shortDesc: "Professional bookkeeping for your US LLC. Monthly statements, expense tracking, and tax-ready financials.",
-    metaTitle: "Bookkeeping Services for US LLC | Tax-Ready Financials | LLCPad",
-    metaDescription: "Professional bookkeeping for your US LLC. Monthly statements, expense tracking, and tax-ready financials. Keep your business finances organized.",
-    description: `<p>Keep your LLC finances organized with professional bookkeeping. We track income, expenses, and prepare financial statements so you're always tax-ready.</p>
-
-<h3>What's Included</h3>
-<ul>
-  <li><strong>Transaction Recording:</strong> Categorize all income and expenses.</li>
-  <li><strong>Monthly Statements:</strong> Profit & Loss and Balance Sheet.</li>
-  <li><strong>Bank Reconciliation:</strong> Match bank transactions with records.</li>
-  <li><strong>Tax Preparation:</strong> Year-end financials ready for tax filing.</li>
-</ul>`,
-    icon: "Calculator",
-    image: "/images/services/bookkeeping.jpg",
-    startingPrice: 149,
-    categorySlug: "tax-finance",
-    isPopular: false,
-    features: [
-      "Monthly transaction recording",
-      "Expense categorization",
-      "Profit & Loss statements",
-      "Balance sheet",
-      "Bank reconciliation",
-      "Tax-ready financials",
-    ],
-    packages: [
-      {
-        name: "Starter",
-        price: 149,
-        description: "For businesses with up to 50 transactions/month",
-        features: ["Up to 50 Transactions", "Monthly P&L", "Expense Categorization", "Bank Reconciliation"],
-        notIncluded: ["Balance Sheet", "Dedicated Accountant"],
-        isPopular: false,
-      },
-      {
-        name: "Growth",
-        price: 299,
-        description: "For businesses with up to 150 transactions/month",
-        features: ["Up to 150 Transactions", "Monthly P&L & Balance Sheet", "Dedicated Accountant", "Quarterly Review Call"],
-        notIncluded: [],
-        isPopular: true,
-      },
-    ],
-    faqs: [
-      {
-        question: "Do I need bookkeeping for my LLC?",
-        answer: "Yes, proper bookkeeping is essential for tax compliance and understanding your business performance.",
-      },
-      {
-        question: "How do you access my financial data?",
-        answer: "We connect securely to your bank accounts and accounting software through read-only integrations.",
-      },
-    ],
-  },
-  // ITIN Application Service
-  {
-    slug: "itin-application",
-    name: "ITIN Application",
-    shortDesc: "Get your Individual Taxpayer Identification Number (ITIN) for US tax filing. Required for foreign nationals without SSN. CAA-assisted processing.",
-    metaTitle: "ITIN Application Service | Get Your US Tax ID Number | LLCPad",
-    metaDescription: "Get your Individual Taxpayer Identification Number (ITIN) for US tax filing. CAA-assisted processing - no need to mail your original passport. Fast processing for foreign nationals.",
-    description: `<p>An Individual Taxpayer Identification Number (ITIN) is a tax processing number issued by the IRS for individuals who need to file US taxes but are not eligible for a Social Security Number.</p>
-
-<h3>Who Needs an ITIN?</h3>
-<ul>
-  <li><strong>Foreign LLC Owners:</strong> Required if you receive US-source income and need to file taxes.</li>
-  <li><strong>Tax Treaty Benefits:</strong> Claim reduced withholding rates under US tax treaties.</li>
-  <li><strong>Bank Account Requirements:</strong> Some banks require ITIN for account opening.</li>
-  <li><strong>Real Estate Transactions:</strong> Required for property purchases and rental income.</li>
-</ul>
-
-<h3>ITIN vs EIN</h3>
-<ul>
-  <li><strong>EIN:</strong> For your business entity (LLC). Required for business banking and Amazon.</li>
-  <li><strong>ITIN:</strong> For you personally as a foreign individual. Required for personal tax filing.</li>
-</ul>
-
-<h3>Our CAA-Assisted Process</h3>
-<p>We work with IRS-authorized Certifying Acceptance Agents (CAAs) who can verify your identity documents without sending original passports to the IRS.</p>`,
-    icon: "UserCheck",
-    image: "/images/services/itin.jpg",
-    startingPrice: 299,
-    categorySlug: "tax-finance",
-    isPopular: false,
-    features: [
-      "Form W-7 preparation",
-      "CAA document certification",
-      "No need to mail original passport",
-      "Tax return preparation included",
-      "IRS submission handling",
-      "Application tracking",
-    ],
-    packages: [
-      {
-        name: "Standard",
-        price: 299,
-        description: "ITIN application with CAA certification",
-        features: ["W-7 Preparation", "CAA Certification", "Document Review", "IRS Submission"],
-        notIncluded: ["Tax Return Filing", "Rush Processing"],
-        isPopular: true,
-      },
-      {
-        name: "Premium",
-        price: 449,
-        description: "ITIN + Tax return filing",
-        features: ["Everything in Standard", "Tax Return Preparation", "Form 1040-NR Filing", "Tax Consultation"],
-        notIncluded: [],
-        isPopular: false,
-      },
-    ],
-    faqs: [
-      {
-        question: "How long does ITIN processing take?",
-        answer: "The IRS typically processes ITIN applications within 7-11 weeks. During peak tax season (January-April), processing may take longer.",
-      },
-      {
-        question: "Do I need to send my original passport to the IRS?",
-        answer: "No! Through our CAA-assisted service, your documents are certified locally. You never need to mail your original passport to the IRS.",
-      },
-      {
-        question: "What documents do I need for ITIN application?",
-        answer: "You need a valid passport (most common) or combination of identity documents. Our team will guide you on accepted documents from your country.",
-      },
-      {
-        question: "Do I need an ITIN if I have an EIN?",
-        answer: "They serve different purposes. EIN is for your LLC. ITIN is for you personally if you need to file US taxes or claim treaty benefits. Many foreign LLC owners need both.",
-      },
-    ],
-  },
-  // DBA/Trade Name
-  {
-    slug: "dba-filing",
-    name: "DBA/Trade Name",
-    shortDesc: "Register a DBA (Doing Business As) or trade name for your LLC. Operate under multiple brand names legally.",
-    metaTitle: "DBA Filing Service | Register Your Trade Name | LLCPad",
-    metaDescription: "Register a DBA (Doing Business As) or trade name for your LLC. Operate under multiple brand names legally. Fast filing in all 50 states.",
-    description: `<p>A DBA (Doing Business As), also called a trade name or fictitious business name, allows your LLC to operate under a different name than its legal name.</p>
-
-<h3>Why Register a DBA?</h3>
-<ul>
-  <li><strong>Multiple Brands:</strong> Run multiple businesses or brands under one LLC.</li>
-  <li><strong>Marketing Flexibility:</strong> Use a more marketable name than your legal LLC name.</li>
-  <li><strong>Bank Accounts:</strong> Open bank accounts and accept payments under your DBA name.</li>
-  <li><strong>Professional Image:</strong> Create a distinct brand identity for each business line.</li>
-</ul>
-
-<h3>DBA vs New LLC</h3>
-<p>A DBA is simpler and cheaper than forming a new LLC. However, it doesn't provide separate liability protection. All DBAs under your LLC share the same liability umbrella.</p>`,
-    icon: "Tag",
-    image: "/images/services/dba.jpg",
-    startingPrice: 99,
-    categorySlug: "formation",
-    isPopular: false,
-    features: [
-      "State DBA registration",
-      "Name availability search",
-      "Filing with state/county",
-      "DBA certificate",
-      "Publication if required",
-      "Renewal reminders",
-    ],
-    packages: [
-      {
-        name: "Standard",
-        price: 99,
-        description: "DBA registration (+ state/county fees)",
-        features: ["Name Search", "DBA Filing", "Certificate of Filing", "Digital Document Storage"],
-        notIncluded: ["Publication", "Renewal Filing"],
-        isPopular: true,
-      },
-    ],
-    faqs: [
-      {
-        question: "What's the difference between a DBA and an LLC?",
-        answer: "An LLC is a legal business entity that provides liability protection. A DBA is just a registered trade name - it doesn't create a new entity or provide additional liability protection.",
-      },
-      {
-        question: "Do I need a DBA for each product line?",
-        answer: "Not necessarily. A DBA is only needed if you want to operate under a name different from your LLC's legal name. You can sell multiple products under your LLC name without a DBA.",
-      },
-      {
-        question: "Can I use my DBA name on Amazon?",
-        answer: "Amazon uses your legal business name for verification. However, you can display your DBA as your storefront/brand name. For full brand protection, consider trademark registration.",
-      },
-    ],
-  },
-  // Operating Agreement
-  {
-    slug: "operating-agreement",
-    name: "Operating Agreement",
-    shortDesc: "Custom LLC Operating Agreement drafted for your business. Required by banks and essential for multi-member LLCs.",
-    metaTitle: "LLC Operating Agreement Service | Bank-Ready Documents | LLCPad",
-    metaDescription: "Custom LLC Operating Agreement drafted for your business. Required by banks for account opening. Single-member and multi-member options available.",
-    description: `<p>An Operating Agreement is an internal document that outlines how your LLC will be run, including ownership percentages, profit distribution, and decision-making procedures.</p>
-
-<h3>Why You Need an Operating Agreement</h3>
-<ul>
-  <li><strong>Bank Requirement:</strong> Most US banks require an Operating Agreement to open a business account.</li>
-  <li><strong>Legal Protection:</strong> Separates personal and business assets, strengthening liability protection.</li>
-  <li><strong>Dispute Prevention:</strong> Clear rules prevent conflicts between members.</li>
-  <li><strong>State Requirements:</strong> Some states legally require LLCs to have an Operating Agreement.</li>
-</ul>
-
-<h3>Single vs Multi-Member</h3>
-<ul>
-  <li><strong>Single-Member:</strong> Simpler document establishing your LLC's operating procedures.</li>
-  <li><strong>Multi-Member:</strong> More complex, covering ownership splits, voting rights, buyout procedures, and profit distribution.</li>
-</ul>`,
-    icon: "FileText",
-    image: "/images/services/operating-agreement.jpg",
-    startingPrice: 79,
-    categorySlug: "formation",
-    isPopular: false,
-    features: [
-      "Customized Operating Agreement",
-      "Single or multi-member options",
-      "Management structure defined",
-      "Profit distribution rules",
-      "Member rights and duties",
-      "Dissolution procedures",
-    ],
-    packages: [
-      {
-        name: "Single-Member",
-        price: 79,
-        description: "Operating Agreement for single-owner LLC",
-        features: ["Customized Agreement", "Management Provisions", "Bank-Ready Format", "Digital Delivery"],
-        notIncluded: ["Multi-Member Provisions"],
-        isPopular: true,
-      },
-      {
-        name: "Multi-Member",
-        price: 149,
-        description: "Operating Agreement for multiple owners",
-        features: ["Everything in Single-Member", "Ownership Percentages", "Voting Rights", "Buyout Provisions", "Profit Distribution Rules"],
-        notIncluded: [],
-        isPopular: false,
-      },
-    ],
-    faqs: [
-      {
-        question: "Is an Operating Agreement legally required?",
-        answer: "It depends on the state. California, Delaware, Maine, Missouri, and New York require it by law. However, even in states where it's not required, banks and investors will ask for it.",
-      },
-      {
-        question: "Can I write my own Operating Agreement?",
-        answer: "You can, but we don't recommend it. A poorly drafted agreement can cause legal issues, fail bank requirements, or not hold up in disputes. Professional drafting ensures all necessary provisions are included.",
-      },
-      {
-        question: "Can I change my Operating Agreement later?",
-        answer: "Yes, Operating Agreements can be amended. We recommend reviewing and updating your agreement when there are ownership changes, major business changes, or annually.",
-      },
-    ],
-  },
-  // Certificate of Good Standing
-  {
-    slug: "certificate-good-standing",
-    name: "Certificate of Good Standing",
-    shortDesc: "Get an official Certificate of Good Standing for your LLC. Required for banking, contracts, and foreign registration.",
-    metaTitle: "Certificate of Good Standing | Official State Document | LLCPad",
-    metaDescription: "Get an official Certificate of Good Standing for your LLC. Required for banking, contracts, and foreign registration. Rush processing available.",
-    description: `<p>A Certificate of Good Standing (also called Certificate of Existence or Certificate of Status) is an official state document confirming your LLC is active and compliant with all state requirements.</p>
-
-<h3>When You Need a Certificate of Good Standing</h3>
-<ul>
-  <li><strong>Bank Account Opening:</strong> Many banks require a recent Certificate of Good Standing.</li>
-  <li><strong>Business Contracts:</strong> Vendors and partners may require proof your LLC is active.</li>
-  <li><strong>Foreign Registration:</strong> Required when registering your LLC in another state.</li>
-  <li><strong>Loans and Credit:</strong> Lenders verify your LLC status before approving financing.</li>
-  <li><strong>Business Sale:</strong> Buyers verify the LLC is in good standing during due diligence.</li>
-</ul>
-
-<h3>Apostille Service</h3>
-<p>For international use, your Certificate of Good Standing may need an apostille - a form of authentication for documents used in countries that are part of the Hague Convention.</p>`,
-    icon: "Award",
-    image: "/images/services/good-standing.jpg",
-    startingPrice: 75,
-    categorySlug: "compliance",
-    isPopular: false,
-    features: [
-      "Official state certificate",
-      "Current date certification",
-      "Digital and physical copies",
-      "Rush processing available",
-      "Apostille add-on option",
-      "Bank-ready format",
-    ],
-    packages: [
-      {
-        name: "Standard",
-        price: 75,
-        description: "Certificate of Good Standing (+ state fee)",
-        features: ["State Filing", "Digital Certificate", "Physical Copy Mailed", "5-7 Business Days"],
-        notIncluded: ["Apostille", "Rush Processing"],
-        isPopular: true,
-      },
-      {
-        name: "Rush",
-        price: 125,
-        description: "Expedited Certificate of Good Standing",
-        features: ["Everything in Standard", "24-48 Hour Processing", "Priority Handling"],
-        notIncluded: ["Apostille"],
-        isPopular: false,
-      },
-    ],
-    faqs: [
-      {
-        question: "How long is a Certificate of Good Standing valid?",
-        answer: "Certificates are typically valid for 30-90 days, depending on the requesting party's requirements. Banks usually accept certificates dated within 30-60 days.",
-      },
-      {
-        question: "What if my LLC is not in good standing?",
-        answer: "If your LLC has compliance issues (missed annual reports, unpaid fees), we can help you resolve them and restore good standing before obtaining the certificate.",
-      },
-      {
-        question: "Do I need an apostille for US banks?",
-        answer: "No, apostilles are only needed for international use. US banks accept standard Certificates of Good Standing without apostille.",
-      },
-    ],
-  },
-  // Amendment Filing
-  {
-    slug: "amendment-filing",
-    name: "Amendment Filing",
-    shortDesc: "File amendments to update your LLC's registered information. Name changes, address changes, member changes, and more.",
-    metaTitle: "LLC Amendment Filing Service | Update Your LLC Records | LLCPad",
-    metaDescription: "File amendments to update your LLC's registered information. Name changes, address changes, member changes, and more. Fast processing in all states.",
-    description: `<p>When your LLC's information changes, you need to file an amendment with the state to update your official records. We handle all types of LLC amendments.</p>
-
-<h3>Common Amendment Types</h3>
-<ul>
-  <li><strong>Name Change:</strong> Change your LLC's legal name.</li>
-  <li><strong>Address Change:</strong> Update principal office or mailing address.</li>
-  <li><strong>Registered Agent Change:</strong> Change your registered agent or their address.</li>
-  <li><strong>Member/Manager Change:</strong> Add or remove members or managers (if listed in Articles).</li>
-  <li><strong>Purpose Change:</strong> Modify your LLC's stated business purpose.</li>
-</ul>
-
-<h3>Amendment Process</h3>
-<ol>
-  <li>Determine what needs to be changed</li>
-  <li>Prepare Articles of Amendment</li>
-  <li>File with the state</li>
-  <li>Update internal documents (Operating Agreement, etc.)</li>
-  <li>Update external records (bank, IRS, etc.)</li>
-</ol>`,
-    icon: "FileEdit",
-    image: "/images/services/amendment.jpg",
-    startingPrice: 99,
-    categorySlug: "compliance",
-    isPopular: false,
-    features: [
-      "Articles of Amendment preparation",
-      "State filing submission",
-      "Certified copy of amendment",
-      "Internal document updates",
-      "Compliance verification",
-      "Follow-up support",
-    ],
-    packages: [
-      {
-        name: "Standard",
-        price: 99,
-        description: "Single amendment filing (+ state fee)",
-        features: ["Amendment Preparation", "State Filing", "Certified Copy", "Document Storage"],
-        notIncluded: ["IRS Updates", "Bank Notifications"],
-        isPopular: true,
-      },
-      {
-        name: "Complete",
-        price: 179,
-        description: "Amendment + all notifications",
-        features: ["Everything in Standard", "IRS Notification (if needed)", "Bank Letter Template", "Operating Agreement Update"],
-        notIncluded: [],
-        isPopular: false,
-      },
-    ],
-    faqs: [
-      {
-        question: "How long does an amendment take to process?",
-        answer: "Processing times vary by state. Most states process amendments within 5-10 business days. Rush processing is available in many states for an additional fee.",
-      },
-      {
-        question: "Do I need to notify the IRS of changes?",
-        answer: "Some changes require IRS notification. Name changes and responsible party changes require IRS notification. Address changes may also need reporting. We'll advise you on what's required.",
-      },
-      {
-        question: "Will I get new formation documents after an amendment?",
-        answer: "You'll receive a Certificate of Amendment or stamped Articles of Amendment. Your original Articles of Organization remain valid, supplemented by the amendment.",
-      },
-    ],
-  },
-  // LLC Dissolution
-  {
-    slug: "llc-dissolution",
-    name: "LLC Dissolution",
-    shortDesc: "Properly dissolve your LLC when closing your business. Avoid ongoing fees and compliance obligations.",
-    metaTitle: "LLC Dissolution Service | Close Your Business Properly | LLCPad",
-    metaDescription: "Properly dissolve your LLC when closing your business. Avoid ongoing fees and compliance obligations. Articles of Dissolution filing in all states.",
-    description: `<p>When you're ready to close your LLC, proper dissolution is essential. Without formal dissolution, you may continue to owe annual fees and be liable for compliance requirements.</p>
-
-<h3>Why Proper Dissolution Matters</h3>
-<ul>
-  <li><strong>Stop Ongoing Fees:</strong> Annual reports and franchise taxes continue until formally dissolved.</li>
-  <li><strong>Avoid Penalties:</strong> Non-compliance while "abandoning" an LLC can result in penalties.</li>
-  <li><strong>Legal Closure:</strong> Formal dissolution provides clean legal closure.</li>
-  <li><strong>Protect Your Record:</strong> Administrative dissolution (by the state) looks worse than voluntary dissolution.</li>
-</ul>
-
-<h3>Dissolution Process</h3>
-<ol>
-  <li>Member approval of dissolution</li>
-  <li>Tax clearance (if required by state)</li>
-  <li>Settle debts and distribute assets</li>
-  <li>File Articles of Dissolution</li>
-  <li>Cancel registrations and accounts</li>
-  <li>Final tax returns</li>
-</ol>`,
-    icon: "FileX",
-    image: "/images/services/dissolution.jpg",
-    startingPrice: 149,
-    categorySlug: "compliance",
-    isPopular: false,
-    features: [
-      "Articles of Dissolution preparation",
-      "State filing submission",
-      "Tax clearance assistance",
-      "IRS notification guidance",
-      "Account closure checklist",
-      "Dissolution certificate",
-    ],
-    packages: [
-      {
-        name: "Standard",
-        price: 149,
-        description: "LLC Dissolution filing (+ state fee)",
-        features: ["Dissolution Documents", "State Filing", "Tax Clearance Guidance", "Closure Checklist"],
-        notIncluded: ["Final Tax Returns", "Account Cancellations"],
-        isPopular: true,
-      },
-    ],
-    faqs: [
-      {
-        question: "What happens if I just stop using my LLC without dissolving?",
-        answer: "The state will continue sending annual report notices and accumulating fees. Eventually, the state may administratively dissolve your LLC, but you'll still owe all back fees and potentially penalties. It's always better to dissolve properly.",
-      },
-      {
-        question: "Do I need tax clearance to dissolve my LLC?",
-        answer: "Some states require tax clearance certificates before accepting dissolution filings. This confirms you've paid all state taxes. We'll check your state's requirements and assist with the process.",
-      },
-      {
-        question: "What about my EIN after dissolution?",
-        answer: "Your EIN remains permanently assigned to your LLC - it cannot be transferred or reused. You should close the business account with the IRS by sending a letter, but the EIN itself stays on record.",
-      },
-    ],
-  },
-  // Apostille Service
-  {
-    slug: "apostille-service",
-    name: "Apostille Service",
-    shortDesc: "Get apostille certification for your US documents. Required for international legal recognition of your LLC documents.",
-    metaTitle: "Apostille Service for US Documents | International Authentication | LLCPad",
-    metaDescription: "Get apostille certification for your US documents. Required for international legal recognition. Fast processing for LLC documents, good standing certificates, and more.",
-    description: `<p>An apostille is a form of authentication issued for documents used internationally. If you need to use your US LLC documents in another country, they likely need an apostille.</p>
-
-<h3>What is an Apostille?</h3>
-<p>An apostille is a certificate that authenticates a document for use in countries that are part of the Hague Apostille Convention (over 120 countries). It confirms the document is legitimate and was properly signed by the issuing authority.</p>
-
-<h3>Documents That Can Be Apostilled</h3>
-<ul>
-  <li>Articles of Organization / Certificate of Formation</li>
-  <li>Certificate of Good Standing</li>
-  <li>Operating Agreement (must be notarized first)</li>
-  <li>EIN Confirmation Letter (with notarization)</li>
-  <li>Corporate Resolutions</li>
-  <li>Other notarized business documents</li>
-</ul>
-
-<h3>When You Need an Apostille</h3>
-<ul>
-  <li>Opening a bank account in another country</li>
-  <li>Registering your LLC in a foreign country</li>
-  <li>International business contracts</li>
-  <li>Legal proceedings abroad</li>
-</ul>`,
-    icon: "Stamp",
-    image: "/images/services/apostille.jpg",
-    startingPrice: 149,
-    categorySlug: "compliance",
-    isPopular: false,
-    features: [
-      "Document review and preparation",
-      "Notarization if required",
-      "State apostille processing",
-      "Federal apostille available",
-      "International shipping",
-      "Multiple document discounts",
-    ],
-    packages: [
-      {
-        name: "Single Document",
-        price: 149,
-        description: "Apostille for one document",
-        features: ["Document Review", "Notarization (if needed)", "State Apostille", "Digital + Physical Copy"],
-        notIncluded: ["International Shipping"],
-        isPopular: true,
-      },
-      {
-        name: "Document Package",
-        price: 349,
-        description: "Apostille for up to 3 documents",
-        features: ["Everything in Single Document", "Up to 3 Documents", "Priority Processing", "International Shipping Included"],
-        notIncluded: [],
-        isPopular: false,
-      },
-    ],
-    faqs: [
-      {
-        question: "How long does apostille processing take?",
-        answer: "Standard processing takes 5-10 business days depending on the state. Rush processing (2-3 days) is available for an additional fee. Some states are faster than others.",
-      },
-      {
-        question: "Does my country accept apostilles?",
-        answer: "Most countries accept apostilles, including all EU countries, UK, India, UAE, and many others. However, some countries (like China and Canada) are not part of the Hague Convention and require different authentication (embassy legalization).",
-      },
-      {
-        question: "Can any document be apostilled?",
-        answer: "Only official documents or notarized documents can be apostilled. Private documents (like contracts or agreements) must first be notarized before they can receive an apostille.",
-      },
-    ],
-  },
-  // Tax Filing Service
-  {
-    slug: "tax-filing",
-    name: "Tax Filing Service",
-    shortDesc: "Professional US tax filing for LLCs. We handle Forms 1120, 1065, 5472, and individual returns for foreign owners.",
-    metaTitle: "LLC Tax Filing Service | Form 5472 & Business Tax Returns | LLCPad",
-    metaDescription: "Professional US tax filing for LLCs. We handle Forms 1120, 1065, 5472, and individual returns for foreign owners. Avoid $25,000 penalties for non-filing.",
-    description: `<p>US tax obligations for foreign-owned LLCs can be complex. We provide professional tax preparation and filing services specifically designed for international entrepreneurs.</p>
-
-<h3>LLC Tax Filing Requirements</h3>
-<ul>
-  <li><strong>Form 5472:</strong> Required for foreign-owned LLCs with reportable transactions (even $0).</li>
-  <li><strong>Form 1120:</strong> If your LLC elected corporate taxation.</li>
-  <li><strong>Form 1065:</strong> For multi-member LLCs (partnership taxation).</li>
-  <li><strong>Form 1040-NR:</strong> Personal return for foreign individuals with US income.</li>
-</ul>
-
-<h3>Important Deadlines</h3>
-<ul>
-  <li><strong>March 15:</strong> Partnership returns (Form 1065)</li>
-  <li><strong>April 15:</strong> Corporate returns (Form 1120) and individual returns</li>
-  <li><strong>Extensions available:</strong> 6-month extensions for most returns</li>
-</ul>
-
-<h3>Penalties for Non-Filing</h3>
-<p>The IRS takes foreign reporting seriously. Penalties for late or missing Form 5472 are $25,000 per form, per year. Don't risk it - let us handle your compliance.</p>`,
-    icon: "Receipt",
-    image: "/images/services/tax-filing.jpg",
-    startingPrice: 299,
-    categorySlug: "tax-finance",
-    isPopular: false,
-    features: [
-      "Form 5472 preparation",
-      "LLC tax return filing",
-      "State tax compliance",
-      "IRS e-filing",
-      "Deadline tracking",
-      "Audit support",
-    ],
-    packages: [
-      {
-        name: "Basic",
-        price: 299,
-        description: "Form 5472 + Pro Forma 1120 (Foreign-owned single-member LLC)",
-        features: ["Form 5472 Preparation", "Pro Forma 1120", "E-Filing", "Confirmation Letter"],
-        notIncluded: ["State Returns", "Individual Returns"],
-        isPopular: true,
-      },
-      {
-        name: "Complete",
-        price: 599,
-        description: "Full LLC tax compliance",
-        features: ["Everything in Basic", "State Tax Returns", "Tax Planning Consultation", "Quarterly Estimates"],
-        notIncluded: [],
-        isPopular: false,
-      },
-    ],
-    faqs: [
-      {
-        question: "Does my LLC need to file taxes if it had no income?",
-        answer: "Yes! Foreign-owned single-member LLCs must file Form 5472 even with zero income or transactions. The penalty for not filing is $25,000, so this is not optional.",
-      },
-      {
-        question: "What is Form 5472?",
-        answer: "Form 5472 reports transactions between your US LLC and its foreign owner(s). This includes loans, capital contributions, distributions, and payments for services. It's filed with a pro forma Form 1120.",
-      },
-      {
-        question: "When is my LLC tax return due?",
-        answer: "For most single-member LLCs, the deadline is April 15 (or the next business day). You can request an automatic 6-month extension, but estimated taxes may still be due by the original deadline.",
-      },
-    ],
-  },
-  // Category Ungating
-  {
-    slug: "category-ungating",
-    name: "Amazon Category Ungating",
-    shortDesc: "Get approved to sell in restricted Amazon categories. Professional ungating service for Grocery, Beauty, Health, and more.",
-    metaTitle: "Amazon Category Ungating Service | Get Approved Fast | LLCPad",
-    metaDescription: "Get approved to sell in restricted Amazon categories. Professional ungating service for Grocery, Beauty, Health, Topicals, and more. 90% success rate.",
-    description: `<p>Many profitable Amazon categories are "gated" - restricted to approved sellers only. Our ungating service helps you get approved to sell in these lucrative categories.</p>
-
-<h3>Popular Restricted Categories</h3>
-<ul>
-  <li><strong>Grocery & Gourmet:</strong> High demand, recurring purchases</li>
-  <li><strong>Health & Personal Care:</strong> Large market with brand opportunities</li>
-  <li><strong>Beauty:</strong> High margins, loyal customers</li>
-  <li><strong>Topicals:</strong> Skincare, lotions, and topical products</li>
-  <li><strong>Baby:</strong> Growing market with recurring sales</li>
-  <li><strong>Pet Supplies:</strong> Passionate customer base</li>
-</ul>
-
-<h3>Why Categories Are Restricted</h3>
-<p>Amazon restricts categories to ensure product quality and customer safety. They require sellers to prove they can meet quality standards through documentation and sometimes product testing.</p>
-
-<h3>Our Ungating Process</h3>
-<ol>
-  <li>Review your seller account status</li>
-  <li>Identify categories you want to unlock</li>
-  <li>Prepare required documentation</li>
-  <li>Submit ungating application</li>
-  <li>Handle any follow-up requests</li>
-</ol>`,
-    icon: "Unlock",
-    image: "/images/services/category-ungating.jpg",
-    startingPrice: 199,
-    categorySlug: "amazon",
-    isPopular: false,
-    features: [
-      "Category analysis",
-      "Documentation preparation",
-      "Application submission",
-      "Follow-up handling",
-      "Multiple category discounts",
-      "Success guarantee",
-    ],
-    packages: [
-      {
-        name: "Single Category",
-        price: 199,
-        description: "Ungating for one category",
-        features: ["Account Review", "Document Preparation", "Application Submission", "Follow-up Support"],
-        notIncluded: ["Product Sourcing", "Brand Approval"],
-        isPopular: true,
-      },
-      {
-        name: "Multi-Category",
-        price: 449,
-        description: "Ungating for up to 3 categories",
-        features: ["Everything in Single Category", "Up to 3 Categories", "Priority Support", "Strategy Consultation"],
-        notIncluded: [],
-        isPopular: false,
-      },
-    ],
-    faqs: [
-      {
-        question: "What's the success rate for ungating?",
-        answer: "Our success rate is over 90% for standard restricted categories. Success depends on your account health, history, and documentation quality. We review your account before proceeding.",
-      },
-      {
-        question: "How long does ungating take?",
-        answer: "Most ungating applications are processed within 24-72 hours. Some categories may require additional documentation or longer review periods.",
-      },
-      {
-        question: "What if my ungating application is rejected?",
-        answer: "We'll analyze the rejection reason and resubmit with improved documentation. Our service includes follow-up support until approval or we identify a blocking issue.",
-      },
-    ],
-  },
-  // Product Listing Optimization
-  {
-    slug: "listing-optimization",
-    name: "Product Listing Optimization",
-    shortDesc: "Optimize your Amazon product listings for higher rankings and conversions. Keyword research, copywriting, and image guidance.",
-    metaTitle: "Amazon Listing Optimization Service | Rank Higher, Sell More | LLCPad",
-    metaDescription: "Optimize your Amazon product listings for higher rankings and conversions. Professional keyword research, copywriting, and backend optimization.",
-    description: `<p>Your Amazon listing is your storefront. Optimized listings rank higher in search results and convert more browsers into buyers. Our optimization service improves both visibility and conversion.</p>
-
-<h3>What We Optimize</h3>
-<ul>
-  <li><strong>Title:</strong> Strategic keyword placement for search visibility</li>
-  <li><strong>Bullet Points:</strong> Benefit-focused copy that sells</li>
-  <li><strong>Description:</strong> Compelling storytelling with keywords</li>
-  <li><strong>Backend Keywords:</strong> Hidden keywords for additional discoverability</li>
-  <li><strong>Image Recommendations:</strong> Guidance on image optimization</li>
-</ul>
-
-<h3>Our Process</h3>
-<ol>
-  <li><strong>Keyword Research:</strong> Identify high-volume, relevant search terms</li>
-  <li><strong>Competitor Analysis:</strong> Understand what top sellers are doing</li>
-  <li><strong>Copy Creation:</strong> Write compelling, keyword-rich content</li>
-  <li><strong>Backend Optimization:</strong> Maximize hidden keyword fields</li>
-  <li><strong>Review & Revise:</strong> Refine based on your feedback</li>
-</ol>
-
-<h3>Results You Can Expect</h3>
-<ul>
-  <li>Higher organic search rankings</li>
-  <li>Increased click-through rates</li>
-  <li>Better conversion rates</li>
-  <li>Lower PPC costs (better relevancy)</li>
-</ul>`,
-    icon: "Search",
-    image: "/images/services/listing-optimization.jpg",
-    startingPrice: 149,
-    categorySlug: "amazon",
-    isPopular: false,
-    features: [
-      "Keyword research report",
-      "Optimized title",
-      "5 bullet points",
-      "Product description",
-      "Backend keywords",
-      "Image recommendations",
-    ],
-    packages: [
-      {
-        name: "Single Listing",
-        price: 149,
-        description: "Complete optimization for one ASIN",
-        features: ["Keyword Research", "Title Optimization", "Bullet Points", "Description", "Backend Keywords"],
-        notIncluded: ["A+ Content", "Image Design"],
-        isPopular: true,
-      },
-      {
-        name: "5 Listing Bundle",
-        price: 599,
-        description: "Optimize 5 listings at discounted rate",
-        features: ["Everything in Single Listing", "5 ASINs", "Competitor Analysis Report", "Priority Turnaround"],
-        notIncluded: ["A+ Content", "Image Design"],
-        isPopular: false,
-      },
-    ],
-    faqs: [
-      {
-        question: "How long until I see results?",
-        answer: "Organic ranking improvements typically appear within 1-2 weeks as Amazon indexes your changes. Conversion rate improvements can be immediate. Full impact is usually visible within 30 days.",
-      },
-      {
-        question: "Do you guarantee first page rankings?",
-        answer: "We don't guarantee specific rankings because Amazon's algorithm considers many factors beyond listing content (sales history, reviews, price, etc.). However, optimized listings consistently outperform non-optimized ones.",
-      },
-      {
-        question: "What information do you need from me?",
-        answer: "We need access to your Seller Central account (or you can implement our recommendations), information about your target audience, key product features and benefits, and any brand guidelines.",
-      },
-    ],
-  },
-  // A+ Content Creation
-  {
-    slug: "a-plus-content",
-    name: "A+ Content Creation",
-    shortDesc: "Professional Amazon A+ Content design. Increase conversions with enhanced brand content, comparison charts, and rich media.",
-    metaTitle: "Amazon A+ Content Design Service | Boost Conversions | LLCPad",
-    metaDescription: "Professional Amazon A+ Content design. Increase conversions with enhanced brand content, comparison charts, and rich media. Brand Registry required.",
-    description: `<p>A+ Content (formerly Enhanced Brand Content) allows brand-registered sellers to add rich media, images, and comparison charts to their product descriptions. Studies show A+ Content increases conversions by 5-10%.</p>
-
-<h3>A+ Content Benefits</h3>
-<ul>
-  <li><strong>Higher Conversions:</strong> Rich content helps customers understand your product better</li>
-  <li><strong>Brand Story:</strong> Tell your brand story and build customer connection</li>
-  <li><strong>Reduced Returns:</strong> Better product understanding means fewer returns</li>
-  <li><strong>Cross-Selling:</strong> Comparison charts showcase your product line</li>
-</ul>
-
-<h3>What's Included</h3>
-<ul>
-  <li>Custom graphic design</li>
-  <li>Compelling copywriting</li>
-  <li>Product comparison charts</li>
-  <li>Brand story modules</li>
-  <li>Multiple revision rounds</li>
-</ul>
-
-<h3>A+ Premium (A++ Content)</h3>
-<p>Eligible sellers can access A+ Premium with interactive features, video, and carousel modules. Ask us about eligibility and pricing.</p>`,
-    icon: "Sparkles",
-    image: "/images/services/a-plus-content.jpg",
-    startingPrice: 299,
-    categorySlug: "amazon",
-    isPopular: false,
-    features: [
-      "Custom module design",
-      "Professional copywriting",
-      "Up to 7 modules",
-      "Comparison charts",
-      "Brand story section",
-      "2 revision rounds",
-    ],
-    packages: [
-      {
-        name: "Standard A+",
-        price: 299,
-        description: "A+ Content for one ASIN",
-        features: ["5 Custom Modules", "Professional Copy", "Comparison Chart", "2 Revisions"],
-        notIncluded: ["Brand Story", "A+ Premium"],
-        isPopular: true,
-      },
-      {
-        name: "Premium A+",
-        price: 499,
-        description: "Full A+ Content with brand story",
-        features: ["7 Custom Modules", "Brand Story Section", "Comparison Chart", "Cross-Sell Modules", "Unlimited Revisions"],
-        notIncluded: [],
-        isPopular: false,
-      },
-    ],
-    faqs: [
-      {
-        question: "Do I need Brand Registry for A+ Content?",
-        answer: "Yes, A+ Content is only available to sellers enrolled in Amazon Brand Registry. This requires a trademark (registered or pending). We can help you get brand registered if you're not already.",
-      },
-      {
-        question: "How long does A+ Content creation take?",
-        answer: "Our standard turnaround is 5-7 business days for initial designs. After your feedback, revisions take 2-3 business days each.",
-      },
-      {
-        question: "Can I use A+ Content on all my listings?",
-        answer: "You can apply A+ Content to any ASIN under your registered brand. Once created, A+ Content can be reused across multiple ASINs with modifications.",
-      },
-    ],
-  },
-  // PPC Campaign Setup
-  {
-    slug: "ppc-campaign-setup",
-    name: "Amazon PPC Setup",
-    shortDesc: "Professional Amazon PPC campaign setup. Sponsored Products, Brands, and Display campaigns configured for optimal performance.",
-    metaTitle: "Amazon PPC Campaign Setup Service | Maximize Ad ROI | LLCPad",
-    metaDescription: "Professional Amazon PPC campaign setup. Sponsored Products, Brands, and Display campaigns configured for optimal performance. Start advertising the right way.",
-    description: `<p>Amazon advertising is essential for product visibility. Our PPC setup service creates well-structured campaigns that maximize your advertising ROI from day one.</p>
-
-<h3>Campaign Types We Set Up</h3>
-<ul>
-  <li><strong>Sponsored Products:</strong> Keyword and product targeting for individual products</li>
-  <li><strong>Sponsored Brands:</strong> Banner ads featuring your logo and multiple products</li>
-  <li><strong>Sponsored Display:</strong> Retargeting and audience-based advertising</li>
-</ul>
-
-<h3>Our Setup Process</h3>
-<ol>
-  <li><strong>Account Audit:</strong> Review current campaigns and identify opportunities</li>
-  <li><strong>Keyword Research:</strong> Build comprehensive keyword lists</li>
-  <li><strong>Campaign Architecture:</strong> Create organized, scalable structure</li>
-  <li><strong>Bid Strategy:</strong> Set competitive bids for your goals</li>
-  <li><strong>Launch & Monitor:</strong> Launch campaigns and initial optimization</li>
-</ol>
-
-<h3>What You'll Get</h3>
-<ul>
-  <li>Properly structured campaigns</li>
-  <li>Automatic and manual campaigns</li>
-  <li>Negative keyword lists</li>
-  <li>Budget recommendations</li>
-  <li>7-day optimization check-in</li>
-</ul>`,
-    icon: "Target",
-    image: "/images/services/ppc-setup.jpg",
-    startingPrice: 349,
-    categorySlug: "amazon",
-    isPopular: false,
-    features: [
-      "Keyword research",
-      "Campaign structure design",
-      "Sponsored Products setup",
-      "Sponsored Brands setup",
-      "Bid optimization",
-      "7-day check-in",
-    ],
-    packages: [
-      {
-        name: "Starter",
-        price: 349,
-        description: "PPC setup for up to 5 products",
-        features: ["Keyword Research", "Campaign Setup", "Auto + Manual Campaigns", "7-Day Optimization Check"],
-        notIncluded: ["Sponsored Brands", "Ongoing Management"],
-        isPopular: true,
-      },
-      {
-        name: "Professional",
-        price: 599,
-        description: "Complete PPC setup for up to 15 products",
-        features: ["Everything in Starter", "Up to 15 Products", "Sponsored Brands", "Sponsored Display", "14-Day Management"],
-        notIncluded: [],
-        isPopular: false,
-      },
-    ],
-    faqs: [
-      {
-        question: "What budget should I start with?",
-        answer: "We recommend starting with $20-50/day for new campaigns. This provides enough data for optimization while controlling costs. You can scale up once you identify winning campaigns.",
-      },
-      {
-        question: "How long until I see results?",
-        answer: "You'll see initial impressions and clicks within hours of launch. However, meaningful performance data takes 1-2 weeks to accumulate. True optimization happens over 30-60 days.",
-      },
-      {
-        question: "Do you offer ongoing PPC management?",
-        answer: "Yes, we offer monthly PPC management services for ongoing optimization. This includes bid adjustments, keyword expansion, negative keyword management, and performance reporting.",
-      },
-    ],
-  },
-  // Account Reinstatement
-  {
-    slug: "account-reinstatement",
-    name: "Amazon Account Reinstatement",
-    shortDesc: "Professional Amazon seller account reinstatement service. Suspension appeals, Plan of Action writing, and account recovery.",
-    metaTitle: "Amazon Account Reinstatement Service | Suspension Appeals | LLCPad",
-    metaDescription: "Professional Amazon seller account reinstatement service. Suspension appeals, Plan of Action writing, and account recovery. 85% success rate on first appeal.",
-    description: `<p>Amazon account suspension can be devastating. Our reinstatement experts have helped hundreds of sellers recover their accounts with professionally written appeals and Plans of Action.</p>
-
-<h3>Common Suspension Reasons</h3>
-<ul>
-  <li><strong>Authenticity Complaints:</strong> Customers or brands claim products are fake</li>
-  <li><strong>Policy Violations:</strong> Listing policy, review manipulation, multiple accounts</li>
-  <li><strong>Performance Issues:</strong> High ODR, late shipments, cancellations</li>
-  <li><strong>Inauthentic Items:</strong> Amazon believes products may not be genuine</li>
-  <li><strong>Intellectual Property:</strong> Copyright, trademark, or patent complaints</li>
-</ul>
-
-<h3>Our Reinstatement Process</h3>
-<ol>
-  <li><strong>Case Analysis:</strong> Review suspension notice, account health, and history</li>
-  <li><strong>Root Cause Identification:</strong> Determine exactly what triggered suspension</li>
-  <li><strong>Plan of Action:</strong> Write compelling POA addressing Amazon's concerns</li>
-  <li><strong>Appeal Submission:</strong> Submit through proper channels</li>
-  <li><strong>Follow-Up:</strong> Handle Amazon's responses and additional requests</li>
-</ol>
-
-<h3>What Makes a Successful Appeal</h3>
-<ul>
-  <li>Clear acknowledgment of the issue</li>
-  <li>Specific root cause analysis</li>
-  <li>Concrete corrective actions taken</li>
-  <li>Preventive measures for the future</li>
-  <li>Professional, non-emotional tone</li>
-</ul>`,
-    icon: "ShieldCheck",
-    image: "/images/services/reinstatement.jpg",
-    startingPrice: 499,
-    categorySlug: "amazon",
-    isPopular: false,
-    features: [
-      "Full account analysis",
-      "Root cause assessment",
-      "Professional POA writing",
-      "Appeal submission",
-      "Unlimited revisions",
-      "Follow-up support",
-    ],
-    packages: [
-      {
-        name: "Standard Appeal",
-        price: 499,
-        description: "Single suspension type appeal",
-        features: ["Case Analysis", "POA Writing", "Appeal Submission", "2 Follow-up Appeals"],
-        notIncluded: ["Legal Review", "Brand Owner Outreach"],
-        isPopular: true,
-      },
-      {
-        name: "Complex Case",
-        price: 899,
-        description: "Multiple issues or difficult cases",
-        features: ["Everything in Standard", "Multiple Issue Resolution", "Unlimited Appeals", "Priority Response", "30-Day Support"],
-        notIncluded: [],
-        isPopular: false,
-      },
-    ],
-    faqs: [
-      {
-        question: "What's your success rate?",
-        answer: "Our success rate is approximately 85% for first appeals. Success depends on the suspension type, account history, and whether root causes can be addressed. We evaluate your case before committing.",
-      },
-      {
-        question: "How long does reinstatement take?",
-        answer: "Amazon typically responds to appeals within 24-72 hours. Simple cases may be resolved with one appeal. Complex cases may require multiple appeals over 1-2 weeks. Some difficult cases take longer.",
-      },
-      {
-        question: "Can you guarantee reinstatement?",
-        answer: "No one can guarantee reinstatement - anyone who does is misleading you. Amazon makes the final decision. However, our professional appeals significantly improve your chances compared to self-written appeals.",
-      },
-    ],
-  },
-  // Reseller Certificate
-  {
-    slug: "reseller-certificate",
-    name: "Reseller Certificate",
-    shortDesc: "Get your state reseller certificate (sales tax permit). Buy wholesale without paying sales tax on inventory purchases.",
-    metaTitle: "Reseller Certificate Service | Sales Tax Permit | LLCPad",
-    metaDescription: "Get your state reseller certificate (sales tax permit). Buy wholesale without paying sales tax on inventory purchases. Essential for Amazon sellers.",
-    description: `<p>A reseller certificate (also called a sales tax permit or resale certificate) allows you to purchase inventory for resale without paying sales tax. This is essential for maintaining healthy margins.</p>
-
-<h3>How Reseller Certificates Work</h3>
-<p>When you buy products wholesale for resale, you shouldn't pay sales tax on those purchases. Instead, you collect sales tax from your end customers. The reseller certificate exempts you from paying tax to your suppliers.</p>
-
-<h3>When You Need a Reseller Certificate</h3>
-<ul>
-  <li><strong>Wholesale Purchases:</strong> Buy from US wholesalers and distributors</li>
-  <li><strong>Trade Shows:</strong> Purchase inventory at trade shows</li>
-  <li><strong>Amazon FBA:</strong> States where you have inventory (nexus)</li>
-  <li><strong>Dropshipping:</strong> Needed if you have nexus in supplier's state</li>
-</ul>
-
-<h3>State-by-State Registration</h3>
-<p>Reseller certificates are issued by state. If you have nexus (tax presence) in multiple states, you need a certificate in each state. Common nexus triggers include inventory storage, employees, and significant sales.</p>`,
-    icon: "FileBadge",
-    image: "/images/services/reseller-certificate.jpg",
-    startingPrice: 99,
-    categorySlug: "tax-finance",
-    isPopular: false,
-    features: [
-      "State registration",
-      "Sales tax permit application",
-      "Reseller certificate issuance",
-      "Exemption certificate forms",
-      "Compliance guidance",
-      "Renewal reminders",
-    ],
-    packages: [
-      {
-        name: "Single State",
-        price: 99,
-        description: "Reseller certificate for one state",
-        features: ["State Registration", "Sales Tax Permit", "Resale Certificate", "Compliance Guide"],
-        notIncluded: ["Additional States", "Sales Tax Filing"],
-        isPopular: true,
-      },
-      {
-        name: "Multi-State",
+        name: "Annual Listing",
         price: 249,
-        description: "Reseller certificates for up to 5 states",
-        features: ["Everything in Single State", "Up to 5 States", "Nexus Analysis", "Priority Processing"],
+        description: "12-month verified listing in the Ceremoney directory",
+        features: [
+          "Verified Badge",
+          "Full Portfolio",
+          "Review Management",
+          "Inquiry Inbox",
+          "Analytics",
+        ],
+        notIncluded: ["Featured Placement", "Homepage Spotlight"],
+        isPopular: true,
+      },
+      {
+        name: "Featured Listing",
+        price: 499,
+        description: "12-month listing with premium featured placement",
+        features: [
+          "Everything in Annual Listing",
+          "Featured Placement in Category",
+          "Homepage Spotlight (rotating)",
+          "Priority in Search Results",
+        ],
         notIncluded: [],
         isPopular: false,
       },
     ],
     faqs: [
       {
-        question: "Do Amazon sellers need reseller certificates?",
-        answer: "If you're buying inventory from US suppliers, yes. Most legitimate wholesalers require a reseller certificate. Additionally, if you have FBA inventory in a state, you may have nexus and should consider registration.",
+        question: "How do I get the verified badge?",
+        answer: "After purchasing a listing, our team reviews your business details, portfolio, and contact information. Verification is typically completed within 2 business days.",
       },
       {
-        question: "Which states should I register in?",
-        answer: "At minimum, register in your LLC's home state and any state where you buy inventory locally. For Amazon FBA sellers, consider registering in states where Amazon stores your inventory.",
+        question: "What categories can I list under?",
+        answer: "We support: Photographers, Videographers, Florists, Caterers, Venues, DJs & Bands, Hair & Makeup, Wedding Cakes, Transport, Officiants, and more. Contact us if your category is not listed.",
       },
       {
-        question: "What's the difference between reseller certificate and sales tax permit?",
-        answer: "They're related but different. A sales tax permit allows you to collect sales tax from customers. A reseller certificate (issued with the permit) allows you to buy inventory tax-exempt. You typically get both when registering.",
+        question: "Can I update my listing after it's published?",
+        answer: "Yes. You have full control over your listing content — update photos, pricing, descriptions, and availability at any time from your vendor dashboard.",
+      },
+    ],
+  },
+  {
+    slug: "planning-concierge",
+    name: "Planning Concierge",
+    shortDesc: "Hand off the hard work. A dedicated Ceremoney planner helps you shortlist vendors, negotiate quotes, and manage your timeline.",
+    metaTitle: "Wedding Planning Concierge Service | Ceremoney",
+    metaDescription: "Let a dedicated Ceremoney planner do the heavy lifting. Vendor shortlisting, quote negotiation, contract review, and timeline management included. Available for any subscription tier.",
+    description: `<p>The Planning Concierge pairs you with a dedicated Ceremoney planner who takes the time-consuming coordination off your plate. Available as an add-on to any subscription tier.</p>
+
+<h3>What Your Concierge Does</h3>
+<ul>
+  <li><strong>Vendor Shortlisting:</strong> Based on your style, budget, and availability, your planner presents a curated shortlist for each vendor category.</li>
+  <li><strong>Quote Negotiation:</strong> Your planner reaches out to vendors, collects quotes, and negotiates on your behalf.</li>
+  <li><strong>Contract Review:</strong> Plain-English summary of vendor contracts, highlighting key dates, cancellation policies, and payment schedules.</li>
+  <li><strong>Timeline Management:</strong> Your planner builds and maintains a detailed day-of timeline and keeps all vendors informed.</li>
+  <li><strong>Monthly Check-in Calls:</strong> Regular progress calls to keep planning on track and address any concerns.</li>
+</ul>`,
+    icon: "HeartHandshake",
+    image: "/images/services/planning-concierge.jpg",
+    startingPrice: 2500,
+    categorySlug: "professional",
+    isPopular: true,
+    features: [
+      "Dedicated Ceremoney planner assigned",
+      "Vendor shortlisting (all categories)",
+      "Quote collection and negotiation",
+      "Contract plain-English summaries",
+      "Day-of timeline management",
+      "Monthly 30-minute progress calls",
+      "Unlimited email support",
+    ],
+    packages: [
+      {
+        name: "Essentials",
+        price: 2500,
+        description: "Concierge support for up to 3 vendor categories",
+        features: [
+          "Dedicated Planner",
+          "3 Vendor Categories",
+          "Quote Collection",
+          "Contract Summaries",
+          "2 x 30-min Calls",
+        ],
+        notIncluded: ["Day-of Coordination", "Unlimited Categories"],
+        isPopular: false,
+      },
+      {
+        name: "Full Service",
+        price: 4900,
+        description: "Complete concierge for all vendor categories + day-of coordination",
+        features: [
+          "Everything in Essentials",
+          "All Vendor Categories",
+          "Day-of Timeline Management",
+          "Vendor Briefing Pack",
+          "Monthly Calls (up to 6)",
+          "Unlimited Email Support",
+        ],
+        notIncluded: [],
+        isPopular: true,
+      },
+    ],
+    faqs: [
+      {
+        question: "Do I need a Premium or Elite plan to use the concierge?",
+        answer: "No. The Planning Concierge is available as an add-on to any Ceremoney subscription tier, including Basic.",
+      },
+      {
+        question: "How quickly is a concierge assigned?",
+        answer: "Within 1 business day of your purchase, you'll receive an introduction email from your dedicated planner and a link to schedule your first call.",
+      },
+      {
+        question: "What does 'contract summary' mean — do you review the contract?",
+        answer: "We provide a plain-English summary of key terms — payment schedules, cancellation policies, and important dates. This is an informational summary, not legal advice. We recommend consulting a lawyer for high-value contracts.",
       },
     ],
   },
 ];
 
+// ─── Main seed function ────────────────────────────────────────────────────────
 async function main() {
-  console.log("🌱 Seeding database...\n");
+  console.log("Seeding database...\n");
 
   // Hash password
   const hashedPassword = await bcrypt.hash("Demo@123", 12);
 
   // Create demo users for each role
-  console.log("👤 Creating users...");
+  console.log("Creating users...");
   const users = [
-    { email: "admin@llcpad.com", name: "Admin User", password: hashedPassword, role: "ADMIN" as const, country: "USA" },
-    { email: "customer@llcpad.com", name: "Demo Customer", password: hashedPassword, role: "CUSTOMER" as const, country: "Bangladesh" },
-    { email: "content@llcpad.com", name: "Content Manager", password: hashedPassword, role: "CONTENT_MANAGER" as const, country: "USA" },
-    { email: "sales@llcpad.com", name: "Sales Agent", password: hashedPassword, role: "SALES_AGENT" as const, country: "USA" },
-    { email: "support@llcpad.com", name: "Support Agent", password: hashedPassword, role: "SUPPORT_AGENT" as const, country: "USA" },
+    { email: "admin@ceremoney.com", name: "Admin User", password: hashedPassword, role: "ADMIN" as const, country: "Sweden" },
+    { email: "customer@ceremoney.com", name: "Demo Customer", password: hashedPassword, role: "CUSTOMER" as const, country: "Sweden" },
+    { email: "content@ceremoney.com", name: "Content Manager", password: hashedPassword, role: "CONTENT_MANAGER" as const, country: "Sweden" },
+    { email: "sales@ceremoney.com", name: "Sales Agent", password: hashedPassword, role: "SALES_AGENT" as const, country: "Sweden" },
+    { email: "support@ceremoney.com", name: "Support Agent", password: hashedPassword, role: "SUPPORT_AGENT" as const, country: "Sweden" },
   ];
 
   for (const user of users) {
@@ -1730,11 +807,11 @@ async function main() {
       update: {},
       create: user,
     });
-    console.log(`  ✓ ${user.email} (${user.role})`);
+    console.log(`  + ${user.email} (${user.role})`);
   }
 
   // Create service categories
-  console.log("\n📁 Creating service categories...");
+  console.log("\nCreating service categories...");
   const categoryMap: Record<string, string> = {};
 
   for (const category of serviceCategories) {
@@ -1749,14 +826,23 @@ async function main() {
       create: category,
     });
     categoryMap[category.slug] = created.id;
-    console.log(`  ✓ ${category.name}`);
+    console.log(`  + ${category.name}`);
   }
 
   // Create services with features, packages, and FAQs
-  console.log("\n🛠️ Creating services...");
+  console.log("\nCreating services...");
 
   for (const serviceData of servicesData) {
-    const { features, packages, faqs, categorySlug, metaTitle, metaDescription, comparisonFeatures, ...serviceFields } = serviceData as typeof servicesData[0] & { comparisonFeatures?: typeof llcFormationComparisonFeatures };
+    const {
+      features,
+      packages,
+      faqs,
+      categorySlug,
+      metaTitle,
+      metaDescription,
+      comparisonFeatures,
+      ...serviceFields
+    } = serviceData as typeof servicesData[0] & { comparisonFeatures?: typeof subscriptionComparisonFeatures };
 
     // Create or update service
     const service = await prisma.service.upsert({
@@ -1787,7 +873,7 @@ async function main() {
         categoryId: categoryMap[categorySlug],
       },
     });
-    console.log(`  ✓ ${service.name}`);
+    console.log(`  + ${service.name}`);
 
     // Delete existing features, packages, FAQs to avoid duplicates
     await prisma.serviceFeature.deleteMany({ where: { serviceId: service.id } });
@@ -1802,7 +888,7 @@ async function main() {
     }
     await prisma.package.deleteMany({ where: { serviceId: service.id } });
 
-    // Create packages with new fields (need packages first for comparison features)
+    // Create packages (need packages first for comparison feature mapping)
     const packageMap: Record<string, string> = {};
     for (let i = 0; i < packages.length; i++) {
       const pkg = packages[i] as typeof packages[0] & {
@@ -1819,7 +905,6 @@ async function main() {
           priceUSD: pkg.price,
           isPopular: pkg.isPopular,
           sortOrder: i,
-          // New fields
           processingTime: pkg.processingTime || null,
           processingTimeNote: null,
           processingIcon: pkg.processingIcon || null,
@@ -1851,14 +936,13 @@ async function main() {
         });
       }
     }
-    console.log(`    - ${packages.length} packages`);
+    console.log(`    - ${packages.length} package(s)`);
 
     // Create comparison table features if available
     if (comparisonFeatures && comparisonFeatures.length > 0) {
       for (let i = 0; i < comparisonFeatures.length; i++) {
         const feature = comparisonFeatures[i];
 
-        // Create the master feature
         const createdFeature = await prisma.serviceFeature.create({
           data: {
             serviceId: service.id,
@@ -1869,7 +953,6 @@ async function main() {
           },
         });
 
-        // Create package feature mappings
         for (const [packageName, mapping] of Object.entries(feature.packages)) {
           const packageId = packageMap[packageName];
           if (packageId) {
@@ -1896,7 +979,7 @@ async function main() {
       }
       console.log(`    - ${comparisonFeatures.length} comparison features`);
     } else {
-      // Legacy: Create simple service features
+      // Legacy: create simple service features
       for (let i = 0; i < features.length; i++) {
         await prisma.serviceFeature.create({
           data: {
@@ -1906,7 +989,7 @@ async function main() {
           },
         });
       }
-      console.log(`    - ${features.length} features`);
+      console.log(`    - ${features.length} feature(s)`);
     }
 
     // Create service FAQs
@@ -1920,234 +1003,303 @@ async function main() {
         },
       });
     }
-    console.log(`    - ${faqs.length} FAQs`);
+    console.log(`    - ${faqs.length} FAQ(s)`);
   }
 
-  // Create popular state fees
-  console.log("\n🗺️ Creating state fees...");
-  const stateFees = [
-    { stateCode: "WY", stateName: "Wyoming", llcFee: 100, annualFee: 62, processingTime: "1-2 business days", isPopular: true },
-    { stateCode: "DE", stateName: "Delaware", llcFee: 90, annualFee: 300, processingTime: "1-2 weeks", isPopular: true },
-    { stateCode: "NV", stateName: "Nevada", llcFee: 425, annualFee: 350, processingTime: "1-3 weeks", isPopular: true },
-    { stateCode: "FL", stateName: "Florida", llcFee: 125, annualFee: 138.75, processingTime: "1-2 weeks", isPopular: true },
-    { stateCode: "TX", stateName: "Texas", llcFee: 300, annualFee: 0, processingTime: "2-3 weeks", isPopular: true },
-    { stateCode: "CA", stateName: "California", llcFee: 70, annualFee: 800, processingTime: "2-4 weeks", isPopular: false },
-    { stateCode: "NY", stateName: "New York", llcFee: 200, annualFee: 25, processingTime: "2-3 weeks", isPopular: false },
-    { stateCode: "NM", stateName: "New Mexico", llcFee: 50, annualFee: 0, processingTime: "1-2 business days", isPopular: true },
+  // Placeholder state fees (model is required by schema; we use it for subscription plan region notes)
+  console.log("\nCreating subscription plan placeholders (StateFee table)...");
+  const planPlaceholders = [
+    { stateCode: "BASIC",    stateName: "Basic (Free)",              llcFee: 0,   annualFee: 0,    processingTime: "Instant", isPopular: false },
+    { stateCode: "PREMIUM",  stateName: "Premium (399 SEK/month)",   llcFee: 399, annualFee: 3588, processingTime: "Instant", isPopular: true  },
+    { stateCode: "ELITE",    stateName: "Elite (799 SEK/month)",     llcFee: 799, annualFee: 7188, processingTime: "Instant", isPopular: false },
+    { stateCode: "WHITELBL", stateName: "White-Label (Custom)",      llcFee: 0,   annualFee: 0,    processingTime: "3 days",  isPopular: false },
   ];
 
-  for (const state of stateFees) {
+  for (const entry of planPlaceholders) {
     await prisma.stateFee.upsert({
-      where: { stateCode: state.stateCode },
-      update: state,
-      create: state,
+      where: { stateCode: entry.stateCode },
+      update: entry,
+      create: entry,
     });
-    console.log(`  ✓ ${state.stateName}`);
+    console.log(`  + ${entry.stateName}`);
   }
 
-  // Create sample testimonials
-  console.log("\n⭐ Creating testimonials...");
+  // Create testimonials
+  console.log("\nCreating testimonials...");
   const testimonials = [
-    { name: "Rahman Ahmed", company: "TechBD Solutions", country: "Bangladesh", content: "LLCPad made forming my US LLC incredibly easy. The team was responsive and guided me through every step. Highly recommended!", rating: 5, sortOrder: 1 },
-    { name: "Sarah Chen", company: "Global Imports Co", country: "China", content: "Professional service with excellent communication. Got my Wyoming LLC and EIN within 2 weeks. Very satisfied!", rating: 5, sortOrder: 2 },
-    { name: "Mohammed Al-Farsi", company: "Gulf Trading LLC", country: "UAE", content: "The premium package was worth every penny. They helped me set up everything including my Amazon seller account.", rating: 5, sortOrder: 3 },
+    {
+      name: "Emma Lindqvist",
+      company: "Bride",
+      country: "Sweden",
+      content: "Ceremoney made our entire planning process feel effortless. The seating chart builder alone saved us hours of frustration. We could not recommend it more!",
+      rating: 5,
+      sortOrder: 1,
+    },
+    {
+      name: "Lucas Bergström",
+      company: "Groom",
+      country: "Sweden",
+      content: "As the groom who had no idea where to start, Ceremoney's checklist guided us step-by-step. The vendor directory helped us find a fantastic photographer we would never have discovered otherwise.",
+      rating: 5,
+      sortOrder: 2,
+    },
+    {
+      name: "Amara & Kofi Asante",
+      company: "Newlyweds",
+      country: "Ghana",
+      content: "We planned our Swedish destination wedding entirely from Accra. The QR check-in on Elite was a hit — our guests loved it! The planning concierge was worth every krona.",
+      rating: 5,
+      sortOrder: 3,
+    },
+    {
+      name: "Sofia Mäkinen",
+      company: "Professional Wedding Planner",
+      country: "Finland",
+      content: "The White-Label plan transformed my business. My clients get a branded portal, I manage everything from one dashboard, and the API integration with my CRM saves me hours every week.",
+      rating: 5,
+      sortOrder: 4,
+    },
+    {
+      name: "Lena & Marcus Hoffmann",
+      company: "Newlyweds",
+      country: "Germany",
+      content: "The digital stationery package was stunning. Our guests kept complimenting the invitations. Switching to custom domain for our wedding website was seamless — literally took 10 minutes.",
+      rating: 5,
+      sortOrder: 5,
+    },
+    {
+      name: "Priya Sharma",
+      company: "Bride",
+      country: "India",
+      content: "We used the advanced RSVP forms on Elite to collect meal choices and shuttle preferences for 280 guests. The export was perfectly formatted — we just forwarded it straight to the caterer.",
+      rating: 5,
+      sortOrder: 6,
+    },
   ];
 
   for (const testimonial of testimonials) {
     const existing = await prisma.testimonial.findFirst({ where: { name: testimonial.name } });
     if (!existing) {
       await prisma.testimonial.create({ data: testimonial });
-      console.log(`  ✓ ${testimonial.name}`);
+      console.log(`  + ${testimonial.name}`);
+    } else {
+      console.log(`  ~ ${testimonial.name} (already exists, skipping)`);
     }
   }
 
   // Create legal pages
-  console.log("\n📜 Creating legal pages...");
+  console.log("\nCreating legal pages...");
   const legalPages = [
     {
       slug: "terms",
       title: "Terms of Service",
-      metaTitle: "Terms of Service | LLCPad",
-      metaDescription: "Terms and conditions for using LLCPad services. Read our terms of service before using our LLC formation and business services.",
+      metaTitle: "Terms of Service | Ceremoney",
+      metaDescription: "Read Ceremoney's Terms of Service. Understand your rights and obligations when using our wedding planning platform and services.",
       content: `<h2>1. Acceptance of Terms</h2>
-<p>By accessing and using LLCPad's services, you agree to be bound by these Terms of Service. If you do not agree to these terms, please do not use our services.</p>
+<p>By creating a Ceremoney account or using any Ceremoney service, you agree to be bound by these Terms of Service ("Terms"). If you do not agree to these Terms, please do not use our platform. These Terms apply to all users, including couples, collaborators, vendors, and professional planners.</p>
 
-<h2>2. Services Description</h2>
-<p>LLCPad provides business formation services, including but not limited to:</p>
+<h2>2. Description of Service</h2>
+<p>Ceremoney is a Software-as-a-Service (SaaS) wedding planning platform operated from Sweden. Our services include, but are not limited to:</p>
 <ul>
-<li>LLC Formation in all 50 US states</li>
-<li>EIN Application assistance</li>
-<li>Registered Agent services</li>
-<li>Annual compliance reminders</li>
-<li>Business document preparation</li>
+  <li>Event website creation and hosting</li>
+  <li>RSVP collection and guest list management</li>
+  <li>Seating chart builder</li>
+  <li>Digital stationery design and delivery</li>
+  <li>Vendor directory and inquiry management</li>
+  <li>Planning checklists and timeline tools</li>
+  <li>QR code entrance check-in</li>
+  <li>White-label solutions for professional planners</li>
 </ul>
 
-<h2>3. Not a Law Firm</h2>
-<p><strong>Important:</strong> LLCPad is a business formation service company, NOT a law firm. We do not provide legal advice. The information provided through our services is for general informational purposes only and should not be construed as legal advice. For legal matters, please consult with a licensed attorney in your jurisdiction.</p>
+<h2>3. Not a Law Firm or Venue</h2>
+<p><strong>Important:</strong> Ceremoney is a technology platform, not a law firm, venue, catering company, or professional services provider. We do not provide legal, financial, or contractual advice. Any information provided through our platform is for general informational purposes only. For legal or contractual matters relating to vendor agreements, please consult a licensed professional.</p>
 
-<h2>4. User Responsibilities</h2>
+<h2>4. Subscription Plans and Billing</h2>
+<p>Ceremoney offers Free (Basic), Premium (399 SEK/month or 3 588 SEK/year), Elite (799 SEK/month or 7 188 SEK/year), and White-Label (custom pricing) plans. Prices are listed in Swedish Krona (SEK) and are inclusive of applicable VAT where required by law.</p>
+<ul>
+  <li>Monthly subscriptions renew automatically each calendar month.</li>
+  <li>Annual subscriptions renew automatically after 12 months.</li>
+  <li>You may cancel auto-renewal at any time from your account settings; access continues until the end of the paid period.</li>
+  <li>We reserve the right to change pricing with 30 days' notice to existing subscribers.</li>
+</ul>
+
+<h2>5. User Responsibilities</h2>
 <p>You are responsible for:</p>
 <ul>
-<li>Providing accurate and complete information</li>
-<li>Maintaining the confidentiality of your account</li>
-<li>Complying with all applicable laws and regulations</li>
-<li>Keeping your business in good standing after formation</li>
+  <li>Maintaining the security and confidentiality of your account credentials</li>
+  <li>Ensuring all content you publish on your event website complies with applicable laws</li>
+  <li>Obtaining proper consent before uploading photographs featuring other individuals</li>
+  <li>Ensuring your own vendor contracts and agreements are reviewed and understood before signing</li>
+  <li>Complying with GDPR and applicable data protection laws when collecting guest data</li>
 </ul>
 
-<h2>5. Payment Terms</h2>
-<p>All fees are due at the time of order placement. Prices are subject to change without notice. State fees are determined by each state and are subject to change.</p>
+<h2>6. Intellectual Property</h2>
+<p>Ceremoney owns all rights to the platform, software, and designs. Content you create (wedding website content, photos, guest data) remains yours. By using Ceremoney, you grant us a limited licence to store, display, and process your content solely to provide the service.</p>
 
-<h2>6. Refund Policy</h2>
-<p>Please refer to our <a href="/refund-policy">Refund Policy</a> for information about refunds and cancellations.</p>
+<h2>7. Refund Policy</h2>
+<p>Please refer to our <a href="/refund-policy">Refund Policy</a> for full details on cancellations and refunds.</p>
 
-<h2>7. Limitation of Liability</h2>
-<p>LLCPad's liability is limited to the amount paid for services. We are not liable for any indirect, incidental, or consequential damages.</p>
+<h2>8. Limitation of Liability</h2>
+<p>To the maximum extent permitted by Swedish and EU law, Ceremoney's aggregate liability to you for any claim arising from use of the platform shall not exceed the total fees paid by you in the 12 months preceding the claim. We are not liable for indirect, incidental, or consequential damages, including losses arising from vendor no-shows, venue cancellations, or third-party service failures.</p>
 
-<h2>8. Changes to Terms</h2>
-<p>We reserve the right to modify these terms at any time. Continued use of our services after changes constitutes acceptance of the new terms.</p>
+<h2>9. Governing Law</h2>
+<p>These Terms are governed by the laws of Sweden. Any disputes shall be subject to the exclusive jurisdiction of the courts of Stockholm, Sweden, unless mandatory consumer protection laws in your country of residence provide otherwise.</p>
 
-<h2>9. Contact Information</h2>
-<p>For questions about these Terms of Service, please contact us at support@llcpad.com</p>`,
+<h2>10. Changes to Terms</h2>
+<p>We may update these Terms from time to time. We will notify you by email and in-app notice at least 14 days before material changes take effect. Continued use of Ceremoney after that date constitutes acceptance of the new Terms.</p>
+
+<h2>11. Contact</h2>
+<p>For questions about these Terms, contact us at <a href="mailto:legal@ceremoney.com">legal@ceremoney.com</a>.</p>`,
     },
     {
       slug: "privacy",
       title: "Privacy Policy",
-      metaTitle: "Privacy Policy | LLCPad",
-      metaDescription: "LLCPad Privacy Policy - Learn how we collect, use, and protect your personal information when using our business formation services.",
-      content: `<h2>1. Information We Collect</h2>
-<p>We collect information that you provide directly to us, including:</p>
+      metaTitle: "Privacy Policy | Ceremoney",
+      metaDescription: "Ceremoney's Privacy Policy — how we collect, use, and protect your personal data in compliance with GDPR and Swedish data protection law.",
+      content: `<h2>1. Data Controller</h2>
+<p>Ceremoney AB is the data controller for personal data processed through the Ceremoney platform. We are registered in Sweden and comply with the General Data Protection Regulation (GDPR) and the Swedish Data Protection Act (2018:218).</p>
+
+<h2>2. What Data We Collect</h2>
+<p>We collect the following categories of personal data:</p>
 <ul>
-<li><strong>Personal Information:</strong> Name, email address, phone number, mailing address</li>
-<li><strong>Business Information:</strong> LLC name, business address, EIN, member information</li>
-<li><strong>Payment Information:</strong> Credit card details, billing address</li>
-<li><strong>Identity Documents:</strong> Passport or ID copies (for compliance purposes)</li>
+  <li><strong>Account data:</strong> Name, email address, password (hashed), profile photo</li>
+  <li><strong>Event data:</strong> Wedding date, venue, couple names, event website content</li>
+  <li><strong>Guest data:</strong> Names, email addresses, phone numbers, dietary requirements, RSVP responses — provided by you when building your guest list</li>
+  <li><strong>Payment data:</strong> Billing name, billing address, last four digits of card (full card numbers are processed by Stripe and never stored by us)</li>
+  <li><strong>Usage data:</strong> IP address, browser type, pages visited, feature usage — collected automatically for service improvement</li>
 </ul>
 
-<h2>2. How We Use Your Information</h2>
-<p>We use the information we collect to:</p>
+<h2>3. Legal Basis for Processing</h2>
 <ul>
-<li>Process your orders and form your business entities</li>
-<li>Communicate with you about your orders</li>
-<li>Send important updates and compliance reminders</li>
-<li>Improve our services and customer experience</li>
-<li>Comply with legal obligations</li>
+  <li><strong>Contract performance:</strong> Processing necessary to provide the services you have subscribed to</li>
+  <li><strong>Legitimate interest:</strong> Analytics to improve the platform, fraud prevention, security</li>
+  <li><strong>Legal obligation:</strong> Tax records, audit requirements</li>
+  <li><strong>Consent:</strong> Marketing communications (you can withdraw consent at any time)</li>
 </ul>
 
-<h2>3. Information Sharing</h2>
-<p>We may share your information with:</p>
+<h2>4. How We Use Your Data</h2>
 <ul>
-<li><strong>State Agencies:</strong> Required for filing your business documents</li>
-<li><strong>IRS:</strong> For EIN applications</li>
-<li><strong>Service Providers:</strong> Who assist in providing our services</li>
-<li><strong>Legal Requirements:</strong> When required by law</li>
-</ul>
-<p>We do NOT sell your personal information to third parties.</p>
-
-<h2>4. Data Security</h2>
-<p>We implement appropriate security measures to protect your personal information, including:</p>
-<ul>
-<li>SSL encryption for all data transmission</li>
-<li>Secure data storage with access controls</li>
-<li>Regular security audits and updates</li>
+  <li>To provide and operate the Ceremoney platform</li>
+  <li>To process payments and manage your subscription</li>
+  <li>To send transactional emails (RSVP notifications, invoice receipts, checklist reminders)</li>
+  <li>To send marketing communications where you have opted in</li>
+  <li>To improve and develop new platform features through aggregated analytics</li>
+  <li>To comply with legal and regulatory obligations</li>
 </ul>
 
-<h2>5. Your Rights</h2>
-<p>You have the right to:</p>
+<h2>5. Guest Data</h2>
+<p>When you add guest contact details to Ceremoney, you are acting as a data controller for that guest data and Ceremoney acts as your data processor. You are responsible for having a valid lawful basis (e.g. the guests' consent) to provide their data to Ceremoney. We process guest data only to provide the services you have requested.</p>
+
+<h2>6. Data Sharing</h2>
+<p>We share your data only with:</p>
 <ul>
-<li>Access your personal information</li>
-<li>Request correction of inaccurate data</li>
-<li>Request deletion of your data (subject to legal requirements)</li>
-<li>Opt-out of marketing communications</li>
+  <li><strong>Stripe:</strong> For payment processing (PCI DSS compliant)</li>
+  <li><strong>Hosting providers:</strong> Infrastructure providers operating under GDPR-compliant data processing agreements</li>
+  <li><strong>Email delivery providers:</strong> For transactional and marketing email delivery</li>
+  <li><strong>Legal authorities:</strong> When required by law or court order</li>
+</ul>
+<p>We do <strong>not</strong> sell your personal data to third parties.</p>
+
+<h2>7. Data Retention</h2>
+<p>Account data is retained for the duration of your account plus 2 years after account closure (for legal and audit purposes). You may request earlier deletion by contacting <a href="mailto:privacy@ceremoney.com">privacy@ceremoney.com</a>. Some data may be retained longer where required by law (e.g. invoicing records for 7 years under Swedish accounting law).</p>
+
+<h2>8. Your Rights (GDPR)</h2>
+<p>Under GDPR, you have the right to:</p>
+<ul>
+  <li>Access a copy of your personal data</li>
+  <li>Rectify inaccurate data</li>
+  <li>Erasure ("right to be forgotten") — subject to legal retention obligations</li>
+  <li>Data portability — export your data in machine-readable format</li>
+  <li>Object to or restrict certain processing</li>
+  <li>Lodge a complaint with the Swedish Authority for Privacy Protection (IMY) at <a href="https://www.imy.se" target="_blank" rel="noopener">imy.se</a></li>
 </ul>
 
-<h2>6. Contact Us</h2>
-<p>For privacy-related inquiries, please contact us at privacy@llcpad.com</p>`,
+<h2>9. Cookies</h2>
+<p>We use essential cookies (required for the platform to function), analytics cookies (to understand feature usage), and preference cookies (to remember your settings). A cookie consent banner allows you to manage non-essential cookies when you first visit our site.</p>
+
+<h2>10. Contact</h2>
+<p>For privacy enquiries or to exercise your rights, contact our Data Protection Officer at <a href="mailto:privacy@ceremoney.com">privacy@ceremoney.com</a>.</p>`,
     },
     {
       slug: "refund-policy",
       title: "Refund Policy",
-      metaTitle: "Refund Policy | LLCPad",
-      metaDescription: "LLCPad Refund Policy - Learn about our refund and cancellation policy for LLC formation and business services.",
+      metaTitle: "Refund Policy | Ceremoney",
+      metaDescription: "Ceremoney's refund and cancellation policy for subscription plans, add-ons, and concierge services. Understand your rights before subscribing.",
       content: `<h2>Our Commitment</h2>
-<p>At LLCPad, we strive to provide excellent service. We understand that circumstances may change, and we've created this refund policy to be fair to our customers.</p>
+<p>At Ceremoney, we want you to be confident in your purchase. This policy explains your options for cancellations and refunds across all our products.</p>
 
-<h2>Before Filing</h2>
-<p>If your documents have NOT been filed with the state:</p>
+<h2>Subscription Plans (Basic, Premium, Elite)</h2>
+<h3>Monthly Subscriptions</h3>
 <ul>
-<li><strong>Full refund</strong> of LLCPad service fees</li>
-<li>Simply contact us to cancel your order</li>
-<li>Refunds processed within 5-7 business days</li>
+  <li>You may cancel at any time. Access continues until the end of the current billing period.</li>
+  <li>Monthly fees already charged are <strong>non-refundable</strong> except as set out under EU Consumer Rights below.</li>
+</ul>
+<h3>Annual Subscriptions</h3>
+<ul>
+  <li>Annual subscriptions may be cancelled at any time; the subscription will not renew.</li>
+  <li>A <strong>pro-rata refund</strong> of the unused months is available within the first 60 days of the annual billing date.</li>
+  <li>After 60 days, no refund is issued for the remaining annual period.</li>
 </ul>
 
-<h2>After Filing</h2>
-<p>If your documents HAVE been filed with the state:</p>
+<h2>Add-ons (Printed Stationery, Premium Theme, Extra Collaborators)</h2>
 <ul>
-<li><strong>State filing fees are non-refundable</strong> (paid directly to the state)</li>
-<li>LLCPad service fees may be partially refunded on a case-by-case basis</li>
-<li>We cannot reverse filings made with state agencies</li>
+  <li><strong>Digital Add-ons (Premium Theme, Extra Collaborators):</strong> Refundable within 14 days if you have not made use of the feature.</li>
+  <li><strong>Printed Stationery:</strong> Refundable in full before the design proof has been started. Once a proof has been delivered, a partial refund of 50% is available within 7 days. After approval of the final proof, no refund is available as design work has been completed.</li>
 </ul>
 
-<h2>Non-Refundable Items</h2>
-<p>The following are generally non-refundable:</p>
+<h2>Planning Concierge</h2>
 <ul>
-<li>State filing fees (these go directly to the state)</li>
-<li>Expedited processing fees once expedited service has begun</li>
-<li>Registered Agent fees after service activation</li>
-<li>Third-party fees (IRS, state agencies, etc.)</li>
+  <li>Fully refundable within 48 hours of purchase, provided no planning work has commenced.</li>
+  <li>Once your assigned planner has begun work (shortlisting, vendor outreach), a partial refund based on work completed will be assessed on a case-by-case basis.</li>
 </ul>
+
+<h2>White-Label Plan</h2>
+<p>Refund terms for White-Label agreements are specified in the individual service agreement. Please refer to your contract or contact your account manager.</p>
+
+<h2>EU Consumer Right of Withdrawal</h2>
+<p>If you are a consumer in the EU/EEA, you have a 14-day right of withdrawal from the date of purchase for digital services, unless you have already started using the service and expressly waived this right at checkout. Where you have started using a digital service immediately, the right of withdrawal may not apply in full — we will assess each request individually in accordance with applicable consumer protection law.</p>
 
 <h2>How to Request a Refund</h2>
 <ol>
-<li>Contact our support team at support@llcpad.com</li>
-<li>Provide your order number</li>
-<li>Explain the reason for your refund request</li>
-<li>Our team will review and respond within 48 hours</li>
+  <li>Email <a href="mailto:support@ceremoney.com">support@ceremoney.com</a> with your order number and reason</li>
+  <li>Our team will review and respond within 2 business days</li>
+  <li>Approved refunds are returned to your original payment method within 5–10 business days</li>
 </ol>
 
-<h2>Processing Time</h2>
-<p>Approved refunds are processed within 5-7 business days. The time for the refund to appear in your account depends on your payment method and financial institution.</p>
-
 <h2>Questions?</h2>
-<p>If you have any questions about our refund policy, please contact us at support@llcpad.com</p>`,
+<p>Contact us at <a href="mailto:support@ceremoney.com">support@ceremoney.com</a> — we are happy to help.</p>`,
     },
     {
       slug: "disclaimer",
       title: "Disclaimer",
-      metaTitle: "Disclaimer | LLCPad",
-      metaDescription: "Legal disclaimers for LLCPad services. Important information about our business formation services.",
-      content: `<h2>Not a Law Firm</h2>
-<p><strong>LLCPad is NOT a law firm and does not provide legal advice.</strong> We are a business formation document filing service. The information provided on this website and through our services is for general informational purposes only.</p>
+      metaTitle: "Disclaimer | Ceremoney",
+      metaDescription: "Important disclaimers about Ceremoney's wedding planning platform, including limitations of our service and third-party vendor relationships.",
+      content: `<h2>Not a Professional Services Provider</h2>
+<p><strong>Ceremoney is a technology platform, not a law firm, venue, catering company, florist, photographer, or any other professional wedding service provider.</strong> We provide tools that help couples organise and manage their wedding planning. We do not provide legal, financial, contractual, or professional advice of any kind.</p>
 
-<h2>No Attorney-Client Relationship</h2>
-<p>Use of our services does not create an attorney-client relationship. For legal advice, please consult with a licensed attorney in your jurisdiction who can provide advice tailored to your specific situation.</p>
+<h2>No Endorsement of Vendors</h2>
+<p>Vendors listed in the Ceremoney directory have undergone a basic verification process, but listing on Ceremoney does not constitute an endorsement, warranty, or guarantee of any vendor's quality, reliability, or suitability for your event. Couples are responsible for conducting their own due diligence before entering into any contract with a vendor.</p>
+
+<h2>Vendor Contracts</h2>
+<p>Any contract you enter into with a vendor found through Ceremoney is a direct agreement between you and that vendor. Ceremoney is not a party to such contracts and is not liable for vendor performance, cancellations, pricing disputes, or any other matter arising from your relationship with a vendor. We strongly recommend reviewing all vendor contracts carefully and seeking professional legal advice for high-value agreements.</p>
+
+<h2>Platform Availability</h2>
+<p>While we strive for 99.9% uptime, Ceremoney cannot guarantee uninterrupted service. We are not liable for losses arising from scheduled or unscheduled platform downtime, including any impact on your event website or RSVP collection. We recommend maintaining offline backups of critical guest list data as your event date approaches.</p>
 
 <h2>Accuracy of Information</h2>
-<p>While we strive to provide accurate and up-to-date information, we make no representations or warranties about:</p>
-<ul>
-<li>The completeness or accuracy of information on this website</li>
-<li>The suitability of our services for your specific needs</li>
-<li>The outcomes of any business formation or filing</li>
-</ul>
+<p>We make reasonable efforts to keep information on the Ceremoney platform accurate and up to date. However, we make no representations or warranties as to the completeness, accuracy, or suitability of any information provided, including vendor profiles, pricing, or availability. Always confirm details directly with your vendors.</p>
 
-<h2>Third-Party Services</h2>
-<p>We work with various government agencies and third-party service providers. We are not responsible for:</p>
-<ul>
-<li>Delays caused by state agencies</li>
-<li>Changes in state filing requirements or fees</li>
-<li>Actions or inactions of third-party service providers</li>
-</ul>
-
-<h2>Business Decisions</h2>
-<p>The decision to form a business entity, the type of entity to form, and the state of formation are important decisions that should be made after careful consideration and, where appropriate, consultation with legal and tax professionals.</p>
-
-<h2>Tax Advice</h2>
-<p>We do not provide tax advice. Please consult with a qualified tax professional for advice on tax matters related to your business.</p>
+<h2>Guest Data Responsibility</h2>
+<p>You are the data controller for the personal data of your guests that you enter into the Ceremoney platform. It is your responsibility to ensure you have the appropriate legal basis (such as consent) to collect and process your guests' personal information. Ceremoney acts as your data processor in relation to guest data.</p>
 
 <h2>Limitation of Liability</h2>
-<p>To the maximum extent permitted by law, LLCPad shall not be liable for any indirect, incidental, special, consequential, or punitive damages arising from your use of our services.</p>
+<p>To the maximum extent permitted by applicable law, Ceremoney's total liability for any claim arising out of or related to use of our platform shall not exceed the total subscription fees paid by you in the 12 months preceding the claim. We exclude liability for any indirect, consequential, incidental, or special damages.</p>
 
-<h2>Contact Us</h2>
-<p>If you have any questions about this disclaimer, please contact us at legal@llcpad.com</p>`,
+<h2>Changes to This Disclaimer</h2>
+<p>We may update this disclaimer periodically. The most current version is always available at <a href="/disclaimer">ceremoney.com/disclaimer</a>.</p>
+
+<h2>Contact</h2>
+<p>For questions about this disclaimer, contact us at <a href="mailto:legal@ceremoney.com">legal@ceremoney.com</a>.</p>`,
     },
   ];
 
@@ -2162,13 +1314,12 @@ async function main() {
       },
       create: page,
     });
-    console.log(`  ✓ ${page.title}`);
+    console.log(`  + ${page.title}`);
   }
 
   // Create Header Configuration
-  console.log("\n🎨 Creating header configuration...");
+  console.log("\nCreating header configuration...");
 
-  // First, clean up existing header config
   await prisma.menuItem.deleteMany({ where: { headerId: { not: null } } });
   await prisma.headerConfig.deleteMany({});
 
@@ -2183,34 +1334,28 @@ async function main() {
       logoPosition: "LEFT",
       logoMaxHeight: 56,
       ctaButtons: JSON.stringify([
-        { text: "Get Started", url: "/services/llc-formation", variant: "primary" }
+        { text: "Start Planning Free", url: "/register", variant: "primary" },
       ]),
       showAuthButtons: true,
       loginText: "Sign In",
       loginUrl: "/login",
-      registerText: "Get Started",
-      registerUrl: "/services/llc-formation",
+      registerText: "Start Planning Free",
+      registerUrl: "/register",
       searchEnabled: false,
       mobileBreakpoint: 1024,
       height: 80,
     },
   });
-  console.log("  ✓ Header config created");
+  console.log("  + Header config created");
 
   // Create menu items for header
   const menuItems = [
-    { label: "Home", url: "/", sortOrder: 0 },
-    {
-      label: "Services",
-      url: "/services",
-      sortOrder: 1,
-      isMegaMenu: true,
-      megaMenuColumns: 4,
-    },
-    { label: "Pricing", url: "/pricing", sortOrder: 2 },
-    { label: "About", url: "/about", sortOrder: 3 },
-    { label: "Blog", url: "/blog", sortOrder: 4 },
-    { label: "Contact", url: "/contact", sortOrder: 5 },
+    { label: "Home",     url: "/",         sortOrder: 0 },
+    { label: "Features", url: "/features", sortOrder: 1, isMegaMenu: true, megaMenuColumns: 3 },
+    { label: "Pricing",  url: "/pricing",  sortOrder: 2 },
+    { label: "Vendors",  url: "/vendors",  sortOrder: 3 },
+    { label: "Blog",     url: "/blog",     sortOrder: 4 },
+    { label: "Contact",  url: "/contact",  sortOrder: 5 },
   ];
 
   for (const item of menuItems) {
@@ -2224,62 +1369,49 @@ async function main() {
       },
     });
 
-    // Add mega menu categories for Services
     if (item.isMegaMenu) {
-      const categories = [
+      const megaCategories = [
         {
-          categoryName: "Formation & Legal",
-          categoryIcon: "building-2",
-          categoryDesc: "Start your US business",
+          categoryName: "Planning Tools",
+          categoryIcon: "calendar-heart",
+          categoryDesc: "Everything to organise your day",
           children: [
-            { label: "LLC Formation", url: "/services/llc-formation", badge: "Popular" },
-            { label: "EIN Application", url: "/services/ein-application" },
-            { label: "ITIN Application", url: "/services/itin-application" },
-            { label: "Trademark Registration", url: "/services/trademark-registration", badge: "Popular" },
-            { label: "DBA / Trade Name", url: "/services/dba-filing" },
-            { label: "Operating Agreement", url: "/services/operating-agreement" },
+            { label: "Event Website",          url: "/features/event-website",     badge: "Free" },
+            { label: "Guest List Management",  url: "/features/guest-list" },
+            { label: "Seating Chart Builder",  url: "/features/seating-chart",     badge: "Popular" },
+            { label: "Wedding Checklist",      url: "/features/checklist",         badge: "Free" },
+            { label: "Budget Tracker",         url: "/features/budget" },
+            { label: "Day-of Timeline",        url: "/features/timeline" },
           ],
         },
         {
-          categoryName: "Compliance & Documents",
-          categoryIcon: "shield",
-          categoryDesc: "Keep your business compliant",
+          categoryName: "Guest Experience",
+          categoryIcon: "users",
+          categoryDesc: "Delight your guests from invite to check-in",
           children: [
-            { label: "Registered Agent", url: "/services/registered-agent" },
-            { label: "Annual Compliance", url: "/services/annual-report" },
-            { label: "Virtual US Address", url: "/services/virtual-address" },
-            { label: "Amendment Filing", url: "/services/amendment-filing" },
-            { label: "Certificate of Good Standing", url: "/services/certificate-good-standing" },
-            { label: "Apostille Service", url: "/services/apostille-service" },
+            { label: "RSVP Collection",        url: "/features/rsvp",              badge: "Free" },
+            { label: "Advanced RSVP Forms",    url: "/features/advanced-rsvp",     badge: "Elite" },
+            { label: "Digital Stationery",     url: "/features/stationery" },
+            { label: "QR Entrance Check-in",   url: "/features/qr-checkin",        badge: "Elite" },
+            { label: "Custom Domain",          url: "/features/custom-domain" },
           ],
         },
         {
-          categoryName: "Amazon Services",
-          categoryIcon: "shopping-cart",
-          categoryDesc: "Sell on Amazon with confidence",
+          categoryName: "For Professionals",
+          categoryIcon: "briefcase",
+          categoryDesc: "Tools built for wedding planners",
           children: [
-            { label: "Amazon Seller Account", url: "/services/amazon-seller", badge: "Popular" },
-            { label: "Brand Registry", url: "/services/brand-registry", badge: "Popular" },
-            { label: "Category Ungating", url: "/services/category-ungating" },
-            { label: "Listing Optimization", url: "/services/listing-optimization" },
-            { label: "A+ Content Creation", url: "/services/a-plus-content" },
-            { label: "Account Reinstatement", url: "/services/account-reinstatement" },
-          ],
-        },
-        {
-          categoryName: "Tax & Finance",
-          categoryIcon: "calculator",
-          categoryDesc: "Financial services",
-          children: [
-            { label: "Business Banking", url: "/services/business-banking", badge: "Popular" },
-            { label: "Bookkeeping", url: "/services/bookkeeping" },
-            { label: "Tax Filing", url: "/services/tax-filing" },
+            { label: "White-Label Platform",   url: "/services/plan-white-label",  badge: "Enterprise" },
+            { label: "Multi-Event Management", url: "/features/multi-event" },
+            { label: "Client Portals",         url: "/features/client-portals" },
+            { label: "Vendor Directory Listing", url: "/services/vendor-verified-listing" },
+            { label: "API Access",             url: "/features/api" },
           ],
         },
       ];
 
-      for (let i = 0; i < categories.length; i++) {
-        const cat = categories[i];
+      for (let i = 0; i < megaCategories.length; i++) {
+        const cat = megaCategories[i];
         const categoryMenuItem = await prisma.menuItem.create({
           data: {
             label: cat.categoryName,
@@ -2296,7 +1428,6 @@ async function main() {
           },
         });
 
-        // Add children services
         for (let j = 0; j < cat.children.length; j++) {
           const child = cat.children[j];
           await prisma.menuItem.create({
@@ -2316,19 +1447,18 @@ async function main() {
       }
     }
   }
-  console.log("  ✓ Header menu items created");
+  console.log("  + Header menu items created");
 
-  // Create Footer Configuration (skip if already exists to preserve admin customizations)
-  console.log("\n🦶 Creating footer configuration...");
+  // Create Footer Configuration
+  console.log("\nCreating footer configuration...");
 
   const existingFooter = await prisma.footerConfig.findFirst({ where: { isActive: true } });
 
   let footerConfig;
   if (existingFooter) {
-    console.log("  ℹ Active footer config already exists, skipping creation to preserve customizations");
+    console.log("  ~ Active footer config already exists, skipping to preserve customisations");
     footerConfig = existingFooter;
   } else {
-    // Only clean up and create if no active footer exists
     await prisma.menuItem.deleteMany({ where: { footerWidgetId: { not: null } } });
     await prisma.footerWidget.deleteMany({});
     await prisma.footerConfig.deleteMany({});
@@ -2340,62 +1470,61 @@ async function main() {
         layout: "MULTI_COLUMN",
         columns: 6,
         newsletterEnabled: true,
-        newsletterTitle: "Subscribe to our newsletter",
-        newsletterSubtitle: "Get updates on new services and offers",
+        newsletterTitle: "Wedding planning tips, delivered to your inbox",
+        newsletterSubtitle: "Monthly inspiration, vendor spotlights, and planning guides",
         showSocialLinks: true,
         socialPosition: "brand",
         showContactInfo: true,
         contactPosition: "brand",
         bottomBarEnabled: true,
         showDisclaimer: true,
-        disclaimerText: "LLCPad is not a law firm and does not provide legal advice. The information provided is for general informational purposes only.",
+        disclaimerText: "Ceremoney is a wedding planning technology platform, not a professional services provider. Vendor listings do not constitute endorsements. Always review vendor contracts carefully.",
         showTrustBadges: false,
         paddingTop: 48,
         paddingBottom: 32,
       },
     });
-    console.log("  ✓ Footer config created");
+    console.log("  + Footer config created");
 
-    // Create footer widgets
-    // Widget 1: Brand (column 1-2)
+    // Widget 1: Brand (column 1–2)
     await prisma.footerWidget.create({
       data: {
         footerId: footerConfig.id,
         type: "BRAND",
-        title: "LLCPad",
+        title: "Ceremoney",
         showTitle: false,
         column: 1,
         sortOrder: 0,
       },
     });
 
-    // Widget 2: Services (column 3)
-    const servicesWidget = await prisma.footerWidget.create({
+    // Widget 2: Plans (column 3)
+    const plansWidget = await prisma.footerWidget.create({
       data: {
         footerId: footerConfig.id,
         type: "LINKS",
-        title: "Services",
+        title: "Plans",
         showTitle: true,
         column: 3,
         sortOrder: 0,
       },
     });
 
-    const serviceLinks = [
-      { label: "LLC Formation", url: "/services/llc-formation" },
-      { label: "EIN Application", url: "/services/ein-application" },
-      { label: "Amazon Seller Account", url: "/services/amazon-seller" },
-      { label: "Registered Agent", url: "/services/registered-agent" },
-      { label: "Virtual Address", url: "/services/virtual-address" },
-      { label: "Business Banking", url: "/services/business-banking" },
+    const planLinks = [
+      { label: "Basic (Free)",    url: "/services/plan-basic" },
+      { label: "Premium",        url: "/services/plan-premium" },
+      { label: "Elite",          url: "/services/plan-elite" },
+      { label: "White-Label",    url: "/services/plan-white-label" },
+      { label: "Pricing",        url: "/pricing" },
+      { label: "Compare Plans",  url: "/pricing#compare" },
     ];
 
-    for (let i = 0; i < serviceLinks.length; i++) {
+    for (let i = 0; i < planLinks.length; i++) {
       await prisma.menuItem.create({
         data: {
-          label: serviceLinks[i].label,
-          url: serviceLinks[i].url,
-          footerWidgetId: servicesWidget.id,
+          label: planLinks[i].label,
+          url: planLinks[i].url,
+          footerWidgetId: plansWidget.id,
           sortOrder: i,
           target: "_self",
           isVisible: true,
@@ -2404,25 +1533,60 @@ async function main() {
       });
     }
 
-    // Widget 3: Company (column 4)
-    const companyWidget = await prisma.footerWidget.create({
+    // Widget 3: Features (column 4)
+    const featuresWidget = await prisma.footerWidget.create({
       data: {
         footerId: footerConfig.id,
         type: "LINKS",
-        title: "Company",
+        title: "Features",
         showTitle: true,
         column: 4,
         sortOrder: 0,
       },
     });
 
+    const featureLinks = [
+      { label: "Event Website",        url: "/features/event-website" },
+      { label: "Guest List",           url: "/features/guest-list" },
+      { label: "Seating Chart",        url: "/features/seating-chart" },
+      { label: "RSVP Forms",           url: "/features/rsvp" },
+      { label: "Digital Stationery",   url: "/features/stationery" },
+      { label: "QR Check-in",          url: "/features/qr-checkin" },
+    ];
+
+    for (let i = 0; i < featureLinks.length; i++) {
+      await prisma.menuItem.create({
+        data: {
+          label: featureLinks[i].label,
+          url: featureLinks[i].url,
+          footerWidgetId: featuresWidget.id,
+          sortOrder: i,
+          target: "_self",
+          isVisible: true,
+          visibleOnMobile: true,
+        },
+      });
+    }
+
+    // Widget 4: Company (column 5)
+    const companyWidget = await prisma.footerWidget.create({
+      data: {
+        footerId: footerConfig.id,
+        type: "LINKS",
+        title: "Company",
+        showTitle: true,
+        column: 5,
+        sortOrder: 0,
+      },
+    });
+
     const companyLinks = [
-      { label: "About Us", url: "/about" },
-      { label: "Pricing", url: "/pricing" },
-      { label: "Blog", url: "/blog" },
-      { label: "FAQs", url: "/faq" },
-      { label: "Contact", url: "/contact" },
-      { label: "Testimonials", url: "/testimonials" },
+      { label: "About Us",      url: "/about" },
+      { label: "Blog",          url: "/blog" },
+      { label: "FAQs",          url: "/faq" },
+      { label: "Contact",       url: "/contact" },
+      { label: "Testimonials",  url: "/testimonials" },
+      { label: "For Vendors",   url: "/vendors/list-your-business" },
     ];
 
     for (let i = 0; i < companyLinks.length; i++) {
@@ -2431,40 +1595,6 @@ async function main() {
           label: companyLinks[i].label,
           url: companyLinks[i].url,
           footerWidgetId: companyWidget.id,
-          sortOrder: i,
-          target: "_self",
-          isVisible: true,
-          visibleOnMobile: true,
-        },
-      });
-    }
-
-    // Widget 4: Popular States (column 5)
-    const statesWidget = await prisma.footerWidget.create({
-      data: {
-        footerId: footerConfig.id,
-        type: "LINKS",
-        title: "Popular States",
-        showTitle: true,
-        column: 5,
-        sortOrder: 0,
-      },
-    });
-
-    const stateLinks = [
-      { label: "Wyoming LLC", url: "/llc/wyoming" },
-      { label: "Delaware LLC", url: "/llc/delaware" },
-      { label: "New Mexico LLC", url: "/llc/new-mexico" },
-      { label: "Texas LLC", url: "/llc/texas" },
-      { label: "Florida LLC", url: "/llc/florida" },
-    ];
-
-    for (let i = 0; i < stateLinks.length; i++) {
-      await prisma.menuItem.create({
-        data: {
-          label: stateLinks[i].label,
-          url: stateLinks[i].url,
-          footerWidgetId: statesWidget.id,
           sortOrder: i,
           target: "_self",
           isVisible: true,
@@ -2486,10 +1616,10 @@ async function main() {
     });
 
     const legalLinks = [
-      { label: "Privacy Policy", url: "/privacy" },
+      { label: "Privacy Policy",   url: "/privacy" },
       { label: "Terms of Service", url: "/terms" },
-      { label: "Refund Policy", url: "/refund-policy" },
-      { label: "Disclaimer", url: "/disclaimer" },
+      { label: "Refund Policy",    url: "/refund-policy" },
+      { label: "Disclaimer",       url: "/disclaimer" },
     ];
 
     for (let i = 0; i < legalLinks.length; i++) {
@@ -2505,27 +1635,28 @@ async function main() {
         },
       });
     }
-    console.log("  ✓ Footer widgets created");
-  } // End of else block for footer creation
 
-  // Create brand color settings
-  console.log("\n🎨 Creating brand color settings...");
+    console.log("  + Footer widgets created");
+  }
+
+  // Create brand color settings (preserved as-is per instructions)
+  console.log("\nCreating brand color settings...");
   const brandSettings = [
     // Primary Brand Colors - Midnight Orange Theme
-    { key: "brand_primary_color", value: "#F97316", type: "color" }, // Orange 500
-    { key: "brand_primary_dark", value: "#EA580C", type: "color" }, // Orange 600
-    { key: "brand_primary_light", value: "#FB923C", type: "color" }, // Orange 400
-    { key: "brand_secondary_color", value: "#1E2642", type: "color" }, // Midnight Light
-    { key: "brand_secondary_dark", value: "#0A0F1E", type: "color" }, // Midnight
-    { key: "brand_secondary_light", value: "#2D3A5C", type: "color" }, // Midnight 700
-    { key: "brand_accent_color", value: "#F97316", type: "color" }, // Orange 500 (same as primary)
-    { key: "brand_accent_dark", value: "#C2410C", type: "color" }, // Orange 700
-    { key: "brand_accent_light", value: "#FDBA74", type: "color" }, // Orange 300
+    { key: "brand_primary_color",    value: "#F97316", type: "color" }, // Orange 500
+    { key: "brand_primary_dark",     value: "#EA580C", type: "color" }, // Orange 600
+    { key: "brand_primary_light",    value: "#FB923C", type: "color" }, // Orange 400
+    { key: "brand_secondary_color",  value: "#1E2642", type: "color" }, // Midnight Light
+    { key: "brand_secondary_dark",   value: "#0A0F1E", type: "color" }, // Midnight
+    { key: "brand_secondary_light",  value: "#2D3A5C", type: "color" }, // Midnight 700
+    { key: "brand_accent_color",     value: "#F97316", type: "color" }, // Orange 500 (same as primary)
+    { key: "brand_accent_dark",      value: "#C2410C", type: "color" }, // Orange 700
+    { key: "brand_accent_light",     value: "#FDBA74", type: "color" }, // Orange 300
     // Semantic Colors
-    { key: "color_success", value: "#22C55E", type: "color" }, // Green 500
-    { key: "color_warning", value: "#F59E0B", type: "color" },
-    { key: "color_error", value: "#EF4444", type: "color" },
-    { key: "color_info", value: "#3B82F6", type: "color" },
+    { key: "color_success",          value: "#22C55E", type: "color" }, // Green 500
+    { key: "color_warning",          value: "#F59E0B", type: "color" },
+    { key: "color_error",            value: "#EF4444", type: "color" },
+    { key: "color_info",             value: "#3B82F6", type: "color" },
   ];
 
   for (const setting of brandSettings) {
@@ -2535,14 +1666,16 @@ async function main() {
       create: setting,
     });
   }
-  console.log("  ✓ Brand color settings created");
+  console.log("  + Brand color settings created");
 
-  // Create social media settings
-  console.log("\n📱 Creating social media settings...");
+  // Create social media settings (preserved as-is per instructions)
+  console.log("\nCreating social media settings...");
   const socialSettings = [
-    { key: "business.social.facebook", value: "https://facebook.com/llcpad", type: "url" },
-    { key: "business.social.twitter", value: "https://x.com/llcpad", type: "url" },
-    { key: "business.social.youtube", value: "https://youtube.com/@llcpad", type: "url" },
+    { key: "business.social.facebook",  value: "https://facebook.com/ceremoney",  type: "url" },
+    { key: "business.social.twitter",   value: "https://x.com/ceremoney",         type: "url" },
+    { key: "business.social.youtube",   value: "https://youtube.com/@ceremoney",  type: "url" },
+    { key: "business.social.instagram", value: "https://instagram.com/ceremoney", type: "url" },
+    { key: "business.social.pinterest", value: "https://pinterest.com/ceremoney", type: "url" },
   ];
 
   for (const setting of socialSettings) {
@@ -2552,102 +1685,152 @@ async function main() {
       create: setting,
     });
   }
-  console.log("  ✓ Social media settings created");
+  console.log("  + Social media settings created");
 
-  // Create Global FAQs (for /faq page and homepage)
-  console.log("\n❓ Creating global FAQs...");
+  // Create Global FAQs
+  console.log("\nCreating global FAQs...");
   await prisma.fAQ.deleteMany();
   const globalFaqs = [
-    // General — About LLCPad as a platform
+    // General
     {
-      question: "What is LLCPad?",
-      answer: "<p>LLCPad is a one-stop platform for international entrepreneurs to form and manage US LLCs. We handle everything from formation paperwork and EIN applications to registered agent services, business banking assistance, and Amazon seller account setup.</p>",
+      question: "What is Ceremoney?",
+      answer: "<p>Ceremoney is a Swedish wedding planning SaaS platform that gives couples all the tools they need to plan their wedding in one place — from an event website and RSVP collection to guest list management, seating charts, digital stationery, and QR code entrance check-in.</p>",
       category: "general",
       sortOrder: 0,
     },
     {
-      question: "Who can use LLCPad's services?",
-      answer: "<p>Our services are designed for <strong>international entrepreneurs</strong> — especially from Bangladesh, India, Pakistan, UAE, and other countries — who want to start a US-based business. Whether you're an e-commerce seller, freelancer, or startup founder, we can help you establish a legal US presence.</p>",
+      question: "Who is Ceremoney for?",
+      answer: "<p>Ceremoney is designed for <strong>couples planning their wedding</strong>, their trusted collaborators (parents, wedding party, friends), and <strong>professional wedding planners</strong> managing multiple events for clients. We offer plans from free to enterprise.</p>",
       category: "general",
       sortOrder: 1,
     },
     {
-      question: "Do I need to be a US citizen to use LLCPad?",
-      answer: "<p>No. <strong>US citizenship or residency is not required.</strong> Non-residents from any country can legally form and own a US LLC. You don't even need to visit the US — we handle everything remotely on your behalf.</p>",
+      question: "Do I need to be based in Sweden to use Ceremoney?",
+      answer: "<p>No. Ceremoney is used by couples worldwide. Our platform is available in English (Swedish coming soon) and supports international events. Whether you're planning a wedding in Stockholm, London, or Bali, Ceremoney works for you.</p>",
       category: "general",
       sortOrder: 2,
     },
     {
-      question: "How long does the entire process take?",
-      answer: "<p>Timelines vary by service, but most formations are completed within <strong>1–5 business days</strong>. After placing your order, you can track real-time progress from your dashboard. We keep you updated at every step via email and notifications.</p>",
+      question: "Can I plan a destination wedding with Ceremoney?",
+      answer: "<p>Absolutely. Ceremoney is built for remote planning. You can manage vendors, collect RSVPs, build your seating chart, and communicate with your planning team entirely online — no matter where you or your guests are based.</p>",
       category: "general",
       sortOrder: 3,
     },
     {
-      question: "Is LLCPad a law firm?",
-      answer: "<p><strong>No, LLCPad is not a law firm</strong> and does not provide legal advice. We are a business formation service that helps you file the necessary documents. For legal questions specific to your situation, we recommend consulting with a licensed attorney.</p>",
+      question: "Is Ceremoney a law firm or vendor?",
+      answer: "<p>No. Ceremoney is a technology platform. We are not a law firm, venue, caterer, photographer, or any other type of wedding services provider. We provide tools that help you organise your planning. Vendor listings in our directory do not constitute endorsements.</p>",
       category: "general",
       sortOrder: 4,
     },
+    {
+      question: "How do I get started?",
+      answer: "<p>Simply <a href='/register'>create a free account</a> — no credit card required. You'll be guided through setting up your event website and starting your planning checklist within minutes. You can upgrade to Premium or Elite whenever you're ready for more features.</p>",
+      category: "general",
+      sortOrder: 5,
+    },
 
-    // Pricing & Payments
+    // Plans & Pricing
+    {
+      question: "What are the differences between the plans?",
+      answer: "<p>Ceremoney offers four tiers:</p><ul><li><strong>Basic (Free):</strong> Event website, basic RSVP, checklist, vendor directory access</li><li><strong>Premium (399 SEK/month):</strong> All Basic features + guest list, seating chart, custom domain, digital stationery</li><li><strong>Elite (799 SEK/month):</strong> All Premium features + collaborators, QR entrance check-in, advanced RSVP forms, priority support</li><li><strong>White-Label (custom):</strong> All Elite features for multiple client events, under your own brand</li></ul><p>Visit our <a href='/pricing'>pricing page</a> for a full feature comparison.</p>",
+      category: "pricing",
+      sortOrder: 0,
+    },
+    {
+      question: "Is there a discount for annual billing?",
+      answer: "<p>Yes — annual billing saves 25% on both Premium and Elite plans:</p><ul><li><strong>Premium Annual:</strong> 3 588 SEK/year (equivalent to 299 SEK/month)</li><li><strong>Elite Annual:</strong> 7 188 SEK/year (equivalent to 599 SEK/month)</li></ul><p>Annual plans are billed once per year and renew automatically unless cancelled.</p>",
+      category: "pricing",
+      sortOrder: 1,
+    },
     {
       question: "What payment methods do you accept?",
-      answer: "<p>We accept multiple payment methods for your convenience:</p><ul><li><strong>International:</strong> Visa, Mastercard, American Express via Stripe</li><li><strong>Bangladesh:</strong> bKash, Nagad, local bank cards via SSLCommerz</li><li><strong>Bank Transfer:</strong> Available for larger orders</li></ul><p>All payments are processed securely with 256-bit SSL encryption.</p>",
-      category: "pricing",
-      sortOrder: 0,
-    },
-    {
-      question: "Do you offer refunds?",
-      answer: "<p>Our refund policy depends on the stage of service:</p><ul><li><strong>Before filing:</strong> Full refund available</li><li><strong>After filing:</strong> Service fee may be non-refundable as government filings cannot be reversed, but state fees are not refundable</li><li><strong>Registered Agent:</strong> Pro-rated refund for unused months</li></ul><p>Please review our full refund policy or contact support for specific cases.</p>",
-      category: "pricing",
-      sortOrder: 1,
-    },
-    {
-      question: "Can I pay in Bangladeshi Taka (BDT)?",
-      answer: "<p><strong>Yes!</strong> We display prices in both USD and BDT. When you select SSLCommerz as your payment method, you'll be charged in BDT at the current exchange rate. This makes it convenient for our Bangladeshi customers.</p>",
+      answer: "<p>We accept major credit and debit cards (Visa, Mastercard, American Express) via Stripe. Invoicing is available for White-Label and annual enterprise agreements. All payments are processed securely with SSL encryption.</p>",
       category: "pricing",
       sortOrder: 2,
+    },
+    {
+      question: "Can I get a refund if I change my mind?",
+      answer: "<p>Yes, in many cases. Monthly subscribers can cancel at any time; annual subscribers can request a pro-rata refund within the first 60 days. Please see our full <a href='/refund-policy'>Refund Policy</a> for details on all product types.</p>",
+      category: "pricing",
+      sortOrder: 3,
+    },
+    {
+      question: "Is there a free trial for Premium or Elite?",
+      answer: "<p>We offer a <strong>14-day free trial</strong> of the Premium plan — no credit card required. You can explore all Premium features and decide if you want to continue. If you do not upgrade, your account automatically returns to the Basic tier after 14 days.</p>",
+      category: "pricing",
+      sortOrder: 4,
     },
 
-    // International
+    // Features & Platform
     {
-      question: "I'm from Bangladesh. Can I form a US LLC?",
-      answer: "<p><strong>Absolutely!</strong> Many of our clients are from Bangladesh. We specialize in helping Bangladeshi entrepreneurs form US LLCs. We offer:</p><ul><li>Support in Bangla via live chat and email</li><li>Payment via bKash, Nagad, and local banks through SSLCommerz</li><li>Pricing in BDT alongside USD</li><li>Step-by-step guidance tailored for BD entrepreneurs</li></ul>",
-      category: "international",
+      question: "How does the seating chart builder work?",
+      answer: "<p>The Ceremoney seating chart builder lets you create tables (round, rectangular, or custom shapes), set the number of seats per table, and drag-and-drop guests from your guest list into seats. You can filter by RSVP status, dietary requirement, or group. Finished charts can be exported as PDF for your venue coordinator.</p>",
+      category: "features",
       sortOrder: 0,
     },
     {
-      question: "Do I need to travel to the US for any part of the process?",
-      answer: "<p><strong>No.</strong> The entire process is handled remotely. You do not need to travel to the US to form your LLC, get an EIN, open a business bank account, or set up an Amazon seller account. Everything is managed online through your LLCPad dashboard.</p>",
-      category: "international",
+      question: "How does QR code check-in work?",
+      answer: "<p>On the Elite plan, each confirmed guest receives a unique QR code in their RSVP confirmation or invitation email. On the wedding day, your door team scans QR codes with any smartphone or tablet — no special hardware required. Attendance updates in real time in your Ceremoney dashboard. After the event, export an attendance report.</p>",
+      category: "features",
       sortOrder: 1,
     },
     {
-      question: "Can I manage my US LLC from abroad?",
-      answer: "<p><strong>Yes.</strong> A US LLC can be fully managed from anywhere in the world. You can manage your business remotely, access your US bank account online, file taxes electronically, and use our registered agent to receive official mail. Our virtual address and registered agent services ensure your LLC maintains a legitimate US presence.</p>",
-      category: "international",
+      question: "Can I use my own domain for my event website?",
+      answer: "<p>Yes — custom domain is included in Premium and Elite plans. You point your domain's DNS records to Ceremoney (we provide step-by-step instructions), and your event website becomes accessible at your chosen address, typically within a few hours.</p>",
+      category: "features",
       sortOrder: 2,
+    },
+    {
+      question: "Can I invite family or friends to help with the planning?",
+      answer: "<p>Yes. The <strong>Collaborators</strong> feature (included in Elite, available as an add-on for Premium) lets you invite people to access your planning dashboard with custom permission levels: View Only, Editor, or Co-Host. Each collaborator has their own login.</p>",
+      category: "features",
+      sortOrder: 3,
+    },
+    {
+      question: "What advanced RSVP questions can I ask guests?",
+      answer: "<p>With Advanced RSVP Forms on Elite, you can add any custom questions — for example: meal choice, dietary restrictions, shuttle pickup preference, song requests, hotel room sharing, children's meals, accessibility needs, and more. Each question can be required or optional, and you can set different questions for adult and child guests.</p>",
+      category: "features",
+      sortOrder: 4,
     },
 
     // Account & Support
     {
-      question: "How do I track my order progress?",
-      answer: "<p>After placing an order, log in to your <strong>LLCPad dashboard</strong> to track progress in real-time. You'll see status updates for each step of the process. We also send email notifications whenever there's an important update on your order.</p>",
+      question: "How do I track my planning progress?",
+      answer: "<p>Log in to your Ceremoney dashboard to see an overview of your planning status — checklist completion, RSVP counts, budget tracker, and upcoming tasks. The checklist includes reminders that you can customise based on your wedding date.</p>",
       category: "account",
       sortOrder: 0,
     },
     {
-      question: "How can I contact support?",
-      answer: "<p>You can reach us through multiple channels:</p><ul><li><strong>Live Chat:</strong> Available on every page for instant help</li><li><strong>Email:</strong> support@llcpad.com — we respond within 24 hours</li><li><strong>Support Tickets:</strong> Create a ticket from your dashboard for detailed inquiries</li></ul>",
+      question: "How can I contact Ceremoney support?",
+      answer: "<p>You can reach us through:</p><ul><li><strong>Live Chat:</strong> Available on every page during business hours (Mon–Fri, 08:00–17:00 CET)</li><li><strong>Email:</strong> <a href='mailto:support@ceremoney.com'>support@ceremoney.com</a> — we respond within 24 hours</li><li><strong>Help Centre:</strong> Self-service articles and video guides available 24/7</li><li><strong>Priority Support:</strong> Elite subscribers receive a guaranteed 4-hour response time</li></ul>",
       category: "account",
       sortOrder: 1,
     },
     {
-      question: "Can I upgrade or add services to an existing order?",
-      answer: "<p><strong>Yes.</strong> You can add additional services at any time from your dashboard. For example, if you initially ordered LLC formation only, you can later add EIN application, registered agent, or business banking assistance as separate orders.</p>",
+      question: "Can I upgrade or downgrade my plan at any time?",
+      answer: "<p>Yes. You can upgrade your plan at any time from your account settings — the upgrade takes effect immediately and you are billed pro-rata for the remainder of your billing period. Downgrades take effect at the end of your current billing period. Your data is always preserved.</p>",
       category: "account",
       sortOrder: 2,
+    },
+    {
+      question: "What happens to my event website and data after the wedding?",
+      answer: "<p>Your Ceremoney account and all data — event website, guest list, photos — remain accessible as long as your account is active. Many couples keep their event website live as a keepsake. You can also export your guest list and other data at any time from your dashboard.</p>",
+      category: "account",
+      sortOrder: 3,
+    },
+
+    // Professional Planners
+    {
+      question: "I'm a professional wedding planner. What does Ceremoney offer me?",
+      answer: "<p>The <strong>White-Label plan</strong> is built for professional planners. You get: multi-event management from one dashboard, branded client portals (your logo and colours), all Elite features for every client event, REST API access for CRM integration, and a dedicated account manager. <a href='/contact'>Contact our sales team</a> for a personalised quote.</p>",
+      category: "professional",
+      sortOrder: 0,
+    },
+    {
+      question: "Can I list my business in the Ceremoney vendor directory?",
+      answer: "<p>Yes. The <strong>Verified Vendor Listing</strong> add-on gives your business a professional profile in the Ceremoney vendor directory, including portfolio photos, a verified badge, couple reviews, and an inquiry inbox. Listings start from 249 SEK/year. <a href='/services/vendor-verified-listing'>Learn more here</a>.</p>",
+      category: "professional",
+      sortOrder: 1,
     },
   ];
 
@@ -2662,9 +1845,9 @@ async function main() {
       },
     });
   }
-  console.log(`  ✓ ${globalFaqs.length} global FAQs created`);
+  console.log(`  + ${globalFaqs.length} global FAQs created`);
 
-  console.log("\n✅ Seeding completed!");
+  console.log("\nSeeding completed!");
 }
 
 main()

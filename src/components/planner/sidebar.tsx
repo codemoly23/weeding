@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, Suspense } from "react";
+import { useState, useEffect, Suspense } from "react";
 import Link from "next/link";
 import { usePathname, useSearchParams } from "next/navigation";
 import {
@@ -20,6 +20,7 @@ import {
   ChevronLeft,
   ChevronDown,
   Menu,
+  Star,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
@@ -29,6 +30,7 @@ import {
 } from "@/components/ui/collapsible";
 import { cn } from "@/lib/utils";
 import { useLanguage } from "@/lib/i18n/language-context";
+import { UpgradeModal } from "./upgrade-modal";
 
 interface NavItem {
   name: string;
@@ -98,6 +100,28 @@ function SidebarInner({
   const src = searchParams.get("src"); // "ceremony" | "reception" when coming from venue pages
   const { t } = useLanguage();
   const [closedGroups, setClosedGroups] = useState<string[]>([]);
+  const [upgradeOpen, setUpgradeOpen] = useState(false);
+  const [hiddenTabs, setHiddenTabs] = useState<string[]>([]);
+
+  useEffect(() => {
+    try {
+      const stored = localStorage.getItem(`planner-hidden-tabs-${projectId}`);
+      if (stored) setHiddenTabs(JSON.parse(stored));
+    } catch { /* ignore */ }
+  }, [projectId]);
+
+  function tabIdFromHref(href: string): string {
+    const base = `/planner/${projectId}`;
+    if (href === base) return "overview";
+    return href.replace(`${base}/`, "").split("/")[0];
+  }
+
+  function isTabVisible(href: string): boolean {
+    const id = tabIdFromHref(href);
+    if (id === "overview" || id === "settings") return true;
+    return !hiddenTabs.includes(id);
+  }
+
   const navigation = getNavigation(projectId, t);
 
   const isActive = (href: string) => {
@@ -193,12 +217,14 @@ function SidebarInner({
       <nav className="flex-1 space-y-1 overflow-y-auto p-2">
         {navigation.map((entry) => {
           if (isGroup(entry)) {
+            const visibleChildren = entry.children.filter((c) => isTabVisible(c.href));
+            if (visibleChildren.length === 0) return null;
             const open = !closedGroups.includes(entry.label);
 
             if (collapsed) {
               return (
                 <div key={entry.label} className="space-y-1 pt-2">
-                  {entry.children.map(renderNavItem)}
+                  {visibleChildren.map(renderNavItem)}
                 </div>
               );
             }
@@ -221,15 +247,33 @@ function SidebarInner({
                   </button>
                 </CollapsibleTrigger>
                 <CollapsibleContent className="space-y-1">
-                  {entry.children.map(renderNavItem)}
+                  {visibleChildren.map(renderNavItem)}
                 </CollapsibleContent>
               </Collapsible>
             );
           }
 
+          if (!isTabVisible(entry.href)) return null;
           return renderNavItem(entry);
         })}
       </nav>
+
+      {/* Upgrade to Premium */}
+      <div className="border-t border-gray-100 p-2">
+        <button
+          onClick={() => setUpgradeOpen(true)}
+          className={cn(
+            "w-full flex items-center gap-2 rounded-lg px-3 py-2.5 text-sm font-medium transition-all duration-200 bg-gradient-to-r from-rose-50 to-purple-50 text-rose-600 hover:from-rose-100 hover:to-purple-100 border border-rose-200/60",
+            collapsed && "justify-center px-2"
+          )}
+          title={collapsed ? "Upgrade to Premium" : undefined}
+        >
+          <Star className="h-4 w-4 shrink-0 text-rose-500" />
+          {!collapsed && <span>Upgrade to Premium</span>}
+        </button>
+      </div>
+
+      <UpgradeModal open={upgradeOpen} onClose={() => setUpgradeOpen(false)} />
     </aside>
   );
 }

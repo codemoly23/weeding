@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useCallback, useRef } from "react";
 import { useParams } from "next/navigation";
-import { Upload, Plus, Trash2, ChevronDown, FileSpreadsheet, FileText, Link2, Copy, Check, X, QrCode } from "lucide-react";
+import { Upload, Plus, Trash2, ChevronDown, FileSpreadsheet, FileText, Link2, Copy, Check, X, QrCode, Star, Users, UserCheck, CheckSquare, Square, Table2, MessageSquarePlus, Smartphone } from "lucide-react";
 import QRCode from "qrcode";
 import * as XLSX from "xlsx";
 import { cn } from "@/lib/utils";
@@ -11,11 +11,16 @@ import {
   addLocalGuest,
   updateLocalGuest,
   deleteLocalGuest,
+  getLocalFamilies,
+  addLocalFamily,
+  updateLocalFamily,
+  deleteLocalFamily,
+  type LocalGuestFamily,
 } from "@/lib/planner-storage";
 import { useLanguage } from "@/lib/i18n/language-context";
 import { usePlannerCouple } from "@/lib/planner-context";
 
-type ViewMode = "two-sides" | "alphabetic" | "full-table";
+type ViewMode = "two-sides" | "alphabetic" | "full-table" | "by-family";
 
 type GuestRelation =
   | "BRIDE" | "GROOM"
@@ -42,8 +47,32 @@ interface Guest {
   tableNumber: number | null;
   notes: string | null;
   rsvpToken: string | null;
+  // Task 22 — Plus-one
+  hasPlusOne: boolean;
+  plusOneName: string | null;
+  plusOneMeal: string | null;
+  // Task 23 — Chief guest
+  isChiefGuest: boolean;
+  // Task 24 — Family grouping
+  familyId: string | null;
+  // Task 26 — Table invitation
+  invitationCode: string | null;
+  invitationSent: boolean;
+  invitationSentAt: string | null;
   createdAt: string;
   updatedAt: string;
+}
+
+type RsvpQuestionType = "SHORT_TEXT" | "LONG_TEXT" | "SINGLE_CHOICE" | "MULTIPLE_CHOICE";
+
+interface RsvpQuestion {
+  id: string;
+  projectId: string;
+  text: string;
+  type: RsvpQuestionType;
+  options: string[] | null;
+  required: boolean;
+  order: number;
 }
 
 // ── RSVP Link Modal ────────────────────────────────────────────────────────────
@@ -333,6 +362,9 @@ function GuestRow({
   const { t } = useLanguage();
   const [fullName, setFullName] = useState([guest.firstName, guest.lastName].filter(Boolean).join(" ") || "");
   const [title, setTitle] = useState<string | null>(guest.title ?? null);
+  const [plusOneExpanded, setPlusOneExpanded] = useState(guest.hasPlusOne);
+  const [plusOneName, setPlusOneName] = useState(guest.plusOneName ?? "");
+  const [plusOneMeal, setPlusOneMeal] = useState(guest.plusOneMeal ?? "");
 
   function handleTitleChange(v: string | null) {
     setTitle(v);
@@ -353,9 +385,30 @@ function GuestRow({
     onUpdate(guest.id, { rsvpStatus: next });
   }
 
+  function toggleChiefGuest() {
+    onUpdate(guest.id, { isChiefGuest: !guest.isChiefGuest });
+  }
+
+  function togglePlusOne() {
+    const newVal = !guest.hasPlusOne;
+    setPlusOneExpanded(newVal);
+    onUpdate(guest.id, { hasPlusOne: newVal, plusOneName: newVal ? plusOneName || null : null, plusOneMeal: newVal ? plusOneMeal || null : null });
+  }
+
+  function savePlusOne() {
+    onUpdate(guest.id, { plusOneName: plusOneName.trim() || null, plusOneMeal: plusOneMeal.trim() || null });
+  }
+
   return (
     <div className="group border-b border-gray-100 last:border-0 py-2.5">
-      <p className="text-xs text-gray-400 mb-0.5">{relationLabel(guest.relation, t)}</p>
+      <p className="text-xs text-gray-400 mb-0.5 flex items-center gap-1">
+        {relationLabel(guest.relation, t)}
+        {guest.isChiefGuest && (
+          <span className="inline-flex items-center gap-0.5 rounded-full bg-amber-50 px-1.5 py-0.5 text-[9px] font-semibold text-amber-600">
+            <Star className="h-2.5 w-2.5 fill-amber-500" /> Chief
+          </span>
+        )}
+      </p>
       {editing ? (
         <div className="flex items-center rounded border border-gray-200 focus-within:border-indigo-300">
           <TitleDropdown value={title} onChange={handleTitleChange} />
@@ -382,8 +435,27 @@ function GuestRow({
             className="text-sm text-gray-800 hover:text-indigo-600 text-left transition-colors"
           >
             {displayFullName(guest) || <span className="italic text-gray-300">—</span>}
+            {guest.hasPlusOne && (
+              <span className="ml-1.5 text-[10px] text-indigo-400 font-medium">+1{guest.plusOneName ? ` (${guest.plusOneName})` : ""}</span>
+            )}
           </button>
           <div className="flex items-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+            {/* Chief guest toggle */}
+            <button
+              onClick={toggleChiefGuest}
+              title={guest.isChiefGuest ? "Remove chief guest" : "Mark as chief guest"}
+              className={cn("transition-colors", guest.isChiefGuest ? "text-amber-500" : "text-gray-300 hover:text-amber-400")}
+            >
+              <Star className={cn("h-3.5 w-3.5", guest.isChiefGuest && "fill-amber-500")} />
+            </button>
+            {/* Plus-one toggle */}
+            <button
+              onClick={togglePlusOne}
+              title={guest.hasPlusOne ? "Remove +1" : "Add +1"}
+              className={cn("text-xs font-bold transition-colors", guest.hasPlusOne ? "text-indigo-500" : "text-gray-300 hover:text-indigo-400")}
+            >
+              +1
+            </button>
             <button onClick={cycleRsvp} className={cn("text-xs font-medium transition-colors", RSVP_COLORS[guest.rsvpStatus])}>
               {guest.rsvpStatus === "PENDING" ? t("guests.pending") : guest.rsvpStatus === "ATTENDING" ? t("guests.attending") : t("guests.declined")}
             </button>
@@ -396,6 +468,30 @@ function GuestRow({
               <Trash2 className="h-3.5 w-3.5" />
             </button>
           </div>
+        </div>
+      )}
+
+      {/* Plus-one expanded section */}
+      {plusOneExpanded && (
+        <div className="mt-2 ml-3 flex items-center gap-2 rounded-lg bg-indigo-50/60 px-3 py-2">
+          <UserCheck className="h-3.5 w-3.5 flex-shrink-0 text-indigo-400" />
+          <input
+            value={plusOneName}
+            onChange={(e) => setPlusOneName(e.target.value)}
+            onBlur={savePlusOne}
+            onKeyDown={(e) => e.key === "Enter" && savePlusOne()}
+            placeholder="+1 name"
+            className="flex-1 bg-transparent text-xs text-gray-700 placeholder:text-gray-400 outline-none"
+          />
+          <span className="text-gray-300">·</span>
+          <input
+            value={plusOneMeal}
+            onChange={(e) => setPlusOneMeal(e.target.value)}
+            onBlur={savePlusOne}
+            onKeyDown={(e) => e.key === "Enter" && savePlusOne()}
+            placeholder="Meal preference"
+            className="w-28 bg-transparent text-xs text-gray-700 placeholder:text-gray-400 outline-none"
+          />
         </div>
       )}
     </div>
@@ -661,6 +757,7 @@ export default function GuestListPage() {
   const { brideName, groomName, updateBrideName, updateGroomName } = usePlannerCouple();
   const [viewMode, setViewMode] = useState<ViewMode>("alphabetic");
   const [guests, setGuests] = useState<Guest[]>([]);
+  const [families, setFamilies] = useState<LocalGuestFamily[]>([]);
   const [loading, setLoading] = useState(true);
   const [importing, setImporting] = useState(false);
   const [guidelinesOpen, setGuidelinesOpen] = useState(false);
@@ -668,21 +765,131 @@ export default function GuestListPage() {
   const [rsvpFilter, setRsvpFilter] = useState<"ALL" | RsvpStatus>("ALL");
   const [rsvpModal, setRsvpModal] = useState<{ guestName: string; url: string } | null>(null);
   const importRef = useRef<HTMLInputElement>(null);
+  // Task 24 — Family modal
+  const [familyModalOpen, setFamilyModalOpen] = useState(false);
+  const [newFamilyName, setNewFamilyName] = useState("");
+  const [editingFamily, setEditingFamily] = useState<LocalGuestFamily | null>(null);
+  // Task 25 — Bulk actions
+  const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set());
+  const [bulkTableInput, setBulkTableInput] = useState("");
+  const [bulkFamilyId, setBulkFamilyId] = useState("");
+  // Task 9 — RSVP Questions
+  const [rsvpQuestions, setRsvpQuestions] = useState<RsvpQuestion[]>([]);
+  const [rsvpQuestionsOpen, setRsvpQuestionsOpen] = useState(false);
+  const [newQText, setNewQText] = useState("");
+  const [newQType, setNewQType] = useState<RsvpQuestionType>("SHORT_TEXT");
+  const [newQRequired, setNewQRequired] = useState(false);
+  const [newQOptions, setNewQOptions] = useState("");
+  const [editingQuestion, setEditingQuestion] = useState<RsvpQuestion | null>(null);
+  const [editQText, setEditQText] = useState("");
+  const [editQOptions, setEditQOptions] = useState("");
+  const [editQRequired, setEditQRequired] = useState(false);
+  // Task 11 — SMS sending state
+  const [smsSending, setSmsSending] = useState<string | null>(null); // guestId
 
   const loadGuests = useCallback(async () => {
     if (isLocal) {
       setGuests(getLocalGuests(projectId) as Guest[]);
+      setFamilies(getLocalFamilies(projectId) as LocalGuestFamily[]);
       setLoading(false);
       return;
     }
     try {
-      const res = await fetch(`/api/planner/projects/${projectId}/guests`);
-      if (res.ok) setGuests((await res.json()).guests);
+      const [gRes, fRes] = await Promise.all([
+        fetch(`/api/planner/projects/${projectId}/guests`),
+        fetch(`/api/planner/projects/${projectId}/families`),
+      ]);
+      if (gRes.ok) setGuests((await gRes.json()).guests);
+      if (fRes.ok) setFamilies((await fRes.json()).families);
     } catch {}
     setLoading(false);
   }, [projectId, isLocal]);
 
   useEffect(() => { loadGuests(); }, [loadGuests]);
+
+  const loadRsvpQuestions = useCallback(async () => {
+    if (isLocal) return;
+    try {
+      const res = await fetch(`/api/planner/projects/${projectId}/rsvp-questions`);
+      if (res.ok) setRsvpQuestions((await res.json()).questions);
+    } catch {}
+  }, [projectId, isLocal]);
+
+  useEffect(() => { loadRsvpQuestions(); }, [loadRsvpQuestions]);
+
+  async function handleAddQuestion() {
+    if (!newQText.trim()) return;
+    const needsOptions = newQType === "SINGLE_CHOICE" || newQType === "MULTIPLE_CHOICE";
+    const options = needsOptions
+      ? newQOptions.split("\n").map((o) => o.trim()).filter(Boolean)
+      : null;
+    const res = await fetch(`/api/planner/projects/${projectId}/rsvp-questions`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ text: newQText, type: newQType, options, required: newQRequired }),
+    });
+    if (res.ok) {
+      const data = await res.json();
+      setRsvpQuestions((p) => [...p, data.question]);
+      setNewQText("");
+      setNewQOptions("");
+      setNewQRequired(false);
+      setNewQType("SHORT_TEXT");
+    }
+  }
+
+  async function handleUpdateQuestion(q: RsvpQuestion) {
+    const needsOptions = q.type === "SINGLE_CHOICE" || q.type === "MULTIPLE_CHOICE";
+    const options = needsOptions
+      ? editQOptions.split("\n").map((o) => o.trim()).filter(Boolean)
+      : null;
+    const res = await fetch(
+      `/api/planner/projects/${projectId}/rsvp-questions/${q.id}`,
+      {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ text: editQText, options, required: editQRequired }),
+      }
+    );
+    if (res.ok) {
+      const data = await res.json();
+      setRsvpQuestions((p) => p.map((x) => (x.id === q.id ? data.question : x)));
+      setEditingQuestion(null);
+    }
+  }
+
+  async function handleDeleteQuestion(id: string) {
+    const res = await fetch(
+      `/api/planner/projects/${projectId}/rsvp-questions/${id}`,
+      { method: "DELETE" }
+    );
+    if (res.ok) setRsvpQuestions((p) => p.filter((q) => q.id !== id));
+  }
+
+  async function handleSendSms(guest: Guest) {
+    if (!guest.phone) {
+      alert("This guest has no phone number saved.");
+      return;
+    }
+    setSmsSending(guest.id);
+    try {
+      const res = await fetch(
+        `/api/planner/projects/${projectId}/guests/${guest.id}/sms`,
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ baseUrl: window.location.origin }),
+        }
+      );
+      const data = await res.json();
+      if (!res.ok) alert(data.error ?? "SMS failed");
+      else alert(`SMS sent to ${data.to}`);
+    } catch {
+      alert("SMS delivery failed");
+    } finally {
+      setSmsSending(null);
+    }
+  }
 
   // Sync context brideName → BRIDE guest display (overview → guest list)
   useEffect(() => {
@@ -711,7 +918,13 @@ export default function GuestListPage() {
 
   async function handleAdd(side: GuestSide, relation: GuestRelation) {
     if (isLocal) {
-      const g = addLocalGuest(projectId, { firstName: "", lastName: null, title: null, side, relation, email: null, phone: null, dietary: null, rsvpStatus: "PENDING", tableNumber: null, notes: null }) as Guest;
+      const g = addLocalGuest(projectId, {
+        firstName: "", lastName: null, title: null, side, relation, email: null,
+        phone: null, dietary: null, rsvpStatus: "PENDING", tableNumber: null, notes: null,
+        hasPlusOne: false, plusOneName: null, plusOneMeal: null,
+        isChiefGuest: false, familyId: null,
+        invitationCode: null, invitationSent: false, invitationSentAt: null,
+      }) as Guest;
       setGuests((p) => [...p, g]);
       return;
     }
@@ -774,6 +987,118 @@ export default function GuestListPage() {
       const url = `${window.location.origin}/rsvp/${token}`;
       setRsvpModal({ guestName, url });
     } catch {}
+  }
+
+  // ── Family CRUD ────────────────────────────────────────────────────────────
+  async function handleCreateFamily() {
+    const name = newFamilyName.trim();
+    if (!name) return;
+    if (isLocal) {
+      const f = addLocalFamily(projectId, name) as LocalGuestFamily;
+      setFamilies((p) => [...p, f]);
+    } else {
+      try {
+        const res = await fetch(`/api/planner/projects/${projectId}/families`, {
+          method: "POST", headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ name }),
+        });
+        if (res.ok) { const data = await res.json(); setFamilies((p) => [...p, data.family]); }
+      } catch {}
+    }
+    setNewFamilyName("");
+    setFamilyModalOpen(false);
+  }
+
+  async function handleRenameFamily(familyId: string, name: string) {
+    if (isLocal) {
+      const f = updateLocalFamily(projectId, familyId, name);
+      if (f) setFamilies((p) => p.map((x) => x.id === familyId ? f as LocalGuestFamily : x));
+    } else {
+      try {
+        const res = await fetch(`/api/planner/projects/${projectId}/families/${familyId}`, {
+          method: "PUT", headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ name }),
+        });
+        if (res.ok) setFamilies((p) => p.map((x) => x.id === familyId ? { ...x, name } : x));
+      } catch {}
+    }
+    setEditingFamily(null);
+  }
+
+  async function handleDeleteFamily(familyId: string) {
+    if (isLocal) {
+      deleteLocalFamily(projectId, familyId);
+      setGuests((p) => p.map((g) => g.familyId === familyId ? { ...g, familyId: null } : g));
+    } else {
+      try {
+        await fetch(`/api/planner/projects/${projectId}/families/${familyId}`, { method: "DELETE" });
+        setGuests((p) => p.map((g) => g.familyId === familyId ? { ...g, familyId: null } : g));
+      } catch {}
+    }
+    setFamilies((p) => p.filter((f) => f.id !== familyId));
+  }
+
+  // ── Bulk Actions ───────────────────────────────────────────────────────────
+  function toggleSelect(guestId: string) {
+    setSelectedIds((prev) => {
+      const next = new Set(prev);
+      next.has(guestId) ? next.delete(guestId) : next.add(guestId);
+      return next;
+    });
+  }
+
+  function toggleSelectAll() {
+    if (selectedIds.size === filteredGuests.length) {
+      setSelectedIds(new Set());
+    } else {
+      setSelectedIds(new Set(filteredGuests.map((g) => g.id)));
+    }
+  }
+
+  async function handleBulkAction(action: string) {
+    const guestIds = Array.from(selectedIds);
+    if (guestIds.length === 0) return;
+
+    if (action === "delete") {
+      if (!confirm(`Delete ${guestIds.length} selected guest(s)?`)) return;
+    }
+
+    if (isLocal) {
+      if (action === "assign_table" && bulkTableInput) {
+        const t = Number(bulkTableInput);
+        guestIds.forEach((id) => updateLocalGuest(projectId, id, { tableNumber: t }));
+        setGuests((p) => p.map((g) => selectedIds.has(g.id) ? { ...g, tableNumber: t } : g));
+      } else if (action === "assign_family" && bulkFamilyId) {
+        guestIds.forEach((id) => updateLocalGuest(projectId, id, { familyId: bulkFamilyId }));
+        setGuests((p) => p.map((g) => selectedIds.has(g.id) ? { ...g, familyId: bulkFamilyId } : g));
+      } else if (action === "delete") {
+        guestIds.forEach((id) => deleteLocalGuest(projectId, id));
+        setGuests((p) => p.filter((g) => !selectedIds.has(g.id)));
+      } else if (action === "mark_attending") {
+        guestIds.forEach((id) => updateLocalGuest(projectId, id, { rsvpStatus: "ATTENDING" }));
+        setGuests((p) => p.map((g) => selectedIds.has(g.id) ? { ...g, rsvpStatus: "ATTENDING" } : g));
+      } else if (action === "mark_not_attending") {
+        guestIds.forEach((id) => updateLocalGuest(projectId, id, { rsvpStatus: "NOT_ATTENDING" }));
+        setGuests((p) => p.map((g) => selectedIds.has(g.id) ? { ...g, rsvpStatus: "NOT_ATTENDING" } : g));
+      } else if (action === "mark_pending") {
+        guestIds.forEach((id) => updateLocalGuest(projectId, id, { rsvpStatus: "PENDING" }));
+        setGuests((p) => p.map((g) => selectedIds.has(g.id) ? { ...g, rsvpStatus: "PENDING" } : g));
+      }
+    } else {
+      try {
+        const body: Record<string, unknown> = { guestIds, action };
+        if (action === "assign_table") body.tableNumber = Number(bulkTableInput);
+        if (action === "assign_family") body.familyId = bulkFamilyId;
+        const res = await fetch(`/api/planner/projects/${projectId}/guests/bulk`, {
+          method: "POST", headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(body),
+        });
+        if (res.ok) await loadGuests();
+      } catch {}
+    }
+    setSelectedIds(new Set());
+    setBulkTableInput("");
+    setBulkFamilyId("");
   }
 
   // ── Export as CSV ──────────────────────────────────────────────────────────
@@ -890,6 +1215,7 @@ export default function GuestListPage() {
           <Text style={styles.title}>Wedding Guest List</Text>
           <Text style={styles.subtitle}>
             Total: {guests.length} guests · Bride: {brideGuests.length} · Groom: {groomGuests.length}
+            {guests.filter(g => g.hasPlusOne).length > 0 ? ` · Plus-ones: +${guests.filter(g => g.hasPlusOne).length}` : ""}
           </Text>
 
           <View style={styles.section}>
@@ -958,6 +1284,14 @@ export default function GuestListPage() {
           rsvpStatus: "PENDING" as RsvpStatus,
           tableNumber: null,
           notes: (row["Notes"] || row["notes"] || "").trim() || null,
+          hasPlusOne: false,
+          plusOneName: null,
+          plusOneMeal: null,
+          isChiefGuest: false,
+          familyId: null,
+          invitationCode: null,
+          invitationSent: false,
+          invitationSentAt: null,
         };
 
         if (isLocal) {
@@ -1030,6 +1364,7 @@ export default function GuestListPage() {
     { id: "two-sides", label: t("guests.viewTwoSides") },
     { id: "alphabetic", label: t("guests.viewAlphabetic") },
     { id: "full-table", label: t("guests.viewFullTable") },
+    { id: "by-family", label: "By Family" },
   ];
 
   // Render heading description with {guidelineLink} and {importLink} replaced
@@ -1094,6 +1429,118 @@ export default function GuestListPage() {
         </div>
       </div>
 
+      {/* RSVP Questions Modal */}
+      {rsvpQuestionsOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 px-4">
+          <div className="w-full max-w-lg rounded-2xl bg-white shadow-xl flex flex-col max-h-[90vh]">
+            <div className="flex items-center justify-between border-b border-gray-100 px-5 py-4">
+              <h2 className="font-semibold text-gray-900">Custom RSVP Questions</h2>
+              <button onClick={() => setRsvpQuestionsOpen(false)} className="text-gray-400 hover:text-gray-600"><X className="h-4 w-4" /></button>
+            </div>
+            <div className="flex-1 overflow-y-auto px-5 py-4 space-y-3">
+              {rsvpQuestions.length === 0 && (
+                <p className="text-sm text-gray-400">No custom questions yet. Add one below.</p>
+              )}
+              {rsvpQuestions.map((q) => (
+                <div key={q.id} className="rounded-xl border border-gray-100 p-3">
+                  {editingQuestion?.id === q.id ? (
+                    <div className="space-y-2">
+                      <input
+                        value={editQText}
+                        onChange={(e) => setEditQText(e.target.value)}
+                        className="w-full rounded-lg border border-gray-200 px-3 py-1.5 text-sm focus:border-indigo-300 focus:outline-none"
+                      />
+                      {(q.type === "SINGLE_CHOICE" || q.type === "MULTIPLE_CHOICE") && (
+                        <textarea
+                          value={editQOptions}
+                          onChange={(e) => setEditQOptions(e.target.value)}
+                          rows={3}
+                          placeholder="One option per line"
+                          className="w-full rounded-lg border border-gray-200 px-3 py-1.5 text-sm focus:border-indigo-300 focus:outline-none resize-none"
+                        />
+                      )}
+                      <label className="flex items-center gap-1.5 text-sm text-gray-600 cursor-pointer">
+                        <input type="checkbox" checked={editQRequired} onChange={(e) => setEditQRequired(e.target.checked)} className="rounded" />
+                        Required
+                      </label>
+                      <div className="flex gap-2">
+                        <button onClick={() => handleUpdateQuestion(q)} className="rounded-lg bg-indigo-500 px-3 py-1 text-xs font-medium text-white hover:bg-indigo-600">Save</button>
+                        <button onClick={() => setEditingQuestion(null)} className="rounded-lg border border-gray-200 px-3 py-1 text-xs text-gray-500 hover:bg-gray-50">Cancel</button>
+                      </div>
+                    </div>
+                  ) : (
+                    <div className="flex items-start gap-2">
+                      <div className="flex-1">
+                        <p className="text-sm font-medium text-gray-800">{q.text}</p>
+                        <div className="mt-0.5 flex items-center gap-2">
+                          <span className="rounded bg-gray-100 px-1.5 py-0.5 text-[10px] font-medium text-gray-500 uppercase">{q.type.replace("_", " ")}</span>
+                          {q.required && <span className="text-[10px] font-medium text-rose-500">Required</span>}
+                        </div>
+                        {q.options && (q.options as string[]).length > 0 && (
+                          <p className="mt-1 text-xs text-gray-400">{(q.options as string[]).join(" · ")}</p>
+                        )}
+                      </div>
+                      <div className="flex gap-1 shrink-0">
+                        <button
+                          onClick={() => { setEditingQuestion(q); setEditQText(q.text); setEditQOptions((q.options as string[] | null)?.join("\n") ?? ""); setEditQRequired(q.required); }}
+                          className="rounded-lg border border-gray-200 px-2 py-1 text-xs text-gray-500 hover:bg-gray-50"
+                        >Edit</button>
+                        <button onClick={() => handleDeleteQuestion(q.id)} className="rounded-lg border border-red-100 px-2 py-1 text-xs text-red-500 hover:bg-red-50">
+                          <Trash2 className="h-3 w-3" />
+                        </button>
+                      </div>
+                    </div>
+                  )}
+                </div>
+              ))}
+            </div>
+
+            {/* Add new question */}
+            <div className="border-t border-gray-100 px-5 py-4 space-y-3">
+              <p className="text-xs font-semibold uppercase tracking-wider text-gray-400">Add question</p>
+              <input
+                value={newQText}
+                onChange={(e) => setNewQText(e.target.value)}
+                placeholder="Question text…"
+                className="w-full rounded-lg border border-gray-200 px-3 py-2 text-sm focus:border-indigo-300 focus:outline-none"
+              />
+              <div className="flex gap-2 items-center">
+                <select
+                  value={newQType}
+                  onChange={(e) => setNewQType(e.target.value as RsvpQuestionType)}
+                  className="flex-1 rounded-lg border border-gray-200 px-2 py-1.5 text-sm focus:border-indigo-300 focus:outline-none"
+                >
+                  <option value="SHORT_TEXT">Short text</option>
+                  <option value="LONG_TEXT">Long text</option>
+                  <option value="SINGLE_CHOICE">Single choice</option>
+                  <option value="MULTIPLE_CHOICE">Multiple choice</option>
+                </select>
+                <label className="flex items-center gap-1.5 text-sm text-gray-600 cursor-pointer">
+                  <input type="checkbox" checked={newQRequired} onChange={(e) => setNewQRequired(e.target.checked)} className="rounded" />
+                  Required
+                </label>
+              </div>
+              {(newQType === "SINGLE_CHOICE" || newQType === "MULTIPLE_CHOICE") && (
+                <textarea
+                  value={newQOptions}
+                  onChange={(e) => setNewQOptions(e.target.value)}
+                  rows={3}
+                  placeholder="One option per line"
+                  className="w-full rounded-lg border border-gray-200 px-3 py-2 text-sm focus:border-indigo-300 focus:outline-none resize-none"
+                />
+              )}
+              <button
+                onClick={handleAddQuestion}
+                disabled={!newQText.trim()}
+                className="w-full rounded-xl bg-indigo-500 py-2 text-sm font-medium text-white hover:bg-indigo-600 disabled:opacity-40 transition-colors"
+              >
+                <Plus className="inline h-4 w-4 mr-1" />Add Question
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* Controls */}
       <div className="mb-6 flex items-center justify-between gap-3">
         {/* View toggle */}
@@ -1111,6 +1558,15 @@ export default function GuestListPage() {
             </button>
           ))}
         </div>
+        {!isLocal && (
+          <button
+            onClick={() => setRsvpQuestionsOpen(true)}
+            className="flex items-center gap-1.5 rounded-lg border border-gray-200 bg-white px-3 py-1.5 text-xs font-medium text-gray-600 hover:border-indigo-200 hover:text-indigo-600 transition-colors"
+          >
+            <MessageSquarePlus className="h-3.5 w-3.5" />
+            RSVP Questions{rsvpQuestions.length > 0 ? ` (${rsvpQuestions.length})` : ""}
+          </button>
+        )}
       </div>
 
       {loading ? (
@@ -1196,18 +1652,35 @@ export default function GuestListPage() {
                 <table className="w-full text-sm">
                   <thead>
                     <tr className="border-b border-gray-100 bg-gray-50 text-left text-xs font-semibold uppercase tracking-wider text-gray-400">
+                      <th className="px-3 py-3">
+                        <button onClick={toggleSelectAll} className="text-gray-400 hover:text-indigo-500 transition-colors">
+                          {selectedIds.size === filteredGuests.length && filteredGuests.length > 0
+                            ? <CheckSquare className="h-4 w-4 text-indigo-500" />
+                            : <Square className="h-4 w-4" />}
+                        </button>
+                      </th>
                       <th className="px-4 py-3">{t("guests.colName")}</th>
                       <th className="px-4 py-3">{t("guests.colSide")}</th>
                       <th className="px-4 py-3">{t("guests.colRelation")}</th>
                       <th className="px-4 py-3">{t("guests.colRsvp")}</th>
+                      <th className="px-4 py-3">Invitation</th>
                       <th className="px-4 py-3" />
                     </tr>
                   </thead>
                   <tbody>
-                    {[...guests].sort((a,b) => `${a.firstName}${a.lastName}`.localeCompare(`${b.firstName}${b.lastName}`)).map((g) => (
-                      <tr key={g.id} className="border-b border-gray-100 last:border-0 hover:bg-gray-50 group">
+                    {[...filteredGuests].sort((a,b) => `${a.firstName}${a.lastName}`.localeCompare(`${b.firstName}${b.lastName}`)).map((g) => (
+                      <tr key={g.id} className={cn("border-b border-gray-100 last:border-0 hover:bg-gray-50 group", selectedIds.has(g.id) && "bg-indigo-50/40")}>
+                        <td className="px-3 py-3">
+                          <button onClick={() => toggleSelect(g.id)} className="text-gray-400 hover:text-indigo-500 transition-colors">
+                            {selectedIds.has(g.id) ? <CheckSquare className="h-4 w-4 text-indigo-500" /> : <Square className="h-4 w-4" />}
+                          </button>
+                        </td>
                         <td className="px-4 py-3 font-medium text-gray-800">
-                          {displayFullName(g) || <span className="italic text-gray-300">—</span>}
+                          <span className="flex items-center gap-1.5">
+                            {g.isChiefGuest && <Star className="h-3 w-3 fill-amber-400 text-amber-400 flex-shrink-0" />}
+                            {displayFullName(g) || <span className="italic text-gray-300">—</span>}
+                            {g.hasPlusOne && <span className="text-[10px] font-medium text-indigo-400">+1</span>}
+                          </span>
                         </td>
                         <td className="px-4 py-3">
                           <span className={cn("rounded-full px-2 py-0.5 text-[11px] font-semibold",
@@ -1227,11 +1700,41 @@ export default function GuestListPage() {
                             {g.rsvpStatus === "PENDING" ? t("guests.pending") : g.rsvpStatus === "ATTENDING" ? t("guests.attending") : t("guests.declined")}
                           </button>
                         </td>
+                        <td className="px-4 py-3">
+                          <div className="flex items-center gap-1.5">
+                            <input
+                              defaultValue={g.invitationCode ?? ""}
+                              onBlur={(e) => handleUpdate(g.id, { invitationCode: e.target.value.trim() || null })}
+                              onKeyDown={(e) => e.key === "Enter" && (e.target as HTMLInputElement).blur()}
+                              placeholder="INV-001"
+                              className="w-20 rounded border border-gray-100 px-1.5 py-0.5 text-xs text-gray-600 placeholder:text-gray-300 focus:border-indigo-300 focus:outline-none"
+                            />
+                            <button
+                              onClick={() => handleUpdate(g.id, { invitationSent: !g.invitationSent, invitationSentAt: !g.invitationSent ? new Date().toISOString() : null })}
+                              title={g.invitationSent ? "Mark as not sent" : "Mark as sent"}
+                              className={cn("transition-colors text-xs font-medium", g.invitationSent ? "text-emerald-600" : "text-gray-300 hover:text-emerald-500")}
+                            >
+                              {g.invitationSent ? <Check className="h-3.5 w-3.5" /> : <X className="h-3.5 w-3.5" />}
+                            </button>
+                          </div>
+                        </td>
                         <td className="px-4 py-3 text-right">
                           <div className="flex items-center justify-end gap-2 opacity-0 group-hover:opacity-100 transition-all">
                             {!isLocal && (
                               <button onClick={() => handleShareRsvp(g)} className="text-gray-300 hover:text-indigo-400 transition-colors" title="RSVP Link">
                                 <Link2 className="h-3.5 w-3.5" />
+                              </button>
+                            )}
+                            {!isLocal && g.phone && (
+                              <button
+                                onClick={() => handleSendSms(g)}
+                                disabled={smsSending === g.id}
+                                title="Send RSVP via SMS"
+                                className="text-gray-300 hover:text-emerald-500 transition-colors disabled:opacity-50"
+                              >
+                                {smsSending === g.id
+                                  ? <div className="h-3.5 w-3.5 animate-spin rounded-full border-2 border-gray-300 border-t-emerald-500" />
+                                  : <Smartphone className="h-3.5 w-3.5" />}
                               </button>
                             )}
                             <button onClick={() => handleDelete(g.id)} className="text-gray-200 hover:text-red-400 transition-colors">
@@ -1246,6 +1749,208 @@ export default function GuestListPage() {
               )}
             </div>
           )}
+
+          {/* ── BY FAMILY ── */}
+          {viewMode === "by-family" && (
+            <div>
+              {/* Family management header */}
+              <div className="mb-4 flex items-center justify-between">
+                <p className="text-sm text-gray-500">{families.length} {families.length === 1 ? "family" : "families"}</p>
+                <button
+                  onClick={() => setFamilyModalOpen(true)}
+                  className="flex items-center gap-1.5 rounded-lg border border-gray-200 bg-white px-3 py-1.5 text-xs font-medium text-gray-600 hover:border-indigo-200 hover:text-indigo-600 transition-colors shadow-sm"
+                >
+                  <Plus className="h-3.5 w-3.5" /> New Family
+                </button>
+              </div>
+
+              {/* Unassigned guests */}
+              {(() => {
+                const unassigned = filteredGuests.filter((g) => !g.familyId);
+                return unassigned.length > 0 ? (
+                  <div className="mb-6">
+                    <p className="mb-2 text-xs font-semibold uppercase tracking-wide text-gray-400">Unassigned ({unassigned.length})</p>
+                    <div className="rounded-lg border border-dashed border-gray-200 bg-gray-50/50 p-3">
+                      {unassigned.map((g) => (
+                        <div key={g.id} className="flex items-center justify-between py-1.5 group">
+                          <span className="text-sm text-gray-700">{displayFullName(g) || <span className="italic text-gray-300">—</span>}</span>
+                          <select
+                            value=""
+                            onChange={(e) => { if (e.target.value) handleUpdate(g.id, { familyId: e.target.value }); }}
+                            className="text-xs border border-gray-200 rounded px-1.5 py-0.5 text-gray-500 bg-white opacity-0 group-hover:opacity-100 transition-opacity"
+                          >
+                            <option value="">Assign to family…</option>
+                            {families.map((f) => <option key={f.id} value={f.id}>{f.name}</option>)}
+                          </select>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                ) : null;
+              })()}
+
+              {/* Family groups */}
+              {families.length === 0 ? (
+                <div className="rounded-xl border border-dashed border-gray-200 py-12 text-center">
+                  <Users className="mx-auto mb-2 h-8 w-8 text-gray-300" />
+                  <p className="text-sm text-gray-400">No families yet.</p>
+                  <button onClick={() => setFamilyModalOpen(true)} className="mt-2 text-xs text-indigo-500 hover:underline">Create your first family group</button>
+                </div>
+              ) : (
+                families.map((family) => {
+                  const members = filteredGuests.filter((g) => g.familyId === family.id);
+                  return (
+                    <div key={family.id} className="mb-5">
+                      <div className="mb-2 flex items-center justify-between">
+                        <div className="flex items-center gap-2">
+                          <Users className="h-4 w-4 text-indigo-400" />
+                          {editingFamily?.id === family.id ? (
+                            <input
+                              autoFocus
+                              defaultValue={family.name}
+                              onBlur={(e) => handleRenameFamily(family.id, e.target.value)}
+                              onKeyDown={(e) => { if (e.key === "Enter") handleRenameFamily(family.id, (e.target as HTMLInputElement).value); if (e.key === "Escape") setEditingFamily(null); }}
+                              className="text-sm font-semibold text-gray-800 border-b border-indigo-300 outline-none bg-transparent"
+                            />
+                          ) : (
+                            <button onClick={() => setEditingFamily(family)} className="text-sm font-semibold text-gray-800 hover:text-indigo-600 transition-colors">
+                              {family.name}
+                            </button>
+                          )}
+                          <span className="text-xs text-gray-400">({members.length})</span>
+                        </div>
+                        <button onClick={() => handleDeleteFamily(family.id)} className="text-gray-300 hover:text-red-400 transition-colors">
+                          <Trash2 className="h-3.5 w-3.5" />
+                        </button>
+                      </div>
+                      <div className="rounded-lg border border-gray-100 bg-white p-3">
+                        {members.length === 0 ? (
+                          <p className="text-xs text-gray-400 italic">No members yet. Assign guests from above.</p>
+                        ) : (
+                          members.map((g) => (
+                            <div key={g.id} className="flex items-center justify-between py-1.5 group">
+                              <span className="text-sm text-gray-700 flex items-center gap-1.5">
+                                {g.isChiefGuest && <Star className="h-3 w-3 fill-amber-400 text-amber-400" />}
+                                {displayFullName(g)}
+                                {g.hasPlusOne && <span className="text-[10px] text-indigo-400">+1</span>}
+                              </span>
+                              <button
+                                onClick={() => handleUpdate(g.id, { familyId: null })}
+                                className="text-gray-300 hover:text-red-400 opacity-0 group-hover:opacity-100 transition-all"
+                                title="Remove from family"
+                              >
+                                <X className="h-3.5 w-3.5" />
+                              </button>
+                            </div>
+                          ))
+                        )}
+                      </div>
+                    </div>
+                  );
+                })
+              )}
+            </div>
+          )}
+        </>
+      )}
+
+      {/* ── Bulk Actions Floating Bar ── */}
+      {selectedIds.size > 0 && (
+        <div className="fixed bottom-6 left-1/2 z-50 -translate-x-1/2 w-[calc(100vw-2rem)] max-w-2xl">
+          <div className="rounded-2xl bg-gray-900 px-4 py-3 shadow-2xl flex flex-wrap items-center gap-3">
+            <span className="text-sm font-medium text-white flex-shrink-0">
+              {selectedIds.size} selected
+            </span>
+            <button onClick={() => setSelectedIds(new Set())} className="text-gray-400 hover:text-white transition-colors ml-0.5">
+              <X className="h-4 w-4" />
+            </button>
+            <div className="flex-1 min-w-0" />
+
+            {/* Assign table */}
+            <div className="flex items-center gap-1.5">
+              <Table2 className="h-3.5 w-3.5 text-gray-400" />
+              <input
+                value={bulkTableInput}
+                onChange={(e) => setBulkTableInput(e.target.value)}
+                placeholder="Table #"
+                type="number"
+                min={1}
+                className="w-16 rounded-lg bg-gray-800 px-2 py-1 text-xs text-white placeholder:text-gray-500 outline-none focus:ring-1 focus:ring-indigo-500"
+              />
+              <button
+                onClick={() => handleBulkAction("assign_table")}
+                disabled={!bulkTableInput}
+                className="rounded-lg bg-indigo-600 px-2.5 py-1 text-xs font-medium text-white hover:bg-indigo-500 disabled:opacity-40 transition-colors"
+              >
+                Assign
+              </button>
+            </div>
+
+            {/* Assign family */}
+            {families.length > 0 && (
+              <div className="flex items-center gap-1.5">
+                <Users className="h-3.5 w-3.5 text-gray-400" />
+                <select
+                  value={bulkFamilyId}
+                  onChange={(e) => setBulkFamilyId(e.target.value)}
+                  className="rounded-lg bg-gray-800 px-2 py-1 text-xs text-white outline-none focus:ring-1 focus:ring-indigo-500"
+                >
+                  <option value="">Family…</option>
+                  {families.map((f) => <option key={f.id} value={f.id}>{f.name}</option>)}
+                </select>
+                <button
+                  onClick={() => handleBulkAction("assign_family")}
+                  disabled={!bulkFamilyId}
+                  className="rounded-lg bg-indigo-600 px-2.5 py-1 text-xs font-medium text-white hover:bg-indigo-500 disabled:opacity-40 transition-colors"
+                >
+                  Assign
+                </button>
+              </div>
+            )}
+
+            {/* RSVP shortcuts */}
+            <button onClick={() => handleBulkAction("mark_attending")} className="rounded-lg bg-emerald-700 px-2.5 py-1 text-xs font-medium text-white hover:bg-emerald-600 transition-colors">Attending</button>
+            <button onClick={() => handleBulkAction("mark_not_attending")} className="rounded-lg bg-red-800 px-2.5 py-1 text-xs font-medium text-white hover:bg-red-700 transition-colors">Declined</button>
+            <button onClick={() => handleBulkAction("mark_pending")} className="rounded-lg bg-gray-700 px-2.5 py-1 text-xs font-medium text-white hover:bg-gray-600 transition-colors">Pending</button>
+
+            {/* Delete */}
+            <button onClick={() => handleBulkAction("delete")} className="rounded-lg bg-red-900/60 px-2.5 py-1 text-xs font-medium text-red-300 hover:bg-red-900 transition-colors flex items-center gap-1">
+              <Trash2 className="h-3.5 w-3.5" /> Delete
+            </button>
+          </div>
+        </div>
+      )}
+
+      {/* ── Family Create Modal ── */}
+      {familyModalOpen && (
+        <>
+          <div className="fixed inset-0 z-50 bg-black/40 backdrop-blur-[2px]" onClick={() => setFamilyModalOpen(false)} />
+          <div className="fixed left-1/2 top-1/2 z-50 w-[calc(100vw-2rem)] max-w-sm -translate-x-1/2 -translate-y-1/2 rounded-2xl bg-white p-6 shadow-2xl">
+            <h3 className="mb-4 text-base font-semibold text-gray-900">New Family Group</h3>
+            <input
+              autoFocus
+              value={newFamilyName}
+              onChange={(e) => setNewFamilyName(e.target.value)}
+              onKeyDown={(e) => e.key === "Enter" && handleCreateFamily()}
+              placeholder="e.g. Smith Family"
+              className="w-full rounded-lg border border-gray-200 px-3 py-2 text-sm text-gray-800 focus:border-indigo-300 focus:outline-none"
+            />
+            <div className="mt-4 flex gap-2">
+              <button
+                onClick={handleCreateFamily}
+                disabled={!newFamilyName.trim()}
+                className="flex-1 rounded-xl bg-indigo-600 py-2 text-sm font-medium text-white hover:bg-indigo-700 disabled:opacity-50 transition-colors"
+              >
+                Create
+              </button>
+              <button
+                onClick={() => { setFamilyModalOpen(false); setNewFamilyName(""); }}
+                className="flex-1 rounded-xl border border-gray-200 py-2 text-sm font-medium text-gray-600 hover:bg-gray-50 transition-colors"
+              >
+                Cancel
+              </button>
+            </div>
+          </div>
         </>
       )}
 
@@ -1257,7 +1962,21 @@ export default function GuestListPage() {
           {t("guests.weddingParty")} <span className="font-semibold text-gray-700">{guests.length}</span>
           <span className="mx-2 text-gray-200">·</span>
           {t("guests.totalGuests")} <span className="font-semibold text-gray-700">{guests.filter(g => g.relation !== "BRIDE" && g.relation !== "GROOM").length}</span>
+          {guests.filter(g => g.hasPlusOne).length > 0 && (
+            <>
+              <span className="mx-2 text-gray-200">·</span>
+              Plus-ones <span className="font-semibold text-indigo-600">+{guests.filter(g => g.hasPlusOne).length}</span>
+            </>
+          )}
         </p>
+        {guests.filter(g => g.hasPlusOne).length > 0 && (
+          <p className="mt-0.5 text-xs text-gray-400">
+            Total attending (incl. +1s):{" "}
+            <span className="font-semibold text-emerald-600">
+              {guests.filter(g => g.rsvpStatus === "ATTENDING").length + guests.filter(g => g.rsvpStatus === "ATTENDING" && g.hasPlusOne).length}
+            </span>
+          </p>
+        )}
         <div className="mt-2 flex items-center justify-center gap-4 text-xs text-gray-400">
           <span className="flex items-center gap-1">
             <span className="inline-block h-2 w-2 rounded-full bg-emerald-400" />

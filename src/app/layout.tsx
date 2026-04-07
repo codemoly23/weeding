@@ -15,39 +15,41 @@ const inter = Inter({
 
 export const metadata: Metadata = {
   title: {
-    default: "LLCPad - US LLC Formation & Amazon Seller Services",
-    template: "%s | LLCPad",
+    default: "Ceremoney — Wedding & Event Planning Platform",
+    template: "%s | Ceremoney",
   },
   description:
-    "Start your US LLC in 24 hours. Professional LLC formation, EIN application, Amazon seller account setup, and business banking assistance for international entrepreneurs.",
+    "Plan your perfect wedding, baptism, or event with Ceremoney. Guest management, seating charts, vendor directory, event websites, and more — all in one place.",
   keywords: [
-    "US LLC formation",
-    "LLC registration",
-    "EIN application",
-    "Amazon seller account",
-    "Wyoming LLC",
-    "Delaware LLC",
-    "US business formation",
-    "international entrepreneur",
+    "wedding planning",
+    "event planning",
+    "guest management",
+    "seating chart",
+    "wedding website",
+    "RSVP",
+    "vendor directory",
+    "baptism planning",
+    "bröllopstips",
+    "bröllopsplanering",
   ],
-  authors: [{ name: "LLCPad" }],
-  creator: "LLCPad",
+  authors: [{ name: "Ceremoney" }],
+  creator: "Ceremoney",
   metadataBase: new URL(
     process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000"
   ),
   openGraph: {
     type: "website",
     locale: "en_US",
-    siteName: "LLCPad",
-    title: "LLCPad - US LLC Formation & Amazon Seller Services",
+    siteName: "Ceremoney",
+    title: "Ceremoney — Wedding & Event Planning Platform",
     description:
-      "Start your US LLC in 24 hours. Professional LLC formation for international entrepreneurs.",
+      "Plan your perfect wedding or event with Ceremoney. Guest management, seating charts, vendor directory, and beautiful event websites.",
   },
   twitter: {
     card: "summary_large_image",
-    title: "LLCPad - US LLC Formation & Amazon Seller Services",
+    title: "Ceremoney — Wedding & Event Planning Platform",
     description:
-      "Start your US LLC in 24 hours. Professional LLC formation for international entrepreneurs.",
+      "Plan your perfect wedding or event with Ceremoney. Guest management, seating charts, vendor directory, and beautiful event websites.",
   },
   robots: {
     index: true,

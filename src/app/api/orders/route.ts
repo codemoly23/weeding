@@ -144,10 +144,10 @@ export async function POST(request: NextRequest) {
       // Create default service if not found
       service = await prisma.service.create({
         data: {
-          name: data.serviceName || "LLC Formation",
+          name: data.serviceName || "Wedding Planning",
           slug: data.serviceId,
-          shortDesc: "US LLC Formation Service",
-          description: "US LLC Formation Service",
+          shortDesc: "Ceremoney Wedding Planning Service",
+          description: "Ceremoney Wedding Planning Service",
           isActive: true,
         },
       });
@@ -204,7 +204,7 @@ export async function POST(request: NextRequest) {
           create: [
             {
               serviceId: service.id,
-              name: `${data.serviceName || "LLC Formation"} - ${data.packageName || "Standard"} Package`,
+              name: `${data.serviceName || "Wedding Planning"} - ${data.packageName || "Premium"} Package`,
               description: `${data.locationName || data.stateName || ""} Formation`,
               priceUSD: data.serviceFee,
               stateFee: data.locationFee || data.stateFee,

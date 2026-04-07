@@ -3,6 +3,7 @@
 import { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { signIn } from "next-auth/react";
 import { Eye, EyeOff, Mail, Lock, User, Globe, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -59,15 +60,33 @@ export default function RegisterPage() {
     };
 
     try {
-      // TODO: Implement actual registration with NextAuth
-      console.log("Registration data:", data);
+      const res = await fetch("/api/auth/register", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data),
+      });
 
-      // Simulate API call
-      await new Promise((resolve) => setTimeout(resolve, 1000));
+      const json = await res.json();
 
-      // Redirect to dashboard on success
-      router.push("/dashboard");
-    } catch (err) {
+      if (!res.ok) {
+        setError(json.error || "Registration failed. Please try again.");
+        return;
+      }
+
+      // Auto-login after successful registration
+      const result = await signIn("credentials", {
+        email: data.email,
+        password: data.password,
+        redirect: false,
+      });
+
+      if (result?.error) {
+        router.push("/login");
+      } else {
+        router.push("/planner");
+        router.refresh();
+      }
+    } catch {
       setError("Registration failed. Please try again.");
     } finally {
       setIsLoading(false);
@@ -79,7 +98,7 @@ export default function RegisterPage() {
       <CardHeader className="text-center">
         <CardTitle className="text-2xl">Create an Account</CardTitle>
         <CardDescription>
-          Start your US business journey today
+          Plan your perfect event — it only takes a minute
         </CardDescription>
       </CardHeader>
       <CardContent>

@@ -5,17 +5,17 @@ import { generateLocalBusinessSchema } from "@/lib/seo";
 export const metadata: Metadata = {
   title: "Contact Us",
   description:
-    "Get in touch with LLCPad. Have questions about US LLC formation, EIN application, or Amazon seller services? Our team is here to help.",
+    "Get in touch with Ceremoney. Have questions about wedding planning, vendor listings, or your subscription? Our team is here to help.",
   keywords: [
-    "contact LLCPad",
-    "LLC formation support",
-    "business formation help",
+    "contact Ceremoney",
+    "wedding planning support",
+    "event planning help",
     "customer service",
   ],
   openGraph: {
-    title: "Contact Us | LLCPad",
+    title: "Contact Us | Ceremoney",
     description:
-      "Get in touch with LLCPad. Have questions about US LLC formation, EIN application, or Amazon seller services? Our team is here to help.",
+      "Get in touch with Ceremoney. Have questions about wedding planning, vendor listings, or your subscription? Our team is here to help.",
   },
 };
 

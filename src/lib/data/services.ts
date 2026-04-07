@@ -24,29 +24,29 @@ import {
   Users,
 } from "lucide-react";
 
-// Service categories for organization
+// Service/feature categories for organization
 export type ServiceCategory =
-  | "formation"
-  | "compliance"
-  | "amazon"
-  | "tax-finance";
+  | "core-features"
+  | "event-website"
+  | "vendors"
+  | "planning-tools";
 
 export const serviceCategories = {
-  formation: {
-    name: "Formation & Legal",
-    description: "Start and maintain your US business entity",
+  "core-features": {
+    name: "Guest & Seating",
+    description: "Manage everyone on your big day",
   },
-  compliance: {
-    name: "Compliance & Documents",
-    description: "Keep your business in good standing",
+  "event-website": {
+    name: "Event Website",
+    description: "Share your story with guests",
   },
-  amazon: {
-    name: "Amazon Services",
-    description: "Sell on Amazon with confidence",
+  vendors: {
+    name: "Vendors & Venues",
+    description: "Find and coordinate your suppliers",
   },
-  "tax-finance": {
-    name: "Tax & Finance",
-    description: "Financial and tax services for your business",
+  "planning-tools": {
+    name: "Planning Tools",
+    description: "Keep every detail organized",
   },
 };
 
@@ -86,7 +86,7 @@ export const services = [
       <h3>Transparent Pricing - No Hidden Fees</h3>
       <p>Unlike competitors who hide fees, we believe in complete transparency. Our pricing includes our service fee plus state filing fees (varies by state: $100 Wyoming, $90 Delaware, $50 New Mexico). No hidden charges, no surprise upsells.</p>
 
-      <h3>Why 10,000+ Entrepreneurs Choose LLCPad</h3>
+      <h3>Why 10,000+ Entrepreneurs Choose Ceremoney</h3>
       <ul>
         <li><strong>International Expertise:</strong> We specialize in helping non-US residents from Bangladesh, India, Pakistan, UAE and 50+ countries.</li>
         <li><strong>Speed:</strong> Same-day processing, 24-48 hour state approval in most states.</li>

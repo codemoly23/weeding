@@ -6,9 +6,9 @@ import { NoTemplateFallback } from "@/components/templates/no-template-fallback"
 import { getBlogListTemplate } from "@/lib/templates/get-template";
 
 export const metadata: Metadata = {
-  title: "Blog - LLC Formation Guides & Business Tips",
+  title: "Blog - Wedding Planning Tips & Event Guides",
   description:
-    "Expert guides on US LLC formation, EIN applications, Amazon selling, business banking, and tips for international entrepreneurs. Stay informed with LLCPad.",
+    "Expert guides on wedding planning, guest management, seating charts, vendor selection, and tips for planning your perfect event. Stay inspired with Ceremoney.",
 };
 
 export default async function BlogPage() {

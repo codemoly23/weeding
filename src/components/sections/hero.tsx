@@ -9,15 +9,15 @@ import {
 import { HeroCTAButtons } from "./hero-cta-buttons";
 
 const features = [
-  "Fast 24-48 hour processing",
-  "100% Compliance guaranteed",
-  "Dedicated support team",
+  "Beautiful event websites with RSVP",
+  "Drag-and-drop seating charts",
+  "Vendor directory & coordination",
 ];
 
 const trustBadges = [
   { icon: Shield, text: "Secure & Private" },
-  { icon: Clock, text: "24hr Processing" },
-  { icon: Globe, text: "Serve 50+ Countries" },
+  { icon: Clock, text: "Setup in Minutes" },
+  { icon: Globe, text: "Swedish & Arabic" },
   { icon: Star, text: "4.9/5 Rating" },
 ];
 
@@ -40,21 +40,21 @@ export function Hero() {
         <div className="mx-auto max-w-4xl text-center">
           {/* Badge */}
           <Badge className="mb-6 border-orange-500/50 bg-orange-500/20 px-4 py-2 text-sm font-medium text-orange-400 hover:bg-orange-500/30">
-            🇺🇸 Trusted by 10,000+ International Entrepreneurs
+            Trusted by 5,000+ Couples & Wedding Planners
           </Badge>
 
           {/* Headline */}
           <h1 className="text-4xl font-bold tracking-tight text-white sm:text-5xl lg:text-6xl">
-            Start Your{" "}
-            <span className="text-orange-500">US LLC</span>{" "}
-            in 24 Hours
+            Plan Your Perfect{" "}
+            <span className="text-orange-500">Wedding</span>{" "}
+            with Ease
           </h1>
 
           {/* Subheadline */}
           <p className="mt-6 text-lg text-slate-400 sm:text-xl">
-            Launch your American dream from anywhere in the world. We handle
-            everything from LLC formation to EIN, Amazon seller accounts, and
-            business banking — so you can focus on growing your business.
+            Ceremoney brings your guest list, seating charts, event website,
+            RSVP collection, and vendor coordination into one beautiful platform
+            — so you can focus on enjoying every moment.
           </p>
 
           {/* Features List */}
@@ -80,7 +80,7 @@ export function Hero() {
                 <Star key={i} className="h-4 w-4 fill-amber-400 text-amber-400" />
               ))}
             </div>
-            <span>4.9/5 from 2,000+ reviews</span>
+            <span>4.9/5 from 1,200+ reviews</span>
           </div>
         </div>
 
@@ -108,15 +108,15 @@ export function Hero() {
           <div className="grid grid-cols-2 gap-8 md:grid-cols-4">
             <div className="text-center">
               <p className="text-3xl font-bold text-orange-500 sm:text-4xl">
-                10,000+
+                5,000+
               </p>
-              <p className="mt-1 text-sm text-slate-400">LLCs Formed</p>
+              <p className="mt-1 text-sm text-slate-400">Weddings Planned</p>
             </div>
             <div className="text-center">
               <p className="text-3xl font-bold text-orange-500 sm:text-4xl">
-                50+
+                250,000+
               </p>
-              <p className="mt-1 text-sm text-slate-400">Countries Served</p>
+              <p className="mt-1 text-sm text-slate-400">Guests Managed</p>
             </div>
             <div className="text-center">
               <p className="text-3xl font-bold text-orange-500 sm:text-4xl">
@@ -126,9 +126,9 @@ export function Hero() {
             </div>
             <div className="text-center">
               <p className="text-3xl font-bold text-orange-500 sm:text-4xl">
-                24h
+                Free
               </p>
-              <p className="mt-1 text-sm text-slate-400">Average Processing</p>
+              <p className="mt-1 text-sm text-slate-400">To Get Started</p>
             </div>
           </div>
         </div>

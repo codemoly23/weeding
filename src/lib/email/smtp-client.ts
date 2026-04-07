@@ -78,8 +78,8 @@ export async function sendEmail(
   try {
     const transport = getTransporter();
 
-    const fromName = process.env.SMTP_FROM_NAME || "LLCPad Support";
-    const fromEmail = process.env.SMTP_FROM_EMAIL || process.env.SMTP_USER || "noreply@llcpad.com";
+    const fromName = process.env.SMTP_FROM_NAME || "Ceremoney Support";
+    const fromEmail = process.env.SMTP_FROM_EMAIL || process.env.SMTP_USER || "noreply@ceremoney.com";
 
     const result = await transport.sendMail({
       from: `"${fromName}" <${fromEmail}>`,

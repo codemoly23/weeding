@@ -537,7 +537,7 @@ export default function HeaderBuilderPage() {
       hoverBgColor: "#f3f4f6",
     } as ButtonCustomStyle,
     registerText: "Get Started",
-    registerUrl: "/services/llc-formation",
+    registerUrl: "/register",
     registerStyle: {
       bgColor: "#F97316",
       textColor: "#ffffff",

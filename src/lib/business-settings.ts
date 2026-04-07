@@ -112,9 +112,9 @@ export async function getBusinessConfig(): Promise<BusinessConfig> {
   ].filter(Boolean);
 
   businessConfigCache = {
-    name: settingsMap[BUSINESS_SETTINGS.BUSINESS_NAME] || "LLCPad",
-    tagline: settingsMap[BUSINESS_SETTINGS.BUSINESS_TAGLINE] || "Your Business Formation Partner",
-    description: settingsMap[BUSINESS_SETTINGS.BUSINESS_DESCRIPTION] || "Empowering global entrepreneurs to launch legitimate US businesses and Amazon stores with zero complexity.",
+    name: settingsMap[BUSINESS_SETTINGS.BUSINESS_NAME] || "Ceremoney",
+    tagline: settingsMap[BUSINESS_SETTINGS.BUSINESS_TAGLINE] || "Your Wedding Planning Platform",
+    description: settingsMap[BUSINESS_SETTINGS.BUSINESS_DESCRIPTION] || "Plan your perfect wedding, baptism, or event with Ceremoney. Guest management, seating charts, vendor directory, and beautiful event websites.",
     display: {
       showLogo: settingsMap[BUSINESS_SETTINGS.DISPLAY_LOGO] !== "false",
       showName: settingsMap[BUSINESS_SETTINGS.DISPLAY_NAME] !== "false",
@@ -122,14 +122,14 @@ export async function getBusinessConfig(): Promise<BusinessConfig> {
     logo: {
       url: settingsMap[BUSINESS_SETTINGS.LOGO_URL] || "",
       darkUrl: settingsMap[BUSINESS_SETTINGS.LOGO_DARK_URL] || "",
-      text: settingsMap[BUSINESS_SETTINGS.LOGO_TEXT] || "L",
+      text: settingsMap[BUSINESS_SETTINGS.LOGO_TEXT] || "C",
     },
     favicon: settingsMap[BUSINESS_SETTINGS.FAVICON_URL] || "",
-    currency: settingsMap[BUSINESS_SETTINGS.CURRENCY] || "USD",
+    currency: settingsMap[BUSINESS_SETTINGS.CURRENCY] || "SEK",
     contact: {
-      email: settingsMap[BUSINESS_SETTINGS.CONTACT_EMAIL] || "contact@llcpad.com",
+      email: settingsMap[BUSINESS_SETTINGS.CONTACT_EMAIL] || "contact@ceremoney.com",
       phone: settingsMap[BUSINESS_SETTINGS.CONTACT_PHONE] || "",
-      supportEmail: settingsMap[BUSINESS_SETTINGS.SUPPORT_EMAIL] || "support@llcpad.com",
+      supportEmail: settingsMap[BUSINESS_SETTINGS.SUPPORT_EMAIL] || "support@ceremoney.com",
     },
     address: {
       line1: settingsMap[BUSINESS_SETTINGS.ADDRESS_LINE1] || "",
@@ -137,8 +137,8 @@ export async function getBusinessConfig(): Promise<BusinessConfig> {
       city: settingsMap[BUSINESS_SETTINGS.ADDRESS_CITY] || "",
       state: settingsMap[BUSINESS_SETTINGS.ADDRESS_STATE] || "",
       zip: settingsMap[BUSINESS_SETTINGS.ADDRESS_ZIP] || "",
-      country: settingsMap[BUSINESS_SETTINGS.ADDRESS_COUNTRY] || "USA",
-      full: addressParts.join(", ") || "30 N Gould St, Sheridan, WY 82801, USA",
+      country: settingsMap[BUSINESS_SETTINGS.ADDRESS_COUNTRY] || "Sweden",
+      full: addressParts.join(", ") || "",
     },
     social: {
       facebook: settingsMap[BUSINESS_SETTINGS.SOCIAL_FACEBOOK] || "",
@@ -167,9 +167,9 @@ export function clearBusinessConfigCache() {
  */
 export function getDefaultBusinessConfig(): BusinessConfig {
   return {
-    name: "LLCPad",
-    tagline: "Your Business Formation Partner",
-    description: "Empowering global entrepreneurs to launch legitimate US businesses and Amazon stores with zero complexity.",
+    name: "Ceremoney",
+    tagline: "Your Wedding Planning Platform",
+    description: "Plan your perfect wedding, baptism, or event with Ceremoney. Guest management, seating charts, vendor directory, and beautiful event websites.",
     display: {
       showLogo: true,
       showName: true,
@@ -177,23 +177,23 @@ export function getDefaultBusinessConfig(): BusinessConfig {
     logo: {
       url: "",
       darkUrl: "",
-      text: "L",
+      text: "C",
     },
     favicon: "",
-    currency: "USD",
+    currency: "SEK",
     contact: {
-      email: "contact@llcpad.com",
+      email: "contact@ceremoney.com",
       phone: "",
-      supportEmail: "support@llcpad.com",
+      supportEmail: "support@ceremoney.com",
     },
     address: {
-      line1: "30 N Gould St",
+      line1: "",
       line2: "",
-      city: "Sheridan",
-      state: "WY",
-      zip: "82801",
-      country: "USA",
-      full: "30 N Gould St, Sheridan, WY 82801, USA",
+      city: "",
+      state: "",
+      zip: "",
+      country: "Sweden",
+      full: "",
     },
     social: {
       facebook: "",

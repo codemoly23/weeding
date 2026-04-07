@@ -39,23 +39,31 @@ export async function POST(req: NextRequest) {
     );
   }
 
-  const project = await prisma.weddingProject.create({
-    data: {
-      title: "Untitled",
-      eventType,
-      userId: session.user.id,
-      members: {
-        create: {
-          userId: session.user.id,
-          role,
-          displayName: session.user.name || undefined,
+  try {
+    const project = await prisma.weddingProject.create({
+      data: {
+        title: "Untitled",
+        eventType,
+        userId: session.user.id,
+        members: {
+          create: {
+            userId: session.user.id,
+            role,
+            displayName: session.user.name || undefined,
+          },
         },
       },
-    },
-    include: {
-      members: true,
-    },
-  });
+      include: {
+        members: true,
+      },
+    });
 
-  return NextResponse.json({ project }, { status: 201 });
+    return NextResponse.json({ project }, { status: 201 });
+  } catch (err) {
+    console.error("[POST /api/planner/projects]", err);
+    return NextResponse.json(
+      { error: err instanceof Error ? err.message : "Failed to create project" },
+      { status: 500 }
+    );
+  }
 }

@@ -90,7 +90,7 @@ export default function PlannerProjectLayout({
 
           {/* Main Content */}
           <div className="flex flex-1 flex-col overflow-hidden">
-            <PlannerHeader onMenuClick={() => setMobileMenuOpen(true)} />
+            <PlannerHeader onMenuClick={() => setMobileMenuOpen(true)} projectId={projectId} />
             <main className="flex-1 overflow-y-auto p-4 lg:p-6">{children}</main>
           </div>
         </div>

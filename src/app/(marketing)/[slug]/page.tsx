@@ -50,8 +50,8 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 
   if (landingPage) {
     return {
-      title: landingPage.metaTitle || `${landingPage.name} | LLCPad`,
-      description: landingPage.metaDescription || `${landingPage.name} - LLCPad`,
+      title: landingPage.metaTitle || `${landingPage.name} | Ceremoney`,
+      description: landingPage.metaDescription || `${landingPage.name} - Ceremoney`,
     };
   }
 
@@ -63,13 +63,13 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 
   if (!legalPage) {
     return {
-      title: "Page Not Found | LLCPad",
+      title: "Page Not Found | Ceremoney",
     };
   }
 
   return {
-    title: legalPage.metaTitle || `${legalPage.title} | LLCPad`,
-    description: legalPage.metaDescription || `${legalPage.title} - LLCPad`,
+    title: legalPage.metaTitle || `${legalPage.title} | Ceremoney`,
+    description: legalPage.metaDescription || `${legalPage.title} - Ceremoney`,
   };
 }
 

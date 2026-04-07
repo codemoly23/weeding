@@ -12,8 +12,78 @@ export interface LocalGuest {
   rsvpStatus: "PENDING" | "ATTENDING" | "NOT_ATTENDING";
   tableNumber: number | null;
   notes: string | null;
+  // Task 22 — Plus-one
+  hasPlusOne: boolean;
+  plusOneName: string | null;
+  plusOneMeal: string | null;
+  // Task 23 — Chief guest
+  isChiefGuest: boolean;
+  // Task 24 — Family grouping
+  familyId: string | null;
+  // Task 26 — Table invitation
+  invitationCode: string | null;
+  invitationSent: boolean;
+  invitationSentAt: string | null;
   createdAt: string;
   updatedAt: string;
+}
+
+// ── GuestFamily helpers (localStorage for anonymous projects) ──────────────────
+
+export interface LocalGuestFamily {
+  id: string;
+  projectId: string;
+  name: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
+function familiesKey(projectId: string) {
+  return `planner_families_${projectId}`;
+}
+
+export function getLocalFamilies(projectId: string): LocalGuestFamily[] {
+  if (typeof window === "undefined") return [];
+  try {
+    return JSON.parse(localStorage.getItem(familiesKey(projectId)) || "[]");
+  } catch { return []; }
+}
+
+function saveFamilies(projectId: string, families: LocalGuestFamily[]) {
+  localStorage.setItem(familiesKey(projectId), JSON.stringify(families));
+}
+
+export function addLocalFamily(projectId: string, name: string): LocalGuestFamily {
+  const families = getLocalFamilies(projectId);
+  const now = new Date().toISOString();
+  const family: LocalGuestFamily = {
+    id: `lf-${crypto.randomUUID()}`,
+    projectId,
+    name: name.trim(),
+    createdAt: now,
+    updatedAt: now,
+  };
+  saveFamilies(projectId, [...families, family]);
+  return family;
+}
+
+export function updateLocalFamily(projectId: string, familyId: string, name: string): LocalGuestFamily | null {
+  const families = getLocalFamilies(projectId);
+  const idx = families.findIndex((f) => f.id === familyId);
+  if (idx === -1) return null;
+  const updated = { ...families[idx], name: name.trim(), updatedAt: new Date().toISOString() };
+  families[idx] = updated;
+  saveFamilies(projectId, families);
+  return updated;
+}
+
+export function deleteLocalFamily(projectId: string, familyId: string): void {
+  saveFamilies(projectId, getLocalFamilies(projectId).filter((f) => f.id !== familyId));
+  // Unlink guests from this family
+  const guests = getLocalGuests(projectId).map((g) =>
+    g.familyId === familyId ? { ...g, familyId: null } : g
+  );
+  localStorage.setItem(`planner_guests_${projectId}`, JSON.stringify(guests));
 }
 
 export interface LocalProject {
@@ -127,11 +197,22 @@ export function addLocalGuest(
   data: Omit<LocalGuest, "id" | "projectId" | "createdAt" | "updatedAt">
 ): LocalGuest {
   const now = new Date().toISOString();
+  const defaults = {
+    hasPlusOne: false,
+    plusOneName: null,
+    plusOneMeal: null,
+    isChiefGuest: false,
+    familyId: null,
+    invitationCode: null,
+    invitationSent: false,
+    invitationSentAt: null,
+  };
   const guest: LocalGuest = {
     id: `lg-${crypto.randomUUID()}`,
     projectId,
     createdAt: now,
     updatedAt: now,
+    ...defaults,
     ...data,
   };
   const guests = getLocalGuests(projectId);

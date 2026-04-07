@@ -9,7 +9,7 @@ import { getServicesListTemplate } from "@/lib/templates/get-template";
 export const metadata: Metadata = {
   title: "Services",
   description:
-    "Explore our comprehensive US business formation services including LLC formation, EIN application, Amazon seller accounts, and more.",
+    "Explore all Ceremoney features — guest list management, seating charts, wedding websites with RSVP, vendor directory, budget tracking, and more.",
 };
 
 export default async function ServicesPage() {

@@ -2,7 +2,18 @@
 
 import { useState, useEffect } from "react";
 import { useParams } from "next/navigation";
-import { CheckCircle2, XCircle, Heart, Calendar, Loader2 } from "lucide-react";
+import { CheckCircle2, XCircle, Heart, Calendar, Loader2, Shield } from "lucide-react";
+
+type RsvpQuestionType = "SHORT_TEXT" | "LONG_TEXT" | "SINGLE_CHOICE" | "MULTIPLE_CHOICE";
+
+interface RsvpQuestion {
+  id: string;
+  text: string;
+  type: RsvpQuestionType;
+  options: string[] | null;
+  required: boolean;
+  order: number;
+}
 
 interface GuestInfo {
   id: string;
@@ -13,10 +24,13 @@ interface GuestInfo {
   dietary: string | null;
   rsvpMessage: string | null;
   rsvpSubmittedAt: string | null;
+  gdprConsentAt: string | null;
+  rsvpAnswers: { questionId: string; answer: string }[];
   project: {
     title: string;
     eventDate: string | null;
     eventType: string;
+    rsvpQuestions: RsvpQuestion[];
   };
 }
 
@@ -42,6 +56,8 @@ export default function RsvpPage() {
   const [attending, setAttending] = useState<boolean | null>(null);
   const [dietary, setDietary] = useState("");
   const [message, setMessage] = useState("");
+  const [gdprConsent, setGdprConsent] = useState(false);
+  const [answers, setAnswers] = useState<Record<string, string>>({});
   const [saving, setSaving] = useState(false);
   const [saveError, setSaveError] = useState<string | null>(null);
 
@@ -53,12 +69,18 @@ export default function RsvpPage() {
       })
       .then((data) => {
         setGuest(data.guest);
-        // Pre-fill if already submitted
         if (data.guest.rsvpSubmittedAt) {
           setSubmitted(true);
           setAttending(data.guest.rsvpStatus === "ATTENDING");
           setDietary(data.guest.dietary ?? "");
           setMessage(data.guest.rsvpMessage ?? "");
+          setGdprConsent(!!data.guest.gdprConsentAt);
+          // Pre-fill existing answers
+          const existingAnswers: Record<string, string> = {};
+          for (const a of data.guest.rsvpAnswers ?? []) {
+            existingAnswers[a.questionId] = a.answer;
+          }
+          setAnswers(existingAnswers);
         }
       })
       .catch((e) => setError(e.message))
@@ -78,6 +100,8 @@ export default function RsvpPage() {
           rsvpStatus: attending ? "ATTENDING" : "NOT_ATTENDING",
           dietary: dietary.trim() || null,
           rsvpMessage: message.trim() || null,
+          gdprConsent,
+          answers,
         }),
       });
       if (!res.ok) throw new Error((await res.json()).error ?? "Submission failed");
@@ -110,6 +134,7 @@ export default function RsvpPage() {
   }
 
   const eventDate = guest.project.eventDate ? formatDate(guest.project.eventDate) : null;
+  const questions = guest.project.rsvpQuestions ?? [];
 
   if (submitted) {
     const isAttending = guest.rsvpStatus === "ATTENDING";
@@ -205,7 +230,7 @@ export default function RsvpPage() {
             </div>
           </div>
 
-          {/* Conditional: full form when attending */}
+          {/* Dietary — only when attending */}
           {attending === true && (
             <div>
               <label className="mb-1.5 block text-sm font-medium text-gray-700">
@@ -221,7 +246,81 @@ export default function RsvpPage() {
             </div>
           )}
 
-          {/* Message — always shown */}
+          {/* Custom RSVP questions */}
+          {attending !== null && questions.length > 0 && (
+            <div className="space-y-4">
+              {questions.map((q) => (
+                <div key={q.id}>
+                  <label className="mb-1.5 block text-sm font-medium text-gray-700">
+                    {q.text}
+                    {q.required && <span className="ml-1 text-rose-500">*</span>}
+                  </label>
+                  {q.type === "SHORT_TEXT" && (
+                    <input
+                      type="text"
+                      value={answers[q.id] ?? ""}
+                      onChange={(e) => setAnswers((p) => ({ ...p, [q.id]: e.target.value }))}
+                      required={q.required}
+                      className="w-full rounded-xl border border-gray-200 px-3 py-2.5 text-sm focus:border-rose-300 focus:outline-none focus:ring-2 focus:ring-rose-100"
+                    />
+                  )}
+                  {q.type === "LONG_TEXT" && (
+                    <textarea
+                      value={answers[q.id] ?? ""}
+                      onChange={(e) => setAnswers((p) => ({ ...p, [q.id]: e.target.value }))}
+                      required={q.required}
+                      rows={3}
+                      className="w-full rounded-xl border border-gray-200 px-3 py-2.5 text-sm focus:border-rose-300 focus:outline-none focus:ring-2 focus:ring-rose-100 resize-none"
+                    />
+                  )}
+                  {q.type === "SINGLE_CHOICE" && q.options && (
+                    <div className="space-y-2">
+                      {(q.options as string[]).map((opt) => (
+                        <label key={opt} className="flex items-center gap-2 cursor-pointer">
+                          <input
+                            type="radio"
+                            name={q.id}
+                            value={opt}
+                            checked={answers[q.id] === opt}
+                            onChange={() => setAnswers((p) => ({ ...p, [q.id]: opt }))}
+                            required={q.required}
+                            className="accent-rose-500"
+                          />
+                          <span className="text-sm text-gray-700">{opt}</span>
+                        </label>
+                      ))}
+                    </div>
+                  )}
+                  {q.type === "MULTIPLE_CHOICE" && q.options && (
+                    <div className="space-y-2">
+                      {(q.options as string[]).map((opt) => {
+                        const selected = (answers[q.id] ?? "").split("|||").filter(Boolean);
+                        const checked = selected.includes(opt);
+                        return (
+                          <label key={opt} className="flex items-center gap-2 cursor-pointer">
+                            <input
+                              type="checkbox"
+                              checked={checked}
+                              onChange={() => {
+                                const next = checked
+                                  ? selected.filter((x) => x !== opt)
+                                  : [...selected, opt];
+                                setAnswers((p) => ({ ...p, [q.id]: next.join("|||") }));
+                              }}
+                              className="accent-rose-500"
+                            />
+                            <span className="text-sm text-gray-700">{opt}</span>
+                          </label>
+                        );
+                      })}
+                    </div>
+                  )}
+                </div>
+              ))}
+            </div>
+          )}
+
+          {/* Message — always shown when attending selection made */}
           {attending !== null && (
             <div>
               <label className="mb-1.5 block text-sm font-medium text-gray-700">
@@ -238,17 +337,38 @@ export default function RsvpPage() {
             </div>
           )}
 
+          {/* GDPR consent — Task 10 */}
+          {attending !== null && (
+            <label className="flex items-start gap-3 cursor-pointer">
+              <input
+                type="checkbox"
+                required
+                checked={gdprConsent}
+                onChange={(e) => setGdprConsent(e.target.checked)}
+                className="mt-0.5 h-4 w-4 rounded accent-rose-500 shrink-0"
+              />
+              <span className="text-xs text-gray-500 leading-relaxed">
+                <Shield className="inline h-3 w-3 mr-1 text-gray-400" />
+                I consent to my personal data (name, dietary preferences, responses) being stored and used solely for the purpose of managing this event. This data will not be shared with third parties.{" "}
+                <span className="text-rose-500">*</span>
+              </span>
+            </label>
+          )}
+
           {saveError && (
             <p className="rounded-xl bg-red-50 px-3 py-2 text-xs text-red-600">{saveError}</p>
           )}
 
           <button
             type="submit"
-            disabled={attending === null || saving}
+            disabled={attending === null || saving || (attending !== null && !gdprConsent)}
             className="w-full rounded-2xl bg-rose-500 py-3 text-sm font-semibold text-white transition-all hover:bg-rose-600 disabled:opacity-40 disabled:cursor-not-allowed"
           >
             {saving ? "Sending…" : "Send RSVP"}
           </button>
+          {attending !== null && !gdprConsent && (
+            <p className="text-center text-xs text-gray-400">Please accept the data consent to submit.</p>
+          )}
         </form>
 
         <p className="mt-6 text-center text-xs text-gray-400">

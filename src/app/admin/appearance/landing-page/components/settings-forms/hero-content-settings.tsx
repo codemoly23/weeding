@@ -139,14 +139,14 @@ export function HeroContentSettings({
           label="Text"
           value={s.headline.text}
           onChange={(v) => updateNested("headline", "text", v)}
-          placeholder="Start Your US LLC in 24 Hours"
+          placeholder="Plan Your Perfect Wedding with Ease"
         />
         <TextInput
           label="Highlight Words"
           value={s.headline.highlightWord || ""}
           onChange={(v) => updateNested("headline", "highlightWord", v)}
-          placeholder="US LLC, 24 Hours"
-          description="Separate multiple words with comma (e.g., US LLC, 24 Hours)"
+          placeholder="Wedding, Perfect"
+          description="Separate multiple words with comma (e.g., Wedding, Perfect)"
         />
         <SelectInput
           label="Size"
@@ -277,7 +277,7 @@ export function HeroContentSettings({
           label="Link URL"
           value={s.primaryCTA.link}
           onChange={(v) => updateNested("primaryCTA", "link", v)}
-          placeholder="/services/llc-formation"
+          placeholder="/register"
           openInNewTab={s.primaryCTA.openInNewTab}
           onOpenInNewTabChange={(v) => updateNested("primaryCTA", "openInNewTab", v)}
         />

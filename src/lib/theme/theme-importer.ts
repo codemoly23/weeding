@@ -581,7 +581,7 @@ export async function importThemeData(
             showAuthButtons: hc.showAuthButtons ?? true,
             loginText: hc.loginText || "Sign In",
             registerText: hc.registerText || "Get Started",
-            registerUrl: hc.registerUrl || "/services/llc-formation",
+            registerUrl: hc.registerUrl || "/register",
             searchEnabled: hc.searchEnabled ?? false,
             mobileBreakpoint: hc.mobileBreakpoint ?? 1024,
             height: hc.height ?? 64,

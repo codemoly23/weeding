@@ -57,12 +57,15 @@ function LoginForm() {
         const userResponse = await fetch("/api/auth/me");
         if (userResponse.ok) {
           const userData = await userResponse.json();
-          const staffRoles = ["ADMIN", "CONTENT_MANAGER", "SALES_AGENT", "SUPPORT_AGENT"];
-          const redirectUrl = staffRoles.includes(userData.role) ? "/admin" : "/dashboard";
+          const adminRoles = ["ADMIN", "CONTENT_MANAGER", "SALES_AGENT", "SUPPORT_AGENT"];
+          const vendorRoles = ["VENDOR"];
+          let redirectUrl = "/planner";
+          if (adminRoles.includes(userData.role)) redirectUrl = "/admin";
+          else if (vendorRoles.includes(userData.role)) redirectUrl = "/vendor/dashboard";
           router.push(redirectUrl);
           router.refresh();
         } else {
-          router.push("/dashboard");
+          router.push("/planner");
           router.refresh();
         }
       }

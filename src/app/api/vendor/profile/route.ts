@@ -32,7 +32,8 @@ export async function PUT(req: NextRequest) {
   const body = await req.json();
   const {
     businessName, category, description, tagline, email, phone, website,
-    city, country, serviceRadiusKm, photos, videoUrls,
+    instagram, facebook, pinterest, slaHours, faqItems,
+    city, country, lat, lng, serviceRadiusKm, photos, videoUrls,
     startingPrice, currency, yearsInBusiness, languages,
   } = body;
 
@@ -46,8 +47,15 @@ export async function PUT(req: NextRequest) {
       ...(email !== undefined && { email: email ? String(email).trim() : null }),
       ...(phone !== undefined && { phone: phone ? String(phone).trim() : null }),
       ...(website !== undefined && { website: website ? String(website).trim() : null }),
+      ...(instagram !== undefined && { instagram: instagram ? String(instagram).trim() : null }),
+      ...(facebook !== undefined && { facebook: facebook ? String(facebook).trim() : null }),
+      ...(pinterest !== undefined && { pinterest: pinterest ? String(pinterest).trim() : null }),
+      ...(slaHours !== undefined && { slaHours: slaHours ? parseInt(slaHours) : null }),
+      ...(faqItems !== undefined && { faqItems: Array.isArray(faqItems) ? faqItems : [] }),
       ...(city !== undefined && { city: city ? String(city).trim() : null }),
       ...(country !== undefined && { country: String(country).trim() }),
+      ...(lat !== undefined && { lat: lat !== null && lat !== "" ? parseFloat(lat) : null }),
+      ...(lng !== undefined && { lng: lng !== null && lng !== "" ? parseFloat(lng) : null }),
       ...(serviceRadiusKm !== undefined && { serviceRadiusKm: serviceRadiusKm ? parseInt(serviceRadiusKm) : null }),
       ...(photos !== undefined && { photos: Array.isArray(photos) ? photos : [] }),
       ...(videoUrls !== undefined && { videoUrls: Array.isArray(videoUrls) ? videoUrls : [] }),

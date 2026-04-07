@@ -11,7 +11,7 @@ export async function POST() {
     const data = await exportThemeData();
 
     const dateStr = new Date().toISOString().split("T")[0];
-    const filename = `llcpad-export-${dateStr}.json`;
+    const filename = `ceremoney-export-${dateStr}.json`;
 
     return new NextResponse(JSON.stringify(data, null, 2), {
       status: 200,

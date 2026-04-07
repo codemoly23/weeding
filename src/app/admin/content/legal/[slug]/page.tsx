@@ -19,22 +19,22 @@ import { SunEditorWrapper } from "@/components/editor/sun-editor";
 const pageTemplates: Record<string, { title: string; content: string; metaDescription: string }> = {
   terms: {
     title: "Terms of Service",
-    metaDescription: "Terms and conditions for using LLCPad services. Read our terms of service before using our LLC formation and business services.",
+    metaDescription: "Terms and conditions for using Ceremoney services. Read our terms of service before using our wedding and event planning services.",
     content: `<h2>1. Acceptance of Terms</h2>
-<p>By accessing and using LLCPad's services, you agree to be bound by these Terms of Service. If you do not agree to these terms, please do not use our services.</p>
+<p>By accessing and using Ceremoney's services, you agree to be bound by these Terms of Service. If you do not agree to these terms, please do not use our services.</p>
 
 <h2>2. Services Description</h2>
-<p>LLCPad provides business formation services, including but not limited to:</p>
+<p>Ceremoney provides wedding and event planning services, including but not limited to:</p>
 <ul>
-<li>LLC Formation in all 50 US states</li>
-<li>EIN Application assistance</li>
-<li>Registered Agent services</li>
-<li>Annual compliance reminders</li>
-<li>Business document preparation</li>
+<li>Wedding and event planning</li>
+<li>Vendor marketplace and booking</li>
+<li>Event project management tools</li>
+<li>Budget and guest management</li>
+<li>Event coordination support</li>
 </ul>
 
-<h2>3. Not a Law Firm</h2>
-<p><strong>Important:</strong> LLCPad is a business formation service company, NOT a law firm. We do not provide legal advice. The information provided through our services is for general informational purposes only and should not be construed as legal advice. For legal matters, please consult with a licensed attorney in your jurisdiction.</p>
+<h2>3. Not a Legal or Financial Advisor</h2>
+<p><strong>Important:</strong> Ceremoney is an event planning platform, NOT a legal or financial advisor. We do not provide legal or financial advice. The information provided through our services is for general informational purposes only. For legal or financial matters, please consult with a licensed professional in your jurisdiction.</p>
 
 <h2>4. User Responsibilities</h2>
 <p>You are responsible for:</p>
@@ -42,42 +42,42 @@ const pageTemplates: Record<string, { title: string; content: string; metaDescri
 <li>Providing accurate and complete information</li>
 <li>Maintaining the confidentiality of your account</li>
 <li>Complying with all applicable laws and regulations</li>
-<li>Keeping your business in good standing after formation</li>
+<li>Honoring agreements made with vendors through our platform</li>
 </ul>
 
 <h2>5. Payment Terms</h2>
-<p>All fees are due at the time of order placement. Prices are subject to change without notice. State fees are determined by each state and are subject to change.</p>
+<p>All fees are due at the time of order placement. Prices are subject to change without notice. Vendor fees are determined by each vendor and are subject to change.</p>
 
 <h2>6. Refund Policy</h2>
 <p>Please refer to our <a href="/refund-policy">Refund Policy</a> for information about refunds and cancellations.</p>
 
 <h2>7. Limitation of Liability</h2>
-<p>LLCPad's liability is limited to the amount paid for services. We are not liable for any indirect, incidental, or consequential damages.</p>
+<p>Ceremoney's liability is limited to the amount paid for services. We are not liable for any indirect, incidental, or consequential damages.</p>
 
 <h2>8. Changes to Terms</h2>
 <p>We reserve the right to modify these terms at any time. Continued use of our services after changes constitutes acceptance of the new terms.</p>
 
 <h2>9. Contact Information</h2>
-<p>For questions about these Terms of Service, please contact us at support@llcpad.com</p>`,
+<p>For questions about these Terms of Service, please contact us at support@ceremoney.com</p>`,
   },
   privacy: {
     title: "Privacy Policy",
-    metaDescription: "LLCPad Privacy Policy - Learn how we collect, use, and protect your personal information when using our business formation services.",
+    metaDescription: "Ceremoney Privacy Policy - Learn how we collect, use, and protect your personal information when using our wedding and event planning services.",
     content: `<h2>1. Information We Collect</h2>
 <p>We collect information that you provide directly to us, including:</p>
 <ul>
 <li><strong>Personal Information:</strong> Name, email address, phone number, mailing address</li>
-<li><strong>Business Information:</strong> LLC name, business address, EIN, member information</li>
+<li><strong>Event Information:</strong> Event name, date, venue, guest details</li>
 <li><strong>Payment Information:</strong> Credit card details, billing address</li>
-<li><strong>Identity Documents:</strong> Passport or ID copies (for compliance purposes)</li>
+<li><strong>Preferences:</strong> Vendor preferences, style preferences, and event requirements</li>
 </ul>
 
 <h2>2. How We Use Your Information</h2>
 <p>We use the information we collect to:</p>
 <ul>
-<li>Process your orders and form your business entities</li>
-<li>Communicate with you about your orders</li>
-<li>Send important updates and compliance reminders</li>
+<li>Process your bookings and coordinate your events</li>
+<li>Communicate with you about your events and vendors</li>
+<li>Send important updates and event reminders</li>
 <li>Improve our services and customer experience</li>
 <li>Comply with legal obligations</li>
 </ul>
@@ -85,9 +85,8 @@ const pageTemplates: Record<string, { title: string; content: string; metaDescri
 <h2>3. Information Sharing</h2>
 <p>We may share your information with:</p>
 <ul>
-<li><strong>State Agencies:</strong> Required for filing your business documents</li>
-<li><strong>IRS:</strong> For EIN applications</li>
-<li><strong>Service Providers:</strong> Who assist in providing our services</li>
+<li><strong>Vendors:</strong> Required to coordinate your event services</li>
+<li><strong>Service Providers:</strong> Who assist in providing our platform services</li>
 <li><strong>Legal Requirements:</strong> When required by law</li>
 </ul>
 <p>We do NOT sell your personal information to third parties.</p>
@@ -116,42 +115,41 @@ const pageTemplates: Record<string, { title: string; content: string; metaDescri
 <p>If you are accessing our services from outside the United States, please be aware that your information will be transferred to and processed in the United States.</p>
 
 <h2>8. Contact Us</h2>
-<p>For privacy-related inquiries, please contact us at privacy@llcpad.com</p>`,
+<p>For privacy-related inquiries, please contact us at privacy@ceremoney.com</p>`,
   },
   "refund-policy": {
     title: "Refund Policy",
-    metaDescription: "LLCPad Refund Policy - Learn about our refund and cancellation policy for LLC formation and business services.",
+    metaDescription: "Ceremoney Refund Policy - Learn about our refund and cancellation policy for wedding and event planning services.",
     content: `<h2>Our Commitment</h2>
-<p>At LLCPad, we strive to provide excellent service. We understand that circumstances may change, and we've created this refund policy to be fair to our customers.</p>
+<p>At Ceremoney, we strive to provide excellent service. We understand that circumstances may change, and we've created this refund policy to be fair to our customers.</p>
 
-<h2>Before Filing</h2>
-<p>If your documents have NOT been filed with the state:</p>
+<h2>Before Service Begins</h2>
+<p>If your event services have NOT yet commenced:</p>
 <ul>
-<li><strong>Full refund</strong> of LLCPad service fees</li>
-<li>Simply contact us to cancel your order</li>
+<li><strong>Full refund</strong> of Ceremoney platform fees</li>
+<li>Simply contact us to cancel your booking</li>
 <li>Refunds processed within 5-7 business days</li>
 </ul>
 
-<h2>After Filing</h2>
-<p>If your documents HAVE been filed with the state:</p>
+<h2>After Service Begins</h2>
+<p>If your event services HAVE commenced or vendors have been engaged:</p>
 <ul>
-<li><strong>State filing fees are non-refundable</strong> (paid directly to the state)</li>
-<li>LLCPad service fees may be partially refunded on a case-by-case basis</li>
-<li>We cannot reverse filings made with state agencies</li>
+<li><strong>Vendor deposits may be non-refundable</strong> per individual vendor policies</li>
+<li>Ceremoney platform fees may be partially refunded on a case-by-case basis</li>
+<li>We cannot reverse confirmed vendor bookings on your behalf</li>
 </ul>
 
 <h2>Non-Refundable Items</h2>
 <p>The following are generally non-refundable:</p>
 <ul>
-<li>State filing fees (these go directly to the state)</li>
-<li>Expedited processing fees once expedited service has begun</li>
-<li>Registered Agent fees after service activation</li>
-<li>Third-party fees (IRS, state agencies, etc.)</li>
+<li>Vendor deposits and booking fees (subject to vendor policies)</li>
+<li>Expedited or rush service fees once service has begun</li>
+<li>Third-party fees paid to vendors or venues</li>
 </ul>
 
 <h2>How to Request a Refund</h2>
 <ol>
-<li>Contact our support team at support@llcpad.com</li>
+<li>Contact our support team at support@ceremoney.com</li>
 <li>Provide your order number</li>
 <li>Explain the reason for your refund request</li>
 <li>Our team will review and respond within 48 hours</li>
@@ -161,44 +159,44 @@ const pageTemplates: Record<string, { title: string; content: string; metaDescri
 <p>Approved refunds are processed within 5-7 business days. The time for the refund to appear in your account depends on your payment method and financial institution.</p>
 
 <h2>Questions?</h2>
-<p>If you have any questions about our refund policy, please contact us at support@llcpad.com</p>`,
+<p>If you have any questions about our refund policy, please contact us at support@ceremoney.com</p>`,
   },
   disclaimer: {
     title: "Disclaimer",
-    metaDescription: "Legal disclaimers for LLCPad services. Important information about our business formation services.",
-    content: `<h2>Not a Law Firm</h2>
-<p><strong>LLCPad is NOT a law firm and does not provide legal advice.</strong> We are a business formation document filing service. The information provided on this website and through our services is for general informational purposes only.</p>
+    metaDescription: "Legal disclaimers for Ceremoney services. Important information about our wedding and event planning services.",
+    content: `<h2>Not a Legal or Financial Advisor</h2>
+<p><strong>Ceremoney is NOT a law firm or financial advisor and does not provide legal or financial advice.</strong> We are a wedding and event planning platform. The information provided on this website and through our services is for general informational purposes only.</p>
 
-<h2>No Attorney-Client Relationship</h2>
-<p>Use of our services does not create an attorney-client relationship. For legal advice, please consult with a licensed attorney in your jurisdiction who can provide advice tailored to your specific situation.</p>
+<h2>No Professional Relationship</h2>
+<p>Use of our services does not create an attorney-client or advisor-client relationship. For legal or financial advice, please consult with a licensed professional in your jurisdiction who can provide advice tailored to your specific situation.</p>
 
 <h2>Accuracy of Information</h2>
 <p>While we strive to provide accurate and up-to-date information, we make no representations or warranties about:</p>
 <ul>
 <li>The completeness or accuracy of information on this website</li>
 <li>The suitability of our services for your specific needs</li>
-<li>The outcomes of any business formation or filing</li>
+<li>The outcomes of any event planning or vendor engagement</li>
 </ul>
 
-<h2>Third-Party Services</h2>
-<p>We work with various government agencies and third-party service providers. We are not responsible for:</p>
+<h2>Third-Party Vendors</h2>
+<p>We work with various third-party vendors and service providers. We are not responsible for:</p>
 <ul>
-<li>Delays caused by state agencies</li>
-<li>Changes in state filing requirements or fees</li>
+<li>Delays or issues caused by vendors</li>
+<li>Changes in vendor pricing or availability</li>
 <li>Actions or inactions of third-party service providers</li>
 </ul>
 
-<h2>Business Decisions</h2>
-<p>The decision to form a business entity, the type of entity to form, and the state of formation are important decisions that should be made after careful consideration and, where appropriate, consultation with legal and tax professionals.</p>
+<h2>Event Planning Decisions</h2>
+<p>Decisions about your event, including venue, vendors, and budget, are important and should be made after careful consideration and, where appropriate, consultation with relevant professionals.</p>
 
-<h2>Tax Advice</h2>
-<p>We do not provide tax advice. Please consult with a qualified tax professional for advice on tax matters related to your business.</p>
+<h2>No Tax or Legal Advice</h2>
+<p>We do not provide tax or legal advice. Please consult with a qualified professional for advice on matters related to your event contracts and finances.</p>
 
 <h2>Limitation of Liability</h2>
-<p>To the maximum extent permitted by law, LLCPad shall not be liable for any indirect, incidental, special, consequential, or punitive damages arising from your use of our services.</p>
+<p>To the maximum extent permitted by law, Ceremoney shall not be liable for any indirect, incidental, special, consequential, or punitive damages arising from your use of our services.</p>
 
 <h2>Contact Us</h2>
-<p>If you have any questions about this disclaimer, please contact us at legal@llcpad.com</p>`,
+<p>If you have any questions about this disclaimer, please contact us at legal@ceremoney.com</p>`,
   },
 };
 
@@ -245,7 +243,7 @@ export default function LegalPageEditor({
         title: template.title,
         content: template.content,
         isActive: true,
-        metaTitle: template.title + " | LLCPad",
+        metaTitle: template.title + " | Ceremoney",
         metaDescription: template.metaDescription,
       });
     }
@@ -290,7 +288,7 @@ export default function LegalPageEditor({
       ...formData,
       title,
       slug: isNew && !presetSlug ? generateSlug(title) : formData.slug,
-      metaTitle: isNew ? title + " | LLCPad" : formData.metaTitle,
+      metaTitle: isNew ? title + " | Ceremoney" : formData.metaTitle,
     });
   }
 
@@ -523,7 +521,7 @@ export default function LegalPageEditor({
                         title: template.title,
                         content: template.content,
                         isActive: true,
-                        metaTitle: template.title + " | LLCPad",
+                        metaTitle: template.title + " | Ceremoney",
                         metaDescription: template.metaDescription,
                       });
                       toast.success(`Loaded ${template.title} template`);

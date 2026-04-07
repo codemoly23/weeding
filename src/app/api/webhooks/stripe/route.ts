@@ -6,7 +6,7 @@ import Stripe from "stripe";
 
 export const runtime = "nodejs";
 
-// ─── One-time payment handlers (existing LLCPad orders) ──────────────────────
+// ─── One-time payment handlers (existing Ceremoney orders) ───────────────────
 
 async function handleCheckoutSessionCompleted(session: Stripe.Checkout.Session) {
   const metadata = session.metadata;

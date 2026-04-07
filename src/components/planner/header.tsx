@@ -19,12 +19,19 @@ import { LanguageSwitcher } from "@/components/layout/header/components/Language
 
 interface PlannerHeaderProps {
   onMenuClick?: () => void;
+  projectId?: string;
 }
 
-export function PlannerHeader({ onMenuClick }: PlannerHeaderProps) {
+export function PlannerHeader({ onMenuClick, projectId }: PlannerHeaderProps) {
   const { data: session } = useSession();
   const { t } = useLanguage();
   const isLoggedIn = !!session?.user?.id;
+
+  const loginUrl = projectId?.startsWith("local-")
+    ? `/login?callbackUrl=${encodeURIComponent(`/planner/sync?from=${projectId}`)}`
+    : projectId
+    ? `/login?callbackUrl=${encodeURIComponent(`/planner/${projectId}`)}`
+    : "/login";
 
   const userName = session?.user?.name || "";
   const userEmail = session?.user?.email || "";
@@ -68,7 +75,7 @@ export function PlannerHeader({ onMenuClick }: PlannerHeaderProps) {
         </Link>
 
         {!isLoggedIn && (
-          <Link href="/login">
+          <Link href={loginUrl}>
             <Button size="sm" className="gap-1.5 border-0 bg-gradient-to-r from-rose-500 to-purple-500 text-white hover:from-rose-600 hover:to-purple-600 shadow-sm">
               <LogIn className="h-4 w-4" />
               <span className="hidden sm:inline">{t("common.signIn")}</span>

@@ -398,7 +398,7 @@ export async function exportThemeData(): Promise<ThemeData> {
         showAuthButtons: true,
         loginText: "Sign In",
         registerText: "Get Started",
-        registerUrl: "/services/llc-formation",
+        registerUrl: "/register",
         searchEnabled: false,
         mobileBreakpoint: 1024,
         height: 64,

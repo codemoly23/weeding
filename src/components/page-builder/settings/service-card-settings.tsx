@@ -244,7 +244,7 @@ export function ServiceCardWidgetSettingsPanel({
                 label="Description Text"
                 value={s.header.description.text}
                 onChange={(v) => updateHeaderDescription({ text: v })}
-                placeholder="From LLC formation to Amazon seller accounts..."
+                placeholder="From guest list to seating charts, everything in one place..."
                 rows={3}
               />
             </div>

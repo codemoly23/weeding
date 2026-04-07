@@ -1,10 +1,10 @@
 {
-  "name": "llcpad",
-  "version": "1.0.0",
-  "description": "US LLC Formation & Amazon Seller Services Platform",
+  "name": "ceremoney",
+  "version": "0.1.0",
+  "description": "Ceremoney — Multi-event digital planning platform for weddings, baptisms, and events",
   "private": true,
   "scripts": {
-    "dev": "next dev --turbopack",
+    "dev": "cross-env NODE_OPTIONS=--max-old-space-size=4096 next dev --turbopack --port 3000",
     "dev:chat": "tsx watch chat-server.ts",
     "dev:socket": "tsx watch server.ts",
     "build": "cross-env NODE_ENV=production next build",
@@ -22,16 +22,17 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/sajeebce/llcpad.git"
+    "url": "git+https://github.com/sajeebce/weeding.git"
   },
   "keywords": [
-    "llc",
-    "usa",
-    "amazon",
-    "business",
-    "formation"
+    "wedding",
+    "event-planning",
+    "saas",
+    "guest-management",
+    "seating-chart",
+    "sweden"
   ],
-  "author": "LLCPad",
+  "author": "Ceremoney",
   "license": "UNLICENSED",
   "dependencies": {
     "@aws-sdk/client-s3": "^3.966.0",
@@ -79,6 +80,7 @@
     "@tiptap/pm": "^3.18.0",
     "@tiptap/react": "^3.18.0",
     "@tiptap/starter-kit": "^3.18.0",
+    "@types/leaflet": "^1.9.21",
     "@types/xlsx": "^0.0.35",
     "adm-zip": "^0.5.16",
     "archiver": "^7.0.1",
@@ -89,6 +91,7 @@
     "date-fns": "^4.1.0",
     "emoji-picker-react": "^4.16.1",
     "konva": "^10.2.3",
+    "leaflet": "^1.9.4",
     "lucide-react": "^0.556.0",
     "motion": "^12.23.26",
     "next": "^15.5.9",
@@ -102,6 +105,7 @@
     "react-dropzone": "^14.3.8",
     "react-hook-form": "^7.68.0",
     "react-konva": "^19.2.3",
+    "react-leaflet": "^5.0.0",
     "socket.io": "^4.8.3",
     "socket.io-client": "^4.8.3",
     "sonner": "^2.0.7",

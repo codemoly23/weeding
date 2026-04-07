@@ -14,14 +14,14 @@ export async function GET() {
     console.error("Error fetching business config:", error);
     // Return default config on error
     return NextResponse.json({
-      name: "LLCPad",
-      tagline: "Your Business Formation Partner",
-      description: "Empowering global entrepreneurs to launch legitimate US businesses.",
+      name: "Ceremoney",
+      tagline: "Your Wedding & Event Planning Partner",
+      description: "Empowering couples and event planners to create unforgettable celebrations.",
       display: { showLogo: true, showName: true },
-      logo: { url: "", darkUrl: "", text: "L" },
+      logo: { url: "", darkUrl: "", text: "C" },
       favicon: "",
       currency: "USD",
-      contact: { email: "contact@llcpad.com", phone: "", supportEmail: "support@llcpad.com" },
+      contact: { email: "contact@ceremoney.com", phone: "", supportEmail: "support@ceremoney.com" },
       address: { line1: "", line2: "", city: "", state: "", zip: "", country: "US", full: "" },
       social: { facebook: "", twitter: "", linkedin: "", instagram: "", youtube: "", tiktok: "" },
     });

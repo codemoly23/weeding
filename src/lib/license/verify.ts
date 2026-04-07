@@ -99,7 +99,7 @@ function localVerify(key: string): LicenseResult {
   const checksum = parts[4];
   const expectedChecksum = crypto
     .createHash("md5")
-    .update(baseKey + "llcpad-secret")
+    .update(baseKey + "ceremoney-secret")
     .digest("hex")
     .substring(0, 8)
     .toUpperCase();
@@ -143,7 +143,7 @@ export function generateLicenseKey(): string {
   const baseKey = segments.join("-");
   const checksum = crypto
     .createHash("md5")
-    .update(baseKey + "llcpad-secret")
+    .update(baseKey + "ceremoney-secret")
     .digest("hex")
     .substring(0, 8)
     .toUpperCase();

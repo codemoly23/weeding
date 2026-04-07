@@ -1617,7 +1617,9 @@ model WeddingProject {
   brideName   String?
   groomName   String?
   budgetGoal  Float         @default(0)
-  userId      String
+  userId       String
+  shareToken   String?  @unique
+  shareEnabled Boolean  @default(false)
   createdAt   DateTime      @default(now())
   updatedAt   DateTime      @updatedAt
 
@@ -1636,6 +1638,8 @@ model WeddingProject {
   vendors               WeddingVendor[]
   vendorConversations   VendorConversation[]
   briefTokens           EventBriefToken[]
+  guestFamilies         GuestFamily[]
+  rsvpQuestions         RsvpQuestion[]
   @@index([userId])
   @@index([status])
 }
@@ -1769,6 +1773,58 @@ enum VendorCategory {
   OTHER
 }
 
+model GuestFamily {
+  id        String   @id @default(cuid())
+  projectId String
+  name      String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  project WeddingProject @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  guests  WeddingGuest[]
+
+  @@index([projectId])
+}
+
+enum RsvpQuestionType {
+  SHORT_TEXT
+  LONG_TEXT
+  SINGLE_CHOICE
+  MULTIPLE_CHOICE
+}
+
+model RsvpQuestion {
+  id        String           @id @default(cuid())
+  projectId String
+  text      String
+  type      RsvpQuestionType @default(SHORT_TEXT)
+  options   Json?            // string[] for SINGLE/MULTIPLE_CHOICE
+  required  Boolean          @default(false)
+  order     Int              @default(0)
+  createdAt DateTime         @default(now())
+  updatedAt DateTime         @updatedAt
+
+  project WeddingProject @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  answers RsvpAnswer[]
+
+  @@index([projectId])
+}
+
+model RsvpAnswer {
+  id         String   @id @default(cuid())
+  guestId    String
+  questionId String
+  answer     String
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  guest    WeddingGuest @relation(fields: [guestId], references: [id], onDelete: Cascade)
+  question RsvpQuestion @relation(fields: [questionId], references: [id], onDelete: Cascade)
+
+  @@unique([guestId, questionId])
+  @@index([questionId])
+}
+
 model WeddingGuest {
   id               String        @id @default(cuid())
   projectId        String
@@ -1786,13 +1842,31 @@ model WeddingGuest {
   rsvpToken        String?       @unique
   rsvpMessage      String?
   rsvpSubmittedAt  DateTime?
+  // Task 22 — Plus-one
+  hasPlusOne       Boolean       @default(false)
+  plusOneName      String?
+  plusOneMeal      String?
+  // Task 23 — Chief guest
+  isChiefGuest     Boolean       @default(false)
+  // Task 24 — Family grouping
+  familyId         String?
+  // Task 26 — Table invitation
+  invitationCode   String?
+  invitationSent   Boolean       @default(false)
+  invitationSentAt DateTime?
+  // Task 10 — GDPR consent
+  gdprConsentAt    DateTime?
   createdAt        DateTime      @default(now())
   updatedAt        DateTime      @updatedAt
 
-  project     WeddingProject @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  project WeddingProject @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  family  GuestFamily?   @relation(fields: [familyId], references: [id])
+  rsvpAnswers RsvpAnswer[]
 
   @@index([projectId, side])
   @@index([projectId, rsvpStatus])
+  @@index([projectId, familyId])
+  @@index([projectId, isChiefGuest])
 }
 
 model ProjectMember {
@@ -2034,6 +2108,14 @@ model VendorProfile {
   planTier             VendorPlanTier @default(TRIAL)
   stripeCustomerId     String?
   stripeSubscriptionId String?
+  // Task 11 — Social links
+  instagram       String?
+  facebook        String?
+  pinterest       String?
+  // Task 12 — Response SLA
+  slaHours        Int?
+  // Task 10 — FAQ items (stored as JSON array of {question, answer})
+  faqItems        Json?          @default("[]")
   createdAt       DateTime       @default(now())
   updatedAt       DateTime       @updatedAt
 
@@ -2042,6 +2124,7 @@ model VendorProfile {
   reviews         VendorReview[]
   conversations   VendorConversation[]
   quickReplies    VendorQuickReply[]
+  availability    VendorAvailability[]
 
   @@index([category])
   @@index([isApproved, isActive])
@@ -2049,6 +2132,27 @@ model VendorProfile {
   @@index([isFeatured])
   @@index([userId])
   @@index([status])
+}
+
+// Task 13 — Availability calendar
+enum AvailabilityStatus {
+  AVAILABLE
+  BOOKED
+  TENTATIVE
+}
+
+model VendorAvailability {
+  id        String             @id @default(cuid())
+  vendorId  String
+  date      DateTime           @db.Date
+  status    AvailabilityStatus @default(BOOKED)
+  note      String?
+  createdAt DateTime           @default(now())
+
+  vendor VendorProfile @relation(fields: [vendorId], references: [id], onDelete: Cascade)
+
+  @@unique([vendorId, date])
+  @@index([vendorId])
 }
 
 model VendorInquiry {

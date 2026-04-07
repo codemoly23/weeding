@@ -50,7 +50,7 @@ function calculateLeadScore(data: {
 
   // Service interest (max 20)
   if (data.interestedIn && data.interestedIn.length > 0) {
-    const highValue = ["llc-formation", "amazon-seller", "llc", "amazon"];
+    const highValue = ["premium", "elite", "white-label", "wedding-planner"];
     const hasHighValue = data.interestedIn.some((s) =>
       highValue.some(h => s.toLowerCase().includes(h))
     );
@@ -395,7 +395,7 @@ async function sendLeadAutoResponseEmail(params: {
       firstName: params.firstName,
       interestedIn: params.interestedIn,
       siteUrl,
-      companyName: emailConfig.fromName || "LLCPad",
+      companyName: emailConfig.fromName || "Ceremoney",
     });
 
     await sendEmail({

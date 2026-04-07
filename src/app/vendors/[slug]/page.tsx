@@ -28,6 +28,10 @@ import {
   Shirt,
   Sparkles,
   Package,
+  Clock,
+  Instagram,
+  Facebook,
+  ChevronDown,
 } from "lucide-react";
 
 type VendorCategory =
@@ -70,6 +74,18 @@ interface Review {
   createdAt: string;
 }
 
+interface AvailabilityEntry {
+  id: string;
+  date: string;
+  status: "AVAILABLE" | "BOOKED" | "TENTATIVE";
+  note: string | null;
+}
+
+interface FaqItem {
+  question: string;
+  answer: string;
+}
+
 interface Vendor {
   id: string;
   slug: string;
@@ -80,6 +96,9 @@ interface Vendor {
   email: string | null;
   phone: string | null;
   website: string | null;
+  instagram: string | null;
+  facebook: string | null;
+  pinterest: string | null;
   city: string | null;
   country: string;
   photos: string[];
@@ -89,6 +108,9 @@ interface Vendor {
   yearsInBusiness: number | null;
   languages: string[];
   isFeatured: boolean;
+  slaHours: number | null;
+  faqItems: FaqItem[] | null;
+  availability: AvailabilityEntry[];
   reviews: Review[];
   avgRating: number | null;
 }
@@ -139,6 +161,11 @@ export default function VendorProfilePage({
   });
   const [projects, setProjects] = useState<{ id: string; title: string }[]>([]);
   const [selectedProjectId, setSelectedProjectId] = useState<string>("");
+  const [openFaqIdx, setOpenFaqIdx] = useState<number | null>(null);
+  const [calMonth, setCalMonth] = useState<Date>(() => {
+    const d = new Date();
+    return new Date(d.getFullYear(), d.getMonth(), 1);
+  });
 
   // Auto-fill name/email when logged in
   useEffect(() => {
@@ -387,6 +414,12 @@ export default function VendorProfilePage({
                       {vendor.yearsInBusiness} years in business
                     </span>
                   )}
+                  {vendor.slaHours && (
+                    <span className="flex items-center gap-1 text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-full text-xs font-medium">
+                      <Clock className="w-3.5 h-3.5" />
+                      Responds within {vendor.slaHours}h
+                    </span>
+                  )}
                   {vendor.startingPrice && (
                     <span className="font-semibold text-purple-700">
                       From {vendor.currency} {vendor.startingPrice.toLocaleString()}
@@ -422,6 +455,39 @@ export default function VendorProfilePage({
                       <Globe className="w-4 h-4" /> Website
                     </a>
                   )}
+                  {vendor.instagram && (
+                    <a
+                      href={`https://instagram.com/${vendor.instagram.replace(/^@/, "")}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="flex items-center gap-1.5 text-sm text-gray-700 hover:text-pink-600 transition-colors"
+                    >
+                      <Instagram className="w-4 h-4" /> Instagram
+                    </a>
+                  )}
+                  {vendor.facebook && (
+                    <a
+                      href={vendor.facebook.startsWith("http") ? vendor.facebook : `https://facebook.com/${vendor.facebook}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="flex items-center gap-1.5 text-sm text-gray-700 hover:text-blue-600 transition-colors"
+                    >
+                      <Facebook className="w-4 h-4" /> Facebook
+                    </a>
+                  )}
+                  {vendor.pinterest && (
+                    <a
+                      href={vendor.pinterest.startsWith("http") ? vendor.pinterest : `https://pinterest.com/${vendor.pinterest}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="flex items-center gap-1.5 text-sm text-gray-700 hover:text-red-600 transition-colors"
+                    >
+                      <svg className="w-4 h-4" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M12 0C5.373 0 0 5.373 0 12c0 5.084 3.163 9.426 7.627 11.174-.105-.949-.2-2.405.042-3.441.218-.937 1.407-5.965 1.407-5.965s-.359-.719-.359-1.782c0-1.668.967-2.914 2.171-2.914 1.023 0 1.518.769 1.518 1.69 0 1.029-.655 2.568-.994 3.995-.283 1.194.599 2.169 1.777 2.169 2.133 0 3.772-2.249 3.772-5.495 0-2.873-2.064-4.882-5.012-4.882-3.414 0-5.418 2.561-5.418 5.207 0 1.031.397 2.138.893 2.738a.36.36 0 01.083.345l-.333 1.36c-.053.22-.174.267-.402.161-1.499-.698-2.436-2.889-2.436-4.649 0-3.785 2.75-7.262 7.929-7.262 4.163 0 7.398 2.967 7.398 6.931 0 4.136-2.607 7.464-6.227 7.464-1.216 0-2.359-.632-2.75-1.378l-.748 2.853c-.271 1.043-1.002 2.35-1.492 3.146C9.57 23.812 10.763 24 12 24c6.627 0 12-5.373 12-12S18.627 0 12 0z"/>
+                      </svg>
+                      Pinterest
+                    </a>
+                  )}
                 </div>
               </div>
             </div>
@@ -443,6 +509,107 @@ export default function VendorProfilePage({
                     <span key={lang} className="bg-gray-100 text-gray-700 px-3 py-1 rounded-full text-sm">
                       {lang}
                     </span>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {/* Availability Calendar */}
+            {vendor.availability.length > 0 && (() => {
+              const availMap = new Map(
+                vendor.availability.map((a) => [a.date.slice(0, 10), a])
+              );
+              const year = calMonth.getFullYear();
+              const month = calMonth.getMonth();
+              const firstDay = new Date(year, month, 1).getDay();
+              const daysInMonth = new Date(year, month + 1, 0).getDate();
+              const today = new Date().toISOString().slice(0, 10);
+              const cells: (number | null)[] = [
+                ...Array(firstDay).fill(null),
+                ...Array.from({ length: daysInMonth }, (_, i) => i + 1),
+              ];
+              const statusColor = {
+                AVAILABLE: "bg-emerald-100 text-emerald-800 font-semibold",
+                BOOKED: "bg-red-100 text-red-700 line-through opacity-60",
+                TENTATIVE: "bg-amber-100 text-amber-800",
+              };
+              return (
+                <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100">
+                  <div className="flex items-center justify-between mb-4">
+                    <h2 className="text-lg font-semibold text-gray-900">Availability</h2>
+                    <div className="flex items-center gap-2">
+                      <button
+                        onClick={() => setCalMonth(new Date(year, month - 1, 1))}
+                        className="p-1.5 rounded-lg hover:bg-gray-100 text-gray-500"
+                      >
+                        <ChevronLeft className="w-4 h-4" />
+                      </button>
+                      <span className="text-sm font-medium text-gray-700 min-w-[100px] text-center">
+                        {calMonth.toLocaleDateString("en-US", { month: "long", year: "numeric" })}
+                      </span>
+                      <button
+                        onClick={() => setCalMonth(new Date(year, month + 1, 1))}
+                        className="p-1.5 rounded-lg hover:bg-gray-100 text-gray-500"
+                      >
+                        <ChevronRight className="w-4 h-4" />
+                      </button>
+                    </div>
+                  </div>
+                  <div className="grid grid-cols-7 gap-1 text-center mb-1">
+                    {["Su","Mo","Tu","We","Th","Fr","Sa"].map(d => (
+                      <div key={d} className="text-xs text-gray-400 font-medium py-1">{d}</div>
+                    ))}
+                  </div>
+                  <div className="grid grid-cols-7 gap-1">
+                    {cells.map((day, idx) => {
+                      if (!day) return <div key={idx} />;
+                      const dateStr = `${year}-${String(month + 1).padStart(2, "0")}-${String(day).padStart(2, "0")}`;
+                      const entry = availMap.get(dateStr);
+                      const isToday = dateStr === today;
+                      return (
+                        <div
+                          key={idx}
+                          title={entry ? `${entry.status}${entry.note ? ": " + entry.note : ""}` : undefined}
+                          className={`rounded-lg py-1.5 text-xs text-center transition-colors ${
+                            entry
+                              ? statusColor[entry.status]
+                              : "text-gray-600 hover:bg-gray-50"
+                          } ${isToday ? "ring-2 ring-purple-400" : ""}`}
+                        >
+                          {day}
+                        </div>
+                      );
+                    })}
+                  </div>
+                  <div className="flex items-center gap-4 mt-4 text-xs text-gray-500">
+                    <span className="flex items-center gap-1.5"><span className="w-3 h-3 rounded bg-emerald-100 inline-block" />Available</span>
+                    <span className="flex items-center gap-1.5"><span className="w-3 h-3 rounded bg-amber-100 inline-block" />Tentative</span>
+                    <span className="flex items-center gap-1.5"><span className="w-3 h-3 rounded bg-red-100 inline-block" />Booked</span>
+                  </div>
+                </div>
+              );
+            })()}
+
+            {/* FAQ */}
+            {vendor.faqItems && vendor.faqItems.length > 0 && (
+              <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100">
+                <h2 className="text-lg font-semibold text-gray-900 mb-4">Frequently Asked Questions</h2>
+                <div className="space-y-2">
+                  {vendor.faqItems.map((item, idx) => (
+                    <div key={idx} className="border border-gray-100 rounded-xl overflow-hidden">
+                      <button
+                        onClick={() => setOpenFaqIdx(openFaqIdx === idx ? null : idx)}
+                        className="w-full flex items-center justify-between px-4 py-3 text-left text-sm font-medium text-gray-800 hover:bg-gray-50 transition-colors"
+                      >
+                        <span>{item.question}</span>
+                        <ChevronDown className={`w-4 h-4 text-gray-400 shrink-0 transition-transform ${openFaqIdx === idx ? "rotate-180" : ""}`} />
+                      </button>
+                      {openFaqIdx === idx && (
+                        <div className="px-4 pb-4 pt-1 text-sm text-gray-600 leading-relaxed border-t border-gray-100 bg-gray-50">
+                          {item.answer}
+                        </div>
+                      )}
+                    </div>
                   ))}
                 </div>
               </div>
