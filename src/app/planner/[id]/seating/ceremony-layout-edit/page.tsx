@@ -2,7 +2,7 @@
 
 import React, { useState, useRef, useCallback, useEffect } from "react";
 import { useParams, useRouter } from "next/navigation";
-import { X, Plus, ChevronRight, Eye, Copy, Trash2, RotateCw, Move, Maximize2, Keyboard, FileText, Search, Upload } from "lucide-react";
+import { X, Plus, ChevronRight, Eye, Copy, Trash2, RotateCw, Move, Maximize2, Keyboard, FileText, Search, Upload, Clock } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { getLocalGuests } from "@/lib/planner-storage";
 
@@ -582,6 +582,12 @@ function ActionRow({ icon, label, danger, onClick }: { icon: React.ReactNode; la
 
 // ─── Main page ───────────────────────────────────────────────────────────────
 
+interface Snapshot {
+  label: string;
+  timestamp: number;
+  elements: CeremonyElement[];
+}
+
 export default function CeremonyLayoutEditPage() {
   const { id: projectId } = useParams<{ id: string }>();
   const router = useRouter();
@@ -603,6 +609,21 @@ export default function CeremonyLayoutEditPage() {
   const [coloredIcons, setColoredIcons] = useState(true);
   const [guests, setGuests] = useState<Guest[]>([]);
   const [showAddPanel, setShowAddPanel] = useState(false);
+  const [showHistory, setShowHistory] = useState(false);
+  const [snapshots, setSnapshots] = useState<Snapshot[]>(() => {
+    if (typeof window === "undefined") return [];
+    try {
+      const raw = localStorage.getItem(`snapshots-ceremony-${projectId}`);
+      if (raw) return JSON.parse(raw) as Snapshot[];
+    } catch {}
+    return [];
+  });
+  const [venueImage, setVenueImage] = useState<string | null>(() => {
+    if (typeof window === "undefined") return null;
+    try { return localStorage.getItem(`venue-bg-ceremony-${projectId}`); } catch { return null; }
+  });
+  const [venueOpacity, setVenueOpacity] = useState(0.35);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   const canvasRef = useRef<HTMLDivElement>(null);
   const dragRef = useRef<{ id: string; startMx: number; startMy: number; origX: number; origY: number } | null>(null);
@@ -611,6 +632,18 @@ export default function CeremonyLayoutEditPage() {
   useEffect(() => {
     try { localStorage.setItem(storageKey, JSON.stringify(elements)); } catch {}
   }, [elements, storageKey]);
+
+  useEffect(() => {
+    try { localStorage.setItem(`snapshots-ceremony-${projectId}`, JSON.stringify(snapshots)); } catch {}
+  }, [snapshots, projectId]);
+
+  useEffect(() => {
+    if (venueImage) {
+      try { localStorage.setItem(`venue-bg-ceremony-${projectId}`, venueImage); } catch {}
+    } else {
+      try { localStorage.removeItem(`venue-bg-ceremony-${projectId}`); } catch {}
+    }
+  }, [venueImage, projectId]);
 
   useEffect(() => {
     if (!projectId) return;
@@ -700,6 +733,41 @@ export default function CeremonyLayoutEditPage() {
       guestIds[seatIndex] = guestId;
       return { ...el, guestIds };
     }));
+  }
+
+  function saveSnapshot() {
+    const n = snapshots.length + 1;
+    const snap: Snapshot = { label: `Snapshot ${n}`, timestamp: Date.now(), elements: JSON.parse(JSON.stringify(elements)) };
+    setSnapshots(prev => {
+      const updated = [snap, ...prev];
+      return updated.slice(0, 5);
+    });
+  }
+
+  function restoreSnapshot(snap: Snapshot) {
+    setElements(snap.elements);
+    setShowHistory(false);
+  }
+
+  function handleVenueUpload(e: React.ChangeEvent<HTMLInputElement>) {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = ev => {
+      const result = ev.target?.result as string;
+      setVenueImage(result);
+    };
+    reader.readAsDataURL(file);
+  }
+
+  function formatSnapshotTime(ts: number): string {
+    const d = new Date(ts);
+    const now = new Date();
+    const isToday = d.toDateString() === now.toDateString();
+    const hh = d.getHours().toString().padStart(2, "0");
+    const mm = d.getMinutes().toString().padStart(2, "0");
+    if (isToday) return `Today ${hh}:${mm}`;
+    return `${d.toLocaleDateString()} ${hh}:${mm}`;
   }
 
   function handleAddElement(def: ElementDef) {
@@ -889,6 +957,34 @@ export default function CeremonyLayoutEditPage() {
 
     return (
       <div className="flex flex-col divide-y divide-gray-100">
+        {/* Venue Blueprint section */}
+        <div className="px-4 py-3">
+          <p className="mb-2 text-xs font-semibold text-gray-600">Venue Blueprint</p>
+          {venueImage ? (
+            <div className="space-y-2">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img src={venueImage} alt="Venue blueprint" className="w-full rounded border border-gray-200 object-contain" style={{ maxHeight: 80 }} />
+              <div>
+                <p className="mb-1 text-[11px] text-gray-400">Opacity</p>
+                <input
+                  type="range" min={0.1} max={1.0} step={0.05}
+                  value={venueOpacity}
+                  onChange={e => setVenueOpacity(parseFloat(e.target.value))}
+                  className="w-full accent-purple-600"
+                />
+                <div className="flex justify-between text-[10px] text-gray-400"><span>10%</span><span>{Math.round(venueOpacity * 100)}%</span></div>
+              </div>
+              <button
+                onClick={() => setVenueImage(null)}
+                className="flex items-center gap-1 rounded-lg border border-red-200 px-2 py-1 text-xs text-red-500 hover:bg-red-50"
+              >
+                <X className="h-3 w-3" /> Remove
+              </button>
+            </div>
+          ) : (
+            <p className="text-xs text-gray-400">Upload floor plan to use as background reference.</p>
+          )}
+        </div>
         <div className="bg-gray-50 px-4 py-3 text-sm font-semibold text-orange-500">How to display guests&apos; names</div>
         <div className="px-4 py-4">
           <div className="mb-3 flex gap-2">
@@ -911,6 +1007,9 @@ export default function CeremonyLayoutEditPage() {
 
   return (
     <div className="fixed inset-0 z-50 flex flex-col bg-white">
+      {/* Hidden file input for venue blueprint */}
+      <input ref={fileInputRef} type="file" accept="image/*,.svg" className="hidden" onChange={handleVenueUpload} />
+
       {/* Top bar */}
       <div className="flex h-12 shrink-0 items-center justify-between border-b border-gray-100 bg-white px-4 shadow-sm">
         <button onClick={() => router.push(`/planner/${projectId}/seating?tab=ceremony`)} className="flex items-center gap-1.5 rounded-lg px-2 py-1.5 text-sm text-gray-500 hover:bg-gray-50">
@@ -919,6 +1018,12 @@ export default function CeremonyLayoutEditPage() {
         <div className="flex items-center gap-2">
           <button className="flex h-8 w-8 items-center justify-center rounded-lg border border-gray-200 text-gray-500 hover:bg-gray-50"><Keyboard className="h-4 w-4" /></button>
           <button className="flex items-center gap-1.5 rounded-lg border border-gray-200 px-3 py-1.5 text-sm text-gray-600 hover:bg-gray-50"><FileText className="h-4 w-4" />File</button>
+          <button onClick={() => fileInputRef.current?.click()} className="flex items-center gap-1.5 rounded-lg border border-gray-200 px-3 py-1.5 text-sm text-gray-600 hover:bg-gray-50">
+            <Upload className="h-4 w-4" />Upload Blueprint
+          </button>
+          <button onClick={() => setShowHistory(h => !h)} className="flex items-center gap-1.5 rounded-lg border border-gray-200 px-3 py-1.5 text-sm text-gray-600 hover:bg-gray-50">
+            <Clock className="h-4 w-4" />History
+          </button>
           <button onClick={() => setShowAddPanel(true)} className="flex items-center gap-1.5 rounded-lg bg-purple-600 px-3 py-1.5 text-sm font-medium text-white hover:bg-purple-700">
             <Plus className="h-4 w-4" />Add element
           </button>
@@ -930,6 +1035,11 @@ export default function CeremonyLayoutEditPage() {
         {/* Canvas */}
         <div ref={canvasRef} className="relative flex-1 overflow-hidden" style={{ backgroundColor: "#f0eeeb" }} onMouseDown={onCanvasMouseDown} onWheel={onWheel}>
           <div style={{ position: "absolute", top: "50%", left: "50%", transform: `translate(calc(-50% + ${pan.x}px), calc(-50% + ${pan.y}px)) scale(${zoom})`, transformOrigin: "center center", width: PAPER_W, height: PAPER_H, backgroundColor: "white", boxShadow: "0 4px 24px rgba(0,0,0,0.12)" }}>
+            {/* Venue blueprint background */}
+            {venueImage && (
+              // eslint-disable-next-line @next/next/no-img-element
+              <img src={venueImage} alt="" style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "contain", opacity: venueOpacity, pointerEvents: "none" }} />
+            )}
             {elements.map(el => {
               const isElSel = selection?.kind === "element" && selection.id === el.id;
               const seatSelIdx = (selection?.kind === "seat" && selection.elementId === el.id) ? selection.seatIndex : null;
@@ -1007,6 +1117,52 @@ export default function CeremonyLayoutEditPage() {
 
       {/* Add element panel overlay */}
       {showAddPanel && <AddElementPanel onAdd={handleAddElement} onClose={() => setShowAddPanel(false)} />}
+
+      {/* History panel overlay */}
+      {showHistory && (
+        <div className="fixed inset-0 z-50 flex">
+          <div className="absolute inset-0 bg-black/30" onClick={() => setShowHistory(false)} />
+          <div className="relative ml-auto flex h-full w-[300px] flex-col bg-white shadow-2xl">
+            <div className="flex shrink-0 items-center justify-between border-b border-gray-100 px-4 py-3">
+              <span className="text-sm font-semibold text-gray-700">History</span>
+              <button onClick={() => setShowHistory(false)} className="flex h-7 w-7 items-center justify-center rounded-lg text-gray-400 hover:bg-gray-100 hover:text-gray-600">
+                <X className="h-4 w-4" />
+              </button>
+            </div>
+            <div className="shrink-0 border-b border-gray-100 px-4 py-3">
+              <button
+                onClick={saveSnapshot}
+                className="flex w-full items-center justify-center gap-1.5 rounded-lg bg-purple-600 px-3 py-2 text-xs font-medium text-white hover:bg-purple-700"
+              >
+                <Plus className="h-3.5 w-3.5" /> Save current snapshot
+              </button>
+              <p className="mt-1.5 text-center text-[10px] text-gray-400">Max 5 snapshots stored</p>
+            </div>
+            <div className="flex-1 overflow-y-auto px-4 py-3 space-y-2">
+              {snapshots.length === 0 ? (
+                <p className="py-6 text-center text-xs text-gray-400">No snapshots saved yet.</p>
+              ) : (
+                snapshots.map((snap, i) => (
+                  <div key={i} className="rounded-lg border border-gray-200 bg-gray-50 px-3 py-2.5">
+                    <div className="flex items-center justify-between">
+                      <div>
+                        <p className="text-xs font-medium text-gray-700">{snap.label}</p>
+                        <p className="text-[10px] text-gray-400">{formatSnapshotTime(snap.timestamp)}</p>
+                      </div>
+                      <button
+                        onClick={() => restoreSnapshot(snap)}
+                        className="rounded-lg border border-purple-200 bg-purple-50 px-2 py-1 text-[10px] font-medium text-purple-700 hover:bg-purple-100"
+                      >
+                        Restore
+                      </button>
+                    </div>
+                  </div>
+                ))
+              )}
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

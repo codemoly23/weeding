@@ -233,15 +233,39 @@ export default function RsvpPage() {
           {/* Dietary — only when attending */}
           {attending === true && (
             <div>
-              <label className="mb-1.5 block text-sm font-medium text-gray-700">
+              <label className="mb-2 block text-sm font-medium text-gray-700">
                 Dietary requirements <span className="text-xs font-normal text-gray-400">(optional)</span>
               </label>
+              <div className="space-y-2 mb-3">
+                {["Vegetarian", "Vegan", "Gluten-free", "Dairy-free", "Halal"].map(opt => {
+                  const checked = dietary.split(",").map(s => s.trim()).includes(opt);
+                  return (
+                    <label key={opt} className="flex items-center gap-2.5 cursor-pointer">
+                      <input
+                        type="checkbox"
+                        checked={checked}
+                        onChange={() => {
+                          const parts = dietary.split(",").map(s => s.trim()).filter(Boolean);
+                          const next = checked ? parts.filter(p => p !== opt) : [...parts, opt];
+                          setDietary(next.join(", "));
+                        }}
+                        className="h-4 w-4 rounded accent-rose-500"
+                      />
+                      <span className="text-sm text-gray-700">{opt}</span>
+                    </label>
+                  );
+                })}
+              </div>
               <input
                 type="text"
-                value={dietary}
-                onChange={(e) => setDietary(e.target.value)}
-                placeholder="e.g. Vegetarian, Gluten-free, Nut allergy…"
-                className="w-full rounded-xl border border-gray-200 px-3 py-2.5 text-sm focus:border-rose-300 focus:outline-none focus:ring-2 focus:ring-rose-100"
+                value={dietary.split(",").map(s => s.trim()).filter(s => !["Vegetarian","Vegan","Gluten-free","Dairy-free","Halal"].includes(s)).join(", ")}
+                onChange={e => {
+                  const standard = dietary.split(",").map(s => s.trim()).filter(s => ["Vegetarian","Vegan","Gluten-free","Dairy-free","Halal"].includes(s));
+                  const custom = e.target.value;
+                  setDietary([...standard, ...(custom ? [custom] : [])].join(", "));
+                }}
+                placeholder="Other (e.g. Nut allergy, Kosher…)"
+                className="w-full rounded-xl border border-gray-200 px-3 py-2 text-sm focus:border-rose-300 focus:outline-none focus:ring-2 focus:ring-rose-100"
               />
             </div>
           )}

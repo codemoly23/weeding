@@ -3,6 +3,7 @@ import prisma from "@/lib/db";
 import type { WeddingBlock } from "@/lib/planner-storage";
 import GuestbookSection from "@/components/wedding/GuestbookSection";
 import GuestPhotoUpload from "@/components/wedding/GuestPhotoUpload";
+import PasswordGate from "@/components/wedding/PasswordGate";
 
 export const dynamic = "force-dynamic";
 
@@ -49,6 +50,8 @@ export default async function PublicWeddingSite({ params }: PageProps) {
   });
   if (!site || !site.published) notFound();
 
+  const sitePassword = site.password as string | null;
+
   const themeKey = (site.theme as keyof typeof THEMES) in THEMES ? (site.theme as keyof typeof THEMES) : "modern";
   const theme = THEMES[themeKey];
   const primaryHex = (site.primaryColor as string) || theme.primary;
@@ -60,7 +63,7 @@ export default async function PublicWeddingSite({ params }: PageProps) {
     .filter(b => b.visible)
     .sort((a, b) => a.order - b.order);
 
-  return (
+  const content = (
     <div style={{ fontFamily }} className="min-h-screen bg-white text-gray-800">
       {blocks.map(block => {
         const s = block.settings;
@@ -93,6 +96,10 @@ export default async function PublicWeddingSite({ params }: PageProps) {
                   </nav>
                 )}
                 <div className="relative z-10 flex flex-col items-center justify-center flex-1 text-center px-6 py-16">
+                  {(s.logoUrl as string) && (
+                    // eslint-disable-next-line @next/next/no-img-element
+                    <img src={s.logoUrl as string} alt="Logo" className="mx-auto mb-4 h-16 w-auto object-contain" />
+                  )}
                   {(s.date as string) && (
                     <div className={`border px-5 py-1.5 mb-5 text-base font-light tracking-wide ${bgImg ? "border-white/50 text-white/90" : ""}`}
                       style={!bgImg ? { borderColor: primaryHex + "66", color: primaryHex } : undefined}>
@@ -170,6 +177,38 @@ export default async function PublicWeddingSite({ params }: PageProps) {
                       </div>
                     )}
                   </div>
+                  {((s.ceremonyMapQuery as string) || (s.receptionMapQuery as string)) && (
+                    <div className="mt-8 grid grid-cols-1 sm:grid-cols-2 gap-6">
+                      {(s.ceremonyMapQuery as string) && (
+                        <div className="rounded-2xl overflow-hidden shadow-sm">
+                          <p className="text-xs uppercase tracking-widest text-gray-400 mb-2 text-center">Ceremony Location</p>
+                          <iframe
+                            title="Ceremony Map"
+                            width="100%"
+                            height="300"
+                            style={{ border: 0 }}
+                            loading="lazy"
+                            referrerPolicy="no-referrer-when-downgrade"
+                            src={`https://maps.google.com/maps?q=${encodeURIComponent(s.ceremonyMapQuery as string)}&output=embed`}
+                          />
+                        </div>
+                      )}
+                      {(s.receptionMapQuery as string) && (
+                        <div className="rounded-2xl overflow-hidden shadow-sm">
+                          <p className="text-xs uppercase tracking-widest text-gray-400 mb-2 text-center">Reception Location</p>
+                          <iframe
+                            title="Reception Map"
+                            width="100%"
+                            height="300"
+                            style={{ border: 0 }}
+                            loading="lazy"
+                            referrerPolicy="no-referrer-when-downgrade"
+                            src={`https://maps.google.com/maps?q=${encodeURIComponent(s.receptionMapQuery as string)}&output=embed`}
+                          />
+                        </div>
+                      )}
+                    </div>
+                  )}
                 </div>
               </section>
             );
@@ -326,6 +365,11 @@ export default async function PublicWeddingSite({ params }: PageProps) {
       </footer>
     </div>
   );
+
+  if (sitePassword) {
+    return <PasswordGate password={sitePassword}>{content}</PasswordGate>;
+  }
+  return content;
 }
 
 export async function generateMetadata({ params }: PageProps) {

@@ -2,7 +2,7 @@
 
 import React, { useState, useRef, useCallback, useEffect } from "react";
 import { useParams, useRouter } from "next/navigation";
-import { X, Plus, ChevronRight, Eye, Copy, Trash2, RotateCw, Move, Maximize2, Keyboard, FileText, Search, Upload } from "lucide-react";
+import { X, Plus, ChevronRight, Eye, Copy, Trash2, RotateCw, Move, Maximize2, Keyboard, FileText, Search, Upload, Clock, LayoutTemplate } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { getLocalGuests } from "@/lib/planner-storage";
 
@@ -568,6 +568,135 @@ function ActionRow({ icon, label, danger, onClick }: { icon: React.ReactNode; la
   );
 }
 
+// ─── Snapshot type ────────────────────────────────────────────────────────────
+
+interface Snapshot {
+  label: string;
+  timestamp: number;
+  elements: CeremonyElement[];
+}
+
+// ─── Reception templates ──────────────────────────────────────────────────────
+
+interface ReceptionTemplate {
+  id: string;
+  name: string;
+  buildElements: () => CeremonyElement[];
+}
+
+const RECEPTION_TEMPLATES: ReceptionTemplate[] = [
+  {
+    id: "standard",
+    name: "Standard",
+    buildElements: buildInitElements,
+  },
+  {
+    id: "banquet",
+    name: "Banquet",
+    buildElements: () => [
+      { id: "ht", kind: "table-long", x: 145, y: 80, width: 300, height: 40, angle: 0, seats: 12, guestIds: Array(12).fill(null) },
+      { id: "lt-1", kind: "table-long", x: 55, y: 280, width: 480, height: 40, angle: 0, seats: 20, guestIds: Array(20).fill(null) },
+      { id: "lt-2", kind: "table-long", x: 55, y: 420, width: 480, height: 40, angle: 0, seats: 20, guestIds: Array(20).fill(null) },
+      { id: "lt-3", kind: "table-long", x: 55, y: 560, width: 480, height: 40, angle: 0, seats: 20, guestIds: Array(20).fill(null) },
+      { id: "lt-4", kind: "table-long", x: 55, y: 700, width: 480, height: 40, angle: 0, seats: 20, guestIds: Array(20).fill(null) },
+    ],
+  },
+  {
+    id: "u-shape",
+    name: "U-Shape",
+    buildElements: () => [
+      { id: "u-top", kind: "table-long", x: 155, y: 100, width: 280, height: 40, angle: 0, seats: 10, guestIds: Array(10).fill(null) },
+      { id: "u-left", kind: "table-long", x: 100, y: 140, width: 40, height: 500, angle: 0, seats: 14, guestIds: Array(14).fill(null) },
+      { id: "u-right", kind: "table-long", x: 450, y: 140, width: 40, height: 500, angle: 0, seats: 14, guestIds: Array(14).fill(null) },
+      { id: "dance", kind: "asset", assetType: "dance-area", x: 200, y: 350, width: 190, height: 150, angle: 0 },
+    ],
+  },
+  {
+    id: "classroom",
+    name: "Classroom",
+    buildElements: () => {
+      const els: CeremonyElement[] = [];
+      for (let row = 0; row < 4; row++) {
+        for (let col = 0; col < 4; col++) {
+          els.push({
+            id: `cls-${row}-${col}`,
+            kind: "table-square",
+            x: 60 + col * 130,
+            y: 100 + row * 120,
+            width: 70,
+            height: 40,
+            angle: 0,
+            seats: 8,
+            guestIds: Array(8).fill(null),
+          });
+        }
+      }
+      return els;
+    },
+  },
+  {
+    id: "theater",
+    name: "Theater",
+    buildElements: () => {
+      const els: CeremonyElement[] = [
+        { id: "stage", kind: "table-long", x: 195, y: 50, width: 200, height: 30, angle: 0, seats: 0, guestIds: [] },
+      ];
+      for (let r = 0; r < 10; r++) {
+        els.push({
+          id: `theater-row-${r}`,
+          kind: "row",
+          x: 55,
+          y: 130 + r * 80,
+          width: 480,
+          angle: 0,
+          seats: 8,
+          spacing: 68,
+          guestIds: Array(8).fill(null),
+        });
+      }
+      return els;
+    },
+  },
+  {
+    id: "cocktail",
+    name: "Cocktail",
+    buildElements: () => [
+      { id: "ct-0", kind: "table-round", x: 60, y: 60, width: 70, height: 70, angle: 0, seats: 6, guestIds: Array(6).fill(null) },
+      { id: "ct-1", kind: "table-round", x: 240, y: 50, width: 70, height: 70, angle: 0, seats: 6, guestIds: Array(6).fill(null) },
+      { id: "ct-2", kind: "table-round", x: 420, y: 60, width: 70, height: 70, angle: 0, seats: 6, guestIds: Array(6).fill(null) },
+      { id: "ct-3", kind: "table-round", x: 60, y: 400, width: 70, height: 70, angle: 0, seats: 6, guestIds: Array(6).fill(null) },
+      { id: "ct-4", kind: "table-round", x: 240, y: 380, width: 70, height: 70, angle: 0, seats: 6, guestIds: Array(6).fill(null) },
+      { id: "ct-5", kind: "table-round", x: 420, y: 400, width: 70, height: 70, angle: 0, seats: 6, guestIds: Array(6).fill(null) },
+      { id: "bf-0", kind: "buffet-round", x: 140, y: 220, width: 90, height: 90, angle: 0 },
+      { id: "bf-1", kind: "buffet-round", x: 350, y: 220, width: 90, height: 90, angle: 0 },
+    ],
+  },
+];
+
+// ─── Template preview SVG ─────────────────────────────────────────────────────
+
+function TemplateSVGPreview({ template }: { template: ReceptionTemplate }) {
+  const els = template.buildElements();
+  return (
+    <svg width={110} height={90} viewBox={`0 0 ${PAPER_W} ${PAPER_H}`} style={{ width: 110, height: 90 }}>
+      <rect width={PAPER_W} height={PAPER_H} fill="white" stroke="#e5e7eb" strokeWidth="4" />
+      {els.map(el => {
+        const w = el.width;
+        const h = el.height ?? el.width;
+        const cx = el.x + w / 2;
+        const cy = el.y + h / 2;
+        if (el.kind === "table-round" || el.kind === "buffet-round")
+          return <circle key={el.id} cx={cx} cy={cy} r={w / 2} fill="#f5efe6" stroke="#8b7355" strokeWidth="3" />;
+        if (el.kind === "asset")
+          return <rect key={el.id} x={el.x} y={el.y} width={w} height={h} rx="4" fill="#fdf6e3" stroke="#d4a017" strokeWidth="3" />;
+        if (el.kind === "row")
+          return <rect key={el.id} x={el.x} y={el.y} width={w} height={20} rx="4" fill="#e5e7eb" stroke="#9ca3af" strokeWidth="3" />;
+        return <rect key={el.id} x={el.x} y={el.y} width={w} height={h} rx="3" fill="#f5efe6" stroke="#8b7355" strokeWidth="3" />;
+      })}
+    </svg>
+  );
+}
+
 // ─── Main page ───────────────────────────────────────────────────────────────
 
 export default function ReceptionLayoutEditPage() {
@@ -591,6 +720,22 @@ export default function ReceptionLayoutEditPage() {
   const [coloredIcons, setColoredIcons] = useState(true);
   const [guests, setGuests] = useState<Guest[]>([]);
   const [showAddPanel, setShowAddPanel] = useState(false);
+  const [showHistory, setShowHistory] = useState(false);
+  const [showTemplates, setShowTemplates] = useState(false);
+  const [snapshots, setSnapshots] = useState<Snapshot[]>(() => {
+    if (typeof window === "undefined") return [];
+    try {
+      const raw = localStorage.getItem(`snapshots-reception-${projectId}`);
+      if (raw) return JSON.parse(raw) as Snapshot[];
+    } catch {}
+    return [];
+  });
+  const [venueImage, setVenueImage] = useState<string | null>(() => {
+    if (typeof window === "undefined") return null;
+    try { return localStorage.getItem(`venue-bg-reception-${projectId}`); } catch { return null; }
+  });
+  const [venueOpacity, setVenueOpacity] = useState(0.35);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   const canvasRef = useRef<HTMLDivElement>(null);
   const dragRef = useRef<{ id: string; startMx: number; startMy: number; origX: number; origY: number } | null>(null);
@@ -599,6 +744,18 @@ export default function ReceptionLayoutEditPage() {
   useEffect(() => {
     try { localStorage.setItem(storageKey, JSON.stringify(elements)); } catch {}
   }, [elements, storageKey]);
+
+  useEffect(() => {
+    try { localStorage.setItem(`snapshots-reception-${projectId}`, JSON.stringify(snapshots)); } catch {}
+  }, [snapshots, projectId]);
+
+  useEffect(() => {
+    if (venueImage) {
+      try { localStorage.setItem(`venue-bg-reception-${projectId}`, venueImage); } catch {}
+    } else {
+      try { localStorage.removeItem(`venue-bg-reception-${projectId}`); } catch {}
+    }
+  }, [venueImage, projectId]);
 
   useEffect(() => {
     if (!projectId) return;
@@ -688,6 +845,47 @@ export default function ReceptionLayoutEditPage() {
       guestIds[seatIndex] = guestId;
       return { ...el, guestIds };
     }));
+  }
+
+  function saveSnapshot() {
+    const n = snapshots.length + 1;
+    const snap: Snapshot = { label: `Snapshot ${n}`, timestamp: Date.now(), elements: JSON.parse(JSON.stringify(elements)) };
+    setSnapshots(prev => {
+      const updated = [snap, ...prev];
+      return updated.slice(0, 5);
+    });
+  }
+
+  function restoreSnapshot(snap: Snapshot) {
+    setElements(snap.elements);
+    setShowHistory(false);
+  }
+
+  function handleVenueUpload(e: React.ChangeEvent<HTMLInputElement>) {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = ev => {
+      const result = ev.target?.result as string;
+      setVenueImage(result);
+    };
+    reader.readAsDataURL(file);
+  }
+
+  function formatSnapshotTime(ts: number): string {
+    const d = new Date(ts);
+    const now = new Date();
+    const isToday = d.toDateString() === now.toDateString();
+    const hh = d.getHours().toString().padStart(2, "0");
+    const mm = d.getMinutes().toString().padStart(2, "0");
+    if (isToday) return `Today ${hh}:${mm}`;
+    return `${d.toLocaleDateString()} ${hh}:${mm}`;
+  }
+
+  function applyTemplate(template: ReceptionTemplate) {
+    setElements(template.buildElements());
+    setSelection(null);
+    setShowTemplates(false);
   }
 
   function handleAddElement(def: ElementDef) {
@@ -877,6 +1075,34 @@ export default function ReceptionLayoutEditPage() {
 
     return (
       <div className="flex flex-col divide-y divide-gray-100">
+        {/* Venue Blueprint section */}
+        <div className="px-4 py-3">
+          <p className="mb-2 text-xs font-semibold text-gray-600">Venue Blueprint</p>
+          {venueImage ? (
+            <div className="space-y-2">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img src={venueImage} alt="Venue blueprint" className="w-full rounded border border-gray-200 object-contain" style={{ maxHeight: 80 }} />
+              <div>
+                <p className="mb-1 text-[11px] text-gray-400">Opacity</p>
+                <input
+                  type="range" min={0.1} max={1.0} step={0.05}
+                  value={venueOpacity}
+                  onChange={e => setVenueOpacity(parseFloat(e.target.value))}
+                  className="w-full accent-purple-600"
+                />
+                <div className="flex justify-between text-[10px] text-gray-400"><span>10%</span><span>{Math.round(venueOpacity * 100)}%</span></div>
+              </div>
+              <button
+                onClick={() => setVenueImage(null)}
+                className="flex items-center gap-1 rounded-lg border border-red-200 px-2 py-1 text-xs text-red-500 hover:bg-red-50"
+              >
+                <X className="h-3 w-3" /> Remove
+              </button>
+            </div>
+          ) : (
+            <p className="text-xs text-gray-400">Upload floor plan to use as background reference.</p>
+          )}
+        </div>
         <div className="bg-gray-50 px-4 py-3 text-sm font-semibold text-orange-500">How to display guests&apos; names</div>
         <div className="px-4 py-4">
           <div className="mb-3 flex gap-2">
@@ -899,6 +1125,9 @@ export default function ReceptionLayoutEditPage() {
 
   return (
     <div className="fixed inset-0 z-50 flex flex-col bg-white">
+      {/* Hidden file input for venue blueprint */}
+      <input ref={fileInputRef} type="file" accept="image/*,.svg" className="hidden" onChange={handleVenueUpload} />
+
       {/* Top bar */}
       <div className="flex h-12 shrink-0 items-center justify-between border-b border-gray-100 bg-white px-4 shadow-sm">
         <button onClick={() => router.push(`/planner/${projectId}/seating?tab=reception`)} className="flex items-center gap-1.5 rounded-lg px-2 py-1.5 text-sm text-gray-500 hover:bg-gray-50">
@@ -907,6 +1136,15 @@ export default function ReceptionLayoutEditPage() {
         <div className="flex items-center gap-2">
           <button className="flex h-8 w-8 items-center justify-center rounded-lg border border-gray-200 text-gray-500 hover:bg-gray-50"><Keyboard className="h-4 w-4" /></button>
           <button className="flex items-center gap-1.5 rounded-lg border border-gray-200 px-3 py-1.5 text-sm text-gray-600 hover:bg-gray-50"><FileText className="h-4 w-4" />File</button>
+          <button onClick={() => fileInputRef.current?.click()} className="flex items-center gap-1.5 rounded-lg border border-gray-200 px-3 py-1.5 text-sm text-gray-600 hover:bg-gray-50">
+            <Upload className="h-4 w-4" />Upload Blueprint
+          </button>
+          <button onClick={() => setShowHistory(h => !h)} className="flex items-center gap-1.5 rounded-lg border border-gray-200 px-3 py-1.5 text-sm text-gray-600 hover:bg-gray-50">
+            <Clock className="h-4 w-4" />History
+          </button>
+          <button onClick={() => setShowTemplates(t => !t)} className="flex items-center gap-1.5 rounded-lg border border-gray-200 px-3 py-1.5 text-sm text-gray-600 hover:bg-gray-50">
+            <LayoutTemplate className="h-4 w-4" />Templates
+          </button>
           <button onClick={() => setShowAddPanel(true)} className="flex items-center gap-1.5 rounded-lg bg-purple-600 px-3 py-1.5 text-sm font-medium text-white hover:bg-purple-700">
             <Plus className="h-4 w-4" />Add element
           </button>
@@ -918,6 +1156,11 @@ export default function ReceptionLayoutEditPage() {
         {/* Canvas */}
         <div ref={canvasRef} className="relative flex-1 overflow-hidden" style={{ backgroundColor: "#f0eeeb" }} onMouseDown={onCanvasMouseDown} onWheel={onWheel}>
           <div style={{ position: "absolute", top: "50%", left: "50%", transform: `translate(calc(-50% + ${pan.x}px), calc(-50% + ${pan.y}px)) scale(${zoom})`, transformOrigin: "center center", width: PAPER_W, height: PAPER_H, backgroundColor: "white", boxShadow: "0 4px 24px rgba(0,0,0,0.12)" }}>
+            {/* Venue blueprint background */}
+            {venueImage && (
+              // eslint-disable-next-line @next/next/no-img-element
+              <img src={venueImage} alt="" style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "contain", opacity: venueOpacity, pointerEvents: "none" }} />
+            )}
             {elements.map(el => {
               const isElSel = selection?.kind === "element" && selection.id === el.id;
               const seatSelIdx = (selection?.kind === "seat" && selection.elementId === el.id) ? selection.seatIndex : null;
@@ -995,6 +1238,86 @@ export default function ReceptionLayoutEditPage() {
 
       {/* Add element panel overlay */}
       {showAddPanel && <AddElementPanel onAdd={handleAddElement} onClose={() => setShowAddPanel(false)} />}
+
+      {/* History panel overlay */}
+      {showHistory && (
+        <div className="fixed inset-0 z-50 flex">
+          <div className="absolute inset-0 bg-black/30" onClick={() => setShowHistory(false)} />
+          <div className="relative ml-auto flex h-full w-[300px] flex-col bg-white shadow-2xl">
+            <div className="flex shrink-0 items-center justify-between border-b border-gray-100 px-4 py-3">
+              <span className="text-sm font-semibold text-gray-700">History</span>
+              <button onClick={() => setShowHistory(false)} className="flex h-7 w-7 items-center justify-center rounded-lg text-gray-400 hover:bg-gray-100 hover:text-gray-600">
+                <X className="h-4 w-4" />
+              </button>
+            </div>
+            <div className="shrink-0 border-b border-gray-100 px-4 py-3">
+              <button
+                onClick={saveSnapshot}
+                className="flex w-full items-center justify-center gap-1.5 rounded-lg bg-purple-600 px-3 py-2 text-xs font-medium text-white hover:bg-purple-700"
+              >
+                <Plus className="h-3.5 w-3.5" /> Save current snapshot
+              </button>
+              <p className="mt-1.5 text-center text-[10px] text-gray-400">Max 5 snapshots stored</p>
+            </div>
+            <div className="flex-1 overflow-y-auto px-4 py-3 space-y-2">
+              {snapshots.length === 0 ? (
+                <p className="py-6 text-center text-xs text-gray-400">No snapshots saved yet.</p>
+              ) : (
+                snapshots.map((snap, i) => (
+                  <div key={i} className="rounded-lg border border-gray-200 bg-gray-50 px-3 py-2.5">
+                    <div className="flex items-center justify-between">
+                      <div>
+                        <p className="text-xs font-medium text-gray-700">{snap.label}</p>
+                        <p className="text-[10px] text-gray-400">{formatSnapshotTime(snap.timestamp)}</p>
+                      </div>
+                      <button
+                        onClick={() => restoreSnapshot(snap)}
+                        className="rounded-lg border border-purple-200 bg-purple-50 px-2 py-1 text-[10px] font-medium text-purple-700 hover:bg-purple-100"
+                      >
+                        Restore
+                      </button>
+                    </div>
+                  </div>
+                ))
+              )}
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Templates panel overlay */}
+      {showTemplates && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center">
+          <div className="absolute inset-0 bg-black/30" onClick={() => setShowTemplates(false)} />
+          <div className="relative flex flex-col bg-white rounded-xl shadow-2xl w-[560px] max-h-[80vh] overflow-hidden">
+            <div className="flex shrink-0 items-center justify-between border-b border-gray-100 px-5 py-3">
+              <span className="text-sm font-semibold text-gray-700">Reception Templates</span>
+              <button onClick={() => setShowTemplates(false)} className="flex h-7 w-7 items-center justify-center rounded-lg text-gray-400 hover:bg-gray-100 hover:text-gray-600">
+                <X className="h-4 w-4" />
+              </button>
+            </div>
+            <p className="shrink-0 px-5 py-2 text-xs text-gray-400">Applying a template will replace current layout.</p>
+            <div className="flex-1 overflow-y-auto px-5 py-3">
+              <div className="grid grid-cols-2 gap-4">
+                {RECEPTION_TEMPLATES.map(tmpl => (
+                  <div key={tmpl.id} className="rounded-xl border border-gray-200 bg-gray-50 p-3 flex flex-col items-center gap-2">
+                    <p className="text-xs font-semibold text-gray-700">{tmpl.name}</p>
+                    <div className="rounded-lg border border-gray-200 overflow-hidden bg-white">
+                      <TemplateSVGPreview template={tmpl} />
+                    </div>
+                    <button
+                      onClick={() => applyTemplate(tmpl)}
+                      className="w-full rounded-lg bg-purple-600 px-3 py-1.5 text-xs font-medium text-white hover:bg-purple-700"
+                    >
+                      Use template
+                    </button>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

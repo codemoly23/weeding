@@ -36,6 +36,11 @@ import type {
   RelatedServicesWidgetSettings,
   ButtonGroupWidgetSettings,
   WidgetContainerStyle,
+  EventSearchHeroWidgetSettings,
+  EventGalleryGridWidgetSettings,
+  EventGalleryGridItem,
+  EventCategoriesGridWidgetSettings,
+  CtaBannerWidgetSettings,
 } from "./types";
 
 // ============================================
@@ -310,30 +315,48 @@ export const DEFAULT_TRUST_BADGES_SETTINGS: TrustBadgesWidgetSettings = {
 };
 
 export const DEFAULT_STATS_SECTION_SETTINGS: StatsSectionWidgetSettings = {
+  // Section header above the stats grid
+  header: {
+    show: true,
+    title: "Trusted by Event Planners Worldwide",
+    subtitle: "Join thousands of satisfied users planning unforgettable events",
+    titleColor: "#ffffff",
+    subtitleColor: "rgba(255,255,255,0.9)",
+  },
   stats: [
-    { id: "stat_1", value: "500", label: "Projects Completed", suffix: "+", animate: true, icon: "ClipboardCheck" },
-    { id: "stat_2", value: "150", label: "Happy Clients", suffix: "+", animate: true, icon: "Users" },
-    { id: "stat_3", value: "98", label: "Client Retention", suffix: "%", animate: true, icon: "Heart" },
-    { id: "stat_4", value: "50", label: "Revenue Generated", prefix: "$", suffix: "M+", animate: true, icon: "DollarSign" },
+    { id: "stat_1", value: "50", label: "Events Planned", suffix: "K+", animate: true },
+    { id: "stat_2", value: "10", label: "Verified Vendors", suffix: "K+", animate: true },
+    { id: "stat_3", value: "98", label: "Satisfaction Rate", suffix: "%", animate: true },
+    { id: "stat_4", value: "150", label: "Cities Covered", suffix: "+", animate: true },
   ],
   columns: 4,
   style: {
-    valueColor: "#111827",
-    labelColor: "#6b7280",
-    valueSize: "lg",
+    valueColor: "#ffffff",
+    labelColor: "rgba(255,255,255,0.9)",
+    valueSize: "xl",
+    labelSize: "lg",
+    labelUppercase: false,
     divider: false,
     showTopBorder: false,
     topBorderColor: "#334155",
-    layout: "horizontal",
-    iconColor: "#f97316",
-    iconSize: "lg",
+    layout: "vertical",
+    iconColor: "#ffffff",
+    iconSize: "md",
   },
-  centered: false,
+  centered: true,
   animateOnScroll: true,
-  // Theme color binding
-  colors: { useTheme: true },
-  // Container Style
-  container: DEFAULT_WIDGET_CONTAINER,
+  // No theme color — use explicit white
+  colors: { useTheme: false },
+  // Container Style — dark gradient so white text is visible by default
+  container: {
+    ...DEFAULT_WIDGET_CONTAINER,
+    backgroundType: "gradient",
+    gradientBackground: {
+      colors: ["#1e1b4b", "#4c1d95"],
+      angle: 135,
+    },
+    padding: 80,
+  },
 };
 
 export const DEFAULT_LEAD_FORM_SETTINGS: LeadFormWidgetSettings = {
@@ -426,11 +449,11 @@ export const DEFAULT_VIDEO_SETTINGS: VideoWidgetSettings = {
 };
 
 export const DEFAULT_TESTIMONIAL_SETTINGS: TestimonialWidgetSettings = {
-  quote: "This service helped me set up my LLC in just a few days. Highly recommended!",
+  quote: "Ceremoney made planning our wedding so easy. The guest management and vendor tools saved us weeks of stress. Absolutely love it!",
   author: {
-    name: "John Smith",
-    role: "Founder",
-    company: "Tech Startup",
+    name: "Sofia Lindqvist",
+    role: "Bride",
+    company: "Stockholm Wedding",
     avatar: "",
   },
   rating: 5,
@@ -460,7 +483,7 @@ export const DEFAULT_TESTIMONIALS_SETTINGS: TestimonialsWidgetSettings = {
       borderColor: "#3b82f640",
     },
     heading: {
-      text: "Trusted by 10,000+ Entrepreneurs Worldwide",
+      text: "Trusted by 10,000+ Event Planners Worldwide",
       highlightWords: "10,000+",
       highlightColor: "#f97316",
       size: "xl",
@@ -602,7 +625,7 @@ export const DEFAULT_TESTIMONIALS_SETTINGS: TestimonialsWidgetSettings = {
     show: true,
     showAvatarStack: true,
     avatarStackCount: 4,
-    customerCountText: "Join 10,000+ happy customers",
+    customerCountText: "Join 10,000+ happy event planners",
     showAverageRating: true,
     averageRating: 4.9,
     totalReviews: "(2,500+ reviews)",
@@ -1150,7 +1173,7 @@ export const DEFAULT_PROCESS_STEPS_SETTINGS: ProcessStepsWidgetSettings = {
       borderColor: "#1e3a5f",
     },
     heading: {
-      text: "Start Your LLC in 4 Simple Steps",
+      text: "Plan Your Perfect Event in 4 Simple Steps",
       highlightWords: "",
       highlightColor: "#f97316",
       size: "xl",
@@ -1158,7 +1181,7 @@ export const DEFAULT_PROCESS_STEPS_SETTINGS: ProcessStepsWidgetSettings = {
     },
     description: {
       show: true,
-      text: "We've simplified the process so you can focus on what matters — building your business.",
+      text: "We've simplified event planning so you can focus on what matters — creating unforgettable memories.",
       size: "md",
       color: "#64748b",
     },
@@ -1166,31 +1189,31 @@ export const DEFAULT_PROCESS_STEPS_SETTINGS: ProcessStepsWidgetSettings = {
     marginBottom: 48,
   },
 
-  // Steps Data - matches screenshot
+  // Steps Data
   steps: [
     {
       id: "step_1",
-      icon: "ClipboardList",
-      title: "Create Your Event",
-      description: "Sign up for free, create your wedding event, and set your date. It only takes a minute to get started.",
+      icon: "PlusCircle",
+      title: "Create Event",
+      description: "Set up your event details and preferences",
     },
     {
       id: "step_2",
-      icon: "Users",
-      title: "Add Your Guests",
-      description: "Import your guest list from a spreadsheet or add guests one by one. Organize them into families and groups with ease.",
+      icon: "Search",
+      title: "Find Vendors",
+      description: "Browse verified vendors and services",
     },
     {
       id: "step_3",
-      icon: "Globe",
-      title: "Launch Your Wedding Website",
-      description: "Publish your beautiful event website in one click. Guests can RSVP, check details, and confirm meal preferences — all online.",
+      icon: "ClipboardCheck",
+      title: "Plan & Organize",
+      description: "Use our tools to manage every detail",
     },
     {
       id: "step_4",
-      icon: "Rocket",
-      title: "Enjoy Your Day",
-      description: "Finalize your seating chart, coordinate your vendors, and walk down the aisle knowing every detail is organized.",
+      icon: "Smile",
+      title: "Celebrate",
+      description: "Enjoy your perfectly planned event",
     },
   ],
 
@@ -1202,67 +1225,75 @@ export const DEFAULT_PROCESS_STEPS_SETTINGS: ProcessStepsWidgetSettings = {
     verticalSpacing: 48,
   },
 
-  // Step Number Badge
+  // Step Number Badge (hidden — step label pill used instead)
   stepNumber: {
-    show: true,
+    show: false,
     style: "circle",
     size: "sm",
-    bgColor: "#f97316",
+    bgColor: "#9333ea",
     textColor: "#ffffff",
-    borderColor: "#f97316",
+    borderColor: "#9333ea",
     position: "top-right",
   },
 
-  // Step Icon
+  // Step Icon — purple square (rounded-xl), white icon
   stepIcon: {
     show: true,
-    style: "circle",
-    size: "lg",
-    bgColor: "#fff7ed", // Light orange/peach background
-    iconColor: "#f97316", // Orange icon
+    style: "rounded",
+    size: "md",
+    bgColor: "#9333ea",
+    iconColor: "#ffffff",
     borderColor: "transparent",
-    hoverAnimation: "bounce",
+    hoverAnimation: "none",
+  },
+
+  // Step Label pill ("STEP 01" below icon)
+  stepLabel: {
+    show: true,
+    prefix: "STEP",
+    bgColor: "#f3f4f6",
+    textColor: "#6b7280",
   },
 
   // Step Content
   stepContent: {
-    titleSize: "md",
-    titleColor: "#0f172a", // Dark text
+    titleSize: "lg",
+    titleColor: "#111827",
     descriptionSize: "sm",
-    descriptionColor: "#64748b", // Gray text
-    alignment: "center",
+    descriptionColor: "#6b7280",
+    alignment: "left",
   },
 
-  // Connector Line - Animated!
+  // Connector Line — hidden in card mode
   connector: {
-    show: true,
+    show: false,
     style: "solid",
-    animation: "dot-travel", // Animated dots traveling along line
+    animation: "none",
     thickness: 2,
-    color: "#fde8d7", // Light orange
-    secondaryColor: "#f97316", // Orange for gradient/effects
+    color: "#e5e7eb",
+    secondaryColor: "#9333ea",
     animationSpeed: "medium",
     animationDirection: "forward",
     dotSize: 8,
-    dotColor: "#f97316",
+    dotColor: "#9333ea",
   },
 
   // Container Style
-  container: { ...DEFAULT_WIDGET_CONTAINER, borderRadius: 16 },
+  container: DEFAULT_WIDGET_CONTAINER,
 
-  // Card Style (no cards, transparent background)
+  // Card Style — white card with border/shadow matching HTML
   card: {
-    show: false,
-    backgroundColor: "transparent",
+    show: true,
+    backgroundColor: "#ffffff",
     backgroundType: "solid",
     gradientBackground: undefined,
-    borderRadius: 0,
-    borderWidth: 0,
-    borderColor: "transparent",
+    borderRadius: 16,
+    borderWidth: 1,
+    borderColor: "#e5e7eb",
     gradientBorder: undefined,
-    padding: 0,
-    shadow: "none",
-    hoverEffect: "none",
+    padding: 32,
+    shadow: "sm",
+    hoverEffect: "lift",
   },
 
   // Responsive
@@ -1886,7 +1917,7 @@ const DEFAULT_BLOG_HEADER: BlogPostGridWidgetSettings["header"] = {
   },
   subheading: {
     show: false,
-    text: "Insights and guides for entrepreneurs",
+    text: "Insights and guides for event planners",
     color: "#94a3b8",
   },
   viewAllLink: {
@@ -2155,6 +2186,186 @@ export const DEFAULT_BLOG_RECENT_POSTS_SETTINGS: BlogRecentPostsWidgetSettings =
   container: DEFAULT_WIDGET_CONTAINER,
 };
 
+// ── Event Search Hero Widget ──────────────────────────────────────────────────
+
+export const DEFAULT_EVENT_SEARCH_HERO_SETTINGS: EventSearchHeroWidgetSettings = {
+  title: "Plan Your Perfect Event",
+  subtitle: "Discover amazing venues, connect with top vendors, and create unforgettable celebrations",
+
+  backgroundImages: [
+    "/hero/1775644107819-planner.png",
+    "/hero/1775644579734-planner.png",
+    "/hero/1775646229669-vendor.png",
+  ],
+  autoplayInterval: 5000,
+  overlayOpacityTop: 0.5,
+  overlayOpacityBottom: 0.3,
+
+  showEventTypeField: true,
+  showLocationField: true,
+  showDateField: true,
+  eventTypeLabel: "Event Type",
+  locationLabel: "Location",
+  dateLabel: "Date",
+  locationPlaceholder: "Enter city or venue",
+  eventTypes: [
+    { value: "wedding", label: "Wedding" },
+    { value: "birthday", label: "Birthday Party" },
+    { value: "corporate", label: "Corporate Event" },
+    { value: "anniversary", label: "Anniversary" },
+    { value: "baptism", label: "Baptism" },
+    { value: "other", label: "Other" },
+  ],
+  searchButtonLabel: "Search Events",
+  searchButtonHref: "/vendors",
+};
+
+// ── Event Gallery Grid Widget ────────────────────────────────────────────────
+
+const DEFAULT_EVENT_GALLERY_ITEMS: EventGalleryGridItem[] = [
+  {
+    id: "1",
+    title: "Sarah's 30th Birthday Bash",
+    type: "Birthday",
+    image: "https://images.unsplash.com/photo-1530103862676-de8c9debad1d?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&w=800&q=80",
+    date: "March 15, 2026",
+    location: "Los Angeles, CA",
+    views: 1243,
+    href: "/planner/new",
+  },
+  {
+    id: "2",
+    title: "Emma & James Wedding",
+    type: "Wedding",
+    image: "https://images.unsplash.com/photo-1519741497674-611481863552?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&w=800&q=80",
+    date: "June 20, 2026",
+    location: "Miami, FL",
+    views: 2567,
+    href: "/planner/new",
+  },
+  {
+    id: "3",
+    title: "Tech Corp Annual Summit",
+    type: "Corporate",
+    image: "https://images.unsplash.com/photo-1511578314322-379afb476865?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&w=800&q=80",
+    date: "April 8, 2026",
+    location: "New York, NY",
+    views: 892,
+    href: "/planner/new",
+  },
+];
+
+export const DEFAULT_EVENT_GALLERY_GRID_SETTINGS: EventGalleryGridWidgetSettings = {
+  badge: { show: true, icon: "Camera", text: "Real Event Inspiration" },
+  title: "Get Inspired by Real Events",
+  subtitle: "Explore stunning celebrations from our community and find ideas for your next event",
+  sectionBg: "linear-gradient(to bottom, #faf5ff, #ffffff)",
+  items: DEFAULT_EVENT_GALLERY_ITEMS,
+  columns: 3,
+  cardBadgeFrom: "#9333ea",
+  cardBadgeTo: "#ec4899",
+  planSimilarLabel: "Plan Similar",
+  planSimilarHref: "",
+  showCta: true,
+  ctaLabel: "View More Events",
+  ctaHref: "/events",
+  ctaGradientFrom: "#9333ea",
+  ctaGradientTo: "#ec4899",
+  container: DEFAULT_WIDGET_CONTAINER,
+};
+
+// ── Vendor Listing Widget ────────────────────────────────────────────────────
+
+export const DEFAULT_VENDOR_LISTING_SETTINGS = {
+  title: "Featured Vendors",
+  subtitle: "Connect with our verified and highly-rated event professionals",
+  category: "",
+  limit: 6,
+  featuredOnly: false,
+  showViewAll: true,
+  columns: 3 as const,
+  cardStyle: "overlay" as const,
+  sectionBg: "linear-gradient(to bottom, #f9fafb, #ffffff)",
+  badgeFrom: "#9333ea",
+  badgeTo: "#ec4899",
+  container: DEFAULT_WIDGET_CONTAINER,
+};
+
+// ── Event Categories Grid Widget ─────────────────────────────────────────────
+
+export const DEFAULT_EVENT_CATEGORIES_GRID_SETTINGS: EventCategoriesGridWidgetSettings = {
+  badge: {
+    show: true,
+    text: "Event Categories",
+  },
+  title: "Popular Event Types",
+  subtitle: "Find the perfect planning resources for any celebration",
+  cardHeight: 280,
+  minCardWidth: 280,
+  gap: 24,
+  categories: [
+    {
+      id: "cat_1",
+      image: "https://images.unsplash.com/photo-1519741497674-611481863552?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&w=800&q=80",
+      title: "Weddings",
+      subtitle: "Plan your dream wedding",
+      href: "/planner/new?type=wedding",
+    },
+    {
+      id: "cat_2",
+      image: "https://images.unsplash.com/photo-1530103862676-de8c9debad1d?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&w=800&q=80",
+      title: "Birthday Parties",
+      subtitle: "Celebrate in style",
+      href: "/planner/new?type=birthday",
+    },
+    {
+      id: "cat_3",
+      image: "https://images.unsplash.com/photo-1511578314322-379afb476865?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&w=800&q=80",
+      title: "Corporate Events",
+      subtitle: "Professional gatherings",
+      href: "/planner/new?type=corporate",
+    },
+    {
+      id: "cat_4",
+      image: "https://images.unsplash.com/photo-1464366400600-7168b8af9bc3?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&w=800&q=80",
+      title: "Social Events",
+      subtitle: "Gatherings & parties",
+      href: "/planner/new?type=social",
+    },
+  ],
+};
+
+// ── CTA Banner Widget ─────────────────────────────────────────────────────────
+
+export const DEFAULT_CTA_BANNER_SETTINGS: CtaBannerWidgetSettings = {
+  sectionBgFrom: "#ffffff",
+  sectionBgTo: "#faf5ff",
+
+  cardGradientFrom: "#9333ea",
+  cardGradientTo: "#ec4899",
+  cardGradientAngle: 135,
+  cardBorderRadius: 24,
+  cardPaddingV: 64,
+  cardPaddingH: 32,
+  showPattern: true,
+
+  title: "Ready to Plan Your Next Event?",
+  subtitle: "Join thousands of event planners who trust us for their celebrations",
+
+  primaryButton: {
+    show: true,
+    label: "Get Started Free",
+    href: "/planner/new",
+    icon: "ArrowRight",
+  },
+  secondaryButton: {
+    show: true,
+    label: "Watch Demo",
+    href: "#demo",
+    icon: "Play",
+  },
+};
+
 // ============================================
 // EXPORT ALL DEFAULTS
 // ============================================
@@ -2189,4 +2400,9 @@ export const WIDGET_DEFAULTS: Record<string, unknown> = {
   "blog-post-list": DEFAULT_BLOG_POST_LIST_SETTINGS,
   "blog-recent-posts": DEFAULT_BLOG_RECENT_POSTS_SETTINGS,
   "button-group": DEFAULT_BUTTON_GROUP_SETTINGS,
+  "vendor-listing": DEFAULT_VENDOR_LISTING_SETTINGS,
+  "event-search-hero": DEFAULT_EVENT_SEARCH_HERO_SETTINGS,
+  "event-gallery-grid": DEFAULT_EVENT_GALLERY_GRID_SETTINGS,
+  "event-categories-grid": DEFAULT_EVENT_CATEGORIES_GRID_SETTINGS,
+  "cta-banner": DEFAULT_CTA_BANNER_SETTINGS,
 };

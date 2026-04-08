@@ -92,14 +92,16 @@ export function TrustBadgesWidget({ settings, isPreview = false }: TrustBadgesWi
   }
 
   // Grid layout - Card style
+  const isSingle = badges.length === 1;
+
   return (
     <WidgetContainer container={settings.container}>
-    <div data-field-id="badges" className={cn(centered && "flex justify-center")}>
+    <div data-field-id="badges" className={cn(!isSingle && centered && "flex justify-center")}>
       <div
         className={cn(
           "grid gap-4",
-          getColumnsClass(),
-          centered && "w-fit"
+          isSingle ? "grid-cols-1" : getColumnsClass(),
+          !isSingle && centered && "w-fit"
         )}
       >
         {badges.map((badge) => {

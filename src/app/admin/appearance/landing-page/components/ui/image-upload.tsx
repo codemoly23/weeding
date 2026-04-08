@@ -1,8 +1,7 @@
 "use client";
 
 import { useState, useRef } from "react";
-import Image from "next/image";
-import { Upload, X, Loader2, ImageIcon } from "lucide-react";
+import { X, Loader2, ImageIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -128,11 +127,11 @@ export function ImageUpload({
         // Preview with remove button
         <div className={cn("relative group", previewClassName)}>
           <div className="relative aspect-video w-full max-w-sm rounded-lg border overflow-hidden bg-muted">
-            <Image
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
               src={normalizedValue}
               alt="Preview"
-              fill
-              className="object-contain"
+              className="w-full h-full object-contain"
             />
           </div>
           <Button

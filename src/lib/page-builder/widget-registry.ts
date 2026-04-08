@@ -25,6 +25,12 @@ export const WIDGET_CATEGORIES: WidgetCategoryInfo[] = [
     description: "Service Details template widgets",
   },
   {
+    id: "wedding",
+    name: "Wedding",
+    icon: "Heart",
+    description: "Wedding & event planner widgets",
+  },
+  {
     id: "content",
     name: "Content",
     icon: "FileText",

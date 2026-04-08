@@ -34,6 +34,7 @@ import {
   SelectInput,
   ColorInput,
   ToggleSwitch,
+  TextInput,
 } from "@/app/admin/appearance/landing-page/components/ui/form-controls";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -265,6 +266,7 @@ export function StatsSectionWidgetSettingsPanel({
     ...DEFAULT_STATS_SECTION_SETTINGS,
     ...settings,
     style: { ...DEFAULT_STATS_SECTION_SETTINGS.style, ...settings?.style },
+    header: settings?.header ? { ...DEFAULT_STATS_SECTION_SETTINGS.header, ...settings.header } : DEFAULT_STATS_SECTION_SETTINGS.header,
     container: { ...DEFAULT_WIDGET_CONTAINER, ...settings?.container },
   };
 
@@ -280,6 +282,13 @@ export function StatsSectionWidgetSettingsPanel({
     value: string | boolean
   ) => {
     onChange({ ...s, style: { ...s.style, [key]: value } });
+  };
+
+  const updateHeaderField = (
+    key: keyof NonNullable<StatsSectionWidgetSettings["header"]>,
+    value: string | boolean
+  ) => {
+    onChange({ ...s, header: { ...s.header!, [key]: value } });
   };
 
   const addStat = useCallback(() => {
@@ -340,6 +349,42 @@ export function StatsSectionWidgetSettingsPanel({
   // Content Tab
   const renderContentTab = () => (
     <div className="space-y-4">
+      {/* Section Header */}
+      <div className="space-y-3 border rounded-lg p-3">
+        <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wide">Section Header</p>
+        <ToggleSwitch
+          label="Show Header"
+          checked={s.header?.show ?? false}
+          onChange={(v) => updateHeaderField("show", v)}
+        />
+        {s.header?.show && (
+          <>
+            <TextInput
+              label="Title"
+              value={s.header.title ?? ""}
+              onChange={(v) => updateHeaderField("title", v)}
+              placeholder="Trusted by Event Planners Worldwide"
+            />
+            <TextInput
+              label="Subtitle (optional)"
+              value={s.header.subtitle ?? ""}
+              onChange={(v) => updateHeaderField("subtitle", v)}
+              placeholder="Join thousands of event planners..."
+            />
+            <ColorInput
+              label="Title Color"
+              value={s.header.titleColor ?? "#0f172a"}
+              onChange={(v) => updateHeaderField("titleColor", v)}
+            />
+            <ColorInput
+              label="Subtitle Color"
+              value={s.header.subtitleColor ?? "#64748b"}
+              onChange={(v) => updateHeaderField("subtitleColor", v)}
+            />
+          </>
+        )}
+      </div>
+
       {/* Columns */}
       <SelectInput
         label="Columns"
@@ -446,6 +491,21 @@ export function StatsSectionWidgetSettingsPanel({
           { value: "lg", label: "Large" },
           { value: "xl", label: "Extra Large" },
         ]}
+      />
+      <SelectInput
+        label="Label Size"
+        value={s.style.labelSize ?? "sm"}
+        onChange={(v) => updateStyleField("labelSize", v)}
+        options={[
+          { value: "sm", label: "Small" },
+          { value: "md", label: "Medium" },
+          { value: "lg", label: "Large" },
+        ]}
+      />
+      <ToggleSwitch
+        label="Uppercase Labels"
+        checked={s.style.labelUppercase ?? true}
+        onChange={(v) => updateStyleField("labelUppercase", v)}
       />
 
       {/* Icon settings */}

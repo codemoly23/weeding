@@ -4,6 +4,7 @@ import { useState, useEffect, useCallback, useRef } from "react";
 import { useParams, useRouter } from "next/navigation";
 import { Calendar, MapPin, LayoutTemplate, Download, CloudUpload } from "lucide-react";
 import { getLocalVenue, updateLocalVenue, updateLocalProject, LocalVenueDetails } from "@/lib/planner-storage";
+import { useLanguage } from "@/lib/i18n/language-context";
 
 const isLocal = (id: string) => id.startsWith("local-");
 
@@ -44,17 +45,17 @@ function venueToForm(v: LocalVenueDetails | null): VenueForm {
   };
 }
 
-function formatDate(dateStr: string | null): string {
-  if (!dateStr) return "Set date";
+function formatDate(dateStr: string | null, fallback: string): string {
+  if (!dateStr) return fallback;
   try {
     const d = new Date(dateStr + "T00:00:00");
     return d.toLocaleDateString("en-GB", { weekday: "long", day: "numeric", month: "short", year: "numeric" });
   } catch { return dateStr; }
 }
 
-function formatLocation(city: string | null, country: string | null, address: string | null): string {
+function formatLocation(city: string | null, country: string | null, address: string | null, fallback: string): string {
   const parts = [address, city, country].filter(Boolean);
-  return parts.length > 0 ? parts.join(", ") : "Set location";
+  return parts.length > 0 ? parts.join(", ") : fallback;
 }
 
 async function saveVenue(id: string, local: boolean, form: VenueForm) {
@@ -76,6 +77,7 @@ export default function CeremonyPage() {
   const { id } = useParams<{ id: string }>();
   const router = useRouter();
   const local = isLocal(id);
+  const { t } = useLanguage();
 
   const [form, setForm] = useState<VenueForm>(emptyForm());
   const [loading, setLoading] = useState(true);
@@ -189,11 +191,8 @@ export default function CeremonyPage() {
 
         {/* Title */}
         <div className="mb-6 text-center">
-          <h1 className="text-2xl font-semibold text-gray-700">Ceremony Details</h1>
-          <p className="mt-1.5 text-sm text-gray-500">
-            Get down to the nitty-gritty and organize the details of your ceremony here. Find and add vendors
-            and services, set date and location, and plan your layout here.
-          </p>
+          <h1 className="text-2xl font-semibold text-gray-700">{t("ceremony.title")}</h1>
+          <p className="mt-1.5 text-sm text-gray-500">{t("ceremony.desc")}</p>
         </div>
 
         {/* Three info cards */}
@@ -204,9 +203,9 @@ export default function CeremonyPage() {
             className="relative cursor-pointer rounded-xl border border-gray-200 bg-white/80 px-4 py-4 hover:bg-white transition-colors"
             onClick={() => { setDatePickerOpen(v => !v); setLocPopupOpen(false); setEditingLocation(false); }}
           >
-            <p className="mb-1 text-xs text-gray-400">Ceremony Date</p>
+            <p className="mb-1 text-xs text-gray-400">{t("ceremony.date")}</p>
             <p className={`text-sm font-medium ${form.date ? "text-purple-600" : "text-purple-400"}`}>
-              {formatDate(form.date)}
+              {formatDate(form.date, t("ceremony.setDate"))}
             </p>
             {/* Calendar icon — click to open date picker */}
             <div className="absolute bottom-2 right-2" onClick={e => e.stopPropagation()}>
@@ -219,6 +218,7 @@ export default function CeremonyPage() {
                   date={form.date}
                   onSave={date => { commitDate(date); setDatePickerOpen(false); }}
                   onClose={() => setDatePickerOpen(false)}
+                  t={t}
                 />
               )}
             </div>
@@ -229,7 +229,7 @@ export default function CeremonyPage() {
             className="relative cursor-pointer rounded-xl border border-gray-200 bg-white/80 px-4 py-4 hover:bg-white transition-colors"
             onClick={() => { setEditingLocation(true); setDatePickerOpen(false); setLocPopupOpen(false); }}
           >
-            <p className="mb-1 text-xs text-gray-400">Ceremony Location</p>
+            <p className="mb-1 text-xs text-gray-400">{t("ceremony.location")}</p>
             {editingLocation ? (
               <LocationEditInline
                 city={form.city ?? ""}
@@ -237,10 +237,11 @@ export default function CeremonyPage() {
                 address={form.address ?? ""}
                 onCommit={commitLocation}
                 onCancel={() => setEditingLocation(false)}
+                t={t}
               />
             ) : (
               <p className={`text-sm font-medium truncate ${(form.city || form.country || form.address) ? "text-purple-600" : "text-purple-400"}`}>
-                {formatLocation(form.city, form.country, form.address)}
+                {formatLocation(form.city, form.country, form.address, t("ceremony.setLocation"))}
               </p>
             )}
             {/* MapPin icon — click to open location popup */}
@@ -256,6 +257,7 @@ export default function CeremonyPage() {
                   address={form.address ?? ""}
                   onCommit={commitLocation}
                   onClose={() => setLocPopupOpen(false)}
+                  t={t}
                 />
               )}
             </div>
@@ -266,8 +268,8 @@ export default function CeremonyPage() {
             className="relative cursor-pointer rounded-xl border border-gray-200 bg-white/80 px-4 py-4 hover:bg-white transition-colors"
             onClick={() => router.push(`/planner/${id}/seating?tab=ceremony&src=ceremony`)}
           >
-            <p className="mb-1 text-xs text-gray-400">Ceremony Layout</p>
-            <p className="text-sm font-medium text-purple-600">Plan venue layout</p>
+            <p className="mb-1 text-xs text-gray-400">{t("ceremony.layout")}</p>
+            <p className="text-sm font-medium text-purple-600">{t("ceremony.planLayout")}</p>
             <LayoutTemplate className="absolute bottom-2 right-2 h-12 w-12 text-purple-200" />
           </div>
         </div>
@@ -278,7 +280,7 @@ export default function CeremonyPage() {
             rows={4}
             value={form.description ?? ""}
             onChange={e => handleDescriptionChange(e.target.value)}
-            placeholder="Ceremony description"
+            placeholder={t("ceremony.descPlaceholder")}
             className="w-full resize-none bg-transparent text-sm text-gray-700 placeholder-gray-400 focus:outline-none"
           />
         </div>
@@ -286,16 +288,16 @@ export default function CeremonyPage() {
         {/* Photo upload area */}
         <div className="mb-6 rounded-xl border-2 border-dashed border-purple-200 bg-white/60 px-6 py-10 text-center">
           <CloudUpload className="mx-auto mb-3 h-12 w-12 text-gray-400" />
-          <p className="mb-1 text-sm font-semibold text-gray-600">Upload photos</p>
-          <p className="mb-1 text-xs text-gray-400">Drop your photos here, or click below to select a files to upload.</p>
+          <p className="mb-1 text-sm font-semibold text-gray-600">{t("ceremony.uploadPhotos")}</p>
+          <p className="mb-1 text-xs text-gray-400">{t("ceremony.dropPhotos")}</p>
           <p className="mb-4 text-xs font-semibold text-gray-500">
-            Limit is 30 photos. <span className="text-purple-500">Photos must be no larger than 20Mb.</span>
+            {t("ceremony.photoLimit")} <span className="text-purple-500">{t("ceremony.photoSize")}</span>
           </p>
           <button
-            onClick={() => alert("Photo upload will be available after storage is configured.")}
+            onClick={() => alert(t("ceremony.photoDeferred"))}
             className="rounded-lg bg-purple-600 px-6 py-2 text-sm font-medium text-white hover:bg-purple-700 transition-colors"
           >
-            Upload
+            {t("ceremony.upload")}
           </button>
         </div>
 
@@ -306,7 +308,7 @@ export default function CeremonyPage() {
             className="flex items-center gap-2 rounded-lg border border-gray-300 bg-white px-5 py-2.5 text-sm text-gray-600 hover:bg-gray-50 transition-colors"
           >
             <Download className="h-4 w-4 text-purple-500" />
-            Download PDF file
+            {t("ceremony.downloadPdf")}
           </button>
         </div>
 
@@ -317,15 +319,16 @@ export default function CeremonyPage() {
 
 // ── Date picker popup ─────────────────────────────────────────────────────────
 
-function DatePickerPopup({ date, onSave, onClose }: {
+function DatePickerPopup({ date, onSave, onClose, t }: {
   date: string | null;
   onSave: (date: string) => void;
   onClose: () => void;
+  t: (key: string) => string;
 }) {
   const [val, setVal] = useState(date ?? "");
   return (
     <div className="absolute bottom-full right-0 mb-1 z-50 w-56 rounded-xl border border-gray-200 bg-white shadow-xl p-3">
-      <p className="mb-2 text-xs font-medium text-gray-500">Select Date</p>
+      <p className="mb-2 text-xs font-medium text-gray-500">{t("ceremony.selectDate")}</p>
       <input
         autoFocus
         type="date"
@@ -334,8 +337,8 @@ function DatePickerPopup({ date, onSave, onClose }: {
         className="w-full rounded-lg border border-gray-200 px-2.5 py-1.5 text-sm text-gray-700 focus:outline-none focus:border-purple-400"
       />
       <div className="flex gap-2 mt-2">
-        <button onClick={() => onSave(val)} className="flex-1 rounded-lg bg-purple-600 py-1.5 text-xs font-medium text-white hover:bg-purple-700">Save</button>
-        <button onClick={onClose} className="flex-1 rounded-lg bg-gray-100 py-1.5 text-xs text-gray-500 hover:bg-gray-200">Cancel</button>
+        <button onClick={() => onSave(val)} className="flex-1 rounded-lg bg-purple-600 py-1.5 text-xs font-medium text-white hover:bg-purple-700">{t("ceremony.save")}</button>
+        <button onClick={onClose} className="flex-1 rounded-lg bg-gray-100 py-1.5 text-xs text-gray-500 hover:bg-gray-200">{t("ceremony.cancel")}</button>
       </div>
     </div>
   );
@@ -343,10 +346,11 @@ function DatePickerPopup({ date, onSave, onClose }: {
 
 // ── Location popup ────────────────────────────────────────────────────────────
 
-function LocationPopup({ city, country, address, onCommit, onClose }: {
+function LocationPopup({ city, country, address, onCommit, onClose, t }: {
   city: string; country: string; address: string;
   onCommit: (city: string, country: string, address: string) => void;
   onClose: () => void;
+  t: (key: string) => string;
 }) {
   const [c, setC] = useState(city);
   const [co, setCo] = useState(country);
@@ -354,18 +358,18 @@ function LocationPopup({ city, country, address, onCommit, onClose }: {
 
   return (
     <div className="absolute bottom-full right-0 mb-1 z-50 w-64 rounded-xl border border-gray-200 bg-white shadow-xl p-3">
-      <p className="mb-2 text-xs font-medium text-gray-500">Location Details</p>
+      <p className="mb-2 text-xs font-medium text-gray-500">{t("ceremony.locationDetails")}</p>
       <div className="space-y-1.5">
-        <input autoFocus value={a} onChange={e => setA(e.target.value)} placeholder="Street address"
+        <input autoFocus value={a} onChange={e => setA(e.target.value)} placeholder={t("ceremony.streetAddress")}
           className="w-full rounded-lg border border-gray-200 px-2.5 py-1.5 text-xs text-gray-700 focus:outline-none focus:border-purple-400" />
-        <input value={c} onChange={e => setC(e.target.value)} placeholder="City"
+        <input value={c} onChange={e => setC(e.target.value)} placeholder={t("ceremony.city")}
           className="w-full rounded-lg border border-gray-200 px-2.5 py-1.5 text-xs text-gray-700 focus:outline-none focus:border-purple-400" />
-        <input value={co} onChange={e => setCo(e.target.value)} placeholder="Country"
+        <input value={co} onChange={e => setCo(e.target.value)} placeholder={t("ceremony.country")}
           className="w-full rounded-lg border border-gray-200 px-2.5 py-1.5 text-xs text-gray-700 focus:outline-none focus:border-purple-400" />
       </div>
       <div className="flex gap-2 mt-2">
-        <button onClick={() => onCommit(c, co, a)} className="flex-1 rounded-lg bg-purple-600 py-1.5 text-xs font-medium text-white hover:bg-purple-700">Save</button>
-        <button onClick={onClose} className="flex-1 rounded-lg bg-gray-100 py-1.5 text-xs text-gray-500 hover:bg-gray-200">Cancel</button>
+        <button onClick={() => onCommit(c, co, a)} className="flex-1 rounded-lg bg-purple-600 py-1.5 text-xs font-medium text-white hover:bg-purple-700">{t("ceremony.save")}</button>
+        <button onClick={onClose} className="flex-1 rounded-lg bg-gray-100 py-1.5 text-xs text-gray-500 hover:bg-gray-200">{t("ceremony.cancel")}</button>
       </div>
     </div>
   );
@@ -374,11 +378,12 @@ function LocationPopup({ city, country, address, onCommit, onClose }: {
 // ── Inline location editor (card click) ──────────────────────────────────────
 
 function LocationEditInline({
-  city, country, address, onCommit, onCancel,
+  city, country, address, onCommit, onCancel, t,
 }: {
   city: string; country: string; address: string;
   onCommit: (city: string, country: string, address: string) => void;
   onCancel: () => void;
+  t: (key: string) => string;
 }) {
   const [c, setC] = useState(city);
   const [co, setCo] = useState(country);
@@ -386,19 +391,19 @@ function LocationEditInline({
 
   return (
     <div className="space-y-1" onClick={e => e.stopPropagation()}>
-      <input autoFocus value={a} onChange={e => setA(e.target.value)} placeholder="Street address"
+      <input autoFocus value={a} onChange={e => setA(e.target.value)} placeholder={t("ceremony.streetAddress")}
         className="w-full rounded border border-purple-300 bg-transparent px-2 py-0.5 text-xs text-purple-700 focus:outline-none" />
       <div className="flex gap-1">
-        <input value={c} onChange={e => setC(e.target.value)} placeholder="City"
+        <input value={c} onChange={e => setC(e.target.value)} placeholder={t("ceremony.city")}
           className="w-full rounded border border-purple-300 bg-transparent px-2 py-0.5 text-xs text-purple-700 focus:outline-none" />
-        <input value={co} onChange={e => setCo(e.target.value)} placeholder="Country"
+        <input value={co} onChange={e => setCo(e.target.value)} placeholder={t("ceremony.country")}
           className="w-full rounded border border-purple-300 bg-transparent px-2 py-0.5 text-xs text-purple-700 focus:outline-none" />
       </div>
       <div className="flex gap-1 pt-0.5">
         <button onClick={() => onCommit(c, co, a)}
-          className="rounded bg-purple-600 px-2 py-0.5 text-xs text-white hover:bg-purple-700">Save</button>
+          className="rounded bg-purple-600 px-2 py-0.5 text-xs text-white hover:bg-purple-700">{t("ceremony.save")}</button>
         <button onClick={onCancel}
-          className="rounded bg-gray-100 px-2 py-0.5 text-xs text-gray-500 hover:bg-gray-200">Cancel</button>
+          className="rounded bg-gray-100 px-2 py-0.5 text-xs text-gray-500 hover:bg-gray-200">{t("ceremony.cancel")}</button>
       </div>
     </div>
   );

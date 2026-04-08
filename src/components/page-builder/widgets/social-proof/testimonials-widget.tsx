@@ -9,6 +9,7 @@ import { DEFAULT_TESTIMONIALS_SETTINGS } from "@/lib/page-builder/defaults";
 import { TestimonialsGridView } from "./testimonials-grid-view";
 import { TestimonialsCarouselView } from "./testimonials-carousel-view";
 import { TestimonialsVideoView } from "./testimonials-video-view";
+import { TestimonialsMarqueeView } from "./testimonials-marquee-view";
 import { cn } from "@/lib/utils";
 import { WidgetContainer } from "@/components/page-builder/shared/widget-container";
 
@@ -360,6 +361,15 @@ export function TestimonialsWidget({ settings: partialSettings, isPreview = fals
           {settings.viewMode === "video-grid" && (
             <TestimonialsVideoView
               testimonials={testimonials.filter((t) => t.type === "video")}
+              settings={settings}
+              isPreview={isPreview}
+            />
+          )}
+
+          {/* Marquee View */}
+          {settings.viewMode === "marquee" && (
+            <TestimonialsMarqueeView
+              testimonials={testimonials}
               settings={settings}
               isPreview={isPreview}
             />

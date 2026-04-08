@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useCallback, useRef } from "react";
 import { useParams, useRouter } from "next/navigation";
-import { Plus, Users, Download, X, ChevronDown, ChevronLeft, ChevronRight, Eye } from "lucide-react";
+import { Plus, Users, Download, X, ChevronDown, ChevronLeft, ChevronRight, Eye, UtensilsCrossed } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { CeremonyDiagram, ReceptionDiagram } from "@/components/planner/venue-diagrams";
 import {
@@ -21,6 +21,7 @@ interface Guest {
   id: string; firstName: string; lastName: string | null; title: string | null;
   side: "BRIDE" | "GROOM"; rsvpStatus: "PENDING" | "ATTENDING" | "NOT_ATTENDING";
   tableNumber?: number | null;
+  dietary?: string | null;
 }
 
 const isLocal = (id: string) => id.startsWith("local-");
@@ -127,7 +128,7 @@ const PREV_H = 1010;
 const PREV_CHAIR_R = 11;
 function prevSpPx(s: number) { return s * 0.62; }
 
-function CeremonyLayoutPreview({ elements, guests, svgId = "ceremony-layout-svg" }: { elements: PreviewElement[]; guests?: { id: string; firstName: string; lastName: string | null }[]; svgId?: string }) {
+function CeremonyLayoutPreview({ elements, guests, svgId = "ceremony-layout-svg", venueImage, venueOpacity = 0.35 }: { elements: PreviewElement[]; guests?: { id: string; firstName: string; lastName: string | null }[]; svgId?: string; venueImage?: string | null; venueOpacity?: number }) {
   function guestLabel(guestIds: (string | null)[] | undefined, i: number): string {
     if (!guests || !guestIds) return `${i + 1}`;
     const gid = guestIds[i];
@@ -167,6 +168,9 @@ function CeremonyLayoutPreview({ elements, guests, svgId = "ceremony-layout-svg"
   return (
     <svg id={svgId} viewBox={`0 0 ${PREV_W} ${PREV_H}`} className="w-full h-auto">
       <rect width={PREV_W} height={PREV_H} fill="white" />
+      {venueImage && (
+        <image href={venueImage} x={0} y={0} width={PREV_W} height={PREV_H} preserveAspectRatio="xMidYMid meet" opacity={venueOpacity} />
+      )}
       <defs>
         <linearGradient id="pvAg" x1="0" y1="0" x2="0" y2="1">
           <stop offset="0%"   stopColor="#fdf4ec" stopOpacity="0.7" />
@@ -2003,6 +2007,88 @@ function AtlasLayoutEditor({
   );
 }
 
+// ─── CSV Export helper ────────────────────────────────────────────────────────
+
+function parseDietary(dietary: string | null | undefined): string {
+  if (!dietary) return "Standard";
+  const d = dietary.toLowerCase();
+  if (d.includes("vegan")) return "Vegan";
+  if (d.includes("gluten")) return "Gluten-free";
+  if (d.includes("vegetarian")) return "Vegetarian";
+  return "Standard";
+}
+
+function exportGuestCSV(elements: PreviewElement[], guests: Guest[]) {
+  const TABLE_KINDS = ["table-long", "table-square", "table-round", "table-ellipse", "table-halfround"];
+  const rows: string[] = [];
+  rows.push(["Guest Name", "Table Name", "Seat #", "Dietary", "RSVP Status"].join(","));
+
+  let tableIndex = 0;
+  for (const el of elements) {
+    if (!TABLE_KINDS.includes(el.kind)) continue;
+    const tableName = el.name || `Table ${tableIndex + 1}`;
+    tableIndex++;
+    const guestIds = el.guestIds ?? [];
+    for (let s = 0; s < guestIds.length; s++) {
+      const gid = guestIds[s];
+      const g = gid ? guests.find(x => x.id === gid) : null;
+      const name = g ? `${g.firstName}${g.lastName ? " " + g.lastName : ""}` : "(Empty seat)";
+      const dietary = g ? parseDietary(g.dietary) : "";
+      const rsvp = g ? g.rsvpStatus : "";
+      rows.push([
+        `"${name.replace(/"/g, '""')}"`,
+        `"${tableName.replace(/"/g, '""')}"`,
+        String(s + 1),
+        `"${dietary}"`,
+        `"${rsvp}"`,
+      ].join(","));
+    }
+  }
+
+  const csvContent = "\uFEFF" + rows.join("\n");
+  const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = "seating-chart.csv";
+  a.click();
+  URL.revokeObjectURL(url);
+}
+
+// ─── Catering summary helper ──────────────────────────────────────────────────
+
+interface CateringSummaryRow {
+  tableName: string;
+  total: number;
+  vegan: number;
+  glutenFree: number;
+  vegetarian: number;
+  standard: number;
+}
+
+function buildCateringSummary(elements: PreviewElement[], guests: Guest[]): CateringSummaryRow[] {
+  const TABLE_KINDS = ["table-long", "table-square", "table-round", "table-ellipse", "table-halfround"];
+  const rows: CateringSummaryRow[] = [];
+  let idx = 0;
+  for (const el of elements) {
+    if (!TABLE_KINDS.includes(el.kind)) continue;
+    const tableName = el.name || `Table ${idx + 1}`;
+    idx++;
+    const guestIds = (el.guestIds ?? []).filter(Boolean);
+    let vegan = 0, glutenFree = 0, vegetarian = 0, standard = 0;
+    for (const gid of guestIds) {
+      const g = guests.find(x => x.id === gid);
+      const cat = parseDietary(g?.dietary);
+      if (cat === "Vegan") vegan++;
+      else if (cat === "Gluten-free") glutenFree++;
+      else if (cat === "Vegetarian") vegetarian++;
+      else standard++;
+    }
+    rows.push({ tableName, total: guestIds.length, vegan, glutenFree, vegetarian, standard });
+  }
+  return rows;
+}
+
 // ─── Main Page ────────────────────────────────────────────────────────────────
 
 export default function SeatingPage() {
@@ -2017,7 +2103,10 @@ export default function SeatingPage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [ceremonyElements, setCeremonyElements] = useState<PreviewElement[] | null>(null);
+  const [ceremonyVenueBg, setCeremonyVenueBg] = useState<string | null>(null);
+  const [receptionVenueBg, setReceptionVenueBg] = useState<string | null>(null);
   const [atlasEditMode, setAtlasEditMode] = useState(false);
+  const [cateringMode, setCateringMode] = useState(false);
   const [atlasSettings, setAtlasSettings] = useState<AtlasSettings>(() => {
     try {
       const raw = localStorage.getItem(`atlas-settings-${projectId}`);
@@ -2031,7 +2120,7 @@ export default function SeatingPage() {
 
   const activeLayout = layouts.find(l => l.id === activeLayoutId) ?? null;
 
-  // Load saved ceremony layout from localStorage for preview
+  // Load saved ceremony layout + venue bg from localStorage for preview
   useEffect(() => {
     if (activeTab !== "ceremony") return;
     try {
@@ -2039,9 +2128,10 @@ export default function SeatingPage() {
       if (raw) setCeremonyElements(JSON.parse(raw) as PreviewElement[]);
       else setCeremonyElements(null);
     } catch {}
+    setCeremonyVenueBg(localStorage.getItem(`venue-bg-ceremony-${projectId}`));
   }, [projectId, activeTab]);
 
-  // Load saved reception layout from localStorage for preview
+  // Load saved reception layout + venue bg from localStorage for preview
   useEffect(() => {
     if (activeTab !== "reception") return;
     try {
@@ -2049,6 +2139,7 @@ export default function SeatingPage() {
       if (raw) setReceptionElements(JSON.parse(raw) as PreviewElement[]);
       else setReceptionElements(null);
     } catch {}
+    setReceptionVenueBg(localStorage.getItem(`venue-bg-reception-${projectId}`));
   }, [projectId, activeTab]);
 
   // Load table cards from reception layout
@@ -2148,6 +2239,20 @@ export default function SeatingPage() {
             These tools make it easy to design your seating chart and all the related details.
             Everything is connected through your guest list, so changes update automatically.
           </p>
+          <div className="mt-3 flex items-center justify-center">
+            <button
+              onClick={() => {
+                try {
+                  const raw = localStorage.getItem(`reception-layout-${projectId}`);
+                  if (raw) exportGuestCSV(JSON.parse(raw) as PreviewElement[], guests);
+                } catch {}
+              }}
+              className="flex items-center gap-2 rounded-lg border border-gray-300 bg-white px-4 py-1.5 text-sm text-gray-600 hover:bg-gray-50 transition-colors"
+            >
+              <Download className="h-4 w-4 text-purple-500" />
+              Export Guest List CSV
+            </button>
+          </div>
         </div>
 
         {/* Tab cards */}
@@ -2178,7 +2283,7 @@ export default function SeatingPage() {
             subtitle="Prepare and print your ceremony layout."
             diagram={
               ceremonyElements && ceremonyElements.length > 0
-                ? <CeremonyLayoutPreview elements={ceremonyElements} guests={guests} />
+                ? <CeremonyLayoutPreview elements={ceremonyElements} guests={guests} venueImage={ceremonyVenueBg} />
                 : <CeremonyDiagram />
             }
             onEdit={() => router.push(`/planner/${projectId}/seating/ceremony-layout-edit`)}
@@ -2188,19 +2293,123 @@ export default function SeatingPage() {
           />
         )}
         {activeTab === "reception" && (
-          <LayoutPanel
-            title="Reception Layout"
-            subtitle="Prepare and print your reception layout."
-            diagram={
-              receptionElements && receptionElements.length > 0
-                ? <CeremonyLayoutPreview elements={receptionElements} guests={guests} svgId="reception-layout-svg" />
-                : <ReceptionDiagram />
-            }
-            onEdit={() => router.push(`/planner/${projectId}/seating/reception-layout-edit`)}
-            photos={GALLERY.reception}
-            pdfSvgId="reception-layout-svg"
-            wide
-          />
+          <div>
+            <LayoutPanel
+              title="Reception Layout"
+              subtitle="Prepare and print your reception layout."
+              diagram={
+                receptionElements && receptionElements.length > 0
+                  ? <CeremonyLayoutPreview elements={receptionElements} guests={guests} svgId="reception-layout-svg" venueImage={receptionVenueBg} />
+                  : <ReceptionDiagram />
+              }
+              onEdit={() => router.push(`/planner/${projectId}/seating/reception-layout-edit`)}
+              photos={GALLERY.reception}
+              pdfSvgId="reception-layout-svg"
+              wide
+            />
+
+            {/* Export CSV button */}
+            <div className="mx-auto mt-4 max-w-3xl flex items-center justify-center gap-3">
+              <button
+                onClick={() => {
+                  if (receptionElements) exportGuestCSV(receptionElements, guests);
+                }}
+                disabled={!receptionElements || receptionElements.length === 0}
+                className="flex items-center gap-2 rounded-lg border border-gray-300 bg-white px-5 py-2 text-sm text-gray-600 hover:bg-gray-50 transition-colors disabled:opacity-40"
+              >
+                <Download className="h-4 w-4 text-purple-500" />
+                Export Guest CSV
+              </button>
+            </div>
+
+            {/* Catering Mode toggle */}
+            <div className="mx-auto mt-6 max-w-3xl rounded-xl border border-gray-200 bg-white px-5 py-4 shadow-sm">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-2">
+                  <UtensilsCrossed className="h-4 w-4 text-purple-500" />
+                  <span className="text-sm font-semibold text-gray-700">Catering Mode</span>
+                </div>
+                <button
+                  onClick={() => setCateringMode(m => !m)}
+                  className={cn(
+                    "relative inline-flex h-6 w-11 items-center rounded-full transition-colors",
+                    cateringMode ? "bg-purple-500" : "bg-gray-200"
+                  )}
+                >
+                  <span className={cn(
+                    "inline-block h-4 w-4 rounded-full bg-white shadow transition-transform",
+                    cateringMode ? "translate-x-6" : "translate-x-1"
+                  )} />
+                </button>
+              </div>
+              <p className="mt-1 text-xs text-gray-400">Show a dietary breakdown per table for catering staff.</p>
+
+              {cateringMode && receptionElements && (
+                <div className="mt-4 overflow-x-auto">
+                  {(() => {
+                    const summary = buildCateringSummary(receptionElements, guests);
+                    if (summary.length === 0) return <p className="text-xs text-gray-400">No tables found in the reception layout.</p>;
+                    return (
+                      <table className="w-full text-xs border-collapse">
+                        <thead>
+                          <tr className="border-b border-gray-200 text-gray-500">
+                            <th className="py-1.5 text-start font-medium">Table</th>
+                            <th className="py-1.5 text-center font-medium">Total</th>
+                            <th className="py-1.5 text-center font-medium">Vegan</th>
+                            <th className="py-1.5 text-center font-medium">Gluten-free</th>
+                            <th className="py-1.5 text-center font-medium">Vegetarian</th>
+                            <th className="py-1.5 text-center font-medium">Standard</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {summary.map((row, i) => (
+                            <tr key={i} className={cn("border-b border-gray-100", i % 2 === 0 ? "bg-gray-50" : "bg-white")}>
+                              <td className="py-1.5 pr-2 text-gray-700 font-medium">{row.tableName}</td>
+                              <td className="py-1.5 text-center text-gray-600">{row.total}</td>
+                              <td className="py-1.5 text-center text-green-600">{row.vegan || "—"}</td>
+                              <td className="py-1.5 text-center text-amber-600">{row.glutenFree || "—"}</td>
+                              <td className="py-1.5 text-center text-blue-600">{row.vegetarian || "—"}</td>
+                              <td className="py-1.5 text-center text-gray-500">{row.standard || "—"}</td>
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
+                    );
+                  })()}
+                </div>
+              )}
+            </div>
+
+            {/* QR Entrance Mode */}
+            <div className="mx-auto mt-6 max-w-3xl rounded-xl border border-gray-200 bg-white px-5 py-4 shadow-sm">
+              <p className="mb-2 text-sm font-semibold text-gray-700">QR Entrance Mode</p>
+              <p className="mb-3 text-xs text-gray-400">Share this link with venue staff to look up guests on arrival.</p>
+              <div className="flex items-start gap-4">
+                <div className="flex-1 rounded-lg border-2 border-dashed border-gray-300 bg-gray-50 px-4 py-3">
+                  <p className="break-all font-mono text-xs text-gray-600">{`${typeof window !== "undefined" ? window.location.origin : ""}/seat-finder/${projectId}`}</p>
+                </div>
+                <div className="flex flex-col gap-2">
+                  <button
+                    onClick={() => {
+                      const url = `${window.location.origin}/seat-finder/${projectId}`;
+                      navigator.clipboard.writeText(url).catch(() => {});
+                    }}
+                    className="rounded-lg border border-gray-300 bg-white px-3 py-1.5 text-xs text-gray-600 hover:bg-gray-50 transition-colors"
+                  >
+                    Copy link
+                  </button>
+                  <a
+                    href={`/seat-finder/${projectId}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex items-center justify-center gap-1.5 rounded-lg bg-purple-600 px-3 py-1.5 text-xs font-medium text-white hover:bg-purple-700 transition-colors"
+                  >
+                    Open Entrance Scanner
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
         )}
         {activeTab === "atlas" && (
           <AlphabeticalAtlasPanel

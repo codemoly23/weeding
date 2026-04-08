@@ -19,20 +19,21 @@ import {
 } from "@/components/ui/select";
 import { getLocalProject, updateLocalProject, createLocalProject } from "@/lib/planner-storage";
 import { usePlannerCouple } from "@/lib/planner-context";
+import { useLanguage } from "@/lib/i18n/language-context";
 
 // Tab IDs that can be hidden
 const HIDEABLE_TABS = [
-  { id: "guests", label: "Guest List" },
-  { id: "ceremony", label: "Ceremony" },
-  { id: "reception", label: "Reception" },
-  { id: "vendors", label: "All Vendors" },
-  { id: "website", label: "Website" },
-  { id: "checklist", label: "Checklist" },
-  { id: "budget", label: "Budget" },
-  { id: "itinerary", label: "Itinerary" },
-  { id: "seating", label: "Seating Chart" },
-  { id: "notes", label: "Notes" },
-  { id: "post-wedding", label: "Post-Wedding" },
+  { id: "guests",       tKey: "tab.guests" },
+  { id: "ceremony",     tKey: "tab.ceremony" },
+  { id: "reception",    tKey: "tab.reception" },
+  { id: "vendors",      tKey: "tab.vendors" },
+  { id: "website",      tKey: "tab.website" },
+  { id: "checklist",    tKey: "tab.checklist" },
+  { id: "budget",       tKey: "tab.budget" },
+  { id: "itinerary",    tKey: "tab.itinerary" },
+  { id: "seating",      tKey: "tab.seating" },
+  { id: "notes",        tKey: "tab.notes" },
+  { id: "post-wedding", tKey: "tab.postWedding" },
 ];
 
 interface SubscriptionInfo {
@@ -121,6 +122,7 @@ export default function SettingsPage() {
   const projectId = params.id as string;
   const isLocal = projectId.startsWith("local-");
   const { brideName, groomName, updateBrideName, updateGroomName } = usePlannerCouple();
+  const { t } = useLanguage();
 
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
@@ -397,46 +399,46 @@ export default function SettingsPage() {
 
   return (
     <div className="mx-auto max-w-2xl space-y-6">
-      <h1 className="text-2xl font-bold">Project Settings</h1>
+      <h1 className="text-2xl font-bold">{t("settings.title")}</h1>
 
       {/* Couple Names */}
       <Card>
         <CardHeader>
-          <CardTitle>Couple</CardTitle>
+          <CardTitle>{t("settings.couple")}</CardTitle>
         </CardHeader>
         <CardContent className="space-y-4">
           <div className="grid grid-cols-2 gap-4">
             <div className="space-y-2">
-              <Label htmlFor="brideName">Bride&apos;s Name</Label>
+              <Label htmlFor="brideName">{t("settings.brideName")}</Label>
               <Input
                 id="brideName"
                 value={brideName}
                 onChange={(e) => updateBrideName(e.target.value, projectId, isLocal)}
-                placeholder="e.g. Sarah"
+                placeholder={t("settings.brideNamePh")}
               />
             </div>
             <div className="space-y-2">
-              <Label htmlFor="groomName">Groom&apos;s Name</Label>
+              <Label htmlFor="groomName">{t("settings.groomName")}</Label>
               <Input
                 id="groomName"
                 value={groomName}
                 onChange={(e) => updateGroomName(e.target.value, projectId, isLocal)}
-                placeholder="e.g. John"
+                placeholder={t("settings.groomNamePh")}
               />
             </div>
           </div>
-          <p className="text-xs text-gray-400">These names appear across all planner pages automatically.</p>
+          <p className="text-xs text-gray-400">{t("settings.namesNote")}</p>
         </CardContent>
       </Card>
 
       {/* General */}
       <Card>
         <CardHeader>
-          <CardTitle>General</CardTitle>
+          <CardTitle>{t("settings.general")}</CardTitle>
         </CardHeader>
         <CardContent className="space-y-4">
           <div className="space-y-2">
-            <Label htmlFor="title">Project Title</Label>
+            <Label htmlFor="title">{t("settings.projectTitle")}</Label>
             <Input
               id="title"
               value={form.title}
@@ -445,7 +447,7 @@ export default function SettingsPage() {
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="eventType">Event Type</Label>
+            <Label htmlFor="eventType">{t("settings.eventType")}</Label>
             <Select
               value={form.eventType}
               onValueChange={(v) => setForm((f) => ({ ...f, eventType: v }))}
@@ -454,16 +456,16 @@ export default function SettingsPage() {
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="WEDDING">Wedding</SelectItem>
-                <SelectItem value="BAPTISM">Baptism</SelectItem>
-                <SelectItem value="PARTY">Party</SelectItem>
-                <SelectItem value="CORPORATE">Corporate</SelectItem>
+                <SelectItem value="WEDDING">{t("settings.wedding")}</SelectItem>
+                <SelectItem value="BAPTISM">{t("settings.baptism")}</SelectItem>
+                <SelectItem value="PARTY">{t("settings.party")}</SelectItem>
+                <SelectItem value="CORPORATE">{t("settings.corporate")}</SelectItem>
               </SelectContent>
             </Select>
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="eventDate">Event Date</Label>
+            <Label htmlFor="eventDate">{t("settings.eventDate")}</Label>
             <Input
               id="eventDate"
               type="date"
@@ -473,7 +475,7 @@ export default function SettingsPage() {
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="status">Status</Label>
+            <Label htmlFor="status">{t("settings.status")}</Label>
             <Select
               value={form.status}
               onValueChange={(v) => setForm((f) => ({ ...f, status: v }))}
@@ -482,17 +484,17 @@ export default function SettingsPage() {
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="DRAFT">Draft</SelectItem>
-                <SelectItem value="ACTIVE">Active</SelectItem>
-                <SelectItem value="ARCHIVED">Archived</SelectItem>
-                <SelectItem value="COMPLETED">Completed</SelectItem>
+                <SelectItem value="DRAFT">{t("settings.draft")}</SelectItem>
+                <SelectItem value="ACTIVE">{t("settings.active")}</SelectItem>
+                <SelectItem value="ARCHIVED">{t("settings.archived")}</SelectItem>
+                <SelectItem value="COMPLETED">{t("settings.completed")}</SelectItem>
               </SelectContent>
             </Select>
           </div>
 
           <Button onClick={handleSave} disabled={saving} className="gap-2">
             <Save className="h-4 w-4" />
-            {saving ? "Saving..." : "Save Changes"}
+            {saving ? t("settings.saving") : t("settings.saveChanges")}
           </Button>
         </CardContent>
       </Card>
@@ -501,14 +503,11 @@ export default function SettingsPage() {
       <Card>
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
-            <Copy className="h-4 w-4 text-gray-500" /> Copy Project
+            <Copy className="h-4 w-4 text-gray-500" /> {t("settings.copyProject")}
           </CardTitle>
         </CardHeader>
         <CardContent className="space-y-3">
-          <p className="text-sm text-gray-500">
-            Duplicate this project with all guests, budget, checklist, itinerary, notes, and venue data.
-            The copy will be created as a draft.
-          </p>
+          <p className="text-sm text-gray-500">{t("settings.copyProjectDesc")}</p>
           <Button
             variant="outline"
             onClick={handleCopyProject}
@@ -516,7 +515,7 @@ export default function SettingsPage() {
             className="gap-2"
           >
             {copying ? <Loader2 className="h-4 w-4 animate-spin" /> : <Copy className="h-4 w-4" />}
-            {copying ? "Copying…" : "Duplicate Project"}
+            {copying ? t("settings.copying") : t("settings.duplicateProject")}
           </Button>
         </CardContent>
       </Card>
@@ -525,18 +524,16 @@ export default function SettingsPage() {
       <Card>
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
-            <Eye className="h-4 w-4 text-gray-500" /> Dashboard Layout
+            <Eye className="h-4 w-4 text-gray-500" /> {t("settings.dashboardLayout")}
           </CardTitle>
         </CardHeader>
         <CardContent className="space-y-2">
-          <p className="text-sm text-gray-500 mb-3">
-            Choose which tabs appear in your sidebar. Overview and Settings are always visible.
-          </p>
+          <p className="text-sm text-gray-500 mb-3">{t("settings.dashboardLayoutDesc")}</p>
           {HIDEABLE_TABS.map((tab) => {
             const isVisible = !hiddenTabs.includes(tab.id);
             return (
               <div key={tab.id} className="flex items-center justify-between py-1.5 border-b border-gray-50 last:border-0">
-                <span className="text-sm text-gray-700">{tab.label}</span>
+                <span className="text-sm text-gray-700">{t(tab.tKey)}</span>
                 <button
                   onClick={() => toggleTab(tab.id)}
                   role="switch"
@@ -560,7 +557,7 @@ export default function SettingsPage() {
               }}
               className="text-xs text-rose-500 hover:underline mt-2"
             >
-              Show all tabs
+              {t("settings.showAllTabs")}
             </button>
           )}
         </CardContent>
@@ -570,18 +567,18 @@ export default function SettingsPage() {
       <Card>
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
-            <Share2 className="h-4 w-4 text-gray-500" /> Share Project
+            <Share2 className="h-4 w-4 text-gray-500" /> {t("settings.shareProject")}
           </CardTitle>
         </CardHeader>
         <CardContent className="space-y-4">
           {isLocal ? (
-            <p className="text-sm text-gray-400 italic">Sign in to share your project with others.</p>
+            <p className="text-sm text-gray-400 italic">{t("settings.shareSignIn")}</p>
           ) : (
             <>
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-sm font-medium text-gray-700">Enable read-only share link</p>
-                  <p className="text-xs text-gray-400">Anyone with the link can view your project overview.</p>
+                  <p className="text-sm font-medium text-gray-700">{t("settings.shareEnable")}</p>
+                  <p className="text-xs text-gray-400">{t("settings.shareDesc")}</p>
                 </div>
                 <button
                   onClick={() => toggleShare(!shareEnabled)}
@@ -612,12 +609,12 @@ export default function SettingsPage() {
                     rel="noopener noreferrer"
                     className="flex items-center gap-1.5 text-xs text-rose-500 hover:underline"
                   >
-                    <ExternalLink className="h-3 w-3" /> Preview share page
+                    <ExternalLink className="h-3 w-3" /> {t("settings.previewShare")}
                   </a>
                   {qrDataUrl && (
                     <div className="flex flex-col items-start gap-2">
                       <div className="flex items-center gap-1.5 text-xs text-gray-500">
-                        <QrCode className="h-3.5 w-3.5" /> QR Code
+                        <QrCode className="h-3.5 w-3.5" /> {t("settings.qrCode")}
                       </div>
                       {/* eslint-disable-next-line @next/next/no-img-element */}
                       <img src={qrDataUrl} alt="Share QR code" className="rounded-lg border border-gray-100 shadow-sm w-32 h-32" />
@@ -628,7 +625,7 @@ export default function SettingsPage() {
 
               {!shareEnabled && (
                 <div className="flex items-center gap-2 rounded-xl bg-gray-50 px-4 py-3 text-xs text-gray-400">
-                  <EyeOff className="h-3.5 w-3.5" /> Share link is disabled. Enable to generate a link.
+                  <EyeOff className="h-3.5 w-3.5" /> {t("settings.shareDisabled")}
                 </div>
               )}
             </>
@@ -640,14 +637,14 @@ export default function SettingsPage() {
       <Card>
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
-            <Accessibility className="h-4 w-4 text-gray-500" /> Accessibility
+            <Accessibility className="h-4 w-4 text-gray-500" /> {t("settings.accessibility")}
           </CardTitle>
         </CardHeader>
         <CardContent>
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-sm font-medium text-gray-700">Accessibility mode</p>
-              <p className="text-xs text-gray-400">Higher contrast, reduced motion, larger focus rings.</p>
+              <p className="text-sm font-medium text-gray-700">{t("settings.accessibilityMode")}</p>
+              <p className="text-xs text-gray-400">{t("settings.accessibilityDesc")}</p>
             </div>
             <button
               onClick={toggleA11y}
@@ -669,7 +666,7 @@ export default function SettingsPage() {
       {!isLocal && (
         <Card>
           <CardHeader>
-            <CardTitle>Plans & Billing</CardTitle>
+            <CardTitle>{t("settings.plans")}</CardTitle>
           </CardHeader>
           <CardContent className="space-y-6">
             {/* Current plan banner */}
@@ -679,14 +676,14 @@ export default function SettingsPage() {
                   <CreditCard className="w-5 h-5 text-gray-500" />
                   <div>
                     <p className="text-sm font-semibold text-gray-800 capitalize">
-                      {sub.tier} Plan
+                      {sub.tier} {t("settings.plan")}
                       {sub.status === "past_due" && (
-                        <span className="ml-2 text-xs font-normal text-red-600">· Payment past due</span>
+                        <span className="ml-2 text-xs font-normal text-red-600">· {t("settings.paymentPastDue")}</span>
                       )}
                     </p>
                     {sub.periodEnd && (
                       <p className="text-xs text-gray-500">
-                        Renews {new Date(sub.periodEnd).toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" })}
+                        {t("settings.renews")} {new Date(sub.periodEnd).toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" })}
                       </p>
                     )}
                   </div>
@@ -698,9 +695,9 @@ export default function SettingsPage() {
                     className="flex items-center gap-1.5 text-sm text-gray-600 hover:text-gray-900 transition-colors disabled:opacity-60"
                   >
                     {managingPortal ? (
-                      <><Loader2 className="w-4 h-4 animate-spin" /> Opening…</>
+                      <><Loader2 className="w-4 h-4 animate-spin" /> {t("settings.opening")}</>
                     ) : (
-                      <><ExternalLink className="w-4 h-4" /> Manage billing</>
+                      <><ExternalLink className="w-4 h-4" /> {t("settings.manageBilling")}</>
                     )}
                   </button>
                 )}
@@ -742,7 +739,7 @@ export default function SettingsPage() {
                         <h2 className="font-bold text-gray-900">{plan.name}</h2>
                         {isCurrent && (
                           <span className="ml-auto text-xs font-semibold text-rose-600 bg-rose-100 px-2 py-0.5 rounded-full">
-                            Current
+                            {t("settings.current")}
                           </span>
                         )}
                       </div>
@@ -777,11 +774,11 @@ export default function SettingsPage() {
                     <div className="px-4 pb-4">
                       {isCurrent ? (
                         <div className="w-full py-2 rounded-xl bg-rose-100 text-rose-700 text-xs font-semibold text-center">
-                          Your current plan
+                          {t("settings.currentPlan")}
                         </div>
                       ) : plan.id === "basic" ? (
                         <div className="w-full py-2 rounded-xl bg-gray-100 text-gray-500 text-xs font-semibold text-center">
-                          Free forever
+                          {t("settings.freeForever")}
                         </div>
                       ) : (
                         <button
@@ -790,11 +787,11 @@ export default function SettingsPage() {
                           className="w-full py-2 rounded-xl bg-rose-500 text-white text-xs font-semibold hover:bg-rose-600 transition-colors disabled:opacity-60 flex items-center justify-center gap-2"
                         >
                           {upgrading === plan.id ? (
-                            <><Loader2 className="w-3.5 h-3.5 animate-spin" /> Redirecting…</>
+                            <><Loader2 className="w-3.5 h-3.5 animate-spin" /> {t("settings.redirecting")}</>
                           ) : isHigher ? (
-                            <>Upgrade to {plan.name}</>
+                            <>{t("settings.upgradeTo")} {plan.name}</>
                           ) : (
-                            <>Switch to {plan.name}</>
+                            <>{t("settings.switchTo")} {plan.name}</>
                           )}
                         </button>
                       )}
@@ -805,7 +802,7 @@ export default function SettingsPage() {
             </div>
 
             <p className="text-center text-xs text-gray-400">
-              Prices include VAT · Secure payment via Stripe · Cancel anytime
+              {t("settings.stripeNote")}
             </p>
           </CardContent>
         </Card>

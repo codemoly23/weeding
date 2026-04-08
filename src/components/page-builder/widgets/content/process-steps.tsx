@@ -739,6 +739,28 @@ function StepItem({
         <HorizontalConnectorLine settings={settings} accentColor={accentColor} />
       )}
 
+      {/* Step Label pill ("STEP 01") */}
+      {settings.stepLabel?.show && (
+        <div
+          style={{
+            display: "inline-block",
+            padding: "0.25rem 0.75rem",
+            background: settings.stepLabel.bgColor || "#f3f4f6",
+            borderRadius: "9999px",
+            marginBottom: "1rem",
+          }}
+        >
+          <span style={{
+            fontSize: "0.75rem",
+            fontWeight: 600,
+            color: settings.stepLabel.textColor || "#6b7280",
+            letterSpacing: "0.05em",
+          }}>
+            {settings.stepLabel.prefix || "STEP"} {String(index + 1).padStart(2, "0")}
+          </span>
+        </div>
+      )}
+
       {/* Title */}
       <h3
         className={cn("font-semibold mb-2", titleSizeClasses[stepContent.titleSize])}

@@ -18,8 +18,12 @@ import {
   TextBlockWidget,
   LeadFormWidget,
   TestimonialsWidget,
+  EventSearchHeroWidget,
+  EventCategoriesGridWidget,
+  EventGalleryGridWidget,
+  CtaBannerWidget,
 } from "@/components/page-builder/widgets";
-import { ServiceCardWidget, ServiceListWidget, PricingTableWidget } from "@/components/page-builder/widgets/commerce";
+import { ServiceCardWidget, ServiceListWidget, PricingTableWidget, VendorListingWidget } from "@/components/page-builder/widgets/commerce";
 import { ButtonGroupWidget } from "@/components/page-builder/widgets/cta";
 import {
   ServiceHeroWidget,
@@ -314,6 +318,7 @@ function WidgetRenderer({ widget }: WidgetRendererProps) {
       case "lead-form":
         return <LeadFormWidget settings={widget.settings as any} />;
 
+      case "testimonial":
       case "testimonials-carousel":
         return <TestimonialsWidget settings={widget.settings as any} />;
 
@@ -353,6 +358,21 @@ function WidgetRenderer({ widget }: WidgetRendererProps) {
 
       case "blog-recent-posts":
         return <BlogRecentPostsWidget settings={widget.settings as any} />;
+
+      case "event-search-hero":
+        return <EventSearchHeroWidget settings={widget.settings as any} />;
+
+      case "event-categories-grid":
+        return <EventCategoriesGridWidget settings={widget.settings as any} />;
+
+      case "event-gallery-grid":
+        return <EventGalleryGridWidget settings={widget.settings as any} />;
+
+      case "cta-banner":
+        return <CtaBannerWidget settings={widget.settings as any} />;
+
+      case "vendor-listing":
+        return <VendorListingWidget settings={widget.settings as any} />;
 
       default:
         // Unknown widget type - render nothing in production

@@ -28,6 +28,10 @@ const nextConfig: NextConfig = {
         protocol: "https",
         hostname: "flagcdn.com", // Flag images for language switcher
       },
+      {
+        protocol: "https",
+        hostname: "images.unsplash.com", // Unsplash default images for widgets
+      },
     ],
   },
 

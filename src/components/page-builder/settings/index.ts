@@ -16,6 +16,11 @@ export { LeadFormWidgetSettingsPanel } from "./lead-form-settings";
 export { ServiceHeroWidgetSettingsPanel } from "./service-hero-settings";
 export { FaqAccordionWidgetSettingsPanel } from "./faq-accordion-settings";
 export { ButtonGroupWidgetSettingsPanel } from "./button-group-settings";
+export { EventSearchHeroSettingsPanel } from "./event-search-hero-settings";
+export { EventGalleryGridSettingsPanel } from "./event-gallery-grid-settings";
+export { EventCategoriesGridSettingsPanel } from "./event-categories-grid-settings";
+export { CtaBannerSettingsPanel } from "./cta-banner-settings";
+export { VendorListingSettingsPanel } from "./vendor-listing-settings";
 
 // Blog widget settings
 export { BlogPostGridSettingsPanel } from "./blog/blog-post-grid-settings";

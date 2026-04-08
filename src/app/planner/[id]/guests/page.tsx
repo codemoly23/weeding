@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useCallback, useRef } from "react";
 import { useParams } from "next/navigation";
-import { Upload, Plus, Trash2, ChevronDown, FileSpreadsheet, FileText, Link2, Copy, Check, X, QrCode, Star, Users, UserCheck, CheckSquare, Square, Table2, MessageSquarePlus, Smartphone } from "lucide-react";
+import { Upload, Plus, Trash2, ChevronDown, FileSpreadsheet, FileText, Link2, Copy, Check, X, QrCode, Star, Users, UserCheck, CheckSquare, Square, Table2, MessageSquarePlus, Smartphone, UtensilsCrossed } from "lucide-react";
 import QRCode from "qrcode";
 import * as XLSX from "xlsx";
 import { cn } from "@/lib/utils";
@@ -385,6 +385,20 @@ function GuestRow({
     onUpdate(guest.id, { rsvpStatus: next });
   }
 
+  const DIETARY_OPTIONS = [null, "Vegetarian", "Vegan", "Gluten-free", "Halal"];
+  const DIETARY_COLORS: Record<string, string> = {
+    "Vegetarian": "text-green-600",
+    "Vegan": "text-emerald-600",
+    "Gluten-free": "text-orange-500",
+    "Halal": "text-blue-500",
+  };
+  function cycleDietary() {
+    const cur = guest.dietary ?? null;
+    const idx = DIETARY_OPTIONS.findIndex(o => o === cur);
+    const next = DIETARY_OPTIONS[(idx + 1) % DIETARY_OPTIONS.length];
+    onUpdate(guest.id, { dietary: next });
+  }
+
   function toggleChiefGuest() {
     onUpdate(guest.id, { isChiefGuest: !guest.isChiefGuest });
   }
@@ -455,6 +469,15 @@ function GuestRow({
               className={cn("text-xs font-bold transition-colors", guest.hasPlusOne ? "text-indigo-500" : "text-gray-300 hover:text-indigo-400")}
             >
               +1
+            </button>
+            {/* Dietary toggle */}
+            <button
+              onClick={cycleDietary}
+              title={`Dietary: ${guest.dietary ?? "None"} — click to cycle`}
+              className={cn("flex items-center gap-0.5 text-xs font-medium transition-colors", guest.dietary ? DIETARY_COLORS[guest.dietary] ?? "text-gray-500" : "text-gray-300 hover:text-green-500")}
+            >
+              <UtensilsCrossed className="h-3 w-3" />
+              {guest.dietary ? <span>{guest.dietary}</span> : null}
             </button>
             <button onClick={cycleRsvp} className={cn("text-xs font-medium transition-colors", RSVP_COLORS[guest.rsvpStatus])}>
               {guest.rsvpStatus === "PENDING" ? t("guests.pending") : guest.rsvpStatus === "ATTENDING" ? t("guests.attending") : t("guests.declined")}
