@@ -13,14 +13,14 @@ export async function generateMetadata(): Promise<Metadata> {
 
   if (!page) {
     return {
-      title: "Privacy Policy | LLCPad",
-      description: "Learn how LLCPad collects, uses, and protects your personal information.",
+      title: "Privacy Policy | Ceremoney",
+      description: "Learn how Ceremoney collects, uses, and protects your personal information.",
     };
   }
 
   return {
-    title: page.metaTitle || `${page.title} | LLCPad`,
-    description: page.metaDescription || "Learn how LLCPad collects, uses, and protects your personal information.",
+    title: page.metaTitle || `${page.title} | Ceremoney`,
+    description: page.metaDescription || "Learn how Ceremoney collects, uses, and protects your personal information.",
   };
 }
 
@@ -38,7 +38,7 @@ function FallbackPrivacyContent() {
         <ul className="list-disc pl-6 space-y-2 text-slate-700">
           <li>Name, email address, and phone number</li>
           <li>Billing and payment information</li>
-          <li>Business information (LLC name, state of formation, etc.)</li>
+          <li>Event information (wedding date, guest count, venue details, etc.)</li>
           <li>Communications you send to us</li>
           <li>Any other information you choose to provide</li>
         </ul>
@@ -93,8 +93,8 @@ function FallbackPrivacyContent() {
         <h2 className="text-xl font-semibold mb-4 text-slate-900">6. Contact Us</h2>
         <p className="text-slate-700">
           If you have any questions about this Privacy Policy, please contact us at{" "}
-          <a href="mailto:support@llcpad.com" className="text-primary hover:underline">
-            support@llcpad.com
+          <a href="mailto:support@ceremoney.com" className="text-primary hover:underline">
+            support@ceremoney.com
           </a>
         </p>
       </section>
@@ -136,7 +136,7 @@ export default async function PrivacyPolicyPage() {
           {/* Footer Note */}
           <div className="mt-12 rounded-lg border border-slate-200 bg-slate-50 p-6">
             <p className="text-sm text-slate-600">
-              <strong className="text-slate-900">Important:</strong> LLCPad is a business formation service, not a law firm.
+              <strong className="text-slate-900">Important:</strong> Ceremoney is a business formation service, not a law firm.
               This document does not constitute legal advice. Please consult with a licensed attorney
               for legal matters specific to your situation.
             </p>

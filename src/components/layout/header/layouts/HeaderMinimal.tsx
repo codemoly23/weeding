@@ -58,7 +58,7 @@ export function HeaderMinimal({
               showButtons: config.auth?.showButtons ?? true,
               loginText: config.auth?.loginText || "Sign In",
               registerText: config.auth?.registerText || "Get Started",
-              registerUrl: config.auth?.registerUrl || "/services/llc-formation",
+              registerUrl: config.auth?.registerUrl || "/register",
             }}
             ctaButtons={config.cta || []}
             onLogout={onLogout}

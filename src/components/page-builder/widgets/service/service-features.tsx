@@ -327,12 +327,12 @@ function DetailedFeatureCard({
 // ============================================
 
 const PLACEHOLDER_FEATURES = [
-  { id: "p1", text: "Articles of Organization", description: "The official state document that legally creates your LLC.", icon: "FileText", tag: "All Plans", tagType: "included", sortOrder: 1 },
-  { id: "p2", text: "Operating Agreement", description: "Defines ownership structure and operating rules.", icon: "Shield", tag: "All Plans \u2022 Free ($79 value)", tagType: "free", sortOrder: 2 },
-  { id: "p3", text: "EIN / Tax ID Application", description: "Your LLC\u2019s federal Employer Identification Number.", icon: "CreditCard", tag: "Professional & Complete", tagType: "addon", sortOrder: 3 },
-  { id: "p4", text: "Registered Agent \u2014 1 Year Free", description: "Receives official legal notices and government mail.", icon: "Building2", tag: "Professional & Complete", tagType: "addon", sortOrder: 4 },
-  { id: "p5", text: "BOI Ownership Filing", description: "FinCEN\u2019s Beneficial Ownership Information report.", icon: "FileText", tag: "Professional & Complete", tagType: "addon", sortOrder: 5 },
-  { id: "p6", text: "US Business Banking Guidance", description: "Step-by-step help opening a Mercury or Relay account.", icon: "Building2", tag: "Complete Plan", tagType: "premium", sortOrder: 6 },
+  { id: "p1", text: "Guest List with RSVP Tracking", sortOrder: 1 },
+  { id: "p2", text: "Drag-and-Drop Seating Chart", sortOrder: 2 },
+  { id: "p3", text: "Custom Wedding Website", sortOrder: 3 },
+  { id: "p4", text: "Online RSVP Collection", sortOrder: 4 },
+  { id: "p5", text: "Vendor Directory Access", sortOrder: 5 },
+  { id: "p6", text: "Wedding Planning Checklist", sortOrder: 6 },
 ];
 
 function ServiceFeaturesPlaceholder({

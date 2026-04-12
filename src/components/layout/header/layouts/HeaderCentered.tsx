@@ -57,7 +57,7 @@ export function HeaderCentered({
                 showButtons: config.auth?.showButtons ?? true,
                 loginText: config.auth?.loginText || "Sign In",
                 registerText: config.auth?.registerText || "Get Started",
-                registerUrl: config.auth?.registerUrl || "/services/llc-formation",
+                registerUrl: config.auth?.registerUrl || "/register",
               }}
               ctaButtons={config.cta || []}
               onLogout={onLogout}
@@ -89,12 +89,13 @@ export function HeaderCentered({
           <CTAButtons
             buttons={config.cta || []}
             showAuth={config.auth?.showButtons ?? true}
+            showLanguageSwitcher={config.languageSwitcher?.enabled ?? false}
             authConfig={{
               loginText: config.auth?.loginText || "Sign In",
               loginUrl: config.auth?.loginUrl || "/login",
               loginStyle: config.auth?.loginStyle,
               registerText: config.auth?.registerText || "Get Started",
-              registerUrl: config.auth?.registerUrl || "/services/llc-formation",
+              registerUrl: config.auth?.registerUrl || "/register",
             }}
             user={user}
             session={session}

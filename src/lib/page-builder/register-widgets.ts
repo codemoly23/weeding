@@ -33,21 +33,24 @@ import {
   DEFAULT_BLOG_POST_LIST_SETTINGS,
   DEFAULT_BLOG_RECENT_POSTS_SETTINGS,
   DEFAULT_BUTTON_GROUP_SETTINGS,
-  DEFAULT_CUSTOM_HTML_SETTINGS,
-  DEFAULT_TICKER_MARQUEE_SETTINGS,
+  DEFAULT_VENDOR_LISTING_SETTINGS,
+  DEFAULT_EVENT_SEARCH_HERO_SETTINGS,
+  DEFAULT_EVENT_GALLERY_GRID_SETTINGS,
+  DEFAULT_EVENT_CATEGORIES_GRID_SETTINGS,
+  DEFAULT_CTA_BANNER_SETTINGS,
+  DEFAULT_TOP_UTILITY_BAR_SETTINGS,
 } from "./defaults";
 
 // Import widget components
-import { HeroContentWidget, ProcessStepsWidget, HeadingWidget, TextBlockWidget, TickerMarqueeWidget } from "@/components/page-builder/widgets/content";
-import { CustomHtmlWidget } from "@/components/page-builder/widgets/advanced";
+import { HeroContentWidget, ProcessStepsWidget, HeadingWidget, TextBlockWidget, EventSearchHeroWidget, EventGalleryGridWidget, EventCategoriesGridWidget, CtaBannerWidget } from "@/components/page-builder/widgets/content";
 import { ImageWidget, ImageSliderWidget } from "@/components/page-builder/widgets/media";
 import {
   TrustBadgesWidget,
   StatsSectionWidget,
   TestimonialsWidget,
 } from "@/components/page-builder/widgets/social-proof";
-import { DividerWidget, FaqAccordionWidget } from "@/components/page-builder/widgets/layout";
-import { ServiceCardWidget, ServiceListWidget, PricingTableWidget } from "@/components/page-builder/widgets/commerce";
+import { DividerWidget, FaqAccordionWidget, TopUtilityBarWidget } from "@/components/page-builder/widgets/layout";
+import { ServiceCardWidget, ServiceListWidget, PricingTableWidget, VendorListingWidget } from "@/components/page-builder/widgets/commerce";
 import { LeadFormWidget } from "@/components/page-builder/widgets/forms";
 import { ButtonGroupWidget } from "@/components/page-builder/widgets/cta";
 import {
@@ -357,25 +360,70 @@ export function registerAllWidgets() {
     component: BlogRecentPostsWidget,
   });
 
-  // Advanced Widgets
+  // Vendor Listing Widget
   WidgetRegistry.register({
-    type: "custom-html",
-    name: "Custom HTML",
-    description: "Add custom HTML and CSS for any design",
-    icon: "Code",
-    category: "advanced",
-    defaultSettings: DEFAULT_CUSTOM_HTML_SETTINGS,
-    component: CustomHtmlWidget,
+    type: "vendor-listing",
+    name: "Vendor Listing",
+    description: "Display approved vendors from the marketplace in a card grid",
+    icon: "Store",
+    category: "commerce",
+    defaultSettings: DEFAULT_VENDOR_LISTING_SETTINGS,
+    component: VendorListingWidget,
   });
 
+  // Event Gallery Grid Widget
   WidgetRegistry.register({
-    type: "ticker-marquee",
-    name: "Ticker Marquee",
-    description: "Infinite scrolling ticker bar with country/stat items",
-    icon: "MoveHorizontal",
-    category: "content",
-    defaultSettings: DEFAULT_TICKER_MARQUEE_SETTINGS,
-    component: TickerMarqueeWidget,
+    type: "event-gallery-grid",
+    name: "Event Gallery Grid",
+    description: "Inspiration gallery with event cards — image, category badge, date, location, views and hover CTA",
+    icon: "LayoutGrid",
+    category: "wedding",
+    defaultSettings: DEFAULT_EVENT_GALLERY_GRID_SETTINGS,
+    component: EventGalleryGridWidget,
+  });
+
+  // Event Search Hero Widget
+  WidgetRegistry.register({
+    type: "event-search-hero",
+    name: "Event Search Hero",
+    description: "Full-screen hero with auto-rotating background images and vendor search form",
+    icon: "Search",
+    category: "wedding",
+    defaultSettings: DEFAULT_EVENT_SEARCH_HERO_SETTINGS,
+    component: EventSearchHeroWidget,
+  });
+
+  // Event Categories Grid Widget
+  WidgetRegistry.register({
+    type: "event-categories-grid",
+    name: "Event Categories Grid",
+    description: "Popular event types grid with image cards, hover lift effect, and section header",
+    icon: "LayoutGrid",
+    category: "wedding",
+    defaultSettings: DEFAULT_EVENT_CATEGORIES_GRID_SETTINGS,
+    component: EventCategoriesGridWidget,
+  });
+
+  // CTA Banner Widget
+  WidgetRegistry.register({
+    type: "cta-banner",
+    name: "CTA Banner",
+    description: "Full-width gradient CTA card with title, subtitle, and two action buttons",
+    icon: "Megaphone",
+    category: "cta",
+    defaultSettings: DEFAULT_CTA_BANNER_SETTINGS,
+    component: CtaBannerWidget,
+  });
+
+  // Top Utility Bar Widget
+  WidgetRegistry.register({
+    type: "top-utility-bar",
+    name: "Top Utility Bar",
+    description: "Gradient top bar with navigation links — vendor portal, login, register",
+    icon: "AlignJustify",
+    category: "layout",
+    defaultSettings: DEFAULT_TOP_UTILITY_BAR_SETTINGS,
+    component: TopUtilityBarWidget,
   });
 }
 

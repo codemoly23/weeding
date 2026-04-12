@@ -497,7 +497,7 @@ export default function TestimonialsPage() {
                   id="company"
                   value={formData.company}
                   onChange={(e) => setFormData({ ...formData, company: e.target.value })}
-                  placeholder="Amazon Seller"
+                  placeholder="Wedding Planner"
                 />
               </div>
             </div>

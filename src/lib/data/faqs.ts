@@ -5,204 +5,147 @@ export interface FAQ {
 }
 
 export const faqCategories = [
-  { id: "llc-formation", name: "LLC Formation" },
-  { id: "ein", name: "EIN & Taxes" },
-  { id: "banking", name: "Business Banking" },
-  { id: "amazon", name: "Amazon Seller" },
-  { id: "international", name: "International Clients" },
+  { id: "planning", name: "Wedding Planning" },
+  { id: "guest-management", name: "Guest Management" },
+  { id: "vendors", name: "Vendors & Venues" },
+  { id: "event-website", name: "Event Website & RSVP" },
   { id: "pricing", name: "Pricing & Payments" },
 ];
 
 export const faqs: FAQ[] = [
-  // LLC Formation
+  // Wedding Planning
   {
-    question: "What is an LLC and why do I need one?",
+    question: "What is Ceremoney and how does it help me plan my wedding?",
     answer:
-      "An LLC (Limited Liability Company) is a business structure that protects your personal assets from business debts and lawsuits. It combines the liability protection of a corporation with the tax flexibility of a partnership. You need an LLC to separate your personal and business finances, build credibility, and protect yourself legally.",
-    category: "llc-formation",
+      "Ceremoney is a Swedish wedding planning SaaS that helps couples and professional wedding planners organize every aspect of their big day. From managing your guest list and seating charts to creating a beautiful event website with RSVP, coordinating vendors, and tracking your budget — Ceremoney keeps everything in one place so you can focus on celebrating.",
+    category: "planning",
   },
   {
-    question: "Do I need to be a US citizen to form an LLC?",
+    question: "Can I use Ceremoney for events other than weddings?",
     answer:
-      "No, you do not need to be a US citizen or resident to form an LLC in the United States. International entrepreneurs from any country can form a US LLC. You'll need a registered agent with a US address (which we provide) and can manage your LLC from anywhere in the world.",
-    category: "llc-formation",
+      "Yes! While Ceremoney is optimized for weddings, it works great for other celebrations such as engagement parties, anniversary celebrations, birthday milestones, and corporate events. The guest management, seating, and event website tools are flexible enough for any gathering.",
+    category: "planning",
   },
   {
-    question: "Which state should I form my LLC in?",
+    question: "How far in advance should I start planning my wedding with Ceremoney?",
     answer:
-      "For most international entrepreneurs and online businesses, we recommend Wyoming due to its low fees ($100 filing, $60/year annual), strong privacy protections, no state income tax, and business-friendly laws. Delaware is preferred for businesses seeking venture capital. New Mexico is the most affordable option with just $50 filing and no annual fees.",
-    category: "llc-formation",
+      "We recommend starting as early as possible — ideally 12 to 18 months before your wedding date. This gives you plenty of time to book popular venues and vendors, send save-the-dates, collect RSVPs, and finalize your seating chart. Ceremoney's timeline and checklist features help you stay on track every step of the way.",
+    category: "planning",
   },
   {
-    question: "How long does it take to form an LLC?",
+    question: "Can professional wedding planners use Ceremoney for multiple clients?",
     answer:
-      "Standard LLC formation typically takes 3-5 business days after we submit your documents to the state. With our expedited service, most states can process your LLC in 1-2 business days. You'll receive your formation documents via email as soon as they're ready.",
-    category: "llc-formation",
+      "Absolutely. Our White-Label plan is designed specifically for professional wedding planners and event companies. You can manage unlimited client events under your own brand, invite clients to collaborate in real time, and present a polished, branded experience. Contact us for a White-Label demo.",
+    category: "planning",
   },
   {
-    question: "What documents will I receive after forming my LLC?",
+    question: "Does Ceremoney support Arabic (RTL) and Swedish?",
     answer:
-      "You'll receive: Articles of Organization (state-filed formation document), Operating Agreement (internal governance document), EIN Confirmation Letter (if ordered), Registered Agent Acceptance, and all state filing receipts. All documents are delivered digitally to your dashboard and can be downloaded anytime.",
-    category: "llc-formation",
-  },
-  {
-    question: "What is a Registered Agent and do I need one?",
-    answer:
-      "A Registered Agent is a person or company designated to receive legal documents and official correspondence on behalf of your LLC. Every state requires LLCs to have a registered agent with a physical address in the state of formation. We provide registered agent service as part of our Standard and Premium packages.",
-    category: "llc-formation",
-  },
-  {
-    question: "Can I be my own Registered Agent?",
-    answer:
-      "Technically yes, but only if you have a physical address in the state where your LLC is formed and are available during business hours. For international clients or those without a US address, using a professional registered agent service is required and recommended for privacy.",
-    category: "llc-formation",
-  },
-  {
-    question: "What is an Operating Agreement?",
-    answer:
-      "An Operating Agreement is an internal document that outlines how your LLC will be run, including ownership percentages, profit distribution, voting rights, and management structure. While not all states require it, having one is essential for maintaining liability protection and is often required by banks to open a business account.",
-    category: "llc-formation",
+      "Yes. Ceremoney fully supports Swedish as the primary language and includes right-to-left (RTL) layout support for Arabic-speaking couples and planners. You can switch language preferences from your account settings.",
+    category: "planning",
   },
 
-  // EIN & Taxes
+  // Guest Management
   {
-    question: "What is an EIN and do I need one?",
+    question: "How do I add guests to my guest list?",
     answer:
-      "An EIN (Employer Identification Number) is a 9-digit tax ID number issued by the IRS for your business, similar to a Social Security Number for individuals. You need an EIN to open a business bank account, hire employees, file business taxes, and establish business credit. We strongly recommend getting an EIN for every LLC.",
-    category: "ein",
+      "You can add guests one by one, import them from a spreadsheet (CSV/Excel), or let guests register themselves through your event website. Each guest entry supports name, contact details, dietary requirements, plus-one status, and RSVP response. You can also group guests into families for easier management.",
+    category: "guest-management",
   },
   {
-    question: "How long does it take to get an EIN?",
+    question: "How does the seating chart work?",
     answer:
-      "For US residents with an SSN/ITIN, EINs can be obtained instantly online. For international clients without an SSN/ITIN, we submit your application via fax to the IRS, and it typically takes 4-6 weeks to receive your EIN. We'll notify you as soon as it's ready.",
-    category: "ein",
+      "Our drag-and-drop seating editor lets you create a visual floor plan of your venue, add tables with custom names and capacities, and assign guests to seats. The system automatically flags conflicts such as unassigned guests or overfilled tables. Changes sync in real time so your planner or partner always sees the latest version.",
+    category: "guest-management",
   },
   {
-    question: "Do I need an ITIN to get an EIN?",
+    question: "Can I track dietary requirements and meal preferences?",
     answer:
-      "No, you do not need an ITIN (Individual Tax Identification Number) to obtain an EIN for your LLC. International clients without an SSN or ITIN can still get an EIN - we handle this process through a special IRS fax application procedure.",
-    category: "ein",
+      "Yes. Each guest profile includes a dietary requirements field where you can record preferences such as vegetarian, vegan, gluten-free, halal, or custom notes. You can export a summary report for your catering team directly from the guest list.",
+    category: "guest-management",
   },
   {
-    question: "What taxes does a US LLC need to pay?",
+    question: "How many guests can I manage on each plan?",
     answer:
-      "By default, single-member LLCs are taxed as 'disregarded entities' and multi-member LLCs as partnerships. This means profits pass through to your personal tax return. For non-US owners without US-sourced income, you may have minimal or no US tax liability. We recommend consulting a tax professional for your specific situation.",
-    category: "ein",
-  },
-  {
-    question: "Do I need to file US taxes if I don't live in the US?",
-    answer:
-      "It depends on your business activities. If your LLC earns US-sourced income (income from US customers or US-based activities), you may have US tax filing obligations. If all your income is from outside the US, you may only need to file informational returns. Consult a tax professional for advice specific to your situation.",
-    category: "ein",
+      "The Basic (free) plan supports up to 50 guests. The Premium plan supports up to 300 guests, and the Elite plan is unlimited. White-Label planners also enjoy unlimited guests across all their client events. You can upgrade your plan at any time as your guest list grows.",
+    category: "guest-management",
   },
 
-  // Business Banking
+  // Vendors & Venues
   {
-    question: "Can non-US residents open a US business bank account?",
+    question: "Does Ceremoney have a vendor directory?",
     answer:
-      "Yes! Many US banks now offer business accounts to non-US residents with a US LLC. Some banks require an in-person visit, while others like Mercury, Relay, and certain credit unions allow remote account opening. Our Premium package includes assistance with the bank account opening process.",
-    category: "banking",
+      "Yes. Our vendor marketplace lists photographers, venues, florists, caterers, musicians, and other wedding professionals. You can browse by category, location, and budget, read reviews from real couples, and contact vendors directly. Vendors listed in our directory are verified by the Ceremoney team.",
+    category: "vendors",
   },
   {
-    question: "Which banks do you recommend for international LLC owners?",
+    question: "Can I invite my own vendors to collaborate in Ceremoney?",
     answer:
-      "For international clients, we recommend Mercury (online bank, easy remote opening), Relay (no monthly fees, remote opening), and certain credit unions. Traditional banks like Chase or Bank of America typically require an in-person visit but offer more services. Your best option depends on your specific needs.",
-    category: "banking",
+      "Yes. You can invite any vendor to your event workspace using their email address, even if they are not listed in our directory. They will receive a limited-access view to see relevant details — such as the seating chart for a caterer or the timeline for a photographer — without accessing your entire event.",
+    category: "vendors",
   },
   {
-    question: "What documents do I need to open a business bank account?",
+    question: "How do I compare venue options?",
     answer:
-      "Typically you'll need: Articles of Organization, Operating Agreement, EIN Confirmation Letter, valid passport or government ID, proof of business address, and sometimes a business plan or website. Banks may have additional requirements - we'll guide you through the specific requirements for your chosen bank.",
-    category: "banking",
-  },
-  {
-    question: "Do I need to visit the US to open a bank account?",
-    answer:
-      "Not necessarily. Several banks and fintech companies (Mercury, Relay, Brex) allow international LLC owners to open accounts entirely online. Traditional banks like Chase, Bank of America, and Wells Fargo typically require an in-person visit to a US branch.",
-    category: "banking",
+      "Use the Venue Comparison tool to add multiple venues side by side and compare capacity, pricing, location, amenities, and guest reviews. You can save your shortlist and share it with your partner or planner to make a collaborative decision.",
+    category: "vendors",
   },
 
-  // Amazon Seller
+  // Event Website & RSVP
   {
-    question: "Do I need a US LLC to sell on Amazon?",
+    question: "Can I create a wedding website with Ceremoney?",
     answer:
-      "While not strictly required, having a US LLC provides significant benefits for Amazon sellers: better access to Amazon lending, easier payment processing, professional business image, liability protection, and simpler tax reporting. Most successful international Amazon sellers operate through a US LLC.",
-    category: "amazon",
+      "Yes! Every Ceremoney account includes a beautiful, customizable event website. Choose from our curated templates, add your love story, ceremony details, accommodation suggestions, gift registry links, and photo gallery. Guests can RSVP directly through the website, and their responses sync instantly to your guest list.",
+    category: "event-website",
   },
   {
-    question: "Can I use my US LLC to sell on Amazon from outside the US?",
+    question: "Is my event website public or private?",
     answer:
-      "Yes! A US LLC can be used to sell on Amazon.com and other Amazon marketplaces from anywhere in the world. You'll need an EIN, a US bank account (or supported international bank), and proper tax documentation. We help set up everything you need to start selling.",
-    category: "amazon",
+      "You decide. Your event website can be fully public (accessible to anyone with the link), password-protected (guests enter a code you share with them), or private (visible only to invited guests who log in). The privacy setting can be changed at any time from your website settings.",
+    category: "event-website",
   },
   {
-    question: "What do I need to set up an Amazon seller account with a US LLC?",
+    question: "Can guests RSVP online?",
     answer:
-      "To create an Amazon Professional Seller account with your US LLC, you'll need: EIN, business bank account or credit card, valid phone number, government-issued ID, and Articles of Organization. Our Amazon Seller Setup service guides you through the entire registration process.",
-    category: "amazon",
+      "Yes. Your event website includes a built-in RSVP form where guests can confirm attendance, specify their meal preference, add a plus-one, and leave a personal message. RSVP responses are collected in real time and reflected immediately in your guest list and seating chart. You can also set an RSVP deadline and send automated reminders to guests who have not responded.",
+    category: "event-website",
   },
   {
-    question: "How do I receive payments from Amazon as an international seller?",
+    question: "What happens if a guest does not have internet access?",
     answer:
-      "Amazon can deposit funds to your US business bank account directly. Alternatively, you can use payment services like Payoneer or WorldFirst that provide US bank details. With a US LLC and business bank account, you'll have the smoothest payment experience.",
-    category: "amazon",
-  },
-
-  // International Clients
-  {
-    question: "Can I manage my US LLC from my home country?",
-    answer:
-      "Yes, you can manage your US LLC entirely from your home country. All communication with state agencies goes through your registered agent (us), you can conduct business online, and banking can be done remotely with the right bank. You don't need to visit the US to run your LLC.",
-    category: "international",
-  },
-  {
-    question: "What address will my LLC have?",
-    answer:
-      "Your LLC will have two addresses: 1) Registered Agent Address - our address in the state of formation for receiving legal documents, and 2) Principal Business Address - can be your home country address or a US virtual address (included in Premium package) for a more professional appearance.",
-    category: "international",
-  },
-  {
-    question: "Do I need a US phone number for my LLC?",
-    answer:
-      "A US phone number is helpful but not required for LLC formation. However, you'll need one for Amazon seller registration and some bank accounts. Virtual US phone numbers are available through services like Google Voice, OpenPhone, or Grasshopper at low monthly costs.",
-    category: "international",
-  },
-  {
-    question: "Is my information public when I form an LLC?",
-    answer:
-      "This depends on the state. Wyoming, Delaware, and New Mexico do not require member names in public filings, providing privacy protection. Our registered agent address is used for public records, keeping your personal address private. For maximum privacy, we recommend Wyoming.",
-    category: "international",
+      "We understand that not all guests, especially older family members, are comfortable with online forms. You can always manually update RSVP statuses on their behalf directly in the guest list. You can also print a PDF version of your guest list and seating chart for offline reference.",
+    category: "event-website",
   },
 
   // Pricing & Payments
   {
-    question: "What payment methods do you accept?",
+    question: "What payment methods does Ceremoney accept?",
     answer:
-      "We accept all major credit cards (Visa, Mastercard, American Express) and debit cards through Stripe. For clients in Bangladesh, we also accept bKash, Nagad, and local bank transfers through SSLCommerz. All payments are secure and processed through encrypted connections.",
+      "We accept all major credit and debit cards (Visa, Mastercard, American Express) via Stripe. For customers in Sweden we also support Swish for easy mobile payments. All transactions are processed securely and prices are shown in SEK by default, with multi-currency support available on Premium and Elite plans.",
     category: "pricing",
   },
   {
-    question: "Are there any hidden fees?",
+    question: "Is there a free plan?",
     answer:
-      "No hidden fees! Our pricing is completely transparent. The price you see includes our full service fee. State filing fees are listed separately and paid at checkout. We don't charge extra for document delivery, customer support, or standard processing.",
+      "Yes. The Basic plan is free forever and includes one active event, up to 50 guests, a customizable event website with RSVP, and access to our vendor directory. When you are ready for more features — such as unlimited guests, advanced seating charts, and priority support — you can upgrade to Premium or Elite at any time.",
     category: "pricing",
   },
   {
-    question: "What's included in each package?",
+    question: "What is included in each paid plan?",
     answer:
-      "Basic ($149): LLC formation, name check, Articles of Organization, digital documents. Standard ($249): Everything in Basic plus EIN, Operating Agreement, Registered Agent (1 year), Banking Resolution. Premium ($399): Everything in Standard plus bank account assistance, virtual address, annual report filing, express processing.",
+      "Premium (399 SEK/month or 3,499 SEK/year): Up to 300 guests, unlimited seating charts, custom domain for your event website, vendor collaboration, and priority support. Elite (799 SEK/month or 6,999 SEK/year): Unlimited guests, multiple events, advanced analytics, export tools, and dedicated account manager. White-Label: Custom pricing for professional planners — contact us for a quote.",
     category: "pricing",
   },
   {
-    question: "Do you offer refunds?",
+    question: "Can I cancel or get a refund?",
     answer:
-      "Yes, we offer a 30-day satisfaction guarantee. If you're not happy with our service before we file with the state, we'll provide a full refund of our service fee. After state filing, refunds are limited to our service fee only (state fees are non-refundable as they go directly to the government).",
+      "You can cancel your subscription at any time from your account settings — no long-term contracts. If you cancel within 14 days of your first paid subscription (for new customers), we offer a full refund. After the 14-day window, you retain access until the end of your current billing period, after which your account reverts to the free Basic plan.",
     category: "pricing",
   },
   {
-    question: "What are state filing fees?",
+    question: "Is VAT (Moms) included in the prices?",
     answer:
-      "State filing fees are government charges required to register your LLC and are paid directly to the state. These vary by state: Wyoming $100, Delaware $140, New Mexico $50, Texas $300. These fees are separate from our service fees and are clearly shown during checkout.",
+      "Prices shown on the website are exclusive of Swedish VAT (Moms at 25%). VAT is added at checkout based on your billing country. Business customers in the EU with a valid VAT number can apply for reverse charge. A proper VAT invoice is generated for every transaction and available to download from your billing settings.",
     category: "pricing",
   },
 ];

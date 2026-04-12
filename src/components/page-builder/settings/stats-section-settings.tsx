@@ -34,6 +34,7 @@ import {
   SelectInput,
   ColorInput,
   ToggleSwitch,
+  TextInput,
 } from "@/app/admin/appearance/landing-page/components/ui/form-controls";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -265,6 +266,7 @@ export function StatsSectionWidgetSettingsPanel({
     ...DEFAULT_STATS_SECTION_SETTINGS,
     ...settings,
     style: { ...DEFAULT_STATS_SECTION_SETTINGS.style, ...settings?.style },
+    header: settings?.header ? { ...DEFAULT_STATS_SECTION_SETTINGS.header, ...settings.header } : DEFAULT_STATS_SECTION_SETTINGS.header,
     container: { ...DEFAULT_WIDGET_CONTAINER, ...settings?.container },
   };
 
@@ -280,6 +282,13 @@ export function StatsSectionWidgetSettingsPanel({
     value: string | boolean
   ) => {
     onChange({ ...s, style: { ...s.style, [key]: value } });
+  };
+
+  const updateHeaderField = (
+    key: keyof NonNullable<StatsSectionWidgetSettings["header"]>,
+    value: string | boolean
+  ) => {
+    onChange({ ...s, header: { ...s.header!, [key]: value } });
   };
 
   const addStat = useCallback(() => {
@@ -352,16 +361,41 @@ export function StatsSectionWidgetSettingsPanel({
   // Content Tab
   const renderContentTab = () => (
     <div className="space-y-4">
-      {/* Variant */}
-      <SelectInput
-        label="Design Variant"
-        value={s.variant ?? "default"}
-        onChange={(v) => updateField("variant", v as "default" | "card-grid")}
-        options={[
-          { value: "default", label: "Default (flat grid with icons)" },
-          { value: "card-grid", label: "Card Grid (rounded, dark card style)" },
-        ]}
-      />
+      {/* Section Header */}
+      <div className="space-y-3 border rounded-lg p-3">
+        <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wide">Section Header</p>
+        <ToggleSwitch
+          label="Show Header"
+          checked={s.header?.show ?? false}
+          onChange={(v) => updateHeaderField("show", v)}
+        />
+        {s.header?.show && (
+          <>
+            <TextInput
+              label="Title"
+              value={s.header.title ?? ""}
+              onChange={(v) => updateHeaderField("title", v)}
+              placeholder="Trusted by Event Planners Worldwide"
+            />
+            <TextInput
+              label="Subtitle (optional)"
+              value={s.header.subtitle ?? ""}
+              onChange={(v) => updateHeaderField("subtitle", v)}
+              placeholder="Join thousands of event planners..."
+            />
+            <ColorInput
+              label="Title Color"
+              value={s.header.titleColor ?? "#0f172a"}
+              onChange={(v) => updateHeaderField("titleColor", v)}
+            />
+            <ColorInput
+              label="Subtitle Color"
+              value={s.header.subtitleColor ?? "#64748b"}
+              onChange={(v) => updateHeaderField("subtitleColor", v)}
+            />
+          </>
+        )}
+      </div>
 
       {/* Columns */}
       <SelectInput
@@ -439,20 +473,42 @@ export function StatsSectionWidgetSettingsPanel({
   const renderStyleTab = () => {
     const cg = s.cardGrid ?? DEFAULT_CARD_GRID_SETTINGS!;
 
-    return (
-      <div className="space-y-3">
-        {/* Default variant styles */}
-        {!isCardGrid && (
-          <>
-            <SelectInput
-              label="Item Layout"
-              value={s.style.layout ?? "vertical"}
-              onChange={(v) => updateStyleField("layout", v)}
-              options={[
-                { value: "vertical", label: "Vertical (icon top, number below)" },
-                { value: "horizontal", label: "Horizontal (icon left, number right)" },
-              ]}
-            />
+      <ColorInput
+        label="Value Color"
+        value={s.style.valueColor}
+        onChange={(v) => updateStyleField("valueColor", v)}
+      />
+      <ColorInput
+        label="Label Color"
+        value={s.style.labelColor}
+        onChange={(v) => updateStyleField("labelColor", v)}
+      />
+      <SelectInput
+        label="Value Size"
+        value={s.style.valueSize}
+        onChange={(v) => updateStyleField("valueSize", v)}
+        options={[
+          { value: "sm", label: "Small" },
+          { value: "md", label: "Medium" },
+          { value: "lg", label: "Large" },
+          { value: "xl", label: "Extra Large" },
+        ]}
+      />
+      <SelectInput
+        label="Label Size"
+        value={s.style.labelSize ?? "sm"}
+        onChange={(v) => updateStyleField("labelSize", v)}
+        options={[
+          { value: "sm", label: "Small" },
+          { value: "md", label: "Medium" },
+          { value: "lg", label: "Large" },
+        ]}
+      />
+      <ToggleSwitch
+        label="Uppercase Labels"
+        checked={s.style.labelUppercase ?? true}
+        onChange={(v) => updateStyleField("labelUppercase", v)}
+      />
 
             <SelectInput
               label="Value Size"

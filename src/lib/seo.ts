@@ -1,14 +1,14 @@
 import { Metadata } from "next";
 
 const siteConfig = {
-  name: "LLCPad",
-  url: process.env.NEXT_PUBLIC_APP_URL || "https://llcpad.com",
+  name: "Ceremoney",
+  url: process.env.NEXT_PUBLIC_APP_URL || "https://ceremoney.com",
   description:
-    "Start your US LLC in 24 hours. Professional LLC formation, EIN application, Amazon seller account setup, and business banking assistance for international entrepreneurs.",
+    "Plan your perfect wedding, baptism, or event with Ceremoney. Guest management, seating charts, vendor directory, event websites, and more — all in one place.",
   ogImage: "/og-image.jpg",
   links: {
-    twitter: "https://twitter.com/llcpad",
-    facebook: "https://facebook.com/llcpad",
+    twitter: "https://twitter.com/ceremoney",
+    instagram: "https://instagram.com/ceremoney",
   },
 };
 
@@ -70,17 +70,17 @@ export function generateOrganizationSchema() {
   return {
     "@context": "https://schema.org",
     "@type": "Organization",
-    name: "LLCPad",
+    name: "Ceremoney",
     url: siteConfig.url,
     logo: `${siteConfig.url}/logo.png`,
     description: siteConfig.description,
     contactPoint: {
       "@type": "ContactPoint",
-      telephone: "+1-555-123-4567",
+      email: "support@ceremoney.com",
       contactType: "customer service",
-      availableLanguage: ["English"],
+      availableLanguage: ["English", "Swedish", "Arabic"],
     },
-    sameAs: [siteConfig.links.twitter, siteConfig.links.facebook],
+    sameAs: [siteConfig.links.twitter, siteConfig.links.instagram],
   };
 }
 
@@ -105,13 +105,13 @@ export function generateServiceSchema({
     description,
     provider: {
       "@type": "Organization",
-      name: "LLCPad",
+      name: "Ceremoney",
       url: siteConfig.url,
     },
     offers: {
       "@type": "Offer",
       price: price.toString(),
-      priceCurrency: "USD",
+      priceCurrency: "SEK",
       availability: "https://schema.org/InStock",
     },
     image: image || `${siteConfig.url}/og-image.jpg`,
@@ -144,16 +144,16 @@ export function generateProductSchema({
     url: `${siteConfig.url}${url}`,
     brand: {
       "@type": "Brand",
-      name: "LLCPad",
+      name: "Ceremoney",
     },
     offers: {
       "@type": "Offer",
       price: price.toString(),
-      priceCurrency: "USD",
+      priceCurrency: "SEK",
       availability: "https://schema.org/InStock",
       seller: {
         "@type": "Organization",
-        name: "LLCPad",
+        name: "Ceremoney",
       },
     },
   };
@@ -207,28 +207,14 @@ export function generateBreadcrumbSchema(
 export function generateLocalBusinessSchema() {
   return {
     "@context": "https://schema.org",
-    "@type": "ProfessionalService",
-    name: "LLCPad",
+    "@type": "SoftwareApplication",
+    name: "Ceremoney",
     url: siteConfig.url,
     logo: `${siteConfig.url}/logo.png`,
     description: siteConfig.description,
-    address: {
-      "@type": "PostalAddress",
-      streetAddress: "1712 Pioneer Ave, Suite 500",
-      addressLocality: "Cheyenne",
-      addressRegion: "WY",
-      postalCode: "82001",
-      addressCountry: "US",
-    },
-    telephone: "+1-555-123-4567",
-    email: "support@llcpad.com",
-    priceRange: "$99 - $599",
-    openingHoursSpecification: {
-      "@type": "OpeningHoursSpecification",
-      dayOfWeek: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"],
-      opens: "09:00",
-      closes: "18:00",
-    },
+    email: "support@ceremoney.com",
+    applicationCategory: "LifestyleApplication",
+    operatingSystem: "Web",
   };
 }
 
@@ -250,7 +236,7 @@ export function generateWebPageSchema({
     url: `${siteConfig.url}${url}`,
     isPartOf: {
       "@type": "WebSite",
-      name: "LLCPad",
+      name: "Ceremoney",
       url: siteConfig.url,
     },
   };

@@ -114,6 +114,8 @@ function AnimatedStat({
   valueColor,
   labelColor,
   valueSize,
+  labelSize,
+  labelUppercase,
   layout,
   globalIconColor,
   iconSize,
@@ -130,6 +132,8 @@ function AnimatedStat({
   valueColor: string;
   labelColor: string;
   valueSize: string;
+  labelSize?: "sm" | "md" | "lg";
+  labelUppercase?: boolean;
   layout: "vertical" | "horizontal";
   globalIconColor: string;
   iconSize: "sm" | "md" | "lg";
@@ -172,6 +176,11 @@ function AnimatedStat({
   const IconComponent = icon ? STATS_ICON_MAP[icon] : null;
   const resolvedIconColor = iconColor || globalIconColor;
 
+  const getLabelClass = () => {
+    const size = labelSize === "lg" ? "text-lg" : labelSize === "md" ? "text-base" : "text-sm";
+    return cn("font-semibold", size, labelUppercase && "uppercase tracking-wide");
+  };
+
   if (layout === "horizontal") {
     // Horizontal: icon on left, number+label stacked on right
     return (
@@ -203,19 +212,7 @@ function AnimatedStat({
             {displayValue}
             {suffix}
           </span>
-          <span
-            className={cn(
-              !customLabelFontSize && "text-sm",
-              !labelFontWeight && "font-medium",
-              "uppercase tracking-wide"
-            )}
-            style={{
-              color: labelColor,
-              ...(customLabelFontSize ? { fontSize: customLabelFontSize } : {}),
-              ...(labelFontWeight ? { fontWeight: labelFontWeight } : {}),
-              ...(labelLetterSpacing ? { letterSpacing: labelLetterSpacing } : {}),
-            }}
-          >
+          <span className={getLabelClass()} style={{ color: labelColor }}>
             {label}
           </span>
         </div>
@@ -252,19 +249,7 @@ function AnimatedStat({
         {displayValue}
         {suffix}
       </span>
-      <span
-        className={cn(
-          !customLabelFontSize && "text-sm",
-          !labelFontWeight && "font-medium",
-          "mt-2 uppercase tracking-wide"
-        )}
-        style={{
-          color: labelColor,
-          ...(customLabelFontSize ? { fontSize: customLabelFontSize } : {}),
-          ...(labelFontWeight ? { fontWeight: labelFontWeight } : {}),
-          ...(labelLetterSpacing ? { letterSpacing: labelLetterSpacing } : {}),
-        }}
-      >
+      <span className={cn("mt-2", getLabelClass())} style={{ color: labelColor }}>
         {label}
       </span>
     </div>
@@ -324,10 +309,26 @@ export function StatsSectionWidget({ settings, isPreview = false }: StatsSection
   const [isVisible, setIsVisible] = useState(!animateOnScroll);
   const containerRef = useRef<HTMLDivElement>(null);
 
+  // Ensure there's always a visible background (white text needs a dark bg)
+  const container = settings.container ?? { padding: 80, borderRadius: 0 };
+  const hasBackground =
+    container.backgroundColor ||
+    (container.backgroundType === "gradient" && container.gradientBackground?.colors?.length);
+  const resolvedContainer = hasBackground
+    ? container
+    : {
+        ...container,
+        backgroundType: "gradient" as const,
+        gradientBackground: { colors: ["#1e1b4b", "#4c1d95"], angle: 135 },
+        padding: container.padding && container.padding > 0 ? container.padding : 80,
+      };
+
   const layout = style.layout ?? "vertical";
   const useTheme = settings.colors?.useTheme !== false;
   const iconColor = useTheme ? "var(--color-primary)" : (style.iconColor ?? "#f97316");
   const iconSize = style.iconSize ?? "md";
+  const labelSize = style.labelSize ?? "sm";
+  const labelUppercase = style.labelUppercase ?? true; // backwards-compat default
 
   // Intersection observer for scroll animation
   useEffect(() => {
@@ -363,7 +364,7 @@ export function StatsSectionWidget({ settings, isPreview = false }: StatsSection
 
   if (stats.length === 0) {
     return (
-      <WidgetContainer container={settings.container}>
+      <WidgetContainer container={resolvedContainer}>
         <div className="flex items-center justify-center h-24 bg-slate-800/50 rounded-lg border border-dashed border-slate-600">
           <span className="text-sm text-slate-500">No stats configured</span>
         </div>
@@ -371,71 +372,39 @@ export function StatsSectionWidget({ settings, isPreview = false }: StatsSection
     );
   }
 
-  // Card-grid variant: rounded container with 1px gap grid lines
-  if (variant === "card-grid") {
-    const cg = settings.cardGrid ?? DEFAULT_CARD_GRID_SETTINGS!;
-    const suffixColor = style.suffixColor || style.valueColor;
+  const header = settings.header;
 
-    return (
-      <WidgetContainer container={settings.container}>
-        <div
-          ref={containerRef}
-          data-field-id="stats"
-          className="overflow-hidden"
-          style={{
-            borderRadius: `${cg.borderRadius}px`,
-            background: cg.gridLineColor,
-          }}
-        >
-          <div
-            className="grid"
-            style={{
-              gridTemplateColumns: `repeat(${columns}, 1fr)`,
-              gap: `${cg.gridGap}px`,
-            }}
-          >
-            {stats.map((stat) => (
-              <div
-                key={stat.id}
-                style={{
-                  padding: cg.cellPadding,
-                  background: cg.cellBackground,
-                }}
-              >
-                <CardGridValue
-                  stat={stat}
-                  animate={isVisible && stat.animate}
-                  valueColor={style.valueColor}
-                  suffixColor={suffixColor}
-                  cg={cg}
-                />
-                <div
-                  style={{
-                    fontSize: `${cg.labelFontSize || 13}px`,
-                    fontWeight: cg.labelFontWeight || 500,
-                    color: style.labelColor,
-                    letterSpacing: cg.labelLetterSpacing || "0.3px",
-                    marginTop: `${cg.labelMarginTop || 8}px`,
-                  }}
-                >
-                  {stat.label}
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </WidgetContainer>
-    );
-  }
-
-  // Default variant
   return (
     <WidgetContainer container={settings.container}>
+      {/* Optional section header */}
+      {header?.show && (header.title || header.subtitle) && (
+        <div style={{ textAlign: "center", marginBottom: "3rem" }}>
+          {header.title && (
+            <h2 style={{
+              fontSize: "clamp(1.5rem, 3vw, 2.5rem)",
+              fontWeight: 900,
+              color: header.titleColor || "#ffffff",
+              marginBottom: "1rem",
+            }}>
+              {header.title}
+            </h2>
+          )}
+          {header.subtitle && (
+            <p style={{
+              fontSize: "1.125rem",
+              color: header.subtitleColor || "rgba(255,255,255,0.9)",
+            }}>
+              {header.subtitle}
+            </p>
+          )}
+        </div>
+      )}
+
       <div
         ref={containerRef}
         data-field-id="stats"
         className={cn(
-          "grid gap-8 pt-8",
+          "grid gap-8",
           getColumnsClass(),
           centered && layout === "vertical" && "text-center",
           style.showTopBorder && "border-t"
@@ -461,6 +430,8 @@ export function StatsSectionWidget({ settings, isPreview = false }: StatsSection
               valueColor={style.valueColor}
               labelColor={style.labelColor}
               valueSize={style.valueSize}
+              labelSize={labelSize}
+              labelUppercase={labelUppercase}
               layout={layout}
               globalIconColor={iconColor}
               iconSize={iconSize}

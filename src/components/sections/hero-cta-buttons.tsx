@@ -20,8 +20,8 @@ export function HeroCTAButtons() {
         textColor={WHITE}
         asChild
       >
-        <Link href="/services/llc-formation">
-          <CraftButtonLabel>Start Your LLC Now</CraftButtonLabel>
+        <Link href="/register">
+          <CraftButtonLabel>Start Planning Free</CraftButtonLabel>
           <CraftButtonIcon>
             <ArrowRight className="size-3 stroke-2" />
           </CraftButtonIcon>

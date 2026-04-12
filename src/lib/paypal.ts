@@ -134,7 +134,7 @@ export async function createPayPalOrder(options: {
     amount,
     currency = "USD",
     orderId,
-    description = "LLCPad Order",
+    description = "Ceremoney Order",
     returnUrl,
     cancelUrl,
   } = options;
@@ -159,7 +159,7 @@ export async function createPayPalOrder(options: {
         },
       ],
       application_context: {
-        brand_name: "LLCPad",
+        brand_name: "Ceremoney",
         landing_page: "NO_PREFERENCE",
         user_action: "PAY_NOW",
         return_url: returnUrl,

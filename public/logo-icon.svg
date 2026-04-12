@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 44 44" fill="none">
+  <!-- Interlocked Wedding Rings -->
+  <circle cx="15" cy="24" r="11" stroke="#C96B8A" stroke-width="3" fill="none"/>
+  <circle cx="27" cy="24" r="11" stroke="#C96B8A" stroke-width="3" fill="none"/>
+  <!-- Interlocking illusion -->
+  <path d="M25 13.5 Q32 17.5 32 24 Q32 30.5 25 34.5" stroke="white" stroke-width="3.4" fill="none"/>
+  <!-- Diamond sparkle -->
+  <path d="M21 7 L22 9.5 L25 10 L23 12 L23.5 15 L21 13.8 L18.5 15 L19 12 L17 10 L20 9.5 Z" fill="#C96B8A"/>
+</svg>

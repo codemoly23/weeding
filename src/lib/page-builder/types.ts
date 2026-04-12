@@ -195,6 +195,7 @@ export type WidgetType =
   | "feature-comparison"
   | "service-card"
   | "service-list"
+  | "vendor-listing"
   // Layout Widgets
   | "spacer"
   | "divider"
@@ -233,9 +234,13 @@ export type WidgetType =
   | "blog-featured-post"
   | "blog-post-list"
   | "blog-recent-posts"
-  // Theme Widgets
-  | "application-tracker"
-  | "ticker-marquee";
+  // Event/Planner Widgets
+  | "event-search-hero"
+  | "event-gallery-grid"
+  | "event-categories-grid"
+  | "cta-banner"
+  // Navigation Widgets
+  | "top-utility-bar";
 
 export type WidgetCategory =
   | "most-used"
@@ -248,7 +253,8 @@ export type WidgetCategory =
   | "cta"
   | "advanced"
   | "service" // Service-specific widgets (for Service Details template)
-  | "blog"; // Blog widgets
+  | "blog" // Blog widgets
+  | "wedding"; // Wedding & event planner widgets
 
 export interface WidgetSpacing {
   marginTop: number;
@@ -991,13 +997,23 @@ export interface StatsCardGridConfig {
 }
 
 export interface StatsSectionWidgetSettings {
-  variant?: "default" | "card-grid";
+  // Optional section header (title + subtitle above the stats grid)
+  header?: {
+    show: boolean;
+    title: string;
+    subtitle?: string;
+    titleColor: string;
+    subtitleColor: string;
+  };
+
   stats: StatItem[];
   columns: 2 | 3 | 4 | 5;
   style: {
     valueColor: string;
     labelColor: string;
     valueSize: "sm" | "md" | "lg" | "xl";
+    labelSize?: "sm" | "md" | "lg";    // Label font size (defaults to sm)
+    labelUppercase?: boolean;           // Whether to uppercase labels
     divider: boolean;
     showTopBorder?: boolean;
     topBorderColor?: string;
@@ -1070,7 +1086,7 @@ export interface TestimonialWidgetSettings {
 // TESTIMONIALS WIDGET TYPES (Multiple - Grid/Carousel/Video)
 // ============================================
 
-export type TestimonialsViewMode = "grid" | "carousel" | "masonry" | "video-grid";
+export type TestimonialsViewMode = "grid" | "carousel" | "masonry" | "video-grid" | "marquee";
 export type TestimonialType = "photo" | "video" | "mixed";
 export type TestimonialCardStyle = "minimal" | "elevated" | "glassmorphism" | "bordered" | "gradient-border";
 export type TestimonialAvatarStyle = "initials" | "photo" | "none";
@@ -2323,6 +2339,14 @@ export interface ProcessStepsWidgetSettings {
     animateOnScroll: boolean;
   };
 
+  // Step Label (e.g. "STEP 01" pill shown below icon)
+  stepLabel?: {
+    show: boolean;
+    prefix: string;   // e.g. "STEP"
+    bgColor: string;
+    textColor: string;
+  };
+
   // Theme color binding
   colors?: {
     useTheme?: boolean; // When true, use CSS var(--color-primary) as accent color
@@ -3345,51 +3369,186 @@ export interface BlogRecentPostsWidgetSettings {
   container?: WidgetContainerStyle;
 }
 
-// ============================================
-// CUSTOM HTML WIDGET
-// ============================================
+// ── Event Categories Grid Widget ─────────────────────────────────────────────
 
-export interface CustomHtmlWidgetSettings {
-  html: string;
-  css: string;
+export interface EventCategoryItem {
+  id: string;
+  image: string;
+  title: string;
+  subtitle: string;
+  href: string;
+}
+
+export interface EventCategoriesGridWidgetSettings {
+  badge: {
+    show: boolean;
+    text: string;
+  };
+  title: string;
+  subtitle: string;
+  cardHeight: number;
+  minCardWidth: number;
+  gap: number;
+  categories: EventCategoryItem[];
+}
+
+// ── Vendor Listing Widget ────────────────────────────────────────────────────
+
+export interface VendorListingWidgetSettings {
+  title: string;
+  subtitle: string;
+  category: string; // "" = all, or VendorCategory value
+  limit: number;
+  featuredOnly: boolean;
+  showViewAll: boolean;
+  columns: 2 | 3 | 4;
+  cardStyle?: "overlay" | "standard"; // overlay = image with gradient overlay (default), standard = info below image
+  sectionBg?: string;                  // Section background CSS value
+  badgeFrom?: string;                  // Category badge gradient start color
+  badgeTo?: string;                    // Category badge gradient end color
   container?: WidgetContainerStyle;
 }
 
-// ============================================
-// TICKER MARQUEE WIDGET
-// ============================================
+// ── Event Search Hero Widget ──────────────────────────────────────────────────
 
-export interface TickerMarqueeItem {
-  id: string;
-  content: string; // HTML from TipTap editor
-  // Legacy fields (backward compat)
-  boldText?: string;
-  text?: string;
-  link?: string;
-  openInNewTab?: boolean;
-  noFollow?: boolean;
+export interface EventSearchHeroEventType {
+  value: string;
+  label: string;
 }
 
-export interface TickerMarqueeWidgetSettings {
-  tickerName?: string; // Reference to a saved ticker by name
-  items: TickerMarqueeItem[];
-  speed: number; // seconds for one full cycle
-  separator: string; // e.g., "·"
-  textColor: string;
-  boldColor: string;
-  separatorColor: string;
-  // Custom typography overrides
-  customFontSize?: string;     // e.g., "13px" - overrides hardcoded text-[13px]
-  fontWeight?: number;         // e.g., 600
+// ── Event Gallery Grid Widget ─────────────────────────────────────────────────
 
-  // Interaction
-  pauseOnHover?: boolean;      // Pause marquee animation on mouse hover
+export interface EventGalleryGridItem {
+  id: string;
+  title: string;
+  type: string;      // Category badge text e.g. "Wedding", "Birthday"
+  image: string;
+  date: string;
+  location: string;
+  views: number;
+  href: string;      // Link for "Plan Similar" button
+}
 
-  // Theme color binding
-  colors?: {
-    useTheme?: boolean;
+export interface EventGalleryGridWidgetSettings {
+  // Section Header
+  badge: {
+    show: boolean;
+    icon: string;   // Lucide icon name
+    text: string;
+  };
+  title: string;
+  subtitle: string;
+
+  // Section background (CSS value)
+  sectionBg: string;
+
+  // Grid items
+  items: EventGalleryGridItem[];
+  columns: 2 | 3 | 4;
+
+  // Card category badge gradient
+  cardBadgeFrom: string;
+  cardBadgeTo: string;
+
+  // "Plan Similar" button
+  planSimilarLabel: string;
+  planSimilarHref: string; // If empty, uses item.href
+
+  // Bottom CTA button
+  showCta: boolean;
+  ctaLabel: string;
+  ctaHref: string;
+  ctaGradientFrom: string;
+  ctaGradientTo: string;
+
+  container?: WidgetContainerStyle;
+}
+
+// ── Event Search Hero Widget ──────────────────────────────────────────────────
+
+export interface EventSearchHeroWidgetSettings {
+  // Text Content
+  title: string;
+  subtitle: string;
+
+  // Background Slideshow
+  backgroundImages: string[];
+  autoplayInterval: number; // ms, default 5000
+  overlayOpacityTop: number; // 0-1, default 0.5
+  overlayOpacityBottom: number; // 0-1, default 0.3
+
+  // Search Card
+  showEventTypeField: boolean;
+  showLocationField: boolean;
+  showDateField: boolean;
+  eventTypeLabel: string;
+  locationLabel: string;
+  dateLabel: string;
+  locationPlaceholder: string;
+  eventTypes: EventSearchHeroEventType[];
+  searchButtonLabel: string;
+  searchButtonHref: string; // base URL to navigate on search
+}
+
+// ── CTA Banner Widget ─────────────────────────────────────────────────────────
+
+export interface CtaBannerWidgetSettings {
+  // Outer section
+  sectionBgFrom: string;       // default "#ffffff"
+  sectionBgTo: string;         // default "#faf5ff"
+
+  // Inner card
+  cardGradientFrom: string;    // default "#9333ea"
+  cardGradientTo: string;      // default "#ec4899"
+  cardGradientAngle: number;   // default 135
+  cardBorderRadius: number;    // default 24 (px)
+  cardPaddingV: number;        // default 64 (px vertical)
+  cardPaddingH: number;        // default 32 (px horizontal)
+  showPattern: boolean;        // checkerboard overlay
+
+  // Text content
+  title: string;
+  subtitle: string;
+
+  // Primary button
+  primaryButton: {
+    show: boolean;
+    label: string;
+    href: string;
+    icon: string;              // lucide icon name, default "ArrowRight"
   };
 
-  // Container Style
-  container?: WidgetContainerStyle;
+  // Secondary button
+  secondaryButton: {
+    show: boolean;
+    label: string;
+    href: string;
+    icon: string;              // lucide icon name, default "Play"
+  };
 }
+
+// ── Top Utility Bar Widget ────────────────────────────────────────────────────
+
+export interface TopUtilityBarLink {
+  id: string;
+  label: string;
+  href: string;
+  showIcon: boolean;
+  icon: string;  // lucide icon name
+}
+
+export interface TopUtilityBarWidgetSettings {
+  gradientFrom: string;      // default "#9333ea"
+  gradientTo: string;        // default "#ec4899"
+  gradientAngle: number;     // default 90 (to right)
+  borderBottomColor: string; // default "#7e22ce"
+  showBorderBottom: boolean; // default true
+  height: number;            // default 40 (px)
+  textColor: string;         // default "#ffffff"
+  hoverColor: string;        // default "#e9d5ff"
+  fontSize: number;          // default 14 (px)
+  paddingX: number;          // default 32 (px)
+  gap: number;               // default 24 (px)
+  links: TopUtilityBarLink[];
+}
+

@@ -1,10 +1,6 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  // Standalone output for VPS deployment
-  output: "standalone",
-
-
   // Image optimization
   images: {
     remotePatterns: [
@@ -18,11 +14,23 @@ const nextConfig: NextConfig = {
       },
       {
         protocol: "https",
-        hostname: "llcpad.com", // Main domain
+        hostname: "ceremoney.com", // Main domain
       },
       {
         protocol: "https",
-        hostname: "cdn.llcpad.com", // R2 CDN for uploaded files
+        hostname: "cdn.ceremoney.com", // CDN for uploaded files
+      },
+      {
+        protocol: "https",
+        hostname: "*.amazonaws.com", // AWS S3 uploads
+      },
+      {
+        protocol: "https",
+        hostname: "flagcdn.com", // Flag images for language switcher
+      },
+      {
+        protocol: "https",
+        hostname: "images.unsplash.com", // Unsplash default images for widgets
       },
       {
         protocol: "https",

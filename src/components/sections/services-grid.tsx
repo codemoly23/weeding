@@ -1,22 +1,17 @@
 import Link from "next/link";
 import {
-  Building2,
-  FileText,
-  ShoppingCart,
+  Users,
+  Globe,
+  LayoutGrid,
+  Camera,
+  Flower2,
+  UtensilsCrossed,
+  Music,
   MapPin,
-  Landmark,
-  Shield,
-  BadgeCheck,
-  Briefcase,
-  FileCheck,
-  Stamp,
-  ScrollText,
-  TrendingUp,
-  Package,
-  Sparkles,
-  Target,
-  Calculator,
-  BookOpen,
+  CalendarCheck,
+  Heart,
+  MessageSquare,
+  BarChart3,
   ArrowRight,
   ChevronRight,
 } from "lucide-react";
@@ -27,139 +22,138 @@ import { Button } from "@/components/ui/button";
 // Featured services for the main grid
 const featuredServices = [
   {
-    name: "LLC Formation",
+    name: "Guest List Management",
     description:
-      "Form your US LLC in any state with complete documentation and compliance support.",
-    icon: Building2,
-    href: "/services/llc-formation",
-    price: "From $199",
+      "Build and manage your complete guest list with RSVP tracking, dietary requirements, and family grouping.",
+    icon: Users,
+    href: "/features/guest-management",
+    price: "Free",
     popular: true,
-    category: "Formation",
+    category: "Core",
   },
   {
-    name: "EIN Application",
+    name: "Seating Chart Editor",
     description:
-      "Get your Employer Identification Number (Tax ID) for your US business.",
-    icon: FileText,
-    href: "/services/ein-application",
-    price: "From $99",
+      "Drag-and-drop visual seating planner. Assign guests to tables and export a PDF for your venue.",
+    icon: LayoutGrid,
+    href: "/features/seating-chart",
+    price: "From Free",
+    popular: true,
+    category: "Core",
+  },
+  {
+    name: "Wedding Website & RSVP",
+    description:
+      "Beautiful, customizable event website with online RSVP, countdown timer, and photo gallery.",
+    icon: Globe,
+    href: "/features/wedding-website",
+    price: "Free",
+    popular: true,
+    category: "Core",
+  },
+  {
+    name: "Vendor Directory",
+    description:
+      "Browse verified photographers, venues, florists, caterers, and more. Compare and contact in one place.",
+    icon: Camera,
+    href: "/vendors",
+    price: "Free to Browse",
+    popular: true,
+    category: "Vendors",
+  },
+  {
+    name: "Budget Tracker",
+    description:
+      "Set your wedding budget, log expenses, and track spending category by category in real time.",
+    icon: BarChart3,
+    href: "/features/budget",
+    price: "Premium",
     popular: false,
-    category: "Formation",
+    category: "Planning",
   },
   {
-    name: "Trademark Registration",
+    name: "Wedding Checklist",
     description:
-      "Protect your brand with USPTO trademark registration for nationwide protection.",
-    icon: Stamp,
-    href: "/services/trademark-registration",
-    price: "From $599",
-    popular: true,
-    category: "Formation",
-  },
-  {
-    name: "Amazon Seller Account",
-    description:
-      "Professional Amazon seller account setup with full verification support.",
-    icon: ShoppingCart,
-    href: "/services/amazon-seller",
-    price: "From $349",
-    popular: true,
-    category: "Amazon",
-  },
-  {
-    name: "Brand Registry",
-    description:
-      "Protect your brand on Amazon with trademark and brand registry enrollment.",
-    icon: BadgeCheck,
-    href: "/services/brand-registry",
-    price: "From $299",
-    popular: true,
-    category: "Amazon",
-  },
-  {
-    name: "Business Banking",
-    description:
-      "Open a US business bank account with our partner banks remotely.",
-    icon: Landmark,
-    href: "/services/business-banking",
-    price: "From $199",
-    popular: true,
-    category: "Finance",
-  },
-  {
-    name: "Registered Agent",
-    description:
-      "Comply with state requirements with our reliable registered agent service.",
-    icon: Shield,
-    href: "/services/registered-agent",
-    price: "From $99/yr",
+      "Personalized month-by-month planning checklist so nothing falls through the cracks.",
+    icon: CalendarCheck,
+    href: "/features/checklist",
+    price: "Free",
     popular: false,
-    category: "Compliance",
+    category: "Planning",
   },
   {
-    name: "Virtual US Address",
+    name: "Vendor Collaboration",
     description:
-      "Get a real US business address for mail forwarding and business presence.",
-    icon: MapPin,
-    href: "/services/virtual-address",
-    price: "From $149/yr",
+      "Invite your photographer, caterer, or florist to access relevant event details securely.",
+    icon: MessageSquare,
+    href: "/features/vendor-collaboration",
+    price: "Premium",
     popular: false,
-    category: "Compliance",
+    category: "Vendors",
+  },
+  {
+    name: "Event Analytics",
+    description:
+      "Track RSVP response rates, dietary breakdowns, and guest demographics with visual reports.",
+    icon: BarChart3,
+    href: "/features/analytics",
+    price: "Elite",
+    popular: false,
+    category: "Insights",
   },
 ];
 
-// All service categories for "View All Services" section
+// All feature/service categories
 const serviceCategories = [
   {
-    name: "Formation & Legal",
-    description: "Start your US business",
+    name: "Guest & Seating",
+    description: "Manage everyone on your big day",
     services: [
-      { name: "LLC Formation", href: "/services/llc-formation", price: "$199" },
-      { name: "EIN Application", href: "/services/ein-application", price: "$99" },
-      { name: "ITIN Application", href: "/services/itin-application", price: "$199" },
-      { name: "Trademark Registration", href: "/services/trademark-registration", price: "$599" },
-      { name: "DBA / Trade Name", href: "/services/dba-filing", price: "$99" },
-      { name: "Operating Agreement", href: "/services/operating-agreement", price: "$149" },
+      { name: "Guest List Manager", href: "/features/guest-management", price: "Free" },
+      { name: "Family Grouping", href: "/features/guest-management", price: "Free" },
+      { name: "RSVP Collection", href: "/features/wedding-website", price: "Free" },
+      { name: "Dietary Tracking", href: "/features/guest-management", price: "Free" },
+      { name: "Seating Chart Editor", href: "/features/seating-chart", price: "Free" },
+      { name: "Seating PDF Export", href: "/features/seating-chart", price: "Premium" },
     ],
-    icon: Building2,
+    icon: Users,
   },
   {
-    name: "Compliance & Documents",
-    description: "Keep your business compliant",
+    name: "Event Website",
+    description: "Share your story with guests",
     services: [
-      { name: "Registered Agent", href: "/services/registered-agent", price: "$99/yr" },
-      { name: "Annual Compliance", href: "/services/compliance", price: "$149/yr" },
-      { name: "Amendment Filing", href: "/services/amendment-filing", price: "$99" },
-      { name: "Certificate of Good Standing", href: "/services/certificate-good-standing", price: "$49" },
-      { name: "LLC Dissolution", href: "/services/llc-dissolution", price: "$149" },
-      { name: "Apostille Service", href: "/services/apostille-service", price: "$99" },
-      { name: "Virtual US Address", href: "/services/virtual-address", price: "$149/yr" },
+      { name: "Wedding Website", href: "/features/wedding-website", price: "Free" },
+      { name: "Online RSVP Form", href: "/features/wedding-website", price: "Free" },
+      { name: "Custom Domain", href: "/features/wedding-website", price: "Premium" },
+      { name: "Photo Gallery", href: "/features/wedding-website", price: "Free" },
+      { name: "Countdown Timer", href: "/features/wedding-website", price: "Free" },
+      { name: "Gift Registry Links", href: "/features/wedding-website", price: "Free" },
     ],
-    icon: Shield,
+    icon: Globe,
   },
   {
-    name: "Amazon Services",
-    description: "Sell on Amazon with confidence",
+    name: "Vendors & Venues",
+    description: "Find and coordinate your suppliers",
     services: [
-      { name: "Amazon Seller Account", href: "/services/amazon-seller", price: "$349" },
-      { name: "Brand Registry", href: "/services/brand-registry", price: "$299" },
-      { name: "Category Ungating", href: "/services/category-ungating", price: "$149" },
-      { name: "Listing Optimization", href: "/services/product-listing-optimization", price: "$149" },
-      { name: "A+ Content Creation", href: "/services/a-plus-content", price: "$199" },
-      { name: "PPC Campaign Setup", href: "/services/ppc-campaign-setup", price: "$249" },
-      { name: "Account Reinstatement", href: "/services/account-reinstatement", price: "$399" },
+      { name: "Photographer Directory", href: "/vendors/photographers", price: "Free" },
+      { name: "Venue Directory", href: "/vendors/venues", price: "Free" },
+      { name: "Florists & Decoration", href: "/vendors/florists", price: "Free" },
+      { name: "Catering & Food", href: "/vendors/catering", price: "Free" },
+      { name: "Music & Entertainment", href: "/vendors/music", price: "Free" },
+      { name: "Vendor Collaboration", href: "/features/vendor-collaboration", price: "Premium" },
     ],
-    icon: ShoppingCart,
+    icon: Camera,
   },
   {
-    name: "Tax & Finance",
-    description: "Financial services for your business",
+    name: "Planning Tools",
+    description: "Keep every detail organized",
     services: [
-      { name: "Business Banking", href: "/services/business-banking", price: "$199" },
-      { name: "Bookkeeping", href: "/services/bookkeeping", price: "$149/mo" },
-      { name: "Tax Filing", href: "/services/tax-filing", price: "$349" },
+      { name: "Wedding Checklist", href: "/features/checklist", price: "Free" },
+      { name: "Budget Tracker", href: "/features/budget", price: "Premium" },
+      { name: "Event Analytics", href: "/features/analytics", price: "Elite" },
+      { name: "Multiple Events", href: "/pricing", price: "Elite" },
     ],
-    icon: Calculator,
+    icon: CalendarCheck,
   },
 ];
 
@@ -170,14 +164,14 @@ export function ServicesGrid() {
         {/* Section Header */}
         <div className="mx-auto max-w-2xl text-center">
           <Badge variant="secondary" className="mb-4">
-            Our Services
+            Features
           </Badge>
           <h2 className="text-3xl font-bold tracking-tight text-foreground sm:text-4xl">
-            Everything You Need to Start Your US Business
+            Everything You Need to Plan Your Perfect Wedding
           </h2>
           <p className="mt-4 text-lg text-muted-foreground">
-            From LLC formation to Amazon seller accounts, we provide end-to-end
-            support for international entrepreneurs.
+            From guest list to seating chart, event website to vendor coordination,
+            Ceremoney brings every part of your wedding planning into one place.
           </p>
         </div>
 
@@ -215,14 +209,14 @@ export function ServicesGrid() {
           ))}
         </div>
 
-        {/* All Services by Category */}
+        {/* All Features by Category */}
         <div className="mt-20">
           <div className="mb-10 text-center">
             <h3 className="text-2xl font-bold tracking-tight text-foreground">
-              All Services
+              All Features
             </h3>
             <p className="mt-2 text-muted-foreground">
-              Explore our complete range of business services
+              Explore the complete Ceremoney feature set
             </p>
           </div>
 
@@ -271,17 +265,17 @@ export function ServicesGrid() {
         {/* CTA Section */}
         <div className="mt-16 text-center">
           <p className="mb-4 text-muted-foreground">
-            Not sure which services you need?
+            Not sure which plan is right for you?
           </p>
           <div className="flex flex-col items-center justify-center gap-4 sm:flex-row">
             <Button asChild size="lg">
-              <Link href="/services">
-                View All Services
+              <Link href="/pricing">
+                View Pricing
                 <ChevronRight className="ml-1 h-4 w-4" />
               </Link>
             </Button>
             <Button variant="outline" size="lg" asChild>
-              <Link href="/contact">Get Free Consultation</Link>
+              <Link href="/contact">Talk to Us</Link>
             </Button>
           </div>
         </div>

@@ -1,5 +1,5 @@
 /**
- * Email Templates for LLCPad
+ * Email Templates for Ceremoney
  * Beautiful HTML email templates for order notifications
  */
 
@@ -22,7 +22,7 @@ function baseTemplate(content: string): string {
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>LLCPad</title>
+  <title>Ceremoney</title>
 </head>
 <body style="margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f4f7fa;">
   <table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="background-color: #f4f7fa;">
@@ -32,8 +32,8 @@ function baseTemplate(content: string): string {
           <!-- Header -->
           <tr>
             <td style="background: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%); padding: 30px 40px; text-align: center;">
-              <h1 style="margin: 0; color: #ffffff; font-size: 28px; font-weight: 700; letter-spacing: -0.5px;">LLCPad</h1>
-              <p style="margin: 8px 0 0; color: rgba(255, 255, 255, 0.9); font-size: 14px;">Your Trusted Business Formation Partner</p>
+              <h1 style="margin: 0; color: #ffffff; font-size: 28px; font-weight: 700; letter-spacing: -0.5px;">Ceremoney</h1>
+              <p style="margin: 8px 0 0; color: rgba(255, 255, 255, 0.9); font-size: 14px;">Your Wedding & Event Planning Platform</p>
             </td>
           </tr>
 
@@ -51,14 +51,14 @@ function baseTemplate(content: string): string {
                 <tr>
                   <td style="text-align: center;">
                     <p style="margin: 0 0 10px; color: #64748b; font-size: 14px;">Need help? Contact our support team</p>
-                    <a href="mailto:support@llcpad.com" style="color: #3b82f6; text-decoration: none; font-weight: 500;">support@llcpad.com</a>
+                    <a href="mailto:support@ceremoney.com" style="color: #3b82f6; text-decoration: none; font-weight: 500;">support@ceremoney.com</a>
                   </td>
                 </tr>
                 <tr>
                   <td style="text-align: center; padding-top: 20px;">
-                    <p style="margin: 0; color: #94a3b8; font-size: 12px;">© ${year} LLCPad. All rights reserved.</p>
+                    <p style="margin: 0; color: #94a3b8; font-size: 12px;">© ${year} Ceremoney. All rights reserved.</p>
                     <p style="margin: 8px 0 0; color: #94a3b8; font-size: 11px;">
-                      This email was sent to you because you have an account with LLCPad.
+                      This email was sent to you because you have an account with Ceremoney.
                     </p>
                   </td>
                 </tr>
@@ -245,7 +245,7 @@ export function orderCompletedEmail(data: OrderEmailData): string {
 
     <div style="background-color: #f0fdf4; border: 1px solid #bbf7d0; padding: 20px; border-radius: 8px; margin-bottom: 24px; text-align: center;">
       <p style="margin: 0 0 8px; color: #166534; font-size: 14px; font-weight: 600;">
-        🎉 Thank you for choosing LLCPad!
+        🎉 Thank you for choosing Ceremoney!
       </p>
       <p style="margin: 0; color: #15803d; font-size: 13px;">
         We hope you're satisfied with our service. Feel free to reach out if you need anything else.

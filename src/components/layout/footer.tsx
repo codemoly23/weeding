@@ -26,6 +26,8 @@ import { PrimaryFlowButton } from "@/components/ui/flow-button";
 import { NeuralButton } from "@/components/ui/neural-button";
 import { CRAFT_BG_DARK, WHITE, ORANGE_PRIMARY } from "@/lib/button-constants";
 import { cn } from "@/lib/utils";
+import { FooterLanguageSwitcher } from "@/components/layout/footer-language-switcher";
+import { useLanguage } from "@/lib/i18n/language-context";
 
 // Shared button utilities
 import {
@@ -774,6 +776,7 @@ function FooterWidgetRenderer({
 export function Footer() {
   const { config: businessConfig } = useBusinessConfig();
   const { config: footerConfig, isLoading: isConfigLoading } = useFooterConfig();
+  const { t } = useLanguage();
   const footerRef = useRef<HTMLElement>(null);
   const [isVisible, setIsVisible] = useState(false);
   const [hasAnimated, setHasAnimated] = useState(false);
@@ -1089,13 +1092,13 @@ export function Footer() {
         >
           <p className="text-sm opacity-80">
             {footerConfig?.bottomBar?.copyrightText ||
-              `© ${new Date().getFullYear()} ${businessConfig.name}. All rights reserved.`}
+              t("footer.copyright", { year: String(new Date().getFullYear()), name: businessConfig.name })}
           </p>
           {footerConfig?.bottomBar?.showDisclaimer && (
             <p className={`max-w-xl text-xs opacity-60 ${layout === "CENTERED" ? "" : "md:text-right"}`}>
               <strong>Disclaimer:</strong>{" "}
               {footerConfig?.bottomBar?.disclaimerText ||
-                `${businessConfig.name} is not a law firm and does not provide legal advice.`}
+                t("footer.disclaimer", { name: businessConfig.name })}
             </p>
           )}
         </div>
@@ -1124,6 +1127,11 @@ export function Footer() {
             <TrustBadges badges={footerConfig.trustBadges.badges} />
           </div>
         )}
+
+        {/* Language Switcher */}
+        <div className="mt-6 flex justify-center">
+          <FooterLanguageSwitcher />
+        </div>
       </>
     ) : null
   );
@@ -1301,7 +1309,7 @@ export function Footer() {
           <div className="mt-6 border-t pt-6 text-center" style={{ borderColor: styling?.borderColor }}>
             <p className="text-sm opacity-80">
               {footerConfig?.bottomBar?.copyrightText ||
-                `© ${new Date().getFullYear()} ${businessConfig.name}. All rights reserved.`}
+                t("footer.copyright", { year: String(new Date().getFullYear()), name: businessConfig.name })}
             </p>
           </div>
         </div>

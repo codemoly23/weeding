@@ -184,7 +184,7 @@ export function getNewLeadEmail(data: NewLeadEmailData): {
                 This is an automated notification from your lead management system.
               </p>
               <p style="color: #a1a1aa; margin: 0; font-size: 12px;">
-                © ${new Date().getFullYear()} LLCPad. All rights reserved.
+                © ${new Date().getFullYear()} Ceremoney. All rights reserved.
               </p>
             </td>
           </tr>
@@ -220,7 +220,7 @@ ${message ? `Message:\n${message}` : ''}
 View Lead Details: ${adminUrl}/admin/leads/${leadId}
 
 This is an automated notification from your lead management system.
-© ${new Date().getFullYear()} LLCPad. All rights reserved.
+© ${new Date().getFullYear()} Ceremoney. All rights reserved.
 `;
 
   return {

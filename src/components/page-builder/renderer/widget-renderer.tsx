@@ -12,8 +12,10 @@ import { HeroContentWidget } from "../widgets/content/hero-content";
 import { HeadingWidget } from "../widgets/content/heading-widget";
 import { TextBlockWidget } from "../widgets/content/text-block-widget";
 import { ProcessStepsWidget } from "../widgets/content/process-steps";
-import { TickerMarqueeWidget } from "../widgets/content/ticker-marquee";
-import { CustomHtmlWidget } from "../widgets/advanced/custom-html-widget";
+import { EventSearchHeroWidget } from "../widgets/content/event-search-hero-widget";
+import { EventCategoriesGridWidget } from "../widgets/content/event-categories-grid-widget";
+import { EventGalleryGridWidget } from "../widgets/content/event-gallery-grid-widget";
+import { CtaBannerWidget } from "../widgets/content/cta-banner-widget";
 import { ImageWidget } from "../widgets/media/image-widget";
 import { ImageSliderWidget } from "../widgets/media/image-slider-widget";
 import { TrustBadgesWidget } from "../widgets/social-proof/trust-badges";
@@ -21,11 +23,13 @@ import { StatsSectionWidget } from "../widgets/social-proof/stats-section";
 import { TestimonialsWidget } from "../widgets/social-proof/testimonials-widget";
 import { DividerWidget } from "../widgets/layout/divider-widget";
 import { FaqAccordionWidget } from "../widgets/layout/faq-accordion-widget";
+import { TopUtilityBarWidget } from "../widgets/layout/top-utility-bar-widget";
 import { LeadFormWidget } from "../widgets/forms/lead-form-widget";
 import { ButtonGroupWidget } from "../widgets/cta/button-group-widget";
 import { PricingTableWidget } from "../widgets/commerce/pricing-table-widget";
 import { ServiceCardWidget } from "../widgets/commerce/service-card-widget";
 import { ServiceListWidget } from "../widgets/commerce/service-list-widget";
+import { VendorListingWidget } from "../widgets/commerce/vendor-listing-widget";
 
 // Service widgets
 import { ServiceHeroWidget } from "../widgets/service/service-hero";
@@ -57,6 +61,10 @@ const WIDGET_COMPONENTS: Partial<Record<WidgetType, React.ComponentType<any>>> =
   "heading": HeadingWidget,
   "text-block": TextBlockWidget,
   "process-steps": ProcessStepsWidget,
+  "event-search-hero": EventSearchHeroWidget,
+  "event-categories-grid": EventCategoriesGridWidget,
+  "event-gallery-grid": EventGalleryGridWidget,
+  "cta-banner": CtaBannerWidget,
 
   // Media widgets
   "image": ImageWidget,
@@ -75,6 +83,7 @@ const WIDGET_COMPONENTS: Partial<Record<WidgetType, React.ComponentType<any>>> =
   "pricing-table": PricingTableWidget,
   "service-card": ServiceCardWidget,
   "service-list": ServiceListWidget,
+  "vendor-listing": VendorListingWidget,
 
   // CTA widgets
   "button-group": ButtonGroupWidget,
@@ -83,6 +92,7 @@ const WIDGET_COMPONENTS: Partial<Record<WidgetType, React.ComponentType<any>>> =
   "divider": DividerWidget,
   "faq": FaqAccordionWidget,
   "faq-accordion": FaqAccordionWidget,
+  "top-utility-bar": TopUtilityBarWidget,
 
   // Service widgets
   "service-hero": ServiceHeroWidget,

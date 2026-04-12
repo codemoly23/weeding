@@ -15,580 +15,359 @@ export interface BlogPost {
 }
 
 export const blogCategories = [
-  { id: "llc-guides", name: "LLC Guides" },
-  { id: "tax-tips", name: "Tax Tips" },
-  { id: "amazon-selling", name: "Amazon Selling" },
-  { id: "business-banking", name: "Business Banking" },
-  { id: "international", name: "International Business" },
+  { id: "wedding-planning", name: "Wedding Planning" },
+  { id: "guest-management", name: "Guest Management" },
+  { id: "vendors-venues", name: "Vendors & Venues" },
+  { id: "inspiration", name: "Inspiration & Trends" },
+  { id: "tips-guides", name: "Tips & Guides" },
 ];
 
 export const blogPosts: BlogPost[] = [
   {
-    slug: "how-to-form-wyoming-llc-complete-guide",
-    title: "How to Form a Wyoming LLC: Complete 2024 Guide",
+    slug: "how-to-create-wedding-guest-list-complete-guide",
+    title: "How to Create Your Wedding Guest List: Complete Guide",
     excerpt:
-      "Learn everything you need to know about forming a Wyoming LLC, including step-by-step instructions, costs, benefits, and common mistakes to avoid.",
+      "Learn how to build and manage your wedding guest list stress-free, including tips on setting a budget, handling plus-ones, and collecting RSVPs with Ceremoney.",
     content: `
-## Why Choose Wyoming for Your LLC?
+## Starting Your Guest List
 
-Wyoming is consistently ranked as the #1 state for LLC formation, and for good reason. The state offers a unique combination of benefits that make it ideal for entrepreneurs, especially international business owners.
+Your wedding guest list is one of the first — and most important — decisions you will make. It shapes your venue choice, catering budget, and the overall feel of your day.
 
-### Key Benefits of Wyoming LLCs
+### Step 1: Set Your Target Number
 
-1. **No State Income Tax**: Wyoming has no personal or corporate income tax, allowing you to keep more of your profits.
+Before inviting anyone, agree with your partner on a rough total. Consider:
+- **Venue capacity**: Your venue has a maximum number of guests.
+- **Budget per head**: Every additional guest increases catering, stationery, and seating costs.
+- **Atmosphere**: Intimate weddings (under 50 guests) feel very different from large celebrations (150+).
 
-2. **Strong Privacy Protections**: Wyoming doesn't require member names to be listed in public filings, protecting your identity from public records.
+A useful rule: start with a "must invite" list — immediate family and closest friends. Then add a "would love to invite" list and a "if budget allows" list.
 
-3. **Lowest Annual Fees**: At just $60/year, Wyoming has the lowest LLC annual report fee in the nation.
+### Step 2: Import Your Contacts
 
-4. **Asset Protection**: Wyoming's charging order protection is among the strongest in the country, shielding your personal assets from business creditors.
+With Ceremoney, you can:
+- Add guests one by one
+- Import from a CSV or Excel spreadsheet
+- Invite guests to register themselves through your event website
 
-5. **No Franchise Tax**: Unlike Delaware, Wyoming has no franchise tax regardless of your company's revenue.
+Each guest profile stores name, contact details, RSVP status, meal preference, and plus-one information.
 
-## Step-by-Step: Forming Your Wyoming LLC
+### Step 3: Organize by Groups and Families
 
-### Step 1: Choose Your LLC Name
+Group guests into families or categories (e.g., Bride's Family, Groom's Friends, Work Colleagues). This makes it easier to assign seating and track who has responded.
 
-Your LLC name must:
-- Be unique and not already in use in Wyoming
-- Include "LLC" or "Limited Liability Company"
-- Not include restricted words like "Bank" or "Insurance" without special approval
+### Step 4: Send Save-the-Dates and Invitations
 
-### Step 2: Appoint a Registered Agent
+Use your Ceremoney event website to share your wedding details. Guests can RSVP online, and their responses sync instantly to your guest list.
 
-Every Wyoming LLC needs a registered agent with a physical address in Wyoming. Your registered agent receives legal documents and official mail on behalf of your LLC.
+### Step 5: Track RSVPs and Follow Up
 
-### Step 3: File Articles of Organization
+Ceremoney sends automated RSVP reminders to guests who have not responded by your deadline. You can also manually update statuses for guests who prefer to reply by phone or post.
 
-File your Articles of Organization with the Wyoming Secretary of State. You'll need to provide:
-- LLC name
-- Registered agent name and address
-- Organizer information
-- Filing fee: $100
+## Common Guest List Mistakes to Avoid
 
-### Step 4: Create an Operating Agreement
+1. **Inviting obligation guests**: Only invite people you genuinely want there.
+2. **Forgetting plus-ones**: Decide on a consistent plus-one policy early.
+3. **Waiting too long to send invitations**: Send save-the-dates 6–12 months ahead.
+4. **Not tracking dietary requirements**: Collect these with the RSVP to help your caterer.
 
-While not required to file with the state, an Operating Agreement is essential for:
-- Defining ownership percentages
-- Establishing management structure
-- Protecting your limited liability status
-- Meeting bank requirements for opening accounts
+## Guest List Size Guide
 
-### Step 5: Obtain an EIN
+| Wedding Size | Guest Count | Typical Venue |
+|---|---|---|
+| Intimate | Under 30 | Private dining room, home |
+| Small | 30–75 | Boutique venue, restaurant |
+| Medium | 75–150 | Country house, hotel |
+| Large | 150–300 | Grand hotel, manor |
+| Grand | 300+ | Palace, large estate |
 
-Apply for an Employer Identification Number (EIN) from the IRS. You'll need this to:
-- Open a business bank account
-- Hire employees
-- File taxes
+## Ready to Build Your Guest List?
 
-## Common Mistakes to Avoid
+Start managing your wedding guest list for free with Ceremoney.
 
-1. **Skipping the Operating Agreement**: Even single-member LLCs need this document.
-2. **Mixing Personal and Business Finances**: Always keep accounts separate.
-3. **Missing Annual Report Deadlines**: Mark your calendar - it's due on the first day of your anniversary month.
-4. **Not Maintaining Proper Records**: Keep all formation documents organized and accessible.
-
-## Cost Breakdown
-
-| Item | Cost |
-|------|------|
-| State Filing Fee | $100 |
-| Registered Agent (1 year) | $99-149 |
-| EIN Application | $0-79 |
-| Operating Agreement | Included |
-| **Total** | **$199-328** |
-
-## Ready to Start?
-
-Forming a Wyoming LLC is straightforward with the right guidance. Our team handles the entire process for you, from name search to document delivery.
-
-[Get Started with Wyoming LLC Formation →](/checkout/llc-formation?state=WY)
+[Get Started Free →](/register)
     `,
-    coverImage: "/blog/wyoming-llc-guide.jpg",
+    coverImage: "/blog/wedding-guest-list.jpg",
     author: {
-      name: "Sarah Johnson",
-      avatar: "/avatars/sarah.jpg",
+      name: "Sofia Lindgren",
+      avatar: "/avatars/sofia.jpg",
     },
-    category: "llc-guides",
-    tags: ["Wyoming", "LLC Formation", "Business Guide"],
-    publishedAt: "2024-12-01",
-    readTime: 8,
-  },
-  {
-    slug: "ein-for-non-us-residents-complete-guide",
-    title: "How to Get an EIN Without SSN: Guide for Non-US Residents",
-    excerpt:
-      "A comprehensive guide for international entrepreneurs on obtaining an EIN (Employer Identification Number) for your US LLC without a Social Security Number.",
-    content: `
-## What is an EIN?
-
-An Employer Identification Number (EIN) is a 9-digit tax identification number issued by the IRS to identify your business. Think of it as a Social Security Number for your LLC.
-
-## Why Do You Need an EIN?
-
-Even if you're not a US resident, you need an EIN to:
-
-1. **Open a US Business Bank Account**: Banks require an EIN to open business accounts
-2. **File US Tax Returns**: Required for any US tax filings
-3. **Hire Employees**: Mandatory if you plan to hire staff
-4. **Build Business Credit**: Essential for establishing credit history
-5. **Comply with Amazon/Payment Processors**: Most platforms require an EIN
-
-## Can Non-US Residents Get an EIN?
-
-**Yes!** You do not need to be a US citizen or have a Social Security Number to obtain an EIN. The IRS issues EINs to foreign individuals and entities that have US tax obligations or need an EIN for business purposes.
-
-## Methods to Get an EIN Without SSN
-
-### Method 1: Online Application (With ITIN)
-
-If you have an Individual Taxpayer Identification Number (ITIN), you can apply online at irs.gov.
-
-**Pros**: Instant EIN issuance
-**Cons**: Requires ITIN
-
-### Method 2: Fax Application (Without SSN/ITIN)
-
-For those without an SSN or ITIN, the IRS accepts Form SS-4 via fax.
-
-**Process**:
-1. Complete Form SS-4
-2. Write "FOREIGN" in the SSN/ITIN field
-3. Include your foreign address
-4. Fax to the IRS
-5. Wait 4-6 weeks for your EIN
-
-**Pros**: No SSN/ITIN needed
-**Cons**: Longer processing time
-
-### Method 3: Mail Application
-
-Similar to fax, but sent via postal mail.
-
-**Pros**: No SSN/ITIN needed
-**Cons**: Takes 6-8 weeks
-
-### Method 4: Phone Application
-
-International applicants can call the IRS Business & Specialty Tax Line.
-
-**Pros**: Potentially faster
-**Cons**: Long hold times, specific calling hours
-
-## What Information Do You Need?
-
-To apply for an EIN, have ready:
-
-- LLC legal name
-- LLC formation date
-- State of formation
-- Business address (can be registered agent address)
-- Responsible party information (your name and address)
-- Principal business activity
-- Reason for applying
-
-## Common Mistakes to Avoid
-
-1. **Using the Wrong Form**: Make sure to use Form SS-4
-2. **Incomplete Information**: Fill out every required field
-3. **Wrong Business Type**: Select "Limited Liability Company" correctly
-4. **Missing Signature**: Don't forget to sign the form
-
-## Timeline Expectations
-
-| Method | Timeline |
-|--------|----------|
-| Online (with ITIN) | Immediate |
-| Fax | 4-6 weeks |
-| Mail | 6-8 weeks |
-| Phone | Same day (if successful) |
-
-## Our EIN Application Service
-
-Skip the hassle and let us handle your EIN application. We:
-
-- Complete Form SS-4 correctly
-- Submit via the fastest method for your situation
-- Track your application status
-- Deliver your EIN confirmation letter
-
-[Get Your EIN Today →](/services/ein-application)
-    `,
-    coverImage: "/blog/ein-guide.jpg",
-    author: {
-      name: "Michael Chen",
-      avatar: "/avatars/michael.jpg",
-    },
-    category: "tax-tips",
-    tags: ["EIN", "International", "Tax ID", "IRS"],
-    publishedAt: "2024-11-28",
+    category: "guest-management",
+    tags: ["Guest List", "Planning", "RSVP"],
+    publishedAt: "2025-03-15",
     readTime: 7,
   },
   {
-    slug: "amazon-seller-us-llc-international-guide",
-    title: "How to Sell on Amazon USA with a US LLC: International Seller Guide",
+    slug: "wedding-seating-chart-tips-guide",
+    title: "Wedding Seating Chart Tips: How to Seat 100+ Guests Without the Stress",
     excerpt:
-      "Everything international sellers need to know about setting up a US LLC for Amazon FBA, including account setup, tax considerations, and payment processing.",
+      "A practical guide to creating a wedding seating plan that keeps guests comfortable and avoids family drama. Includes a step-by-step approach using Ceremoney's seating chart editor.",
     content: `
-## Why International Sellers Need a US LLC
+## Why Seating Charts Matter
 
-Selling on Amazon.com with a US LLC provides significant advantages:
+A thoughtful seating chart ensures that every guest has a great time. Poorly seated guests can feel isolated or uncomfortable, especially in large weddings with mixed social circles.
 
-1. **Professional Seller Status**: More credibility with Amazon and customers
-2. **Better Payment Options**: Direct US bank account deposits
-3. **Tax Efficiency**: Proper business structure for tax optimization
-4. **Amazon Lending Access**: Qualify for Amazon's lending program
-5. **Liability Protection**: Separate personal assets from business risks
+## Getting Started with Your Seating Plan
 
-## Step-by-Step Setup Process
+### 1. Confirm Your Final Guest Count First
 
-### Step 1: Form Your US LLC
+Never start a seating plan until you have final RSVPs. Work with confirmed attendees only to avoid rearranging everything when last-minute cancellations arrive.
 
-We recommend **Wyoming** for Amazon sellers due to:
-- Low fees ($100 filing, $60/year)
-- No state income tax
-- Strong privacy protections
-- No physical presence required
+### 2. Map Out Your Venue
 
-### Step 2: Get Your EIN
+Draw a floor plan or use Ceremoney's visual seating editor to recreate your venue layout. Add tables with the correct shapes (round, rectangular, or mixed) and capacities.
 
-Apply for an EIN (Employer Identification Number) from the IRS. This is your business tax ID and is required for:
-- Amazon seller registration
-- Opening a US bank account
-- Tax reporting
+### 3. Seat the VIPs First
 
-### Step 3: Open a US Business Bank Account
+Start with the head table or sweetheart table. Then seat immediate family on both sides, followed by the wedding party, close friends, and finally extended guests.
 
-Options for international sellers:
-- **Mercury**: Online bank, remote account opening
-- **Relay**: No monthly fees, remote opening
-- **Payoneer**: Virtual US bank account
-- **Traditional banks**: May require US visit
+### 4. Apply the Comfort Rule
 
-### Step 4: Register Your Amazon Seller Account
+Seat guests with people they know or who share something in common — age group, profession, or social circle. Avoid seating feuding family members close together.
 
-With your LLC, EIN, and bank account ready:
+### 5. Account for Special Needs
 
-1. Go to sellercentral.amazon.com
-2. Choose "Professional Seller" account
-3. Provide your LLC information
-4. Enter your EIN
-5. Connect your US bank account
-6. Complete identity verification
+- Place elderly guests near exits and restrooms.
+- Seat guests with mobility issues at accessible tables.
+- Keep children's tables near parents but away from the dance floor (or close to it — depends on your crowd!).
 
-## Tax Considerations
+## Ceremoney's Drag-and-Drop Seating Editor
 
-### Do I Need to Pay US Taxes?
+Our visual editor lets you:
+- Build a realistic floor plan of your venue
+- Add and label tables with names (e.g., "Table Rose" or "Table 7")
+- Drag guest names from your list to seats
+- See unassigned guests at a glance
+- Export a PDF for your venue coordinator
 
-As a non-US resident with a US LLC:
-- **No US-sourced income**: Likely no US tax liability
-- **Inventory stored in US**: May create tax nexus
-- **Sales to US customers**: May trigger tax obligations
+Changes sync in real time, so you and your planner always see the latest version.
 
-Consult a tax professional for your specific situation.
+## Seating Chart Checklist
 
-### Sales Tax Collection
+- [ ] All confirmed RSVPs are in the guest list
+- [ ] Venue floor plan is mapped accurately
+- [ ] VIP and family tables are assigned first
+- [ ] No feuding guests seated together
+- [ ] Accessibility needs are addressed
+- [ ] Children and elderly guests have appropriate placement
+- [ ] Table names or numbers match the venue cards
+- [ ] PDF exported for venue and catering team
 
-Amazon handles sales tax collection in most states through their Marketplace Facilitator program. You generally don't need to register for sales tax separately.
-
-## Common Challenges & Solutions
-
-### Challenge 1: Bank Account Opening
-
-**Solution**: Use online banks like Mercury or Relay that accept international LLC owners without US visits.
-
-### Challenge 2: Address Verification
-
-**Solution**: Use your registered agent address or a US virtual address service.
-
-### Challenge 3: Two-Step Verification
-
-**Solution**: Get a US phone number through Google Voice or similar services.
-
-## Cost Breakdown for Amazon Sellers
-
-| Item | Cost |
-|------|------|
-| Wyoming LLC Formation | $149-399 |
-| Wyoming State Fee | $100 |
-| EIN Application | $79 |
-| Registered Agent (1 year) | Included |
-| Amazon Professional Account | $39.99/month |
-| **Startup Total** | **~$400-600** |
-
-## Ready to Start Selling?
-
-Our Amazon Seller Setup package includes:
-- US LLC formation
-- EIN application
-- Bank account guidance
-- Amazon registration assistance
-- Ongoing compliance support
-
-[Start Your Amazon Business →](/services/amazon-seller)
+[Try the Seating Chart Editor →](/dashboard/seating)
     `,
-    coverImage: "/blog/amazon-seller-guide.jpg",
+    coverImage: "/blog/seating-chart.jpg",
     author: {
-      name: "Emma Wilson",
-      avatar: "/avatars/emma.jpg",
+      name: "Erik Johansson",
+      avatar: "/avatars/erik.jpg",
     },
-    category: "amazon-selling",
-    tags: ["Amazon", "FBA", "E-commerce", "International"],
-    publishedAt: "2024-11-25",
-    readTime: 10,
+    category: "wedding-planning",
+    tags: ["Seating Chart", "Planning Tips", "Venue"],
+    publishedAt: "2025-03-01",
+    readTime: 6,
   },
   {
-    slug: "best-banks-international-llc-owners-2024",
-    title: "Best US Banks for International LLC Owners in 2024",
+    slug: "how-to-choose-wedding-photographer-sweden",
+    title: "How to Choose the Perfect Wedding Photographer in Sweden",
     excerpt:
-      "Compare the top US banks and fintech options for non-US residents with American LLCs. Find out which banks offer remote account opening.",
+      "Everything you need to know about finding, evaluating, and booking the right wedding photographer — including key questions to ask, pricing expectations, and how Ceremoney's vendor directory helps you compare photographers.",
     content: `
-## The Challenge of International Banking
+## Why Your Photographer Choice Matters
 
-Opening a US business bank account as a non-US resident has traditionally been difficult. Many banks require in-person visits, US credit history, or SSNs. However, the landscape has changed significantly with fintech solutions.
+Your wedding photos are the lasting record of your day. Choosing the right photographer — one whose style aligns with your vision and who you feel comfortable around — is one of the most important vendor decisions you will make.
 
-## Best Options for International LLC Owners
+## Defining Your Photography Style
 
-### 1. Mercury (Highly Recommended)
+Before searching, decide what style of wedding photography you prefer:
 
-**Best for**: Most international LLC owners
+- **Documentary / Reportage**: Candid, natural moments captured as they happen. Minimal posing.
+- **Editorial / Fine Art**: Artistic, magazine-style images with careful composition and lighting.
+- **Traditional**: Classic, formally posed portraits of family and the wedding party.
+- **Bohemian**: Relaxed, outdoorsy, often with a warm or desaturated color palette.
 
-**Pros**:
-- 100% remote account opening
-- No minimum balance
-- No monthly fees
-- Modern online interface
-- Integrations with accounting software
+Browse each photographer's full galleries — not just their highlights — to get a realistic picture of their work.
 
-**Cons**:
-- Limited physical banking services
-- No cash deposits
+## Questions to Ask a Potential Photographer
 
-**Requirements**:
-- US LLC with EIN
-- Valid passport
-- Proof of business (website, contracts)
+1. Are you available on our wedding date?
+2. Have you photographed at our venue before?
+3. How many images will we receive, and in what format?
+4. What is your backup plan if you become ill on the day?
+5. How long does post-processing take, and how will we receive our photos?
+6. Do you work alone or with a second shooter?
+7. What are your travel fees if our venue is outside your local area?
 
-### 2. Relay
+## Understanding Wedding Photography Pricing in Sweden
 
-**Best for**: Budget-conscious entrepreneurs
+Photography costs vary widely based on experience and coverage hours:
 
-**Pros**:
-- No monthly fees
-- Remote account opening
-- Multiple free checking accounts
-- Built-in budgeting tools
+| Level | Estimated Price (SEK) |
+|---|---|
+| Emerging photographer | 10,000 – 20,000 |
+| Experienced photographer | 20,000 – 45,000 |
+| Premium / award-winning | 45,000 – 80,000+ |
 
-**Cons**:
-- Newer platform
-- Limited features compared to Mercury
+Always request a written contract that specifies delivery timelines, copyright terms, and what happens if the photographer cancels.
 
-**Requirements**:
-- US LLC with EIN
-- Valid ID
-- Business verification
+## Using Ceremoney's Vendor Directory
 
-### 3. Payoneer
+Ceremoney's vendor marketplace lists verified photographers across Sweden. You can:
+- Filter by location, style, and budget
+- Read reviews from real couples
+- Compare packages side by side
+- Contact photographers directly from your dashboard
 
-**Best for**: E-commerce sellers
-
-**Pros**:
-- Easy setup
-- Receive payments from Amazon, Walmart, etc.
-- Multi-currency support
-
-**Cons**:
-- Not a full bank account
-- Higher fees for some services
-
-**Requirements**:
-- Government ID
-- Proof of business
-- Address verification
-
-### 4. Wise Business
-
-**Best for**: Multi-currency operations
-
-**Pros**:
-- Low currency conversion fees
-- Hold 40+ currencies
-- Remote setup
-
-**Cons**:
-- Not a full US bank account
-- Limited US banking features
-
-### 5. Traditional Banks (Chase, BofA, Wells Fargo)
-
-**Best for**: Those who can visit the US
-
-**Pros**:
-- Full banking services
-- Physical branches
-- Established reputation
-
-**Cons**:
-- Usually require in-person visit
-- Monthly fees may apply
-- Stricter requirements
-
-## Comparison Table
-
-| Bank | Remote Opening | Monthly Fee | Best For |
-|------|---------------|-------------|----------|
-| Mercury | Yes | $0 | General business |
-| Relay | Yes | $0 | Budget-conscious |
-| Payoneer | Yes | Varies | E-commerce |
-| Wise | Yes | $0 | Multi-currency |
-| Chase | No* | $15+ | Full services |
-
-*Some Chase branches may work with international clients
-
-## Tips for Successful Account Opening
-
-1. **Have all documents ready**: EIN, Articles of Organization, Operating Agreement, passport
-2. **Build a business presence**: Website, social media, contracts
-3. **Start with fintech**: They're more international-friendly
-4. **Be honest**: Don't misrepresent your situation
-5. **Apply to multiple**: Rejections happen, have backups
-
-## Our Banking Assistance
-
-Our Premium package includes personalized banking guidance:
-- Bank selection based on your needs
-- Document preparation
-- Application support
-- Troubleshooting rejections
-
-[Get Banking Assistance →](/services/business-banking)
+[Find Photographers in Our Directory →](/vendors/photographers)
     `,
-    coverImage: "/blog/business-banking-guide.jpg",
+    coverImage: "/blog/wedding-photographer.jpg",
     author: {
-      name: "David Park",
-      avatar: "/avatars/david.jpg",
+      name: "Anna Bergström",
+      avatar: "/avatars/anna.jpg",
     },
-    category: "business-banking",
-    tags: ["Banking", "Fintech", "Mercury", "International"],
-    publishedAt: "2024-11-20",
-    readTime: 9,
-  },
-  {
-    slug: "delaware-vs-wyoming-llc-comparison",
-    title: "Delaware vs Wyoming LLC: Which State is Better for Your Business?",
-    excerpt:
-      "A detailed comparison of Delaware and Wyoming for LLC formation. Learn the pros, cons, costs, and which state is right for your business type.",
-    content: `
-## The Great LLC State Debate
-
-Delaware and Wyoming are two of the most popular states for LLC formation. But which one is right for your business? Let's break it down.
-
-## Quick Comparison
-
-| Factor | Delaware | Wyoming |
-|--------|----------|---------|
-| Filing Fee | $140 | $100 |
-| Annual Fee | $300 | $60 |
-| State Income Tax | None (LLC) | None |
-| Privacy | Good | Excellent |
-| Best For | VC-backed startups | Small businesses |
-
-## Delaware: The Corporate Capital
-
-### Pros of Delaware
-
-1. **Court of Chancery**: Specialized business court with experienced judges
-2. **Investor Familiarity**: VCs prefer Delaware due to established precedent
-3. **Flexible Laws**: Delaware LLC Act allows maximum customization
-4. **Fast Processing**: Same-day filing available
-
-### Cons of Delaware
-
-1. **Higher Annual Costs**: $300/year franchise tax
-2. **Foreign Qualification**: May need to register in your operating state too
-3. **Overkill for Small Business**: Benefits mainly help larger companies
-
-### Best For
-
-- Companies seeking venture capital
-- Businesses planning to go public
-- Complex multi-member LLCs
-- Tech startups with sophisticated structures
-
-## Wyoming: The Small Business Champion
-
-### Pros of Wyoming
-
-1. **Lowest Ongoing Costs**: Only $60/year
-2. **Strong Privacy**: Best-in-class privacy protections
-3. **No Franchise Tax**: No tax regardless of revenue
-4. **Asset Protection**: Strong charging order protection
-5. **Simplicity**: Straightforward formation and maintenance
-
-### Cons of Wyoming
-
-1. **Less Known**: Some investors less familiar
-2. **Smaller State**: Less business law precedent than Delaware
-
-### Best For
-
-- Small businesses and solo entrepreneurs
-- E-commerce and online businesses
-- International business owners
-- Privacy-conscious entrepreneurs
-- Anyone wanting to minimize costs
-
-## Cost Comparison Over 5 Years
-
-### Delaware LLC
-
-| Year | Annual Fee | Total |
-|------|-----------|-------|
-| 1 | $140 + $300 | $440 |
-| 2 | $300 | $740 |
-| 3 | $300 | $1,040 |
-| 4 | $300 | $1,340 |
-| 5 | $300 | $1,640 |
-
-### Wyoming LLC
-
-| Year | Annual Fee | Total |
-|------|-----------|-------|
-| 1 | $100 + $60 | $160 |
-| 2 | $60 | $220 |
-| 3 | $60 | $280 |
-| 4 | $60 | $340 |
-| 5 | $60 | $400 |
-
-**5-Year Savings with Wyoming: $1,240**
-
-## Our Recommendation
-
-**Choose Wyoming if you**:
-- Are a small business owner
-- Want to minimize ongoing costs
-- Value privacy
-- Don't plan to raise venture capital
-
-**Choose Delaware if you**:
-- Plan to raise VC funding
-- Are building a company to go public
-- Need complex governance structures
-- Have investors who prefer Delaware
-
-## Still Unsure?
-
-[Take our State Selection Quiz →](/quiz) or [Schedule a Free Consultation →](/contact)
-    `,
-    coverImage: "/blog/delaware-vs-wyoming.jpg",
-    author: {
-      name: "Sarah Johnson",
-      avatar: "/avatars/sarah.jpg",
-    },
-    category: "llc-guides",
-    tags: ["Delaware", "Wyoming", "Comparison", "LLC Formation"],
-    publishedAt: "2024-11-15",
+    category: "vendors-venues",
+    tags: ["Photography", "Vendors", "Sweden"],
+    publishedAt: "2025-02-20",
     readTime: 8,
+  },
+  {
+    slug: "creating-wedding-website-with-ceremoney",
+    title: "How to Create a Beautiful Wedding Website with RSVP in Minutes",
+    excerpt:
+      "A step-by-step guide to setting up your Ceremoney event website, customizing it to match your wedding theme, and collecting RSVPs from all your guests online.",
+    content: `
+## Why You Need a Wedding Website
+
+A personal wedding website replaces the need for a printed details card inside your invitation. It gives guests a single place to find all the information they need — ceremony location, dress code, accommodation, and how to RSVP.
+
+## Setting Up Your Ceremoney Event Website
+
+### Step 1: Choose a Template
+
+Ceremoney offers a curated collection of wedding website templates. Each template is fully responsive (looks great on mobile and desktop) and customizable with your own colors and fonts.
+
+### Step 2: Add Your Details
+
+Fill in your event information:
+- Wedding date, time, and location
+- Ceremony and reception venue addresses
+- Accommodation recommendations for out-of-town guests
+- Dress code
+- Gift registry links
+- Your love story (optional but guests love it!)
+
+### Step 3: Configure Your RSVP Form
+
+Enable the built-in RSVP form and choose:
+- RSVP deadline
+- Whether to allow plus-ones
+- Meal preference options
+- Custom questions (e.g., song requests)
+
+### Step 4: Set Privacy
+
+Choose who can access your site:
+- **Public**: Anyone with the link
+- **Password-protected**: Guests enter a code you share in the invitation
+- **Private**: Only invited guests who log in
+
+### Step 5: Share with Guests
+
+Copy your unique website link and include it in your invitations or save-the-dates. All RSVP responses automatically appear in your Ceremoney guest list.
+
+## Website Tips
+
+- Use your initials or names in the URL (e.g., \`anna-and-erik.ceremoney.com\`)
+- Add a countdown timer to build excitement
+- Update the site as details change — guests can check back anytime
+- Export the RSVP data to share with your caterer or venue
+
+[Create Your Free Wedding Website →](/register)
+    `,
+    coverImage: "/blog/wedding-website.jpg",
+    author: {
+      name: "Sofia Lindgren",
+      avatar: "/avatars/sofia.jpg",
+    },
+    category: "tips-guides",
+    tags: ["Wedding Website", "RSVP", "Getting Started"],
+    publishedAt: "2025-02-10",
+    readTime: 5,
+  },
+  {
+    slug: "wedding-planning-checklist-12-months",
+    title: "The Complete 12-Month Wedding Planning Checklist",
+    excerpt:
+      "From booking your venue 12 months out to your wedding-day emergency kit, this month-by-month checklist covers everything so nothing falls through the cracks.",
+    content: `
+## 12+ Months Before the Wedding
+
+- Set your overall budget
+- Agree on a rough guest count
+- Choose your wedding date
+- Book your ceremony and reception venue
+- Start your Ceremoney account and create your event
+
+## 9–12 Months Before
+
+- Hire a wedding planner (optional)
+- Book your photographer and videographer
+- Research and shortlist caterers
+- Book accommodation for out-of-town guests (room blocks)
+- Begin dress/suit shopping
+
+## 6–9 Months Before
+
+- Send save-the-dates
+- Book hair and makeup artists
+- Book florist
+- Book music (band or DJ)
+- Arrange transportation
+- Book officiant
+
+## 4–6 Months Before
+
+- Launch your Ceremoney event website
+- Send formal invitations (collect RSVPs online)
+- Finalize menu with caterer
+- Arrange wedding cake
+- Plan honeymoon
+
+## 2–4 Months Before
+
+- Chase outstanding RSVPs with Ceremoney's automated reminders
+- Finalize guest list and start seating chart
+- Organize ceremony readings and vows
+- Purchase wedding rings
+- Confirm all vendors in writing
+
+## 1–2 Months Before
+
+- Finalize and share seating chart with venue and catering
+- Export guest list dietary requirements for caterer
+- Arrange gifts and favours
+- Create detailed day-of timeline
+- Break in new shoes
+
+## 1–2 Weeks Before
+
+- Confirm arrival times with all vendors
+- Prepare wedding-day emergency kit
+- Distribute final seating chart to venue coordinator
+- Delegate day-of tasks to bridal party
+
+## Wedding Day
+
+- Enjoy every moment — Ceremoney has handled the organization!
+
+[Download as PDF →](/resources/checklist)
+    `,
+    coverImage: "/blog/wedding-checklist.jpg",
+    author: {
+      name: "Erik Johansson",
+      avatar: "/avatars/erik.jpg",
+    },
+    category: "tips-guides",
+    tags: ["Checklist", "Timeline", "Wedding Planning"],
+    publishedAt: "2025-01-28",
+    readTime: 9,
   },
 ];
 

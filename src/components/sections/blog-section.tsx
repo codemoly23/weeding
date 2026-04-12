@@ -11,33 +11,33 @@ import { formatDistanceToNow } from "date-fns";
 const fallbackPosts = [
   {
     id: "1",
-    title: "How to Form a Wyoming LLC: Complete 2024 Guide",
-    slug: "how-to-form-wyoming-llc-complete-guide",
+    title: "How to Create Your Wedding Guest List: Complete Guide",
+    slug: "how-to-create-wedding-guest-list-complete-guide",
     excerpt:
-      "Learn everything you need to know about forming a Wyoming LLC, including step-by-step instructions, costs, benefits, and common mistakes to avoid.",
-    coverImage: "/images/blog/wyoming-llc.jpg",
-    tags: ["Wyoming", "LLC Formation", "Business Guide"],
-    publishedAt: new Date("2024-12-01"),
+      "Learn how to build and manage your wedding guest list stress-free, including tips on setting a budget, handling plus-ones, and collecting RSVPs with Ceremoney.",
+    coverImage: "/images/blog/wedding-guest-list.jpg",
+    tags: ["Guest List", "Planning", "RSVP"],
+    publishedAt: new Date("2025-03-15"),
   },
   {
     id: "2",
-    title: "How to Get an EIN Without SSN: Guide for Non-US Residents",
-    slug: "ein-for-non-us-residents-complete-guide",
+    title: "Wedding Seating Chart Tips: How to Seat 100+ Guests Without the Stress",
+    slug: "wedding-seating-chart-tips-guide",
     excerpt:
-      "A comprehensive guide for international entrepreneurs on obtaining an EIN (Employer Identification Number) for your US LLC without a Social Security Number.",
-    coverImage: "/images/blog/ein-guide.jpg",
-    tags: ["EIN", "International", "Tax ID"],
-    publishedAt: new Date("2024-11-28"),
+      "A practical guide to creating a wedding seating plan that keeps guests comfortable and avoids family drama.",
+    coverImage: "/images/blog/seating-chart.jpg",
+    tags: ["Seating Chart", "Planning Tips", "Venue"],
+    publishedAt: new Date("2025-03-01"),
   },
   {
     id: "3",
-    title: "How to Sell on Amazon USA with a US LLC: International Seller Guide",
-    slug: "amazon-seller-us-llc-international-guide",
+    title: "How to Create a Beautiful Wedding Website with RSVP in Minutes",
+    slug: "creating-wedding-website-with-ceremoney",
     excerpt:
-      "Everything international sellers need to know about setting up a US LLC for Amazon FBA, including account setup, tax considerations, and payment processing.",
-    coverImage: "/images/blog/amazon-fba.jpg",
-    tags: ["Amazon", "FBA", "E-commerce"],
-    publishedAt: new Date("2024-11-25"),
+      "A step-by-step guide to setting up your Ceremoney event website, customizing it to match your wedding theme, and collecting RSVPs from all your guests online.",
+    coverImage: "/images/blog/wedding-website.jpg",
+    tags: ["Wedding Website", "RSVP", "Getting Started"],
+    publishedAt: new Date("2025-02-10"),
   },
 ];
 
@@ -90,7 +90,7 @@ export async function BlogSection() {
               Latest Insights & Guides
             </h2>
             <p className="mt-2 text-muted-foreground">
-              Expert tips and comprehensive guides for international entrepreneurs
+              Expert tips, inspiration, and step-by-step guides for engaged couples and wedding planners
             </p>
           </div>
           <Button className="group" variant="outline" asChild>

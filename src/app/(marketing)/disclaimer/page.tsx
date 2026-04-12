@@ -13,14 +13,14 @@ export async function generateMetadata(): Promise<Metadata> {
 
   if (!page) {
     return {
-      title: "Disclaimer | LLCPad",
-      description: "Legal disclaimers for LLCPad services. Important information about our business formation services.",
+      title: "Disclaimer | Ceremoney",
+      description: "Legal disclaimers for Ceremoney services. Important information about our business formation services.",
     };
   }
 
   return {
-    title: page.metaTitle || `${page.title} | LLCPad`,
-    description: page.metaDescription || "Legal disclaimers for LLCPad services.",
+    title: page.metaTitle || `${page.title} | Ceremoney`,
+    description: page.metaDescription || "Legal disclaimers for Ceremoney services.",
   };
 }
 
@@ -39,7 +39,7 @@ export default async function DisclaimerPage() {
               Disclaimer
             </h1>
             <p className="mt-6 text-lg text-slate-600">
-              Our Disclaimer page is being updated. Please check back soon or contact us at support@llcpad.com for any questions.
+              Our Disclaimer page is being updated. Please check back soon or contact us at support@ceremoney.com for any questions.
             </p>
           </div>
         </div>
@@ -73,8 +73,8 @@ export default async function DisclaimerPage() {
             <p className="text-sm text-slate-600">
               <strong className="text-slate-900">Questions?</strong> If you have any questions about this disclaimer,
               please contact us at{" "}
-              <a href="mailto:legal@llcpad.com" className="text-primary hover:underline">
-                legal@llcpad.com
+              <a href="mailto:legal@ceremoney.com" className="text-primary hover:underline">
+                legal@ceremoney.com
               </a>
             </p>
           </div>

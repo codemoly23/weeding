@@ -8,56 +8,56 @@ import prisma from "@/lib/db";
 const fallbackTestimonials = [
   {
     id: "1",
-    name: "Priya Sharma",
-    country: "India",
-    company: "Amazon FBA Seller",
+    name: "Emma & Lucas",
+    country: "Sweden",
+    company: "Wedding — Stockholm",
     content:
-      "I was hesitant about starting a US business from India, but LLCPad made it incredibly smooth. Within 10 days, I had my LLC, EIN, and Amazon seller account ready. Now I'm doing $50k/month in sales! Their expertise saved me months of research.",
+      "Ceremoney made our entire wedding planning so much easier. The guest list, seating chart, and event website all in one place — we couldn't imagine doing it any other way. Our guests loved the RSVP experience!",
     rating: 5,
   },
   {
     id: "2",
-    name: "Ahmed Al-Farsi",
-    country: "UAE",
-    company: "E-commerce Business Owner",
+    name: "Sara Lindqvist",
+    country: "Sweden",
+    company: "Wedding Planner",
     content:
-      "Outstanding service! LLCPad handled my Wyoming LLC formation, registered agent service, and US business bank account seamlessly. The team's professionalism and quick response time exceeded all expectations. Highly recommend for serious entrepreneurs.",
+      "As a professional wedding planner, I use Ceremoney for all my clients. The vendor directory saved me hours of research, and the seating chart tool is genuinely the best I've ever used. My clients are always impressed.",
     rating: 5,
   },
   {
     id: "3",
-    name: "Imran Khan",
-    country: "Pakistan",
-    company: "Digital Marketing Agency",
+    name: "Aisha & Mohammed",
+    country: "UAE",
+    company: "Wedding — Dubai",
     content:
-      "After comparing 5+ services, I chose LLCPad for their transparency and expertise. Best decision ever! They guided me through LLC formation, EIN application, and even helped with my first US client contracts. True business partners, not just a service provider.",
+      "We planned our wedding from abroad using Ceremoney. The Arabic RTL support was perfect, and coordinating with Swedish vendors through the platform was seamless. Absolutely recommend for international couples.",
     rating: 5,
   },
   {
     id: "4",
-    name: "Vijay Patel",
-    country: "India",
-    company: "SaaS Entrepreneur",
+    name: "Sofia Bergman",
+    country: "Sweden",
+    company: "Baptism — Gothenburg",
     content:
-      "LLCPad's Premium package was worth every penny. Got my Delaware LLC, business banking, and trademark registration done professionally. Their knowledge of international entrepreneur challenges is unmatched. Now my startup looks credible to US investors!",
+      "Used Ceremoney for my son's baptism and it was wonderful. The event website with countdown timer was a big hit with the family. The checklist feature kept me on track for months before the day.",
     rating: 5,
   },
   {
     id: "5",
-    name: "Sarah Johnson",
-    country: "UK",
-    company: "Amazon Brand Owner",
+    name: "Anna & Erik",
+    country: "Sweden",
+    company: "Wedding — Malmö",
     content:
-      "I needed US presence for Amazon Brand Registry. LLCPad delivered everything - LLC, EIN, virtual address - within a week. Their step-by-step guidance made complex processes simple. My brand is now protected and sales have doubled!",
+      "The Elite plan was worth every krona. The printable stationery and QR entrance feature at our wedding felt so modern and professional. Our guests were impressed. Planning was stress-free from start to finish.",
     rating: 5,
   },
   {
     id: "6",
-    name: "Omar Hassan",
-    country: "UAE",
-    company: "Import/Export Business",
+    name: "Olivia Chen",
+    country: "UK",
+    company: "Wedding — London",
     content:
-      "Exceptional experience from start to finish! LLCPad helped me establish my US entity for international trade. The registered agent service is reliable, and their compliance support ensures I never miss important deadlines. Trustworthy partner for global business.",
+      "Found Ceremoney while searching for wedding planning tools and it exceeded all expectations. The vendor discovery feature helped us find our photographer and florist in minutes. Beautiful platform — highly recommend!",
     rating: 5,
   },
 ];
@@ -101,11 +101,11 @@ export async function Testimonials() {
             Testimonials
           </Badge>
           <h2 className="text-3xl font-bold tracking-tight text-foreground sm:text-4xl">
-            Trusted by 10,000+ Entrepreneurs Worldwide
+            Loved by Couples & Planners Worldwide
           </h2>
           <p className="mt-4 text-lg text-muted-foreground">
-            See what our customers from around the world have to say about their
-            experience with LLCPad.
+            See what couples, hosts, and wedding planners have to say about
+            their experience with Ceremoney.
           </p>
         </div>
 
@@ -168,7 +168,7 @@ export async function Testimonials() {
               ))}
             </div>
             <span className="text-sm text-muted-foreground">
-              Join 10,000+ happy customers
+              Join thousands of happy couples
             </span>
           </div>
           <div className="flex items-center gap-1">
@@ -181,7 +181,7 @@ export async function Testimonials() {
               4.9/5
             </span>
             <span className="text-sm text-muted-foreground">
-              (2,500+ reviews)
+              (1,200+ reviews)
             </span>
           </div>
         </div>

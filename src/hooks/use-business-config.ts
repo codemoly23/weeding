@@ -43,9 +43,9 @@ interface BusinessConfig {
 
 // Default config for client-side (no server imports)
 const defaultConfig: BusinessConfig = {
-  name: "LLCPad",
-  tagline: "Your Business Formation Partner",
-  description: "Empowering global entrepreneurs to launch legitimate US businesses and Amazon stores with zero complexity.",
+  name: "Ceremoney",
+  tagline: "Your Wedding Planning Platform",
+  description: "Plan your perfect wedding, baptism, or event with Ceremoney. Guest management, seating charts, vendor directory, and beautiful event websites.",
   display: {
     showLogo: true,
     showName: true,
@@ -53,22 +53,22 @@ const defaultConfig: BusinessConfig = {
   logo: {
     url: "",
     darkUrl: "",
-    text: "L",
+    text: "C",
   },
   favicon: "",
   contact: {
-    email: "contact@llcpad.com",
+    email: "contact@ceremoney.com",
     phone: "",
-    supportEmail: "support@llcpad.com",
+    supportEmail: "support@ceremoney.com",
   },
   address: {
-    line1: "30 N Gould St",
+    line1: "",
     line2: "",
-    city: "Sheridan",
-    state: "WY",
-    zip: "82801",
-    country: "USA",
-    full: "30 N Gould St, Sheridan, WY 82801, USA",
+    city: "",
+    state: "",
+    zip: "",
+    country: "Sweden",
+    full: "",
   },
   social: {
     facebook: "",

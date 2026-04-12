@@ -43,8 +43,8 @@ interface FAQ {
 
 const helpCategories = [
   {
-    title: "LLC Formation",
-    description: "Questions about forming your LLC",
+    title: "Event Planning",
+    description: "Questions about planning your event",
     icon: Building2,
     color: "bg-blue-100 text-blue-600",
   },
@@ -69,10 +69,10 @@ const helpCategories = [
 ];
 
 const quickLinks = [
-  { title: "How to form an LLC", href: "/blog/how-to-form-llc" },
-  { title: "Understanding EIN", href: "/blog/what-is-ein" },
-  { title: "State filing fees", href: "/services/llc-formation" },
-  { title: "Processing times", href: "/faq" },
+  { title: "How to plan your event", href: "/blog/how-to-plan-your-event" },
+  { title: "Finding vendors", href: "/blog/finding-vendors" },
+  { title: "Event packages", href: "/services" },
+  { title: "FAQs", href: "/faq" },
 ];
 
 export default function HelpCenterPage() {
@@ -188,8 +188,8 @@ export default function HelpCenterPage() {
                 Get help via email within 24 hours
               </p>
               <Button variant="link" className="mt-2 h-auto p-0" asChild>
-                <a href="mailto:support@llcpad.com">
-                  support@llcpad.com <ExternalLink className="ml-1 h-4 w-4" />
+                <a href="mailto:support@ceremoney.com">
+                  support@ceremoney.com <ExternalLink className="ml-1 h-4 w-4" />
                 </a>
               </Button>
             </div>

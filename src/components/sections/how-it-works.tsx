@@ -1,8 +1,8 @@
 import { Badge } from "@/components/ui/badge";
 import {
   ClipboardList,
-  FileCheck,
-  Building2,
+  Users,
+  Globe,
   Rocket,
 } from "lucide-react";
 
@@ -10,30 +10,30 @@ const steps = [
   {
     step: 1,
     icon: ClipboardList,
-    title: "Choose Your Package",
+    title: "Create Your Event",
     description:
-      "Select the LLC formation package that fits your needs. Pick your state and provide basic information about your business.",
+      "Sign up for free, create your wedding event, and set your date. It only takes a minute to get started.",
   },
   {
     step: 2,
-    icon: FileCheck,
-    title: "We Handle the Paperwork",
+    icon: Users,
+    title: "Add Your Guests",
     description:
-      "Our team prepares and files all necessary documents with the state. We ensure everything is accurate and compliant.",
+      "Import your guest list from a spreadsheet or add guests one by one. Organize them into families and groups with ease.",
   },
   {
     step: 3,
-    icon: Building2,
-    title: "Receive Your Documents",
+    icon: Globe,
+    title: "Launch Your Wedding Website",
     description:
-      "Get your LLC approval, Articles of Organization, Operating Agreement, and EIN delivered to your email within 24-48 hours.",
+      "Publish your beautiful event website in one click. Guests can RSVP, check details, and confirm meal preferences — all online.",
   },
   {
     step: 4,
     icon: Rocket,
-    title: "Launch Your Business",
+    title: "Enjoy Your Day",
     description:
-      "Open your US business bank account, set up your Amazon seller account, and start accepting payments. You're ready to go!",
+      "Finalize your seating chart, coordinate your vendors, and walk down the aisle knowing every detail is organized.",
   },
 ];
 
@@ -47,11 +47,11 @@ export function HowItWorks() {
             How It Works
           </Badge>
           <h2 className="text-3xl font-bold tracking-tight text-foreground sm:text-4xl">
-            Start Your LLC in 4 Simple Steps
+            Plan Your Wedding in 4 Simple Steps
           </h2>
           <p className="mt-4 text-lg text-muted-foreground">
-            We've simplified the process so you can focus on what matters —
-            building your business.
+            We have simplified wedding planning so you can focus on what matters
+            — celebrating with the people you love.
           </p>
         </div>
 

@@ -72,14 +72,14 @@ interface BusinessSettings {
 }
 
 const defaultSettings: BusinessSettings = {
-  "business.name": "LLCPad",
-  "business.tagline": "Your Business Formation Partner",
-  "business.description": "Empowering global entrepreneurs to launch legitimate US businesses and Amazon stores with zero complexity.",
+  "business.name": "Ceremoney",
+  "business.tagline": "Your Wedding & Event Planning Partner",
+  "business.description": "Empowering couples and event planners to create unforgettable celebrations with ease.",
   "business.display.logo": "true",
   "business.display.name": "true",
   "business.logo.url": "",
   "business.logo.darkUrl": "",
-  "business.logo.text": "L",
+  "business.logo.text": "C",
   "business.favicon.url": "",
   "business.contact.email": "",
   "business.contact.phone": "",
@@ -295,7 +295,7 @@ export default function BusinessSettingsPage() {
               <Input
                 value={settings["business.name"]}
                 onChange={(e) => updateSetting("business.name", e.target.value)}
-                placeholder="LLCPad"
+                placeholder="Ceremoney"
               />
             </div>
             <div className="space-y-2">
@@ -303,7 +303,7 @@ export default function BusinessSettingsPage() {
               <Input
                 value={settings["business.tagline"]}
                 onChange={(e) => updateSetting("business.tagline", e.target.value)}
-                placeholder="Your Business Formation Partner"
+                placeholder="Your Wedding & Event Planning Partner"
               />
             </div>
           </div>
@@ -653,7 +653,7 @@ export default function BusinessSettingsPage() {
               <Input
                 value={settings["business.address.city"]}
                 onChange={(e) => updateSetting("business.address.city", e.target.value)}
-                placeholder="Sheridan"
+                placeholder="City"
               />
             </div>
             <div className="space-y-2">
@@ -661,7 +661,7 @@ export default function BusinessSettingsPage() {
               <Input
                 value={settings["business.address.state"]}
                 onChange={(e) => updateSetting("business.address.state", e.target.value)}
-                placeholder="WY"
+                placeholder="State"
               />
             </div>
             <div className="space-y-2">
@@ -669,7 +669,7 @@ export default function BusinessSettingsPage() {
               <Input
                 value={settings["business.address.zip"]}
                 onChange={(e) => updateSetting("business.address.zip", e.target.value)}
-                placeholder="82801"
+                placeholder="ZIP"
               />
             </div>
             <div className="space-y-2">

@@ -13,14 +13,14 @@ export async function generateMetadata(): Promise<Metadata> {
 
   if (!page) {
     return {
-      title: "Refund Policy | LLCPad",
-      description: "Learn about LLCPad's refund and cancellation policy for LLC formation and business services.",
+      title: "Refund Policy | Ceremoney",
+      description: "Learn about Ceremoney's refund and cancellation policy for wedding planning subscriptions and services.",
     };
   }
 
   return {
-    title: page.metaTitle || `${page.title} | LLCPad`,
-    description: page.metaDescription || "Learn about LLCPad's refund and cancellation policy.",
+    title: page.metaTitle || `${page.title} | Ceremoney`,
+    description: page.metaDescription || "Learn about Ceremoney's refund and cancellation policy.",
   };
 }
 
@@ -39,7 +39,7 @@ export default async function RefundPolicyPage() {
               Refund Policy
             </h1>
             <p className="mt-6 text-lg text-slate-600">
-              Our Refund Policy page is being updated. Please check back soon or contact us at support@llcpad.com for any questions.
+              Our Refund Policy page is being updated. Please check back soon or contact us at support@ceremoney.com for any questions.
             </p>
           </div>
         </div>
@@ -73,8 +73,8 @@ export default async function RefundPolicyPage() {
             <p className="text-sm text-slate-600">
               <strong className="text-slate-900">Questions?</strong> If you have any questions about our refund policy,
               please contact us at{" "}
-              <a href="mailto:support@llcpad.com" className="text-primary hover:underline">
-                support@llcpad.com
+              <a href="mailto:support@ceremoney.com" className="text-primary hover:underline">
+                support@ceremoney.com
               </a>
             </p>
           </div>

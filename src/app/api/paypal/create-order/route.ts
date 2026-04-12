@@ -21,7 +21,7 @@ export async function POST(request: NextRequest) {
       orderId: validatedData.orderId,
       amount: validatedData.amount,
       currency: validatedData.currency,
-      description: validatedData.description || `LLCPad Order ${validatedData.orderId}`,
+      description: validatedData.description || `Ceremoney Order ${validatedData.orderId}`,
       returnUrl: `${origin}/checkout/success?gateway=paypal&orderId=${validatedData.orderId}`,
       cancelUrl: `${origin}/checkout?cancelled=true`,
     });

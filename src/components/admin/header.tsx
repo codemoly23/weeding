@@ -48,7 +48,7 @@ const notifications = [
   {
     id: 3,
     title: "New support ticket",
-    description: "Question about EIN application",
+    description: "Question about seating chart export",
     time: "2 hours ago",
     unread: false,
   },
@@ -174,7 +174,7 @@ export function AdminHeader() {
               <div className="flex flex-col space-y-1">
                 <p className="text-sm font-medium">Admin User</p>
                 <p className="text-xs text-muted-foreground">
-                  admin@llcpad.com
+                  admin@ceremoney.com
                 </p>
               </div>
             </DropdownMenuLabel>

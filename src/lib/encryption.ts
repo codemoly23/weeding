@@ -33,7 +33,7 @@ function getEncryptionKey(): Buffer {
   }
 
   // Derive key from passphrase
-  return crypto.scryptSync(key, "llcpad-salt", 32);
+  return crypto.scryptSync(key, "ceremoney-salt", 32);
 }
 
 /**

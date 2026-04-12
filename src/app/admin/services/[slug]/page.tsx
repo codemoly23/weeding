@@ -995,7 +995,7 @@ export default function ServiceEditorPage() {
                         id="name"
                         value={service.name}
                         onChange={(e) => handleInputChange("name", e.target.value)}
-                        placeholder="e.g., LLC Formation"
+                        placeholder="e.g., Guest List Management"
                       />
                     </div>
                     <div className="space-y-2">
@@ -1005,7 +1005,7 @@ export default function ServiceEditorPage() {
                           id="slug"
                           value={service.slug}
                           onChange={(e) => handleInputChange("slug", e.target.value)}
-                          placeholder="e.g., llc-formation"
+                          placeholder="e.g., guest-list-management"
                         />
                         <Button
                           type="button"
@@ -1677,7 +1677,7 @@ export default function ServiceEditorPage() {
                     {service.metaTitle || service.name || "Service Title"}
                   </p>
                   <p className="text-sm text-green-700">
-                    llcpad.com/services/{service.slug || "service-slug"}
+                    ceremoney.com/services/{service.slug || "service-slug"}
                   </p>
                   <p className="text-sm text-muted-foreground">
                     {service.metaDescription ||

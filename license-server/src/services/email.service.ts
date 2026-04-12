@@ -4,7 +4,7 @@ const resend = process.env.RESEND_API_KEY
   ? new Resend(process.env.RESEND_API_KEY)
   : null;
 
-const FROM_EMAIL = process.env.EMAIL_FROM || 'LLCPad Licenses <noreply@llcpad.com>';
+const FROM_EMAIL = process.env.EMAIL_FROM || 'Ceremoney Licenses <noreply@ceremoney.com>';
 
 interface LicenseEmailData {
   customerEmail: string;
@@ -78,10 +78,10 @@ class EmailService {
       const { error } = await resend.emails.send({
         from: FROM_EMAIL,
         to,
-        subject: 'Test Email from LLCPad License Server',
+        subject: 'Test Email from Ceremoney License Server',
         html: `
           <h2>Test Email</h2>
-          <p>This is a test email from your LLCPad License Server.</p>
+          <p>This is a test email from your Ceremoney License Server.</p>
           <p>If you received this email, your email configuration is working correctly.</p>
         `,
       });
@@ -149,7 +149,7 @@ class EmailService {
             <p>If you have any questions, please don't hesitate to contact our support team.</p>
 
             <div class="footer">
-              <p>This email was sent by LLCPad License Server</p>
+              <p>This email was sent by Ceremoney License Server</p>
               <p>Please keep this email for your records</p>
             </div>
           </div>

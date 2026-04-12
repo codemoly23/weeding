@@ -10,7 +10,7 @@ const fallbackTestimonials = [
     country: "Bangladesh",
     avatar: null,
     content:
-      "LLCPad made forming my US LLC incredibly easy. The team was responsive and guided me through every step. Highly recommended!",
+      "Ceremoney made planning our wedding incredibly easy. The team was responsive and guided us through every step. Highly recommended!",
     rating: 5,
     type: "photo" as "photo" | "video",
     videoUrl: null,
@@ -23,7 +23,7 @@ const fallbackTestimonials = [
     country: "China",
     avatar: null,
     content:
-      "Professional service with excellent communication. Got my Wyoming LLC and EIN within 2 weeks. Very satisfied!",
+      "Professional service with excellent communication. Our event was coordinated flawlessly within our timeline. Very satisfied!",
     rating: 5,
     type: "photo" as "photo" | "video",
     videoUrl: null,
@@ -36,7 +36,7 @@ const fallbackTestimonials = [
     country: "UAE",
     avatar: null,
     content:
-      "The premium package was worth every penny. They helped me set up everything including my Amazon seller account.",
+      "The premium package was worth every penny. They helped us set up everything for our dream wedding.",
     rating: 5,
     type: "photo" as "photo" | "video",
     videoUrl: null,
@@ -49,7 +49,7 @@ const fallbackTestimonials = [
     country: "India",
     avatar: null,
     content:
-      "I was hesitant about starting a US business from India, but LLCPad made it incredibly smooth. Within 10 days, I had my LLC, EIN, and Amazon seller account ready.",
+      "I was nervous about planning a destination wedding, but Ceremoney made it incredibly smooth. Within days, I had vendors, venue, and a full plan ready.",
     rating: 5,
     type: "photo" as "photo" | "video",
     videoUrl: null,
@@ -62,7 +62,7 @@ const fallbackTestimonials = [
     country: "Pakistan",
     avatar: null,
     content:
-      "After comparing 5+ services, I chose LLCPad for their transparency and expertise. Best decision ever! True business partners.",
+      "After comparing 5+ services, I chose Ceremoney for their transparency and expertise. Best decision ever! True event partners.",
     rating: 5,
     type: "photo" as "photo" | "video",
     videoUrl: null,
@@ -75,7 +75,7 @@ const fallbackTestimonials = [
     country: "UAE",
     avatar: null,
     content:
-      "Exceptional experience from start to finish! LLCPad helped me establish my US entity for international trade. Trustworthy partner for global business.",
+      "Exceptional experience from start to finish! Ceremoney helped us create the most beautiful event. Trustworthy partner for any celebration.",
     rating: 5,
     type: "photo" as "photo" | "video",
     videoUrl: null,

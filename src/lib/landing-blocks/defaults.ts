@@ -19,28 +19,28 @@ export const defaultHeroSettings: HeroSettings = {
 
   badge: {
     enabled: true,
-    text: "Trusted by 10,000+ International Entrepreneurs",
-    emoji: "🇺🇸",
+    text: "Trusted by 5,000+ Couples & Wedding Planners",
+    emoji: "💍",
     style: "default",
   },
 
   headline: {
-    text: "Start Your US LLC in 24 Hours",
-    highlightWord: "US LLC",
+    text: "Plan Your Perfect Wedding with Ease",
+    highlightWord: "Wedding",
     size: "xl",
   },
 
   subheadline: {
-    text: "Launch your American dream from anywhere in the world. We handle everything from LLC formation to EIN, Amazon seller accounts, and business banking — so you can focus on growing your business.",
+    text: "Ceremoney brings your guest list, seating charts, event website, RSVP collection, and vendor coordination into one beautiful platform — so you can focus on enjoying every moment.",
     size: "lg",
   },
 
   features: {
     enabled: true,
     items: [
-      { id: "feat_1", text: "Fast 24-48 hour processing", icon: "CheckCircle" },
-      { id: "feat_2", text: "100% Compliance guaranteed", icon: "CheckCircle" },
-      { id: "feat_3", text: "Dedicated support team", icon: "CheckCircle" },
+      { id: "feat_1", text: "Beautiful event websites with RSVP", icon: "CheckCircle" },
+      { id: "feat_2", text: "Drag-and-drop seating charts", icon: "CheckCircle" },
+      { id: "feat_3", text: "Vendor directory & coordination", icon: "CheckCircle" },
     ],
     layout: "list",
     iconPosition: "left",
@@ -49,11 +49,11 @@ export const defaultHeroSettings: HeroSettings = {
   },
 
   primaryCTA: {
-    text: "Start Your LLC Now",
-    link: "/services/llc-formation",
+    text: "Start Planning Free",
+    link: "/register",
     variant: "solid",
     showPrice: true,
-    priceText: "From $0",
+    priceText: "Free",
   },
 
   secondaryCTA: {
@@ -75,8 +75,8 @@ export const defaultHeroSettings: HeroSettings = {
     enabled: true,
     items: [
       { icon: "Shield", text: "Secure & Private" },
-      { icon: "Clock", text: "24hr Processing" },
-      { icon: "Globe", text: "Serve 50+ Countries" },
+      { icon: "Clock", text: "Setup in Minutes" },
+      { icon: "Globe", text: "Swedish & Arabic" },
       { icon: "Star", text: "4.9/5 Rating" },
     ],
   },
@@ -84,10 +84,10 @@ export const defaultHeroSettings: HeroSettings = {
   stats: {
     enabled: true,
     items: [
-      { value: "10,000+", label: "LLCs Formed" },
-      { value: "50+", label: "Countries Served" },
+      { value: "5,000+", label: "Weddings Planned" },
+      { value: "250,000+", label: "Guests Managed" },
       { value: "4.9/5", label: "Customer Rating" },
-      { value: "24h", label: "Average Processing" },
+      { value: "Free", label: "To Get Started" },
     ],
   },
 };
@@ -105,7 +105,7 @@ export const heroVariantDefaults: Record<string, Partial<HeroSettings>> = {
     visual: {
       type: "image",
       url: "/images/hero-illustration.svg",
-      alt: "US LLC Formation Illustration",
+      alt: "Ceremoney Wedding Planning Illustration",
       position: "right",
     },
   },

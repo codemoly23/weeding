@@ -41,7 +41,7 @@ export interface PluginManifest {
     type?: string;
   }>;
   manifest?: {
-    requires?: { llcpad?: string };
+    requires?: { ceremoney?: string };
     permissions?: string[];
     widgets?: Array<{
       name: string;
@@ -299,7 +299,7 @@ export const pluginInstaller = {
     pluginVersion: string
   ): Promise<LicenseVerifyResult> {
     const licenseServerUrl =
-      process.env.LICENSE_SERVER_URL || "https://license.llcpad.com";
+      process.env.LICENSE_SERVER_URL || "https://license.ceremoney.com";
     const domain = this.getCurrentDomain();
 
     try {

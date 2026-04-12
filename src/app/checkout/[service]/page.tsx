@@ -1874,7 +1874,7 @@ function ServiceCheckoutForm() {
                           onCheckedChange={(checked) => setUnderstandDisclaimer(checked as boolean)}
                         />
                         <Label htmlFor="disclaimer" className="text-sm leading-tight cursor-pointer">
-                          I understand that LLCPad is a business formation service, not a law firm.
+                          I understand that Ceremoney is a wedding and event planning service.
                           This is not legal advice.
                         </Label>
                       </div>

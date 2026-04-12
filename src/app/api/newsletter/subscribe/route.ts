@@ -14,6 +14,75 @@ const subscribeSchema = z.object({
   firstName: z.string().min(1).max(100).optional(),
 });
 
+async function addToBrevo(email: string, name?: string, listId?: string) {
+  const apiKey = await getSetting("newsletter.brevo.apiKey");
+
+  if (!apiKey) {
+    throw new Error("Brevo API key not configured");
+  }
+
+  const doubleOptIn = await getSetting("newsletter.doubleOptIn");
+
+  const payload: Record<string, unknown> = {
+    email,
+    updateEnabled: true,
+  };
+
+  if (name) {
+    payload.attributes = { FIRSTNAME: name };
+  }
+
+  if (listId) {
+    payload.listIds = [parseInt(listId)];
+  }
+
+  // If double opt-in is enabled, use DOI endpoint
+  if (doubleOptIn === "true") {
+    const response = await fetch("https://api.brevo.com/v3/contacts/doubleOptinConfirmation", {
+      method: "POST",
+      headers: {
+        "api-key": apiKey,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        ...payload,
+        templateId: 1, // Default DOI template
+        redirectionUrl: process.env.NEXT_PUBLIC_APP_URL || "https://ceremoney.com",
+      }),
+    });
+
+    if (!response.ok) {
+      const error = await response.json().catch(() => ({}));
+      // Contact already exists is not an error
+      if (error.code === "duplicate_parameter") {
+        return { alreadyExists: true };
+      }
+      throw new Error(error.message || "Failed to add to Brevo");
+    }
+  } else {
+    // Direct add without double opt-in
+    const response = await fetch("https://api.brevo.com/v3/contacts", {
+      method: "POST",
+      headers: {
+        "api-key": apiKey,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(payload),
+    });
+
+    if (!response.ok) {
+      const error = await response.json().catch(() => ({}));
+      // Contact already exists is not an error
+      if (error.code === "duplicate_parameter") {
+        return { alreadyExists: true };
+      }
+      throw new Error(error.message || "Failed to add to Brevo");
+    }
+  }
+
+  return { success: true };
+}
+
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();

@@ -78,9 +78,9 @@ export function DashboardHeader({ onMenuClick }: DashboardHeaderProps) {
             <DropdownMenuLabel>Notifications</DropdownMenuLabel>
             <DropdownMenuSeparator />
             <DropdownMenuItem className="flex flex-col items-start gap-1 py-3">
-              <span className="font-medium">Order LLC-ABC123 Completed</span>
+              <span className="font-medium">RSVP Update — 5 New Responses</span>
               <span className="text-xs text-muted-foreground">
-                Your LLC formation is complete. Download documents now.
+                5 guests have responded to your wedding invitation.
               </span>
             </DropdownMenuItem>
             <DropdownMenuItem className="flex flex-col items-start gap-1 py-3">

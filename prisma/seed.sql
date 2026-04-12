@@ -3,11 +3,11 @@
 
 INSERT INTO "User" (id, email, name, password, role, country, "createdAt", "updatedAt")
 VALUES
-  ('demo_admin_001', 'admin@llcpad.com', 'Admin User', '$2b$12$9GpIkyagW6AtVwrTcQuUxunJUacKig.vGaJX7eeVegZCxBUYb1Y1C', 'ADMIN', 'USA', NOW(), NOW()),
-  ('demo_customer_001', 'customer@llcpad.com', 'Demo Customer', '$2b$12$9GpIkyagW6AtVwrTcQuUxunJUacKig.vGaJX7eeVegZCxBUYb1Y1C', 'CUSTOMER', 'Bangladesh', NOW(), NOW()),
-  ('demo_content_001', 'content@llcpad.com', 'Content Manager', '$2b$12$9GpIkyagW6AtVwrTcQuUxunJUacKig.vGaJX7eeVegZCxBUYb1Y1C', 'CONTENT_MANAGER', 'USA', NOW(), NOW()),
-  ('demo_sales_001', 'sales@llcpad.com', 'Sales Agent', '$2b$12$9GpIkyagW6AtVwrTcQuUxunJUacKig.vGaJX7eeVegZCxBUYb1Y1C', 'SALES_AGENT', 'USA', NOW(), NOW()),
-  ('demo_support_001', 'support@llcpad.com', 'Support Agent', '$2b$12$9GpIkyagW6AtVwrTcQuUxunJUacKig.vGaJX7eeVegZCxBUYb1Y1C', 'SUPPORT_AGENT', 'USA', NOW(), NOW())
+  ('demo_admin_001', 'admin@ceremoney.com', 'Admin User', '$2b$12$9GpIkyagW6AtVwrTcQuUxunJUacKig.vGaJX7eeVegZCxBUYb1Y1C', 'ADMIN', 'USA', NOW(), NOW()),
+  ('demo_customer_001', 'customer@ceremoney.com', 'Demo Customer', '$2b$12$9GpIkyagW6AtVwrTcQuUxunJUacKig.vGaJX7eeVegZCxBUYb1Y1C', 'CUSTOMER', 'Bangladesh', NOW(), NOW()),
+  ('demo_content_001', 'content@ceremoney.com', 'Content Manager', '$2b$12$9GpIkyagW6AtVwrTcQuUxunJUacKig.vGaJX7eeVegZCxBUYb1Y1C', 'CONTENT_MANAGER', 'USA', NOW(), NOW()),
+  ('demo_sales_001', 'sales@ceremoney.com', 'Sales Agent', '$2b$12$9GpIkyagW6AtVwrTcQuUxunJUacKig.vGaJX7eeVegZCxBUYb1Y1C', 'SALES_AGENT', 'USA', NOW(), NOW()),
+  ('demo_support_001', 'support@ceremoney.com', 'Support Agent', '$2b$12$9GpIkyagW6AtVwrTcQuUxunJUacKig.vGaJX7eeVegZCxBUYb1Y1C', 'SUPPORT_AGENT', 'USA', NOW(), NOW())
 ON CONFLICT (email) DO NOTHING;
 
 -- Services
@@ -51,7 +51,7 @@ ON CONFLICT (id) DO NOTHING;
 -- Testimonials
 INSERT INTO "Testimonial" (id, name, company, country, content, rating, "isActive", "sortOrder", "createdAt")
 VALUES
-  ('test_001', 'Rahman Ahmed', 'TechBD Solutions', 'Bangladesh', 'LLCPad made forming my US LLC incredibly easy. Highly recommended!', 5, true, 1, NOW()),
+  ('test_001', 'Rahman Ahmed', 'TechBD Solutions', 'Bangladesh', 'Ceremoney made planning our wedding incredibly easy. Highly recommended!', 5, true, 1, NOW()),
   ('test_002', 'Sarah Chen', 'Global Imports Co', 'China', 'Professional service with excellent communication. Got my Wyoming LLC within 2 weeks.', 5, true, 2, NOW()),
   ('test_003', 'Mohammed Al-Farsi', 'Gulf Trading LLC', 'UAE', 'The premium package was worth every penny. They helped with everything including Amazon seller account.', 5, true, 3, NOW())
 ON CONFLICT (id) DO NOTHING;

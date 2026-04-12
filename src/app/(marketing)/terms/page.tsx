@@ -14,14 +14,14 @@ export async function generateMetadata(): Promise<Metadata> {
 
   if (!page) {
     return {
-      title: "Terms of Service | LLCPad",
-      description: "Terms and conditions for using LLCPad services.",
+      title: "Terms of Service | Ceremoney",
+      description: "Terms and conditions for using Ceremoney services.",
     };
   }
 
   return {
-    title: page.metaTitle || `${page.title} | LLCPad`,
-    description: page.metaDescription || "Terms and conditions for using LLCPad services.",
+    title: page.metaTitle || `${page.title} | Ceremoney`,
+    description: page.metaDescription || "Terms and conditions for using Ceremoney services.",
   };
 }
 
@@ -41,7 +41,7 @@ export default async function TermsPage() {
               Terms of Service
             </h1>
             <p className="mt-6 text-lg text-slate-600">
-              Our Terms of Service page is being updated. Please check back soon or contact us at support@llcpad.com for any questions.
+              Our Terms of Service page is being updated. Please check back soon or contact us at support@ceremoney.com for any questions.
             </p>
           </div>
         </div>
@@ -73,7 +73,7 @@ export default async function TermsPage() {
           {/* Footer Note */}
           <div className="mt-12 rounded-lg border border-slate-200 bg-slate-50 p-6">
             <p className="text-sm text-slate-600">
-              <strong className="text-slate-900">Important:</strong> LLCPad is a business formation service, not a law firm.
+              <strong className="text-slate-900">Important:</strong> Ceremoney is a business formation service, not a law firm.
               This document does not constitute legal advice. Please consult with a licensed attorney
               for legal matters specific to your situation.
             </p>

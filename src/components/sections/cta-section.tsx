@@ -3,10 +3,10 @@ import { Button } from "@/components/ui/button";
 import { ArrowRight, CheckCircle, MessageCircle } from "lucide-react";
 
 const benefits = [
-  "24-48 hour LLC formation",
+  "Free to get started",
+  "Guest list & RSVP tools",
+  "Beautiful event website",
   "Dedicated support team",
-  "No hidden fees guaranteed",
-  "100% satisfaction guarantee",
 ];
 
 export function CTASection() {
@@ -21,11 +21,11 @@ export function CTASection() {
       <div className="container mx-auto px-4">
         <div className="mx-auto max-w-3xl text-center">
           <h2 className="text-3xl font-bold tracking-tight text-primary-foreground sm:text-4xl">
-            Ready to Start Your US Business?
+            Start Planning Your Perfect Day
           </h2>
           <p className="mt-4 text-lg text-primary-foreground/80">
-            Join thousands of international entrepreneurs who have successfully
-            launched their US LLC with LLCPad. Get started in minutes.
+            Join thousands of couples who have planned their dream wedding with
+            Ceremoney. Create your free account and get started in minutes.
           </p>
 
           {/* Benefits */}
@@ -49,8 +49,8 @@ export function CTASection() {
               className="group w-full sm:w-auto"
               asChild
             >
-              <Link href="/services/llc-formation">
-                Start Your LLC Now
+              <Link href="/register">
+                Create Free Account
                 <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
               </Link>
             </Button>

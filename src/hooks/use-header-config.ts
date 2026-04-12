@@ -25,7 +25,7 @@ const defaultConfig: PublicHeaderResponse = {
   cta: [
     {
       text: "Get Started",
-      url: "/services/llc-formation",
+      url: "/register",
       variant: "primary",
     },
   ],
@@ -33,9 +33,12 @@ const defaultConfig: PublicHeaderResponse = {
     showButtons: true,
     loginText: "Sign In",
     registerText: "Get Started",
-    registerUrl: "/services/llc-formation",
+    registerUrl: "/register",
   },
   search: {
+    enabled: false,
+  },
+  languageSwitcher: {
     enabled: false,
   },
   styling: {},

@@ -269,7 +269,7 @@ export function HeroSettingsForm({
             <Input
               value={mergedSettings.headline.text}
               onChange={(e) => updateNestedField("headline", "text", e.target.value)}
-              placeholder="Start Your US LLC in 24 Hours"
+              placeholder="Plan Your Perfect Wedding with Ease"
             />
           </div>
           <div className="space-y-2">
@@ -277,7 +277,7 @@ export function HeroSettingsForm({
             <Input
               value={mergedSettings.headline.highlightWord || ""}
               onChange={(e) => updateNestedField("headline", "highlightWord", e.target.value)}
-              placeholder="US LLC"
+              placeholder="Wedding"
             />
             <p className="text-xs text-muted-foreground">
               This word will be highlighted with primary color
@@ -459,7 +459,7 @@ export function HeroSettingsForm({
             <Input
               value={mergedSettings.primaryCTA.link}
               onChange={(e) => updateNestedField("primaryCTA", "link", e.target.value)}
-              placeholder="/services/llc-formation"
+              placeholder="/register"
             />
           </div>
           <div className="flex items-center justify-between">

@@ -23,8 +23,8 @@ const liveSupportProPlugin = {
   description:
     "Professional customer support system with live chat, ticketing, and AI assistance. Includes real-time messaging, ticket management, canned responses, and more.",
   version: "1.0.0",
-  author: "LLCPad",
-  authorUrl: "https://llcpad.com",
+  author: "Ceremoney",
+  authorUrl: "https://ceremoney.com",
   icon: "MessageSquare",
   status: "INSTALLED" as const, // Pre-installed but NOT active - requires license
   requiresLicense: true,
@@ -42,14 +42,14 @@ const liveSupportProPlugin = {
     description:
       "Professional customer support system with live chat, ticketing, and AI assistance.",
     author: {
-      name: "LLCPad",
-      email: "support@llcpad.com",
-      url: "https://llcpad.com",
+      name: "Ceremoney",
+      email: "support@ceremoney.com",
+      url: "https://ceremoney.com",
     },
     license: {
       type: "commercial",
       requiresActivation: true,
-      licenseServerUrl: "https://license.llcpad.com",
+      licenseServerUrl: "https://license.ceremoney.com",
     },
     compatibility: {
       minCmsVersion: "1.0.0",

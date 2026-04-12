@@ -444,7 +444,7 @@ export default function LeadDetailPage({ params }: { params: Promise<{ id: strin
                 variant="outline"
                 size="sm"
                 onClick={() => {
-                  window.location.href = `mailto:${lead.email}?subject=Follow-up from LLCPad`;
+                  window.location.href = `mailto:${lead.email}?subject=Follow-up from Ceremoney`;
                 }}
               >
                 <Mail className="mr-2 h-4 w-4" />

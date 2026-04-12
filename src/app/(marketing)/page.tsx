@@ -13,29 +13,29 @@ import { getHomeTemplate } from "@/lib/templates/get-template";
 
 const homepageFaqs = [
   {
-    question: "How long does it take to form an LLC?",
+    question: "What is Ceremoney?",
     answer:
-      "Standard LLC formation typically takes 3-5 business days after state filing. With our expedited service, you can have your LLC formed within 24 hours.",
+      "Ceremoney is a Swedish wedding planning SaaS that helps couples and professional planners organize every aspect of their celebration — guest list, seating charts, event website with RSVP, vendor coordination, and budget tracking — all in one place.",
   },
   {
-    question: "Do I need to be a US citizen to form an LLC?",
+    question: "Is Ceremoney free to use?",
     answer:
-      "No, you do not need to be a US citizen or resident to form an LLC in the United States. International entrepreneurs from any country can form a US LLC.",
+      "Yes! Our Basic plan is free forever and includes one event, up to 50 guests, a wedding website with online RSVP, and access to the vendor directory. Upgrade to Premium or Elite when you need more guests, advanced features, or a custom domain.",
   },
   {
-    question: "What is an EIN and do I need one?",
+    question: "How does online RSVP work?",
     answer:
-      "An EIN (Employer Identification Number) is a tax ID for your business, similar to a Social Security Number for individuals. You'll need an EIN to open a business bank account, hire employees, and file taxes.",
+      "Your Ceremoney wedding website includes a built-in RSVP form. Guests visit your site and confirm attendance, meal preferences, and plus-ones. All responses sync instantly to your guest list and seating chart — no manual data entry needed.",
   },
   {
-    question: "Which state is best for forming an LLC?",
+    question: "Can I manage seating for a large wedding?",
     answer:
-      "Wyoming, Delaware, and New Mexico are popular choices for LLC formation due to their business-friendly laws, low fees, and privacy protections. Wyoming is often the best choice for small businesses and international entrepreneurs.",
+      "Absolutely. Our drag-and-drop seating chart editor supports any venue layout and any number of tables. Assign guests to seats, spot conflicts instantly, and export a print-ready PDF for your venue coordinator.",
   },
   {
-    question: "What documents will I receive after LLC formation?",
+    question: "Does Ceremoney support Swedish and Arabic?",
     answer:
-      "You'll receive your Articles of Organization, Operating Agreement, EIN confirmation letter (if ordered), and all state filing receipts. All documents are delivered digitally to your dashboard.",
+      "Yes. Ceremoney is fully available in Swedish and includes right-to-left (RTL) layout support for Arabic. Switch your language preference at any time from your account settings.",
   },
 ];
 
@@ -50,11 +50,11 @@ export default async function HomePage() {
           generateOrganizationSchema(),
           generateFAQSchema(homepageFaqs),
           generateProductSchema({
-            name: "LLC Formation Service",
+            name: "Ceremoney Wedding Planning",
             description:
-              "Professional US LLC formation service for international entrepreneurs. Includes state filing, registered agent, and operating agreement.",
-            price: 149,
-            url: "/services/llc-formation",
+              "Wedding planning platform for couples and professional planners. Includes guest management, seating charts, event website with RSVP, and vendor coordination.",
+            price: 0,
+            url: "/pricing",
             reviews: { rating: 4.9, count: 1247 },
           }),
         ]}

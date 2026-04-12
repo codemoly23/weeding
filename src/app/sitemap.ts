@@ -3,44 +3,10 @@ import prisma from "@/lib/db";
 
 export const dynamic = "force-dynamic";
 
-const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "https://llcpad.com";
-
-// State pages for LLC formation
-const states = [
-  "wyoming",
-  "delaware",
-  "new-mexico",
-  "nevada",
-  "florida",
-  "texas",
-  "california",
-  "new-york",
-];
+const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "https://ceremoney.com";
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const now = new Date();
-
-  // Fetch active services from database
-  let serviceSlugs: string[] = [];
-  try {
-    const services = await prisma.service.findMany({
-      where: { isActive: true },
-      select: { slug: true },
-      orderBy: { sortOrder: "asc" },
-    });
-    serviceSlugs = services.map((s) => s.slug);
-  } catch (error) {
-    console.error("Error fetching services for sitemap:", error);
-    // Fallback to common services if database fails
-    serviceSlugs = [
-      "llc-formation",
-      "ein-application",
-      "amazon-seller",
-      "registered-agent",
-      "business-banking",
-      "virtual-address",
-    ];
-  }
 
   // Fetch published blog posts
   let blogSlugs: string[] = [];
@@ -55,6 +21,19 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     console.error("Error fetching blog posts for sitemap:", error);
   }
 
+  // Fetch approved vendors
+  let vendorSlugs: string[] = [];
+  try {
+    const vendors = await prisma.vendorProfile.findMany({
+      where: { status: "APPROVED" },
+      select: { slug: true },
+      orderBy: { createdAt: "desc" },
+    });
+    vendorSlugs = vendors.map((v) => v.slug);
+  } catch (error) {
+    console.error("Error fetching vendors for sitemap:", error);
+  }
+
   // Static pages
   const staticPages: MetadataRoute.Sitemap = [
     {
@@ -64,15 +43,15 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       priority: 1.0,
     },
     {
-      url: `${baseUrl}/services`,
+      url: `${baseUrl}/pricing`,
       lastModified: now,
       changeFrequency: "weekly",
       priority: 0.9,
     },
     {
-      url: `${baseUrl}/pricing`,
+      url: `${baseUrl}/vendors`,
       lastModified: now,
-      changeFrequency: "weekly",
+      changeFrequency: "daily",
       priority: 0.9,
     },
     {
@@ -107,14 +86,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     },
   ];
 
-  // Service pages
-  const servicePages: MetadataRoute.Sitemap = serviceSlugs.map((slug) => ({
-    url: `${baseUrl}/services/${slug}`,
-    lastModified: now,
-    changeFrequency: "weekly",
-    priority: 0.8,
-  }));
-
   // Blog pages
   const blogPages: MetadataRoute.Sitemap = blogSlugs.map((slug) => ({
     url: `${baseUrl}/blog/${slug}`,
@@ -123,13 +94,13 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     priority: 0.7,
   }));
 
-  // State-specific LLC pages
-  const statePages: MetadataRoute.Sitemap = states.map((state) => ({
-    url: `${baseUrl}/llc/${state}`,
+  // Vendor profile pages
+  const vendorPages: MetadataRoute.Sitemap = vendorSlugs.map((slug) => ({
+    url: `${baseUrl}/vendors/${slug}`,
     lastModified: now,
     changeFrequency: "weekly",
-    priority: 0.8,
+    priority: 0.7,
   }));
 
-  return [...staticPages, ...servicePages, ...blogPages, ...statePages];
+  return [...staticPages, ...blogPages, ...vendorPages];
 }

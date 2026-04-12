@@ -27,9 +27,9 @@ interface CountrySelectorProps {
   inputClasses?: string;
 }
 
-// Comprehensive list of countries eligible for US LLC formation (alphabetical)
+// Comprehensive list of supported countries for Ceremoney
 // EXCLUDED: OFAC sanctioned countries (Cuba, Iran, North Korea, Syria, Russia, Belarus)
-// EXCLUDED: High-risk countries where banking is nearly impossible (Afghanistan, Sudan, South Sudan, Somalia, Yemen, Libya, Myanmar, Venezuela)
+// EXCLUDED: High-risk countries where payment processing is nearly impossible (Afghanistan, Sudan, South Sudan, Somalia, Yemen, Libya, Myanmar, Venezuela)
 const ELIGIBLE_COUNTRIES: Country[] = [
   // A
   { code: "AL", name: "Albania", flag: "🇦🇱" },

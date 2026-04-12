@@ -8,7 +8,7 @@ import { getAboutTemplate } from "@/lib/templates/get-template";
 export const metadata: Metadata = {
   title: "About Us",
   description:
-    "Learn about LLCPad - the trusted partner for international entrepreneurs starting US businesses. Over 10,000 LLCs formed for clients in 50+ countries.",
+    "Learn about Ceremoney — the wedding and event planning platform helping couples and hosts create unforgettable moments. Trusted by thousands across Sweden and beyond.",
 };
 
 export default async function AboutPage() {

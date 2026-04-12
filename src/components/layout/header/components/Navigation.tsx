@@ -119,22 +119,22 @@ function MegaMenuDropdown({ categories }: MegaMenuProps) {
         <div className="mt-6 flex items-center gap-4 border-t pt-4">
           <span className="text-sm text-muted-foreground">Quick Start:</span>
           <Link
-            href="/services/llc-formation"
+            href="/register"
             className="rounded-full bg-primary/10 px-3 py-1 text-xs font-medium text-primary transition-colors hover:bg-primary hover:text-primary-foreground"
           >
-            Form Your LLC
+            Start Planning Free
           </Link>
           <Link
-            href="/services/amazon-seller"
+            href="/features/seating-chart"
             className="rounded-full bg-primary/10 px-3 py-1 text-xs font-medium text-primary transition-colors hover:bg-primary hover:text-primary-foreground"
           >
-            Start Selling on Amazon
+            Seating Chart
           </Link>
           <Link
             href="/contact"
             className="rounded-full bg-muted px-3 py-1 text-xs font-medium text-muted-foreground transition-colors hover:bg-muted/80"
           >
-            Free Consultation
+            Get in Touch
           </Link>
         </div>
       </div>

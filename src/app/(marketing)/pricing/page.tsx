@@ -8,7 +8,7 @@ import { getPricingTemplate } from "@/lib/templates/get-template";
 export const metadata: Metadata = {
   title: "Pricing",
   description:
-    "Transparent pricing for US LLC formation services. No hidden fees. Choose from Basic, Standard, or Premium packages starting at $199.",
+    "Simple, transparent pricing for Ceremoney wedding planning. Start free, upgrade when you need more. Plans in SEK — Basic (free), Premium, Elite, and White-Label.",
 };
 
 export default async function PricingPage() {

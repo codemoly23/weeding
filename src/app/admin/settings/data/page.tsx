@@ -76,7 +76,7 @@ export default function DataManagementPage() {
 
       const blob = await res.blob();
       const date = new Date().toISOString().split("T")[0];
-      const filename = `llcpad-export-${date}.json`;
+      const filename = `ceremoney-export-${date}.json`;
 
       const url = window.URL.createObjectURL(blob);
       const a = document.createElement("a");

@@ -59,8 +59,8 @@ class TokenService {
       ...payload,
     })
       .setProtectedHeader({ alg: 'RS256', typ: 'JWT' })
-      .setIssuer('license.llcpad.com')
-      .setAudience('llcpad-plugin')
+      .setIssuer('license.ceremoney.com')
+      .setAudience('ceremoney-plugin')
       .setIssuedAt()
       .setExpirationTime('7d') // 7 days
       .sign(this.privateKey);
@@ -77,8 +77,8 @@ class TokenService {
 
     try {
       const { payload } = await jwtVerify(token, this.publicKey, {
-        issuer: 'license.llcpad.com',
-        audience: 'llcpad-plugin',
+        issuer: 'license.ceremoney.com',
+        audience: 'ceremoney-plugin',
       });
 
       return payload as unknown as VerifiedTokenPayload;

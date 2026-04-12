@@ -314,7 +314,7 @@ export default function MediaStorageSettingsPage() {
               </p>
               <ol className="text-sm text-blue-700 space-y-1 list-decimal list-inside">
                 <li>Go to Cloudflare Dashboard and enable R2</li>
-                <li>Create a new bucket (e.g., "llcpad-media")</li>
+                <li>Create a new bucket (e.g., "ceremoney-media")</li>
                 <li>Go to R2 &gt; Manage R2 API Tokens &gt; Create API Token</li>
                 <li>Select "Object Read & Write" permission for your bucket</li>
                 <li>Copy the Access Key ID and Secret Access Key</li>
