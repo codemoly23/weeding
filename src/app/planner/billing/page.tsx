@@ -1,7 +1,8 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import { Check, Crown, Zap, Star, Loader2, ExternalLink, CreditCard } from "lucide-react";
+import { useState, useEffect, Suspense } from "react";
+import { useSearchParams } from "next/navigation";
+import { Check, Crown, Zap, Star, Loader2, ExternalLink, CreditCard, PartyPopper } from "lucide-react";
 
 interface SubscriptionInfo {
   tier: "basic" | "premium" | "elite";
@@ -83,7 +84,11 @@ const PLANS = [
 
 type PlanId = "basic" | "premium" | "elite";
 
-export default function PlannerBillingPage() {
+function PlannerBillingPage() {
+  const searchParams = useSearchParams();
+  const isSuccess = searchParams.get("success") === "1";
+  const isCancelled = searchParams.get("cancelled") === "1";
+
   const [sub, setSub] = useState<SubscriptionInfo | null>(null);
   const [loading, setLoading] = useState(true);
   const [upgrading, setUpgrading] = useState<PlanId | null>(null);
@@ -91,12 +96,17 @@ export default function PlannerBillingPage() {
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
 
   useEffect(() => {
-    fetch("/api/billing/subscription")
-      .then((r) => r.json())
-      .then((d) => setSub(d))
-      .catch(() => {})
-      .finally(() => setLoading(false));
-  }, []);
+    // After successful payment, poll briefly to let webhook update the DB
+    const delay = isSuccess ? 1500 : 0;
+    const timer = setTimeout(() => {
+      fetch("/api/billing/subscription")
+        .then((r) => r.json())
+        .then((d) => setSub(d))
+        .catch(() => {})
+        .finally(() => setLoading(false));
+    }, delay);
+    return () => clearTimeout(timer);
+  }, [isSuccess]);
 
   async function handleUpgrade(tier: PlanId) {
     if (tier === "basic") return;
@@ -145,6 +155,22 @@ export default function PlannerBillingPage() {
           Choose the plan that fits your wedding planning needs
         </p>
       </div>
+
+      {/* Success / Cancelled banners */}
+      {isSuccess && (
+        <div className="flex items-center gap-3 rounded-2xl bg-green-50 border border-green-200 px-5 py-4">
+          <PartyPopper className="w-5 h-5 text-green-600 shrink-0" />
+          <div>
+            <p className="text-sm font-semibold text-green-800">Payment successful! Welcome to {sub?.tier ?? "your new plan"}.</p>
+            <p className="text-xs text-green-600">Your plan has been upgraded. All premium features are now unlocked.</p>
+          </div>
+        </div>
+      )}
+      {isCancelled && (
+        <div className="flex items-center gap-3 rounded-2xl bg-amber-50 border border-amber-200 px-5 py-4">
+          <p className="text-sm text-amber-700">Checkout was cancelled. Your plan was not changed.</p>
+        </div>
+      )}
 
       {/* Current plan banner */}
       {!loading && sub && (
@@ -283,5 +309,13 @@ export default function PlannerBillingPage() {
         Prices include VAT · Secure payment via Stripe · Cancel anytime
       </p>
     </div>
+  );
+}
+
+export default function PlannerBillingPageWrapper() {
+  return (
+    <Suspense fallback={<div className="flex min-h-[400px] items-center justify-center"><Loader2 className="w-6 h-6 animate-spin text-gray-400" /></div>}>
+      <PlannerBillingPage />
+    </Suspense>
   );
 }

@@ -1,6 +1,6 @@
 "use client";
 
-import { Suspense, useEffect, useState } from "react";
+import { Suspense, useEffect, useRef, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useSession } from "next-auth/react";
 import {
@@ -15,9 +15,11 @@ function SyncContent() {
   const searchParams = useSearchParams();
   const { data: session, status } = useSession();
   const [message, setMessage] = useState("Syncing your project...");
+  const hasSynced = useRef(false);
 
   useEffect(() => {
     if (status === "loading") return;
+    if (hasSynced.current) return;
 
     const from = searchParams.get("from");
 
@@ -41,6 +43,8 @@ function SyncContent() {
       router.replace("/planner");
       return;
     }
+
+    hasSynced.current = true;
 
     async function sync() {
       try {

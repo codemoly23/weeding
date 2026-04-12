@@ -387,12 +387,12 @@ export default function PlannerOverviewPage() {
             isLoggedIn ? (
               <Link
                 href={`/planner/sync?from=${projectId}`}
-                className="ml-2 rounded-full bg-amber-100 px-2 py-0.5 text-xs text-amber-700 hover:bg-amber-200 dark:bg-amber-900/30 dark:text-amber-400"
+                className="ml-2 rounded-full bg-red-100 px-2 py-0.5 text-xs font-semibold text-red-600 hover:bg-red-200 dark:bg-red-900/30 dark:text-red-400"
               >
                 {t("common.notSaved")} · Save now
               </Link>
             ) : (
-              <span className="ml-2 rounded-full bg-amber-100 px-2 py-0.5 text-xs text-amber-700 dark:bg-amber-900/30 dark:text-amber-400">
+              <span className="ml-2 rounded-full bg-red-100 px-2 py-0.5 text-xs font-semibold text-red-600 dark:bg-red-900/30 dark:text-red-400">
                 {t("common.notSaved")}
               </span>
             )

@@ -27,6 +27,9 @@ import {
 import { Separator } from "@/components/ui/separator";
 
 const countries = [
+  { code: "SE", name: "Sweden" },
+  { code: "US", name: "United States" },
+  { code: "GB", name: "United Kingdom" },
   { code: "BD", name: "Bangladesh" },
   { code: "IN", name: "India" },
   { code: "PK", name: "Pakistan" },
@@ -34,7 +37,6 @@ const countries = [
   { code: "SA", name: "Saudi Arabia" },
   { code: "MY", name: "Malaysia" },
   { code: "SG", name: "Singapore" },
-  { code: "GB", name: "United Kingdom" },
   { code: "CA", name: "Canada" },
   { code: "AU", name: "Australia" },
   { code: "OTHER", name: "Other" },
@@ -143,7 +145,7 @@ export default function RegisterPage() {
 
           <div className="space-y-2">
             <Label htmlFor="country">Country</Label>
-            <Select name="country" required disabled={isLoading}>
+            <Select name="country" disabled={isLoading}>
               <SelectTrigger>
                 <Globe className="mr-2 h-4 w-4 text-muted-foreground" />
                 <SelectValue placeholder="Select your country" />

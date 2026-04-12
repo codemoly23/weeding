@@ -167,39 +167,6 @@ function LoginForm() {
           </Button>
         </form>
 
-        <div className="mt-4 rounded-md border border-dashed border-muted-foreground/30 p-3">
-          <p className="mb-2 text-center text-xs font-medium text-muted-foreground">Demo Credentials</p>
-          <div className="space-y-1.5 text-xs">
-            {[
-              { label: "Admin", email: "admin@llcpad.com" },
-              { label: "Customer", email: "customer@llcpad.com" },
-              { label: "Content", email: "content@llcpad.com" },
-              { label: "Sales", email: "sales@llcpad.com" },
-              { label: "Support", email: "support@llcpad.com" },
-            ].map((demo) => (
-              <div key={demo.email} className="flex items-center justify-between">
-                <span className="text-muted-foreground">
-                  {demo.label}: <span className="font-mono">{demo.email}</span>
-                </span>
-                <Button
-                  type="button"
-                  variant="outline"
-                  size="sm"
-                  className="h-6 px-2 text-xs"
-                  onClick={() => {
-                    setEmail(demo.email);
-                    setPassword("Demo@123");
-                  }}
-                >
-                  Fill
-                </Button>
-              </div>
-            ))}
-            <p className="pt-1 text-center text-muted-foreground">
-              Password: <span className="font-mono">Demo@123</span>
-            </p>
-          </div>
-        </div>
       </CardContent>
       <CardFooter className="justify-center">
         <p className="text-sm text-muted-foreground">
