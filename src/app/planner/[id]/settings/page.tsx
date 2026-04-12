@@ -711,7 +711,7 @@ export default function SettingsPage() {
             )}
 
             {/* Pricing cards */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 pt-4">
               {PLANS.map((plan) => {
                 const currentTier = sub?.tier ?? "basic";
                 const isCurrent = currentTier === plan.id;
@@ -726,14 +726,14 @@ export default function SettingsPage() {
                     }`}
                   >
                     {"badge" in plan && plan.badge && (
-                      <div className="absolute -top-3 left-1/2 -translate-x-1/2">
+                      <div className="absolute -top-4 left-1/2 -translate-x-1/2 whitespace-nowrap">
                         <span className="rounded-full bg-rose-500 px-3 py-1 text-xs font-semibold text-white shadow">
                           {plan.badge}
                         </span>
                       </div>
                     )}
 
-                    <div className={`rounded-t-2xl px-4 py-4 ${plan.headerColor}`}>
+                    <div className={`rounded-t-2xl px-4 pb-4 ${"badge" in plan && plan.badge ? "pt-7" : "pt-4"} ${plan.headerColor}`}>
                       <div className="flex items-center gap-2 mb-1">
                         {plan.icon}
                         <h2 className="font-bold text-gray-900">{plan.name}</h2>

@@ -17,6 +17,8 @@ import {
 } from "@/lib/planner-storage";
 import { useLanguage } from "@/lib/i18n/language-context";
 import { usePlannerCouple } from "@/lib/planner-context";
+import { useSession } from "next-auth/react";
+import Link from "next/link";
 
 // ── helpers ───────────────────────────────────────────────────────────────────
 
@@ -171,8 +173,10 @@ export default function PlannerOverviewPage() {
   const params = useParams();
   const router = useRouter();
   const { t } = useLanguage();
+  const { data: session } = useSession();
   const projectId = params.id as string;
   const isLocal = projectId.startsWith("local-");
+  const isLoggedIn = !!session?.user?.id;
 
   const [project, setProject] = useState<Project | null>(null);
   const [loading, setLoading] = useState(true);
@@ -380,9 +384,18 @@ export default function PlannerOverviewPage() {
         <p className="mt-1 text-sm text-muted-foreground capitalize">
           {project.eventType.toLowerCase()} &middot; {project.status.toLowerCase()}
           {isLocal && (
-            <span className="ml-2 rounded-full bg-amber-100 px-2 py-0.5 text-xs text-amber-700 dark:bg-amber-900/30 dark:text-amber-400">
-              {t("common.notSaved")}
-            </span>
+            isLoggedIn ? (
+              <Link
+                href={`/planner/sync?from=${projectId}`}
+                className="ml-2 rounded-full bg-amber-100 px-2 py-0.5 text-xs text-amber-700 hover:bg-amber-200 dark:bg-amber-900/30 dark:text-amber-400"
+              >
+                {t("common.notSaved")} · Save now
+              </Link>
+            ) : (
+              <span className="ml-2 rounded-full bg-amber-100 px-2 py-0.5 text-xs text-amber-700 dark:bg-amber-900/30 dark:text-amber-400">
+                {t("common.notSaved")}
+              </span>
+            )
           )}
         </p>
       </div>

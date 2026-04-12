@@ -9,10 +9,10 @@ async function main() {
   // Create default admin user
   const adminPassword = await hash('admin123', 12);
   const admin = await prisma.admin.upsert({
-    where: { email: 'admin@llcpad.com' },
+    where: { email: 'admin@ceremoney.com' },
     update: {},
     create: {
-      email: 'admin@llcpad.com',
+      email: 'admin@ceremoney.com',
       name: 'Super Admin',
       password: adminPassword,
       role: 'SUPER_ADMIN',
@@ -115,7 +115,7 @@ async function main() {
 
   // Create default settings
   const settings = [
-    { key: 'site_name', value: 'LLCPad License Server', type: 'string', description: 'Name of the license server' },
+    { key: 'site_name', value: 'Ceremoney License Server', type: 'string', description: 'Name of the license server' },
     { key: 'token_expiry_days', value: '7', type: 'number', description: 'JWT token expiry in days' },
     { key: 'max_failed_verifications', value: '10', type: 'number', description: 'Max failed verification attempts before temporary ban' },
   ];
@@ -131,7 +131,7 @@ async function main() {
 
   console.log('Seeding completed!');
   console.log('\nDefault admin credentials:');
-  console.log('  Email: admin@llcpad.com');
+  console.log('  Email: admin@ceremoney.com');
   console.log('  Password: admin123');
   console.log('\nPlease change the password after first login!');
 }

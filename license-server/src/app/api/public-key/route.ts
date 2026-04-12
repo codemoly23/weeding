@@ -15,7 +15,7 @@ export async function GET() {
   return NextResponse.json({
     publicKey,
     algorithm: 'RS256',
-    issuer: 'license.llcpad.com',
-    audience: 'llcpad-plugin',
+    issuer: 'license.ceremoney.com',
+    audience: 'ceremoney-plugin',
   });
 }

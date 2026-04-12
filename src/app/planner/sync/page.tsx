@@ -3,7 +3,12 @@
 import { Suspense, useEffect, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useSession } from "next-auth/react";
-import { getLocalProject, deleteLocalProject } from "@/lib/planner-storage";
+import {
+  getLocalProject, deleteLocalProject,
+  getLocalGuests, getLocalFamilies, getLocalBudget,
+  getLocalChecklist, getLocalItinerary, getLocalNotes,
+  getLocalVendors, getLocalVenue,
+} from "@/lib/planner-storage";
 
 function SyncContent() {
   const router = useRouter();
@@ -39,6 +44,19 @@ function SyncContent() {
 
     async function sync() {
       try {
+        setMessage("Migrating your project data...");
+
+        // Collect all localStorage data
+        const guests = getLocalGuests(from!);
+        const families = getLocalFamilies(from!);
+        const budget = getLocalBudget(from!);
+        const checklist = getLocalChecklist(from!);
+        const itinerary = getLocalItinerary(from!);
+        const notes = getLocalNotes(from!);
+        const vendors = getLocalVendors(from!);
+        const ceremony = getLocalVenue(from!, "CEREMONY");
+        const reception = getLocalVenue(from!, "RECEPTION");
+
         const res = await fetch("/api/planner/sync", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -48,11 +66,23 @@ function SyncContent() {
             role: local!.role,
             eventType: local!.eventType,
             eventDate: local!.eventDate,
+            brideName: local!.brideName ?? null,
+            groomName: local!.groomName ?? null,
+            guests,
+            families,
+            budget,
+            checklist,
+            itinerary,
+            notes,
+            vendors,
+            ceremony,
+            reception,
           }),
         });
 
         if (res.ok) {
           const data = await res.json();
+          // Clean up all localStorage keys for this project
           deleteLocalProject(from!);
           router.replace(`/planner/${data.project.id}`);
         } else {
