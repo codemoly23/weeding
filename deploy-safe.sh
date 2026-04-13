@@ -66,7 +66,7 @@ log "Running Prisma generate..."
 npx prisma generate || rollback "prisma generate failed"
 
 log "Running Prisma db push..."
-npx prisma db push --skip-generate || rollback "prisma db push failed"
+npx prisma db push --accept-data-loss || rollback "prisma db push failed"
 
 log "Backing up current build..."
 if [ -d ".next" ]; then
