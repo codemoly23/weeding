@@ -2283,7 +2283,7 @@ Vendor response time is calculated and displayed publicly:
   overnight messages don't count against response time
 ```
 
-#### Phase 5E: Billing & Payments — ✅ CORE COMPLETE (2026-04-05)
+#### Phase 5E: Billing & Payments — ✅ CORE COMPLETE (2026-04-05, enhanced 2026-04-13)
 
 | # | Task | Status | Details |
 |---|------|--------|---------|
@@ -2297,6 +2297,15 @@ Vendor response time is calculated and displayed publicly:
 | 8 | Swish payments (SE mobile) | ⬜ Pending | Blueprint: Swish integration for Swedish mobile payments |
 | 9 | Klarna BNPL | ⬜ Pending | Blueprint: Klarna buy-now-pay-later option for couples |
 | 10 | White-label tier ($120/mo) | ⬜ Pending | Blueprint: custom subdomain, auto-premium for their clients, 14-day free trial. Target: professional wedding planners |
+| 11 | Billing flow bug fixes | ✅ Done (2026-04-13) | Fixed: success page showed "Welcome to basic" due to webhook timing. Added `POST /api/billing/verify-session` — reads Stripe session by `session_id`, updates DB directly as webhook fallback. `clearTierCache()` exported from `use-planner-tier.ts` — feature gates unlock immediately after payment. `returnTo` param added to checkout flow — user redirected back to original page after upgrade. Sidebar upgrade button now tier-aware: Basic→"Upgrade to Premium", Premium→"Upgrade to Elite", Elite→hidden. |
+
+**Files created/modified (2026-04-13 billing fix):**
+- `src/app/api/billing/verify-session/route.ts` — **Created** — POST, verifies Stripe session_id, updates DB as webhook fallback
+- `src/app/api/billing/checkout/route.ts` — Modified — accepts `returnTo`, passes encoded to success_url
+- `src/app/planner/billing/page.tsx` — Modified — calls verify-session on success, shows correct tier name, "Go back" button
+- `src/hooks/use-planner-tier.ts` — Modified — exported `clearTierCache()`
+- `src/components/planner/upgrade-modal.tsx` — Modified — passes `window.location.pathname` as returnTo
+- `src/components/planner/sidebar.tsx` — Modified — tier-aware upgrade button
 
 #### Phase 5G: Stationery Engine — ⬜ NOT STARTED
 
