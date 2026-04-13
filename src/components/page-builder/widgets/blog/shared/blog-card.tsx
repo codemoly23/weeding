@@ -4,6 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { Calendar, Clock, Tag, ImageIcon } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { calculateReadingTime } from "@/lib/reading-time";
 import type {
   BlogPostData,
   BlogPostGridWidgetSettings,
@@ -74,16 +75,6 @@ function formatBlogDate(
     default:
       return formatDateShort(dateStr);
   }
-}
-
-// ── Reading time calculator ─────────────────────────────────────────
-
-function calculateReadingTime(text: string | null): string {
-  if (!text) return "1 min read";
-  const wordsPerMinute = 200;
-  const wordCount = text.trim().split(/\s+/).length;
-  const minutes = Math.max(1, Math.ceil(wordCount / wordsPerMinute));
-  return `${minutes} min read`;
 }
 
 // ── Aspect ratio classes ────────────────────────────────────────────
@@ -376,7 +367,7 @@ export function BlogCard({ post, cardSettings, className }: BlogCardProps) {
                 {item === "readingTime" && (
                   <>
                     <Clock className="h-3 w-3" />
-                    <span>{calculateReadingTime(post.excerpt)}</span>
+                    <span>{calculateReadingTime(post.excerpt)} min read</span>
                   </>
                 )}
               </span>

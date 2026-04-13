@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import { Calendar, Users, ExternalLink, Heart } from "lucide-react";
+import type { PlannerTier } from "@/hooks/use-planner-tier";
 import { Card, CardContent } from "@/components/ui/card";
 import {
   Table,
@@ -21,7 +22,7 @@ interface Project {
   status: string;
   createdAt: string;
   updatedAt: string;
-  user: { id: string; name: string | null; email: string | null; plannerTier: string };
+  user: { id: string; name: string | null; email: string | null; plannerTier: PlannerTier };
   _count: { guests: number };
 }
 
@@ -40,6 +41,12 @@ export default function AdminPlannerPage() {
     ACTIVE: "bg-green-100 text-green-700",
     ARCHIVED: "bg-gray-100 text-gray-600",
     COMPLETED: "bg-blue-100 text-blue-700",
+  };
+
+  const tierColor: Record<PlannerTier, string> = {
+    elite: "bg-purple-100 text-purple-700",
+    premium: "bg-blue-100 text-blue-700",
+    basic: "bg-gray-100 text-gray-600",
   };
 
   return (
@@ -107,14 +114,8 @@ export default function AdminPlannerPage() {
                       </span>
                     </TableCell>
                     <TableCell>
-                      <span className={`rounded-full px-2 py-0.5 text-xs font-medium ${
-                        project.user.plannerTier === "elite"
-                          ? "bg-purple-100 text-purple-700"
-                          : project.user.plannerTier === "premium"
-                          ? "bg-blue-100 text-blue-700"
-                          : "bg-gray-100 text-gray-600"
-                      }`}>
-                        {project.user.plannerTier ?? "basic"}
+                      <span className={`rounded-full px-2 py-0.5 text-xs font-medium ${tierColor[project.user.plannerTier] ?? tierColor.basic}`}>
+                        {project.user.plannerTier}
                       </span>
                     </TableCell>
                     <TableCell>

@@ -9,6 +9,7 @@ import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import prisma from "@/lib/db";
 import { MultiJsonLd } from "@/components/seo/json-ld";
 import { generateBreadcrumbSchema } from "@/lib/seo";
+import { calculateReadingTime } from "@/lib/reading-time";
 
 export const dynamic = "force-dynamic";
 
@@ -17,12 +18,6 @@ interface PageProps {
 }
 
 // ── Helpers ──────────────────────────────────────────────────────────
-
-function calculateReadingTime(text: string | null): number {
-  if (!text) return 1;
-  const words = text.replace(/<[^>]*>/g, "").split(/\s+/).length;
-  return Math.max(1, Math.ceil(words / 200));
-}
 
 function formatDate(date: Date | string): string {
   const d = typeof date === "string" ? new Date(date) : date;
