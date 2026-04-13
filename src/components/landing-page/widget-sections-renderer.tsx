@@ -22,6 +22,7 @@ import {
   EventCategoriesGridWidget,
   EventGalleryGridWidget,
   CtaBannerWidget,
+  CustomHtmlWidget,
 } from "@/components/page-builder/widgets";
 import { TopUtilityBarWidget } from "@/components/page-builder/widgets/layout";
 import { ServiceCardWidget, ServiceListWidget, PricingTableWidget, VendorListingWidget } from "@/components/page-builder/widgets/commerce";
@@ -391,8 +392,12 @@ function WidgetRenderer({ widget }: WidgetRendererProps) {
         return <RelatedServicesWidget settings={widget.settings as any} />;
 
       case "faq":
+      case "faq-section":
       case "faq-accordion":
         return <FaqAccordionWidget settings={widget.settings as any} />;
+
+      case "custom-html":
+        return <CustomHtmlWidget settings={widget.settings as any} />;
 
       case "button-group":
         return <ButtonGroupWidget settings={widget.settings as any} />;
