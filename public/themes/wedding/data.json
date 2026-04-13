@@ -134,7 +134,13 @@
       "startingPrice": 0,
       "categorySlug": "planning",
       "isPopular": false,
-      "features": ["Wedding Website", "RSVP Collection", "Guest List (50)", "Planning Checklist", "Vendor Directory"],
+      "features": [
+        "Wedding Website",
+        "RSVP Collection",
+        "Guest List (50)",
+        "Planning Checklist",
+        "Vendor Directory"
+      ],
       "packages": [
         {
           "name": "Basic",
@@ -142,14 +148,31 @@
           "description": "Essential tools to start your wedding journey",
           "badgeText": "Free",
           "badgeColor": "#22C55E",
-          "features": ["Wedding Website", "RSVP Collection", "Guest List (up to 50)", "Planning Checklist", "Vendor Directory"],
-          "notIncluded": ["Seating Chart", "Custom Domain", "PDF Export", "Collaborators"],
+          "features": [
+            "Wedding Website",
+            "RSVP Collection",
+            "Guest List (up to 50)",
+            "Planning Checklist",
+            "Vendor Directory"
+          ],
+          "notIncluded": [
+            "Seating Chart",
+            "Custom Domain",
+            "PDF Export",
+            "Collaborators"
+          ],
           "isPopular": false
         }
       ],
       "faqs": [
-        { "question": "Is the Basic plan really free?", "answer": "Yes! Completely free with no credit card required." },
-        { "question": "Can I upgrade later?", "answer": "Absolutely. All your data carries over when you upgrade." }
+        {
+          "question": "Is the Basic plan really free?",
+          "answer": "Yes! Completely free with no credit card required."
+        },
+        {
+          "question": "Can I upgrade later?",
+          "answer": "Absolutely. All your data carries over when you upgrade."
+        }
       ],
       "sortOrder": 1
     },
@@ -166,7 +189,14 @@
       "isPopular": true,
       "badgeText": "Most Popular",
       "badgeColor": "#BE6B8B",
-      "features": ["Unlimited Guests", "Seating Chart", "Custom Domain", "PDF & XLS Export", "Advanced RSVP", "Everything in Basic"],
+      "features": [
+        "Unlimited Guests",
+        "Seating Chart",
+        "Custom Domain",
+        "PDF & XLS Export",
+        "Advanced RSVP",
+        "Everything in Basic"
+      ],
       "packages": [
         {
           "name": "Premium",
@@ -174,14 +204,32 @@
           "description": "Complete wedding organisation suite — 299 SEK/mo",
           "badgeText": "Most Popular",
           "badgeColor": "#BE6B8B",
-          "features": ["Unlimited Guest List", "Seating Chart Designer", "Custom Domain", "PDF & XLS Export", "Advanced RSVP Tracking", "Everything in Basic"],
-          "notIncluded": ["Stationery Engine", "QR Entrance Scan", "Collaborators", "SMS Credits"],
+          "features": [
+            "Unlimited Guest List",
+            "Seating Chart Designer",
+            "Custom Domain",
+            "PDF & XLS Export",
+            "Advanced RSVP Tracking",
+            "Everything in Basic"
+          ],
+          "notIncluded": [
+            "Stationery Engine",
+            "QR Entrance Scan",
+            "Collaborators",
+            "SMS Credits"
+          ],
           "isPopular": true
         }
       ],
       "faqs": [
-        { "question": "How does the seating chart work?", "answer": "Drag-and-drop designer — create tables, assign guests, export as PDF." },
-        { "question": "Can I use my own domain?", "answer": "Yes, connect any domain you own to your Ceremoney wedding website." }
+        {
+          "question": "How does the seating chart work?",
+          "answer": "Drag-and-drop designer — create tables, assign guests, export as PDF."
+        },
+        {
+          "question": "Can I use my own domain?",
+          "answer": "Yes, connect any domain you own to your Ceremoney wedding website."
+        }
       ],
       "sortOrder": 2
     },
@@ -198,7 +246,13 @@
       "isPopular": false,
       "badgeText": "Elite",
       "badgeColor": "#C9A84C",
-      "features": ["Stationery Designer", "QR Entrance Scan", "Team Collaborators", "SMS Credits", "Everything in Premium"],
+      "features": [
+        "Stationery Designer",
+        "QR Entrance Scan",
+        "Team Collaborators",
+        "SMS Credits",
+        "Everything in Premium"
+      ],
       "packages": [
         {
           "name": "Elite",
@@ -206,14 +260,27 @@
           "description": "The ultimate wedding planning suite — 499 SEK/mo",
           "badgeText": "Elite",
           "badgeColor": "#C9A84C",
-          "features": ["Stationery Engine", "QR Code Entrance Scan", "Team Collaborators", "SMS Credits", "Priority Support", "Everything in Premium"],
+          "features": [
+            "Stationery Engine",
+            "QR Code Entrance Scan",
+            "Team Collaborators",
+            "SMS Credits",
+            "Priority Support",
+            "Everything in Premium"
+          ],
           "notIncluded": [],
           "isPopular": false
         }
       ],
       "faqs": [
-        { "question": "How does QR entrance scanning work?", "answer": "Each guest gets a unique QR code. Scan at the venue entrance to check in instantly." },
-        { "question": "How many collaborators can I invite?", "answer": "Multiple collaborators — your planner, maid of honor, or family members." }
+        {
+          "question": "How does QR entrance scanning work?",
+          "answer": "Each guest gets a unique QR code. Scan at the venue entrance to check in instantly."
+        },
+        {
+          "question": "How many collaborators can I invite?",
+          "answer": "Multiple collaborators — your planner, maid of honor, or family members."
+        }
       ],
       "sortOrder": 3
     },
@@ -228,12 +295,51 @@
       "startingPrice": 4900,
       "categorySlug": "venue-catering",
       "isPopular": false,
-      "features": ["Venue Shortlisting", "Site Visits", "Contract Review", "Logistics Planning"],
-      "packages": [
-        { "name": "Venue Search", "price": 4900, "description": "Shortlist + visits", "badgeText": null, "badgeColor": null, "features": ["Up to 5 Venues", "Site Visit Coordination", "2 Revisions"], "notIncluded": ["Contract Negotiation"], "isPopular": false },
-        { "name": "Full Venue Package", "price": 9900, "description": "Complete venue management", "badgeText": "Recommended", "badgeColor": "#BE6B8B", "features": ["Unlimited Shortlist", "Site Visits", "Contract Negotiation", "Full Logistics"], "notIncluded": [], "isPopular": true }
+      "features": [
+        "Venue Shortlisting",
+        "Site Visits",
+        "Contract Review",
+        "Logistics Planning"
       ],
-      "faqs": [{ "question": "How many venues will you shortlist?", "answer": "Up to 5 in the basic package, unlimited in the full package." }],
+      "packages": [
+        {
+          "name": "Venue Search",
+          "price": 4900,
+          "description": "Shortlist + visits",
+          "badgeText": null,
+          "badgeColor": null,
+          "features": [
+            "Up to 5 Venues",
+            "Site Visit Coordination",
+            "2 Revisions"
+          ],
+          "notIncluded": [
+            "Contract Negotiation"
+          ],
+          "isPopular": false
+        },
+        {
+          "name": "Full Venue Package",
+          "price": 9900,
+          "description": "Complete venue management",
+          "badgeText": "Recommended",
+          "badgeColor": "#BE6B8B",
+          "features": [
+            "Unlimited Shortlist",
+            "Site Visits",
+            "Contract Negotiation",
+            "Full Logistics"
+          ],
+          "notIncluded": [],
+          "isPopular": true
+        }
+      ],
+      "faqs": [
+        {
+          "question": "How many venues will you shortlist?",
+          "answer": "Up to 5 in the basic package, unlimited in the full package."
+        }
+      ],
       "sortOrder": 4
     },
     {
@@ -247,12 +353,51 @@
       "startingPrice": 3500,
       "categorySlug": "photography",
       "isPopular": false,
-      "features": ["Photographer Matching", "Contract Review", "Photography Timeline", "Album Coordination"],
-      "packages": [
-        { "name": "Photography Only", "price": 3500, "description": "Photography matching and coordination", "badgeText": null, "badgeColor": null, "features": ["Photographer Matching", "Contract Review", "Photography Timeline"], "notIncluded": ["Videography"], "isPopular": false },
-        { "name": "Photo & Video", "price": 6500, "description": "Full photo and video coordination", "badgeText": "Popular", "badgeColor": "#BE6B8B", "features": ["Photographer & Videographer Matching", "Contract Review", "Full Timeline", "Album & Highlight Reel"], "notIncluded": [], "isPopular": true }
+      "features": [
+        "Photographer Matching",
+        "Contract Review",
+        "Photography Timeline",
+        "Album Coordination"
       ],
-      "faqs": [{ "question": "Do you provide the photographer directly?", "answer": "We coordinate and match you with vetted independent photographers." }],
+      "packages": [
+        {
+          "name": "Photography Only",
+          "price": 3500,
+          "description": "Photography matching and coordination",
+          "badgeText": null,
+          "badgeColor": null,
+          "features": [
+            "Photographer Matching",
+            "Contract Review",
+            "Photography Timeline"
+          ],
+          "notIncluded": [
+            "Videography"
+          ],
+          "isPopular": false
+        },
+        {
+          "name": "Photo & Video",
+          "price": 6500,
+          "description": "Full photo and video coordination",
+          "badgeText": "Popular",
+          "badgeColor": "#BE6B8B",
+          "features": [
+            "Photographer & Videographer Matching",
+            "Contract Review",
+            "Full Timeline",
+            "Album & Highlight Reel"
+          ],
+          "notIncluded": [],
+          "isPopular": true
+        }
+      ],
+      "faqs": [
+        {
+          "question": "Do you provide the photographer directly?",
+          "answer": "We coordinate and match you with vetted independent photographers."
+        }
+      ],
       "sortOrder": 5
     },
     {
@@ -266,12 +411,54 @@
       "startingPrice": 2500,
       "categorySlug": "decor",
       "isPopular": false,
-      "features": ["Style Consultation", "Florist Matching", "Decor Planning", "Setup Coordination"],
-      "packages": [
-        { "name": "Essentials", "price": 2500, "description": "Bouquet + ceremony arch", "badgeText": null, "badgeColor": null, "features": ["Bridal Bouquet", "Ceremony Arch", "Florist Coordination"], "notIncluded": ["Centerpieces", "Full Venue Decor"], "isPopular": false },
-        { "name": "Full Styling", "price": 7500, "description": "Complete venue floral & decor", "badgeText": "Recommended", "badgeColor": "#BE6B8B", "features": ["Bridal Party Bouquets", "Ceremony Arch & Aisle", "Table Centerpieces", "Sweetheart Table", "Welcome Table", "Setup & Breakdown"], "notIncluded": [], "isPopular": true }
+      "features": [
+        "Style Consultation",
+        "Florist Matching",
+        "Decor Planning",
+        "Setup Coordination"
       ],
-      "faqs": [{ "question": "Can I bring my own floral inspiration?", "answer": "Absolutely! Share Pinterest boards or photos and we'll match your vision." }],
+      "packages": [
+        {
+          "name": "Essentials",
+          "price": 2500,
+          "description": "Bouquet + ceremony arch",
+          "badgeText": null,
+          "badgeColor": null,
+          "features": [
+            "Bridal Bouquet",
+            "Ceremony Arch",
+            "Florist Coordination"
+          ],
+          "notIncluded": [
+            "Centerpieces",
+            "Full Venue Decor"
+          ],
+          "isPopular": false
+        },
+        {
+          "name": "Full Styling",
+          "price": 7500,
+          "description": "Complete venue floral & decor",
+          "badgeText": "Recommended",
+          "badgeColor": "#BE6B8B",
+          "features": [
+            "Bridal Party Bouquets",
+            "Ceremony Arch & Aisle",
+            "Table Centerpieces",
+            "Sweetheart Table",
+            "Welcome Table",
+            "Setup & Breakdown"
+          ],
+          "notIncluded": [],
+          "isPopular": true
+        }
+      ],
+      "faqs": [
+        {
+          "question": "Can I bring my own floral inspiration?",
+          "answer": "Absolutely! Share Pinterest boards or photos and we'll match your vision."
+        }
+      ],
       "sortOrder": 6
     },
     {
@@ -285,11 +472,35 @@
       "startingPrice": 3900,
       "categorySlug": "venue-catering",
       "isPopular": false,
-      "features": ["Caterer Matching", "Menu Planning", "Tasting Sessions", "Dietary Management"],
-      "packages": [
-        { "name": "Catering Coordination", "price": 3900, "description": "Full catering management", "badgeText": null, "badgeColor": null, "features": ["Caterer Matching", "Menu Planning", "Tasting Coordination", "Dietary Requirements"], "notIncluded": [], "isPopular": true }
+      "features": [
+        "Caterer Matching",
+        "Menu Planning",
+        "Tasting Sessions",
+        "Dietary Management"
       ],
-      "faqs": [{ "question": "How do you handle dietary requirements?", "answer": "We pull dietary data directly from your Ceremoney RSVP responses." }],
+      "packages": [
+        {
+          "name": "Catering Coordination",
+          "price": 3900,
+          "description": "Full catering management",
+          "badgeText": null,
+          "badgeColor": null,
+          "features": [
+            "Caterer Matching",
+            "Menu Planning",
+            "Tasting Coordination",
+            "Dietary Requirements"
+          ],
+          "notIncluded": [],
+          "isPopular": true
+        }
+      ],
+      "faqs": [
+        {
+          "question": "How do you handle dietary requirements?",
+          "answer": "We pull dietary data directly from your Ceremoney RSVP responses."
+        }
+      ],
       "sortOrder": 7
     },
     {
@@ -303,13 +514,40 @@
       "startingPrice": 8900,
       "categorySlug": "planning",
       "isPopular": false,
-      "features": ["Pre-Wedding Briefing", "Vendor Liaison", "Full Day-of Management", "Guest Coordination", "Emergency Kit"],
+      "features": [
+        "Pre-Wedding Briefing",
+        "Vendor Liaison",
+        "Full Day-of Management",
+        "Guest Coordination",
+        "Emergency Kit"
+      ],
       "packages": [
-        { "name": "Day-of Coordination", "price": 8900, "description": "Full wedding day coordination", "badgeText": null, "badgeColor": null, "features": ["Pre-Wedding Briefing", "Vendor Confirmation", "Full Day-of Management", "Guest Coordination", "Emergency Kit"], "notIncluded": [], "isPopular": true }
+        {
+          "name": "Day-of Coordination",
+          "price": 8900,
+          "description": "Full wedding day coordination",
+          "badgeText": null,
+          "badgeColor": null,
+          "features": [
+            "Pre-Wedding Briefing",
+            "Vendor Confirmation",
+            "Full Day-of Management",
+            "Guest Coordination",
+            "Emergency Kit"
+          ],
+          "notIncluded": [],
+          "isPopular": true
+        }
       ],
       "faqs": [
-        { "question": "What hours does the coordinator work?", "answer": "Typically 2 hours before ceremony through the first hour of reception." },
-        { "question": "Do I need this if I have a venue coordinator?", "answer": "Venue coordinators manage only the venue. Our coordinator works entirely for you — all vendors, your timeline, your vision." }
+        {
+          "question": "What hours does the coordinator work?",
+          "answer": "Typically 2 hours before ceremony through the first hour of reception."
+        },
+        {
+          "question": "Do I need this if I have a venue coordinator?",
+          "answer": "Venue coordinators manage only the venue. Our coordinator works entirely for you — all vendors, your timeline, your vision."
+        }
       ],
       "sortOrder": 8
     }
@@ -318,7 +556,7 @@
     {
       "slug": "home",
       "name": "Home",
-      "templateType": "home",
+      "templateType": "HOME",
       "isSystem": true,
       "isTemplateActive": true,
       "metaTitle": "Ceremoney — Your Wedding Planning Partner",
@@ -351,7 +589,10 @@
                           "textColor": "#6B3A4A",
                           "borderColor": "rgba(190,107,139,0.15)",
                           "boxShadow": "0 2px 8px rgba(190,107,139,0.08)",
-                          "dot": { "show": true, "color": "#BE6B8B" }
+                          "dot": {
+                            "show": true,
+                            "color": "#BE6B8B"
+                          }
                         },
                         "headline": {
                           "text": "Plan Your\nDream Wedding\nEffortlessly.",
@@ -424,11 +665,31 @@
                         "avatarGroup": {
                           "show": true,
                           "avatars": [
-                            { "id": "av_1", "initials": "EO", "color": "#BE6B8B" },
-                            { "id": "av_2", "initials": "SA", "color": "#8B6B9B" },
-                            { "id": "av_3", "initials": "MF", "color": "#C9A84C" },
-                            { "id": "av_4", "initials": "AT", "color": "#BE6B8B" },
-                            { "id": "av_5", "initials": "HE", "color": "#6B9B8B" }
+                            {
+                              "id": "av_1",
+                              "initials": "EO",
+                              "color": "#BE6B8B"
+                            },
+                            {
+                              "id": "av_2",
+                              "initials": "SA",
+                              "color": "#8B6B9B"
+                            },
+                            {
+                              "id": "av_3",
+                              "initials": "MF",
+                              "color": "#C9A84C"
+                            },
+                            {
+                              "id": "av_4",
+                              "initials": "AT",
+                              "color": "#BE6B8B"
+                            },
+                            {
+                              "id": "av_5",
+                              "initials": "HE",
+                              "color": "#6B9B8B"
+                            }
                           ],
                           "text": "<strong>500+ couples</strong> already planning their perfect day",
                           "textColor": "#6B5555",
@@ -442,11 +703,17 @@
                           "buttonsToProof": 40,
                           "buttonsGap": 12
                         },
-                        "colors": { "useTheme": false }
+                        "colors": {
+                          "useTheme": false
+                        }
                       }
                     }
                   ],
-                  "settings": { "verticalAlign": "top", "padding": 0, "paddingBottom": 80 }
+                  "settings": {
+                    "verticalAlign": "top",
+                    "padding": 0,
+                    "paddingBottom": 80
+                  }
                 },
                 {
                   "id": "col_hero_right",
@@ -482,12 +749,18 @@
                       }
                     }
                   ],
-                  "settings": { "verticalAlign": "bottom", "padding": 0 }
+                  "settings": {
+                    "verticalAlign": "bottom",
+                    "padding": 0
+                  }
                 }
               ],
               "settings": {
                 "fullWidth": true,
-                "background": { "type": "solid", "color": "#FDFAF7" },
+                "background": {
+                  "type": "solid",
+                  "color": "#FDFAF7"
+                },
                 "paddingTop": 80,
                 "paddingBottom": 0,
                 "paddingLeft": 28,
@@ -517,7 +790,11 @@
                         "content": {
                           "text": "Numbers that tell\nour love story",
                           "htmlTag": "h2",
-                          "highlight": { "enabled": true, "words": "love story", "style": "color" }
+                          "highlight": {
+                            "enabled": true,
+                            "words": "love story",
+                            "style": "color"
+                          }
                         },
                         "style": {
                           "alignment": "left",
@@ -532,11 +809,18 @@
                             "letterSpacing": -0.02,
                             "letterSpacingUnit": "em"
                           },
-                          "textFill": { "type": "solid", "color": "#F5EDE8" },
-                          "highlightStyle": { "color": "#C9A84C" }
+                          "textFill": {
+                            "type": "solid",
+                            "color": "#F5EDE8"
+                          },
+                          "highlightStyle": {
+                            "color": "#C9A84C"
+                          }
                         }
                       },
-                      "spacing": { "marginBottom": 20 }
+                      "spacing": {
+                        "marginBottom": 20
+                      }
                     },
                     {
                       "id": "widget_stats_text",
@@ -550,7 +834,9 @@
                           "linkColor": "#C9A84C"
                         }
                       },
-                      "spacing": { "marginBottom": 32 }
+                      "spacing": {
+                        "marginBottom": 32
+                      }
                     },
                     {
                       "id": "widget_stats_cta",
@@ -579,7 +865,10 @@
                       }
                     }
                   ],
-                  "settings": { "verticalAlign": "center", "padding": 0 }
+                  "settings": {
+                    "verticalAlign": "center",
+                    "padding": 0
+                  }
                 },
                 {
                   "id": "col_stats_right",
@@ -590,10 +879,34 @@
                       "settings": {
                         "variant": "card-grid",
                         "stats": [
-                          { "id": "stat_couples", "value": "500", "label": "Couples Planning", "suffix": "+", "animate": true },
-                          { "id": "stat_guests", "value": "45000", "label": "Guests Managed", "suffix": "+", "animate": true },
-                          { "id": "stat_rating", "value": "4.9", "label": "Avg. Rating", "suffix": "★", "animate": true },
-                          { "id": "stat_free", "value": "0", "label": "Cost to Start", "suffix": " SEK", "animate": false }
+                          {
+                            "id": "stat_couples",
+                            "value": "500",
+                            "label": "Couples Planning",
+                            "suffix": "+",
+                            "animate": true
+                          },
+                          {
+                            "id": "stat_guests",
+                            "value": "45000",
+                            "label": "Guests Managed",
+                            "suffix": "+",
+                            "animate": true
+                          },
+                          {
+                            "id": "stat_rating",
+                            "value": "4.9",
+                            "label": "Avg. Rating",
+                            "suffix": "★",
+                            "animate": true
+                          },
+                          {
+                            "id": "stat_free",
+                            "value": "0",
+                            "label": "Cost to Start",
+                            "suffix": " SEK",
+                            "animate": false
+                          }
                         ],
                         "columns": 2,
                         "style": {
@@ -626,16 +939,24 @@
                         },
                         "centered": false,
                         "animateOnScroll": true,
-                        "colors": { "useTheme": false }
+                        "colors": {
+                          "useTheme": false
+                        }
                       }
                     }
                   ],
-                  "settings": { "verticalAlign": "center", "padding": 0 }
+                  "settings": {
+                    "verticalAlign": "center",
+                    "padding": 0
+                  }
                 }
               ],
               "settings": {
                 "fullWidth": true,
-                "background": { "type": "solid", "color": "#2C1A1A" },
+                "background": {
+                  "type": "solid",
+                  "color": "#2C1A1A"
+                },
                 "paddingTop": 80,
                 "paddingBottom": 80,
                 "paddingLeft": 28,
@@ -647,7 +968,18 @@
                 "isVisible": true,
                 "visibleOnMobile": true,
                 "visibleOnDesktop": true,
-                "watermark": { "enabled": true, "text": "♡", "position": "right", "fontSize": 320, "fontWeight": 900, "color": "#ffffff", "opacity": 0.02, "rotation": 0, "offsetX": 0, "offsetY": 0 }
+                "watermark": {
+                  "enabled": true,
+                  "text": "♡",
+                  "position": "right",
+                  "fontSize": 320,
+                  "fontWeight": 900,
+                  "color": "#ffffff",
+                  "opacity": 0.02,
+                  "rotation": 0,
+                  "offsetX": 0,
+                  "offsetY": 0
+                }
               }
             },
             {
@@ -687,7 +1019,12 @@
                             "lineHeight": 1.2,
                             "letterSpacing": "-0.02em"
                           },
-                          "description": { "show": false, "text": "", "size": "md", "color": "#64748b" },
+                          "description": {
+                            "show": false,
+                            "text": "",
+                            "size": "md",
+                            "color": "#64748b"
+                          },
                           "alignment": "center",
                           "marginBottom": 60
                         },
@@ -717,8 +1054,16 @@
                             "description": "Manage your seating chart, coordinate vendors, and enjoy every moment — Ceremoney handles the organization."
                           }
                         ],
-                        "layout": { "type": "horizontal", "columns": 4, "gap": 0 },
-                        "connector": { "show": true, "style": "dashed", "color": "rgba(190,107,139,0.3)" },
+                        "layout": {
+                          "type": "horizontal",
+                          "columns": 4,
+                          "gap": 0
+                        },
+                        "connector": {
+                          "show": true,
+                          "style": "dashed",
+                          "color": "rgba(190,107,139,0.3)"
+                        },
                         "stepStyle": {
                           "numberStyle": "circle-filled",
                           "numberBgColor": "#BE6B8B",
@@ -731,12 +1076,18 @@
                       }
                     }
                   ],
-                  "settings": { "verticalAlign": "top", "padding": 0 }
+                  "settings": {
+                    "verticalAlign": "top",
+                    "padding": 0
+                  }
                 }
               ],
               "settings": {
                 "fullWidth": true,
-                "background": { "type": "solid", "color": "#FDFAF7" },
+                "background": {
+                  "type": "solid",
+                  "color": "#FDFAF7"
+                },
                 "paddingTop": 96,
                 "paddingBottom": 96,
                 "paddingLeft": 28,
@@ -790,8 +1141,16 @@
                           "alignment": "center",
                           "marginBottom": 48
                         },
-                        "dataSource": { "type": "category", "categorySlug": "planning", "limit": 3 },
-                        "layout": { "type": "grid", "columns": 3, "gap": 24 },
+                        "dataSource": {
+                          "type": "category",
+                          "categorySlug": "planning",
+                          "limit": 3
+                        },
+                        "layout": {
+                          "type": "grid",
+                          "columns": 3,
+                          "gap": 24
+                        },
                         "cardStyle": {
                           "variant": "default",
                           "borderRadius": 20,
@@ -802,16 +1161,24 @@
                           "padding": 28,
                           "hoverEffect": "lift"
                         },
-                        "colors": { "useTheme": true }
+                        "colors": {
+                          "useTheme": true
+                        }
                       }
                     }
                   ],
-                  "settings": { "verticalAlign": "top", "padding": 0 }
+                  "settings": {
+                    "verticalAlign": "top",
+                    "padding": 0
+                  }
                 }
               ],
               "settings": {
                 "fullWidth": true,
-                "background": { "type": "solid", "color": "#2C1A1A" },
+                "background": {
+                  "type": "solid",
+                  "color": "#2C1A1A"
+                },
                 "paddingTop": 96,
                 "paddingBottom": 96,
                 "paddingLeft": 28,
@@ -875,7 +1242,11 @@
                         },
                         "viewMode": "carousel",
                         "testimonialType": "photo",
-                        "dataSource": { "limit": 6, "sortBy": "sort-order", "testimonialType": "all" },
+                        "dataSource": {
+                          "limit": 6,
+                          "sortBy": "sort-order",
+                          "testimonialType": "all"
+                        },
                         "carouselView": {
                           "layout": "rail",
                           "effect": "slide",
@@ -885,8 +1256,15 @@
                           "slidesPerView": 3,
                           "spaceBetween": 24,
                           "navigation": {
-                            "arrows": { "enabled": false },
-                            "pagination": { "enabled": true, "type": "dots", "activeColor": "#BE6B8B", "inactiveColor": "rgba(190,107,139,0.2)" }
+                            "arrows": {
+                              "enabled": false
+                            },
+                            "pagination": {
+                              "enabled": true,
+                              "type": "dots",
+                              "activeColor": "#BE6B8B",
+                              "inactiveColor": "rgba(190,107,139,0.2)"
+                            }
                           }
                         },
                         "cardStyle": {
@@ -925,18 +1303,40 @@
                           "infoColor": "#8C6E6E",
                           "infoFontSize": "sm"
                         },
-                        "trustFooter": { "show": false },
-                        "animation": { "enabled": true, "entrance": "fade", "staggerDelay": 100, "duration": 500 },
-                        "responsive": { "tablet": { "columns": 2, "slidesPerView": 2 }, "mobile": { "columns": 1, "slidesPerView": 1 } }
+                        "trustFooter": {
+                          "show": false
+                        },
+                        "animation": {
+                          "enabled": true,
+                          "entrance": "fade",
+                          "staggerDelay": 100,
+                          "duration": 500
+                        },
+                        "responsive": {
+                          "tablet": {
+                            "columns": 2,
+                            "slidesPerView": 2
+                          },
+                          "mobile": {
+                            "columns": 1,
+                            "slidesPerView": 1
+                          }
+                        }
                       }
                     }
                   ],
-                  "settings": { "verticalAlign": "top", "padding": 0 }
+                  "settings": {
+                    "verticalAlign": "top",
+                    "padding": 0
+                  }
                 }
               ],
               "settings": {
                 "fullWidth": true,
-                "background": { "type": "solid", "color": "#FDFAF7" },
+                "background": {
+                  "type": "solid",
+                  "color": "#FDFAF7"
+                },
                 "paddingTop": 96,
                 "paddingBottom": 96,
                 "paddingLeft": 28,
@@ -1005,8 +1405,12 @@
                           "mode": "manual",
                           "serviceSlug": "premium-wedding-package"
                         },
-                        "stateFee": { "enabled": false },
-                        "orderSummary": { "enabled": false },
+                        "stateFee": {
+                          "enabled": false
+                        },
+                        "orderSummary": {
+                          "enabled": false
+                        },
                         "forgeCardOverrides": [
                           {
                             "packageIndex": 0,
@@ -1035,12 +1439,18 @@
                       }
                     }
                   ],
-                  "settings": { "verticalAlign": "top", "padding": 0 }
+                  "settings": {
+                    "verticalAlign": "top",
+                    "padding": 0
+                  }
                 }
               ],
               "settings": {
                 "fullWidth": true,
-                "background": { "type": "solid", "color": "#FDFAF7" },
+                "background": {
+                  "type": "solid",
+                  "color": "#FDFAF7"
+                },
                 "paddingTop": 96,
                 "paddingBottom": 96,
                 "paddingLeft": 28,
@@ -1094,8 +1504,14 @@
                           "alignment": "center",
                           "marginBottom": 48
                         },
-                        "dataSource": { "limit": 8, "sortBy": "sort-order" },
-                        "layout": { "columns": 1, "gap": 0 },
+                        "dataSource": {
+                          "limit": 8,
+                          "sortBy": "sort-order"
+                        },
+                        "layout": {
+                          "columns": 1,
+                          "gap": 0
+                        },
                         "style": {
                           "variant": "bordered",
                           "borderColor": "rgba(190,107,139,0.15)",
@@ -1107,16 +1523,24 @@
                           "questionFontWeight": 600,
                           "borderRadius": 12
                         },
-                        "colors": { "useTheme": false }
+                        "colors": {
+                          "useTheme": false
+                        }
                       }
                     }
                   ],
-                  "settings": { "verticalAlign": "top", "padding": 0 }
+                  "settings": {
+                    "verticalAlign": "top",
+                    "padding": 0
+                  }
                 }
               ],
               "settings": {
                 "fullWidth": true,
-                "background": { "type": "solid", "color": "#F5EDE8" },
+                "background": {
+                  "type": "solid",
+                  "color": "#F5EDE8"
+                },
                 "paddingTop": 96,
                 "paddingBottom": 96,
                 "paddingLeft": 28,
@@ -1137,96 +1561,274 @@
     {
       "slug": "services",
       "name": "Services",
-      "templateType": "services",
+      "templateType": "SERVICES_LIST",
       "isSystem": true,
       "isTemplateActive": true,
       "metaTitle": "Wedding Planning Services | Ceremoney",
       "metaDescription": "Explore Ceremoney's wedding planning packages and services.",
-      "blocks": [{ "type": "widget-page-sections", "name": "Services Sections", "sortOrder": 0, "isActive": true, "settings": [] }]
+      "blocks": [
+        {
+          "type": "widget-page-sections",
+          "name": "Services Sections",
+          "sortOrder": 0,
+          "isActive": true,
+          "settings": []
+        }
+      ]
     },
     {
       "slug": "service",
       "name": "Service Detail",
-      "templateType": "service",
+      "templateType": "SERVICE_DETAILS",
       "isSystem": true,
       "isTemplateActive": true,
       "metaTitle": "Service | Ceremoney",
       "metaDescription": "Wedding planning service details.",
-      "blocks": [{ "type": "widget-page-sections", "name": "Service Sections", "sortOrder": 0, "isActive": true, "settings": [] }]
+      "blocks": [
+        {
+          "type": "widget-page-sections",
+          "name": "Service Sections",
+          "sortOrder": 0,
+          "isActive": true,
+          "settings": []
+        }
+      ]
     },
     {
       "slug": "about",
       "name": "About",
-      "templateType": null,
+      "templateType": "ABOUT",
       "isSystem": true,
       "isTemplateActive": false,
       "metaTitle": "About Ceremoney — Your Wedding Planning Partner",
       "metaDescription": "Learn about Ceremoney, the all-in-one wedding planning platform.",
-      "blocks": [{ "type": "widget-page-sections", "name": "About Sections", "sortOrder": 0, "isActive": true, "settings": [] }]
+      "blocks": [
+        {
+          "type": "widget-page-sections",
+          "name": "About Sections",
+          "sortOrder": 0,
+          "isActive": true,
+          "settings": []
+        }
+      ]
     },
     {
       "slug": "contact",
       "name": "Contact",
-      "templateType": null,
+      "templateType": "CONTACT",
       "isSystem": true,
       "isTemplateActive": false,
       "metaTitle": "Contact Ceremoney",
       "metaDescription": "Get in touch with the Ceremoney team.",
-      "blocks": [{ "type": "widget-page-sections", "name": "Contact Sections", "sortOrder": 0, "isActive": true, "settings": [] }]
+      "blocks": [
+        {
+          "type": "widget-page-sections",
+          "name": "Contact Sections",
+          "sortOrder": 0,
+          "isActive": true,
+          "settings": []
+        }
+      ]
     },
     {
       "slug": "faq",
       "name": "FAQ",
-      "templateType": null,
+      "templateType": "FAQ",
       "isSystem": true,
       "isTemplateActive": false,
       "metaTitle": "Wedding Planning FAQ | Ceremoney",
       "metaDescription": "Frequently asked questions about Ceremoney.",
-      "blocks": [{ "type": "widget-page-sections", "name": "FAQ Sections", "sortOrder": 0, "isActive": true, "settings": [] }]
+      "blocks": [
+        {
+          "type": "widget-page-sections",
+          "name": "FAQ Sections",
+          "sortOrder": 0,
+          "isActive": true,
+          "settings": []
+        }
+      ]
     },
     {
       "slug": "pricing",
       "name": "Pricing",
-      "templateType": null,
+      "templateType": "PRICING",
       "isSystem": true,
       "isTemplateActive": false,
       "metaTitle": "Wedding Planning Pricing | Ceremoney",
       "metaDescription": "Simple, transparent pricing for Ceremoney's wedding planning platform.",
-      "blocks": [{ "type": "widget-page-sections", "name": "Pricing Sections", "sortOrder": 0, "isActive": true, "settings": [] }]
+      "blocks": [
+        {
+          "type": "widget-page-sections",
+          "name": "Pricing Sections",
+          "sortOrder": 0,
+          "isActive": true,
+          "settings": []
+        }
+      ]
     },
     {
       "slug": "blog-list",
       "name": "Blog",
-      "templateType": "blog-list",
+      "templateType": "BLOG_LIST",
       "isSystem": true,
       "isTemplateActive": true,
       "metaTitle": "Wedding Planning Blog | Ceremoney",
       "metaDescription": "Wedding planning tips, inspiration, and advice.",
-      "blocks": [{ "type": "widget-page-sections", "name": "Blog Sections", "sortOrder": 0, "isActive": true, "settings": [] }]
+      "blocks": [
+        {
+          "type": "widget-page-sections",
+          "name": "Blog Sections",
+          "sortOrder": 0,
+          "isActive": true,
+          "settings": []
+        }
+      ]
     }
   ],
   "faqs": [
-    { "question": "Is Ceremoney free to use?", "answer": "Yes! Ceremoney's Basic plan is completely free — no credit card required. It includes your wedding website, RSVP collection, guest list (up to 50 guests), and planning checklist. Upgrade to Premium or Elite for advanced features.", "category": "General", "sortOrder": 1 },
-    { "question": "What is the difference between Premium and Elite?", "answer": "Premium (299 SEK/mo) includes unlimited guests, seating chart designer, custom domain, and PDF/XLS export. Elite (499 SEK/mo) adds the stationery designer, QR code entrance scanning, team collaborators, and SMS credits.", "category": "General", "sortOrder": 2 },
-    { "question": "Can I create a password-protected wedding website?", "answer": "Yes! You can add a password to your wedding website so only invited guests can access it. This keeps your RSVP form and personal details private.", "category": "Wedding Website", "sortOrder": 3 },
-    { "question": "How does RSVP collection work?", "answer": "Guests visit your wedding website and fill in the RSVP form — including their name, attendance status, dietary requirements, and plus-one details. All responses appear instantly in your Ceremoney guest list.", "category": "Guest Management", "sortOrder": 4 },
-    { "question": "Can I manage the bride's and groom's guest lists separately?", "answer": "Yes! Every guest in Ceremoney is tagged to either the bride's side or the groom's side. You can filter, view, and export each side separately.", "category": "Guest Management", "sortOrder": 5 },
-    { "question": "How does the seating chart work?", "answer": "The seating chart is a drag-and-drop visual designer. Create tables of any shape and size, then drag guest names from your list to assign seats. Export the finished chart as a PDF.", "category": "Premium Features", "sortOrder": 6 },
-    { "question": "What is QR entrance scanning?", "answer": "With Elite, each guest automatically receives a unique QR code. At your venue entrance, scan the code with any smartphone to check them in. See real-time attendance as guests arrive.", "category": "Elite Features", "sortOrder": 7 },
-    { "question": "Can my wedding planner access my account?", "answer": "With Elite, you can invite collaborators — your wedding planner, maid of honor, or family — who get access to manage guests, RSVPs, and planning tasks.", "category": "Elite Features", "sortOrder": 8 }
+    {
+      "question": "Is Ceremoney free to use?",
+      "answer": "Yes! Ceremoney's Basic plan is completely free — no credit card required. It includes your wedding website, RSVP collection, guest list (up to 50 guests), and planning checklist. Upgrade to Premium or Elite for advanced features.",
+      "category": "General",
+      "sortOrder": 1
+    },
+    {
+      "question": "What is the difference between Premium and Elite?",
+      "answer": "Premium (299 SEK/mo) includes unlimited guests, seating chart designer, custom domain, and PDF/XLS export. Elite (499 SEK/mo) adds the stationery designer, QR code entrance scanning, team collaborators, and SMS credits.",
+      "category": "General",
+      "sortOrder": 2
+    },
+    {
+      "question": "Can I create a password-protected wedding website?",
+      "answer": "Yes! You can add a password to your wedding website so only invited guests can access it. This keeps your RSVP form and personal details private.",
+      "category": "Wedding Website",
+      "sortOrder": 3
+    },
+    {
+      "question": "How does RSVP collection work?",
+      "answer": "Guests visit your wedding website and fill in the RSVP form — including their name, attendance status, dietary requirements, and plus-one details. All responses appear instantly in your Ceremoney guest list.",
+      "category": "Guest Management",
+      "sortOrder": 4
+    },
+    {
+      "question": "Can I manage the bride's and groom's guest lists separately?",
+      "answer": "Yes! Every guest in Ceremoney is tagged to either the bride's side or the groom's side. You can filter, view, and export each side separately.",
+      "category": "Guest Management",
+      "sortOrder": 5
+    },
+    {
+      "question": "How does the seating chart work?",
+      "answer": "The seating chart is a drag-and-drop visual designer. Create tables of any shape and size, then drag guest names from your list to assign seats. Export the finished chart as a PDF.",
+      "category": "Premium Features",
+      "sortOrder": 6
+    },
+    {
+      "question": "What is QR entrance scanning?",
+      "answer": "With Elite, each guest automatically receives a unique QR code. At your venue entrance, scan the code with any smartphone to check them in. See real-time attendance as guests arrive.",
+      "category": "Elite Features",
+      "sortOrder": 7
+    },
+    {
+      "question": "Can my wedding planner access my account?",
+      "answer": "With Elite, you can invite collaborators — your wedding planner, maid of honor, or family — who get access to manage guests, RSVPs, and planning tasks.",
+      "category": "Elite Features",
+      "sortOrder": 8
+    }
   ],
   "testimonials": [
-    { "name": "Emma & Oliver Lindqvist", "country": "Sweden", "content": "Ceremoney made planning our wedding so much easier. The seating chart feature saved us hours, and guests loved how elegant our wedding website looked. We got RSVPs from everyone within the first week!", "rating": 5, "isActive": true, "sortOrder": 1, "tags": ["Premium", "Wedding Website", "Seating Chart"] },
-    { "name": "Sofia & Ahmed Karlsson", "country": "Sweden", "content": "We used Ceremoney Elite and the QR code entrance scanning was absolutely brilliant. Our venue coordinator was amazed — check-in took seconds for each guest. Worth every öre.", "rating": 5, "isActive": true, "sortOrder": 2, "tags": ["Elite", "QR Scanning"] },
-    { "name": "Maja & Felix Bergström", "country": "Sweden", "content": "As someone who is not tech-savvy at all, I was worried about building a wedding website. Ceremoney was incredibly easy to use. Our website was live in under an hour and looked absolutely beautiful.", "rating": 5, "isActive": true, "sortOrder": 3, "tags": ["Basic", "Wedding Website"] },
-    { "name": "Alicia & Tom Johansson", "country": "Sweden", "content": "The stationery designer in Elite is stunning. We designed our digital invitations to perfectly match our wedding theme and colors. Guests loved receiving them. Highly recommend!", "rating": 5, "isActive": true, "sortOrder": 4, "tags": ["Elite", "Stationery"] },
-    { "name": "Hannah & David Eriksson", "country": "Sweden", "content": "Managing dietary requirements for 120 guests seemed overwhelming. Ceremoney's RSVP system collected everything automatically and we could export a clean list for our caterer. Game changer!", "rating": 5, "isActive": true, "sortOrder": 5, "tags": ["Premium", "Guest Management"] },
-    { "name": "Isabelle & Marcus Nilsson", "country": "Sweden", "content": "Our wedding planner used the collaborator feature to manage the guest list with us in real time. Having everything in one place — RSVPs, seating, vendors — was invaluable.", "rating": 5, "isActive": true, "sortOrder": 6, "tags": ["Elite", "Collaborators"] }
+    {
+      "name": "Emma & Oliver Lindqvist",
+      "country": "Sweden",
+      "content": "Ceremoney made planning our wedding so much easier. The seating chart feature saved us hours, and guests loved how elegant our wedding website looked. We got RSVPs from everyone within the first week!",
+      "rating": 5,
+      "isActive": true,
+      "sortOrder": 1,
+      "tags": [
+        "Premium",
+        "Wedding Website",
+        "Seating Chart"
+      ]
+    },
+    {
+      "name": "Sofia & Ahmed Karlsson",
+      "country": "Sweden",
+      "content": "We used Ceremoney Elite and the QR code entrance scanning was absolutely brilliant. Our venue coordinator was amazed — check-in took seconds for each guest. Worth every öre.",
+      "rating": 5,
+      "isActive": true,
+      "sortOrder": 2,
+      "tags": [
+        "Elite",
+        "QR Scanning"
+      ]
+    },
+    {
+      "name": "Maja & Felix Bergström",
+      "country": "Sweden",
+      "content": "As someone who is not tech-savvy at all, I was worried about building a wedding website. Ceremoney was incredibly easy to use. Our website was live in under an hour and looked absolutely beautiful.",
+      "rating": 5,
+      "isActive": true,
+      "sortOrder": 3,
+      "tags": [
+        "Basic",
+        "Wedding Website"
+      ]
+    },
+    {
+      "name": "Alicia & Tom Johansson",
+      "country": "Sweden",
+      "content": "The stationery designer in Elite is stunning. We designed our digital invitations to perfectly match our wedding theme and colors. Guests loved receiving them. Highly recommend!",
+      "rating": 5,
+      "isActive": true,
+      "sortOrder": 4,
+      "tags": [
+        "Elite",
+        "Stationery"
+      ]
+    },
+    {
+      "name": "Hannah & David Eriksson",
+      "country": "Sweden",
+      "content": "Managing dietary requirements for 120 guests seemed overwhelming. Ceremoney's RSVP system collected everything automatically and we could export a clean list for our caterer. Game changer!",
+      "rating": 5,
+      "isActive": true,
+      "sortOrder": 5,
+      "tags": [
+        "Premium",
+        "Guest Management"
+      ]
+    },
+    {
+      "name": "Isabelle & Marcus Nilsson",
+      "country": "Sweden",
+      "content": "Our wedding planner used the collaborator feature to manage the guest list with us in real time. Having everything in one place — RSVPs, seating, vendors — was invaluable.",
+      "rating": 5,
+      "isActive": true,
+      "sortOrder": 6,
+      "tags": [
+        "Elite",
+        "Collaborators"
+      ]
+    }
   ],
   "legalPages": [
-    { "slug": "privacy-policy", "title": "Privacy Policy", "content": "<h2>Privacy Policy</h2><p>At Ceremoney, we take your privacy seriously. This policy explains how we collect, use, and protect your personal data in accordance with GDPR.</p><h3>Data We Collect</h3><p>We collect information you provide directly: account registration details, wedding project data, and guest information submitted through RSVP forms. Guest data is collected only with explicit GDPR consent.</p><h3>How We Use Your Data</h3><p>Your data is used solely to provide and improve Ceremoney's services. We do not sell or share your personal data with third parties for marketing purposes.</p><h3>Your Rights</h3><p>You have the right to access, correct, export, or delete your data at any time. Contact us at privacy@ceremoney.com.</p><h3>Data Retention</h3><p>We retain your data for as long as your account is active. Upon account deletion, all personal data is permanently removed within 30 days.</p>", "isActive": true },
-    { "slug": "terms-of-service", "title": "Terms of Service", "content": "<h2>Terms of Service</h2><p>By using Ceremoney, you agree to these Terms of Service.</p><h3>Use of Service</h3><p>Ceremoney provides wedding planning tools for personal use by couples planning their wedding.</p><h3>Account Responsibility</h3><p>You are responsible for maintaining the security of your account and all activity under it.</p><h3>Guest Data</h3><p>You are responsible for ensuring that guest data collected through Ceremoney RSVP forms complies with applicable privacy laws, including obtaining GDPR consent.</p><h3>Subscription</h3><p>Premium and Elite plans are billed monthly. No refunds for partial months. Cancel anytime.</p>", "isActive": true },
-    { "slug": "gdpr", "title": "GDPR & Data Protection", "content": "<h2>GDPR & Data Protection</h2><p>Ceremoney is fully compliant with the General Data Protection Regulation (GDPR).</p><h3>Guest RSVP Data</h3><p>When guests submit an RSVP through a Ceremoney wedding website, they provide explicit consent for their data to be stored for event management purposes. This consent is recorded with a timestamp.</p><h3>Your Rights Under GDPR</h3><ul><li>Right to access your personal data</li><li>Right to rectification</li><li>Right to erasure</li><li>Right to data portability</li></ul><p>Contact: privacy@ceremoney.com</p>", "isActive": true }
+    {
+      "slug": "privacy-policy",
+      "title": "Privacy Policy",
+      "content": "<h2>Privacy Policy</h2><p>At Ceremoney, we take your privacy seriously. This policy explains how we collect, use, and protect your personal data in accordance with GDPR.</p><h3>Data We Collect</h3><p>We collect information you provide directly: account registration details, wedding project data, and guest information submitted through RSVP forms. Guest data is collected only with explicit GDPR consent.</p><h3>How We Use Your Data</h3><p>Your data is used solely to provide and improve Ceremoney's services. We do not sell or share your personal data with third parties for marketing purposes.</p><h3>Your Rights</h3><p>You have the right to access, correct, export, or delete your data at any time. Contact us at privacy@ceremoney.com.</p><h3>Data Retention</h3><p>We retain your data for as long as your account is active. Upon account deletion, all personal data is permanently removed within 30 days.</p>",
+      "isActive": true
+    },
+    {
+      "slug": "terms-of-service",
+      "title": "Terms of Service",
+      "content": "<h2>Terms of Service</h2><p>By using Ceremoney, you agree to these Terms of Service.</p><h3>Use of Service</h3><p>Ceremoney provides wedding planning tools for personal use by couples planning their wedding.</p><h3>Account Responsibility</h3><p>You are responsible for maintaining the security of your account and all activity under it.</p><h3>Guest Data</h3><p>You are responsible for ensuring that guest data collected through Ceremoney RSVP forms complies with applicable privacy laws, including obtaining GDPR consent.</p><h3>Subscription</h3><p>Premium and Elite plans are billed monthly. No refunds for partial months. Cancel anytime.</p>",
+      "isActive": true
+    },
+    {
+      "slug": "gdpr",
+      "title": "GDPR & Data Protection",
+      "content": "<h2>GDPR & Data Protection</h2><p>Ceremoney is fully compliant with the General Data Protection Regulation (GDPR).</p><h3>Guest RSVP Data</h3><p>When guests submit an RSVP through a Ceremoney wedding website, they provide explicit consent for their data to be stored for event management purposes. This consent is recorded with a timestamp.</p><h3>Your Rights Under GDPR</h3><ul><li>Right to access your personal data</li><li>Right to rectification</li><li>Right to erasure</li><li>Right to data portability</li></ul><p>Contact: privacy@ceremoney.com</p>",
+      "isActive": true
+    }
   ],
   "headerConfig": {
     "name": "Wedding Header",
@@ -1246,12 +1848,48 @@
     "ctaButtons": "\"[{\\\"text\\\":\\\"Start Planning Free\\\",\\\"url\\\":\\\"/register\\\",\\\"variant\\\":\\\"primary\\\"}]\""
   },
   "menuItems": [
-    { "label": "Home", "url": "/", "sortOrder": 0, "isVisible": true, "visibleOnMobile": true },
-    { "label": "Features", "url": "/services", "sortOrder": 1, "isVisible": true, "visibleOnMobile": true },
-    { "label": "Pricing", "url": "/pricing", "sortOrder": 2, "isVisible": true, "visibleOnMobile": true },
-    { "label": "Blog", "url": "/blog", "sortOrder": 3, "isVisible": true, "visibleOnMobile": true },
-    { "label": "FAQ", "url": "/faq", "sortOrder": 4, "isVisible": true, "visibleOnMobile": true },
-    { "label": "Contact", "url": "/contact", "sortOrder": 5, "isVisible": true, "visibleOnMobile": false }
+    {
+      "label": "Home",
+      "url": "/",
+      "sortOrder": 0,
+      "isVisible": true,
+      "visibleOnMobile": true
+    },
+    {
+      "label": "Features",
+      "url": "/services",
+      "sortOrder": 1,
+      "isVisible": true,
+      "visibleOnMobile": true
+    },
+    {
+      "label": "Pricing",
+      "url": "/pricing",
+      "sortOrder": 2,
+      "isVisible": true,
+      "visibleOnMobile": true
+    },
+    {
+      "label": "Blog",
+      "url": "/blog",
+      "sortOrder": 3,
+      "isVisible": true,
+      "visibleOnMobile": true
+    },
+    {
+      "label": "FAQ",
+      "url": "/faq",
+      "sortOrder": 4,
+      "isVisible": true,
+      "visibleOnMobile": true
+    },
+    {
+      "label": "Contact",
+      "url": "/contact",
+      "sortOrder": 5,
+      "isVisible": true,
+      "visibleOnMobile": false
+    }
   ],
   "footerConfig": {
     "layout": "MULTI_COLUMN",
@@ -1290,18 +1928,42 @@
     "socialPosition": "brand"
   },
   "footerWidgets": [
-    { "type": "BRAND", "column": 1, "sortOrder": 0 },
+    {
+      "type": "BRAND",
+      "column": 1,
+      "sortOrder": 0
+    },
     {
       "type": "LINKS",
       "title": "Platform",
       "column": 2,
       "sortOrder": 0,
       "links": [
-        { "label": "Features", "url": "/services", "sortOrder": 0 },
-        { "label": "Pricing", "url": "/pricing", "sortOrder": 1 },
-        { "label": "Wedding Website", "url": "/services/basic-wedding-package", "sortOrder": 2 },
-        { "label": "Guest Management", "url": "/services/premium-wedding-package", "sortOrder": 3 },
-        { "label": "Seating Chart", "url": "/services/premium-wedding-package", "sortOrder": 4 }
+        {
+          "label": "Features",
+          "url": "/services",
+          "sortOrder": 0
+        },
+        {
+          "label": "Pricing",
+          "url": "/pricing",
+          "sortOrder": 1
+        },
+        {
+          "label": "Wedding Website",
+          "url": "/services/basic-wedding-package",
+          "sortOrder": 2
+        },
+        {
+          "label": "Guest Management",
+          "url": "/services/premium-wedding-package",
+          "sortOrder": 3
+        },
+        {
+          "label": "Seating Chart",
+          "url": "/services/premium-wedding-package",
+          "sortOrder": 4
+        }
       ]
     },
     {
@@ -1310,20 +1972,64 @@
       "column": 3,
       "sortOrder": 0,
       "links": [
-        { "label": "About", "url": "/about", "sortOrder": 0 },
-        { "label": "Blog", "url": "/blog", "sortOrder": 1 },
-        { "label": "FAQ", "url": "/faq", "sortOrder": 2 },
-        { "label": "Contact", "url": "/contact", "sortOrder": 3 },
-        { "label": "Privacy Policy", "url": "/privacy-policy", "sortOrder": 4 },
-        { "label": "Terms of Service", "url": "/terms-of-service", "sortOrder": 5 }
+        {
+          "label": "About",
+          "url": "/about",
+          "sortOrder": 0
+        },
+        {
+          "label": "Blog",
+          "url": "/blog",
+          "sortOrder": 1
+        },
+        {
+          "label": "FAQ",
+          "url": "/faq",
+          "sortOrder": 2
+        },
+        {
+          "label": "Contact",
+          "url": "/contact",
+          "sortOrder": 3
+        },
+        {
+          "label": "Privacy Policy",
+          "url": "/privacy-policy",
+          "sortOrder": 4
+        },
+        {
+          "label": "Terms of Service",
+          "url": "/terms-of-service",
+          "sortOrder": 5
+        }
       ]
     }
   ],
   "blogCategories": [
-    { "name": "Wedding Planning", "slug": "wedding-planning", "description": "Tips and guides for planning your perfect wedding", "sortOrder": 1 },
-    { "name": "Inspiration", "slug": "inspiration", "description": "Wedding themes, trends, and styling inspiration", "sortOrder": 2 },
-    { "name": "Venue & Decor", "slug": "venue-decor", "description": "Venue tips and decoration ideas", "sortOrder": 3 },
-    { "name": "Guest Management", "slug": "guest-management", "description": "Tips for managing your guest list and RSVPs", "sortOrder": 4 }
+    {
+      "name": "Wedding Planning",
+      "slug": "wedding-planning",
+      "description": "Tips and guides for planning your perfect wedding",
+      "sortOrder": 1
+    },
+    {
+      "name": "Inspiration",
+      "slug": "inspiration",
+      "description": "Wedding themes, trends, and styling inspiration",
+      "sortOrder": 2
+    },
+    {
+      "name": "Venue & Decor",
+      "slug": "venue-decor",
+      "description": "Venue tips and decoration ideas",
+      "sortOrder": 3
+    },
+    {
+      "name": "Guest Management",
+      "slug": "guest-management",
+      "description": "Tips for managing your guest list and RSVPs",
+      "sortOrder": 4
+    }
   ],
   "blogs": [],
   "formTemplates": [],
