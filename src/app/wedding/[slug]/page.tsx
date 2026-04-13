@@ -4,6 +4,7 @@ import type { WeddingBlock } from "@/lib/planner-storage";
 import GuestbookSection from "@/components/wedding/GuestbookSection";
 import GuestPhotoUpload from "@/components/wedding/GuestPhotoUpload";
 import PasswordGate from "@/components/wedding/PasswordGate";
+import RsvpModal from "@/components/wedding/RsvpModal";
 
 export const dynamic = "force-dynamic";
 
@@ -262,11 +263,7 @@ export default async function PublicWeddingSite({ params }: PageProps) {
                 {(s.deadline as string) && (
                   <p className="text-sm text-gray-400 mb-6">RSVP by {s.deadline as string}</p>
                 )}
-                <a href="#guestbook"
-                  style={{ background: primaryHex }}
-                  className="inline-block px-8 py-3 rounded-full text-white font-medium hover:opacity-90 transition">
-                  RSVP Now
-                </a>
+                <RsvpModal slug={slug} primaryColor={primaryHex} accentColor={accentHex} />
               </section>
             );
 

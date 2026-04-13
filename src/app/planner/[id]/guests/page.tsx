@@ -55,6 +55,8 @@ interface Guest {
   plusOneMeal: string | null;
   // Task 23 — Chief guest
   isChiefGuest: boolean;
+  // Open RSVP
+  selfRegistered: boolean;
   // Task 24 — Family grouping
   familyId: string | null;
   // Task 26 — Table invitation
@@ -422,6 +424,11 @@ function GuestRow({
         {guest.isChiefGuest && (
           <span className="inline-flex items-center gap-0.5 rounded-full bg-amber-50 px-1.5 py-0.5 text-[9px] font-semibold text-amber-600">
             <Star className="h-2.5 w-2.5 fill-amber-500" /> Chief
+          </span>
+        )}
+        {guest.selfRegistered && (
+          <span className="inline-flex items-center rounded-full bg-blue-50 px-1.5 py-0.5 text-[9px] font-semibold text-blue-600">
+            Self-registered
           </span>
         )}
       </p>
@@ -949,7 +956,7 @@ export default function GuestListPage() {
         firstName: "", lastName: null, title: null, side, relation, email: null,
         phone: null, dietary: null, rsvpStatus: "PENDING", tableNumber: null, notes: null,
         hasPlusOne: false, plusOneName: null, plusOneMeal: null,
-        isChiefGuest: false, familyId: null,
+        isChiefGuest: false, selfRegistered: false, familyId: null,
         invitationCode: null, invitationSent: false, invitationSentAt: null,
       }) as Guest;
       setGuests((p) => [...p, g]);
@@ -1317,6 +1324,7 @@ export default function GuestListPage() {
           plusOneName: null,
           plusOneMeal: null,
           isChiefGuest: false,
+          selfRegistered: false,
           familyId: null,
           invitationCode: null,
           invitationSent: false,

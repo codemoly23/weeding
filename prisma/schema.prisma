@@ -1228,7 +1228,6 @@ model Lead {
   assignedTo       User?             @relation("AssignedLeads", fields: [assignedToId], references: [id])
   formTemplate     LeadFormTemplate? @relation(fields: [formTemplateId], references: [id])
   activities       LeadActivity[]
-  campaignRecipients EmailCampaignRecipient[]
   leadNotes        LeadNote[]
 
   @@index([email])
@@ -1864,6 +1863,8 @@ model WeddingGuest {
   invitationSentAt DateTime?
   // Task 10 — GDPR consent
   gdprConsentAt    DateTime?
+  // Open RSVP — self-registered via wedding website
+  selfRegistered   Boolean       @default(false)
   createdAt        DateTime      @default(now())
   updatedAt        DateTime      @updatedAt
 
