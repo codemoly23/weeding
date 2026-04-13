@@ -31,6 +31,7 @@ import {
 import { cn } from "@/lib/utils";
 import { useLanguage } from "@/lib/i18n/language-context";
 import { UpgradeModal } from "./upgrade-modal";
+import { usePlannerTier } from "@/hooks/use-planner-tier";
 
 interface NavItem {
   name: string;
@@ -102,6 +103,7 @@ function SidebarInner({
   const [closedGroups, setClosedGroups] = useState<string[]>([]);
   const [upgradeOpen, setUpgradeOpen] = useState(false);
   const [hiddenTabs, setHiddenTabs] = useState<string[]>([]);
+  const { tier } = usePlannerTier(projectId);
 
   useEffect(() => {
     try {
@@ -258,22 +260,30 @@ function SidebarInner({
         })}
       </nav>
 
-      {/* Upgrade to Premium */}
-      <div className="border-t border-gray-100 p-2">
-        <button
-          onClick={() => setUpgradeOpen(true)}
-          className={cn(
-            "w-full flex items-center gap-2 rounded-lg px-3 py-2.5 text-sm font-medium transition-all duration-200 bg-gradient-to-r from-rose-50 to-purple-50 text-rose-600 hover:from-rose-100 hover:to-purple-100 border border-rose-200/60",
-            collapsed && "justify-center px-2"
-          )}
-          title={collapsed ? "Upgrade to Premium" : undefined}
-        >
-          <Star className="h-4 w-4 shrink-0 text-rose-500" />
-          {!collapsed && <span>Upgrade to Premium</span>}
-        </button>
-      </div>
+      {/* Upgrade button — hidden for Elite users */}
+      {tier !== "elite" && (
+        <div className="border-t border-gray-100 p-2">
+          <button
+            onClick={() => setUpgradeOpen(true)}
+            className={cn(
+              "w-full flex items-center gap-2 rounded-lg px-3 py-2.5 text-sm font-medium transition-all duration-200 bg-gradient-to-r from-rose-50 to-purple-50 text-rose-600 hover:from-rose-100 hover:to-purple-100 border border-rose-200/60",
+              collapsed && "justify-center px-2"
+            )}
+            title={collapsed ? (tier === "premium" ? "Upgrade to Elite" : "Upgrade to Premium") : undefined}
+          >
+            <Star className="h-4 w-4 shrink-0 text-rose-500" />
+            {!collapsed && (
+              <span>{tier === "premium" ? "Upgrade to Elite" : "Upgrade to Premium"}</span>
+            )}
+          </button>
+        </div>
+      )}
 
-      <UpgradeModal open={upgradeOpen} onClose={() => setUpgradeOpen(false)} />
+      <UpgradeModal
+        open={upgradeOpen}
+        onClose={() => setUpgradeOpen(false)}
+        defaultTab={tier === "premium" ? "elite" : "premium"}
+      />
     </aside>
   );
 }

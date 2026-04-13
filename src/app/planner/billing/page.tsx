@@ -1,8 +1,9 @@
 "use client";
 
 import { useState, useEffect, Suspense } from "react";
-import { useSearchParams } from "next/navigation";
-import { Check, Crown, Zap, Star, Loader2, ExternalLink, CreditCard, PartyPopper } from "lucide-react";
+import { useSearchParams, useRouter } from "next/navigation";
+import { Check, Crown, Zap, Star, Loader2, ExternalLink, CreditCard, PartyPopper, ArrowLeft } from "lucide-react";
+import { clearTierCache } from "@/hooks/use-planner-tier";
 
 interface SubscriptionInfo {
   tier: "basic" | "premium" | "elite";
@@ -86,27 +87,53 @@ type PlanId = "basic" | "premium" | "elite";
 
 function PlannerBillingPage() {
   const searchParams = useSearchParams();
+  const router = useRouter();
+
   const isSuccess = searchParams.get("success") === "1";
   const isCancelled = searchParams.get("cancelled") === "1";
+  const sessionId = searchParams.get("session_id");
+  const returnTo = searchParams.get("returnTo");
 
   const [sub, setSub] = useState<SubscriptionInfo | null>(null);
   const [loading, setLoading] = useState(true);
+  const [verifiedTier, setVerifiedTier] = useState<PlanId | null>(null);
   const [upgrading, setUpgrading] = useState<PlanId | null>(null);
-  const [managinPortal, setManagingPortal] = useState(false);
+  const [managingPortal, setManagingPortal] = useState(false);
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
 
   useEffect(() => {
-    // After successful payment, poll briefly to let webhook update the DB
-    const delay = isSuccess ? 1500 : 0;
-    const timer = setTimeout(() => {
+    if (isSuccess && sessionId) {
+      // Verify the Stripe session directly — no webhook dependency
+      fetch("/api/billing/verify-session", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ sessionId }),
+      })
+        .then((r) => r.json())
+        .then((d) => {
+          if (d.tier) {
+            setVerifiedTier(d.tier);
+            // Clear the module-level tier cache so feature gates re-check
+            clearTierCache();
+          }
+        })
+        .catch(() => {})
+        .finally(() => {
+          // Also refresh sub info from DB
+          fetch("/api/billing/subscription")
+            .then((r) => r.json())
+            .then((d) => setSub(d))
+            .catch(() => {})
+            .finally(() => setLoading(false));
+        });
+    } else {
       fetch("/api/billing/subscription")
         .then((r) => r.json())
         .then((d) => setSub(d))
         .catch(() => {})
         .finally(() => setLoading(false));
-    }, delay);
-    return () => clearTimeout(timer);
-  }, [isSuccess]);
+    }
+  }, [isSuccess, sessionId]);
 
   async function handleUpgrade(tier: PlanId) {
     if (tier === "basic") return;
@@ -141,7 +168,14 @@ function PlannerBillingPage() {
     }
   }
 
-  const currentTier = sub?.tier ?? "basic";
+  // Use verified tier from Stripe session first (accurate), fallback to DB
+  const currentTier = (verifiedTier ?? sub?.tier ?? "basic") as PlanId;
+  const successTierName = verifiedTier
+    ? verifiedTier.charAt(0).toUpperCase() + verifiedTier.slice(1)
+    : sub?.tier
+    ? sub.tier.charAt(0).toUpperCase() + sub.tier.slice(1)
+    : "your new plan";
+
   const periodEnd = sub?.periodEnd
     ? new Date(sub.periodEnd).toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" })
     : null;
@@ -156,16 +190,33 @@ function PlannerBillingPage() {
         </p>
       </div>
 
-      {/* Success / Cancelled banners */}
+      {/* Success banner */}
       {isSuccess && (
-        <div className="flex items-center gap-3 rounded-2xl bg-green-50 border border-green-200 px-5 py-4">
-          <PartyPopper className="w-5 h-5 text-green-600 shrink-0" />
-          <div>
-            <p className="text-sm font-semibold text-green-800">Payment successful! Welcome to {sub?.tier ?? "your new plan"}.</p>
-            <p className="text-xs text-green-600">Your plan has been upgraded. All premium features are now unlocked.</p>
+        <div className="flex flex-col gap-3 rounded-2xl bg-green-50 border border-green-200 px-5 py-4">
+          <div className="flex items-center gap-3">
+            <PartyPopper className="w-5 h-5 text-green-600 shrink-0" />
+            <div>
+              <p className="text-sm font-semibold text-green-800">
+                Payment successful! Welcome to {successTierName}.
+              </p>
+              <p className="text-xs text-green-600">
+                Your plan has been upgraded. All {successTierName} features are now unlocked.
+              </p>
+            </div>
           </div>
+          {returnTo && (
+            <button
+              onClick={() => router.push(returnTo)}
+              className="self-start flex items-center gap-1.5 text-sm font-medium text-green-700 hover:text-green-900 transition-colors"
+            >
+              <ArrowLeft className="w-4 h-4" />
+              Go back and try it now
+            </button>
+          )}
         </div>
       )}
+
+      {/* Cancelled banner */}
       {isCancelled && (
         <div className="flex items-center gap-3 rounded-2xl bg-amber-50 border border-amber-200 px-5 py-4">
           <p className="text-sm text-amber-700">Checkout was cancelled. Your plan was not changed.</p>
@@ -192,10 +243,10 @@ function PlannerBillingPage() {
           {sub.hasSubscription && (
             <button
               onClick={handleManagePortal}
-              disabled={managinPortal}
+              disabled={managingPortal}
               className="flex items-center gap-1.5 text-sm text-gray-600 hover:text-gray-900 transition-colors disabled:opacity-60"
             >
-              {managinPortal ? (
+              {managingPortal ? (
                 <><Loader2 className="w-4 h-4 animate-spin" /> Opening…</>
               ) : (
                 <><ExternalLink className="w-4 h-4" /> Manage billing</>
@@ -216,7 +267,9 @@ function PlannerBillingPage() {
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         {PLANS.map((plan) => {
           const isCurrent = currentTier === plan.id;
-          const isHigher = ["premium", "elite"].indexOf(plan.id) > ["premium", "elite"].indexOf(currentTier);
+          const isHigher =
+            ["premium", "elite"].indexOf(plan.id as "premium" | "elite") >
+            ["premium", "elite"].indexOf(currentTier as "premium" | "elite");
 
           return (
             <div
@@ -314,7 +367,13 @@ function PlannerBillingPage() {
 
 export default function PlannerBillingPageWrapper() {
   return (
-    <Suspense fallback={<div className="flex min-h-[400px] items-center justify-center"><Loader2 className="w-6 h-6 animate-spin text-gray-400" /></div>}>
+    <Suspense
+      fallback={
+        <div className="flex min-h-[400px] items-center justify-center">
+          <Loader2 className="w-6 h-6 animate-spin text-gray-400" />
+        </div>
+      }
+    >
       <PlannerBillingPage />
     </Suspense>
   );

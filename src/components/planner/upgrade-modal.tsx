@@ -81,7 +81,7 @@ export function UpgradeModal({ open, onClose, defaultTab }: UpgradeModalProps) {
       const res = await fetch("/api/billing/checkout", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ tier }),
+        body: JSON.stringify({ tier, returnTo: window.location.pathname }),
       });
       const data = await res.json();
       if (!res.ok) throw new Error(data.error ?? "Failed to start checkout");

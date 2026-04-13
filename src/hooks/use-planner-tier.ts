@@ -11,6 +11,12 @@ interface TierState {
 let cached: PlannerTier | null = null;
 let inflight: Promise<PlannerTier> | null = null;
 
+/** Call this after a successful plan upgrade to force a fresh fetch */
+export function clearTierCache() {
+  cached = null;
+  inflight = null;
+}
+
 async function fetchTier(): Promise<PlannerTier> {
   if (cached) return cached;
   if (inflight) return inflight;

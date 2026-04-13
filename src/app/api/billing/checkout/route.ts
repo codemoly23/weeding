@@ -18,6 +18,7 @@ export async function POST(req: NextRequest) {
 
   const body = await req.json();
   const tier = (body.tier as PlannerTier) ?? "premium";
+  const returnTo = typeof body.returnTo === "string" ? body.returnTo : undefined;
 
   if (!["premium", "elite"].includes(tier)) {
     return NextResponse.json({ error: "Invalid plan tier" }, { status: 400 });
@@ -51,6 +52,9 @@ export async function POST(req: NextRequest) {
     });
   }
 
+  const appUrl = process.env.NEXT_PUBLIC_APP_URL ?? "";
+  const returnParam = returnTo ? `&returnTo=${encodeURIComponent(returnTo)}` : "";
+
   const checkoutSession = await createSubscriptionCheckout({
     priceId: plan.priceId,
     customerId,
@@ -58,6 +62,7 @@ export async function POST(req: NextRequest) {
       userId: session.user.id,
       plannerTier: tier,
     },
+    successUrl: `${appUrl}/planner/billing?success=1&session_id={CHECKOUT_SESSION_ID}${returnParam}`,
   });
 
   return NextResponse.json({ url: checkoutSession.url });
