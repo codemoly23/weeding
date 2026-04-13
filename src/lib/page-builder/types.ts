@@ -240,7 +240,9 @@ export type WidgetType =
   | "event-categories-grid"
   | "cta-banner"
   // Navigation Widgets
-  | "top-utility-bar";
+  | "top-utility-bar"
+  // Ticker Widgets
+  | "ticker-marquee";
 
 export type WidgetCategory =
   | "most-used"

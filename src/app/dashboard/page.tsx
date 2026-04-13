@@ -75,7 +75,7 @@ export default function DashboardPage() {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [session?.user?.id]);
 
-  const localProjects = getAllLocalProjects();
+  const localProjects = typeof window !== "undefined" ? getAllLocalProjects() : [];
   const totalProjects = projects.length + localProjects.length;
   const activeProjects = projects.filter((p) => p.status === "ACTIVE").length;
   const completedProjects = projects.filter((p) => p.status === "COMPLETED").length;

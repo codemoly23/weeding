@@ -18,30 +18,10 @@ interface PageProps {
 
 // ── Helpers ──────────────────────────────────────────────────────────
 
-  if (!post) {
-    return {
-      title: "Post Not Found",
-    };
-  }
-
-  return {
-    title: `${post.title} | Ceremoney Blog`,
-    description: post.excerpt,
-    keywords: post.tags,
-    openGraph: {
-      title: post.title,
-      description: post.excerpt,
-      type: "article",
-      publishedTime: post.publishedAt,
-      authors: [post.author.name],
-      tags: post.tags,
-    },
-    twitter: {
-      card: "summary_large_image",
-      title: post.title,
-      description: post.excerpt,
-    },
-  };
+function calculateReadingTime(text: string | null): number {
+  if (!text) return 1;
+  const words = text.replace(/<[^>]*>/g, "").split(/\s+/).length;
+  return Math.max(1, Math.ceil(words / 200));
 }
 
 function formatDate(date: Date | string): string {

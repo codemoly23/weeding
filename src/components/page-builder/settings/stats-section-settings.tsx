@@ -473,43 +473,10 @@ export function StatsSectionWidgetSettingsPanel({
   const renderStyleTab = () => {
     const cg = s.cardGrid ?? DEFAULT_CARD_GRID_SETTINGS!;
 
-      <ColorInput
-        label="Value Color"
-        value={s.style.valueColor}
-        onChange={(v) => updateStyleField("valueColor", v)}
-      />
-      <ColorInput
-        label="Label Color"
-        value={s.style.labelColor}
-        onChange={(v) => updateStyleField("labelColor", v)}
-      />
-      <SelectInput
-        label="Value Size"
-        value={s.style.valueSize}
-        onChange={(v) => updateStyleField("valueSize", v)}
-        options={[
-          { value: "sm", label: "Small" },
-          { value: "md", label: "Medium" },
-          { value: "lg", label: "Large" },
-          { value: "xl", label: "Extra Large" },
-        ]}
-      />
-      <SelectInput
-        label="Label Size"
-        value={s.style.labelSize ?? "sm"}
-        onChange={(v) => updateStyleField("labelSize", v)}
-        options={[
-          { value: "sm", label: "Small" },
-          { value: "md", label: "Medium" },
-          { value: "lg", label: "Large" },
-        ]}
-      />
-      <ToggleSwitch
-        label="Uppercase Labels"
-        checked={s.style.labelUppercase ?? true}
-        onChange={(v) => updateStyleField("labelUppercase", v)}
-      />
-
+    return (
+      <div className="space-y-3">
+        {!isCardGrid && (
+          <>
             <SelectInput
               label="Value Size"
               value={s.style.valueSize}

@@ -66,6 +66,9 @@ import {
   CtaBannerSettingsPanel,
   VendorListingSettingsPanel,
   TopUtilityBarSettingsPanel,
+  ServiceFeaturesWidgetSettingsPanel,
+  CustomHtmlWidgetSettingsPanel,
+  TickerMarqueeWidgetSettingsPanel,
 } from "@/components/page-builder/settings";
 import { NumberInput } from "@/app/admin/appearance/landing-page/components/ui/form-controls";
 import { AccordionSection } from "@/app/admin/appearance/landing-page/components/ui/accordion-section";
