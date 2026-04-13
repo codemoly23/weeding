@@ -3,7 +3,6 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import { Calendar, Users, ExternalLink, Heart } from "lucide-react";
-import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
 import {
   Table,
@@ -22,8 +21,8 @@ interface Project {
   status: string;
   createdAt: string;
   updatedAt: string;
-  user: { id: string; name: string | null; email: string | null };
-  members: { id: string; role: string; displayName: string | null }[];
+  user: { id: string; name: string | null; email: string | null; plannerTier: string };
+  _count: { guests: number };
 }
 
 export default function AdminPlannerPage() {
@@ -83,7 +82,8 @@ export default function AdminPlannerPage() {
                 <TableRow>
                   <TableHead>Project</TableHead>
                   <TableHead>Owner</TableHead>
-                  <TableHead>Members</TableHead>
+                  <TableHead>Guests</TableHead>
+                  <TableHead>Plan</TableHead>
                   <TableHead>Event Date</TableHead>
                   <TableHead>Status</TableHead>
                   <TableHead>Updated</TableHead>
@@ -103,7 +103,18 @@ export default function AdminPlannerPage() {
                     <TableCell>
                       <span className="flex items-center gap-1 text-sm">
                         <Users className="h-3.5 w-3.5 text-muted-foreground" />
-                        {project.members.length}
+                        {project._count.guests}
+                      </span>
+                    </TableCell>
+                    <TableCell>
+                      <span className={`rounded-full px-2 py-0.5 text-xs font-medium ${
+                        project.user.plannerTier === "elite"
+                          ? "bg-purple-100 text-purple-700"
+                          : project.user.plannerTier === "premium"
+                          ? "bg-blue-100 text-blue-700"
+                          : "bg-gray-100 text-gray-600"
+                      }`}>
+                        {project.user.plannerTier ?? "basic"}
                       </span>
                     </TableCell>
                     <TableCell>

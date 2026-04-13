@@ -943,6 +943,7 @@ async function main() {
       for (let i = 0; i < comparisonFeatures.length; i++) {
         const feature = comparisonFeatures[i];
 
+        const featureAny = feature as any;
         const createdFeature = await prisma.serviceFeature.create({
           data: {
             serviceId: service.id,
