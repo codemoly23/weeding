@@ -44,6 +44,7 @@ model User {
   projectMemberships    ProjectMember[]
   vendorProfile         VendorProfile?
   coupleConversations   VendorConversation[] @relation("CoupleConversations")
+  savedVendors          SavedVendor[]
 
   @@index([email])
   @@index([role])
@@ -2144,6 +2145,21 @@ model VendorProfile {
   @@index([isVerified])
   @@index([userId])
   @@index([status])
+  savedBy SavedVendor[]
+}
+
+model SavedVendor {
+  id        String   @id @default(cuid())
+  userId    String
+  vendorId  String
+  createdAt DateTime @default(now())
+
+  user   User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  vendor VendorProfile @relation(fields: [vendorId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, vendorId])
+  @@index([userId])
+  @@index([vendorId])
 }
 
 // Task 13 — Availability calendar

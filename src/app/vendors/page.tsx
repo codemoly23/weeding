@@ -1,6 +1,7 @@
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useRef } from "react";
+import { useSession } from "next-auth/react";
 import dynamic from "next/dynamic";
 import Link from "next/link";
 import { useLanguage } from "@/lib/i18n/language-context";
@@ -8,7 +9,7 @@ import {
   Search, MapPin, Star, ChevronLeft, ChevronRight,
   Camera, Music, Flower2, Car, Scissors, CalendarHeart,
   Building2, Gem, UtensilsCrossed, Video, Shirt, Sparkles,
-  Package, Map, List, X, Clock, SlidersHorizontal, ChevronDown, ChevronUp, BadgeCheck,
+  Package, Map, List, X, Clock, SlidersHorizontal, ChevronDown, ChevronUp, BadgeCheck, Heart,
 } from "lucide-react";
 
 const VendorMap = dynamic(() => import("@/components/vendors/VendorMap"), { ssr: false });
@@ -90,6 +91,9 @@ function FilterSection({ title, defaultOpen = true, children }: { title: string;
 
 export default function VendorsPage() {
   const { t } = useLanguage();
+  const { data: session } = useSession();
+  const [savedIds, setSavedIds] = useState<Set<string>>(new Set());
+  const savingRef = useRef<Set<string>>(new Set());
   const [vendors, setVendors] = useState<VendorCard[]>([]);
   const [total, setTotal] = useState(0);
   const [totalPages, setTotalPages] = useState(1);
@@ -137,6 +141,45 @@ export default function VendorsPage() {
   }, [search, cityFilter, categoryFilter, selectedPriceRange, minRating, featuredOnly, page]);
 
   useEffect(() => { fetchVendors(); }, [fetchVendors]);
+
+  useEffect(() => {
+    if (!session?.user?.id) { setSavedIds(new Set()); return; }
+    fetch("/api/user/saved-vendors")
+      .then((r) => r.ok ? r.json() : null)
+      .then((data) => {
+        if (data?.vendors) setSavedIds(new Set(data.vendors.map((v: { id: string }) => v.id)));
+      })
+      .catch(() => {});
+  }, [session?.user?.id]);
+
+  async function toggleSave(e: React.MouseEvent, vendorId: string, slug: string) {
+    e.preventDefault();
+    e.stopPropagation();
+    if (!session?.user?.id) {
+      window.location.href = `/login?returnTo=/vendors`;
+      return;
+    }
+    if (savingRef.current.has(vendorId)) return;
+    savingRef.current.add(vendorId);
+    setSavedIds((prev) => {
+      const next = new Set(prev);
+      if (next.has(vendorId)) next.delete(vendorId); else next.add(vendorId);
+      return next;
+    });
+    try {
+      const res = await fetch(`/api/vendors/${slug}/save`, { method: "POST" });
+      if (res.ok) {
+        const data = await res.json();
+        setSavedIds((prev) => {
+          const next = new Set(prev);
+          if (data.saved) next.add(vendorId); else next.delete(vendorId);
+          return next;
+        });
+      }
+    } catch { /* ignore */ } finally {
+      savingRef.current.delete(vendorId);
+    }
+  }
 
   function handleSearch(e: React.FormEvent) {
     e.preventDefault();
@@ -518,6 +561,13 @@ export default function VendorsPage() {
                               </span>
                             )}
                             <span className={`absolute top-2 right-2 ${meta.bg} ${meta.color} text-xs font-medium px-2 py-0.5 rounded-full`}>{t(meta.tKey)}</span>
+                            <button
+                              onClick={(e) => toggleSave(e, v.id, v.slug)}
+                              title={savedIds.has(v.id) ? "Unsave" : "Save"}
+                              className="absolute bottom-2 right-2 w-7 h-7 flex items-center justify-center bg-white rounded-full shadow-sm hover:scale-110 transition-transform"
+                            >
+                              <Heart className={`w-3.5 h-3.5 ${savedIds.has(v.id) ? "fill-rose-500 text-rose-500" : "text-gray-400"}`} />
+                            </button>
                           </div>
                           <div className="p-4">
                             <h3 className="font-semibold text-gray-900 text-base leading-tight mb-1 group-hover:text-purple-700 transition-colors">{v.businessName}</h3>

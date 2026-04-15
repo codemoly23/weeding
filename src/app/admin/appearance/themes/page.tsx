@@ -41,7 +41,7 @@ interface ThemeListItem {
 
 // Gradient presets for theme thumbnail placeholders
 const categoryGradients: Record<string, string> = {
-  "legal-business": "from-orange-500 to-amber-600",
+  wedding: "from-rose-400 to-pink-500",
   technology: "from-blue-500 to-cyan-600",
   healthcare: "from-emerald-500 to-teal-600",
   creative: "from-purple-500 to-pink-600",
@@ -50,7 +50,7 @@ const categoryGradients: Record<string, string> = {
 };
 
 const categoryBadgeColors: Record<string, string> = {
-  "legal-business": "bg-orange-100 text-orange-700",
+  wedding: "bg-rose-100 text-rose-700",
   technology: "bg-blue-100 text-blue-700",
   healthcare: "bg-emerald-100 text-emerald-700",
   creative: "bg-purple-100 text-purple-700",

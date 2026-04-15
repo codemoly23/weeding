@@ -36,6 +36,7 @@ import {
   Facebook,
   ChevronDown,
   BadgeCheck,
+  Heart,
 } from "lucide-react";
 
 type VendorCategory =
@@ -170,6 +171,8 @@ export default function VendorProfilePage({
   const [projects, setProjects] = useState<{ id: string; title: string }[]>([]);
   const [selectedProjectId, setSelectedProjectId] = useState<string>("");
   const [openFaqIdx, setOpenFaqIdx] = useState<number | null>(null);
+  const [isSaved, setIsSaved] = useState(false);
+  const [saveLoading, setSaveLoading] = useState(false);
 
   // Review form
   const [showReviewForm, setShowReviewForm] = useState(false);
@@ -217,6 +220,31 @@ export default function VendorProfilePage({
       .catch(() => setNotFound(true))
       .finally(() => setIsLoading(false));
   }, [slug]);
+
+  useEffect(() => {
+    if (!session?.user?.id) return;
+    fetch(`/api/vendors/${slug}/save`)
+      .then((r) => r.ok ? r.json() : null)
+      .then((data) => { if (data) setIsSaved(data.saved); })
+      .catch(() => {});
+  }, [slug, session?.user?.id]);
+
+  async function toggleSave() {
+    if (!session?.user?.id) {
+      window.location.href = `/login?returnTo=/vendors/${slug}`;
+      return;
+    }
+    setSaveLoading(true);
+    try {
+      const res = await fetch(`/api/vendors/${slug}/save`, { method: "POST" });
+      if (res.ok) {
+        const data = await res.json();
+        setIsSaved(data.saved);
+      }
+    } finally {
+      setSaveLoading(false);
+    }
+  }
 
   function updateForm(field: keyof InquiryForm, value: string) {
     setForm((prev) => ({ ...prev, [field]: value }));
@@ -325,13 +353,26 @@ export default function VendorProfilePage({
     <div className="min-h-screen bg-gray-50">
       {/* Back nav */}
       <div className="bg-white border-b border-gray-200">
-        <div className="max-w-7xl mx-auto px-4 py-3">
+        <div className="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between">
           <Link
             href="/vendors"
             className="flex items-center gap-1.5 text-sm text-gray-600 hover:text-purple-600 transition-colors"
           >
             <ArrowLeft className="w-4 h-4" /> Back to Vendors
           </Link>
+          <button
+            onClick={toggleSave}
+            disabled={saveLoading}
+            title={isSaved ? "Unsave" : "Save vendor"}
+            className={`flex items-center gap-1.5 text-sm font-medium px-3 py-1.5 rounded-lg border transition-colors disabled:opacity-60 ${
+              isSaved
+                ? "bg-rose-50 border-rose-200 text-rose-600 hover:bg-rose-100"
+                : "bg-white border-gray-200 text-gray-600 hover:bg-gray-50"
+            }`}
+          >
+            <Heart className={`w-4 h-4 ${isSaved ? "fill-rose-500 text-rose-500" : ""}`} />
+            {isSaved ? "Saved" : "Save"}
+          </button>
         </div>
       </div>
 
