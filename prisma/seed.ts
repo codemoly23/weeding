@@ -1851,6 +1851,69 @@ async function main() {
   }
   console.log(`  + ${globalFaqs.length} global FAQs created`);
 
+  // ─── Wedding Theme Activation ────────────────────────────────────────────────
+  console.log("\nActivating Wedding theme...");
+  const existingTheme = await prisma.activeTheme.findFirst();
+  if (existingTheme) {
+    console.log("  ✓ Theme already active, skipping");
+  } else {
+    const { readFile } = await import("fs/promises");
+    const { join } = await import("path");
+
+    const themeDataRaw = await readFile(
+      join(process.cwd(), "public", "themes", "wedding", "data.json"),
+      "utf-8"
+    );
+    const themeData = JSON.parse(themeDataRaw);
+
+    await prisma.activeTheme.create({
+      data: {
+        themeId: "wedding",
+        themeName: "Wedding & Ceremony Planning",
+        colorPalette: themeData.colorPalette,
+        originalColorPalette: themeData.colorPalette,
+        fontConfig: themeData.fontConfig ?? undefined,
+        widgetDefaults: {},
+      },
+    });
+
+    // Import landing pages (home template + other page templates)
+    await prisma.landingPageBlock.deleteMany({});
+    await prisma.landingPage.deleteMany({});
+
+    for (const page of themeData.pages ?? []) {
+      const createdPage = await prisma.landingPage.create({
+        data: {
+          slug: page.slug,
+          name: page.name,
+          isActive: true,
+          isSystem: page.isSystem ?? false,
+          templateType: page.templateType ?? undefined,
+          isTemplateActive: page.isTemplateActive ?? false,
+          metaTitle: page.metaTitle ?? null,
+          metaDescription: page.metaDescription ?? null,
+        },
+      });
+
+      for (const block of page.blocks ?? []) {
+        await prisma.landingPageBlock.create({
+          data: {
+            landingPageId: createdPage.id,
+            type: block.type,
+            name: block.name ?? null,
+            sortOrder: block.sortOrder ?? 0,
+            isActive: block.isActive ?? true,
+            settings: block.settings,
+            hideOnMobile: block.hideOnMobile ?? false,
+            hideOnDesktop: block.hideOnDesktop ?? false,
+          },
+        });
+      }
+    }
+
+    console.log(`  ✓ Wedding theme activated (${themeData.pages?.length ?? 0} pages imported)`);
+  }
+
   console.log("\nSeeding completed!");
 }
 

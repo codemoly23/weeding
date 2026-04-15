@@ -2,7 +2,7 @@
  * seed-wedding-theme.ts
  *
  * Seeds:
- *  1. Activates the Wedding theme in DB
+ *  1. Activates the Wedding theme in DB (with proper widgetDefaults + pages import)
  *  2. Creates 12 realistic Swedish wedding vendors
  *  3. Adds approved reviews for each vendor
  *
@@ -12,6 +12,8 @@
 import { PrismaClient, VendorCategory, VendorStatus, VendorPlanTier } from "@prisma/client";
 import { PrismaPg } from "@prisma/adapter-pg";
 import { Pool } from "pg";
+import fs from "fs";
+import path from "path";
 import "dotenv/config";
 
 const pool = new Pool({ connectionString: process.env.DATABASE_URL });
@@ -457,30 +459,136 @@ const vendors: VendorSeed[] = [
   },
 ];
 
+// ─── Widget types that support theme color binding ────────────────────────────
+const THEME_AWARE_WIDGETS = new Set([
+  "hero-content", "stats-section", "service-list",
+  "process-steps", "faq-accordion", "pricing-table",
+]);
+
+// ─── Read data.json ───────────────────────────────────────────────────────────
+function loadThemeData() {
+  const dataPath = path.join(process.cwd(), "public", "themes", THEME_ID, "data.json");
+  return JSON.parse(fs.readFileSync(dataPath, "utf-8"));
+}
+
+// ─── Extract widgetDefaults from all pages (mirrors theme-importer logic) ─────
+function extractWidgetDefaults(pages: any[]): Record<string, unknown> {
+  const widgetDefaults: Record<string, unknown> = {};
+  for (const page of pages ?? []) {
+    for (const block of page.blocks ?? []) {
+      if (!Array.isArray(block.settings)) continue;
+      for (const section of block.settings as any[]) {
+        for (const col of section.columns ?? []) {
+          for (const widget of col.widgets ?? []) {
+            if (widget.type && widget.settings && !widgetDefaults[widget.type]) {
+              const existingColors = widget.settings.colors;
+              const settings =
+                THEME_AWARE_WIDGETS.has(widget.type) && existingColors?.useTheme !== false
+                  ? { ...widget.settings, colors: { ...(existingColors ?? {}), useTheme: true } }
+                  : widget.settings;
+              widgetDefaults[widget.type] = settings;
+            }
+          }
+        }
+      }
+    }
+  }
+  return widgetDefaults;
+}
+
+// ─── Import pages from data.json into DB ──────────────────────────────────────
+async function importPages(pages: any[]): Promise<number> {
+  // Delete existing pages + blocks
+  await prisma.landingPageBlock.deleteMany({});
+  await prisma.landingPage.deleteMany({});
+
+  let count = 0;
+  for (const page of pages ?? []) {
+    const createdPage = await prisma.landingPage.create({
+      data: {
+        slug: page.slug,
+        name: page.name,
+        isActive: true,
+        isSystem: page.isSystem ?? false,
+        templateType: page.templateType ?? undefined,
+        isTemplateActive: page.isTemplateActive ?? false,
+        metaTitle: page.metaTitle ?? null,
+        metaDescription: page.metaDescription ?? null,
+      },
+    });
+
+    for (const block of page.blocks ?? []) {
+      // Inject colors.useTheme:true into theme-aware widgets (mirrors importThemeData)
+      let blockSettings: unknown = block.settings;
+      if (Array.isArray(blockSettings)) {
+        blockSettings = (blockSettings as any[]).map((section: any) => ({
+          ...section,
+          columns: section.columns?.map((col: any) => ({
+            ...col,
+            widgets: col.widgets?.map((widget: any) => {
+              if (THEME_AWARE_WIDGETS.has(widget.type) && widget.settings) {
+                const existingColors = widget.settings.colors;
+                if (existingColors?.useTheme !== false) {
+                  return {
+                    ...widget,
+                    settings: {
+                      ...widget.settings,
+                      colors: { ...(existingColors ?? {}), useTheme: true },
+                    },
+                  };
+                }
+              }
+              return widget;
+            }),
+          })),
+        }));
+      }
+
+      await prisma.landingPageBlock.create({
+        data: {
+          landingPageId: createdPage.id,
+          type: block.type,
+          name: block.name ?? null,
+          sortOrder: block.sortOrder ?? 0,
+          isActive: block.isActive ?? true,
+          settings: blockSettings as any,
+          hideOnMobile: block.hideOnMobile ?? false,
+          hideOnDesktop: block.hideOnDesktop ?? false,
+        },
+      });
+    }
+    count++;
+  }
+  return count;
+}
+
 // ─── Main seed function ───────────────────────────────────────────────────────
 async function main() {
   console.log("🌹 Seeding Wedding Theme & Vendors...\n");
 
-  // 1. Activate wedding theme
-  await prisma.activeTheme.upsert({
-    where: { themeId: THEME_ID },
-    update: {
-      themeName: THEME_NAME,
-      colorPalette: COLOR_PALETTE,
-      fontConfig: FONT_CONFIG,
-      activatedAt: new Date(),
-    },
-    create: {
+  // 1. Load data.json
+  const themeData = loadThemeData();
+  const widgetDefaults = extractWidgetDefaults(themeData.pages ?? []);
+
+  // 2. Activate wedding theme with proper widgetDefaults
+  await prisma.activeTheme.deleteMany({});
+  await prisma.activeTheme.create({
+    data: {
       themeId: THEME_ID,
       themeName: THEME_NAME,
-      colorPalette: COLOR_PALETTE,
-      fontConfig: FONT_CONFIG,
-      originalColorPalette: COLOR_PALETTE,
+      colorPalette: COLOR_PALETTE as any,
+      fontConfig: FONT_CONFIG as any,
+      originalColorPalette: COLOR_PALETTE as any,
+      widgetDefaults: widgetDefaults as any,
     },
   });
-  console.log(`✅ Theme activated: ${THEME_NAME}`);
+  console.log(`✅ Theme activated: ${THEME_NAME} (${Object.keys(widgetDefaults).length} widget defaults)`);
 
-  // 2. Create vendors + reviews
+  // 3. Import pages from data.json into DB
+  const pageCount = await importPages(themeData.pages ?? []);
+  console.log(`✅ Pages imported: ${pageCount} pages from data.json`);
+
+  // 4. Create vendors + reviews
   let vendorCount = 0;
   let reviewCount = 0;
 
@@ -565,9 +673,10 @@ async function main() {
   }
 
   console.log(`\n🎉 Done!`);
+  console.log(`   Theme:   ${THEME_NAME} (active, ${Object.keys(widgetDefaults).length} widget defaults)`);
+  console.log(`   Pages:   ${pageCount} imported from data.json`);
   console.log(`   Vendors: ${vendorCount}`);
   console.log(`   Reviews: ${reviewCount}`);
-  console.log(`   Theme:   ${THEME_NAME} (active)`);
 }
 
 main()
