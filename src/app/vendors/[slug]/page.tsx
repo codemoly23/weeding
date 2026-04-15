@@ -3,6 +3,9 @@
 import { useState, useEffect, use } from "react";
 import { useSession } from "next-auth/react";
 import Link from "next/link";
+import dynamic from "next/dynamic";
+
+const VendorSingleMap = dynamic(() => import("@/components/vendors/VendorSingleMap"), { ssr: false });
 import {
   ArrowLeft,
   MapPin,
@@ -32,6 +35,7 @@ import {
   Instagram,
   Facebook,
   ChevronDown,
+  BadgeCheck,
 } from "lucide-react";
 
 type VendorCategory =
@@ -104,10 +108,14 @@ interface Vendor {
   photos: string[];
   videoUrls: string[];
   startingPrice: number | null;
+  maxPrice: number | null;
   currency: string;
   yearsInBusiness: number | null;
   languages: string[];
+  lat: number | null;
+  lng: number | null;
   isFeatured: boolean;
+  isVerified: boolean;
   slaHours: number | null;
   faqItems: FaqItem[] | null;
   availability: AvailabilityEntry[];
@@ -162,6 +170,14 @@ export default function VendorProfilePage({
   const [projects, setProjects] = useState<{ id: string; title: string }[]>([]);
   const [selectedProjectId, setSelectedProjectId] = useState<string>("");
   const [openFaqIdx, setOpenFaqIdx] = useState<number | null>(null);
+
+  // Review form
+  const [showReviewForm, setShowReviewForm] = useState(false);
+  const [reviewForm, setReviewForm] = useState({ authorName: "", rating: 5, comment: "" });
+  const [reviewSubmitting, setReviewSubmitting] = useState(false);
+  const [reviewSubmitted, setReviewSubmitted] = useState(false);
+  const [reviewError, setReviewError] = useState("");
+
   const [calMonth, setCalMonth] = useState<Date>(() => {
     const d = new Date();
     return new Date(d.getFullYear(), d.getMonth(), 1);
@@ -253,6 +269,32 @@ export default function VendorProfilePage({
       setInquiryError("Network error. Please try again.");
     } finally {
       setSubmitting(false);
+    }
+  }
+
+  async function submitReview(e: React.FormEvent) {
+    e.preventDefault();
+    if (!vendor) return;
+    setReviewSubmitting(true);
+    setReviewError("");
+    try {
+      const res = await fetch(`/api/vendors/${slug}/reviews`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(reviewForm),
+      });
+      if (!res.ok) {
+        const d = await res.json();
+        setReviewError(d.error || "Failed to submit review.");
+        return;
+      }
+      setReviewSubmitted(true);
+      setShowReviewForm(false);
+      setReviewForm({ authorName: "", rating: 5, comment: "" });
+    } catch {
+      setReviewError("Network error. Please try again.");
+    } finally {
+      setReviewSubmitting(false);
     }
   }
 
@@ -375,6 +417,11 @@ export default function VendorProfilePage({
                           Featured
                         </span>
                       )}
+                      {vendor.isVerified && (
+                        <span className="flex items-center gap-1 bg-purple-100 text-purple-700 text-xs font-semibold px-2 py-0.5 rounded-full">
+                          <BadgeCheck className="w-3 h-3" /> Verified
+                        </span>
+                      )}
                     </div>
                     <h1 className="text-2xl font-bold text-gray-900">{vendor.businessName}</h1>
                     {vendor.tagline && (
@@ -422,7 +469,8 @@ export default function VendorProfilePage({
                   )}
                   {vendor.startingPrice && (
                     <span className="font-semibold text-purple-700">
-                      From {vendor.currency} {vendor.startingPrice.toLocaleString()}
+                      {vendor.currency} {vendor.startingPrice.toLocaleString()}
+                      {vendor.maxPrice ? ` – ${vendor.maxPrice.toLocaleString()}` : "+"}
                     </span>
                   )}
                 </div>
@@ -616,11 +664,139 @@ export default function VendorProfilePage({
             )}
 
             {/* Reviews */}
-            {vendor.reviews.length > 0 && (
-              <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100">
-                <h2 className="text-lg font-semibold text-gray-900 mb-4">
-                  Reviews ({vendor.reviews.length})
+            <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100">
+              {/* Header */}
+              <div className="flex items-center justify-between mb-4">
+                <h2 className="text-lg font-semibold text-gray-900">
+                  Reviews{vendor.reviews.length > 0 ? ` (${vendor.reviews.length})` : ""}
                 </h2>
+                {!reviewSubmitted ? (
+                  <button
+                    onClick={() => setShowReviewForm((v) => !v)}
+                    className="text-sm font-medium text-purple-600 border border-purple-200 px-3 py-1.5 rounded-lg hover:bg-purple-50 transition-colors"
+                  >
+                    {showReviewForm ? "Cancel" : "Write a Review"}
+                  </button>
+                ) : (
+                  <span className="text-sm text-green-600 font-medium">✓ Review submitted!</span>
+                )}
+              </div>
+
+              {/* Rating summary */}
+              {vendor.reviews.length > 0 && vendor.avgRating !== null && (() => {
+                const breakdown = [5, 4, 3, 2, 1].map((star) => ({
+                  star,
+                  count: vendor.reviews.filter((r) => r.rating === star).length,
+                }));
+                const maxCount = Math.max(...breakdown.map((b) => b.count), 1);
+                const recommended = Math.round(
+                  (vendor.reviews.filter((r) => r.rating >= 4).length / vendor.reviews.length) * 100
+                );
+                return (
+                  <div className="flex flex-col sm:flex-row gap-6 mb-6 pb-6 border-b border-gray-100">
+                    {/* Score */}
+                    <div className="text-center shrink-0">
+                      <div className="text-5xl font-bold text-gray-900">{vendor.avgRating.toFixed(1)}</div>
+                      <div className="flex items-center justify-center gap-0.5 mt-1">
+                        {Array.from({ length: 5 }).map((_, i) => (
+                          <Star
+                            key={i}
+                            className={`w-4 h-4 ${
+                              i < Math.round(vendor.avgRating!) ? "fill-yellow-400 text-yellow-400" : "fill-gray-200 text-gray-200"
+                            }`}
+                          />
+                        ))}
+                      </div>
+                      <p className="text-xs text-gray-500 mt-1">
+                        Recommended by {recommended}% of couples
+                      </p>
+                    </div>
+                    {/* Breakdown bars */}
+                    <div className="flex-1 space-y-1.5">
+                      {breakdown.map(({ star, count }) => (
+                        <div key={star} className="flex items-center gap-2 text-xs">
+                          <span className="w-6 text-right text-gray-600 shrink-0">{star}★</span>
+                          <div className="flex-1 bg-gray-100 rounded-full h-2 overflow-hidden">
+                            <div
+                              className="h-2 bg-yellow-400 rounded-full transition-all"
+                              style={{ width: `${(count / maxCount) * 100}%` }}
+                            />
+                          </div>
+                          <span className="w-4 text-gray-500 shrink-0">{count}</span>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                );
+              })()}
+
+              {/* Write a Review form */}
+              {showReviewForm && (
+                <form onSubmit={submitReview} className="mb-6 p-4 bg-gray-50 rounded-xl border border-gray-200 space-y-3">
+                  <p className="text-sm font-medium text-gray-800">Share your experience</p>
+                  {reviewError && (
+                    <div className="text-sm text-red-600 bg-red-50 border border-red-200 rounded-lg px-3 py-2">
+                      {reviewError}
+                    </div>
+                  )}
+                  {/* Star rating picker */}
+                  <div>
+                    <label className="block text-xs font-medium text-gray-700 mb-1">Your Rating *</label>
+                    <div className="flex items-center gap-1">
+                      {[1, 2, 3, 4, 5].map((star) => (
+                        <button
+                          key={star}
+                          type="button"
+                          onClick={() => setReviewForm((f) => ({ ...f, rating: star }))}
+                          className="p-0.5 focus:outline-none"
+                        >
+                          <Star
+                            className={`w-7 h-7 transition-colors ${
+                              star <= reviewForm.rating
+                                ? "fill-yellow-400 text-yellow-400"
+                                : "fill-gray-200 text-gray-200 hover:fill-yellow-200 hover:text-yellow-300"
+                            }`}
+                          />
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                  <div>
+                    <label className="block text-xs font-medium text-gray-700 mb-1">Your Name *</label>
+                    <input
+                      type="text"
+                      required
+                      value={reviewForm.authorName}
+                      onChange={(e) => setReviewForm((f) => ({ ...f, authorName: e.target.value }))}
+                      className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-purple-400"
+                      placeholder="Full name"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-xs font-medium text-gray-700 mb-1">Review</label>
+                    <textarea
+                      rows={3}
+                      value={reviewForm.comment}
+                      onChange={(e) => setReviewForm((f) => ({ ...f, comment: e.target.value }))}
+                      className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-purple-400 resize-none"
+                      placeholder="Tell others about your experience..."
+                    />
+                  </div>
+                  <button
+                    type="submit"
+                    disabled={reviewSubmitting}
+                    className="w-full bg-purple-600 hover:bg-purple-700 disabled:opacity-60 text-white text-sm font-semibold py-2.5 rounded-lg transition-colors"
+                  >
+                    {reviewSubmitting ? "Submitting..." : "Submit Review"}
+                  </button>
+                  <p className="text-xs text-gray-400 text-center">Your review will appear after admin approval.</p>
+                </form>
+              )}
+
+              {/* Review list */}
+              {vendor.reviews.length === 0 ? (
+                <p className="text-sm text-gray-500 text-center py-4">No reviews yet. Be the first to review!</p>
+              ) : (
                 <div className="space-y-4">
                   {vendor.reviews.map((review) => (
                     <div key={review.id} className="border-b border-gray-100 last:border-0 pb-4 last:pb-0">
@@ -655,6 +831,31 @@ export default function VendorProfilePage({
                       </p>
                     </div>
                   ))}
+                </div>
+              )}
+            </div>
+
+            {/* Map */}
+            {vendor.lat && vendor.lng && (
+              <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100">
+                <h2 className="text-lg font-semibold text-gray-900 mb-4">Map</h2>
+                <VendorSingleMap
+                  lat={vendor.lat}
+                  lng={vendor.lng}
+                  name={vendor.businessName}
+                  city={vendor.city}
+                  country={vendor.country}
+                  phone={vendor.phone}
+                />
+                <div className="mt-3 flex items-start gap-1.5 text-sm text-gray-600">
+                  <MapPin className="w-4 h-4 text-gray-400 mt-0.5 shrink-0" />
+                  <div>
+                    <p className="font-medium">Location</p>
+                    {vendor.city && (
+                      <p className="text-gray-500">{[vendor.city, vendor.country].filter(Boolean).join(", ")}</p>
+                    )}
+                    {vendor.phone && <p className="text-gray-500">{vendor.phone}</p>}
+                  </div>
                 </div>
               </div>
             )}

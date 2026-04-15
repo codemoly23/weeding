@@ -1,6 +1,6 @@
 {
   "version": "1.0",
-  "exportedAt": "2026-04-13T00:00:00.000Z",
+  "exportedAt": "2026-04-15T06:31:58.762Z",
   "colorPalette": {
     "light": {
       "background": "#FDFAF7",
@@ -554,1011 +554,6 @@
   ],
   "pages": [
     {
-      "slug": "home",
-      "name": "Home",
-      "templateType": "HOME",
-      "isSystem": true,
-      "isTemplateActive": true,
-      "metaTitle": "Ceremoney — Your Wedding Planning Partner",
-      "metaDescription": "Plan your perfect wedding with Ceremoney. Beautiful wedding websites, guest management, seating charts, vendor coordination, and more. Start for free.",
-      "blocks": [
-        {
-          "type": "widget-page-sections",
-          "name": "Home Sections",
-          "sortOrder": 0,
-          "isActive": true,
-          "settings": [
-            {
-              "id": "section_hero_wedding",
-              "order": 0,
-              "layout": "1-1",
-              "columns": [
-                {
-                  "id": "col_hero_left",
-                  "widgets": [
-                    {
-                      "id": "widget_hero_content_wedding",
-                      "type": "hero-content",
-                      "settings": {
-                        "badge": {
-                          "show": true,
-                          "icon": "",
-                          "text": "Now planning 500+ beautiful weddings",
-                          "style": "pill",
-                          "bgColor": "#ffffff",
-                          "textColor": "#6B3A4A",
-                          "borderColor": "rgba(190,107,139,0.15)",
-                          "boxShadow": "0 2px 8px rgba(190,107,139,0.08)",
-                          "dot": {
-                            "show": true,
-                            "color": "#BE6B8B"
-                          }
-                        },
-                        "headline": {
-                          "text": "Plan Your\nDream Wedding\nEffortlessly.",
-                          "highlightWords": "Dream Wedding",
-                          "highlightColor": "#BE6B8B",
-                          "underlineWords": "Effortlessly.",
-                          "underlineColor": "#C9A84C",
-                          "size": "2xl",
-                          "customFontSize": "clamp(40px, 5.5vw, 70px)",
-                          "color": "#2C1A1A",
-                          "fontWeight": 700,
-                          "letterSpacing": "-0.03em",
-                          "lineHeight": 1.05
-                        },
-                        "subheadline": {
-                          "text": "Create your wedding website, collect RSVPs, manage your guest list, design seating charts, and coordinate vendors — all in one beautiful place.",
-                          "show": true,
-                          "size": "md",
-                          "color": "#6B5555",
-                          "lineHeight": 1.75,
-                          "maxWidth": 480
-                        },
-                        "features": {
-                          "show": false,
-                          "items": [],
-                          "columns": 3,
-                          "iconColor": "#BE6B8B",
-                          "iconPosition": "left",
-                          "layout": "list"
-                        },
-                        "primaryButton": {
-                          "show": true,
-                          "text": "Start Planning — Free",
-                          "link": "/register",
-                          "openInNewTab": false,
-                          "style": {
-                            "bgColor": "#BE6B8B",
-                            "textColor": "#ffffff",
-                            "borderRadius": 10,
-                            "borderWidth": 0,
-                            "borderColor": "#BE6B8B",
-                            "hoverBgColor": "#A35575",
-                            "hoverShadow": "0 8px 24px rgba(190,107,139,0.35)",
-                            "hoverEffect": "default"
-                          }
-                        },
-                        "secondaryButton": {
-                          "show": true,
-                          "text": "See Pricing",
-                          "link": "/pricing",
-                          "openInNewTab": false,
-                          "style": {
-                            "bgColor": "transparent",
-                            "textColor": "#2C1A1A",
-                            "borderRadius": 10,
-                            "borderWidth": 1.5,
-                            "borderColor": "rgba(44,26,26,0.15)",
-                            "hoverBgColor": "rgba(190,107,139,0.07)",
-                            "hoverBorderColor": "#BE6B8B",
-                            "hoverEffect": "default"
-                          }
-                        },
-                        "trustText": {
-                          "show": false,
-                          "rating": 4.9,
-                          "text": "",
-                          "textColor": "#9ca3af",
-                          "starColor": "#C9A84C"
-                        },
-                        "avatarGroup": {
-                          "show": true,
-                          "avatars": [
-                            {
-                              "id": "av_1",
-                              "initials": "EO",
-                              "color": "#BE6B8B"
-                            },
-                            {
-                              "id": "av_2",
-                              "initials": "SA",
-                              "color": "#8B6B9B"
-                            },
-                            {
-                              "id": "av_3",
-                              "initials": "MF",
-                              "color": "#C9A84C"
-                            },
-                            {
-                              "id": "av_4",
-                              "initials": "AT",
-                              "color": "#BE6B8B"
-                            },
-                            {
-                              "id": "av_5",
-                              "initials": "HE",
-                              "color": "#6B9B8B"
-                            }
-                          ],
-                          "text": "<strong>500+ couples</strong> already planning their perfect day",
-                          "textColor": "#6B5555",
-                          "boldColor": "#2C1A1A"
-                        },
-                        "alignment": "left",
-                        "spacing": {
-                          "badgeToHeadline": 28,
-                          "headlineToSub": 24,
-                          "subToButtons": 36,
-                          "buttonsToProof": 40,
-                          "buttonsGap": 12
-                        },
-                        "colors": {
-                          "useTheme": false
-                        }
-                      }
-                    }
-                  ],
-                  "settings": {
-                    "verticalAlign": "top",
-                    "padding": 0,
-                    "paddingBottom": 80
-                  }
-                },
-                {
-                  "id": "col_hero_right",
-                  "widgets": [
-                    {
-                      "id": "widget_wedding_dashboard",
-                      "type": "custom-html",
-                      "settings": {
-                        "html": "<div class=\"wd-card\"><div class=\"wd-head\"><div class=\"wd-head__title\"><svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\"><path d=\"M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z\"/></svg>Wedding Planner</div><div class=\"wd-live\"><span class=\"wd-live-dot\"></span>Live</div></div><div class=\"wd-couple\"><div class=\"wd-couple__avatars\"><div class=\"wd-avatar\" style=\"background:#BE6B8B\">E</div><div class=\"wd-avatar\" style=\"background:#8B6B9B\">O</div></div><div class=\"wd-couple__info\"><strong>Emma &amp; Oliver</strong><span>Wedding · 14 June 2026</span></div><div class=\"wd-tier\">Premium</div></div><div class=\"wd-stats\"><div class=\"wd-stat\"><strong>142</strong><span>Guests</span></div><div class=\"wd-stat-div\"></div><div class=\"wd-stat\"><strong>89</strong><span>RSVPs</span></div><div class=\"wd-stat-div\"></div><div class=\"wd-stat\"><strong>73</strong><span>Attending</span></div></div><div class=\"wd-progress-wrap\"><div class=\"wd-progress-label\"><span>RSVP Progress</span><span class=\"wd-pct\">63%</span></div><div class=\"wd-progress-track\"><div class=\"wd-progress-fill\" style=\"width:63%\"></div></div></div><div class=\"wd-steps\"><div class=\"wd-step wd-step--done\"><div class=\"wd-step__icon\"><svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"3\"><path d=\"M20 6L9 17l-5-5\"/></svg></div><div class=\"wd-step__line\"></div><div class=\"wd-step__body\"><div class=\"wd-step__name\">Wedding website live</div></div><div class=\"wd-step__badge wd-step__badge--done\">✓ Done</div></div><div class=\"wd-step wd-step--done\"><div class=\"wd-step__icon\"><svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"3\"><path d=\"M20 6L9 17l-5-5\"/></svg></div><div class=\"wd-step__line\"></div><div class=\"wd-step__body\"><div class=\"wd-step__name\">Invitations sent</div></div><div class=\"wd-step__badge wd-step__badge--done\">✓ Done</div></div><div class=\"wd-step wd-step--active\"><div class=\"wd-step__icon\"><svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\"><circle cx=\"12\" cy=\"12\" r=\"10\"/><path d=\"M12 8v4l3 3\"/></svg></div><div class=\"wd-step__line\"></div><div class=\"wd-step__body\"><div class=\"wd-step__name\">Seating chart</div></div><div class=\"wd-step__badge wd-step__badge--active\">In Progress</div></div><div class=\"wd-step wd-step--pending\"><div class=\"wd-step__icon\"></div><div class=\"wd-step__line\" style=\"display:none\"></div><div class=\"wd-step__body\"><div class=\"wd-step__name\">Vendor confirmations</div></div><div class=\"wd-step__badge wd-step__badge--pending\">~2 weeks</div></div></div></div>",
-                        "css": "@keyframes wd-pulse{0%,100%{opacity:1}50%{opacity:.5}}.wd-card{background:#2C1A1A;border-radius:22px 22px 0 0;position:relative;box-shadow:0 24px 64px rgba(44,26,26,0.25);overflow:hidden}.wd-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,#BE6B8B,#C9A84C,rgba(190,107,139,0))}.wd-head{display:flex;align-items:center;justify-content:space-between;padding:18px 22px 14px;border-bottom:1px solid rgba(255,255,255,0.07)}.wd-head__title{display:flex;align-items:center;gap:8px;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1.4px;color:rgba(245,237,232,0.4)}.wd-head__title svg{width:13px;height:13px;opacity:.45}.wd-live{display:flex;align-items:center;gap:6px;font-size:10px;font-weight:700;color:#f9a8d4;text-transform:uppercase;letter-spacing:1px}.wd-live-dot{width:7px;height:7px;border-radius:50%;background:#f9a8d4;animation:wd-pulse 2s ease-in-out infinite;flex-shrink:0}.wd-couple{display:flex;align-items:center;gap:12px;padding:16px 22px;border-bottom:1px solid rgba(255,255,255,0.06)}.wd-couple__avatars{display:flex}.wd-avatar{width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:#fff;border:2px solid #2C1A1A}.wd-avatar:last-child{margin-left:-8px}.wd-couple__info{flex:1}.wd-couple__info strong{display:block;font-size:13px;font-weight:700;color:#f5ede8;line-height:1.2}.wd-couple__info span{font-size:11px;color:rgba(245,237,232,0.4)}.wd-tier{font-size:10px;font-weight:700;padding:3px 9px;border-radius:100px;background:rgba(190,107,139,0.15);color:#f9a8d4;letter-spacing:.3px}.wd-stats{display:flex;align-items:center;padding:14px 22px;gap:0;border-bottom:1px solid rgba(255,255,255,0.06)}.wd-stat{flex:1;text-align:center}.wd-stat strong{display:block;font-size:20px;font-weight:800;color:#f5ede8;letter-spacing:-0.02em;line-height:1.1}.wd-stat span{font-size:10px;color:rgba(245,237,232,0.4);text-transform:uppercase;letter-spacing:.5px;font-weight:600}.wd-stat-div{width:1px;height:28px;background:rgba(255,255,255,0.08);flex-shrink:0}.wd-progress-wrap{padding:14px 22px 10px;border-bottom:1px solid rgba(255,255,255,0.06)}.wd-progress-label{display:flex;justify-content:space-between;font-size:11px;color:rgba(245,237,232,0.4);margin-bottom:8px;font-weight:600;text-transform:uppercase;letter-spacing:.5px}.wd-pct{color:#f9a8d4}.wd-progress-track{height:5px;background:rgba(255,255,255,0.07);border-radius:100px;overflow:hidden}.wd-progress-fill{height:100%;background:linear-gradient(90deg,#BE6B8B,#C9A84C);border-radius:100px}.wd-steps{padding:14px 22px 18px;display:flex;flex-direction:column;gap:0}.wd-step{display:flex;align-items:flex-start;gap:12px}.wd-step__icon{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0}.wd-step__line{width:1px;min-height:18px;flex-shrink:0;margin:3px 0 3px 13px}.wd-step:last-child .wd-step__line{display:none!important}.wd-step--done .wd-step__icon{background:#BE6B8B;border:2px solid #BE6B8B}.wd-step--done .wd-step__icon svg{width:12px;height:12px;color:#fff}.wd-step--done .wd-step__line{background:linear-gradient(to bottom,#BE6B8B,rgba(255,255,255,0.06))}.wd-step--active .wd-step__icon{background:rgba(201,168,76,0.12);border:2px solid #C9A84C}.wd-step--active .wd-step__icon svg{width:12px;height:12px;color:#C9A84C}.wd-step--active .wd-step__line{background:rgba(255,255,255,0.07)}.wd-step--pending .wd-step__icon{background:rgba(255,255,255,0.03);border:1.5px solid rgba(255,255,255,0.1)}.wd-step__body{flex:1;padding-top:4px;padding-bottom:14px}.wd-step__name{font-size:12px;font-weight:600;color:#f5ede8;line-height:1.3}.wd-step--pending .wd-step__name{color:rgba(245,237,232,0.3)}.wd-step__badge{font-size:10px;font-weight:700;padding:2px 8px;border-radius:100px;white-space:nowrap;margin-top:5px;letter-spacing:.3px;align-self:flex-start;flex-shrink:0}.wd-step__badge--done{background:rgba(190,107,139,0.12);color:#f9a8d4}.wd-step__badge--active{background:rgba(201,168,76,0.12);color:#C9A84C;animation:wd-pulse 2s ease-in-out infinite}.wd-step__badge--pending{background:rgba(255,255,255,0.05);color:rgba(245,237,232,0.25)}"
-                      }
-                    },
-                    {
-                      "id": "widget_hero_cta",
-                      "type": "button-group",
-                      "settings": {
-                        "buttons": [
-                          {
-                            "id": "btn_hero_cta",
-                            "text": "Start Planning Free →",
-                            "link": "/register",
-                            "style": {
-                              "bgColor": "#BE6B8B",
-                              "textColor": "#ffffff",
-                              "borderRadius": 0,
-                              "hoverBgColor": "#A35575"
-                            }
-                          }
-                        ],
-                        "layout": "stacked",
-                        "alignment": "center",
-                        "gap": 0
-                      }
-                    }
-                  ],
-                  "settings": {
-                    "verticalAlign": "bottom",
-                    "padding": 0
-                  }
-                }
-              ],
-              "settings": {
-                "fullWidth": true,
-                "background": {
-                  "type": "solid",
-                  "color": "#FDFAF7"
-                },
-                "paddingTop": 80,
-                "paddingBottom": 0,
-                "paddingLeft": 28,
-                "paddingRight": 28,
-                "marginTop": 0,
-                "marginBottom": 0,
-                "gap": 64,
-                "maxWidth": "xl",
-                "isVisible": true,
-                "visibleOnMobile": true,
-                "visibleOnDesktop": true,
-                "customCSS": "@media (min-width: 1024px) { & .grid { grid-template-columns: 1fr 400px; } }"
-              }
-            },
-            {
-              "id": "section_stats_wedding",
-              "order": 1,
-              "layout": "1-1",
-              "columns": [
-                {
-                  "id": "col_stats_left",
-                  "widgets": [
-                    {
-                      "id": "widget_stats_heading",
-                      "type": "heading",
-                      "settings": {
-                        "content": {
-                          "text": "Numbers that tell\nour love story",
-                          "htmlTag": "h2",
-                          "highlight": {
-                            "enabled": true,
-                            "words": "love story",
-                            "style": "color"
-                          }
-                        },
-                        "style": {
-                          "alignment": "left",
-                          "typography": {
-                            "fontFamily": "Cormorant Garamond",
-                            "fontSize": 48,
-                            "fontSizeUnit": "px",
-                            "fontWeight": 700,
-                            "fontStyle": "normal",
-                            "textTransform": "none",
-                            "lineHeight": 1.15,
-                            "letterSpacing": -0.02,
-                            "letterSpacingUnit": "em"
-                          },
-                          "textFill": {
-                            "type": "solid",
-                            "color": "#F5EDE8"
-                          },
-                          "highlightStyle": {
-                            "color": "#C9A84C"
-                          }
-                        }
-                      },
-                      "spacing": {
-                        "marginBottom": 20
-                      }
-                    },
-                    {
-                      "id": "widget_stats_text",
-                      "type": "text-block",
-                      "settings": {
-                        "content": "<p>We've helped hundreds of couples across Sweden and beyond plan the wedding of their dreams — from the first RSVP to the last dance.</p>",
-                        "typography": {
-                          "fontSize": 16,
-                          "lineHeight": 1.75,
-                          "color": "rgba(245,237,232,0.55)",
-                          "linkColor": "#C9A84C"
-                        }
-                      },
-                      "spacing": {
-                        "marginBottom": 32
-                      }
-                    },
-                    {
-                      "id": "widget_stats_cta",
-                      "type": "button-group",
-                      "settings": {
-                        "buttons": [
-                          {
-                            "id": "btn_stats_start",
-                            "text": "Start Planning Free",
-                            "link": "/register",
-                            "openInNewTab": false,
-                            "style": {
-                              "bgColor": "#BE6B8B",
-                              "textColor": "#ffffff",
-                              "borderRadius": 10,
-                              "borderWidth": 0,
-                              "hoverBgColor": "#A35575",
-                              "hoverShadow": "0 8px 24px rgba(190,107,139,0.35)",
-                              "hoverEffect": "shadow-lift"
-                            }
-                          }
-                        ],
-                        "alignment": "left",
-                        "layout": "horizontal",
-                        "gap": 12
-                      }
-                    }
-                  ],
-                  "settings": {
-                    "verticalAlign": "center",
-                    "padding": 0
-                  }
-                },
-                {
-                  "id": "col_stats_right",
-                  "widgets": [
-                    {
-                      "id": "widget_stats_grid",
-                      "type": "stats-section",
-                      "settings": {
-                        "variant": "card-grid",
-                        "stats": [
-                          {
-                            "id": "stat_couples",
-                            "value": "500",
-                            "label": "Couples Planning",
-                            "suffix": "+",
-                            "animate": true
-                          },
-                          {
-                            "id": "stat_guests",
-                            "value": "45000",
-                            "label": "Guests Managed",
-                            "suffix": "+",
-                            "animate": true
-                          },
-                          {
-                            "id": "stat_rating",
-                            "value": "4.9",
-                            "label": "Avg. Rating",
-                            "suffix": "★",
-                            "animate": true
-                          },
-                          {
-                            "id": "stat_free",
-                            "value": "0",
-                            "label": "Cost to Start",
-                            "suffix": " SEK",
-                            "animate": false
-                          }
-                        ],
-                        "columns": 2,
-                        "style": {
-                          "valueColor": "#F5EDE8",
-                          "labelColor": "rgba(245,237,232,0.45)",
-                          "valueSize": "xl",
-                          "divider": false,
-                          "suffixColor": "#C9A84C",
-                          "customValueFontSize": "44px",
-                          "valueFontWeight": 800,
-                          "valueLetterSpacing": "-0.03em",
-                          "valueLineHeight": 1,
-                          "customLabelFontSize": "12px",
-                          "labelFontWeight": 500,
-                          "labelLetterSpacing": "0.3px"
-                        },
-                        "cardGrid": {
-                          "borderRadius": 20,
-                          "gridGap": 1,
-                          "gridLineColor": "rgba(255,255,255,0.07)",
-                          "cellBackground": "rgba(255,255,255,0.04)",
-                          "cellPadding": "28px 24px",
-                          "valueFontWeight": 800,
-                          "valueFontSize": 44,
-                          "valueLetterSpacing": "-0.03em",
-                          "labelFontSize": 12,
-                          "labelFontWeight": 500,
-                          "labelLetterSpacing": "0.3px",
-                          "labelMarginTop": 8
-                        },
-                        "centered": false,
-                        "animateOnScroll": true,
-                        "colors": {
-                          "useTheme": false
-                        }
-                      }
-                    }
-                  ],
-                  "settings": {
-                    "verticalAlign": "center",
-                    "padding": 0
-                  }
-                }
-              ],
-              "settings": {
-                "fullWidth": true,
-                "background": {
-                  "type": "solid",
-                  "color": "#2C1A1A"
-                },
-                "paddingTop": 80,
-                "paddingBottom": 80,
-                "paddingLeft": 28,
-                "paddingRight": 28,
-                "marginTop": 0,
-                "marginBottom": 0,
-                "gap": 64,
-                "maxWidth": "xl",
-                "isVisible": true,
-                "visibleOnMobile": true,
-                "visibleOnDesktop": true,
-                "watermark": {
-                  "enabled": true,
-                  "text": "♡",
-                  "position": "right",
-                  "fontSize": 320,
-                  "fontWeight": 900,
-                  "color": "#ffffff",
-                  "opacity": 0.02,
-                  "rotation": 0,
-                  "offsetX": 0,
-                  "offsetY": 0
-                }
-              }
-            },
-            {
-              "id": "section_process_wedding",
-              "order": 2,
-              "layout": "1",
-              "columns": [
-                {
-                  "id": "col_process",
-                  "widgets": [
-                    {
-                      "id": "widget_process_wedding",
-                      "type": "process-steps",
-                      "settings": {
-                        "header": {
-                          "show": true,
-                          "badge": {
-                            "show": true,
-                            "text": "How It Works",
-                            "style": "outline",
-                            "bgColor": "transparent",
-                            "textColor": "#BE6B8B",
-                            "borderColor": "transparent",
-                            "customFontSize": "12px",
-                            "fontWeight": 700,
-                            "letterSpacing": "1.5px",
-                            "textTransform": "uppercase"
-                          },
-                          "heading": {
-                            "text": "Your perfect wedding\nin 4 simple steps",
-                            "highlightWords": "",
-                            "highlightColor": "",
-                            "size": "xl",
-                            "color": "#2C1A1A",
-                            "customFontSize": "clamp(28px, 3.5vw, 44px)",
-                            "fontWeight": 700,
-                            "lineHeight": 1.2,
-                            "letterSpacing": "-0.02em"
-                          },
-                          "description": {
-                            "show": false,
-                            "text": "",
-                            "size": "md",
-                            "color": "#64748b"
-                          },
-                          "alignment": "center",
-                          "marginBottom": 60
-                        },
-                        "steps": [
-                          {
-                            "id": "step_1",
-                            "icon": "UserPlus",
-                            "title": "Create Your Account",
-                            "description": "Sign up free in under a minute. No credit card required. Your wedding planning journey starts immediately."
-                          },
-                          {
-                            "id": "step_2",
-                            "icon": "Globe",
-                            "title": "Build Your Wedding Website",
-                            "description": "Choose an elegant template, customize your colors, upload photos, and add your story. Live in minutes."
-                          },
-                          {
-                            "id": "step_3",
-                            "icon": "Mail",
-                            "title": "Invite Guests & Collect RSVPs",
-                            "description": "Share your website link. Guests RSVP directly online — tracking attendance, dietary needs, and plus-ones automatically."
-                          },
-                          {
-                            "id": "step_4",
-                            "icon": "Heart",
-                            "title": "Celebrate Your Perfect Day",
-                            "description": "Manage your seating chart, coordinate vendors, and enjoy every moment — Ceremoney handles the organization."
-                          }
-                        ],
-                        "layout": {
-                          "type": "horizontal",
-                          "columns": 4,
-                          "gap": 0
-                        },
-                        "connector": {
-                          "show": true,
-                          "style": "dashed",
-                          "color": "rgba(190,107,139,0.3)"
-                        },
-                        "stepStyle": {
-                          "numberStyle": "circle-filled",
-                          "numberBgColor": "#BE6B8B",
-                          "numberTextColor": "#ffffff",
-                          "numberSize": 48,
-                          "iconSize": 22,
-                          "titleColor": "#2C1A1A",
-                          "descColor": "#6B5555"
-                        }
-                      }
-                    }
-                  ],
-                  "settings": {
-                    "verticalAlign": "top",
-                    "padding": 0
-                  }
-                }
-              ],
-              "settings": {
-                "fullWidth": true,
-                "background": {
-                  "type": "solid",
-                  "color": "#FDFAF7"
-                },
-                "paddingTop": 96,
-                "paddingBottom": 96,
-                "paddingLeft": 28,
-                "paddingRight": 28,
-                "marginTop": 0,
-                "marginBottom": 0,
-                "gap": 0,
-                "maxWidth": "xl",
-                "isVisible": true,
-                "visibleOnMobile": true,
-                "visibleOnDesktop": true
-              }
-            },
-            {
-              "id": "section_features_wedding",
-              "order": 3,
-              "layout": "1",
-              "columns": [
-                {
-                  "id": "col_features",
-                  "widgets": [
-                    {
-                      "id": "widget_service_list_wedding",
-                      "type": "service-list",
-                      "settings": {
-                        "header": {
-                          "show": true,
-                          "badge": {
-                            "show": true,
-                            "text": "Our Plans",
-                            "style": "pill",
-                            "bgColor": "rgba(190,107,139,0.1)",
-                            "textColor": "#BE6B8B",
-                            "borderColor": "transparent"
-                          },
-                          "heading": {
-                            "text": "Everything you need,\nnothing you don't",
-                            "size": "xl",
-                            "color": "#F5EDE8",
-                            "customFontSize": "clamp(28px, 3.5vw, 44px)",
-                            "fontWeight": 700,
-                            "lineHeight": 1.2,
-                            "letterSpacing": "-0.02em"
-                          },
-                          "description": {
-                            "show": true,
-                            "text": "Start free. Upgrade when you need more. Cancel anytime.",
-                            "size": "md",
-                            "color": "rgba(245,237,232,0.55)"
-                          },
-                          "alignment": "center",
-                          "marginBottom": 48
-                        },
-                        "dataSource": {
-                          "type": "category",
-                          "categorySlug": "planning",
-                          "limit": 3
-                        },
-                        "layout": {
-                          "type": "grid",
-                          "columns": 3,
-                          "gap": 24
-                        },
-                        "cardStyle": {
-                          "variant": "default",
-                          "borderRadius": 20,
-                          "borderWidth": 1,
-                          "borderColor": "rgba(245,237,232,0.08)",
-                          "backgroundColor": "rgba(255,255,255,0.04)",
-                          "shadow": "sm",
-                          "padding": 28,
-                          "hoverEffect": "lift"
-                        },
-                        "colors": {
-                          "useTheme": true
-                        }
-                      }
-                    }
-                  ],
-                  "settings": {
-                    "verticalAlign": "top",
-                    "padding": 0
-                  }
-                }
-              ],
-              "settings": {
-                "fullWidth": true,
-                "background": {
-                  "type": "solid",
-                  "color": "#2C1A1A"
-                },
-                "paddingTop": 96,
-                "paddingBottom": 96,
-                "paddingLeft": 28,
-                "paddingRight": 28,
-                "marginTop": 0,
-                "marginBottom": 0,
-                "gap": 0,
-                "maxWidth": "xl",
-                "isVisible": true,
-                "visibleOnMobile": true,
-                "visibleOnDesktop": true
-              }
-            },
-            {
-              "id": "section_testimonials_wedding",
-              "order": 4,
-              "layout": "1",
-              "columns": [
-                {
-                  "id": "col_testimonials",
-                  "widgets": [
-                    {
-                      "id": "widget_testimonials_wedding",
-                      "type": "testimonials-carousel",
-                      "settings": {
-                        "header": {
-                          "show": true,
-                          "badge": {
-                            "show": true,
-                            "text": "Happy Couples",
-                            "style": "pill",
-                            "bgColor": "transparent",
-                            "textColor": "#BE6B8B",
-                            "borderColor": "transparent",
-                            "customFontSize": "12px",
-                            "fontWeight": 700,
-                            "letterSpacing": "1.5px",
-                            "textTransform": "uppercase"
-                          },
-                          "heading": {
-                            "text": "Loved by couples\nacross Sweden",
-                            "highlightWords": "",
-                            "highlightColor": "#BE6B8B",
-                            "size": "xl",
-                            "color": "#2C1A1A",
-                            "customFontSize": "clamp(26px, 3vw, 40px)",
-                            "fontWeight": 700,
-                            "lineHeight": 1.15,
-                            "letterSpacing": "-0.02em"
-                          },
-                          "description": {
-                            "show": true,
-                            "text": "Real stories from real couples who planned their dream wedding with Ceremoney.",
-                            "size": "md",
-                            "color": "#6B5555",
-                            "customFontSize": "15px",
-                            "lineHeight": 1.7
-                          },
-                          "alignment": "space-between",
-                          "marginBottom": 48
-                        },
-                        "viewMode": "carousel",
-                        "testimonialType": "photo",
-                        "dataSource": {
-                          "limit": 6,
-                          "sortBy": "sort-order",
-                          "testimonialType": "all"
-                        },
-                        "carouselView": {
-                          "layout": "rail",
-                          "effect": "slide",
-                          "autoplay": true,
-                          "autoplayDelay": 5000,
-                          "loop": true,
-                          "slidesPerView": 3,
-                          "spaceBetween": 24,
-                          "navigation": {
-                            "arrows": {
-                              "enabled": false
-                            },
-                            "pagination": {
-                              "enabled": true,
-                              "type": "dots",
-                              "activeColor": "#BE6B8B",
-                              "inactiveColor": "rgba(190,107,139,0.2)"
-                            }
-                          }
-                        },
-                        "cardStyle": {
-                          "style": "minimal",
-                          "borderRadius": 16,
-                          "borderWidth": 1,
-                          "borderColor": "rgba(190,107,139,0.12)",
-                          "backgroundColor": "rgba(190,107,139,0.03)",
-                          "shadow": "none",
-                          "padding": 28,
-                          "hoverEffect": "lift"
-                        },
-                        "avatar": {
-                          "style": "initials",
-                          "shape": "circle",
-                          "size": "lg",
-                          "borderWidth": 2,
-                          "borderColor": "rgba(190,107,139,0.2)",
-                          "backgroundColor": "rgba(190,107,139,0.8)",
-                          "textColor": "#ffffff"
-                        },
-                        "content": {
-                          "showRating": true,
-                          "ratingStyle": "stars",
-                          "ratingColor": "#C9A84C",
-                          "showCompany": false,
-                          "showCountry": true,
-                          "countryFlag": true,
-                          "quoteMaxLines": 0,
-                          "quoteFontSize": "md",
-                          "quoteColor": "#6B5555",
-                          "quoteStyle": "normal",
-                          "nameFontSize": "md",
-                          "nameColor": "#2C1A1A",
-                          "nameFontWeight": "bold",
-                          "infoColor": "#8C6E6E",
-                          "infoFontSize": "sm"
-                        },
-                        "trustFooter": {
-                          "show": false
-                        },
-                        "animation": {
-                          "enabled": true,
-                          "entrance": "fade",
-                          "staggerDelay": 100,
-                          "duration": 500
-                        },
-                        "responsive": {
-                          "tablet": {
-                            "columns": 2,
-                            "slidesPerView": 2
-                          },
-                          "mobile": {
-                            "columns": 1,
-                            "slidesPerView": 1
-                          }
-                        }
-                      }
-                    }
-                  ],
-                  "settings": {
-                    "verticalAlign": "top",
-                    "padding": 0
-                  }
-                }
-              ],
-              "settings": {
-                "fullWidth": true,
-                "background": {
-                  "type": "solid",
-                  "color": "#FDFAF7"
-                },
-                "paddingTop": 96,
-                "paddingBottom": 96,
-                "paddingLeft": 28,
-                "paddingRight": 28,
-                "marginTop": 0,
-                "marginBottom": 0,
-                "maxWidth": "xl",
-                "gap": 0,
-                "isVisible": true,
-                "visibleOnMobile": true,
-                "visibleOnDesktop": true
-              }
-            },
-            {
-              "id": "section_pricing_wedding",
-              "order": 5,
-              "layout": "1",
-              "columns": [
-                {
-                  "id": "col_pricing",
-                  "widgets": [
-                    {
-                      "id": "widget_pricing_wedding",
-                      "type": "pricing-table",
-                      "settings": {
-                        "viewMode": "cards",
-                        "cardStyle": {
-                          "cardVariant": "forge",
-                          "columns": 3,
-                          "gap": 24,
-                          "borderRadius": 20,
-                          "borderWidth": 1.5,
-                          "borderColor": "rgba(190,107,139,0.12)",
-                          "shadow": "sm",
-                          "padding": 32,
-                          "popularBorderColor": "#BE6B8B",
-                          "popularBadgeBgColor": "#BE6B8B",
-                          "popularBadgeTextColor": "#ffffff"
-                        },
-                        "header": {
-                          "show": true,
-                          "badge": {
-                            "show": true,
-                            "text": "Pricing",
-                            "style": "pill",
-                            "bgColor": "rgba(190,107,139,0.1)",
-                            "textColor": "#BE6B8B",
-                            "borderColor": "transparent"
-                          },
-                          "heading": {
-                            "text": "Simple, transparent pricing",
-                            "size": "xl",
-                            "color": "#2C1A1A"
-                          },
-                          "description": {
-                            "show": true,
-                            "text": "Start free. Upgrade when you need more. Cancel anytime — no long-term commitment.",
-                            "size": "md",
-                            "color": "#6B5555"
-                          },
-                          "alignment": "center",
-                          "marginBottom": 48
-                        },
-                        "dataSource": {
-                          "type": "service",
-                          "mode": "manual",
-                          "serviceSlug": "premium-wedding-package"
-                        },
-                        "stateFee": {
-                          "enabled": false
-                        },
-                        "orderSummary": {
-                          "enabled": false
-                        },
-                        "forgeCardOverrides": [
-                          {
-                            "packageIndex": 0,
-                            "tierLabel": "BASIC",
-                            "tagline": "Everything you need to get started — completely free",
-                            "buttonVariant": "outline-dark",
-                            "priceNote": "No credit card required · Free forever"
-                          },
-                          {
-                            "packageIndex": 1,
-                            "tierLabel": "PREMIUM",
-                            "tagline": "Unlimited guests, seating chart, custom domain, PDF export",
-                            "savingsText": "Most popular choice",
-                            "buttonVariant": "forest",
-                            "priceNote": "299 SEK/mo · Cancel anytime · No hidden fees"
-                          },
-                          {
-                            "packageIndex": 2,
-                            "tierLabel": "ELITE",
-                            "tagline": "Stationery, QR scanning, collaborators, SMS credits",
-                            "savingsText": "Complete experience",
-                            "buttonVariant": "coral",
-                            "priceNote": "499 SEK/mo · Priority support · All features included"
-                          }
-                        ]
-                      }
-                    }
-                  ],
-                  "settings": {
-                    "verticalAlign": "top",
-                    "padding": 0
-                  }
-                }
-              ],
-              "settings": {
-                "fullWidth": true,
-                "background": {
-                  "type": "solid",
-                  "color": "#FDFAF7"
-                },
-                "paddingTop": 96,
-                "paddingBottom": 96,
-                "paddingLeft": 28,
-                "paddingRight": 28,
-                "marginTop": 0,
-                "marginBottom": 0,
-                "maxWidth": "xl",
-                "gap": 0,
-                "isVisible": true,
-                "visibleOnMobile": true,
-                "visibleOnDesktop": true
-              }
-            },
-            {
-              "id": "section_faq_wedding",
-              "order": 6,
-              "layout": "1",
-              "columns": [
-                {
-                  "id": "col_faq",
-                  "widgets": [
-                    {
-                      "id": "widget_faq_wedding",
-                      "type": "faq-section",
-                      "settings": {
-                        "header": {
-                          "show": true,
-                          "badge": {
-                            "show": true,
-                            "text": "FAQ",
-                            "style": "pill",
-                            "bgColor": "rgba(190,107,139,0.1)",
-                            "textColor": "#BE6B8B",
-                            "borderColor": "transparent"
-                          },
-                          "heading": {
-                            "text": "Frequently asked questions",
-                            "size": "xl",
-                            "color": "#2C1A1A",
-                            "customFontSize": "clamp(24px, 3vw, 38px)",
-                            "fontWeight": 700,
-                            "lineHeight": 1.2,
-                            "letterSpacing": "-0.02em"
-                          },
-                          "description": {
-                            "show": true,
-                            "text": "Everything you need to know about Ceremoney.",
-                            "size": "md",
-                            "color": "#6B5555"
-                          },
-                          "alignment": "center",
-                          "marginBottom": 48
-                        },
-                        "dataSource": {
-                          "limit": 8,
-                          "sortBy": "sort-order"
-                        },
-                        "layout": {
-                          "columns": 1,
-                          "gap": 0
-                        },
-                        "style": {
-                          "variant": "bordered",
-                          "borderColor": "rgba(190,107,139,0.15)",
-                          "backgroundColor": "transparent",
-                          "activeBackgroundColor": "rgba(190,107,139,0.04)",
-                          "questionColor": "#2C1A1A",
-                          "answerColor": "#6B5555",
-                          "iconColor": "#BE6B8B",
-                          "questionFontWeight": 600,
-                          "borderRadius": 12
-                        },
-                        "colors": {
-                          "useTheme": false
-                        }
-                      }
-                    }
-                  ],
-                  "settings": {
-                    "verticalAlign": "top",
-                    "padding": 0
-                  }
-                }
-              ],
-              "settings": {
-                "fullWidth": true,
-                "background": {
-                  "type": "solid",
-                  "color": "#F5EDE8"
-                },
-                "paddingTop": 96,
-                "paddingBottom": 96,
-                "paddingLeft": 28,
-                "paddingRight": 28,
-                "marginTop": 0,
-                "marginBottom": 0,
-                "maxWidth": "xl",
-                "gap": 0,
-                "isVisible": true,
-                "visibleOnMobile": true,
-                "visibleOnDesktop": true
-              }
-            }
-          ]
-        }
-      ]
-    },
-    {
       "slug": "services",
       "name": "Services",
       "templateType": "SERVICES_LIST",
@@ -1681,6 +676,1416 @@
           "sortOrder": 0,
           "isActive": true,
           "settings": []
+        }
+      ]
+    },
+    {
+      "slug": "home",
+      "name": "Home",
+      "templateType": "HOME",
+      "isSystem": true,
+      "isTemplateActive": true,
+      "metaTitle": "Ceremoney — Your Wedding Planning Partner",
+      "metaDescription": "Plan your perfect wedding with Ceremoney. Beautiful wedding websites, guest management, seating charts, vendor coordination, and more. Start for free.",
+      "blocks": [
+        {
+          "type": "widget-page-sections",
+          "name": "Home Sections",
+          "sortOrder": 0,
+          "isActive": true,
+          "settings": [
+            {
+              "id": "section_1776226584183_udn1a9emg",
+              "order": 0,
+              "layout": "1",
+              "columns": [
+                {
+                  "id": "col_1776226584183_kc1hpqt3l",
+                  "widgets": [
+                    {
+                      "id": "widget_1776226591887_wzce8gprg",
+                      "type": "top-utility-bar",
+                      "settings": {
+                        "gap": 24,
+                        "links": [
+                          {
+                            "id": "link-1",
+                            "href": "/vendor/register",
+                            "icon": "ShoppingCart",
+                            "label": "ARE YOU A VENDOR?",
+                            "showIcon": true
+                          },
+                          {
+                            "id": "link-2",
+                            "href": "vendor/dashboard",
+                            "icon": "",
+                            "label": "Log in",
+                            "showIcon": false
+                          },
+                          {
+                            "id": "link-3",
+                            "href": "/register",
+                            "icon": "",
+                            "label": "Join now",
+                            "showIcon": false
+                          }
+                        ],
+                        "height": 40,
+                        "fontSize": 14,
+                        "paddingX": 32,
+                        "textColor": "#ffffff",
+                        "gradientTo": "#ec4899",
+                        "hoverColor": "#e9d5ff",
+                        "gradientFrom": "#9333ea",
+                        "gradientAngle": 90,
+                        "showBorderBottom": true,
+                        "borderBottomColor": "#7e22ce"
+                      }
+                    }
+                  ],
+                  "settings": {
+                    "padding": 0,
+                    "verticalAlign": "top"
+                  }
+                }
+              ],
+              "settings": {
+                "gap": 32,
+                "maxWidth": "full",
+                "fullWidth": true,
+                "isVisible": true,
+                "marginTop": 0,
+                "background": {
+                  "type": "solid",
+                  "color": "#ffffff",
+                  "image": {
+                    "url": "",
+                    "size": "cover",
+                    "fixed": false,
+                    "repeat": "no-repeat",
+                    "position": "center"
+                  },
+                  "video": {
+                    "url": "",
+                    "loop": true,
+                    "muted": true
+                  },
+                  "overlay": {
+                    "color": "#000000",
+                    "enabled": false,
+                    "opacity": 0.5
+                  },
+                  "gradient": {
+                    "type": "linear",
+                    "angle": 180,
+                    "colors": [
+                      {
+                        "color": "#1e293b",
+                        "position": 0
+                      },
+                      {
+                        "color": "#0f172a",
+                        "position": 100
+                      }
+                    ]
+                  },
+                  "patternOverlay": {
+                    "type": "dots",
+                    "color": "#ffffff",
+                    "opacity": 0.1
+                  }
+                },
+                "paddingTop": 0,
+                "paddingLeft": 16,
+                "borderRadius": 0,
+                "marginBottom": 0,
+                "paddingRight": 16,
+                "paddingBottom": 0,
+                "visibleOnMobile": true,
+                "visibleOnDesktop": true
+              }
+            },
+            {
+              "id": "section_1776226595102_xlxhp1nvp",
+              "order": 1,
+              "layout": "1",
+              "columns": [
+                {
+                  "id": "col_1776226595102_dpk9m9atb",
+                  "widgets": [
+                    {
+                      "id": "widget_1776226600462_sab1xugsg",
+                      "type": "event-search-hero",
+                      "settings": {
+                        "title": "Plan Your Perfect Event",
+                        "subtitle": "Discover amazing venues, connect with top vendors, and create unforgettable celebrations",
+                        "dateLabel": "Date",
+                        "eventTypes": [
+                          {
+                            "label": "Wedding",
+                            "value": "wedding"
+                          },
+                          {
+                            "label": "Birthday Party",
+                            "value": "birthday"
+                          },
+                          {
+                            "label": "Corporate Event",
+                            "value": "corporate"
+                          },
+                          {
+                            "label": "Anniversary",
+                            "value": "anniversary"
+                          },
+                          {
+                            "label": "Baptism",
+                            "value": "baptism"
+                          },
+                          {
+                            "label": "Other",
+                            "value": "other"
+                          }
+                        ],
+                        "locationLabel": "Location",
+                        "showDateField": true,
+                        "eventTypeLabel": "Event Type",
+                        "autoplayInterval": 5000,
+                        "backgroundImages": [
+                          "/hero/1776226659493-venue.jpg",
+                          "/hero/1776226667092-wedding1.jpeg",
+                          "/hero/1776226674636-flowers.jpg"
+                        ],
+                        "searchButtonHref": "/vendors",
+                        "overlayOpacityTop": 0.5,
+                        "searchButtonLabel": "Search Events",
+                        "showLocationField": true,
+                        "showEventTypeField": true,
+                        "locationPlaceholder": "Enter city or venue",
+                        "overlayOpacityBottom": 0.3
+                      }
+                    }
+                  ],
+                  "settings": {
+                    "padding": 0,
+                    "verticalAlign": "top"
+                  }
+                }
+              ],
+              "settings": {
+                "gap": 32,
+                "maxWidth": "full",
+                "fullWidth": true,
+                "isVisible": true,
+                "marginTop": 0,
+                "background": {
+                  "type": "solid",
+                  "color": "#ffffff",
+                  "image": {
+                    "url": "",
+                    "size": "cover",
+                    "fixed": false,
+                    "repeat": "no-repeat",
+                    "position": "center"
+                  },
+                  "video": {
+                    "url": "",
+                    "loop": true,
+                    "muted": true
+                  },
+                  "overlay": {
+                    "color": "#000000",
+                    "enabled": false,
+                    "opacity": 0.5
+                  },
+                  "gradient": {
+                    "type": "linear",
+                    "angle": 180,
+                    "colors": [
+                      {
+                        "color": "#1e293b",
+                        "position": 0
+                      },
+                      {
+                        "color": "#0f172a",
+                        "position": 100
+                      }
+                    ]
+                  },
+                  "patternOverlay": {
+                    "type": "dots",
+                    "color": "#ffffff",
+                    "opacity": 0.1
+                  }
+                },
+                "paddingTop": 64,
+                "paddingLeft": 16,
+                "borderRadius": 0,
+                "marginBottom": 0,
+                "paddingRight": 16,
+                "paddingBottom": 64,
+                "visibleOnMobile": true,
+                "visibleOnDesktop": true
+              }
+            },
+            {
+              "id": "section_1776226399546_ykgm9xlbm",
+              "order": 2,
+              "layout": "1",
+              "columns": [
+                {
+                  "id": "col_1776226399546_v3dajktkc",
+                  "widgets": [
+                    {
+                      "id": "widget_1776226403441_4ghnb96v0",
+                      "type": "event-gallery-grid",
+                      "settings": {
+                        "badge": {
+                          "icon": "Camera",
+                          "show": true,
+                          "text": "Real Event Inspiration"
+                        },
+                        "items": [
+                          {
+                            "id": "1",
+                            "date": "March 15, 2026",
+                            "href": "/planner/new",
+                            "type": "Birthday",
+                            "image": "https://images.unsplash.com/photo-1530103862676-de8c9debad1d?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&w=800&q=80",
+                            "title": "Sarah's 30th Birthday Bash",
+                            "views": 1243,
+                            "location": "Los Angeles, CA"
+                          },
+                          {
+                            "id": "2",
+                            "date": "June 20, 2026",
+                            "href": "/planner/new",
+                            "type": "Wedding",
+                            "image": "https://images.unsplash.com/photo-1519741497674-611481863552?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&w=800&q=80",
+                            "title": "Emma & James Wedding",
+                            "views": 2567,
+                            "location": "Miami, FL"
+                          },
+                          {
+                            "id": "3",
+                            "date": "April 8, 2026",
+                            "href": "/planner/new",
+                            "type": "Corporate",
+                            "image": "https://images.unsplash.com/photo-1511578314322-379afb476865?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&w=800&q=80",
+                            "title": "Tech Corp Annual Summit",
+                            "views": 892,
+                            "location": "New York, NY"
+                          },
+                          {
+                            "id": "1776226413162",
+                            "date": "June15,2026",
+                            "href": "/planner/new",
+                            "type": "Birhtday",
+                            "image": "/hero/1776226428603-wedding1.jpeg",
+                            "title": "John's 20th Birthday Bash",
+                            "views": 1250,
+                            "location": "New York, NY"
+                          }
+                        ],
+                        "title": "Get Inspired by Real Events",
+                        "columns": 3,
+                        "ctaHref": "/events",
+                        "showCta": true,
+                        "ctaLabel": "View More Events",
+                        "subtitle": "Explore stunning celebrations from our community and find ideas for your next event",
+                        "container": {
+                          "shadow": "none",
+                          "padding": 0,
+                          "borderWidth": 2,
+                          "borderRadius": 0,
+                          "backgroundType": "solid",
+                          "gradientBorder": {
+                            "angle": 135,
+                            "colors": [
+                              "#ec4899",
+                              "#8b5cf6"
+                            ],
+                            "enabled": false
+                          }
+                        },
+                        "sectionBg": "linear-gradient(to bottom, #faf5ff, #ffffff)",
+                        "cardBadgeTo": "#ec4899",
+                        "cardBadgeFrom": "#9333ea",
+                        "ctaGradientTo": "#ec4899",
+                        "ctaGradientFrom": "#9333ea",
+                        "planSimilarHref": "",
+                        "planSimilarLabel": "Plan Similar"
+                      }
+                    }
+                  ],
+                  "settings": {
+                    "padding": 0,
+                    "verticalAlign": "top"
+                  }
+                }
+              ],
+              "settings": {
+                "gap": 32,
+                "maxWidth": "full",
+                "fullWidth": true,
+                "isVisible": true,
+                "marginTop": 0,
+                "background": {
+                  "type": "solid",
+                  "color": "#ffffff",
+                  "image": {
+                    "url": "",
+                    "size": "cover",
+                    "fixed": false,
+                    "repeat": "no-repeat",
+                    "position": "center"
+                  },
+                  "video": {
+                    "url": "",
+                    "loop": true,
+                    "muted": true
+                  },
+                  "overlay": {
+                    "color": "#000000",
+                    "enabled": false,
+                    "opacity": 0.5
+                  },
+                  "gradient": {
+                    "type": "linear",
+                    "angle": 180,
+                    "colors": [
+                      {
+                        "color": "#1e293b",
+                        "position": 0
+                      },
+                      {
+                        "color": "#0f172a",
+                        "position": 100
+                      }
+                    ]
+                  },
+                  "patternOverlay": {
+                    "type": "dots",
+                    "color": "#ffffff",
+                    "opacity": 0.1
+                  }
+                },
+                "paddingTop": 64,
+                "paddingLeft": 16,
+                "borderRadius": 0,
+                "marginBottom": 0,
+                "paddingRight": 16,
+                "paddingBottom": 64,
+                "visibleOnMobile": true,
+                "visibleOnDesktop": true
+              }
+            },
+            {
+              "id": "section_1776226722993_byl2zt2hq",
+              "order": 3,
+              "layout": "1",
+              "columns": [
+                {
+                  "id": "col_1776226722993_5olt4jbgf",
+                  "widgets": [
+                    {
+                      "id": "widget_1776226768706_rtnrhbyu5",
+                      "type": "event-categories-grid",
+                      "spacing": {
+                        "marginTop": -100,
+                        "marginBottom": 0
+                      },
+                      "settings": {
+                        "gap": 24,
+                        "badge": {
+                          "show": true,
+                          "text": "Event Categories"
+                        },
+                        "title": "Popular Event Types",
+                        "subtitle": "Find the perfect planning resources for any celebration",
+                        "cardHeight": 280,
+                        "categories": [
+                          {
+                            "id": "cat_1",
+                            "href": "/planner/new?type=wedding",
+                            "image": "https://images.unsplash.com/photo-1519741497674-611481863552?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&w=800&q=80",
+                            "title": "Weddings",
+                            "subtitle": "Plan your dream wedding"
+                          },
+                          {
+                            "id": "cat_2",
+                            "href": "/planner/new?type=birthday",
+                            "image": "https://images.unsplash.com/photo-1530103862676-de8c9debad1d?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&w=800&q=80",
+                            "title": "Birthday Parties",
+                            "subtitle": "Celebrate in style"
+                          },
+                          {
+                            "id": "cat_3",
+                            "href": "/planner/new?type=corporate",
+                            "image": "https://images.unsplash.com/photo-1511578314322-379afb476865?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&w=800&q=80",
+                            "title": "Corporate Events",
+                            "subtitle": "Professional gatherings"
+                          },
+                          {
+                            "id": "cat_4",
+                            "href": "/planner/new?type=social",
+                            "image": "https://images.unsplash.com/photo-1464366400600-7168b8af9bc3?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&w=800&q=80",
+                            "title": "Social Events",
+                            "subtitle": "Gatherings & parties"
+                          }
+                        ],
+                        "minCardWidth": 280
+                      }
+                    }
+                  ],
+                  "settings": {
+                    "padding": 0,
+                    "verticalAlign": "top"
+                  }
+                }
+              ],
+              "settings": {
+                "gap": 32,
+                "maxWidth": "xl",
+                "fullWidth": true,
+                "isVisible": true,
+                "marginTop": 0,
+                "background": {
+                  "type": "solid",
+                  "color": "#ffffff",
+                  "image": {
+                    "url": "",
+                    "size": "cover",
+                    "fixed": false,
+                    "repeat": "no-repeat",
+                    "position": "center"
+                  },
+                  "video": {
+                    "url": "",
+                    "loop": true,
+                    "muted": true
+                  },
+                  "overlay": {
+                    "color": "#000000",
+                    "enabled": false,
+                    "opacity": 0.5
+                  },
+                  "gradient": {
+                    "type": "linear",
+                    "angle": 180,
+                    "colors": [
+                      {
+                        "color": "#1e293b",
+                        "position": 0
+                      },
+                      {
+                        "color": "#0f172a",
+                        "position": 100
+                      }
+                    ]
+                  },
+                  "patternOverlay": {
+                    "type": "dots",
+                    "color": "#ffffff",
+                    "opacity": 0.1
+                  }
+                },
+                "paddingTop": 64,
+                "paddingLeft": 16,
+                "borderRadius": 0,
+                "marginBottom": 0,
+                "paddingRight": 16,
+                "paddingBottom": 64,
+                "visibleOnMobile": true,
+                "visibleOnDesktop": true
+              }
+            },
+            {
+              "id": "section_1776226836684_ojkwwmh1k",
+              "order": 4,
+              "layout": "1",
+              "columns": [
+                {
+                  "id": "col_1776226836684_oym7ewywm",
+                  "widgets": [
+                    {
+                      "id": "widget_1776226874581_wqvwlxe0t",
+                      "type": "process-steps",
+                      "settings": {
+                        "card": {
+                          "show": true,
+                          "shadow": "sm",
+                          "padding": 32,
+                          "borderColor": "#e5e7eb",
+                          "borderWidth": 1,
+                          "hoverEffect": "lift",
+                          "borderRadius": 16,
+                          "backgroundType": "solid",
+                          "backgroundColor": "#ffffff"
+                        },
+                        "steps": [
+                          {
+                            "id": "step_1",
+                            "icon": "UserPlus",
+                            "title": "Create Your Account",
+                            "description": "Sign up free in under a minute. No credit card required. Your wedding planning journey starts immediately."
+                          },
+                          {
+                            "id": "step_2",
+                            "icon": "Globe",
+                            "title": "Build Your Wedding Website",
+                            "description": "Choose an elegant template, customize your colors, upload photos, and add your story. Live in minutes."
+                          },
+                          {
+                            "id": "step_3",
+                            "icon": "Mail",
+                            "title": "Invite Guests & Collect RSVPs",
+                            "description": "Share your website link. Guests RSVP directly online — tracking attendance, dietary needs, and plus-ones automatically."
+                          },
+                          {
+                            "id": "step_4",
+                            "icon": "Heart",
+                            "title": "Celebrate Your Perfect Day",
+                            "description": "Manage your seating chart, coordinate vendors, and enjoy every moment — Ceremoney handles the organization."
+                          }
+                        ],
+                        "colors": {
+                          "useTheme": true
+                        },
+                        "header": {
+                          "show": true,
+                          "badge": {
+                            "show": true,
+                            "text": "Simple Process",
+                            "style": "outline",
+                            "bgColor": "transparent",
+                            "textColor": "#BE6B8B",
+                            "fontWeight": 700,
+                            "borderColor": "transparent",
+                            "letterSpacing": "1.5px",
+                            "textTransform": "uppercase",
+                            "customFontSize": "12px"
+                          },
+                          "heading": {
+                            "size": "xl",
+                            "text": "How It Works",
+                            "color": "#2C1A1A",
+                            "fontWeight": 700,
+                            "lineHeight": 1.2,
+                            "letterSpacing": "-0.02em",
+                            "customFontSize": "clamp(28px, 3.5vw, 44px)",
+                            "highlightColor": "",
+                            "highlightWords": ""
+                          },
+                          "alignment": "center",
+                          "description": {
+                            "show": true,
+                            "size": "lg",
+                            "text": "Plan your perfect event in four simple steps",
+                            "color": "#64748b"
+                          },
+                          "marginBottom": 60
+                        },
+                        "layout": {
+                          "gap": 0,
+                          "type": "horizontal",
+                          "columns": 4,
+                          "verticalSpacing": 48
+                        },
+                        "stepIcon": {
+                          "show": true,
+                          "size": "md",
+                          "style": "rounded",
+                          "bgColor": "#9333ea",
+                          "iconColor": "#ffffff",
+                          "borderColor": "transparent",
+                          "hoverAnimation": "none"
+                        },
+                        "animation": {
+                          "staggerDelay": 150,
+                          "animateOnScroll": true
+                        },
+                        "connector": {
+                          "show": true,
+                          "color": "rgba(190,107,139,0.3)",
+                          "style": "dashed",
+                          "dotSize": 8,
+                          "dotColor": "#9333ea",
+                          "animation": "none",
+                          "thickness": 2,
+                          "animationSpeed": "medium",
+                          "secondaryColor": "#9333ea",
+                          "animationDirection": "forward"
+                        },
+                        "container": {
+                          "shadow": "none",
+                          "padding": 0,
+                          "borderWidth": 2,
+                          "borderRadius": 0,
+                          "backgroundType": "solid",
+                          "gradientBorder": {
+                            "angle": 135,
+                            "colors": [
+                              "#ec4899",
+                              "#8b5cf6"
+                            ],
+                            "enabled": false
+                          }
+                        },
+                        "stepLabel": {
+                          "show": true,
+                          "prefix": "STEP",
+                          "bgColor": "#f3f4f6",
+                          "textColor": "#6b7280"
+                        },
+                        "stepStyle": {
+                          "iconSize": 22,
+                          "descColor": "#6B5555",
+                          "numberSize": 48,
+                          "titleColor": "#2C1A1A",
+                          "numberStyle": "circle-filled",
+                          "numberBgColor": "#BE6B8B",
+                          "numberTextColor": "#ffffff"
+                        },
+                        "responsive": {
+                          "mobile": {
+                            "layout": "vertical",
+                            "columns": 1
+                          },
+                          "tablet": {
+                            "layout": "horizontal",
+                            "columns": 2
+                          }
+                        },
+                        "stepNumber": {
+                          "show": false,
+                          "size": "sm",
+                          "style": "circle",
+                          "bgColor": "#9333ea",
+                          "position": "top-right",
+                          "textColor": "#ffffff",
+                          "borderColor": "#9333ea"
+                        },
+                        "stepContent": {
+                          "alignment": "left",
+                          "titleSize": "lg",
+                          "titleColor": "#111827",
+                          "descriptionSize": "sm",
+                          "descriptionColor": "#6b7280"
+                        }
+                      }
+                    }
+                  ],
+                  "settings": {
+                    "padding": 0,
+                    "verticalAlign": "top"
+                  }
+                }
+              ],
+              "settings": {
+                "gap": 32,
+                "maxWidth": "xl",
+                "fullWidth": true,
+                "isVisible": true,
+                "marginTop": 0,
+                "background": {
+                  "type": "solid",
+                  "color": "#ffffff",
+                  "image": {
+                    "url": "",
+                    "size": "cover",
+                    "fixed": false,
+                    "repeat": "no-repeat",
+                    "position": "center"
+                  },
+                  "video": {
+                    "url": "",
+                    "loop": true,
+                    "muted": true
+                  },
+                  "overlay": {
+                    "color": "#000000",
+                    "enabled": false,
+                    "opacity": 0.5
+                  },
+                  "gradient": {
+                    "type": "linear",
+                    "angle": 180,
+                    "colors": [
+                      {
+                        "color": "#1e293b",
+                        "position": 0
+                      },
+                      {
+                        "color": "#0f172a",
+                        "position": 100
+                      }
+                    ]
+                  },
+                  "patternOverlay": {
+                    "type": "dots",
+                    "color": "#ffffff",
+                    "opacity": 0.1
+                  }
+                },
+                "paddingTop": 64,
+                "paddingLeft": 16,
+                "borderRadius": 0,
+                "marginBottom": 0,
+                "paddingRight": 16,
+                "paddingBottom": 64,
+                "visibleOnMobile": true,
+                "visibleOnDesktop": true
+              }
+            },
+            {
+              "id": "section_1776226359009_9tlyokv5p",
+              "order": 5,
+              "layout": "1",
+              "columns": [
+                {
+                  "id": "col_1776226359009_hmju4b26n",
+                  "widgets": [
+                    {
+                      "id": "widget_1776227110699_25r62rxtk",
+                      "type": "vendor-listing",
+                      "settings": {
+                        "limit": 6,
+                        "title": "All Vendors",
+                        "badgeTo": "#ec4899",
+                        "columns": 3,
+                        "category": "",
+                        "subtitle": "Connect with our verified and highly-rated event professionals",
+                        "badgeFrom": "#9333ea",
+                        "cardStyle": "overlay",
+                        "container": {
+                          "shadow": "none",
+                          "padding": 0,
+                          "borderWidth": 2,
+                          "borderRadius": 0,
+                          "backgroundType": "solid",
+                          "gradientBorder": {
+                            "angle": 135,
+                            "colors": [
+                              "#ec4899",
+                              "#8b5cf6"
+                            ],
+                            "enabled": false
+                          }
+                        },
+                        "sectionBg": "linear-gradient(to bottom, #f9fafb, #ffffff)",
+                        "showViewAll": true,
+                        "featuredOnly": false
+                      }
+                    }
+                  ],
+                  "settings": {
+                    "padding": 0,
+                    "verticalAlign": "top"
+                  }
+                }
+              ],
+              "settings": {
+                "gap": 32,
+                "maxWidth": "xl",
+                "fullWidth": true,
+                "isVisible": true,
+                "marginTop": 0,
+                "background": {
+                  "type": "solid",
+                  "color": "#ffffff",
+                  "image": {
+                    "url": "",
+                    "size": "cover",
+                    "fixed": false,
+                    "repeat": "no-repeat",
+                    "position": "center"
+                  },
+                  "video": {
+                    "url": "",
+                    "loop": true,
+                    "muted": true
+                  },
+                  "overlay": {
+                    "color": "#000000",
+                    "enabled": false,
+                    "opacity": 0.5
+                  },
+                  "gradient": {
+                    "type": "linear",
+                    "angle": 180,
+                    "colors": [
+                      {
+                        "color": "#1e293b",
+                        "position": 0
+                      },
+                      {
+                        "color": "#0f172a",
+                        "position": 100
+                      }
+                    ]
+                  },
+                  "patternOverlay": {
+                    "type": "dots",
+                    "color": "#ffffff",
+                    "opacity": 0.1
+                  }
+                },
+                "paddingTop": 64,
+                "paddingLeft": 16,
+                "borderRadius": 0,
+                "marginBottom": 0,
+                "paddingRight": 16,
+                "paddingBottom": 64,
+                "visibleOnMobile": true,
+                "visibleOnDesktop": true
+              }
+            },
+            {
+              "id": "section_1776226231134_q9zmysqrv",
+              "order": 6,
+              "layout": "1",
+              "columns": [
+                {
+                  "id": "col_1776226231134_238gle9j4",
+                  "widgets": [
+                    {
+                      "id": "widget_1776227636615_uxcumq55o",
+                      "type": "stats-section",
+                      "settings": {
+                        "stats": [
+                          {
+                            "id": "stat_couples",
+                            "label": "Couples Planning",
+                            "value": "500",
+                            "suffix": "+",
+                            "animate": true
+                          },
+                          {
+                            "id": "stat_guests",
+                            "label": "Guests Managed",
+                            "value": "45000",
+                            "suffix": "+",
+                            "animate": true
+                          },
+                          {
+                            "id": "stat_rating",
+                            "label": "Avg. Rating",
+                            "value": "4.9",
+                            "suffix": "★",
+                            "animate": true
+                          },
+                          {
+                            "id": "stat_free",
+                            "label": "Cities Covered",
+                            "value": "150+",
+                            "suffix": "",
+                            "animate": false
+                          }
+                        ],
+                        "style": {
+                          "layout": "vertical",
+                          "divider": false,
+                          "iconSize": "md",
+                          "iconColor": "#ffffff",
+                          "labelSize": "lg",
+                          "valueSize": "xl",
+                          "labelColor": "rgba(245,237,232,0.45)",
+                          "valueColor": "#F5EDE8",
+                          "suffixColor": "#C9A84C",
+                          "showTopBorder": false,
+                          "labelUppercase": false,
+                          "topBorderColor": "#334155",
+                          "labelFontWeight": 500,
+                          "valueFontWeight": 800,
+                          "valueLineHeight": 1,
+                          "labelLetterSpacing": "0.3px",
+                          "valueLetterSpacing": "-0.03em",
+                          "customLabelFontSize": "12px",
+                          "customValueFontSize": "44px"
+                        },
+                        "colors": {
+                          "useTheme": false
+                        },
+                        "header": {
+                          "show": true,
+                          "title": "Trusted by Event Planners Worldwide",
+                          "subtitle": "Join thousands of satisfied users planning unforgettable events",
+                          "titleColor": "#ffffff",
+                          "subtitleColor": "rgba(255,255,255,0.9)"
+                        },
+                        "columns": 4,
+                        "variant": "card-grid",
+                        "cardGrid": {
+                          "gridGap": 1,
+                          "cellPadding": "28px 24px",
+                          "borderRadius": 20,
+                          "gridLineColor": "rgba(255,255,255,0.07)",
+                          "labelFontSize": 12,
+                          "valueFontSize": 44,
+                          "cellBackground": "rgba(255,255,255,0.04)",
+                          "labelMarginTop": 8,
+                          "labelFontWeight": 500,
+                          "valueFontWeight": 800,
+                          "labelLetterSpacing": "0.3px",
+                          "valueLetterSpacing": "-0.03em"
+                        },
+                        "centered": false,
+                        "container": {
+                          "shadow": "none",
+                          "padding": 80,
+                          "borderWidth": 2,
+                          "borderRadius": 0,
+                          "backgroundType": "gradient",
+                          "gradientBorder": {
+                            "angle": 135,
+                            "colors": [
+                              "#ec4899",
+                              "#8b5cf6"
+                            ],
+                            "enabled": false
+                          },
+                          "gradientBackground": {
+                            "angle": 135,
+                            "colors": [
+                              "#1e1b4b",
+                              "#4c1d95"
+                            ]
+                          }
+                        },
+                        "animateOnScroll": true
+                      }
+                    }
+                  ],
+                  "settings": {
+                    "padding": 0,
+                    "verticalAlign": "top"
+                  }
+                }
+              ],
+              "settings": {
+                "gap": 32,
+                "maxWidth": "full",
+                "fullWidth": true,
+                "isVisible": true,
+                "marginTop": 0,
+                "background": {
+                  "type": "solid",
+                  "color": "#ffffff",
+                  "image": {
+                    "url": "",
+                    "size": "cover",
+                    "fixed": false,
+                    "repeat": "no-repeat",
+                    "position": "center"
+                  },
+                  "video": {
+                    "url": "",
+                    "loop": true,
+                    "muted": true
+                  },
+                  "overlay": {
+                    "color": "#000000",
+                    "enabled": false,
+                    "opacity": 0.5
+                  },
+                  "gradient": {
+                    "type": "linear",
+                    "angle": 180,
+                    "colors": [
+                      {
+                        "color": "#1e293b",
+                        "position": 0
+                      },
+                      {
+                        "color": "#0f172a",
+                        "position": 100
+                      }
+                    ]
+                  },
+                  "patternOverlay": {
+                    "type": "dots",
+                    "color": "#ffffff",
+                    "opacity": 0.1
+                  }
+                },
+                "paddingTop": 64,
+                "paddingLeft": 16,
+                "borderRadius": 0,
+                "marginBottom": 0,
+                "paddingRight": 16,
+                "paddingBottom": 64,
+                "visibleOnMobile": true,
+                "visibleOnDesktop": true
+              }
+            },
+            {
+              "id": "section_1776228080659_uf7vkdx5y",
+              "order": 7,
+              "layout": "1",
+              "columns": [
+                {
+                  "id": "col_1776228080659_xy4k8ngps",
+                  "widgets": [
+                    {
+                      "id": "widget_1776228111419_2fbnexi5b",
+                      "type": "testimonials-carousel",
+                      "settings": {
+                        "avatar": {
+                          "size": "lg",
+                          "shape": "circle",
+                          "style": "initials",
+                          "textColor": "#ffffff",
+                          "borderColor": "rgba(190,107,139,0.2)",
+                          "borderWidth": 2,
+                          "backgroundColor": "rgba(190,107,139,0.8)"
+                        },
+                        "header": {
+                          "show": true,
+                          "badge": {
+                            "show": true,
+                            "text": "Success Stories",
+                            "style": "pill",
+                            "bgColor": "transparent",
+                            "textColor": "#BE6B8B",
+                            "fontWeight": 700,
+                            "borderColor": "transparent",
+                            "letterSpacing": "1.5px",
+                            "textTransform": "uppercase",
+                            "customFontSize": "12px"
+                          },
+                          "heading": {
+                            "size": "xl",
+                            "text": "What Our Users Say",
+                            "color": "#2C1A1A",
+                            "fontWeight": 700,
+                            "lineHeight": 1.15,
+                            "letterSpacing": "-0.02em",
+                            "customFontSize": "clamp(26px, 3vw, 40px)",
+                            "highlightColor": "#BE6B8B",
+                            "highlightWords": ""
+                          },
+                          "alignment": "center",
+                          "description": {
+                            "show": true,
+                            "size": "md",
+                            "text": "Real stories from real couples who planned their dream wedding with Ceremoney.",
+                            "color": "#6B5555",
+                            "lineHeight": 1.7,
+                            "customFontSize": "15px"
+                          },
+                          "marginBottom": 48
+                        },
+                        "content": {
+                          "infoColor": "#8C6E6E",
+                          "nameColor": "#2C1A1A",
+                          "quoteColor": "#6B5555",
+                          "quoteStyle": "normal",
+                          "showRating": true,
+                          "countryFlag": true,
+                          "ratingColor": "#C9A84C",
+                          "ratingStyle": "stars",
+                          "showCompany": false,
+                          "showCountry": true,
+                          "infoFontSize": "sm",
+                          "nameFontSize": "md",
+                          "quoteFontSize": "md",
+                          "quoteMaxLines": 0,
+                          "nameFontWeight": "bold"
+                        },
+                        "gridView": {
+                          "gap": 24,
+                          "columns": 3,
+                          "quoteIconSize": "lg",
+                          "showQuoteIcon": true,
+                          "quoteIconColor": "#f9731620",
+                          "quoteIconPosition": "top-right"
+                        },
+                        "viewMode": "marquee",
+                        "animation": {
+                          "enabled": true,
+                          "duration": 500,
+                          "entrance": "fade",
+                          "staggerDelay": 100
+                        },
+                        "cardStyle": {
+                          "style": "minimal",
+                          "shadow": "none",
+                          "padding": 28,
+                          "borderColor": "rgba(190,107,139,0.12)",
+                          "borderWidth": 1,
+                          "glassEffect": {
+                            "blur": 10,
+                            "enabled": false,
+                            "opacity": 0.1
+                          },
+                          "hoverEffect": "lift",
+                          "borderRadius": 16,
+                          "gradientBorder": {
+                            "angle": 135,
+                            "colors": [
+                              "#f97316",
+                              "#3b82f6"
+                            ],
+                            "enabled": false
+                          },
+                          "backgroundColor": "rgba(190,107,139,0.03)"
+                        },
+                        "container": {
+                          "shadow": "none",
+                          "padding": 0,
+                          "borderWidth": 2,
+                          "borderRadius": 0,
+                          "backgroundType": "solid",
+                          "gradientBorder": {
+                            "angle": 135,
+                            "colors": [
+                              "#ec4899",
+                              "#8b5cf6"
+                            ],
+                            "enabled": false
+                          }
+                        },
+                        "videoView": {
+                          "gap": 16,
+                          "columns": 4,
+                          "darkTheme": true,
+                          "hoverEffect": "scale",
+                          "overlayColor": "#000000",
+                          "overlayOpacity": 0.3,
+                          "playButtonSize": "lg",
+                          "playButtonColor": "#ffffff",
+                          "playButtonStyle": "circle",
+                          "showCustomerInfo": true,
+                          "thumbnailAspectRatio": "9:16"
+                        },
+                        "dataSource": {
+                          "limit": 6,
+                          "sortBy": "sort-order",
+                          "testimonialType": "all"
+                        },
+                        "responsive": {
+                          "mobile": {
+                            "layout": "vertical",
+                            "columns": 1,
+                            "slidesPerView": 1
+                          },
+                          "tablet": {
+                            "columns": 2,
+                            "slidesPerView": 2
+                          }
+                        },
+                        "trustFooter": {
+                          "show": false,
+                          "alignment": "center",
+                          "marginTop": 48,
+                          "totalReviews": "(2,500+ reviews)",
+                          "averageRating": 4.9,
+                          "showAvatarStack": true,
+                          "avatarStackCount": 4,
+                          "customerCountText": "Join 10,000+ happy event planners",
+                          "showAverageRating": true
+                        },
+                        "carouselView": {
+                          "loop": true,
+                          "effect": "slide",
+                          "layout": "rail",
+                          "autoplay": true,
+                          "navigation": {
+                            "arrows": {
+                              "size": "md",
+                              "color": "#ffffff",
+                              "style": "rounded",
+                              "enabled": false,
+                              "position": "bottom-right",
+                              "showOnHover": false,
+                              "backgroundColor": "#ffffff20"
+                            },
+                            "pagination": {
+                              "type": "dots",
+                              "enabled": true,
+                              "activeColor": "#BE6B8B",
+                              "inactiveColor": "rgba(190,107,139,0.2)"
+                            }
+                          },
+                          "splitLayout": {
+                            "photoSize": "50",
+                            "photoPosition": "left"
+                          },
+                          "spaceBetween": 24,
+                          "autoplayDelay": 5000,
+                          "slidesPerView": 3
+                        },
+                        "testimonialType": "photo"
+                      }
+                    }
+                  ],
+                  "settings": {
+                    "padding": 0,
+                    "verticalAlign": "top"
+                  }
+                }
+              ],
+              "settings": {
+                "gap": 32,
+                "maxWidth": "xl",
+                "fullWidth": true,
+                "isVisible": true,
+                "marginTop": 0,
+                "background": {
+                  "type": "solid",
+                  "color": "#ffffff",
+                  "image": {
+                    "url": "",
+                    "size": "cover",
+                    "fixed": false,
+                    "repeat": "no-repeat",
+                    "position": "center"
+                  },
+                  "video": {
+                    "url": "",
+                    "loop": true,
+                    "muted": true
+                  },
+                  "overlay": {
+                    "color": "#000000",
+                    "enabled": false,
+                    "opacity": 0.5
+                  },
+                  "gradient": {
+                    "type": "linear",
+                    "angle": 180,
+                    "colors": [
+                      {
+                        "color": "#1e293b",
+                        "position": 0
+                      },
+                      {
+                        "color": "#0f172a",
+                        "position": 100
+                      }
+                    ]
+                  },
+                  "patternOverlay": {
+                    "type": "dots",
+                    "color": "#ffffff",
+                    "opacity": 0.1
+                  }
+                },
+                "paddingTop": 64,
+                "paddingLeft": 16,
+                "borderRadius": 0,
+                "marginBottom": 0,
+                "paddingRight": 16,
+                "paddingBottom": 64,
+                "visibleOnMobile": true,
+                "visibleOnDesktop": true
+              }
+            },
+            {
+              "id": "section_1776228249240_5g2sx9ez8",
+              "order": 8,
+              "layout": "1",
+              "columns": [
+                {
+                  "id": "col_1776228249240_r7h1guma3",
+                  "widgets": [
+                    {
+                      "id": "widget_1776228267343_1r5nyblwl",
+                      "type": "cta-banner",
+                      "spacing": {
+                        "marginTop": -60,
+                        "marginBottom": 0
+                      },
+                      "settings": {
+                        "title": "Ready to Plan Your Next Event?",
+                        "subtitle": "Join thousands of event planners who trust EventPlanner Pro for their celebrations",
+                        "sectionBgTo": "#faf5ff",
+                        "showPattern": true,
+                        "cardPaddingH": 32,
+                        "cardPaddingV": 64,
+                        "primaryButton": {
+                          "href": "/planner",
+                          "icon": "ArrowRight",
+                          "show": true,
+                          "label": "Get Started Free"
+                        },
+                        "sectionBgFrom": "#ffffff",
+                        "cardGradientTo": "#ec4899",
+                        "secondaryButton": {
+                          "href": "#demo",
+                          "icon": "Play",
+                          "show": true,
+                          "label": "Watch Demo"
+                        },
+                        "cardBorderRadius": 24,
+                        "cardGradientFrom": "#9333ea",
+                        "cardGradientAngle": 135
+                      }
+                    }
+                  ],
+                  "settings": {
+                    "padding": 0,
+                    "verticalAlign": "top"
+                  }
+                }
+              ],
+              "settings": {
+                "gap": 32,
+                "maxWidth": "xl",
+                "fullWidth": true,
+                "isVisible": true,
+                "marginTop": 0,
+                "background": {
+                  "type": "solid",
+                  "color": "#ffffff",
+                  "image": {
+                    "url": "",
+                    "size": "cover",
+                    "fixed": false,
+                    "repeat": "no-repeat",
+                    "position": "center"
+                  },
+                  "video": {
+                    "url": "",
+                    "loop": true,
+                    "muted": true
+                  },
+                  "overlay": {
+                    "color": "#000000",
+                    "enabled": false,
+                    "opacity": 0.5
+                  },
+                  "gradient": {
+                    "type": "linear",
+                    "angle": 180,
+                    "colors": [
+                      {
+                        "color": "#1e293b",
+                        "position": 0
+                      },
+                      {
+                        "color": "#0f172a",
+                        "position": 100
+                      }
+                    ]
+                  },
+                  "patternOverlay": {
+                    "type": "dots",
+                    "color": "#ffffff",
+                    "opacity": 0.1
+                  }
+                },
+                "paddingTop": 64,
+                "paddingLeft": 16,
+                "borderRadius": 0,
+                "marginBottom": 0,
+                "paddingRight": 16,
+                "paddingBottom": 64,
+                "visibleOnMobile": true,
+                "visibleOnDesktop": true
+              }
+            }
+          ]
         }
       ]
     }

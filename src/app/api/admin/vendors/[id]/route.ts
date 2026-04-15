@@ -41,6 +41,7 @@ export async function PUT(
     isApproved,
     isActive,
     isFeatured,
+    isVerified,
     status,
     planTier,
   } = body;
@@ -71,6 +72,7 @@ export async function PUT(
       ...(isApproved !== undefined && { isApproved: Boolean(isApproved) }),
       ...(isActive !== undefined && { isActive: Boolean(isActive) }),
       ...(isFeatured !== undefined && { isFeatured: Boolean(isFeatured) }),
+      ...(isVerified !== undefined && { isVerified: Boolean(isVerified) }),
       updatedAt: new Date(),
     },
   });

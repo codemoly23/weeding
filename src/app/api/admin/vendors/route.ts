@@ -47,7 +47,7 @@ export async function GET(req: NextRequest) {
       }
     : {};
 
-  const [vendors, total, approvedCount, pendingCount, featuredCount] = await Promise.all([
+  const [vendors, total, approvedCount, pendingCount, featuredCount, verifiedCount] = await Promise.all([
     prisma.vendorProfile.findMany({
       where,
       orderBy: { createdAt: "desc" },
@@ -62,6 +62,7 @@ export async function GET(req: NextRequest) {
     prisma.vendorProfile.count({ where: { status: "APPROVED" } }),
     prisma.vendorProfile.count({ where: { status: "PENDING" } }),
     prisma.vendorProfile.count({ where: { isFeatured: true } }),
+    prisma.vendorProfile.count({ where: { isVerified: true } }),
   ]);
 
   return NextResponse.json({
@@ -69,7 +70,7 @@ export async function GET(req: NextRequest) {
     total,
     page,
     totalPages: Math.ceil(total / limit),
-    stats: { approved: approvedCount, pending: pendingCount, featured: featuredCount },
+    stats: { approved: approvedCount, pending: pendingCount, featured: featuredCount, verified: verifiedCount },
   });
 }
 
@@ -104,6 +105,7 @@ export async function POST(req: NextRequest) {
     isApproved,
     isActive,
     isFeatured,
+    isVerified,
   } = body;
 
   if (!businessName || !category) {
@@ -155,7 +157,8 @@ export async function POST(req: NextRequest) {
     isApproved: isApproved !== false,
     isActive: isActive !== false,
     isFeatured: isFeatured === true,
-    status: isApproved !== false ? "APPROVED" : "PENDING",
+    isVerified: isVerified === true,
+    status: (isApproved !== false ? "APPROVED" : "PENDING") as "APPROVED" | "PENDING",
     trialEndsAt,
   };
 

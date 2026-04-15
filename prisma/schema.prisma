@@ -2107,12 +2107,14 @@ model VendorProfile {
   photos          String[]       @default([])
   videoUrls       String[]       @default([])
   startingPrice   Int?
+  maxPrice        Int?
   currency        String         @default("SEK")
   yearsInBusiness Int?
   languages       String[]       @default([])
   isApproved      Boolean        @default(false)
   isActive        Boolean        @default(true)
   isFeatured      Boolean        @default(false)
+  isVerified      Boolean        @default(false)
   trialEndsAt          DateTime?
   planTier             VendorPlanTier @default(TRIAL)
   stripeCustomerId     String?
@@ -2139,6 +2141,7 @@ model VendorProfile {
   @@index([isApproved, isActive])
   @@index([city])
   @@index([isFeatured])
+  @@index([isVerified])
   @@index([userId])
   @@index([status])
 }

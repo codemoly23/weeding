@@ -20,6 +20,7 @@ import {
   AlertTriangle,
   Palette,
   Package,
+  Save,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import Link from "next/link";
@@ -64,9 +65,8 @@ export default function ThemeGalleryPage() {
     null
   );
   const [importing, setImporting] = useState(false);
-  const [importType, setImportType] = useState<
-    "full" | "colors" | null
-  >(null);
+  const [importType, setImportType] = useState<"full" | "colors" | null>(null);
+  const [savingPages, setSavingPages] = useState(false);
 
   useEffect(() => {
     fetchThemes();
@@ -84,6 +84,24 @@ export default function ThemeGalleryPage() {
       toast.error("Failed to load themes");
     } finally {
       setLoading(false);
+    }
+  }
+
+  async function handleSavePages(themeId: string) {
+    try {
+      setSavingPages(true);
+      const response = await fetch("/api/admin/themes/save-pages", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ themeId }),
+      });
+      const data = await response.json();
+      if (!response.ok) throw new Error(data.error || "Failed to save");
+      toast.success(`Design saved to theme (${data.pageCount} pages)`);
+    } catch (error) {
+      toast.error(error instanceof Error ? error.message : "Failed to save design to theme");
+    } finally {
+      setSavingPages(false);
     }
   }
 
@@ -241,24 +259,36 @@ export default function ThemeGalleryPage() {
                 {/* Action Button */}
                 <div className="pt-1">
                   {theme.isActive ? (
-                    <div className="flex gap-2">
+                    <div className="flex flex-col gap-2">
+                      <div className="flex gap-2">
+                        <Button variant="outline" className="flex-1" asChild>
+                          <Link href="/admin/appearance/themes/customize">
+                            <Palette className="h-4 w-4 mr-2" />
+                            Customize
+                          </Link>
+                        </Button>
+                        <Badge
+                          variant="secondary"
+                          className="flex items-center gap-1 text-green-600 border-green-200 px-3"
+                        >
+                          <Check className="h-3 w-3" />
+                          Active
+                        </Badge>
+                      </div>
                       <Button
                         variant="outline"
-                        className="flex-1"
-                        asChild
+                        className="w-full text-xs h-8 border-dashed"
+                        disabled={savingPages}
+                        onClick={() => handleSavePages(theme.id)}
+                        title="Save current landing page design permanently into this theme so it survives data resets"
                       >
-                        <Link href="/admin/appearance/themes/customize">
-                          <Palette className="h-4 w-4 mr-2" />
-                          Customize
-                        </Link>
+                        {savingPages ? (
+                          <Loader2 className="h-3 w-3 mr-2 animate-spin" />
+                        ) : (
+                          <Save className="h-3 w-3 mr-2" />
+                        )}
+                        Save Current Design to Theme
                       </Button>
-                      <Badge
-                        variant="secondary"
-                        className="flex items-center gap-1 text-green-600 border-green-200 px-3"
-                      >
-                        <Check className="h-3 w-3" />
-                        Active
-                      </Badge>
                     </div>
                   ) : (
                     <Button

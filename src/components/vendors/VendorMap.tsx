@@ -31,6 +31,7 @@ interface VendorCard {
   startingPrice: number | null;
   currency: string;
   isFeatured: boolean;
+  isVerified: boolean;
   slaHours: number | null;
   reviewCount: number;
   avgRating: number | null;

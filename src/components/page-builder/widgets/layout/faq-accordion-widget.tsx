@@ -9,6 +9,14 @@ import { WidgetContainer } from "@/components/page-builder/shared/widget-contain
 import { useOptionalServiceContext } from "@/lib/page-builder/contexts/service-context";
 import Link from "next/link";
 
+// Normalize heading/description — DB may store as object {text,...} or plain string
+function asText(val: unknown): string {
+  if (!val) return "";
+  if (typeof val === "string") return val;
+  if (typeof val === "object" && val !== null && "text" in val) return String((val as { text: unknown }).text ?? "");
+  return "";
+}
+
 interface FaqItem {
   id: string;
   question: string;
@@ -274,7 +282,7 @@ export function FaqAccordionWidget({
               })}
               style={{ color: hs.headingColor || undefined }}
             >
-              {s.header.heading}
+              {asText(s.header.heading)}
             </h2>
             {s.header.description && (
               <p
@@ -408,14 +416,14 @@ export function FaqAccordionWidget({
             )}
             style={{ color: hs.headingColor || undefined }}
           >
-            {s.header.heading}
+            {asText(s.header.heading)}
           </h2>
           {s.header.description && (
             <p
               className="mt-3 text-lg"
               style={{ color: hs.descriptionColor || undefined }}
             >
-              {s.header.description}
+              {asText(s.header.description)}
             </p>
           )}
         </div>

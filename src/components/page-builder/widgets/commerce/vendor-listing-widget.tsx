@@ -21,6 +21,7 @@ interface VendorItem {
   startingPrice: number | null;
   currency: string | null;
   isFeatured: boolean;
+  isVerified: boolean;
   avgRating: number | null;
   reviewCount: number;
 }
@@ -230,7 +231,7 @@ function OverlayVendorCard({
         </div>
 
         {/* Verified badge — top right */}
-        {vendor.isFeatured && (
+        {vendor.isVerified && (
           <div style={{
             position: "absolute",
             top: "1rem",
@@ -336,6 +337,12 @@ function StandardVendorCard({ vendor, isPreview }: { vendor: VendorItem; isPrevi
           <span className="absolute left-3 top-3 rounded-full bg-yellow-400 px-2.5 py-0.5 text-xs font-semibold text-yellow-900">
             Featured
           </span>
+        )}
+        {vendor.isVerified && (
+          <div className="absolute right-3 top-3 flex items-center gap-1 rounded-full bg-white px-2.5 py-0.5">
+            <BadgeCheck className="h-3.5 w-3.5 text-purple-600" />
+            <span className="text-xs font-semibold text-purple-600">Verified</span>
+          </div>
         )}
       </div>
 

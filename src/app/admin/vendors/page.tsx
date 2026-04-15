@@ -4,7 +4,7 @@ import { useState, useEffect, useCallback } from "react";
 import Link from "next/link";
 import {
   Store, Plus, Check, X, Pencil, Trash2, ExternalLink,
-  Search, Star, ChevronLeft, ChevronRight, KeyRound,
+  Search, Star, ChevronLeft, ChevronRight, KeyRound, BadgeCheck,
 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
@@ -41,6 +41,7 @@ interface Vendor {
   isApproved: boolean;
   isActive: boolean;
   isFeatured: boolean;
+  isVerified: boolean;
   email: string | null;
   phone: string | null;
   website: string | null;
@@ -73,13 +74,14 @@ interface FormData {
   isApproved: boolean;
   isActive: boolean;
   isFeatured: boolean;
+  isVerified: boolean;
 }
 
 const emptyForm = (): FormData => ({
   businessName: "", category: "OTHER", tagline: "", description: "",
   email: "", password: "", phone: "", website: "", city: "", country: "SE",
   startingPrice: "", currency: "SEK", coverPhotoUrl: "",
-  planTier: "TRIAL", isApproved: true, isActive: true, isFeatured: false,
+  planTier: "TRIAL", isApproved: true, isActive: true, isFeatured: false, isVerified: false,
 });
 
 const STATUS_COLORS: Record<VendorStatus, string> = {
@@ -97,7 +99,7 @@ export default function AdminVendorsPage() {
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState("");
   const [searchInput, setSearchInput] = useState("");
-  const [stats, setStats] = useState({ total: 0, approved: 0, pending: 0, featured: 0 });
+  const [stats, setStats] = useState({ total: 0, approved: 0, pending: 0, featured: 0, verified: 0 });
 
   const [showForm, setShowForm] = useState(false);
   const [editId, setEditId] = useState<string | null>(null);
@@ -125,6 +127,7 @@ export default function AdminVendorsPage() {
         approved: data.stats?.approved ?? 0,
         pending: data.stats?.pending ?? 0,
         featured: data.stats?.featured ?? 0,
+        verified: data.stats?.verified ?? 0,
       });
     } finally {
       setLoading(false);
@@ -175,6 +178,7 @@ export default function AdminVendorsPage() {
       isApproved: v.isApproved,
       isActive: v.isActive,
       isFeatured: v.isFeatured,
+      isVerified: v.isVerified,
     });
     setFormError("");
     setShowForm(true);
@@ -239,7 +243,8 @@ export default function AdminVendorsPage() {
     { label: "Total Vendors", value: stats.total, color: "text-gray-900" },
     { label: "Approved", value: stats.approved, color: "text-green-700" },
     { label: "Pending", value: stats.pending, color: "text-yellow-700" },
-    { label: "Featured", value: stats.featured, color: "text-purple-700" },
+    { label: "Featured", value: stats.featured, color: "text-amber-600" },
+    { label: "Verified", value: stats.verified, color: "text-purple-700" },
   ];
 
   return (
@@ -269,7 +274,7 @@ export default function AdminVendorsPage() {
       </div>
 
       {/* Stats */}
-      <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
+      <div className="grid grid-cols-2 sm:grid-cols-5 gap-4">
         {statCards.map((s) => (
           <Card key={s.label}>
             <CardContent className="p-4">
@@ -341,11 +346,18 @@ export default function AdminVendorsPage() {
                     {(v.email || v.user?.email) && (
                       <div className="text-xs text-muted-foreground">{v.email || v.user?.email}</div>
                     )}
-                    {v.isFeatured && (
-                      <span className="inline-flex items-center gap-1 text-xs text-yellow-600 mt-0.5">
-                        <Star className="h-3 w-3 fill-yellow-400 text-yellow-400" /> Featured
-                      </span>
-                    )}
+                    <div className="flex items-center gap-2 mt-0.5">
+                      {v.isFeatured && (
+                        <span className="inline-flex items-center gap-1 text-xs text-yellow-600">
+                          <Star className="h-3 w-3 fill-yellow-400 text-yellow-400" /> Featured
+                        </span>
+                      )}
+                      {v.isVerified && (
+                        <span className="inline-flex items-center gap-1 text-xs text-purple-600">
+                          <BadgeCheck className="h-3 w-3" /> Verified
+                        </span>
+                      )}
+                    </div>
                   </TableCell>
                   <TableCell>
                     <Badge variant="outline" className="text-xs">
@@ -634,6 +646,11 @@ export default function AdminVendorsPage() {
                   <input type="checkbox" checked={form.isFeatured} onChange={(e) => setForm({ ...form, isFeatured: e.target.checked })}
                     className="rounded" />
                   Featured (shown first)
+                </label>
+                <label className="flex items-center gap-2 text-sm cursor-pointer">
+                  <input type="checkbox" checked={form.isVerified} onChange={(e) => setForm({ ...form, isVerified: e.target.checked })}
+                    className="rounded" />
+                  Verified (show verified badge)
                 </label>
                 <label className="flex items-center gap-2 text-sm cursor-pointer">
                   <input type="checkbox" checked={form.isActive} onChange={(e) => setForm({ ...form, isActive: e.target.checked })}

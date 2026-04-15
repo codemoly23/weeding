@@ -118,6 +118,7 @@ const navItems: NavItem[] = [
     children: [
       { title: "All Projects", href: "/admin/planner" },
       { title: "Manage Vendors", href: "/admin/vendors" },
+      { title: "Vendor Reviews", href: "/admin/vendors/reviews" },
       { title: "View All Vendors", href: "/vendors" },
     ],
   },

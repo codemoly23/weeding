@@ -95,8 +95,8 @@ export default function VendorProfilePage() {
           setProfile({
             ...defaultProfile,
             ...data.profile,
-            priceMin: data.profile.priceMin?.toString() ?? "",
-            priceMax: data.profile.priceMax?.toString() ?? "",
+            priceMin: data.profile.startingPrice?.toString() ?? "",
+            priceMax: data.profile.maxPrice?.toString() ?? "",
             slaHours: data.profile.slaHours?.toString() ?? "",
             lat: data.profile.lat?.toString() ?? "",
             lng: data.profile.lng?.toString() ?? "",

@@ -34,7 +34,7 @@ export async function PUT(req: NextRequest) {
     businessName, category, description, tagline, email, phone, website,
     instagram, facebook, pinterest, slaHours, faqItems,
     city, country, lat, lng, serviceRadiusKm, photos, videoUrls,
-    startingPrice, currency, yearsInBusiness, languages,
+    startingPrice, priceMin, priceMax, currency, yearsInBusiness, languages,
   } = body;
 
   const profile = await prisma.vendorProfile.update({
@@ -60,6 +60,8 @@ export async function PUT(req: NextRequest) {
       ...(photos !== undefined && { photos: Array.isArray(photos) ? photos : [] }),
       ...(videoUrls !== undefined && { videoUrls: Array.isArray(videoUrls) ? videoUrls : [] }),
       ...(startingPrice !== undefined && { startingPrice: startingPrice ? parseInt(startingPrice) : null }),
+      ...(priceMin !== undefined && { startingPrice: priceMin ? parseInt(priceMin) : null }),
+      ...(priceMax !== undefined && { maxPrice: priceMax ? parseInt(priceMax) : null }),
       ...(currency !== undefined && { currency: String(currency) }),
       ...(yearsInBusiness !== undefined && { yearsInBusiness: yearsInBusiness ? parseInt(yearsInBusiness) : null }),
       ...(languages !== undefined && { languages: Array.isArray(languages) ? languages : [] }),
