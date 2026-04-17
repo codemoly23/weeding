@@ -484,7 +484,15 @@ model BlogPost {
   excerpt         String?
   content         String
   coverImage      String?
+  readingMinutes  Int?
+  views           Int            @default(0)
   authorId        String?
+  authorName      String?
+  authorRole      String?
+  authorBio       String?
+  authorAvatarUrl String?
+  authorTwitter   String?
+  authorLinkedin  String?
   status          PostStatus     @default(DRAFT)
   publishedAt     DateTime?
   tags            String[]

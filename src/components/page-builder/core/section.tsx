@@ -8,7 +8,8 @@ import {
   getColumnSpanClasses,
   getMaxWidthClass,
 } from "@/lib/page-builder/section-layouts";
-import { getPatternCSS, getPatternBackgroundSize } from "@/lib/page-builder/pattern-utils";
+import { getPatternCSS, getPatternBackgroundSize, getPatternMaskCSS } from "@/lib/page-builder/pattern-utils";
+import { DecorativeGlows } from "@/components/page-builder/shared/decorative-glows";
 import { Column } from "./column";
 
 interface SectionProps {
@@ -164,17 +165,31 @@ export function Section({
         />
       )}
 
+      {/* Decorative Glows (behind pattern) */}
+      <DecorativeGlows glows={settings.decorativeGlows} borderRadius={borderRadius} />
+
       {/* Pattern Overlay */}
-      {patternOverlay && patternOverlay.opacity > 0 && (
-        <div
-          className="absolute inset-0 pointer-events-none"
-          style={{
-            backgroundImage: getPatternCSS(patternOverlay.type, patternOverlay.color, patternOverlay.opacity),
-            backgroundSize: getPatternBackgroundSize(patternOverlay.type),
-            borderRadius,
-          }}
-        />
-      )}
+      {patternOverlay && patternOverlay.opacity > 0 && (() => {
+        const maskCss = getPatternMaskCSS(patternOverlay.mask);
+        return (
+          <div
+            className="absolute inset-0 pointer-events-none"
+            style={{
+              backgroundImage: getPatternCSS(patternOverlay.type, patternOverlay.color, patternOverlay.opacity),
+              backgroundSize: getPatternBackgroundSize(patternOverlay.type),
+              borderRadius,
+              ...(maskCss
+                ? {
+                    maskImage: maskCss,
+                    WebkitMaskImage: maskCss,
+                    maskRepeat: "no-repeat",
+                    WebkitMaskRepeat: "no-repeat",
+                  }
+                : {}),
+            }}
+          />
+        );
+      })()}
 
       {/* Watermark Text Overlay */}
       {settings.watermark?.enabled && settings.watermark.text && (
@@ -211,16 +226,27 @@ export function Section({
             }}
           />
         )}
-        {!settings.fullWidth && patternOverlay && patternOverlay.opacity > 0 && (
-          <div
-            className="absolute inset-0 pointer-events-none"
-            style={{
-              backgroundImage: getPatternCSS(patternOverlay.type, patternOverlay.color, patternOverlay.opacity),
-              backgroundSize: getPatternBackgroundSize(patternOverlay.type),
-              borderRadius,
-            }}
-          />
-        )}
+        {!settings.fullWidth && patternOverlay && patternOverlay.opacity > 0 && (() => {
+          const maskCss = getPatternMaskCSS(patternOverlay.mask);
+          return (
+            <div
+              className="absolute inset-0 pointer-events-none"
+              style={{
+                backgroundImage: getPatternCSS(patternOverlay.type, patternOverlay.color, patternOverlay.opacity),
+                backgroundSize: getPatternBackgroundSize(patternOverlay.type),
+                borderRadius,
+                ...(maskCss
+                  ? {
+                      maskImage: maskCss,
+                      WebkitMaskImage: maskCss,
+                      maskRepeat: "no-repeat",
+                      WebkitMaskRepeat: "no-repeat",
+                    }
+                  : {}),
+              }}
+            />
+          );
+        })()}
 
         {/* Grid */}
         <div

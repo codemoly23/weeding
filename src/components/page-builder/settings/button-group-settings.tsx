@@ -92,7 +92,7 @@ export function ButtonGroupWidgetSettingsPanel({
               label="Link URL"
               value={btn.link}
               onChange={(v) => updateButton(index, { link: v })}
-              placeholder="/register"
+              placeholder="/services/business-formation"
             />
             <ToggleSwitch
               label="Open in new tab"

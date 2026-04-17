@@ -29,6 +29,8 @@ export function getPatternCSS(type: PatternType, color: string, opacity: number)
       return `radial-gradient(${adjustedColor} 1.5px, transparent 1.5px)`;
     case "grid":
       return `linear-gradient(${adjustedColor} 2px, transparent 2px), linear-gradient(90deg, ${adjustedColor} 2px, transparent 2px)`;
+    case "grid-fine":
+      return `linear-gradient(${adjustedColor} 1px, transparent 1px), linear-gradient(90deg, ${adjustedColor} 1px, transparent 1px)`;
     case "diagonal":
       return `repeating-linear-gradient(45deg, ${adjustedColor}, ${adjustedColor} 1px, transparent 1px, transparent 10px)`;
     case "waves": {
@@ -61,6 +63,8 @@ export function getPatternBackgroundSize(type: PatternType): string {
       return "40px 40px";
     case "grid":
       return "80px 50px, 80px 50px";
+    case "grid-fine":
+      return "60px 60px, 60px 60px";
     case "diagonal":
       return "auto";
     case "waves":
@@ -77,11 +81,29 @@ export function getPatternBackgroundSize(type: PatternType): string {
 }
 
 /**
+ * Build CSS mask-image value for an optional radial fade mask on a pattern overlay.
+ * Returns undefined when mask is "none" or unset.
+ */
+export function getPatternMaskCSS(mask?: string): string | undefined {
+  switch (mask) {
+    case "radial-center":
+      return "radial-gradient(ellipse 60% 60% at 50% 40%, black 20%, transparent 100%)";
+    case "radial-top":
+      return "radial-gradient(ellipse 70% 60% at 50% 0%, black 10%, transparent 90%)";
+    case "radial-bottom":
+      return "radial-gradient(ellipse 70% 60% at 50% 100%, black 10%, transparent 90%)";
+    default:
+      return undefined;
+  }
+}
+
+/**
  * Pattern type options for the UI dropdown
  */
 export const PATTERN_TYPE_OPTIONS = [
   { value: "dots", label: "Dots" },
   { value: "grid", label: "Grid" },
+  { value: "grid-fine", label: "Grid (Fine)" },
   { value: "diagonal", label: "Diagonal" },
   { value: "waves", label: "Waves" },
   { value: "circuit", label: "Circuit" },

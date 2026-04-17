@@ -9,14 +9,6 @@ import { WidgetContainer } from "@/components/page-builder/shared/widget-contain
 import { useOptionalServiceContext } from "@/lib/page-builder/contexts/service-context";
 import Link from "next/link";
 
-// Normalize heading/description — DB may store as object {text,...} or plain string
-function asText(val: unknown): string {
-  if (!val) return "";
-  if (typeof val === "string") return val;
-  if (typeof val === "object" && val !== null && "text" in val) return String((val as { text: unknown }).text ?? "");
-  return "";
-}
-
 interface FaqItem {
   id: string;
   question: string;
@@ -282,7 +274,7 @@ export function FaqAccordionWidget({
               })}
               style={{ color: hs.headingColor || undefined }}
             >
-              {asText(s.header.heading)}
+              {s.header.heading}
             </h2>
             {s.header.description && (
               <p
@@ -416,14 +408,14 @@ export function FaqAccordionWidget({
             )}
             style={{ color: hs.headingColor || undefined }}
           >
-            {asText(s.header.heading)}
+            {s.header.heading}
           </h2>
           {s.header.description && (
             <p
               className="mt-3 text-lg"
               style={{ color: hs.descriptionColor || undefined }}
             >
-              {asText(s.header.description)}
+              {s.header.description}
             </p>
           )}
         </div>
@@ -471,7 +463,7 @@ export function FaqAccordionWidget({
       )}
 
       {/* FAQ Items */}
-      <div className="w-full" data-field-id="faq-items">
+      <div className="mx-auto w-full max-w-3xl" data-field-id="faq-items">
         {s.style === "minimal" && (
           <div className="divide-y divide-border">
             {displayFaqs.map((faq) => (

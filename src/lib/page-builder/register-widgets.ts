@@ -39,20 +39,31 @@ import {
   DEFAULT_EVENT_CATEGORIES_GRID_SETTINGS,
   DEFAULT_CTA_BANNER_SETTINGS,
   DEFAULT_TOP_UTILITY_BAR_SETTINGS,
+  DEFAULT_TICKER_MARQUEE_SETTINGS,
+  DEFAULT_CUSTOM_HTML_SETTINGS,
+  DEFAULT_NEWSLETTER_CTA_SETTINGS,
+  DEFAULT_SOCIAL_SHARE_RAIL_SETTINGS,
+  DEFAULT_BREADCRUMB_SETTINGS,
+  DEFAULT_BLOG_POST_HERO_SETTINGS,
+  DEFAULT_BLOG_POST_CONTENT_SETTINGS,
+  DEFAULT_BLOG_POST_TOC_SETTINGS,
+  DEFAULT_BLOG_POST_AUTHOR_CARD_SETTINGS,
+  DEFAULT_BLOG_POST_TAGS_SETTINGS,
 } from "./defaults";
 
 // Import widget components
-import { HeroContentWidget, ProcessStepsWidget, HeadingWidget, TextBlockWidget, EventSearchHeroWidget, EventGalleryGridWidget, EventCategoriesGridWidget, CtaBannerWidget } from "@/components/page-builder/widgets/content";
+import { HeroContentWidget, ProcessStepsWidget, HeadingWidget, TextBlockWidget, TickerMarqueeWidget, SocialShareRailWidget, EventSearchHeroWidget, EventGalleryGridWidget, EventCategoriesGridWidget, CtaBannerWidget } from "@/components/page-builder/widgets/content";
 import { ImageWidget, ImageSliderWidget } from "@/components/page-builder/widgets/media";
 import {
   TrustBadgesWidget,
   StatsSectionWidget,
   TestimonialsWidget,
 } from "@/components/page-builder/widgets/social-proof";
-import { DividerWidget, FaqAccordionWidget, TopUtilityBarWidget } from "@/components/page-builder/widgets/layout";
+import { DividerWidget, FaqAccordionWidget, BreadcrumbWidget, TopUtilityBarWidget } from "@/components/page-builder/widgets/layout";
 import { ServiceCardWidget, ServiceListWidget, PricingTableWidget, VendorListingWidget } from "@/components/page-builder/widgets/commerce";
 import { LeadFormWidget } from "@/components/page-builder/widgets/forms";
-import { ButtonGroupWidget } from "@/components/page-builder/widgets/cta";
+import { ButtonGroupWidget, NewsletterCtaWidget } from "@/components/page-builder/widgets/cta";
+import { CustomHtmlWidget } from "@/components/page-builder/widgets/advanced/custom-html-widget";
 import {
   ServiceHeroWidget,
   ServiceChecklistCardWidget,
@@ -67,6 +78,11 @@ import {
   BlogFeaturedPostWidget,
   BlogPostListWidget,
   BlogRecentPostsWidget,
+  BlogPostHeroWidget,
+  BlogPostContentWidget,
+  BlogPostTocWidget,
+  BlogPostAuthorCardWidget,
+  BlogPostTagsWidget,
 } from "@/components/page-builder/widgets/blog";
 
 // Register all widgets
@@ -424,6 +440,112 @@ export function registerAllWidgets() {
     category: "layout",
     defaultSettings: DEFAULT_TOP_UTILITY_BAR_SETTINGS,
     component: TopUtilityBarWidget,
+  });
+
+  // Ticker Marquee
+  WidgetRegistry.register({
+    type: "ticker-marquee",
+    name: "Ticker Marquee",
+    description: "Infinite scrolling ticker bar with country/stat items",
+    icon: "MoveHorizontal",
+    category: "content",
+    defaultSettings: DEFAULT_TICKER_MARQUEE_SETTINGS,
+    component: TickerMarqueeWidget,
+  });
+
+  // Custom HTML (Advanced)
+  WidgetRegistry.register({
+    type: "custom-html",
+    name: "Custom HTML",
+    description: "Add custom HTML and CSS for any design",
+    icon: "Code",
+    category: "advanced",
+    defaultSettings: DEFAULT_CUSTOM_HTML_SETTINGS,
+    component: CustomHtmlWidget,
+  });
+
+  // Newsletter CTA
+  WidgetRegistry.register({
+    type: "newsletter-cta",
+    name: "Newsletter CTA",
+    description: "Lightweight email-only newsletter signup with badge, 2-color title, and disclaimer",
+    icon: "Mail",
+    category: "cta",
+    defaultSettings: DEFAULT_NEWSLETTER_CTA_SETTINGS,
+    component: NewsletterCtaWidget,
+  });
+
+  // Social Share Rail
+  WidgetRegistry.register({
+    type: "social-share-rail",
+    name: "Social Share Rail",
+    description: "Sticky social share buttons (Twitter, LinkedIn, Facebook, Copy Link)",
+    icon: "Share2",
+    category: "content",
+    defaultSettings: DEFAULT_SOCIAL_SHARE_RAIL_SETTINGS,
+    component: SocialShareRailWidget,
+  });
+
+  // Breadcrumb
+  WidgetRegistry.register({
+    type: "breadcrumb",
+    name: "Breadcrumb",
+    description: "Auto-generated breadcrumb navigation",
+    icon: "ChevronRight",
+    category: "layout",
+    defaultSettings: DEFAULT_BREADCRUMB_SETTINGS,
+    component: BreadcrumbWidget,
+  });
+
+  // Blog Detail Widgets (dynamic — read from BlogPostContext)
+  WidgetRegistry.register({
+    type: "blog-post-hero",
+    name: "Blog Post Hero",
+    description: "Article hero with breadcrumb, category, title, and author meta — pulls from current post",
+    icon: "FileText",
+    category: "blog",
+    defaultSettings: DEFAULT_BLOG_POST_HERO_SETTINGS,
+    component: BlogPostHeroWidget,
+  });
+
+  WidgetRegistry.register({
+    type: "blog-post-content",
+    name: "Blog Post Content",
+    description: "Renders blog post content with prose typography and optional cover image",
+    icon: "AlignLeft",
+    category: "blog",
+    defaultSettings: DEFAULT_BLOG_POST_CONTENT_SETTINGS,
+    component: BlogPostContentWidget,
+  });
+
+  WidgetRegistry.register({
+    type: "blog-post-toc",
+    name: "Table of Contents",
+    description: "Auto-extracted table of contents with sticky behavior and scroll-spy",
+    icon: "List",
+    category: "blog",
+    defaultSettings: DEFAULT_BLOG_POST_TOC_SETTINGS,
+    component: BlogPostTocWidget,
+  });
+
+  WidgetRegistry.register({
+    type: "blog-post-author-card",
+    name: "Author Bio Card",
+    description: "Large author card with avatar, name, role, bio, and social links",
+    icon: "User",
+    category: "blog",
+    defaultSettings: DEFAULT_BLOG_POST_AUTHOR_CARD_SETTINGS,
+    component: BlogPostAuthorCardWidget,
+  });
+
+  WidgetRegistry.register({
+    type: "blog-post-tags",
+    name: "Post Tags",
+    description: "Pill list of blog post tags",
+    icon: "Tag",
+    category: "blog",
+    defaultSettings: DEFAULT_BLOG_POST_TAGS_SETTINGS,
+    component: BlogPostTagsWidget,
   });
 }
 

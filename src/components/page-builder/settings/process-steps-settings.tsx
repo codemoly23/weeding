@@ -59,7 +59,6 @@ export function ProcessStepsWidgetSettingsPanel({
     stepNumber: { ...DEFAULT_PROCESS_STEPS_SETTINGS.stepNumber, ...settings?.stepNumber },
     stepIcon: { ...DEFAULT_PROCESS_STEPS_SETTINGS.stepIcon, ...settings?.stepIcon },
     stepContent: { ...DEFAULT_PROCESS_STEPS_SETTINGS.stepContent, ...settings?.stepContent },
-    stepLabel: settings?.stepLabel ? { ...DEFAULT_PROCESS_STEPS_SETTINGS.stepLabel, ...settings.stepLabel } : DEFAULT_PROCESS_STEPS_SETTINGS.stepLabel,
     connector: { ...DEFAULT_PROCESS_STEPS_SETTINGS.connector, ...settings?.connector },
     container: { ...DEFAULT_PROCESS_STEPS_SETTINGS.container!, ...settings?.container },
     card: { ...DEFAULT_PROCESS_STEPS_SETTINGS.card, ...settings?.card },
@@ -106,10 +105,6 @@ export function ProcessStepsWidgetSettingsPanel({
 
   const updateContainer = (updates: Partial<NonNullable<ProcessStepsWidgetSettings["container"]>>) => {
     onChange({ ...s, container: { ...s.container!, ...updates } });
-  };
-
-  const updateStepLabel = (updates: Partial<NonNullable<ProcessStepsWidgetSettings["stepLabel"]>>) => {
-    onChange({ ...s, stepLabel: { ...s.stepLabel!, ...updates } });
   };
 
   const updateCard = (updates: Partial<ProcessStepsWidgetSettings["card"]>) => {
@@ -198,7 +193,7 @@ export function ProcessStepsWidgetSettingsPanel({
               label="Heading Text"
               value={s.header.heading.text}
               onChange={(v) => updateHeaderHeading({ text: v })}
-              placeholder="Start Your LLC in 4 Simple Steps"
+              placeholder="Start your business in 4 Simple Steps"
             />
             <TextInput
               label="Highlight Words"
@@ -599,37 +594,6 @@ export function ProcessStepsWidgetSettingsPanel({
                   { value: "rotate", label: "Rotate" },
                   { value: "shake", label: "Shake" },
                 ]}
-              />
-            </>
-          )}
-        </div>
-      </AccordionSection>
-
-      {/* Step Label Pill */}
-      <AccordionSection title="Step Label Pill (e.g. STEP 01)">
-        <div className="space-y-4">
-          <ToggleSwitch
-            label="Show Step Label"
-            checked={s.stepLabel?.show ?? false}
-            onChange={(checked) => updateStepLabel({ show: checked })}
-          />
-          {s.stepLabel?.show && (
-            <>
-              <TextInput
-                label="Label Prefix"
-                value={s.stepLabel.prefix ?? "STEP"}
-                onChange={(v) => updateStepLabel({ prefix: v })}
-                placeholder="STEP"
-              />
-              <ColorInput
-                label="Background"
-                value={s.stepLabel.bgColor ?? "#f3f4f6"}
-                onChange={(v) => updateStepLabel({ bgColor: v })}
-              />
-              <ColorInput
-                label="Text Color"
-                value={s.stepLabel.textColor ?? "#6b7280"}
-                onChange={(v) => updateStepLabel({ textColor: v })}
               />
             </>
           )}

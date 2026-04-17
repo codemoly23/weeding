@@ -7,25 +7,39 @@
 
 import type { Widget, WidgetType } from "@/lib/page-builder/types";
 
-// Import widget components
+// Content widgets
 import { HeroContentWidget } from "../widgets/content/hero-content";
 import { HeadingWidget } from "../widgets/content/heading-widget";
 import { TextBlockWidget } from "../widgets/content/text-block-widget";
 import { ProcessStepsWidget } from "../widgets/content/process-steps";
+import { TickerMarqueeWidget } from "../widgets/content/ticker-marquee";
+import { SocialShareRailWidget } from "../widgets/content/social-share-rail";
 import { EventSearchHeroWidget } from "../widgets/content/event-search-hero-widget";
 import { EventCategoriesGridWidget } from "../widgets/content/event-categories-grid-widget";
 import { EventGalleryGridWidget } from "../widgets/content/event-gallery-grid-widget";
 import { CtaBannerWidget } from "../widgets/content/cta-banner-widget";
+
+// Media widgets
 import { ImageWidget } from "../widgets/media/image-widget";
 import { ImageSliderWidget } from "../widgets/media/image-slider-widget";
+
+// Social proof widgets
 import { TrustBadgesWidget } from "../widgets/social-proof/trust-badges";
 import { StatsSectionWidget } from "../widgets/social-proof/stats-section";
 import { TestimonialsWidget } from "../widgets/social-proof/testimonials-widget";
+
+// Layout widgets
 import { DividerWidget } from "../widgets/layout/divider-widget";
 import { FaqAccordionWidget } from "../widgets/layout/faq-accordion-widget";
+import { BreadcrumbWidget } from "../widgets/layout/breadcrumb-widget";
 import { TopUtilityBarWidget } from "../widgets/layout/top-utility-bar-widget";
+
+// Form + CTA widgets
 import { LeadFormWidget } from "../widgets/forms/lead-form-widget";
 import { ButtonGroupWidget } from "../widgets/cta/button-group-widget";
+import { NewsletterCtaWidget } from "../widgets/cta/newsletter-cta-widget";
+
+// Commerce widgets
 import { PricingTableWidget } from "../widgets/commerce/pricing-table-widget";
 import { ServiceCardWidget } from "../widgets/commerce/service-card-widget";
 import { ServiceListWidget } from "../widgets/commerce/service-list-widget";
@@ -46,12 +60,18 @@ import {
   BlogFeaturedPostWidget,
   BlogPostListWidget,
   BlogRecentPostsWidget,
+  BlogPostHeroWidget,
+  BlogPostContentWidget,
+  BlogPostTocWidget,
+  BlogPostAuthorCardWidget,
+  BlogPostTagsWidget,
 } from "../widgets/blog";
+
+// Advanced
+import { CustomHtmlWidget } from "../widgets/advanced/custom-html-widget";
 
 // ============================================
 // WIDGET COMPONENT MAP
-// Maps widget types to their React components
-// Using 'any' to allow flexible widget props
 // ============================================
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -61,6 +81,8 @@ const WIDGET_COMPONENTS: Partial<Record<WidgetType, React.ComponentType<any>>> =
   "heading": HeadingWidget,
   "text-block": TextBlockWidget,
   "process-steps": ProcessStepsWidget,
+  "ticker-marquee": TickerMarqueeWidget,
+  "social-share-rail": SocialShareRailWidget,
   "event-search-hero": EventSearchHeroWidget,
   "event-categories-grid": EventCategoriesGridWidget,
   "event-gallery-grid": EventGalleryGridWidget,
@@ -87,11 +109,13 @@ const WIDGET_COMPONENTS: Partial<Record<WidgetType, React.ComponentType<any>>> =
 
   // CTA widgets
   "button-group": ButtonGroupWidget,
+  "newsletter-cta": NewsletterCtaWidget,
 
   // Layout widgets
   "divider": DividerWidget,
   "faq": FaqAccordionWidget,
   "faq-accordion": FaqAccordionWidget,
+  "breadcrumb": BreadcrumbWidget,
   "top-utility-bar": TopUtilityBarWidget,
 
   // Service widgets
@@ -108,9 +132,11 @@ const WIDGET_COMPONENTS: Partial<Record<WidgetType, React.ComponentType<any>>> =
   "blog-featured-post": BlogFeaturedPostWidget,
   "blog-post-list": BlogPostListWidget,
   "blog-recent-posts": BlogRecentPostsWidget,
-
-  // Theme widgets
-  "ticker-marquee": TickerMarqueeWidget,
+  "blog-post-hero": BlogPostHeroWidget,
+  "blog-post-content": BlogPostContentWidget,
+  "blog-post-toc": BlogPostTocWidget,
+  "blog-post-author-card": BlogPostAuthorCardWidget,
+  "blog-post-tags": BlogPostTagsWidget,
 
   // Advanced widgets
   "custom-html": CustomHtmlWidget,
@@ -127,11 +153,9 @@ interface WidgetRendererProps {
 export function WidgetRenderer({ widget }: WidgetRendererProps) {
   const { type, settings, spacing } = widget;
 
-  // Get the component for this widget type
   const WidgetComponent = WIDGET_COMPONENTS[type];
 
   if (!WidgetComponent) {
-    // Unknown widget type - show placeholder in development
     if (process.env.NODE_ENV === "development") {
       return (
         <div className="flex items-center justify-center bg-muted/50 py-8 text-sm text-muted-foreground rounded-lg border border-dashed border-muted-foreground/30">
@@ -142,7 +166,6 @@ export function WidgetRenderer({ widget }: WidgetRendererProps) {
     return null;
   }
 
-  // Build spacing styles
   const spacingStyles: React.CSSProperties = {};
   if (spacing?.marginTop) {
     spacingStyles.marginTop = `${spacing.marginTop}px`;

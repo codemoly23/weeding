@@ -10,7 +10,8 @@ import {
   getColumnSpanClasses,
   getMaxWidthClass,
 } from "@/lib/page-builder/section-layouts";
-import { getPatternCSS, getPatternBackgroundSize } from "@/lib/page-builder/pattern-utils";
+import { getPatternCSS, getPatternBackgroundSize, getPatternMaskCSS } from "@/lib/page-builder/pattern-utils";
+import { DecorativeGlows } from "@/components/page-builder/shared/decorative-glows";
 import { WidgetRenderer } from "./widget-renderer";
 
 // ============================================
@@ -187,17 +188,31 @@ function SectionRenderer({ section }: SectionRendererProps) {
         />
       )}
 
+      {/* Decorative Glows (behind pattern) */}
+      <DecorativeGlows glows={settings.decorativeGlows} borderRadius={innerBorderRadius ? `${innerBorderRadius}px` : undefined} />
+
       {/* Pattern Overlay (fullWidth) */}
-      {settings.fullWidth && patternOverlay && patternOverlay.opacity > 0 && (
-        <div
-          className="absolute inset-0 pointer-events-none"
-          style={{
-            backgroundImage: getPatternCSS(patternOverlay.type, patternOverlay.color, patternOverlay.opacity),
-            backgroundSize: getPatternBackgroundSize(patternOverlay.type),
-            borderRadius: innerBorderRadius ? `${innerBorderRadius}px` : undefined,
-          }}
-        />
-      )}
+      {settings.fullWidth && patternOverlay && patternOverlay.opacity > 0 && (() => {
+        const maskCss = getPatternMaskCSS(patternOverlay.mask);
+        return (
+          <div
+            className="absolute inset-0 pointer-events-none"
+            style={{
+              backgroundImage: getPatternCSS(patternOverlay.type, patternOverlay.color, patternOverlay.opacity),
+              backgroundSize: getPatternBackgroundSize(patternOverlay.type),
+              borderRadius: innerBorderRadius ? `${innerBorderRadius}px` : undefined,
+              ...(maskCss
+                ? {
+                    maskImage: maskCss,
+                    WebkitMaskImage: maskCss,
+                    maskRepeat: "no-repeat",
+                    WebkitMaskRepeat: "no-repeat",
+                  }
+                : {}),
+            }}
+          />
+        );
+      })()}
 
       {/* Container */}
       <div
@@ -218,16 +233,27 @@ function SectionRenderer({ section }: SectionRendererProps) {
             }}
           />
         )}
-        {!settings.fullWidth && patternOverlay && patternOverlay.opacity > 0 && (
-          <div
-            className="absolute inset-0 pointer-events-none"
-            style={{
-              backgroundImage: getPatternCSS(patternOverlay.type, patternOverlay.color, patternOverlay.opacity),
-              backgroundSize: getPatternBackgroundSize(patternOverlay.type),
-              borderRadius,
-            }}
-          />
-        )}
+        {!settings.fullWidth && patternOverlay && patternOverlay.opacity > 0 && (() => {
+          const maskCss = getPatternMaskCSS(patternOverlay.mask);
+          return (
+            <div
+              className="absolute inset-0 pointer-events-none"
+              style={{
+                backgroundImage: getPatternCSS(patternOverlay.type, patternOverlay.color, patternOverlay.opacity),
+                backgroundSize: getPatternBackgroundSize(patternOverlay.type),
+                borderRadius,
+                ...(maskCss
+                  ? {
+                      maskImage: maskCss,
+                      WebkitMaskImage: maskCss,
+                      maskRepeat: "no-repeat",
+                      WebkitMaskRepeat: "no-repeat",
+                    }
+                  : {}),
+              }}
+            />
+          );
+        })()}
 
         {/* Grid */}
         <div

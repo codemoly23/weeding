@@ -96,7 +96,7 @@ export function ServiceHeroWidgetSettingsPanel({
           label="Highlight Phrase"
           value={s.titleHighlightWord || ""}
           onChange={(v) => updateField("titleHighlightWord", v)}
-          placeholder="US LLC"
+          placeholder="business"
           description="Text colored in forest green"
         />
         <TextInput

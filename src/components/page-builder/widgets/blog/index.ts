@@ -3,3 +3,8 @@ export { BlogPostCarouselWidget } from "./blog-post-carousel";
 export { BlogFeaturedPostWidget } from "./blog-featured-post";
 export { BlogPostListWidget } from "./blog-post-list";
 export { BlogRecentPostsWidget } from "./blog-recent-posts";
+export { BlogPostHeroWidget } from "./blog-post-hero";
+export { BlogPostContentWidget } from "./blog-post-content";
+export { BlogPostTocWidget } from "./blog-post-toc";
+export { BlogPostAuthorCardWidget } from "./blog-post-author-card";
+export { BlogPostTagsWidget } from "./blog-post-tags";

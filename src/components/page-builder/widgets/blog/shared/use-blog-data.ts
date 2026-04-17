@@ -6,6 +6,8 @@ import type { BlogPostData, BlogDataSource } from "@/lib/page-builder/types";
 interface UseBlogDataOptions {
   dataSource: BlogDataSource;
   activeCategory?: string | null; // for filter tabs
+  excludeIds?: string[]; // post IDs to exclude (e.g., featured post on same page)
+  searchQuery?: string | null; // text search query (e.g., from hero search bar)
 }
 
 interface UseBlogDataResult {
@@ -30,6 +32,8 @@ interface UseBlogDataResult {
 export function useBlogData({
   dataSource,
   activeCategory,
+  excludeIds,
+  searchQuery,
 }: UseBlogDataOptions): UseBlogDataResult {
   const [posts, setPosts] = useState<BlogPostData[]>([]);
   const [total, setTotal] = useState(0);
@@ -48,6 +52,12 @@ export function useBlogData({
   const activeCategoryRef = useRef(activeCategory);
   activeCategoryRef.current = activeCategory;
 
+  const excludeIdsRef = useRef(excludeIds);
+  excludeIdsRef.current = excludeIds;
+
+  const searchQueryRef = useRef(searchQuery);
+  searchQueryRef.current = searchQuery;
+
   // Serialize dataSource + activeCategory into a single stable string key.
   // useEffect only re-fires when this key actually changes (string value equality).
   const fetchKey = JSON.stringify([
@@ -58,6 +68,8 @@ export function useBlogData({
     dataSource.categories ?? null,
     dataSource.tags ?? null,
     activeCategory ?? null,
+    excludeIds && excludeIds.length > 0 ? [...excludeIds].sort() : null,
+    searchQuery ?? null,
   ]);
 
   // Helper: build URLSearchParams (reads from refs, no dependency issues)
@@ -86,6 +98,19 @@ export function useBlogData({
     // Tag filtering
     if (ds.source === "tag" && ds.tags && ds.tags.length > 0) {
       params.set("tag", ds.tags[0]);
+    }
+
+    // Exclude post IDs (e.g., featured post on same page).
+    // /api/blog supports a single `exclude` param — pass first ID for now.
+    const excl = excludeIdsRef.current;
+    if (excl && excl.length > 0) {
+      params.set("exclude", excl[0]);
+    }
+
+    // Text search query (from hero search bar)
+    const sq = searchQueryRef.current;
+    if (sq && sq.trim()) {
+      params.set("search", sq.trim());
     }
 
     return params;
