@@ -1,9 +1,16 @@
 "use client";
 
-import { useState, useMemo, useId } from "react";
+import { useState, useMemo, useId, useSyncExternalStore } from "react";
+import { useSearchParams } from "next/navigation";
 import type { BlogPostGridWidgetSettings } from "@/lib/page-builder/types";
 import { DEFAULT_BLOG_POST_GRID_SETTINGS } from "@/lib/page-builder/defaults";
 import { useBlogData } from "./shared/use-blog-data";
+import {
+  subscribeFeaturedExcluded,
+  getFeaturedExcludedSnapshot,
+  getFeaturedExcludedArray,
+} from "./shared/featured-exclusion-store";
+import { useBlogPostContext } from "@/components/page-builder/context/blog-post-context";
 import { BlogCard } from "./shared/blog-card";
 import { BlogSectionHeader } from "./shared/blog-section-header";
 import { BlogSkeleton } from "./shared/blog-skeleton";
@@ -74,10 +81,64 @@ export function BlogPostGridWidget({
   // Filter tabs state
   const [activeCategory, setActiveCategory] = useState<string | null>(null);
 
+  // Sort state
+  const [sortValue, setSortValue] = useState<string>(
+    s.sort?.options?.[0]?.value || "date-desc"
+  );
+
+  // Subscribe to featured-post exclusion store (sibling widget on same page)
+  useSyncExternalStore(
+    subscribeFeaturedExcluded,
+    getFeaturedExcludedSnapshot,
+    () => "" // SSR: nothing excluded server-side
+  );
+  const excludeIds = getFeaturedExcludedArray();
+
+  // Read text search query from URL (?q=...) — wired by hero-content search bar
+  const searchParams = useSearchParams();
+  const searchQuery = searchParams?.get("q") || null;
+
+  // Read blog post context (for "related" mode)
+  const currentPost = useBlogPostContext();
+
+  // Apply sort + related mode to dataSource
+  const sortedDataSource = useMemo(() => {
+    let ds = s.dataSource;
+
+    // Related mode: filter by current post's primary category
+    if ((s.dataSource as { mode?: string }).mode === "related" && currentPost) {
+      const cat = currentPost.categories?.[0];
+      ds = {
+        ...ds,
+        source: cat ? "category" : "all",
+        categories: cat ? [cat.slug] : [],
+      };
+    }
+
+    if (!s.sort?.enabled) return ds;
+    const [orderBy, dir] = sortValue.split("-");
+    return {
+      ...ds,
+      orderBy: orderBy as "date" | "title" | "modified",
+      orderDirection: (dir || "desc") as "asc" | "desc",
+    };
+  }, [s.dataSource, s.sort?.enabled, sortValue, currentPost]);
+
+  // For related mode, also exclude the current post
+  const combinedExcludeIds = useMemo(() => {
+    if ((s.dataSource as { mode?: string }).mode === "related" && currentPost) {
+      return [...excludeIds, currentPost.id];
+    }
+    return excludeIds;
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [excludeIds, currentPost?.id, (s.dataSource as { mode?: string }).mode]);
+
   // Fetch blog data
   const { posts, total, hasMore, loading, error, loadMore } = useBlogData({
-    dataSource: s.dataSource,
+    dataSource: sortedDataSource,
     activeCategory,
+    excludeIds: combinedExcludeIds,
+    searchQuery,
   });
 
   // Extract unique categories from loaded posts for filter tabs
@@ -125,12 +186,7 @@ export function BlogPostGridWidget({
         }
       `}</style>
 
-      {/* Section Header */}
-      <div data-field-id="header">
-        <BlogSectionHeader settings={s.header} />
-      </div>
-
-      {/* Filter Tabs */}
+      {/* Filter Tabs (above heading row, mockup order) */}
       {s.filterTabs.show && filterCategories.length > 0 && (
         <BlogFilterTabs
           categories={filterCategories}
@@ -139,8 +195,42 @@ export function BlogPostGridWidget({
           style={s.filterTabs.style}
           showAll={s.filterTabs.showAll}
           allText={s.filterTabs.allText}
+          activeBg={s.filterTabs.activeBg}
+          activeColor={s.filterTabs.activeColor}
+          activeBorder={s.filterTabs.activeBorder}
+          inactiveBg={s.filterTabs.inactiveBg}
+          inactiveColor={s.filterTabs.inactiveColor}
+          inactiveBorder={s.filterTabs.inactiveBorder}
+          hoverBorder={s.filterTabs.hoverBorder}
         />
       )}
+
+      {/* Section Header — heading left + sort dropdown right */}
+      <div
+        className="flex flex-wrap items-end justify-between gap-4 mb-10"
+        data-field-id="header"
+      >
+        <div className="flex-1 min-w-0">
+          <BlogSectionHeader settings={s.header} />
+        </div>
+
+        {s.sort?.enabled && (s.sort.options?.length ?? 0) > 0 && (
+          <div className="flex items-center gap-2.5 text-sm text-slate-500">
+            <span>{s.sort.label || "Sort by:"}</span>
+            <select
+              value={sortValue}
+              onChange={(e) => setSortValue(e.target.value)}
+              className="rounded-lg border border-slate-200 bg-white px-4 py-2.5 text-sm font-medium text-slate-900 cursor-pointer font-display focus:outline-none focus:ring-2 focus:ring-orange-500/30"
+            >
+              {s.sort.options!.map((opt) => (
+                <option key={opt.value} value={opt.value}>
+                  {opt.label}
+                </option>
+              ))}
+            </select>
+          </div>
+        )}
+      </div>
 
       {/* Loading State */}
       {loading && posts.length === 0 && (

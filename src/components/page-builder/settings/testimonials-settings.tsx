@@ -178,7 +178,6 @@ export function TestimonialsWidgetSettingsPanel({
             options={[
               { label: "Grid", value: "grid" },
               { label: "Carousel", value: "carousel" },
-              { label: "Marquee (Scrolling)", value: "marquee" },
               { label: "Video Grid", value: "video-grid" },
             ]}
           />

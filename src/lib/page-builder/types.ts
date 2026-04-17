@@ -25,7 +25,18 @@ export type MaxWidth = "sm" | "md" | "lg" | "xl" | "2xl" | "full";
 // Background Types
 export type BackgroundType = "solid" | "gradient" | "image" | "video";
 export type GradientType = "linear" | "radial";
-export type PatternType = "dots" | "grid" | "diagonal" | "waves" | "circuit" | "geometric" | "confetti";
+export type PatternType = "dots" | "grid" | "grid-fine" | "diagonal" | "waves" | "circuit" | "geometric" | "confetti";
+
+/** Decorative radial glow positioned absolutely inside a section — used for hero accent lighting */
+export interface DecorativeGlow {
+  position: "top-left" | "top-right" | "bottom-left" | "bottom-right" | "center";
+  size: number;       // px (square)
+  color: string;      // hex or rgba
+  opacity?: number;   // 0-1, default 1 (color usually already has alpha)
+  offsetX?: number;   // % offset from edge (e.g., -10 = -10%)
+  offsetY?: number;   // % offset from edge
+  fade?: number;      // 0-100, where the gradient becomes transparent (default 70)
+}
 export type BackgroundSize = "cover" | "contain" | "auto";
 export type BackgroundPosition = "center" | "top" | "bottom" | "left" | "right" | "top-left" | "top-right" | "bottom-left" | "bottom-right";
 export type BackgroundRepeat = "no-repeat" | "repeat" | "repeat-x" | "repeat-y";
@@ -58,6 +69,8 @@ export interface PatternSettings {
   type: PatternType;
   color: string;
   opacity: number; // 0-1
+  /** Optional radial fade mask — pattern visible at center, fades to transparent at edges */
+  mask?: "none" | "radial-center" | "radial-top" | "radial-bottom";
 }
 
 export interface BackgroundOverlay {
@@ -125,6 +138,8 @@ export interface SectionSettings {
   customCSS?: string;
   // Decorative watermark text overlay
   watermark?: SectionWatermark;
+  // Decorative radial glows (e.g., hero accent lights)
+  decorativeGlows?: DecorativeGlow[];
   // Visibility
   isVisible: boolean;
   visibleOnMobile: boolean;
@@ -234,6 +249,15 @@ export type WidgetType =
   | "blog-featured-post"
   | "blog-post-list"
   | "blog-recent-posts"
+  | "blog-post-hero"
+  | "blog-post-content"
+  | "blog-post-toc"
+  | "blog-post-author-card"
+  | "blog-post-tags"
+  // New CTA / Nav / Social
+  | "newsletter-cta"
+  | "social-share-rail"
+  | "breadcrumb"
   // Event/Planner Widgets
   | "event-search-hero"
   | "event-gallery-grid"
@@ -415,6 +439,22 @@ export interface HeroContentWidgetSettings {
   // Theme color binding
   colors?: {
     useTheme?: boolean; // When true, use CSS var(--color-primary) as accent color
+  };
+
+  // Optional Search Bar (e.g., for blog list / knowledge base hero)
+  search?: {
+    enabled: boolean;
+    placeholder?: string;
+    buttonText?: string;
+    action?: "blog" | "services" | "custom-url";
+    customUrl?: string; // when action === "custom-url" — pattern like "/search?q="
+    variant?: "pill" | "rounded" | "square";
+    bgColor?: string;
+    textColor?: string;
+    borderColor?: string;
+    buttonBgColor?: string;
+    buttonTextColor?: string;
+    maxWidth?: number; // px
   };
 
   // Container Style
@@ -999,23 +1039,13 @@ export interface StatsCardGridConfig {
 }
 
 export interface StatsSectionWidgetSettings {
-  // Optional section header (title + subtitle above the stats grid)
-  header?: {
-    show: boolean;
-    title: string;
-    subtitle?: string;
-    titleColor: string;
-    subtitleColor: string;
-  };
-
+  variant?: "default" | "card-grid";
   stats: StatItem[];
   columns: 2 | 3 | 4 | 5;
   style: {
     valueColor: string;
     labelColor: string;
     valueSize: "sm" | "md" | "lg" | "xl";
-    labelSize?: "sm" | "md" | "lg";    // Label font size (defaults to sm)
-    labelUppercase?: boolean;           // Whether to uppercase labels
     divider: boolean;
     showTopBorder?: boolean;
     topBorderColor?: string;
@@ -1031,6 +1061,16 @@ export interface StatsSectionWidgetSettings {
     customLabelFontSize?: string;    // e.g., "13px"
     labelFontWeight?: number;        // e.g., 500
     labelLetterSpacing?: string;     // e.g., "0.3px"
+    labelSize?: "sm" | "md" | "lg";   // Label font size preset
+    labelUppercase?: boolean;          // Whether to uppercase labels
+  };
+  // Optional section header (title + subtitle above the stats grid)
+  header?: {
+    show: boolean;
+    title: string;
+    subtitle?: string;
+    titleColor: string;
+    subtitleColor: string;
   };
   cardGrid?: StatsCardGridConfig;
   centered: boolean;
@@ -2268,6 +2308,14 @@ export interface ProcessStepsWidgetSettings {
     hoverAnimation: "none" | "bounce" | "pulse" | "rotate" | "shake";
   };
 
+  // Step Label pill ("STEP 01" shown below icon)
+  stepLabel?: {
+    show: boolean;
+    prefix: string;
+    bgColor: string;
+    textColor: string;
+  };
+
   // Step Content
   stepContent: {
     titleSize: "sm" | "md" | "lg" | "xl";
@@ -2339,14 +2387,6 @@ export interface ProcessStepsWidgetSettings {
   animation: {
     staggerDelay: number;      // Delay between each step appearing (ms)
     animateOnScroll: boolean;
-  };
-
-  // Step Label (e.g. "STEP 01" pill shown below icon)
-  stepLabel?: {
-    show: boolean;
-    prefix: string;   // e.g. "STEP"
-    bgColor: string;
-    textColor: string;
   };
 
   // Theme color binding
@@ -3098,7 +3138,16 @@ export interface BlogPostData {
   slug: string;
   excerpt: string | null;
   coverImage: string | null;
+  readingMinutes: number | null;
+  views?: number | null;
+  content?: string;
   authorId: string | null;
+  authorName: string | null;
+  authorRole: string | null;
+  authorBio?: string | null;
+  authorAvatarUrl?: string | null;
+  authorTwitter?: string | null;
+  authorLinkedin?: string | null;
   publishedAt: string | null;
   tags: string[];
   categories: { id: string; name: string; slug: string }[];
@@ -3122,30 +3171,61 @@ export interface BlogPostGridWidgetSettings {
   card: {
     style: "default" | "bordered" | "elevated" | "minimal";
     backgroundColor?: string;
+    borderColor?: string;
+    borderWidth?: number;
     borderRadius: number;
     shadow: "none" | "sm" | "md" | "lg";
+    hoverShadow?: string;
     hoverEffect: "none" | "lift" | "shadow" | "scale";
     image: {
       show: boolean;
       aspectRatio: "16:9" | "4:3" | "3:2" | "1:1";
       borderRadius: number;
       hoverEffect: "none" | "zoom" | "brighten";
+      /** Decorative emblem mode (instead of real cover image) */
+      emblem?: {
+        enabled: boolean;
+        mode?: "always" | "fallback";
+        text?: string;
+        autoFromCategory?: boolean;
+        fontSize?: number;
+        color?: string;
+        opacity?: number;
+        letterSpacing?: string;
+      };
+      decorative?: {
+        background?: string;
+        showGrid?: boolean;
+        gridColor?: string;
+        gridSize?: number;
+        showGlow?: boolean;
+        glowColor?: string;
+        glowSize?: number;
+      };
     };
     categoryBadge: {
       show: boolean;
-      position: "overlay-top-left" | "above-title" | "below-title";
-      style: "pill" | "solid" | "minimal";
+      position: "overlay-top-left" | "overlay-top-right" | "above-title" | "below-title";
+      style: "pill" | "solid" | "minimal" | "dark-blur";
+      bgColor?: string;
+      textColor?: string;
+      borderColor?: string;
+      uppercase?: boolean;
+      letterSpacing?: string;
     };
     title: {
       show: boolean;
       maxLines: number;
       fontSize: "sm" | "md" | "lg" | "xl";
       fontWeight: 500 | 600 | 700;
+      color?: string;
+      hoverColor?: string;
     };
     excerpt: {
       show: boolean;
       maxLength: number;
       fontSize: "xs" | "sm" | "md";
+      color?: string;
     };
     meta: {
       show: boolean;
@@ -3153,6 +3233,9 @@ export interface BlogPostGridWidgetSettings {
       dateFormat: "relative" | "short" | "long";
       separator: "dot" | "dash" | "pipe";
       fontSize: "xs" | "sm";
+      style?: "icons" | "inline-dots";
+      textColor?: string;
+      dotColor?: string;
     };
     readMore: {
       show: boolean;
@@ -3160,6 +3243,27 @@ export interface BlogPostGridWidgetSettings {
       style: "link" | "button-sm" | "arrow-only";
     };
     contentPadding: number;
+    /** Footer with author + arrow button (mockup style) */
+    footer?: {
+      show: boolean;
+      showDivider: boolean;
+      dividerColor?: string;
+      paddingTop?: number;
+      author: {
+        show: boolean;
+        avatarBgFrom?: string;
+        avatarBgTo?: string;
+        nameColor?: string;
+      };
+      arrow: {
+        show: boolean;
+        bgColor?: string;
+        textColor?: string;
+        hoverBgColor?: string;
+        hoverTextColor?: string;
+        size?: number;
+      };
+    };
   };
   filterTabs: {
     show: boolean;
@@ -3167,6 +3271,18 @@ export interface BlogPostGridWidgetSettings {
     showAll: boolean;
     allText: string;
     categories: string[];
+    activeBg?: string;
+    activeColor?: string;
+    activeBorder?: string;
+    inactiveBg?: string;
+    inactiveColor?: string;
+    inactiveBorder?: string;
+    hoverBorder?: string;
+  };
+  sort?: {
+    enabled: boolean;
+    label?: string;
+    options?: Array<{ value: string; label: string }>;
   };
   pagination: {
     type: "none" | "load-more" | "numbered";
@@ -3232,6 +3348,8 @@ export interface BlogFeaturedPostWidgetSettings {
     source: "latest" | "specific" | "category-latest";
     postId?: string;
     categorySlug?: string;
+    /** When true, this featured post's ID is broadcast so blog-post-grid widgets on the same page exclude it from their results. */
+    excludeFromGrid?: boolean;
   };
   layout: "overlay" | "split-left" | "split-right" | "stacked";
   image: {
@@ -3243,6 +3361,48 @@ export interface BlogFeaturedPostWidgetSettings {
       opacity: number;
     };
     hoverEffect: "none" | "zoom" | "ken-burns";
+    /** Decorative emblem mode — replaces real cover image with dark BG + huge text */
+    emblem?: {
+      enabled: boolean;
+      mode?: "always" | "fallback"; // always = ignore coverImage; fallback = only when coverImage missing
+      text?: string;          // explicit text (e.g., "WY/DE"); if empty, auto-derive from category/title
+      autoFromCategory?: boolean; // when true, derive text from primary category short code
+      fontSize?: number;      // px (default 120)
+      color?: string;         // text color
+      opacity?: number;       // 0-1 (default 0.4)
+      letterSpacing?: string;
+    };
+    /** Decorative background layers (when emblem mode active) */
+    decorative?: {
+      background?: string;    // CSS background (gradient or solid)
+      showGrid?: boolean;
+      gridColor?: string;     // rgba
+      gridSize?: number;      // px
+      showGlow?: boolean;
+      glowColor?: string;     // rgba
+      glowSize?: number;      // px
+    };
+  };
+  /** Featured tag (separate from category badge) — top-left orange pill */
+  featuredTag?: {
+    show: boolean;
+    text: string;
+    position?: "top-left" | "top-right";
+    bgColor?: string;
+    textColor?: string;
+    uppercase?: boolean;
+    letterSpacing?: string;
+    shadow?: string;
+  };
+  /** Card wrapper styling (for split-left/split-right/stacked layouts) */
+  card?: {
+    background?: string;
+    borderWidth?: number;
+    borderColor?: string;
+    borderRadius?: number;
+    shadow?: string;
+    hoverShadow?: string;
+    hoverLift?: boolean;
   };
   content: {
     categoryBadge: {
@@ -3253,24 +3413,46 @@ export interface BlogFeaturedPostWidgetSettings {
       size: "lg" | "xl" | "2xl" | "3xl";
       fontWeight: 600 | 700 | 800;
       maxLines: number;
+      color?: string;
+      customFontSize?: string;
     };
     excerpt: {
       show: boolean;
       maxLength: number;
       fontSize: "sm" | "md" | "lg";
+      color?: string;
     };
     meta: {
       show: boolean;
       items: ("date" | "readingTime" | "category")[];
       dateFormat: "relative" | "short" | "long";
+      style?: "icons" | "inline-dots"; // icons = old, inline-dots = orange uppercase category + bullet dots
+      categoryColor?: string;
+      dotColor?: string;
+      textColor?: string;
     };
     readMore: {
       show: boolean;
       text: string;
       style: "button-primary" | "button-outline" | "link" | "arrow";
+      color?: string;
+    };
+    /** Author block (gradient avatar + name + role) */
+    author?: {
+      show: boolean;
+      source?: "post" | "manual";
+      name?: string;
+      role?: string;
+      initials?: string;
+      avatarUrl?: string;
+      avatarBgFrom?: string;
+      avatarBgTo?: string;
+      nameColor?: string;
+      roleColor?: string;
     };
     alignment: "left" | "center";
     verticalPosition: "top" | "center" | "bottom";
+    padding?: number; // px content side padding
   };
   height: "auto" | "sm" | "md" | "lg" | "xl";
 
@@ -3554,3 +3736,270 @@ export interface TopUtilityBarWidgetSettings {
   links: TopUtilityBarLink[];
 }
 
+export interface NewsletterCtaWidgetSettings {
+  badge: {
+    show: boolean;
+    icon?: string; // Lucide icon name OR emoji
+    text: string;
+    bgColor?: string;
+    textColor?: string;
+    borderColor?: string;
+  };
+  title: {
+    line1: string;
+    line2: string;
+    line2Color?: string; // accent color for second line
+    color?: string;
+    size?: "lg" | "xl" | "2xl" | "3xl";
+    fontWeight?: number;
+  };
+  subtitle: {
+    show: boolean;
+    text: string;
+    color?: string;
+    maxWidth?: number;
+  };
+  form: {
+    placeholder: string;
+    buttonText: string;
+    buttonBgColor?: string;
+    buttonTextColor?: string;
+    inputBgColor?: string;
+    inputTextColor?: string;
+    inputBorderColor?: string;
+    borderRadius?: number;
+    layout?: "inline" | "stacked";
+  };
+  successMessage: string;
+  errorMessage: string;
+  disclaimer: {
+    show: boolean;
+    text: string;
+    color?: string;
+  };
+  alignment: "left" | "center" | "right";
+  background?: {
+    color?: string;
+    variant?: "dark" | "light" | "custom";
+  };
+  container?: WidgetContainerStyle;
+}
+
+// ============================================
+// BLOG DETAIL PAGE WIDGETS (dynamic — read from BlogPostContext)
+// ============================================
+
+/** Breadcrumb widget — auto-generated from URL or manual */
+export interface BreadcrumbWidgetSettings {
+  separator: "chevron" | "slash" | "arrow" | "dot";
+  homeLabel: string;
+  homeUrl: string;
+  /** Optional manual override of crumbs (if empty, auto-generates from URL/blog post) */
+  manualCrumbs?: Array<{ label: string; url?: string }>;
+  showCurrent: boolean;
+  color?: string;
+  hoverColor?: string;
+  currentColor?: string;
+  separatorColor?: string;
+  fontSize?: number;
+  uppercase?: boolean;
+  letterSpacing?: string;
+  alignment?: "left" | "center" | "right";
+  container?: WidgetContainerStyle;
+}
+
+/** Blog Post Hero — dynamic article hero pulling from current post */
+export interface BlogPostHeroWidgetSettings {
+  breadcrumb: {
+    show: boolean;
+    color?: string;
+    separatorColor?: string;
+  };
+  categoryPill: {
+    show: boolean;
+    bgColor?: string;
+    textColor?: string;
+    borderColor?: string;
+    uppercase?: boolean;
+    letterSpacing?: string;
+  };
+  title: {
+    customFontSize?: string;
+    color?: string;
+    accentColor?: string;
+    accentWords?: string; // comma-separated; if empty, auto-detect last 2 words
+    fontWeight?: number;
+    lineHeight?: number;
+    letterSpacing?: string;
+  };
+  lead: {
+    show: boolean;
+    color?: string;
+    fontSize?: string;
+    maxWidth?: number;
+  };
+  meta: {
+    show: boolean;
+    showAuthor: boolean;
+    showDate: boolean;
+    showReadingTime: boolean;
+    showViews: boolean;
+    avatarBgFrom?: string;
+    avatarBgTo?: string;
+    nameColor?: string;
+    roleColor?: string;
+    statColor?: string;
+    statLabelColor?: string;
+    iconColor?: string;
+    dividerColor?: string;
+  };
+  alignment?: "left" | "center";
+  container?: WidgetContainerStyle;
+}
+
+/** Blog Post Content — renders post.content HTML with prose typography */
+export interface BlogPostContentWidgetSettings {
+  coverImage: {
+    show: boolean;
+    aspectRatio?: "16:9" | "21:9" | "4:3";
+    borderRadius?: number;
+    marginBottom?: number;
+  };
+  prose: {
+    /** Tailwind prose size: prose-sm | prose-base | prose-lg | prose-xl */
+    size?: "sm" | "base" | "lg" | "xl";
+    /** Theme: light (default), dark, custom */
+    theme?: "light" | "dark";
+    maxWidth?: number; // px, content max-width
+    linkColor?: string;
+    linkHoverColor?: string;
+    headingColor?: string;
+    bodyColor?: string;
+    quoteColor?: string;
+    codeBg?: string;
+  };
+  container?: WidgetContainerStyle;
+}
+
+/** Blog Post Table of Contents — auto-extracts headings from post content */
+export interface BlogPostTocWidgetSettings {
+  title: string;
+  showTitle: boolean;
+  /** Which heading levels to include */
+  headingLevels: Array<2 | 3 | 4>;
+  sticky: boolean;
+  stickyTop?: number; // px from top
+  scrollSpy: boolean;
+  titleColor?: string;
+  itemColor?: string;
+  itemHoverColor?: string;
+  activeColor?: string;
+  activeBgColor?: string;
+  borderColor?: string;
+  fontSize?: number;
+  itemSpacing?: number;
+  container?: WidgetContainerStyle;
+}
+
+/** Social Share Rail — sticky vertical/horizontal share buttons */
+export interface SocialShareRailWidgetSettings {
+  label: string;
+  showLabel: boolean;
+  layout: "vertical" | "horizontal";
+  sticky: boolean;
+  stickyTop?: number;
+  platforms: Array<"twitter" | "linkedin" | "facebook" | "whatsapp" | "copy">;
+  buttonStyle: "outline" | "filled" | "minimal";
+  buttonBgColor?: string;
+  buttonTextColor?: string;
+  buttonBorderColor?: string;
+  buttonHoverBgColor?: string;
+  buttonHoverTextColor?: string;
+  showCounter: boolean;
+  counterValue?: string; // static (e.g. "1.2K")
+  counterLabel?: string;
+  labelColor?: string;
+  iconSize?: number;
+  container?: WidgetContainerStyle;
+}
+
+/** Blog Post Author Card — large author bio block */
+export interface BlogPostAuthorCardWidgetSettings {
+  showAvatar: boolean;
+  avatarSize?: number;
+  avatarBgFrom?: string;
+  avatarBgTo?: string;
+  showRole: boolean;
+  showBio: boolean;
+  showSocial: boolean;
+  cardBg?: string;
+  cardBorderColor?: string;
+  cardBorderRadius?: number;
+  cardPadding?: number;
+  nameColor?: string;
+  roleColor?: string;
+  bioColor?: string;
+  socialIconColor?: string;
+  socialHoverColor?: string;
+  layout?: "horizontal" | "vertical";
+  container?: WidgetContainerStyle;
+}
+
+/** Blog Post Tags — pill list of post tags */
+export interface BlogPostTagsWidgetSettings {
+  label: string;
+  showLabel: boolean;
+  tagBgColor?: string;
+  tagTextColor?: string;
+  tagBorderColor?: string;
+  tagHoverBgColor?: string;
+  tagHoverTextColor?: string;
+  pillStyle?: "rounded" | "square";
+  uppercase?: boolean;
+  letterSpacing?: string;
+  fontSize?: number;
+  linkPrefix?: string; // e.g. "/blog/tag/"
+  alignment?: "left" | "center";
+  container?: WidgetContainerStyle;
+}
+
+// ============================================
+// CUSTOM HTML WIDGET
+// ============================================
+
+export interface CustomHtmlWidgetSettings {
+  html: string;
+  css: string;
+  container?: WidgetContainerStyle;
+}
+
+// ============================================
+// TICKER MARQUEE WIDGET
+// ============================================
+
+export interface TickerMarqueeItem {
+  id: string;
+  content: string; // HTML from TipTap editor
+  boldText?: string;
+  text?: string;
+  link?: string;
+  openInNewTab?: boolean;
+  noFollow?: boolean;
+}
+
+export interface TickerMarqueeWidgetSettings {
+  tickerName?: string;
+  items: TickerMarqueeItem[];
+  speed: number;
+  separator: string;
+  textColor: string;
+  boldColor: string;
+  separatorColor: string;
+  customFontSize?: string;
+  fontWeight?: number;
+  pauseOnHover?: boolean;
+  colors?: {
+    useTheme?: boolean;
+  };
+  container?: WidgetContainerStyle;
+}

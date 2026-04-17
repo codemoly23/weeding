@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import { cn } from "@/lib/utils";
 
 interface BlogFilterTabsProps {
@@ -9,6 +10,14 @@ interface BlogFilterTabsProps {
   style: "pills" | "underline" | "buttons";
   showAll: boolean;
   allText: string;
+  // Theming (optional — defaults to original blue scheme)
+  activeBg?: string;
+  activeColor?: string;
+  activeBorder?: string;
+  inactiveBg?: string;
+  inactiveColor?: string;
+  inactiveBorder?: string;
+  hoverBorder?: string;
 }
 
 export function BlogFilterTabs({
@@ -18,7 +27,16 @@ export function BlogFilterTabs({
   style,
   showAll,
   allText,
+  activeBg = "#1b3a2d",
+  activeColor = "#ffffff",
+  activeBorder = "#1b3a2d",
+  inactiveBg = "#ffffff",
+  inactiveColor = "#64748b",
+  inactiveBorder = "#e2e8f0",
+  hoverBorder = "#f97316",
 }: BlogFilterTabsProps) {
+  const [hoveredId, setHoveredId] = useState<string | null>(null);
+
   if (categories.length === 0) return null;
 
   const tabs = showAll
@@ -28,47 +46,44 @@ export function BlogFilterTabs({
   return (
     <div
       className={cn(
-        "mb-6 flex flex-wrap",
-        style === "underline" ? "gap-0 border-b border-slate-200 dark:border-slate-700" : "gap-2"
+        "mb-8 flex flex-wrap justify-center",
+        style === "underline" ? "gap-0 border-b border-slate-200" : "gap-2.5"
       )}
     >
       {tabs.map((tab) => {
         const isActive =
           tab.slug === "" ? activeCategory === null : activeCategory === tab.slug;
+        const isHovered = hoveredId === tab.id;
+
+        const inlineStyle: React.CSSProperties = {};
+        if (style === "pills" || style === "buttons") {
+          inlineStyle.background = isActive ? activeBg : inactiveBg;
+          inlineStyle.color = isActive ? activeColor : inactiveColor;
+          inlineStyle.borderColor = isActive
+            ? activeBorder
+            : isHovered
+              ? hoverBorder
+              : inactiveBorder;
+          inlineStyle.borderWidth = "1px";
+          inlineStyle.borderStyle = "solid";
+        } else if (style === "underline") {
+          inlineStyle.color = isActive ? activeBg : inactiveColor;
+          inlineStyle.borderBottomColor = isActive ? activeBg : "transparent";
+        }
 
         return (
           <button
             key={tab.id}
-            onClick={() =>
-              onCategoryChange(tab.slug === "" ? null : tab.slug)
-            }
+            onClick={() => onCategoryChange(tab.slug === "" ? null : tab.slug)}
+            onMouseEnter={() => setHoveredId(tab.id)}
+            onMouseLeave={() => setHoveredId(null)}
             className={cn(
-              "text-sm font-medium transition-all duration-200",
-
-              // Pills style
-              style === "pills" && [
-                "rounded-full px-4 py-1.5",
-                isActive
-                  ? "bg-blue-600 text-white dark:bg-blue-500"
-                  : "bg-slate-100 text-slate-600 hover:bg-slate-200 dark:bg-slate-800 dark:text-slate-400 dark:hover:bg-slate-700",
-              ],
-
-              // Underline style
-              style === "underline" && [
-                "border-b-2 px-4 py-2.5 -mb-px",
-                isActive
-                  ? "border-blue-600 text-blue-600 dark:border-blue-400 dark:text-blue-400"
-                  : "border-transparent text-slate-500 hover:border-slate-300 hover:text-slate-700 dark:text-slate-400 dark:hover:border-slate-600 dark:hover:text-slate-300",
-              ],
-
-              // Buttons style
-              style === "buttons" && [
-                "rounded-lg border px-4 py-1.5",
-                isActive
-                  ? "border-blue-600 bg-blue-50 text-blue-600 dark:border-blue-500 dark:bg-blue-900/20 dark:text-blue-400"
-                  : "border-slate-200 text-slate-600 hover:border-slate-300 hover:bg-slate-50 dark:border-slate-700 dark:text-slate-400 dark:hover:border-slate-600 dark:hover:bg-slate-800",
-              ]
+              "font-display font-medium text-[14px] transition-all duration-200 cursor-pointer",
+              style === "pills" && "rounded-full px-[22px] py-[10px]",
+              style === "buttons" && "rounded-lg px-4 py-1.5",
+              style === "underline" && "border-b-2 px-4 py-2.5 -mb-px"
             )}
+            style={inlineStyle}
           >
             {tab.name}
           </button>

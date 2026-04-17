@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState, useMemo } from "react";
+import React, { useEffect, useState, useMemo } from "react";
 import Link from "next/link";
 import {
   Check,
@@ -84,6 +84,7 @@ interface Package {
   processingIcon?: string | null;
   badgeText?: string | null;
   badgeColor?: string | null;
+  compareAtPrice?: number | null;
 }
 
 interface ServiceData {
@@ -246,6 +247,7 @@ function SectionHeader({ settings }: { settings: PricingTableWidgetSettings }) {
         )}
         style={{
           color: heading.color || "#0f172a",
+          whiteSpace: "pre-line",
           ...(heading.customFontSize ? { fontSize: heading.customFontSize } : {}),
           ...(heading.fontWeight ? { fontWeight: heading.fontWeight } : {}),
           ...(heading.lineHeight ? { lineHeight: heading.lineHeight } : {}),
@@ -533,6 +535,31 @@ interface ComparisonTableProps {
   expandedFeature: string | null;
   onExpandFeature: (featureId: string | null) => void;
   currencySymbol?: string;
+  serviceSlug: string;
+}
+
+// =============================================================================
+// INFO TOOLTIP
+// =============================================================================
+
+function InfoTooltip({ text }: { text: string }) {
+  return (
+    <span
+      className="relative inline-flex items-center justify-center w-3.5 h-3.5 rounded-full border-[1.5px] border-[rgba(14,17,9,0.16)] bg-transparent text-[9px] font-bold ml-1.5 cursor-default shrink-0 group/tip"
+      style={{ fontFamily: "var(--font-accent, Georgia, serif)", color: "#8a9086" }}
+      onMouseEnter={(e) => { e.currentTarget.style.borderColor = "#1b3a2d"; e.currentTarget.style.color = "#1b3a2d"; e.currentTarget.style.backgroundColor = "rgba(27,58,45,0.07)"; }}
+      onMouseLeave={(e) => { e.currentTarget.style.borderColor = "rgba(14,17,9,0.16)"; e.currentTarget.style.color = "#8a9086"; e.currentTarget.style.backgroundColor = "transparent"; }}
+    >
+      i
+      <span
+        className="absolute bottom-[calc(100%+8px)] left-1/2 -translate-x-1/2 translate-y-1.5 bg-[#0e1109] text-[rgba(255,255,255,0.88)] text-[11.5px] font-normal px-3 py-2.5 rounded-[9px] w-56 text-left opacity-0 pointer-events-none transition-all duration-150 whitespace-normal shadow-[0_10px_30px_rgba(0,0,0,0.22)] group-hover/tip:opacity-100 group-hover/tip:translate-y-0 z-[300]"
+        style={{ fontFamily: "var(--font-sans, Inter, sans-serif)", fontStyle: "normal" }}
+      >
+        {text}
+        <span className="absolute top-full left-1/2 -translate-x-1/2 border-[5px] border-transparent border-t-[#0e1109]" />
+      </span>
+    </span>
+  );
 }
 
 function ComparisonTable({
@@ -548,356 +575,367 @@ function ComparisonTable({
   expandedFeature,
   onExpandFeature,
   currencySymbol = "$",
+  serviceSlug,
 }: ComparisonTableProps) {
-  const { tableStyle, tableHeader, featureRows, colors } = settings;
-  const useTheme = settings.colors?.useTheme !== false;
-  const accentColor = useTheme ? "var(--color-primary)" : (settings.ctaButtons?.defaultBgColor || "#f97316");
-  const accentBgLight = useTheme ? "color-mix(in srgb, var(--color-primary) 8%, transparent)" : `${settings.ctaButtons?.defaultBgColor || "#f97316"}15`;
-  const accentBgBorder = useTheme ? "color-mix(in srgb, var(--color-primary) 50%, transparent)" : `${settings.ctaButtons?.defaultBgColor || "#f97316"}80`;
+  // ── colour tokens ──────────────────────────────────────────────────────────
+  const FOREST = "#1b3a2d";
+  const CREAM  = "#faf8f4";
+  const CORAL  = "#e84c1e";
+  const BORDER = "rgba(14,17,9,0.1)";
 
-  const renderCellContent = (
-    feature: ComparisonFeature,
-    pkg: Package,
-    isSelectedColumn: boolean
-  ) => {
-    const mapping = feature.packageMappings.find((m) => m.packageId === pkg.id);
-    if (!mapping) {
-      return (
-        <Minus
-          className={cn(
-            "h-5 w-5",
-            isSelectedColumn ? "text-gray-400" : "text-gray-300"
-          )}
-        />
-      );
-    }
+  // ── local state ────────────────────────────────────────────────────────────
+  const [hoveredCol, setHoveredCol] = useState<number | null>(null);
+  const [expandedAddons, setExpandedAddons] = useState<Record<string, boolean>>({});
+  const [headerOffset, setHeaderOffset] = useState(0);
 
-    const { valueType, included, customValue, addonPriceUSD } = mapping;
+  useEffect(() => {
+    const measure = () => {
+      let maxBottom = 0;
+      document.querySelectorAll("header").forEach((el) => {
+        const node = el as HTMLElement;
+        const cs = window.getComputedStyle(node);
+        if (cs.position !== "sticky" && cs.position !== "fixed") return;
+        const rect = node.getBoundingClientRect();
+        if (rect.top <= 1 && rect.bottom > maxBottom) maxBottom = rect.bottom;
+      });
+      setHeaderOffset(Math.ceil(maxBottom));
+    };
+    measure();
+    window.addEventListener("resize", measure);
+    window.addEventListener("scroll", measure, { passive: true });
+    return () => {
+      window.removeEventListener("resize", measure);
+      window.removeEventListener("scroll", measure);
+    };
+  }, []);
 
-    switch (valueType) {
-      case "ADDON":
-        if (addonPriceUSD) {
-          const isSelected = isAddonSelected(feature.id, pkg.id);
-          return (
-            <Button
-              variant="outline"
-              size="sm"
-              className={cn(
-                "h-8 px-3 text-sm font-medium transition-all",
-                isSelected
-                  ? "text-white"
-                  : "border-gray-300 hover:border-gray-400"
-              )}
-              style={
-                isSelected
-                  ? {
-                      backgroundColor: featureRows.addonStyle.selectedColor || accentColor,
-                      borderColor: featureRows.addonStyle.selectedColor || accentColor,
-                    }
-                  : isSelectedColumn
-                    ? { borderColor: accentBgBorder }
-                    : undefined
-              }
-              onClick={(e) => {
-                e.stopPropagation();
-                onToggleAddon(feature.id, feature.text, pkg.id, addonPriceUSD);
-              }}
-            >
-              {isSelected ? (
-                <Check className="w-4 h-4 mr-1" />
-              ) : (
-                <Plus className="w-4 h-4 mr-1" />
-              )}
-              {currencySymbol}{addonPriceUSD}
-            </Button>
-          );
-        }
-        return <Minus className="h-5 w-5 text-gray-300" />;
+  // ── sorted packages (price ascending) ─────────────────────────────────────
+  const sortedPackages = [...packages].sort((a, b) => a.price - b.price);
+  const colCount = sortedPackages.length;
 
-      case "DASH":
-        return (
-          <Minus
-            className={cn(
-              "h-5 w-5",
-              isSelectedColumn ? "text-gray-400" : "text-gray-300"
-            )}
-          />
-        );
+  // ── feature segregation ───────────────────────────────────────────────────
+  const regularFeatures = features.filter(
+    (f) => !f.packageMappings.some((m) => m.valueType === "ADDON")
+  );
+  const addonFeatures = features.filter(
+    (f) => f.packageMappings.some((m) => m.valueType === "ADDON")
+  );
 
-      case "TEXT":
-        return (
-          <span
-            className="text-sm font-medium"
-            style={isSelectedColumn ? { color: accentColor } : undefined}
-          >
-            {customValue}
-          </span>
-        );
+  // ── active column index ───────────────────────────────────────────────────
+  const activeColIndex = sortedPackages.findIndex((p) => p.id === selectedPackageId);
 
-      case "BOOLEAN":
-      default:
-        if (included) {
-          return (
-            <div
-              className="inline-flex h-6 w-6 items-center justify-center rounded-full text-white"
-              style={{
-                backgroundColor: isSelectedColumn
-                  ? featureRows.booleanStyle.trueColor || accentColor
-                  : "#9ca3af",
-              }}
-            >
-              <Check className="h-4 w-4 stroke-[3]" />
-            </div>
-          );
-        }
-        return (
-          <div
-            className={cn(
-              "inline-flex h-6 w-6 items-center justify-center rounded-full",
-              isSelectedColumn ? "bg-gray-300 text-gray-500" : "bg-gray-200 text-gray-400"
-            )}
-            style={
-              featureRows.booleanStyle.falseColor
-                ? { backgroundColor: featureRows.booleanStyle.falseColor }
-                : undefined
-            }
-          >
-            <X className="h-4 w-4 stroke-[3]" />
-          </div>
-        );
-    }
+  // ── checkout URL ──────────────────────────────────────────────────────────
+  const getCheckoutUrl = (pkg: Package) => {
+    const pkgAddons = selectedAddons.filter((a) => a.packageId === pkg.id);
+    const pkgName = encodeURIComponent(pkg.name.toLowerCase());
+    return `/checkout/${serviceSlug}?package=${pkgName}${
+      pkgAddons.length > 0 ? `&addons=${pkgAddons.map((a) => a.featureId).join(",")}` : ""
+    }`;
   };
 
-  return (
-    <div className="flex-1 overflow-x-auto">
-      <div
-        className="rounded-xl border bg-white shadow-sm"
-        style={{
-          borderRadius: `${tableStyle.borderRadius}px`,
-          borderWidth: `${tableStyle.borderWidth}px`,
-          borderColor: tableStyle.borderColor || "#e2e8f0",
-          backgroundColor: tableStyle.backgroundColor || "#ffffff",
-        }}
-      >
-        <table className="w-full border-collapse">
-          <thead>
-            {/* Badge Row */}
-            <tr>
-              <th
-                className="sticky left-0 z-20 h-6"
-                style={{ backgroundColor: tableStyle.backgroundColor || "#ffffff" }}
-              />
-              {packages.map((pkg, index) => {
-                const isSelected = pkg.id === selectedPackageId;
-                // Disable default highlightColumn when any package is selected - only selected column gets highlight
-                const isHighlighted = !selectedPackageId && tableHeader.highlightColumn === index;
-                return (
-                <th
-                  key={`badge-${pkg.id}`}
-                  className="relative h-6 cursor-pointer"
-                  style={{
-                    backgroundColor: isSelected
-                      ? colors.highlightedColumnBg || accentBgLight
-                      : isHighlighted
-                        ? tableHeader.highlightColor || accentBgLight
-                        : tableStyle.backgroundColor || "#ffffff",
-                  }}
-                  onClick={() => onPackageSelect(pkg.id)}
-                >
-                  {tableHeader.showPopularBadge && pkg.badgeText && (
-                    <div
-                      className="absolute bottom-0 left-1/2 -translate-x-1/2 translate-y-1/2 px-3 py-1 text-xs font-semibold font-display text-white rounded-full whitespace-nowrap z-10 shadow-sm"
-                      style={{
-                        backgroundColor: tableHeader.popularBadgeColor
-                          ? tableHeader.popularBadgeColor
-                          : pkg.badgeColor === "green"
-                            ? "#10b981"
-                            : accentColor,
-                      }}
-                    >
-                      {pkg.badgeText}
-                    </div>
-                  )}
-                </th>
-              );
-              })}
-            </tr>
+  const toggleAddonDetail = (key: string) =>
+    setExpandedAddons((prev) => ({ ...prev, [key]: !prev[key] }));
 
-            {/* Header Row */}
+  // Dummy usage to satisfy TS (CREAM used inline via string)
+  void CREAM;
+
+  return (
+    <div className="pt-4 overflow-x-auto md:overflow-x-visible md:overflow-y-visible">
+      <div
+        className="rounded-[20px] border-[1.5px] bg-white relative"
+        style={{ borderColor: BORDER, boxShadow: "0 4px 24px rgba(0,0,0,0.04)", minWidth: "640px" }}
+      >
+        <table className="w-full border-separate border-spacing-0 table-fixed">
+
+          {/* ── THEAD — sticky while table is in view ────────────────────── */}
+          <thead className="md:sticky" style={{ top: `${headerOffset}px`, zIndex: 60 }}>
+            {/* Single header row (badge + package info combined) */}
             <tr>
               <th
-                className="sticky left-0 z-20 min-w-64 px-6 py-4 text-left"
-                style={{ backgroundColor: tableStyle.backgroundColor || "#ffffff" }}
+                className="w-[38%] p-0 bg-white text-left align-bottom border-b-[1.5px] rounded-tl-[20px]"
+                style={{ borderColor: BORDER, minWidth: "180px" }}
               >
-                <span className="text-base font-semibold text-gray-900">
-                  Business Formation
-                  <br />
-                  Packages
-                </span>
+                <div
+                  className="px-7 pt-7 pb-6 text-[17px] font-extrabold text-[#0e1109]"
+                  style={{ fontFamily: "var(--font-heading, Outfit, sans-serif)" }}
+                >
+                  Business Formation<br />Packages
+                </div>
               </th>
-              {packages.map((pkg, index) => {
-                const isSelected = pkg.id === selectedPackageId;
-                // Disable default highlightColumn when any package is selected - only selected column gets highlight
-                const isHighlighted = !selectedPackageId && tableHeader.highlightColumn === index;
+
+              {sortedPackages.map((pkg, colIdx) => {
+                const isActive = activeColIndex === colIdx;
+                const isLast = colIdx === colCount - 1;
+                const addonTotal = selectedAddons.filter((a) => a.packageId === pkg.id).reduce((s, a) => s + a.price, 0);
+
                 return (
                   <th
                     key={pkg.id}
                     className={cn(
-                      "relative min-w-36 cursor-pointer px-4 pt-5 pb-4 text-center transition-all",
-                      !isSelected && "hover:bg-gray-50"
+                      "p-0 bg-white text-center align-bottom border-b-[1.5px] relative transition-colors duration-150",
+                      isLast ? "rounded-tr-[20px]" : "",
+                      hoveredCol === colIdx ? "bg-[rgba(27,58,45,0.02)]" : ""
                     )}
-                    style={{
-                      backgroundColor: isSelected
-                        ? colors.highlightedColumnBg || accentBgLight
-                        : isHighlighted
-                          ? tableHeader.highlightColor || accentBgLight
-                          : tableStyle.backgroundColor || "#ffffff",
-                    }}
-                    onClick={() => onPackageSelect(pkg.id)}
+                    style={{ borderColor: BORDER, width: `${62 / colCount}%` }}
+                    onMouseEnter={() => setHoveredCol(colIdx)}
+                    onMouseLeave={() => setHoveredCol(null)}
                   >
-                    {tableHeader.showPackageNames && (
+                    {/* Popular badge — absolute, sits above the th */}
+                    {pkg.isPopular && (
                       <div
-                        className="mb-2 rounded-lg border-2 px-4 py-1 transition-all"
-                        style={
-                          isSelected
-                            ? { borderColor: accentColor, backgroundColor: "#ffffff" }
-                            : { borderColor: "#e5e7eb", backgroundColor: "#f9fafb" }
-                        }
+                        className="absolute -top-[13px] left-1/2 -translate-x-1/2 px-3.5 py-1 rounded-full text-[10px] font-bold uppercase tracking-[0.6px] text-white whitespace-nowrap z-[3] shadow-sm"
+                        style={{ fontFamily: "var(--font-heading, Outfit, sans-serif)", backgroundColor: CORAL }}
                       >
-                        <span className="text-sm font-semibold font-display text-gray-900">
+                        {pkg.badgeText || "Recommended"}
+                      </div>
+                    )}
+                    <div className="px-4 pt-7 pb-6">
+                      <button
+                        onClick={() => onPackageSelect(pkg.id)}
+                        className={cn(
+                          "flex flex-col items-center gap-1 w-full py-3.5 px-4 rounded-xl border-2 cursor-pointer transition-all duration-200 font-inherit",
+                          isActive
+                            ? "border-[#1b3a2d] bg-[#1b3a2d]"
+                            : "border-[rgba(14,17,9,0.1)] bg-white hover:border-[#1b3a2d] hover:bg-[rgba(27,58,45,0.07)]"
+                        )}
+                      >
+                        <span
+                          className={cn("text-[15px] font-extrabold tracking-[-0.01em]", isActive ? "text-[#faf8f4]" : "text-[#0e1109]")}
+                          style={{ fontFamily: "var(--font-heading, Outfit, sans-serif)" }}
+                        >
                           {pkg.name}
                         </span>
-                      </div>
-                    )}
 
-                    {tableHeader.showPackagePrices && (
-                      <div className="text-2xl font-bold font-display text-gray-900">
-                        {currencySymbol}{pkg.price}
-                      </div>
-                    )}
-
-                    {locationFee > 0 && (
-                      <div className="text-xs text-gray-500 mt-1">
-                        + {currencySymbol}{locationFee} {settings.stateFee.label?.toLowerCase() || "location fee"}
-                      </div>
-                    )}
-
-                    {pkg.processingTime && (
-                      <div className="flex items-center justify-center gap-1 mt-2 text-xs text-gray-500">
-                        {pkg.processingIcon === "zap" ? (
-                          <Zap className="h-3 w-3" style={{ color: accentColor }} />
-                        ) : (
-                          <Clock className="h-3 w-3" />
-                        )}
-                        <span
-                          style={pkg.processingIcon === "zap" ? { color: accentColor, fontWeight: 500 } : undefined}
-                        >
-                          {pkg.processingTime}
+                        <span className="flex items-baseline gap-0.5 leading-[1.1] flex-wrap justify-center">
+                          <span
+                            className={cn("text-[28px] font-black tracking-[-0.03em]", isActive ? "text-[#faf8f4]" : "text-[#0e1109]")}
+                            style={{ fontFamily: "var(--font-heading, Outfit, sans-serif)" }}
+                          >
+                            {currencySymbol}{pkg.price + addonTotal}
+                          </span>
+                          {pkg.compareAtPrice && (
+                            <span
+                              className={cn("text-[14px] font-semibold line-through ml-1 align-middle", isActive ? "text-[rgba(250,248,244,0.35)]" : "text-[#8a9086]")}
+                              style={{ fontFamily: "var(--font-heading, Outfit, sans-serif)" }}
+                            >
+                              {currencySymbol}{pkg.compareAtPrice}
+                            </span>
+                          )}
+                          <sub className={cn("text-[11px] font-medium ml-0.5", isActive ? "text-[rgba(250,248,244,0.5)]" : "text-[#8a9086]")}>
+                            {locationFee > 0 ? `+${currencySymbol}${locationFee} state fee` : "+ state fee"}
+                          </sub>
                         </span>
-                      </div>
-                    )}
+
+                        {pkg.processingTime && (
+                          <span className={cn("flex items-center gap-1 text-[11px] font-semibold mt-0.5", isActive ? "text-[rgba(250,248,244,0.6)]" : "text-[#8a9086]")}>
+                            {pkg.processingIcon === "zap" ? <Zap className="w-3 h-3" /> : <Clock className="w-3 h-3" />}
+                            {pkg.processingTime}
+                          </span>
+                        )}
+                      </button>
+                    </div>
                   </th>
                 );
               })}
             </tr>
           </thead>
 
+          {/* ── TBODY ───────────────────────────────────────────────────── */}
           <tbody>
-            {features.map((feature, index) => (
-              <tr
-                key={feature.id}
-                className={cn(
-                  "border-t border-gray-100 transition-colors",
-                  featureRows.alternateRowColors &&
-                    (index % 2 === 0 ? "bg-white" : "bg-gray-50/50")
-                )}
-              >
-                <td
-                  className="sticky left-0 z-10 bg-inherit px-6 py-4"
-                  style={{
-                    backgroundColor:
-                      featureRows.alternateRowColors && index % 2 !== 0
-                        ? "#f9fafb80"
-                        : tableStyle.backgroundColor || "#ffffff",
-                  }}
+            {/* Regular feature rows */}
+            {regularFeatures.map((feature, rowIdx) => {
+              const isAlt = rowIdx % 2 === 1;
+              return (
+                <tr
+                  key={feature.id}
+                  className={cn("transition-colors duration-150 hover:bg-[rgba(27,58,45,0.02)]", isAlt ? "bg-[rgba(27,58,45,0.015)]" : "")}
                 >
-                  <div className="flex flex-col">
-                    <div className="flex items-center gap-2">
-                      <span
-                        className="text-sm font-medium"
-                        style={{ color: colors.featureLabelText || "#0f172a" }}
-                      >
-                        {feature.text}
-                      </span>
-                      {featureRows.showTooltips && feature.tooltip && (
-                        <TooltipProvider>
-                          <Tooltip>
-                            <TooltipTrigger asChild>
-                              <button className="text-gray-400 hover:text-gray-600">
-                                <Info className="h-4 w-4" />
-                              </button>
-                            </TooltipTrigger>
-                            <TooltipContent
-                              side={featureRows.tooltipPosition}
-                              className="max-w-64"
-                            >
-                              <p className="text-xs">{feature.tooltip}</p>
-                            </TooltipContent>
-                          </Tooltip>
-                        </TooltipProvider>
-                      )}
-                    </div>
+                  <td className="py-3.5 px-7 border-b border-[rgba(14,17,9,0.06)] text-[14px] font-medium text-[#1a1f16] align-middle leading-[1.5] sticky left-0 z-[2] md:static bg-inherit">
+                    <span className="inline-flex items-center">
+                      {feature.text}
+                      {feature.tooltip && <InfoTooltip text={feature.tooltip} />}
+                    </span>
+                  </td>
 
-                    {featureRows.showFeatureDescriptions && feature.description && (
-                      <Collapsible
-                        open={expandedFeature === feature.id}
-                        onOpenChange={(open) =>
-                          onExpandFeature(open ? feature.id : null)
-                        }
+                  {sortedPackages.map((pkg, colIdx) => {
+                    const isActiveCol = activeColIndex === colIdx;
+                    const mapping = feature.packageMappings.find((m) => m.packageId === pkg.id);
+                    const included = mapping?.included ?? false;
+
+                    return (
+                      <td
+                        key={pkg.id}
+                        className={cn(
+                          "py-3.5 px-4 border-b border-[rgba(14,17,9,0.06)] text-center align-middle cursor-pointer transition-colors duration-150",
+                          hoveredCol === colIdx ? (isAlt ? "!bg-[rgba(27,58,45,0.05)]" : "!bg-[rgba(27,58,45,0.035)]") : ""
+                        )}
+                        onClick={() => onPackageSelect(pkg.id)}
+                        onMouseEnter={() => setHoveredCol(colIdx)}
+                        onMouseLeave={() => setHoveredCol(null)}
                       >
-                        <CollapsibleTrigger className="flex items-center gap-1 text-xs text-gray-500 hover:text-gray-700 mt-1">
-                          See what&apos;s included
-                          <ChevronDown
-                            className={cn(
-                              "h-3 w-3 transition-transform",
-                              expandedFeature === feature.id && "rotate-180"
-                            )}
-                          />
-                        </CollapsibleTrigger>
-                        <CollapsibleContent className="mt-2 text-xs text-gray-600">
-                          {feature.description}
-                        </CollapsibleContent>
-                      </Collapsible>
-                    )}
-                  </div>
+                        {included ? (
+                          <span className={cn("w-7 h-7 rounded-full inline-flex items-center justify-center transition-transform duration-200 hover:scale-110", isActiveCol ? "bg-[#1b3a2d]" : "bg-[rgba(27,58,45,0.08)]")}>
+                            <Check className={cn("w-3.5 h-3.5 stroke-3", isActiveCol ? "text-[#faf8f4]" : "text-[#1b3a2d]")} />
+                          </span>
+                        ) : mapping?.valueType === "TEXT" && mapping.customValue ? (
+                          <span className={cn("text-[13px] font-medium", isActiveCol ? "text-[#faf8f4]" : "text-[#1a1f16]")}>{mapping.customValue}</span>
+                        ) : (
+                          <span className="w-7 h-7 rounded-full inline-flex items-center justify-center bg-[rgba(14,17,9,0.04)]">
+                            <X className="w-3 h-3 text-[rgba(14,17,9,0.2)] stroke-2" />
+                          </span>
+                        )}
+                      </td>
+                    );
+                  })}
+                </tr>
+              );
+            })}
+
+            {/* Add-ons separator */}
+            {addonFeatures.length > 0 && (
+              <tr>
+                <td colSpan={colCount + 1} className="border-b border-[rgba(14,17,9,0.08)] bg-[#faf8f4] px-7 pt-5 pb-2.5">
+                  <span className="text-[13px] font-bold uppercase tracking-[1.2px] text-[#8a9086]" style={{ fontFamily: "var(--font-heading, Outfit, sans-serif)" }}>
+                    Optional Add-Ons
+                  </span>
                 </td>
-
-                {packages.map((pkg, pkgIndex) => {
-                  const isSelected = pkg.id === selectedPackageId;
-                  // Disable default highlightColumn when any package is selected - only selected column gets highlight
-                  const isHighlighted = !selectedPackageId && tableHeader.highlightColumn === pkgIndex;
-                  return (
-                    <td
-                      key={pkg.id}
-                      className="px-4 py-4 text-center transition-all cursor-pointer"
-                      style={{
-                        backgroundColor: isSelected
-                          ? colors.highlightedColumnBg || accentBgLight
-                          : isHighlighted
-                            ? tableHeader.highlightColor || accentBgLight
-                            : featureRows.alternateRowColors && index % 2 !== 0
-                              ? "#f9fafb80"
-                              : tableStyle.backgroundColor || "#ffffff",
-                      }}
-                      onClick={() => onPackageSelect(pkg.id)}
-                    >
-                      {renderCellContent(feature, pkg, isSelected)}
-                    </td>
-                  );
-                })}
               </tr>
-            ))}
+            )}
+
+            {/* Add-on rows */}
+            {addonFeatures.map((feature) => {
+              const isExpanded = !!expandedAddons[feature.id];
+              const firstAddonMapping = feature.packageMappings.find((m) => m.valueType === "ADDON");
+              const addonPrice = firstAddonMapping?.addonPriceUSD;
+
+              return (
+                <React.Fragment key={feature.id}>
+                  <tr className={cn("group/addon", isExpanded ? "open" : "")}>
+                    <td className="py-3.5 px-7 border-b border-[rgba(14,17,9,0.06)] bg-[rgba(250,248,244,0.5)] group-hover/addon:bg-[rgba(27,58,45,0.03)] transition-colors duration-150 align-middle sticky left-0 z-2 md:static">
+                      <div className="flex items-center gap-2">
+                        <button
+                          onClick={() => toggleAddonDetail(feature.id)}
+                          aria-label="More info"
+                          className={cn(
+                            "w-6 h-6 rounded-full border-[1.5px] flex items-center justify-center shrink-0 transition-all duration-200",
+                            isExpanded
+                              ? "border-[#1b3a2d] bg-[rgba(27,58,45,0.08)] text-[#1b3a2d]"
+                              : "border-[rgba(14,17,9,0.1)] bg-white text-[#8a9086] hover:border-[#1b3a2d] hover:text-[#1b3a2d] hover:bg-[rgba(27,58,45,0.06)]"
+                          )}
+                        >
+                          <Plus className={cn("w-3 h-3 transition-transform duration-300", isExpanded && "rotate-45")} style={{ transitionTimingFunction: "cubic-bezier(0.16,1,0.3,1)" }} />
+                        </button>
+                        <span className="text-[14px] font-medium text-[#1a1f16]">{feature.text}</span>
+                        {addonPrice && (
+                          <span className="text-[12px] font-bold text-[#4b5249] ml-0.5" style={{ fontFamily: "var(--font-heading, Outfit, sans-serif)" }}>
+                            +{currencySymbol}{addonPrice}
+                          </span>
+                        )}
+                        {feature.tooltip && <InfoTooltip text={feature.tooltip} />}
+                      </div>
+                    </td>
+
+                    {sortedPackages.map((pkg, colIdx) => {
+                      const mapping = feature.packageMappings.find((m) => m.packageId === pkg.id);
+                      const isIncluded = mapping?.valueType === "BOOLEAN" && mapping.included;
+                      const isAddon = mapping?.valueType === "ADDON";
+                      const price = mapping?.addonPriceUSD;
+                      const added = isAddonSelected(feature.id, pkg.id);
+
+                      return (
+                        <td
+                          key={pkg.id}
+                          className={cn(
+                            "py-3.5 px-4 border-b border-[rgba(14,17,9,0.06)] text-center align-middle bg-[rgba(250,248,244,0.5)] group-hover/addon:bg-[rgba(27,58,45,0.03)] transition-colors duration-150",
+                            hoveredCol === colIdx ? "bg-[rgba(27,58,45,0.055)]!" : ""
+                          )}
+                          onMouseEnter={() => setHoveredCol(colIdx)}
+                          onMouseLeave={() => setHoveredCol(null)}
+                        >
+                          {isIncluded ? (
+                            <span className="text-[12px] font-semibold text-[#1b3a2d]">Included</span>
+                          ) : isAddon && price ? (
+                            <button
+                              onClick={(e) => { e.stopPropagation(); onToggleAddon(feature.id, feature.text, pkg.id, price); }}
+                              className={cn(
+                                "text-[11px] font-bold px-3 py-1 rounded-full border-[1.5px] cursor-pointer transition-all duration-200 whitespace-nowrap leading-none",
+                                added
+                                  ? "bg-[#1b3a2d] text-white border-[#1b3a2d] hover:bg-[#0f2318] hover:border-[#0f2318]"
+                                  : "bg-transparent text-[#1b3a2d] border-[#1b3a2d] hover:bg-[#1b3a2d] hover:text-white"
+                              )}
+                            >
+                              {added ? "✓ Added" : "+ Add"}
+                            </button>
+                          ) : (
+                            <span className="w-7 h-7 rounded-full inline-flex items-center justify-center bg-[rgba(14,17,9,0.04)]">
+                              <X className="w-3 h-3 text-[rgba(14,17,9,0.2)] stroke-2" />
+                            </span>
+                          )}
+                        </td>
+                      );
+                    })}
+                  </tr>
+
+                  {/* Expand detail row — separate <tr> spanning all columns */}
+                  {isExpanded && feature.description && (
+                    <tr>
+                      <td
+                        colSpan={colCount + 1}
+                        className="border-b border-[rgba(14,17,9,0.06)] bg-[rgba(250,248,244,0.5)] px-7 pb-4"
+                        style={{ paddingTop: 0 }}
+                      >
+                        <div className="pl-8 pt-2.5 pb-1 text-[12.5px] text-[#4b5249] leading-[1.65] border-t border-dashed border-[rgba(14,17,9,0.1)]">
+                          {feature.description}
+                        </div>
+                      </td>
+                    </tr>
+                  )}
+                </React.Fragment>
+              );
+            })}
           </tbody>
+
+          {/* ── TFOOT ── CTA row ─────────────────────────────────────────── */}
+          <tfoot>
+            <tr>
+              <td className="px-7 py-5 bg-white border-t-[1.5px] rounded-bl-[20px] sticky left-0 z-[2] md:static" style={{ borderColor: BORDER }} />
+              {sortedPackages.map((pkg, colIdx) => {
+                const isActive = activeColIndex === colIdx;
+                const isLast = colIdx === colCount - 1;
+                // Last package (Premium) → coral, selected → forest, others → outline
+                const btnClass = isLast
+                  ? "bg-[#e84c1e] text-white border-[#e84c1e] hover:bg-[#d13d10] hover:-translate-y-0.5 hover:shadow-[0_8px_24px_rgba(232,76,30,0.35)]"
+                  : isActive
+                    ? "bg-[#1b3a2d] text-white border-[#1b3a2d] hover:bg-[#0f2318] hover:-translate-y-0.5 hover:shadow-[0_8px_24px_rgba(27,58,45,0.3)]"
+                    : "bg-transparent text-[#1a1f16] border-[rgba(14,17,9,0.1)] hover:border-[#1a1f16] hover:bg-[rgba(27,58,45,0.04)]";
+
+                return (
+                  <td
+                    key={pkg.id}
+                    className={cn(
+                      "px-4 py-5 bg-white border-t-[1.5px] text-center transition-colors duration-150",
+                      isLast ? "rounded-br-[20px]" : "",
+                      hoveredCol === colIdx ? "bg-[rgba(27,58,45,0.02)]" : ""
+                    )}
+                    style={{ borderColor: BORDER }}
+                    onMouseEnter={() => setHoveredCol(colIdx)}
+                    onMouseLeave={() => setHoveredCol(null)}
+                  >
+                    <Link
+                      href={getCheckoutUrl(pkg)}
+                      className={cn(
+                        "w-full flex items-center justify-center gap-2 py-3.5 px-5 rounded-xl font-semibold text-[14px] border-[1.5px] transition-all duration-200",
+                        btnClass
+                      )}
+                      style={{ fontFamily: "var(--font-heading, Outfit, sans-serif)" }}
+                    >
+                      {settings.ctaButtons?.buttonText || "Get Started"} →
+                    </Link>
+                  </td>
+                );
+              })}
+            </tr>
+          </tfoot>
         </table>
       </div>
     </div>
@@ -1355,7 +1393,8 @@ export function PricingTableWidget({
           />
         ) : (
         <>
-          <div className="hidden lg:flex gap-6">
+          {/* Desktop: full-width table, no sidebar */}
+          <div className="hidden lg:block">
             <ComparisonTable
               settings={settings}
               features={serviceData.comparisonFeatures}
@@ -1369,35 +1408,12 @@ export function PricingTableWidget({
               expandedFeature={expandedFeature}
               onExpandFeature={setExpandedFeature}
               currencySymbol={currencySymbol}
-            />
-
-            <OrderSummary
-              settings={settings}
-              selectedPackage={selectedPackage}
-              selectedLocation={selectedLocation}
-              locationFee={locationFee}
-              selectedAddons={selectedAddons}
-              grandTotal={grandTotal}
               serviceSlug={serviceData.slug}
-              checkoutBadgeText={serviceData.displayOptions?.checkoutBadgeText}
-              checkoutBadgeDescription={serviceData.displayOptions?.checkoutBadgeDescription}
-              currencySymbol={currencySymbol}
             />
           </div>
 
-          {/* View Mode: Table - Mobile Layout */}
+          {/* Mobile: swipeable cards */}
           <div className="lg:hidden mt-8">
-            <MobileOrderSummary
-              settings={settings}
-              selectedPackage={selectedPackage}
-              locationFee={locationFee}
-              selectedAddons={selectedAddons}
-              grandTotal={grandTotal}
-              serviceSlug={serviceData.slug}
-              selectedLocation={selectedLocation}
-              currencySymbol={currencySymbol}
-            />
-
             <MobilePackageCards
               settings={settings}
               packages={serviceData.packages}

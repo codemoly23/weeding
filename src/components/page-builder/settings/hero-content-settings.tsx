@@ -73,6 +73,7 @@ export function HeroContentWidgetSettingsPanel({
     secondaryButton: { ...DEFAULT_HERO_CONTENT_SETTINGS.secondaryButton, ...settings?.secondaryButton },
     trustText: { ...DEFAULT_HERO_CONTENT_SETTINGS.trustText, ...settings?.trustText },
     avatarGroup: { ...DEFAULT_HERO_CONTENT_SETTINGS.avatarGroup!, ...settings?.avatarGroup, avatars: settings?.avatarGroup?.avatars ?? DEFAULT_HERO_CONTENT_SETTINGS.avatarGroup!.avatars },
+    search: { ...DEFAULT_HERO_CONTENT_SETTINGS.search!, ...settings?.search },
     container: { ...DEFAULT_WIDGET_CONTAINER, ...settings?.container },
   };
 
@@ -149,13 +150,13 @@ export function HeroContentWidgetSettingsPanel({
           label="Text"
           value={s.headline.text}
           onChange={(v) => updateNested("headline", "text", v)}
-          placeholder="Plan Your Perfect Wedding with Ease"
+          placeholder="Start your business in 24 Hours"
         />
         <TextInput
           label="Highlight Words"
           value={s.headline.highlightWords}
           onChange={(v) => updateNested("headline", "highlightWords", v)}
-          placeholder="Wedding, Perfect"
+          placeholder="business, 24 Hours"
           description="Separate multiple words with comma"
         />
       </AccordionSection>
@@ -175,6 +176,80 @@ export function HeroContentWidgetSettingsPanel({
             placeholder="Your supporting text here..."
             rows={3}
           />
+        )}
+      </AccordionSection>
+
+      {/* Search Bar Section */}
+      <AccordionSection title="Search Bar" {...getAccordionProps("search")}>
+        <ToggleSwitch
+          label="Show Search Bar"
+          checked={s.search?.enabled ?? false}
+          onChange={(checked) => updateNested("search", "enabled", checked)}
+        />
+        {s.search?.enabled && (
+          <>
+            <TextInput
+              label="Placeholder"
+              value={s.search.placeholder || ""}
+              onChange={(v) => updateNested("search", "placeholder", v)}
+              placeholder="Search articles..."
+            />
+            <TextInput
+              label="Button Text"
+              value={s.search.buttonText || ""}
+              onChange={(v) => updateNested("search", "buttonText", v)}
+              placeholder="Search"
+            />
+            <SelectInput
+              label="Search Action"
+              value={s.search.action || "blog"}
+              onChange={(v) => updateNested("search", "action", v)}
+              options={[
+                { value: "blog", label: "Filter Blog Posts (/blog?q=)" },
+                { value: "services", label: "Search Services (/services?q=)" },
+                { value: "custom-url", label: "Custom URL" },
+              ]}
+            />
+            {s.search.action === "custom-url" && (
+              <TextInput
+                label="Custom URL Pattern"
+                value={s.search.customUrl || ""}
+                onChange={(v) => updateNested("search", "customUrl", v)}
+                placeholder="/search?q="
+                description="Query value will be appended"
+              />
+            )}
+            <SelectInput
+              label="Variant"
+              value={s.search.variant || "pill"}
+              onChange={(v) => updateNested("search", "variant", v)}
+              options={[
+                { value: "pill", label: "Pill (rounded full)" },
+                { value: "rounded", label: "Rounded" },
+                { value: "square", label: "Square" },
+              ]}
+            />
+            <ColorInput
+              label="Background"
+              value={s.search.bgColor || "#ffffff"}
+              onChange={(v) => updateNested("search", "bgColor", v)}
+            />
+            <ColorInput
+              label="Border Color"
+              value={s.search.borderColor || "#e2e8f0"}
+              onChange={(v) => updateNested("search", "borderColor", v)}
+            />
+            <ColorInput
+              label="Button Background"
+              value={s.search.buttonBgColor || "#f97316"}
+              onChange={(v) => updateNested("search", "buttonBgColor", v)}
+            />
+            <ColorInput
+              label="Button Text"
+              value={s.search.buttonTextColor || "#ffffff"}
+              onChange={(v) => updateNested("search", "buttonTextColor", v)}
+            />
+          </>
         )}
       </AccordionSection>
 

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useCallback } from "react";
+import React, { useState, useCallback, useEffect } from "react";
 import Link from "next/link";
 import { Check, X, Plus, Clock, Zap } from "lucide-react";
 import { cn } from "@/lib/utils";
@@ -115,6 +115,30 @@ export function PricingTableForge({
   const overrides = settings.forgeCardOverrides || [];
   const [hoveredCol, setHoveredCol] = useState<number | null>(null);
   const [expandedAddons, setExpandedAddons] = useState<Record<string, boolean>>({});
+  const [headerOffset, setHeaderOffset] = useState(0);
+
+  useEffect(() => {
+    const measure = () => {
+      // Find every sticky/fixed element pinned at the top of the viewport
+      // and use the maximum bottom edge as our offset.
+      let maxBottom = 0;
+      document.querySelectorAll("header, [data-sticky-top]").forEach((el) => {
+        const node = el as HTMLElement;
+        const cs = window.getComputedStyle(node);
+        if (cs.position !== "sticky" && cs.position !== "fixed") return;
+        const rect = node.getBoundingClientRect();
+        if (rect.top <= 1 && rect.bottom > maxBottom) maxBottom = rect.bottom;
+      });
+      setHeaderOffset(Math.ceil(maxBottom));
+    };
+    measure();
+    window.addEventListener("resize", measure);
+    window.addEventListener("scroll", measure, { passive: true });
+    return () => {
+      window.removeEventListener("resize", measure);
+      window.removeEventListener("scroll", measure);
+    };
+  }, []);
 
   // Sort packages by price ascending
   const sortedPackages = [...packages].sort((a, b) => a.price - b.price);
@@ -169,18 +193,18 @@ export function PricingTableForge({
   const recommendedColIndex = sortedPackages.findIndex((p) => p.isPopular);
 
   return (
-    <div className="overflow-x-auto overflow-y-visible -webkit-overflow-scrolling-touch">
+    <div className="overflow-x-auto md:overflow-x-visible md:overflow-y-visible -webkit-overflow-scrolling-touch">
       <div
         className="rounded-[20px] border-[1.5px] border-[rgba(14,17,9,0.1)] bg-white shadow-[0_4px_24px_rgba(0,0,0,0.04)] relative"
         style={{ minWidth: "640px" }}
       >
-        <table className="w-full border-collapse table-fixed">
+        <table className="w-full border-separate border-spacing-0 table-fixed">
           {/* ============= HEADER ============= */}
-          <thead>
+          <thead className="md:sticky" style={{ top: "200px", zIndex: 60 }}>
             <tr>
               {/* Feature column header */}
               <th
-                className="w-[38%] p-0 bg-white text-left align-bottom border-b-[1.5px] border-[rgba(14,17,9,0.1)] rounded-tl-[20px] sticky left-0 z-[2] md:static"
+                className="w-[38%] p-0 bg-white text-left align-bottom border-b-[1.5px] border-[rgba(14,17,9,0.1)] rounded-tl-[20px]"
                 style={{ minWidth: "180px" }}
               >
                 <div
@@ -414,9 +438,10 @@ export function PricingTableForge({
               const isExpanded = expandedAddons[addonKey];
 
               return (
-                <tr key={feature.id} className="group/addon">
+                <React.Fragment key={feature.id}>
+                <tr className="group/addon">
                   {/* Addon name */}
-                  <td className="py-3.5 px-7 border-b border-[rgba(14,17,9,0.06)] bg-[rgba(250,248,244,0.5)] group-hover/addon:bg-[rgba(27,58,45,0.03)] transition-colors duration-150 align-middle sticky left-0 z-[2] md:static">
+                  <td className="py-3.5 px-7 border-b border-[rgba(14,17,9,0.06)] bg-[rgba(250,248,244,0.5)] group-hover/addon:bg-[rgba(27,58,45,0.03)] transition-colors duration-150 align-middle sticky left-0 z-2 md:static">
                     <div className="flex items-center gap-2">
                       {/* Toggle */}
                       <button
@@ -444,12 +469,6 @@ export function PricingTableForge({
                       {feature.tooltip && <InfoTooltip text={feature.tooltip} />}
                     </div>
 
-                    {/* Expanded detail */}
-                    {isExpanded && feature.tooltip && (
-                      <div className="pl-8 pt-2 pb-1 text-[12.5px] text-[#4b5249] leading-[1.65] border-t border-dashed border-[rgba(14,17,9,0.1)] mt-2">
-                        {feature.tooltip}
-                      </div>
-                    )}
                   </td>
 
                   {/* Per-package cells */}
@@ -511,6 +530,21 @@ export function PricingTableForge({
                     );
                   })}
                 </tr>
+
+                {isExpanded && (feature.description || feature.tooltip) && (
+                  <tr>
+                    <td
+                      colSpan={colCount + 1}
+                      className="border-b border-[rgba(14,17,9,0.06)] bg-[rgba(250,248,244,0.5)] px-7 pb-4"
+                      style={{ paddingTop: 0 }}
+                    >
+                      <div className="pl-8 pt-2.5 pb-1 text-[12.5px] text-[#4b5249] leading-[1.65] border-t border-dashed border-[rgba(14,17,9,0.1)]">
+                        {feature.description || feature.tooltip}
+                      </div>
+                    </td>
+                  </tr>
+                )}
+                </React.Fragment>
               );
             })}
           </tbody>

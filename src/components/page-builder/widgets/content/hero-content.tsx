@@ -1,9 +1,10 @@
 "use client";
 
-import { useMemo } from "react";
+import { useMemo, useState, useCallback } from "react";
+import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { SmartLink } from "@/components/ui/smart-link";
-import { ArrowRight, ArrowUpRight, Star, CheckCircle } from "lucide-react";
+import { ArrowRight, ArrowUpRight, Star, CheckCircle, Search as SearchIcon } from "lucide-react";
 import * as LucideIcons from "lucide-react";
 import { cn } from "@/lib/utils";
 import type { HeroContentWidgetSettings } from "@/lib/page-builder/types";
@@ -83,7 +84,32 @@ export function HeroContentWidget({ settings: rawSettings, isPreview = false }: 
       avatars: rawSettings.avatarGroup?.avatars ?? DEFAULT_HERO_CONTENT_SETTINGS.avatarGroup!.avatars,
     },
     spacing: { ...rawSettings.spacing },
+    search: rawSettings.search
+      ? { ...DEFAULT_HERO_CONTENT_SETTINGS.search, ...rawSettings.search }
+      : DEFAULT_HERO_CONTENT_SETTINGS.search,
   }), [rawSettings]);
+
+  // Search bar state + submit handler
+  const router = useRouter();
+  const [searchValue, setSearchValue] = useState("");
+  const [searchFocused, setSearchFocused] = useState(false);
+  const handleSearchSubmit = useCallback(
+    (e: React.FormEvent) => {
+      e.preventDefault();
+      if (isPreview) return;
+      const q = searchValue.trim();
+      const action = settings.search?.action || "blog";
+      let target = "";
+      if (action === "blog") target = `/blog${q ? `?q=${encodeURIComponent(q)}` : ""}`;
+      else if (action === "services") target = `/services${q ? `?q=${encodeURIComponent(q)}` : ""}`;
+      else if (action === "custom-url") {
+        const base = settings.search?.customUrl || "/search?q=";
+        target = `${base}${q ? encodeURIComponent(q) : ""}`;
+      }
+      if (target) router.push(target);
+    },
+    [searchValue, settings.search, router, isPreview]
+  );
 
   // Theme-aware accent color
   const useTheme = rawSettings.colors?.useTheme !== false;
@@ -688,6 +714,59 @@ export function HeroContentWidget({ settings: rawSettings, isPreview = false }: 
             ? <span dangerouslySetInnerHTML={{ __html: settings.subheadline.text }} />
             : settings.subheadline.text}
         </p>
+      )}
+
+      {/* Search Bar (optional) */}
+      {settings.search?.enabled && (
+        <form
+          data-field-id="search"
+          onSubmit={handleSearchSubmit}
+          className={cn(
+            "w-full flex items-stretch gap-2 mt-2 mb-4 border border-solid",
+            settings.search.variant === "pill" && "rounded-full",
+            settings.search.variant === "rounded" && "rounded-xl",
+            settings.search.variant === "square" && "rounded-md"
+          )}
+          style={{
+            maxWidth: settings.search.maxWidth ? `${settings.search.maxWidth}px` : "560px",
+            background: settings.search.bgColor || "#ffffff",
+            borderColor: searchFocused
+              ? (accentColor || "#f97316")
+              : (settings.search.borderColor || "#e2e8f0"),
+            transition: "border-color 250ms ease",
+            padding: "6px",
+            borderRadius:
+              settings.search.variant === "pill" ? "9999px" :
+              settings.search.variant === "square" ? "8px" : "14px",
+          }}
+        >
+          <div className="flex items-center pl-3 text-slate-400">
+            <SearchIcon className="h-4 w-4" />
+          </div>
+          <input
+            type="search"
+            value={searchValue}
+            onChange={(e) => setSearchValue(e.target.value)}
+            onFocus={() => setSearchFocused(true)}
+            onBlur={() => setSearchFocused(false)}
+            placeholder={settings.search.placeholder || "Search..."}
+            className="flex-1 bg-transparent px-2 py-2 text-sm outline-none"
+            style={{ color: settings.search.textColor || "#0f172a" }}
+          />
+          <button
+            type="submit"
+            className="font-display font-semibold text-sm px-5 py-2 transition-opacity hover:opacity-90"
+            style={{
+              background: settings.search.buttonBgColor || "#f97316",
+              color: settings.search.buttonTextColor || "#ffffff",
+              borderRadius:
+                settings.search.variant === "pill" ? "9999px" :
+                settings.search.variant === "square" ? "6px" : "10px",
+            }}
+          >
+            {settings.search.buttonText || "Search"}
+          </button>
+        </form>
       )}
 
       {/* Features */}

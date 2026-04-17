@@ -11,6 +11,7 @@ import type {
 } from "@/lib/page-builder/types";
 import { DEFAULT_BLOG_FEATURED_POST_SETTINGS } from "@/lib/page-builder/defaults";
 import { WidgetContainer } from "@/components/page-builder/shared/widget-container";
+import { addFeaturedExcluded } from "./shared/featured-exclusion-store";
 
 // ── Deep merge settings with defaults ────────────────────────────────
 
@@ -26,7 +27,11 @@ function mergeSettings(
       ...d.image,
       ...settings?.image,
       overlay: { ...d.image.overlay, ...settings?.image?.overlay },
+      emblem: { ...d.image.emblem!, ...settings?.image?.emblem },
+      decorative: { ...d.image.decorative!, ...settings?.image?.decorative },
     },
+    featuredTag: { ...d.featuredTag!, ...settings?.featuredTag },
+    card: { ...d.card!, ...settings?.card },
     content: {
       ...d.content,
       ...settings?.content,
@@ -38,6 +43,7 @@ function mergeSettings(
       excerpt: { ...d.content.excerpt, ...settings?.content?.excerpt },
       meta: { ...d.content.meta, ...settings?.content?.meta },
       readMore: { ...d.content.readMore, ...settings?.content?.readMore },
+      author: { ...d.content.author!, ...settings?.content?.author },
     },
   };
 }
@@ -78,9 +84,14 @@ function formatDate(
   });
 }
 
-function estimateReadingTime(text: string | null): string {
+function formatReadingTime(post: { readingMinutes?: number | null; excerpt?: string | null }): string {
+  if (post.readingMinutes && post.readingMinutes > 0) {
+    return `${post.readingMinutes} min read`;
+  }
+  // Fallback: estimate from excerpt (legacy posts without column populated)
+  const text = post.excerpt;
   if (!text) return "1 min read";
-  const words = text.trim().split(/\s+/).length;
+  const words = text.trim().split(/\s+/).filter(Boolean).length;
   return `${Math.max(1, Math.ceil(words / 200))} min read`;
 }
 
@@ -221,6 +232,13 @@ export function BlogFeaturedPostWidget({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [fetchKey]);
 
+  // Broadcast post ID to sibling blog-post-grid widgets when excludeFromGrid is enabled
+  useEffect(() => {
+    if (!post?.id || !s.dataSource.excludeFromGrid) return;
+    const cleanup = addFeaturedExcluded(post.id);
+    return cleanup;
+  }, [post?.id, s.dataSource.excludeFromGrid]);
+
   // Loading skeleton
   if (loading) {
     return (
@@ -265,15 +283,42 @@ export function BlogFeaturedPostWidget({
   const postDate = post.publishedAt || post.createdAt;
   const postUrl = `/blog/${post.slug}`;
 
+  // Author resolution
+  const authorSettings = s.content.author;
+  const authorName =
+    authorSettings?.source === "manual"
+      ? authorSettings.name || ""
+      : (post as unknown as { authorName?: string }).authorName || authorSettings?.name || "";
+  const authorRole = authorSettings?.role || "";
+  const authorInitials =
+    authorSettings?.initials ||
+    (authorName
+      ? authorName
+          .split(/\s+/)
+          .map((w) => w[0])
+          .filter(Boolean)
+          .slice(0, 2)
+          .join("")
+          .toUpperCase()
+      : "");
+
   // Content rendering
+  const isOverlay = s.layout === "overlay";
+  const titleColor = s.content.title.color || (isOverlay ? "#ffffff" : "#0f172a");
+  const excerptColor = s.content.excerpt.color || (isOverlay ? "rgba(255,255,255,0.8)" : "#64748b");
+  const metaTextColor = s.content.meta.textColor || (isOverlay ? "rgba(255,255,255,0.6)" : "#64748b");
+  const metaCategoryColor = s.content.meta.categoryColor || "#e84c1e";
+  const metaDotColor = s.content.meta.dotColor || "#f97316";
+  const readMoreColor = s.content.readMore.color || (isOverlay ? "#ffffff" : "#e84c1e");
+
   const contentBlock = (
     <div
       className={cn(
-        "flex flex-col gap-3",
+        "flex flex-col gap-4",
         s.content.alignment === "center" && "items-center text-center"
       )}
     >
-      {/* Category Badge */}
+      {/* Category Badge (legacy — usually off when featuredTag is used) */}
       {s.content.categoryBadge.show && primaryCategory && (
         <span
           className={cn(
@@ -287,14 +332,43 @@ export function BlogFeaturedPostWidget({
         </span>
       )}
 
+      {/* Meta — inline-dots style: CATEGORY • date • read time */}
+      {s.content.meta.show && s.content.meta.style === "inline-dots" && (
+        <div
+          className="flex flex-wrap items-center gap-3 text-[13px] font-medium"
+          style={{ color: metaTextColor }}
+        >
+          {primaryCategory && (
+            <>
+              <span
+                className="font-display font-bold uppercase text-[12px]"
+                style={{
+                  color: metaCategoryColor,
+                  letterSpacing: "0.05em",
+                }}
+              >
+                {primaryCategory.name}
+              </span>
+              <span
+                className="rounded-full"
+                style={{ width: 4, height: 4, background: metaDotColor }}
+              />
+            </>
+          )}
+          <span>{formatDate(postDate, s.content.meta.dateFormat)}</span>
+          <span
+            className="rounded-full"
+            style={{ width: 4, height: 4, background: metaDotColor }}
+          />
+          <span>{formatReadingTime(post)}</span>
+        </div>
+      )}
+
       {/* Title */}
       <h2
         className={cn(
-          "font-bold leading-tight",
-          getTitleSizeClass(s.content.title.size),
-          s.layout === "overlay"
-            ? "text-white"
-            : "text-slate-900 dark:text-white"
+          "font-display font-bold leading-tight tracking-tight",
+          !s.content.title.customFontSize && getTitleSizeClass(s.content.title.size)
         )}
         style={{
           display: "-webkit-box",
@@ -302,6 +376,8 @@ export function BlogFeaturedPostWidget({
           WebkitBoxOrient: "vertical",
           overflow: "hidden",
           fontWeight: s.content.title.fontWeight,
+          color: titleColor,
+          fontSize: s.content.title.customFontSize,
         }}
       >
         {post.title}
@@ -310,12 +386,8 @@ export function BlogFeaturedPostWidget({
       {/* Excerpt */}
       {s.content.excerpt.show && post.excerpt && (
         <p
-          className={cn(
-            getExcerptSizeClass(s.content.excerpt.fontSize),
-            s.layout === "overlay"
-              ? "text-white/80"
-              : "text-slate-600 dark:text-slate-400"
-          )}
+          className={cn(getExcerptSizeClass(s.content.excerpt.fontSize), "leading-relaxed")}
+          style={{ color: excerptColor }}
         >
           {post.excerpt.length > s.content.excerpt.maxLength
             ? `${post.excerpt.slice(0, s.content.excerpt.maxLength)}...`
@@ -323,15 +395,11 @@ export function BlogFeaturedPostWidget({
         </p>
       )}
 
-      {/* Meta */}
-      {s.content.meta.show && (
+      {/* Meta — icons style (legacy) */}
+      {s.content.meta.show && s.content.meta.style !== "inline-dots" && (
         <div
-          className={cn(
-            "flex flex-wrap items-center gap-3 text-sm",
-            s.layout === "overlay"
-              ? "text-white/60"
-              : "text-slate-500 dark:text-slate-400"
-          )}
+          className="flex flex-wrap items-center gap-3 text-sm"
+          style={{ color: metaTextColor }}
         >
           {s.content.meta.items.map((item) => (
             <span key={item} className="flex items-center gap-1.5">
@@ -344,7 +412,7 @@ export function BlogFeaturedPostWidget({
               {item === "readingTime" && (
                 <>
                   <Clock className="h-3.5 w-3.5" />
-                  {estimateReadingTime(post.excerpt)}
+                  {formatReadingTime(post)}
                 </>
               )}
               {item === "category" && primaryCategory && (
@@ -358,46 +426,73 @@ export function BlogFeaturedPostWidget({
         </div>
       )}
 
+      {/* Author Block */}
+      {authorSettings?.show && (authorName || authorInitials) && (
+        <div className="flex items-center gap-3.5 mt-2">
+          {authorSettings.avatarUrl ? (
+            <img
+              src={authorSettings.avatarUrl}
+              alt={authorName}
+              className="h-12 w-12 rounded-full object-cover"
+            />
+          ) : (
+            <div
+              className="flex h-12 w-12 items-center justify-center rounded-full font-display font-bold text-white text-[18px]"
+              style={{
+                background: `linear-gradient(135deg, ${authorSettings.avatarBgFrom || "#f97316"}, ${authorSettings.avatarBgTo || "#e84c1e"})`,
+              }}
+            >
+              {authorInitials || "•"}
+            </div>
+          )}
+          <div className="text-left">
+            <div className="font-semibold text-[14px]" style={{ color: authorSettings.nameColor || "#0f172a" }}>
+              {authorName}
+            </div>
+            {authorRole && (
+              <div className="text-[13px]" style={{ color: authorSettings.roleColor || "#64748b" }}>
+                {authorRole}
+              </div>
+            )}
+          </div>
+        </div>
+      )}
+
       {/* Read More */}
       {s.content.readMore.show && (
-        <div className="mt-1">
+        <div className="mt-2">
           {(s.content.readMore.style === "button-primary" ||
             s.content.readMore.style === "button-outline") && (
             <span
-              className={cn(
-                "inline-flex items-center gap-2 rounded-lg px-5 py-2.5 text-sm font-medium transition-all hover:opacity-90",
-                s.content.readMore.style === "button-primary"
-                  ? "bg-blue-600 text-white shadow-md hover:bg-blue-700"
-                  : "border border-white/30 text-white hover:bg-white/10"
-              )}
+              className="inline-flex items-center gap-2 rounded-lg px-5 py-2.5 text-sm font-display font-semibold transition-all hover:opacity-90"
+              style={{
+                background:
+                  s.content.readMore.style === "button-primary" ? readMoreColor : "transparent",
+                color:
+                  s.content.readMore.style === "button-primary" ? "#ffffff" : readMoreColor,
+                border:
+                  s.content.readMore.style === "button-outline" ? `1px solid ${readMoreColor}` : "none",
+              }}
             >
               {s.content.readMore.text}
             </span>
           )}
           {s.content.readMore.style === "link" && (
             <span
-              className={cn(
-                "inline-flex items-center gap-1 text-sm font-medium transition-colors",
-                s.layout === "overlay"
-                  ? "text-white hover:text-white/80"
-                  : "text-blue-600 hover:text-blue-700 dark:text-blue-400"
-              )}
+              className="inline-flex items-center gap-1 text-sm font-display font-semibold"
+              style={{ color: readMoreColor }}
             >
               {s.content.readMore.text}
             </span>
           )}
           {s.content.readMore.style === "arrow" && (
             <span
-              className={cn(
-                "inline-flex items-center gap-2 text-sm font-medium transition-colors",
-                s.layout === "overlay"
-                  ? "text-white hover:text-white/80"
-                  : "text-blue-600 hover:text-blue-700 dark:text-blue-400"
-              )}
+              className="inline-flex items-center gap-2 text-[15px] font-display font-semibold transition-all group-hover:gap-3"
+              style={{ color: readMoreColor }}
             >
               {s.content.readMore.text}
               <svg
-                className="h-4 w-4"
+                className="h-[18px] w-[18px]"
                 fill="none"
                 viewBox="0 0 24 24"
                 stroke="currentColor"
@@ -416,32 +511,124 @@ export function BlogFeaturedPostWidget({
     </div>
   );
 
-  // Image element
+  // Resolve emblem mode
+  const emblem = s.image.emblem;
+  const decorative = s.image.decorative;
+  const useEmblem =
+    emblem?.enabled &&
+    (emblem.mode === "always" || (emblem.mode === "fallback" && !post.coverImage));
+
+  // Auto-derive emblem text if needed
+  const emblemText = (() => {
+    if (!useEmblem) return "";
+    if (emblem?.text) return emblem.text;
+    if (emblem?.autoFromCategory && primaryCategory) {
+      // Try to extract uppercase letters or first 4 chars
+      const slug = primaryCategory.slug || primaryCategory.name || "";
+      const upper = slug.replace(/[^A-Za-z]/g, "").toUpperCase();
+      return upper.slice(0, 4) || primaryCategory.name.slice(0, 4).toUpperCase();
+    }
+    return primaryCategory?.name?.slice(0, 4).toUpperCase() || "";
+  })();
+
+  // Featured tag (overlay on image side)
+  const featuredTagEl = s.featuredTag?.show && (
+    <span
+      className="absolute font-display font-bold z-20"
+      style={{
+        top: 24,
+        left: s.featuredTag.position === "top-right" ? undefined : 24,
+        right: s.featuredTag.position === "top-right" ? 24 : undefined,
+        background: s.featuredTag.bgColor || "#e84c1e",
+        color: s.featuredTag.textColor || "#ffffff",
+        padding: "8px 16px",
+        borderRadius: 9999,
+        fontSize: 11,
+        letterSpacing: s.featuredTag.letterSpacing || "0.08em",
+        textTransform: s.featuredTag.uppercase ? "uppercase" : "none",
+        boxShadow: s.featuredTag.shadow || "0 4px 14px rgba(232,76,30,0.4)",
+      }}
+    >
+      {s.featuredTag.text}
+    </span>
+  );
+
+  // Image / Emblem element
   const imageElement = (
     <div className="relative h-full w-full overflow-hidden">
-      {post.coverImage ? (
-        <Image
-          src={post.coverImage}
-          alt={post.title}
-          fill
-          className={cn(
-            "object-cover",
-            s.image.hoverEffect === "zoom" &&
-              "transition-transform duration-700 group-hover:scale-105",
-            s.image.hoverEffect === "ken-burns" &&
-              "animate-[kenburns_20s_ease-in-out_infinite]"
+      {useEmblem ? (
+        <div
+          className="relative flex h-full w-full items-center justify-center"
+          style={{
+            background: decorative?.background || "linear-gradient(135deg, #1b3a2d 0%, #0f2318 100%)",
+            minHeight: 420,
+          }}
+        >
+          {/* Decorative grid */}
+          {decorative?.showGrid && (
+            <div
+              className="absolute inset-0 pointer-events-none"
+              style={{
+                backgroundImage: `linear-gradient(${decorative.gridColor || "rgba(249,115,22,0.06)"} 1px, transparent 1px), linear-gradient(90deg, ${decorative.gridColor || "rgba(249,115,22,0.06)"} 1px, transparent 1px)`,
+                backgroundSize: `${decorative.gridSize || 40}px ${decorative.gridSize || 40}px`,
+              }}
+            />
           )}
-          sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 100vw"
-          priority
-        />
+          {/* Decorative glow */}
+          {decorative?.showGlow && (
+            <div
+              className="absolute pointer-events-none"
+              style={{
+                top: "-30%",
+                right: "-30%",
+                width: decorative.glowSize || 400,
+                height: decorative.glowSize || 400,
+                background: `radial-gradient(circle, ${decorative.glowColor || "rgba(249,115,22,0.18)"} 0%, transparent 60%)`,
+              }}
+            />
+          )}
+          {/* Emblem text */}
+          <span
+            className="relative z-[1] font-display font-bold select-none"
+            style={{
+              fontSize: emblem?.fontSize || 120,
+              color: emblem?.color || "#f97316",
+              opacity: emblem?.opacity ?? 0.4,
+              letterSpacing: emblem?.letterSpacing || "-0.05em",
+              lineHeight: 1,
+            }}
+          >
+            {emblemText}
+          </span>
+          {featuredTagEl}
+        </div>
+      ) : post.coverImage ? (
+        <>
+          <Image
+            src={post.coverImage}
+            alt={post.title}
+            fill
+            className={cn(
+              "object-cover",
+              s.image.hoverEffect === "zoom" &&
+                "transition-transform duration-700 group-hover:scale-105",
+              s.image.hoverEffect === "ken-burns" &&
+                "animate-[kenburns_20s_ease-in-out_infinite]"
+            )}
+            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 100vw"
+            priority
+          />
+          {featuredTagEl}
+        </>
       ) : (
         <div className="flex h-full w-full items-center justify-center bg-slate-100 dark:bg-slate-800">
           <ImageIcon className="h-16 w-16 text-slate-300 dark:text-slate-600" />
+          {featuredTagEl}
         </div>
       )}
 
       {/* Image overlay */}
-      {s.image.overlay.enabled && (
+      {s.image.overlay.enabled && !useEmblem && (
         <div
           className="absolute inset-0"
           style={{
@@ -453,25 +640,41 @@ export function BlogFeaturedPostWidget({
     </div>
   );
 
+  // Card wrapper styles (for split layouts)
+  const cardStyle: React.CSSProperties = {
+    background: s.card?.background || "#ffffff",
+    border: s.card?.borderWidth
+      ? `${s.card.borderWidth}px solid ${s.card.borderColor || "#e2e8f0"}`
+      : undefined,
+    borderRadius: s.card?.borderRadius ?? s.image.borderRadius,
+    boxShadow: s.card?.shadow,
+    transition: "transform 0.4s, box-shadow 0.4s",
+  };
+  const contentPadding = s.content.padding ?? 48;
+
   // Helper to wrap content in a Link or div
   function WrapLink({
     children,
     className,
     style,
+    onMouseEnter,
+    onMouseLeave,
   }: {
     children: React.ReactNode;
     className?: string;
     style?: React.CSSProperties;
+    onMouseEnter?: (e: React.MouseEvent<HTMLElement>) => void;
+    onMouseLeave?: (e: React.MouseEvent<HTMLElement>) => void;
   }) {
     if (isPreview) {
       return (
-        <div className={className} style={style}>
+        <div className={className} style={style} onMouseEnter={onMouseEnter} onMouseLeave={onMouseLeave}>
           {children}
         </div>
       );
     }
     return (
-      <Link href={postUrl} className={className} style={style}>
+      <Link href={postUrl} className={className} style={style} onMouseEnter={onMouseEnter} onMouseLeave={onMouseLeave}>
         {children}
       </Link>
     );
@@ -516,15 +719,24 @@ export function BlogFeaturedPostWidget({
       <WidgetContainer container={s.container}>
       <WrapLink
         className={cn(
-          "group grid overflow-hidden md:grid-cols-2",
-          getHeightClass(s.height)
+          "group grid overflow-hidden md:grid-cols-[1.1fr_1fr]",
+          getHeightClass(s.height),
+          s.card?.hoverLift && !isPreview && "hover:-translate-y-1"
         )}
-        style={{ borderRadius: s.image.borderRadius }}
+        style={cardStyle}
+        onMouseEnter={(e) => {
+          if (isPreview) return;
+          if (s.card?.hoverShadow) e.currentTarget.style.boxShadow = s.card.hoverShadow;
+        }}
+        onMouseLeave={(e) => {
+          if (isPreview) return;
+          if (s.card?.shadow) e.currentTarget.style.boxShadow = s.card.shadow;
+        }}
       >
         {/* Image */}
         <div
           className={cn(
-            "relative aspect-video md:aspect-auto",
+            "relative aspect-video md:aspect-auto md:min-h-[420px]",
             !imageOnLeft && "md:order-2"
           )}
         >
@@ -534,10 +746,13 @@ export function BlogFeaturedPostWidget({
         {/* Content */}
         <div
           className={cn(
-            "flex flex-col justify-center p-6 md:p-10",
-            !imageOnLeft && "md:order-1",
-            "bg-white dark:bg-slate-900"
+            "flex flex-col justify-center",
+            !imageOnLeft && "md:order-1"
           )}
+          style={{
+            padding: `${contentPadding}px`,
+            background: s.card?.background || "#ffffff",
+          }}
         >
           {contentBlock}
         </div>

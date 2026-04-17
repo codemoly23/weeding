@@ -170,6 +170,11 @@ export function BlogFeaturedPostSettingsPanel({
             placeholder="e.g. business-tips"
           />
         )}
+        <ToggleSwitch
+          label="Exclude from Post Grid"
+          checked={s.dataSource.excludeFromGrid ?? false}
+          onChange={(v) => updateDataSource("excludeFromGrid", v)}
+        />
       </AccordionSection>
     </div>
   );

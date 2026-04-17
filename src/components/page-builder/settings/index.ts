@@ -37,3 +37,15 @@ export { BlogPostCarouselSettingsPanel } from "./blog/blog-post-carousel-setting
 export { BlogFeaturedPostSettingsPanel } from "./blog/blog-featured-post-settings";
 export { BlogPostListSettingsPanel } from "./blog/blog-post-list-settings";
 export { BlogRecentPostsSettingsPanel } from "./blog/blog-recent-posts-settings";
+
+// Newsletter CTA
+export { NewsletterCtaSettingsPanel } from "./newsletter-cta-settings";
+
+// Blog detail page widget settings
+export { BreadcrumbWidgetSettingsPanel } from "./breadcrumb-settings";
+export { BlogPostHeroSettingsPanel } from "./blog/blog-post-hero-settings";
+export { BlogPostContentSettingsPanel } from "./blog/blog-post-content-settings";
+export { BlogPostTocSettingsPanel } from "./blog/blog-post-toc-settings";
+export { SocialShareRailSettingsPanel } from "./blog/social-share-rail-settings";
+export { BlogPostAuthorCardSettingsPanel } from "./blog/blog-post-author-card-settings";
+export { BlogPostTagsSettingsPanel } from "./blog/blog-post-tags-settings";
