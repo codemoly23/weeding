@@ -1,7 +1,8 @@
 "use client";
 
-import { useState, useEffect, useCallback, useRef } from "react";
+import { useState, useEffect, useCallback, useRef, Suspense } from "react";
 import { useSession } from "next-auth/react";
+import { useSearchParams } from "next/navigation";
 import dynamic from "next/dynamic";
 import Link from "next/link";
 import { useLanguage } from "@/lib/i18n/language-context";
@@ -89,9 +90,10 @@ function FilterSection({ title, defaultOpen = true, children }: { title: string;
   );
 }
 
-export default function VendorsPage() {
+function VendorsPage() {
   const { t } = useLanguage();
   const { data: session } = useSession();
+  const searchParams = useSearchParams();
   const [savedIds, setSavedIds] = useState<Set<string>>(new Set());
   const savingRef = useRef<Set<string>>(new Set());
   const [vendors, setVendors] = useState<VendorCard[]>([]);
@@ -107,10 +109,30 @@ export default function VendorsPage() {
   const [searchInput, setSearchInput] = useState("");
   const [cityInput, setCityInput] = useState("");
   const [cityFilter, setCityFilter] = useState("");
+  const [dateFilter, setDateFilter] = useState("");
+  const [eventTypeLabel, setEventTypeLabel] = useState("");
   const [categoryFilter, setCategoryFilter] = useState<VendorCategory | "">("");
   const [selectedPriceRange, setSelectedPriceRange] = useState<PriceRange | null>(null);
   const [minRating, setMinRating] = useState("");
   const [featuredOnly, setFeaturedOnly] = useState(false);
+
+  // Pre-fill filters from homepage search params (runs once on mount)
+  useEffect(() => {
+    const location = searchParams.get("location");
+    const date = searchParams.get("date");
+    const type = searchParams.get("type");
+    if (location) {
+      setCityInput(location);
+      setCityFilter(location);
+    }
+    if (date) {
+      setDateFilter(date);
+    }
+    if (type) {
+      setEventTypeLabel(type);
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const fetchVendors = useCallback(async () => {
     setIsLoading(true);
@@ -118,6 +140,7 @@ export default function VendorsPage() {
       const params = new URLSearchParams();
       if (search) params.set("q", search);
       if (cityFilter) params.set("city", cityFilter);
+      if (dateFilter) params.set("date", dateFilter);
       if (categoryFilter) params.set("category", categoryFilter);
       if (selectedPriceRange) {
         params.set("minPrice", String(selectedPriceRange.min));
@@ -138,7 +161,7 @@ export default function VendorsPage() {
     } finally {
       setIsLoading(false);
     }
-  }, [search, cityFilter, categoryFilter, selectedPriceRange, minRating, featuredOnly, page]);
+  }, [search, cityFilter, dateFilter, categoryFilter, selectedPriceRange, minRating, featuredOnly, page]);
 
   useEffect(() => { fetchVendors(); }, [fetchVendors]);
 
@@ -201,6 +224,8 @@ export default function VendorsPage() {
   function clearAllFilters() {
     setSearch(""); setSearchInput("");
     setCityFilter(""); setCityInput("");
+    setDateFilter("");
+    setEventTypeLabel("");
     setCategoryFilter("");
     setSelectedPriceRange(null);
     setMinRating("");
@@ -214,7 +239,7 @@ export default function VendorsPage() {
   }
 
   const activeFilterCount = [
-    cityFilter, categoryFilter, selectedPriceRange, minRating, featuredOnly ? "1" : "",
+    cityFilter, dateFilter, categoryFilter, selectedPriceRange, minRating, featuredOnly ? "1" : "",
   ].filter(Boolean).length;
 
   // Sidebar content — reused in both desktop sidebar and mobile drawer
@@ -450,6 +475,18 @@ export default function VendorsPage() {
                     <button onClick={() => { setCityFilter(""); setCityInput(""); }}><X className="w-3 h-3 ml-0.5" /></button>
                   </span>
                 )}
+                {dateFilter && (
+                  <span className="flex items-center gap-1 bg-green-100 text-green-700 text-xs px-2.5 py-1 rounded-full font-medium">
+                    <Clock className="w-3 h-3" />{new Date(dateFilter).toLocaleDateString()}
+                    <button onClick={() => { setDateFilter(""); setPage(1); }}><X className="w-3 h-3 ml-0.5" /></button>
+                  </span>
+                )}
+                {eventTypeLabel && (
+                  <span className="flex items-center gap-1 bg-pink-100 text-pink-700 text-xs px-2.5 py-1 rounded-full font-medium capitalize">
+                    {eventTypeLabel}
+                    <button onClick={() => setEventTypeLabel("")}><X className="w-3 h-3 ml-0.5" /></button>
+                  </span>
+                )}
                 {search && (
                   <span className="flex items-center gap-1 bg-gray-100 text-gray-700 text-xs px-2.5 py-1 rounded-full font-medium">
                     &ldquo;{search}&rdquo;
@@ -634,5 +671,13 @@ export default function VendorsPage() {
         </div>
       </div>
     </div>
+  );
+}
+
+export default function VendorsPageWrapper() {
+  return (
+    <Suspense>
+      <VendorsPage />
+    </Suspense>
   );
 }

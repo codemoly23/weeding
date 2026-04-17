@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { ChevronDown, LucideIcon, Folder } from "lucide-react";
+import { useLanguage } from "@/lib/i18n/language-context";
 import {
   Building2,
   FileText,
@@ -64,21 +65,22 @@ interface MegaMenuProps {
 }
 
 function MegaMenuDropdown({ categories }: MegaMenuProps) {
+  const { t } = useLanguage();
   return (
     <div className="absolute left-1/2 top-full -translate-x-1/2 pt-4">
       <div className="w-[800px] rounded-xl border bg-background p-6 shadow-xl">
         <div className="mb-4 flex items-center justify-between border-b pb-4">
           <div>
-            <h3 className="font-semibold text-foreground">Our Services</h3>
+            <h3 className="font-semibold text-foreground">{t("nav.ourServices")}</h3>
             <p className="text-sm text-muted-foreground">
-              Complete business solutions for international entrepreneurs
+              {t("nav.servicesDesc")}
             </p>
           </div>
           <Link
             href="/services"
             className="text-sm font-medium text-primary hover:underline"
           >
-            View All Services
+            {t("nav.viewAllServices")}
           </Link>
         </div>
 
@@ -117,30 +119,42 @@ function MegaMenuDropdown({ categories }: MegaMenuProps) {
 
         {/* Quick Links */}
         <div className="mt-6 flex items-center gap-4 border-t pt-4">
-          <span className="text-sm text-muted-foreground">Quick Start:</span>
+          <span className="text-sm text-muted-foreground">{t("nav.quickStart")}</span>
           <Link
             href="/register"
             className="rounded-full bg-primary/10 px-3 py-1 text-xs font-medium text-primary transition-colors hover:bg-primary hover:text-primary-foreground"
           >
-            Start Planning Free
+            {t("nav.startPlanningFree")}
           </Link>
           <Link
             href="/features/seating-chart"
             className="rounded-full bg-primary/10 px-3 py-1 text-xs font-medium text-primary transition-colors hover:bg-primary hover:text-primary-foreground"
           >
-            Seating Chart
+            {t("nav.seatingChart")}
           </Link>
           <Link
             href="/contact"
             className="rounded-full bg-muted px-3 py-1 text-xs font-medium text-muted-foreground transition-colors hover:bg-muted/80"
           >
-            Get in Touch
+            {t("nav.getInTouch")}
           </Link>
         </div>
       </div>
     </div>
   );
 }
+
+// Map of English nav item labels to translation keys
+const NAV_LABEL_MAP: Record<string, string> = {
+  "Home": "nav.home",
+  "Services": "nav.services",
+  "Pricing": "nav.pricing",
+  "About": "nav.about",
+  "Blog": "nav.blog",
+  "Contact": "nav.contact",
+  "Features": "nav.features",
+  "Vendors": "nav.vendors",
+};
 
 export function Navigation({
   items,
@@ -150,6 +164,8 @@ export function Navigation({
   split = "all",
   styling,
 }: NavigationProps) {
+  const { t } = useLanguage();
+
   // Split navigation items if needed
   let displayItems = items;
   if (split === "left") {
@@ -166,6 +182,7 @@ export function Navigation({
     <div className="flex items-center gap-x-8">
       {displayItems.map((item) => {
         const isHovered = hoveredItem === item.name;
+        const label = NAV_LABEL_MAP[item.name] ? t(NAV_LABEL_MAP[item.name]) : item.name;
 
         // Determine text color
         const textStyle: React.CSSProperties = {};
@@ -194,7 +211,7 @@ export function Navigation({
               )}
               style={textStyle}
             >
-              {item.name}
+              {label}
               {item.hasDropdown && (
                 <ChevronDown
                   className={cn(

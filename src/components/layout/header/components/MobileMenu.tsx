@@ -33,6 +33,7 @@ import {
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { cn } from "@/lib/utils";
 import type { MobileMenuProps } from "../types";
+import { useLanguage } from "@/lib/i18n/language-context";
 
 // Icon mapping for dynamic icons from database
 const iconMap: Record<string, LucideIcon> = {
@@ -83,6 +84,17 @@ function getDashboardUrl(role?: string) {
   return role === "ADMIN" || role === "STAFF" ? "/admin" : "/dashboard";
 }
 
+const NAV_LABEL_MAP: Record<string, string> = {
+  "Home": "nav.home",
+  "Services": "nav.services",
+  "Pricing": "nav.pricing",
+  "About": "nav.about",
+  "Blog": "nav.blog",
+  "Contact": "nav.contact",
+  "Features": "nav.features",
+  "Vendors": "nav.vendors",
+};
+
 export function MobileMenu({
   navigation,
   serviceCategories,
@@ -94,6 +106,7 @@ export function MobileMenu({
   onLogout,
   alwaysVisible = false,
 }: MobileMenuProps) {
+  const { t } = useLanguage();
   const [servicesOpen, setServicesOpen] = useState(false);
   const isLoggedIn = !!(user || session?.user);
   const displayUser = user || session?.user;
@@ -134,6 +147,7 @@ export function MobileMenu({
           {/* Navigation */}
           <div className="mt-6 flex flex-col gap-1">
             {navigation.map((item) => {
+              const label = NAV_LABEL_MAP[item.name] ? t(NAV_LABEL_MAP[item.name]) : item.name;
               if (item.hasDropdown) {
                 return (
                   <div key={item.name}>
@@ -141,7 +155,7 @@ export function MobileMenu({
                       onClick={() => setServicesOpen(!servicesOpen)}
                       className="flex w-full items-center justify-between rounded-md px-3 py-2 text-base font-medium text-foreground hover:bg-muted"
                     >
-                      {item.name}
+                      {label}
                       <ChevronDown
                         className={cn(
                           "h-4 w-4 transition-transform",
@@ -184,7 +198,7 @@ export function MobileMenu({
                             href="/services"
                             className="block rounded-md px-2 py-2 text-sm font-medium text-primary hover:bg-muted"
                           >
-                            View All Services
+                            {t("nav.viewAllServices")}
                           </Link>
                         </SheetClose>
                       </div>
@@ -199,7 +213,7 @@ export function MobileMenu({
                     href={item.href}
                     className="block rounded-md px-3 py-2 text-base font-medium text-foreground hover:bg-muted"
                   >
-                    {item.name}
+                    {label}
                   </Link>
                 </SheetClose>
               );
@@ -226,14 +240,14 @@ export function MobileMenu({
                   <Button variant="outline" asChild className="w-full">
                     <Link href={getDashboardUrl(user?.role)} className="flex items-center gap-2">
                       <LayoutDashboard className="h-4 w-4" />
-                      Dashboard
+                      {t("common.dashboard")}
                     </Link>
                   </Button>
                 </SheetClose>
                 <SheetClose asChild>
                   <Button variant="destructive" onClick={onLogout} className="w-full">
                     <LogOut className="mr-2 h-4 w-4" />
-                    Logout
+                    {t("common.logout")}
                   </Button>
                 </SheetClose>
               </>
@@ -241,13 +255,13 @@ export function MobileMenu({
               <>
                 <SheetClose asChild>
                   <Button variant="outline" asChild className="w-full">
-                    <Link href="/login">{authConfig.loginText || "Sign In"}</Link>
+                    <Link href="/login">{authConfig.loginText || t("common.signIn")}</Link>
                   </Button>
                 </SheetClose>
                 <SheetClose asChild>
                   <Button asChild className="w-full">
                     <Link href={ctaButtons?.[0]?.url || "/register"}>
-                      {ctaButtons?.[0]?.text || "Get Started"}
+                      {ctaButtons?.[0]?.text || t("common.startPlanning")}
                     </Link>
                   </Button>
                 </SheetClose>

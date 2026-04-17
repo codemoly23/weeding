@@ -1,5 +1,7 @@
 "use client";
 
+import { useMemo } from "react";
+import { useLanguage } from "@/lib/i18n/language-context";
 import type { Section, Widget, SectionBackground, SectionWatermark } from "@/lib/page-builder/types";
 import { DEFAULT_SECTION_BACKGROUND } from "@/lib/page-builder/defaults";
 import { cn } from "@/lib/utils";
@@ -320,11 +322,55 @@ function WatermarkOverlay({ watermark }: { watermark: SectionWatermark }) {
   );
 }
 
+// ── Widget Translation Resolver ─────────────────────────────────────────────
+/**
+ * Sets a deeply nested value in an object using dot-notation path.
+ * Supports array indices: "steps.0.title"
+ */
+function setNestedValue(obj: Record<string, unknown>, path: string, value: unknown): void {
+  const parts = path.split(".");
+  let current: unknown = obj;
+  for (let i = 0; i < parts.length - 1; i++) {
+    const key = parts[i];
+    const next = (current as Record<string, unknown>)[key];
+    if (typeof next !== "object" || next === null) return;
+    current = next;
+  }
+  const lastKey = parts[parts.length - 1];
+  (current as Record<string, unknown>)[lastKey] = value;
+}
+
+/**
+ * Merges `settings._translations[lang]` (dot-notation map) into a deep clone
+ * of settings, enabling per-widget multilingual content stored in the DB.
+ *
+ * Example widget settings:
+ *   { title: "Hello", _translations: { sv: { "title": "Hej" } } }
+ */
+function resolveWidgetTranslations<T>(settings: T, lang: string): T {
+  const s = settings as Record<string, unknown>;
+  const translations = s?._translations as Record<string, Record<string, unknown>> | undefined;
+  if (!translations || !translations[lang]) return settings;
+  const resolved: Record<string, unknown> = JSON.parse(JSON.stringify(s));
+  for (const [dotPath, value] of Object.entries(translations[lang])) {
+    setNestedValue(resolved, dotPath, value);
+  }
+  return resolved as T;
+}
+
 interface WidgetRendererProps {
   widget: Widget<unknown>;
 }
 
 function WidgetRenderer({ widget }: WidgetRendererProps) {
+  const { lang } = useLanguage();
+
+  // Resolve per-widget translations from settings._translations[lang]
+  const resolvedSettings = useMemo(
+    () => resolveWidgetTranslations(widget.settings, lang),
+    [widget.settings, lang]
+  );
+
   // Get widget spacing styles
   const spacingStyles: React.CSSProperties = {
     marginTop: widget.spacing?.marginTop ? `${widget.spacing.marginTop}px` : undefined,
@@ -334,106 +380,106 @@ function WidgetRenderer({ widget }: WidgetRendererProps) {
   const renderWidgetContent = () => {
     switch (widget.type) {
       case "hero-content":
-        return <HeroContentWidget settings={widget.settings as any} />;
+        return <HeroContentWidget settings={resolvedSettings as any} />;
 
       case "image":
-        return <ImageWidget settings={widget.settings as any} />;
+        return <ImageWidget settings={resolvedSettings as any} />;
 
       case "trust-badges":
-        return <TrustBadgesWidget settings={widget.settings as any} />;
+        return <TrustBadgesWidget settings={resolvedSettings as any} />;
 
       case "stats-section":
-        return <StatsSectionWidget settings={widget.settings as any} />;
+        return <StatsSectionWidget settings={resolvedSettings as any} />;
 
       case "divider":
-        return <DividerWidget settings={widget.settings as any} />;
+        return <DividerWidget settings={resolvedSettings as any} />;
 
       case "image-slider":
-        return <ImageSliderWidget settings={widget.settings as any} />;
+        return <ImageSliderWidget settings={resolvedSettings as any} />;
 
       case "service-card":
-        return <ServiceCardWidget settings={widget.settings as any} />;
+        return <ServiceCardWidget settings={resolvedSettings as any} />;
 
       case "service-list":
-        return <ServiceListWidget settings={widget.settings as any} />;
+        return <ServiceListWidget settings={resolvedSettings as any} />;
 
       case "process-steps":
-        return <ProcessStepsWidget settings={widget.settings as any} />;
+        return <ProcessStepsWidget settings={resolvedSettings as any} />;
 
       case "pricing-table":
-        return <PricingTableWidget settings={widget.settings as any} />;
+        return <PricingTableWidget settings={resolvedSettings as any} />;
 
       case "heading":
-        return <HeadingWidget settings={widget.settings as any} />;
+        return <HeadingWidget settings={resolvedSettings as any} />;
 
       case "text-block":
-        return <TextBlockWidget settings={widget.settings as any} />;
+        return <TextBlockWidget settings={resolvedSettings as any} />;
 
       case "lead-form":
-        return <LeadFormWidget settings={widget.settings as any} />;
+        return <LeadFormWidget settings={resolvedSettings as any} />;
 
       case "testimonial":
       case "testimonials-carousel":
-        return <TestimonialsWidget settings={widget.settings as any} />;
+        return <TestimonialsWidget settings={resolvedSettings as any} />;
 
       case "service-hero":
-        return <ServiceHeroWidget settings={widget.settings as any} />;
+        return <ServiceHeroWidget settings={resolvedSettings as any} />;
 
       case "service-features":
-        return <ServiceFeaturesWidget settings={widget.settings as any} />;
+        return <ServiceFeaturesWidget settings={resolvedSettings as any} />;
 
       case "service-description":
-        return <ServiceDescriptionWidget settings={widget.settings as any} />;
+        return <ServiceDescriptionWidget settings={resolvedSettings as any} />;
 
       case "service-breadcrumb":
-        return <ServiceBreadcrumbWidget settings={widget.settings as any} />;
+        return <ServiceBreadcrumbWidget settings={resolvedSettings as any} />;
 
       case "related-services":
-        return <RelatedServicesWidget settings={widget.settings as any} />;
+        return <RelatedServicesWidget settings={resolvedSettings as any} />;
 
       case "faq":
       case "faq-section":
       case "faq-accordion":
-        return <FaqAccordionWidget settings={widget.settings as any} />;
+        return <FaqAccordionWidget settings={resolvedSettings as any} />;
 
       case "custom-html":
-        return <CustomHtmlWidget settings={widget.settings as any} />;
+        return <CustomHtmlWidget settings={resolvedSettings as any} />;
 
       case "button-group":
-        return <ButtonGroupWidget settings={widget.settings as any} />;
+        return <ButtonGroupWidget settings={resolvedSettings as any} />;
 
       case "blog-post-grid":
-        return <BlogPostGridWidget settings={widget.settings as any} />;
+        return <BlogPostGridWidget settings={resolvedSettings as any} />;
 
       case "blog-post-carousel":
-        return <BlogPostCarouselWidget settings={widget.settings as any} />;
+        return <BlogPostCarouselWidget settings={resolvedSettings as any} />;
 
       case "blog-featured-post":
-        return <BlogFeaturedPostWidget settings={widget.settings as any} />;
+        return <BlogFeaturedPostWidget settings={resolvedSettings as any} />;
 
       case "blog-post-list":
-        return <BlogPostListWidget settings={widget.settings as any} />;
+        return <BlogPostListWidget settings={resolvedSettings as any} />;
 
       case "blog-recent-posts":
-        return <BlogRecentPostsWidget settings={widget.settings as any} />;
+        return <BlogRecentPostsWidget settings={resolvedSettings as any} />;
 
       case "event-search-hero":
-        return <EventSearchHeroWidget settings={widget.settings as any} />;
+        return <EventSearchHeroWidget settings={resolvedSettings as any} />;
 
       case "event-categories-grid":
-        return <EventCategoriesGridWidget settings={widget.settings as any} />;
+        return <EventCategoriesGridWidget settings={resolvedSettings as any} />;
 
       case "event-gallery-grid":
-        return <EventGalleryGridWidget settings={widget.settings as any} />;
+        return <EventGalleryGridWidget settings={resolvedSettings as any} />;
 
       case "cta-banner":
-        return <CtaBannerWidget settings={widget.settings as any} />;
+        return <CtaBannerWidget settings={resolvedSettings as any} />;
 
       case "top-utility-bar":
-        return <TopUtilityBarWidget settings={widget.settings as any} />;
+        return <TopUtilityBarWidget settings={resolvedSettings as any} />;
 
       case "vendor-listing":
-        return <VendorListingWidget settings={widget.settings as any} />;
+        return <VendorListingWidget settings={resolvedSettings as any} />;
 
       default:
         // Unknown widget type - render nothing in production

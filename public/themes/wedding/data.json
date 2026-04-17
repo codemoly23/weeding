@@ -1,6 +1,6 @@
 {
   "version": "1.0",
-  "exportedAt": "2026-04-15T09:37:32.971Z",
+  "exportedAt": "2026-04-17T11:53:22.528Z",
   "colorPalette": {
     "light": {
       "background": "#FDFAF7",
@@ -724,7 +724,7 @@
                           },
                           {
                             "id": "link-3",
-                            "href": "/register",
+                            "href": "/vendor/register",
                             "icon": "",
                             "label": "Join now",
                             "showIcon": false
@@ -737,9 +737,49 @@
                         "gradientTo": "#ec4899",
                         "hoverColor": "#e9d5ff",
                         "gradientFrom": "#9333ea",
+                        "_translations": {
+                          "ar": {
+                            "links.0.label": "هل أنت مورد؟",
+                            "links.1.label": "تسجيل الدخول",
+                            "links.2.label": "انضم الآن"
+                          },
+                          "bn": {
+                            "links.0.label": "আপনি কি একজন ভেন্ডর?",
+                            "links.1.label": "লগইন",
+                            "links.2.label": "এখনই যোগ দিন"
+                          },
+                          "sv": {
+                            "links.0.label": "ÄR DU EN LEVERANTÖR?",
+                            "links.1.label": "Logga in",
+                            "links.2.label": "Registrera dig"
+                          }
+                        },
                         "gradientAngle": 90,
                         "showBorderBottom": true,
                         "borderBottomColor": "#7e22ce"
+                      }
+                    },
+                    {
+                      "id": "widget_1776425312308_de6q8ppgp",
+                      "type": "custom-html",
+                      "settings": {
+                        "css": "padding-bottom: 0 !important;\nmargin-bottom: 0 !important;",
+                        "html": "",
+                        "container": {
+                          "shadow": "none",
+                          "padding": 0,
+                          "borderWidth": 2,
+                          "borderRadius": 0,
+                          "backgroundType": "solid",
+                          "gradientBorder": {
+                            "angle": 135,
+                            "colors": [
+                              "#ec4899",
+                              "#8b5cf6"
+                            ],
+                            "enabled": false
+                          }
+                        }
                       }
                     }
                   ],
@@ -752,6 +792,7 @@
               "settings": {
                 "gap": 32,
                 "maxWidth": "full",
+                "customCSS": "padding-bottom: 0 !important;\nmargin-bottom: 0 !important;",
                 "fullWidth": true,
                 "isVisible": true,
                 "marginTop": 0,
@@ -846,6 +887,35 @@
                             "value": "other"
                           }
                         ],
+                        "_translations": {
+                          "ar": {
+                            "title": "خطط لحدثك المثالي",
+                            "subtitle": "اكتشف أماكن رائعة، تواصل مع أفضل الموردين، وأنشئ احتفالات لا تُنسى",
+                            "dateLabel": "التاريخ",
+                            "locationLabel": "الموقع",
+                            "eventTypeLabel": "نوع الحدث",
+                            "searchButtonLabel": "بحث عن الأحداث",
+                            "locationPlaceholder": "أدخل المدينة أو القاعة"
+                          },
+                          "bn": {
+                            "title": "আপনার নিখুঁত ইভেন্ট পরিকল্পনা করুন",
+                            "subtitle": "অসাধারণ ভেন্যু খুঁজুন, শীর্ষ ভেন্ডরদের সাথে সংযোগ করুন এবং অবিস্মরণীয় উৎসব তৈরি করুন",
+                            "dateLabel": "তারিখ",
+                            "locationLabel": "অবস্থান",
+                            "eventTypeLabel": "ইভেন্টের ধরন",
+                            "searchButtonLabel": "ইভেন্ট খুঁজুন",
+                            "locationPlaceholder": "শহর বা ভেন্যু লিখুন"
+                          },
+                          "sv": {
+                            "title": "Planera ditt perfekta evenemang",
+                            "subtitle": "Hitta fantastiska lokaler, ta kontakt med toppleverantörer och skapa oförglömliga fester",
+                            "dateLabel": "Datum",
+                            "locationLabel": "Plats",
+                            "eventTypeLabel": "Evenemangstyp",
+                            "searchButtonLabel": "Sök evenemang",
+                            "locationPlaceholder": "Ange stad eller lokal"
+                          }
+                        },
                         "locationLabel": "Location",
                         "showDateField": true,
                         "eventTypeLabel": "Event Type",
@@ -874,6 +944,7 @@
               "settings": {
                 "gap": 32,
                 "maxWidth": "full",
+                "customCSS": "padding-top: 0 !important;\nmargin-top: 0 !important;",
                 "fullWidth": true,
                 "isVisible": true,
                 "marginTop": 0,
@@ -1009,11 +1080,80 @@
                         },
                         "sectionBg": "linear-gradient(to bottom, #faf5ff, #ffffff)",
                         "cardBadgeTo": "#ec4899",
+                        "_translations": {
+                          "ar": {
+                            "title": "استلهم من الأحداث الحقيقية",
+                            "ctaLabel": "عرض المزيد من الأحداث",
+                            "subtitle": "استكشف احتفالات رائعة من مجتمعنا وابحث عن أفكار لحدثك القادم",
+                            "badge.text": "إلهام من أحداث حقيقية",
+                            "planSimilarLabel": "خطط لحدث مماثل"
+                          },
+                          "bn": {
+                            "title": "বাস্তব ইভেন্ট থেকে অনুপ্রেরণা নিন",
+                            "ctaLabel": "আরও ইভেন্ট দেখুন",
+                            "subtitle": "আমাদের কমিউনিটির অসাধারণ উৎসবগুলো দেখুন এবং আপনার পরবর্তী ইভেন্টের জন্য আইডিয়া খুঁজুন",
+                            "badge.text": "বাস্তব ইভেন্টের অনুপ্রেরণা",
+                            "planSimilarLabel": "একই ধরন পরিকল্পনা করুন"
+                          },
+                          "sv": {
+                            "title": "Få inspiration från riktiga evenemang",
+                            "ctaLabel": "Visa fler evenemang",
+                            "subtitle": "Utforska fantastiska firanden från vår community och hitta idéer för ditt nästa evenemang",
+                            "badge.text": "Riktig eventinspiration",
+                            "planSimilarLabel": "Planera liknande"
+                          }
+                        },
                         "cardBadgeFrom": "#9333ea",
                         "ctaGradientTo": "#ec4899",
                         "ctaGradientFrom": "#9333ea",
                         "planSimilarHref": "",
                         "planSimilarLabel": "Plan Similar"
+                      }
+                    },
+                    {
+                      "id": "widget_1776425654621_wdo434r6f",
+                      "type": "custom-html",
+                      "settings": {
+                        "css": "padding-bottom: 0 !important;\nmargin-bottom: 0 !important;",
+                        "html": "",
+                        "container": {
+                          "shadow": "none",
+                          "padding": 0,
+                          "borderWidth": 2,
+                          "borderRadius": 0,
+                          "backgroundType": "solid",
+                          "gradientBorder": {
+                            "angle": 135,
+                            "colors": [
+                              "#ec4899",
+                              "#8b5cf6"
+                            ],
+                            "enabled": false
+                          }
+                        }
+                      }
+                    },
+                    {
+                      "id": "widget_1776425698950_lrsbhivik",
+                      "type": "custom-html",
+                      "settings": {
+                        "css": "padding-bottom: 0 !important;\nmargin-bottom: 0 !important;",
+                        "html": "",
+                        "container": {
+                          "shadow": "none",
+                          "padding": 0,
+                          "borderWidth": 2,
+                          "borderRadius": 0,
+                          "backgroundType": "solid",
+                          "gradientBorder": {
+                            "angle": 135,
+                            "colors": [
+                              "#ec4899",
+                              "#8b5cf6"
+                            ],
+                            "enabled": false
+                          }
+                        }
                       }
                     }
                   ],
@@ -1026,6 +1166,7 @@
               "settings": {
                 "gap": 32,
                 "maxWidth": "full",
+                "customCSS": "padding-top: 0 !important;\nmargin-top: 0 !important;",
                 "fullWidth": true,
                 "isVisible": true,
                 "marginTop": 0,
@@ -1133,7 +1274,24 @@
                             "subtitle": "Gatherings & parties"
                           }
                         ],
-                        "minCardWidth": 280
+                        "minCardWidth": 280,
+                        "_translations": {
+                          "ar": {
+                            "title": "أنواع الأحداث الشائعة",
+                            "subtitle": "ابحث عن موارد التخطيط المثالية لأي احتفال",
+                            "badge.text": "فئات الأحداث"
+                          },
+                          "bn": {
+                            "title": "জনপ্রিয় ইভেন্টের ধরন",
+                            "subtitle": "যেকোনো উৎসবের জন্য নিখুঁত পরিকল্পনা সম্পদ খুঁজুন",
+                            "badge.text": "ইভেন্ট বিভাগসমূহ"
+                          },
+                          "sv": {
+                            "title": "Populära evenemangstyper",
+                            "subtitle": "Hitta perfekta planeringsresurser för varje firande",
+                            "badge.text": "Evenemangskategorier"
+                          }
+                        }
                       }
                     }
                   ],
@@ -1286,7 +1444,7 @@
                           "marginBottom": 60
                         },
                         "layout": {
-                          "gap": 0,
+                          "gap": 17,
                           "type": "horizontal",
                           "columns": 4,
                           "verticalSpacing": 48
@@ -1307,7 +1465,7 @@
                         "connector": {
                           "show": true,
                           "color": "rgba(190,107,139,0.3)",
-                          "style": "dashed",
+                          "style": "dotted",
                           "dotSize": 8,
                           "dotColor": "#9333ea",
                           "animation": "none",
@@ -1371,6 +1529,47 @@
                           "titleColor": "#111827",
                           "descriptionSize": "sm",
                           "descriptionColor": "#6b7280"
+                        },
+                        "_translations": {
+                          "ar": {
+                            "steps.0.title": "أنشئ حسابك",
+                            "steps.1.title": "أنشئ موقع زفافك",
+                            "steps.2.title": "ادعُ الضيوف واجمع تأكيدات الحضور",
+                            "steps.3.title": "احتفل بيومك المثالي",
+                            "header.badge.text": "عملية بسيطة",
+                            "header.heading.text": "كيف يعمل",
+                            "steps.0.description": "سجّل مجاناً في أقل من دقيقة. لا بطاقة ائتمان مطلوبة. تبدأ رحلة تخطيط زفافك فوراً.",
+                            "steps.1.description": "اختر قالباً أنيقاً، خصّص ألوانك، ارفع الصور وأضف قصتك. مباشر في دقائق.",
+                            "steps.2.description": "شارك رابط موقعك. يؤكد الضيوف حضورهم مباشرة عبر الإنترنت — يتتبع الحضور والاحتياجات الغذائية تلقائياً.",
+                            "steps.3.description": "أدِر مخطط الجلوس، نسّق مع الموردين، واستمتع بكل لحظة — Ceremoney يتولى التنظيم.",
+                            "header.description.text": "خطط لحدثك المثالي في أربع خطوات بسيطة"
+                          },
+                          "bn": {
+                            "steps.0.title": "আপনার অ্যাকাউন্ট তৈরি করুন",
+                            "steps.1.title": "আপনার বিয়ের ওয়েবসাইট তৈরি করুন",
+                            "steps.2.title": "অতিথিদের আমন্ত্রণ জানান ও RSVP সংগ্রহ করুন",
+                            "steps.3.title": "আপনার নিখুঁত দিন উদযাপন করুন",
+                            "header.badge.text": "সহজ প্রক্রিয়া",
+                            "header.heading.text": "কীভাবে কাজ করে",
+                            "steps.0.description": "এক মিনিটেরও কম সময়ে বিনামূল্যে নিবন্ধন করুন। ক্রেডিট কার্ডের প্রয়োজন নেই।",
+                            "steps.1.description": "একটি মার্জিত টেমপ্লেট বেছে নিন, রঙ কাস্টমাইজ করুন, ছবি আপলোড করুন এবং আপনার গল্প যোগ করুন।",
+                            "steps.2.description": "আপনার ওয়েবসাইটের লিংক শেয়ার করুন। অতিথিরা অনলাইনে RSVP দেন — উপস্থিতি, খাবারের পছন্দ স্বয়ংক্রিয়ভাবে ট্র্যাক হয়।",
+                            "steps.3.description": "আসন বিন্যাস পরিচালনা করুন, ভেন্ডরদের সমন্বয় করুন এবং প্রতিটি মুহূর্ত উপভোগ করুন।",
+                            "header.description.text": "চারটি সহজ ধাপে আপনার নিখুঁত ইভেন্ট পরিকল্পনা করুন"
+                          },
+                          "sv": {
+                            "steps.0.title": "Skapa ditt konto",
+                            "steps.1.title": "Bygg din bröllopssida",
+                            "steps.2.title": "Bjud in gäster och samla in OSA",
+                            "steps.3.title": "Fira din perfekta dag",
+                            "header.badge.text": "Enkel process",
+                            "header.heading.text": "Så fungerar det",
+                            "steps.0.description": "Registrera dig gratis på under en minut. Inget kreditkort krävs. Din bröllopplanering börjar omedelbart.",
+                            "steps.1.description": "Välj en elegant mall, anpassa dina färger, ladda upp foton och lägg till din historia. Live på några minuter.",
+                            "steps.2.description": "Dela länken till din sida. Gäster svarar direkt online — närvaro, kostbehov och sällskap spåras automatiskt.",
+                            "steps.3.description": "Hantera din bordplacering, koordinera leverantörer och njut av varje ögonblick — Ceremoney sköter organisationen.",
+                            "header.description.text": "Planera ditt perfekta evenemang i fyra enkla steg"
+                          }
                         }
                       }
                     }
@@ -1384,6 +1583,7 @@
               "settings": {
                 "gap": 32,
                 "maxWidth": "xl",
+                "customCSS": "padding-top: 0 !important;\nmargin-top: 0 !important;",
                 "fullWidth": true,
                 "isVisible": true,
                 "marginTop": 0,
@@ -1439,7 +1639,7 @@
             },
             {
               "id": "section_1776226359009_9tlyokv5p",
-              "order": 5,
+              "order": 6,
               "layout": "1",
               "columns": [
                 {
@@ -1542,7 +1742,7 @@
             },
             {
               "id": "section_1776226231134_q9zmysqrv",
-              "order": 6,
+              "order": 7,
               "layout": "1",
               "columns": [
                 {
@@ -1652,6 +1852,32 @@
                             ]
                           }
                         },
+                        "_translations": {
+                          "ar": {
+                            "header.title": "موثوق به من قِبل مخططي الفعاليات حول العالم",
+                            "stats.0.label": "أزواج يخططون",
+                            "stats.1.label": "ضيوف تتم إدارتهم",
+                            "stats.2.label": "متوسط التقييم",
+                            "stats.3.label": "مدن مشمولة",
+                            "header.subtitle": "انضم إلى آلاف المستخدمين الراضين الذين يخططون لأحداث لا تُنسى"
+                          },
+                          "bn": {
+                            "header.title": "বিশ্বজুড়ে ইভেন্ট পরিকল্পনাকারীদের বিশ্বাস",
+                            "stats.0.label": "পরিকল্পনারত দম্পতি",
+                            "stats.1.label": "পরিচালিত অতিথি",
+                            "stats.2.label": "গড় রেটিং",
+                            "stats.3.label": "শহরসমূহ",
+                            "header.subtitle": "হাজার হাজার সন্তুষ্ট ব্যবহারকারীর সাথে যোগ দিন যারা অবিস্মরণীয় ইভেন্ট পরিকল্পনা করছেন"
+                          },
+                          "sv": {
+                            "header.title": "Betrodd av eventplanerare världen över",
+                            "stats.0.label": "Par som planerar",
+                            "stats.1.label": "Hanterade gäster",
+                            "stats.2.label": "Genomsnittligt betyg",
+                            "stats.3.label": "Städer täckta",
+                            "header.subtitle": "Gå med tusentals nöjda användare som planerar oförglömliga evenemang"
+                          }
+                        },
                         "animateOnScroll": true
                       }
                     }
@@ -1720,7 +1946,7 @@
             },
             {
               "id": "section_1776228080659_uf7vkdx5y",
-              "order": 7,
+              "order": 8,
               "layout": "1",
               "columns": [
                 {
@@ -1915,6 +2141,23 @@
                           "autoplayDelay": 5000,
                           "slidesPerView": 3
                         },
+                        "_translations": {
+                          "ar": {
+                            "header.badge.text": "قصص نجاح",
+                            "header.heading.text": "ما يقوله مستخدمونا",
+                            "header.description.text": "قصص حقيقية من أزواج حقيقيين خططوا لحفل زفاف أحلامهم مع Ceremoney."
+                          },
+                          "bn": {
+                            "header.badge.text": "সাফল্যের গল্প",
+                            "header.heading.text": "আমাদের ব্যবহারকারীরা কী বলেন",
+                            "header.description.text": "Ceremoney দিয়ে স্বপ্নের বিয়ে পরিকল্পনা করা বাস্তব দম্পতিদের বাস্তব গল্প।"
+                          },
+                          "sv": {
+                            "header.badge.text": "Framgångshistorier",
+                            "header.heading.text": "Vad våra användare säger",
+                            "header.description.text": "Riktiga berättelser från riktiga par som planerade sitt drömbröllopp med Ceremoney."
+                          }
+                        },
                         "testimonialType": "photo"
                       }
                     }
@@ -1983,7 +2226,7 @@
             },
             {
               "id": "section_1776228249240_5g2sx9ez8",
-              "order": 8,
+              "order": 9,
               "layout": "1",
               "columns": [
                 {
@@ -2003,6 +2246,26 @@
                         "showPattern": true,
                         "cardPaddingH": 32,
                         "cardPaddingV": 64,
+                        "_translations": {
+                          "ar": {
+                            "title": "هل أنت مستعد لتخطيط حدثك القادم؟",
+                            "subtitle": "انضم إلى آلاف مخططي الفعاليات الذين يثقون في Ceremoney لاحتفالاتهم",
+                            "primaryButton.label": "ابدأ مجاناً",
+                            "secondaryButton.label": "شاهد العرض التوضيحي"
+                          },
+                          "bn": {
+                            "title": "আপনার পরবর্তী ইভেন্ট পরিকল্পনা করতে প্রস্তুত?",
+                            "subtitle": "হাজার হাজার ইভেন্ট পরিকল্পনাকারীদের সাথে যোগ দিন যারা তাদের উৎসবের জন্য Ceremoney বিশ্বাস করেন",
+                            "primaryButton.label": "বিনামূল্যে শুরু করুন",
+                            "secondaryButton.label": "ডেমো দেখুন"
+                          },
+                          "sv": {
+                            "title": "Redo att planera ditt nästa evenemang?",
+                            "subtitle": "Gå med tusentals eventplanerare som litar på Ceremoney för sina firanden",
+                            "primaryButton.label": "Kom igång gratis",
+                            "secondaryButton.label": "Se demo"
+                          }
+                        },
                         "primaryButton": {
                           "href": "/planner",
                           "icon": "ArrowRight",
@@ -2031,7 +2294,7 @@
               ],
               "settings": {
                 "gap": 32,
-                "maxWidth": "xl",
+                "maxWidth": "full",
                 "fullWidth": true,
                 "isVisible": true,
                 "marginTop": 0,

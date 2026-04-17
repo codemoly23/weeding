@@ -1,8 +1,8 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import { User, Mail, Phone, Globe, Lock, Save, Loader2, AlertTriangle } from "lucide-react";
-import { signOut } from "next-auth/react";
+import { useState, useEffect, useRef } from "react";
+import { User, Mail, Phone, Globe, Lock, Save, Loader2, AlertTriangle, Upload } from "lucide-react";
+import { signOut, useSession } from "next-auth/react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -30,7 +30,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Separator } from "@/components/ui/separator";
 import { toast } from "sonner";
 import {
@@ -49,6 +49,9 @@ interface UserProfile {
 }
 
 const countries = [
+  { code: "SE", name: "Sweden" },
+  { code: "US", name: "United States" },
+  { code: "GB", name: "United Kingdom" },
   { code: "BD", name: "Bangladesh" },
   { code: "IN", name: "India" },
   { code: "PK", name: "Pakistan" },
@@ -56,15 +59,19 @@ const countries = [
   { code: "SA", name: "Saudi Arabia" },
   { code: "MY", name: "Malaysia" },
   { code: "SG", name: "Singapore" },
-  { code: "GB", name: "United Kingdom" },
-  { code: "US", name: "United States" },
+  { code: "CA", name: "Canada" },
+  { code: "AU", name: "Australia" },
+  { code: "OTHER", name: "Other" },
 ];
 
 export default function ProfilePage() {
+  const { update: updateSession } = useSession();
   const [loading, setLoading] = useState(true);
   const [isSaving, setIsSaving] = useState(false);
   const [isChangingPassword, setIsChangingPassword] = useState(false);
+  const [isUploadingPhoto, setIsUploadingPhoto] = useState(false);
   const [user, setUser] = useState<UserProfile | null>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -142,6 +149,7 @@ export default function ProfilePage() {
 
       const data = await response.json();
       setUser(data.user);
+      await updateSession({ name: data.user.name });
       toast.success("Profile updated successfully");
     } catch (error) {
       toast.error(error instanceof Error ? error.message : "Failed to update profile");
@@ -217,6 +225,53 @@ export default function ProfilePage() {
       .slice(0, 2);
   };
 
+  const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    if (file.size > 2 * 1024 * 1024) {
+      toast.error("Image must be less than 2MB");
+      return;
+    }
+
+    setIsUploadingPhoto(true);
+    try {
+      const uploadData = new FormData();
+      uploadData.append("file", file);
+
+      const uploadRes = await fetch("/api/upload", {
+        method: "POST",
+        body: uploadData,
+      });
+
+      if (!uploadRes.ok) {
+        const err = await uploadRes.json().catch(() => ({}));
+        throw new Error(err.error || "Upload failed");
+      }
+      const { url } = await uploadRes.json();
+
+      const profileRes = await fetch("/api/customer/profile", {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ image: url }),
+      });
+
+      if (!profileRes.ok) {
+        const err = await profileRes.json().catch(() => ({}));
+        throw new Error(err.error || "Failed to save photo");
+      }
+      const data = await profileRes.json();
+      setUser(data.user);
+      await updateSession({ image: url });
+      toast.success("Profile photo updated");
+    } catch (err) {
+      toast.error(err instanceof Error ? err.message : "Failed to upload photo");
+    } finally {
+      setIsUploadingPhoto(false);
+      if (fileInputRef.current) fileInputRef.current.value = "";
+    }
+  };
+
   if (loading) {
     return (
       <div className="space-y-6">
@@ -262,13 +317,36 @@ export default function ProfilePage() {
             </CardHeader>
             <CardContent className="flex items-center gap-6">
               <Avatar className="h-20 w-20">
+                {user?.image && <AvatarImage src={user.image} alt={user.name || "Profile"} />}
                 <AvatarFallback className="bg-primary text-2xl text-primary-foreground">
                   {getInitials(user?.name || null)}
                 </AvatarFallback>
               </Avatar>
               <div className="space-y-2">
-                <Button variant="outline" size="sm">
-                  Upload Photo
+                <input
+                  ref={fileInputRef}
+                  type="file"
+                  accept="image/jpeg,image/png,image/gif,image/webp"
+                  className="hidden"
+                  onChange={handleImageUpload}
+                />
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => fileInputRef.current?.click()}
+                  disabled={isUploadingPhoto}
+                >
+                  {isUploadingPhoto ? (
+                    <>
+                      <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                      Uploading...
+                    </>
+                  ) : (
+                    <>
+                      <Upload className="mr-2 h-4 w-4" />
+                      Upload Photo
+                    </>
+                  )}
                 </Button>
                 <p className="text-xs text-muted-foreground">
                   JPG, PNG or GIF. Max size 2MB.

@@ -7,6 +7,7 @@ const updateProfileSchema = z.object({
   name: z.string().min(1).max(100).optional(),
   phone: z.string().max(20).optional(),
   country: z.string().max(10).optional(),
+  image: z.string().max(500).nullable().optional(),
 });
 
 // GET - Fetch user profile

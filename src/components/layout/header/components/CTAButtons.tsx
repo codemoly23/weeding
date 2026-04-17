@@ -10,6 +10,7 @@ import { NeuralButton } from "@/components/ui/neural-button";
 import { UserMenu } from "./UserMenu";
 import { LanguageSwitcher } from "./LanguageSwitcher";
 import type { CTAButtonsProps } from "../types";
+import { useLanguage } from "@/lib/i18n/language-context";
 import type { CTAButton } from "@/lib/header-footer/types";
 import { cn } from "@/lib/utils";
 
@@ -197,6 +198,7 @@ export function CTAButtons({
   sessionStatus,
   onLogout,
 }: CTAButtonsProps) {
+  const { t } = useLanguage();
   const safeButtons = Array.isArray(buttons) ? buttons : [];
   const isLoggedIn = !!(user || session?.user);
   const isLoading = sessionStatus === "loading";
@@ -259,7 +261,7 @@ export function CTAButtons({
             }}
           >
             <SmartLink href={loginUrl} openInNewTab={loginStyle.openInNewTab}>
-              <CraftButtonLabel>{authConfig.loginText || "Sign In"}</CraftButtonLabel>
+              <CraftButtonLabel>{authConfig.loginText || t("common.signIn")}</CraftButtonLabel>
               <CraftButtonIcon>
                 {craftIcon}
               </CraftButtonIcon>
@@ -340,7 +342,7 @@ export function CTAButtons({
           }}
         >
           {loginStyle?.iconPosition === "left" && renderButtonIcon(loginStyle)}
-          <span>{authConfig.loginText || "Sign In"}</span>
+          <span>{authConfig.loginText || t("common.signIn")}</span>
           {loginStyle?.iconPosition !== "left" && renderButtonIcon(loginStyle)}
         </SmartLink>
       );
@@ -349,7 +351,7 @@ export function CTAButtons({
     // Default ghost button
     return (
       <Button variant="ghost" asChild>
-        <SmartLink href={loginUrl}>{authConfig.loginText || "Sign In"}</SmartLink>
+        <SmartLink href={loginUrl}>{authConfig.loginText || t("common.signIn")}</SmartLink>
       </Button>
     );
   };
@@ -365,7 +367,7 @@ export function CTAButtons({
         ))
       ) : (
         <Button asChild>
-          <SmartLink href="/register">Get Started</SmartLink>
+          <SmartLink href="/register">{t("common.startPlanning")}</SmartLink>
         </Button>
       )}
     </div>

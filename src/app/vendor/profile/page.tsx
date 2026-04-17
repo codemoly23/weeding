@@ -42,6 +42,7 @@ interface ProfileData {
   priceMin: string;
   priceMax: string;
   currency: string;
+  languages: string[];
   photos: string[];
   isAvailable: boolean;
   status: string;
@@ -66,11 +67,18 @@ const defaultProfile: ProfileData = {
   priceMin: "",
   priceMax: "",
   currency: "USD",
+  languages: [],
   photos: [],
   isAvailable: true,
   status: "PENDING",
   faqItems: [],
 };
+
+const COMMON_LANGUAGES = [
+  "Swedish", "English", "Arabic", "French", "Spanish",
+  "German", "Italian", "Portuguese", "Turkish", "Urdu",
+  "Hindi", "Bengali", "Malay", "Chinese", "Japanese",
+];
 
 export default function VendorProfilePage() {
   const [profile, setProfile] = useState<ProfileData>(defaultProfile);
@@ -105,6 +113,7 @@ export default function VendorProfilePage() {
             facebook: data.profile.facebook ?? "",
             pinterest: data.profile.pinterest ?? "",
             faqItems: data.profile.faqItems ?? [],
+            languages: data.profile.languages ?? [],
           });
         }
       })
@@ -368,6 +377,34 @@ export default function VendorProfilePage() {
                 placeholder="pinterest.com/yourboard"
               />
             </Field>
+          </div>
+        </Section>
+
+        {/* Languages */}
+        <Section title="Languages Spoken">
+          <div className="flex flex-wrap gap-2">
+            {COMMON_LANGUAGES.map((lang) => {
+              const selected = profile.languages.includes(lang);
+              return (
+                <button
+                  key={lang}
+                  type="button"
+                  onClick={() => set(
+                    "languages",
+                    selected
+                      ? profile.languages.filter((l) => l !== lang)
+                      : [...profile.languages, lang]
+                  )}
+                  className={`px-3 py-1.5 rounded-full text-sm font-medium border transition-colors ${
+                    selected
+                      ? "bg-purple-600 text-white border-purple-600"
+                      : "bg-white text-gray-700 border-gray-300 hover:border-purple-400"
+                  }`}
+                >
+                  {lang}
+                </button>
+              );
+            })}
           </div>
         </Section>
 

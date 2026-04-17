@@ -73,10 +73,17 @@ export const authConfig = {
     signIn: "/login",
   },
   callbacks: {
-    async jwt({ token, user }) {
+    async jwt({ token, user, trigger, session: sessionData }) {
       if (user && user.id) {
         token.id = user.id;
         token.role = user.role;
+        token.image = user.image ?? null;
+      }
+      if (trigger === "update" && sessionData?.image !== undefined) {
+        token.image = sessionData.image;
+      }
+      if (trigger === "update" && sessionData?.name !== undefined) {
+        token.name = sessionData.name;
       }
       return token;
     },
@@ -84,6 +91,7 @@ export const authConfig = {
       if (session.user) {
         session.user.id = token.id as string;
         session.user.role = token.role as UserRole;
+        session.user.image = (token.image as string | null) ?? session.user.image ?? null;
       }
       return session;
     },

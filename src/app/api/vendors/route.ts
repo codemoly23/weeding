@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
+import { Prisma } from "@prisma/client";
 import prisma from "@/lib/db";
 import { activePlanWhereClause } from "@/lib/vendor-plan";
 
@@ -8,6 +9,7 @@ export async function GET(req: NextRequest) {
   const category = searchParams.get("category") as string | null;
   const city = searchParams.get("city");
   const q = searchParams.get("q");
+  const date = searchParams.get("date");
   const featured = searchParams.get("featured") === "true";
   const minPrice = searchParams.get("minPrice") ? parseInt(searchParams.get("minPrice")!) : null;
   const maxPrice = searchParams.get("maxPrice") ? parseInt(searchParams.get("maxPrice")!) : null;
@@ -16,28 +18,48 @@ export async function GET(req: NextRequest) {
   const limit = 12;
   const skip = (page - 1) * limit;
 
-  const where: Record<string, unknown> = {
-    isApproved: true,
-    isActive: true,
-    ...activePlanWhereClause(),
-  };
+  // Build AND conditions explicitly to avoid OR/city conflict from activePlanWhereClause spread
+  const AND: Prisma.VendorProfileWhereInput[] = [
+    { isApproved: true },
+    { isActive: true },
+    activePlanWhereClause(),
+  ];
 
-  if (category) where.category = category;
-  if (city) where.city = { contains: city, mode: "insensitive" };
-  if (featured) where.isFeatured = true;
+  if (category) AND.push({ category: category as Prisma.EnumVendorCategoryFilter });
+  if (city) AND.push({ city: { contains: city, mode: "insensitive" } });
+  if (featured) AND.push({ isFeatured: true });
   if (minPrice !== null || maxPrice !== null) {
-    where.startingPrice = {
-      ...(minPrice !== null && { gte: minPrice }),
-      ...(maxPrice !== null && { lte: maxPrice }),
-    };
+    AND.push({
+      startingPrice: {
+        ...(minPrice !== null && { gte: minPrice }),
+        ...(maxPrice !== null && { lte: maxPrice }),
+      },
+    });
   }
   if (q) {
-    where.OR = [
-      { businessName: { contains: q, mode: "insensitive" } },
-      { description: { contains: q, mode: "insensitive" } },
-      { city: { contains: q, mode: "insensitive" } },
-    ];
+    AND.push({
+      OR: [
+        { businessName: { contains: q, mode: "insensitive" } },
+        { description: { contains: q, mode: "insensitive" } },
+        { city: { contains: q, mode: "insensitive" } },
+      ],
+    });
   }
+  // Exclude vendors that are BOOKED on the selected date
+  if (date) {
+    const parsedDate = new Date(date);
+    if (!isNaN(parsedDate.getTime())) {
+      AND.push({
+        NOT: {
+          availability: {
+            some: { date: parsedDate, status: "BOOKED" },
+          },
+        },
+      });
+    }
+  }
+
+  const where: Prisma.VendorProfileWhereInput = { AND };
 
   const [vendors, total] = await Promise.all([
     prisma.vendorProfile.findMany({

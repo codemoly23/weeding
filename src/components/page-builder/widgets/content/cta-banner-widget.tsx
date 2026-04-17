@@ -42,10 +42,10 @@ export function CtaBannerWidget({
     <section
       style={{
         background: `linear-gradient(to bottom, ${s.sectionBgFrom}, ${s.sectionBgTo})`,
-        padding: "5rem 1rem",
+        padding: "5rem 0",
       }}
     >
-      <div style={{ maxWidth: "1280px", margin: "0 auto" }}>
+      <div style={{ width: "100%" }}>
         {/* Card */}
         <div
           style={{

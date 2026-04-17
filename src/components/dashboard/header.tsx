@@ -14,7 +14,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 
 interface DashboardHeaderProps {
@@ -27,6 +27,7 @@ export function DashboardHeader({ onMenuClick }: DashboardHeaderProps) {
   // Get user data from session
   const userName = session?.user?.name || "User";
   const userEmail = session?.user?.email || "";
+  const userImage = session?.user?.image || null;
   const userInitials = userName
     .split(" ")
     .map((n) => n[0])
@@ -107,6 +108,7 @@ export function DashboardHeader({ onMenuClick }: DashboardHeaderProps) {
           <DropdownMenuTrigger asChild>
             <Button variant="ghost" className="gap-2 px-2">
               <Avatar className="h-8 w-8">
+                {userImage && <AvatarImage src={userImage} alt={userName} />}
                 <AvatarFallback className="bg-primary/10 text-primary">
                   {userInitials}
                 </AvatarFallback>
