@@ -111,9 +111,14 @@ export function WidgetSectionsRenderer({ sections }: WidgetSectionsRendererProps
     return null;
   }
 
-  // Filter out hidden sections and sort by order
+  // Filter out hidden sections and sections that are fully hoisted to layout (e.g. top-utility-bar)
+  const HOISTED_WIDGET_TYPES = new Set(["top-utility-bar"]);
   const visibleSections = [...sections]
     .filter((s) => s.settings.isVisible !== false)
+    .filter((s) => {
+      const allWidgets = s.columns.flatMap((c) => c.widgets);
+      return allWidgets.length === 0 || allWidgets.some((w) => !HOISTED_WIDGET_TYPES.has(w.type));
+    })
     .sort((a, b) => a.order - b.order);
 
   return (
