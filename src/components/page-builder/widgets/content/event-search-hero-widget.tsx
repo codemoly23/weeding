@@ -3,7 +3,7 @@
 import { useState, useEffect, useCallback, useRef } from "react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
-import { Search } from "lucide-react";
+import { Search, MapPin } from "lucide-react";
 import type { EventSearchHeroWidgetSettings } from "@/lib/page-builder/types";
 import { DEFAULT_EVENT_SEARCH_HERO_SETTINGS } from "@/lib/page-builder/defaults";
 
@@ -74,6 +74,35 @@ export function EventSearchHeroWidget({
   const [location, setLocation] = useState("");
   const [date, setDate] = useState("");
   const [errors, setErrors] = useState<{ eventType?: boolean; location?: boolean; date?: boolean }>({});
+
+  // City suggestions
+  const [cities, setCities] = useState<string[]>([]);
+  const [showCitySuggestions, setShowCitySuggestions] = useState(false);
+  const locationInputRef = useRef<HTMLInputElement>(null);
+  const cityDropdownRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    fetch("/api/vendor-cities")
+      .then((r) => r.json())
+      .then((data) => {
+        if (Array.isArray(data)) setCities(data.map((c: { name: string }) => c.name));
+      })
+      .catch(() => {});
+  }, []);
+
+  useEffect(() => {
+    function onClickOutside(e: MouseEvent) {
+      if (
+        cityDropdownRef.current &&
+        !cityDropdownRef.current.contains(e.target as Node) &&
+        !locationInputRef.current?.contains(e.target as Node)
+      ) {
+        setShowCitySuggestions(false);
+      }
+    }
+    document.addEventListener("mousedown", onClickOutside);
+    return () => document.removeEventListener("mousedown", onClickOutside);
+  }, []);
 
   function handleSearch() {
     if (isPreview) return;
@@ -233,7 +262,7 @@ export function EventSearchHeroWidget({
 
             {/* Location */}
             {showLocationField && (
-              <div>
+              <div style={{ position: "relative" }}>
                 <label
                   style={{
                     display: "block",
@@ -248,11 +277,15 @@ export function EventSearchHeroWidget({
                   {locationLabel}
                 </label>
                 <input
+                  ref={locationInputRef}
                   type="text"
                   value={location}
-                  onChange={(e) => { setLocation(e.target.value); setErrors((p) => ({ ...p, location: false })); }}
+                  onChange={(e) => { setLocation(e.target.value); setErrors((p) => ({ ...p, location: false })); setShowCitySuggestions(true); }}
+                  onFocus={() => setShowCitySuggestions(true)}
+                  onClick={() => setShowCitySuggestions(true)}
                   onKeyDown={handleKeyDown}
                   placeholder={locationPlaceholder}
+                  autoComplete="off"
                   style={{
                     width: "100%",
                     padding: "0.75rem",
@@ -262,9 +295,55 @@ export function EventSearchHeroWidget({
                     outline: "none",
                     color: "#1f2937",
                   }}
-                  onFocus={(e) => (e.currentTarget.style.borderColor = errors.location ? "#dc2626" : "#9333ea")}
                   onBlur={(e) => (e.currentTarget.style.borderColor = errors.location ? "#dc2626" : "#e5e7eb")}
                 />
+                {showCitySuggestions && cities.filter((c) => c.toLowerCase().includes(location.toLowerCase())).length > 0 && (
+                  <div
+                    ref={cityDropdownRef}
+                    style={{
+                      position: "absolute",
+                      top: "100%",
+                      left: 0,
+                      right: 0,
+                      marginTop: "4px",
+                      background: "white",
+                      border: "1px solid #e5e7eb",
+                      borderRadius: "0.5rem",
+                      boxShadow: "0 4px 12px rgba(0,0,0,0.1)",
+                      zIndex: 100,
+                      maxHeight: "180px",
+                      overflowY: "auto",
+                    }}
+                  >
+                    {cities
+                      .filter((c) => c.toLowerCase().includes(location.toLowerCase()))
+                      .map((city) => (
+                        <button
+                          key={city}
+                          type="button"
+                          onMouseDown={(e) => { e.preventDefault(); setLocation(city); setShowCitySuggestions(false); setErrors((p) => ({ ...p, location: false })); }}
+                          style={{
+                            width: "100%",
+                            textAlign: "left",
+                            padding: "0.625rem 0.75rem",
+                            fontSize: "0.875rem",
+                            color: "#1f2937",
+                            background: "none",
+                            border: "none",
+                            cursor: "pointer",
+                            display: "flex",
+                            alignItems: "center",
+                            gap: "0.5rem",
+                          }}
+                          onMouseEnter={(e) => { e.currentTarget.style.background = "#f5f3ff"; }}
+                          onMouseLeave={(e) => { e.currentTarget.style.background = "none"; }}
+                        >
+                          <MapPin size={13} style={{ color: "#9ca3af", flexShrink: 0 }} />
+                          {city}
+                        </button>
+                      ))}
+                  </div>
+                )}
                 {errors.location && (
                   <p style={{ color: "#dc2626", fontSize: "0.75rem", marginTop: "0.25rem" }}>Please enter a location</p>
                 )}

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import {
@@ -56,6 +56,35 @@ export default function VendorRegisterPage() {
   const [step, setStep] = useState(1);
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState("");
+  const [cities, setCities] = useState<string[]>([]);
+  const [showCitySuggestions, setShowCitySuggestions] = useState(false);
+  const cityInputRef = useRef<HTMLInputElement>(null);
+  const cityDropdownRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    fetch("/api/vendor-cities")
+      .then((r) => r.json())
+      .then((data) => {
+        if (Array.isArray(data)) setCities(data.map((c: { name: string }) => c.name));
+      })
+      .catch(() => {});
+  }, []);
+
+  // Close dropdown on outside click
+  useEffect(() => {
+    function onClickOutside(e: MouseEvent) {
+      if (
+        cityDropdownRef.current &&
+        !cityDropdownRef.current.contains(e.target as Node) &&
+        !cityInputRef.current?.contains(e.target as Node)
+      ) {
+        setShowCitySuggestions(false);
+      }
+    }
+    document.addEventListener("mousedown", onClickOutside);
+    return () => document.removeEventListener("mousedown", onClickOutside);
+  }, []);
+
   const [form, setForm] = useState<FormData>({
     name: "", email: "", password: "", confirmPassword: "", phone: "",
     businessName: "", category: "", tagline: "", description: "", city: "", country: "SE",
@@ -288,10 +317,38 @@ export default function VendorRegisterPage() {
                   <div>
                     <label className="block text-xs font-medium text-gray-700 mb-1">City</label>
                     <div className="relative">
-                      <MapPin className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
-                      <input type="text" value={form.city} onChange={(e) => update("city", e.target.value)}
+                      <MapPin className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 z-10 pointer-events-none" />
+                      <input
+                        ref={cityInputRef}
+                        type="text"
+                        value={form.city}
+                        onChange={(e) => { update("city", e.target.value); setShowCitySuggestions(true); }}
+                        onFocus={() => setShowCitySuggestions(true)}
+                        onClick={() => setShowCitySuggestions(true)}
                         className="w-full pl-9 pr-3 py-2.5 border rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-purple-400"
-                        placeholder="Stockholm" />
+                        placeholder="Stockholm"
+                        autoComplete="off"
+                      />
+                      {showCitySuggestions && cities.filter((c) => c.toLowerCase().includes(form.city.toLowerCase())).length > 0 && (
+                        <div
+                          ref={cityDropdownRef}
+                          className="absolute top-full left-0 right-0 mt-1 bg-white border rounded-lg shadow-lg z-50 max-h-48 overflow-y-auto"
+                        >
+                          {cities
+                            .filter((c) => c.toLowerCase().includes(form.city.toLowerCase()))
+                            .map((city) => (
+                              <button
+                                key={city}
+                                type="button"
+                                onMouseDown={(e) => { e.preventDefault(); update("city", city); setShowCitySuggestions(false); }}
+                                className="w-full text-left px-4 py-2 text-sm hover:bg-purple-50 hover:text-purple-700 flex items-center gap-2"
+                              >
+                                <MapPin className="w-3 h-3 text-gray-400" />
+                                {city}
+                              </button>
+                            ))}
+                        </div>
+                      )}
                     </div>
                   </div>
                   <div>

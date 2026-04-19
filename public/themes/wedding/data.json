@@ -1,6 +1,6 @@
 {
   "version": "1.0",
-  "exportedAt": "2026-04-19T05:08:39.479Z",
+  "exportedAt": "2026-04-19T11:21:40.830Z",
   "colorPalette": {
     "light": {
       "background": "#FDFAF7",
@@ -732,7 +732,7 @@
                         ],
                         "height": 40,
                         "fontSize": 14,
-                        "paddingX": 32,
+                        "paddingX": 180,
                         "textColor": "#ffffff",
                         "gradientTo": "#ec4899",
                         "hoverColor": "#e9d5ff",
@@ -2513,7 +2513,7 @@
     "searchEnabled": false,
     "mobileBreakpoint": 1024,
     "height": 72,
-    "ctaButtons": "\"[{\\\"text\\\":\\\"Start Planning Free\\\",\\\"url\\\":\\\"/register\\\",\\\"variant\\\":\\\"primary\\\"}]\""
+    "ctaButtons": "\"[{\\\"text\\\":\\\"Start Planning Free\\\",\\\"url\\\":\\\"/register\\\",\\\"style\\\":{\\\"bgColor\\\":\\\"#BE6B8B\\\",\\\"textColor\\\":\\\"#ffffff\\\",\\\"borderRadius\\\":8,\\\"borderWidth\\\":0,\\\"hoverEffect\\\":\\\"darken\\\"}}]\""
   },
   "menuItems": [
     {

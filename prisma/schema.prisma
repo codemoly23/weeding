@@ -2316,6 +2316,16 @@ enum VendorPlanTier {
   EXPIRED   // Trial or plan expired — dashboard access only
 }
 
+model VendorCity {
+  id        String   @id @default(cuid())
+  name      String   @unique
+  country   String   @default("SE")
+  sortOrder Int      @default(0)
+  createdAt DateTime @default(now())
+
+  @@index([country])
+}
+
 enum VendorStatus {
   PENDING
   APPROVED

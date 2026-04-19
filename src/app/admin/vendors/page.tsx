@@ -4,7 +4,7 @@ import { useState, useEffect, useCallback } from "react";
 import Link from "next/link";
 import {
   Store, Plus, Check, X, Pencil, Trash2, ExternalLink,
-  Search, Star, ChevronLeft, ChevronRight, KeyRound, BadgeCheck,
+  Search, Star, ChevronLeft, ChevronRight, KeyRound, BadgeCheck, MapPin,
 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
@@ -111,6 +111,49 @@ export default function AdminVendorsPage() {
   const [createLoginPassword, setCreateLoginPassword] = useState("");
   const [createLoginSaving, setCreateLoginSaving] = useState(false);
   const [createLoginError, setCreateLoginError] = useState("");
+
+  const [showCitiesModal, setShowCitiesModal] = useState(false);
+  const [cityInput, setCityInput] = useState("");
+  const [cityList, setCityList] = useState<{ id: string; name: string }[]>([]);
+  const [citiesLoading, setCitiesLoading] = useState(false);
+
+  async function fetchCities() {
+    setCitiesLoading(true);
+    try {
+      const res = await fetch("/api/vendor-cities");
+      const data = await res.json();
+      setCityList(Array.isArray(data) ? data : []);
+    } finally {
+      setCitiesLoading(false);
+    }
+  }
+
+  async function handleAddCityToList() {
+    const trimmed = cityInput.trim();
+    if (!trimmed) return;
+    if (cityList.some((c) => c.name.toLowerCase() === trimmed.toLowerCase())) {
+      setCityInput("");
+      return;
+    }
+    const res = await fetch("/api/vendor-cities", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ name: trimmed }),
+    });
+    if (res.ok) {
+      setCityInput("");
+      fetchCities();
+    }
+  }
+
+  async function handleRemoveCityFromList(name: string) {
+    await fetch("/api/vendor-cities", {
+      method: "DELETE",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ name }),
+    });
+    fetchCities();
+  }
 
   const fetchVendors = useCallback(async () => {
     setLoading(true);
@@ -264,6 +307,12 @@ export default function AdminVendorsPage() {
               <ExternalLink className="h-4 w-4" /> View All Vendors
             </button>
           </Link>
+          <button
+            onClick={() => { fetchCities(); setShowCitiesModal(true); }}
+            className="flex items-center gap-2 px-3 py-2 text-sm border border-blue-300 text-blue-700 rounded-lg hover:bg-blue-50 transition-colors"
+          >
+            <MapPin className="h-4 w-4" /> Add Cities
+          </button>
           <button
             onClick={openAdd}
             className="flex items-center gap-2 px-4 py-2 text-sm bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors"
@@ -509,6 +558,69 @@ export default function AdminVendorsPage() {
                 </div>
               </div>
             )}
+          </div>
+        </div>
+      )}
+
+      {/* Add Cities Modal */}
+      {showCitiesModal && (
+        <div className="fixed inset-0 bg-black/40 z-50 flex items-center justify-center p-4" onClick={() => setShowCitiesModal(false)}>
+          <div className="bg-white rounded-2xl shadow-xl w-full max-w-md p-6" onClick={(e) => e.stopPropagation()}>
+            <div className="flex items-center justify-between mb-4">
+              <div className="flex items-center gap-2">
+                <MapPin className="h-5 w-5 text-blue-600" />
+                <h2 className="text-base font-bold">Add Swedish Cities</h2>
+              </div>
+              <button onClick={() => setShowCitiesModal(false)} className="text-gray-400 hover:text-gray-600">
+                <X className="h-5 w-5" />
+              </button>
+            </div>
+
+            <p className="text-sm text-gray-600 mb-3">
+              Vendors with no city assigned will be distributed across the cities below (round-robin).
+            </p>
+
+            {/* Add new city input */}
+            <div className="flex gap-2 mb-3">
+              <input
+                value={cityInput}
+                onChange={(e) => setCityInput(e.target.value)}
+                onKeyDown={(e) => { if (e.key === "Enter") { e.preventDefault(); handleAddCityToList(); } }}
+                placeholder="Type a city name..."
+                className="flex-1 border rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400"
+              />
+              <button
+                onClick={handleAddCityToList}
+                disabled={!cityInput.trim()}
+                className="flex items-center gap-1 px-3 py-2 text-sm bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-40"
+              >
+                <Plus className="h-4 w-4" /> Add
+              </button>
+            </div>
+
+            <div className="grid grid-cols-2 gap-2 mb-4 max-h-52 overflow-y-auto">
+              {citiesLoading ? (
+                <div className="col-span-2 py-4 text-center text-sm text-gray-400">Loading…</div>
+              ) : cityList.length === 0 ? (
+                <div className="col-span-2 py-4 text-center text-sm text-gray-400">No cities added yet.</div>
+              ) : cityList.map((city, i) => (
+                <div key={city.id} className="flex items-center justify-between gap-1 px-3 py-2 bg-blue-50 rounded-lg text-sm text-blue-800">
+                  <div className="flex items-center gap-2 min-w-0">
+                    <span className="text-xs font-medium text-blue-400 shrink-0">{i + 1}.</span>
+                    <span className="truncate">{city.name}</span>
+                  </div>
+                  <button onClick={() => handleRemoveCityFromList(city.name)} className="text-blue-300 hover:text-red-400 shrink-0">
+                    <X className="h-3 w-3" />
+                  </button>
+                </div>
+              ))}
+            </div>
+
+            <div className="flex justify-end">
+              <button onClick={() => setShowCitiesModal(false)} className="px-4 py-2 text-sm border rounded-lg hover:bg-gray-50">
+                Close
+              </button>
+            </div>
           </div>
         </div>
       )}
