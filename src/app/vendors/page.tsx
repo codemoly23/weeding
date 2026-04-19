@@ -274,6 +274,24 @@ function VendorsPage() {
         )}
       </FilterSection>
 
+      {/* Event Date */}
+      <FilterSection title="Event Date">
+        <input
+          type="date"
+          value={dateFilter}
+          onChange={(e) => { setDateFilter(e.target.value); setPage(1); }}
+          className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-purple-400 text-gray-700"
+        />
+        {dateFilter && (
+          <button
+            onClick={() => { setDateFilter(""); setPage(1); }}
+            className="mt-2 w-full text-xs text-gray-500 hover:text-red-500 flex items-center justify-center gap-1 py-1"
+          >
+            <X className="w-3 h-3" /> Clear date
+          </button>
+        )}
+      </FilterSection>
+
       {/* Price Range */}
       <FilterSection title="Price Range">
         <div className="space-y-2">

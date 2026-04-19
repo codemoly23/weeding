@@ -132,6 +132,7 @@ export async function PUT(request: NextRequest, { params }: RouteParams) {
     });
 
     // Revalidate the page's public URL so changes show immediately
+    revalidatePath("/", "layout");
     revalidatePath("/");
     if (page.slug) {
       revalidatePath(`/${page.slug}`);

@@ -3,6 +3,8 @@ import { checkAdminOnly, authError } from "@/lib/admin-auth";
 import fs from "fs/promises";
 import path from "path";
 import prisma from "@/lib/db";
+import { revalidatePath } from "next/cache";
+import { Prisma } from "@prisma/client";
 
 /**
  * POST /api/admin/themes/save-pages
@@ -70,6 +72,35 @@ export async function POST(request: NextRequest) {
 
     // Write back to disk
     await fs.writeFile(dataPath, JSON.stringify(themeData, null, 2), "utf-8");
+
+    // Also sync ActiveTheme.widgetDefaults from the current page sections
+    // so layout reads (e.g. top-utility-bar) always reflect the latest design
+    const widgetDefaults: Record<string, unknown> = {};
+    for (const page of pagesRaw) {
+      for (const block of page.blocks) {
+        if (!Array.isArray(block.settings)) continue;
+        for (const section of block.settings as Array<{
+          columns?: Array<{ widgets?: Array<{ type: string; settings?: Record<string, unknown> }> }>;
+        }>) {
+          for (const col of section.columns ?? []) {
+            for (const widget of col.widgets ?? []) {
+              if (widget.type && widget.settings && !widgetDefaults[widget.type]) {
+                widgetDefaults[widget.type] = widget.settings;
+              }
+            }
+          }
+        }
+      }
+    }
+
+    await prisma.activeTheme.updateMany({
+      where: { themeId },
+      data: { widgetDefaults: widgetDefaults as Prisma.InputJsonValue },
+    });
+
+    // Revalidate public site so changes are immediately visible
+    revalidatePath("/", "layout");
+    revalidatePath("/");
 
     return NextResponse.json({
       success: true,

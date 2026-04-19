@@ -476,7 +476,8 @@ function WidgetRenderer({ widget }: WidgetRendererProps) {
         return <CtaBannerWidget settings={resolvedSettings as any} />;
 
       case "top-utility-bar":
-        return <TopUtilityBarWidget settings={resolvedSettings as any} />;
+        // Hoisted to layout — rendered above <Header /> in (marketing)/layout.tsx
+        return null;
 
       case "vendor-listing":
         return <VendorListingWidget settings={resolvedSettings as any} />;
