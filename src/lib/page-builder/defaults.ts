@@ -2402,7 +2402,7 @@ export const DEFAULT_EVENT_GALLERY_GRID_SETTINGS: EventGalleryGridWidgetSettings
   planSimilarHref: "",
   showCta: true,
   ctaLabel: "View More Events",
-  ctaHref: "/events",
+  ctaHref: "/vendors",
   ctaGradientFrom: "#9333ea",
   ctaGradientTo: "#ec4899",
   container: DEFAULT_WIDGET_CONTAINER,

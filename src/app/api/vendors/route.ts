@@ -3,6 +3,29 @@ import { Prisma } from "@prisma/client";
 import prisma from "@/lib/db";
 import { activePlanWhereClause } from "@/lib/vendor-plan";
 
+// Maps common country names/aliases to ISO 3166-1 alpha-2 codes
+const COUNTRY_NAME_TO_CODE: Record<string, string> = {
+  sweden: "SE",
+  sverige: "SE",
+  "united kingdom": "GB",
+  "uk": "GB",
+  "england": "GB",
+  norway: "NO",
+  norge: "NO",
+  denmark: "DK",
+  danmark: "DK",
+  finland: "FI",
+  suomi: "FI",
+  germany: "DE",
+  deutschland: "DE",
+  france: "FR",
+  netherlands: "NL",
+  spain: "ES",
+  italy: "IT",
+  "united states": "US",
+  usa: "US",
+};
+
 // GET /api/vendors?category=PHOTOGRAPHY&city=Stockholm&q=name&minPrice=500&maxPrice=5000&minRating=4&page=1
 export async function GET(req: NextRequest) {
   const { searchParams } = new URL(req.url);
@@ -26,7 +49,15 @@ export async function GET(req: NextRequest) {
   ];
 
   if (category) AND.push({ category: category as Prisma.EnumVendorCategoryFilter });
-  if (city) AND.push({ city: { contains: city, mode: "insensitive" } });
+  if (city) {
+    const countryCode = COUNTRY_NAME_TO_CODE[city.trim().toLowerCase()];
+    AND.push({
+      OR: [
+        { city: { contains: city, mode: "insensitive" } },
+        ...(countryCode ? [{ country: countryCode }] : [{ country: { contains: city, mode: "insensitive" } }]),
+      ],
+    });
+  }
   if (featured) AND.push({ isFeatured: true });
   if (minPrice !== null || maxPrice !== null) {
     AND.push({

@@ -1,6 +1,6 @@
 {
   "version": "1.0",
-  "exportedAt": "2026-04-17T11:53:22.528Z",
+  "exportedAt": "2026-04-19T05:08:39.479Z",
   "colorPalette": {
     "light": {
       "background": "#FDFAF7",
@@ -1059,7 +1059,7 @@
                         ],
                         "title": "Get Inspired by Real Events",
                         "columns": 3,
-                        "ctaHref": "/events",
+                        "ctaHref": "/vendors",
                         "showCta": true,
                         "ctaLabel": "View More Events",
                         "subtitle": "Explore stunning celebrations from our community and find ideas for your next event",
@@ -1106,7 +1106,7 @@
                         "cardBadgeFrom": "#9333ea",
                         "ctaGradientTo": "#ec4899",
                         "ctaGradientFrom": "#9333ea",
-                        "planSimilarHref": "",
+                        "planSimilarHref": "/planner",
                         "planSimilarLabel": "Plan Similar"
                       }
                     },

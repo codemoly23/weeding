@@ -73,9 +73,19 @@ export function EventSearchHeroWidget({
   const [eventType, setEventType] = useState("");
   const [location, setLocation] = useState("");
   const [date, setDate] = useState("");
+  const [errors, setErrors] = useState<{ eventType?: boolean; location?: boolean; date?: boolean }>({});
 
   function handleSearch() {
     if (isPreview) return;
+    const newErrors: typeof errors = {};
+    if (showEventTypeField && !eventType) newErrors.eventType = true;
+    if (showLocationField && !location.trim()) newErrors.location = true;
+    if (showDateField && !date) newErrors.date = true;
+    if (Object.keys(newErrors).length > 0) {
+      setErrors(newErrors);
+      return;
+    }
+    setErrors({});
     const params = new URLSearchParams();
     if (eventType) params.set("type", eventType);
     if (location) params.set("location", location);
@@ -182,7 +192,7 @@ export function EventSearchHeroWidget({
                     display: "block",
                     fontSize: "0.75rem",
                     fontWeight: 600,
-                    color: "#6b7280",
+                    color: errors.eventType ? "#dc2626" : "#6b7280",
                     marginBottom: "0.5rem",
                     textTransform: "uppercase",
                     letterSpacing: "0.05em",
@@ -192,11 +202,11 @@ export function EventSearchHeroWidget({
                 </label>
                 <select
                   value={eventType}
-                  onChange={(e) => setEventType(e.target.value)}
+                  onChange={(e) => { setEventType(e.target.value); setErrors((p) => ({ ...p, eventType: false })); }}
                   style={{
                     width: "100%",
                     padding: "0.75rem",
-                    border: "1px solid #e5e7eb",
+                    border: `1px solid ${errors.eventType ? "#dc2626" : "#e5e7eb"}`,
                     borderRadius: "0.5rem",
                     fontSize: "0.875rem",
                     outline: "none",
@@ -205,8 +215,8 @@ export function EventSearchHeroWidget({
                     cursor: "pointer",
                     appearance: "auto",
                   }}
-                  onFocus={(e) => (e.currentTarget.style.borderColor = "#9333ea")}
-                  onBlur={(e) => (e.currentTarget.style.borderColor = "#e5e7eb")}
+                  onFocus={(e) => (e.currentTarget.style.borderColor = errors.eventType ? "#dc2626" : "#9333ea")}
+                  onBlur={(e) => (e.currentTarget.style.borderColor = errors.eventType ? "#dc2626" : "#e5e7eb")}
                 >
                   <option value="">Select event type</option>
                   {eventTypes.map((et) => (
@@ -215,6 +225,9 @@ export function EventSearchHeroWidget({
                     </option>
                   ))}
                 </select>
+                {errors.eventType && (
+                  <p style={{ color: "#dc2626", fontSize: "0.75rem", marginTop: "0.25rem" }}>Please select an event type</p>
+                )}
               </div>
             )}
 
@@ -226,7 +239,7 @@ export function EventSearchHeroWidget({
                     display: "block",
                     fontSize: "0.75rem",
                     fontWeight: 600,
-                    color: "#6b7280",
+                    color: errors.location ? "#dc2626" : "#6b7280",
                     marginBottom: "0.5rem",
                     textTransform: "uppercase",
                     letterSpacing: "0.05em",
@@ -237,21 +250,24 @@ export function EventSearchHeroWidget({
                 <input
                   type="text"
                   value={location}
-                  onChange={(e) => setLocation(e.target.value)}
+                  onChange={(e) => { setLocation(e.target.value); setErrors((p) => ({ ...p, location: false })); }}
                   onKeyDown={handleKeyDown}
                   placeholder={locationPlaceholder}
                   style={{
                     width: "100%",
                     padding: "0.75rem",
-                    border: "1px solid #e5e7eb",
+                    border: `1px solid ${errors.location ? "#dc2626" : "#e5e7eb"}`,
                     borderRadius: "0.5rem",
                     fontSize: "0.875rem",
                     outline: "none",
                     color: "#1f2937",
                   }}
-                  onFocus={(e) => (e.currentTarget.style.borderColor = "#9333ea")}
-                  onBlur={(e) => (e.currentTarget.style.borderColor = "#e5e7eb")}
+                  onFocus={(e) => (e.currentTarget.style.borderColor = errors.location ? "#dc2626" : "#9333ea")}
+                  onBlur={(e) => (e.currentTarget.style.borderColor = errors.location ? "#dc2626" : "#e5e7eb")}
                 />
+                {errors.location && (
+                  <p style={{ color: "#dc2626", fontSize: "0.75rem", marginTop: "0.25rem" }}>Please enter a location</p>
+                )}
               </div>
             )}
 
@@ -263,7 +279,7 @@ export function EventSearchHeroWidget({
                     display: "block",
                     fontSize: "0.75rem",
                     fontWeight: 600,
-                    color: "#6b7280",
+                    color: errors.date ? "#dc2626" : "#6b7280",
                     marginBottom: "0.5rem",
                     textTransform: "uppercase",
                     letterSpacing: "0.05em",
@@ -274,19 +290,22 @@ export function EventSearchHeroWidget({
                 <input
                   type="date"
                   value={date}
-                  onChange={(e) => setDate(e.target.value)}
+                  onChange={(e) => { setDate(e.target.value); setErrors((p) => ({ ...p, date: false })); }}
                   style={{
                     width: "100%",
                     padding: "0.75rem",
-                    border: "1px solid #e5e7eb",
+                    border: `1px solid ${errors.date ? "#dc2626" : "#e5e7eb"}`,
                     borderRadius: "0.5rem",
                     fontSize: "0.875rem",
                     outline: "none",
                     color: "#1f2937",
                   }}
-                  onFocus={(e) => (e.currentTarget.style.borderColor = "#9333ea")}
-                  onBlur={(e) => (e.currentTarget.style.borderColor = "#e5e7eb")}
+                  onFocus={(e) => (e.currentTarget.style.borderColor = errors.date ? "#dc2626" : "#9333ea")}
+                  onBlur={(e) => (e.currentTarget.style.borderColor = errors.date ? "#dc2626" : "#e5e7eb")}
                 />
+                {errors.date && (
+                  <p style={{ color: "#dc2626", fontSize: "0.75rem", marginTop: "0.25rem" }}>Please select a date</p>
+                )}
               </div>
             )}
           </div>
