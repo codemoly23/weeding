@@ -77,13 +77,13 @@ interface PriceRange { min: number; max: number | null }
 function FilterSection({ title, defaultOpen = true, children }: { title: string; defaultOpen?: boolean; children: React.ReactNode }) {
   const [open, setOpen] = useState(defaultOpen);
   return (
-    <div className="border-b border-gray-100 pb-4 mb-4">
+    <div className="border-b border-border pb-4 mb-4">
       <button
         onClick={() => setOpen(!open)}
-        className="flex items-center justify-between w-full text-sm font-semibold text-gray-800 mb-3"
+        className="flex items-center justify-between w-full text-sm font-semibold text-foreground mb-3"
       >
         {title}
-        {open ? <ChevronUp className="w-4 h-4 text-gray-400" /> : <ChevronDown className="w-4 h-4 text-gray-400" />}
+        {open ? <ChevronUp className="w-4 h-4 text-muted-foreground" /> : <ChevronDown className="w-4 h-4 text-muted-foreground" />}
       </button>
       {open && children}
     </div>
@@ -103,6 +103,46 @@ function VendorsPage() {
   const [isLoading, setIsLoading] = useState(true);
   const [viewMode, setViewMode] = useState<"list" | "map">("list");
   const [mobileSidebarOpen, setMobileSidebarOpen] = useState(false);
+
+  // City suggestions
+  const [cities, setCities] = useState<string[]>([]);
+  const [showCitySuggestions, setShowCitySuggestions] = useState(false);
+  const cityInputRef = useRef<HTMLInputElement>(null);
+  const cityDropdownRef = useRef<HTMLDivElement>(null);
+  const [showHeroCitySuggestions, setShowHeroCitySuggestions] = useState(false);
+  const [heroCityQuery, setHeroCityQuery] = useState("");
+  const heroCityInputRef = useRef<HTMLInputElement>(null);
+  const heroCityDropdownRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    fetch("/api/vendor-cities")
+      .then((r) => r.json())
+      .then((data) => {
+        if (Array.isArray(data)) setCities(data.map((c: { name: string }) => c.name));
+      })
+      .catch(() => {});
+  }, []);
+
+  useEffect(() => {
+    function onClickOutside(e: MouseEvent) {
+      if (
+        cityDropdownRef.current &&
+        !cityDropdownRef.current.contains(e.target as Node) &&
+        !cityInputRef.current?.contains(e.target as Node)
+      ) {
+        setShowCitySuggestions(false);
+      }
+      if (
+        heroCityDropdownRef.current &&
+        !heroCityDropdownRef.current.contains(e.target as Node) &&
+        !heroCityInputRef.current?.contains(e.target as Node)
+      ) {
+        setShowHeroCitySuggestions(false);
+      }
+    }
+    document.addEventListener("mousedown", onClickOutside);
+    return () => document.removeEventListener("mousedown", onClickOutside);
+  }, []);
 
   // Filters
   const [search, setSearch] = useState("");
@@ -248,26 +288,50 @@ function VendorsPage() {
       {/* City/Town */}
       <FilterSection title="City / Town">
         <div className="relative">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-gray-400" />
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-muted-foreground" />
           <input
+            ref={cityInputRef}
             type="text"
             placeholder="Search city..."
             value={cityInput}
-            onChange={(e) => setCityInput(e.target.value)}
-            onKeyDown={(e) => { if (e.key === "Enter") handleCityFilterApply(); }}
-            className="w-full border border-gray-200 rounded-lg pl-8 pr-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-purple-400"
+            onChange={(e) => { setCityInput(e.target.value); setShowCitySuggestions(true); }}
+            onFocus={() => setShowCitySuggestions(true)}
+            onClick={() => setShowCitySuggestions(true)}
+            onKeyDown={(e) => { if (e.key === "Enter") { handleCityFilterApply(); setShowCitySuggestions(false); } }}
+            className="w-full border border-input rounded-lg pl-8 pr-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-ring bg-background"
+            autoComplete="off"
           />
+          {showCitySuggestions && cities.filter((c) => c.toLowerCase().includes(cityInput.toLowerCase())).length > 0 && (
+            <div
+              ref={cityDropdownRef}
+              className="absolute top-full left-0 right-0 mt-1 bg-card border border-border rounded-lg shadow-lg z-50 max-h-48 overflow-y-auto"
+            >
+              {cities
+                .filter((c) => c.toLowerCase().includes(cityInput.toLowerCase()))
+                .map((city) => (
+                  <button
+                    key={city}
+                    type="button"
+                    onMouseDown={(e) => { e.preventDefault(); setCityInput(city); setCityFilter(city); setShowCitySuggestions(false); setPage(1); }}
+                    className="w-full text-left px-4 py-2 text-sm hover:bg-primary/5 hover:text-primary flex items-center gap-2"
+                  >
+                    <MapPin className="w-3 h-3 text-muted-foreground" />
+                    {city}
+                  </button>
+                ))}
+            </div>
+          )}
         </div>
         {cityInput && (
           <button
-            onClick={handleCityFilterApply}
-            className="mt-2 w-full bg-purple-600 hover:bg-purple-700 text-white text-xs font-medium py-1.5 rounded-lg transition-colors"
+            onClick={() => { handleCityFilterApply(); setShowCitySuggestions(false); }}
+            className="mt-2 w-full bg-primary hover:bg-primary/90 text-primary-foreground text-xs font-medium py-1.5 rounded-lg transition-colors"
           >
             Apply
           </button>
         )}
         {cityFilter && (
-          <div className="mt-2 flex items-center gap-1 text-xs text-purple-700 bg-purple-50 rounded-lg px-2 py-1">
+          <div className="mt-2 flex items-center gap-1 text-xs text-primary bg-primary/10 rounded-lg px-2 py-1">
             <MapPin className="w-3 h-3" />{cityFilter}
             <button onClick={() => { setCityFilter(""); setCityInput(""); }} className="ml-auto"><X className="w-3 h-3" /></button>
           </div>
@@ -280,12 +344,12 @@ function VendorsPage() {
           type="date"
           value={dateFilter}
           onChange={(e) => { setDateFilter(e.target.value); setPage(1); }}
-          className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-purple-400 text-gray-700"
+          className="w-full border border-input rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-ring text-foreground bg-background"
         />
         {dateFilter && (
           <button
             onClick={() => { setDateFilter(""); setPage(1); }}
-            className="mt-2 w-full text-xs text-gray-500 hover:text-red-500 flex items-center justify-center gap-1 py-1"
+            className="mt-2 w-full text-xs text-muted-foreground hover:text-destructive flex items-center justify-center gap-1 py-1"
           >
             <X className="w-3 h-3" /> Clear date
           </button>
@@ -306,9 +370,9 @@ function VendorsPage() {
                     setSelectedPriceRange(isSelected ? null : { min: range.min, max: range.max });
                     setPage(1);
                   }}
-                  className="w-4 h-4 rounded border-gray-300 text-purple-600 focus:ring-purple-400 cursor-pointer"
+                  className="w-4 h-4 rounded border-input text-primary focus:ring-ring cursor-pointer"
                 />
-                <span className="text-sm text-gray-700 group-hover:text-gray-900">{range.label}</span>
+                <span className="text-sm text-foreground/80 group-hover:text-foreground">{range.label}</span>
               </label>
             );
           })}
@@ -326,9 +390,9 @@ function VendorsPage() {
                 value={opt.value}
                 checked={minRating === opt.value}
                 onChange={() => { setMinRating(opt.value); setPage(1); }}
-                className="w-4 h-4 border-gray-300 text-purple-600 focus:ring-purple-400 cursor-pointer"
+                className="w-4 h-4 border-input text-primary focus:ring-ring cursor-pointer"
               />
-              <span className="text-sm text-gray-700 group-hover:text-gray-900 flex items-center gap-1">
+              <span className="text-sm text-foreground/80 group-hover:text-foreground flex items-center gap-1">
                 {opt.value && <Star className="w-3.5 h-3.5 fill-yellow-400 text-yellow-400" />}
                 {opt.label}
               </span>
@@ -344,9 +408,9 @@ function VendorsPage() {
             type="checkbox"
             checked={featuredOnly}
             onChange={() => { setFeaturedOnly(!featuredOnly); setPage(1); }}
-            className="w-4 h-4 rounded border-gray-300 text-purple-600 focus:ring-purple-400 cursor-pointer"
+            className="w-4 h-4 rounded border-input text-primary focus:ring-ring cursor-pointer"
           />
-          <span className="text-sm text-gray-700 group-hover:text-gray-900">Show featured only</span>
+          <span className="text-sm text-foreground/80 group-hover:text-foreground">Show featured only</span>
         </label>
       </FilterSection>
 
@@ -354,7 +418,7 @@ function VendorsPage() {
       {activeFilterCount > 0 && (
         <button
           onClick={clearAllFilters}
-          className="w-full text-sm text-purple-600 hover:text-purple-800 font-medium py-2 border border-purple-200 rounded-lg hover:bg-purple-50 transition-colors flex items-center justify-center gap-1"
+          className="w-full text-sm text-primary hover:text-primary/80 font-medium py-2 border border-primary/20 rounded-lg hover:bg-primary/5 transition-colors flex items-center justify-center gap-1"
         >
           <X className="w-4 h-4" /> Clear all filters
         </button>
@@ -363,34 +427,58 @@ function VendorsPage() {
   );
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-muted/30">
       {/* Hero */}
-      <div className="bg-gradient-to-br from-purple-700 to-purple-900 text-white py-14 px-4">
+      <div className="bg-gradient-to-br from-primary to-primary/80 text-primary-foreground py-14 px-4">
         <div className="max-w-4xl mx-auto text-center">
           <h1 className="text-4xl font-bold mb-3">{t("vendors.title")}</h1>
-          <p className="text-purple-200 text-lg mb-8">{t("vendors.subtitle")}</p>
-          <form onSubmit={handleSearch} className="bg-white rounded-2xl p-2 flex flex-col sm:flex-row gap-2 shadow-xl">
+          <p className="text-primary-foreground/70 text-lg mb-8">{t("vendors.subtitle")}</p>
+          <form onSubmit={handleSearch} className="bg-background rounded-2xl p-2 flex flex-col sm:flex-row gap-2 shadow-xl">
             <div className="flex items-center flex-1 px-3 gap-2">
-              <Search className="w-5 h-5 text-gray-400 shrink-0" />
+              <Search className="w-5 h-5 text-muted-foreground shrink-0" />
               <input
                 type="text"
                 placeholder={t("vendors.searchPlaceholder")}
                 value={searchInput}
                 onChange={(e) => setSearchInput(e.target.value)}
-                className="flex-1 outline-none text-gray-800 text-sm py-2"
+                className="flex-1 outline-none text-foreground text-sm py-2 bg-transparent"
               />
             </div>
-            <div className="flex items-center px-3 gap-2 border-t sm:border-t-0 sm:border-l border-gray-200">
-              <MapPin className="w-5 h-5 text-gray-400 shrink-0" />
+            <div className="relative flex items-center px-3 gap-2 border-t sm:border-t-0 sm:border-l border-border">
+              <MapPin className="w-5 h-5 text-muted-foreground shrink-0" />
               <input
+                ref={heroCityInputRef}
                 type="text"
                 placeholder={t("vendors.cityPlaceholder")}
                 value={cityInput}
-                onChange={(e) => setCityInput(e.target.value)}
-                className="outline-none text-gray-800 text-sm py-2 w-36"
+                onChange={(e) => { setCityInput(e.target.value); setHeroCityQuery(e.target.value); setShowHeroCitySuggestions(true); }}
+                onFocus={() => { setHeroCityQuery(""); setShowHeroCitySuggestions(true); }}
+                onClick={() => { setHeroCityQuery(""); setShowHeroCitySuggestions(true); }}
+                className="outline-none text-foreground text-sm py-2 w-36 bg-transparent"
+                autoComplete="off"
               />
+              {showHeroCitySuggestions && cities.filter((c) => c.toLowerCase().includes(heroCityQuery.toLowerCase())).length > 0 && (
+                <div
+                  ref={heroCityDropdownRef}
+                  className="absolute top-full left-0 right-0 mt-1 bg-card border border-border rounded-lg shadow-lg z-50 max-h-48 overflow-y-auto"
+                >
+                  {cities
+                    .filter((c) => c.toLowerCase().includes(heroCityQuery.toLowerCase()))
+                    .map((city) => (
+                      <button
+                        key={city}
+                        type="button"
+                        onMouseDown={(e) => { e.preventDefault(); setCityInput(city); setHeroCityQuery(city); setShowHeroCitySuggestions(false); }}
+                        className="w-full text-left px-4 py-2 text-sm text-foreground hover:bg-primary/5 hover:text-primary flex items-center gap-2"
+                      >
+                        <MapPin className="w-3 h-3 text-muted-foreground" />
+                        {city}
+                      </button>
+                    ))}
+                </div>
+              )}
             </div>
-            <button type="submit" className="bg-purple-600 hover:bg-purple-700 text-white px-6 py-2.5 rounded-xl font-medium text-sm transition-colors">
+            <button type="submit" className="bg-primary hover:bg-primary/90 text-primary-foreground px-6 py-2.5 rounded-xl font-medium text-sm transition-colors">
               {t("vendors.searchBtn")}
             </button>
           </form>
@@ -398,12 +486,12 @@ function VendorsPage() {
       </div>
 
       {/* Category pills */}
-      <div className="bg-white border-b border-gray-200 px-4 py-3">
+      <div className="bg-card border-b border-border px-4 py-3">
         <div className="max-w-7xl mx-auto">
           <div className="flex flex-wrap gap-2">
             <button
               onClick={() => handleCategoryClick("")}
-              className={`px-3 py-1.5 rounded-full text-sm font-medium transition-colors flex items-center gap-1.5 ${categoryFilter === "" ? "bg-purple-600 text-white" : "bg-gray-100 text-gray-700 hover:bg-purple-50 hover:text-purple-700"}`}
+              className={`px-3 py-1.5 rounded-full text-sm font-medium transition-colors flex items-center gap-1.5 ${categoryFilter === "" ? "bg-primary text-primary-foreground" : "bg-muted text-foreground/70 hover:bg-primary/10 hover:text-primary"}`}
             >
               All Categories
             </button>
@@ -412,7 +500,7 @@ function VendorsPage() {
               const active = categoryFilter === cat;
               return (
                 <button key={cat} onClick={() => handleCategoryClick(cat)}
-                  className={`px-3 py-1.5 rounded-full text-sm font-medium transition-colors flex items-center gap-1.5 ${active ? "bg-purple-600 text-white" : `bg-gray-100 ${cfg.color} hover:bg-purple-50`}`}
+                  className={`px-3 py-1.5 rounded-full text-sm font-medium transition-colors flex items-center gap-1.5 ${active ? "bg-primary text-primary-foreground" : `bg-muted ${cfg.color} hover:bg-primary/10`}`}
                 >
                   {cfg.icon}{t(cfg.tKey)}
                 </button>
@@ -427,15 +515,15 @@ function VendorsPage() {
         <div className="flex items-center justify-between mb-4 lg:hidden">
           <button
             onClick={() => setMobileSidebarOpen(true)}
-            className="flex items-center gap-2 px-4 py-2 border border-gray-200 rounded-xl bg-white text-sm font-medium text-gray-700 hover:border-purple-300 transition-colors"
+            className="flex items-center gap-2 px-4 py-2 border border-border rounded-xl bg-card text-sm font-medium text-foreground hover:border-primary/40 transition-colors"
           >
             <SlidersHorizontal className="w-4 h-4" />
             Filters
             {activeFilterCount > 0 && (
-              <span className="bg-purple-600 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">{activeFilterCount}</span>
+              <span className="bg-primary text-primary-foreground text-xs rounded-full w-5 h-5 flex items-center justify-center">{activeFilterCount}</span>
             )}
           </button>
-          <p className="text-sm text-gray-500">
+          <p className="text-sm text-muted-foreground">
             {isLoading ? "Loading..." : `${total} vendor${total !== 1 ? "s" : ""} found`}
           </p>
         </div>
@@ -444,11 +532,11 @@ function VendorsPage() {
         {mobileSidebarOpen && (
           <div className="fixed inset-0 z-50 lg:hidden">
             <div className="absolute inset-0 bg-black/40" onClick={() => setMobileSidebarOpen(false)} />
-            <div className="absolute inset-y-0 left-0 w-80 max-w-full bg-white shadow-2xl overflow-y-auto p-5">
+            <div className="absolute inset-y-0 left-0 w-80 max-w-full bg-card shadow-2xl overflow-y-auto p-5">
               <div className="flex items-center justify-between mb-5">
-                <h2 className="text-base font-bold text-gray-900">Filters</h2>
-                <button onClick={() => setMobileSidebarOpen(false)} className="p-1 rounded-lg hover:bg-gray-100">
-                  <X className="w-5 h-5 text-gray-600" />
+                <h2 className="text-base font-bold text-foreground">Filters</h2>
+                <button onClick={() => setMobileSidebarOpen(false)} className="p-1 rounded-lg hover:bg-muted">
+                  <X className="w-5 h-5 text-muted-foreground" />
                 </button>
               </div>
               {FilterSidebar}
@@ -459,11 +547,11 @@ function VendorsPage() {
         <div className="flex gap-8">
           {/* Desktop sidebar */}
           <aside className="hidden lg:block w-64 shrink-0">
-            <div className="sticky top-6 bg-white rounded-2xl border border-gray-200 p-5 shadow-sm">
+            <div className="sticky top-6 bg-card rounded-2xl border border-border p-5 shadow-sm">
               <div className="flex items-center justify-between mb-4">
-                <h2 className="text-sm font-bold text-gray-900 uppercase tracking-wide">Filters</h2>
+                <h2 className="text-sm font-bold text-foreground uppercase tracking-wide">Filters</h2>
                 {activeFilterCount > 0 && (
-                  <span className="text-xs text-purple-600 font-medium">{activeFilterCount} active</span>
+                  <span className="text-xs text-primary font-medium">{activeFilterCount} active</span>
                 )}
               </div>
               {FilterSidebar}
@@ -475,13 +563,13 @@ function VendorsPage() {
             {/* Toolbar */}
             <div className="flex items-center justify-between mb-5 gap-3 flex-wrap">
               <div className="flex items-center gap-2 flex-wrap">
-                <p className="text-sm font-medium text-gray-700">
+                <p className="text-sm font-medium text-foreground/80">
                   {isLoading ? "Loading..." : `${total} vendor${total !== 1 ? "s" : ""} found`}
                 </p>
 
                 {/* Active filter chips */}
                 {categoryFilter && (
-                  <span className="flex items-center gap-1 bg-purple-100 text-purple-700 text-xs px-2.5 py-1 rounded-full font-medium">
+                  <span className="flex items-center gap-1 bg-primary/10 text-primary text-xs px-2.5 py-1 rounded-full font-medium">
                     {CATEGORY_CONFIG[categoryFilter].icon}
                     {t(CATEGORY_CONFIG[categoryFilter].tKey)}
                     <button onClick={() => setCategoryFilter("")}><X className="w-3 h-3 ml-0.5" /></button>
@@ -506,7 +594,7 @@ function VendorsPage() {
                   </span>
                 )}
                 {search && (
-                  <span className="flex items-center gap-1 bg-gray-100 text-gray-700 text-xs px-2.5 py-1 rounded-full font-medium">
+                  <span className="flex items-center gap-1 bg-muted text-foreground/70 text-xs px-2.5 py-1 rounded-full font-medium">
                     &ldquo;{search}&rdquo;
                     <button onClick={() => { setSearch(""); setSearchInput(""); }}><X className="w-3 h-3 ml-0.5" /></button>
                   </span>
@@ -530,23 +618,23 @@ function VendorsPage() {
                   </span>
                 )}
                 {activeFilterCount > 1 && (
-                  <button onClick={clearAllFilters} className="text-xs text-purple-600 hover:underline flex items-center gap-0.5">
+                  <button onClick={clearAllFilters} className="text-xs text-primary hover:underline flex items-center gap-0.5">
                     <X className="w-3 h-3" /> Clear all
                   </button>
                 )}
               </div>
 
               {/* View toggle */}
-              <div className="flex items-center rounded-xl border border-gray-200 bg-white overflow-hidden shrink-0">
+              <div className="flex items-center rounded-xl border border-border bg-card overflow-hidden shrink-0">
                 <button
                   onClick={() => setViewMode("list")}
-                  className={`flex items-center gap-1.5 px-3 py-2 text-sm font-medium transition-colors ${viewMode === "list" ? "bg-purple-600 text-white" : "text-gray-600 hover:bg-gray-50"}`}
+                  className={`flex items-center gap-1.5 px-3 py-2 text-sm font-medium transition-colors ${viewMode === "list" ? "bg-primary text-primary-foreground" : "text-foreground/70 hover:bg-muted"}`}
                 >
                   <List className="w-4 h-4" />{t("vendors.listView")}
                 </button>
                 <button
                   onClick={() => setViewMode("map")}
-                  className={`flex items-center gap-1.5 px-3 py-2 text-sm font-medium transition-colors border-l border-gray-200 ${viewMode === "map" ? "bg-purple-600 text-white" : "text-gray-600 hover:bg-gray-50"}`}
+                  className={`flex items-center gap-1.5 px-3 py-2 text-sm font-medium transition-colors border-l border-border ${viewMode === "map" ? "bg-primary text-primary-foreground" : "text-foreground/70 hover:bg-muted"}`}
                 >
                   <Map className="w-4 h-4" />{t("vendors.mapView")}
                 </button>
@@ -555,10 +643,10 @@ function VendorsPage() {
 
             {/* Map view */}
             {viewMode === "map" && (
-              <div className="mb-8 rounded-2xl overflow-hidden border border-gray-200 shadow-sm" style={{ height: 480 }}>
+              <div className="mb-8 rounded-2xl overflow-hidden border border-border shadow-sm" style={{ height: 480 }}>
                 {isLoading ? (
-                  <div className="h-full bg-gray-100 flex items-center justify-center">
-                    <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-purple-600" />
+                  <div className="h-full bg-muted flex items-center justify-center">
+                    <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary" />
                   </div>
                 ) : (
                   <VendorMap vendors={vendors} />
@@ -572,11 +660,11 @@ function VendorsPage() {
                 {isLoading ? (
                   <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-5">
                     {Array.from({ length: 9 }).map((_, i) => (
-                      <div key={i} className="bg-white rounded-2xl overflow-hidden shadow-sm animate-pulse">
-                        <div className="h-48 bg-gray-200" />
+                      <div key={i} className="bg-card rounded-2xl overflow-hidden shadow-sm animate-pulse">
+                        <div className="h-48 bg-muted" />
                         <div className="p-4 space-y-2">
-                          <div className="h-4 bg-gray-200 rounded w-3/4" />
-                          <div className="h-3 bg-gray-200 rounded w-1/2" />
+                          <div className="h-4 bg-muted rounded w-3/4" />
+                          <div className="h-3 bg-muted rounded w-1/2" />
                         </div>
                       </div>
                     ))}
@@ -584,10 +672,10 @@ function VendorsPage() {
                 ) : vendors.length === 0 ? (
                   <div className="text-center py-24">
                     <div className="text-6xl mb-4">🔍</div>
-                    <h3 className="text-xl font-semibold text-gray-700 mb-2">{t("vendors.noVendors")}</h3>
-                    <p className="text-gray-500">{t("vendors.noVendorsDesc")}</p>
+                    <h3 className="text-xl font-semibold text-foreground/80 mb-2">{t("vendors.noVendors")}</h3>
+                    <p className="text-muted-foreground">{t("vendors.noVendorsDesc")}</p>
                     {activeFilterCount > 0 && (
-                      <button onClick={clearAllFilters} className="mt-4 text-purple-600 hover:underline text-sm font-medium">
+                      <button onClick={clearAllFilters} className="mt-4 text-primary hover:underline text-sm font-medium">
                         Clear all filters
                       </button>
                     )}
@@ -598,9 +686,9 @@ function VendorsPage() {
                       const meta = CATEGORY_CONFIG[v.category];
                       return (
                         <Link key={v.id} href={`/vendors/${v.slug}`}
-                          className="group bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-lg transition-all duration-200 border border-gray-100"
+                          className="group bg-card rounded-2xl overflow-hidden shadow-sm hover:shadow-lg transition-all duration-200 border border-border"
                         >
-                          <div className="relative h-48 overflow-hidden bg-gradient-to-br from-purple-100 to-pink-100">
+                          <div className="relative h-48 overflow-hidden bg-gradient-to-br from-primary/10 to-primary/5">
                             {v.coverPhoto ? (
                               // eslint-disable-next-line @next/next/no-img-element
                               <img src={v.coverPhoto} alt={v.businessName} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" />
@@ -611,7 +699,7 @@ function VendorsPage() {
                             )}
                             {v.isFeatured && <span className="absolute top-2 left-2 bg-yellow-400 text-yellow-900 text-xs font-bold px-2 py-0.5 rounded-full">{t("vendors.featured")}</span>}
                             {v.isVerified && (
-                              <span className="absolute bottom-2 left-2 flex items-center gap-1 bg-white text-purple-700 text-xs font-semibold px-2 py-0.5 rounded-full shadow-sm">
+                              <span className="absolute bottom-2 left-2 flex items-center gap-1 bg-card text-primary text-xs font-semibold px-2 py-0.5 rounded-full shadow-sm">
                                 <BadgeCheck className="w-3 h-3" /> Verified
                               </span>
                             )}
@@ -619,29 +707,29 @@ function VendorsPage() {
                             <button
                               onClick={(e) => toggleSave(e, v.id, v.slug)}
                               title={savedIds.has(v.id) ? "Unsave" : "Save"}
-                              className="absolute bottom-2 right-2 w-7 h-7 flex items-center justify-center bg-white rounded-full shadow-sm hover:scale-110 transition-transform"
+                              className="absolute bottom-2 right-2 w-7 h-7 flex items-center justify-center bg-card rounded-full shadow-sm hover:scale-110 transition-transform"
                             >
-                              <Heart className={`w-3.5 h-3.5 ${savedIds.has(v.id) ? "fill-rose-500 text-rose-500" : "text-gray-400"}`} />
+                              <Heart className={`w-3.5 h-3.5 ${savedIds.has(v.id) ? "fill-rose-500 text-rose-500" : "text-muted-foreground"}`} />
                             </button>
                           </div>
                           <div className="p-4">
-                            <h3 className="font-semibold text-gray-900 text-base leading-tight mb-1 group-hover:text-purple-700 transition-colors">{v.businessName}</h3>
-                            {v.tagline && <p className="text-gray-500 text-sm line-clamp-1 mb-2">{v.tagline}</p>}
+                            <h3 className="font-semibold text-foreground text-base leading-tight mb-1 group-hover:text-primary transition-colors">{v.businessName}</h3>
+                            {v.tagline && <p className="text-muted-foreground text-sm line-clamp-1 mb-2">{v.tagline}</p>}
                             <div className="flex items-center justify-between">
-                              <div className="flex items-center gap-1 text-xs text-gray-500">
+                              <div className="flex items-center gap-1 text-xs text-muted-foreground">
                                 <MapPin className="w-3 h-3" />
                                 {v.city || v.country}
                               </div>
                               {v.avgRating !== null && (
                                 <div className="flex items-center gap-1 text-xs">
                                   <Star className="w-3 h-3 fill-yellow-400 text-yellow-400" />
-                                  <span className="font-medium text-gray-700">{v.avgRating.toFixed(1)}</span>
-                                  <span className="text-gray-400">({v.reviewCount})</span>
+                                  <span className="font-medium text-foreground/80">{v.avgRating.toFixed(1)}</span>
+                                  <span className="text-muted-foreground">({v.reviewCount})</span>
                                 </div>
                               )}
                             </div>
                             {v.startingPrice && (
-                              <p className="mt-2 text-sm font-semibold text-purple-700">{formatPrice(v.startingPrice, v.currency)}</p>
+                              <p className="mt-2 text-sm font-semibold text-primary">{formatPrice(v.startingPrice, v.currency)}</p>
                             )}
                             {v.slaHours && (
                               <p className="mt-1 flex items-center gap-1 text-xs text-emerald-600">
@@ -660,18 +748,18 @@ function VendorsPage() {
             {/* Pagination */}
             {viewMode === "list" && totalPages > 1 && (
               <div className="flex items-center justify-center gap-2 mt-10">
-                <button disabled={page === 1} onClick={() => setPage((p) => p - 1)} className="p-2 rounded-lg border border-gray-200 disabled:opacity-40 hover:bg-gray-100 transition-colors">
+                <button disabled={page === 1} onClick={() => setPage((p) => p - 1)} className="p-2 rounded-lg border border-border disabled:opacity-40 hover:bg-muted transition-colors">
                   <ChevronLeft className="w-5 h-5" />
                 </button>
                 {Array.from({ length: totalPages }, (_, i) => i + 1)
                   .filter((p) => p === 1 || p === totalPages || Math.abs(p - page) <= 2)
                   .map((p, idx, arr) => (
                     <span key={p}>
-                      {idx > 0 && arr[idx - 1] !== p - 1 && <span className="px-1 text-gray-400">…</span>}
-                      <button onClick={() => setPage(p)} className={`w-9 h-9 rounded-lg text-sm font-medium transition-colors ${p === page ? "bg-purple-600 text-white" : "border border-gray-200 text-gray-700 hover:bg-gray-100"}`}>{p}</button>
+                      {idx > 0 && arr[idx - 1] !== p - 1 && <span className="px-1 text-muted-foreground">…</span>}
+                      <button onClick={() => setPage(p)} className={`w-9 h-9 rounded-lg text-sm font-medium transition-colors ${p === page ? "bg-primary text-primary-foreground" : "border border-border text-foreground/70 hover:bg-muted"}`}>{p}</button>
                     </span>
                   ))}
-                <button disabled={page === totalPages} onClick={() => setPage((p) => p + 1)} className="p-2 rounded-lg border border-gray-200 disabled:opacity-40 hover:bg-gray-100 transition-colors">
+                <button disabled={page === totalPages} onClick={() => setPage((p) => p + 1)} className="p-2 rounded-lg border border-border disabled:opacity-40 hover:bg-muted transition-colors">
                   <ChevronRight className="w-5 h-5" />
                 </button>
               </div>
@@ -680,10 +768,10 @@ function VendorsPage() {
         </div>
 
         {/* CTA */}
-        <div className="mt-16 bg-gradient-to-r from-purple-600 to-purple-800 rounded-2xl p-8 text-white text-center">
+        <div className="mt-16 bg-primary rounded-2xl p-8 text-primary-foreground text-center">
           <h2 className="text-2xl font-bold mb-2">{t("vendors.ctaTitle")}</h2>
-          <p className="text-purple-200 mb-6">{t("vendors.ctaDesc")}</p>
-          <Link href="/vendor/register" className="inline-block bg-white text-purple-700 font-semibold px-8 py-3 rounded-xl hover:bg-purple-50 transition-colors">
+          <p className="text-primary-foreground/70 mb-6">{t("vendors.ctaDesc")}</p>
+          <Link href="/vendor/register" className="inline-block bg-background text-primary font-semibold px-8 py-3 rounded-xl hover:bg-background/90 transition-colors">
             {t("vendors.ctaBtn")}
           </Link>
         </div>

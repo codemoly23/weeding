@@ -112,8 +112,17 @@ export function TopUtilityBarWidget({ settings: partialSettings, isPreview }: To
   };
 
   return (
-    <div style={barStyle}>
-      <div style={linksStyle}>
+    <>
+      <style>{`
+        @media (max-width: 639px) {
+          .utility-bar-widget { padding-left: 12px !important; padding-right: 12px !important; }
+          .utility-bar-links { gap: 10px !important; }
+          .utility-bar-links a span { font-size: 11px !important; }
+          .utility-bar-links a svg { display: none; }
+        }
+      `}</style>
+    <div style={barStyle} className="utility-bar-widget">
+      <div style={linksStyle} className="utility-bar-links">
         {links.map((link) => (
           <UtilityLink
             key={link.id}
@@ -130,5 +139,6 @@ export function TopUtilityBarWidget({ settings: partialSettings, isPreview }: To
         ))}
       </div>
     </div>
+    </>
   );
 }

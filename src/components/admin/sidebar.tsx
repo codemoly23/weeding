@@ -67,25 +67,6 @@ const navItems: NavItem[] = [
     icon: Users,
   },
   {
-    title: "Leads",
-    icon: Target,
-    children: [
-      { title: "All Leads", href: "/admin/leads" },
-      { title: "Pipeline", href: "/admin/leads/pipeline" },
-      { title: "Forms", href: "/admin/leads/forms" },
-      { title: "Analytics", href: "/admin/leads/analytics" },
-      { title: "Settings", href: "/admin/leads/settings" },
-    ],
-  },
-  {
-    title: "Services",
-    icon: Tag,
-    children: [
-      { title: "All Services", href: "/admin/services" },
-      { title: "Categories", href: "/admin/services/categories" },
-    ],
-  },
-  {
     title: "Content",
     icon: FileText,
     children: [
@@ -98,13 +79,8 @@ const navItems: NavItem[] = [
     ],
   },
   {
-    title: "Invoices",
-    href: "/admin/invoices",
-    icon: Receipt,
-  },
-  {
     title: "Service Location",
-    href: "/admin/location-pricing",
+    href: "/admin/service-locations",
     icon: MapPin,
   },
   {

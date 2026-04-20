@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { Loader2, Upload, User, Lock, Save, Eye, EyeOff } from "lucide-react";
+import { Loader2, Upload, User, Lock, Save, Eye, EyeOff, X } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -91,13 +91,17 @@ export default function AdminProfilePage() {
 
       if (!res.ok) throw new Error("Upload failed");
       const data = await res.json();
-      setFormData({ ...formData, image: data.url });
+      setFormData((prev) => ({ ...prev, image: data.url }));
       toast.success("Profile picture uploaded");
     } catch (error) {
       toast.error("Failed to upload image");
     } finally {
       setUploadingImage(false);
     }
+  }
+
+  function handleRemoveImage() {
+    setFormData((prev) => ({ ...prev, image: "" }));
   }
 
   async function handleUpdateProfile(e: React.FormEvent) {
@@ -202,12 +206,24 @@ export default function AdminProfilePage() {
           </CardHeader>
           <CardContent className="space-y-4">
             <div className="flex flex-col items-center gap-4">
-              <Avatar className="h-32 w-32">
-                <AvatarImage src={formData.image || undefined} alt={formData.name} />
-                <AvatarFallback className="text-3xl">
-                  {getInitials(formData.name)}
-                </AvatarFallback>
-              </Avatar>
+              <div className="relative">
+                <Avatar className="h-32 w-32">
+                  <AvatarImage src={formData.image || undefined} alt={formData.name} />
+                  <AvatarFallback className="text-3xl">
+                    {getInitials(formData.name)}
+                  </AvatarFallback>
+                </Avatar>
+                {formData.image && (
+                  <button
+                    type="button"
+                    onClick={handleRemoveImage}
+                    className="absolute -top-1 -right-1 w-6 h-6 rounded-full bg-destructive text-destructive-foreground flex items-center justify-center shadow-md hover:bg-destructive/90 transition-colors"
+                    title="Remove photo"
+                  >
+                    <X className="w-3.5 h-3.5" />
+                  </button>
+                )}
+              </div>
               <div className="space-y-2 text-center">
                 <Label htmlFor="profile-picture" className="cursor-pointer">
                   <div className="flex items-center gap-2 rounded-md border border-input bg-background px-4 py-2 hover:bg-accent hover:text-accent-foreground">

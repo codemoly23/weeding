@@ -2547,8 +2547,8 @@ Layer 2 — Shareable Event Brief Link (couple controlled)
 
 **What's pending:** Admin panel (Phase 6), Files tab (2E), Invitation Designer (3D), budget analytics/multi-currency (2C #11–15), Stationery Engine (5G), White-label, Swish/Klarna payments.
 
-**Last Updated:** 2026-04-10 (Phase 5H Feature Gating — all PDF exports, seating editor, stationery tabs gated by tier)
-**Current Focus:** Phase 5H ✅ complete. Next candidates: Phase 6 (Admin Panel), Phase 2E (Files Tab), Phase 3D (Invitation Designer), or budget analytics (2C #11–15).
+**Last Updated:** 2026-04-20 (Admin Panel UI improvements — Service Locations redesign, vendor theming, mobile utility bar fix, SEK currency, sidebar cleanup)
+**Current Focus:** Admin panel polish ongoing. Next candidates: Phase 6 (Admin Panel full implementation), Phase 2E (Files Tab), Phase 3D (Invitation Designer), or budget analytics (2C #11–15).
 
 **Session log (2026-04-06, session 13 — Reception Menu tab editor + preview sync):**
 - **`menu-edit/page.tsx` created:** Full-screen reception menu editor. Sections are clickable — click selects element (purple dashed outline), right panel shows element-specific: type label, editable `<textarea>`, `x: N  y: N` coords (via `getBoundingClientRect`), red Delete button. Blank canvas click deselects → right panel shows global style: Template dropdown (Basic/Elegant/Minimal), Main heading / Second heading / Paragraph each with font ◄► + size slider. "Add element" dropdown (Main heading, Second heading, Paragraph, Flourish) + auto-selects new element immediately via `setSelectedId(newId)` + position-recompute `useEffect`. Default 10 sections (Flourish → Appetizer → Salad → Entrees → Dessert → Heading). Google Fonts loaded inline. All saved to `menu-sections-${projectId}` + `menu-settings-${projectId}` localStorage. Close → `?tab=menu`.
@@ -2597,6 +2597,18 @@ Layer 2 — Shareable Event Brief Link (couple controlled)
 - **Result:** Zero TypeScript errors in seating files. `seating/page.tsx` is clean — no dead code, no unused state.
 - Files created: `src/app/planner/[id]/seating/reception-layout-edit/page.tsx`
 - Files modified: `src/app/planner/[id]/seating/page.tsx` (reception wiring + dead code removal + import cleanup), `docs/Weedding plan/wedding planner DEVELOPMENT-PLAN.md`
+
+**Session log (2026-04-20 — Admin Panel UI improvements & vendor/config fixes):**
+- **Service Locations page redesigned** (`src/app/admin/service-locations/page.tsx`): Full redesign replacing plain layout. Gradient header banner (primary color) with city count badge. 2-column layout: left = "Add a City" card + info tip ("Cities appear as filter options on the public Vendors page"), right = "Active Service Cities" card with numbered circular badges, hover-reveal X button, hover primary tint. Empty state with MapPin icon.
+- **Admin URL renamed:** `/admin/location-pricing` → `/admin/service-locations`. Folder renamed, sidebar href updated in `src/components/admin/sidebar.tsx`.
+- **SEK currency added to vendor profile:** `src/app/vendor/profile/page.tsx` — SEK (kr) added as first option in currency dropdown (Sweden = primary market).
+- **DB vendor currency migration:** All existing `VendorProfile` records updated via `UPDATE "VendorProfile" SET currency = 'SEK' WHERE currency != 'SEK'`. Admin vendors page default currency was already `"SEK"`.
+- **Admin sidebar cleanup:** Removed "Leads", "Services", "Invoices" nav items from `src/components/admin/sidebar.tsx`.
+- **Admin profile page:** Added X button to remove uploaded profile picture (`src/app/admin/profile/page.tsx`). Avatar wrapped in relative div; destructive X button appears absolute top-right when image exists. `handleRemoveImage` clears `formData.image`.
+- **Vendor register page themed:** `src/app/vendor/register/page.tsx` — all hardcoded `purple-*` Tailwind classes replaced with CSS variable classes (`bg-primary`, `text-primary-foreground`, `bg-muted`, `border-input`, `ring-ring`, etc.).
+- **Vendors public page themed:** `src/app/vendors/page.tsx` — all hardcoded `purple-*` classes replaced with theme CSS variables. Added city suggestions dropdowns: sidebar City/Town filter + hero "City or region" input both fetch from `/api/vendor-cities` and show autocomplete dropdown. Hero dropdown uses separate `heroCityQuery` state (resets to `""` on focus to show all cities).
+- **Top utility bar mobile fix:** `src/components/page-builder/widgets/layout/top-utility-bar-widget.tsx` — added `<style>` tag with media query for `max-width: 639px`: reduces padding to 12px, gap to 10px, font-size to 11px, hides SVG icons. Fixes "ARE YOU A VENDOR?" text cut-off on mobile.
+- Files modified: `src/app/admin/service-locations/page.tsx` (renamed from location-pricing), `src/components/admin/sidebar.tsx`, `src/app/vendor/profile/page.tsx`, `src/app/vendor/register/page.tsx`, `src/app/vendors/page.tsx`, `src/app/admin/profile/page.tsx`, `src/app/admin/vendors/page.tsx`, `src/components/page-builder/widgets/layout/top-utility-bar-widget.tsx`
 
 **Session log (2026-04-10 — Phase 5H Extension: Full PDF gating across all planner pages):**
 - **Problem:** Phase 5H initially gated Budget, Guests, and Seating pages. Five additional pages — Checklist, Ceremony, Reception, Itinerary, Vendors — still allowed Basic (free) users to download PDFs without any tier check.

@@ -448,6 +448,7 @@ export default function VendorProfilePage() {
                 onChange={(e) => set("currency", e.target.value)}
                 className="input"
               >
+                <option value="SEK">SEK (kr)</option>
                 <option value="USD">USD ($)</option>
                 <option value="BDT">BDT (৳)</option>
                 <option value="EUR">EUR (€)</option>

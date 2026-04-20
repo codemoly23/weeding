@@ -155,14 +155,14 @@ export default function VendorRegisterPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-purple-50 to-white flex flex-col">
+    <div className="min-h-screen bg-background flex flex-col">
       {/* Top bar */}
-      <div className="bg-white border-b px-6 py-4 flex items-center justify-between">
-        <Link href="/" className="flex items-center gap-2 font-bold text-purple-700">
+      <div className="bg-card border-b px-6 py-4 flex items-center justify-between">
+        <Link href="/" className="flex items-center gap-2 font-bold text-primary">
           <Store className="w-5 h-5" />
           <span>Vendor Portal</span>
         </Link>
-        <Link href="/login?callbackUrl=/vendor/dashboard" className="text-sm text-gray-600 hover:text-purple-600 transition-colors">
+        <Link href="/login?callbackUrl=/vendor/dashboard" className="text-sm text-muted-foreground hover:text-primary transition-colors">
           Already have an account? Sign in
         </Link>
       </div>
@@ -179,16 +179,16 @@ export default function VendorRegisterPage() {
                 <div key={s.label} className="flex items-center">
                   <div className="flex flex-col items-center">
                     <div className={`w-9 h-9 rounded-full flex items-center justify-center text-sm font-semibold transition-colors ${
-                      done ? "bg-purple-600 text-white" : active ? "bg-purple-600 text-white" : "bg-gray-200 text-gray-500"
+                      done ? "bg-primary text-primary-foreground" : active ? "bg-primary text-primary-foreground" : "bg-muted text-muted-foreground"
                     }`}>
                       {done ? <Check className="w-4 h-4" /> : s.icon}
                     </div>
-                    <span className={`text-xs mt-1 ${active ? "text-purple-600 font-medium" : "text-gray-400"}`}>
+                    <span className={`text-xs mt-1 ${active ? "text-primary font-medium" : "text-muted-foreground"}`}>
                       {s.label}
                     </span>
                   </div>
                   {i < STEPS.length - 1 && (
-                    <div className={`w-16 h-0.5 mb-5 mx-1 ${step > num ? "bg-purple-600" : "bg-gray-200"}`} />
+                    <div className={`w-16 h-0.5 mb-5 mx-1 ${step > num ? "bg-primary" : "bg-muted"}`} />
                   )}
                 </div>
               );
@@ -197,64 +197,64 @@ export default function VendorRegisterPage() {
 
           {/* Step 1: Account */}
           {step === 1 && (
-            <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-8">
-              <h1 className="text-2xl font-bold text-gray-900 mb-1">Create your account</h1>
-              <p className="text-gray-500 text-sm mb-6">Start your 30-day free trial — no credit card required</p>
+            <div className="bg-card rounded-2xl shadow-sm border border-border p-8">
+              <h1 className="text-2xl font-bold text-foreground mb-1">Create your account</h1>
+              <p className="text-muted-foreground text-sm mb-6">Start your 30-day free trial — no credit card required</p>
 
               {error && (
-                <div className="mb-4 p-3 bg-red-50 border border-red-200 text-red-700 text-sm rounded-lg">{error}</div>
+                <div className="mb-4 p-3 bg-destructive/10 border border-destructive/20 text-destructive text-sm rounded-lg">{error}</div>
               )}
 
               <div className="space-y-4">
                 <div>
-                  <label className="block text-xs font-medium text-gray-700 mb-1">Full Name *</label>
+                  <label className="block text-xs font-medium text-foreground mb-1">Full Name *</label>
                   <div className="relative">
-                    <User className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+                    <User className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
                     <input type="text" value={form.name} onChange={(e) => update("name", e.target.value)}
-                      className="w-full pl-9 pr-3 py-2.5 border rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-purple-400"
+                      className="w-full pl-9 pr-3 py-2.5 border border-input rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-ring bg-background"
                       placeholder="Your full name" />
                   </div>
                 </div>
                 <div>
-                  <label className="block text-xs font-medium text-gray-700 mb-1">Email Address *</label>
+                  <label className="block text-xs font-medium text-foreground mb-1">Email Address *</label>
                   <div className="relative">
-                    <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+                    <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
                     <input type="email" value={form.email} onChange={(e) => update("email", e.target.value)}
-                      className="w-full pl-9 pr-3 py-2.5 border rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-purple-400"
+                      className="w-full pl-9 pr-3 py-2.5 border border-input rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-ring bg-background"
                       placeholder="you@business.com" />
                   </div>
                 </div>
                 <div>
-                  <label className="block text-xs font-medium text-gray-700 mb-1">Phone (optional)</label>
+                  <label className="block text-xs font-medium text-foreground mb-1">Phone (optional)</label>
                   <div className="relative">
-                    <Phone className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+                    <Phone className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
                     <input type="tel" value={form.phone} onChange={(e) => update("phone", e.target.value)}
-                      className="w-full pl-9 pr-3 py-2.5 border rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-purple-400"
+                      className="w-full pl-9 pr-3 py-2.5 border border-input rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-ring bg-background"
                       placeholder="+46 70 123 4567" />
                   </div>
                 </div>
                 <div>
-                  <label className="block text-xs font-medium text-gray-700 mb-1">Password *</label>
+                  <label className="block text-xs font-medium text-foreground mb-1">Password *</label>
                   <div className="relative">
-                    <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+                    <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
                     <input type="password" value={form.password} onChange={(e) => update("password", e.target.value)}
-                      className="w-full pl-9 pr-3 py-2.5 border rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-purple-400"
+                      className="w-full pl-9 pr-3 py-2.5 border border-input rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-ring bg-background"
                       placeholder="Min 8 characters" />
                   </div>
                 </div>
                 <div>
-                  <label className="block text-xs font-medium text-gray-700 mb-1">Confirm Password *</label>
+                  <label className="block text-xs font-medium text-foreground mb-1">Confirm Password *</label>
                   <div className="relative">
-                    <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+                    <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
                     <input type="password" value={form.confirmPassword} onChange={(e) => update("confirmPassword", e.target.value)}
-                      className="w-full pl-9 pr-3 py-2.5 border rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-purple-400"
+                      className="w-full pl-9 pr-3 py-2.5 border border-input rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-ring bg-background"
                       placeholder="Repeat password" />
                   </div>
                 </div>
               </div>
 
               <button onClick={handleNext}
-                className="w-full mt-6 flex items-center justify-center gap-2 bg-purple-600 hover:bg-purple-700 text-white font-semibold py-2.5 rounded-xl transition-colors">
+                className="w-full mt-6 flex items-center justify-center gap-2 bg-primary hover:bg-primary/90 text-primary-foreground font-semibold py-2.5 rounded-xl transition-colors">
                 Continue <ChevronRight className="w-4 h-4" />
               </button>
             </div>
@@ -262,35 +262,35 @@ export default function VendorRegisterPage() {
 
           {/* Step 2: Business Info */}
           {step === 2 && (
-            <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-8">
-              <h1 className="text-2xl font-bold text-gray-900 mb-1">Your business details</h1>
-              <p className="text-gray-500 text-sm mb-6">This will be shown on your public vendor profile</p>
+            <div className="bg-card rounded-2xl shadow-sm border border-border p-8">
+              <h1 className="text-2xl font-bold text-foreground mb-1">Your business details</h1>
+              <p className="text-muted-foreground text-sm mb-6">This will be shown on your public vendor profile</p>
 
               {error && (
-                <div className="mb-4 p-3 bg-red-50 border border-red-200 text-red-700 text-sm rounded-lg">{error}</div>
+                <div className="mb-4 p-3 bg-destructive/10 border border-destructive/20 text-destructive text-sm rounded-lg">{error}</div>
               )}
 
               <div className="space-y-4">
                 <div>
-                  <label className="block text-xs font-medium text-gray-700 mb-1">Business Name *</label>
+                  <label className="block text-xs font-medium text-foreground mb-1">Business Name *</label>
                   <div className="relative">
-                    <Building2 className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+                    <Building2 className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
                     <input type="text" value={form.businessName} onChange={(e) => update("businessName", e.target.value)}
-                      className="w-full pl-9 pr-3 py-2.5 border rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-purple-400"
+                      className="w-full pl-9 pr-3 py-2.5 border border-input rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-ring bg-background"
                       placeholder="e.g. Stockholm Photography Studio" />
                   </div>
                 </div>
 
                 <div>
-                  <label className="block text-xs font-medium text-gray-700 mb-2">Category *</label>
+                  <label className="block text-xs font-medium text-foreground mb-2">Category *</label>
                   <div className="grid grid-cols-3 sm:grid-cols-4 gap-2">
                     {CATEGORY_OPTIONS.map((opt) => (
                       <button key={opt.value} type="button"
                         onClick={() => update("category", opt.value)}
                         className={`flex flex-col items-center gap-1 p-2 rounded-lg border text-xs transition-colors ${
                           form.category === opt.value
-                            ? "border-purple-500 bg-purple-50 text-purple-700 font-medium"
-                            : "border-gray-200 hover:border-purple-300 text-gray-600"
+                            ? "border-primary bg-primary/10 text-primary font-medium"
+                            : "border-border hover:border-primary/40 text-muted-foreground"
                         }`}>
                         <span className="text-lg">{opt.icon}</span>
                         <span className="leading-tight text-center">{opt.label}</span>
@@ -300,24 +300,24 @@ export default function VendorRegisterPage() {
                 </div>
 
                 <div>
-                  <label className="block text-xs font-medium text-gray-700 mb-1">Tagline</label>
+                  <label className="block text-xs font-medium text-foreground mb-1">Tagline</label>
                   <input type="text" value={form.tagline} onChange={(e) => update("tagline", e.target.value)}
-                    className="w-full px-3 py-2.5 border rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-purple-400"
+                    className="w-full px-3 py-2.5 border border-input rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-ring bg-background"
                     placeholder="A short, catchy description" />
                 </div>
 
                 <div>
-                  <label className="block text-xs font-medium text-gray-700 mb-1">About your business</label>
+                  <label className="block text-xs font-medium text-foreground mb-1">About your business</label>
                   <textarea rows={3} value={form.description} onChange={(e) => update("description", e.target.value)}
-                    className="w-full px-3 py-2.5 border rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-purple-400 resize-none"
+                    className="w-full px-3 py-2.5 border border-input rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-ring resize-none bg-background"
                     placeholder="Tell couples what makes you special..." />
                 </div>
 
                 <div className="grid grid-cols-2 gap-3">
                   <div>
-                    <label className="block text-xs font-medium text-gray-700 mb-1">City</label>
+                    <label className="block text-xs font-medium text-foreground mb-1">City</label>
                     <div className="relative">
-                      <MapPin className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 z-10 pointer-events-none" />
+                      <MapPin className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground z-10 pointer-events-none" />
                       <input
                         ref={cityInputRef}
                         type="text"
@@ -325,14 +325,14 @@ export default function VendorRegisterPage() {
                         onChange={(e) => { update("city", e.target.value); setShowCitySuggestions(true); }}
                         onFocus={() => setShowCitySuggestions(true)}
                         onClick={() => setShowCitySuggestions(true)}
-                        className="w-full pl-9 pr-3 py-2.5 border rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-purple-400"
+                        className="w-full pl-9 pr-3 py-2.5 border border-input rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-ring bg-background"
                         placeholder="Stockholm"
                         autoComplete="off"
                       />
                       {showCitySuggestions && cities.filter((c) => c.toLowerCase().includes(form.city.toLowerCase())).length > 0 && (
                         <div
                           ref={cityDropdownRef}
-                          className="absolute top-full left-0 right-0 mt-1 bg-white border rounded-lg shadow-lg z-50 max-h-48 overflow-y-auto"
+                          className="absolute top-full left-0 right-0 mt-1 bg-card border border-border rounded-lg shadow-lg z-50 max-h-48 overflow-y-auto"
                         >
                           {cities
                             .filter((c) => c.toLowerCase().includes(form.city.toLowerCase()))
@@ -341,9 +341,9 @@ export default function VendorRegisterPage() {
                                 key={city}
                                 type="button"
                                 onMouseDown={(e) => { e.preventDefault(); update("city", city); setShowCitySuggestions(false); }}
-                                className="w-full text-left px-4 py-2 text-sm hover:bg-purple-50 hover:text-purple-700 flex items-center gap-2"
+                                className="w-full text-left px-4 py-2 text-sm hover:bg-primary/5 hover:text-primary flex items-center gap-2"
                               >
-                                <MapPin className="w-3 h-3 text-gray-400" />
+                                <MapPin className="w-3 h-3 text-muted-foreground" />
                                 {city}
                               </button>
                             ))}
@@ -352,9 +352,9 @@ export default function VendorRegisterPage() {
                     </div>
                   </div>
                   <div>
-                    <label className="block text-xs font-medium text-gray-700 mb-1">Country</label>
+                    <label className="block text-xs font-medium text-foreground mb-1">Country</label>
                     <select value={form.country} onChange={(e) => update("country", e.target.value)}
-                      className="w-full px-3 py-2.5 border rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-purple-400">
+                      className="w-full px-3 py-2.5 border border-input rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-ring bg-background">
                       <option value="SE">Sweden</option>
                       <option value="NO">Norway</option>
                       <option value="DK">Denmark</option>
@@ -371,13 +371,13 @@ export default function VendorRegisterPage() {
 
               <div className="flex gap-3 mt-6">
                 <button onClick={() => { setStep(1); setError(""); }}
-                  className="px-4 py-2.5 border rounded-xl text-sm text-gray-600 hover:bg-gray-50 transition-colors">
+                  className="px-4 py-2.5 border border-border rounded-xl text-sm text-muted-foreground hover:bg-muted transition-colors">
                   Back
                 </button>
                 <button onClick={handleSubmit} disabled={submitting}
-                  className="flex-1 flex items-center justify-center gap-2 bg-purple-600 hover:bg-purple-700 disabled:opacity-60 text-white font-semibold py-2.5 rounded-xl transition-colors">
+                  className="flex-1 flex items-center justify-center gap-2 bg-primary hover:bg-primary/90 disabled:opacity-60 text-primary-foreground font-semibold py-2.5 rounded-xl transition-colors">
                   {submitting ? (
-                    <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white" />
+                    <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-primary-foreground" />
                   ) : <Check className="w-4 h-4" />}
                   {submitting ? "Registering…" : "Complete Registration"}
                 </button>
@@ -387,26 +387,26 @@ export default function VendorRegisterPage() {
 
           {/* Step 3: Success */}
           {step === 3 && (
-            <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-8 text-center">
-              <div className="w-16 h-16 rounded-full bg-purple-100 flex items-center justify-center mx-auto mb-4">
-                <Check className="w-8 h-8 text-purple-600" />
+            <div className="bg-card rounded-2xl shadow-sm border border-border p-8 text-center">
+              <div className="w-16 h-16 rounded-full bg-primary/15 flex items-center justify-center mx-auto mb-4">
+                <Check className="w-8 h-8 text-primary" />
               </div>
-              <h1 className="text-2xl font-bold text-gray-900 mb-2">You&apos;re registered!</h1>
-              <p className="text-gray-600 mb-2">
+              <h1 className="text-2xl font-bold text-foreground mb-2">You&apos;re registered!</h1>
+              <p className="text-foreground/80 mb-2">
                 Your business listing is <strong>pending admin review</strong>.
               </p>
-              <p className="text-gray-500 text-sm mb-6">
+              <p className="text-muted-foreground text-sm mb-6">
                 We&apos;ll notify you when your profile is approved and visible in the directory.
                 This usually takes 1–2 business days.
               </p>
               <div className="flex flex-col gap-3">
                 <Link href="/login?callbackUrl=/vendor/dashboard">
-                  <button className="w-full bg-purple-600 hover:bg-purple-700 text-white font-semibold py-2.5 rounded-xl transition-colors">
+                  <button className="w-full bg-primary hover:bg-primary/90 text-primary-foreground font-semibold py-2.5 rounded-xl transition-colors">
                     Sign in to your account
                   </button>
                 </Link>
                 <Link href="/vendors">
-                  <button className="w-full border border-gray-200 text-gray-600 hover:bg-gray-50 py-2.5 rounded-xl text-sm transition-colors flex items-center justify-center gap-2">
+                  <button className="w-full border border-border text-muted-foreground hover:bg-muted py-2.5 rounded-xl text-sm transition-colors flex items-center justify-center gap-2">
                     <Camera className="w-4 h-4" />
                     Browse the vendor directory
                   </button>
