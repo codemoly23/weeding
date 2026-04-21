@@ -24,6 +24,7 @@ import {
   Paintbrush,
   Database,
   CalendarHeart,
+  Building2,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useBusinessConfig } from "@/hooks/use-business-config";
@@ -82,6 +83,11 @@ const navItems: NavItem[] = [
     title: "Service Location",
     href: "/admin/service-locations",
     icon: MapPin,
+  },
+  {
+    title: "Venues",
+    href: "/admin/venues",
+    icon: Building2,
   },
   {
     title: "Users",
@@ -162,6 +168,7 @@ const iconMap: Record<string, React.ComponentType<{ className?: string }>> = {
   Paintbrush,
   Database,
   CalendarHeart,
+  Building2,
 };
 
 export function AdminSidebar() {

@@ -37,19 +37,8 @@ export async function resetAllData(
       };
 
       // DELETE PHASE (same order as importer to respect FK constraints)
-
-      // Footer
-      await tx.menuItem.deleteMany({
-        where: { footerWidgetId: { not: null } },
-      });
-      await tx.footerWidget.deleteMany({});
-      await tx.footerConfig.deleteMany({});
-
-      // Header
-      await tx.menuItem.deleteMany({
-        where: { headerId: { not: null } },
-      });
-      await tx.headerConfig.deleteMany({});
+      // NOTE: Header and footer configs are preserved — user built them manually,
+      // they are not part of content data.
 
       // Forms
       await tx.formField.deleteMany({});

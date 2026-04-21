@@ -16,6 +16,7 @@ export function HeaderDefault({
   config,
   navigation,
   serviceCategories,
+  allServiceCategories,
   user,
   session,
   sessionStatus,
@@ -47,6 +48,7 @@ export function HeaderDefault({
         <Navigation
           items={navigation}
           serviceCategories={serviceCategories}
+          allServiceCategories={allServiceCategories}
           hoveredItem={hoveredItem}
           setHoveredItem={setHoveredItem}
           styling={styling}

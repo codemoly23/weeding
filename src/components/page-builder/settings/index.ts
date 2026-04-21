@@ -21,6 +21,8 @@ export { ButtonGroupWidgetSettingsPanel } from "./button-group-settings";
 export { EventSearchHeroSettingsPanel } from "./event-search-hero-settings";
 export { EventGalleryGridSettingsPanel } from "./event-gallery-grid-settings";
 export { EventCategoriesGridSettingsPanel } from "./event-categories-grid-settings";
+export { FeaturesShowcaseSettingsPanel } from "./features-showcase-settings";
+export { TrendingVenuesSettingsPanel } from "./trending-venues-settings";
 export { CtaBannerSettingsPanel } from "./cta-banner-settings";
 export { VendorListingSettingsPanel } from "./vendor-listing-settings";
 export { TopUtilityBarSettingsPanel } from "./top-utility-bar-settings";

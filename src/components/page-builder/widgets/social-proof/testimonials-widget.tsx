@@ -301,6 +301,7 @@ export function TestimonialsWidget({ settings: partialSettings, isPreview = fals
   const description = header.description || DEFAULT_TESTIMONIALS_SETTINGS.header.description;
 
   return (
+    <section style={{ background: "linear-gradient(135deg, #fdf4ff 0%, #fce7f3 40%, #ffffff 100%)" }}>
     <WidgetContainer container={settings.container}>
     <div className="w-full">
       {/* Header Section */}
@@ -466,5 +467,6 @@ export function TestimonialsWidget({ settings: partialSettings, isPreview = fals
       {renderTrustFooter()}
     </div>
     </WidgetContainer>
+    </section>
   );
 }

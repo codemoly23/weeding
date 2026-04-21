@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import prisma from "@/lib/db";
+import { Prisma } from "@prisma/client";
 import { z } from "zod";
 import { checkAdminAccess, authError } from "@/lib/admin-auth";
 
@@ -19,6 +20,7 @@ const menuItemSchema = z.object({
   categoryName: z.string().optional().nullable(),
   categoryIcon: z.string().optional().nullable(),
   categoryDesc: z.string().optional().nullable(),
+  megaMenuContent: z.record(z.string(), z.unknown()).optional().nullable(),
   sortOrder: z.number().default(0),
 });
 
@@ -92,12 +94,16 @@ export async function POST(request: NextRequest) {
       _max: { sortOrder: true },
     });
 
-    const menuItem = await prisma.menuItem.create({
-      data: {
-        ...validatedData,
-        sortOrder: (maxSortOrder._max.sortOrder ?? -1) + 1,
-      },
-    });
+    const { megaMenuContent, ...restValidatedData } = validatedData;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const createData: any = {
+      ...restValidatedData,
+      sortOrder: (maxSortOrder._max.sortOrder ?? -1) + 1,
+    };
+    if (megaMenuContent !== undefined) {
+      createData.megaMenuContent = megaMenuContent === null ? Prisma.JsonNull : megaMenuContent;
+    }
+    const menuItem = await prisma.menuItem.create({ data: createData });
 
     return NextResponse.json(menuItem, { status: 201 });
   } catch (error) {
@@ -133,11 +139,17 @@ export async function PUT(request: NextRequest) {
       );
     }
 
-    const validatedData = menuItemSchema.partial().parse(data);
+    const validatedData = menuItemSchema.omit({ sortOrder: true }).partial().parse(data);
+    const { megaMenuContent, ...restValidatedData } = validatedData;
 
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const updateData: any = { ...restValidatedData };
+    if (megaMenuContent !== undefined) {
+      updateData.megaMenuContent = megaMenuContent === null ? Prisma.JsonNull : megaMenuContent;
+    }
     const menuItem = await prisma.menuItem.update({
       where: { id },
-      data: validatedData,
+      data: updateData,
     });
 
     return NextResponse.json(menuItem);

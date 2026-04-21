@@ -50,6 +50,7 @@ export async function GET() {
       parentId: item.parentId,
       isMegaMenu: item.isMegaMenu,
       megaMenuColumns: item.megaMenuColumns,
+      megaMenuContent: item.megaMenuContent ?? undefined,
       badge: item.badge,
       badgeColor: item.badgeColor,
       categoryName: item.categoryName,

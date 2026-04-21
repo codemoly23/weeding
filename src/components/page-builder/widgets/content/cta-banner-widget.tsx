@@ -33,10 +33,12 @@ export function CtaBannerWidget({
     ...raw,
     primaryButton: { ...DEFAULT_CTA_BANNER_SETTINGS.primaryButton, ...raw.primaryButton },
     secondaryButton: { ...DEFAULT_CTA_BANNER_SETTINGS.secondaryButton, ...raw.secondaryButton },
+    trustBadges: { ...DEFAULT_CTA_BANNER_SETTINGS.trustBadges, ...raw.trustBadges },
   };
 
   const PrimaryIcon = getIcon(s.primaryButton.icon);
   const SecondaryIcon = getIcon(s.secondaryButton.icon);
+  const isLight = s.variant === "light";
 
   return (
     <section
@@ -55,11 +57,13 @@ export function CtaBannerWidget({
             textAlign: "center",
             position: "relative",
             overflow: "hidden",
-            boxShadow: "0 20px 25px -5px rgba(0,0,0,0.1)",
+            boxShadow: isLight
+              ? "0 2px 8px rgba(0,0,0,0.06)"
+              : "0 20px 25px -5px rgba(0,0,0,0.1)",
           }}
         >
-          {/* Checkerboard pattern overlay */}
-          {s.showPattern && (
+          {/* Checkerboard pattern overlay (dark variant only) */}
+          {s.showPattern && !isLight && (
             <div
               aria-hidden
               style={{
@@ -79,7 +83,7 @@ export function CtaBannerWidget({
               style={{
                 fontSize: "clamp(1.75rem, 4vw, 2.5rem)",
                 fontWeight: 900,
-                color: "white",
+                color: isLight ? "#0f172a" : "white",
                 marginBottom: "1rem",
                 lineHeight: 1.15,
               }}
@@ -90,8 +94,8 @@ export function CtaBannerWidget({
             {/* Subtitle */}
             <p
               style={{
-                fontSize: "1.25rem",
-                color: "rgba(255,255,255,0.9)",
+                fontSize: "1.125rem",
+                color: isLight ? "#64748b" : "rgba(255,255,255,0.9)",
                 marginBottom: "2.5rem",
                 maxWidth: "42rem",
                 marginLeft: "auto",
@@ -118,6 +122,7 @@ export function CtaBannerWidget({
                   href={s.primaryButton.href}
                   icon={<PrimaryIcon size={20} strokeWidth={2.5} />}
                   isPreview={isPreview}
+                  isLight={isLight}
                 />
               )}
               {s.secondaryButton.show && (
@@ -126,9 +131,53 @@ export function CtaBannerWidget({
                   href={s.secondaryButton.href}
                   icon={<SecondaryIcon size={20} strokeWidth={2.5} />}
                   isPreview={isPreview}
+                  isLight={isLight}
                 />
               )}
             </div>
+
+            {/* Trust Badges */}
+            {s.trustBadges.show && s.trustBadges.items.length > 0 && (
+              <div
+                style={{
+                  display: "flex",
+                  flexWrap: "wrap",
+                  justifyContent: "center",
+                  gap: "1.5rem",
+                  marginTop: "1.5rem",
+                }}
+              >
+                {s.trustBadges.items.map((item, i) => (
+                  <span
+                    key={i}
+                    style={{
+                      display: "inline-flex",
+                      alignItems: "center",
+                      gap: "0.375rem",
+                      fontSize: "0.875rem",
+                      color: isLight ? "#64748b" : "rgba(255,255,255,0.85)",
+                    }}
+                  >
+                    <svg
+                      width="14"
+                      height="14"
+                      viewBox="0 0 14 14"
+                      fill="none"
+                      style={{ flexShrink: 0 }}
+                    >
+                      <path
+                        d="M2 7L5.5 10.5L12 4"
+                        stroke={isLight ? "#9333ea" : "rgba(255,255,255,0.9)"}
+                        strokeWidth="2"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                      />
+                    </svg>
+                    {item}
+                  </span>
+                ))}
+              </div>
+            )}
           </div>
         </div>
       </div>
@@ -143,9 +192,10 @@ interface BtnProps {
   href: string;
   icon: React.ReactNode;
   isPreview: boolean;
+  isLight: boolean;
 }
 
-function PrimaryBtn({ label, href, icon, isPreview }: BtnProps) {
+function PrimaryBtn({ label, href, icon, isPreview, isLight }: BtnProps) {
   const [hovered, setHovered] = useState(false);
 
   const btn = (
@@ -154,19 +204,27 @@ function PrimaryBtn({ label, href, icon, isPreview }: BtnProps) {
         display: "inline-flex",
         alignItems: "center",
         gap: "0.5rem",
-        padding: "1rem 2.5rem",
-        background: "white",
-        color: "#9333ea",
+        padding: "0.875rem 2rem",
+        background: isLight
+          ? hovered
+            ? "linear-gradient(135deg, #7e22ce, #db2777)"
+            : "linear-gradient(135deg, #9333ea, #ec4899)"
+          : "white",
+        color: isLight ? "white" : "#9333ea",
         border: "none",
-        borderRadius: "0.75rem",
+        borderRadius: "9999px",
         fontWeight: 700,
-        fontSize: "1.125rem",
+        fontSize: "1rem",
         cursor: isPreview ? "default" : "pointer",
-        boxShadow: hovered
-          ? "0 20px 25px -5px rgba(0,0,0,0.3)"
-          : "0 10px 15px -3px rgba(0,0,0,0.2)",
-        transform: hovered ? "scale(1.05)" : "scale(1)",
-        transition: "transform 0.2s, box-shadow 0.2s",
+        boxShadow: isLight
+          ? hovered
+            ? "0 8px 25px rgba(147,51,234,0.4)"
+            : "0 4px 14px rgba(147,51,234,0.25)"
+          : hovered
+            ? "0 20px 25px -5px rgba(0,0,0,0.3)"
+            : "0 10px 15px -3px rgba(0,0,0,0.2)",
+        transform: hovered ? "translateY(-1px)" : "translateY(0)",
+        transition: "all 0.2s ease",
       }}
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
@@ -180,7 +238,7 @@ function PrimaryBtn({ label, href, icon, isPreview }: BtnProps) {
   return <Link href={href} style={{ textDecoration: "none" }}>{btn}</Link>;
 }
 
-function SecondaryBtn({ label, href, icon, isPreview }: BtnProps) {
+function SecondaryBtn({ label, href, icon, isPreview, isLight }: BtnProps) {
   const [hovered, setHovered] = useState(false);
 
   const btn = (
@@ -189,16 +247,21 @@ function SecondaryBtn({ label, href, icon, isPreview }: BtnProps) {
         display: "inline-flex",
         alignItems: "center",
         gap: "0.5rem",
-        padding: "1rem 2.5rem",
-        background: hovered ? "rgba(255,255,255,0.3)" : "rgba(255,255,255,0.2)",
-        color: "white",
-        border: "2px solid white",
-        borderRadius: "0.75rem",
-        fontWeight: 700,
-        fontSize: "1.125rem",
+        padding: "0.875rem 2rem",
+        background: isLight
+          ? hovered ? "#f8f8f8" : "white"
+          : hovered ? "rgba(255,255,255,0.3)" : "rgba(255,255,255,0.2)",
+        color: isLight ? "#374151" : "white",
+        border: isLight ? "1.5px solid #e5e7eb" : "2px solid white",
+        borderRadius: "9999px",
+        fontWeight: 600,
+        fontSize: "1rem",
         cursor: isPreview ? "default" : "pointer",
-        backdropFilter: "blur(8px)",
-        transition: "background 0.2s",
+        backdropFilter: isLight ? undefined : "blur(8px)",
+        boxShadow: isLight
+          ? hovered ? "0 4px 12px rgba(0,0,0,0.08)" : "0 1px 3px rgba(0,0,0,0.06)"
+          : undefined,
+        transition: "all 0.2s ease",
       }}
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}

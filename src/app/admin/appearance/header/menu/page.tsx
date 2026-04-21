@@ -36,6 +36,7 @@ import {
   Loader2,
   LayoutGrid,
   Save,
+  Images,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
@@ -104,6 +105,27 @@ export default function MenuBuilderPage() {
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [selectedItem, setSelectedItem] = useState<MenuItem | null>(null);
   const [formData, setFormData] = useState(defaultFormData);
+
+  // Featured gallery content editor
+  const [galleryDialogOpen, setGalleryDialogOpen] = useState(false);
+  const [galleryItem, setGalleryItem] = useState<MenuItem | null>(null);
+  const [gallerySaving, setGallerySaving] = useState(false);
+
+  interface GalleryDesigner {
+    name: string;
+    imageUrl: string;
+    href: string;
+  }
+  const defaultGalleryContent = {
+    sectionHeader: "",
+    topLinks: [{ name: "", icon: "", href: "" }] as { name: string; icon: string; href: string }[],
+    galleryTitle: "FEATURED DESIGNERS",
+    designers: [] as GalleryDesigner[],
+    featuredLink: { text: "", href: "" },
+    footerLink: { text: "", href: "" },
+    aspectRatio: "portrait" as "portrait" | "square",
+  };
+  const [galleryContent, setGalleryContent] = useState(defaultGalleryContent);
 
   // Drag and drop state
   const [activeId, setActiveId] = useState<UniqueIdentifier | null>(null);
@@ -204,6 +226,25 @@ export default function MenuBuilderPage() {
     setDeleteDialogOpen(true);
   }
 
+  function openGalleryEditor(item: MenuItem) {
+    setGalleryItem(item);
+    const content = (item as MenuItem & { megaMenuContent?: unknown }).megaMenuContent as {
+      sectionHeader?: string;
+      topLinks?: { name: string; icon: string; href: string }[];
+      gallery?: { title?: string; items?: GalleryDesigner[]; aspectRatio?: "portrait" | "square" };
+    } | null | undefined;
+    setGalleryContent({
+      sectionHeader: content?.sectionHeader || "",
+      topLinks: content?.topLinks || [{ name: "", icon: "", href: "" }],
+      galleryTitle: content?.gallery?.title || "FEATURED DESIGNERS",
+      designers: content?.gallery?.items || [],
+      featuredLink: (content as any)?.featuredLink || { text: "", href: "" },
+      footerLink: (content as any)?.footerLink || { text: "", href: "" },
+      aspectRatio: (content as any)?.gallery?.aspectRatio || "portrait",
+    });
+    setGalleryDialogOpen(true);
+  }
+
   async function handleSave() {
     if (!formData.label) {
       toast.error("Label is required");
@@ -246,6 +287,55 @@ export default function MenuBuilderPage() {
       toast.error("Failed to save menu item");
     } finally {
       setSaving(false);
+    }
+  }
+
+  async function handleGallerySave() {
+    if (!galleryItem) return;
+    setGallerySaving(true);
+    try {
+      const megaMenuContent = {
+        type: "featured-gallery",
+        sectionHeader: galleryContent.sectionHeader,
+        topLinks: galleryContent.topLinks.filter(l => l.name),
+        featuredLink: galleryContent.featuredLink.text ? galleryContent.featuredLink : undefined,
+        footerLink: galleryContent.footerLink.text ? galleryContent.footerLink : undefined,
+        gallery: {
+          title: galleryContent.galleryTitle,
+          aspectRatio: galleryContent.aspectRatio,
+          items: galleryContent.designers,
+        },
+      };
+      const res = await fetch("/api/admin/header/menu", {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ id: galleryItem.id, megaMenuContent }),
+      });
+      if (!res.ok) throw new Error("Failed to save");
+      toast.success("Gallery content saved");
+      setGalleryDialogOpen(false);
+      fetchData();
+    } catch {
+      toast.error("Failed to save gallery content");
+    } finally {
+      setGallerySaving(false);
+    }
+  }
+
+  async function uploadDesignerImage(file: File, designerIndex: number) {
+    const formData = new FormData();
+    formData.append("file", file);
+    formData.append("folder", "designers");
+    try {
+      const res = await fetch("/api/upload", { method: "POST", body: formData });
+      if (!res.ok) throw new Error("Upload failed");
+      const data = await res.json();
+      const newDesigners = [...galleryContent.designers];
+      newDesigners[designerIndex] = { ...newDesigners[designerIndex], imageUrl: data.url };
+      setGalleryContent({ ...galleryContent, designers: newDesigners });
+      toast.success("Image uploaded");
+    } catch {
+      toast.error("Failed to upload image");
     }
   }
 
@@ -526,6 +616,18 @@ export default function MenuBuilderPage() {
             >
               <Trash2 className="h-4 w-4" />
             </Button>
+            {/* Gallery content editor - only for Dresses, Registry, Wedding Website */}
+            {["Dresses", "Registry", "Wedding Website"].includes(item.label) && !item.parentId && (
+              <Button
+                variant="ghost"
+                size="icon"
+                className="h-7 w-7 text-blue-500"
+                title="Edit Featured Gallery"
+                onClick={() => openGalleryEditor(item)}
+              >
+                <Images className="h-4 w-4" />
+              </Button>
+            )}
             {/* Add child item */}
             <Button
               variant="ghost"
@@ -855,6 +957,262 @@ export default function MenuBuilderPage() {
                 <Save className="mr-2 h-4 w-4" />
               )}
               {selectedItem ? "Update" : "Create"}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      {/* Featured Gallery Content Editor */}
+      <Dialog open={galleryDialogOpen} onOpenChange={setGalleryDialogOpen}>
+        <DialogContent className="max-w-2xl w-full max-h-[90vh] overflow-y-auto overflow-x-hidden">
+          <DialogHeader>
+            <DialogTitle>Featured Gallery Content — {galleryItem?.label}</DialogTitle>
+          </DialogHeader>
+          <div className="space-y-6">
+            {/* Section Header */}
+            <div className="space-y-2">
+              <Label>Section Header</Label>
+              <Input
+                value={galleryContent.sectionHeader}
+                onChange={(e) => setGalleryContent({ ...galleryContent, sectionHeader: e.target.value })}
+                placeholder="e.g., The latest in bridal fashion"
+              />
+            </div>
+
+            {/* Featured Link */}
+            <div className="space-y-2">
+              <Label>Featured Link (colored, e.g., "Find a couple's registry")</Label>
+              <div className="grid grid-cols-2 gap-2">
+                <Input
+                  placeholder="Link text"
+                  value={galleryContent.featuredLink.text}
+                  onChange={(e) => setGalleryContent({ ...galleryContent, featuredLink: { ...galleryContent.featuredLink, text: e.target.value } })}
+                />
+                <Input
+                  placeholder="URL"
+                  value={galleryContent.featuredLink.href}
+                  onChange={(e) => setGalleryContent({ ...galleryContent, featuredLink: { ...galleryContent.featuredLink, href: e.target.value } })}
+                />
+              </div>
+            </div>
+
+            {/* Top Links */}
+            <div className="space-y-2">
+              <div className="flex items-center justify-between">
+                <Label>Top Links (icon buttons)</Label>
+                <Button
+                  type="button"
+                  variant="outline"
+                  size="sm"
+                  onClick={() => setGalleryContent({
+                    ...galleryContent,
+                    topLinks: [...galleryContent.topLinks, { name: "", icon: "", href: "" }]
+                  })}
+                >
+                  <Plus className="mr-1 h-3 w-3" /> Add Link
+                </Button>
+              </div>
+              {galleryContent.topLinks.map((link, idx) => (
+                <div key={idx} className="flex flex-col gap-2 border rounded-lg p-3">
+                  <Input
+                    placeholder="Name (e.g., Bride)"
+                    value={link.name}
+                    onChange={(e) => {
+                      const newLinks = [...galleryContent.topLinks];
+                      newLinks[idx] = { ...newLinks[idx], name: e.target.value };
+                      setGalleryContent({ ...galleryContent, topLinks: newLinks });
+                    }}
+                  />
+                  <Input
+                    placeholder="Icon (e.g., shirt)"
+                    value={link.icon}
+                    onChange={(e) => {
+                      const newLinks = [...galleryContent.topLinks];
+                      newLinks[idx] = { ...newLinks[idx], icon: e.target.value };
+                      setGalleryContent({ ...galleryContent, topLinks: newLinks });
+                    }}
+                  />
+                  <div className="flex gap-1">
+                    <Input
+                      placeholder="URL (e.g., /dresses/bride)"
+                      value={link.href}
+                      onChange={(e) => {
+                        const newLinks = [...galleryContent.topLinks];
+                        newLinks[idx] = { ...newLinks[idx], href: e.target.value };
+                        setGalleryContent({ ...galleryContent, topLinks: newLinks });
+                      }}
+                    />
+                    <Button
+                      type="button"
+                      variant="ghost"
+                      size="icon"
+                      className="h-9 w-9 shrink-0 text-destructive"
+                      title="Remove link"
+                      onClick={() => setGalleryContent({
+                        ...galleryContent,
+                        topLinks: galleryContent.topLinks.filter((_, i) => i !== idx)
+                      })}
+                    >
+                      <Trash2 className="h-4 w-4" />
+                    </Button>
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            {/* Gallery Section */}
+            <div className="space-y-3">
+              <div className="grid grid-cols-2 gap-3">
+                <div className="space-y-1">
+                  <Label>Gallery Section Title</Label>
+                  <Input
+                    value={galleryContent.galleryTitle}
+                    onChange={(e) => setGalleryContent({ ...galleryContent, galleryTitle: e.target.value })}
+                    placeholder="e.g., FEATURED DESIGNERS"
+                  />
+                </div>
+                <div className="space-y-1">
+                  <Label>Image Aspect Ratio</Label>
+                  <Select
+                    value={galleryContent.aspectRatio}
+                    onValueChange={(v: "portrait" | "square") => setGalleryContent({ ...galleryContent, aspectRatio: v })}
+                  >
+                    <SelectTrigger>
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="portrait">Portrait (3:4) - Dresses</SelectItem>
+                      <SelectItem value="square">Square - Brands/Logos</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+              </div>
+              <Button
+                type="button"
+                variant="outline"
+                size="sm"
+                className="w-full"
+                onClick={() => setGalleryContent({
+                  ...galleryContent,
+                  designers: [...galleryContent.designers, { name: "", imageUrl: "", href: "" }]
+                })}
+              >
+                <Plus className="mr-1 h-3 w-3" /> Add Item
+              </Button>
+
+              <div className="space-y-3">
+                {galleryContent.designers.map((designer, idx) => (
+                  <div key={idx} className="rounded-lg border p-3 space-y-2">
+                    <div className="flex items-center justify-between">
+                      <span className="text-sm font-medium">Item {idx + 1}</span>
+                      <Button
+                        type="button"
+                        variant="ghost"
+                        size="icon"
+                        className="h-7 w-7 text-destructive"
+                        onClick={() => setGalleryContent({
+                          ...galleryContent,
+                          designers: galleryContent.designers.filter((_, i) => i !== idx)
+                        })}
+                      >
+                        <Trash2 className="h-4 w-4" />
+                      </Button>
+                    </div>
+                    <Input
+                      placeholder="Designer name"
+                      value={designer.name}
+                      onChange={(e) => {
+                        const newDesigners = [...galleryContent.designers];
+                        newDesigners[idx] = { ...newDesigners[idx], name: e.target.value };
+                        setGalleryContent({ ...galleryContent, designers: newDesigners });
+                      }}
+                    />
+                    <Input
+                      placeholder="Link URL (e.g., /dresses/essense)"
+                      value={designer.href}
+                      onChange={(e) => {
+                        const newDesigners = [...galleryContent.designers];
+                        newDesigners[idx] = { ...newDesigners[idx], href: e.target.value };
+                        setGalleryContent({ ...galleryContent, designers: newDesigners });
+                      }}
+                    />
+                    {/* Image upload */}
+                    <div className="space-y-1">
+                      {designer.imageUrl ? (
+                        <div className="relative">
+                          <img
+                            src={designer.imageUrl}
+                            alt={designer.name}
+                            className="w-full h-32 object-cover rounded-lg"
+                          />
+                          <Button
+                            type="button"
+                            variant="destructive"
+                            size="sm"
+                            className="absolute top-1 right-1 h-6 px-2 text-xs"
+                            onClick={() => {
+                              const newDesigners = [...galleryContent.designers];
+                              newDesigners[idx] = { ...newDesigners[idx], imageUrl: "" };
+                              setGalleryContent({ ...galleryContent, designers: newDesigners });
+                            }}
+                          >
+                            Remove
+                          </Button>
+                        </div>
+                      ) : (
+                        <label className="flex flex-col items-center justify-center w-full h-24 border-2 border-dashed rounded-lg cursor-pointer hover:bg-muted/50">
+                          <div className="flex flex-col items-center justify-center gap-1">
+                            <Images className="h-5 w-5 text-muted-foreground" />
+                            <span className="text-xs text-muted-foreground">Upload photo</span>
+                          </div>
+                          <input
+                            type="file"
+                            className="hidden"
+                            accept="image/*"
+                            onChange={(e) => {
+                              const file = e.target.files?.[0];
+                              if (file) uploadDesignerImage(file, idx);
+                            }}
+                          />
+                        </label>
+                      )}
+                      <Input
+                        placeholder="Or paste image URL"
+                        value={designer.imageUrl}
+                        onChange={(e) => {
+                          const newDesigners = [...galleryContent.designers];
+                          newDesigners[idx] = { ...newDesigners[idx], imageUrl: e.target.value };
+                          setGalleryContent({ ...galleryContent, designers: newDesigners });
+                        }}
+                      />
+                    </div>
+                  </div>
+                ))}
+              </div>
+
+              {/* Footer Link */}
+              <div className="space-y-2">
+                <Label>Footer Link (below gallery, e.g., "See all brands")</Label>
+                <div className="grid grid-cols-2 gap-2">
+                  <Input
+                    placeholder="Link text"
+                    value={galleryContent.footerLink.text}
+                    onChange={(e) => setGalleryContent({ ...galleryContent, footerLink: { ...galleryContent.footerLink, text: e.target.value } })}
+                  />
+                  <Input
+                    placeholder="URL"
+                    value={galleryContent.footerLink.href}
+                    onChange={(e) => setGalleryContent({ ...galleryContent, footerLink: { ...galleryContent.footerLink, href: e.target.value } })}
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setGalleryDialogOpen(false)}>Cancel</Button>
+            <Button onClick={handleGallerySave} disabled={gallerySaving}>
+              {gallerySaving ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <Save className="mr-2 h-4 w-4" />}
+              Save Gallery
             </Button>
           </DialogFooter>
         </DialogContent>

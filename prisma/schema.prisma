@@ -2332,3 +2332,53 @@ enum VendorStatus {
   REJECTED
   SUSPENDED
 }
+
+enum SearchOptionType {
+  PLACE
+  SERVICE
+  LOCATION
+}
+
+model SearchOption {
+  id        String           @id @default(cuid())
+  name      String
+  type      SearchOptionType
+  icon      String?
+  group     String?          // For LOCATION: "Sweden" | "International"
+  sortOrder Int              @default(0)
+  isActive  Boolean          @default(true)
+  createdAt DateTime         @default(now())
+  updatedAt DateTime         @updatedAt
+
+  @@unique([name, type])
+  @@index([type, isActive])
+}
+
+model Venue {
+  id          String   @id @default(cuid())
+  name        String
+  slug        String   @unique
+  category    String   // "wedding" | "party" | "specialty"
+  type        String   // "Banquet Hall" | "Winery" | "Garden" | etc.
+  location    String?
+  city        String?
+  rating      Float    @default(0)
+  reviewCount Int      @default(0)
+  price       Int?
+  priceUnit   String   @default("/day")
+  image       String?
+  badge       String?
+  badgeColor  String?  // "purple" | "orange" | "green" | null
+  tags        String[]
+  href        String?
+  description String?
+  isFeatured  Boolean  @default(false)
+  isActive    Boolean  @default(true)
+  sortOrder   Int      @default(0)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([category, isActive])
+  @@index([type, isActive])
+  @@index([isFeatured, isActive])
+}

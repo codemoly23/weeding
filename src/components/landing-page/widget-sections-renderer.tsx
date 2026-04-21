@@ -25,10 +25,14 @@ import {
   EventGalleryGridWidget,
   CtaBannerWidget,
   CustomHtmlWidget,
+  FeaturesShowcaseWidget,
+  TrendingVenuesWidget,
+  TickerMarqueeWidget,
+  SocialShareRailWidget,
 } from "@/components/page-builder/widgets";
-import { TopUtilityBarWidget } from "@/components/page-builder/widgets/layout";
+import { TopUtilityBarWidget, BreadcrumbWidget } from "@/components/page-builder/widgets/layout";
 import { ServiceCardWidget, ServiceListWidget, PricingTableWidget, VendorListingWidget } from "@/components/page-builder/widgets/commerce";
-import { ButtonGroupWidget } from "@/components/page-builder/widgets/cta";
+import { ButtonGroupWidget, NewsletterCtaWidget } from "@/components/page-builder/widgets/cta";
 import {
   ServiceHeroWidget,
   ServiceFeaturesWidget,
@@ -479,6 +483,24 @@ function WidgetRenderer({ widget }: WidgetRendererProps) {
 
       case "cta-banner":
         return <CtaBannerWidget settings={resolvedSettings as any} />;
+
+      case "features-showcase":
+        return <FeaturesShowcaseWidget settings={resolvedSettings as any} />;
+
+      case "trending-venues":
+        return <TrendingVenuesWidget settings={resolvedSettings as any} />;
+
+      case "ticker-marquee":
+        return <TickerMarqueeWidget settings={resolvedSettings as any} />;
+
+      case "newsletter-cta":
+        return <NewsletterCtaWidget settings={resolvedSettings as any} />;
+
+      case "social-share-rail":
+        return <SocialShareRailWidget settings={resolvedSettings as any} />;
+
+      case "breadcrumb":
+        return <BreadcrumbWidget settings={resolvedSettings as any} />;
 
       case "top-utility-bar":
         // Hoisted to layout — rendered above <Header /> in (marketing)/layout.tsx

@@ -1,6 +1,5 @@
 "use client";
 
-import { Plus, Trash2 } from "lucide-react";
 import type { EventSearchHeroWidgetSettings } from "@/lib/page-builder/types";
 import { DEFAULT_EVENT_SEARCH_HERO_SETTINGS } from "@/lib/page-builder/defaults";
 import {
@@ -12,6 +11,7 @@ import { AccordionSection } from "@/app/admin/appearance/landing-page/components
 import { ImageUpload } from "@/app/admin/appearance/landing-page/components/ui/image-upload";
 import { useFieldAccordion } from "@/components/page-builder/settings/use-field-accordion";
 import { Button } from "@/components/ui/button";
+import { Plus, Trash2 } from "lucide-react";
 
 interface EventSearchHeroSettingsPanelProps {
   settings: Partial<EventSearchHeroWidgetSettings>;
@@ -138,102 +138,50 @@ export function EventSearchHeroSettingsPanel({
         {/* Search Form Fields */}
         <AccordionSection title="Search Form" defaultOpen {...getAccordionProps("search")}>
           <div className="space-y-3">
+            <p className="text-xs text-muted-foreground">
+              Options for each field are managed in{" "}
+              <strong>Admin → Search Options</strong>.
+            </p>
             <ToggleSwitch
-              label="Show Event Type Field"
+              label="Show Place Field"
               checked={settings.showEventTypeField}
               onChange={(v) => updateField("showEventTypeField", v)}
             />
             {settings.showEventTypeField && (
               <TextInput
-                label="Event Type Label"
+                label="Place Dropdown Label"
                 value={settings.eventTypeLabel}
                 onChange={(v) => updateField("eventTypeLabel", v)}
               />
             )}
 
             <ToggleSwitch
-              label="Show Location Field"
+              label="Show Service Field"
               checked={settings.showLocationField}
               onChange={(v) => updateField("showLocationField", v)}
             />
             {settings.showLocationField && (
-              <>
-                <TextInput
-                  label="Location Label"
-                  value={settings.locationLabel}
-                  onChange={(v) => updateField("locationLabel", v)}
-                />
-                <TextInput
-                  label="Location Placeholder"
-                  value={settings.locationPlaceholder}
-                  onChange={(v) => updateField("locationPlaceholder", v)}
-                />
-              </>
+              <TextInput
+                label="Service Dropdown Label"
+                value={settings.locationLabel}
+                onChange={(v) => updateField("locationLabel", v)}
+              />
             )}
 
             <ToggleSwitch
-              label="Show Date Field"
+              label="Show Location Field"
               checked={settings.showDateField}
               onChange={(v) => updateField("showDateField", v)}
             />
             {settings.showDateField && (
               <TextInput
-                label="Date Label"
+                label="Location Dropdown Label"
                 value={settings.dateLabel}
                 onChange={(v) => updateField("dateLabel", v)}
               />
             )}
           </div>
         </AccordionSection>
-
-        {/* Event Types List */}
-        {settings.showEventTypeField && (
-          <AccordionSection title="Event Type Options" {...getAccordionProps("eventTypes")}>
-            <div className="space-y-2">
-              {settings.eventTypes.map((et, i) => (
-                <div key={i} className="flex items-center gap-2">
-                  <input
-                    type="text"
-                    value={et.label}
-                    onChange={(e) => {
-                      const next = settings.eventTypes.map((item, idx) =>
-                        idx === i ? { ...item, label: e.target.value, value: e.target.value.toLowerCase().replace(/\s+/g, "-") } : item
-                      );
-                      updateField("eventTypes", next);
-                    }}
-                    placeholder="Event type name"
-                    className="flex-1 h-8 rounded-md border border-input bg-background px-3 text-sm focus:outline-none focus:ring-1 focus:ring-ring"
-                  />
-                  <Button
-                    variant="ghost"
-                    size="sm"
-                    className="h-8 w-8 p-0 text-destructive hover:text-destructive"
-                    onClick={() => {
-                      const next = settings.eventTypes.filter((_, idx) => idx !== i);
-                      updateField("eventTypes", next);
-                    }}
-                  >
-                    <Trash2 size={13} />
-                  </Button>
-                </div>
-              ))}
-              <Button
-                variant="outline"
-                size="sm"
-                className="w-full gap-2 mt-1"
-                onClick={() =>
-                  updateField("eventTypes", [
-                    ...settings.eventTypes,
-                    { value: "", label: "" },
-                  ])
-                }
-              >
-                <Plus size={13} />
-                Add Option
-              </Button>
-            </div>
-          </AccordionSection>
-        )}
 
         {/* Search Button */}
         <AccordionSection title="Search Button" {...getAccordionProps("button")}>

@@ -40,6 +40,10 @@ export function FaqAccordionWidgetSettingsPanel({
     header: {
       ...DEFAULT_FAQ_ACCORDION_SETTINGS.header,
       ...partialSettings?.header,
+      badge: {
+        ...DEFAULT_FAQ_ACCORDION_SETTINGS.header.badge,
+        ...partialSettings?.header?.badge,
+      },
     },
     headerStyle: { ...DEFAULT_FAQ_ACCORDION_SETTINGS.headerStyle!, ...partialSettings?.headerStyle },
     itemStyle: { ...DEFAULT_FAQ_ACCORDION_SETTINGS.itemStyle!, ...partialSettings?.itemStyle },
@@ -76,6 +80,35 @@ export function FaqAccordionWidgetSettingsPanel({
             />
             {settings.header.show && (
               <>
+                <ToggleSwitch
+                  label="Show Badge"
+                  checked={settings.header.badge?.show ?? false}
+                  onChange={(v) =>
+                    onChange({
+                      ...settings,
+                      header: {
+                        ...settings.header,
+                        badge: { ...settings.header.badge, show: v, text: settings.header.badge?.text ?? "Got Questions?" },
+                      },
+                    })
+                  }
+                />
+                {settings.header.badge?.show && (
+                  <TextInput
+                    label="Badge Text"
+                    value={settings.header.badge?.text ?? "Got Questions?"}
+                    onChange={(v) =>
+                      onChange({
+                        ...settings,
+                        header: {
+                          ...settings.header,
+                          badge: { ...settings.header.badge, show: true, text: v },
+                        },
+                      })
+                    }
+                    placeholder="Got Questions?"
+                  />
+                )}
                 <TextInput
                   label="Heading"
                   value={settings.header.heading}
@@ -275,6 +308,22 @@ export function FaqAccordionWidgetSettingsPanel({
               min={0}
               max={48}
               step={4}
+            />
+          </div>
+        </AccordionSection>
+
+        {/* Layout */}
+        <AccordionSection title="Layout" defaultOpen>
+          <div className="space-y-3">
+            <SelectInput
+              label="Columns"
+              value={String(settings.columns ?? 1)}
+              onChange={(v) => updateField("columns", Number(v) as 1 | 2 | 3)}
+              options={[
+                { value: "1", label: "1 Column" },
+                { value: "2", label: "2 Columns" },
+                { value: "3", label: "3 Columns" },
+              ]}
             />
           </div>
         </AccordionSection>

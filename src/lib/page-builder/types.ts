@@ -266,7 +266,11 @@ export type WidgetType =
   // Navigation Widgets
   | "top-utility-bar"
   // Ticker Widgets
-  | "ticker-marquee";
+  | "ticker-marquee"
+  // Features Showcase Widget
+  | "features-showcase"
+  // Trending Venues Widget
+  | "trending-venues";
 
 export type WidgetCategory =
   | "most-used"
@@ -2927,6 +2931,10 @@ export interface FaqAccordionWidgetSettings {
     heading: string;
     description: string;
     alignment: "left" | "center";
+    badge?: {
+      show: boolean;
+      text: string;
+    };
   };
   source: "all" | "category" | "service" | "service-all";
   categories: string[];
@@ -2936,6 +2944,7 @@ export interface FaqAccordionWidgetSettings {
   style: "minimal" | "cards" | "bordered";
   accentColor: string;
   showCategoryFilter: boolean;
+  columns: 1 | 2 | 3;
 
   // Theme color binding
   colors?: {
@@ -3579,17 +3588,21 @@ export interface EventCategoriesGridWidgetSettings {
 // ── Vendor Listing Widget ────────────────────────────────────────────────────
 
 export interface VendorListingWidgetSettings {
+  badge: { show: boolean; text: string };
   title: string;
   subtitle: string;
-  category: string; // "" = all, or VendorCategory value
+  headerTextColor?: string;
+  category: string;
   limit: number;
   featuredOnly: boolean;
   showViewAll: boolean;
+  viewAllText?: string;
+  viewAllLink?: string;
   columns: 2 | 3 | 4;
-  cardStyle?: "overlay" | "standard"; // overlay = image with gradient overlay (default), standard = info below image
-  sectionBg?: string;                  // Section background CSS value
-  badgeFrom?: string;                  // Category badge gradient start color
-  badgeTo?: string;                    // Category badge gradient end color
+  cardStyle?: "overlay" | "standard";
+  sectionBg?: string;
+  badgeFrom?: string;
+  badgeTo?: string;
   container?: WidgetContainerStyle;
 }
 
@@ -3690,6 +3703,9 @@ export interface CtaBannerWidgetSettings {
   cardPaddingH: number;        // default 32 (px horizontal)
   showPattern: boolean;        // checkerboard overlay
 
+  // Variant — controls text and button colors
+  variant: "dark" | "light";  // "dark" = white text on colored card, "light" = dark text on light card
+
   // Text content
   title: string;
   subtitle: string;
@@ -3708,6 +3724,12 @@ export interface CtaBannerWidgetSettings {
     label: string;
     href: string;
     icon: string;              // lucide icon name, default "Play"
+  };
+
+  // Trust badges (checkmark items below buttons)
+  trustBadges: {
+    show: boolean;
+    items: string[];
   };
 }
 
@@ -4002,4 +4024,64 @@ export interface TickerMarqueeWidgetSettings {
     useTheme?: boolean;
   };
   container?: WidgetContainerStyle;
+}
+
+// ── Features Showcase Widget ──────────────────────────────────────────────────
+
+export interface FeaturesShowcaseItem {
+  id: string;
+  title: string;
+  image: string;
+  icon: string; // Lucide icon name
+  href?: string;
+}
+
+export interface FeaturesShowcaseWidgetSettings {
+  badge: {
+    show: boolean;
+    text: string;
+  };
+  heading: string;
+  subheading: string;
+  items: FeaturesShowcaseItem[];
+  columns: 2 | 3;
+  gap: number;
+  cardHeight: number;
+  showCta: boolean;
+  ctaText: string;
+  ctaHref: string;
+}
+
+// ── Trending Venues Widget ────────────────────────────────────────────────────
+
+export type VenueBadgeColor = "purple" | "orange" | "green" | "none";
+
+export interface TrendingVenueItem {
+  id: string;
+  image: string;
+  badge: { text: string; color: VenueBadgeColor };
+  name: string;
+  location: string;
+  rating: number;
+  reviewCount: number;
+  tags: string[]; // e.g. ["180 guests", "Historic"]
+  price: number;
+  priceUnit: string; // e.g. "/day"
+  href?: string;
+}
+
+export interface TrendingVenuesWidgetSettings {
+  badge: {
+    show: boolean;
+    text: string;
+  };
+  heading: string;
+  subheading: string;
+  venues: TrendingVenueItem[];
+  viewMode: "grid" | "marquee";
+  columns: 2 | 3 | 4;
+  gap: number;
+  showCta: boolean;
+  ctaText: string;
+  ctaHref: string;
 }

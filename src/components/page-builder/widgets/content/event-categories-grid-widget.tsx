@@ -34,7 +34,7 @@ export function EventCategoriesGridWidget({
   return (
     <section
       style={{
-        background: "linear-gradient(to bottom, #ffffff, #f9fafb)",
+        background: "linear-gradient(135deg, #fdf4ff 0%, #fce7f3 40%, #ffffff 100%)",
         padding: "5rem 1rem",
       }}
     >

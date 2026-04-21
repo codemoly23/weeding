@@ -26,6 +26,10 @@ export function VendorListingSettingsPanel({
   const settings: VendorListingWidgetSettings = {
     ...DEFAULT_VENDOR_LISTING_SETTINGS,
     ...partialSettings,
+    badge: {
+      ...DEFAULT_VENDOR_LISTING_SETTINGS.badge,
+      ...partialSettings?.badge,
+    },
     container: {
       ...DEFAULT_VENDOR_LISTING_SETTINGS.container,
       ...partialSettings?.container,
@@ -55,14 +59,27 @@ export function VendorListingSettingsPanel({
       <div className="space-y-4">
         <AccordionSection title="Section Header" defaultOpen>
           <div className="space-y-3">
+            <ToggleSwitch
+              label="Show Badge"
+              checked={settings.badge.show}
+              onChange={(v) => update("badge", { ...settings.badge, show: v })}
+            />
+            {settings.badge.show && (
+              <TextInput
+                label="Badge Text"
+                value={settings.badge.text}
+                onChange={(v) => update("badge", { ...settings.badge, text: v })}
+                placeholder="Top Vendors"
+              />
+            )}
             <TextInput
-              label="Title"
+              label="Heading"
               value={settings.title}
               onChange={(v) => update("title", v)}
               placeholder="Featured Vendors"
             />
             <TextInput
-              label="Subtitle"
+              label="Subheading"
               value={settings.subtitle}
               onChange={(v) => update("subtitle", v)}
               placeholder="Connect with verified event professionals"
@@ -95,6 +112,22 @@ export function VendorListingSettingsPanel({
               checked={settings.showViewAll}
               onChange={(v) => update("showViewAll", v)}
             />
+            {settings.showViewAll && (
+              <>
+                <TextInput
+                  label="Button Text"
+                  value={settings.viewAllText ?? "View All Vendors"}
+                  onChange={(v) => update("viewAllText", v)}
+                  placeholder="View All Vendors"
+                />
+                <TextInput
+                  label="Button Link"
+                  value={settings.viewAllLink ?? "/vendors"}
+                  onChange={(v) => update("viewAllLink", v)}
+                  placeholder="/vendors"
+                />
+              </>
+            )}
           </div>
         </AccordionSection>
       </div>
@@ -104,7 +137,17 @@ export function VendorListingSettingsPanel({
   if (activeTab === "style") {
     return (
       <div className="space-y-4">
-        <AccordionSection title="Layout" defaultOpen>
+        <AccordionSection title="Section Header" defaultOpen>
+          <div className="space-y-3">
+            <ColorPicker
+              label="Header Text Color"
+              value={settings.headerTextColor ?? "#0f172a"}
+              onChange={(v) => update("headerTextColor", v)}
+            />
+          </div>
+        </AccordionSection>
+
+        <AccordionSection title="Layout">
           <div className="space-y-3">
             <SelectInput
               label="Card Style"

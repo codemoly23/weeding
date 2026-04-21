@@ -53,12 +53,16 @@ interface VendorListingWidgetProps {
 
 export function VendorListingWidget({ settings, isPreview = false }: VendorListingWidgetProps) {
   const {
+    badge,
     title,
     subtitle,
+    headerTextColor = "#0f172a",
     category,
     limit,
     featuredOnly,
     showViewAll,
+    viewAllText = "View All Vendors",
+    viewAllLink = "/vendors",
     columns,
     container,
     cardStyle = "overlay",
@@ -93,10 +97,26 @@ export function VendorListingWidget({ settings, isPreview = false }: VendorListi
   return (
     <WidgetContainer container={container}>
       {/* Header */}
-      {(title || subtitle) && (
+      {(badge?.show || title || subtitle) && (
         <div className="mb-8 text-center">
-          {title   && <h2 className="text-2xl font-bold text-gray-900 sm:text-3xl">{title}</h2>}
-          {subtitle && <p className="mt-2 text-base text-gray-500">{subtitle}</p>}
+          {badge?.show && badge.text && (
+            <span
+              className="mb-3 inline-block rounded-full px-4 py-1 text-xs font-semibold uppercase tracking-wider"
+              style={{ background: `linear-gradient(to right, ${badgeFrom}, ${badgeTo})`, color: "#fff" }}
+            >
+              {badge.text}
+            </span>
+          )}
+          {title && (
+            <h2 className="text-2xl font-bold sm:text-3xl" style={{ color: headerTextColor }}>
+              {title}
+            </h2>
+          )}
+          {subtitle && (
+            <p className="mt-2 text-base" style={{ color: headerTextColor, opacity: 0.65 }}>
+              {subtitle}
+            </p>
+          )}
         </div>
       )}
 
@@ -125,7 +145,7 @@ export function VendorListingWidget({ settings, isPreview = false }: VendorListi
       {showViewAll && !loading && vendors.length > 0 && (
         <div style={{ textAlign: "center", marginTop: "3rem" }}>
           <a
-            href={isPreview ? undefined : "/vendors"}
+            href={isPreview ? undefined : viewAllLink}
             onClick={e => isPreview && e.preventDefault()}
             style={{
               display: "inline-flex",
@@ -141,7 +161,7 @@ export function VendorListingWidget({ settings, isPreview = false }: VendorListi
               boxShadow: "0 10px 15px -3px rgba(0,0,0,0.1)",
             }}
           >
-            View All Vendors
+            {viewAllText}
             <ArrowRight size={18} />
           </a>
         </div>

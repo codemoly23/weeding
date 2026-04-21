@@ -49,10 +49,12 @@ import {
   DEFAULT_BLOG_POST_TOC_SETTINGS,
   DEFAULT_BLOG_POST_AUTHOR_CARD_SETTINGS,
   DEFAULT_BLOG_POST_TAGS_SETTINGS,
+  DEFAULT_FEATURES_SHOWCASE_SETTINGS,
+  DEFAULT_TRENDING_VENUES_SETTINGS,
 } from "./defaults";
 
 // Import widget components
-import { HeroContentWidget, ProcessStepsWidget, HeadingWidget, TextBlockWidget, TickerMarqueeWidget, SocialShareRailWidget, EventSearchHeroWidget, EventGalleryGridWidget, EventCategoriesGridWidget, CtaBannerWidget } from "@/components/page-builder/widgets/content";
+import { HeroContentWidget, ProcessStepsWidget, HeadingWidget, TextBlockWidget, TickerMarqueeWidget, SocialShareRailWidget, EventSearchHeroWidget, EventGalleryGridWidget, EventCategoriesGridWidget, CtaBannerWidget, FeaturesShowcaseWidget, TrendingVenuesWidget } from "@/components/page-builder/widgets/content";
 import { ImageWidget, ImageSliderWidget } from "@/components/page-builder/widgets/media";
 import {
   TrustBadgesWidget,
@@ -407,6 +409,28 @@ export function registerAllWidgets() {
     category: "wedding",
     defaultSettings: DEFAULT_EVENT_SEARCH_HERO_SETTINGS,
     component: EventSearchHeroWidget,
+  });
+
+  // Features Showcase Widget
+  WidgetRegistry.register({
+    type: "features-showcase",
+    name: "Features Showcase",
+    description: "Feature cards grid with background images, icon badges, and a CTA button",
+    icon: "LayoutGrid",
+    category: "wedding",
+    defaultSettings: DEFAULT_FEATURES_SHOWCASE_SETTINGS,
+    component: FeaturesShowcaseWidget,
+  });
+
+  // Trending Venues Widget
+  WidgetRegistry.register({
+    type: "trending-venues",
+    name: "Trending Venues",
+    description: "Venue showcase cards with image, rating, tags, and price — ideal for marketing pages",
+    icon: "MapPin",
+    category: "wedding",
+    defaultSettings: DEFAULT_TRENDING_VENUES_SETTINGS,
+    component: TrendingVenuesWidget,
   });
 
   // Event Categories Grid Widget

@@ -74,6 +74,7 @@ export function FaqAccordionWidget({
     style: (typeof settings?.style === "string" ? settings.style : "cards") as "minimal" | "cards" | "bordered",
     accentColor,
     showCategoryFilter: settings?.showCategoryFilter ?? false,
+    columns: settings?.columns ?? 1,
     header: { ...defaultHeader, ...settings?.header },
   };
 
@@ -395,6 +396,23 @@ export function FaqAccordionWidget({
             s.header.alignment === "center" && "text-center"
           )}
         >
+          {/* Badge */}
+          {s.header.badge?.show && (
+            <div
+              className={cn(
+                "mb-4 inline-flex items-center gap-1.5 rounded-full border px-4 py-1.5 text-sm font-semibold",
+                s.header.alignment === "center" ? "justify-center" : "justify-start"
+              )}
+              style={{
+                background: "#fdf4ff",
+                borderColor: "#d8b4fe",
+                color: "#7c3aed",
+              }}
+            >
+              <span>💬</span>
+              {s.header.badge.text}
+            </div>
+          )}
           <h2
             className={cn(
               "font-bold tracking-tight",
@@ -463,53 +481,85 @@ export function FaqAccordionWidget({
       )}
 
       {/* FAQ Items */}
-      <div className="mx-auto w-full max-w-3xl" data-field-id="faq-items">
-        {s.style === "minimal" && (
-          <div className="divide-y divide-border">
-            {displayFaqs.map((faq) => (
-              <FaqItemMinimal
-                key={faq.id}
-                faq={faq}
-                isOpen={openItems.has(faq.id)}
-                onToggle={() => toggleItem(faq.id)}
-                itemStyle={is}
-              />
-            ))}
-          </div>
-        )}
+      {(() => {
+        const cols = s.columns ?? 1;
+        // Split FAQs into N column arrays
+        const columnArrays: typeof displayFaqs[] = Array.from({ length: cols }, (_, ci) =>
+          displayFaqs.filter((_, i) => i % cols === ci)
+        );
 
-        {s.style === "cards" && (
-          <div className="flex flex-col" style={{ gap: `${is.gap}px` }}>
-            {displayFaqs.map((faq) => (
-              <FaqItemCard
-                key={faq.id}
-                faq={faq}
-                isOpen={openItems.has(faq.id)}
-                onToggle={() => toggleItem(faq.id)}
-                accentColor={s.accentColor}
-                accentBorder={accentBorder}
-                itemStyle={is}
-              />
-            ))}
-          </div>
-        )}
+        const renderFaqList = (faqList: typeof displayFaqs, colOffset = 0) => (
+          <>
+            {s.style === "minimal" && (
+              <div className="divide-y divide-border">
+                {faqList.map((faq) => (
+                  <FaqItemMinimal
+                    key={faq.id}
+                    faq={faq}
+                    isOpen={openItems.has(faq.id)}
+                    onToggle={() => toggleItem(faq.id)}
+                    itemStyle={is}
+                  />
+                ))}
+              </div>
+            )}
+            {s.style === "cards" && (
+              <div className="flex flex-col" style={{ gap: `${is.gap}px` }}>
+                {faqList.map((faq) => (
+                  <FaqItemCard
+                    key={faq.id}
+                    faq={faq}
+                    isOpen={openItems.has(faq.id)}
+                    onToggle={() => toggleItem(faq.id)}
+                    accentColor={s.accentColor}
+                    accentBorder={accentBorder}
+                    itemStyle={is}
+                  />
+                ))}
+              </div>
+            )}
+            {s.style === "bordered" && (
+              <div className="flex flex-col" style={{ gap: `${is.gap}px` }}>
+                {faqList.map((faq, i) => (
+                  <FaqItemBordered
+                    key={faq.id}
+                    faq={faq}
+                    index={displayFaqs.indexOf(faq)}
+                    isOpen={openItems.has(faq.id)}
+                    onToggle={() => toggleItem(faq.id)}
+                    accentColor={s.accentColor}
+                    itemStyle={is}
+                  />
+                ))}
+              </div>
+            )}
+          </>
+        );
 
-        {s.style === "bordered" && (
-          <div className="flex flex-col" style={{ gap: `${is.gap}px` }}>
-            {displayFaqs.map((faq, index) => (
-              <FaqItemBordered
-                key={faq.id}
-                faq={faq}
-                index={index}
-                isOpen={openItems.has(faq.id)}
-                onToggle={() => toggleItem(faq.id)}
-                accentColor={s.accentColor}
-                itemStyle={is}
-              />
+        if (cols === 1) {
+          return (
+            <div className="mx-auto w-full max-w-3xl" data-field-id="faq-items">
+              {renderFaqList(displayFaqs)}
+            </div>
+          );
+        }
+
+        return (
+          <div
+            data-field-id="faq-items"
+            style={{
+              display: "grid",
+              gridTemplateColumns: `repeat(${cols}, 1fr)`,
+              gap: "1.5rem",
+              alignItems: "start",
+            }}
+          >
+            {columnArrays.map((colFaqs, ci) => (
+              <div key={ci}>{renderFaqList(colFaqs, ci)}</div>
             ))}
           </div>
-        )}
-      </div>
+        );
+      })()}
     </div>
     </WidgetContainer>
   );

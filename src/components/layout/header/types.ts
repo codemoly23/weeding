@@ -14,13 +14,15 @@ export interface NavigationItem {
   name: string;
   href: string;
   hasDropdown: boolean;
+  megaMenuColumns?: number;
+  megaMenuContent?: unknown;
 }
 
 export interface ServiceCategory {
   name: string;
   description: string;
   icon: string;
-  services: { name: string; href: string; popular?: boolean }[];
+  services: { name: string; href: string; icon?: string; popular?: boolean }[];
 }
 
 export interface BusinessConfig {
@@ -40,6 +42,7 @@ export interface HeaderLayoutProps {
   config: PublicHeaderResponse;
   navigation: NavigationItem[];
   serviceCategories: ServiceCategory[];
+  allServiceCategories?: Record<string, ServiceCategory[]>;
   user: LoggedInUser | null;
   session: Session | null;
   sessionStatus: "loading" | "authenticated" | "unauthenticated";
@@ -63,6 +66,7 @@ export interface LogoProps {
 export interface NavigationProps {
   items: NavigationItem[];
   serviceCategories: ServiceCategory[];
+  allServiceCategories?: Record<string, ServiceCategory[]>;
   hoveredItem: string | null;
   setHoveredItem: (item: string | null) => void;
   split?: "left" | "right" | "all";

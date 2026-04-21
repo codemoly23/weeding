@@ -7,6 +7,7 @@ import {
   NumberInput,
   ToggleSwitch,
   ColorInput,
+  SelectInput,
 } from "@/app/admin/appearance/landing-page/components/ui/form-controls";
 import { AccordionSection } from "@/app/admin/appearance/landing-page/components/ui/accordion-section";
 import { useFieldAccordion } from "@/components/page-builder/settings/use-field-accordion";
@@ -36,6 +37,10 @@ export function CtaBannerSettingsPanel({
     secondaryButton: {
       ...DEFAULT_CTA_BANNER_SETTINGS.secondaryButton,
       ...partialSettings.secondaryButton,
+    },
+    trustBadges: {
+      ...DEFAULT_CTA_BANNER_SETTINGS.trustBadges,
+      ...partialSettings.trustBadges,
     },
   };
 
@@ -111,6 +116,29 @@ export function CtaBannerSettingsPanel({
             />
           </div>
         </AccordionSection>
+
+        <AccordionSection title="Trust Badges" {...getAccordionProps("trust-badges")}>
+          <div className="space-y-3">
+            <ToggleSwitch
+              label="Show Trust Badges"
+              checked={settings.trustBadges.show}
+              onChange={(v) => update("trustBadges", { ...settings.trustBadges, show: v })}
+            />
+            {settings.trustBadges.show && (
+              <TextInput
+                label="Items (comma separated)"
+                value={settings.trustBadges.items.join(", ")}
+                onChange={(v) =>
+                  update("trustBadges", {
+                    ...settings.trustBadges,
+                    items: v.split(",").map((s) => s.trim()).filter(Boolean),
+                  })
+                }
+                placeholder="Free forever plan, No credit card required, Cancel anytime"
+              />
+            )}
+          </div>
+        </AccordionSection>
       </div>
     );
   }
@@ -118,6 +146,23 @@ export function CtaBannerSettingsPanel({
   if (activeTab === "style") {
     return (
       <div className="space-y-3">
+        <AccordionSection title="Variant" defaultOpen>
+          <div className="space-y-3">
+            <SelectInput
+              label="Color Variant"
+              value={settings.variant ?? "dark"}
+              options={[
+                { value: "dark", label: "Dark — white text on colored card" },
+                { value: "light", label: "Light — dark text on light card" },
+              ]}
+              onChange={(v) => update("variant", v as "dark" | "light")}
+            />
+            <p className="text-xs text-muted-foreground">
+              Use <strong>Light</strong> when card colors are white/gray. Use <strong>Dark</strong> for colored gradient cards.
+            </p>
+          </div>
+        </AccordionSection>
+
         <AccordionSection title="Section Background" defaultOpen>
           <div className="space-y-3">
             <ColorInput

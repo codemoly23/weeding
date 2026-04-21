@@ -191,6 +191,7 @@ export interface MenuItem {
   categoryDesc?: string | null;
   sortOrder: number;
   children?: MenuItem[];
+  megaMenuContent?: unknown;
 }
 
 export interface HeaderConfig {

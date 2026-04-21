@@ -4,7 +4,7 @@ import { useState, useEffect, useMemo } from "react";
 import { useSession, signOut } from "next-auth/react";
 import { cn } from "@/lib/utils";
 import { useBusinessConfig } from "@/hooks/use-business-config";
-import { useHeaderConfig, getMegaMenuCategories, getMainNavigation } from "@/hooks/use-header-config";
+import { useHeaderConfig, getMegaMenuCategories, getAllMegaMenuCategories, getMainNavigation } from "@/hooks/use-header-config";
 import { useScrollTransparency } from "./hooks/useScrollTransparency";
 import { TopBar } from "./components/TopBar";
 import { HeaderDefault } from "./layouts/HeaderDefault";
@@ -51,6 +51,13 @@ export function Header() {
       }
     }
     return fallbackServiceCategories;
+  }, [headerConfig?.menu]);
+
+  const allServiceCategories = useMemo(() => {
+    if (headerConfig?.menu && headerConfig.menu.length > 0) {
+      return getAllMegaMenuCategories(headerConfig.menu);
+    }
+    return {};
   }, [headerConfig?.menu]);
 
   // Check for logged-in user
@@ -135,6 +142,7 @@ export function Header() {
     config: headerConfig!,
     navigation,
     serviceCategories,
+    allServiceCategories,
     user,
     session,
     sessionStatus: status,

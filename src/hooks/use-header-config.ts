@@ -112,9 +112,33 @@ export function getMegaMenuCategories(menu: MenuItem[]): {
     services: (category.children || []).map((service) => ({
       name: service.label,
       href: service.url || "#",
+      icon: service.icon || "",
       popular: !!service.badge,
     })),
   }));
+}
+
+// Helper to get mega menu categories for ALL mega menu items (keyed by item label)
+export function getAllMegaMenuCategories(menu: MenuItem[]): Record<string, {
+  name: string; description: string; icon: string;
+  services: { name: string; href: string; icon?: string; popular?: boolean }[];
+}[]> {
+  const result: Record<string, { name: string; description: string; icon: string; services: { name: string; href: string; icon?: string; popular?: boolean }[] }[]> = {};
+  const megaItems = menu.filter((item) => item.isMegaMenu && item.children && item.children.length > 0);
+  for (const item of megaItems) {
+    result[item.label] = (item.children || []).map((category) => ({
+      name: category.categoryName || category.label,
+      description: category.categoryDesc || "",
+      icon: category.categoryIcon || "folder",
+      services: (category.children || []).map((service) => ({
+        name: service.label,
+        href: service.url || "#",
+        icon: service.icon || "",
+        popular: !!service.badge,
+      })),
+    }));
+  }
+  return result;
 }
 
 // Helper to get main navigation items (non-mega menu)
@@ -122,6 +146,8 @@ export function getMainNavigation(menu: MenuItem[]): {
   name: string;
   href: string;
   hasDropdown: boolean;
+  megaMenuColumns?: number;
+  megaMenuContent?: unknown;
 }[] {
   return menu
     .filter((item) => item.isVisible && !item.parentId)
@@ -129,5 +155,7 @@ export function getMainNavigation(menu: MenuItem[]): {
       name: item.label,
       href: item.url || "#",
       hasDropdown: item.isMegaMenu,
+      megaMenuColumns: item.megaMenuColumns ?? undefined,
+      megaMenuContent: item.megaMenuContent ?? undefined,
     }));
 }

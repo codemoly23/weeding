@@ -53,6 +53,8 @@ import type {
   NewsletterCtaWidgetSettings,
   CustomHtmlWidgetSettings,
   TickerMarqueeWidgetSettings,
+  FeaturesShowcaseWidgetSettings,
+  TrendingVenuesWidgetSettings,
 } from "./types";
 
 // ============================================
@@ -1915,6 +1917,10 @@ export const DEFAULT_FAQ_ACCORDION_SETTINGS = {
     heading: "Frequently Asked Questions",
     description: "Get answers to common questions about our services",
     alignment: "center" as const,
+    badge: {
+      show: false,
+      text: "Got Questions?",
+    },
   },
   source: "all" as const,
   categories: [],
@@ -1924,6 +1930,7 @@ export const DEFAULT_FAQ_ACCORDION_SETTINGS = {
   style: "cards" as const,
   accentColor: "#3b82f6",
   showCategoryFilter: false,
+  columns: 1 as 1 | 2 | 3,
   colors: { useTheme: true },
   headerStyle: {
     headingSize: "lg" as const,
@@ -2411,12 +2418,16 @@ export const DEFAULT_EVENT_GALLERY_GRID_SETTINGS: EventGalleryGridWidgetSettings
 // ── Vendor Listing Widget ────────────────────────────────────────────────────
 
 export const DEFAULT_VENDOR_LISTING_SETTINGS = {
+  badge: { show: true, text: "Top Vendors" },
   title: "Featured Vendors",
   subtitle: "Connect with our verified and highly-rated event professionals",
+  headerTextColor: "#0f172a",
   category: "",
   limit: 6,
   featuredOnly: false,
   showViewAll: true,
+  viewAllText: "View All Vendors",
+  viewAllLink: "/vendors",
   columns: 3 as const,
   cardStyle: "overlay" as const,
   sectionBg: "linear-gradient(to bottom, #f9fafb, #ffffff)",
@@ -2469,6 +2480,135 @@ export const DEFAULT_EVENT_CATEGORIES_GRID_SETTINGS: EventCategoriesGridWidgetSe
   ],
 };
 
+// ── Features Showcase Widget ──────────────────────────────────────────────────
+
+export const DEFAULT_FEATURES_SHOWCASE_SETTINGS: FeaturesShowcaseWidgetSettings = {
+  badge: {
+    show: true,
+    text: "Powerful Features",
+  },
+  heading: "Everything You Need to Plan Amazing Events",
+  subheading: "From planning to execution, our all-in-one platform makes event management effortless",
+  columns: 3,
+  gap: 16,
+  cardHeight: 260,
+  showCta: true,
+  ctaText: "Explore All Features",
+  ctaHref: "/features",
+  items: [
+    {
+      id: "feat_1",
+      title: "Event Dashboard",
+      image: "https://images.unsplash.com/photo-1551818255-e6e10975bc17?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&w=800&q=80",
+      icon: "LayoutGrid",
+      href: "/features/dashboard",
+    },
+    {
+      id: "feat_2",
+      title: "Guest Management",
+      image: "https://images.unsplash.com/photo-1511578314322-379afb476865?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&w=800&q=80",
+      icon: "Users",
+      href: "/features/guests",
+    },
+    {
+      id: "feat_3",
+      title: "Budget Tracker",
+      image: "https://images.unsplash.com/photo-1554224155-6726b3ff858f?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&w=800&q=80",
+      icon: "DollarSign",
+      href: "/features/budget",
+    },
+    {
+      id: "feat_4",
+      title: "Vendor Marketplace",
+      image: "https://images.unsplash.com/photo-1555396273-367ea4eb4db5?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&w=800&q=80",
+      icon: "Store",
+      href: "/features/vendors",
+    },
+    {
+      id: "feat_5",
+      title: "Smart Checklist",
+      image: "https://images.unsplash.com/photo-1484480974693-6ca0a78fb36b?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&w=800&q=80",
+      icon: "ListChecks",
+      href: "/features/checklist",
+    },
+    {
+      id: "feat_6",
+      title: "Digital Invitations",
+      image: "https://images.unsplash.com/photo-1585776245991-cf89dd7fc73a?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&w=800&q=80",
+      icon: "Mail",
+      href: "/features/invitations",
+    },
+  ],
+};
+
+// ── Trending Venues Widget ────────────────────────────────────────────────────
+
+export const DEFAULT_TRENDING_VENUES_SETTINGS: TrendingVenuesWidgetSettings = {
+  badge: { show: true, text: "Handpicked for You" },
+  heading: "Trending Venues",
+  subheading: "Discover the most sought-after event spaces perfect for your special occasion",
+  viewMode: "grid",
+  columns: 4,
+  gap: 24,
+  showCta: true,
+  ctaText: "View All Venues",
+  ctaHref: "/venues",
+  venues: [
+    {
+      id: "venue_1",
+      image: "https://images.unsplash.com/photo-1464366400600-7168b8af9bc3?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&w=800&q=80",
+      badge: { text: "Popular", color: "purple" },
+      name: "Historic Mansion",
+      location: "Charleston, SC",
+      rating: 5.0,
+      reviewCount: 142,
+      tags: ["180 guests", "Historic"],
+      price: 7200,
+      priceUnit: "/day",
+      href: "/venues/historic-mansion",
+    },
+    {
+      id: "venue_2",
+      image: "https://images.unsplash.com/photo-1519167758481-83f550bb49b3?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&w=800&q=80",
+      badge: { text: "Featured", color: "orange" },
+      name: "Skyline Ballroom",
+      location: "New York, NY",
+      rating: 5.0,
+      reviewCount: 89,
+      tags: ["500 guests", "Ballroom"],
+      price: 5000,
+      priceUnit: "/day",
+      href: "/venues/skyline-ballroom",
+    },
+    {
+      id: "venue_3",
+      image: "https://images.unsplash.com/photo-1549294413-26f195200c16?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&w=800&q=80",
+      badge: { text: "none", color: "none" },
+      name: "Modern Art Gallery",
+      location: "Chicago, IL",
+      rating: 4.7,
+      reviewCount: 67,
+      tags: ["120 guests", "Gallery"],
+      price: 3800,
+      priceUnit: "/day",
+      href: "/venues/modern-art-gallery",
+    },
+    {
+      id: "venue_4",
+      image: "https://images.unsplash.com/photo-1578774204375-826dc4691b6c?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&w=800&q=80",
+      badge: { text: "none", color: "none" },
+      name: "Garden Terrace",
+      location: "Miami, FL",
+      rating: 4.8,
+      reviewCount: 54,
+      tags: ["200 guests", "Outdoor"],
+      price: 4500,
+      priceUnit: "/day",
+      href: "/venues/garden-terrace",
+    },
+  ],
+};
+
 // ── CTA Banner Widget ─────────────────────────────────────────────────────────
 
 export const DEFAULT_CTA_BANNER_SETTINGS: CtaBannerWidgetSettings = {
@@ -2482,6 +2622,8 @@ export const DEFAULT_CTA_BANNER_SETTINGS: CtaBannerWidgetSettings = {
   cardPaddingV: 64,
   cardPaddingH: 32,
   showPattern: true,
+
+  variant: "dark",
 
   title: "Ready to Plan Your Next Event?",
   subtitle: "Join thousands of event planners who trust us for their celebrations",
@@ -2497,6 +2639,11 @@ export const DEFAULT_CTA_BANNER_SETTINGS: CtaBannerWidgetSettings = {
     label: "Watch Demo",
     href: "#demo",
     icon: "Play",
+  },
+
+  trustBadges: {
+    show: false,
+    items: ["Free forever plan", "No credit card required", "Cancel anytime"],
   },
 };
 
@@ -2593,6 +2740,8 @@ export const WIDGET_DEFAULTS: Record<string, unknown> = {
   "event-search-hero": DEFAULT_EVENT_SEARCH_HERO_SETTINGS,
   "event-gallery-grid": DEFAULT_EVENT_GALLERY_GRID_SETTINGS,
   "event-categories-grid": DEFAULT_EVENT_CATEGORIES_GRID_SETTINGS,
+  "features-showcase": DEFAULT_FEATURES_SHOWCASE_SETTINGS,
+  "trending-venues": DEFAULT_TRENDING_VENUES_SETTINGS,
   "cta-banner": DEFAULT_CTA_BANNER_SETTINGS,
   "top-utility-bar": DEFAULT_TOP_UTILITY_BAR_SETTINGS,
 };
