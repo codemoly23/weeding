@@ -1028,8 +1028,10 @@ async function main() {
     console.log(`  + ${entry.stateName}`);
   }
 
-  // Create testimonials
+  // Create testimonials (delete all first to ensure fresh data)
   console.log("\nCreating testimonials...");
+  await prisma.testimonial.deleteMany({});
+  console.log("  ~ Cleared existing testimonials");
   const testimonials = [
     {
       name: "Emma Lindqvist",
