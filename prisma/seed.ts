@@ -1456,192 +1456,205 @@ async function main() {
   // Create Footer Configuration
   console.log("\nCreating footer configuration...");
 
-  const existingFooter = await prisma.footerConfig.findFirst({ where: { isActive: true } });
+  await prisma.menuItem.deleteMany({ where: { footerWidgetId: { not: null } } });
+  await prisma.footerWidget.deleteMany({});
+  await prisma.footerConfig.deleteMany({});
 
-  let footerConfig;
-  if (existingFooter) {
-    console.log("  ~ Active footer config already exists, skipping to preserve customisations");
-    footerConfig = existingFooter;
-  } else {
-    await prisma.menuItem.deleteMany({ where: { footerWidgetId: { not: null } } });
-    await prisma.footerWidget.deleteMany({});
-    await prisma.footerConfig.deleteMany({});
+  const footerConfig = await prisma.footerConfig.create({
+    data: {
+      name: "Default Footer",
+      isActive: true,
+      layout: "MULTI_COLUMN",
+      columns: 5,
+      // Background — dark purple gradient
+      bgType: "gradient",
+      bgGradient: JSON.stringify({
+        type: "linear",
+        colors: [
+          { color: "#1e1b4b", position: 0 },
+          { color: "#2e1065", position: 100 },
+        ],
+        angle: 180,
+      }),
+      // Colors
+      textColor:      "#ddd6fe",
+      headingColor:   "#faf5ff",
+      linkColor:      "#c4b5fd",
+      linkHoverColor: "#a855f7",
+      accentColor:    "#a855f7",
+      borderColor:    "#6b21a8",
+      dividerColor:   "rgba(255,255,255,0.07)",
+      dividerStyle:   "solid",
+      // Typography
+      headingSize:   "sm",
+      headingWeight: "semibold",
+      headingStyle:  "normal",
+      // Social
+      showSocialLinks:   true,
+      socialPosition:    "brand",
+      socialShape:       "circle",
+      socialSize:        "md",
+      socialColorMode:   "brand",
+      socialHoverEffect: "scale",
+      socialBgStyle:     "subtle",
+      // Links
+      linkPrefix:      "chevron",
+      linkHoverEffect: "color",
+      // Trust badges
+      showTrustBadges: true,
+      trustBadges: JSON.stringify([
+        { style: "pill", text: "Top Rated", iconName: "star",   image: "", alt: "Top Rated" },
+        { style: "pill", text: "Secure",    iconName: "shield", image: "", alt: "Secure"    },
+        { style: "pill", text: "Fast",      iconName: "zap",    image: "", alt: "Fast"      },
+      ]),
+      // Bottom bar
+      bottomBarEnabled: true,
+      bottomBarLayout:  "split",
+      copyrightText:    `© ${new Date().getFullYear()} EventPlanner Pro. All rights reserved.`,
+      showDisclaimer:   false,
+      bottomLinks: JSON.stringify([
+        { label: "Privacy Policy",   url: "/privacy"       },
+        { label: "Terms of Service", url: "/terms"         },
+        { label: "Cookie Policy",    url: "/cookies"       },
+        { label: "Accessibility",    url: "/accessibility" },
+      ]),
+      // Spacing & border
+      paddingTop:      64,
+      paddingBottom:   40,
+      topBorderStyle:  "solid",
+      topBorderHeight: 1,
+      topBorderColor:  "#6b21a8",
+      shadow:          "none",
+      showContactInfo: false,
+      contactPosition: "brand",
+      containerWidth:  "full",
+    },
+  });
+  console.log("  + Footer config created");
 
-    footerConfig = await prisma.footerConfig.create({
-      data: {
-        name: "Default Footer",
-        isActive: true,
-        layout: "MULTI_COLUMN",
-        columns: 6,
-        newsletterEnabled: true,
-        newsletterTitle: "Wedding planning tips, delivered to your inbox",
-        newsletterSubtitle: "Monthly inspiration, vendor spotlights, and planning guides",
-        showSocialLinks: true,
-        socialPosition: "brand",
-        showContactInfo: true,
-        contactPosition: "brand",
-        bottomBarEnabled: true,
-        showDisclaimer: true,
-        disclaimerText: "Ceremoney is a wedding planning technology platform, not a professional services provider. Vendor listings do not constitute endorsements. Always review vendor contracts carefully.",
-        showTrustBadges: false,
-        paddingTop: 48,
-        paddingBottom: 32,
-      },
-    });
-    console.log("  + Footer config created");
+  // Widget 1: Brand (column 1)
+  await prisma.footerWidget.create({
+    data: {
+      footerId:  footerConfig.id,
+      type:      "BRAND",
+      title:     null,
+      showTitle: false,
+      column:    1,
+      sortOrder: 0,
+      content: JSON.stringify({
+        showTagline: true,
+        tagline:     "The all-in-one platform for stress-free event planning. Plan, manage, and celebrate life's special moments with confidence.",
+        showContact: false,
+        showSocial:  false,
+      }),
+    },
+  });
 
-    // Widget 1: Brand (column 1–2)
-    await prisma.footerWidget.create({
-      data: {
-        footerId: footerConfig.id,
-        type: "BRAND",
-        title: "Ceremoney",
-        showTitle: false,
-        column: 1,
-        sortOrder: 0,
-      },
-    });
+  // Widget 2: Social (column 1, below Brand)
+  await prisma.footerWidget.create({
+    data: {
+      footerId:  footerConfig.id,
+      type:      "SOCIAL",
+      title:     null,
+      showTitle: false,
+      column:    1,
+      sortOrder: 1,
+    },
+  });
 
-    // Widget 2: Plans (column 3)
-    const plansWidget = await prisma.footerWidget.create({
-      data: {
-        footerId: footerConfig.id,
-        type: "LINKS",
-        title: "Plans",
-        showTitle: true,
-        column: 3,
-        sortOrder: 0,
-      },
-    });
-
-    const planLinks = [
-      { label: "Basic (Free)",    url: "/services/plan-basic" },
-      { label: "Premium",        url: "/services/plan-premium" },
-      { label: "Elite",          url: "/services/plan-elite" },
-      { label: "White-Label",    url: "/services/plan-white-label" },
-      { label: "Pricing",        url: "/pricing" },
-      { label: "Compare Plans",  url: "/pricing#compare" },
-    ];
-
-    for (let i = 0; i < planLinks.length; i++) {
-      await prisma.menuItem.create({
-        data: {
-          label: planLinks[i].label,
-          url: planLinks[i].url,
-          footerWidgetId: plansWidget.id,
-          sortOrder: i,
-          target: "_self",
-          isVisible: true,
-          visibleOnMobile: true,
-        },
-      });
-    }
-
-    // Widget 3: Features (column 4)
-    const featuresWidget = await prisma.footerWidget.create({
-      data: {
-        footerId: footerConfig.id,
-        type: "LINKS",
-        title: "Features",
-        showTitle: true,
-        column: 4,
-        sortOrder: 0,
-      },
-    });
-
-    const featureLinks = [
-      { label: "Event Website",        url: "/features/event-website" },
-      { label: "Guest List",           url: "/features/guest-list" },
-      { label: "Seating Chart",        url: "/features/seating-chart" },
-      { label: "RSVP Forms",           url: "/features/rsvp" },
-      { label: "Digital Stationery",   url: "/features/stationery" },
-      { label: "QR Check-in",          url: "/features/qr-checkin" },
-    ];
-
-    for (let i = 0; i < featureLinks.length; i++) {
-      await prisma.menuItem.create({
-        data: {
-          label: featureLinks[i].label,
-          url: featureLinks[i].url,
-          footerWidgetId: featuresWidget.id,
-          sortOrder: i,
-          target: "_self",
-          isVisible: true,
-          visibleOnMobile: true,
-        },
-      });
-    }
-
-    // Widget 4: Company (column 5)
-    const companyWidget = await prisma.footerWidget.create({
-      data: {
-        footerId: footerConfig.id,
-        type: "LINKS",
-        title: "Company",
-        showTitle: true,
-        column: 5,
-        sortOrder: 0,
-      },
-    });
-
-    const companyLinks = [
-      { label: "About Us",      url: "/about" },
-      { label: "Blog",          url: "/blog" },
-      { label: "FAQs",          url: "/faq" },
-      { label: "Contact",       url: "/contact" },
-      { label: "Testimonials",  url: "/testimonials" },
-      { label: "For Vendors",   url: "/vendors/list-your-business" },
-    ];
-
-    for (let i = 0; i < companyLinks.length; i++) {
-      await prisma.menuItem.create({
-        data: {
-          label: companyLinks[i].label,
-          url: companyLinks[i].url,
-          footerWidgetId: companyWidget.id,
-          sortOrder: i,
-          target: "_self",
-          isVisible: true,
-          visibleOnMobile: true,
-        },
-      });
-    }
-
-    // Widget 5: Legal (column 6)
-    const legalWidget = await prisma.footerWidget.create({
-      data: {
-        footerId: footerConfig.id,
-        type: "LINKS",
-        title: "Legal",
-        showTitle: true,
-        column: 6,
-        sortOrder: 0,
-      },
-    });
-
-    const legalLinks = [
-      { label: "Privacy Policy",   url: "/privacy" },
-      { label: "Terms of Service", url: "/terms" },
-      { label: "Refund Policy",    url: "/refund-policy" },
-      { label: "Disclaimer",       url: "/disclaimer" },
-    ];
-
-    for (let i = 0; i < legalLinks.length; i++) {
-      await prisma.menuItem.create({
-        data: {
-          label: legalLinks[i].label,
-          url: legalLinks[i].url,
-          footerWidgetId: legalWidget.id,
-          sortOrder: i,
-          target: "_self",
-          isVisible: true,
-          visibleOnMobile: true,
-        },
-      });
-    }
-
-    console.log("  + Footer widgets created");
+  // Widget 3: For Planners (column 2)
+  const plannersWidget = await prisma.footerWidget.create({
+    data: {
+      footerId:    footerConfig.id,
+      type:        "LINKS",
+      title:       "For Planners",
+      showTitle:   true,
+      headingIcon: "users",
+      column:      2,
+      sortOrder:   0,
+    },
+  });
+  const plannerLinks = [
+    { label: "Event Dashboard",   url: "/dashboard",    sortOrder: 0 },
+    { label: "Guest Management",  url: "/#guests",      sortOrder: 1 },
+    { label: "Budget Tracker",    url: "/#budget",      sortOrder: 2 },
+    { label: "Checklist",         url: "/#checklist",   sortOrder: 3 },
+    { label: "Invitations",       url: "/#invitations", sortOrder: 4 },
+  ];
+  for (const link of plannerLinks) {
+    await prisma.menuItem.create({ data: { ...link, footerWidgetId: plannersWidget.id, isVisible: true, visibleOnMobile: true, target: "_self" } });
   }
+
+  // Widget 4: For Vendors (column 3)
+  const vendorsWidget = await prisma.footerWidget.create({
+    data: {
+      footerId:    footerConfig.id,
+      type:        "LINKS",
+      title:       "For Vendors",
+      showTitle:   true,
+      headingIcon: "building",
+      column:      3,
+      sortOrder:   0,
+    },
+  });
+  const vendorLinks = [
+    { label: "List Business",   url: "/vendors/register", sortOrder: 0 },
+    { label: "Dashboard",       url: "/vendor/dashboard", sortOrder: 1 },
+    { label: "Pricing",         url: "/pricing",          sortOrder: 2 },
+    { label: "Success Stories", url: "/blog?tag=success", sortOrder: 3 },
+    { label: "Resources",       url: "/blog",             sortOrder: 4 },
+  ];
+  for (const link of vendorLinks) {
+    await prisma.menuItem.create({ data: { ...link, footerWidgetId: vendorsWidget.id, isVisible: true, visibleOnMobile: true, target: "_self" } });
+  }
+
+  // Widget 5: Event Types (column 4)
+  const eventWidget = await prisma.footerWidget.create({
+    data: {
+      footerId:    footerConfig.id,
+      type:        "LINKS",
+      title:       "Event Types",
+      showTitle:   true,
+      headingIcon: "party-popper",
+      column:      4,
+      sortOrder:   0,
+    },
+  });
+  const eventLinks = [
+    { label: "Weddings",     url: "/planner/create?type=wedding",   sortOrder: 0 },
+    { label: "Birthdays",    url: "/planner/create?type=party",     sortOrder: 1 },
+    { label: "Corporate",    url: "/planner/create?type=corporate", sortOrder: 2 },
+    { label: "Baby Showers", url: "/planner/create?type=baptism",   sortOrder: 3 },
+    { label: "Conferences",  url: "/planner/create?type=corporate", sortOrder: 4 },
+  ];
+  for (const link of eventLinks) {
+    await prisma.menuItem.create({ data: { ...link, footerWidgetId: eventWidget.id, isVisible: true, visibleOnMobile: true, target: "_self" } });
+  }
+
+  // Widget 6: Support (column 5)
+  const supportWidget = await prisma.footerWidget.create({
+    data: {
+      footerId:    footerConfig.id,
+      type:        "LINKS",
+      title:       "Support",
+      showTitle:   true,
+      headingIcon: "headphones",
+      column:      5,
+      sortOrder:   0,
+    },
+  });
+  const supportLinks = [
+    { label: "Help Center", url: "/help",      sortOrder: 0 },
+    { label: "Contact Us",  url: "/contact",   sortOrder: 1 },
+    { label: "FAQs",        url: "/faq",       sortOrder: 2 },
+    { label: "Blog",        url: "/blog",      sortOrder: 3 },
+    { label: "Community",   url: "/community", sortOrder: 4 },
+  ];
+  for (const link of supportLinks) {
+    await prisma.menuItem.create({ data: { ...link, footerWidgetId: supportWidget.id, isVisible: true, visibleOnMobile: true, target: "_self" } });
+  }
+
+  console.log("  + Footer widgets created (5-col dark gradient design)");
 
   // Create brand color settings (preserved as-is per instructions)
   console.log("\nCreating brand color settings...");
