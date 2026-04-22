@@ -1523,66 +1523,6 @@ async function main() {
       }
     }
   }
-  // Set Ideas megaMenuContent (ideas-grid)
-  const ideasItem = await prisma.menuItem.findFirst({ where: { headerId: headerConfig.id, label: "Ideas" } });
-  if (ideasItem) {
-    await prisma.menuItem.update({
-      where: { id: ideasItem.id },
-      data: {
-        megaMenuContent: {
-          type: "ideas-grid",
-          columns: [
-            {
-              title: "Decor",
-              items: [
-                { name: "Wedding Themes",      icon: "palette",      href: "/ideas/themes" },
-                { name: "Floral Arrangements", icon: "flower-2",     href: "/ideas/flowers" },
-                { name: "Table Settings",      icon: "layout-grid",  href: "/ideas/tables" },
-                { name: "Ceremony Decor",      icon: "star",         href: "/ideas/ceremony" },
-              ],
-            },
-            {
-              title: "Celebration",
-              items: [
-                { name: "Reception Ideas",  icon: "party-popper", href: "/ideas/reception" },
-                { name: "Wedding Favors",   icon: "gift",         href: "/ideas/favors" },
-                { name: "Photo Ideas",      icon: "camera",       href: "/ideas/photos" },
-                { name: "Honeymoon Ideas",  icon: "plane",        href: "/ideas/honeymoon" },
-              ],
-            },
-          ],
-        },
-      },
-    });
-  }
-  // Set Wedding Website megaMenuContent (featured-gallery)
-  const weddingWebsiteItem = await prisma.menuItem.findFirst({ where: { headerId: headerConfig.id, label: "Wedding Website" } });
-  if (weddingWebsiteItem) {
-    await prisma.menuItem.update({
-      where: { id: weddingWebsiteItem.id },
-      data: {
-        megaMenuContent: {
-          type: "featured-gallery",
-          sectionHeader: "Set up your website in minutes",
-          topLinks: [
-            { name: "Create your wedding website", href: "/wedding-website/create" },
-            { name: "Find a couple website", href: "/wedding-website/search" },
-          ],
-          gallery: {
-            title: "CHOOSE YOUR DESIGN",
-            aspectRatio: "portrait",
-            items: [
-              { name: "Minimal Leaves",    imageUrl: "", href: "/wedding-website/themes/minimal-leaves" },
-              { name: "Painted Desert",    imageUrl: "", href: "/wedding-website/themes/painted-desert" },
-              { name: "Classic Garden",    imageUrl: "", href: "/wedding-website/themes/classic-garden" },
-              { name: "Formal Ampersand", imageUrl: "", href: "/wedding-website/themes/formal-ampersand" },
-            ],
-          },
-          footerLink: { text: "See all website designs", href: "/wedding-website/themes" },
-        },
-      },
-    });
-  }
   console.log("  + Header menu items created");
 
   // Create Footer Configuration
@@ -2016,6 +1956,143 @@ async function main() {
     });
 
     console.log(`  ✓ Wedding theme activated (${result.imported.pages} pages, ${result.imported.menuItems} menu items imported)`);
+  }
+
+  // ─── Set megaMenuContent (must run AFTER importThemeData) ────────────────────
+  console.log("\nSetting mega menu content...");
+  const megaMenuUpdates: { label: string; content: object }[] = [
+    {
+      label: "Ideas",
+      content: {
+        type: "ideas-grid",
+        header: "Get wedding inspiration",
+        columns: [
+          { title: "", items: [
+            { name: "Planning Basics",    icon: "", href: "/ideas/planning" },
+            { name: "Wedding Ceremony",   icon: "", href: "/ideas/ceremony" },
+            { name: "Wedding Reception",  icon: "", href: "/ideas/reception" },
+            { name: "Wedding Services",   icon: "", href: "/ideas/services" },
+            { name: "Wedding Fashion",    icon: "", href: "/ideas/fashion" },
+          ]},
+          { title: "", items: [
+            { name: "Hair & Makeup",        icon: "", href: "/ideas/hair-makeup" },
+            { name: "Destination Weddings", icon: "", href: "/ideas/destination" },
+            { name: "Married Life",         icon: "", href: "/ideas/married-life" },
+            { name: "Events & Parties",     icon: "", href: "/ideas/events" },
+            { name: "Family & Friends",     icon: "", href: "/ideas/family" },
+          ]},
+        ],
+      },
+    },
+    {
+      label: "Forums",
+      content: {
+        type: "forums-grid",
+        header: "Forums",
+        groups: [{ title: "", items: [
+          { name: "Planning",                  icon: "calendar",       href: "/forum/planning" },
+          { name: "Ceremony",                  icon: "heart",          href: "/forum/ceremony" },
+          { name: "Style and Décor",           icon: "sparkles",       href: "/forum/style-decor" },
+          { name: "Wedding Attire",            icon: "shirt",          href: "/forum/wedding-attire" },
+          { name: "Married Life",              icon: "heart-handshake", href: "/forum/married-life" },
+          { name: "Fitness and Health",        icon: "activity",       href: "/forum/fitness" },
+          { name: "Honeymoon",                 icon: "plane",          href: "/forum/honeymoon" },
+          { name: "Family and Relationships",  icon: "users",          href: "/forum/family" },
+          { name: "Hair and Makeup",           icon: "palette",        href: "/forum/hair-makeup" },
+          { name: "Community Conversations",   icon: "message-circle", href: "/forum/community" },
+          { name: "Etiquette and Advice",      icon: "help-circle",    href: "/forum/etiquette" },
+          { name: "Registry",                  icon: "gift",           href: "/forum/registry" },
+          { name: "Reception",                 icon: "music",          href: "/forum/reception" },
+          { name: "Parties and Events",        icon: "party-popper",   href: "/forum/parties" },
+          { name: "Local Groups",              icon: "map-pin",        href: "/forum/local" },
+        ]}],
+        sidebar: {
+          title: "STAY UP TO DATE",
+          items: [
+            { name: "Discussions",     icon: "message-square", href: "/forum" },
+            { name: "Photos",          icon: "image",          href: "/forum/photos" },
+            { name: "Videos",          icon: "video",          href: "/forum/videos" },
+            { name: "Users",           icon: "user",           href: "/forum/users" },
+            { name: "Account support", icon: "help-circle",    href: "/forum/support" },
+          ],
+        },
+      },
+    },
+    {
+      label: "Dresses",
+      content: {
+        type: "featured-gallery",
+        sectionHeader: "The latest in bridal fashion",
+        topLinks: [
+          { name: "Bride", icon: "shirt", href: "/dresses/bridal" },
+        ],
+        gallery: {
+          title: "FEATURED DESIGNERS",
+          aspectRatio: "portrait",
+          items: [
+            { name: "Essense of Australia",       imageUrl: "https://images.unsplash.com/photo-1594552072238-b8a33785b6cd?w=400&h=533&fit=crop",  href: "/dresses/essense-of-australia" },
+            { name: "Martina Liana Luxe",         imageUrl: "https://images.unsplash.com/photo-1643185539104-3622eb1f2c1d?w=400&h=533&fit=crop",  href: "/dresses/martina-liana-luxe" },
+            { name: "Le Blanc by Casablanca Bridal", imageUrl: "https://images.unsplash.com/photo-1519741497674-611481863552?w=400&h=533&fit=crop", href: "/dresses/casablanca-bridal" },
+            { name: "Martina Liana",              imageUrl: "https://images.unsplash.com/photo-1537633552985-df8429e8048b?w=400&h=533&fit=crop",  href: "/dresses/martina-liana" },
+            { name: "Justin Alexander",           imageUrl: "https://images.unsplash.com/photo-1511285560929-80b456fea0bc?w=400&h=533&fit=crop",  href: "/dresses/justin-alexander" },
+          ],
+        },
+      },
+    },
+    {
+      label: "Registry",
+      content: {
+        type: "featured-gallery",
+        sectionHeader: "Create your all-in-one registry",
+        topLinks: [
+          { name: "Start Your Registry",  icon: "", href: "/registry/start" },
+          { name: "Registry Retailers",   icon: "", href: "/registry/retailers" },
+          { name: "Registry Ideas",       icon: "", href: "/registry/ideas" },
+        ],
+        featuredLink: { text: "Find a couple's Registry", href: "/registry/find" },
+        gallery: {
+          title: "FEATURED REGISTRY BRANDS",
+          aspectRatio: "square",
+          items: [
+            { name: "Amazon",        imageUrl: "", href: "/registry/amazon" },
+            { name: "Crate & Barrel", imageUrl: "", href: "/registry/crate-barrel" },
+            { name: "Target",        imageUrl: "", href: "/registry/target" },
+            { name: "Traveler's Joy", imageUrl: "", href: "/registry/travelers-joy" },
+          ],
+        },
+        footerLink: { text: "See all registry brands", href: "/registry/brands" },
+      },
+    },
+    {
+      label: "Wedding Website",
+      content: {
+        type: "featured-gallery",
+        sectionHeader: "Set up your website in minutes",
+        topLinks: [
+          { name: "Create your wedding website", href: "/wedding-website/create" },
+          { name: "Find a couple website",       href: "/wedding-website/search" },
+        ],
+        gallery: {
+          title: "CHOOSE YOUR DESIGN",
+          aspectRatio: "portrait",
+          items: [
+            { name: "Minimal Leaves",    imageUrl: "", href: "/wedding-website/themes/minimal-leaves" },
+            { name: "Painted Desert",    imageUrl: "", href: "/wedding-website/themes/painted-desert" },
+            { name: "Classic Garden",    imageUrl: "", href: "/wedding-website/themes/classic-garden" },
+            { name: "Formal Ampersand",  imageUrl: "", href: "/wedding-website/themes/formal-ampersand" },
+          ],
+        },
+        footerLink: { text: "See all website designs", href: "/wedding-website/themes" },
+      },
+    },
+  ];
+
+  for (const { label, content } of megaMenuUpdates) {
+    const item = await prisma.menuItem.findFirst({ where: { label, parentId: null } });
+    if (item) {
+      await prisma.menuItem.update({ where: { id: item.id }, data: { megaMenuContent: content } });
+      console.log(`  ✓ ${label} megaMenuContent set`);
+    }
   }
 
   console.log("\nSeeding completed!");
