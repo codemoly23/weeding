@@ -9,10 +9,11 @@ import {
   Sparkles, Target, AlertTriangle, BookOpen,
   Heart, Wine, Trees, Waves, Home, PartyPopper, Briefcase, Hotel,
   Ship, Gem, Plane, Store, Users, Globe, LayoutGrid, Ticket,
-  Camera, Music, Utensils, Flower2, Star, Search,
+  Camera, Music, Utensils, UtensilsCrossed, Flower2, Star, Search,
   Disc, Palette, ClipboardList, Video, User,
   Calendar, Shirt, HeartHandshake, Activity, MessageCircle,
   HelpCircle, Gift, MessageSquare, Image, Settings,
+  Car, Ring,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import type { NavigationProps, ServiceCategory } from "../types";
@@ -105,6 +106,138 @@ interface MegaMenuProps {
 }
 
 function MegaMenuDropdown({ categories, columns, richContent }: MegaMenuProps) {
+  // Forums grid layout
+  if (richContent && typeof richContent === "object" && (richContent as Record<string, unknown>).type === "forums-grid") {
+    const content = richContent as {
+      type: string;
+      header?: string;
+      groups?: { title: string; items: { name: string; icon?: string; href: string }[] }[];
+      sidebar?: { title: string; items: { name: string; icon?: string; href: string }[] };
+    };
+    const hasSidebar = content.sidebar && content.sidebar.items && content.sidebar.items.length > 0;
+    return (
+      <div className="absolute left-1/2 top-full -translate-x-1/2 pt-2">
+        <div className="rounded-xl border bg-white p-6 shadow-xl w-[900px]">
+          {content.header && (
+            <h4 className="mb-4 text-base font-bold text-foreground">{content.header}</h4>
+          )}
+          <div className="flex gap-6">
+            {/* Groups */}
+            <div className="flex-1 space-y-5">
+              {content.groups?.map((group, gi) => (
+                <div key={gi}>
+                  {group.title && (
+                    <p className="mb-2 text-xs font-bold uppercase tracking-wider text-muted-foreground">
+                      {group.title}
+                    </p>
+                  )}
+                  <div className="grid grid-cols-3 gap-1">
+                    {group.items.map((item) => {
+                      const ItemIcon = getIcon(item.icon);
+                      return (
+                        <Link
+                          key={item.name}
+                          href={item.href}
+                          className="flex items-center gap-2.5 rounded-lg px-3 py-2 text-sm text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
+                        >
+                          <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-muted">
+                            <ItemIcon className="h-4 w-4 text-foreground" />
+                          </span>
+                          <span>{item.name}</span>
+                        </Link>
+                      );
+                    })}
+                  </div>
+                </div>
+              ))}
+            </div>
+            {/* Sidebar */}
+            {hasSidebar && (
+              <div className="w-52 shrink-0 border-l border-border pl-6">
+                <p className="mb-3 text-xs font-bold uppercase tracking-wider text-muted-foreground">
+                  {content.sidebar!.title}
+                </p>
+                <ul className="space-y-1">
+                  {content.sidebar!.items.map((item) => {
+                    const ItemIcon = getIcon(item.icon);
+                    return (
+                      <li key={item.name}>
+                        <Link
+                          href={item.href}
+                          className="flex items-center gap-2.5 rounded-lg px-2 py-1.5 text-sm text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
+                        >
+                          <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-muted">
+                            <ItemIcon className="h-3.5 w-3.5 text-foreground" />
+                          </span>
+                          <span>{item.name}</span>
+                        </Link>
+                      </li>
+                    );
+                  })}
+                </ul>
+              </div>
+            )}
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  // Ideas grid layout — 2-column layout (text-only or with icons)
+  if (richContent && typeof richContent === "object" && (richContent as Record<string, unknown>).type === "ideas-grid") {
+    const content = richContent as {
+      type: string;
+      header?: string;
+      columns: { title: string; items: { name: string; icon?: string; href: string }[] }[];
+    };
+    // Detect if any item in any column has an icon
+    const hasIcons = content.columns?.some((col) => col.items?.some((i) => i.icon));
+    return (
+      <div className="absolute left-1/2 top-full -translate-x-1/2 pt-2">
+        <div className="rounded-xl border bg-white p-6 shadow-xl w-[520px]">
+          {content.header && (
+            <h4 className="mb-4 text-base font-bold text-foreground">{content.header}</h4>
+          )}
+          <div className="grid grid-cols-2 gap-8">
+            {content.columns?.map((col, ci) => (
+              <div key={ci}>
+                {col.title && (
+                  <p className="mb-3 text-xs font-semibold uppercase tracking-wide text-muted-foreground">
+                    {col.title}
+                  </p>
+                )}
+                <ul className="space-y-0.5">
+                  {col.items?.map((item) => (
+                    <li key={item.name}>
+                      {hasIcons ? (
+                        <Link
+                          href={item.href}
+                          className="flex items-center gap-3 rounded-lg px-2 py-1.5 text-sm text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
+                        >
+                          <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-md border border-border bg-background">
+                            {(() => { const I = getIcon(item.icon); return <I className="h-4 w-4 text-foreground/70" />; })()}
+                          </span>
+                          <span>{item.name}</span>
+                        </Link>
+                      ) : (
+                        <Link
+                          href={item.href}
+                          className="block rounded-lg px-2 py-1.5 text-sm text-muted-foreground transition-colors hover:text-foreground"
+                        >
+                          {item.name}
+                        </Link>
+                      )}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   // Featured gallery layout (Dresses-style)
   if (richContent && typeof richContent === "object" && (richContent as Record<string, unknown>).type === "featured-gallery") {
     const content = richContent as {
@@ -121,14 +254,14 @@ function MegaMenuDropdown({ categories, columns, richContent }: MegaMenuProps) {
     };
     return (
       <div className="absolute left-1/2 top-full -translate-x-1/2 pt-2">
-        <div className="rounded-xl border bg-white p-6 shadow-xl w-[900px]">
+        <div className="rounded-xl border bg-white p-6 shadow-xl" style={{ width: "clamp(380px, 50vw, 900px)" }}>
           {content.sectionHeader && (
-            <h4 className="mb-4 text-base font-semibold text-foreground">
+            <h4 className="mb-4 text-base font-bold text-foreground">
               {content.sectionHeader}
             </h4>
           )}
           {content.topLinks && content.topLinks.length > 0 && (
-            <div className="mb-4 flex flex-wrap gap-2">
+            <div className="mb-3 flex flex-col gap-0.5">
               {content.topLinks.map((link) => {
                 if (link.icon) {
                   const LinkIcon = getIcon(link.icon);
@@ -136,7 +269,7 @@ function MegaMenuDropdown({ categories, columns, richContent }: MegaMenuProps) {
                     <Link
                       key={link.name}
                       href={link.href}
-                      className="flex items-center gap-2 rounded-lg px-3 py-1.5 text-sm text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
+                      className="flex items-center gap-2 rounded-lg px-2 py-1.5 text-sm text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
                     >
                       <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-muted">
                         <LinkIcon className="h-4 w-4 text-foreground" />
@@ -149,7 +282,7 @@ function MegaMenuDropdown({ categories, columns, richContent }: MegaMenuProps) {
                   <Link
                     key={link.name}
                     href={link.href}
-                    className="text-sm text-muted-foreground hover:text-foreground transition-colors py-1 block"
+                    className="block rounded-lg px-2 py-1.5 text-sm text-muted-foreground transition-colors hover:text-foreground"
                   >
                     {link.name}
                   </Link>
@@ -183,7 +316,7 @@ function MegaMenuDropdown({ categories, columns, richContent }: MegaMenuProps) {
                         href={item.href}
                         className="group flex flex-col gap-2"
                       >
-                        <div className={`overflow-hidden rounded-lg bg-muted ${aspectClass}`}>
+                        <div className={`overflow-hidden rounded-lg border border-border bg-muted ${aspectClass}`}>
                           {item.imageUrl ? (
                             <img
                               src={item.imageUrl}
@@ -191,8 +324,8 @@ function MegaMenuDropdown({ categories, columns, richContent }: MegaMenuProps) {
                               className="h-full w-full object-cover transition-transform group-hover:scale-105"
                             />
                           ) : (
-                            <div className="h-full w-full flex items-center justify-center text-muted-foreground text-xs">
-                              No image
+                            <div className="h-full w-full flex items-center justify-center p-2 text-center text-xs font-semibold text-foreground/60 leading-tight">
+                              {item.name}
                             </div>
                           )}
                         </div>

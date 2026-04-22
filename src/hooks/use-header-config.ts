@@ -55,7 +55,7 @@ export function useHeaderConfig(): UseHeaderConfigResult {
       setError(null);
 
       const response = await fetch("/api/header", {
-        next: { revalidate: 60 }, // Cache for 60 seconds
+        cache: "no-store",
       });
 
       if (!response.ok) {

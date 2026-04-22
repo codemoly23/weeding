@@ -111,6 +111,42 @@ export default function MenuBuilderPage() {
   const [galleryItem, setGalleryItem] = useState<MenuItem | null>(null);
   const [gallerySaving, setGallerySaving] = useState(false);
 
+  // Forums grid editor
+  const [forumsDialogOpen, setForumsDialogOpen] = useState(false);
+  const [forumsItem, setForumsItem] = useState<MenuItem | null>(null);
+  const [forumsSaving, setForumsSaving] = useState(false);
+
+  // Ideas grid editor
+  const [ideasDialogOpen, setIdeasDialogOpen] = useState(false);
+  const [ideasItem, setIdeasItem] = useState<MenuItem | null>(null);
+  const [ideasSaving, setIdeasSaving] = useState(false);
+
+  interface ForumLink { name: string; icon: string; href: string }
+  interface ForumGroup { title: string; items: ForumLink[] }
+  interface ForumsContent {
+    header: string;
+    groups: ForumGroup[];
+    sidebar: { title: string; items: ForumLink[] };
+  }
+  const defaultForumsContent: ForumsContent = {
+    header: "Forums",
+    groups: [{ title: "", items: [{ name: "", icon: "", href: "" }] }],
+    sidebar: { title: "STAY UP TO DATE", items: [] },
+  };
+  const [forumsContent, setForumsContent] = useState<ForumsContent>(defaultForumsContent);
+
+  interface IdeasLink { name: string; icon: string; href: string }
+  interface IdeasColumn { title: string; items: IdeasLink[] }
+  interface IdeasContent { header: string; columns: IdeasColumn[] }
+  const defaultIdeasContent: IdeasContent = {
+    header: "Get wedding inspiration",
+    columns: [
+      { title: "", items: [{ name: "", icon: "", href: "" }] },
+      { title: "", items: [{ name: "", icon: "", href: "" }] },
+    ],
+  };
+  const [ideasContent, setIdeasContent] = useState<IdeasContent>(defaultIdeasContent);
+
   interface GalleryDesigner {
     name: string;
     imageUrl: string;
@@ -319,6 +355,94 @@ export default function MenuBuilderPage() {
       toast.error("Failed to save gallery content");
     } finally {
       setGallerySaving(false);
+    }
+  }
+
+  function openForumsEditor(item: MenuItem) {
+    setForumsItem(item);
+    const raw = (item as MenuItem & { megaMenuContent?: unknown }).megaMenuContent as {
+      header?: string;
+      groups?: { title: string; items: { name: string; icon: string; href: string }[] }[];
+      sidebar?: { title: string; items: { name: string; icon: string; href: string }[] };
+    } | null | undefined;
+    setForumsContent({
+      header: raw?.header ?? "Forums",
+      groups: raw?.groups ?? [{ title: "", items: [{ name: "", icon: "", href: "" }] }],
+      sidebar: raw?.sidebar ?? { title: "STAY UP TO DATE", items: [] },
+    });
+    setForumsDialogOpen(true);
+  }
+
+  function openIdeasEditor(item: MenuItem) {
+    setIdeasItem(item);
+    const raw = (item as MenuItem & { megaMenuContent?: unknown }).megaMenuContent as {
+      header?: string;
+      columns?: { title: string; items: { name: string; icon: string; href: string }[] }[];
+    } | null | undefined;
+    setIdeasContent({
+      header: raw?.header ?? "Get wedding inspiration",
+      columns: raw?.columns ?? defaultIdeasContent.columns,
+    });
+    setIdeasDialogOpen(true);
+  }
+
+  async function handleIdeasSave() {
+    if (!ideasItem) return;
+    setIdeasSaving(true);
+    try {
+      const megaMenuContent = {
+        type: "ideas-grid",
+        header: ideasContent.header,
+        columns: ideasContent.columns.map((col) => ({
+          title: col.title,
+          items: col.items.filter((i) => i.name),
+        })),
+      };
+      const res = await fetch("/api/admin/header/menu", {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ id: ideasItem.id, megaMenuContent }),
+      });
+      if (!res.ok) throw new Error("Failed to save");
+      toast.success("Ideas menu saved");
+      setIdeasDialogOpen(false);
+      fetchData();
+    } catch {
+      toast.error("Failed to save ideas menu");
+    } finally {
+      setIdeasSaving(false);
+    }
+  }
+
+  async function handleForumsSave() {
+    if (!forumsItem) return;
+    setForumsSaving(true);
+    try {
+      const megaMenuContent = {
+        type: "forums-grid",
+        header: forumsContent.header,
+        groups: forumsContent.groups.map((g) => ({
+          title: g.title,
+          items: g.items.filter((i) => i.name),
+        })),
+        sidebar: {
+          title: forumsContent.sidebar.title,
+          items: forumsContent.sidebar.items.filter((i) => i.name),
+        },
+      };
+      const res = await fetch("/api/admin/header/menu", {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ id: forumsItem.id, megaMenuContent }),
+      });
+      if (!res.ok) throw new Error("Failed to save");
+      toast.success("Forums menu saved");
+      setForumsDialogOpen(false);
+      fetchData();
+    } catch {
+      toast.error("Failed to save forums menu");
+    } finally {
+      setForumsSaving(false);
     }
   }
 
@@ -616,8 +740,8 @@ export default function MenuBuilderPage() {
             >
               <Trash2 className="h-4 w-4" />
             </Button>
-            {/* Gallery content editor - only for Dresses, Registry, Wedding Website */}
-            {["Dresses", "Registry", "Wedding Website"].includes(item.label) && !item.parentId && (
+            {/* Gallery content editor - only for Dresses, Registry */}
+            {["Dresses", "Registry"].includes(item.label) && !item.parentId && (
               <Button
                 variant="ghost"
                 size="icon"
@@ -626,6 +750,30 @@ export default function MenuBuilderPage() {
                 onClick={() => openGalleryEditor(item)}
               >
                 <Images className="h-4 w-4" />
+              </Button>
+            )}
+            {/* Forums grid editor */}
+            {item.label === "Forums" && !item.parentId && (
+              <Button
+                variant="ghost"
+                size="icon"
+                className="h-7 w-7 text-emerald-600"
+                title="Edit Forums Menu"
+                onClick={() => openForumsEditor(item)}
+              >
+                <LayoutGrid className="h-4 w-4" />
+              </Button>
+            )}
+            {/* Ideas / Wedding Website grid editor */}
+            {(item.label === "Ideas" || item.label === "Wedding Website") && !item.parentId && (
+              <Button
+                variant="ghost"
+                size="icon"
+                className="h-7 w-7 text-violet-600"
+                title="Edit Two-Column Menu"
+                onClick={() => openIdeasEditor(item)}
+              >
+                <LayoutGrid className="h-4 w-4" />
               </Button>
             )}
             {/* Add child item */}
@@ -1213,6 +1361,330 @@ export default function MenuBuilderPage() {
             <Button onClick={handleGallerySave} disabled={gallerySaving}>
               {gallerySaving ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <Save className="mr-2 h-4 w-4" />}
               Save Gallery
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      {/* Forums Grid Editor */}
+      <Dialog open={forumsDialogOpen} onOpenChange={setForumsDialogOpen}>
+        <DialogContent className="max-w-2xl w-full max-h-[90vh] overflow-y-auto overflow-x-hidden">
+          <DialogHeader>
+            <DialogTitle>Forums Menu — {forumsItem?.label}</DialogTitle>
+          </DialogHeader>
+          <div className="space-y-6">
+            {/* Header title */}
+            <div className="space-y-2">
+              <Label className="text-base">Header Title</Label>
+              <Input
+                placeholder="e.g. Forums"
+                value={forumsContent.header}
+                onChange={(e) => setForumsContent({ ...forumsContent, header: e.target.value })}
+              />
+            </div>
+            {/* Groups */}
+            <div className="space-y-4">
+              <div className="flex items-center justify-between">
+                <Label className="text-base">Groups</Label>
+                <Button
+                  type="button"
+                  variant="outline"
+                  size="sm"
+                  onClick={() =>
+                    setForumsContent({
+                      ...forumsContent,
+                      groups: [...forumsContent.groups, { title: "", items: [{ name: "", icon: "", href: "" }] }],
+                    })
+                  }
+                >
+                  <Plus className="mr-1 h-3 w-3" /> Add Group
+                </Button>
+              </div>
+              {forumsContent.groups.map((group, gi) => (
+                <div key={gi} className="rounded-lg border p-4 space-y-3">
+                  <div className="flex items-center gap-2">
+                    <Input
+                      placeholder="Group title (e.g., Community)"
+                      value={group.title}
+                      onChange={(e) => {
+                        const groups = [...forumsContent.groups];
+                        groups[gi] = { ...groups[gi], title: e.target.value };
+                        setForumsContent({ ...forumsContent, groups });
+                      }}
+                    />
+                    <Button
+                      type="button"
+                      variant="ghost"
+                      size="icon"
+                      className="h-9 w-9 shrink-0 text-destructive"
+                      onClick={() =>
+                        setForumsContent({ ...forumsContent, groups: forumsContent.groups.filter((_, i) => i !== gi) })
+                      }
+                    >
+                      <Trash2 className="h-4 w-4" />
+                    </Button>
+                  </div>
+                  <div className="space-y-2">
+                    {group.items.map((item, ii) => (
+                      <div key={ii} className="grid grid-cols-[1fr_1fr_1fr_auto] gap-2 items-center">
+                        <Input
+                          placeholder="Name"
+                          value={item.name}
+                          onChange={(e) => {
+                            const groups = [...forumsContent.groups];
+                            groups[gi].items[ii] = { ...groups[gi].items[ii], name: e.target.value };
+                            setForumsContent({ ...forumsContent, groups });
+                          }}
+                        />
+                        <Input
+                          placeholder="Icon (e.g., calendar)"
+                          value={item.icon}
+                          onChange={(e) => {
+                            const groups = [...forumsContent.groups];
+                            groups[gi].items[ii] = { ...groups[gi].items[ii], icon: e.target.value };
+                            setForumsContent({ ...forumsContent, groups });
+                          }}
+                        />
+                        <Input
+                          placeholder="URL"
+                          value={item.href}
+                          onChange={(e) => {
+                            const groups = [...forumsContent.groups];
+                            groups[gi].items[ii] = { ...groups[gi].items[ii], href: e.target.value };
+                            setForumsContent({ ...forumsContent, groups });
+                          }}
+                        />
+                        <Button
+                          type="button"
+                          variant="ghost"
+                          size="icon"
+                          className="h-9 w-9 text-destructive"
+                          onClick={() => {
+                            const groups = [...forumsContent.groups];
+                            groups[gi].items = groups[gi].items.filter((_, i) => i !== ii);
+                            setForumsContent({ ...forumsContent, groups });
+                          }}
+                        >
+                          <Trash2 className="h-4 w-4" />
+                        </Button>
+                      </div>
+                    ))}
+                    <Button
+                      type="button"
+                      variant="outline"
+                      size="sm"
+                      onClick={() => {
+                        const groups = [...forumsContent.groups];
+                        groups[gi].items = [...groups[gi].items, { name: "", icon: "", href: "" }];
+                        setForumsContent({ ...forumsContent, groups });
+                      }}
+                    >
+                      <Plus className="mr-1 h-3 w-3" /> Add Item
+                    </Button>
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            {/* Sidebar */}
+            <div className="rounded-lg border p-4 space-y-3">
+              <Label className="text-base">Sidebar (e.g., "Stay Up To Date")</Label>
+              <Input
+                placeholder="Sidebar title"
+                value={forumsContent.sidebar.title}
+                onChange={(e) =>
+                  setForumsContent({ ...forumsContent, sidebar: { ...forumsContent.sidebar, title: e.target.value } })
+                }
+              />
+              <div className="space-y-2">
+                {forumsContent.sidebar.items.map((item, ii) => (
+                  <div key={ii} className="grid grid-cols-[1fr_1fr_1fr_auto] gap-2 items-center">
+                    <Input
+                      placeholder="Name"
+                      value={item.name}
+                      onChange={(e) => {
+                        const items = [...forumsContent.sidebar.items];
+                        items[ii] = { ...items[ii], name: e.target.value };
+                        setForumsContent({ ...forumsContent, sidebar: { ...forumsContent.sidebar, items } });
+                      }}
+                    />
+                    <Input
+                      placeholder="Icon (e.g., message-square)"
+                      value={item.icon}
+                      onChange={(e) => {
+                        const items = [...forumsContent.sidebar.items];
+                        items[ii] = { ...items[ii], icon: e.target.value };
+                        setForumsContent({ ...forumsContent, sidebar: { ...forumsContent.sidebar, items } });
+                      }}
+                    />
+                    <Input
+                      placeholder="URL"
+                      value={item.href}
+                      onChange={(e) => {
+                        const items = [...forumsContent.sidebar.items];
+                        items[ii] = { ...items[ii], href: e.target.value };
+                        setForumsContent({ ...forumsContent, sidebar: { ...forumsContent.sidebar, items } });
+                      }}
+                    />
+                    <Button
+                      type="button"
+                      variant="ghost"
+                      size="icon"
+                      className="h-9 w-9 text-destructive"
+                      onClick={() => {
+                        const items = forumsContent.sidebar.items.filter((_, i) => i !== ii);
+                        setForumsContent({ ...forumsContent, sidebar: { ...forumsContent.sidebar, items } });
+                      }}
+                    >
+                      <Trash2 className="h-4 w-4" />
+                    </Button>
+                  </div>
+                ))}
+                <Button
+                  type="button"
+                  variant="outline"
+                  size="sm"
+                  onClick={() =>
+                    setForumsContent({
+                      ...forumsContent,
+                      sidebar: { ...forumsContent.sidebar, items: [...forumsContent.sidebar.items, { name: "", icon: "", href: "" }] },
+                    })
+                  }
+                >
+                  <Plus className="mr-1 h-3 w-3" /> Add Sidebar Item
+                </Button>
+              </div>
+            </div>
+          </div>
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setForumsDialogOpen(false)}>Cancel</Button>
+            <Button onClick={handleForumsSave} disabled={forumsSaving}>
+              {forumsSaving ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <Save className="mr-2 h-4 w-4" />}
+              Save Forums Menu
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      {/* Ideas Grid Editor */}
+      <Dialog open={ideasDialogOpen} onOpenChange={setIdeasDialogOpen}>
+        <DialogContent className="max-w-2xl w-full max-h-[90vh] overflow-y-auto overflow-x-hidden">
+          <DialogHeader>
+            <DialogTitle>{ideasItem?.label} Menu</DialogTitle>
+          </DialogHeader>
+          <div className="space-y-6">
+            {/* Header title */}
+            <div className="space-y-2">
+              <Label className="text-base">Header Title</Label>
+              <Input
+                placeholder="e.g. Get wedding inspiration"
+                value={ideasContent.header}
+                onChange={(e) => setIdeasContent({ ...ideasContent, header: e.target.value })}
+              />
+            </div>
+            {ideasContent.columns.map((col, ci) => (
+              <div key={ci} className="rounded-lg border p-4 space-y-3">
+                <div className="flex items-center gap-2">
+                  <Input
+                    placeholder="Column title (optional)"
+                    value={col.title}
+                    onChange={(e) => {
+                      const columns = [...ideasContent.columns];
+                      columns[ci] = { ...columns[ci], title: e.target.value };
+                      setIdeasContent({ ...ideasContent, columns });
+                    }}
+                  />
+                  <Button
+                    type="button"
+                    variant="ghost"
+                    size="icon"
+                    className="h-9 w-9 shrink-0 text-destructive"
+                    onClick={() =>
+                      setIdeasContent({ ...ideasContent, columns: ideasContent.columns.filter((_, i) => i !== ci) })
+                    }
+                  >
+                    <Trash2 className="h-4 w-4" />
+                  </Button>
+                </div>
+                <div className="space-y-2">
+                  {col.items.map((item, ii) => (
+                    <div key={ii} className="grid grid-cols-[1fr_1fr_1fr_auto] gap-2 items-center">
+                      <Input
+                        placeholder="Name"
+                        value={item.name}
+                        onChange={(e) => {
+                          const columns = [...ideasContent.columns];
+                          columns[ci].items[ii] = { ...columns[ci].items[ii], name: e.target.value };
+                          setIdeasContent({ ...ideasContent, columns });
+                        }}
+                      />
+                      <Input
+                        placeholder="Icon (e.g., palette)"
+                        value={item.icon}
+                        onChange={(e) => {
+                          const columns = [...ideasContent.columns];
+                          columns[ci].items[ii] = { ...columns[ci].items[ii], icon: e.target.value };
+                          setIdeasContent({ ...ideasContent, columns });
+                        }}
+                      />
+                      <Input
+                        placeholder="URL"
+                        value={item.href}
+                        onChange={(e) => {
+                          const columns = [...ideasContent.columns];
+                          columns[ci].items[ii] = { ...columns[ci].items[ii], href: e.target.value };
+                          setIdeasContent({ ...ideasContent, columns });
+                        }}
+                      />
+                      <Button
+                        type="button"
+                        variant="ghost"
+                        size="icon"
+                        className="h-9 w-9 text-destructive"
+                        onClick={() => {
+                          const columns = [...ideasContent.columns];
+                          columns[ci].items = columns[ci].items.filter((_, i) => i !== ii);
+                          setIdeasContent({ ...ideasContent, columns });
+                        }}
+                      >
+                        <Trash2 className="h-4 w-4" />
+                      </Button>
+                    </div>
+                  ))}
+                  <Button
+                    type="button"
+                    variant="outline"
+                    size="sm"
+                    onClick={() => {
+                      const columns = [...ideasContent.columns];
+                      columns[ci].items = [...columns[ci].items, { name: "", icon: "", href: "" }];
+                      setIdeasContent({ ...ideasContent, columns });
+                    }}
+                  >
+                    <Plus className="mr-1 h-3 w-3" /> Add Item
+                  </Button>
+                </div>
+              </div>
+            ))}
+            <Button
+              type="button"
+              variant="outline"
+              size="sm"
+              onClick={() =>
+                setIdeasContent({
+                  ...ideasContent,
+                  columns: [...ideasContent.columns, { title: "", items: [{ name: "", icon: "", href: "" }] }],
+                })
+              }
+            >
+              <Plus className="mr-1 h-3 w-3" /> Add Column
+            </Button>
+          </div>
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setIdeasDialogOpen(false)}>Cancel</Button>
+            <Button onClick={handleIdeasSave} disabled={ideasSaving}>
+              {ideasSaving ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <Save className="mr-2 h-4 w-4" />}
+              Save Ideas Menu
             </Button>
           </DialogFooter>
         </DialogContent>

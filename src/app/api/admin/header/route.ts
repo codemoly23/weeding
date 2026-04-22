@@ -32,6 +32,15 @@ const headerConfigSchema = z.object({
   height: z.number().default(64),
 });
 
+// Safely parse a JSON field that may already be an object or a JSON string
+function safeJsonParse<T>(value: unknown, fallback: T): T {
+  if (value === null || value === undefined) return fallback;
+  if (typeof value === "string") {
+    try { return JSON.parse(value) as T; } catch { return fallback; }
+  }
+  return value as T;
+}
+
 // GET /api/admin/header - Get all header configs
 export async function GET() {
   try {
@@ -66,10 +75,10 @@ export async function GET() {
     return NextResponse.json({
       headers: headers.map((h) => ({
         ...h,
-        ctaButtons: h.ctaButtons ? JSON.parse(h.ctaButtons as string) : [],
-        topBarContent: h.topBarContent ? JSON.parse(h.topBarContent as string) : null,
-        loginStyle: h.loginStyle ? JSON.parse(h.loginStyle as string) : null,
-        registerStyle: h.registerStyle ? JSON.parse(h.registerStyle as string) : null,
+        ctaButtons: safeJsonParse(h.ctaButtons, []),
+        topBarContent: safeJsonParse(h.topBarContent, null),
+        loginStyle: safeJsonParse(h.loginStyle, null),
+        registerStyle: safeJsonParse(h.registerStyle, null),
         menuItemsCount: h._count.menuItems,
       })),
       total: headers.length,

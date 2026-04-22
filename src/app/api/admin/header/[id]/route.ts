@@ -2,6 +2,14 @@ import { NextRequest, NextResponse } from "next/server";
 import prisma from "@/lib/db";
 import { checkAdminAccess, authError } from "@/lib/admin-auth";
 
+function safeJsonParse<T>(value: unknown, fallback: T): T {
+  if (value === null || value === undefined) return fallback;
+  if (typeof value === "string") {
+    try { return JSON.parse(value) as T; } catch { return fallback; }
+  }
+  return value as T;
+}
+
 // GET /api/admin/header/[id] - Get specific header config
 export async function GET(
   request: NextRequest,
@@ -44,8 +52,8 @@ export async function GET(
 
     return NextResponse.json({
       ...header,
-      ctaButtons: header.ctaButtons ? JSON.parse(header.ctaButtons as string) : [],
-      topBarContent: header.topBarContent ? JSON.parse(header.topBarContent as string) : null,
+      ctaButtons: safeJsonParse(header.ctaButtons, []),
+      topBarContent: safeJsonParse(header.topBarContent, null),
     });
   } catch (error) {
     console.error("Error fetching header:", error);

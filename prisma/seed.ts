@@ -1357,9 +1357,12 @@ async function main() {
     { label: "Home",     url: "/",         sortOrder: 0 },
     { label: "Features", url: "/features", sortOrder: 1, isMegaMenu: true, megaMenuColumns: 3 },
     { label: "Pricing",  url: "/pricing",  sortOrder: 2 },
-    { label: "Vendors",  url: "/vendors",  sortOrder: 3 },
-    { label: "Blog",     url: "/blog",     sortOrder: 4 },
-    { label: "Contact",  url: "/contact",  sortOrder: 5 },
+    { label: "Vendors",  url: "/vendors",  sortOrder: 3, isMegaMenu: true },
+    { label: "Forums",   url: "/forum",    sortOrder: 4, isMegaMenu: true },
+    { label: "Dresses",  url: "/dresses",  sortOrder: 5, isMegaMenu: true, megaMenuColumns: 3 },
+    { label: "Ideas",    url: "/ideas",    sortOrder: 6, isMegaMenu: true },
+    { label: "Blog",     url: "/blog",     sortOrder: 7 },
+    { label: "Contact",  url: "/contact",  sortOrder: 8 },
   ];
 
   for (const item of menuItems) {
@@ -1374,18 +1377,18 @@ async function main() {
     });
 
     if (item.isMegaMenu) {
-      const megaCategories = [
+      const featuresMegaCategories = [
         {
           categoryName: "Planning Tools",
           categoryIcon: "calendar-heart",
           categoryDesc: "Everything to organise your day",
           children: [
-            { label: "Event Website",          url: "/features/event-website",     badge: "Free" },
-            { label: "Guest List Management",  url: "/features/guest-list" },
-            { label: "Seating Chart Builder",  url: "/features/seating-chart",     badge: "Popular" },
-            { label: "Wedding Checklist",      url: "/features/checklist",         badge: "Free" },
-            { label: "Budget Tracker",         url: "/features/budget" },
-            { label: "Day-of Timeline",        url: "/features/timeline" },
+            { label: "Event Website",          url: "/features/event-website",     badge: "Free",       icon: null },
+            { label: "Guest List Management",  url: "/features/guest-list",                             icon: null },
+            { label: "Seating Chart Builder",  url: "/features/seating-chart",     badge: "Popular",    icon: null },
+            { label: "Wedding Checklist",      url: "/features/checklist",         badge: "Free",       icon: null },
+            { label: "Budget Tracker",         url: "/features/budget",                                 icon: null },
+            { label: "Day-of Timeline",        url: "/features/timeline",                               icon: null },
           ],
         },
         {
@@ -1393,11 +1396,11 @@ async function main() {
           categoryIcon: "users",
           categoryDesc: "Delight your guests from invite to check-in",
           children: [
-            { label: "RSVP Collection",        url: "/features/rsvp",              badge: "Free" },
-            { label: "Advanced RSVP Forms",    url: "/features/advanced-rsvp",     badge: "Elite" },
-            { label: "Digital Stationery",     url: "/features/stationery" },
-            { label: "QR Entrance Check-in",   url: "/features/qr-checkin",        badge: "Elite" },
-            { label: "Custom Domain",          url: "/features/custom-domain" },
+            { label: "RSVP Collection",        url: "/features/rsvp",              badge: "Free",       icon: null },
+            { label: "Advanced RSVP Forms",    url: "/features/advanced-rsvp",     badge: "Elite",      icon: null },
+            { label: "Digital Stationery",     url: "/features/stationery",                             icon: null },
+            { label: "QR Entrance Check-in",   url: "/features/qr-checkin",        badge: "Elite",      icon: null },
+            { label: "Custom Domain",          url: "/features/custom-domain",                          icon: null },
           ],
         },
         {
@@ -1405,14 +1408,82 @@ async function main() {
           categoryIcon: "briefcase",
           categoryDesc: "Tools built for wedding planners",
           children: [
-            { label: "White-Label Platform",   url: "/services/plan-white-label",  badge: "Enterprise" },
-            { label: "Multi-Event Management", url: "/features/multi-event" },
-            { label: "Client Portals",         url: "/features/client-portals" },
-            { label: "Vendor Directory Listing", url: "/services/vendor-verified-listing" },
-            { label: "API Access",             url: "/features/api" },
+            { label: "White-Label Platform",   url: "/services/plan-white-label",  badge: "Enterprise", icon: null },
+            { label: "Multi-Event Management", url: "/features/multi-event",                            icon: null },
+            { label: "Client Portals",         url: "/features/client-portals",                        icon: null },
+            { label: "Vendor Directory Listing", url: "/services/vendor-verified-listing",              icon: null },
+            { label: "API Access",             url: "/features/api",                                    icon: null },
           ],
         },
       ];
+      const vendorsMegaCategories = [
+        {
+          categoryName: "Start hiring your vendors",
+          categoryIcon: "store",
+          categoryDesc: "Browse all vendor categories",
+          children: [
+            { label: "Photography",      url: "/vendors?category=PHOTOGRAPHY",     icon: "camera" },
+            { label: "DJs",              url: "/vendors?category=MUSIC_DJ",        icon: "disc" },
+            { label: "Hair & Makeup",    url: "/vendors?category=HAIR_MAKEUP",     icon: "sparkles" },
+            { label: "Wedding Planning", url: "/vendors?category=WEDDING_PLANNER", icon: "clipboard-list" },
+            { label: "Catering",         url: "/vendors?category=CATERING",        icon: "utensils" },
+            { label: "Flowers",          url: "/vendors?category=FLOWERS",         icon: "flower-2" },
+            { label: "Videography",      url: "/vendors?category=VIDEOGRAPHY",     icon: "video" },
+            { label: "Officiants",       url: "/vendors?category=OTHER",           icon: "user" },
+          ],
+        },
+        {
+          categoryName: "COMPLETE YOUR WEDDING TEAM",
+          categoryIcon: "users",
+          categoryDesc: "More vendor categories",
+          children: [
+            { label: "Event Rentals",    url: "/vendors?category=DECORATIONS",     icon: null },
+            { label: "Photo Booths",     url: "/vendors?category=PHOTOGRAPHY",     icon: null },
+            { label: "Bands",            url: "/vendors?category=MUSIC_DJ",        icon: null },
+            { label: "Dress & Attire",   url: "/vendors?category=DRESS_ATTIRE",    icon: null },
+            { label: "Cakes",            url: "/vendors?category=CATERING",        icon: null },
+            { label: "Transportation",   url: "/vendors?category=TRANSPORTATION",  icon: null },
+            { label: "Ceremony Music",   url: "/vendors?category=MUSIC_DJ",        icon: null },
+            { label: "Lighting & Decor", url: "/vendors?category=DECORATIONS",     icon: null },
+            { label: "Invitations",      url: "/vendors",                          icon: null },
+            { label: "Travel Agents",    url: "/vendors",                          icon: null },
+            { label: "Jewelry",          url: "/vendors?category=RINGS",           icon: null },
+            { label: "Favors & Gifts",   url: "/vendors",                          icon: null },
+            { label: "Deals",            url: "/vendors",                          icon: null },
+          ],
+        },
+      ];
+      if (item.label === "Ideas" || item.label === "Forums") continue;
+      const dressesMegaCategories = [
+        {
+          categoryName: "Bridal", categoryIcon: "shirt", categoryDesc: "Wedding dresses & bridal party",
+          children: [
+            { label: "Bridal Gowns",        url: "/dresses/bridal-gowns",  icon: "shirt" },
+            { label: "Bridesmaid Dresses",  url: "/dresses/bridesmaid",    icon: "users" },
+            { label: "Mother of the Bride", url: "/dresses/mother-bride",  icon: "heart" },
+            { label: "Flower Girl Dresses", url: "/dresses/flower-girl",   icon: "flower-2" },
+          ],
+        },
+        {
+          categoryName: "Groom", categoryIcon: "briefcase", categoryDesc: "Suits, tuxedos & groom attire",
+          children: [
+            { label: "Suits & Tuxedos",  url: "/dresses/suits-tuxedos", icon: "briefcase" },
+            { label: "Groomsmen Attire", url: "/dresses/groomsmen",     icon: "users" },
+          ],
+        },
+        {
+          categoryName: "Accessories", categoryIcon: "gem", categoryDesc: "Jewelry, shoes & headpieces",
+          children: [
+            { label: "Jewelry",            url: "/dresses/jewelry", icon: "gem" },
+            { label: "Shoes",              url: "/dresses/shoes",   icon: "package" },
+            { label: "Veils & Headpieces", url: "/dresses/veils",   icon: "sparkles" },
+          ],
+        },
+      ];
+      const megaCategories =
+        item.label === "Vendors"  ? vendorsMegaCategories  :
+        item.label === "Dresses"  ? dressesMegaCategories  :
+        featuresMegaCategories;
 
       for (let i = 0; i < megaCategories.length; i++) {
         const cat = megaCategories[i];
@@ -1438,9 +1509,10 @@ async function main() {
             data: {
               label: child.label,
               url: child.url,
+              icon: child.icon || null,
               headerId: headerConfig.id,
               parentId: categoryMenuItem.id,
-              badge: child.badge || null,
+              badge: (child as { badge?: string }).badge || null,
               sortOrder: j,
               target: "_self",
               isVisible: true,
@@ -1450,6 +1522,66 @@ async function main() {
         }
       }
     }
+  }
+  // Set Ideas megaMenuContent (ideas-grid)
+  const ideasItem = await prisma.menuItem.findFirst({ where: { headerId: headerConfig.id, label: "Ideas" } });
+  if (ideasItem) {
+    await prisma.menuItem.update({
+      where: { id: ideasItem.id },
+      data: {
+        megaMenuContent: {
+          type: "ideas-grid",
+          columns: [
+            {
+              title: "Decor",
+              items: [
+                { name: "Wedding Themes",      icon: "palette",      href: "/ideas/themes" },
+                { name: "Floral Arrangements", icon: "flower-2",     href: "/ideas/flowers" },
+                { name: "Table Settings",      icon: "layout-grid",  href: "/ideas/tables" },
+                { name: "Ceremony Decor",      icon: "star",         href: "/ideas/ceremony" },
+              ],
+            },
+            {
+              title: "Celebration",
+              items: [
+                { name: "Reception Ideas",  icon: "party-popper", href: "/ideas/reception" },
+                { name: "Wedding Favors",   icon: "gift",         href: "/ideas/favors" },
+                { name: "Photo Ideas",      icon: "camera",       href: "/ideas/photos" },
+                { name: "Honeymoon Ideas",  icon: "plane",        href: "/ideas/honeymoon" },
+              ],
+            },
+          ],
+        },
+      },
+    });
+  }
+  // Set Wedding Website megaMenuContent (featured-gallery)
+  const weddingWebsiteItem = await prisma.menuItem.findFirst({ where: { headerId: headerConfig.id, label: "Wedding Website" } });
+  if (weddingWebsiteItem) {
+    await prisma.menuItem.update({
+      where: { id: weddingWebsiteItem.id },
+      data: {
+        megaMenuContent: {
+          type: "featured-gallery",
+          sectionHeader: "Set up your website in minutes",
+          topLinks: [
+            { name: "Create your wedding website", href: "/wedding-website/create" },
+            { name: "Find a couple website", href: "/wedding-website/search" },
+          ],
+          gallery: {
+            title: "CHOOSE YOUR DESIGN",
+            aspectRatio: "portrait",
+            items: [
+              { name: "Minimal Leaves",    imageUrl: "", href: "/wedding-website/themes/minimal-leaves" },
+              { name: "Painted Desert",    imageUrl: "", href: "/wedding-website/themes/painted-desert" },
+              { name: "Classic Garden",    imageUrl: "", href: "/wedding-website/themes/classic-garden" },
+              { name: "Formal Ampersand", imageUrl: "", href: "/wedding-website/themes/formal-ampersand" },
+            ],
+          },
+          footerLink: { text: "See all website designs", href: "/wedding-website/themes" },
+        },
+      },
+    });
   }
   console.log("  + Header menu items created");
 

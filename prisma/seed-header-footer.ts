@@ -56,10 +56,12 @@ async function seedHeaderFooter() {
   const menuItems = [
     { label: "Home", url: "/", sortOrder: 0 },
     { label: "Features", url: "/#features", sortOrder: 1, isMegaMenu: true },
-    { label: "Vendors", url: "/vendors", sortOrder: 2 },
-    { label: "Pricing", url: "/pricing", sortOrder: 3 },
-    { label: "Blog", url: "/blog", sortOrder: 4 },
-    { label: "Contact", url: "/contact", sortOrder: 5 },
+    { label: "Vendors", url: "/vendors", sortOrder: 2, isMegaMenu: true },
+    { label: "Forums", url: "/forum", sortOrder: 3, isMegaMenu: true },
+    { label: "Ideas", url: "/ideas", sortOrder: 4, isMegaMenu: true },
+    { label: "Pricing", url: "/pricing", sortOrder: 5 },
+    { label: "Blog", url: "/blog", sortOrder: 6 },
+    { label: "Contact", url: "/contact", sortOrder: 7 },
   ];
 
   for (const item of menuItems) {
@@ -162,6 +164,204 @@ async function seedHeaderFooter() {
       }
       console.log(`      → Added ${category.items.length} items`);
     }
+  }
+
+  // Mega menu under Vendors
+  const vendorsMenuItem = await prisma.menuItem.findFirst({
+    where: { headerId: header.id, label: "Vendors" },
+  });
+
+  if (vendorsMenuItem) {
+    const vendorMegaMenuData = [
+      {
+        categoryName: "Start hiring your vendors",
+        categoryIcon: "store",
+        categoryDesc: "Browse all vendor categories",
+        sortOrder: 0,
+        items: [
+          { label: "Photography",     url: "/vendors?category=PHOTOGRAPHY",    icon: "camera",         sortOrder: 0 },
+          { label: "DJs",             url: "/vendors?category=MUSIC_DJ",       icon: "disc",           sortOrder: 1 },
+          { label: "Hair & Makeup",   url: "/vendors?category=HAIR_MAKEUP",    icon: "sparkles",       sortOrder: 2 },
+          { label: "Wedding Planning",url: "/vendors?category=WEDDING_PLANNER",icon: "clipboard-list", sortOrder: 3 },
+          { label: "Catering",        url: "/vendors?category=CATERING",       icon: "utensils",       sortOrder: 4 },
+          { label: "Flowers",         url: "/vendors?category=FLOWERS",        icon: "flower-2",       sortOrder: 5 },
+          { label: "Videography",     url: "/vendors?category=VIDEOGRAPHY",    icon: "video",          sortOrder: 6 },
+          { label: "Officiants",      url: "/vendors?category=OTHER",          icon: "user",           sortOrder: 7 },
+        ],
+      },
+      {
+        categoryName: "COMPLETE YOUR WEDDING TEAM",
+        categoryIcon: "users",
+        categoryDesc: "More vendor categories",
+        sortOrder: 1,
+        items: [
+          { label: "Event Rentals",   url: "/vendors?category=DECORATIONS",    icon: "", sortOrder: 0 },
+          { label: "Photo Booths",    url: "/vendors?category=PHOTOGRAPHY",    icon: "", sortOrder: 1 },
+          { label: "Bands",           url: "/vendors?category=MUSIC_DJ",       icon: "", sortOrder: 2 },
+          { label: "Dress & Attire",  url: "/vendors?category=DRESS_ATTIRE",   icon: "", sortOrder: 3 },
+          { label: "Cakes",           url: "/vendors?category=CATERING",       icon: "", sortOrder: 4 },
+          { label: "Transportation",  url: "/vendors?category=TRANSPORTATION", icon: "", sortOrder: 5 },
+          { label: "Ceremony Music",  url: "/vendors?category=MUSIC_DJ",       icon: "", sortOrder: 6 },
+          { label: "Lighting & Decor",url: "/vendors?category=DECORATIONS",    icon: "", sortOrder: 7 },
+          { label: "Invitations",     url: "/vendors",                         icon: "", sortOrder: 8 },
+          { label: "Travel Agents",   url: "/vendors",                         icon: "", sortOrder: 9 },
+          { label: "Jewelry",         url: "/vendors?category=RINGS",          icon: "", sortOrder: 10 },
+          { label: "Favors & Gifts",  url: "/vendors",                         icon: "", sortOrder: 11 },
+          { label: "Deals",           url: "/vendors",                         icon: "", sortOrder: 12 },
+        ],
+      },
+    ];
+
+    for (const category of vendorMegaMenuData) {
+      const categoryItem = await prisma.menuItem.create({
+        data: {
+          label: category.categoryName,
+          categoryName: category.categoryName,
+          categoryIcon: category.categoryIcon,
+          categoryDesc: category.categoryDesc,
+          parentId: vendorsMenuItem.id,
+          headerId: header.id,
+          sortOrder: category.sortOrder,
+          isVisible: true,
+        },
+      });
+      console.log(`   ✓ Created vendor category: ${category.categoryName}`);
+
+      for (const item of category.items) {
+        await prisma.menuItem.create({
+          data: {
+            label: item.label,
+            url: item.url,
+            icon: item.icon,
+            parentId: categoryItem.id,
+            headerId: header.id,
+            sortOrder: item.sortOrder,
+            isVisible: true,
+          },
+        });
+      }
+      console.log(`      → Added ${category.items.length} items`);
+    }
+  }
+
+  // Forums megaMenuContent (forums-grid rich content)
+  const forumsMenuItem = await prisma.menuItem.findFirst({
+    where: { headerId: header.id, label: "Forums" },
+  });
+
+  if (forumsMenuItem) {
+    await prisma.menuItem.update({
+      where: { id: forumsMenuItem.id },
+      data: {
+        megaMenuContent: {
+          type: "forums-grid",
+          header: "Forums",
+          groups: [
+            {
+              title: "",
+              items: [
+                { name: "Planning",                 href: "/forum/planning",       icon: "calendar" },
+                { name: "Ceremony",                 href: "/forum/ceremony",       icon: "heart" },
+                { name: "Style and Décor",          href: "/forum/style-decor",   icon: "sparkles" },
+                { name: "Wedding Attire",           href: "/forum/wedding-attire", icon: "shirt" },
+                { name: "Married Life",             href: "/forum/married-life",  icon: "heart-handshake" },
+                { name: "Fitness and Health",       href: "/forum/fitness",       icon: "activity" },
+                { name: "Honeymoon",                href: "/forum/honeymoon",     icon: "plane" },
+                { name: "Family and Relationships", href: "/forum/family",        icon: "users" },
+                { name: "Hair and Makeup",          href: "/forum/hair-makeup",   icon: "palette" },
+                { name: "Community Conversations",  href: "/forum/community",     icon: "message-circle" },
+                { name: "Etiquette and Advice",     href: "/forum/etiquette",     icon: "help-circle" },
+                { name: "Registry",                 href: "/forum/registry",      icon: "gift" },
+                { name: "Reception",                href: "/forum/reception",     icon: "music" },
+                { name: "Parties and Events",       href: "/forum/parties",       icon: "party-popper" },
+                { name: "Local Groups",             href: "/forum/local",         icon: "map-pin" },
+              ],
+            },
+          ],
+          sidebar: {
+            title: "STAY UP TO DATE",
+            items: [
+              { name: "Discussions",     href: "/forum",          icon: "message-square" },
+              { name: "Photos",          href: "/forum/photos",   icon: "image" },
+              { name: "Videos",          href: "/forum/videos",   icon: "video" },
+              { name: "Users",           href: "/forum/users",    icon: "user" },
+              { name: "Account support", href: "/forum/support",  icon: "help-circle" },
+            ],
+          },
+        },
+      },
+    });
+    console.log("   ✓ Forums megaMenuContent set");
+  }
+
+  // Ideas megaMenuContent (ideas-grid rich content)
+  const ideasMenuItem = await prisma.menuItem.findFirst({
+    where: { headerId: header.id, label: "Ideas" },
+  });
+
+  if (ideasMenuItem) {
+    await prisma.menuItem.update({
+      where: { id: ideasMenuItem.id },
+      data: {
+        megaMenuContent: {
+          type: "ideas-grid",
+          columns: [
+            {
+              title: "Decor",
+              items: [
+                { name: "Wedding Themes",     icon: "palette",      href: "/ideas/themes" },
+                { name: "Floral Arrangements", icon: "flower-2",     href: "/ideas/flowers" },
+                { name: "Table Settings",      icon: "layout-grid",  href: "/ideas/tables" },
+                { name: "Ceremony Decor",      icon: "star",         href: "/ideas/ceremony" },
+              ],
+            },
+            {
+              title: "Celebration",
+              items: [
+                { name: "Reception Ideas",  icon: "party-popper", href: "/ideas/reception" },
+                { name: "Wedding Favors",   icon: "gift",         href: "/ideas/favors" },
+                { name: "Photo Ideas",      icon: "camera",       href: "/ideas/photos" },
+                { name: "Honeymoon Ideas",  icon: "plane",        href: "/ideas/honeymoon" },
+              ],
+            },
+          ],
+        },
+      },
+    });
+    console.log("   ✓ Ideas megaMenuContent set");
+  }
+
+  // Wedding Website megaMenuContent (featured-gallery rich content)
+  const weddingWebsiteMenuItem = await prisma.menuItem.findFirst({
+    where: { headerId: header.id, label: "Wedding Website" },
+  });
+
+  if (weddingWebsiteMenuItem) {
+    await prisma.menuItem.update({
+      where: { id: weddingWebsiteMenuItem.id },
+      data: {
+        megaMenuContent: {
+          type: "featured-gallery",
+          sectionHeader: "Set up your website in minutes",
+          topLinks: [
+            { name: "Create your wedding website", href: "/wedding-website/create" },
+            { name: "Find a couple website", href: "/wedding-website/search" },
+          ],
+          gallery: {
+            title: "CHOOSE YOUR DESIGN",
+            aspectRatio: "portrait",
+            items: [
+              { name: "Minimal Leaves",    imageUrl: "", href: "/wedding-website/themes/minimal-leaves" },
+              { name: "Painted Desert",    imageUrl: "", href: "/wedding-website/themes/painted-desert" },
+              { name: "Classic Garden",    imageUrl: "", href: "/wedding-website/themes/classic-garden" },
+              { name: "Formal Ampersand", imageUrl: "", href: "/wedding-website/themes/formal-ampersand" },
+            ],
+          },
+          footerLink: { text: "See all website designs", href: "/wedding-website/themes" },
+        },
+      },
+    });
+    console.log("   ✓ Wedding Website megaMenuContent set");
   }
 
   // ==========================================
