@@ -1,6 +1,6 @@
 {
   "version": "1.0",
-  "exportedAt": "2026-04-22T05:08:10.141Z",
+  "exportedAt": "2026-04-22T05:36:03.132Z",
   "colorPalette": {
     "light": {
       "background": "#FDFAF7",
@@ -2516,7 +2516,19 @@
     "searchEnabled": false,
     "mobileBreakpoint": 1024,
     "height": 72,
-    "ctaButtons": "[{\"text\":\"Start Planning Free\",\"url\":\"/register\",\"style\":{\"bgColor\":\"#BE6B8B\",\"textColor\":\"#ffffff\",\"borderRadius\":8,\"borderWidth\":0,\"hoverEffect\":\"darken\"}}]"
+    "ctaButtons": [
+      {
+        "text": "Start Planning Free",
+        "url": "/register",
+        "style": {
+          "bgColor": "#BE6B8B",
+          "textColor": "#ffffff",
+          "borderRadius": 8,
+          "borderWidth": 0,
+          "hoverEffect": "darken"
+        }
+      }
+    ]
   },
   "menuItems": [
     {
@@ -3332,51 +3344,13 @@
               "visibleOnMobile": true,
               "megaMenuColumns": 4,
               "icon": "Search"
-            }
-          ]
-        },
-        {
-          "label": "Categories",
-          "sortOrder": 1,
-          "isVisible": true,
-          "visibleOnMobile": true,
-          "megaMenuColumns": 4,
-          "children": [
-            {
-              "label": "Home & Kitchen",
-              "url": "/registry/home",
-              "sortOrder": 0,
-              "isVisible": true,
-              "visibleOnMobile": true,
-              "megaMenuColumns": 4,
-              "icon": "Home"
             },
             {
-              "label": "Travel Fund",
-              "url": "/registry/travel",
+              "label": "Categories",
               "sortOrder": 1,
               "isVisible": true,
               "visibleOnMobile": true,
-              "megaMenuColumns": 4,
-              "icon": "Plane"
-            },
-            {
-              "label": "Cash Fund",
-              "url": "/registry/cash",
-              "sortOrder": 2,
-              "isVisible": true,
-              "visibleOnMobile": true,
-              "megaMenuColumns": 4,
-              "icon": "Banknote"
-            },
-            {
-              "label": "Experiences",
-              "url": "/registry/experiences",
-              "sortOrder": 3,
-              "isVisible": true,
-              "visibleOnMobile": true,
-              "megaMenuColumns": 4,
-              "icon": "Sparkles"
+              "megaMenuColumns": 4
             }
           ]
         }
@@ -3495,7 +3469,6 @@
       "angle": 180
     },
     "bgPatternOpacity": 0.1,
-    "bgImageOverlay": "rgba(0,0,0,0.5)",
     "textColor": "#ddd6fe",
     "headingColor": "#faf5ff",
     "linkColor": "#c4b5fd",
@@ -3577,10 +3550,10 @@
       "column": 1,
       "sortOrder": 0,
       "content": {
-        "showTagline": true,
         "tagline": "The all-in-one platform for stress-free event planning. Plan, manage, and celebrate life's special moments with confidence.",
+        "showSocial": false,
         "showContact": false,
-        "showSocial": false
+        "showTagline": true
       },
       "links": []
     },
