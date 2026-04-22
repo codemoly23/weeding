@@ -2095,6 +2095,116 @@ async function main() {
     }
   }
 
+  // ─── Search Options (Place / Service / Location) ──────────────────────────
+  console.log("\nCreating search options...");
+
+  const placeOptions = [
+    { name: "Wedding Venues",       icon: "Heart",           sortOrder: 1  },
+    { name: "Mansions",             icon: "Home",            sortOrder: 2  },
+    { name: "Hotels",               icon: "Hotel",           sortOrder: 3  },
+    { name: "Restaurants",          icon: "UtensilsCrossed", sortOrder: 4  },
+    { name: "Boats",                icon: "Sailboat",        sortOrder: 5  },
+    { name: "Beaches",              icon: "Waves",           sortOrder: 6  },
+    { name: "Rooftops & Lofts",     icon: "Building2",       sortOrder: 7  },
+    { name: "Parks",                icon: "TreePine",        sortOrder: 8  },
+    { name: "Wineries & Breweries", icon: "Wine",            sortOrder: 9  },
+    { name: "Barns & Farms",        icon: "Warehouse",       sortOrder: 10 },
+    { name: "Country Clubs",        icon: "Flag",            sortOrder: 11 },
+    { name: "Churches & Temples",   icon: "Church",          sortOrder: 12 },
+    { name: "Museums",              icon: "Landmark",        sortOrder: 13 },
+    { name: "Historic Venues",      icon: "Landmark",        sortOrder: 14 },
+    { name: "Banquet Halls",        icon: "Building",        sortOrder: 15 },
+    { name: "Gardens",              icon: "Leaf",            sortOrder: 16 },
+    { name: "Waterfronts",          icon: "Waves",           sortOrder: 17 },
+  ];
+
+  const serviceOptions = [
+    { name: "Catering",         icon: "UtensilsCrossed", sortOrder: 1  },
+    { name: "Invitations",      icon: "Mail",            sortOrder: 2  },
+    { name: "Favors & Gifts",   icon: "Gift",            sortOrder: 3  },
+    { name: "Photography",      icon: "Camera",          sortOrder: 4  },
+    { name: "Ceremony Music",   icon: "Music",           sortOrder: 5  },
+    { name: "Transportation",   icon: "Car",             sortOrder: 6  },
+    { name: "Flowers",          icon: "Flower2",         sortOrder: 7  },
+    { name: "Dress & Attire",   icon: "Shirt",           sortOrder: 8  },
+    { name: "Wedding Planning", icon: "ClipboardList",   sortOrder: 9  },
+    { name: "Videography",      icon: "Video",           sortOrder: 10 },
+    { name: "Jewelry",          icon: "Gem",             sortOrder: 11 },
+    { name: "Hair & Makeup",    icon: "Sparkles",        sortOrder: 12 },
+    { name: "Travel Agents",    icon: "Plane",           sortOrder: 13 },
+    { name: "Lighting & Decor", icon: "Lightbulb",       sortOrder: 14 },
+    { name: "Cakes",            icon: "Cake",            sortOrder: 15 },
+    { name: "DJs",              icon: "Disc3",           sortOrder: 16 },
+    { name: "Event Rentals",    icon: "Package",         sortOrder: 17 },
+    { name: "Officiants",       icon: "User",            sortOrder: 18 },
+    { name: "Photo Booths",     icon: "Camera",          sortOrder: 19 },
+    { name: "Bands",            icon: "Music",           sortOrder: 20 },
+  ];
+
+  const swedenLocations = [
+    { name: "Stockholm",   sortOrder: 1  },
+    { name: "Gothenburg",  sortOrder: 2  },
+    { name: "Malmö",       sortOrder: 3  },
+    { name: "Uppsala",     sortOrder: 4  },
+    { name: "Västerås",    sortOrder: 5  },
+    { name: "Örebro",      sortOrder: 6  },
+    { name: "Linköping",   sortOrder: 7  },
+    { name: "Helsingborg", sortOrder: 8  },
+    { name: "Jönköping",   sortOrder: 9  },
+    { name: "Norrköping",  sortOrder: 10 },
+  ];
+
+  const internationalLocations = [
+    { name: "London, UK",             sortOrder: 1  },
+    { name: "Paris, France",          sortOrder: 2  },
+    { name: "Berlin, Germany",        sortOrder: 3  },
+    { name: "Amsterdam, Netherlands", sortOrder: 4  },
+    { name: "Copenhagen, Denmark",    sortOrder: 5  },
+    { name: "Oslo, Norway",           sortOrder: 6  },
+    { name: "Helsinki, Finland",      sortOrder: 7  },
+    { name: "Barcelona, Spain",       sortOrder: 8  },
+    { name: "Rome, Italy",            sortOrder: 9  },
+    { name: "Dubai, UAE",             sortOrder: 10 },
+    { name: "New York, USA",          sortOrder: 11 },
+    { name: "Tokyo, Japan",           sortOrder: 12 },
+  ];
+
+  for (const opt of placeOptions) {
+    await prisma.searchOption.upsert({
+      where: { name_type: { name: opt.name, type: "PLACE" } },
+      update: { icon: opt.icon, sortOrder: opt.sortOrder, isActive: true },
+      create: { name: opt.name, type: "PLACE", icon: opt.icon, sortOrder: opt.sortOrder },
+    });
+  }
+  console.log(`  + ${placeOptions.length} Place options`);
+
+  for (const opt of serviceOptions) {
+    await prisma.searchOption.upsert({
+      where: { name_type: { name: opt.name, type: "SERVICE" } },
+      update: { icon: opt.icon, sortOrder: opt.sortOrder, isActive: true },
+      create: { name: opt.name, type: "SERVICE", icon: opt.icon, sortOrder: opt.sortOrder },
+    });
+  }
+  console.log(`  + ${serviceOptions.length} Service options`);
+
+  for (const loc of swedenLocations) {
+    await prisma.searchOption.upsert({
+      where: { name_type: { name: loc.name, type: "LOCATION" } },
+      update: { icon: "MapPin", sortOrder: loc.sortOrder, group: "Sweden", isActive: true },
+      create: { name: loc.name, type: "LOCATION", icon: "MapPin", group: "Sweden", sortOrder: loc.sortOrder },
+    });
+  }
+  console.log(`  + ${swedenLocations.length} Sweden locations`);
+
+  for (const loc of internationalLocations) {
+    await prisma.searchOption.upsert({
+      where: { name_type: { name: loc.name, type: "LOCATION" } },
+      update: { icon: "Globe", sortOrder: loc.sortOrder, group: "International", isActive: true },
+      create: { name: loc.name, type: "LOCATION", icon: "Globe", group: "International", sortOrder: loc.sortOrder },
+    });
+  }
+  console.log(`  + ${internationalLocations.length} International locations`);
+
   console.log("\nSeeding completed!");
 }
 
