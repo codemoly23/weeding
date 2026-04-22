@@ -17,7 +17,58 @@ import {
   ArrowRight,
   ArrowUpRight,
   ExternalLink,
+  ChevronRight,
+  Star,
+  Shield,
+  Zap,
+  Award,
+  CheckCircle,
+  Lock,
+  Trophy,
+  Heart,
+  Users,
+  Building,
+  Building2,
+  PartyPopper,
+  MessageCircle,
+  Store,
+  ShoppingBag,
+  Globe,
+  Tag,
+  Headphones,
+  HelpCircle,
 } from "lucide-react";
+
+// Icon map for footer link column headings
+const HEADING_ICONS: Record<string, React.ComponentType<{ className?: string }>> = {
+  users: Users,
+  building: Building,
+  "building-2": Building2,
+  "party-popper": PartyPopper,
+  "message-circle": MessageCircle,
+  store: Store,
+  "shopping-bag": ShoppingBag,
+  globe: Globe,
+  tag: Tag,
+  headphones: Headphones,
+  "help-circle": HelpCircle,
+  star: Star,
+  heart: Heart,
+  mail: Mail,
+  phone: Phone,
+};
+
+// Icon map for pill-style trust badges
+const PILL_BADGE_ICONS: Record<string, React.ComponentType<{ className?: string }>> = {
+  star: Star,
+  shield: Shield,
+  zap: Zap,
+  award: Award,
+  "check-circle": CheckCircle,
+  lock: Lock,
+  trophy: Trophy,
+  heart: Heart,
+};
 import { useBusinessConfig } from "@/hooks/use-business-config";
 import { useFooterConfig, getWidgetsByColumn, getWidgetLinks } from "@/hooks/use-footer-config";
 import type { FooterWidget, PublicFooterResponse, ButtonCustomStyle } from "@/lib/header-footer/types";
@@ -271,13 +322,32 @@ function EnhancedSocialLinks({
 function TrustBadges({
   badges,
 }: {
-  badges: { image: string; alt: string; url?: string }[];
+  badges: { style?: string; image: string; alt: string; url?: string; text?: string; iconName?: string }[];
 }) {
   if (!badges || badges.length === 0) return null;
 
   return (
-    <div className="flex flex-wrap items-center justify-center gap-4" role="list" aria-label="Trust badges">
+    <div className="flex flex-wrap items-center gap-2" role="list" aria-label="Trust badges">
       {badges.map((badge, index) => {
+        if (badge.style === "pill") {
+          const Icon = badge.iconName ? PILL_BADGE_ICONS[badge.iconName] : null;
+          const pillContent = (
+            <span className="inline-flex items-center gap-1.5 rounded-full border border-current/20 bg-white/8 px-3 py-1.5 text-xs font-medium opacity-75 transition-opacity hover:opacity-100">
+              {Icon && <Icon className="h-3.5 w-3.5 shrink-0" aria-hidden="true" />}
+              {badge.text || badge.alt}
+            </span>
+          );
+          if (badge.url) {
+            return (
+              <a key={index} href={badge.url} target="_blank" rel="noopener noreferrer" role="listitem" className="focus:outline-none focus:ring-2 focus:ring-primary rounded-full">
+                {pillContent}
+              </a>
+            );
+          }
+          return <span key={index} role="listitem">{pillContent}</span>;
+        }
+
+        // Default: image badge
         const badgeImage = (
           // eslint-disable-next-line @next/next/no-img-element
           <img
@@ -286,7 +356,6 @@ function TrustBadges({
             className="h-10 w-auto max-w-25 object-contain opacity-70 transition-opacity hover:opacity-100"
           />
         );
-
         if (badge.url) {
           return (
             <a
@@ -295,12 +364,12 @@ function TrustBadges({
               target="_blank"
               rel="noopener noreferrer"
               className="inline-flex focus:outline-none focus:ring-2 focus:ring-primary"
+              role="listitem"
             >
               {badgeImage}
             </a>
           );
         }
-
         return <span key={index} role="listitem">{badgeImage}</span>;
       })}
     </div>
@@ -499,10 +568,13 @@ function FooterWidgetRenderer({
                 className="h-12 w-auto rounded-lg object-contain"
               />
             ) : (
-              <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-primary">
-                <span className="text-xl font-bold text-primary-foreground">
-                  {businessConfig.logo.text || businessConfig.name.charAt(0)}
-                </span>
+              <div className="flex items-center gap-3">
+                <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-primary">
+                  <span className="text-lg font-bold text-primary-foreground">
+                    {businessConfig.logo.text || businessConfig.name.charAt(0)}
+                  </span>
+                </div>
+                <span className="text-lg font-semibold">{businessConfig.name}</span>
               </div>
             )}
           </Link>
@@ -575,19 +647,27 @@ function FooterWidgetRenderer({
         </div>
       );
 
-    case "LINKS":
+    case "LINKS": {
+      const linkPrefix = footerConfig?.styling?.linkPrefix || "none";
+      const HeadingIcon = widget.headingIcon ? HEADING_ICONS[widget.headingIcon] : null;
       return (
         <nav aria-label={widget.title || "Footer links"}>
           {widget.showTitle && widget.title && (
-            <h3 className={headingClasses}>{widget.title}</h3>
+            <h3 className={cn(headingClasses, "flex items-center gap-2")}>
+              {HeadingIcon && <HeadingIcon className="h-4 w-4 shrink-0 opacity-70" aria-hidden="true" />}
+              {widget.title}
+            </h3>
           )}
           <ul className={widget.showTitle && widget.title ? "mt-4 space-y-3" : "space-y-3"}>
             {links.map((link) => (
               <li key={link.id}>
                 <Link
                   href={link.url}
-                  className={cn("text-sm", linkClasses)}
+                  className={cn("text-sm inline-flex items-center gap-1.5", linkClasses)}
                 >
+                  {linkPrefix === "chevron" && <ChevronRight className="h-3 w-3 shrink-0 opacity-50" aria-hidden="true" />}
+                  {linkPrefix === "arrow" && <ArrowRight className="h-3 w-3 shrink-0 opacity-50" aria-hidden="true" />}
+                  {linkPrefix === "dash" && <span className="opacity-50 leading-none">–</span>}
                   {link.label}
                 </Link>
               </li>
@@ -595,6 +675,7 @@ function FooterWidgetRenderer({
           </ul>
         </nav>
       );
+    }
 
     case "CONTACT":
       return (

@@ -46,6 +46,7 @@ const widgetSchema = z.object({
   ]),
   title: z.string().optional().nullable(),
   showTitle: z.boolean().default(true),
+  headingIcon: z.string().optional().nullable(),
   content: z.any().optional(),
   column: z.number().min(1).max(6).default(1),
   sortOrder: z.number().default(0),

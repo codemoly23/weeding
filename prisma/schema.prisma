@@ -921,6 +921,7 @@ model FooterConfig {
   isActive             Boolean        @default(true)
   layout               FooterLayout   @default(MULTI_COLUMN)
   columns              Int            @default(4)
+  linkPrefix           String         @default("none")
   showSocialLinks      Boolean        @default(true)
   socialPosition       String         @default("brand")
   showContactInfo      Boolean        @default(true)
@@ -1020,6 +1021,7 @@ model FooterWidget {
   type        FooterWidgetType
   title       String?
   showTitle   Boolean          @default(true)
+  headingIcon String?
   content     Json?
   column      Int              @default(1)
   sortOrder   Int              @default(0)

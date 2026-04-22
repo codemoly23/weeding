@@ -369,6 +369,7 @@ const defaultWidgetFormData = {
   type: "LINKS" as FooterWidgetType,
   title: "",
   showTitle: true,
+  headingIcon: "",
   column: 1,
   content: {} as Record<string, unknown>,
   links: [] as WidgetLink[],
@@ -646,6 +647,7 @@ export default function FooterBuilderPage() {
     enableAnimations: false,
     entranceAnimation: "",
     animationDuration: 300,
+    linkPrefix: "none",
     linkHoverEffect: "color",
     topBorderStyle: "none",
     topBorderHeight: 1,
@@ -737,6 +739,7 @@ export default function FooterBuilderPage() {
           enableAnimations: activeFooter.enableAnimations || false,
           entranceAnimation: activeFooter.entranceAnimation || "",
           animationDuration: activeFooter.animationDuration || 300,
+          linkPrefix: activeFooter.linkPrefix || "none",
           linkHoverEffect: activeFooter.linkHoverEffect || "color",
           topBorderStyle: activeFooter.topBorderStyle || "none",
           topBorderHeight: activeFooter.topBorderHeight || 1,
@@ -833,6 +836,7 @@ export default function FooterBuilderPage() {
           enableAnimations: formData.enableAnimations,
           entranceAnimation: formData.entranceAnimation || null,
           animationDuration: formData.animationDuration,
+          linkPrefix: formData.linkPrefix,
           linkHoverEffect: formData.linkHoverEffect,
           topBorderStyle: formData.topBorderStyle,
           topBorderHeight: formData.topBorderHeight,
@@ -899,6 +903,7 @@ export default function FooterBuilderPage() {
       type: widget.type,
       title: widget.title || "",
       showTitle: widget.showTitle,
+      headingIcon: widget.headingIcon || "",
       column: widget.column,
       content: widget.content || {},
       links,
@@ -937,6 +942,7 @@ export default function FooterBuilderPage() {
         type: widgetFormData.type,
         title: widgetFormData.title || null,
         showTitle: widgetFormData.showTitle,
+        headingIcon: widgetFormData.headingIcon || null,
         column: widgetFormData.column,
         content: widgetFormData.content,
         menuItems,
@@ -998,10 +1004,15 @@ export default function FooterBuilderPage() {
   }
 
   // Trust badges functions
-  function addTrustBadge() {
+  function addTrustBadge(style: "image" | "pill" = "pill") {
     setFormData({
       ...formData,
-      trustBadges: [...formData.trustBadges, { image: "", alt: "Trust Badge", url: "" }],
+      trustBadges: [
+        ...formData.trustBadges,
+        style === "pill"
+          ? { style: "pill" as const, image: "", alt: "Trust Badge", text: "", iconName: "shield", url: "" }
+          : { style: "image" as const, image: "", alt: "Trust Badge", url: "" },
+      ],
     });
   }
 
@@ -2220,78 +2231,127 @@ export default function FooterBuilderPage() {
                 <div className="space-y-4">
                   <div className="flex items-center justify-between">
                     <Label>Trust Badges</Label>
-                    <Button variant="outline" size="sm" onClick={addTrustBadge}>
-                      <Plus className="mr-1 h-4 w-4" />
-                      Add Badge
-                    </Button>
+                    <div className="flex gap-2">
+                      <Button variant="outline" size="sm" onClick={() => addTrustBadge("pill")}>
+                        <Plus className="mr-1 h-4 w-4" />
+                        Pill Badge
+                      </Button>
+                      <Button variant="outline" size="sm" onClick={() => addTrustBadge("image")}>
+                        <Plus className="mr-1 h-4 w-4" />
+                        Image Badge
+                      </Button>
+                    </div>
                   </div>
                   {formData.trustBadges.length === 0 ? (
                     <div className="rounded-lg border-2 border-dashed p-8 text-center">
-                      <ImageIcon className="mx-auto h-8 w-8 text-muted-foreground" />
+                      <Shield className="mx-auto h-8 w-8 text-muted-foreground" />
                       <p className="mt-2 text-sm text-muted-foreground">No trust badges configured</p>
-                      <Button variant="outline" size="sm" className="mt-4" onClick={addTrustBadge}>
+                      <p className="text-xs text-muted-foreground mt-1">Pill badges show text + icon (e.g. "Top Rated", "Secure"). Image badges show a logo.</p>
+                      <Button variant="outline" size="sm" className="mt-4" onClick={() => addTrustBadge("pill")}>
                         <Plus className="mr-1 h-4 w-4" />
-                        Add Your First Badge
+                        Add Pill Badge
                       </Button>
                     </div>
                   ) : (
                     <div className="space-y-3">
                       {formData.trustBadges.map((badge, index) => (
-                        <div key={index} className="flex items-start gap-3 rounded-lg border p-4">
-                          <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded bg-muted">
-                            {badge.image ? (
-                              // eslint-disable-next-line @next/next/no-img-element
-                              <img
-                                src={badge.image}
-                                alt={badge.alt}
-                                className="h-10 w-10 object-contain"
-                                onError={(e) => {
-                                  e.currentTarget.style.display = "none";
-                                }}
-                              />
-                            ) : (
-                              <Shield className="h-6 w-6 text-muted-foreground" />
-                            )}
-                          </div>
-                          <div className="flex-1 space-y-2">
-                            <Input
-                              value={badge.image}
-                              onChange={(e) => updateTrustBadge(index, { image: e.target.value })}
-                              placeholder="Image URL (e.g., /images/badges/ssl.png)"
-                            />
-                            <div className="flex gap-2">
-                              <Input
-                                value={badge.alt}
-                                onChange={(e) => updateTrustBadge(index, { alt: e.target.value })}
-                                placeholder="Alt text"
-                                className="flex-1"
-                              />
-                              <Input
-                                value={badge.url || ""}
-                                onChange={(e) => updateTrustBadge(index, { url: e.target.value })}
-                                placeholder="Link URL (optional)"
-                                className="flex-1"
-                              />
+                        <div key={index} className="rounded-lg border p-4 space-y-3">
+                          <div className="flex items-center justify-between">
+                            <div className="flex items-center gap-2">
+                              <Select
+                                value={badge.style || "image"}
+                                onValueChange={(v) => updateTrustBadge(index, { style: v as "image" | "pill" })}
+                              >
+                                <SelectTrigger className="w-28 h-7 text-xs">
+                                  <SelectValue />
+                                </SelectTrigger>
+                                <SelectContent>
+                                  <SelectItem value="pill">Pill</SelectItem>
+                                  <SelectItem value="image">Image</SelectItem>
+                                </SelectContent>
+                              </Select>
+                              <span className="text-xs text-muted-foreground">Badge {index + 1}</span>
                             </div>
+                            <Button
+                              variant="ghost"
+                              size="icon"
+                              className="h-7 w-7 text-destructive"
+                              onClick={() => removeTrustBadge(index)}
+                            >
+                              <Trash2 className="h-3.5 w-3.5" />
+                            </Button>
                           </div>
-                          <Button
-                            variant="ghost"
-                            size="icon"
-                            className="shrink-0 text-destructive"
-                            onClick={() => removeTrustBadge(index)}
-                          >
-                            <Trash2 className="h-4 w-4" />
-                          </Button>
+
+                          {(badge.style || "image") === "pill" ? (
+                            <div className="grid grid-cols-2 gap-2">
+                              <div className="space-y-1">
+                                <Label className="text-xs">Label Text</Label>
+                                <Input
+                                  value={badge.text || ""}
+                                  onChange={(e) => updateTrustBadge(index, { text: e.target.value })}
+                                  placeholder="e.g. Top Rated"
+                                  className="h-8 text-sm"
+                                />
+                              </div>
+                              <div className="space-y-1">
+                                <Label className="text-xs">Icon</Label>
+                                <Select
+                                  value={badge.iconName || "shield"}
+                                  onValueChange={(v) => updateTrustBadge(index, { iconName: v })}
+                                >
+                                  <SelectTrigger className="h-8 text-sm">
+                                    <SelectValue />
+                                  </SelectTrigger>
+                                  <SelectContent>
+                                    <SelectItem value="shield">Shield</SelectItem>
+                                    <SelectItem value="star">Star</SelectItem>
+                                    <SelectItem value="zap">Zap / Fast</SelectItem>
+                                    <SelectItem value="award">Award</SelectItem>
+                                    <SelectItem value="check-circle">Check Circle</SelectItem>
+                                    <SelectItem value="lock">Lock</SelectItem>
+                                    <SelectItem value="trophy">Trophy</SelectItem>
+                                    <SelectItem value="heart">Heart</SelectItem>
+                                  </SelectContent>
+                                </Select>
+                              </div>
+                              <div className="col-span-2 space-y-1">
+                                <Label className="text-xs">Link URL (optional)</Label>
+                                <Input
+                                  value={badge.url || ""}
+                                  onChange={(e) => updateTrustBadge(index, { url: e.target.value })}
+                                  placeholder="https://..."
+                                  className="h-8 text-sm"
+                                />
+                              </div>
+                            </div>
+                          ) : (
+                            <div className="space-y-2">
+                              <Input
+                                value={badge.image}
+                                onChange={(e) => updateTrustBadge(index, { image: e.target.value })}
+                                placeholder="Image URL (e.g., /images/badges/ssl.png)"
+                                className="h-8 text-sm"
+                              />
+                              <div className="flex gap-2">
+                                <Input
+                                  value={badge.alt}
+                                  onChange={(e) => updateTrustBadge(index, { alt: e.target.value })}
+                                  placeholder="Alt text"
+                                  className="flex-1 h-8 text-sm"
+                                />
+                                <Input
+                                  value={badge.url || ""}
+                                  onChange={(e) => updateTrustBadge(index, { url: e.target.value })}
+                                  placeholder="Link URL (optional)"
+                                  className="flex-1 h-8 text-sm"
+                                />
+                              </div>
+                            </div>
+                          )}
                         </div>
                       ))}
                     </div>
                   )}
-                  <div className="rounded-lg bg-muted/50 p-4">
-                    <p className="text-sm text-muted-foreground">
-                      <strong>Tip:</strong> Common trust badges include SSL certificates, payment provider logos (Stripe, PayPal),
-                      BBB accreditation, or security seals. Use image URLs from your public assets.
-                    </p>
-                  </div>
                 </div>
               )}
             </CardContent>
@@ -3092,6 +3152,25 @@ export default function FooterBuilderPage() {
                 </div>
 
                 <div className="space-y-2">
+                  <Label>Link Prefix Icon</Label>
+                  <Select
+                    value={formData.linkPrefix}
+                    onValueChange={(value) => setFormData({ ...formData, linkPrefix: value })}
+                  >
+                    <SelectTrigger>
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="none">None</SelectItem>
+                      <SelectItem value="chevron">Chevron ›</SelectItem>
+                      <SelectItem value="arrow">Arrow →</SelectItem>
+                      <SelectItem value="dash">Dash –</SelectItem>
+                    </SelectContent>
+                  </Select>
+                  <p className="text-xs text-muted-foreground">Icon shown before each footer link</p>
+                </div>
+
+                <div className="space-y-2">
                   <Label>Link Hover Effect</Label>
                   <Select
                     value={formData.linkHoverEffect}
@@ -3586,6 +3665,40 @@ export default function FooterBuilderPage() {
                 </SelectContent>
               </Select>
             </div>
+
+            {/* Heading Icon for LINKS widget */}
+            {widgetFormData.type === "LINKS" && (
+              <div className="space-y-2">
+                <Label htmlFor="headingIcon">Heading Icon (optional)</Label>
+                <Select
+                  value={widgetFormData.headingIcon || "none"}
+                  onValueChange={(v) => setWidgetFormData({ ...widgetFormData, headingIcon: v === "none" ? "" : v })}
+                >
+                  <SelectTrigger id="headingIcon">
+                    <SelectValue placeholder="No icon" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="none">No icon</SelectItem>
+                    <SelectItem value="users">Users</SelectItem>
+                    <SelectItem value="building">Building</SelectItem>
+                    <SelectItem value="building-2">Building 2</SelectItem>
+                    <SelectItem value="party-popper">Party Popper</SelectItem>
+                    <SelectItem value="message-circle">Message Circle</SelectItem>
+                    <SelectItem value="store">Store</SelectItem>
+                    <SelectItem value="shopping-bag">Shopping Bag</SelectItem>
+                    <SelectItem value="globe">Globe</SelectItem>
+                    <SelectItem value="tag">Tag</SelectItem>
+                    <SelectItem value="headphones">Headphones</SelectItem>
+                    <SelectItem value="help-circle">Help Circle</SelectItem>
+                    <SelectItem value="star">Star</SelectItem>
+                    <SelectItem value="heart">Heart</SelectItem>
+                    <SelectItem value="mail">Mail</SelectItem>
+                    <SelectItem value="phone">Phone</SelectItem>
+                  </SelectContent>
+                </Select>
+                <p className="text-xs text-muted-foreground">Icon shown next to the column heading</p>
+              </div>
+            )}
 
             {/* Links Editor for LINKS widget type */}
             {widgetFormData.type === "LINKS" && (

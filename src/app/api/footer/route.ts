@@ -57,6 +57,7 @@ export async function GET() {
       type: widget.type,
       title: widget.title,
       showTitle: widget.showTitle,
+      headingIcon: widget.headingIcon,
       column: widget.column,
       sortOrder: widget.sortOrder,
       content: safeJsonParse(widget.content, null), // Parse in case of double-encoding
@@ -117,6 +118,8 @@ export async function GET() {
         topBorderGradientTo: footer.topBorderGradientTo,
         dividerStyle: footer.dividerStyle,
         dividerColor: footer.dividerColor,
+        // Link prefix
+        linkPrefix: footer.linkPrefix || "none",
         // Animation
         enableAnimations: footer.enableAnimations,
         entranceAnimation: footer.entranceAnimation,

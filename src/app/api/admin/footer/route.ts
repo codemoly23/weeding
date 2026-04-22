@@ -61,6 +61,7 @@ const footerConfigSchema = z.object({
   enableAnimations: z.boolean().default(false),
   entranceAnimation: z.string().nullable().optional(),
   animationDuration: z.number().default(300),
+  linkPrefix: z.string().default("none"),
   linkHoverEffect: z.string().default("color"),
   topBorderStyle: z.string().default("none"),
   topBorderHeight: z.number().default(1),

@@ -271,9 +271,14 @@ export interface BottomLink {
 }
 
 export interface TrustBadge {
+  style?: "image" | "pill";
+  // Image badge fields
   image: string;
   alt: string;
   url?: string;
+  // Pill badge fields
+  text?: string;
+  iconName?: string;
 }
 
 export interface FooterWidgetLink {
@@ -292,6 +297,7 @@ export interface FooterWidget {
   type: FooterWidgetType;
   title?: string | null;
   showTitle: boolean;
+  headingIcon?: string | null;
   content?: Record<string, unknown> | null;
   column: number;
   sortOrder: number;
@@ -429,6 +435,9 @@ export interface FooterConfig {
   brandRevealText?: string | null;
   brandRevealColor?: string | null;
   brandRevealOpacity?: number | null;
+
+  // Link prefix
+  linkPrefix?: string;
 
   // Advanced
   customCSS?: string | null;
@@ -575,6 +584,9 @@ export interface PublicFooterResponse {
     // Divider
     dividerStyle?: string;
     dividerColor?: string;
+
+    // Link prefix
+    linkPrefix?: string;
 
     // Effects
     enableAnimations?: boolean;

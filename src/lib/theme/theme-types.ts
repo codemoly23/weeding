@@ -254,6 +254,10 @@ export interface ThemeFooterConfig {
   accentColor?: string;
   borderColor?: string;
   presetId?: string;
+  // New fields
+  linkPrefix?: string;
+  bgGradient?: unknown;
+  dividerColor?: string;
   [key: string]: unknown;
 }
 
@@ -261,6 +265,7 @@ export interface ThemeFooterWidget {
   type: string;
   title?: string;
   showTitle?: boolean;
+  headingIcon?: string;
   column: number;
   sortOrder: number;
   content?: Record<string, unknown>;

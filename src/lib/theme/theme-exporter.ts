@@ -531,11 +531,25 @@ export async function exportThemeData(): Promise<ThemeData> {
         showTrustBadges: footerRaw.showTrustBadges,
         trustBadges: footerRaw.trustBadges ?? undefined,
         bgType: footerRaw.bgType,
+        bgGradient: footerRaw.bgGradient ?? undefined,
         containerWidth: footerRaw.containerWidth,
         paddingTop: footerRaw.paddingTop,
         paddingBottom: footerRaw.paddingBottom,
         dividerStyle: footerRaw.dividerStyle,
+        dividerColor: footerRaw.dividerColor ?? undefined,
         shadow: footerRaw.shadow,
+        linkPrefix: footerRaw.linkPrefix ?? "none",
+        topBorderStyle: footerRaw.topBorderStyle ?? undefined,
+        topBorderHeight: footerRaw.topBorderHeight ?? undefined,
+        topBorderColor: footerRaw.topBorderColor ?? undefined,
+        headingSize: footerRaw.headingSize,
+        headingWeight: footerRaw.headingWeight,
+        headingStyle: footerRaw.headingStyle,
+        socialShape: footerRaw.socialShape,
+        socialSize: footerRaw.socialSize,
+        socialColorMode: footerRaw.socialColorMode,
+        socialHoverEffect: footerRaw.socialHoverEffect,
+        socialBgStyle: footerRaw.socialBgStyle,
       }
     : {
         layout: "MULTI_COLUMN",
@@ -546,9 +560,17 @@ export async function exportThemeData(): Promise<ThemeData> {
   const footerWidgets: ThemeFooterWidget[] = footerRaw
     ? footerRaw.widgets.map((w) => ({
         type: w.type,
+        title: w.title ?? undefined,
+        showTitle: w.showTitle,
+        headingIcon: w.headingIcon ?? undefined,
         column: w.column,
         sortOrder: w.sortOrder,
-        content: (w.content as Record<string, unknown>) ?? {},
+        content: (w.content as Record<string, unknown>) ?? undefined,
+        links: w.menuItems.map((item) => ({
+          label: item.label,
+          url: item.url ?? "",
+          sortOrder: item.sortOrder,
+        })),
       }))
     : [];
 

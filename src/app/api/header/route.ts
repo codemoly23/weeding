@@ -1,6 +1,13 @@
 import { NextResponse } from "next/server";
 import prisma from "@/lib/db";
 
+// Safely parse JSON — handles both string-encoded and already-parsed values
+const safeJson = (v: unknown, fallback: unknown = null) => {
+  if (!v) return fallback;
+  if (typeof v === "string") { try { return JSON.parse(v); } catch { return fallback; } }
+  return v;
+};
+
 // Public API - Get active header configuration
 // Cached for 60 seconds
 export async function GET() {
@@ -68,7 +75,7 @@ export async function GET() {
       height: header.height,
       topBar: {
         enabled: header.topBarEnabled,
-        content: header.topBarContent ? JSON.parse(header.topBarContent as string) : null,
+        content: safeJson(header.topBarContent),
         bgColor: header.topBarBgColor,
         textColor: header.topBarTextColor,
       },
@@ -77,15 +84,15 @@ export async function GET() {
         maxHeight: header.logoMaxHeight,
       },
       menu: header.menuItems.map(transformMenuItem),
-      cta: header.ctaButtons ? JSON.parse(header.ctaButtons as string) : [],
+      cta: (safeJson(header.ctaButtons, []) as unknown[]),
       auth: {
         showButtons: header.showAuthButtons,
         loginText: header.loginText,
         loginUrl: header.loginUrl,
-        loginStyle: header.loginStyle ? JSON.parse(header.loginStyle as string) : null,
+        loginStyle: safeJson(header.loginStyle),
         registerText: header.registerText,
         registerUrl: header.registerUrl,
-        registerStyle: header.registerStyle ? JSON.parse(header.registerStyle as string) : null,
+        registerStyle: safeJson(header.registerStyle),
       },
       search: {
         enabled: header.searchEnabled,

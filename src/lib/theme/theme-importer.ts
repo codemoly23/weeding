@@ -60,18 +60,17 @@ export async function importThemeData(
       // DELETE PHASE - Order matters for FK constraints
       // =============================================
 
-      // 1. Delete footer menu items (child of FooterWidget)
-      await tx.menuItem.deleteMany({
-        where: { footerWidgetId: { not: null } },
-      });
-      // 2. Delete footer widgets
-      await tx.footerWidget.deleteMany({});
-      // 3. Delete footer configs
-      await tx.footerConfig.deleteMany({});
-      // 4. Delete header menu items (child of HeaderConfig)
-      await tx.menuItem.deleteMany({ where: { headerId: { not: null } } });
-      // 5. Delete header configs
-      await tx.headerConfig.deleteMany({});
+      // 1. Delete footer only if theme provides a replacement footer config
+      if (data.footerConfig) {
+        await tx.menuItem.deleteMany({ where: { footerWidgetId: { not: null } } });
+        await tx.footerWidget.deleteMany({});
+        await tx.footerConfig.deleteMany({});
+      }
+      // 4. Delete header only if theme provides a replacement header config
+      if (data.headerConfig) {
+        await tx.menuItem.deleteMany({ where: { headerId: { not: null } } });
+        await tx.headerConfig.deleteMany({});
+      }
       // 6. Delete form fields, form tabs, form templates
       await tx.formField.deleteMany({});
       await tx.formTab.deleteMany({});
@@ -849,6 +848,14 @@ export async function importThemeData(
             copyrightText: s("copyrightText"),
             disclaimerText: s("disclaimerText"),
             presetId: s("presetId"),
+            // New fields
+            linkPrefix: s("linkPrefix", "none") as string,
+            showTrustBadges: b("showTrustBadges", false),
+            showContactInfo: b("showContactInfo", true),
+            contactPosition: s("contactPosition", "brand") as string,
+            ...(fc["bottomLinks"] != null && { bottomLinks: JSON.stringify(fc["bottomLinks"]) }),
+            ...(fc["trustBadges"] != null && { trustBadges: JSON.stringify(fc["trustBadges"]) }),
+            ...(fc["bgGradient"] != null && { bgGradient: JSON.stringify(fc["bgGradient"]) }),
           },
         });
         footerId = footer.id;
@@ -882,6 +889,7 @@ export async function importThemeData(
               type: widget.type as "BRAND",
               title: widget.title || null,
               showTitle: widget.showTitle ?? (widget.type === "LINKS"),
+              headingIcon: widget.headingIcon || null,
               column: widget.column ?? 1,
               sortOrder: widget.sortOrder ?? 0,
               content: widget.content as Prisma.InputJsonValue,

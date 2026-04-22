@@ -1,6 +1,6 @@
 {
   "version": "1.0",
-  "exportedAt": "2026-04-21T12:06:32.562Z",
+  "exportedAt": "2026-04-22T05:08:10.141Z",
   "colorPalette": {
     "light": {
       "background": "#FDFAF7",
@@ -2516,164 +2516,1221 @@
     "searchEnabled": false,
     "mobileBreakpoint": 1024,
     "height": 72,
-    "ctaButtons": "\"[{\\\"text\\\":\\\"Start Planning Free\\\",\\\"url\\\":\\\"/register\\\",\\\"style\\\":{\\\"bgColor\\\":\\\"#BE6B8B\\\",\\\"textColor\\\":\\\"#ffffff\\\",\\\"borderRadius\\\":8,\\\"borderWidth\\\":0,\\\"hoverEffect\\\":\\\"darken\\\"}}]\""
+    "ctaButtons": "[{\"text\":\"Start Planning Free\",\"url\":\"/register\",\"style\":{\"bgColor\":\"#BE6B8B\",\"textColor\":\"#ffffff\",\"borderRadius\":8,\"borderWidth\":0,\"hoverEffect\":\"darken\"}}]"
   },
   "menuItems": [
     {
-      "label": "Home",
-      "url": "/",
+      "label": "Planning Tools",
       "sortOrder": 0,
       "isVisible": true,
-      "visibleOnMobile": true
+      "visibleOnMobile": true,
+      "isMegaMenu": true,
+      "megaMenuColumns": 2,
+      "children": [
+        {
+          "label": "Organize with ease",
+          "sortOrder": 0,
+          "isVisible": true,
+          "visibleOnMobile": true,
+          "megaMenuColumns": 4,
+          "children": [
+            {
+              "label": "Checklist",
+              "url": "/tools/checklist",
+              "sortOrder": 0,
+              "isVisible": true,
+              "visibleOnMobile": true,
+              "megaMenuColumns": 4,
+              "icon": "ClipboardList"
+            },
+            {
+              "label": "Seating chart",
+              "url": "/tools/seating",
+              "sortOrder": 1,
+              "isVisible": true,
+              "visibleOnMobile": true,
+              "megaMenuColumns": 4,
+              "icon": "LayoutDashboard"
+            },
+            {
+              "label": "Event Vendors",
+              "url": "/vendors",
+              "sortOrder": 2,
+              "isVisible": true,
+              "visibleOnMobile": true,
+              "megaMenuColumns": 4,
+              "icon": "FolderOpen"
+            },
+            {
+              "label": "Guests",
+              "url": "/tools/guests",
+              "sortOrder": 3,
+              "isVisible": true,
+              "visibleOnMobile": true,
+              "megaMenuColumns": 4,
+              "icon": "Users"
+            },
+            {
+              "label": "Budget",
+              "url": "/tools/budget",
+              "sortOrder": 4,
+              "isVisible": true,
+              "visibleOnMobile": true,
+              "megaMenuColumns": 4,
+              "icon": "Calculator"
+            },
+            {
+              "label": "Event website",
+              "url": "/wedding-website",
+              "sortOrder": 5,
+              "isVisible": true,
+              "visibleOnMobile": true,
+              "megaMenuColumns": 4,
+              "icon": "Globe"
+            }
+          ]
+        },
+        {
+          "label": "Personalize your event",
+          "sortOrder": 1,
+          "isVisible": true,
+          "visibleOnMobile": true,
+          "megaMenuColumns": 4,
+          "children": [
+            {
+              "label": "Hotel Blocks",
+              "url": "/tools/hotel-blocks",
+              "sortOrder": 0,
+              "isVisible": true,
+              "visibleOnMobile": true,
+              "megaMenuColumns": 4
+            },
+            {
+              "label": "Date Finder",
+              "url": "/tools/date-finder",
+              "sortOrder": 1,
+              "isVisible": true,
+              "visibleOnMobile": true,
+              "megaMenuColumns": 4
+            },
+            {
+              "label": "Cost Guide",
+              "url": "/tools/cost-guide",
+              "sortOrder": 2,
+              "isVisible": true,
+              "visibleOnMobile": true,
+              "megaMenuColumns": 4
+            },
+            {
+              "label": "Color generator",
+              "url": "/tools/color-generator",
+              "sortOrder": 3,
+              "isVisible": true,
+              "visibleOnMobile": true,
+              "megaMenuColumns": 4
+            },
+            {
+              "label": "Hashtag generator",
+              "url": "/tools/hashtag-generator",
+              "sortOrder": 4,
+              "isVisible": true,
+              "visibleOnMobile": true,
+              "megaMenuColumns": 4
+            }
+          ]
+        }
+      ]
     },
     {
-      "label": "Features",
-      "url": "/services",
+      "label": "Venues",
+      "url": "/venues",
       "sortOrder": 1,
       "isVisible": true,
-      "visibleOnMobile": true
+      "visibleOnMobile": true,
+      "isMegaMenu": true,
+      "megaMenuColumns": 3,
+      "children": [
+        {
+          "label": "Wedding Venues",
+          "sortOrder": 0,
+          "isVisible": true,
+          "visibleOnMobile": true,
+          "megaMenuColumns": 4,
+          "children": [
+            {
+              "label": "All Wedding Venues",
+              "url": "/venues/wedding",
+              "sortOrder": 0,
+              "isVisible": true,
+              "visibleOnMobile": true,
+              "megaMenuColumns": 4,
+              "icon": "Heart"
+            },
+            {
+              "label": "Banquet Halls",
+              "url": "/venues/banquet-halls",
+              "sortOrder": 1,
+              "isVisible": true,
+              "visibleOnMobile": true,
+              "megaMenuColumns": 4,
+              "icon": "Building2"
+            },
+            {
+              "label": "Wineries",
+              "url": "/venues/wineries",
+              "sortOrder": 2,
+              "isVisible": true,
+              "visibleOnMobile": true,
+              "megaMenuColumns": 4,
+              "icon": "Wine"
+            },
+            {
+              "label": "Gardens",
+              "url": "/venues/gardens",
+              "sortOrder": 3,
+              "isVisible": true,
+              "visibleOnMobile": true,
+              "megaMenuColumns": 4,
+              "icon": "Flower2"
+            },
+            {
+              "label": "Beach Venues",
+              "url": "/venues/beach",
+              "sortOrder": 4,
+              "isVisible": true,
+              "visibleOnMobile": true,
+              "megaMenuColumns": 4,
+              "icon": "Waves"
+            },
+            {
+              "label": "Mansions",
+              "url": "/venues/mansions",
+              "sortOrder": 5,
+              "isVisible": true,
+              "visibleOnMobile": true,
+              "megaMenuColumns": 4,
+              "icon": "Home"
+            }
+          ]
+        },
+        {
+          "label": "Party & Event Venues",
+          "sortOrder": 1,
+          "isVisible": true,
+          "visibleOnMobile": true,
+          "megaMenuColumns": 4,
+          "children": [
+            {
+              "label": "Party Halls",
+              "url": "/venues/party-halls",
+              "sortOrder": 0,
+              "isVisible": true,
+              "visibleOnMobile": true,
+              "megaMenuColumns": 4,
+              "icon": "PartyPopper"
+            },
+            {
+              "label": "Conference Centers",
+              "url": "/venues/conference-centers",
+              "sortOrder": 1,
+              "isVisible": true,
+              "visibleOnMobile": true,
+              "megaMenuColumns": 4,
+              "icon": "Briefcase"
+            },
+            {
+              "label": "Hotels",
+              "url": "/venues/hotels",
+              "sortOrder": 2,
+              "isVisible": true,
+              "visibleOnMobile": true,
+              "megaMenuColumns": 4,
+              "icon": "Hotel"
+            },
+            {
+              "label": "Historic Venues",
+              "url": "/venues/historic",
+              "sortOrder": 3,
+              "isVisible": true,
+              "visibleOnMobile": true,
+              "megaMenuColumns": 4,
+              "icon": "Landmark"
+            },
+            {
+              "label": "Yachts & Boats",
+              "url": "/venues/yachts",
+              "sortOrder": 4,
+              "isVisible": true,
+              "visibleOnMobile": true,
+              "megaMenuColumns": 4,
+              "icon": "Ship"
+            },
+            {
+              "label": "Outdoor Venues",
+              "url": "/venues/outdoor",
+              "sortOrder": 5,
+              "isVisible": true,
+              "visibleOnMobile": true,
+              "megaMenuColumns": 4,
+              "icon": "TreePine"
+            }
+          ]
+        },
+        {
+          "label": "Specialty Venues",
+          "sortOrder": 2,
+          "isVisible": true,
+          "visibleOnMobile": true,
+          "megaMenuColumns": 4,
+          "children": [
+            {
+              "label": "Religious Venues",
+              "url": "/venues/religious",
+              "sortOrder": 0,
+              "isVisible": true,
+              "visibleOnMobile": true,
+              "megaMenuColumns": 4,
+              "icon": "Church"
+            },
+            {
+              "label": "Luxury Estates",
+              "url": "/venues/luxury",
+              "sortOrder": 1,
+              "isVisible": true,
+              "visibleOnMobile": true,
+              "megaMenuColumns": 4,
+              "icon": "Diamond"
+            },
+            {
+              "label": "Destination Venues",
+              "url": "/venues/destination",
+              "sortOrder": 2,
+              "isVisible": true,
+              "visibleOnMobile": true,
+              "megaMenuColumns": 4,
+              "icon": "Plane"
+            },
+            {
+              "label": "Unique Spaces",
+              "url": "/venues/unique",
+              "sortOrder": 3,
+              "isVisible": true,
+              "visibleOnMobile": true,
+              "megaMenuColumns": 4,
+              "icon": "Sparkles"
+            },
+            {
+              "label": "Find Near Me",
+              "url": "/venues/near-me",
+              "sortOrder": 4,
+              "isVisible": true,
+              "visibleOnMobile": true,
+              "megaMenuColumns": 4,
+              "icon": "MapPin"
+            }
+          ]
+        }
+      ]
     },
     {
-      "label": "Pricing",
-      "url": "/pricing",
+      "label": "Vendors",
+      "url": "/vendors",
       "sortOrder": 2,
       "isVisible": true,
-      "visibleOnMobile": true
+      "visibleOnMobile": true,
+      "isMegaMenu": true,
+      "megaMenuColumns": 2,
+      "children": [
+        {
+          "label": "Find Vendors",
+          "sortOrder": 0,
+          "isVisible": true,
+          "visibleOnMobile": true,
+          "megaMenuColumns": 4,
+          "children": [
+            {
+              "label": "All Vendors",
+              "url": "/vendors",
+              "sortOrder": 0,
+              "isVisible": true,
+              "visibleOnMobile": true,
+              "megaMenuColumns": 4,
+              "icon": "Store"
+            },
+            {
+              "label": "Photographers",
+              "url": "/vendors/photographers",
+              "sortOrder": 1,
+              "isVisible": true,
+              "visibleOnMobile": true,
+              "megaMenuColumns": 4,
+              "icon": "Camera"
+            },
+            {
+              "label": "Caterers",
+              "url": "/vendors/caterers",
+              "sortOrder": 2,
+              "isVisible": true,
+              "visibleOnMobile": true,
+              "megaMenuColumns": 4,
+              "icon": "UtensilsCrossed"
+            },
+            {
+              "label": "Florists",
+              "url": "/vendors/florists",
+              "sortOrder": 3,
+              "isVisible": true,
+              "visibleOnMobile": true,
+              "megaMenuColumns": 4,
+              "icon": "Flower2"
+            },
+            {
+              "label": "DJs & Bands",
+              "url": "/vendors/music",
+              "sortOrder": 4,
+              "isVisible": true,
+              "visibleOnMobile": true,
+              "megaMenuColumns": 4,
+              "icon": "Music"
+            },
+            {
+              "label": "Hair & Makeup",
+              "url": "/vendors/beauty",
+              "sortOrder": 5,
+              "isVisible": true,
+              "visibleOnMobile": true,
+              "megaMenuColumns": 4,
+              "icon": "Sparkles"
+            }
+          ]
+        },
+        {
+          "label": "Specialists",
+          "sortOrder": 1,
+          "isVisible": true,
+          "visibleOnMobile": true,
+          "megaMenuColumns": 4,
+          "children": [
+            {
+              "label": "Wedding Planners",
+              "url": "/vendors/planners",
+              "sortOrder": 0,
+              "isVisible": true,
+              "visibleOnMobile": true,
+              "megaMenuColumns": 4,
+              "icon": "ClipboardList"
+            },
+            {
+              "label": "Officiants",
+              "url": "/vendors/officiants",
+              "sortOrder": 1,
+              "isVisible": true,
+              "visibleOnMobile": true,
+              "megaMenuColumns": 4,
+              "icon": "BookOpen"
+            },
+            {
+              "label": "Transportation",
+              "url": "/vendors/transportation",
+              "sortOrder": 2,
+              "isVisible": true,
+              "visibleOnMobile": true,
+              "megaMenuColumns": 4,
+              "icon": "Car"
+            },
+            {
+              "label": "Videographers",
+              "url": "/vendors/videographers",
+              "sortOrder": 3,
+              "isVisible": true,
+              "visibleOnMobile": true,
+              "megaMenuColumns": 4,
+              "icon": "Video"
+            },
+            {
+              "label": "Cakes & Desserts",
+              "url": "/vendors/cakes",
+              "sortOrder": 4,
+              "isVisible": true,
+              "visibleOnMobile": true,
+              "megaMenuColumns": 4,
+              "icon": "Cake"
+            },
+            {
+              "label": "Jewelers",
+              "url": "/vendors/jewelry",
+              "sortOrder": 5,
+              "isVisible": true,
+              "visibleOnMobile": true,
+              "megaMenuColumns": 4,
+              "icon": "Gem"
+            }
+          ]
+        }
+      ]
     },
     {
-      "label": "Blog",
-      "url": "/blog",
+      "label": "Forums",
+      "url": "/forums",
       "sortOrder": 3,
       "isVisible": true,
-      "visibleOnMobile": true
+      "visibleOnMobile": true,
+      "isMegaMenu": true,
+      "megaMenuColumns": 2,
+      "children": [
+        {
+          "label": "Community",
+          "sortOrder": 0,
+          "isVisible": true,
+          "visibleOnMobile": true,
+          "megaMenuColumns": 4,
+          "children": [
+            {
+              "label": "Wedding Planning",
+              "url": "/forums/wedding-planning",
+              "sortOrder": 0,
+              "isVisible": true,
+              "visibleOnMobile": true,
+              "megaMenuColumns": 4,
+              "icon": "ClipboardList"
+            },
+            {
+              "label": "Budget & Finance",
+              "url": "/forums/budget",
+              "sortOrder": 1,
+              "isVisible": true,
+              "visibleOnMobile": true,
+              "megaMenuColumns": 4,
+              "icon": "Calculator"
+            },
+            {
+              "label": "Venues & Vendors",
+              "url": "/forums/venues-vendors",
+              "sortOrder": 2,
+              "isVisible": true,
+              "visibleOnMobile": true,
+              "megaMenuColumns": 4,
+              "icon": "Building2"
+            },
+            {
+              "label": "Fashion & Beauty",
+              "url": "/forums/fashion",
+              "sortOrder": 3,
+              "isVisible": true,
+              "visibleOnMobile": true,
+              "megaMenuColumns": 4,
+              "icon": "Shirt"
+            },
+            {
+              "label": "Honeymoon",
+              "url": "/forums/honeymoon",
+              "sortOrder": 4,
+              "isVisible": true,
+              "visibleOnMobile": true,
+              "megaMenuColumns": 4,
+              "icon": "Plane"
+            }
+          ]
+        },
+        {
+          "label": "Inspiration",
+          "sortOrder": 1,
+          "isVisible": true,
+          "visibleOnMobile": true,
+          "megaMenuColumns": 4,
+          "children": [
+            {
+              "label": "DIY Projects",
+              "url": "/forums/diy",
+              "sortOrder": 0,
+              "isVisible": true,
+              "visibleOnMobile": true,
+              "megaMenuColumns": 4,
+              "icon": "Hammer"
+            },
+            {
+              "label": "Real Weddings",
+              "url": "/forums/real-weddings",
+              "sortOrder": 1,
+              "isVisible": true,
+              "visibleOnMobile": true,
+              "megaMenuColumns": 4,
+              "icon": "Heart"
+            },
+            {
+              "label": "Newlyweds",
+              "url": "/forums/newlyweds",
+              "sortOrder": 2,
+              "isVisible": true,
+              "visibleOnMobile": true,
+              "megaMenuColumns": 4,
+              "icon": "HeartHandshake"
+            },
+            {
+              "label": "Photo Ideas",
+              "url": "/forums/photos",
+              "sortOrder": 3,
+              "isVisible": true,
+              "visibleOnMobile": true,
+              "megaMenuColumns": 4,
+              "icon": "Camera"
+            }
+          ]
+        }
+      ]
     },
     {
-      "label": "FAQ",
-      "url": "/faq",
+      "label": "Dresses",
+      "url": "/dresses",
       "sortOrder": 4,
       "isVisible": true,
-      "visibleOnMobile": true
+      "visibleOnMobile": true,
+      "isMegaMenu": true,
+      "megaMenuColumns": 3,
+      "children": [
+        {
+          "label": "Bridal",
+          "sortOrder": 0,
+          "isVisible": true,
+          "visibleOnMobile": true,
+          "megaMenuColumns": 4,
+          "children": [
+            {
+              "label": "Bridal Gowns",
+              "url": "/dresses/bridal",
+              "sortOrder": 0,
+              "isVisible": true,
+              "visibleOnMobile": true,
+              "megaMenuColumns": 4,
+              "icon": "Shirt"
+            },
+            {
+              "label": "Bridesmaid Dresses",
+              "url": "/dresses/bridesmaid",
+              "sortOrder": 1,
+              "isVisible": true,
+              "visibleOnMobile": true,
+              "megaMenuColumns": 4,
+              "icon": "Users"
+            },
+            {
+              "label": "Mother of the Bride",
+              "url": "/dresses/mother-of-bride",
+              "sortOrder": 2,
+              "isVisible": true,
+              "visibleOnMobile": true,
+              "megaMenuColumns": 4,
+              "icon": "Heart"
+            },
+            {
+              "label": "Flower Girl Dresses",
+              "url": "/dresses/flower-girl",
+              "sortOrder": 3,
+              "isVisible": true,
+              "visibleOnMobile": true,
+              "megaMenuColumns": 4,
+              "icon": "Flower2"
+            }
+          ]
+        },
+        {
+          "label": "Groom",
+          "sortOrder": 1,
+          "isVisible": true,
+          "visibleOnMobile": true,
+          "megaMenuColumns": 4,
+          "children": [
+            {
+              "label": "Suits & Tuxedos",
+              "url": "/dresses/suits",
+              "sortOrder": 0,
+              "isVisible": true,
+              "visibleOnMobile": true,
+              "megaMenuColumns": 4,
+              "icon": "Briefcase"
+            },
+            {
+              "label": "Groomsmen Attire",
+              "url": "/dresses/groomsmen",
+              "sortOrder": 1,
+              "isVisible": true,
+              "visibleOnMobile": true,
+              "megaMenuColumns": 4,
+              "icon": "Users"
+            }
+          ]
+        },
+        {
+          "label": "Accessories",
+          "sortOrder": 2,
+          "isVisible": true,
+          "visibleOnMobile": true,
+          "megaMenuColumns": 4,
+          "children": [
+            {
+              "label": "Jewelry",
+              "url": "/dresses/jewelry",
+              "sortOrder": 0,
+              "isVisible": true,
+              "visibleOnMobile": true,
+              "megaMenuColumns": 4,
+              "icon": "Gem"
+            },
+            {
+              "label": "Shoes",
+              "url": "/dresses/shoes",
+              "sortOrder": 1,
+              "isVisible": true,
+              "visibleOnMobile": true,
+              "megaMenuColumns": 4,
+              "icon": "Footprints"
+            },
+            {
+              "label": "Veils & Headpieces",
+              "url": "/dresses/veils",
+              "sortOrder": 2,
+              "isVisible": true,
+              "visibleOnMobile": true,
+              "megaMenuColumns": 4,
+              "icon": "Sparkles"
+            }
+          ]
+        }
+      ]
     },
     {
-      "label": "Contact",
-      "url": "/contact",
+      "label": "Ideas",
+      "url": "/ideas",
       "sortOrder": 5,
       "isVisible": true,
-      "visibleOnMobile": false
+      "visibleOnMobile": true,
+      "isMegaMenu": true,
+      "megaMenuColumns": 2,
+      "children": [
+        {
+          "label": "Decor",
+          "sortOrder": 0,
+          "isVisible": true,
+          "visibleOnMobile": true,
+          "megaMenuColumns": 4,
+          "children": [
+            {
+              "label": "Wedding Themes",
+              "url": "/ideas/themes",
+              "sortOrder": 0,
+              "isVisible": true,
+              "visibleOnMobile": true,
+              "megaMenuColumns": 4,
+              "icon": "Palette"
+            },
+            {
+              "label": "Floral Arrangements",
+              "url": "/ideas/flowers",
+              "sortOrder": 1,
+              "isVisible": true,
+              "visibleOnMobile": true,
+              "megaMenuColumns": 4,
+              "icon": "Flower2"
+            },
+            {
+              "label": "Table Settings",
+              "url": "/ideas/tables",
+              "sortOrder": 2,
+              "isVisible": true,
+              "visibleOnMobile": true,
+              "megaMenuColumns": 4,
+              "icon": "LayoutDashboard"
+            },
+            {
+              "label": "Ceremony Decor",
+              "url": "/ideas/ceremony",
+              "sortOrder": 3,
+              "isVisible": true,
+              "visibleOnMobile": true,
+              "megaMenuColumns": 4,
+              "icon": "Star"
+            }
+          ]
+        },
+        {
+          "label": "Celebration",
+          "sortOrder": 1,
+          "isVisible": true,
+          "visibleOnMobile": true,
+          "megaMenuColumns": 4,
+          "children": [
+            {
+              "label": "Reception Ideas",
+              "url": "/ideas/reception",
+              "sortOrder": 0,
+              "isVisible": true,
+              "visibleOnMobile": true,
+              "megaMenuColumns": 4,
+              "icon": "PartyPopper"
+            },
+            {
+              "label": "Wedding Favors",
+              "url": "/ideas/favors",
+              "sortOrder": 1,
+              "isVisible": true,
+              "visibleOnMobile": true,
+              "megaMenuColumns": 4,
+              "icon": "Gift"
+            },
+            {
+              "label": "Photo Ideas",
+              "url": "/ideas/photos",
+              "sortOrder": 2,
+              "isVisible": true,
+              "visibleOnMobile": true,
+              "megaMenuColumns": 4,
+              "icon": "Camera"
+            },
+            {
+              "label": "Honeymoon Ideas",
+              "url": "/ideas/honeymoon",
+              "sortOrder": 3,
+              "isVisible": true,
+              "visibleOnMobile": true,
+              "megaMenuColumns": 4,
+              "icon": "Plane"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "label": "Registry",
+      "url": "/registry",
+      "sortOrder": 6,
+      "isVisible": true,
+      "visibleOnMobile": true,
+      "isMegaMenu": true,
+      "megaMenuColumns": 2,
+      "children": [
+        {
+          "label": "Registry",
+          "sortOrder": 0,
+          "isVisible": true,
+          "visibleOnMobile": true,
+          "megaMenuColumns": 4,
+          "children": [
+            {
+              "label": "Create a Registry",
+              "url": "/registry/create",
+              "sortOrder": 0,
+              "isVisible": true,
+              "visibleOnMobile": true,
+              "megaMenuColumns": 4,
+              "icon": "PlusCircle"
+            },
+            {
+              "label": "Find a Registry",
+              "url": "/registry/find",
+              "sortOrder": 1,
+              "isVisible": true,
+              "visibleOnMobile": true,
+              "megaMenuColumns": 4,
+              "icon": "Search"
+            }
+          ]
+        },
+        {
+          "label": "Categories",
+          "sortOrder": 1,
+          "isVisible": true,
+          "visibleOnMobile": true,
+          "megaMenuColumns": 4,
+          "children": [
+            {
+              "label": "Home & Kitchen",
+              "url": "/registry/home",
+              "sortOrder": 0,
+              "isVisible": true,
+              "visibleOnMobile": true,
+              "megaMenuColumns": 4,
+              "icon": "Home"
+            },
+            {
+              "label": "Travel Fund",
+              "url": "/registry/travel",
+              "sortOrder": 1,
+              "isVisible": true,
+              "visibleOnMobile": true,
+              "megaMenuColumns": 4,
+              "icon": "Plane"
+            },
+            {
+              "label": "Cash Fund",
+              "url": "/registry/cash",
+              "sortOrder": 2,
+              "isVisible": true,
+              "visibleOnMobile": true,
+              "megaMenuColumns": 4,
+              "icon": "Banknote"
+            },
+            {
+              "label": "Experiences",
+              "url": "/registry/experiences",
+              "sortOrder": 3,
+              "isVisible": true,
+              "visibleOnMobile": true,
+              "megaMenuColumns": 4,
+              "icon": "Sparkles"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "label": "Wedding Website",
+      "url": "/wedding-website",
+      "sortOrder": 7,
+      "isVisible": true,
+      "visibleOnMobile": true,
+      "isMegaMenu": true,
+      "megaMenuColumns": 2,
+      "children": [
+        {
+          "label": "Get Started",
+          "sortOrder": 0,
+          "isVisible": true,
+          "visibleOnMobile": true,
+          "megaMenuColumns": 4,
+          "children": [
+            {
+              "label": "Create Website",
+              "url": "/wedding-website/create",
+              "sortOrder": 0,
+              "isVisible": true,
+              "visibleOnMobile": true,
+              "megaMenuColumns": 4,
+              "icon": "Globe"
+            },
+            {
+              "label": "Themes & Designs",
+              "url": "/wedding-website/themes",
+              "sortOrder": 1,
+              "isVisible": true,
+              "visibleOnMobile": true,
+              "megaMenuColumns": 4,
+              "icon": "Palette"
+            },
+            {
+              "label": "Custom Domain",
+              "url": "/wedding-website/domain",
+              "sortOrder": 2,
+              "isVisible": true,
+              "visibleOnMobile": true,
+              "megaMenuColumns": 4,
+              "icon": "Link"
+            }
+          ]
+        },
+        {
+          "label": "Features",
+          "sortOrder": 1,
+          "isVisible": true,
+          "visibleOnMobile": true,
+          "megaMenuColumns": 4,
+          "children": [
+            {
+              "label": "RSVP Management",
+              "url": "/wedding-website/rsvp",
+              "sortOrder": 0,
+              "isVisible": true,
+              "visibleOnMobile": true,
+              "megaMenuColumns": 4,
+              "icon": "Users"
+            },
+            {
+              "label": "Guest Pages",
+              "url": "/wedding-website/guests",
+              "sortOrder": 1,
+              "isVisible": true,
+              "visibleOnMobile": true,
+              "megaMenuColumns": 4,
+              "icon": "UserCheck"
+            },
+            {
+              "label": "Photo Gallery",
+              "url": "/wedding-website/gallery",
+              "sortOrder": 2,
+              "isVisible": true,
+              "visibleOnMobile": true,
+              "megaMenuColumns": 4,
+              "icon": "Image"
+            },
+            {
+              "label": "Our Story",
+              "url": "/wedding-website/story",
+              "sortOrder": 3,
+              "isVisible": true,
+              "visibleOnMobile": true,
+              "megaMenuColumns": 4,
+              "icon": "BookHeart"
+            }
+          ]
+        }
+      ]
     }
   ],
   "footerConfig": {
     "layout": "MULTI_COLUMN",
-    "columns": 3,
-    "bgType": "solid",
+    "columns": 5,
+    "bgType": "gradient",
     "bgColor": "#2C1A1A",
-    "textColor": "rgba(245,237,232,0.6)",
-    "headingColor": "rgba(245,237,232,0.4)",
-    "linkColor": "rgba(245,237,232,0.6)",
-    "linkHoverColor": "#F5EDE8",
-    "accentColor": "#BE6B8B",
-    "borderColor": "rgba(255,255,255,0.07)",
+    "bgGradient": {
+      "type": "linear",
+      "colors": [
+        {
+          "color": "#1e1b4b",
+          "position": 0
+        },
+        {
+          "color": "#2e1065",
+          "position": 100
+        }
+      ],
+      "angle": 180
+    },
+    "bgPatternOpacity": 0.1,
+    "bgImageOverlay": "rgba(0,0,0,0.5)",
+    "textColor": "#ddd6fe",
+    "headingColor": "#faf5ff",
+    "linkColor": "#c4b5fd",
+    "linkHoverColor": "#a855f7",
+    "accentColor": "#a855f7",
+    "borderColor": "#6b21a8",
     "dividerColor": "rgba(255,255,255,0.07)",
-    "dividerStyle": "solid",
+    "dividerStyle": "none",
     "headingSize": "sm",
-    "headingWeight": "bold",
-    "headingStyle": "uppercase",
-    "topBorderStyle": "gradient",
-    "topBorderHeight": 3,
-    "topBorderGradientFrom": "#BE6B8B",
-    "topBorderGradientTo": "#C9A84C",
-    "socialShape": "rounded",
+    "headingWeight": "semibold",
+    "headingStyle": "normal",
+    "showSocialLinks": true,
+    "socialPosition": "brand",
+    "socialShape": "circle",
     "socialSize": "md",
-    "socialColorMode": "monochrome",
+    "socialColorMode": "brand",
     "socialHoverEffect": "scale",
     "socialBgStyle": "subtle",
-    "paddingTop": 72,
-    "paddingBottom": 0,
-    "containerWidth": "full",
+    "linkPrefix": "chevron",
+    "linkHoverEffect": "color",
+    "showTrustBadges": true,
+    "trustBadges": [
+      {
+        "style": "pill",
+        "text": "Top Rated",
+        "iconName": "star",
+        "image": "",
+        "alt": "Top Rated"
+      },
+      {
+        "style": "pill",
+        "text": "Secure",
+        "iconName": "shield",
+        "image": "",
+        "alt": "Secure"
+      },
+      {
+        "style": "pill",
+        "text": "Fast",
+        "iconName": "zap",
+        "image": "",
+        "alt": "Fast"
+      }
+    ],
     "bottomBarEnabled": true,
     "bottomBarLayout": "split",
+    "copyrightText": "© 2026 Ceremoney. All rights reserved. Made with ❤️ for event planners worldwide.",
     "showDisclaimer": false,
-    "copyrightText": "© 2026 Ceremoney. All rights reserved.",
-    "disclaimerText": "",
-    "showSocialLinks": true,
-    "socialPosition": "brand"
+    "bottomLinks": [
+      {
+        "label": "Privacy Policy",
+        "url": "/privacy"
+      },
+      {
+        "label": "Terms of Service",
+        "url": "/terms"
+      },
+      {
+        "label": "Cookie Policy",
+        "url": "/cookies"
+      },
+      {
+        "label": "Accessibility",
+        "url": "/accessibility"
+      }
+    ],
+    "topBorderStyle": "solid",
+    "topBorderHeight": 1,
+    "topBorderColor": "#6b21a8",
+    "shadow": "none",
+    "paddingTop": 64,
+    "paddingBottom": 40,
+    "containerWidth": "full"
   },
   "footerWidgets": [
     {
       "type": "BRAND",
+      "showTitle": false,
       "column": 1,
-      "sortOrder": 0
+      "sortOrder": 0,
+      "content": {
+        "showTagline": true,
+        "tagline": "The all-in-one platform for stress-free event planning. Plan, manage, and celebrate life's special moments with confidence.",
+        "showContact": false,
+        "showSocial": false
+      },
+      "links": []
     },
     {
       "type": "LINKS",
-      "title": "Platform",
+      "title": "For Planners",
+      "showTitle": true,
+      "headingIcon": "users",
       "column": 2,
       "sortOrder": 0,
       "links": [
         {
-          "label": "Features",
-          "url": "/services",
+          "label": "Event Dashboard",
+          "url": "/dashboard",
           "sortOrder": 0
         },
         {
-          "label": "Pricing",
-          "url": "/pricing",
+          "label": "Guest Management",
+          "url": "/#guests",
           "sortOrder": 1
         },
         {
-          "label": "Wedding Website",
-          "url": "/services/basic-wedding-package",
+          "label": "Budget Tracker",
+          "url": "/#budget",
           "sortOrder": 2
         },
         {
-          "label": "Guest Management",
-          "url": "/services/premium-wedding-package",
+          "label": "Checklist",
+          "url": "/#checklist",
           "sortOrder": 3
         },
         {
-          "label": "Seating Chart",
-          "url": "/services/premium-wedding-package",
+          "label": "Invitations",
+          "url": "/#invitations",
           "sortOrder": 4
         }
       ]
     },
     {
       "type": "LINKS",
-      "title": "Company",
+      "title": "For Vendors",
+      "showTitle": true,
+      "headingIcon": "building",
       "column": 3,
       "sortOrder": 0,
       "links": [
         {
-          "label": "About",
-          "url": "/about",
+          "label": "List Business",
+          "url": "/vendors/register",
           "sortOrder": 0
         },
         {
-          "label": "Blog",
-          "url": "/blog",
+          "label": "Dashboard",
+          "url": "/vendor/dashboard",
           "sortOrder": 1
         },
         {
-          "label": "FAQ",
+          "label": "Pricing",
+          "url": "/pricing",
+          "sortOrder": 2
+        },
+        {
+          "label": "Success Stories",
+          "url": "/blog?tag=success",
+          "sortOrder": 3
+        },
+        {
+          "label": "Resources",
+          "url": "/blog",
+          "sortOrder": 4
+        }
+      ]
+    },
+    {
+      "type": "LINKS",
+      "title": "Event Types",
+      "showTitle": true,
+      "headingIcon": "party-popper",
+      "column": 4,
+      "sortOrder": 0,
+      "links": [
+        {
+          "label": "Weddings",
+          "url": "/planner/create?type=wedding",
+          "sortOrder": 0
+        },
+        {
+          "label": "Birthdays",
+          "url": "/planner/create?type=party",
+          "sortOrder": 1
+        },
+        {
+          "label": "Corporate",
+          "url": "/planner/create?type=corporate",
+          "sortOrder": 2
+        },
+        {
+          "label": "Baby Showers",
+          "url": "/planner/create?type=baptism",
+          "sortOrder": 3
+        },
+        {
+          "label": "Conferences",
+          "url": "/planner/create?type=corporate",
+          "sortOrder": 4
+        }
+      ]
+    },
+    {
+      "type": "LINKS",
+      "title": "Support",
+      "showTitle": true,
+      "headingIcon": "headphones",
+      "column": 5,
+      "sortOrder": 0,
+      "links": [
+        {
+          "label": "Help Center",
+          "url": "/help",
+          "sortOrder": 0
+        },
+        {
+          "label": "Contact Us",
+          "url": "/contact",
+          "sortOrder": 1
+        },
+        {
+          "label": "FAQs",
           "url": "/faq",
           "sortOrder": 2
         },
         {
-          "label": "Contact",
-          "url": "/contact",
+          "label": "Blog",
+          "url": "/blog",
           "sortOrder": 3
         },
         {
-          "label": "Privacy Policy",
-          "url": "/privacy-policy",
+          "label": "Community",
+          "url": "/community",
           "sortOrder": 4
-        },
-        {
-          "label": "Terms of Service",
-          "url": "/terms-of-service",
-          "sortOrder": 5
         }
       ]
+    },
+    {
+      "type": "SOCIAL",
+      "showTitle": true,
+      "column": 1,
+      "sortOrder": 0,
+      "content": {},
+      "links": []
     }
   ],
   "blogCategories": [
