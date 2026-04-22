@@ -1,6 +1,6 @@
 {
   "version": "1.0",
-  "exportedAt": "2026-04-22T05:36:03.132Z",
+  "exportedAt": "2026-04-22T07:54:57.890Z",
   "colorPalette": {
     "light": {
       "background": "#FDFAF7",
@@ -2518,14 +2518,14 @@
     "height": 72,
     "ctaButtons": [
       {
-        "text": "Start Planning Free",
         "url": "/register",
+        "text": "Start Planning Free",
         "style": {
           "bgColor": "#BE6B8B",
           "textColor": "#ffffff",
-          "borderRadius": 8,
           "borderWidth": 0,
-          "hoverEffect": "darken"
+          "hoverEffect": "darken",
+          "borderRadius": 8
         }
       }
     ]
@@ -2851,131 +2851,207 @@
       "isVisible": true,
       "visibleOnMobile": true,
       "isMegaMenu": true,
-      "megaMenuColumns": 2,
       "children": [
         {
-          "label": "Find Vendors",
+          "label": "Start hiring your vendors",
+          "url": "#",
           "sortOrder": 0,
           "isVisible": true,
           "visibleOnMobile": true,
           "megaMenuColumns": 4,
+          "categoryName": "Start hiring your vendors",
+          "categoryIcon": "store",
+          "categoryDesc": "Browse all vendor categories",
           "children": [
             {
-              "label": "All Vendors",
-              "url": "/vendors",
+              "label": "Photography",
+              "url": "/vendors?category=PHOTOGRAPHY",
               "sortOrder": 0,
               "isVisible": true,
               "visibleOnMobile": true,
               "megaMenuColumns": 4,
-              "icon": "Store"
+              "icon": "camera"
             },
             {
-              "label": "Photographers",
-              "url": "/vendors/photographers",
+              "label": "DJs",
+              "url": "/vendors?category=MUSIC_DJ",
               "sortOrder": 1,
               "isVisible": true,
               "visibleOnMobile": true,
               "megaMenuColumns": 4,
-              "icon": "Camera"
+              "icon": "disc"
             },
             {
-              "label": "Caterers",
-              "url": "/vendors/caterers",
+              "label": "Hair & Makeup",
+              "url": "/vendors?category=HAIR_MAKEUP",
               "sortOrder": 2,
               "isVisible": true,
               "visibleOnMobile": true,
               "megaMenuColumns": 4,
-              "icon": "UtensilsCrossed"
+              "icon": "sparkles"
             },
             {
-              "label": "Florists",
-              "url": "/vendors/florists",
+              "label": "Wedding Planning",
+              "url": "/vendors?category=WEDDING_PLANNER",
               "sortOrder": 3,
               "isVisible": true,
               "visibleOnMobile": true,
               "megaMenuColumns": 4,
-              "icon": "Flower2"
+              "icon": "clipboard-list"
             },
             {
-              "label": "DJs & Bands",
-              "url": "/vendors/music",
+              "label": "Catering",
+              "url": "/vendors?category=CATERING",
               "sortOrder": 4,
               "isVisible": true,
               "visibleOnMobile": true,
               "megaMenuColumns": 4,
-              "icon": "Music"
+              "icon": "utensils"
             },
             {
-              "label": "Hair & Makeup",
-              "url": "/vendors/beauty",
+              "label": "Flowers",
+              "url": "/vendors?category=FLOWERS",
               "sortOrder": 5,
               "isVisible": true,
               "visibleOnMobile": true,
               "megaMenuColumns": 4,
-              "icon": "Sparkles"
+              "icon": "flower-2"
+            },
+            {
+              "label": "Videography",
+              "url": "/vendors?category=VIDEOGRAPHY",
+              "sortOrder": 6,
+              "isVisible": true,
+              "visibleOnMobile": true,
+              "megaMenuColumns": 4,
+              "icon": "video"
+            },
+            {
+              "label": "Officiants",
+              "url": "/vendors?category=OTHER",
+              "sortOrder": 7,
+              "isVisible": true,
+              "visibleOnMobile": true,
+              "megaMenuColumns": 4,
+              "icon": "user"
             }
           ]
         },
         {
-          "label": "Specialists",
+          "label": "COMPLETE YOUR WEDDING TEAM",
+          "url": "#",
           "sortOrder": 1,
           "isVisible": true,
           "visibleOnMobile": true,
           "megaMenuColumns": 4,
+          "categoryName": "COMPLETE YOUR WEDDING TEAM",
+          "categoryIcon": "users",
+          "categoryDesc": "More vendor categories",
           "children": [
             {
-              "label": "Wedding Planners",
-              "url": "/vendors/planners",
+              "label": "Event Rentals",
+              "url": "/vendors?category=DECORATIONS",
               "sortOrder": 0,
               "isVisible": true,
               "visibleOnMobile": true,
-              "megaMenuColumns": 4,
-              "icon": "ClipboardList"
+              "megaMenuColumns": 4
             },
             {
-              "label": "Officiants",
-              "url": "/vendors/officiants",
+              "label": "Photo Booths",
+              "url": "/vendors?category=PHOTOGRAPHY",
               "sortOrder": 1,
               "isVisible": true,
               "visibleOnMobile": true,
-              "megaMenuColumns": 4,
-              "icon": "BookOpen"
+              "megaMenuColumns": 4
             },
             {
-              "label": "Transportation",
-              "url": "/vendors/transportation",
+              "label": "Bands",
+              "url": "/vendors?category=MUSIC_DJ",
               "sortOrder": 2,
               "isVisible": true,
               "visibleOnMobile": true,
-              "megaMenuColumns": 4,
-              "icon": "Car"
+              "megaMenuColumns": 4
             },
             {
-              "label": "Videographers",
-              "url": "/vendors/videographers",
+              "label": "Dress & Attire",
+              "url": "/vendors?category=DRESS_ATTIRE",
               "sortOrder": 3,
               "isVisible": true,
               "visibleOnMobile": true,
-              "megaMenuColumns": 4,
-              "icon": "Video"
+              "megaMenuColumns": 4
             },
             {
-              "label": "Cakes & Desserts",
-              "url": "/vendors/cakes",
+              "label": "Cakes",
+              "url": "/vendors?category=CATERING",
               "sortOrder": 4,
               "isVisible": true,
               "visibleOnMobile": true,
-              "megaMenuColumns": 4,
-              "icon": "Cake"
+              "megaMenuColumns": 4
             },
             {
-              "label": "Jewelers",
-              "url": "/vendors/jewelry",
+              "label": "Transportation",
+              "url": "/vendors?category=TRANSPORTATION",
               "sortOrder": 5,
               "isVisible": true,
               "visibleOnMobile": true,
+              "megaMenuColumns": 4
+            },
+            {
+              "label": "Ceremony Music",
+              "url": "/vendors?category=MUSIC_DJ",
+              "sortOrder": 6,
+              "isVisible": true,
+              "visibleOnMobile": true,
+              "megaMenuColumns": 4
+            },
+            {
+              "label": "Lighting & Decor",
+              "url": "/vendors?category=DECORATIONS",
+              "sortOrder": 7,
+              "isVisible": true,
+              "visibleOnMobile": true,
+              "megaMenuColumns": 4
+            },
+            {
+              "label": "Invitations",
+              "url": "/vendors",
+              "sortOrder": 8,
+              "isVisible": true,
+              "visibleOnMobile": true,
+              "megaMenuColumns": 4
+            },
+            {
+              "label": "Travel Agents",
+              "url": "/vendors",
+              "sortOrder": 9,
+              "isVisible": true,
+              "visibleOnMobile": true,
+              "megaMenuColumns": 4
+            },
+            {
+              "label": "Jewelry",
+              "url": "/vendors?category=RINGS",
+              "sortOrder": 10,
+              "isVisible": true,
+              "visibleOnMobile": true,
+              "megaMenuColumns": 4
+            },
+            {
+              "label": "Favors & Gifts",
+              "url": "/vendors",
+              "sortOrder": 11,
+              "isVisible": true,
+              "visibleOnMobile": true,
+              "megaMenuColumns": 4
+            },
+            {
+              "label": "Deals",
+              "url": "/vendors",
+              "sortOrder": 12,
+              "isVisible": true,
+              "visibleOnMobile": true,
               "megaMenuColumns": 4,
-              "icon": "Gem"
+              "badge": "Hot"
             }
           ]
         }
@@ -2988,7 +3064,6 @@
       "isVisible": true,
       "visibleOnMobile": true,
       "isMegaMenu": true,
-      "megaMenuColumns": 2,
       "children": [
         {
           "label": "Community",
@@ -3097,118 +3172,7 @@
       "sortOrder": 4,
       "isVisible": true,
       "visibleOnMobile": true,
-      "isMegaMenu": true,
-      "megaMenuColumns": 3,
-      "children": [
-        {
-          "label": "Bridal",
-          "sortOrder": 0,
-          "isVisible": true,
-          "visibleOnMobile": true,
-          "megaMenuColumns": 4,
-          "children": [
-            {
-              "label": "Bridal Gowns",
-              "url": "/dresses/bridal",
-              "sortOrder": 0,
-              "isVisible": true,
-              "visibleOnMobile": true,
-              "megaMenuColumns": 4,
-              "icon": "Shirt"
-            },
-            {
-              "label": "Bridesmaid Dresses",
-              "url": "/dresses/bridesmaid",
-              "sortOrder": 1,
-              "isVisible": true,
-              "visibleOnMobile": true,
-              "megaMenuColumns": 4,
-              "icon": "Users"
-            },
-            {
-              "label": "Mother of the Bride",
-              "url": "/dresses/mother-of-bride",
-              "sortOrder": 2,
-              "isVisible": true,
-              "visibleOnMobile": true,
-              "megaMenuColumns": 4,
-              "icon": "Heart"
-            },
-            {
-              "label": "Flower Girl Dresses",
-              "url": "/dresses/flower-girl",
-              "sortOrder": 3,
-              "isVisible": true,
-              "visibleOnMobile": true,
-              "megaMenuColumns": 4,
-              "icon": "Flower2"
-            }
-          ]
-        },
-        {
-          "label": "Groom",
-          "sortOrder": 1,
-          "isVisible": true,
-          "visibleOnMobile": true,
-          "megaMenuColumns": 4,
-          "children": [
-            {
-              "label": "Suits & Tuxedos",
-              "url": "/dresses/suits",
-              "sortOrder": 0,
-              "isVisible": true,
-              "visibleOnMobile": true,
-              "megaMenuColumns": 4,
-              "icon": "Briefcase"
-            },
-            {
-              "label": "Groomsmen Attire",
-              "url": "/dresses/groomsmen",
-              "sortOrder": 1,
-              "isVisible": true,
-              "visibleOnMobile": true,
-              "megaMenuColumns": 4,
-              "icon": "Users"
-            }
-          ]
-        },
-        {
-          "label": "Accessories",
-          "sortOrder": 2,
-          "isVisible": true,
-          "visibleOnMobile": true,
-          "megaMenuColumns": 4,
-          "children": [
-            {
-              "label": "Jewelry",
-              "url": "/dresses/jewelry",
-              "sortOrder": 0,
-              "isVisible": true,
-              "visibleOnMobile": true,
-              "megaMenuColumns": 4,
-              "icon": "Gem"
-            },
-            {
-              "label": "Shoes",
-              "url": "/dresses/shoes",
-              "sortOrder": 1,
-              "isVisible": true,
-              "visibleOnMobile": true,
-              "megaMenuColumns": 4,
-              "icon": "Footprints"
-            },
-            {
-              "label": "Veils & Headpieces",
-              "url": "/dresses/veils",
-              "sortOrder": 2,
-              "isVisible": true,
-              "visibleOnMobile": true,
-              "megaMenuColumns": 4,
-              "icon": "Sparkles"
-            }
-          ]
-        }
-      ]
+      "isMegaMenu": true
     },
     {
       "label": "Ideas",
@@ -3217,7 +3181,6 @@
       "isVisible": true,
       "visibleOnMobile": true,
       "isMegaMenu": true,
-      "megaMenuColumns": 2,
       "children": [
         {
           "label": "Decor",
@@ -3317,44 +3280,7 @@
       "sortOrder": 6,
       "isVisible": true,
       "visibleOnMobile": true,
-      "isMegaMenu": true,
-      "megaMenuColumns": 2,
-      "children": [
-        {
-          "label": "Registry",
-          "sortOrder": 0,
-          "isVisible": true,
-          "visibleOnMobile": true,
-          "megaMenuColumns": 4,
-          "children": [
-            {
-              "label": "Create a Registry",
-              "url": "/registry/create",
-              "sortOrder": 0,
-              "isVisible": true,
-              "visibleOnMobile": true,
-              "megaMenuColumns": 4,
-              "icon": "PlusCircle"
-            },
-            {
-              "label": "Find a Registry",
-              "url": "/registry/find",
-              "sortOrder": 1,
-              "isVisible": true,
-              "visibleOnMobile": true,
-              "megaMenuColumns": 4,
-              "icon": "Search"
-            },
-            {
-              "label": "Categories",
-              "sortOrder": 1,
-              "isVisible": true,
-              "visibleOnMobile": true,
-              "megaMenuColumns": 4
-            }
-          ]
-        }
-      ]
+      "isMegaMenu": true
     },
     {
       "label": "Wedding Website",
