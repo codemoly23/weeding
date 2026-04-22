@@ -1087,7 +1087,8 @@ async function main() {
       await prisma.testimonial.create({ data: testimonial });
       console.log(`  + ${testimonial.name}`);
     } else {
-      console.log(`  ~ ${testimonial.name} (already exists, skipping)`);
+      await prisma.testimonial.update({ where: { id: existing.id }, data: testimonial });
+      console.log(`  ~ ${testimonial.name} (updated)`);
     }
   }
 
