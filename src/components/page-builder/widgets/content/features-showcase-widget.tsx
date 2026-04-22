@@ -28,7 +28,7 @@ export function FeaturesShowcaseWidget({
       : DEFAULT_FEATURES_SHOWCASE_SETTINGS.items,
   };
 
-  const { badge, heading, subheading, items, columns, gap, cardHeight, showCta, ctaText, ctaHref } = settings;
+  const { badge, heading, subheading, items, columns, gap, cardHeight, cardAspectRatio, showCta, ctaText, ctaHref } = settings;
 
   return (
     <section
@@ -105,6 +105,7 @@ export function FeaturesShowcaseWidget({
               key={item.id}
               item={item}
               height={cardHeight}
+              aspectRatio={cardAspectRatio ?? "1/1"}
               isPreview={isPreview}
             />
           ))}
@@ -169,10 +170,11 @@ function CtaButton({ text }: { text: string }) {
 interface FeatureCardProps {
   item: FeaturesShowcaseItem;
   height: number;
+  aspectRatio: "1/1" | "4/3" | "3/4" | "custom";
   isPreview: boolean;
 }
 
-function FeatureCard({ item, height, isPreview }: FeatureCardProps) {
+function FeatureCard({ item, height, aspectRatio, isPreview }: FeatureCardProps) {
   const [hovered, setHovered] = useState(false);
 
   const IconComponent = (LucideIcons as Record<string, React.ComponentType<{ size?: number; strokeWidth?: number; color?: string }>>)[item.icon] ?? LucideIcons.Star;
@@ -184,7 +186,9 @@ function FeatureCard({ item, height, isPreview }: FeatureCardProps) {
       onMouseLeave={() => setHovered(false)}
       style={{
         perspective: "1200px",
-        height: `${height}px`,
+        ...(aspectRatio === "custom"
+          ? { height: `${height}px` }
+          : { aspectRatio: aspectRatio.replace("/", " / ") }),
         cursor: item.href && !isPreview ? "pointer" : "default",
       }}
     >
@@ -281,7 +285,7 @@ function FeatureCard({ item, height, isPreview }: FeatureCardProps) {
             backfaceVisibility: "hidden",
             WebkitBackfaceVisibility: "hidden",
             transform: "rotateY(180deg)",
-            background: "linear-gradient(145deg, #1e1b4b 0%, #0f172a 100%)",
+            background: "#0a0a0a",
             padding: "1.5rem",
             display: "flex",
             flexDirection: "column",
@@ -335,16 +339,18 @@ function FeatureCard({ item, height, isPreview }: FeatureCardProps) {
             )}
             <div
               style={{
-                display: "inline-flex",
+                display: "flex",
                 alignItems: "center",
+                justifyContent: "center",
                 gap: "0.375rem",
-                padding: "0.5rem 1.25rem",
+                padding: "0.625rem 1.25rem",
                 background: "rgba(255,255,255,0.95)",
-                color: "#0f172a",
+                color: "#7c3aed",
                 borderRadius: "9999px",
-                fontSize: "0.8125rem",
+                fontSize: "0.875rem",
                 fontWeight: 600,
                 letterSpacing: "0.01em",
+                width: "100%",
               }}
             >
               Learn more <span>→</span>

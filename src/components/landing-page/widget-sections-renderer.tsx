@@ -21,7 +21,6 @@ import {
   LeadFormWidget,
   TestimonialsWidget,
   EventSearchHeroWidget,
-  EventCategoriesGridWidget,
   EventGalleryGridWidget,
   CtaBannerWidget,
   CustomHtmlWidget,
@@ -474,9 +473,6 @@ function WidgetRenderer({ widget }: WidgetRendererProps) {
 
       case "event-search-hero":
         return <EventSearchHeroWidget settings={resolvedSettings as any} />;
-
-      case "event-categories-grid":
-        return <EventCategoriesGridWidget settings={resolvedSettings as any} />;
 
       case "event-gallery-grid":
         return <EventGalleryGridWidget settings={resolvedSettings as any} />;

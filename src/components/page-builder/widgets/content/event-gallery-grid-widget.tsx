@@ -47,29 +47,22 @@ export function EventGalleryGridWidget({
   };
 
   const [hoveredId, setHoveredId] = useState<string | null>(null);
+  const [heartedIds, setHeartedIds] = useState<Set<string>>(new Set());
 
-  const {
-    badge,
-    title,
-    subtitle,
-    sectionBg,
-    items,
-    columns,
-    cardBadgeFrom,
-    cardBadgeTo,
-    planSimilarLabel,
-    planSimilarHref,
-    showCta,
-    ctaLabel,
-    ctaHref,
-    ctaGradientFrom,
-    ctaGradientTo,
-  } = settings;
+  const { badge, title, subtitle, sectionBg, items, columns, cardBadgeFrom, cardBadgeTo, showCta, ctaLabel, ctaHref, ctaGradientFrom, ctaGradientTo } = settings;
 
   const BadgeIcon = getLucideIcon(badge.icon);
 
+  const toggleHeart = (id: string) => {
+    setHeartedIds((prev) => {
+      const next = new Set(prev);
+      next.has(id) ? next.delete(id) : next.add(id);
+      return next;
+    });
+  };
+
   return (
-    <section style={{ background: sectionBg, padding: "5rem 1rem" }}>
+    <section style={{ background: "linear-gradient(135deg, #fdf4ff 0%, #fce7f3 40%, #ffffff 100%)", padding: "5rem 1rem" }}>
       <div style={{ maxWidth: "1280px", margin: "0 auto" }}>
 
         {/* ── Section Header ── */}
@@ -126,7 +119,7 @@ export function EventGalleryGridWidget({
         <div className={`grid gap-6 ${getGridColsClass(columns)}`}>
           {items.map((item) => {
             const isHovered = hoveredId === item.id;
-            const planHref = planSimilarHref || item.href || "/planner/new";
+            const isHearted = heartedIds.has(item.id);
 
             return (
               <div
@@ -137,16 +130,15 @@ export function EventGalleryGridWidget({
                   overflow: "hidden",
                   cursor: "pointer",
                   boxShadow: isHovered
-                    ? "0 20px 25px -5px rgba(0,0,0,0.15), 0 10px 10px -5px rgba(0,0,0,0.05)"
-                    : "0 10px 15px -3px rgba(0,0,0,0.1), 0 4px 6px -2px rgba(0,0,0,0.05)",
+                    ? "0 20px 25px -5px rgba(0,0,0,0.15)"
+                    : "0 4px 12px rgba(0,0,0,0.1)",
                   transform: isHovered ? "translateY(-4px)" : "translateY(0)",
                   transition: "box-shadow 0.3s, transform 0.3s",
-                  background: "white",
                 }}
                 onMouseEnter={() => setHoveredId(item.id)}
                 onMouseLeave={() => setHoveredId(null)}
               >
-                {/* Image Container */}
+                {/* Image */}
                 <div style={{ position: "relative", height: "20rem", overflow: "hidden" }}>
                   {/* eslint-disable-next-line @next/next/no-img-element */}
                   <img
@@ -156,19 +148,18 @@ export function EventGalleryGridWidget({
                       width: "100%",
                       height: "100%",
                       objectFit: "cover",
-                      transform: isHovered ? "scale(1.1)" : "scale(1)",
-                      transition: "transform 0.7s ease",
+                      transform: isHovered ? "scale(1.07)" : "scale(1)",
+                      transition: "transform 0.6s ease",
                       display: "block",
                     }}
                   />
 
-                  {/* Gradient overlay — bottom to top */}
+                  {/* Gradient overlay */}
                   <div
                     style={{
                       position: "absolute",
                       inset: 0,
-                      background:
-                        "linear-gradient(to top, rgba(0,0,0,0.8), rgba(0,0,0,0.3), transparent)",
+                      background: "linear-gradient(to top, rgba(0,0,0,0.82) 0%, rgba(0,0,0,0.3) 50%, transparent 100%)",
                       pointerEvents: "none",
                     }}
                   />
@@ -177,15 +168,14 @@ export function EventGalleryGridWidget({
                   <div
                     style={{
                       position: "absolute",
-                      top: "1rem",
-                      left: "1rem",
-                      padding: "0.375rem 0.75rem",
+                      top: "0.875rem",
+                      left: "0.875rem",
+                      padding: "0.3rem 0.75rem",
                       background: `linear-gradient(to right, ${cardBadgeFrom}, ${cardBadgeTo})`,
                       color: "white",
                       fontSize: "0.75rem",
                       fontWeight: 700,
                       borderRadius: "9999px",
-                      boxShadow: "0 4px 6px rgba(0,0,0,0.15)",
                       letterSpacing: "0.02em",
                     }}
                   >
@@ -195,33 +185,27 @@ export function EventGalleryGridWidget({
                   {/* Favorite button — top right */}
                   <button
                     aria-label="Save to favourites"
+                    onClick={(e) => { e.stopPropagation(); toggleHeart(item.id); }}
                     style={{
                       position: "absolute",
-                      top: "1rem",
-                      right: "1rem",
-                      width: "2.5rem",
-                      height: "2.5rem",
+                      top: "0.875rem",
+                      right: "0.875rem",
+                      width: "2.25rem",
+                      height: "2.25rem",
                       background: "rgba(255,255,255,0.2)",
                       backdropFilter: "blur(8px)",
                       WebkitBackdropFilter: "blur(8px)",
-                      border: "1px solid rgba(255,255,255,0.4)",
+                      border: "1px solid rgba(255,255,255,0.35)",
                       borderRadius: "9999px",
                       display: "flex",
                       alignItems: "center",
                       justifyContent: "center",
                       cursor: "pointer",
-                      color: "white",
-                      transition: "background 0.2s",
-                    }}
-                    onClick={(e) => e.stopPropagation()}
-                    onMouseEnter={(e) => {
-                      e.currentTarget.style.background = "rgba(255,255,255,0.3)";
-                    }}
-                    onMouseLeave={(e) => {
-                      e.currentTarget.style.background = "rgba(255,255,255,0.2)";
+                      color: isHearted ? "#f472b6" : "white",
+                      transition: "background 0.2s, color 0.2s",
                     }}
                   >
-                    <Heart size={14} />
+                    <Heart size={14} fill={isHearted ? "#f472b6" : "none"} />
                   </button>
 
                   {/* Card content — bottom overlay */}
@@ -231,113 +215,86 @@ export function EventGalleryGridWidget({
                       bottom: 0,
                       left: 0,
                       right: 0,
-                      padding: "1.5rem",
+                      padding: "1.25rem",
                     }}
                   >
-                    {/* Event title */}
                     <h3
                       style={{
-                        fontSize: "1.25rem",
+                        fontSize: "1.125rem",
                         fontWeight: 700,
                         color: "white",
-                        marginBottom: "0.75rem",
-                        lineHeight: 1.3,
+                        marginBottom: "0.5rem",
+                        lineHeight: 1.25,
                       }}
                     >
                       {item.title}
                     </h3>
 
-                    {/* Date + Location */}
-                    <div
-                      style={{
-                        display: "flex",
-                        flexDirection: "column",
-                        gap: "0.5rem",
-                        marginBottom: "1rem",
-                      }}
-                    >
-                      <div
-                        style={{
-                          display: "flex",
-                          alignItems: "center",
-                          gap: "0.5rem",
-                          fontSize: "0.875rem",
-                          color: "rgba(255,255,255,0.9)",
-                        }}
-                      >
-                        <Calendar size={14} style={{ flexShrink: 0 }} />
-                        {item.date}
-                      </div>
-                      <div
-                        style={{
-                          display: "flex",
-                          alignItems: "center",
-                          gap: "0.5rem",
-                          fontSize: "0.875rem",
-                          color: "rgba(255,255,255,0.9)",
-                        }}
-                      >
-                        <MapPin size={14} style={{ flexShrink: 0 }} />
-                        {item.location}
-                      </div>
-                    </div>
+                    {/* Subtitle (category mode) */}
+                    {item.subtitle && (
+                      <p style={{ fontSize: "0.8125rem", color: "rgba(255,255,255,0.85)", margin: "0 0 0.5rem 0" }}>
+                        {item.subtitle}
+                      </p>
+                    )}
 
-                    {/* Views + Plan Similar button */}
-                    <div
-                      style={{
-                        display: "flex",
-                        alignItems: "center",
-                        justifyContent: "space-between",
-                      }}
-                    >
-                      {/* Views */}
-                      <div
-                        style={{
-                          display: "flex",
-                          alignItems: "center",
-                          gap: "0.375rem",
-                          fontSize: "0.875rem",
-                          color: "rgba(255,255,255,0.9)",
-                        }}
-                      >
-                        <Eye size={14} style={{ flexShrink: 0 }} />
-                        {item.views.toLocaleString()}
+                    {/* Date + Location (event mode) */}
+                    {(item.date || item.location) && (
+                      <div style={{ display: "flex", flexDirection: "column", gap: "0.3rem", marginBottom: "0.75rem" }}>
+                        {item.date && (
+                          <div style={{ display: "flex", alignItems: "center", gap: "0.4rem", fontSize: "0.8125rem", color: "rgba(255,255,255,0.88)" }}>
+                            <Calendar size={12} style={{ flexShrink: 0 }} />
+                            {item.date}
+                          </div>
+                        )}
+                        {item.location && (
+                          <div style={{ display: "flex", alignItems: "center", gap: "0.4rem", fontSize: "0.8125rem", color: "rgba(255,255,255,0.88)" }}>
+                            <MapPin size={12} style={{ flexShrink: 0 }} />
+                            {item.location}
+                          </div>
+                        )}
+                      </div>
+                    )}
+
+                    {/* Views + Likes LEFT | View button RIGHT */}
+                    <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: "0.5rem" }}>
+                      <div style={{ display: "flex", alignItems: "center", gap: "0.75rem" }}>
+                        {item.views ? (
+                          <span style={{ display: "flex", alignItems: "center", gap: "0.3rem", fontSize: "0.8125rem", color: "rgba(255,255,255,0.85)" }}>
+                            <Eye size={13} />
+                            {item.views.toLocaleString()}
+                          </span>
+                        ) : null}
+                        {item.likes ? (
+                          <span style={{ display: "flex", alignItems: "center", gap: "0.3rem", fontSize: "0.8125rem", color: "#f9a8d4" }}>
+                            <Heart size={13} fill="#f9a8d4" />
+                            {item.likes}
+                          </span>
+                        ) : null}
                       </div>
 
-                      {/* Plan Similar button — appears on hover */}
-                      <a
-                        href={isPreview ? undefined : planHref}
-                        style={{
-                          background: "white",
-                          color: "#7c3aed",
-                          padding: "0.5rem 1rem",
-                          borderRadius: "0.5rem",
-                          fontWeight: 600,
-                          fontSize: "0.875rem",
-                          border: "none",
-                          cursor: isPreview ? "default" : "pointer",
-                          display: "flex",
-                          alignItems: "center",
-                          gap: "0.5rem",
-                          boxShadow: "0 4px 6px rgba(0,0,0,0.15)",
-                          opacity: isHovered ? 1 : 0,
-                          transform: isHovered ? "translateY(0)" : "translateY(8px)",
-                          transition: "opacity 0.3s, transform 0.3s, background 0.2s",
-                          textDecoration: "none",
-                          whiteSpace: "nowrap",
-                          pointerEvents: isHovered ? "auto" : "none",
-                        }}
-                        onMouseEnter={(e) => {
-                          e.currentTarget.style.background = "#f3f4f6";
-                        }}
-                        onMouseLeave={(e) => {
-                          e.currentTarget.style.background = "white";
-                        }}
-                        onClick={(e) => isPreview && e.preventDefault()}
-                      >
-                        {planSimilarLabel}
-                        <ArrowRight size={14} />
-                      </a>
+                      {/* View button — visible on hover only */}
+                      {isHovered && (
+                        <a
+                          href={isPreview ? undefined : (item.href || "#")}
+                          onClick={(e) => isPreview && e.preventDefault()}
+                          style={{
+                            display: "inline-flex",
+                            alignItems: "center",
+                            gap: "0.25rem",
+                            padding: "0.375rem 0.875rem",
+                            background: "rgba(255,255,255,0.95)",
+                            color: "#111827",
+                            borderRadius: "9999px",
+                            fontSize: "0.8125rem",
+                            fontWeight: 600,
+                            textDecoration: "none",
+                            flexShrink: 0,
+                            cursor: isPreview ? "default" : "pointer",
+                          }}
+                        >
+                          View <ArrowRight size={13} />
+                        </a>
+                      )}
                     </div>
                   </div>
                 </div>
@@ -351,36 +308,35 @@ export function EventGalleryGridWidget({
           <div style={{ textAlign: "center", marginTop: "3rem" }}>
             <a
               href={isPreview ? undefined : ctaHref}
+              onClick={(e) => isPreview && e.preventDefault()}
               style={{
                 display: "inline-flex",
                 alignItems: "center",
                 gap: "0.5rem",
-                padding: "1rem 2rem",
+                padding: "1rem 2.5rem",
                 background: `linear-gradient(to right, ${ctaGradientFrom}, ${ctaGradientTo})`,
                 color: "white",
                 border: "none",
-                borderRadius: "0.75rem",
+                borderRadius: "9999px",
                 fontWeight: 600,
                 fontSize: "1rem",
                 cursor: isPreview ? "default" : "pointer",
-                boxShadow: "0 10px 15px -3px rgba(0,0,0,0.1)",
+                boxShadow: "0 4px 14px rgba(147,51,234,0.3)",
                 textDecoration: "none",
                 transition: "transform 0.2s, box-shadow 0.2s",
               }}
               onMouseEnter={(e) => {
                 if (!isPreview) {
-                  e.currentTarget.style.transform = "scale(1.05)";
-                  e.currentTarget.style.boxShadow = "0 20px 25px -5px rgba(0,0,0,0.15)";
+                  e.currentTarget.style.transform = "translateY(-2px)";
+                  e.currentTarget.style.boxShadow = "0 8px 24px rgba(147,51,234,0.4)";
                 }
               }}
               onMouseLeave={(e) => {
-                e.currentTarget.style.transform = "scale(1)";
-                e.currentTarget.style.boxShadow = "0 10px 15px -3px rgba(0,0,0,0.1)";
+                e.currentTarget.style.transform = "translateY(0)";
+                e.currentTarget.style.boxShadow = "0 4px 14px rgba(147,51,234,0.3)";
               }}
-              onClick={(e) => isPreview && e.preventDefault()}
             >
               {ctaLabel}
-              <ArrowRight size={20} />
             </a>
           </div>
         )}

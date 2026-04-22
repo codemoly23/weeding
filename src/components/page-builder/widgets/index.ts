@@ -1,4 +1,4 @@
-export { HeroContentWidget, ProcessStepsWidget, HeadingWidget, TextBlockWidget, TickerMarqueeWidget, SocialShareRailWidget, EventSearchHeroWidget, EventCategoriesGridWidget, EventGalleryGridWidget, CtaBannerWidget, FeaturesShowcaseWidget, TrendingVenuesWidget } from "./content";
+export { HeroContentWidget, ProcessStepsWidget, HeadingWidget, TextBlockWidget, TickerMarqueeWidget, SocialShareRailWidget, EventSearchHeroWidget, EventGalleryGridWidget, CtaBannerWidget, FeaturesShowcaseWidget, TrendingVenuesWidget } from "./content";
 export { ImageWidget, ImageSliderWidget } from "./media";
 export { TrustBadgesWidget, StatsSectionWidget, TestimonialsWidget } from "./social-proof";
 export { DividerWidget, FaqAccordionWidget, BreadcrumbWidget, TopUtilityBarWidget } from "./layout";

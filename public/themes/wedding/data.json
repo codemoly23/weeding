@@ -1,6 +1,6 @@
 {
   "version": "1.0",
-  "exportedAt": "2026-04-22T07:54:57.890Z",
+  "exportedAt": "2026-04-22T11:53:36.709Z",
   "colorPalette": {
     "light": {
       "background": "#FDFAF7",
@@ -554,6 +554,132 @@
   ],
   "pages": [
     {
+      "slug": "services",
+      "name": "Services",
+      "templateType": "SERVICES_LIST",
+      "isSystem": true,
+      "isTemplateActive": true,
+      "metaTitle": "Wedding Planning Services | Ceremoney",
+      "metaDescription": "Explore Ceremoney's wedding planning packages and services.",
+      "blocks": [
+        {
+          "type": "widget-page-sections",
+          "name": "Services Sections",
+          "sortOrder": 0,
+          "isActive": true,
+          "settings": []
+        }
+      ]
+    },
+    {
+      "slug": "service",
+      "name": "Service Detail",
+      "templateType": "SERVICE_DETAILS",
+      "isSystem": true,
+      "isTemplateActive": true,
+      "metaTitle": "Service | Ceremoney",
+      "metaDescription": "Wedding planning service details.",
+      "blocks": [
+        {
+          "type": "widget-page-sections",
+          "name": "Service Sections",
+          "sortOrder": 0,
+          "isActive": true,
+          "settings": []
+        }
+      ]
+    },
+    {
+      "slug": "about",
+      "name": "About",
+      "templateType": "ABOUT",
+      "isSystem": true,
+      "isTemplateActive": false,
+      "metaTitle": "About Ceremoney — Your Wedding Planning Partner",
+      "metaDescription": "Learn about Ceremoney, the all-in-one wedding planning platform.",
+      "blocks": [
+        {
+          "type": "widget-page-sections",
+          "name": "About Sections",
+          "sortOrder": 0,
+          "isActive": true,
+          "settings": []
+        }
+      ]
+    },
+    {
+      "slug": "contact",
+      "name": "Contact",
+      "templateType": "CONTACT",
+      "isSystem": true,
+      "isTemplateActive": false,
+      "metaTitle": "Contact Ceremoney",
+      "metaDescription": "Get in touch with the Ceremoney team.",
+      "blocks": [
+        {
+          "type": "widget-page-sections",
+          "name": "Contact Sections",
+          "sortOrder": 0,
+          "isActive": true,
+          "settings": []
+        }
+      ]
+    },
+    {
+      "slug": "faq",
+      "name": "FAQ",
+      "templateType": "FAQ",
+      "isSystem": true,
+      "isTemplateActive": false,
+      "metaTitle": "Wedding Planning FAQ | Ceremoney",
+      "metaDescription": "Frequently asked questions about Ceremoney.",
+      "blocks": [
+        {
+          "type": "widget-page-sections",
+          "name": "FAQ Sections",
+          "sortOrder": 0,
+          "isActive": true,
+          "settings": []
+        }
+      ]
+    },
+    {
+      "slug": "pricing",
+      "name": "Pricing",
+      "templateType": "PRICING",
+      "isSystem": true,
+      "isTemplateActive": false,
+      "metaTitle": "Wedding Planning Pricing | Ceremoney",
+      "metaDescription": "Simple, transparent pricing for Ceremoney's wedding planning platform.",
+      "blocks": [
+        {
+          "type": "widget-page-sections",
+          "name": "Pricing Sections",
+          "sortOrder": 0,
+          "isActive": true,
+          "settings": []
+        }
+      ]
+    },
+    {
+      "slug": "blog-list",
+      "name": "Blog",
+      "templateType": "BLOG_LIST",
+      "isSystem": true,
+      "isTemplateActive": true,
+      "metaTitle": "Wedding Planning Blog | Ceremoney",
+      "metaDescription": "Wedding planning tips, inspiration, and advice.",
+      "blocks": [
+        {
+          "type": "widget-page-sections",
+          "name": "Blog Sections",
+          "sortOrder": 0,
+          "isActive": true,
+          "settings": []
+        }
+      ]
+    },
+    {
       "slug": "home",
       "name": "Home",
       "templateType": "HOME",
@@ -884,7 +1010,7 @@
                       "id": "widget_1776767760363_nwugmpl7a",
                       "type": "features-showcase",
                       "settings": {
-                        "gap": 16,
+                        "gap": 12,
                         "badge": {
                           "show": true,
                           "text": "Powerful Features"
@@ -895,42 +1021,48 @@
                             "href": "/features/dashboard",
                             "icon": "LayoutGrid",
                             "image": "https://images.unsplash.com/photo-1551818255-e6e10975bc17?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&w=800&q=80",
-                            "title": "Event Dashboard"
+                            "title": "Event Dashboad",
+                            "description": "Centralized command center to manage all your event details, timelines, and tasks in one beautiful interface"
                           },
                           {
                             "id": "feat_2",
                             "href": "/features/guests",
                             "icon": "Users",
                             "image": "https://images.unsplash.com/photo-1511578314322-379afb476865?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&w=800&q=80",
-                            "title": "Guest Management"
+                            "title": "Guest Management",
+                            "description": "Track RSVPs, manage guest lists, send invitations, and organize seating arrangements with ease"
                           },
                           {
                             "id": "feat_3",
                             "href": "/features/budget",
                             "icon": "DollarSign",
                             "image": "https://images.unsplash.com/photo-1554224155-6726b3ff858f?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&w=800&q=80",
-                            "title": "Budget Tracker"
+                            "title": "Budget Tracker",
+                            "description": "Monitor expenses, track payments, and stay within budget with real-time financial insights and alerts"
                           },
                           {
                             "id": "feat_4",
                             "href": "/features/vendors",
                             "icon": "Store",
                             "image": "https://images.unsplash.com/photo-1555396273-367ea4eb4db5?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&w=800&q=80",
-                            "title": "Vendor Marketplace"
+                            "title": "Vendor Marketplace",
+                            "description": "Browse, compare, and book thousands of verified vendors including caterers, photographers, and DJs"
                           },
                           {
                             "id": "feat_5",
                             "href": "/features/checklist",
                             "icon": "ListChecks",
                             "image": "https://images.unsplash.com/photo-1484480974693-6ca0a78fb36b?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&w=800&q=80",
-                            "title": "Smart Checklist"
+                            "title": "Smart Checklist",
+                            "description": "AI-powered checklists that adapt to your event type and ensure you never miss an important detail"
                           },
                           {
                             "id": "feat_6",
                             "href": "/features/invitations",
                             "icon": "Mail",
                             "image": "https://images.unsplash.com/photo-1585776245991-cf89dd7fc73a?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&w=800&q=80",
-                            "title": "Digital Invitations"
+                            "title": "Digital Invitations",
+                            "description": "Design stunning digital invitations with customizable templates and track who's opened and responded"
                           }
                         ],
                         "columns": 3,
@@ -939,7 +1071,8 @@
                         "heading": "Everything You Need to Plan Amazing Events",
                         "showCta": true,
                         "cardHeight": 260,
-                        "subheading": "From planning to execution, our all-in-one platform makes event management effortless"
+                        "subheading": "From planning to execution, our all-in-one platform makes event management effortless",
+                        "cardAspectRatio": "4/3"
                       }
                     }
                   ],
@@ -1291,65 +1424,110 @@
                   "id": "col_1776769890364_k1sm34251",
                   "widgets": [
                     {
-                      "id": "widget_1776770110521_p5e6q7ena",
-                      "type": "event-categories-grid",
+                      "id": "widget_1776856278817_moyls862f",
+                      "type": "event-gallery-grid",
                       "settings": {
-                        "gap": 24,
                         "badge": {
+                          "icon": "Camera",
                           "show": true,
                           "text": "Real Event Inspiration"
                         },
-                        "title": "Get Inspired by Real Events",
-                        "subtitle": "Explore stunning celebrations from our community and find ideas for your next event",
-                        "cardHeight": 280,
-                        "categories": [
+                        "items": [
                           {
-                            "id": "cat_1",
-                            "href": "/planner/new?type=wedding",
-                            "image": "https://images.unsplash.com/photo-1519741497674-611481863552?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&w=800&q=80",
-                            "title": "Weddings",
-                            "subtitle": "Plan your dream wedding"
-                          },
-                          {
-                            "id": "cat_2",
-                            "href": "/planner/new?type=birthday",
+                            "id": "1",
+                            "date": "March 15, 2026",
+                            "href": "/planner",
+                            "type": "Birthday",
                             "image": "https://images.unsplash.com/photo-1530103862676-de8c9debad1d?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&w=800&q=80",
-                            "title": "Birthday Parties",
-                            "subtitle": "Celebrate in style"
+                            "likes": 124,
+                            "title": "Sarah's 30th Birthday Bash",
+                            "views": 1243,
+                            "location": "Los Angeles, CA"
                           },
                           {
-                            "id": "cat_3",
-                            "href": "/planner/new?type=corporate",
+                            "id": "2",
+                            "date": "June 20, 2026",
+                            "href": "/planner",
+                            "type": "Wedding",
+                            "image": "https://images.unsplash.com/photo-1519741497674-611481863552?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&w=800&q=80",
+                            "likes": 256,
+                            "title": "Emma & James Wedding",
+                            "views": 2567,
+                            "location": "Miami, FL"
+                          },
+                          {
+                            "id": "3",
+                            "date": "April 8, 2026",
+                            "href": "/planner",
+                            "type": "Corporate",
                             "image": "https://images.unsplash.com/photo-1511578314322-379afb476865?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&w=800&q=80",
-                            "title": "Corporate Events",
-                            "subtitle": "Professional gatherings"
+                            "likes": 89,
+                            "title": "Tech Corp Annual Summit",
+                            "views": 892,
+                            "location": "New York, NY"
                           },
                           {
-                            "id": "cat_4",
-                            "href": "/planner/new?type=social",
+                            "id": "4",
+                            "date": "May 3, 2026",
+                            "href": "/planner",
+                            "type": "Parties",
+                            "image": "/hero/1776856812898-i1.jfif",
+                            "likes": 65,
+                            "title": "Baby Shower for Maya",
+                            "views": 654,
+                            "location": "Austin, TX"
+                          },
+                          {
+                            "id": "5",
+                            "date": "June 5, 2026",
+                            "href": "/planner",
+                            "type": "Parties",
+                            "image": "/hero/1776856822751-i2.jpg",
+                            "likes": 187,
+                            "title": "Class of 2026 Graduation",
+                            "views": 1876,
+                            "location": "Boston, MA"
+                          },
+                          {
+                            "id": "6",
+                            "date": "July 12, 2026",
+                            "href": "/planner",
+                            "type": "Parties",
                             "image": "https://images.unsplash.com/photo-1464366400600-7168b8af9bc3?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&w=800&q=80",
-                            "title": "Social Events",
-                            "subtitle": "Gatherings & parties"
+                            "likes": 43,
+                            "title": "25th Anniversary Dinner",
+                            "views": 432,
+                            "location": "Seattle, WA"
                           }
                         ],
-                        "minCardWidth": 280,
-                        "_translations": {
-                          "ar": {
-                            "title": "أنواع الأحداث الشائعة",
-                            "subtitle": "ابحث عن موارد التخطيط المثالية لأي احتفال",
-                            "badge.text": "فئات الأحداث"
-                          },
-                          "bn": {
-                            "title": "জনপ্রিয় ইভেন্টের ধরন",
-                            "subtitle": "যেকোনো উৎসবের জন্য নিখুঁত পরিকল্পনা সম্পদ খুঁজুন",
-                            "badge.text": "ইভেন্ট বিভাগসমূহ"
-                          },
-                          "sv": {
-                            "title": "Populära evenemangstyper",
-                            "subtitle": "Hitta perfekta planeringsresurser för varje firande",
-                            "badge.text": "Evenemangskategorier"
+                        "title": "Get Inspired by Real Events",
+                        "columns": 3,
+                        "ctaHref": "/vendors",
+                        "showCta": true,
+                        "ctaLabel": "View More Events",
+                        "subtitle": "Explore stunning celebrations from our community and find ideas for your next event",
+                        "container": {
+                          "shadow": "none",
+                          "padding": 0,
+                          "borderWidth": 2,
+                          "borderRadius": 0,
+                          "backgroundType": "solid",
+                          "gradientBorder": {
+                            "angle": 135,
+                            "colors": [
+                              "#ec4899",
+                              "#8b5cf6"
+                            ],
+                            "enabled": false
                           }
-                        }
+                        },
+                        "sectionBg": "linear-gradient(to bottom, #faf5ff, #ffffff)",
+                        "cardBadgeTo": "#ec4899",
+                        "cardBadgeFrom": "#9333ea",
+                        "ctaGradientTo": "#ec4899",
+                        "ctaGradientFrom": "#9333ea",
+                        "planSimilarHref": "",
+                        "planSimilarLabel": "Plan Similar"
                       }
                     }
                   ],
@@ -1835,7 +2013,7 @@
                           "thumbnailAspectRatio": "9:16"
                         },
                         "dataSource": {
-                          "limit": 6,
+                          "limit": 5,
                           "sortBy": "sort-order",
                           "testimonialType": "all"
                         },
@@ -2226,132 +2404,6 @@
               }
             }
           ]
-        }
-      ]
-    },
-    {
-      "slug": "services",
-      "name": "Services",
-      "templateType": "SERVICES_LIST",
-      "isSystem": true,
-      "isTemplateActive": true,
-      "metaTitle": "Wedding Planning Services | Ceremoney",
-      "metaDescription": "Explore Ceremoney's wedding planning packages and services.",
-      "blocks": [
-        {
-          "type": "widget-page-sections",
-          "name": "Services Sections",
-          "sortOrder": 0,
-          "isActive": true,
-          "settings": []
-        }
-      ]
-    },
-    {
-      "slug": "service",
-      "name": "Service Detail",
-      "templateType": "SERVICE_DETAILS",
-      "isSystem": true,
-      "isTemplateActive": true,
-      "metaTitle": "Service | Ceremoney",
-      "metaDescription": "Wedding planning service details.",
-      "blocks": [
-        {
-          "type": "widget-page-sections",
-          "name": "Service Sections",
-          "sortOrder": 0,
-          "isActive": true,
-          "settings": []
-        }
-      ]
-    },
-    {
-      "slug": "about",
-      "name": "About",
-      "templateType": "ABOUT",
-      "isSystem": true,
-      "isTemplateActive": false,
-      "metaTitle": "About Ceremoney — Your Wedding Planning Partner",
-      "metaDescription": "Learn about Ceremoney, the all-in-one wedding planning platform.",
-      "blocks": [
-        {
-          "type": "widget-page-sections",
-          "name": "About Sections",
-          "sortOrder": 0,
-          "isActive": true,
-          "settings": []
-        }
-      ]
-    },
-    {
-      "slug": "contact",
-      "name": "Contact",
-      "templateType": "CONTACT",
-      "isSystem": true,
-      "isTemplateActive": false,
-      "metaTitle": "Contact Ceremoney",
-      "metaDescription": "Get in touch with the Ceremoney team.",
-      "blocks": [
-        {
-          "type": "widget-page-sections",
-          "name": "Contact Sections",
-          "sortOrder": 0,
-          "isActive": true,
-          "settings": []
-        }
-      ]
-    },
-    {
-      "slug": "faq",
-      "name": "FAQ",
-      "templateType": "FAQ",
-      "isSystem": true,
-      "isTemplateActive": false,
-      "metaTitle": "Wedding Planning FAQ | Ceremoney",
-      "metaDescription": "Frequently asked questions about Ceremoney.",
-      "blocks": [
-        {
-          "type": "widget-page-sections",
-          "name": "FAQ Sections",
-          "sortOrder": 0,
-          "isActive": true,
-          "settings": []
-        }
-      ]
-    },
-    {
-      "slug": "pricing",
-      "name": "Pricing",
-      "templateType": "PRICING",
-      "isSystem": true,
-      "isTemplateActive": false,
-      "metaTitle": "Wedding Planning Pricing | Ceremoney",
-      "metaDescription": "Simple, transparent pricing for Ceremoney's wedding planning platform.",
-      "blocks": [
-        {
-          "type": "widget-page-sections",
-          "name": "Pricing Sections",
-          "sortOrder": 0,
-          "isActive": true,
-          "settings": []
-        }
-      ]
-    },
-    {
-      "slug": "blog-list",
-      "name": "Blog",
-      "templateType": "BLOG_LIST",
-      "isSystem": true,
-      "isTemplateActive": true,
-      "metaTitle": "Wedding Planning Blog | Ceremoney",
-      "metaDescription": "Wedding planning tips, inspiration, and advice.",
-      "blocks": [
-        {
-          "type": "widget-page-sections",
-          "name": "Blog Sections",
-          "sortOrder": 0,
-          "isActive": true,
-          "settings": []
         }
       ]
     }

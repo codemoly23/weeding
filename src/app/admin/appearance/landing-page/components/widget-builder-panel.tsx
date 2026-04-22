@@ -62,7 +62,6 @@ import {
   ButtonGroupWidgetSettingsPanel,
   EventSearchHeroSettingsPanel,
   EventGalleryGridSettingsPanel,
-  EventCategoriesGridSettingsPanel,
   FeaturesShowcaseSettingsPanel,
   TrendingVenuesSettingsPanel,
   CtaBannerSettingsPanel,
@@ -724,15 +723,6 @@ function EditMode({ widget, section, columnId, activeFieldId, onBack, onUpdateSe
             />
           )}
 
-          {/* Event Categories Grid Widget */}
-          {widget.type === "event-categories-grid" && (
-            <EventCategoriesGridSettingsPanel
-              settings={widget.settings as any}
-              onChange={onUpdateSettings}
-              activeTab={activeTab}
-              activeFieldId={activeFieldId}
-            />
-          )}
 
           {/* Features Showcase Widget */}
           {widget.type === "features-showcase" && (
@@ -784,7 +774,7 @@ function EditMode({ widget, section, columnId, activeFieldId, onBack, onUpdateSe
           )}
 
           {/* Fallback for unknown widget types */}
-          {!["hero-content", "heading", "text-block", "image", "image-slider", "trust-badges", "stats-section", "divider", "service-card", "service-list", "process-steps", "pricing-table", "testimonials-carousel", "lead-form", "service-hero", "faq", "faq-accordion", "service-features", "service-description", "service-breadcrumb", "related-services", "blog-post-grid", "blog-post-carousel", "blog-featured-post", "blog-post-list", "blog-recent-posts", "event-search-hero", "event-gallery-grid", "event-categories-grid", "features-showcase", "trending-venues", "cta-banner", "top-utility-bar"].includes(widget.type) && (
+          {!["hero-content", "heading", "text-block", "image", "image-slider", "trust-badges", "stats-section", "divider", "service-card", "service-list", "process-steps", "pricing-table", "testimonials-carousel", "lead-form", "service-hero", "faq", "faq-accordion", "service-features", "service-description", "service-breadcrumb", "related-services", "blog-post-grid", "blog-post-carousel", "blog-featured-post", "blog-post-list", "blog-recent-posts", "event-search-hero", "event-gallery-grid", "features-showcase", "trending-venues", "cta-banner", "top-utility-bar"].includes(widget.type) && (
             <p className="text-center text-sm text-muted-foreground">
               Settings for {widget.type} coming soon.
             </p>

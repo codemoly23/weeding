@@ -36,7 +36,6 @@ import {
   DEFAULT_VENDOR_LISTING_SETTINGS,
   DEFAULT_EVENT_SEARCH_HERO_SETTINGS,
   DEFAULT_EVENT_GALLERY_GRID_SETTINGS,
-  DEFAULT_EVENT_CATEGORIES_GRID_SETTINGS,
   DEFAULT_CTA_BANNER_SETTINGS,
   DEFAULT_TOP_UTILITY_BAR_SETTINGS,
   DEFAULT_TICKER_MARQUEE_SETTINGS,
@@ -54,7 +53,7 @@ import {
 } from "./defaults";
 
 // Import widget components
-import { HeroContentWidget, ProcessStepsWidget, HeadingWidget, TextBlockWidget, TickerMarqueeWidget, SocialShareRailWidget, EventSearchHeroWidget, EventGalleryGridWidget, EventCategoriesGridWidget, CtaBannerWidget, FeaturesShowcaseWidget, TrendingVenuesWidget } from "@/components/page-builder/widgets/content";
+import { HeroContentWidget, ProcessStepsWidget, HeadingWidget, TextBlockWidget, TickerMarqueeWidget, SocialShareRailWidget, EventSearchHeroWidget, EventGalleryGridWidget, CtaBannerWidget, FeaturesShowcaseWidget, TrendingVenuesWidget } from "@/components/page-builder/widgets/content";
 import { ImageWidget, ImageSliderWidget } from "@/components/page-builder/widgets/media";
 import {
   TrustBadgesWidget,
@@ -431,17 +430,6 @@ export function registerAllWidgets() {
     category: "wedding",
     defaultSettings: DEFAULT_TRENDING_VENUES_SETTINGS,
     component: TrendingVenuesWidget,
-  });
-
-  // Event Categories Grid Widget
-  WidgetRegistry.register({
-    type: "event-categories-grid",
-    name: "Event Categories Grid",
-    description: "Popular event types grid with image cards, hover lift effect, and section header",
-    icon: "LayoutGrid",
-    category: "wedding",
-    defaultSettings: DEFAULT_EVENT_CATEGORIES_GRID_SETTINGS,
-    component: EventCategoriesGridWidget,
   });
 
   // CTA Banner Widget

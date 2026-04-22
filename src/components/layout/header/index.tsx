@@ -28,7 +28,7 @@ const fallbackNavigation: NavigationItem[] = [
 
 export function Header() {
   const { config: businessConfig } = useBusinessConfig();
-  const { config: headerConfig } = useHeaderConfig();
+  const { config: headerConfig, isLoading: headerLoading } = useHeaderConfig();
   const { data: session, status } = useSession();
   const [user, setUser] = useState<LoggedInUser | null>(null);
 
@@ -179,6 +179,11 @@ export function Header() {
         return <HeaderDefault {...layoutProps} />;
     }
   };
+
+  // Don't render anything until header config is loaded to prevent flash of default content
+  if (headerLoading) {
+    return <div style={{ height: `${headerConfig?.height ?? 64}px` }} className="w-full" aria-hidden="true" />;
+  }
 
   return (
     <>

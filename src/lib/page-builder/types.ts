@@ -261,7 +261,6 @@ export type WidgetType =
   // Event/Planner Widgets
   | "event-search-hero"
   | "event-gallery-grid"
-  | "event-categories-grid"
   | "cta-banner"
   // Navigation Widgets
   | "top-utility-bar"
@@ -3562,29 +3561,6 @@ export interface BlogRecentPostsWidgetSettings {
   container?: WidgetContainerStyle;
 }
 
-// ── Event Categories Grid Widget ─────────────────────────────────────────────
-
-export interface EventCategoryItem {
-  id: string;
-  image: string;
-  title: string;
-  subtitle: string;
-  href: string;
-}
-
-export interface EventCategoriesGridWidgetSettings {
-  badge: {
-    show: boolean;
-    text: string;
-  };
-  title: string;
-  subtitle: string;
-  cardHeight: number;
-  minCardWidth: number;
-  gap: number;
-  categories: EventCategoryItem[];
-}
-
 // ── Vendor Listing Widget ────────────────────────────────────────────────────
 
 export interface VendorListingWidgetSettings {
@@ -3620,10 +3596,12 @@ export interface EventGalleryGridItem {
   title: string;
   type: string;      // Category badge text e.g. "Wedding", "Birthday"
   image: string;
-  date: string;
-  location: string;
-  views: number;
-  href: string;      // Link for "Plan Similar" button
+  subtitle?: string; // Optional subtitle for category-style cards
+  date?: string;
+  location?: string;
+  views?: number;
+  likes?: number;
+  href: string;
 }
 
 export interface EventGalleryGridWidgetSettings {
@@ -3646,10 +3624,6 @@ export interface EventGalleryGridWidgetSettings {
   // Card category badge gradient
   cardBadgeFrom: string;
   cardBadgeTo: string;
-
-  // "Plan Similar" button
-  planSimilarLabel: string;
-  planSimilarHref: string; // If empty, uses item.href
 
   // Bottom CTA button
   showCta: boolean;
@@ -4031,6 +4005,7 @@ export interface TickerMarqueeWidgetSettings {
 export interface FeaturesShowcaseItem {
   id: string;
   title: string;
+  description?: string;
   image: string;
   icon: string; // Lucide icon name
   href?: string;
@@ -4047,6 +4022,7 @@ export interface FeaturesShowcaseWidgetSettings {
   columns: 2 | 3;
   gap: number;
   cardHeight: number;
+  cardAspectRatio: "1/1" | "4/3" | "3/4" | "custom";
   showCta: boolean;
   ctaText: string;
   ctaHref: string;

@@ -20,7 +20,6 @@ export { FaqAccordionWidgetSettingsPanel } from "./faq-accordion-settings";
 export { ButtonGroupWidgetSettingsPanel } from "./button-group-settings";
 export { EventSearchHeroSettingsPanel } from "./event-search-hero-settings";
 export { EventGalleryGridSettingsPanel } from "./event-gallery-grid-settings";
-export { EventCategoriesGridSettingsPanel } from "./event-categories-grid-settings";
 export { FeaturesShowcaseSettingsPanel } from "./features-showcase-settings";
 export { TrendingVenuesSettingsPanel } from "./trending-venues-settings";
 export { CtaBannerSettingsPanel } from "./cta-banner-settings";

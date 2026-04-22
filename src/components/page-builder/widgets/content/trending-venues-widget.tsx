@@ -122,9 +122,14 @@ export function TrendingVenuesWidget({
 
 function MarqueeRow({ venues, isPreview }: { venues: TrendingVenueItem[]; isPreview: boolean }) {
   const tripled = [...venues, ...venues, ...venues];
+  const [paused, setPaused] = useState(false);
 
   return (
-    <div style={{ position: "relative", overflow: "hidden" }}>
+    <div
+      style={{ position: "relative", overflow: "hidden" }}
+      onMouseEnter={() => setPaused(true)}
+      onMouseLeave={() => setPaused(false)}
+    >
       <style>{`
         @keyframes venues-marquee {
           0%   { transform: translateX(0); }
@@ -137,6 +142,7 @@ function MarqueeRow({ venues, isPreview }: { venues: TrendingVenueItem[]; isPrev
           gap: "1.5rem",
           padding: "0.5rem 1.5rem",
           animation: "venues-marquee 35s linear infinite",
+          animationPlayState: paused ? "paused" : "running",
           width: "max-content",
         }}
       >

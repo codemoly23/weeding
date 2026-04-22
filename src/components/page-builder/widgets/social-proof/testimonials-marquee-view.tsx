@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import type { TestimonialsWidgetSettings, TestimonialItem } from "@/lib/page-builder/types";
 import { StarRating, getInitials } from "./testimonials-widget";
 
@@ -14,6 +15,7 @@ export function TestimonialsMarqueeView({
   settings,
 }: TestimonialsMarqueeViewProps) {
   const { content, avatar } = settings;
+  const [paused, setPaused] = useState(false);
 
   if (testimonials.length === 0) return null;
 
@@ -21,7 +23,11 @@ export function TestimonialsMarqueeView({
   const tripled = [...testimonials, ...testimonials, ...testimonials];
 
   return (
-    <div style={{ position: "relative", overflow: "hidden", margin: "0 -1rem" }}>
+    <div
+      style={{ position: "relative", overflow: "hidden", margin: "0 -1rem" }}
+      onMouseEnter={() => setPaused(true)}
+      onMouseLeave={() => setPaused(false)}
+    >
       <style>{`
         @keyframes marquee-scroll {
           0%   { transform: translateX(0); }
@@ -35,6 +41,7 @@ export function TestimonialsMarqueeView({
           gap: "1.5rem",
           padding: "0.5rem 1rem",
           animation: "marquee-scroll 30s linear infinite",
+          animationPlayState: paused ? "paused" : "running",
           width: "max-content",
         }}
       >
@@ -49,6 +56,17 @@ export function TestimonialsMarqueeView({
               padding: "2rem",
               border: "1px solid #e5e7eb",
               boxShadow: "0 4px 6px rgba(0,0,0,0.1)",
+              transition: "transform 0.3s ease, box-shadow 0.3s ease",
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.transform = "translateY(-6px)";
+              e.currentTarget.style.boxShadow = "0 16px 32px rgba(147,51,234,0.15)";
+              e.currentTarget.style.borderColor = "#d8b4fe";
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.transform = "translateY(0)";
+              e.currentTarget.style.boxShadow = "0 4px 6px rgba(0,0,0,0.1)";
+              e.currentTarget.style.borderColor = "#e5e7eb";
             }}
           >
             {/* Author row */}

@@ -10,7 +10,7 @@ const fallbackTestimonials = [
     country: "Bangladesh",
     avatar: null,
     content:
-      "Ceremoney made planning our wedding incredibly easy. The team was responsive and guided us through every step. Highly recommended!",
+      "EventPlanner Pro made planning our wedding incredibly easy. The team was responsive and guided us through every step. Highly recommended!",
     rating: 5,
     type: "photo" as "photo" | "video",
     videoUrl: null,
@@ -49,7 +49,7 @@ const fallbackTestimonials = [
     country: "India",
     avatar: null,
     content:
-      "I was nervous about planning a destination wedding, but Ceremoney made it incredibly smooth. Within days, I had vendors, venue, and a full plan ready.",
+      "I was nervous about planning a destination wedding, but EventPlanner Pro made it incredibly smooth. Within days, I had vendors, venue, and a full plan ready.",
     rating: 5,
     type: "photo" as "photo" | "video",
     videoUrl: null,
@@ -62,7 +62,7 @@ const fallbackTestimonials = [
     country: "Pakistan",
     avatar: null,
     content:
-      "After comparing 5+ services, I chose Ceremoney for their transparency and expertise. Best decision ever! True event partners.",
+      "After comparing 5+ services, I chose EventPlanner Pro for their transparency and expertise. Best decision ever! True event partners.",
     rating: 5,
     type: "photo" as "photo" | "video",
     videoUrl: null,
@@ -75,7 +75,7 @@ const fallbackTestimonials = [
     country: "UAE",
     avatar: null,
     content:
-      "Exceptional experience from start to finish! Ceremoney helped us create the most beautiful event. Trustworthy partner for any celebration.",
+      "Exceptional experience from start to finish! EventPlanner Pro helped us create the most beautiful event. Trustworthy partner for any celebration.",
     rating: 5,
     type: "photo" as "photo" | "video",
     videoUrl: null,

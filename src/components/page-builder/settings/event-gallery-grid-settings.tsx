@@ -28,9 +28,6 @@ function newItem(): EventGalleryGridItem {
     title: "New Event",
     type: "Event",
     image: "",
-    date: "",
-    location: "",
-    views: 0,
     href: "/planner/new",
   };
 }
@@ -159,26 +156,39 @@ export function EventGalleryGridSettingsPanel({
                     placeholder="Wedding"
                   />
                   <TextInput
+                    label="Subtitle (optional)"
+                    value={item.subtitle ?? ""}
+                    onChange={(v) => updateItem(index, { subtitle: v })}
+                    placeholder="e.g. Plan your dream wedding"
+                  />
+                  <TextInput
                     label="Date"
-                    value={item.date}
+                    value={item.date ?? ""}
                     onChange={(v) => updateItem(index, { date: v })}
                     placeholder="June 20, 2026"
                   />
                   <TextInput
                     label="Location"
-                    value={item.location}
+                    value={item.location ?? ""}
                     onChange={(v) => updateItem(index, { location: v })}
                     placeholder="Miami, FL"
                   />
                   <NumberInput
                     label="Views"
-                    value={item.views}
+                    value={item.views ?? 0}
                     onChange={(v) => updateItem(index, { views: v })}
                     min={0}
                     step={1}
                   />
+                  <NumberInput
+                    label="Likes"
+                    value={item.likes ?? 0}
+                    onChange={(v) => updateItem(index, { likes: v })}
+                    min={0}
+                    step={1}
+                  />
                   <TextInput
-                    label="Link (Plan Similar href)"
+                    label="Link (View Details href)"
                     value={item.href}
                     onChange={(v) => updateItem(index, { href: v })}
                     placeholder="/planner/new"
@@ -198,24 +208,6 @@ export function EventGalleryGridSettingsPanel({
                 Add Event Card
               </Button>
             )}
-          </div>
-        </AccordionSection>
-
-        {/* "Plan Similar" Button */}
-        <AccordionSection title="Plan Similar Button" {...getAccordionProps("plan-similar")}>
-          <div className="space-y-3">
-            <TextInput
-              label="Button Label"
-              value={settings.planSimilarLabel}
-              onChange={(v) => update("planSimilarLabel", v)}
-              placeholder="Plan Similar"
-            />
-            <TextInput
-              label="Override Link (leave blank to use each card's link)"
-              value={settings.planSimilarHref}
-              onChange={(v) => update("planSimilarHref", v)}
-              placeholder="/planner/new"
-            />
           </div>
         </AccordionSection>
 

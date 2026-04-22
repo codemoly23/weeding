@@ -15,7 +15,6 @@ import { ProcessStepsWidget } from "../widgets/content/process-steps";
 import { TickerMarqueeWidget } from "../widgets/content/ticker-marquee";
 import { SocialShareRailWidget } from "../widgets/content/social-share-rail";
 import { EventSearchHeroWidget } from "../widgets/content/event-search-hero-widget";
-import { EventCategoriesGridWidget } from "../widgets/content/event-categories-grid-widget";
 import { EventGalleryGridWidget } from "../widgets/content/event-gallery-grid-widget";
 import { CtaBannerWidget } from "../widgets/content/cta-banner-widget";
 
@@ -84,7 +83,6 @@ const WIDGET_COMPONENTS: Partial<Record<WidgetType, React.ComponentType<any>>> =
   "ticker-marquee": TickerMarqueeWidget,
   "social-share-rail": SocialShareRailWidget,
   "event-search-hero": EventSearchHeroWidget,
-  "event-categories-grid": EventCategoriesGridWidget,
   "event-gallery-grid": EventGalleryGridWidget,
   "cta-banner": CtaBannerWidget,
 

@@ -40,7 +40,6 @@ import type {
   EventSearchHeroWidgetSettings,
   EventGalleryGridWidgetSettings,
   EventGalleryGridItem,
-  EventCategoriesGridWidgetSettings,
   CtaBannerWidgetSettings,
   TopUtilityBarWidgetSettings,
   BreadcrumbWidgetSettings,
@@ -190,7 +189,7 @@ export const DEFAULT_HERO_CONTENT_SETTINGS: HeroContentWidgetSettings = {
     color: "#000000",
   },
   subheadline: {
-    text: "Ceremoney brings your guest list, seating charts, event website, RSVP collection, and vendor coordination into one beautiful platform — so you can focus on enjoying every moment.",
+    text: "EventPlanner Pro brings your guest list, seating charts, event website, RSVP collection, and vendor coordination into one beautiful platform — so you can focus on enjoying every moment.",
     show: true,
     size: "lg",
     color: "#94a3b8",
@@ -517,7 +516,7 @@ export const DEFAULT_VIDEO_SETTINGS: VideoWidgetSettings = {
 };
 
 export const DEFAULT_TESTIMONIAL_SETTINGS: TestimonialWidgetSettings = {
-  quote: "Ceremoney made planning our wedding so easy. The guest management and vendor tools saved us weeks of stress. Absolutely love it!",
+  quote: "EventPlanner Pro made planning our wedding so easy. The guest management and vendor tools saved us weeks of stress. Absolutely love it!",
   author: {
     name: "Sofia Lindqvist",
     role: "Bride",
@@ -559,7 +558,7 @@ export const DEFAULT_TESTIMONIALS_SETTINGS: TestimonialsWidgetSettings = {
     },
     description: {
       show: true,
-      text: "See what couples and event hosts from around the world have to say about their experience with Ceremoney.",
+      text: "See what couples and event hosts from around the world have to say about their experience with EventPlanner Pro.",
       size: "md",
       color: "#94a3b8",
     },
@@ -1032,7 +1031,7 @@ export const DEFAULT_SERVICE_CARD_SETTINGS: ServiceCardWidgetSettings = {
     },
     description: {
       show: true,
-      text: "From guest list to seating chart, event website to vendor coordination, Ceremoney brings every part of your wedding planning into one place.",
+      text: "From guest list to seating chart, event website to vendor coordination, EventPlanner Pro brings every part of your wedding planning into one place.",
       size: "lg",
       color: "#94a3b8",
     },
@@ -2372,6 +2371,7 @@ const DEFAULT_EVENT_GALLERY_ITEMS: EventGalleryGridItem[] = [
     date: "March 15, 2026",
     location: "Los Angeles, CA",
     views: 1243,
+    likes: 124,
     href: "/planner/new",
   },
   {
@@ -2382,6 +2382,7 @@ const DEFAULT_EVENT_GALLERY_ITEMS: EventGalleryGridItem[] = [
     date: "June 20, 2026",
     location: "Miami, FL",
     views: 2567,
+    likes: 256,
     href: "/planner/new",
   },
   {
@@ -2392,6 +2393,40 @@ const DEFAULT_EVENT_GALLERY_ITEMS: EventGalleryGridItem[] = [
     date: "April 8, 2026",
     location: "New York, NY",
     views: 892,
+    likes: 89,
+    href: "/planner/new",
+  },
+  {
+    id: "4",
+    title: "Baby Shower for Maya",
+    type: "Parties",
+    image: "https://images.unsplash.com/photo-1602631985686-1bb2456a9d48?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&w=800&q=80",
+    date: "May 3, 2026",
+    location: "Austin, TX",
+    views: 654,
+    likes: 65,
+    href: "/planner/new",
+  },
+  {
+    id: "5",
+    title: "Class of 2026 Graduation",
+    type: "Parties",
+    image: "https://images.unsplash.com/photo-1523050854058-8df90110c9f1?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&w=800&q=80",
+    date: "June 5, 2026",
+    location: "Boston, MA",
+    views: 1876,
+    likes: 187,
+    href: "/planner/new",
+  },
+  {
+    id: "6",
+    title: "25th Anniversary Dinner",
+    type: "Parties",
+    image: "https://images.unsplash.com/photo-1464366400600-7168b8af9bc3?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&w=800&q=80",
+    date: "July 12, 2026",
+    location: "Seattle, WA",
+    views: 432,
+    likes: 43,
     href: "/planner/new",
   },
 ];
@@ -2400,13 +2435,11 @@ export const DEFAULT_EVENT_GALLERY_GRID_SETTINGS: EventGalleryGridWidgetSettings
   badge: { show: true, icon: "Camera", text: "Real Event Inspiration" },
   title: "Get Inspired by Real Events",
   subtitle: "Explore stunning celebrations from our community and find ideas for your next event",
-  sectionBg: "linear-gradient(to bottom, #faf5ff, #ffffff)",
+  sectionBg: "linear-gradient(135deg, #fdf4ff 0%, #fce7f3 40%, #ffffff 100%)",
   items: DEFAULT_EVENT_GALLERY_ITEMS,
   columns: 3,
   cardBadgeFrom: "#9333ea",
   cardBadgeTo: "#ec4899",
-  planSimilarLabel: "Plan Similar",
-  planSimilarHref: "",
   showCta: true,
   ctaLabel: "View More Events",
   ctaHref: "/vendors",
@@ -2436,50 +2469,6 @@ export const DEFAULT_VENDOR_LISTING_SETTINGS = {
   container: DEFAULT_WIDGET_CONTAINER,
 };
 
-// ── Event Categories Grid Widget ─────────────────────────────────────────────
-
-export const DEFAULT_EVENT_CATEGORIES_GRID_SETTINGS: EventCategoriesGridWidgetSettings = {
-  badge: {
-    show: true,
-    text: "Event Categories",
-  },
-  title: "Popular Event Types",
-  subtitle: "Find the perfect planning resources for any celebration",
-  cardHeight: 280,
-  minCardWidth: 280,
-  gap: 24,
-  categories: [
-    {
-      id: "cat_1",
-      image: "https://images.unsplash.com/photo-1519741497674-611481863552?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&w=800&q=80",
-      title: "Weddings",
-      subtitle: "Plan your dream wedding",
-      href: "/planner/new?type=wedding",
-    },
-    {
-      id: "cat_2",
-      image: "https://images.unsplash.com/photo-1530103862676-de8c9debad1d?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&w=800&q=80",
-      title: "Birthday Parties",
-      subtitle: "Celebrate in style",
-      href: "/planner/new?type=birthday",
-    },
-    {
-      id: "cat_3",
-      image: "https://images.unsplash.com/photo-1511578314322-379afb476865?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&w=800&q=80",
-      title: "Corporate Events",
-      subtitle: "Professional gatherings",
-      href: "/planner/new?type=corporate",
-    },
-    {
-      id: "cat_4",
-      image: "https://images.unsplash.com/photo-1464366400600-7168b8af9bc3?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&w=800&q=80",
-      title: "Social Events",
-      subtitle: "Gatherings & parties",
-      href: "/planner/new?type=social",
-    },
-  ],
-};
-
 // ── Features Showcase Widget ──────────────────────────────────────────────────
 
 export const DEFAULT_FEATURES_SHOWCASE_SETTINGS: FeaturesShowcaseWidgetSettings = {
@@ -2492,6 +2481,7 @@ export const DEFAULT_FEATURES_SHOWCASE_SETTINGS: FeaturesShowcaseWidgetSettings 
   columns: 3,
   gap: 16,
   cardHeight: 260,
+  cardAspectRatio: "1/1",
   showCta: true,
   ctaText: "Explore All Features",
   ctaHref: "/features",
@@ -2499,6 +2489,7 @@ export const DEFAULT_FEATURES_SHOWCASE_SETTINGS: FeaturesShowcaseWidgetSettings 
     {
       id: "feat_1",
       title: "Event Dashboard",
+      description: "Centralized command center to manage all your event details, timelines, and tasks in one beautiful interface",
       image: "https://images.unsplash.com/photo-1551818255-e6e10975bc17?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&w=800&q=80",
       icon: "LayoutGrid",
       href: "/features/dashboard",
@@ -2506,6 +2497,7 @@ export const DEFAULT_FEATURES_SHOWCASE_SETTINGS: FeaturesShowcaseWidgetSettings 
     {
       id: "feat_2",
       title: "Guest Management",
+      description: "Effortlessly manage your guest list, track RSVPs, and handle seating arrangements with smart tools",
       image: "https://images.unsplash.com/photo-1511578314322-379afb476865?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&w=800&q=80",
       icon: "Users",
       href: "/features/guests",
@@ -2513,6 +2505,7 @@ export const DEFAULT_FEATURES_SHOWCASE_SETTINGS: FeaturesShowcaseWidgetSettings 
     {
       id: "feat_3",
       title: "Budget Tracker",
+      description: "Stay on top of every expense with real-time budget tracking and automated cost breakdowns",
       image: "https://images.unsplash.com/photo-1554224155-6726b3ff858f?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&w=800&q=80",
       icon: "DollarSign",
       href: "/features/budget",
@@ -2520,6 +2513,7 @@ export const DEFAULT_FEATURES_SHOWCASE_SETTINGS: FeaturesShowcaseWidgetSettings 
     {
       id: "feat_4",
       title: "Vendor Marketplace",
+      description: "Discover, compare, and book trusted vendors all in one place — from caterers to photographers",
       image: "https://images.unsplash.com/photo-1555396273-367ea4eb4db5?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&w=800&q=80",
       icon: "Store",
       href: "/features/vendors",
@@ -2527,6 +2521,7 @@ export const DEFAULT_FEATURES_SHOWCASE_SETTINGS: FeaturesShowcaseWidgetSettings 
     {
       id: "feat_5",
       title: "Smart Checklist",
+      description: "Never miss a detail with AI-powered checklists that adapt to your event type and timeline",
       image: "https://images.unsplash.com/photo-1484480974693-6ca0a78fb36b?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&w=800&q=80",
       icon: "ListChecks",
       href: "/features/checklist",
@@ -2534,6 +2529,7 @@ export const DEFAULT_FEATURES_SHOWCASE_SETTINGS: FeaturesShowcaseWidgetSettings 
     {
       id: "feat_6",
       title: "Digital Invitations",
+      description: "Design stunning digital invitations and send them instantly to all your guests with one click",
       image: "https://images.unsplash.com/photo-1585776245991-cf89dd7fc73a?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&w=800&q=80",
       icon: "Mail",
       href: "/features/invitations",
@@ -2739,7 +2735,6 @@ export const WIDGET_DEFAULTS: Record<string, unknown> = {
   "vendor-listing": DEFAULT_VENDOR_LISTING_SETTINGS,
   "event-search-hero": DEFAULT_EVENT_SEARCH_HERO_SETTINGS,
   "event-gallery-grid": DEFAULT_EVENT_GALLERY_GRID_SETTINGS,
-  "event-categories-grid": DEFAULT_EVENT_CATEGORIES_GRID_SETTINGS,
   "features-showcase": DEFAULT_FEATURES_SHOWCASE_SETTINGS,
   "trending-venues": DEFAULT_TRENDING_VENUES_SETTINGS,
   "cta-banner": DEFAULT_CTA_BANNER_SETTINGS,

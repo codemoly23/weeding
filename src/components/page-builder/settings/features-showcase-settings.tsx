@@ -5,8 +5,10 @@ import type { FeaturesShowcaseWidgetSettings, FeaturesShowcaseItem } from "@/lib
 import { DEFAULT_FEATURES_SHOWCASE_SETTINGS } from "@/lib/page-builder/defaults";
 import {
   TextInput,
+  TextAreaInput,
   NumberInput,
   ToggleSwitch,
+  SelectInput,
 } from "@/app/admin/appearance/landing-page/components/ui/form-controls";
 import { AccordionSection } from "@/app/admin/appearance/landing-page/components/ui/accordion-section";
 import { ImageUpload } from "@/app/admin/appearance/landing-page/components/ui/image-upload";
@@ -143,6 +145,14 @@ export function FeaturesShowcaseSettingsPanel({
                   placeholder="Event Dashboard"
                 />
 
+                <TextAreaInput
+                  label="Description"
+                  value={item.description ?? ""}
+                  onChange={(v) => updateItem(i, { description: v })}
+                  placeholder="Brief description shown on card hover..."
+                  rows={3}
+                />
+
                 <TextInput
                   label="Icon (Lucide name)"
                   value={item.icon}
@@ -216,15 +226,28 @@ export function FeaturesShowcaseSettingsPanel({
               max={3}
               step={1}
             />
-            <NumberInput
-              label="Card Height"
-              value={settings.cardHeight}
-              onChange={(v) => updateField("cardHeight", v)}
-              min={180}
-              max={480}
-              step={20}
-              unit="px"
+            <SelectInput
+              label="Card Shape"
+              value={settings.cardAspectRatio ?? "1/1"}
+              onChange={(v) => updateField("cardAspectRatio", v as "1/1" | "4/3" | "3/4" | "custom")}
+              options={[
+                { label: "Square (1:1)", value: "1/1" },
+                { label: "Landscape (4:3)", value: "4/3" },
+                { label: "Portrait (3:4)", value: "3/4" },
+                { label: "Custom Height", value: "custom" },
+              ]}
             />
+            {(settings.cardAspectRatio ?? "1/1") === "custom" && (
+              <NumberInput
+                label="Card Height"
+                value={settings.cardHeight}
+                onChange={(v) => updateField("cardHeight", v)}
+                min={180}
+                max={480}
+                step={20}
+                unit="px"
+              />
+            )}
             <NumberInput
               label="Gap"
               value={settings.gap}

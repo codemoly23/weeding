@@ -6,7 +6,6 @@ export { TickerMarqueeWidget } from "./ticker-marquee";
 export { SocialShareRailWidget } from "./social-share-rail";
 export { EventSearchHeroWidget } from "./event-search-hero-widget";
 export { EventGalleryGridWidget } from "./event-gallery-grid-widget";
-export { EventCategoriesGridWidget } from "./event-categories-grid-widget";
 export { CtaBannerWidget } from "./cta-banner-widget";
 export { FeaturesShowcaseWidget } from "./features-showcase-widget";
 export { TrendingVenuesWidget } from "./trending-venues-widget";
