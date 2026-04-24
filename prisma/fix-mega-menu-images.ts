@@ -90,39 +90,6 @@ async function main() {
     console.log("⚠ Wedding Website menu item not found — skipping");
   }
 
-  // ── Dresses ───────────────────────────────────────────────────────────────
-  const dressesItem = await prisma.menuItem.findFirst({
-    where: { headerId: header.id, label: "Dresses" },
-  });
-
-  if (dressesItem) {
-    await prisma.menuItem.update({
-      where: { id: dressesItem.id },
-      data: {
-        megaMenuContent: {
-          type: "featured-gallery",
-          sectionHeader: "Find your dream dress",
-          topLinks: [
-            { name: "Browse all dresses", href: "/dresses" },
-            { name: "Designer collections", href: "/dresses/designers" },
-          ],
-          gallery: {
-            title: "FEATURED DESIGNERS",
-            aspectRatio: "portrait",
-            items: [
-              { name: "Featured Designer 1", imageUrl: "/designers/1777004155592-dre1.png", href: "/dresses/designers/1" },
-              { name: "Featured Designer 2", imageUrl: "/designers/1777004214636-dre2.png", href: "/dresses/designers/2" },
-            ],
-          },
-          footerLink: { text: "See all designers", href: "/dresses/designers" },
-        },
-      },
-    });
-    console.log("✓ Dresses megaMenuContent updated");
-  } else {
-    console.log("⚠ Dresses menu item not found — skipping");
-  }
-
   console.log("\n🎉 Done!");
 }
 
