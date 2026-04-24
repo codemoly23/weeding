@@ -107,6 +107,7 @@ export async function POST(request: NextRequest) {
       ...(item.categoryName ? { categoryName: item.categoryName } : {}),
       ...(item.categoryIcon ? { categoryIcon: item.categoryIcon } : {}),
       ...(item.categoryDesc ? { categoryDesc: item.categoryDesc } : {}),
+      ...(item.megaMenuContent ? { megaMenuContent: item.megaMenuContent } : {}),
       ...(item.children?.length ? { children: item.children.map(serializeMenuItem) } : {}),
     });
 
