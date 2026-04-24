@@ -199,18 +199,7 @@ export default function MenuBuilderPage() {
         const menuData = await menuRes.json();
         setMenuItems(menuData.menuItems || []);
 
-        // Expand items with children by default
-        const itemsWithChildren = new Set<string>();
-        function findItemsWithChildren(items: MenuItemWithChildren[]) {
-          items.forEach((item) => {
-            if (item.children && item.children.length > 0) {
-              itemsWithChildren.add(item.id);
-              findItemsWithChildren(item.children);
-            }
-          });
-        }
-        findItemsWithChildren(menuData.menuItems || []);
-        setExpandedItems(itemsWithChildren);
+        // All items collapsed by default
       }
     } catch (error) {
       toast.error("Failed to load menu items");
@@ -269,14 +258,15 @@ export default function MenuBuilderPage() {
       topLinks?: { name: string; icon: string; href: string }[];
       gallery?: { title?: string; items?: GalleryDesigner[]; aspectRatio?: "portrait" | "square" };
     } | null | undefined;
+    const isWeddingWebsite = item.label === "Wedding Website";
     setGalleryContent({
       sectionHeader: content?.sectionHeader || "",
       topLinks: content?.topLinks || [{ name: "", icon: "", href: "" }],
-      galleryTitle: content?.gallery?.title || "FEATURED DESIGNERS",
+      galleryTitle: content?.gallery?.title || (isWeddingWebsite ? "CHOOSE YOUR DESIGN" : "FEATURED DESIGNERS"),
       designers: content?.gallery?.items || [],
       featuredLink: (content as any)?.featuredLink || { text: "", href: "" },
       footerLink: (content as any)?.footerLink || { text: "", href: "" },
-      aspectRatio: (content as any)?.gallery?.aspectRatio || "portrait",
+      aspectRatio: (content as any)?.gallery?.aspectRatio || (isWeddingWebsite ? "square" : "portrait"),
     });
     setGalleryDialogOpen(true);
   }
@@ -740,8 +730,8 @@ export default function MenuBuilderPage() {
             >
               <Trash2 className="h-4 w-4" />
             </Button>
-            {/* Gallery content editor - only for Dresses, Registry */}
-            {["Dresses", "Registry"].includes(item.label) && !item.parentId && (
+            {/* Gallery content editor - Dresses, Registry, Wedding Website */}
+            {["Dresses", "Registry", "Wedding Website"].includes(item.label) && !item.parentId && (
               <Button
                 variant="ghost"
                 size="icon"
@@ -764,8 +754,8 @@ export default function MenuBuilderPage() {
                 <LayoutGrid className="h-4 w-4" />
               </Button>
             )}
-            {/* Ideas / Wedding Website grid editor */}
-            {(item.label === "Ideas" || item.label === "Wedding Website") && !item.parentId && (
+            {/* Ideas grid editor */}
+            {item.label === "Ideas" && !item.parentId && (
               <Button
                 variant="ghost"
                 size="icon"

@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import type { TestimonialsWidgetSettings, TestimonialItem } from "@/lib/page-builder/types";
-import { StarRating, getInitials } from "./testimonials-widget";
+import { getInitials } from "./testimonials-widget";
 
 interface TestimonialsMarqueeViewProps {
   testimonials: TestimonialItem[];
@@ -10,21 +10,34 @@ interface TestimonialsMarqueeViewProps {
   isPreview?: boolean;
 }
 
+function StarIcon({ filled, color }: { filled: boolean; color: string }) {
+  return (
+    <svg viewBox="0 0 24 24" style={{ width: 18, height: 18, fill: filled ? color : "#e5e7eb" }}>
+      <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
+    </svg>
+  );
+}
+
 export function TestimonialsMarqueeView({
   testimonials,
   settings,
 }: TestimonialsMarqueeViewProps) {
-  const { content, avatar } = settings;
+  const { content } = settings;
+  const ratingColor = content.ratingColor || "#facc15";
   const [paused, setPaused] = useState(false);
 
   if (testimonials.length === 0) return null;
 
   // Triple the cards for a seamless infinite loop
   const tripled = [...testimonials, ...testimonials, ...testimonials];
+  const gap = 24;
+  // Duration scales with number of cards so speed stays consistent
+  const duration = testimonials.length * 5;
 
   return (
+    <div style={{ padding: "0 450px" }}>
     <div
-      style={{ position: "relative", overflow: "hidden", margin: "0 -1rem" }}
+      style={{ position: "relative", overflow: "hidden" }}
       onMouseEnter={() => setPaused(true)}
       onMouseLeave={() => setPaused(false)}
     >
@@ -38,9 +51,9 @@ export function TestimonialsMarqueeView({
       <div
         style={{
           display: "flex",
-          gap: "1.5rem",
-          padding: "0.5rem 1rem",
-          animation: "marquee-scroll 30s linear infinite",
+          gap: `${gap}px`,
+          padding: "8px 0 16px",
+          animation: `marquee-scroll ${duration}s linear infinite`,
           animationPlayState: paused ? "paused" : "running",
           width: "max-content",
         }}
@@ -50,76 +63,76 @@ export function TestimonialsMarqueeView({
             key={`${t.id}-${idx}`}
             style={{
               flexShrink: 0,
-              width: "350px",
-              background: "white",
-              borderRadius: "1rem",
-              padding: "2rem",
-              border: "1px solid #e5e7eb",
-              boxShadow: "0 4px 6px rgba(0,0,0,0.1)",
-              transition: "transform 0.3s ease, box-shadow 0.3s ease",
+              width: "320px",
+              minHeight: "380px",
+              display: "flex",
+              flexDirection: "column",
+              background: "#ffffff",
+              borderRadius: "16px",
+              padding: "28px",
+              border: "1px solid #f3f4f6",
+              boxShadow: "0 1px 3px rgba(0,0,0,0.08)",
+              transition: "transform 0.3s ease, box-shadow 0.3s ease, background 0.3s ease, border-color 0.3s ease",
             }}
             onMouseEnter={(e) => {
-              e.currentTarget.style.transform = "translateY(-6px)";
-              e.currentTarget.style.boxShadow = "0 16px 32px rgba(147,51,234,0.15)";
-              e.currentTarget.style.borderColor = "#d8b4fe";
+              e.currentTarget.style.transform = "translateY(-4px)";
+              e.currentTarget.style.boxShadow = "0 12px 32px rgba(0,0,0,0.12)";
+              e.currentTarget.style.background = "#fffbf0";
+              e.currentTarget.style.borderColor = "#fde68a";
             }}
             onMouseLeave={(e) => {
               e.currentTarget.style.transform = "translateY(0)";
-              e.currentTarget.style.boxShadow = "0 4px 6px rgba(0,0,0,0.1)";
-              e.currentTarget.style.borderColor = "#e5e7eb";
+              e.currentTarget.style.boxShadow = "0 1px 3px rgba(0,0,0,0.08)";
+              e.currentTarget.style.background = "#ffffff";
+              e.currentTarget.style.borderColor = "#f3f4f6";
             }}
           >
-            {/* Author row */}
-            <div style={{ display: "flex", alignItems: "center", gap: "1rem", marginBottom: "1rem" }}>
-              {avatar.style !== "none" && (
-                <div style={{
-                  width: "3.5rem",
-                  height: "3.5rem",
-                  borderRadius: "9999px",
-                  overflow: "hidden",
-                  flexShrink: 0,
-                  background: avatar.backgroundColor || "#e9d5ff",
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                }}>
-                  {avatar.style === "photo" && t.avatar ? (
-                    // eslint-disable-next-line @next/next/no-img-element
-                    <img src={t.avatar} alt={t.name} style={{ width: "100%", height: "100%", objectFit: "cover" }} />
-                  ) : (
-                    <span style={{ fontSize: "1rem", fontWeight: 700, color: avatar.textColor || "#7c3aed" }}>
-                      {getInitials(t.name)}
-                    </span>
-                  )}
-                </div>
-              )}
-              <div>
-                <h4 style={{ fontWeight: 700, color: "#111827", margin: 0 }}>{t.name}</h4>
-                {(content.showCompany && t.company) && (
-                  <p style={{ fontSize: "0.875rem", color: "#6b7280", margin: 0 }}>{t.company}</p>
-                )}
-              </div>
-            </div>
-
             {/* Stars */}
             {content.showRating && (
-              <div style={{ marginBottom: "1rem" }}>
-                <StarRating rating={t.rating} color={content.ratingColor || "#fbbf24"} size="sm" />
+              <div style={{ display: "flex", gap: "2px", marginBottom: "12px" }}>
+                {Array.from({ length: 5 }).map((_, i) => (
+                  <StarIcon key={i} filled={i < t.rating} color={ratingColor} />
+                ))}
               </div>
             )}
 
-            {/* Quote */}
-            <p style={{
-              color: content.quoteColor || "#374151",
-              lineHeight: 1.6,
-              fontStyle: content.quoteStyle === "italic" ? "italic" : "normal",
-              margin: 0,
-            }}>
+            {/* Big quote marks */}
+            <div style={{ fontSize: "44px", fontWeight: 900, color: "#c4b5fd", lineHeight: 1, marginBottom: "10px", userSelect: "none" }}>
+              &#x275D;&#x275E;
+            </div>
+
+            {/* Content */}
+            <p style={{ flex: 1, fontSize: "14px", color: "#4b5563", lineHeight: 1.7, margin: 0 }}>
               &ldquo;{t.content}&rdquo;
             </p>
+
+            {/* Divider */}
+            <div style={{ height: "2px", width: "44px", borderRadius: "999px", background: "linear-gradient(to right, #a855f7, #ec4899)", margin: "18px 0 14px" }} />
+
+            {/* Author */}
+            <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+              {t.avatar ? (
+                // eslint-disable-next-line @next/next/no-img-element
+                <img src={t.avatar} alt={t.name} style={{ width: 40, height: 40, borderRadius: "9999px", objectFit: "cover", flexShrink: 0 }} />
+              ) : (
+                <div style={{ width: 40, height: 40, borderRadius: "9999px", background: "#ec4899", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
+                  <span style={{ fontSize: "13px", fontWeight: 700, color: "#fff" }}>{getInitials(t.name)}</span>
+                </div>
+              )}
+              <div>
+                <div style={{ fontSize: "14px", fontWeight: 600, color: "#111827" }}>{t.name}</div>
+                {content.showCompany && t.company && (
+                  <div style={{ fontSize: "12px", color: "#9ca3af", marginTop: "1px" }}>{t.company}</div>
+                )}
+                {content.showCountry && t.country && (
+                  <div style={{ fontSize: "12px", color: "#9ca3af", marginTop: "1px" }}>{t.country}</div>
+                )}
+              </div>
+            </div>
           </div>
         ))}
       </div>
+    </div>
     </div>
   );
 }

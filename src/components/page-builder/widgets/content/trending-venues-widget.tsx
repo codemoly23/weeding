@@ -28,10 +28,10 @@ export function TrendingVenuesWidget({
       : DEFAULT_TRENDING_VENUES_SETTINGS.venues,
   };
 
-  const { badge, heading, subheading, venues, viewMode, columns, gap, showCta, ctaText, ctaHref } = settings;
+  const { badge, heading, subheading, venues, viewMode, columns, gap, showCta, ctaText, ctaHref, headingFontSize } = settings;
 
   return (
-    <section style={{ background: "#ffffff", padding: "5rem 0" }}>
+    <section style={{ background: "#ffffff", padding: "3rem 0 5rem" }}>
       <div style={{ maxWidth: "1200px", margin: "0 auto", padding: "0 1.5rem" }}>
 
         {/* Section Header */}
@@ -52,13 +52,12 @@ export function TrendingVenuesWidget({
                 color: "#7c3aed",
               }}
             >
-              <span style={{ fontSize: "0.9rem" }}>✨</span>
               {badge.text}
             </div>
           )}
           <h2
             style={{
-              fontSize: "clamp(2.25rem, 5vw, 3.5rem)",
+              fontSize: headingFontSize ? `${headingFontSize}px` : "clamp(2.25rem, 5vw, 3.5rem)",
               fontWeight: 900,
               color: "#0f172a",
               lineHeight: 1.1,
@@ -167,22 +166,23 @@ function CtaButton({ text }: { text: string }) {
       style={{
         display: "inline-flex",
         alignItems: "center",
-        gap: "0.5rem",
-        padding: "0.875rem 2.5rem",
+        gap: "0.625rem",
+        padding: "1rem 2.75rem",
         background: hovered
-          ? "linear-gradient(135deg, #7e22ce, #db2777)"
-          : "linear-gradient(135deg, #9333ea, #ec4899)",
+          ? "linear-gradient(135deg, #6d28d9, #be185d)"
+          : "linear-gradient(135deg, #7c3aed, #db2777)",
         color: "#ffffff",
-        borderRadius: "9999px",
+        borderRadius: "12px",
         border: "none",
         cursor: "pointer",
-        fontSize: "0.9375rem",
-        fontWeight: 600,
+        fontSize: "1.0625rem",
+        fontWeight: 700,
         boxShadow: hovered
-          ? "0 8px 25px rgba(147, 51, 234, 0.35)"
-          : "0 4px 14px rgba(147, 51, 234, 0.25)",
-        transform: hovered ? "translateY(-1px)" : "translateY(0)",
+          ? "0 12px 32px rgba(124, 58, 237, 0.45)"
+          : "0 6px 20px rgba(124, 58, 237, 0.35)",
+        transform: hovered ? "translateY(-2px)" : "translateY(0)",
         transition: "all 0.2s ease",
+        letterSpacing: "0.01em",
       }}
     >
       {text}
@@ -210,7 +210,7 @@ function StarRating({ rating }: { rating: number }) {
       {Array.from({ length: 5 }).map((_, i) => (
         <Star
           key={i}
-          size={13}
+          size={15}
           fill={i < full || (i === full && half) ? "#f59e0b" : "none"}
           color={i < full || (i === full && half) ? "#f59e0b" : "#d1d5db"}
           strokeWidth={1.5}
@@ -249,9 +249,9 @@ function VenueCard({ venue, isPreview }: VenueCardProps) {
         border: "1px solid #e5e7eb",
         overflow: "hidden",
         boxShadow: hovered
-          ? "0 16px 40px rgba(0,0,0,0.12)"
-          : "0 2px 8px rgba(0,0,0,0.06)",
-        transform: hovered ? "translateY(-5px)" : "translateY(0)",
+          ? "0 20px 48px rgba(0,0,0,0.15)"
+          : "0 4px 16px rgba(0,0,0,0.08)",
+        transform: hovered ? "translateY(-6px)" : "translateY(0)",
         transition: "transform 0.25s ease, box-shadow 0.25s ease",
         cursor: venue.href && !isPreview ? "pointer" : "default",
         display: "flex",
@@ -259,7 +259,7 @@ function VenueCard({ venue, isPreview }: VenueCardProps) {
       }}
     >
       {/* Image */}
-      <div style={{ position: "relative", height: "240px", overflow: "hidden", flexShrink: 0 }}>
+      <div style={{ position: "relative", height: "220px", overflow: "hidden", flexShrink: 0 }}>
         {venue.image ? (
           <Image
             src={venue.image}
@@ -285,11 +285,12 @@ function VenueCard({ venue, isPreview }: VenueCardProps) {
               left: "0.75rem",
               background: badgeStyle.bg,
               color: badgeStyle.text,
-              fontSize: "0.6875rem",
+              fontSize: "0.75rem",
               fontWeight: 700,
-              padding: "0.3rem 0.75rem",
+              padding: "0.35rem 0.875rem",
               borderRadius: "9999px",
-              letterSpacing: "0.02em",
+              letterSpacing: "0.01em",
+              boxShadow: "0 2px 8px rgba(0,0,0,0.2)",
             }}
           >
             {venue.badge.text}
@@ -329,16 +330,17 @@ function VenueCard({ venue, isPreview }: VenueCardProps) {
       </div>
 
       {/* Card Body */}
-      <div style={{ padding: "1.125rem", display: "flex", flexDirection: "column", flex: 1 }}>
+      <div style={{ padding: "1.25rem", display: "flex", flexDirection: "column", flex: 1 }}>
 
         {/* Venue Name */}
         <h3
           style={{
-            fontSize: "1.0625rem",
+            fontSize: "1.1875rem",
             fontWeight: 700,
             color: "#0f172a",
             margin: "0 0 0.375rem",
             lineHeight: 1.3,
+            letterSpacing: "-0.01em",
           }}
         >
           {venue.name}
@@ -367,10 +369,10 @@ function VenueCard({ venue, isPreview }: VenueCardProps) {
           }}
         >
           <StarRating rating={venue.rating} />
-          <span style={{ fontSize: "0.8125rem", fontWeight: 600, color: "#374151" }}>
+          <span style={{ fontSize: "0.875rem", fontWeight: 700, color: "#374151" }}>
             {venue.rating.toFixed(1)}
           </span>
-          <span style={{ fontSize: "0.75rem", color: "#9ca3af" }}>({venue.reviewCount})</span>
+          <span style={{ fontSize: "0.8125rem", color: "#9ca3af" }}>({venue.reviewCount})</span>
         </div>
 
         {/* Tags */}
@@ -415,10 +417,10 @@ function VenueCard({ venue, isPreview }: VenueCardProps) {
         >
           {/* Price row */}
           <div style={{ marginBottom: "0.75rem" }}>
-            <span style={{ fontSize: "1.375rem", fontWeight: 800, color: "#db2777", letterSpacing: "-0.02em" }}>
+            <span style={{ fontSize: "1.75rem", fontWeight: 800, color: "#db2777", letterSpacing: "-0.03em" }}>
               {priceFormatted}
             </span>
-            <span style={{ fontSize: "0.75rem", color: "#9ca3af", marginLeft: "4px" }}>
+            <span style={{ fontSize: "0.8125rem", color: "#9ca3af", marginLeft: "4px" }}>
               {venue.priceUnit}
             </span>
           </div>

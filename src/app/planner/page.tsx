@@ -126,13 +126,8 @@ function ProjectCard({ project, onClick, onDelete }: {
       className="relative group cursor-pointer select-none"
       onClick={onClick}
     >
-      {/* Folder tab */}
-      <div
-        className={`absolute -top-3 left-4 h-[14px] w-[42%] rounded-t-lg ${tab} shadow-[0_-2px_6px_rgba(0,0,0,0.06)] border border-b-0 border-gray-100`}
-      />
-
       {/* Card */}
-      <div className="relative rounded-2xl rounded-tl-none overflow-hidden shadow-sm border border-gray-100/80 bg-white transition-all duration-200 group-hover:shadow-lg group-hover:-translate-y-0.5">
+      <div className="relative rounded-2xl overflow-hidden shadow-sm border border-gray-100/80 bg-white transition-all duration-200 group-hover:shadow-lg group-hover:-translate-y-0.5">
 
         {/* Top gradient area */}
         <div className={`h-32 bg-gradient-to-br ${grad} flex flex-col items-center justify-center gap-2`}>
@@ -281,7 +276,7 @@ export default function MyProjectsPage() {
             Wedding Projects
           </h1>
           <p className="mt-2 text-sm text-gray-400 font-medium">
-            {session?.user?.name ? `Welcome back, ${session.user.name} ✨` : "Keep up to date with your wedding planning"}
+            {session?.user?.name ? `Welcome back, ${session.user.name}` : "Keep up to date with your wedding planning"}
           </p>
         </div>
 

@@ -542,6 +542,10 @@ function StepItem({
     ...DEFAULT_PROCESS_STEPS_SETTINGS.stepContent,
     ...settings.stepContent,
   };
+  const stepLabel = {
+    ...DEFAULT_PROCESS_STEPS_SETTINGS.stepLabel,
+    ...settings.stepLabel,
+  };
   const card = {
     ...DEFAULT_PROCESS_STEPS_SETTINGS.card,
     ...settings.card,
@@ -685,7 +689,7 @@ function StepItem({
   const cardContent = (
     <div
       className={cn(
-        "relative group flex flex-col overflow-visible",
+        "relative group flex flex-col overflow-visible h-full",
         alignmentClasses[stepContent.alignment],
         card.show && card.hoverEffect !== "none" && "cursor-pointer"
       )}
@@ -721,7 +725,7 @@ function StepItem({
           >
             <Icon
               className={iconSizeClasses[stepIcon.size].icon}
-              style={{ color: accentColor || stepIcon.iconColor || "#f97316" }}
+              style={{ color: stepIcon.iconColor || accentColor || "#f97316" }}
             />
           </div>
 
@@ -757,6 +761,26 @@ function StepItem({
       {/* Horizontal Connector Line - positioned at StepItem level for better alignment */}
       {!isVertical && !isLast && connector.show && (
         <HorizontalConnectorLine settings={settings} accentColor={accentColor} />
+      )}
+
+      {/* Step Label — "STEP 01" pill */}
+      {stepLabel?.show && (
+        <span
+          style={{
+            display: "inline-flex",
+            alignItems: "center",
+            background: stepLabel.bgColor || "#f3f4f6",
+            color: stepLabel.textColor || "#6b7280",
+            fontSize: "0.6875rem",
+            fontWeight: 700,
+            padding: "0.25rem 0.625rem",
+            borderRadius: "9999px",
+            letterSpacing: "0.08em",
+            marginBottom: "0.625rem",
+          }}
+        >
+          {stepLabel.prefix || "STEP"} {String(index + 1).padStart(2, "0")}
+        </span>
       )}
 
       {/* Title */}
@@ -809,7 +833,7 @@ function StepItem({
     return (
       <div
         className={cn(
-          "overflow-visible",
+          "overflow-visible h-full",
           card.hoverEffect !== "none" && "cursor-pointer"
         )}
         style={{
@@ -978,7 +1002,7 @@ export function ProcessStepsWidget({
           <div
             key={step.id}
             className={cn(
-              "transition-all duration-500 overflow-visible",
+              "transition-all duration-500 overflow-visible h-full",
               isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4",
               isAlternating && index % 2 !== 0 && "lg:ml-auto"
             )}

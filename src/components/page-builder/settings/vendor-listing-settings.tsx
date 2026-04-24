@@ -144,6 +144,15 @@ export function VendorListingSettingsPanel({
               value={settings.headerTextColor ?? "#0f172a"}
               onChange={(v) => update("headerTextColor", v)}
             />
+            <NumberInput
+              label="Heading Font Size"
+              value={settings.headingFontSize ?? 30}
+              onChange={(v) => update("headingFontSize", v)}
+              min={20}
+              max={96}
+              step={2}
+              unit="px"
+            />
           </div>
         </AccordionSection>
 

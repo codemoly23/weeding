@@ -247,6 +247,21 @@ export function EventGalleryGridSettingsPanel({
     return (
       <div className="space-y-4">
 
+        {/* Section Header */}
+        <AccordionSection title="Section Header" defaultOpen {...getAccordionProps("header-style")}>
+          <div className="space-y-3">
+            <NumberInput
+              label="Heading Font Size"
+              value={settings.headingFontSize ?? 48}
+              onChange={(v) => update("headingFontSize", v)}
+              min={20}
+              max={96}
+              step={2}
+              unit="px"
+            />
+          </div>
+        </AccordionSection>
+
         {/* Layout */}
         <AccordionSection title="Layout" defaultOpen {...getAccordionProps("layout")}>
           <div className="space-y-3">

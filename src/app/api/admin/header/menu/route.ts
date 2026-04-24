@@ -142,8 +142,17 @@ export async function PUT(request: NextRequest) {
     const validatedData = menuItemSchema.omit({ sortOrder: true }).partial().parse(data);
     const { megaMenuContent, ...restValidatedData } = validatedData;
 
+    // Only update fields that were explicitly sent in the request.
+    // Zod fills in defaults for absent fields (e.g. isMegaMenu: false), so we
+    // must filter by the original payload keys to avoid overwriting DB values.
+    const sentKeys = new Set(Object.keys(data));
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const updateData: any = { ...restValidatedData };
+    const updateData: any = {};
+    for (const [key, value] of Object.entries(restValidatedData)) {
+      if (sentKeys.has(key) && value !== undefined) {
+        updateData[key] = value;
+      }
+    }
     if (megaMenuContent !== undefined) {
       updateData.megaMenuContent = megaMenuContent === null ? Prisma.JsonNull : megaMenuContent;
     }

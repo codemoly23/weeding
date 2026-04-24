@@ -1,24 +1,13 @@
 "use client";
 
 import { useState } from "react";
-import * as LucideIcons from "lucide-react";
-import { Camera, MapPin, Eye, Calendar, Heart, ArrowRight } from "lucide-react";
+import { MapPin, Eye, Calendar, Heart, ArrowRight } from "lucide-react";
 import type { EventGalleryGridWidgetSettings } from "@/lib/page-builder/types";
 import { DEFAULT_EVENT_GALLERY_GRID_SETTINGS } from "@/lib/page-builder/defaults";
 
 interface EventGalleryGridWidgetProps {
   settings: EventGalleryGridWidgetSettings;
   isPreview?: boolean;
-}
-
-function getLucideIcon(
-  name: string
-): React.ComponentType<{ size?: number; style?: React.CSSProperties }> {
-  const icons = LucideIcons as unknown as Record<
-    string,
-    React.ComponentType<{ size?: number; style?: React.CSSProperties }>
-  >;
-  return icons[name] || Camera;
 }
 
 function getGridColsClass(columns: 2 | 3 | 4): string {
@@ -49,9 +38,9 @@ export function EventGalleryGridWidget({
   const [hoveredId, setHoveredId] = useState<string | null>(null);
   const [heartedIds, setHeartedIds] = useState<Set<string>>(new Set());
 
-  const { badge, title, subtitle, sectionBg, items, columns, cardBadgeFrom, cardBadgeTo, showCta, ctaLabel, ctaHref, ctaGradientFrom, ctaGradientTo } = settings;
+  const { badge, title, subtitle, items, columns, cardBadgeFrom, cardBadgeTo, showCta, ctaLabel, ctaHref, headingFontSize } = settings;
 
-  const BadgeIcon = getLucideIcon(badge.icon);
+  const [ctaHovered, setCtaHovered] = useState(false);
 
   const toggleHeart = (id: string) => {
     setHeartedIds((prev) => {
@@ -62,8 +51,16 @@ export function EventGalleryGridWidget({
   };
 
   return (
-    <section style={{ background: "linear-gradient(135deg, #fdf4ff 0%, #fce7f3 40%, #ffffff 100%)", padding: "5rem 1rem" }}>
-      <div style={{ maxWidth: "1280px", margin: "0 auto" }}>
+    <section style={{
+      background: "linear-gradient(135deg, rgba(147,51,234,0.05) 0%, rgba(219,39,119,0.05) 50%, rgba(147,51,234,0.10) 100%)",
+      padding: "5rem 1rem",
+      position: "relative",
+      overflow: "hidden",
+    }}>
+      {/* Decorative blur orbs */}
+      <div style={{ position: "absolute", top: 0, right: 0, width: "24rem", height: "24rem", background: "rgba(216,180,254,0.10)", borderRadius: "9999px", filter: "blur(64px)", pointerEvents: "none" }} />
+      <div style={{ position: "absolute", bottom: 0, left: 0, width: "24rem", height: "24rem", background: "rgba(249,168,212,0.10)", borderRadius: "9999px", filter: "blur(64px)", pointerEvents: "none" }} />
+      <div style={{ maxWidth: "1280px", margin: "0 auto", position: "relative", zIndex: 1 }}>
 
         {/* ── Section Header ── */}
         <div style={{ textAlign: "center", marginBottom: "3rem" }}>
@@ -85,14 +82,13 @@ export function EventGalleryGridWidget({
                 color: "#374151",
               }}
             >
-              <BadgeIcon size={16} />
               {badge.text}
             </div>
           )}
 
           <h2
             style={{
-              fontSize: "clamp(2rem, 4vw, 3rem)",
+              fontSize: headingFontSize ? `${headingFontSize}px` : "clamp(2rem, 4vw, 3rem)",
               fontWeight: 900,
               color: "#000",
               marginBottom: "1rem",
@@ -309,34 +305,33 @@ export function EventGalleryGridWidget({
             <a
               href={isPreview ? undefined : ctaHref}
               onClick={(e) => isPreview && e.preventDefault()}
+              onMouseEnter={() => setCtaHovered(true)}
+              onMouseLeave={() => setCtaHovered(false)}
               style={{
                 display: "inline-flex",
                 alignItems: "center",
-                gap: "0.5rem",
-                padding: "1rem 2.5rem",
-                background: `linear-gradient(to right, ${ctaGradientFrom}, ${ctaGradientTo})`,
-                color: "white",
+                gap: "0.625rem",
+                padding: "1rem 2.75rem",
+                background: ctaHovered
+                  ? "linear-gradient(135deg, #6d28d9, #be185d)"
+                  : "linear-gradient(135deg, #7c3aed, #db2777)",
+                color: "#ffffff",
+                borderRadius: "12px",
                 border: "none",
-                borderRadius: "9999px",
-                fontWeight: 600,
-                fontSize: "1rem",
                 cursor: isPreview ? "default" : "pointer",
-                boxShadow: "0 4px 14px rgba(147,51,234,0.3)",
+                fontSize: "1.0625rem",
+                fontWeight: 700,
+                boxShadow: ctaHovered
+                  ? "0 12px 32px rgba(124,58,237,0.45)"
+                  : "0 6px 20px rgba(124,58,237,0.35)",
+                transform: ctaHovered ? "translateY(-2px)" : "translateY(0)",
+                transition: "all 0.2s ease",
+                letterSpacing: "0.01em",
                 textDecoration: "none",
-                transition: "transform 0.2s, box-shadow 0.2s",
-              }}
-              onMouseEnter={(e) => {
-                if (!isPreview) {
-                  e.currentTarget.style.transform = "translateY(-2px)";
-                  e.currentTarget.style.boxShadow = "0 8px 24px rgba(147,51,234,0.4)";
-                }
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.transform = "translateY(0)";
-                e.currentTarget.style.boxShadow = "0 4px 14px rgba(147,51,234,0.3)";
               }}
             >
               {ctaLabel}
+              <span style={{ fontSize: "1.1em" }}>→</span>
             </a>
           </div>
         )}

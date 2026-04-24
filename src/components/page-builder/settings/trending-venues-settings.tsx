@@ -283,6 +283,19 @@ export function TrendingVenuesSettingsPanel({
   if (activeTab === "style") {
     return (
       <div className="space-y-4">
+        <AccordionSection title="Section Header" defaultOpen {...getAccordionProps("header-style")}>
+          <div className="space-y-3">
+            <NumberInput
+              label="Heading Font Size"
+              value={settings.headingFontSize ?? 56}
+              onChange={(v) => updateField("headingFontSize", v)}
+              min={20}
+              max={96}
+              step={2}
+              unit="px"
+            />
+          </div>
+        </AccordionSection>
         <AccordionSection title="View Mode" defaultOpen {...getAccordionProps("viewMode")}>
           <div className="space-y-3">
             <SelectInput

@@ -58,11 +58,11 @@ export function FaqAccordionWidget({
   const useTheme = settings?.colors?.useTheme !== false;
   const accentColor = useTheme ? "var(--color-primary)" : (settings?.accentColor ?? "#3b82f6");
   const accentBgLight = useTheme
-    ? "color-mix(in srgb, var(--color-primary) 8%, transparent)"
-    : `${settings?.accentColor ?? "#3b82f6"}15`;
+    ? "color-mix(in srgb, var(--color-primary) 12%, transparent)"
+    : `${settings?.accentColor ?? "#7c3aed"}20`;
   const accentBorder = useTheme
-    ? "color-mix(in srgb, var(--color-primary) 25%, transparent)"
-    : `${settings?.accentColor ?? "#3b82f6"}40`;
+    ? "color-mix(in srgb, var(--color-primary) 35%, transparent)"
+    : `${settings?.accentColor ?? "#7c3aed"}55`;
 
   const s = {
     source: settings?.source ?? ("all" as const),
@@ -400,7 +400,7 @@ export function FaqAccordionWidget({
           {s.header.badge?.show && (
             <div
               className={cn(
-                "mb-4 inline-flex items-center gap-1.5 rounded-full border px-4 py-1.5 text-sm font-semibold",
+                "mb-4 inline-flex items-center rounded-full border px-4 py-1.5 text-sm font-semibold",
                 s.header.alignment === "center" ? "justify-center" : "justify-start"
               )}
               style={{
@@ -409,7 +409,6 @@ export function FaqAccordionWidget({
                 color: "#7c3aed",
               }}
             >
-              <span>💬</span>
               {s.header.badge.text}
             </div>
           )}
@@ -568,6 +567,7 @@ export function FaqAccordionWidget({
 interface FaqItemStyle {
   questionColor?: string;
   answerColor?: string;
+  questionSize?: "sm" | "base" | "lg" | "xl";
   gap: number;
   borderRadius: number;
   padding: number;
@@ -592,7 +592,12 @@ function FaqItemMinimal({
         className="group flex w-full items-center justify-between text-left"
       >
         <span
-          className="text-base font-medium pr-4 transition-colors group-hover:opacity-80"
+          className={cn("font-medium pr-4 transition-colors group-hover:opacity-80", {
+            "text-sm": itemStyle.questionSize === "sm",
+            "text-base": !itemStyle.questionSize || itemStyle.questionSize === "base",
+            "text-lg": itemStyle.questionSize === "lg",
+            "text-xl": itemStyle.questionSize === "xl",
+          })}
           style={{ color: itemStyle.questionColor || undefined }}
         >
           {faq.question}
@@ -642,15 +647,10 @@ function FaqItemCard({
 }) {
   return (
     <div
-      className={cn(
-        "border transition-all duration-300",
-        isOpen
-          ? "bg-accent/30 shadow-md"
-          : "bg-card hover:-translate-y-0.5 hover:shadow-md"
-      )}
+      className="border bg-card transition-all duration-300 hover:-translate-y-0.5 hover:shadow-md"
       style={{
         borderRadius: `${itemStyle.borderRadius}px`,
-        ...(isOpen ? { borderColor: accentBorder } : {}),
+        borderColor: accentBorder,
       }}
     >
       <button
@@ -659,23 +659,25 @@ function FaqItemCard({
         style={{ padding: `${itemStyle.padding}px` }}
       >
         <span
-          className="text-base font-semibold transition-colors duration-200 pr-4"
+          className={cn("font-semibold transition-colors duration-200 pr-4", {
+            "text-sm": itemStyle.questionSize === "sm",
+            "text-base": !itemStyle.questionSize || itemStyle.questionSize === "base",
+            "text-lg": itemStyle.questionSize === "lg",
+            "text-xl": itemStyle.questionSize === "xl",
+          })}
           style={{ color: itemStyle.questionColor || undefined }}
         >
           {faq.question}
         </span>
         <div
-          className={cn(
-            "flex h-8 w-8 shrink-0 items-center justify-center rounded-full transition-all duration-300",
-            isOpen ? "text-white" : "bg-muted text-muted-foreground"
-          )}
-          style={isOpen ? { backgroundColor: accentColor } : undefined}
+          className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-muted transition-all duration-300"
         >
           <ChevronDown
             className={cn(
               "h-4 w-4 transition-transform duration-300",
               isOpen && "rotate-180"
             )}
+            style={{ color: accentColor }}
           />
         </div>
       </button>
@@ -745,7 +747,12 @@ function FaqItemBordered({
           {String(index + 1).padStart(2, "0")}
         </span>
         <span
-          className="flex-1 text-base font-medium"
+          className={cn("flex-1 font-medium", {
+            "text-sm": itemStyle.questionSize === "sm",
+            "text-base": !itemStyle.questionSize || itemStyle.questionSize === "base",
+            "text-lg": itemStyle.questionSize === "lg",
+            "text-xl": itemStyle.questionSize === "xl",
+          })}
           style={{ color: itemStyle.questionColor || undefined }}
         >
           {faq.question}

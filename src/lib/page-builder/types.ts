@@ -2961,6 +2961,7 @@ export interface FaqAccordionWidgetSettings {
   itemStyle?: {
     questionColor?: string;
     answerColor?: string;
+    questionSize?: "sm" | "base" | "lg" | "xl";
     gap: number;
     borderRadius: number;
     padding: number;
@@ -3579,6 +3580,7 @@ export interface VendorListingWidgetSettings {
   sectionBg?: string;
   badgeFrom?: string;
   badgeTo?: string;
+  headingFontSize?: number;
   container?: WidgetContainerStyle;
 }
 
@@ -3631,6 +3633,7 @@ export interface EventGalleryGridWidgetSettings {
   ctaHref: string;
   ctaGradientFrom: string;
   ctaGradientTo: string;
+  headingFontSize?: number;
 
   container?: WidgetContainerStyle;
 }
@@ -4019,6 +4022,7 @@ export interface FeaturesShowcaseWidgetSettings {
   heading: string;
   subheading: string;
   items: FeaturesShowcaseItem[];
+  headingFontSize?: number;
   columns: 2 | 3;
   gap: number;
   cardHeight: number;
@@ -4026,6 +4030,7 @@ export interface FeaturesShowcaseWidgetSettings {
   showCta: boolean;
   ctaText: string;
   ctaHref: string;
+  headingFontSize?: number;
 }
 
 // ── Trending Venues Widget ────────────────────────────────────────────────────

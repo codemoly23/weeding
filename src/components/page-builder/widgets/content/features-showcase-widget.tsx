@@ -28,16 +28,22 @@ export function FeaturesShowcaseWidget({
       : DEFAULT_FEATURES_SHOWCASE_SETTINGS.items,
   };
 
-  const { badge, heading, subheading, items, columns, gap, cardHeight, cardAspectRatio, showCta, ctaText, ctaHref } = settings;
+  const { badge, heading, subheading, items, columns, gap, cardHeight, cardAspectRatio, showCta, ctaText, ctaHref, headingFontSize } = settings;
 
   return (
     <section
       style={{
-        background: "linear-gradient(135deg, #fdf4ff 0%, #fce7f3 40%, #ffffff 100%)",
+        background: "linear-gradient(135deg, rgba(147,51,234,0.05) 0%, rgba(219,39,119,0.05) 50%, rgba(147,51,234,0.10) 100%)",
         padding: "5rem 1.5rem",
+        position: "relative",
+        overflow: "hidden",
       }}
     >
-      <div style={{ maxWidth: "1200px", margin: "0 auto" }}>
+      {/* Decorative blur orbs */}
+      <div style={{ position: "absolute", top: 0, right: 0, width: "24rem", height: "24rem", background: "rgba(216,180,254,0.10)", borderRadius: "9999px", filter: "blur(64px)", pointerEvents: "none" }} />
+      <div style={{ position: "absolute", bottom: 0, left: 0, width: "24rem", height: "24rem", background: "rgba(249,168,212,0.10)", borderRadius: "9999px", filter: "blur(64px)", pointerEvents: "none" }} />
+
+      <div style={{ maxWidth: "1200px", margin: "0 auto", position: "relative", zIndex: 1 }}>
 
         {/* Section Header */}
         <div style={{ textAlign: "center", marginBottom: "3rem" }}>
@@ -59,7 +65,6 @@ export function FeaturesShowcaseWidget({
                 color: "#7c3aed",
               }}
             >
-              <span style={{ fontSize: "0.9rem" }}>✨</span>
               {badge.text}
             </div>
           )}
@@ -67,7 +72,7 @@ export function FeaturesShowcaseWidget({
           {/* Heading */}
           <h2
             style={{
-              fontSize: "clamp(2rem, 4vw, 2.875rem)",
+              fontSize: headingFontSize ? `${headingFontSize}px` : "clamp(2rem, 4vw, 2.875rem)",
               fontWeight: 900,
               color: "#0f172a",
               lineHeight: 1.15,
@@ -140,21 +145,21 @@ function CtaButton({ text }: { text: string }) {
       style={{
         display: "inline-flex",
         alignItems: "center",
-        gap: "0.5rem",
-        padding: "0.75rem 2rem",
+        gap: "0.625rem",
+        padding: "1rem 2.75rem",
         background: hovered
-          ? "linear-gradient(135deg, #7e22ce, #db2777)"
-          : "linear-gradient(135deg, #9333ea, #ec4899)",
+          ? "linear-gradient(135deg, #6d28d9, #be185d)"
+          : "linear-gradient(135deg, #7c3aed, #db2777)",
         color: "#ffffff",
-        borderRadius: "9999px",
+        borderRadius: "12px",
         border: "none",
         cursor: "pointer",
-        fontSize: "0.9375rem",
-        fontWeight: 600,
+        fontSize: "1.0625rem",
+        fontWeight: 700,
         boxShadow: hovered
-          ? "0 8px 25px rgba(147, 51, 234, 0.35)"
-          : "0 4px 14px rgba(147, 51, 234, 0.25)",
-        transform: hovered ? "translateY(-1px)" : "translateY(0)",
+          ? "0 12px 32px rgba(124, 58, 237, 0.45)"
+          : "0 6px 20px rgba(124, 58, 237, 0.35)",
+        transform: hovered ? "translateY(-2px)" : "translateY(0)",
         transition: "all 0.2s ease",
         letterSpacing: "0.01em",
       }}

@@ -301,7 +301,7 @@ export function TestimonialsWidget({ settings: partialSettings, isPreview = fals
   const description = header.description || DEFAULT_TESTIMONIALS_SETTINGS.header.description;
 
   return (
-    <section style={{ background: "linear-gradient(135deg, #fdf4ff 0%, #fce7f3 40%, #ffffff 100%)" }}>
+    <section style={{ background: "linear-gradient(135deg, #fdf2f8 0%, #fce7f3 30%, #ede9fe 70%, #f5f3ff 100%)", padding: "5rem 0 4rem" }}>
     <WidgetContainer container={settings.container}>
     <div className="w-full">
       {/* Header Section */}
@@ -360,14 +360,11 @@ export function TestimonialsWidget({ settings: partialSettings, isPreview = fals
         >
           {/* Badge */}
           {badge.show && (
-            <Badge
-              variant="secondary"
-              className="mb-4"
+            <div className="mb-5 inline-flex items-center gap-2 rounded-full border px-4 py-1.5 text-sm font-semibold shadow-sm"
               style={{
                 backgroundColor: badge.bgColor || DEFAULT_TESTIMONIALS_SETTINGS.header.badge.bgColor,
                 color: badge.textColor || DEFAULT_TESTIMONIALS_SETTINGS.header.badge.textColor,
                 borderColor: badge.borderColor || DEFAULT_TESTIMONIALS_SETTINGS.header.badge.borderColor,
-                borderWidth: badge.style === "outline" ? 1 : 0,
                 ...(badge.customFontSize ? { fontSize: badge.customFontSize } : {}),
                 ...(badge.fontWeight ? { fontWeight: badge.fontWeight } : {}),
                 ...(badge.letterSpacing ? { letterSpacing: badge.letterSpacing } : {}),
@@ -375,7 +372,7 @@ export function TestimonialsWidget({ settings: partialSettings, isPreview = fals
               }}
             >
               {badge.text || DEFAULT_TESTIMONIALS_SETTINGS.header.badge.text}
-            </Badge>
+            </div>
           )}
 
           {/* Heading */}

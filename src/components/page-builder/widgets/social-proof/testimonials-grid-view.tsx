@@ -1,6 +1,5 @@
 "use client";
 
-import { Quote } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import type { TestimonialsWidgetSettings, TestimonialItem } from "@/lib/page-builder/types";
@@ -248,19 +247,7 @@ export function TestimonialsGridView({
               animationDelay: animation.enabled ? `${index * animation.staggerDelay}ms` : undefined,
             }}
           >
-            <CardContent className="p-0">
-              {/* Quote Icon */}
-              {gridView.showQuoteIcon && (
-                <Quote
-                  className={cn(
-                    "absolute",
-                    quoteIconSizeClasses[gridView.quoteIconSize],
-                    quoteIconPositionClasses[gridView.quoteIconPosition]
-                  )}
-                  style={{ color: gridView.quoteIconColor }}
-                />
-              )}
-
+            <CardContent className="p-0 flex flex-col h-full">
               {/* Rating */}
               {content.showRating && (
                 <div className="mb-4">
@@ -273,10 +260,20 @@ export function TestimonialsGridView({
                 </div>
               )}
 
+              {/* Big Inline Quote Marks */}
+              {gridView.showQuoteIcon && (
+                <div
+                  className="mb-3 text-5xl font-bold leading-none select-none"
+                  style={{ color: gridView.quoteIconColor }}
+                >
+                  &#x275D;&#x275E;
+                </div>
+              )}
+
               {/* Quote Content */}
               <p
                 className={cn(
-                  "mb-6",
+                  "flex-1 mb-0",
                   quoteFontSizeClasses[content.quoteFontSize],
                   content.quoteStyle === "italic" && "italic"
                 )}
@@ -294,6 +291,14 @@ export function TestimonialsGridView({
               >
                 &ldquo;{testimonial.content}&rdquo;
               </p>
+
+              {/* Divider */}
+              <div
+                className="my-5 h-0.5 w-12 rounded-full"
+                style={{
+                  background: `linear-gradient(to right, ${gridView.quoteIconColor}, transparent)`,
+                }}
+              />
 
               {/* Author Info */}
               <div className="flex items-center gap-3">

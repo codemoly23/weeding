@@ -178,6 +178,7 @@ export function TestimonialsWidgetSettingsPanel({
             options={[
               { label: "Grid", value: "grid" },
               { label: "Carousel", value: "carousel" },
+              { label: "Marquee (Auto-scroll)", value: "marquee" },
               { label: "Video Grid", value: "video-grid" },
             ]}
           />
@@ -592,6 +593,19 @@ export function TestimonialsWidgetSettingsPanel({
       {/* Style Tab */}
       {activeTab === "style" && (
         <>
+          {/* Heading Font Size */}
+          <NumberInput
+            label="Heading Font Size"
+            value={parseInt(s.header.heading.customFontSize || "40") || 40}
+            onChange={(value) =>
+              updateHeader({
+                heading: { ...s.header.heading, customFontSize: `${value}px` },
+              })
+            }
+            min={16}
+            max={120}
+          />
+
           {/* Card Style */}
           <SelectInput
             label="Card Style"

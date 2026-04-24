@@ -44,6 +44,22 @@ const CATEGORY_META: Record<string, { label: string; Icon: React.ElementType }> 
   OTHER:           { label: "Other",           Icon: HelpCircle },
 };
 
+const CATEGORY_PLACEHOLDER: Record<string, string> = {
+  VENUE:           "https://picsum.photos/seed/venue-hall/800/600",
+  PHOTOGRAPHY:     "https://picsum.photos/seed/photography/800/600",
+  VIDEOGRAPHY:     "https://picsum.photos/seed/videography/800/600",
+  CATERING:        "https://picsum.photos/seed/catering-food/800/600",
+  MUSIC_DJ:        "https://picsum.photos/seed/music-dj/800/600",
+  FLOWERS:         "https://picsum.photos/seed/flowers-bouquet/800/600",
+  DRESS_ATTIRE:    "https://picsum.photos/seed/wedding-dress/800/600",
+  RINGS:           "https://picsum.photos/seed/wedding-rings/800/600",
+  DECORATIONS:     "https://picsum.photos/seed/event-decor/800/600",
+  TRANSPORTATION:  "https://picsum.photos/seed/luxury-car/800/600",
+  HAIR_MAKEUP:     "https://picsum.photos/seed/hair-makeup/800/600",
+  WEDDING_PLANNER: "https://picsum.photos/seed/wedding-plan/800/600",
+  OTHER:           "https://picsum.photos/seed/event-other/800/600",
+};
+
 // ── Widget ───────────────────────────────────────────────────────────────────
 
 interface VendorListingWidgetProps {
@@ -68,6 +84,7 @@ export function VendorListingWidget({ settings, isPreview = false }: VendorListi
     cardStyle = "overlay",
     badgeFrom = "#9333ea",
     badgeTo = "#ec4899",
+    headingFontSize,
   } = settings;
 
   const [vendors, setVendors] = useState<VendorItem[]>([]);
@@ -101,14 +118,20 @@ export function VendorListingWidget({ settings, isPreview = false }: VendorListi
         <div className="mb-8 text-center">
           {badge?.show && badge.text && (
             <span
-              className="mb-3 inline-block rounded-full px-4 py-1 text-xs font-semibold uppercase tracking-wider"
-              style={{ background: `linear-gradient(to right, ${badgeFrom}, ${badgeTo})`, color: "#fff" }}
+              className="mb-3 inline-block rounded-full px-4 py-1 text-xs font-semibold tracking-wide"
+              style={{ background: "#111827", color: "#fff" }}
             >
               {badge.text}
             </span>
           )}
           {title && (
-            <h2 className="text-2xl font-bold sm:text-3xl" style={{ color: headerTextColor }}>
+            <h2
+              className="font-bold"
+              style={{
+                color: headerTextColor,
+                fontSize: headingFontSize ? `${headingFontSize}px` : "clamp(1.5rem, 3vw, 1.875rem)",
+              }}
+            >
               {title}
             </h2>
           )}
@@ -221,9 +244,19 @@ function OverlayVendorCard({
             }}
           />
         ) : (
-          <div style={{ width: "100%", height: "100%", background: "#f3e8ff", display: "flex", alignItems: "center", justifyContent: "center" }}>
-            <Icon style={{ width: "3rem", height: "3rem", color: "#d8b4fe" }} />
-          </div>
+          // eslint-disable-next-line @next/next/no-img-element
+          <img
+            src={CATEGORY_PLACEHOLDER[vendor.category] ?? CATEGORY_PLACEHOLDER.OTHER}
+            alt={vendor.businessName}
+            style={{
+              width: "100%",
+              height: "100%",
+              objectFit: "cover",
+              transform: hovered ? "scale(1.1)" : "scale(1)",
+              transition: "transform 0.7s ease",
+              display: "block",
+            }}
+          />
         )}
 
         {/* Gradient overlay */}

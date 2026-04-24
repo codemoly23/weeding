@@ -1,6 +1,6 @@
 {
   "version": "1.0",
-  "exportedAt": "2026-04-22T11:54:55.521Z",
+  "exportedAt": "2026-04-24T11:07:47.339Z",
   "colorPalette": {
     "light": {
       "background": "#FDFAF7",
@@ -1072,7 +1072,8 @@
                         "showCta": true,
                         "cardHeight": 260,
                         "subheading": "From planning to execution, our all-in-one platform makes event management effortless",
-                        "cardAspectRatio": "4/3"
+                        "cardAspectRatio": "4/3",
+                        "headingFontSize": 70
                       }
                     }
                   ],
@@ -1182,7 +1183,8 @@
                         "viewAllLink": "/vendors",
                         "viewAllText": "Explore More Vendors",
                         "featuredOnly": false,
-                        "headerTextColor": "#ffffff"
+                        "headerTextColor": "#ffffff",
+                        "headingFontSize": 50
                       }
                     }
                   ],
@@ -1349,7 +1351,8 @@
                         "heading": "Trending Venues",
                         "showCta": true,
                         "viewMode": "marquee",
-                        "subheading": "Discover the most sought-after event spaces perfect for your special occasion"
+                        "subheading": "Discover the most sought-after event spaces perfect for your special occasion",
+                        "headingFontSize": 62
                       }
                     }
                   ],
@@ -1526,6 +1529,7 @@
                         "cardBadgeFrom": "#9333ea",
                         "ctaGradientTo": "#ec4899",
                         "ctaGradientFrom": "#9333ea",
+                        "headingFontSize": 52,
                         "planSimilarHref": "",
                         "planSimilarLabel": "Plan Similar"
                       }
@@ -1699,7 +1703,7 @@
                           "animateOnScroll": true
                         },
                         "connector": {
-                          "show": true,
+                          "show": false,
                           "color": "rgba(190,107,139,0.3)",
                           "style": "dotted",
                           "dotSize": 8,
@@ -1751,7 +1755,7 @@
                           }
                         },
                         "stepNumber": {
-                          "show": true,
+                          "show": false,
                           "size": "sm",
                           "style": "circle",
                           "bgColor": "#9333ea",
@@ -1885,13 +1889,13 @@
                       "type": "testimonials-carousel",
                       "settings": {
                         "avatar": {
-                          "size": "lg",
+                          "size": "md",
                           "shape": "circle",
                           "style": "initials",
                           "textColor": "#ffffff",
-                          "borderColor": "rgba(190,107,139,0.2)",
-                          "borderWidth": 2,
-                          "backgroundColor": "rgba(190,107,139,0.8)"
+                          "borderColor": "#ec4899",
+                          "borderWidth": 0,
+                          "backgroundColor": "#ec4899"
                         },
                         "header": {
                           "show": true,
@@ -1899,23 +1903,23 @@
                             "show": true,
                             "text": "Trusted by Thousands",
                             "style": "pill",
-                            "bgColor": "transparent",
-                            "textColor": "#BE6B8B",
-                            "fontWeight": 700,
-                            "borderColor": "transparent",
-                            "letterSpacing": "1.5px",
-                            "textTransform": "uppercase",
-                            "customFontSize": "12px"
+                            "bgColor": "#ffffff",
+                            "textColor": "#7c3aed",
+                            "fontWeight": 600,
+                            "borderColor": "#ddd6fe",
+                            "letterSpacing": "0px",
+                            "textTransform": "none",
+                            "customFontSize": "13px"
                           },
                           "heading": {
                             "size": "xl",
                             "text": "What Event Planners Say",
-                            "color": "#2C1A1A",
+                            "color": "#111827",
                             "fontWeight": 700,
                             "lineHeight": 1.15,
                             "letterSpacing": "-0.02em",
-                            "customFontSize": "clamp(26px, 3vw, 40px)",
-                            "highlightColor": "#BE6B8B",
+                            "customFontSize": "48px",
+                            "highlightColor": "#7c3aed",
                             "highlightWords": ""
                           },
                           "alignment": "center",
@@ -1923,35 +1927,35 @@
                             "show": true,
                             "size": "md",
                             "text": "Join thousands of happy planners who've created unforgettable events",
-                            "color": "#6B5555",
+                            "color": "#6b7280",
                             "lineHeight": 1.7,
                             "customFontSize": "15px"
                           },
-                          "marginBottom": 48
+                          "marginBottom": 56
                         },
                         "content": {
-                          "infoColor": "#8C6E6E",
-                          "nameColor": "#2C1A1A",
-                          "quoteColor": "#6B5555",
+                          "infoColor": "#9ca3af",
+                          "nameColor": "#111827",
+                          "quoteColor": "#4b5563",
                           "quoteStyle": "normal",
                           "showRating": true,
-                          "countryFlag": true,
-                          "ratingColor": "#C9A84C",
+                          "countryFlag": false,
+                          "ratingColor": "#facc15",
                           "ratingStyle": "stars",
-                          "showCompany": false,
-                          "showCountry": true,
-                          "infoFontSize": "sm",
-                          "nameFontSize": "md",
-                          "quoteFontSize": "md",
+                          "showCompany": true,
+                          "showCountry": false,
+                          "infoFontSize": "xs",
+                          "nameFontSize": "sm",
+                          "quoteFontSize": "sm",
                           "quoteMaxLines": 0,
-                          "nameFontWeight": "bold"
+                          "nameFontWeight": "semibold"
                         },
                         "gridView": {
-                          "gap": 24,
+                          "gap": 32,
                           "columns": 3,
                           "quoteIconSize": "lg",
                           "showQuoteIcon": true,
-                          "quoteIconColor": "#f9731620",
+                          "quoteIconColor": "#c4b5fd",
                           "quoteIconPosition": "top-right"
                         },
                         "viewMode": "marquee",
@@ -1962,10 +1966,10 @@
                           "staggerDelay": 100
                         },
                         "cardStyle": {
-                          "style": "minimal",
-                          "shadow": "none",
-                          "padding": 28,
-                          "borderColor": "rgba(190,107,139,0.12)",
+                          "style": "elevated",
+                          "shadow": "sm",
+                          "padding": 32,
+                          "borderColor": "#f3f4f6",
                           "borderWidth": 1,
                           "glassEffect": {
                             "blur": 10,
@@ -1977,12 +1981,12 @@
                           "gradientBorder": {
                             "angle": 135,
                             "colors": [
-                              "#f97316",
-                              "#3b82f6"
+                              "#ec4899",
+                              "#8b5cf6"
                             ],
                             "enabled": false
                           },
-                          "backgroundColor": "rgba(190,107,139,0.03)"
+                          "backgroundColor": "#ffffff"
                         },
                         "container": {
                           "shadow": "none",
@@ -2013,7 +2017,7 @@
                           "thumbnailAspectRatio": "9:16"
                         },
                         "dataSource": {
-                          "limit": 5,
+                          "limit": 6,
                           "sortBy": "sort-order",
                           "testimonialType": "all"
                         },
@@ -2032,11 +2036,11 @@
                           "show": false,
                           "alignment": "center",
                           "marginTop": 48,
-                          "totalReviews": "(2,500+ reviews)",
+                          "totalReviews": "(1,200+ reviews)",
                           "averageRating": 4.9,
                           "showAvatarStack": true,
                           "avatarStackCount": 4,
-                          "customerCountText": "Join 10,000+ happy event planners",
+                          "customerCountText": "Join thousands of happy planners",
                           "showAverageRating": true
                         },
                         "carouselView": {
@@ -2098,7 +2102,7 @@
               ],
               "settings": {
                 "gap": 32,
-                "maxWidth": "2xl",
+                "maxWidth": "full",
                 "fullWidth": true,
                 "isVisible": true,
                 "marginTop": 0,
@@ -2166,7 +2170,7 @@
                       "settings": {
                         "style": "cards",
                         "colors": {
-                          "useTheme": true
+                          "useTheme": false
                         },
                         "header": {
                           "show": true,
@@ -2199,11 +2203,12 @@
                         "itemStyle": {
                           "gap": 16,
                           "padding": 20,
-                          "borderRadius": 12
+                          "borderRadius": 12,
+                          "questionSize": "base"
                         },
                         "categories": [],
-                        "accentColor": "#3b82f6",
-                        "expandFirst": true,
+                        "accentColor": "#7c3aed",
+                        "expandFirst": false,
                         "headerStyle": {
                           "headingSize": "lg"
                         },
@@ -3224,7 +3229,8 @@
       "sortOrder": 4,
       "isVisible": true,
       "visibleOnMobile": true,
-      "isMegaMenu": true
+      "isMegaMenu": true,
+      "megaMenuColumns": 4
     },
     {
       "label": "Ideas",
@@ -3332,7 +3338,8 @@
       "sortOrder": 6,
       "isVisible": true,
       "visibleOnMobile": true,
-      "isMegaMenu": true
+      "isMegaMenu": true,
+      "megaMenuColumns": 4
     },
     {
       "label": "Wedding Website",
@@ -3341,90 +3348,7 @@
       "isVisible": true,
       "visibleOnMobile": true,
       "isMegaMenu": true,
-      "megaMenuColumns": 2,
-      "children": [
-        {
-          "label": "Get Started",
-          "sortOrder": 0,
-          "isVisible": true,
-          "visibleOnMobile": true,
-          "megaMenuColumns": 4,
-          "children": [
-            {
-              "label": "Create Website",
-              "url": "/wedding-website/create",
-              "sortOrder": 0,
-              "isVisible": true,
-              "visibleOnMobile": true,
-              "megaMenuColumns": 4,
-              "icon": "Globe"
-            },
-            {
-              "label": "Themes & Designs",
-              "url": "/wedding-website/themes",
-              "sortOrder": 1,
-              "isVisible": true,
-              "visibleOnMobile": true,
-              "megaMenuColumns": 4,
-              "icon": "Palette"
-            },
-            {
-              "label": "Custom Domain",
-              "url": "/wedding-website/domain",
-              "sortOrder": 2,
-              "isVisible": true,
-              "visibleOnMobile": true,
-              "megaMenuColumns": 4,
-              "icon": "Link"
-            }
-          ]
-        },
-        {
-          "label": "Features",
-          "sortOrder": 1,
-          "isVisible": true,
-          "visibleOnMobile": true,
-          "megaMenuColumns": 4,
-          "children": [
-            {
-              "label": "RSVP Management",
-              "url": "/wedding-website/rsvp",
-              "sortOrder": 0,
-              "isVisible": true,
-              "visibleOnMobile": true,
-              "megaMenuColumns": 4,
-              "icon": "Users"
-            },
-            {
-              "label": "Guest Pages",
-              "url": "/wedding-website/guests",
-              "sortOrder": 1,
-              "isVisible": true,
-              "visibleOnMobile": true,
-              "megaMenuColumns": 4,
-              "icon": "UserCheck"
-            },
-            {
-              "label": "Photo Gallery",
-              "url": "/wedding-website/gallery",
-              "sortOrder": 2,
-              "isVisible": true,
-              "visibleOnMobile": true,
-              "megaMenuColumns": 4,
-              "icon": "Image"
-            },
-            {
-              "label": "Our Story",
-              "url": "/wedding-website/story",
-              "sortOrder": 3,
-              "isVisible": true,
-              "visibleOnMobile": true,
-              "megaMenuColumns": 4,
-              "icon": "BookHeart"
-            }
-          ]
-        }
-      ]
+      "megaMenuColumns": 4
     }
   ],
   "footerConfig": {

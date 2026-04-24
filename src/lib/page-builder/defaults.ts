@@ -543,31 +543,31 @@ export const DEFAULT_TESTIMONIALS_SETTINGS: TestimonialsWidgetSettings = {
     show: true,
     badge: {
       show: true,
-      text: "Testimonials",
+      text: "Trusted by Thousands",
       style: "pill",
-      bgColor: "#3b82f620",
-      textColor: "#3b82f6",
-      borderColor: "#3b82f640",
+      bgColor: "#ffffff",
+      textColor: "#7c3aed",
+      borderColor: "#ddd6fe",
     },
     heading: {
-      text: "Trusted by 10,000+ Event Planners Worldwide",
-      highlightWords: "10,000+",
-      highlightColor: "#f97316",
-      size: "xl",
-      color: "#0f172a",
+      text: "What Event Planners Say",
+      highlightWords: "",
+      highlightColor: "#7c3aed",
+      size: "2xl",
+      color: "#111827",
     },
     description: {
       show: true,
-      text: "See what couples and event hosts from around the world have to say about their experience with EventPlanner Pro.",
+      text: "Join thousands of happy planners who've created unforgettable events",
       size: "md",
-      color: "#94a3b8",
+      color: "#6b7280",
     },
     alignment: "center",
-    marginBottom: 48,
+    marginBottom: 56,
   },
 
   // View Mode
-  viewMode: "carousel",
+  viewMode: "grid",
   testimonialType: "photo",
 
   // Data Source (from database)
@@ -581,10 +581,10 @@ export const DEFAULT_TESTIMONIALS_SETTINGS: TestimonialsWidgetSettings = {
   // Grid View Settings
   gridView: {
     columns: 3,
-    gap: 24,
+    gap: 32,
     showQuoteIcon: true,
     quoteIconPosition: "top-right",
-    quoteIconColor: "#f9731620",
+    quoteIconColor: "#c4b5fd",
     quoteIconSize: "lg",
   },
 
@@ -638,12 +638,12 @@ export const DEFAULT_TESTIMONIALS_SETTINGS: TestimonialsWidgetSettings = {
   // Card Style
   cardStyle: {
     style: "elevated",
-    borderRadius: 12,
+    borderRadius: 16,
     borderWidth: 1,
-    borderColor: "#334155",
-    backgroundColor: "#1e293b",
-    shadow: "md",
-    padding: 24,
+    borderColor: "#f3f4f6",
+    backgroundColor: "#ffffff",
+    shadow: "sm",
+    padding: 32,
     hoverEffect: "lift",
     glassEffect: {
       enabled: false,
@@ -652,7 +652,7 @@ export const DEFAULT_TESTIMONIALS_SETTINGS: TestimonialsWidgetSettings = {
     },
     gradientBorder: {
       enabled: false,
-      colors: ["#f97316", "#3b82f6"],
+      colors: ["#ec4899", "#8b5cf6"],
       angle: 135,
     },
   },
@@ -663,9 +663,9 @@ export const DEFAULT_TESTIMONIALS_SETTINGS: TestimonialsWidgetSettings = {
     shape: "circle",
     size: "md",
     borderWidth: 0,
-    borderColor: "#f97316",
-    backgroundColor: "#f9731620",
-    textColor: "#f97316",
+    borderColor: "#ec4899",
+    backgroundColor: "#ec4899",
+    textColor: "#ffffff",
   },
 
   // Content Display
@@ -674,28 +674,28 @@ export const DEFAULT_TESTIMONIALS_SETTINGS: TestimonialsWidgetSettings = {
     ratingStyle: "stars",
     ratingColor: "#facc15",
     showCompany: true,
-    showCountry: true,
+    showCountry: false,
     countryFlag: false,
     quoteMaxLines: 0,
     quoteFontSize: "sm",
-    quoteColor: "#94a3b8",
+    quoteColor: "#4b5563",
     quoteStyle: "normal",
-    nameFontSize: "md",
-    nameColor: "#f8fafc",
-    nameFontWeight: "medium",
-    infoColor: "#64748b",
+    nameFontSize: "sm",
+    nameColor: "#111827",
+    nameFontWeight: "semibold",
+    infoColor: "#9ca3af",
     infoFontSize: "xs",
   },
 
   // Trust Footer
   trustFooter: {
-    show: true,
+    show: false,
     showAvatarStack: true,
     avatarStackCount: 4,
-    customerCountText: "Join 10,000+ happy event planners",
+    customerCountText: "Join thousands of happy planners",
     showAverageRating: true,
     averageRating: 4.9,
-    totalReviews: "(2,500+ reviews)",
+    totalReviews: "(1,200+ reviews)",
     alignment: "center",
     marginTop: 48,
   },
@@ -1394,7 +1394,7 @@ export const DEFAULT_PROCESS_STEPS_SETTINGS: ProcessStepsWidgetSettings = {
   },
 
   // Theme color binding
-  colors: { useTheme: true },
+  colors: { useTheme: false },
 };
 
 export const DEFAULT_PRICING_TABLE_SETTINGS: PricingTableWidgetSettings = {
@@ -1924,13 +1924,13 @@ export const DEFAULT_FAQ_ACCORDION_SETTINGS = {
   source: "all" as const,
   categories: [],
   maxItems: 10,
-  expandFirst: true,
+  expandFirst: false,
   allowMultipleOpen: false,
   style: "cards" as const,
-  accentColor: "#3b82f6",
+  accentColor: "#7c3aed",
   showCategoryFilter: false,
   columns: 1 as 1 | 2 | 3,
-  colors: { useTheme: true },
+  colors: { useTheme: false },
   headerStyle: {
     headingSize: "lg" as const,
     headingColor: undefined,
@@ -1939,6 +1939,7 @@ export const DEFAULT_FAQ_ACCORDION_SETTINGS = {
   itemStyle: {
     questionColor: undefined,
     answerColor: undefined,
+    questionSize: "base" as const,
     gap: 16,
     borderRadius: 12,
     padding: 20,

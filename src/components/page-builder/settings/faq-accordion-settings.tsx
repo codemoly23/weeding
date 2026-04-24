@@ -275,6 +275,17 @@ export function FaqAccordionWidgetSettingsPanel({
         {/* Item Style */}
         <AccordionSection title="Item Style">
           <div className="space-y-3">
+            <SelectInput
+              label="Question Size"
+              value={is.questionSize ?? "base"}
+              onChange={(v) => updateItemStyle({ questionSize: v as "sm" | "base" | "lg" | "xl" })}
+              options={[
+                { value: "sm", label: "Small" },
+                { value: "base", label: "Base (Default)" },
+                { value: "lg", label: "Large" },
+                { value: "xl", label: "Extra Large" },
+              ]}
+            />
             <ColorInput
               label="Question Text Color"
               value={is.questionColor || ""}
@@ -343,11 +354,21 @@ export function FaqAccordionWidgetSettingsPanel({
                 { value: "bordered", label: "Bordered (Numbered)" },
               ]}
             />
-            <ColorInput
-              label="Accent Color"
-              value={settings.accentColor}
-              onChange={(v) => updateField("accentColor", v)}
+            <ToggleSwitch
+              label="Use Theme Color"
+              description="Use the site's primary color as accent"
+              checked={settings.colors?.useTheme ?? false}
+              onChange={(v) =>
+                onChange({ ...settings, colors: { ...settings.colors, useTheme: v } })
+              }
             />
+            {!settings.colors?.useTheme && (
+              <ColorInput
+                label="Accent Color"
+                value={settings.accentColor}
+                onChange={(v) => updateField("accentColor", v)}
+              />
+            )}
           </div>
         </AccordionSection>
 

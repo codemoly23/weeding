@@ -51,7 +51,8 @@ export function TestimonialsRailView({
 
   const railRef = useRef<HTMLDivElement>(null);
   const outerRef = useRef<HTMLDivElement>(null);
-  const [currentPage, setCurrentPage] = useState(0);
+  /** Current card index (advances 1 card at a time) */
+  const [currentIndex, setCurrentIndex] = useState(0);
   const autoIntervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
   /** Responsive cards per view */
@@ -68,15 +69,18 @@ export function TestimonialsRailView({
     setPerView(getPerView());
     const onResize = () => {
       setPerView(getPerView());
-      setCurrentPage(0);
+      setCurrentIndex(0);
     };
     window.addEventListener("resize", onResize);
     return () => window.removeEventListener("resize", onResize);
   }, [getPerView]);
 
-  const totalPages = Math.ceil(testimonials.length / perView);
+  /** Max index = last valid starting position so all perView cards are visible */
+  const maxIndex = Math.max(0, testimonials.length - perView);
+  /** Total dot positions */
+  const totalDots = maxIndex + 1;
 
-  /** Slide to page using pixel-based transform (v3-forge approach) */
+  /** Slide 1 card at a time */
   useEffect(() => {
     const rail = railRef.current;
     if (!rail || !rail.children.length) return;
@@ -85,9 +89,9 @@ export function TestimonialsRailView({
     const firstCard = rail.children[0] as HTMLElement;
     if (!firstCard) return;
     const cardW = firstCard.offsetWidth + gap;
-    const clampedPage = Math.max(0, Math.min(currentPage, totalPages - 1));
-    rail.style.transform = `translateX(-${clampedPage * perView * cardW}px)`;
-  }, [currentPage, perView, totalPages, carouselView.spaceBetween]);
+    const clamped = Math.max(0, Math.min(currentIndex, maxIndex));
+    rail.style.transform = `translateX(-${clamped * cardW}px)`;
+  }, [currentIndex, perView, maxIndex, carouselView.spaceBetween]);
 
   /** Auto-play */
   const stopAuto = useCallback(() => {
@@ -99,11 +103,11 @@ export function TestimonialsRailView({
 
   const startAuto = useCallback(() => {
     stopAuto();
-    if (!carouselView.autoplay || totalPages <= 1) return;
+    if (!carouselView.autoplay || maxIndex < 1) return;
     autoIntervalRef.current = setInterval(() => {
-      setCurrentPage((prev) => (prev + 1) % totalPages);
-    }, carouselView.autoplayDelay || 5000);
-  }, [stopAuto, carouselView.autoplay, carouselView.autoplayDelay, totalPages]);
+      setCurrentIndex((prev) => (prev >= maxIndex ? 0 : prev + 1));
+    }, carouselView.autoplayDelay || 3000);
+  }, [stopAuto, carouselView.autoplay, carouselView.autoplayDelay, maxIndex]);
 
   useEffect(() => {
     startAuto();
@@ -126,7 +130,7 @@ export function TestimonialsRailView({
 
   const goTo = (idx: number) => {
     stopAuto();
-    setCurrentPage(Math.max(0, Math.min(idx, totalPages - 1)));
+    setCurrentIndex(Math.max(0, Math.min(idx, maxIndex)));
     startAuto();
   };
 
@@ -166,25 +170,25 @@ export function TestimonialsRailView({
       </div>
 
       {/* Dot pagination */}
-      {carouselView.navigation.pagination.enabled && totalPages > 1 && (
+      {carouselView.navigation.pagination.enabled && totalDots > 1 && (
         <div className="flex justify-center items-center gap-2 mt-12">
-          {Array.from({ length: totalPages }).map((_, i) => (
+          {Array.from({ length: totalDots }).map((_, i) => (
             <button
               key={i}
               onClick={() => goTo(i)}
               className={cn(
                 "h-2.5 rounded-full cursor-pointer transition-all duration-300 border border-transparent",
-                i === currentPage ? "w-7" : "w-2.5 hover:opacity-60"
+                i === currentIndex ? "w-7" : "w-2.5 hover:opacity-60"
               )}
               style={{
-                background: i === currentPage
+                background: i === currentIndex
                   ? (carouselView.navigation.pagination.activeColor || "#ff6a3d")
                   : (carouselView.navigation.pagination.inactiveColor || "rgba(255,255,255,0.2)"),
-                ...(i === currentPage
+                ...(i === currentIndex
                   ? { borderRadius: "5px", borderColor: "rgba(232,76,30,0.3)" }
                   : {}),
               }}
-              aria-label={`Go to page ${i + 1}`}
+              aria-label={`Go to card ${i + 1}`}
             />
           ))}
         </div>
@@ -193,7 +197,7 @@ export function TestimonialsRailView({
   );
 }
 
-/** Individual testimonial card — matches v3-forge design exactly */
+/** Individual testimonial card — reference design */
 function RailCard({
   testimonial,
   index,
@@ -213,147 +217,106 @@ function RailCard({
   showCompany: boolean;
   showCountry: boolean;
 }) {
-  // Responsive width calculation matching v3-forge
   const getWidth = () => {
     if (perView === 1) return "100%";
     if (perView === 2) return `calc(50% - ${gap / 2}px)`;
     return `calc(33.333% - ${(gap * (perView - 1)) / perView}px)`;
   };
 
-  // Avatar background: use avatar field as color if it's a color string, else use index color
-  const avatarBg = testimonial.avatar && testimonial.avatar.startsWith("rgba")
-    ? testimonial.avatar
-    : AVATAR_COLORS[index % AVATAR_COLORS.length];
-
-  // Parse country for flag emoji (e.g., "🇮🇳 Mumbai, India")
-  const country = testimonial.country || "";
-  const hasFlag = country && /[\u{1F1E0}-\u{1F1FF}]/u.test(country);
-
   return (
     <div
-      className="flex flex-col shrink-0 group"
+      className="flex flex-col shrink-0"
       style={{
         width: getWidth(),
-        minHeight: perView === 1 ? "280px" : "320px",
-        background: "rgba(255,255,255,0.03)",
-        border: "1px solid rgba(255,255,255,0.08)",
+        minHeight: "280px",
+        background: "#ffffff",
+        border: "1px solid #f3f4f6",
         borderRadius: "16px",
-        padding: perView === 1 ? "24px" : "32px",
-        transition: "all 0.3s cubic-bezier(0.16, 1, 0.3, 1)",
+        padding: "32px",
+        boxShadow: "0 1px 3px rgba(0,0,0,0.08)",
+        transition: "transform 0.3s ease, box-shadow 0.3s ease",
       }}
       onMouseEnter={(e) => {
-        const el = e.currentTarget;
-        el.style.background = "rgba(255,255,255,0.06)";
-        el.style.borderColor = "rgba(255,255,255,0.15)";
-        el.style.transform = "translateY(-4px)";
-        el.style.boxShadow = "0 12px 32px rgba(0,0,0,0.3)";
+        e.currentTarget.style.transform = "translateY(-4px)";
+        e.currentTarget.style.boxShadow = "0 12px 32px rgba(168,85,247,0.15)";
+        e.currentTarget.style.background = "#faf5ff";
+        e.currentTarget.style.borderColor = "#e9d5ff";
       }}
       onMouseLeave={(e) => {
-        const el = e.currentTarget;
-        el.style.background = "rgba(255,255,255,0.03)";
-        el.style.borderColor = "rgba(255,255,255,0.08)";
-        el.style.transform = "translateY(0)";
-        el.style.boxShadow = "none";
+        e.currentTarget.style.transform = "translateY(0)";
+        e.currentTarget.style.boxShadow = "0 1px 3px rgba(0,0,0,0.08)";
+        e.currentTarget.style.background = "#ffffff";
+        e.currentTarget.style.borderColor = "#f3f4f6";
       }}
     >
-      {/* Quote character */}
-      <div
-        className="font-display leading-none"
-        style={{
-          fontSize: perView === 1 ? "42px" : "56px",
-          color: ratingColor,
-          opacity: 0.5,
-          fontWeight: 900,
-          marginBottom: "-8px",
-        }}
-      >
-        &ldquo;
-      </div>
-
       {/* Star rating */}
       {showRating && (
-        <div className="flex gap-1 mb-[18px]">
+        <div className="flex gap-0.5 mb-4">
           {Array.from({ length: 5 }).map((_, i) => (
-            <StarIcon key={i} color={i < testimonial.rating ? ratingColor : "rgba(255,255,255,0.1)"} />
+            <StarIcon key={i} color={i < testimonial.rating ? ratingColor : "#e5e7eb"} />
           ))}
         </div>
       )}
 
+      {/* Big quote marks */}
+      <div
+        className="leading-none select-none mb-3"
+        style={{ fontSize: "48px", fontWeight: 900, color: "#c4b5fd", lineHeight: 1 }}
+      >
+        &#x275D;&#x275E;
+      </div>
+
       {/* Content text */}
       <p
         className="flex-grow"
-        style={{
-          fontSize: perView === 1 ? "14px" : "15px",
-          color: "rgba(250,248,244,0.75)",
-          lineHeight: 1.7,
-          fontStyle: "normal",
-        }}
+        style={{ fontSize: "14px", color: "#4b5563", lineHeight: 1.7 }}
       >
-        {testimonial.content}
+        &ldquo;{testimonial.content}&rdquo;
       </p>
 
-      {/* Gradient divider */}
+      {/* Divider */}
       <div
         style={{
-          height: "1px",
-          background: "linear-gradient(90deg, transparent, rgba(255,255,255,0.12), transparent)",
-          margin: "20px 0 18px",
+          height: "2px",
+          width: "48px",
+          borderRadius: "999px",
+          background: "linear-gradient(to right, #a855f7, #ec4899)",
+          margin: "20px 0 16px",
         }}
       />
 
       {/* Author */}
-      <div className="flex items-center gap-3.5 mt-auto">
-        {/* Avatar circle */}
-        <div
-          className="shrink-0 flex items-center justify-center rounded-full font-display text-white"
-          style={{
-            width: perView === 1 ? "44px" : "52px",
-            height: perView === 1 ? "44px" : "52px",
-            fontSize: perView === 1 ? "14px" : "16px",
-            fontWeight: 900,
-            background: avatarBg,
-            border: "2px solid rgba(255,255,255,0.1)",
-            boxShadow: "0 4px 12px rgba(0,0,0,0.2)",
-          }}
-        >
-          {getInitials(testimonial.name)}
-        </div>
+      <div className="flex items-center gap-3">
+        {/* Avatar */}
+        {testimonial.avatar ? (
+          <img
+            src={testimonial.avatar}
+            alt={testimonial.name}
+            className="shrink-0 rounded-full object-cover"
+            style={{ width: "44px", height: "44px" }}
+          />
+        ) : (
+          <div
+            className="shrink-0 flex items-center justify-center rounded-full text-white font-semibold text-sm"
+            style={{ width: "44px", height: "44px", background: "#ec4899" }}
+          >
+            {getInitials(testimonial.name)}
+          </div>
+        )}
 
         {/* Info */}
         <div>
-          <div
-            className="font-display"
-            style={{
-              fontSize: perView === 1 ? "15px" : "16px",
-              fontWeight: 800,
-              color: "#faf8f4",
-              letterSpacing: "-0.01em",
-            }}
-          >
+          <div style={{ fontSize: "14px", fontWeight: 600, color: "#111827" }}>
             {testimonial.name}
           </div>
           {showCompany && testimonial.company && (
-            <div
-              style={{
-                fontSize: perView === 1 ? "12px" : "13px",
-                color: "rgba(250,248,244,0.5)",
-                marginTop: "3px",
-                fontWeight: 500,
-              }}
-            >
+            <div style={{ fontSize: "12px", color: "#9ca3af", marginTop: "1px" }}>
               {testimonial.company}
             </div>
           )}
-          {showCountry && country && (
-            <div
-              className="flex items-center gap-1.5"
-              style={{
-                fontSize: perView === 1 ? "12px" : "13px",
-                color: "rgba(250,248,244,0.4)",
-                marginTop: "2px",
-              }}
-            >
-              {country}
+          {showCountry && testimonial.country && (
+            <div style={{ fontSize: "12px", color: "#9ca3af", marginTop: "1px" }}>
+              {testimonial.country}
             </div>
           )}
         </div>
