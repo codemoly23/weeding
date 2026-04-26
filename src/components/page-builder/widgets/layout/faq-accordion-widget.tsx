@@ -266,7 +266,7 @@ export function FaqAccordionWidget({
             )}
           >
             <h2
-              className={cn("font-bold tracking-tight", !hs.headingFontSize && {
+              className={cn("font-extrabold tracking-tight", !hs.headingFontSize && {
                 "text-xl sm:text-2xl": hs.headingSize === "sm",
                 "text-2xl sm:text-3xl": hs.headingSize === "md",
                 "text-3xl sm:text-4xl": hs.headingSize === "lg",
@@ -279,7 +279,7 @@ export function FaqAccordionWidget({
             </h2>
             {s.header.description && (
               <p
-                className="mt-3 text-lg"
+                className="mt-3 text-xl"
                 style={{ color: hs.descriptionColor || undefined }}
               >
                 {s.header.description}
@@ -414,7 +414,7 @@ export function FaqAccordionWidget({
           )}
           <h2
             className={cn(
-              "font-bold tracking-tight",
+              "font-extrabold tracking-tight",
               !hs.headingFontSize && {
                 "text-xl sm:text-2xl": hs.headingSize === "sm",
                 "text-2xl sm:text-3xl": hs.headingSize === "md",
@@ -429,7 +429,7 @@ export function FaqAccordionWidget({
           </h2>
           {s.header.description && (
             <p
-              className="mt-3 text-lg"
+              className="mt-3 text-xl"
               style={{ color: hs.descriptionColor || undefined }}
             >
               {s.header.description}

@@ -137,9 +137,27 @@ interface SectionRendererProps {
   section: Section;
 }
 
+// Widget types that render their own <section> with backgrounds — must be edge-to-edge
+const FULL_BLEED_WIDGET_TYPES = new Set([
+  "event-search-hero",
+  "hero-content",
+  "features-showcase",
+  "trending-venues",
+  "testimonials-carousel",
+  "testimonial",
+  "event-gallery-grid",
+  "cta-banner",
+]);
+
+function isFullBleedSection(section: Section): boolean {
+  const allWidgets = section.columns.flatMap((c) => c.widgets);
+  return allWidgets.length > 0 && allWidgets.every((w) => FULL_BLEED_WIDGET_TYPES.has(w.type));
+}
+
 function SectionRenderer({ section }: SectionRendererProps) {
   const { layout, columns, settings } = section;
   const columnSpanClasses = getColumnSpanClasses(layout);
+  const isFullBleed = isFullBleedSection(section);
 
   // Responsive visibility classes
   const visibilityClass = cn(
@@ -178,8 +196,8 @@ function SectionRenderer({ section }: SectionRendererProps) {
         ...(settings.fullWidth ? backgroundStyles : {}),
         paddingTop: `${settings.paddingTop ?? 0}px`,
         paddingBottom: `${settings.paddingBottom ?? 0}px`,
-        paddingLeft: `${settings.paddingLeft ?? 0}px`,
-        paddingRight: `${settings.paddingRight ?? 0}px`,
+        paddingLeft: isFullBleed ? 0 : `${settings.paddingLeft ?? 0}px`,
+        paddingRight: isFullBleed ? 0 : `${settings.paddingRight ?? 0}px`,
         marginTop: `${settings.marginTop ?? 0}px`,
         marginBottom: `${settings.marginBottom ?? 0}px`,
         minHeight: settings.minHeight ? `${settings.minHeight}px` : undefined,
@@ -237,8 +255,8 @@ function SectionRenderer({ section }: SectionRendererProps) {
       {/* Container */}
       <div
         className={cn(
-          "relative z-[2] mx-auto",
-          getMaxWidthClass(settings.maxWidth)
+          "relative z-[2]",
+          isFullBleed ? "w-full" : cn("mx-auto", getMaxWidthClass(settings.maxWidth))
         )}
         style={!settings.fullWidth ? backgroundStyles : undefined}
       >

@@ -36,6 +36,8 @@ async function seedHeaderFooter() {
       searchEnabled: false,
       mobileBreakpoint: 1024,
       height: 80,
+      textColor: "#1e293b",
+      hoverColor: "#9810fa",
       ctaButtons: JSON.stringify([
         {
           text: "Start Planning",

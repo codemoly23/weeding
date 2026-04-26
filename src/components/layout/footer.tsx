@@ -322,7 +322,7 @@ function EnhancedSocialLinks({
 function TrustBadges({
   badges,
 }: {
-  badges: { style?: string; image: string; alt: string; url?: string; text?: string; iconName?: string }[];
+  badges: { style?: string; image: string; alt: string; url?: string; text?: string; iconName?: string; iconColor?: string }[];
 }) {
   if (!badges || badges.length === 0) return null;
 
@@ -333,7 +333,7 @@ function TrustBadges({
           const Icon = badge.iconName ? PILL_BADGE_ICONS[badge.iconName] : null;
           const pillContent = (
             <span className="inline-flex items-center gap-1.5 rounded-full border border-current/20 bg-white/8 px-3 py-1.5 text-xs font-medium opacity-75 transition-opacity hover:opacity-100">
-              {Icon && <Icon className="h-3.5 w-3.5 shrink-0" aria-hidden="true" />}
+              {Icon && <Icon className="h-3.5 w-3.5 shrink-0" style={badge.iconColor ? { color: badge.iconColor } : undefined} aria-hidden="true" />}
               {badge.text || badge.alt}
             </span>
           );
@@ -554,6 +554,7 @@ function FooterWidgetRenderer({
       const showContact = brandContent?.showContact !== false; // Default true
       const showSocial = brandContent?.showSocial !== false; // Default true (but controlled by separate SOCIAL widget usually)
       const showCTA = brandContent?.showCTA;
+      const showBrandBadges = brandContent?.showBrandBadges;
 
       return (
         <div className="space-y-4">
@@ -644,6 +645,7 @@ function FooterWidgetRenderer({
               )}
             </address>
           )}
+
         </div>
       );
 
@@ -1159,76 +1161,88 @@ export function Footer() {
   };
 
   // Bottom bar component (shared across layouts)
+  const isSplit = footerConfig?.bottomBar?.layout === "split";
+  const isCentered = footerConfig?.bottomBar?.layout === "centered" || footerConfig?.bottomBar?.layout === "stacked";
+
   const BottomBar = () => (
     footerConfig?.bottomBar?.enabled !== false ? (
       <>
         <Divider />
-        <div
-          className={cn(
-            "flex gap-4",
-            footerConfig?.bottomBar?.layout === "centered" && "flex-col items-center text-center",
-            footerConfig?.bottomBar?.layout === "stacked" && "flex-col items-center text-center",
-            footerConfig?.bottomBar?.layout === "split" && "flex-col items-center justify-between md:flex-row"
-          )}
-        >
-          <p className="text-sm opacity-80">
-            {footerConfig?.bottomBar?.copyrightText ||
-              t("footer.copyright", { year: String(new Date().getFullYear()), name: businessConfig.name })}
-          </p>
-          {footerConfig?.bottomBar?.showDisclaimer && (
-            <p className={`max-w-xl text-xs opacity-60 ${layout === "CENTERED" ? "" : "md:text-right"}`}>
-              <strong>Disclaimer:</strong>{" "}
-              {footerConfig?.bottomBar?.disclaimerText ||
-                t("footer.disclaimer", { name: businessConfig.name })}
-            </p>
-          )}
-        </div>
 
-        {/* Bottom Links */}
-        {footerConfig?.bottomBar?.links && footerConfig.bottomBar.links.length > 0 && (
-          <nav className={cn(
-            "mt-4 flex flex-wrap gap-4",
-            footerConfig?.bottomBar?.layout === "centered" ? "justify-center" : "justify-center md:justify-start"
-          )} aria-label="Legal links">
-            {footerConfig.bottomBar.links.map((link, index) => (
-              <Link
-                key={index}
-                href={link.url}
-                className={cn("text-xs", linkClasses)}
-              >
-                {link.label}
-              </Link>
-            ))}
-          </nav>
+        {/* Split layout: copyright left, links right — same row */}
+        {isSplit ? (
+          <div className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
+            <p className="text-sm opacity-80">
+              {footerConfig?.bottomBar?.copyrightText ||
+                t("footer.copyright", { year: String(new Date().getFullYear()), name: businessConfig.name })}
+            </p>
+            {footerConfig?.bottomBar?.links && footerConfig.bottomBar.links.length > 0 && (
+              <nav className="flex flex-wrap gap-4" aria-label="Legal links">
+                {footerConfig.bottomBar.links.map((link, index) => (
+                  <Link key={index} href={link.url} className={cn("text-xs", linkClasses)}>
+                    {link.label}
+                  </Link>
+                ))}
+              </nav>
+            )}
+          </div>
+        ) : (
+          <>
+            <div className={cn("flex gap-4", isCentered && "flex-col items-center text-center")}>
+              <p className="text-sm opacity-80">
+                {footerConfig?.bottomBar?.copyrightText ||
+                  t("footer.copyright", { year: String(new Date().getFullYear()), name: businessConfig.name })}
+              </p>
+              {footerConfig?.bottomBar?.showDisclaimer && (
+                <p className="max-w-xl text-xs opacity-60">
+                  <strong>Disclaimer:</strong>{" "}
+                  {footerConfig?.bottomBar?.disclaimerText ||
+                    t("footer.disclaimer", { name: businessConfig.name })}
+                </p>
+              )}
+            </div>
+            {footerConfig?.bottomBar?.links && footerConfig.bottomBar.links.length > 0 && (
+              <nav className={cn("mt-4 flex flex-wrap gap-4", isCentered ? "justify-center" : "justify-start")} aria-label="Legal links">
+                {footerConfig.bottomBar.links.map((link, index) => (
+                  <Link key={index} href={link.url} className={cn("text-xs", linkClasses)}>
+                    {link.label}
+                  </Link>
+                ))}
+              </nav>
+            )}
+          </>
         )}
 
-        {/* Trust Badges */}
+        {/* Trust Badges (for non-brand-column layouts) */}
         {footerConfig?.trustBadges?.show && footerConfig.trustBadges.badges?.length > 0 && (
           <div className="mt-6">
             <TrustBadges badges={footerConfig.trustBadges.badges} />
           </div>
         )}
-
-        {/* Language Switcher */}
-        <div className="mt-6 flex justify-center">
-          <FooterLanguageSwitcher />
-        </div>
       </>
     ) : null
   );
 
-  // Dynamic CSS for footer colors (uses CSS custom properties from footerStyle)
+  // Dynamic CSS for footer colors (uses direct interpolation for guaranteed application)
+  const linkColor = styling?.linkColor || "inherit";
+  const linkHoverColor = styling?.linkHoverColor || styling?.accentColor || "#22d3ee";
+  const headingColor = styling?.headingColor || "inherit";
   const FooterStyles = () => (
     <style>{`
       .footer-dynamic-styles .footer-link {
-        color: var(--footer-link-color);
+        color: ${linkColor};
+        font-size: 0.875rem;
+        line-height: 1.5rem;
         transition: color 0.2s ease;
       }
       .footer-dynamic-styles .footer-link:hover {
-        color: var(--footer-link-hover-color);
+        color: ${linkHoverColor};
       }
       .footer-dynamic-styles .footer-heading {
-        color: var(--footer-heading-color);
+        color: ${headingColor};
+        font-size: ${styling?.headingSize === "xl" ? "1.25rem" : styling?.headingSize === "lg" ? "1.125rem" : styling?.headingSize === "base" ? "1rem" : "0.875rem"};
+        font-weight: ${styling?.headingWeight === "bold" ? "700" : styling?.headingWeight === "semibold" ? "600" : "500"};
+        line-height: 1.75rem;
       }
     `}</style>
   );
@@ -2025,6 +2039,10 @@ export function Footer() {
                             logoUrl={footerLogoUrl}
                           />
                         ))}
+                        {/* Trust badges at bottom of brand column — after social icons */}
+                        {isBrand && footerConfig?.trustBadges?.badges && footerConfig.trustBadges.badges.length > 0 && (
+                          <TrustBadges badges={footerConfig.trustBadges.badges} />
+                        )}
                       </div>
                     );
                   })}

@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { Star, ArrowRight, BadgeCheck, Building2, Camera, Video, Utensils, Music, Flower2, Shirt, Gem, Palette, Car, Sparkles, CalendarDays, HelpCircle } from "lucide-react";
+import { Star, ArrowRight, BadgeCheck, Heart, Building2, Camera, Video, Utensils, Music, Flower2, Shirt, Gem, Palette, Car, Sparkles, CalendarDays, HelpCircle } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { WidgetContainer } from "@/components/page-builder/shared/widget-container";
 import type { VendorListingWidgetSettings } from "@/lib/page-builder/types";
@@ -126,17 +126,19 @@ export function VendorListingWidget({ settings, isPreview = false }: VendorListi
           )}
           {title && (
             <h2
-              className="font-bold"
               style={{
                 color: headerTextColor,
-                fontSize: headingFontSize ? `${headingFontSize}px` : "clamp(1.5rem, 3vw, 1.875rem)",
+                fontSize: headingFontSize ? `${headingFontSize}px` : "3.75rem",
+                fontWeight: 700,
+                lineHeight: 1.15,
+                letterSpacing: "-0.02em",
               }}
             >
               {title}
             </h2>
           )}
           {subtitle && (
-            <p className="mt-2 text-base" style={{ color: headerTextColor, opacity: 0.65 }}>
+            <p className="mt-2" style={{ color: headerTextColor, opacity: 0.65, fontSize: "1.25rem", fontWeight: 400 }}>
               {subtitle}
             </p>
           )}
@@ -207,8 +209,11 @@ function OverlayVendorCard({
   badgeTo: string;
 }) {
   const [hovered, setHovered] = useState(false);
+  const [hearted, setHearted] = useState(false);
   const meta = CATEGORY_META[vendor.category] ?? CATEGORY_META.OTHER;
   const { Icon } = meta;
+
+  const fullStars = Math.round(vendor.avgRating ?? 0);
 
   const card = (
     <div
@@ -229,130 +234,162 @@ function OverlayVendorCard({
     >
       {/* Image */}
       <div style={{ position: "relative", height: "20rem", overflow: "hidden" }}>
-        {vendor.coverPhoto ? (
-          // eslint-disable-next-line @next/next/no-img-element
-          <img
-            src={vendor.coverPhoto}
-            alt={vendor.businessName}
-            style={{
-              width: "100%",
-              height: "100%",
-              objectFit: "cover",
-              transform: hovered ? "scale(1.1)" : "scale(1)",
-              transition: "transform 0.7s ease",
-              display: "block",
-            }}
-          />
-        ) : (
-          // eslint-disable-next-line @next/next/no-img-element
-          <img
-            src={CATEGORY_PLACEHOLDER[vendor.category] ?? CATEGORY_PLACEHOLDER.OTHER}
-            alt={vendor.businessName}
-            style={{
-              width: "100%",
-              height: "100%",
-              objectFit: "cover",
-              transform: hovered ? "scale(1.1)" : "scale(1)",
-              transition: "transform 0.7s ease",
-              display: "block",
-            }}
-          />
-        )}
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img
+          src={vendor.coverPhoto ?? (CATEGORY_PLACEHOLDER[vendor.category] ?? CATEGORY_PLACEHOLDER.OTHER)}
+          alt={vendor.businessName}
+          style={{
+            width: "100%",
+            height: "100%",
+            objectFit: "cover",
+            transform: hovered ? "scale(1.1)" : "scale(1)",
+            transition: "transform 0.7s ease",
+            display: "block",
+          }}
+        />
 
         {/* Gradient overlay */}
         <div style={{
           position: "absolute",
           inset: 0,
-          background: "linear-gradient(to top, rgba(0,0,0,0.8), rgba(0,0,0,0.3), transparent)",
+          background: "linear-gradient(to top, rgba(0,0,0,0.85) 0%, rgba(0,0,0,0.35) 50%, transparent 100%)",
           pointerEvents: "none",
         }} />
 
-        {/* Category badge — top left */}
+        {/* Category badge — top left: icon circle + label */}
         <div style={{
           position: "absolute",
           top: "1rem",
           left: "1rem",
-          padding: "0.375rem 0.75rem",
+          display: "flex",
+          alignItems: "center",
+          gap: "0.375rem",
+          padding: "0.25rem 0.625rem 0.25rem 0.25rem",
           background: `linear-gradient(to right, ${badgeFrom}, ${badgeTo})`,
           color: "white",
-          fontSize: "0.75rem",
+          fontSize: "0.6875rem",
           fontWeight: 700,
           borderRadius: "9999px",
-          boxShadow: "0 4px 6px rgba(0,0,0,0.15)",
+          boxShadow: "0 4px 6px rgba(0,0,0,0.2)",
+          letterSpacing: "0.04em",
+          textTransform: "uppercase",
         }}>
+          <span style={{
+            width: "1.25rem",
+            height: "1.25rem",
+            background: "rgba(255,255,255,0.22)",
+            borderRadius: "9999px",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            flexShrink: 0,
+          }}>
+            <Icon size={10} strokeWidth={2.5} />
+          </span>
           {meta.label}
         </div>
 
-        {/* Verified badge — top right */}
-        {vendor.isVerified && (
-          <div style={{
+        {/* Heart button — top right, always visible */}
+        <button
+          onClick={(e) => { e.preventDefault(); e.stopPropagation(); setHearted((v) => !v); }}
+          style={{
             position: "absolute",
             top: "1rem",
             right: "1rem",
+            width: "2rem",
+            height: "2rem",
             background: "white",
-            borderRadius: "9999px",
-            padding: "0.25rem 0.75rem",
+            border: "none",
+            borderRadius: "50%",
             display: "flex",
             alignItems: "center",
-            gap: "0.25rem",
-          }}>
-            <BadgeCheck style={{ width: "1rem", height: "1rem", color: "#9333ea" }} />
-            <span style={{ fontSize: "0.75rem", fontWeight: 600, color: "#9333ea" }}>Verified</span>
-          </div>
-        )}
+            justifyContent: "center",
+            cursor: "pointer",
+            boxShadow: "0 2px 6px rgba(0,0,0,0.18)",
+          }}
+        >
+          <Heart size={14} fill={hearted ? "#ec4899" : "none"} color={hearted ? "#ec4899" : "#6b7280"} strokeWidth={2} />
+        </button>
 
         {/* Card content at bottom */}
-        <div style={{ position: "absolute", bottom: 0, left: 0, right: 0, padding: "1.5rem" }}>
-          <h3 style={{ fontSize: "1.25rem", fontWeight: 700, color: "white", marginBottom: "0.75rem", lineHeight: 1.3 }}>
+        <div style={{ position: "absolute", bottom: 0, left: 0, right: 0, padding: "1.25rem 1.5rem 1.5rem" }}>
+          {/* Business name */}
+          <h3 style={{ fontSize: "1.25rem", fontWeight: 700, color: "white", marginBottom: "0.25rem", lineHeight: 1.3 }}>
             {vendor.businessName}
           </h3>
 
-          {/* Rating */}
-          {vendor.avgRating !== null && (
-            <div style={{ display: "flex", alignItems: "center", gap: "0.5rem", marginBottom: "0.75rem" }}>
-              <div style={{ display: "flex", alignItems: "center", gap: "0.25rem" }}>
-                <Star style={{ width: "1rem", height: "1rem", fill: "#fbbf24", color: "#fbbf24" }} />
-                <span style={{ fontWeight: 600, color: "white" }}>{vendor.avgRating.toFixed(1)}</span>
-              </div>
-              <span style={{ color: "rgba(255,255,255,0.8)", fontSize: "0.875rem" }}>({vendor.reviewCount} reviews)</span>
-            </div>
+          {/* City • review count */}
+          {(vendor.city || vendor.reviewCount > 0) && (
+            <p style={{ fontSize: "0.8125rem", color: "rgba(255,255,255,0.75)", margin: "0 0 0.625rem" }}>
+              {[vendor.city, vendor.reviewCount > 0 ? `${vendor.reviewCount} reviews` : null].filter(Boolean).join(" • ")}
+            </p>
           )}
 
+          {/* Bottom row: Stars LEFT | Price RIGHT — fixed height, no shift */}
           <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
-            {/* Price */}
-            {vendor.startingPrice !== null && (
-              <p style={{
-                background: `linear-gradient(to right, ${badgeFrom}, ${badgeTo})`,
-                WebkitBackgroundClip: "text",
-                WebkitTextFillColor: "transparent",
-                backgroundClip: "text",
-                fontWeight: 700,
-                fontSize: "1rem",
-                filter: "brightness(2)",
-              }}>
-                From {vendor.currency ?? "SEK"} {vendor.startingPrice.toLocaleString()}
-              </p>
+            {/* Multiple stars + rating number */}
+            {vendor.avgRating !== null && (
+              <div style={{ display: "flex", alignItems: "center", gap: "0.375rem" }}>
+                <div style={{ display: "flex", gap: "2px" }}>
+                  {Array.from({ length: 5 }).map((_, i) => (
+                    <Star
+                      key={i}
+                      size={14}
+                      fill={i < fullStars ? "#fbbf24" : "rgba(255,255,255,0.25)"}
+                      color={i < fullStars ? "#fbbf24" : "rgba(255,255,255,0.25)"}
+                      strokeWidth={1.5}
+                    />
+                  ))}
+                </div>
+                <span style={{ fontWeight: 600, color: "white", fontSize: "0.875rem" }}>
+                  {vendor.avgRating.toFixed(1)}
+                </span>
+              </div>
             )}
 
-            {/* View Profile button — appears on hover */}
-            <div style={{
-              background: "white",
-              color: "#7c3aed",
-              padding: "0.5rem 1rem",
-              borderRadius: "0.5rem",
-              fontWeight: 600,
-              fontSize: "0.875rem",
-              display: "flex",
-              alignItems: "center",
-              gap: "0.5rem",
-              boxShadow: "0 4px 6px rgba(0,0,0,0.15)",
-              opacity: hovered ? 1 : 0,
-              transform: hovered ? "translateY(0)" : "translateY(8px)",
-              transition: "opacity 0.3s, transform 0.3s",
-              pointerEvents: hovered ? "auto" : "none",
-            }}>
-              View Profile
-              <ArrowRight size={14} />
+            {/* Price (hidden on hover) + View Profile (shown on hover) — same slot, no layout shift */}
+            <div style={{ position: "relative", height: "1.5rem", display: "flex", alignItems: "center" }}>
+              {/* Price */}
+              {vendor.startingPrice !== null && (
+                <p style={{
+                  background: `linear-gradient(to right, ${badgeFrom}, ${badgeTo})`,
+                  WebkitBackgroundClip: "text",
+                  WebkitTextFillColor: "transparent",
+                  backgroundClip: "text",
+                  fontWeight: 700,
+                  fontSize: "1rem",
+                  filter: "brightness(1.8)",
+                  margin: 0,
+                  opacity: hovered ? 0 : 1,
+                  transition: "opacity 0.2s",
+                }}>
+                  {vendor.currency ?? "SEK"} {vendor.startingPrice.toLocaleString()}+
+                </p>
+              )}
+
+              {/* View Profile — absolute, same position as price, no layout shift */}
+              <div style={{
+                position: "absolute",
+                right: 0,
+                background: "white",
+                color: "#7c3aed",
+                padding: "0.3rem 0.75rem",
+                borderRadius: "0.5rem",
+                fontWeight: 600,
+                fontSize: "0.8125rem",
+                display: "flex",
+                alignItems: "center",
+                gap: "0.375rem",
+                boxShadow: "0 4px 6px rgba(0,0,0,0.15)",
+                whiteSpace: "nowrap",
+                opacity: hovered ? 1 : 0,
+                transform: hovered ? "translateY(0)" : "translateY(4px)",
+                transition: "opacity 0.2s, transform 0.2s",
+                pointerEvents: hovered ? "auto" : "none",
+              }}>
+                View Profile
+                <ArrowRight size={12} />
+              </div>
             </div>
           </div>
         </div>

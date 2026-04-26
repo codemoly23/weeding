@@ -32,7 +32,7 @@ export function TrendingVenuesWidget({
 
   return (
     <section style={{ background: "#ffffff", padding: "3rem 0 5rem" }}>
-      <div style={{ maxWidth: "1200px", margin: "0 auto", padding: "0 1.5rem" }}>
+      <div style={{ maxWidth: "min(1400px, calc(100% - 3rem))", margin: "0 auto", padding: "0 1.5rem" }}>
 
         {/* Section Header */}
         <div style={{ textAlign: "center", marginBottom: "3rem" }}>
@@ -57,9 +57,9 @@ export function TrendingVenuesWidget({
           )}
           <h2
             style={{
-              fontSize: headingFontSize ? `${headingFontSize}px` : "clamp(2.25rem, 5vw, 3.5rem)",
-              fontWeight: 900,
-              color: "#0f172a",
+              fontSize: headingFontSize ? `${headingFontSize}px` : "3.75rem",
+              fontWeight: 800,
+              color: "#000000",
               lineHeight: 1.1,
               marginBottom: "1rem",
               letterSpacing: "-0.03em",
@@ -80,13 +80,10 @@ export function TrendingVenuesWidget({
           </p>
         </div>
 
-      </div>
-
-      {/* Cards — grid or marquee */}
-      {viewMode === "marquee" ? (
-        <MarqueeRow venues={venues} isPreview={isPreview} />
-      ) : (
-        <div style={{ maxWidth: "1200px", margin: "0 auto", padding: "0 1.5rem" }}>
+        {/* Cards — grid or marquee */}
+        {viewMode === "marquee" ? (
+          <MarqueeRow venues={venues} isPreview={isPreview} />
+        ) : (
           <div
             style={{
               display: "grid",
@@ -98,21 +95,22 @@ export function TrendingVenuesWidget({
               <VenueCard key={venue.id} venue={venue} isPreview={isPreview} />
             ))}
           </div>
-        </div>
-      )}
+        )}
 
-      {/* CTA Button */}
-      {showCta && (
-        <div style={{ textAlign: "center", marginTop: "2.5rem", padding: "0 1.5rem" }}>
-          {isPreview || !ctaHref ? (
-            <CtaButton text={ctaText} />
-          ) : (
-            <Link href={ctaHref} style={{ textDecoration: "none" }}>
+        {/* CTA Button */}
+        {showCta && (
+          <div style={{ textAlign: "center", marginTop: "2.5rem" }}>
+            {isPreview || !ctaHref ? (
               <CtaButton text={ctaText} />
-            </Link>
-          )}
-        </div>
-      )}
+            ) : (
+              <Link href={ctaHref} style={{ textDecoration: "none" }}>
+                <CtaButton text={ctaText} />
+              </Link>
+            )}
+          </div>
+        )}
+
+      </div>
     </section>
   );
 }
@@ -139,7 +137,7 @@ function MarqueeRow({ venues, isPreview }: { venues: TrendingVenueItem[]; isPrev
         style={{
           display: "flex",
           gap: "1.5rem",
-          padding: "0.5rem 1.5rem",
+          padding: "0.5rem 0",
           animation: "venues-marquee 35s linear infinite",
           animationPlayState: paused ? "paused" : "running",
           width: "max-content",

@@ -158,8 +158,8 @@ export function TestimonialsWidget({ settings: partialSettings, isPreview = fals
   // Description size classes
   const descriptionSizeClasses = {
     sm: "text-sm",
-    md: "text-base",
-    lg: "text-lg",
+    md: "text-xl",
+    lg: "text-xl",
   };
 
   // Render highlighted heading
@@ -175,14 +175,13 @@ export function TestimonialsWidget({ settings: partialSettings, isPreview = fals
 
     const headingStyle: React.CSSProperties = {
       color,
+      fontWeight: heading.fontWeight || 800,
       ...(heading.customFontSize ? { fontSize: heading.customFontSize } : {}),
-      ...(heading.fontWeight ? { fontWeight: heading.fontWeight } : {}),
       ...(heading.lineHeight ? { lineHeight: heading.lineHeight } : {}),
       ...(heading.letterSpacing ? { letterSpacing: heading.letterSpacing } : {}),
     };
 
     const headingClassName = cn(
-      !heading.fontWeight && "font-bold",
       !heading.letterSpacing && "tracking-tight",
       !heading.customFontSize && headingSizeClasses[size]
     );

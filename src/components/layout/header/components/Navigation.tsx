@@ -1,102 +1,25 @@
 "use client";
 
 import Link from "next/link";
-import { ChevronDown, LucideIcon, Folder } from "lucide-react";
+import * as LucideIcons from "lucide-react";
+import { ChevronDown, Folder, type LucideIcon } from "lucide-react";
 import { useLanguage } from "@/lib/i18n/language-context";
-import {
-  Building2, FileText, ShoppingCart, MapPin, Landmark, Shield,
-  BadgeCheck, Stamp, Calculator, FileCheck, ScrollText, Package,
-  Sparkles, Target, AlertTriangle, BookOpen,
-  Heart, Wine, Trees, Waves, Home, PartyPopper, Briefcase, Hotel,
-  Ship, Gem, Plane, Store, Users, Globe, LayoutGrid, Ticket,
-  Camera, Music, Utensils, UtensilsCrossed, Flower2, Star, Search,
-  Disc, Palette, ClipboardList, Video, User,
-  Calendar, Shirt, HeartHandshake, Activity, MessageCircle,
-  HelpCircle, Gift, MessageSquare, Image, Settings,
-  Car, Ring,
-} from "lucide-react";
 import { cn } from "@/lib/utils";
 import type { NavigationProps, ServiceCategory } from "../types";
 
-// Icon mapping for dynamic icons from database
-const iconMap: Record<string, LucideIcon> = {
-  "building-2": Building2,
-  "building2": Building2,
-  "file-text": FileText,
-  "filetext": FileText,
-  "shopping-cart": ShoppingCart,
-  "shoppingcart": ShoppingCart,
-  "map-pin": MapPin,
-  "mappin": MapPin,
-  landmark: Landmark,
-  shield: Shield,
-  "badge-check": BadgeCheck,
-  "badgecheck": BadgeCheck,
-  stamp: Stamp,
-  calculator: Calculator,
-  "file-check": FileCheck,
-  "filecheck": FileCheck,
-  "scroll-text": ScrollText,
-  "scrolltext": ScrollText,
-  package: Package,
-  sparkles: Sparkles,
-  target: Target,
-  "alert-triangle": AlertTriangle,
-  "alerttriangle": AlertTriangle,
-  "book-open": BookOpen,
-  "bookopen": BookOpen,
-  folder: Folder,
-  heart: Heart,
-  wine: Wine,
-  trees: Trees,
-  waves: Waves,
-  home: Home,
-  "party-popper": PartyPopper,
-  partypopper: PartyPopper,
-  briefcase: Briefcase,
-  hotel: Hotel,
-  ship: Ship,
-  gem: Gem,
-  plane: Plane,
-  store: Store,
-  users: Users,
-  globe: Globe,
-  "layout-grid": LayoutGrid,
-  layoutgrid: LayoutGrid,
-  ticket: Ticket,
-  camera: Camera,
-  music: Music,
-  utensils: Utensils,
-  "flower-2": Flower2,
-  flower2: Flower2,
-  star: Star,
-  search: Search,
-  disc: Disc,
-  palette: Palette,
-  "clipboard-list": ClipboardList,
-  clipboardlist: ClipboardList,
-  video: Video,
-  user: User,
-  calendar: Calendar,
-  shirt: Shirt,
-  "heart-handshake": HeartHandshake,
-  hearthandshake: HeartHandshake,
-  activity: Activity,
-  "message-circle": MessageCircle,
-  messagecircle: MessageCircle,
-  "help-circle": HelpCircle,
-  helpcircle: HelpCircle,
-  gift: Gift,
-  "message-square": MessageSquare,
-  messagesquare: MessageSquare,
-  image: Image,
-  settings: Settings,
-};
+// Convert kebab-case or snake_case icon name to PascalCase (Lucide's export format)
+function toPascalCase(name: string): string {
+  return name
+    .split(/[-_\s]+/)
+    .map((p) => p.charAt(0).toUpperCase() + p.slice(1).toLowerCase())
+    .join("");
+}
 
 function getIcon(iconName: string | undefined | null): LucideIcon {
   if (!iconName) return Folder;
-  const normalizedName = iconName.toLowerCase().replace(/[-_\s]/g, "");
-  return iconMap[normalizedName] || iconMap[iconName.toLowerCase()] || Folder;
+  const pascalName = toPascalCase(iconName);
+  const icons = LucideIcons as unknown as Record<string, LucideIcon>;
+  return icons[pascalName] || icons[iconName] || Folder;
 }
 
 interface MegaMenuProps {
@@ -127,7 +50,7 @@ function MegaMenuDropdown({ categories, columns, richContent }: MegaMenuProps) {
               {content.groups?.map((group, gi) => (
                 <div key={gi}>
                   {group.title && (
-                    <p className="mb-2 text-xs font-bold uppercase tracking-wider text-muted-foreground">
+                    <p className="mb-2 text-base font-bold text-foreground">
                       {group.title}
                     </p>
                   )}
@@ -154,7 +77,7 @@ function MegaMenuDropdown({ categories, columns, richContent }: MegaMenuProps) {
             {/* Sidebar */}
             {hasSidebar && (
               <div className="w-52 shrink-0 border-l border-border pl-6">
-                <p className="mb-3 text-xs font-bold uppercase tracking-wider text-muted-foreground">
+                <p className="mb-3 text-base font-bold text-foreground">
                   {content.sidebar!.title}
                 </p>
                 <ul className="space-y-1">
@@ -202,7 +125,7 @@ function MegaMenuDropdown({ categories, columns, richContent }: MegaMenuProps) {
             {content.columns?.map((col, ci) => (
               <div key={ci}>
                 {col.title && (
-                  <p className="mb-3 text-xs font-semibold uppercase tracking-wide text-muted-foreground">
+                  <p className="mb-3 text-base font-bold text-foreground">
                     {col.title}
                   </p>
                 )}
@@ -441,11 +364,11 @@ function MegaMenuDropdown({ categories, columns, richContent }: MegaMenuProps) {
               >
                 {!sectionHeader && category.name && (
                   isSidebarCol ? (
-                    <p className="mb-3 text-xs font-bold uppercase tracking-wider text-muted-foreground">
+                    <p className="mb-3 text-base font-bold text-foreground">
                       {category.name}
                     </p>
                   ) : (
-                    <h4 className="mb-3 text-sm font-bold text-foreground">
+                    <h4 className="mb-3 text-base font-bold text-foreground">
                       {category.name}
                     </h4>
                   )

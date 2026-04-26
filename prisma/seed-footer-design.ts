@@ -53,22 +53,35 @@ async function seedFooterDesign() {
       bgGradient: JSON.stringify({
         type:   "linear",
         colors: [
-          { color: "#1e1b4b", position: 0 },
-          { color: "#2e1065", position: 100 },
+          { color: "#1a1040", position: 0 },
+          { color: "#0f0826", position: 100 },
         ],
         angle: 180,
       }),
+      // Custom CSS — radial glow overlays on left and right edges (matches reference)
+      customCSS: `
+.footer-dynamic-styles::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse at -5% 55%, rgba(192, 38, 211, 0.15) 0%, transparent 38%),
+    radial-gradient(ellipse at 105% 45%, rgba(147, 51, 234, 0.10) 0%, transparent 38%);
+  pointer-events: none;
+  z-index: 0;
+}`,
       // Text colors
-      textColor:        "#ddd6fe",
-      headingColor:     "#faf5ff",
+      textColor:        "#e2d9f3",
+      headingColor:     "#ffffff",
       linkColor:        "#c4b5fd",
-      linkHoverColor:   "#a855f7",
+      linkHoverColor:   "#e9d5ff",
       accentColor:      "#a855f7",
       borderColor:      "#6b21a8",
-      dividerColor:     "rgba(255,255,255,0.07)",
+      dividerStyle:     "solid",
+      dividerColor:     "rgba(255,255,255,0.15)",
       // Typography
-      headingSize:      "sm",
-      headingWeight:    "semibold",
+      headingSize:      "lg",
+      headingWeight:    "bold",
       headingStyle:     "normal",
       // Social icons
       showSocialLinks:  true,
@@ -81,17 +94,17 @@ async function seedFooterDesign() {
       // Links
       linkPrefix:       "chevron",
       linkHoverEffect:  "color",
-      // Trust badges — 3 pill badges
-      showTrustBadges:  true,
+      // Trust badges — rendered inside brand column via showBrandBadges, not in bottom bar
+      showTrustBadges:  false,
       trustBadges: JSON.stringify([
-        { style: "pill", text: "Top Rated", iconName: "star",   image: "", alt: "Top Rated" },
-        { style: "pill", text: "Secure",    iconName: "shield", image: "", alt: "Secure"    },
-        { style: "pill", text: "Fast",      iconName: "zap",    image: "", alt: "Fast"      },
+        { style: "pill", text: "Top Rated", iconName: "star",   iconColor: "#f59e0b", image: "", alt: "Top Rated" },
+        { style: "pill", text: "Secure",    iconName: "shield", iconColor: "#06b6d4", image: "", alt: "Secure"    },
+        { style: "pill", text: "Fast",      iconName: "zap",    iconColor: "#eab308", image: "", alt: "Fast"      },
       ]),
       // Bottom bar
       bottomBarEnabled: true,
       bottomBarLayout:  "split",
-      copyrightText:    "© 2026 Ceremoney. All rights reserved. Made with ❤️ for event planners worldwide.",
+      copyrightText:    `© ${new Date().getFullYear()} EventPlanner Pro. All rights reserved. Made with ❤️ for event planners worldwide.`,
       showDisclaimer:   false,
       bottomLinks: JSON.stringify([
         { label: "Privacy Policy",   url: "/privacy"  },
@@ -122,10 +135,10 @@ async function seedFooterDesign() {
       column:    1,
       sortOrder: 0,
       content: JSON.stringify({
-        showTagline:  true,
-        tagline:      "The all-in-one platform for stress-free event planning. Plan, manage, and celebrate life's special moments with confidence.",
-        showContact:  false,
-        showSocial:   false,  // Social shown via separate SOCIAL widget below
+        showTagline: true,
+        tagline:     "The all-in-one platform for stress-free event planning. Plan, manage, and celebrate life's special moments with confidence.",
+        showContact: false,
+        showSocial:  false,  // Social shown via separate SOCIAL widget below
       }),
     },
   });
@@ -239,6 +252,23 @@ async function seedFooterDesign() {
     await prisma.menuItem.create({ data: { ...link, footerWidgetId: supportWidget.id, isVisible: true } });
   }
   console.log("   ✓ LINKS widget — Support (Column 5)");
+
+  // ─── Ensure all social links are set ─────────────────────────────────────────
+  console.log("🔗 Ensuring social media links...");
+  const socialLinks = [
+    { key: "business.social.facebook",  value: "https://facebook.com/ceremoney"        },
+    { key: "business.social.twitter",   value: "https://x.com/ceremoney"               },
+    { key: "business.social.instagram", value: "https://instagram.com/ceremoney"       },
+    { key: "business.social.linkedin",  value: "https://linkedin.com/company/ceremoney" },
+  ];
+  for (const s of socialLinks) {
+    await prisma.setting.upsert({
+      where:  { key: s.key },
+      update: { value: s.value },
+      create: { key: s.key, value: s.value, type: "url" },
+    });
+  }
+  console.log("   ✓ Facebook, Twitter, Instagram, LinkedIn set\n");
 
   console.log("\n✅ Footer reference design seeded successfully!");
   console.log("   → Go to /admin/appearance/footer to preview and fine-tune.\n");

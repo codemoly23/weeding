@@ -72,8 +72,8 @@ export function FeaturesShowcaseWidget({
           {/* Heading */}
           <h2
             style={{
-              fontSize: headingFontSize ? `${headingFontSize}px` : "clamp(2rem, 4vw, 2.875rem)",
-              fontWeight: 900,
+              fontSize: headingFontSize ? `${headingFontSize}px` : "3.75rem",
+              fontWeight: 700,
               color: "#0f172a",
               lineHeight: 1.15,
               marginBottom: "1rem",
@@ -86,7 +86,7 @@ export function FeaturesShowcaseWidget({
           {/* Subheading */}
           <p
             style={{
-              fontSize: "1rem",
+              fontSize: "1.25rem",
               color: "#64748b",
               maxWidth: "38rem",
               margin: "0 auto",
@@ -268,11 +268,11 @@ function FeatureCard({ item, height, aspectRatio, isPreview }: FeatureCardProps)
             <h3
               style={{
                 color: "#ffffff",
-                fontSize: "1.125rem",
+                fontSize: "1.25rem",
                 fontWeight: 700,
+                fontFamily: "Inter, ui-sans-serif, sans-serif",
                 margin: 0,
                 lineHeight: 1.2,
-                letterSpacing: "-0.01em",
               }}
             >
               {item.title}

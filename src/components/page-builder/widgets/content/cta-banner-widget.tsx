@@ -83,7 +83,7 @@ export function CtaBannerWidget({
             <h2
               style={{
                 fontSize: `${s.headingFontSize}px`,
-                fontWeight: 900,
+                fontWeight: 700,
                 color: isLight ? "#0f172a" : "white",
                 marginBottom: "1rem",
                 lineHeight: 1.15,

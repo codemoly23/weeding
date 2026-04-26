@@ -88,9 +88,9 @@ export function EventGalleryGridWidget({
 
           <h2
             style={{
-              fontSize: headingFontSize ? `${headingFontSize}px` : "clamp(2rem, 4vw, 3rem)",
-              fontWeight: 900,
-              color: "#000",
+              fontSize: headingFontSize ? `${headingFontSize}px` : "3.75rem",
+              fontWeight: 800,
+              color: "#000000",
               marginBottom: "1rem",
               lineHeight: 1.1,
             }}

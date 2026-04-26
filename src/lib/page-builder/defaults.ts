@@ -1932,9 +1932,9 @@ export const DEFAULT_FAQ_ACCORDION_SETTINGS = {
   columns: 1 as 1 | 2 | 3,
   colors: { useTheme: false },
   headerStyle: {
-    headingSize: "lg" as const,
+    headingSize: "xl" as const,
     headingFontSize: undefined,
-    headingColor: undefined,
+    headingColor: "#0f172a",
     descriptionColor: undefined,
   },
   itemStyle: {
@@ -2625,7 +2625,7 @@ export const DEFAULT_CTA_BANNER_SETTINGS: CtaBannerWidgetSettings = {
 
   title: "Ready to Plan Your Next Event?",
   subtitle: "Join thousands of event planners who trust us for their celebrations",
-  headingFontSize: 40,
+  headingFontSize: 48,
 
   primaryButton: {
     show: true,

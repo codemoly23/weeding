@@ -1,6 +1,6 @@
 {
   "version": "1.0",
-  "exportedAt": "2026-04-26T06:30:54.729Z",
+  "exportedAt": "2026-04-26T10:29:17.943Z",
   "colorPalette": {
     "light": {
       "background": "#FDFAF7",
@@ -1073,7 +1073,7 @@
                         "cardHeight": 260,
                         "subheading": "From planning to execution, our all-in-one platform makes event management effortless",
                         "cardAspectRatio": "4/3",
-                        "headingFontSize": 70
+                        "headingFontSize": 60
                       }
                     }
                   ],
@@ -1184,7 +1184,7 @@
                         "viewAllText": "Explore More Vendors",
                         "featuredOnly": false,
                         "headerTextColor": "#ffffff",
-                        "headingFontSize": 50
+                        "headingFontSize": 60
                       }
                     }
                   ],
@@ -1352,7 +1352,7 @@
                         "showCta": true,
                         "viewMode": "marquee",
                         "subheading": "Discover the most sought-after event spaces perfect for your special occasion",
-                        "headingFontSize": 62
+                        "headingFontSize": 60
                       }
                     }
                   ],
@@ -1364,7 +1364,7 @@
               ],
               "settings": {
                 "gap": 32,
-                "maxWidth": "xl",
+                "maxWidth": "lg",
                 "fullWidth": true,
                 "isVisible": true,
                 "marginTop": 0,
@@ -1529,7 +1529,7 @@
                         "cardBadgeFrom": "#9333ea",
                         "ctaGradientTo": "#ec4899",
                         "ctaGradientFrom": "#9333ea",
-                        "headingFontSize": 52,
+                        "headingFontSize": 60,
                         "planSimilarHref": "",
                         "planSimilarLabel": "Plan Similar"
                       }
@@ -1926,7 +1926,7 @@
                           "alignment": "center",
                           "description": {
                             "show": true,
-                            "size": "md",
+                            "size": "lg",
                             "text": "Join thousands of happy planners who've created unforgettable events",
                             "color": "#6b7280",
                             "lineHeight": 1.7,
@@ -2211,8 +2211,8 @@
                         "accentColor": "#7c3aed",
                         "expandFirst": false,
                         "headerStyle": {
-                          "headingSize": "lg",
-                          "headingFontSize": 50
+                          "headingSize": "xl",
+                          "headingColor": "#0f172a"
                         },
                         "allowMultipleOpen": false,
                         "showCategoryFilter": false
@@ -2336,7 +2336,7 @@
                         },
                         "sectionBgFrom": "#ffffff",
                         "cardGradientTo": "#f7f7f7",
-                        "headingFontSize": 50,
+                        "headingFontSize": 48,
                         "secondaryButton": {
                           "href": "#demo",
                           "icon": "calendar",
@@ -2588,7 +2588,9 @@
           "borderRadius": 8
         }
       }
-    ]
+    ],
+    "textColor": "#1e293b",
+    "hoverColor": "#9810fa"
   },
   "menuItems": [
     {
@@ -2622,7 +2624,7 @@
               "isVisible": true,
               "visibleOnMobile": true,
               "megaMenuColumns": 4,
-              "icon": "LayoutDashboard"
+              "icon": "heater"
             },
             {
               "label": "Event Vendors",
@@ -2889,7 +2891,7 @@
               "isVisible": true,
               "visibleOnMobile": true,
               "megaMenuColumns": 4,
-              "icon": "Sparkles"
+              "icon": "store"
             },
             {
               "label": "Find Near Me",
@@ -2948,7 +2950,7 @@
               "isVisible": true,
               "visibleOnMobile": true,
               "megaMenuColumns": 4,
-              "icon": "sparkles"
+              "icon": "palette"
             },
             {
               "label": "Wedding Planning",
@@ -3686,27 +3688,27 @@
       "type": "linear",
       "colors": [
         {
-          "color": "#1e1b4b",
+          "color": "#1a1040",
           "position": 0
         },
         {
-          "color": "#2e1065",
+          "color": "#0f0826",
           "position": 100
         }
       ],
       "angle": 180
     },
     "bgPatternOpacity": 0.1,
-    "textColor": "#ddd6fe",
-    "headingColor": "#faf5ff",
+    "textColor": "#e2d9f3",
+    "headingColor": "#ffffff",
     "linkColor": "#c4b5fd",
-    "linkHoverColor": "#a855f7",
+    "linkHoverColor": "#e9d5ff",
     "accentColor": "#a855f7",
     "borderColor": "#6b21a8",
-    "dividerColor": "rgba(255,255,255,0.07)",
-    "dividerStyle": "none",
-    "headingSize": "sm",
-    "headingWeight": "semibold",
+    "dividerColor": "rgba(255,255,255,0.15)",
+    "dividerStyle": "solid",
+    "headingSize": "lg",
+    "headingWeight": "bold",
     "headingStyle": "normal",
     "showSocialLinks": true,
     "socialPosition": "brand",
@@ -3717,12 +3719,13 @@
     "socialBgStyle": "subtle",
     "linkPrefix": "chevron",
     "linkHoverEffect": "color",
-    "showTrustBadges": true,
+    "showTrustBadges": false,
     "trustBadges": [
       {
         "style": "pill",
         "text": "Top Rated",
         "iconName": "star",
+        "iconColor": "#f59e0b",
         "image": "",
         "alt": "Top Rated"
       },
@@ -3730,6 +3733,7 @@
         "style": "pill",
         "text": "Secure",
         "iconName": "shield",
+        "iconColor": "#06b6d4",
         "image": "",
         "alt": "Secure"
       },
@@ -3737,13 +3741,14 @@
         "style": "pill",
         "text": "Fast",
         "iconName": "zap",
+        "iconColor": "#eab308",
         "image": "",
         "alt": "Fast"
       }
     ],
     "bottomBarEnabled": true,
     "bottomBarLayout": "split",
-    "copyrightText": "© 2026 Ceremoney. All rights reserved. Made with ❤️ for event planners worldwide.",
+    "copyrightText": "© 2026 EventPlanner Pro. All rights reserved. Made with ❤️ for event planners worldwide.",
     "showDisclaimer": false,
     "bottomLinks": [
       {
@@ -3778,10 +3783,10 @@
       "column": 1,
       "sortOrder": 0,
       "content": {
+        "showTagline": true,
         "tagline": "The all-in-one platform for stress-free event planning. Plan, manage, and celebrate life's special moments with confidence.",
-        "showSocial": false,
         "showContact": false,
-        "showTagline": true
+        "showSocial": false
       },
       "links": []
     },
@@ -3927,10 +3932,9 @@
     },
     {
       "type": "SOCIAL",
-      "showTitle": true,
+      "showTitle": false,
       "column": 1,
-      "sortOrder": 0,
-      "content": {},
+      "sortOrder": 1,
       "links": []
     }
   ],
