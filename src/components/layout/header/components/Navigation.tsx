@@ -511,25 +511,15 @@ export function Navigation({
     displayItems = items.slice(Math.ceil(items.length / 2));
   }
 
-  // Custom colors from styling
-  const hasCustomTextColor = !!styling?.textColor;
-  const hasCustomHoverColor = !!styling?.hoverColor;
+  // Consistent nav colors — always resolved, never conditional
+  const navColor = styling?.textColor || "#1e293b";
+  const navHoverColor = styling?.hoverColor || "#f97316";
 
   return (
     <div className="flex items-center gap-x-8">
       {displayItems.map((item) => {
         const isHovered = hoveredItem === item.name;
         const label = NAV_LABEL_MAP[item.name] ? t(NAV_LABEL_MAP[item.name]) : item.name;
-
-        // Determine text color
-        const textStyle: React.CSSProperties = {};
-        if (hasCustomTextColor || hasCustomHoverColor) {
-          if (isHovered && hasCustomHoverColor) {
-            textStyle.color = styling?.hoverColor;
-          } else if (hasCustomTextColor) {
-            textStyle.color = styling?.textColor;
-          }
-        }
 
         return (
           <div
@@ -541,12 +531,9 @@ export function Navigation({
             <Link
               href={item.href}
               className={cn(
-                "flex items-center gap-1 text-sm font-medium transition-colors",
-                // Only use default classes if no custom colors
-                !hasCustomTextColor && !hasCustomHoverColor && "text-muted-foreground hover:text-foreground",
-                !hasCustomTextColor && !hasCustomHoverColor && isHovered && "text-foreground"
+                "flex items-center gap-1 font-sans text-sm font-medium transition-colors"
               )}
-              style={textStyle}
+              style={{ color: isHovered ? navHoverColor : navColor }}
             >
               {label}
               {item.hasDropdown && (

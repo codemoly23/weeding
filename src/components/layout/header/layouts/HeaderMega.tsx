@@ -164,9 +164,9 @@ export function HeaderMega({
 
   const servicesItem = navigation.find((item) => item.hasDropdown);
 
-  // Custom colors from styling
-  const hasCustomTextColor = !!styling?.textColor;
-  const hasCustomHoverColor = !!styling?.hoverColor;
+  // Consistent nav colors — always resolved, never conditional
+  const navColor = styling?.textColor || "#1e293b";
+  const navHoverColor = styling?.hoverColor || "#f97316";
 
   return (
     <div>
@@ -238,16 +238,6 @@ export function HeaderMega({
             {navigation.map((item) => {
               const isHovered = hoveredItem === item.name;
 
-              // Determine text color
-              const textStyle: React.CSSProperties = {};
-              if (hasCustomTextColor || hasCustomHoverColor) {
-                if (isHovered && hasCustomHoverColor) {
-                  textStyle.color = styling?.hoverColor;
-                } else if (hasCustomTextColor) {
-                  textStyle.color = styling?.textColor;
-                }
-              }
-
               return (
                 <div
                   key={item.name}
@@ -257,15 +247,8 @@ export function HeaderMega({
                 >
                   <Link
                     href={item.href}
-                    className={cn(
-                      "flex items-center gap-1 rounded-md px-4 py-2 text-sm font-medium transition-colors",
-                      !hasCustomTextColor && !hasCustomHoverColor && (
-                        isHovered
-                          ? "bg-background text-foreground shadow-sm"
-                          : "text-muted-foreground hover:text-foreground"
-                      )
-                    )}
-                    style={textStyle}
+                    className="flex items-center gap-1 rounded-md px-4 py-2 font-sans text-sm font-medium transition-colors"
+                    style={{ color: isHovered ? navHoverColor : navColor }}
                   >
                     {item.name}
                     {item.hasDropdown && (
