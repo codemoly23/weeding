@@ -42,7 +42,7 @@ function MegaMenuDropdown({ categories, columns, richContent }: MegaMenuProps) {
       <div className="absolute left-1/2 top-full -translate-x-1/2 pt-2">
         <div className="rounded-xl border bg-white p-6 shadow-xl w-[900px]">
           {content.header && (
-            <h4 className="mb-4 text-base font-bold text-foreground">{content.header}</h4>
+            <h4 className="mb-4 font-sans text-base font-bold leading-6 text-foreground">{content.header}</h4>
           )}
           <div className="flex gap-6">
             {/* Groups */}
@@ -50,7 +50,7 @@ function MegaMenuDropdown({ categories, columns, richContent }: MegaMenuProps) {
               {content.groups?.map((group, gi) => (
                 <div key={gi}>
                   {group.title && (
-                    <p className="mb-2 text-base font-bold text-foreground">
+                    <p className="mb-2 font-sans text-base font-bold leading-6 text-foreground">
                       {group.title}
                     </p>
                   )}
@@ -77,7 +77,7 @@ function MegaMenuDropdown({ categories, columns, richContent }: MegaMenuProps) {
             {/* Sidebar */}
             {hasSidebar && (
               <div className="w-52 shrink-0 border-l border-border pl-6">
-                <p className="mb-3 text-base font-bold text-foreground">
+                <p className="mb-3 font-sans text-base font-bold leading-6 text-foreground">
                   {content.sidebar!.title}
                 </p>
                 <ul className="space-y-1">
@@ -119,13 +119,13 @@ function MegaMenuDropdown({ categories, columns, richContent }: MegaMenuProps) {
       <div className="absolute left-1/2 top-full -translate-x-1/2 pt-2">
         <div className="rounded-xl border bg-white p-6 shadow-xl w-[520px]">
           {content.header && (
-            <h4 className="mb-4 text-base font-bold text-foreground">{content.header}</h4>
+            <h4 className="mb-4 font-sans text-base font-bold leading-6 text-foreground">{content.header}</h4>
           )}
           <div className="grid grid-cols-2 gap-8">
             {content.columns?.map((col, ci) => (
               <div key={ci}>
                 {col.title && (
-                  <p className="mb-3 text-base font-bold text-foreground">
+                  <p className="mb-3 font-sans text-base font-bold leading-6 text-foreground">
                     {col.title}
                   </p>
                 )}
@@ -179,7 +179,7 @@ function MegaMenuDropdown({ categories, columns, richContent }: MegaMenuProps) {
       <div className="absolute left-1/2 top-full -translate-x-1/2 pt-2">
         <div className="rounded-xl border bg-white p-6 shadow-xl" style={{ width: "clamp(380px, 50vw, 900px)" }}>
           {content.sectionHeader && (
-            <h4 className="mb-4 text-base font-bold text-foreground">
+            <h4 className="mb-4 font-sans text-base font-bold leading-6 text-foreground">
               {content.sectionHeader}
             </h4>
           )}
@@ -286,7 +286,7 @@ function MegaMenuDropdown({ categories, columns, richContent }: MegaMenuProps) {
           {iconCategories.map((category) => (
             <div key={category.name}>
               {category.name && (
-                <h4 className="mb-4 text-base font-semibold text-foreground">
+                <h4 className="mb-4 font-sans text-base font-bold leading-6 text-foreground">
                   {category.name}
                 </h4>
               )}
@@ -352,7 +352,7 @@ function MegaMenuDropdown({ categories, columns, richContent }: MegaMenuProps) {
     <div className="absolute left-1/2 top-full -translate-x-1/2 pt-2">
       <div className={`rounded-xl border bg-white p-6 shadow-xl ${width}`}>
         {sectionHeader && (
-          <h4 className="mb-4 text-base font-semibold text-foreground">{sectionHeader}</h4>
+          <h4 className="mb-4 font-sans text-base font-bold leading-6 text-foreground">{sectionHeader}</h4>
         )}
         <div className={`grid gap-8 ${gridCols}`}>
           {categories.map((category, idx) => {
@@ -364,11 +364,11 @@ function MegaMenuDropdown({ categories, columns, richContent }: MegaMenuProps) {
               >
                 {!sectionHeader && category.name && (
                   isSidebarCol ? (
-                    <p className="mb-3 text-base font-bold text-foreground">
+                    <p className="mb-3 font-sans text-base font-bold leading-6 text-foreground">
                       {category.name}
                     </p>
                   ) : (
-                    <h4 className="mb-3 text-base font-bold text-foreground">
+                    <h4 className="mb-3 font-sans text-base font-bold leading-6 text-foreground">
                       {category.name}
                     </h4>
                   )
