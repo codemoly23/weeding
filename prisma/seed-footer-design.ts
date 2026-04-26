@@ -80,7 +80,7 @@ async function seedFooterDesign() {
       dividerStyle:     "solid",
       dividerColor:     "rgba(255,255,255,0.15)",
       // Typography
-      headingSize:      "lg",
+      headingSize:      "xl",
       headingWeight:    "bold",
       headingStyle:     "normal",
       // Social icons
