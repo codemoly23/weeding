@@ -20,6 +20,6 @@ jobs:
           ssh -i ~/.ssh/deploy_key -o StrictHostKeyChecking=no ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} '
             export PM2_HOME=/home/ubuntu/.pm2
             export PATH="/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
-            cd /home/ubuntu/weeding && git checkout -- package-lock.json
+            cd /home/ubuntu/weeding && git stash
             bash /home/ubuntu/weeding/deploy-safe.sh
           '
