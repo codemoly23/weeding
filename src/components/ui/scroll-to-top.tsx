@@ -1,9 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { ArrowUp } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { cn } from "@/lib/utils";
+import { ChevronUp } from "lucide-react";
 
 interface WidgetPosition {
   position: "bottom-right" | "bottom-left" | "top-right" | "top-left";
@@ -97,22 +95,38 @@ export function ScrollToTop() {
   };
 
   return (
-    <Button
+    <button
       onClick={scrollToTop}
-      size="icon"
-      style={getPositionStyle()}
-      className={cn(
-        "fixed z-40 h-10 w-10 rounded-full shadow-lg transition-all duration-300",
-        "bg-muted hover:bg-muted/80 text-muted-foreground hover:text-foreground",
-        "border border-border",
-        "hover:scale-110 active:scale-95",
-        isVisible
-          ? "translate-y-0 opacity-100"
-          : "translate-y-16 opacity-0 pointer-events-none"
-      )}
+      style={{
+        ...getPositionStyle(),
+        position: "fixed",
+        zIndex: 40,
+        width: 52,
+        height: 52,
+        borderRadius: "50%",
+        border: "none",
+        cursor: "pointer",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        background: "linear-gradient(135deg, #a855f7, #ec4899)",
+        boxShadow: "0 4px 20px rgba(168,85,247,0.45)",
+        transition: "transform 0.3s ease, opacity 0.3s ease, box-shadow 0.2s ease",
+        transform: isVisible ? "translateY(0)" : "translateY(64px)",
+        opacity: isVisible ? 1 : 0,
+        pointerEvents: isVisible ? "auto" : "none",
+      }}
+      onMouseEnter={(e) => {
+        (e.currentTarget as HTMLButtonElement).style.boxShadow = "0 6px 28px rgba(168,85,247,0.6)";
+        (e.currentTarget as HTMLButtonElement).style.transform = isVisible ? "translateY(-2px)" : "translateY(64px)";
+      }}
+      onMouseLeave={(e) => {
+        (e.currentTarget as HTMLButtonElement).style.boxShadow = "0 4px 20px rgba(168,85,247,0.45)";
+        (e.currentTarget as HTMLButtonElement).style.transform = isVisible ? "translateY(0)" : "translateY(64px)";
+      }}
       aria-label="Scroll to top"
     >
-      <ArrowUp className="h-4 w-4" />
-    </Button>
+      <ChevronUp style={{ width: 22, height: 22, color: "#ffffff", strokeWidth: 2.5 }} />
+    </button>
   );
 }
