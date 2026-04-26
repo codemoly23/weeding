@@ -2624,6 +2624,7 @@ export const DEFAULT_CTA_BANNER_SETTINGS: CtaBannerWidgetSettings = {
 
   title: "Ready to Plan Your Next Event?",
   subtitle: "Join thousands of event planners who trust us for their celebrations",
+  headingFontSize: 40,
 
   primaryButton: {
     show: true,

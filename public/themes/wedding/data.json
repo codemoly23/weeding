@@ -1,6 +1,6 @@
 {
   "version": "1.0",
-  "exportedAt": "2026-04-24T11:07:47.339Z",
+  "exportedAt": "2026-04-26T04:11:18.336Z",
   "colorPalette": {
     "light": {
       "background": "#FDFAF7",
@@ -1768,7 +1768,8 @@
                           "titleSize": "lg",
                           "titleColor": "#111827",
                           "descriptionSize": "sm",
-                          "descriptionColor": "#6b7280"
+                          "descriptionColor": "#6b7280",
+                          "customTitleFontSize": "24px"
                         },
                         "_translations": {
                           "ar": {
@@ -2334,6 +2335,7 @@
                         },
                         "sectionBgFrom": "#ffffff",
                         "cardGradientTo": "#f7f7f7",
+                        "headingFontSize": 50,
                         "secondaryButton": {
                           "href": "#demo",
                           "icon": "calendar",
@@ -3121,6 +3123,122 @@
       "isVisible": true,
       "visibleOnMobile": true,
       "isMegaMenu": true,
+      "megaMenuContent": {
+        "type": "forums-grid",
+        "groups": [
+          {
+            "items": [
+              {
+                "href": "/forum/planning",
+                "icon": "calendar",
+                "name": "Planning"
+              },
+              {
+                "href": "/forum/ceremony",
+                "icon": "heart",
+                "name": "Ceremony"
+              },
+              {
+                "href": "/forum/style-decor",
+                "icon": "sparkles",
+                "name": "Style and Décor"
+              },
+              {
+                "href": "/forum/wedding-attire",
+                "icon": "shirt",
+                "name": "Wedding Attire"
+              },
+              {
+                "href": "/forum/married-life",
+                "icon": "heart-handshake",
+                "name": "Married Life"
+              },
+              {
+                "href": "/forum/fitness",
+                "icon": "activity",
+                "name": "Fitness and Health"
+              },
+              {
+                "href": "/forum/honeymoon",
+                "icon": "plane",
+                "name": "Honeymoon"
+              },
+              {
+                "href": "/forum/family",
+                "icon": "users",
+                "name": "Family and Relationships"
+              },
+              {
+                "href": "/forum/hair-makeup",
+                "icon": "palette",
+                "name": "Hair and Makeup"
+              },
+              {
+                "href": "/forum/community",
+                "icon": "message-circle",
+                "name": "Community Conversations"
+              },
+              {
+                "href": "/forum/etiquette",
+                "icon": "help-circle",
+                "name": "Etiquette and Advice"
+              },
+              {
+                "href": "/forum/registry",
+                "icon": "gift",
+                "name": "Registry"
+              },
+              {
+                "href": "/forum/reception",
+                "icon": "music",
+                "name": "Reception"
+              },
+              {
+                "href": "/forum/parties",
+                "icon": "party-popper",
+                "name": "Parties and Events"
+              },
+              {
+                "href": "/forum/local",
+                "icon": "map-pin",
+                "name": "Local Groups"
+              }
+            ],
+            "title": ""
+          }
+        ],
+        "header": "Forums",
+        "sidebar": {
+          "items": [
+            {
+              "href": "/forum",
+              "icon": "message-square",
+              "name": "Discussions"
+            },
+            {
+              "href": "/forum/photos",
+              "icon": "image",
+              "name": "Photos"
+            },
+            {
+              "href": "/forum/videos",
+              "icon": "video",
+              "name": "Videos"
+            },
+            {
+              "href": "/forum/users",
+              "icon": "user",
+              "name": "Users"
+            },
+            {
+              "href": "/forum/support",
+              "icon": "help-circle",
+              "name": "Account support"
+            }
+          ],
+          "title": "STAY UP TO DATE"
+        }
+      },
       "children": [
         {
           "label": "Community",
@@ -3230,7 +3348,49 @@
       "isVisible": true,
       "visibleOnMobile": true,
       "isMegaMenu": true,
-      "megaMenuColumns": 4
+      "megaMenuColumns": 4,
+      "megaMenuContent": {
+        "type": "featured-gallery",
+        "gallery": {
+          "items": [
+            {
+              "href": "/dresses/essense-of-australia",
+              "name": "Essense of Australia",
+              "imageUrl": "/designers/1777004155592-dre1.png"
+            },
+            {
+              "href": "/dresses/martina-liana-luxe",
+              "name": "Martina Liana Luxe",
+              "imageUrl": "/designers/1777004214636-dre2.png"
+            },
+            {
+              "href": "/dresses/casablanca-bridal",
+              "name": "Le Blanc by Casablanca Bridal",
+              "imageUrl": "https://images.unsplash.com/photo-1519741497674-611481863552?w=400&h=533&fit=crop"
+            },
+            {
+              "href": "/dresses/martina-liana",
+              "name": "Martina Liana",
+              "imageUrl": "https://images.unsplash.com/photo-1537633552985-df8429e8048b?w=400&h=533&fit=crop"
+            },
+            {
+              "href": "/dresses/justin-alexander",
+              "name": "Justin Alexander",
+              "imageUrl": "https://images.unsplash.com/photo-1511285560929-80b456fea0bc?w=400&h=533&fit=crop"
+            }
+          ],
+          "title": "FEATURED DESIGNERS",
+          "aspectRatio": "portrait"
+        },
+        "topLinks": [
+          {
+            "href": "/dresses/bridal",
+            "icon": "shirt",
+            "name": "Bride"
+          }
+        ],
+        "sectionHeader": "The latest in bridal fashion"
+      }
     },
     {
       "label": "Ideas",
@@ -3239,6 +3399,72 @@
       "isVisible": true,
       "visibleOnMobile": true,
       "isMegaMenu": true,
+      "megaMenuContent": {
+        "type": "ideas-grid",
+        "header": "Get wedding inspiration",
+        "columns": [
+          {
+            "items": [
+              {
+                "href": "/ideas/planning",
+                "icon": "",
+                "name": "Planning Basics"
+              },
+              {
+                "href": "/ideas/ceremony",
+                "icon": "",
+                "name": "Wedding Ceremony"
+              },
+              {
+                "href": "/ideas/reception",
+                "icon": "",
+                "name": "Wedding Reception"
+              },
+              {
+                "href": "/ideas/services",
+                "icon": "",
+                "name": "Wedding Services"
+              },
+              {
+                "href": "/ideas/fashion",
+                "icon": "",
+                "name": "Wedding Fashion"
+              }
+            ],
+            "title": ""
+          },
+          {
+            "items": [
+              {
+                "href": "/ideas/hair-makeup",
+                "icon": "",
+                "name": "Hair & Makeup"
+              },
+              {
+                "href": "/ideas/destination",
+                "icon": "",
+                "name": "Destination Weddings"
+              },
+              {
+                "href": "/ideas/married-life",
+                "icon": "",
+                "name": "Married Life"
+              },
+              {
+                "href": "/ideas/events",
+                "icon": "",
+                "name": "Events & Parties"
+              },
+              {
+                "href": "/ideas/family",
+                "icon": "",
+                "name": "Family & Friends"
+              }
+            ],
+            "title": ""
+          }
+        ]
+      },
       "children": [
         {
           "label": "Decor",
@@ -3339,7 +3565,62 @@
       "isVisible": true,
       "visibleOnMobile": true,
       "isMegaMenu": true,
-      "megaMenuColumns": 4
+      "megaMenuColumns": 4,
+      "megaMenuContent": {
+        "type": "featured-gallery",
+        "gallery": {
+          "items": [
+            {
+              "href": "/registry/amazon",
+              "name": "Amazon",
+              "imageUrl": "/designers/1777004751803-amazon.png"
+            },
+            {
+              "href": "/registry/crate-barrel",
+              "name": "Crate & Barrel",
+              "imageUrl": "/designers/1777004759059-crearte.png"
+            },
+            {
+              "href": "/registry/target",
+              "name": "Target",
+              "imageUrl": "/designers/1777004763644-tar.png"
+            },
+            {
+              "href": "/registry/travelers-joy",
+              "name": "Traveler's Joy",
+              "imageUrl": "/designers/1777004769186-travel.png"
+            }
+          ],
+          "title": "FEATURED REGISTRY BRANDS",
+          "aspectRatio": "square"
+        },
+        "topLinks": [
+          {
+            "href": "/registry/start",
+            "icon": "",
+            "name": "Start Your Registry"
+          },
+          {
+            "href": "/registry/retailers",
+            "icon": "",
+            "name": "Registry Retailers"
+          },
+          {
+            "href": "/registry/ideas",
+            "icon": "",
+            "name": "Registry Ideas"
+          }
+        ],
+        "footerLink": {
+          "href": "/registry/brands",
+          "text": "See all registry brands"
+        },
+        "featuredLink": {
+          "href": "/registry/find",
+          "text": "Find a couple's Registry"
+        },
+        "sectionHeader": "Create your all-in-one registry"
+      }
     },
     {
       "label": "Wedding Website",
@@ -3348,7 +3629,51 @@
       "isVisible": true,
       "visibleOnMobile": true,
       "isMegaMenu": true,
-      "megaMenuColumns": 4
+      "megaMenuColumns": 4,
+      "megaMenuContent": {
+        "type": "featured-gallery",
+        "gallery": {
+          "items": [
+            {
+              "href": "/wedding-website/themes?style=minimal-leaves",
+              "name": "Minimal Leaves",
+              "imageUrl": "/designers/1777006588323-ww1.png"
+            },
+            {
+              "href": "/wedding-website/themes?style=painted-desert",
+              "name": "Painted Desert",
+              "imageUrl": "/designers/1777006595094-ww2.png"
+            },
+            {
+              "href": "/wedding-website/themes?style=classic-garden",
+              "name": "Classic Garden",
+              "imageUrl": "/designers/1777006599600-ww3.png"
+            },
+            {
+              "href": "/wedding-website/themes?style=formal-ampersand",
+              "name": "Formal Ampersand",
+              "imageUrl": "/designers/1777006603262-ww4.png"
+            }
+          ],
+          "title": "CHOOSE YOUR DESIGN",
+          "aspectRatio": "square"
+        },
+        "topLinks": [
+          {
+            "href": "/wedding-website/create",
+            "name": "Create your wedding website"
+          },
+          {
+            "href": "/wedding-website/find",
+            "name": "Find a couple's website"
+          }
+        ],
+        "footerLink": {
+          "href": "/wedding-website/themes",
+          "text": "See all website designs"
+        },
+        "sectionHeader": "Set up your website in minutes"
+      }
     }
   ],
   "footerConfig": {

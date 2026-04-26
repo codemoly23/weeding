@@ -86,7 +86,7 @@ export function TestimonialsCarouselView({
   const getCardStyles = (): React.CSSProperties => {
     const baseStyles: React.CSSProperties = {
       borderRadius: cardStyle.borderRadius,
-      padding: cardStyle.padding,
+      padding: `${cardStyle.padding}px ${cardStyle.padding + 20}px`,
     };
 
     switch (cardStyle.style) {

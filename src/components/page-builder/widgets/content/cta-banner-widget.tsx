@@ -31,6 +31,7 @@ export function CtaBannerWidget({
   const s: CtaBannerWidgetSettings = {
     ...DEFAULT_CTA_BANNER_SETTINGS,
     ...raw,
+    headingFontSize: raw.headingFontSize ?? DEFAULT_CTA_BANNER_SETTINGS.headingFontSize,
     primaryButton: { ...DEFAULT_CTA_BANNER_SETTINGS.primaryButton, ...raw.primaryButton },
     secondaryButton: { ...DEFAULT_CTA_BANNER_SETTINGS.secondaryButton, ...raw.secondaryButton },
     trustBadges: { ...DEFAULT_CTA_BANNER_SETTINGS.trustBadges, ...raw.trustBadges },
@@ -81,7 +82,7 @@ export function CtaBannerWidget({
             {/* Title */}
             <h2
               style={{
-                fontSize: "clamp(1.75rem, 4vw, 2.5rem)",
+                fontSize: `${s.headingFontSize}px`,
                 fontWeight: 900,
                 color: isLight ? "#0f172a" : "white",
                 marginBottom: "1rem",
@@ -195,7 +196,7 @@ interface BtnProps {
   isLight: boolean;
 }
 
-function PrimaryBtn({ label, href, icon, isPreview, isLight }: BtnProps) {
+function PrimaryBtn({ label, href, icon, isPreview }: BtnProps) {
   const [hovered, setHovered] = useState(false);
 
   const btn = (
@@ -203,28 +204,23 @@ function PrimaryBtn({ label, href, icon, isPreview, isLight }: BtnProps) {
       style={{
         display: "inline-flex",
         alignItems: "center",
-        gap: "0.5rem",
-        padding: "0.875rem 2rem",
-        background: isLight
-          ? hovered
-            ? "linear-gradient(135deg, #7e22ce, #db2777)"
-            : "linear-gradient(135deg, #9333ea, #ec4899)"
-          : "white",
-        color: isLight ? "white" : "#9333ea",
+        gap: "0.625rem",
+        padding: "1rem 2.75rem",
+        background: hovered
+          ? "linear-gradient(135deg, #6d28d9, #be185d)"
+          : "linear-gradient(135deg, #7c3aed, #db2777)",
+        color: "#ffffff",
         border: "none",
-        borderRadius: "9999px",
+        borderRadius: "12px",
         fontWeight: 700,
-        fontSize: "1rem",
+        fontSize: "1.0625rem",
         cursor: isPreview ? "default" : "pointer",
-        boxShadow: isLight
-          ? hovered
-            ? "0 8px 25px rgba(147,51,234,0.4)"
-            : "0 4px 14px rgba(147,51,234,0.25)"
-          : hovered
-            ? "0 20px 25px -5px rgba(0,0,0,0.3)"
-            : "0 10px 15px -3px rgba(0,0,0,0.2)",
-        transform: hovered ? "translateY(-1px)" : "translateY(0)",
+        boxShadow: hovered
+          ? "0 12px 32px rgba(124,58,237,0.45)"
+          : "0 6px 20px rgba(124,58,237,0.35)",
+        transform: hovered ? "translateY(-2px)" : "translateY(0)",
         transition: "all 0.2s ease",
+        letterSpacing: "0.01em",
       }}
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}

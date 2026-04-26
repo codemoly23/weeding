@@ -122,7 +122,7 @@ export function TestimonialsGridView({
   const getCardStyles = () => {
     const baseStyles: React.CSSProperties = {
       borderRadius: cardStyle.borderRadius,
-      padding: cardStyle.padding,
+      padding: `${cardStyle.padding}px ${cardStyle.padding + 20}px`,
     };
 
     // Apply styles based on card style type

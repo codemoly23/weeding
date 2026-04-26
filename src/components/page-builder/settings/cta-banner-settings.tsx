@@ -146,6 +146,20 @@ export function CtaBannerSettingsPanel({
   if (activeTab === "style") {
     return (
       <div className="space-y-3">
+        <AccordionSection title="Section Header" defaultOpen>
+          <div className="space-y-3">
+            <NumberInput
+              label="Heading Font Size"
+              value={settings.headingFontSize ?? 40}
+              onChange={(v) => update("headingFontSize", v)}
+              min={20}
+              max={96}
+              step={2}
+              unit="px"
+            />
+          </div>
+        </AccordionSection>
+
         <AccordionSection title="Variant" defaultOpen>
           <div className="space-y-3">
             <SelectInput

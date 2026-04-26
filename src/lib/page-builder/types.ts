@@ -3686,6 +3686,7 @@ export interface CtaBannerWidgetSettings {
   // Text content
   title: string;
   subtitle: string;
+  headingFontSize: number;   // default 40 (px)
 
   // Primary button
   primaryButton: {

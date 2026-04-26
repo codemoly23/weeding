@@ -624,6 +624,14 @@ export function ProcessStepsWidgetSettingsPanel({
               { value: "xl", label: "Extra Large" },
             ]}
           />
+          <NumberInput
+            label="Title Font Size"
+            value={s.stepContent.customTitleFontSize ? parseInt(s.stepContent.customTitleFontSize) : 0}
+            onChange={(v) => updateStepContent({ customTitleFontSize: v ? `${v}px` : undefined })}
+            min={0}
+            max={120}
+            unit="px"
+          />
           <ColorInput
             label="Title Color"
             value={s.stepContent.titleColor || "#0f172a"}
@@ -638,6 +646,14 @@ export function ProcessStepsWidgetSettingsPanel({
               { value: "md", label: "Medium" },
               { value: "lg", label: "Large" },
             ]}
+          />
+          <NumberInput
+            label="Description Font Size"
+            value={s.stepContent.customDescFontSize ? parseInt(s.stepContent.customDescFontSize) : 0}
+            onChange={(v) => updateStepContent({ customDescFontSize: v ? `${v}px` : undefined })}
+            min={0}
+            max={80}
+            unit="px"
           />
           <ColorInput
             label="Description Color"
