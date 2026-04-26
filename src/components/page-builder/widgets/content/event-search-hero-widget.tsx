@@ -473,12 +473,14 @@ export function EventSearchHeroWidget({
       >
         <h1
           style={{
-            fontSize: "clamp(2.5rem, 5vw, 4.5rem)",
+            fontFamily: "var(--font-accent)",
+            fontSize: "clamp(3rem, 6vw, 5.5rem)",
             fontWeight: 700,
             color: "white",
             marginBottom: "1.5rem",
             textShadow: "0 4px 6px rgba(0,0,0,0.3)",
             lineHeight: 1.1,
+            maxWidth: "800px",
           }}
         >
           {title}
@@ -486,6 +488,7 @@ export function EventSearchHeroWidget({
 
         <p
           style={{
+            fontFamily: "var(--font-accent)",
             fontSize: "1.25rem",
             fontWeight: 700,
             color: "white",
