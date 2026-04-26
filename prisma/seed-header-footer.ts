@@ -28,21 +28,24 @@ async function seedHeaderFooter() {
       transparent: false,
       topBarEnabled: false,
       logoPosition: "LEFT",
-      logoMaxHeight: 56,
+      logoMaxHeight: 48,
       showAuthButtons: true,
       loginText: "Sign In",
-      registerText: "Start Planning",
+      loginUrl: "/login",
+      loginStyle: JSON.stringify({ bgColor: "transparent", textColor: "#374151", borderWidth: 0, borderRadius: 6, hoverBgColor: "#f3f4f6" }),
+      registerText: "Start Free",
       registerUrl: "/register",
+      registerStyle: JSON.stringify({ bgColor: "#F97316", textColor: "#ffffff", borderWidth: 0, borderRadius: 6, hoverBgColor: "#EA580C" }),
       searchEnabled: false,
       mobileBreakpoint: 1024,
-      height: 80,
+      height: 72,
       textColor: "#1e293b",
       hoverColor: "#9810fa",
       ctaButtons: JSON.stringify([
         {
-          text: "Start Planning",
+          text: "Start Planning Free",
           url: "/register",
-          variant: "primary",
+          style: { bgColor: "#BE6B8B", textColor: "#ffffff", borderWidth: 0, hoverEffect: "darken", borderRadius: 8 },
         },
       ]),
     },
@@ -56,14 +59,14 @@ async function seedHeaderFooter() {
   console.log("\n📌 Creating Header Menu Items...");
 
   const menuItems = [
-    { label: "Home", url: "/", sortOrder: 0 },
-    { label: "Features", url: "/#features", sortOrder: 1, isMegaMenu: true },
-    { label: "Vendors", url: "/vendors", sortOrder: 2, isMegaMenu: true },
-    { label: "Forums", url: "/forum", sortOrder: 3, isMegaMenu: true },
-    { label: "Ideas", url: "/ideas", sortOrder: 4, isMegaMenu: true },
-    { label: "Pricing", url: "/pricing", sortOrder: 5 },
-    { label: "Blog", url: "/blog", sortOrder: 6 },
-    { label: "Contact", url: "/contact", sortOrder: 7 },
+    { label: "Planning Tools",  url: null,                 sortOrder: 0, isMegaMenu: true, megaMenuColumns: 2 },
+    { label: "Venues",          url: null,                 sortOrder: 1, isMegaMenu: true, megaMenuColumns: 3 },
+    { label: "Vendors",         url: "/vendors",           sortOrder: 2, isMegaMenu: true },
+    { label: "Forums",          url: "/forum",             sortOrder: 3, isMegaMenu: true },
+    { label: "Dresses",         url: "/dresses",           sortOrder: 4, isMegaMenu: true, megaMenuColumns: 4 },
+    { label: "Ideas",           url: "/ideas",             sortOrder: 5, isMegaMenu: true },
+    { label: "Registry",        url: "/registry",          sortOrder: 6, isMegaMenu: true, megaMenuColumns: 4 },
+    { label: "Wedding Website", url: "/wedding-website",   sortOrder: 7, isMegaMenu: true, megaMenuColumns: 4 },
   ];
 
   for (const item of menuItems) {
@@ -78,93 +81,105 @@ async function seedHeaderFooter() {
     console.log(`   ✓ Created menu item: ${item.label}`);
   }
 
-  // Mega menu under Features
-  const featuresMenuItem = await prisma.menuItem.findFirst({
-    where: { headerId: header.id, label: "Features" },
+  // Mega menu under Planning Tools
+  const planningToolsMenuItem = await prisma.menuItem.findFirst({
+    where: { headerId: header.id, label: "Planning Tools" },
   });
 
-  if (featuresMenuItem) {
-    const megaMenuData = [
+  if (planningToolsMenuItem) {
+    const ptCategories = [
       {
-        categoryName: "Planning Tools",
-        categoryIcon: "calendar",
-        categoryDesc: "Everything you need to plan",
+        label: "Organize with ease",
         sortOrder: 0,
         items: [
-          { label: "Guest Management", url: "/#guests", badge: "Core", sortOrder: 0 },
-          { label: "Seating Chart Editor", url: "/#seating", badge: "Popular", sortOrder: 1 },
-          { label: "12-Month Checklist", url: "/#checklist", sortOrder: 2 },
-          { label: "Budget Tracker", url: "/#budget", sortOrder: 3 },
-          { label: "Event Itinerary", url: "/#itinerary", sortOrder: 4 },
+          { label: "Checklist",      url: "/tools/checklist",       icon: "ClipboardList", sortOrder: 0 },
+          { label: "Seating chart",  url: "/tools/seating",         icon: "heater",        sortOrder: 1 },
+          { label: "Event Vendors",  url: "/vendors",               icon: "FolderOpen",    sortOrder: 2 },
+          { label: "Guests",         url: "/tools/guests",          icon: "Users",         sortOrder: 3 },
+          { label: "Budget",         url: "/tools/budget",          icon: "Calculator",    sortOrder: 4 },
+          { label: "Event website",  url: "/wedding-website",       icon: "Globe",         sortOrder: 5 },
         ],
       },
       {
-        categoryName: "Event Website",
-        categoryIcon: "globe",
-        categoryDesc: "Beautiful public event pages",
+        label: "Personalize your event",
         sortOrder: 1,
         items: [
-          { label: "RSVP Forms", url: "/#rsvp", badge: "Popular", sortOrder: 0 },
-          { label: "Website Builder", url: "/#website", sortOrder: 1 },
-          { label: "Invitation Designer", url: "/#invitations", sortOrder: 2 },
-          { label: "Countdown Timer", url: "/#countdown", sortOrder: 3 },
-          { label: "Photo Gallery", url: "/#gallery", sortOrder: 4 },
-        ],
-      },
-      {
-        categoryName: "Vendor Tools",
-        categoryIcon: "store",
-        categoryDesc: "Find and manage vendors",
-        sortOrder: 2,
-        items: [
-          { label: "Vendor Directory", url: "/vendors", badge: "Popular", sortOrder: 0 },
-          { label: "Vendor Inquiries", url: "/#inquiries", sortOrder: 1 },
-          { label: "Vendor Reviews", url: "/#reviews", sortOrder: 2 },
-        ],
-      },
-      {
-        categoryName: "Advanced",
-        categoryIcon: "sparkles",
-        categoryDesc: "Elite plan features",
-        sortOrder: 3,
-        items: [
-          { label: "Stationery Engine", url: "/#stationery", badge: "Elite", sortOrder: 0 },
-          { label: "QR Entrance Mode", url: "/#qr", badge: "Elite", sortOrder: 1 },
-          { label: "Collaborators", url: "/#collaborators", badge: "Elite", sortOrder: 2 },
-          { label: "SMS Credits", url: "/#sms", badge: "Elite", sortOrder: 3 },
+          { label: "Hotel Blocks",        url: "/tools/hotel-blocks",      icon: "", sortOrder: 0 },
+          { label: "Date Finder",         url: "/tools/date-finder",       icon: "", sortOrder: 1 },
+          { label: "Cost Guide",          url: "/tools/cost-guide",        icon: "", sortOrder: 2 },
+          { label: "Color generator",     url: "/tools/color-generator",   icon: "", sortOrder: 3 },
+          { label: "Hashtag generator",   url: "/tools/hashtag-generator", icon: "", sortOrder: 4 },
         ],
       },
     ];
 
-    for (const category of megaMenuData) {
-      const categoryItem = await prisma.menuItem.create({
-        data: {
-          label: category.categoryName,
-          categoryName: category.categoryName,
-          categoryIcon: category.categoryIcon,
-          categoryDesc: category.categoryDesc,
-          parentId: featuresMenuItem.id,
-          headerId: header.id,
-          sortOrder: category.sortOrder,
-          isVisible: true,
-        },
+    for (const cat of ptCategories) {
+      const catItem = await prisma.menuItem.create({
+        data: { label: cat.label, parentId: planningToolsMenuItem.id, headerId: header.id, sortOrder: cat.sortOrder, isVisible: true },
       });
-      console.log(`   ✓ Created category: ${category.categoryName}`);
-
-      for (const item of category.items) {
+      for (const item of cat.items) {
         await prisma.menuItem.create({
-          data: {
-            label: item.label,
-            url: item.url,
-            badge: item.badge,
-            parentId: categoryItem.id,
-            headerId: header.id,
-            sortOrder: item.sortOrder,
-            isVisible: true,
-          },
+          data: { label: item.label, url: item.url, icon: item.icon || null, parentId: catItem.id, headerId: header.id, sortOrder: item.sortOrder, isVisible: true },
         });
       }
-      console.log(`      → Added ${category.items.length} items`);
+      console.log(`   ✓ Planning Tools category: ${cat.label} (${cat.items.length} items)`);
+    }
+  }
+
+  // Mega menu under Venues
+  const venuesMenuItem = await prisma.menuItem.findFirst({
+    where: { headerId: header.id, label: "Venues" },
+  });
+
+  if (venuesMenuItem) {
+    const venueCategories = [
+      {
+        label: "Wedding Venues",
+        sortOrder: 0,
+        items: [
+          { label: "All Wedding Venues",  url: "/venues/wedding",         icon: "Heart",      sortOrder: 0 },
+          { label: "Banquet Halls",       url: "/venues/banquet-halls",   icon: "Building2",  sortOrder: 1 },
+          { label: "Wineries",            url: "/venues/wineries",        icon: "Wine",        sortOrder: 2 },
+          { label: "Gardens",             url: "/venues/gardens",         icon: "Flower2",     sortOrder: 3 },
+          { label: "Beach Venues",        url: "/venues/beach",           icon: "Waves",       sortOrder: 4 },
+          { label: "Mansions",            url: "/venues/mansions",        icon: "Home",        sortOrder: 5 },
+        ],
+      },
+      {
+        label: "Party & Event Venues",
+        sortOrder: 1,
+        items: [
+          { label: "Party Halls",         url: "/venues/party-halls",         icon: "PartyPopper", sortOrder: 0 },
+          { label: "Conference Centers",  url: "/venues/conference-centers",  icon: "Briefcase",   sortOrder: 1 },
+          { label: "Hotels",              url: "/venues/hotels",              icon: "Hotel",        sortOrder: 2 },
+          { label: "Historic Venues",     url: "/venues/historic",            icon: "Landmark",     sortOrder: 3 },
+          { label: "Yachts & Boats",      url: "/venues/yachts",             icon: "Ship",          sortOrder: 4 },
+          { label: "Outdoor Venues",      url: "/venues/outdoor",             icon: "TreePine",     sortOrder: 5 },
+        ],
+      },
+      {
+        label: "Specialty Venues",
+        sortOrder: 2,
+        items: [
+          { label: "Religious Venues",    url: "/venues/religious",   icon: "Church",   sortOrder: 0 },
+          { label: "Luxury Estates",      url: "/venues/luxury",      icon: "Diamond",  sortOrder: 1 },
+          { label: "Destination Venues",  url: "/venues/destination", icon: "Plane",    sortOrder: 2 },
+          { label: "Unique Spaces",       url: "/venues/unique",      icon: "Store",    sortOrder: 3 },
+          { label: "Find Near Me",        url: "/venues/near-me",     icon: "MapPin",   sortOrder: 4 },
+        ],
+      },
+    ];
+
+    for (const cat of venueCategories) {
+      const catItem = await prisma.menuItem.create({
+        data: { label: cat.label, parentId: venuesMenuItem.id, headerId: header.id, sortOrder: cat.sortOrder, isVisible: true },
+      });
+      for (const item of cat.items) {
+        await prisma.menuItem.create({
+          data: { label: item.label, url: item.url, icon: item.icon || null, parentId: catItem.id, headerId: header.id, sortOrder: item.sortOrder, isVisible: true },
+        });
+      }
+      console.log(`   ✓ Venues category: ${cat.label} (${cat.items.length} items)`);
     }
   }
 
@@ -246,6 +261,71 @@ async function seedHeaderFooter() {
     }
   }
 
+  // Dresses megaMenuContent (featured-gallery)
+  const dressesMenuItem = await prisma.menuItem.findFirst({
+    where: { headerId: header.id, label: "Dresses" },
+  });
+
+  if (dressesMenuItem) {
+    await prisma.menuItem.update({
+      where: { id: dressesMenuItem.id },
+      data: {
+        megaMenuContent: {
+          type: "featured-gallery",
+          sectionHeader: "The latest in bridal fashion",
+          topLinks: [{ name: "Bride", href: "/dresses/bridal", icon: "shirt" }],
+          gallery: {
+            title: "FEATURED DESIGNERS",
+            aspectRatio: "portrait",
+            items: [
+              { name: "Essense of Australia",     imageUrl: "/designers/1777004155592-dre1.png", href: "/dresses/essense-of-australia" },
+              { name: "Martina Liana Luxe",       imageUrl: "/designers/1777004214636-dre2.png", href: "/dresses/martina-liana-luxe" },
+              { name: "Le Blanc by Casablanca",   imageUrl: "https://images.unsplash.com/photo-1519741497674-611481863552?w=400&h=533&fit=crop", href: "/dresses/casablanca-bridal" },
+              { name: "Martina Liana",            imageUrl: "https://images.unsplash.com/photo-1537633552985-df8429e8048b?w=400&h=533&fit=crop", href: "/dresses/martina-liana" },
+              { name: "Justin Alexander",         imageUrl: "https://images.unsplash.com/photo-1511285560929-80b456fea0bc?w=400&h=533&fit=crop", href: "/dresses/justin-alexander" },
+            ],
+          },
+        },
+      },
+    });
+    console.log("   ✓ Dresses megaMenuContent set");
+  }
+
+  // Registry megaMenuContent (featured-gallery)
+  const registryMenuItem = await prisma.menuItem.findFirst({
+    where: { headerId: header.id, label: "Registry" },
+  });
+
+  if (registryMenuItem) {
+    await prisma.menuItem.update({
+      where: { id: registryMenuItem.id },
+      data: {
+        megaMenuContent: {
+          type: "featured-gallery",
+          sectionHeader: "Create your all-in-one registry",
+          topLinks: [
+            { name: "Start Your Registry",  href: "/registry/start" },
+            { name: "Registry Retailers",   href: "/registry/retailers" },
+            { name: "Registry Ideas",       href: "/registry/ideas" },
+          ],
+          gallery: {
+            title: "FEATURED REGISTRY BRANDS",
+            aspectRatio: "square",
+            items: [
+              { name: "Amazon",         imageUrl: "/designers/1777004751803-amazon.png",  href: "/registry/amazon" },
+              { name: "Crate & Barrel", imageUrl: "/designers/1777004759059-crearte.png", href: "/registry/crate-barrel" },
+              { name: "Target",         imageUrl: "/designers/1777004763644-tar.png",      href: "/registry/target" },
+              { name: "Traveler's Joy", imageUrl: "/designers/1777004769186-travel.png",  href: "/registry/travelers-joy" },
+            ],
+          },
+          featuredLink: { text: "Find a couple's Registry", href: "/registry/find" },
+          footerLink:   { text: "See all registry brands",  href: "/registry/brands" },
+        },
+      },
+    });
+    console.log("   ✓ Registry megaMenuContent set");
+  }
+
   // Forums megaMenuContent (forums-grid rich content)
   const forumsMenuItem = await prisma.menuItem.findFirst({
     where: { headerId: header.id, label: "Forums" },
@@ -307,23 +387,26 @@ async function seedHeaderFooter() {
       data: {
         megaMenuContent: {
           type: "ideas-grid",
+          header: "Get wedding inspiration",
           columns: [
             {
-              title: "Decor",
+              title: "",
               items: [
-                { name: "Wedding Themes",     icon: "palette",      href: "/ideas/themes" },
-                { name: "Floral Arrangements", icon: "flower-2",     href: "/ideas/flowers" },
-                { name: "Table Settings",      icon: "layout-grid",  href: "/ideas/tables" },
-                { name: "Ceremony Decor",      icon: "star",         href: "/ideas/ceremony" },
+                { name: "Planning Basics",      href: "/ideas/planning" },
+                { name: "Wedding Ceremony",     href: "/ideas/ceremony" },
+                { name: "Wedding Reception",    href: "/ideas/reception" },
+                { name: "Wedding Services",     href: "/ideas/services" },
+                { name: "Wedding Fashion",      href: "/ideas/fashion" },
               ],
             },
             {
-              title: "Celebration",
+              title: "",
               items: [
-                { name: "Reception Ideas",  icon: "party-popper", href: "/ideas/reception" },
-                { name: "Wedding Favors",   icon: "gift",         href: "/ideas/favors" },
-                { name: "Photo Ideas",      icon: "camera",       href: "/ideas/photos" },
-                { name: "Honeymoon Ideas",  icon: "plane",        href: "/ideas/honeymoon" },
+                { name: "Hair & Makeup",        href: "/ideas/hair-makeup" },
+                { name: "Destination Weddings", href: "/ideas/destination" },
+                { name: "Married Life",         href: "/ideas/married-life" },
+                { name: "Events & Parties",     href: "/ideas/events" },
+                { name: "Family & Friends",     href: "/ideas/family" },
               ],
             },
           ],
@@ -347,16 +430,16 @@ async function seedHeaderFooter() {
           sectionHeader: "Set up your website in minutes",
           topLinks: [
             { name: "Create your wedding website", href: "/wedding-website/create" },
-            { name: "Find a couple website", href: "/wedding-website/search" },
+            { name: "Find a couple's website",     href: "/wedding-website/find" },
           ],
           gallery: {
             title: "CHOOSE YOUR DESIGN",
-            aspectRatio: "portrait",
+            aspectRatio: "square",
             items: [
-              { name: "Minimal Leaves",    imageUrl: "/designers/1777006588323-ww1.png", href: "/wedding-website/themes/minimal-leaves" },
-              { name: "Painted Desert",    imageUrl: "/designers/1777006595094-ww2.png", href: "/wedding-website/themes/painted-desert" },
-              { name: "Classic Garden",    imageUrl: "/designers/1777006599600-ww3.png", href: "/wedding-website/themes/classic-garden" },
-              { name: "Formal Ampersand", imageUrl: "/designers/1777006603262-ww4.png", href: "/wedding-website/themes/formal-ampersand" },
+              { name: "Minimal Leaves",   imageUrl: "/designers/1777006588323-ww1.png", href: "/wedding-website/themes?style=minimal-leaves" },
+              { name: "Painted Desert",   imageUrl: "/designers/1777006595094-ww2.png", href: "/wedding-website/themes?style=painted-desert" },
+              { name: "Classic Garden",   imageUrl: "/designers/1777006599600-ww3.png", href: "/wedding-website/themes?style=classic-garden" },
+              { name: "Formal Ampersand", imageUrl: "/designers/1777006603262-ww4.png", href: "/wedding-website/themes?style=formal-ampersand" },
             ],
           },
           footerLink: { text: "See all website designs", href: "/wedding-website/themes" },
