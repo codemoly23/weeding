@@ -1,6 +1,6 @@
 {
   "version": "1.0",
-  "exportedAt": "2026-04-26T04:11:18.336Z",
+  "exportedAt": "2026-04-26T05:44:58.602Z",
   "colorPalette": {
     "light": {
       "background": "#FDFAF7",
@@ -2211,7 +2211,8 @@
                         "accentColor": "#7c3aed",
                         "expandFirst": false,
                         "headerStyle": {
-                          "headingSize": "lg"
+                          "headingSize": "lg",
+                          "headingFontSize": 50
                         },
                         "allowMultipleOpen": false,
                         "showCategoryFilter": false
