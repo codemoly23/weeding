@@ -473,7 +473,7 @@ export function EventSearchHeroWidget({
       >
         <h1
           style={{
-            fontFamily: "var(--font-accent)",
+            fontFamily: "Georgia, 'Times New Roman', serif",
             fontSize: "clamp(3rem, 6vw, 5.5rem)",
             fontWeight: 700,
             color: "white",
@@ -488,7 +488,7 @@ export function EventSearchHeroWidget({
 
         <p
           style={{
-            fontFamily: "var(--font-accent)",
+            fontFamily: "Georgia, 'Times New Roman', serif",
             fontSize: "1.25rem",
             fontWeight: 700,
             color: "white",
