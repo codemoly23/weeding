@@ -7,7 +7,7 @@ const testimonials = [
     country: "India",
     company: "Bride & Groom",
     content:
-      "I was hesitant about planning a destination wedding, but Ceremoney made it incredibly smooth. Within 10 days, I had my venue shortlist, catering quotes, and photographer booked. Now our dream wedding is taking shape! Their expertise saved me months of research.",
+      "I was hesitant about planning a destination wedding, but EventPlanner Pro made it incredibly smooth. Within 10 days, I had my venue shortlist, catering quotes, and photographer booked. Now our dream wedding is taking shape! Their expertise saved me months of research.",
     rating: 5,
     isActive: true,
     sortOrder: 1,
@@ -18,7 +18,7 @@ const testimonials = [
     country: "UAE",
     company: "Wedding Couple",
     content:
-      "Outstanding service! Ceremoney handled my entire wedding coordination, vendor bookings, and timeline seamlessly. The team's professionalism and quick response time exceeded all expectations. Highly recommend for couples planning their big day.",
+      "Outstanding service! EventPlanner Pro handled my entire wedding coordination, vendor bookings, and timeline seamlessly. The team's professionalism and quick response time exceeded all expectations. Highly recommend for couples planning their big day.",
     rating: 5,
     isActive: true,
     sortOrder: 2,
@@ -29,7 +29,7 @@ const testimonials = [
     country: "Pakistan",
     company: "Engaged Couple",
     content:
-      "After comparing 5+ planning services, I chose Ceremoney for their transparency and expertise. Best decision ever! They guided me through venue selection, catering planning, and even helped coordinate with our photographer. True planning partners, not just a service provider.",
+      "After comparing 5+ planning services, I chose EventPlanner Pro for their transparency and expertise. Best decision ever! They guided me through venue selection, catering planning, and even helped coordinate with our photographer. True planning partners, not just a service provider.",
     rating: 5,
     isActive: true,
     sortOrder: 3,
@@ -40,7 +40,7 @@ const testimonials = [
     country: "India",
     company: "Newlyweds",
     content:
-      "Ceremoney's Premium package was worth every penny. Got our venue, catering, and floral arrangements done professionally. Their knowledge of wedding planning challenges is unmatched. Our ceremony looked incredible and ran perfectly!",
+      "EventPlanner Pro's Premium package was worth every penny. Got our venue, catering, and floral arrangements done professionally. Their knowledge of wedding planning challenges is unmatched. Our ceremony looked incredible and ran perfectly!",
     rating: 5,
     isActive: true,
     sortOrder: 4,
@@ -51,7 +51,7 @@ const testimonials = [
     country: "UK",
     company: "Bride",
     content:
-      "I needed full wedding coordination on a tight timeline. Ceremoney delivered everything - venue, catering, decorations - within a week of booking. Their step-by-step guidance made complex planning simple. Our wedding was perfect and guests were amazed!",
+      "I needed full wedding coordination on a tight timeline. EventPlanner Pro delivered everything - venue, catering, decorations - within a week of booking. Their step-by-step guidance made complex planning simple. Our wedding was perfect and guests were amazed!",
     rating: 5,
     isActive: true,
     sortOrder: 5,
@@ -62,7 +62,7 @@ const testimonials = [
     country: "UAE",
     company: "Wedding Couple",
     content:
-      "Exceptional experience from start to finish! Ceremoney helped us plan our destination wedding with seamless coordination. The vendor management was reliable, and their planning support ensured we never missed important milestones. Trustworthy partner for celebrating love.",
+      "Exceptional experience from start to finish! EventPlanner Pro helped us plan our destination wedding with seamless coordination. The vendor management was reliable, and their planning support ensured we never missed important milestones. Trustworthy partner for celebrating love.",
     rating: 5,
     isActive: true,
     sortOrder: 6,
