@@ -473,13 +473,13 @@ export function EventSearchHeroWidget({
       >
         <h1
           style={{
-            fontFamily: "Georgia, 'Times New Roman', serif",
-            fontSize: "clamp(3rem, 6vw, 5.5rem)",
+            fontFamily: "Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
+            fontSize: "clamp(3rem, 6vw, 3.75rem)",
             fontWeight: 700,
-            color: "white",
+            color: "rgb(255, 255, 255)",
             marginBottom: "1.5rem",
             textShadow: "0 4px 6px rgba(0,0,0,0.3)",
-            lineHeight: 1.1,
+            lineHeight: 1.25,
             maxWidth: "800px",
           }}
         >
@@ -488,13 +488,13 @@ export function EventSearchHeroWidget({
 
         <p
           style={{
-            fontFamily: "Georgia, 'Times New Roman', serif",
+            fontFamily: "Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
             fontSize: "1.25rem",
-            fontWeight: 700,
-            color: "white",
+            fontWeight: 400,
+            color: "rgba(255, 255, 255, 0.9)",
             marginBottom: "2.5rem",
             maxWidth: "42rem",
-            lineHeight: 1.6,
+            lineHeight: 1.65,
           }}
         >
           {subtitle}
