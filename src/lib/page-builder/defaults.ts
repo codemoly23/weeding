@@ -1933,6 +1933,7 @@ export const DEFAULT_FAQ_ACCORDION_SETTINGS = {
   colors: { useTheme: false },
   headerStyle: {
     headingSize: "lg" as const,
+    headingFontSize: undefined,
     headingColor: undefined,
     descriptionColor: undefined,
   },

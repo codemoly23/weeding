@@ -244,10 +244,19 @@ export function FaqAccordionWidgetSettingsPanel({
       <div className="space-y-4">
         {/* Header Style */}
         {settings.header.show && (
-          <AccordionSection title="Header Style" defaultOpen>
+          <AccordionSection title="Section Header" defaultOpen>
             <div className="space-y-3">
+              <NumberInput
+                label="Heading Font Size"
+                value={hs.headingFontSize ?? 36}
+                onChange={(v) => updateHeaderStyle({ headingFontSize: v })}
+                min={16}
+                max={96}
+                step={2}
+                unit="px"
+              />
               <SelectInput
-                label="Heading Size"
+                label="Heading Size (preset)"
                 value={hs.headingSize}
                 onChange={(v) => updateHeaderStyle({ headingSize: v as "sm" | "md" | "lg" | "xl" | "2xl" })}
                 options={[

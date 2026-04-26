@@ -266,14 +266,14 @@ export function FaqAccordionWidget({
             )}
           >
             <h2
-              className={cn("font-bold tracking-tight", {
+              className={cn("font-bold tracking-tight", !hs.headingFontSize && {
                 "text-xl sm:text-2xl": hs.headingSize === "sm",
                 "text-2xl sm:text-3xl": hs.headingSize === "md",
                 "text-3xl sm:text-4xl": hs.headingSize === "lg",
                 "text-4xl sm:text-5xl": hs.headingSize === "xl",
                 "text-5xl sm:text-6xl": hs.headingSize === "2xl",
               })}
-              style={{ color: hs.headingColor || undefined }}
+              style={{ color: hs.headingColor || undefined, ...(hs.headingFontSize ? { fontSize: `${hs.headingFontSize}px` } : {}) }}
             >
               {s.header.heading}
             </h2>
@@ -415,7 +415,7 @@ export function FaqAccordionWidget({
           <h2
             className={cn(
               "font-bold tracking-tight",
-              {
+              !hs.headingFontSize && {
                 "text-xl sm:text-2xl": hs.headingSize === "sm",
                 "text-2xl sm:text-3xl": hs.headingSize === "md",
                 "text-3xl sm:text-4xl": hs.headingSize === "lg",
@@ -423,7 +423,7 @@ export function FaqAccordionWidget({
                 "text-5xl sm:text-6xl": hs.headingSize === "2xl",
               }
             )}
-            style={{ color: hs.headingColor || undefined }}
+            style={{ color: hs.headingColor || undefined, ...(hs.headingFontSize ? { fontSize: `${hs.headingFontSize}px` } : {}) }}
           >
             {s.header.heading}
           </h2>
@@ -650,7 +650,7 @@ function FaqItemCard({
       className="border bg-card transition-all duration-300 hover:-translate-y-0.5 hover:shadow-md"
       style={{
         borderRadius: `${itemStyle.borderRadius}px`,
-        borderColor: accentBorder,
+        borderColor: "#e5e7eb",
       }}
     >
       <button
@@ -670,7 +670,8 @@ function FaqItemCard({
           {faq.question}
         </span>
         <div
-          className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-muted transition-all duration-300"
+          className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl border border-border transition-all duration-300"
+          style={{ backgroundColor: "#ffffff" }}
         >
           <ChevronDown
             className={cn(

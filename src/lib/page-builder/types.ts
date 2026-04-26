@@ -2953,6 +2953,7 @@ export interface FaqAccordionWidgetSettings {
   // Header Style
   headerStyle?: {
     headingSize: "sm" | "md" | "lg" | "xl" | "2xl";
+    headingFontSize?: number;
     headingColor?: string;
     descriptionColor?: string;
   };
