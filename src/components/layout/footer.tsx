@@ -656,7 +656,7 @@ function FooterWidgetRenderer({
         <nav aria-label={widget.title || "Footer links"}>
           {widget.showTitle && widget.title && (
             <h3 className={cn(headingClasses, "flex items-center gap-2")}>
-              {HeadingIcon && <HeadingIcon className="h-4 w-4 shrink-0 opacity-70" aria-hidden="true" />}
+              {HeadingIcon && <HeadingIcon className="h-[18px] w-[18px] shrink-0" style={{ color: "var(--footer-accent-color)" }} aria-hidden="true" />}
               {widget.title}
             </h3>
           )}
