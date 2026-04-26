@@ -665,7 +665,7 @@ function FooterWidgetRenderer({
               <li key={link.id}>
                 <Link
                   href={link.url}
-                  className={cn("text-sm inline-flex items-center gap-1.5", linkClasses)}
+                  className={cn("text-base inline-flex items-center gap-1.5", linkClasses)}
                 >
                   {linkPrefix === "chevron" && <ChevronRight className="h-3 w-3 shrink-0 opacity-50" aria-hidden="true" />}
                   {linkPrefix === "arrow" && <ArrowRight className="h-3 w-3 shrink-0 opacity-50" aria-hidden="true" />}
