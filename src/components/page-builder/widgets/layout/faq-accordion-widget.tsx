@@ -400,10 +400,12 @@ export function FaqAccordionWidget({
           {s.header.badge?.show && (
             <div
               className={cn(
-                "mb-4 inline-flex items-center rounded-full border px-4 py-1.5 text-sm font-semibold",
+                "mb-4 inline-flex items-center rounded-full border font-semibold",
                 s.header.alignment === "center" ? "justify-center" : "justify-start"
               )}
               style={{
+                padding: "0.6rem 1.5rem",
+                fontSize: "0.9375rem",
                 background: "#fdf4ff",
                 borderColor: "#d8b4fe",
                 color: "#7c3aed",

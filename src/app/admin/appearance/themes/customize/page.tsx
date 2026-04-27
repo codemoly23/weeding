@@ -570,7 +570,7 @@ export default function ThemeCustomizePage() {
                   Used for decorative serif elements like pull quotes and info icons.
                 </p>
                 <Select
-                  value={fontConfig.accentFont || "Georgia"}
+                  value={fontConfig.accentFont || "Inter"}
                   onValueChange={(val) =>
                     setFontConfig((prev) => ({ ...prev, accentFont: val }))
                   }
@@ -586,7 +586,7 @@ export default function ThemeCustomizePage() {
                     ))}
                   </SelectContent>
                 </Select>
-                <FontPreview fontFamily={fontConfig.accentFont || "Georgia"} />
+                <FontPreview fontFamily={fontConfig.accentFont || "Inter"} />
               </div>
 
               <div className="pt-2">
