@@ -327,7 +327,7 @@ function TrustBadges({
   if (!badges || badges.length === 0) return null;
 
   return (
-    <div className="flex flex-wrap items-center gap-2" role="list" aria-label="Trust badges">
+    <div className="flex flex-nowrap items-center gap-1.5" role="list" aria-label="Trust badges">
       {badges.map((badge, index) => {
         if (badge.style === "pill") {
           const Icon = badge.iconName ? PILL_BADGE_ICONS[badge.iconName] : null;
@@ -570,10 +570,8 @@ function FooterWidgetRenderer({
               />
             ) : (
               <div className="flex items-center gap-3">
-                <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-primary">
-                  <span className="text-lg font-bold text-primary-foreground">
-                    {businessConfig.logo.text || businessConfig.name.charAt(0)}
-                  </span>
+                <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-violet-500 to-purple-600">
+                  <Sparkles className="h-5 w-5 text-white" />
                 </div>
                 <span className="text-lg font-semibold">{businessConfig.name}</span>
               </div>
@@ -592,6 +590,24 @@ function FooterWidgetRenderer({
             <p className="max-w-md text-xs opacity-60">
               {subtitle}
             </p>
+          )}
+
+          {/* Social icons in brand column */}
+          {showSocial && (
+            <EnhancedSocialLinks
+              links={socialLinks.length > 0 ? socialLinks : [
+                { name: "Facebook", href: "#", icon: Facebook, color: "#1877F2" },
+                { name: "Twitter", href: "#", icon: Twitter, color: "#1DA1F2" },
+                { name: "Instagram", href: "#", icon: Instagram, color: "#E4405F" },
+                { name: "LinkedIn", href: "#", icon: Linkedin, color: "#0A66C2" },
+              ]}
+              shape={footerConfig?.social?.shape || "circle"}
+              size={footerConfig?.social?.size || "md"}
+              colorMode={footerConfig?.social?.colorMode || "brand"}
+              hoverEffect={footerConfig?.social?.hoverEffect || "scale"}
+              accentColor={footerConfig?.styling?.accentColor || undefined}
+              bgStyle={(footerConfig?.social?.bgStyle as "none" | "subtle" | "solid" | "outline") || "subtle"}
+            />
           )}
 
           {/* CTA Buttons (from preset) */}
@@ -1982,12 +1998,12 @@ export function Footer() {
           opacity={styling.bgPatternOpacity || 10}
         />
       )}
-      <div className="container mx-auto px-4 relative z-10">
+      <div className="max-w-6xl mx-auto px-6 relative z-10">
         {hasDynamicWidgets ? (
           (() => {
             const entries = Object.entries(widgetsByColumn!).filter(([, widgets]) => widgets.length > 0);
             const hasBrandWidget = entries.some(([, widgets]) => widgets.some((w) => w.type === "BRAND"));
-            const desktopCols = hasBrandWidget ? entries.length + 1 : entries.length;
+            const desktopCols = entries.length;
 
             return (
               <>
@@ -2012,10 +2028,10 @@ export function Footer() {
                   }
                   @media (min-width: 1024px) {
                     .footer-grid {
-                      grid-template-columns: repeat(${desktopCols}, 1fr);
+                      grid-template-columns: ${hasBrandWidget ? `1.5fr repeat(${desktopCols - 1}, 1fr)` : `repeat(${desktopCols}, 1fr)`};
                     }
                     .footer-grid .brand-col {
-                      grid-column: span 2;
+                      grid-column: span 1;
                     }
                   }
                 `}</style>
