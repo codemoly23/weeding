@@ -71,9 +71,9 @@ async function seedFooterDesign() {
   z-index: 0;
 }`,
       // Text colors
-      textColor:        "#e2d9f3",
+      textColor:        "#c4b8e0",
       headingColor:     "#ffffff",
-      linkColor:        "#ffffff",
+      linkColor:        "rgba(255, 255, 255, 0.65)",
       linkHoverColor:   "#a855f7",
       accentColor:      "#a855f7",
       borderColor:      "#6b21a8",
