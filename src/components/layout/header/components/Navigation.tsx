@@ -409,8 +409,10 @@ const NAV_LABEL_MAP: Record<string, string> = {
   "Services": "nav.services",
   "Pricing": "nav.pricing",
   "About": "nav.about",
+  "About Us": "nav.about",
   "Blog": "nav.blog",
   "Contact": "nav.contact",
+  "Contact Us": "nav.contact",
   "Features": "nav.features",
   "Vendors": "nav.vendors",
 };
@@ -439,7 +441,7 @@ export function Navigation({
   const navHoverColor = styling?.hoverColor || "#f97316";
 
   return (
-    <div className="flex items-center gap-x-8">
+    <div className="flex items-center gap-x-3 xl:gap-x-5">
       {displayItems.map((item) => {
         const isHovered = hoveredItem === item.name;
         const label = NAV_LABEL_MAP[item.name] ? t(NAV_LABEL_MAP[item.name]) : item.name;
