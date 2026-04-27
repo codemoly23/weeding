@@ -358,12 +358,13 @@ export function TestimonialsWidget({ settings: partialSettings, isPreview = fals
         >
           {/* Badge */}
           {badge.show && (
-            <div className="mb-5 inline-flex items-center gap-2 rounded-full border px-4 py-1.5 text-sm font-semibold shadow-sm"
+            <div className="mb-5 inline-flex items-center gap-2 rounded-full border font-semibold shadow-sm"
               style={{
+                padding: "0.6rem 1.5rem",
+                fontSize: badge.customFontSize || "0.9375rem",
                 backgroundColor: badge.bgColor || DEFAULT_TESTIMONIALS_SETTINGS.header.badge.bgColor,
                 color: badge.textColor || DEFAULT_TESTIMONIALS_SETTINGS.header.badge.textColor,
                 borderColor: badge.borderColor || DEFAULT_TESTIMONIALS_SETTINGS.header.badge.borderColor,
-                ...(badge.customFontSize ? { fontSize: badge.customFontSize } : {}),
                 ...(badge.fontWeight ? { fontWeight: badge.fontWeight } : {}),
                 ...(badge.letterSpacing ? { letterSpacing: badge.letterSpacing } : {}),
                 ...(badge.textTransform ? { textTransform: badge.textTransform as React.CSSProperties["textTransform"] } : {}),
