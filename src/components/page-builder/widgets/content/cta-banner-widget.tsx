@@ -95,13 +95,15 @@ export function CtaBannerWidget({
             {/* Subtitle */}
             <p
               style={{
-                fontSize: "1.125rem",
+                fontSize: "20px",
+                fontWeight: 400,
+                fontStyle: "normal",
+                lineHeight: "30px",
                 color: isLight ? "#64748b" : "rgba(255,255,255,0.9)",
                 marginBottom: "2.5rem",
                 maxWidth: "42rem",
                 marginLeft: "auto",
                 marginRight: "auto",
-                lineHeight: 1.6,
               }}
             >
               {s.subtitle}

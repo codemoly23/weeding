@@ -46,9 +46,9 @@
     }
   },
   "fontConfig": {
-    "headingFont": "Cormorant Garamond",
-    "bodyFont": "Lato",
-    "accentFont": "Georgia"
+    "headingFont": "Inter",
+    "bodyFont": "Inter",
+    "accentFont": "Inter"
   },
   "settings": {
     "business.name": "EventPlanner Pro",

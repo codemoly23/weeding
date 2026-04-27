@@ -53,8 +53,14 @@ export function useFooterConfig(): UseFooterConfigResult {
         next: { revalidate: 60 }, // Cache for 60 seconds
       });
 
+      if (response.status === 404) {
+        // No active footer config in DB yet — use defaults silently
+        setConfig(defaultConfig);
+        return;
+      }
+
       if (!response.ok) {
-        throw new Error("Failed to fetch footer config");
+        throw new Error(`Failed to fetch footer config: ${response.status}`);
       }
 
       const data = await response.json();
@@ -62,7 +68,6 @@ export function useFooterConfig(): UseFooterConfigResult {
     } catch (err) {
       console.error("Error fetching footer config:", err);
       setError(err instanceof Error ? err : new Error("Unknown error"));
-      // Use default config on error
       setConfig(defaultConfig);
     } finally {
       setIsLoading(false);

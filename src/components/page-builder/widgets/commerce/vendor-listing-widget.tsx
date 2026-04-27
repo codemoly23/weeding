@@ -118,8 +118,13 @@ export function VendorListingWidget({ settings, isPreview = false }: VendorListi
         <div className="mb-8 text-center">
           {badge?.show && badge.text && (
             <span
-              className="mb-3 inline-block rounded-full px-4 py-1 text-xs font-semibold tracking-wide"
-              style={{ background: "#111827", color: "#fff" }}
+              className="mb-3 inline-block rounded-full font-semibold tracking-wide"
+              style={{
+                padding: "0.6rem 1.5rem",
+                fontSize: "0.9375rem",
+                background: "#111827",
+                color: "#fff",
+              }}
             >
               {badge.text}
             </span>
@@ -138,7 +143,7 @@ export function VendorListingWidget({ settings, isPreview = false }: VendorListi
             </h2>
           )}
           {subtitle && (
-            <p className="mt-2" style={{ color: headerTextColor, opacity: 0.65, fontSize: "1.25rem", fontWeight: 400 }}>
+            <p className="mt-2" style={{ color: headerTextColor, opacity: 0.65, fontSize: "20px", fontWeight: 400, fontStyle: "normal", lineHeight: "30px" }}>
               {subtitle}
             </p>
           )}

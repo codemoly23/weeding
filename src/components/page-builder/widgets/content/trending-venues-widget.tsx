@@ -69,11 +69,13 @@ export function TrendingVenuesWidget({
           </h2>
           <p
             style={{
-              fontSize: "1rem",
+              fontSize: "20px",
+              fontWeight: 400,
+              fontStyle: "normal",
+              lineHeight: "30px",
               color: "#64748b",
               maxWidth: "40rem",
               margin: "0 auto",
-              lineHeight: 1.6,
             }}
           >
             {subheading}

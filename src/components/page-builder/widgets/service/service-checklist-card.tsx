@@ -1,4 +1,4 @@
-// ============================================
+﻿// ============================================
 // SERVICE CHECKLIST CARD WIDGET
 // Dark card with feature checklist and stats
 // Used as standalone widget in hero section (paired with service-hero in "2-1" layout)
@@ -185,7 +185,7 @@ function ChecklistCardShell({
       {/* Card Title */}
       <div
         style={{
-          fontFamily: "var(--font-heading, 'Outfit', sans-serif)",
+          fontFamily: "var(--font-heading)",
           fontSize: "11px",
           fontWeight: 700,
           textTransform: "uppercase",
@@ -297,7 +297,7 @@ function StatsRow({ stats }: { stats: Array<{ value: string; label: string }> })
         <div key={i} style={{ textAlign: "center" }}>
           <strong
             style={{
-              fontFamily: "var(--font-heading, 'Outfit', sans-serif)",
+              fontFamily: "var(--font-heading)",
               fontSize: "20px",
               fontWeight: 800,
               color: "#ff6a3d",

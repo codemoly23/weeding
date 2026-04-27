@@ -67,8 +67,7 @@ export async function getActiveTemplate(
       metaDescription: page.metaDescription,
       ogImage: page.ogImage,
     };
-  } catch (error) {
-    console.error(`Error fetching ${templateType} template:`, error);
+  } catch {
     return null;
   }
 }

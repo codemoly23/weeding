@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import Link from "next/link";
 import Image from "next/image";
@@ -2249,7 +2249,7 @@ function BrandRevealScene({ text, color, bgColor }: { text: string; color: strin
     const brandSpan = document.createElement("span");
     Object.assign(brandSpan.style, {
       display: "block",
-      fontFamily: "var(--font-heading, 'Outfit', sans-serif)",
+      fontFamily: "var(--font-heading)",
       fontSize: "clamp(100px, 22vw, 360px)",
       fontWeight: "900",
       letterSpacing: "-0.04em",

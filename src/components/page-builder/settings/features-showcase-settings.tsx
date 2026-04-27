@@ -85,12 +85,20 @@ export function FeaturesShowcaseSettingsPanel({
               onChange={(v) => updateField("badge", { ...settings.badge, show: v })}
             />
             {settings.badge.show && (
-              <TextInput
-                label="Badge Text"
-                value={settings.badge.text}
-                onChange={(v) => updateField("badge", { ...settings.badge, text: v })}
-                placeholder="Powerful Features"
-              />
+              <>
+                <TextInput
+                  label="Badge Text"
+                  value={settings.badge.text}
+                  onChange={(v) => updateField("badge", { ...settings.badge, text: v })}
+                  placeholder="Powerful Features"
+                />
+                <TextInput
+                  label="Badge Icon (Lucide name)"
+                  value={(settings.badge as { show: boolean; text: string; icon?: string }).icon ?? "Sparkles"}
+                  onChange={(v) => updateField("badge", { ...settings.badge, icon: v })}
+                  placeholder="Sparkles"
+                />
+              </>
             )}
             <TextInput
               label="Heading"

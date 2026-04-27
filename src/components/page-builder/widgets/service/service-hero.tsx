@@ -1,4 +1,4 @@
-// ============================================
+﻿// ============================================
 // SERVICE HERO WIDGET
 // Displays service title, description, price badge, and CTA buttons
 // Uses shared ButtonCustomStyle system for button styling
@@ -264,7 +264,7 @@ export function ServiceHeroWidget({
         {/* Title */}
         <h1
           style={{
-            fontFamily: "var(--font-heading, 'Outfit', sans-serif)",
+            fontFamily: "var(--font-heading)",
             fontSize: "clamp(36px, 5vw, 56px)",
             fontWeight: 900,
             letterSpacing: "-0.04em",
@@ -304,7 +304,7 @@ export function ServiceHeroWidget({
           >
             <div
               style={{
-                fontFamily: "var(--font-heading, 'Outfit', sans-serif)",
+                fontFamily: "var(--font-heading)",
                 fontSize: "36px",
                 fontWeight: 900,
                 color: "#0e1109",
@@ -446,7 +446,7 @@ function ServiceHeroPlaceholder({ settings }: { settings: ServiceHeroWidgetSetti
         </span>
       )}
 
-      <h1 style={{ fontFamily: "var(--font-heading, 'Outfit', sans-serif)", fontSize: "clamp(36px, 5vw, 56px)", fontWeight: 900, letterSpacing: "-0.04em", lineHeight: 1.05, color: "#0e1109", marginBottom: "20px" }}>
+      <h1 style={{ fontFamily: "var(--font-heading)", fontSize: "clamp(36px, 5vw, 56px)", fontWeight: 900, letterSpacing: "-0.04em", lineHeight: 1.05, color: "#0e1109", marginBottom: "20px" }}>
         {settings.titleSource === "custom" && settings.customTitle ? settings.customTitle : "{{service.name}}"}
       </h1>
       <p style={{ fontSize: "17px", color: "#4b5249", lineHeight: 1.75, maxWidth: "520px", marginBottom: "28px" }}>

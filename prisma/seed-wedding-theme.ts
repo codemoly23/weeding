@@ -68,9 +68,9 @@ const COLOR_PALETTE = {
   },
 };
 const FONT_CONFIG = {
-  headingFont: "Cormorant Garamond",
-  bodyFont: "Lato",
-  accentFont: "Georgia",
+  headingFont: "Inter",
+  bodyFont: "Inter",
+  accentFont: "Inter",
 };
 
 // ─── 2. Sample vendors ────────────────────────────────────────────────────────
