@@ -245,20 +245,21 @@ function SecondaryBtn({ label, href, icon, isPreview, isLight }: BtnProps) {
         display: "inline-flex",
         alignItems: "center",
         gap: "0.5rem",
-        padding: "0.875rem 2rem",
+        padding: "1rem 2.75rem",
         background: isLight
           ? hovered ? "#f8f8f8" : "white"
           : hovered ? "rgba(255,255,255,0.3)" : "rgba(255,255,255,0.2)",
         color: isLight ? "#374151" : "white",
         border: isLight ? "1.5px solid #e5e7eb" : "2px solid white",
-        borderRadius: "9999px",
-        fontWeight: 600,
-        fontSize: "1rem",
+        borderRadius: "12px",
+        fontWeight: 700,
+        fontSize: "1.0625rem",
         cursor: isPreview ? "default" : "pointer",
         backdropFilter: isLight ? undefined : "blur(8px)",
         boxShadow: isLight
           ? hovered ? "0 4px 12px rgba(0,0,0,0.08)" : "0 1px 3px rgba(0,0,0,0.06)"
           : undefined,
+        transform: hovered ? "translateY(-2px)" : "translateY(0)",
         transition: "all 0.2s ease",
       }}
       onMouseEnter={() => setHovered(true)}
