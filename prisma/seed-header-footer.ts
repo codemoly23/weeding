@@ -67,6 +67,8 @@ async function seedHeaderFooter() {
     { label: "Ideas",           url: "/ideas",             sortOrder: 5, isMegaMenu: true },
     { label: "Registry",        url: "/registry",          sortOrder: 6, isMegaMenu: true, megaMenuColumns: 4 },
     { label: "Wedding Website", url: "/wedding-website",   sortOrder: 7, isMegaMenu: true, megaMenuColumns: 4 },
+    { label: "About Us",        url: "/about",             sortOrder: 8, isMegaMenu: false },
+    { label: "Contact Us",      url: "/contact",           sortOrder: 9, isMegaMenu: false },
   ];
 
   for (const item of menuItems) {
