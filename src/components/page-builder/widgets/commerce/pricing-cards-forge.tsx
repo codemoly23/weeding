@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useState } from "react";
 import Link from "next/link";
@@ -95,7 +95,7 @@ function InfoTooltip({ text }: { text: string }) {
     <span
       className="info-icon relative inline-flex items-center justify-center w-3.5 h-3.5 rounded-full border-[1.5px] border-[rgba(14,17,9,0.16)] bg-transparent text-[9px] font-bold ml-1.5 cursor-default shrink-0 group/tip"
       style={{
-        fontFamily: "var(--font-accent, Georgia, serif)",
+        fontFamily: "var(--font-accent)",
         color: TEXT_FAINT,
       }}
       onMouseEnter={(e) => { e.currentTarget.style.borderColor = FOREST; e.currentTarget.style.color = FOREST; e.currentTarget.style.backgroundColor = FOREST_LIGHT; }}
@@ -244,7 +244,7 @@ export function PricingCardsForge({
               <div
                 className="absolute -top-3.5 left-1/2 -translate-x-1/2 px-4 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider text-white whitespace-nowrap z-10"
                 style={{
-                  fontFamily: "var(--font-heading, Outfit, sans-serif)",
+                  fontFamily: "var(--font-heading)",
                   backgroundColor: FOREST,
                 }}
               >
@@ -273,7 +273,7 @@ export function PricingCardsForge({
               <div
                 className="text-[11px] font-bold uppercase tracking-[1.2px] mb-2"
                 style={{
-                  fontFamily: "var(--font-heading, Outfit, sans-serif)",
+                  fontFamily: "var(--font-heading)",
                   color: TEXT_FAINT,
                 }}
               >
@@ -285,7 +285,7 @@ export function PricingCardsForge({
             <h3
               className="text-[26px] font-extrabold mb-1.5 pr-7"
               style={{
-                fontFamily: "var(--font-heading, Outfit, sans-serif)",
+                fontFamily: "var(--font-heading)",
                 color: INK,
               }}
             >
@@ -304,7 +304,7 @@ export function PricingCardsForge({
               <div
                 className="flex items-center gap-1.5 rounded-md px-3 py-2 mb-5 text-[11px] font-semibold"
                 style={{
-                  fontFamily: "var(--font-heading, Outfit, sans-serif)",
+                  fontFamily: "var(--font-heading)",
                   backgroundColor: FOREST_BG,
                   color: FOREST,
                 }}
@@ -326,7 +326,7 @@ export function PricingCardsForge({
                   <span
                     className="text-[52px] font-black leading-none tracking-[-0.04em]"
                     style={{
-                      fontFamily: "var(--font-heading, Outfit, sans-serif)",
+                      fontFamily: "var(--font-heading)",
                       color: INK,
                     }}
                   >
@@ -472,7 +472,7 @@ export function PricingCardsForge({
                         <span
                           className="text-[12px] font-bold whitespace-nowrap mr-1.5"
                           style={{
-                            fontFamily: "var(--font-heading, Outfit, sans-serif)",
+                            fontFamily: "var(--font-heading)",
                             color: TEXT_MID,
                           }}
                         >
@@ -541,7 +541,7 @@ export function PricingCardsForge({
                 "w-full flex items-center justify-center gap-2 py-3.5 px-5 rounded-xl font-semibold text-[15px] transition-all duration-200",
                 buttonStyles[override?.buttonVariant || "outline-dark"]
               )}
-              style={{ fontFamily: "var(--font-heading, Outfit, sans-serif)" }}
+              style={{ fontFamily: "var(--font-heading)" }}
               onClick={(e) => e.stopPropagation()}
             >
               Get Started →

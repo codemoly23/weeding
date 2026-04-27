@@ -45,7 +45,7 @@ function generateColorCSS(palette: ThemeColorPalette): string {
  */
 function generateFontCSS(fontConfig: ThemeFontConfig): string {
   const sansFallback = "ui-sans-serif, system-ui, sans-serif";
-  const accentFallback = "serif";
+  const accentFallback = "ui-sans-serif, system-ui, sans-serif";
 
   let css = `:root {\n`;
   css += `  --font-sans: "${fontConfig.bodyFont}", ${sansFallback};\n`;

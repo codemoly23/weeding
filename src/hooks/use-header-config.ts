@@ -58,8 +58,14 @@ export function useHeaderConfig(): UseHeaderConfigResult {
         cache: "no-store",
       });
 
+      if (response.status === 404) {
+        // No active header config in DB yet — use defaults silently
+        setConfig(defaultConfig);
+        return;
+      }
+
       if (!response.ok) {
-        throw new Error("Failed to fetch header config");
+        throw new Error(`Failed to fetch header config: ${response.status}`);
       }
 
       const data = await response.json();
@@ -67,7 +73,6 @@ export function useHeaderConfig(): UseHeaderConfigResult {
     } catch (err) {
       console.error("Error fetching header config:", err);
       setError(err instanceof Error ? err : new Error("Unknown error"));
-      // Use default config on error
       setConfig(defaultConfig);
     } finally {
       setIsLoading(false);

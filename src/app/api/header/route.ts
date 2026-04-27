@@ -39,6 +39,7 @@ export async function GET() {
     });
 
     if (!header) {
+      // No active config seeded yet — return 404 so the client can fall back to defaults
       return NextResponse.json(
         { error: "No active header configuration found" },
         { status: 404 }

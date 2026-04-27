@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import React, { useState, useCallback, useEffect } from "react";
 import Link from "next/link";
@@ -78,7 +78,7 @@ function InfoTooltip({ text }: { text: string }) {
   return (
     <span
       className="info-icon relative inline-flex items-center justify-center w-3.5 h-3.5 rounded-full border-[1.5px] border-[rgba(14,17,9,0.16)] bg-transparent text-[9px] font-bold ml-1.5 cursor-default shrink-0 group/tip"
-      style={{ fontFamily: "var(--font-accent, Georgia, serif)", color: "#8a9086" }}
+      style={{ fontFamily: "var(--font-accent)", color: "#8a9086" }}
       onMouseEnter={(e) => { e.currentTarget.style.borderColor = "#1b3a2d"; e.currentTarget.style.color = "#1b3a2d"; e.currentTarget.style.backgroundColor = "rgba(27,58,45,0.07)"; }}
       onMouseLeave={(e) => { e.currentTarget.style.borderColor = "rgba(14,17,9,0.16)"; e.currentTarget.style.color = "#8a9086"; e.currentTarget.style.backgroundColor = "transparent"; }}
     >
@@ -209,7 +209,7 @@ export function PricingTableForge({
               >
                 <div
                   className="px-7 pt-7 pb-6 text-[17px] font-extrabold text-[#0e1109]"
-                  style={{ fontFamily: "var(--font-heading, Outfit, sans-serif)" }}
+                  style={{ fontFamily: "var(--font-heading)" }}
                 >
                   Business Formation
                   <br />
@@ -242,7 +242,7 @@ export function PricingTableForge({
                       <div
                         className="absolute -top-[13px] left-1/2 -translate-x-1/2 px-3.5 py-1 rounded-full text-[10px] font-bold uppercase tracking-[0.6px] text-white whitespace-nowrap z-[3]"
                         style={{
-                          fontFamily: "var(--font-heading, Outfit, sans-serif)",
+                          fontFamily: "var(--font-heading)",
                           backgroundColor: "#e84c1e",
                         }}
                       >
@@ -267,7 +267,7 @@ export function PricingTableForge({
                             "text-[15px] font-extrabold tracking-[-0.01em]",
                             isActive ? "text-[#faf8f4]" : "text-[#0e1109]"
                           )}
-                          style={{ fontFamily: "var(--font-heading, Outfit, sans-serif)" }}
+                          style={{ fontFamily: "var(--font-heading)" }}
                         >
                           {pkg.name}
                         </span>
@@ -284,7 +284,7 @@ export function PricingTableForge({
                                   "text-[28px] font-black tracking-[-0.03em]",
                                   isActive ? "text-[#faf8f4]" : "text-[#0e1109]"
                                 )}
-                                style={{ fontFamily: "var(--font-heading, Outfit, sans-serif)" }}
+                                style={{ fontFamily: "var(--font-heading)" }}
                               >
                                 {currencySymbol}{Math.floor(pkg.price + addonTotal + locationFee)}
                               </span>
@@ -297,7 +297,7 @@ export function PricingTableForge({
                                 "text-[14px] font-semibold line-through ml-1.5 align-middle",
                                 isActive ? "text-[rgba(250,248,244,0.35)]" : "text-[#8a9086]"
                               )}
-                              style={{ fontFamily: "var(--font-heading, Outfit, sans-serif)" }}
+                              style={{ fontFamily: "var(--font-heading)" }}
                             >
                               {currencySymbol}{Math.floor(pkg.compareAtPrice)}
                             </span>
@@ -424,7 +424,7 @@ export function PricingTableForge({
                 >
                   <span
                     className="text-[13px] font-bold uppercase tracking-[1.2px] text-[#8a9086]"
-                    style={{ fontFamily: "var(--font-heading, Outfit, sans-serif)" }}
+                    style={{ fontFamily: "var(--font-heading)" }}
                   >
                     Optional Add-Ons
                   </span>
@@ -501,7 +501,7 @@ export function PricingTableForge({
                             {priceLabel && (
                               <span
                                 className="text-[12px] font-bold text-[#4b5249]"
-                                style={{ fontFamily: "var(--font-heading, Outfit, sans-serif)" }}
+                                style={{ fontFamily: "var(--font-heading)" }}
                               >
                                 {priceLabel}
                               </span>
@@ -575,7 +575,7 @@ export function PricingTableForge({
                         "w-full flex items-center justify-center gap-2 py-3.5 px-5 rounded-xl font-semibold text-[15px] transition-all duration-200",
                         buttonStyles[override?.buttonVariant || "outline-dark"]
                       )}
-                      style={{ fontFamily: "var(--font-heading, Outfit, sans-serif)" }}
+                      style={{ fontFamily: "var(--font-heading)" }}
                     >
                       Get Started →
                     </Link>

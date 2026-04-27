@@ -67,9 +67,9 @@ export const SYSTEM_FONTS = [
 ];
 
 export const DEFAULT_FONT_CONFIG: ThemeFontConfig = {
-  headingFont: "Outfit",
+  headingFont: "Inter",
   bodyFont: "Inter",
-  accentFont: "Georgia",
+  accentFont: "Inter",
 };
 
 // ---- Widget Presets (per-widget demo content) ----

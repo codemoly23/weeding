@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import React, { useEffect, useState, useMemo } from "react";
 import Link from "next/link";
@@ -546,7 +546,7 @@ function InfoTooltip({ text }: { text: string }) {
   return (
     <span
       className="relative inline-flex items-center justify-center w-3.5 h-3.5 rounded-full border-[1.5px] border-[rgba(14,17,9,0.16)] bg-transparent text-[9px] font-bold ml-1.5 cursor-default shrink-0 group/tip"
-      style={{ fontFamily: "var(--font-accent, Georgia, serif)", color: "#8a9086" }}
+      style={{ fontFamily: "var(--font-accent)", color: "#8a9086" }}
       onMouseEnter={(e) => { e.currentTarget.style.borderColor = "#1b3a2d"; e.currentTarget.style.color = "#1b3a2d"; e.currentTarget.style.backgroundColor = "rgba(27,58,45,0.07)"; }}
       onMouseLeave={(e) => { e.currentTarget.style.borderColor = "rgba(14,17,9,0.16)"; e.currentTarget.style.color = "#8a9086"; e.currentTarget.style.backgroundColor = "transparent"; }}
     >
@@ -657,7 +657,7 @@ function ComparisonTable({
               >
                 <div
                   className="px-7 pt-7 pb-6 text-[17px] font-extrabold text-[#0e1109]"
-                  style={{ fontFamily: "var(--font-heading, Outfit, sans-serif)" }}
+                  style={{ fontFamily: "var(--font-heading)" }}
                 >
                   Business Formation<br />Packages
                 </div>
@@ -684,7 +684,7 @@ function ComparisonTable({
                     {pkg.isPopular && (
                       <div
                         className="absolute -top-[13px] left-1/2 -translate-x-1/2 px-3.5 py-1 rounded-full text-[10px] font-bold uppercase tracking-[0.6px] text-white whitespace-nowrap z-[3] shadow-sm"
-                        style={{ fontFamily: "var(--font-heading, Outfit, sans-serif)", backgroundColor: CORAL }}
+                        style={{ fontFamily: "var(--font-heading)", backgroundColor: CORAL }}
                       >
                         {pkg.badgeText || "Recommended"}
                       </div>
@@ -701,7 +701,7 @@ function ComparisonTable({
                       >
                         <span
                           className={cn("text-[15px] font-extrabold tracking-[-0.01em]", isActive ? "text-[#faf8f4]" : "text-[#0e1109]")}
-                          style={{ fontFamily: "var(--font-heading, Outfit, sans-serif)" }}
+                          style={{ fontFamily: "var(--font-heading)" }}
                         >
                           {pkg.name}
                         </span>
@@ -709,14 +709,14 @@ function ComparisonTable({
                         <span className="flex items-baseline gap-0.5 leading-[1.1] flex-wrap justify-center">
                           <span
                             className={cn("text-[28px] font-black tracking-[-0.03em]", isActive ? "text-[#faf8f4]" : "text-[#0e1109]")}
-                            style={{ fontFamily: "var(--font-heading, Outfit, sans-serif)" }}
+                            style={{ fontFamily: "var(--font-heading)" }}
                           >
                             {currencySymbol}{pkg.price + addonTotal}
                           </span>
                           {pkg.compareAtPrice && (
                             <span
                               className={cn("text-[14px] font-semibold line-through ml-1 align-middle", isActive ? "text-[rgba(250,248,244,0.35)]" : "text-[#8a9086]")}
-                              style={{ fontFamily: "var(--font-heading, Outfit, sans-serif)" }}
+                              style={{ fontFamily: "var(--font-heading)" }}
                             >
                               {currencySymbol}{pkg.compareAtPrice}
                             </span>
@@ -795,7 +795,7 @@ function ComparisonTable({
             {addonFeatures.length > 0 && (
               <tr>
                 <td colSpan={colCount + 1} className="border-b border-[rgba(14,17,9,0.08)] bg-[#faf8f4] px-7 pt-5 pb-2.5">
-                  <span className="text-[13px] font-bold uppercase tracking-[1.2px] text-[#8a9086]" style={{ fontFamily: "var(--font-heading, Outfit, sans-serif)" }}>
+                  <span className="text-[13px] font-bold uppercase tracking-[1.2px] text-[#8a9086]" style={{ fontFamily: "var(--font-heading)" }}>
                     Optional Add-Ons
                   </span>
                 </td>
@@ -827,7 +827,7 @@ function ComparisonTable({
                         </button>
                         <span className="text-[14px] font-medium text-[#1a1f16]">{feature.text}</span>
                         {addonPrice && (
-                          <span className="text-[12px] font-bold text-[#4b5249] ml-0.5" style={{ fontFamily: "var(--font-heading, Outfit, sans-serif)" }}>
+                          <span className="text-[12px] font-bold text-[#4b5249] ml-0.5" style={{ fontFamily: "var(--font-heading)" }}>
                             +{currencySymbol}{addonPrice}
                           </span>
                         )}
@@ -927,7 +927,7 @@ function ComparisonTable({
                         "w-full flex items-center justify-center gap-2 py-3.5 px-5 rounded-xl font-semibold text-[14px] border-[1.5px] transition-all duration-200",
                         btnClass
                       )}
-                      style={{ fontFamily: "var(--font-heading, Outfit, sans-serif)" }}
+                      style={{ fontFamily: "var(--font-heading)" }}
                     >
                       {settings.ctaButtons?.buttonText || "Get Started"} →
                     </Link>
