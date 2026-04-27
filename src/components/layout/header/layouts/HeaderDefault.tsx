@@ -34,7 +34,7 @@ export function HeaderDefault({
 
   return (
     <nav
-      className="container mx-auto flex items-center justify-between px-4"
+      className="container mx-auto flex items-center justify-between px-4 xl:px-6"
       style={{ height: `${config.height || 76}px` }}
     >
       {/* Logo - Left */}
@@ -44,7 +44,7 @@ export function HeaderDefault({
       />
 
       {/* Desktop Navigation - Center */}
-      <div className="hidden lg:flex lg:items-center lg:gap-x-8">
+      <div className="hidden lg:flex lg:items-center lg:gap-x-2 xl:gap-x-4">
         <Navigation
           items={navigation}
           serviceCategories={serviceCategories}
@@ -56,7 +56,7 @@ export function HeaderDefault({
       </div>
 
       {/* Desktop CTA - Right */}
-      <div className="hidden lg:flex lg:items-center lg:gap-x-4">
+      <div className="hidden lg:flex lg:items-center lg:gap-x-2 xl:gap-x-3">
         <SearchButton
           enabled={config.search?.enabled ?? false}
           serviceCategories={serviceCategories}

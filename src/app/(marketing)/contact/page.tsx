@@ -1,9 +1,8 @@
-// Force dynamic rendering - page depends on database content
 export const dynamic = "force-dynamic";
 
 import type { Metadata } from "next";
 import { WidgetSectionsRenderer } from "@/components/landing-page/widget-sections-renderer";
-import { NoTemplateFallback } from "@/components/templates/no-template-fallback";
+import { ContactPageContent } from "@/components/contact/contact-page-content";
 import { getContactTemplate } from "@/lib/templates/get-template";
 
 export const metadata: Metadata = {
@@ -15,13 +14,9 @@ export const metadata: Metadata = {
 export default async function ContactPage() {
   const template = await getContactTemplate();
 
-  return (
-    <>
-      {template ? (
-        <WidgetSectionsRenderer sections={template.sections} />
-      ) : (
-        <NoTemplateFallback pageType="contact" />
-      )}
-    </>
-  );
+  if (template) {
+    return <WidgetSectionsRenderer sections={template.sections} />;
+  }
+
+  return <ContactPageContent />;
 }

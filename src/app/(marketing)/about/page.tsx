@@ -2,7 +2,7 @@ export const dynamic = "force-dynamic";
 
 import type { Metadata } from "next";
 import { WidgetSectionsRenderer } from "@/components/landing-page/widget-sections-renderer";
-import { NoTemplateFallback } from "@/components/templates/no-template-fallback";
+import { AboutPageContent } from "@/components/about/about-page-content";
 import { getAboutTemplate } from "@/lib/templates/get-template";
 
 export const metadata: Metadata = {
@@ -14,13 +14,9 @@ export const metadata: Metadata = {
 export default async function AboutPage() {
   const template = await getAboutTemplate();
 
-  return (
-    <>
-      {template ? (
-        <WidgetSectionsRenderer sections={template.sections} />
-      ) : (
-        <NoTemplateFallback pageType="about" />
-      )}
-    </>
-  );
+  if (template) {
+    return <WidgetSectionsRenderer sections={template.sections} />;
+  }
+
+  return <AboutPageContent />;
 }
