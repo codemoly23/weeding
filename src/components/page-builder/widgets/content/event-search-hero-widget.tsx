@@ -489,12 +489,13 @@ export function EventSearchHeroWidget({
         <p
           style={{
             fontFamily: "Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
-            fontSize: "1.25rem",
+            fontSize: "20px",
             fontWeight: 400,
+            fontStyle: "normal",
+            lineHeight: "30px",
             color: "rgba(255, 255, 255, 0.9)",
             marginBottom: "2.5rem",
             maxWidth: "42rem",
-            lineHeight: 1.65,
           }}
         >
           {subtitle}

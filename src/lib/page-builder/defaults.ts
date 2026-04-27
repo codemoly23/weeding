@@ -2477,6 +2477,7 @@ export const DEFAULT_FEATURES_SHOWCASE_SETTINGS: FeaturesShowcaseWidgetSettings 
   badge: {
     show: true,
     text: "Powerful Features",
+    icon: "Sparkles",
   },
   heading: "Everything You Need to Plan Amazing Events",
   subheading: "From planning to execution, our all-in-one platform makes event management effortless",

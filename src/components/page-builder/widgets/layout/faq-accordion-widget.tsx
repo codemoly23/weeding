@@ -429,8 +429,8 @@ export function FaqAccordionWidget({
           </h2>
           {s.header.description && (
             <p
-              className="mt-3 text-xl"
-              style={{ color: hs.descriptionColor || undefined }}
+              className="mt-3"
+              style={{ fontSize: "20px", fontWeight: 400, fontStyle: "normal", lineHeight: "30px", color: hs.descriptionColor || undefined }}
             >
               {s.header.description}
             </p>

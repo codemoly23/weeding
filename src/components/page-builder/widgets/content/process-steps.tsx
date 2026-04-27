@@ -182,9 +182,11 @@ function SectionHeader({ settings, accentColor }: { settings: ProcessStepsWidget
             !description.customFontSize && descriptionSizeClasses[description.size]
           )}
           style={{
+            fontSize: description.customFontSize || "20px",
+            fontWeight: 400,
+            fontStyle: "normal",
+            lineHeight: description.lineHeight || "30px",
             color: description.color || "#64748b",
-            ...(description.customFontSize ? { fontSize: description.customFontSize } : {}),
-            ...(description.lineHeight ? { lineHeight: description.lineHeight } : {}),
           }}
         >
           {description.text}

@@ -44,8 +44,7 @@ export const getTrackingSettings = cache(async (): Promise<TrackingConfig | null
       gadsConversionLabel: settings.gadsConversionLabel,
       gadsDefaultValue: settings.gadsDefaultValue,
     };
-  } catch (error) {
-    console.error("Error fetching tracking settings:", error);
+  } catch {
     return null;
   }
 });

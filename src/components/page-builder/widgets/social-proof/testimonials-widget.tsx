@@ -335,14 +335,13 @@ export function TestimonialsWidget({ settings: partialSettings, isPreview = fals
           {/* Right side: Description */}
           {description.show && (
             <div
-              className={cn(
-                "shrink-0 max-w-[320px]",
-                !description.customFontSize && descriptionSizeClasses[description.size || DEFAULT_TESTIMONIALS_SETTINGS.header.description.size]
-              )}
+              className="shrink-0 max-w-[320px]"
               style={{
+                fontSize: description.customFontSize || "20px",
+                fontWeight: 400,
+                fontStyle: "normal",
+                lineHeight: description.lineHeight || "30px",
                 color: description.color || DEFAULT_TESTIMONIALS_SETTINGS.header.description.color,
-                ...(description.customFontSize ? { fontSize: description.customFontSize } : {}),
-                ...(description.lineHeight ? { lineHeight: description.lineHeight } : {}),
               }}
               dangerouslySetInnerHTML={{
                 __html: (description.text || DEFAULT_TESTIMONIALS_SETTINGS.header.description.text)
@@ -380,14 +379,13 @@ export function TestimonialsWidget({ settings: partialSettings, isPreview = fals
           {/* Description */}
           {description.show && (
             <p
-              className={cn(
-                "mt-4",
-                !description.customFontSize && descriptionSizeClasses[description.size || DEFAULT_TESTIMONIALS_SETTINGS.header.description.size]
-              )}
+              className="mt-4"
               style={{
+                fontSize: description.customFontSize || "20px",
+                fontWeight: 400,
+                fontStyle: "normal",
+                lineHeight: description.lineHeight || "30px",
                 color: description.color || DEFAULT_TESTIMONIALS_SETTINGS.header.description.color,
-                ...(description.customFontSize ? { fontSize: description.customFontSize } : {}),
-                ...(description.lineHeight ? { lineHeight: description.lineHeight } : {}),
               }}
             >
               {description.text || DEFAULT_TESTIMONIALS_SETTINGS.header.description.text}

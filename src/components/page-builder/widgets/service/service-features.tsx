@@ -1,4 +1,4 @@
-// ============================================
+﻿// ============================================
 // SERVICE FEATURES WIDGET
 // Displays service included features list with 4 style variants
 // ============================================
@@ -293,7 +293,7 @@ function DetailedFeatureCard({
 
       {/* Title */}
       <h3
-        style={{ fontFamily: "var(--font-heading, 'Outfit', sans-serif)" }}
+        style={{ fontFamily: "var(--font-heading)" }}
         className="text-[17px] font-bold tracking-[-0.01em] text-[#0e1109] mb-2"
       >
         {feature.text}

@@ -55,12 +55,12 @@ export function FeaturesShowcaseWidget({
                 display: "inline-flex",
                 alignItems: "center",
                 gap: "0.375rem",
-                padding: "0.375rem 1rem",
-                background: "rgba(253, 244, 255, 0.9)",
+                padding: "0.6rem 1.5rem",
+                background: "linear-gradient(to right, #ede9fe, #ffffff)",
                 border: "1px solid #d8b4fe",
                 borderRadius: "9999px",
                 marginBottom: "1.25rem",
-                fontSize: "0.8125rem",
+                fontSize: "0.9375rem",
                 fontWeight: 600,
                 color: "#7c3aed",
               }}
@@ -86,11 +86,13 @@ export function FeaturesShowcaseWidget({
           {/* Subheading */}
           <p
             style={{
-              fontSize: "1.25rem",
+              fontSize: "20px",
+              fontWeight: 400,
+              fontStyle: "normal",
+              lineHeight: "30px",
               color: "#64748b",
               maxWidth: "38rem",
               margin: "0 auto",
-              lineHeight: 1.6,
             }}
           >
             {subheading}
@@ -182,7 +184,7 @@ interface FeatureCardProps {
 function FeatureCard({ item, height, aspectRatio, isPreview }: FeatureCardProps) {
   const [hovered, setHovered] = useState(false);
 
-  const IconComponent = (LucideIcons as Record<string, React.ComponentType<{ size?: number; strokeWidth?: number; color?: string }>>)[item.icon] ?? LucideIcons.Star;
+  const IconComponent = (LucideIcons as unknown as Record<string, React.ComponentType<{ size?: number; strokeWidth?: number; color?: string }>>)[item.icon] ?? LucideIcons.Star;
 
   const wrapper = (
     // Perspective container

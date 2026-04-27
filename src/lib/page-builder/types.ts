@@ -4020,6 +4020,7 @@ export interface FeaturesShowcaseWidgetSettings {
   badge: {
     show: boolean;
     text: string;
+    icon?: string;
   };
   heading: string;
   subheading: string;

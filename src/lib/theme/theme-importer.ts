@@ -1009,13 +1009,14 @@ export async function importThemeData(
 
   // =============================================
   // REVALIDATION - Bust all cached pages/data
+  // Only available in Next.js request context (not during seeding)
   // =============================================
   try {
     revalidatePath("/", "layout");
     revalidateTag("services");
     revalidateTag("pages");
   } catch {
-    // revalidatePath/revalidateTag require Next.js server context (not available in seed scripts)
+    // Silently skip revalidation outside of Next.js request context (e.g. seed scripts)
   }
 
   const duration = Date.now() - startTime;
