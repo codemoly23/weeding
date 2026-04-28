@@ -107,8 +107,11 @@ export function MobileMenu({
   alwaysVisible = false,
 }: MobileMenuProps) {
   const { t } = useLanguage();
-  const [servicesOpen, setServicesOpen] = useState(false);
+  const [openItem, setOpenItem] = useState<string | null>(null);
   const isLoggedIn = !!(user || session?.user);
+
+  const toggleItem = (name: string) =>
+    setOpenItem((prev) => (prev === name ? null : name));
   const displayUser = user || session?.user;
 
   return (
@@ -148,23 +151,53 @@ export function MobileMenu({
           <div className="mt-6 flex flex-col gap-1">
             {navigation.map((item) => {
               const label = NAV_LABEL_MAP[item.name] ? t(NAV_LABEL_MAP[item.name]) : item.name;
-              if (item.hasDropdown) {
+              const isOpen = openItem === item.name;
+
+              // Simple dropdown (e.g. Company)
+              if (item.simpleDropdown && item.simpleDropdown.length > 0) {
                 return (
                   <div key={item.name}>
                     <button
-                      onClick={() => setServicesOpen(!servicesOpen)}
+                      onClick={() => toggleItem(item.name)}
                       className="flex w-full items-center justify-between rounded-md px-3 py-2 text-base font-medium text-foreground hover:bg-muted"
                     >
                       {label}
                       <ChevronDown
-                        className={cn(
-                          "h-4 w-4 transition-transform",
-                          servicesOpen && "rotate-180"
-                        )}
+                        className={cn("h-4 w-4 transition-transform", isOpen && "rotate-180")}
                       />
                     </button>
+                    {isOpen && (
+                      <div className="ml-2 mt-1 border-l-2 border-muted pl-4">
+                        {item.simpleDropdown.map((link) => (
+                          <SheetClose key={link.href} asChild>
+                            <Link
+                              href={link.href}
+                              className="block rounded-md px-2 py-2 text-sm text-muted-foreground hover:bg-muted hover:text-foreground"
+                            >
+                              {link.name}
+                            </Link>
+                          </SheetClose>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                );
+              }
 
-                    {servicesOpen && (
+              // Mega menu dropdown (e.g. Services)
+              if (item.hasDropdown) {
+                return (
+                  <div key={item.name}>
+                    <button
+                      onClick={() => toggleItem(item.name)}
+                      className="flex w-full items-center justify-between rounded-md px-3 py-2 text-base font-medium text-foreground hover:bg-muted"
+                    >
+                      {label}
+                      <ChevronDown
+                        className={cn("h-4 w-4 transition-transform", isOpen && "rotate-180")}
+                      />
+                    </button>
+                    {isOpen && (
                       <div className="ml-2 mt-2 space-y-4 border-l-2 border-muted pl-4">
                         {serviceCategories.map((category) => {
                           const CategoryIcon = getIcon(category.icon);

@@ -67,8 +67,7 @@ async function seedHeaderFooter() {
     { label: "Ideas",           url: "/ideas",             sortOrder: 5, isMegaMenu: true },
     { label: "Registry",        url: "/registry",          sortOrder: 6, isMegaMenu: true, megaMenuColumns: 4 },
     { label: "Wedding Website", url: "/wedding-website",   sortOrder: 7, isMegaMenu: true, megaMenuColumns: 4 },
-    { label: "About Us",        url: "/about",             sortOrder: 8, isMegaMenu: false },
-    { label: "Contact Us",      url: "/contact",           sortOrder: 9, isMegaMenu: false },
+    { label: "Company",         url: "#",                  sortOrder: 8, isMegaMenu: false },
   ];
 
   for (const item of menuItems) {
@@ -81,6 +80,27 @@ async function seedHeaderFooter() {
       },
     });
     console.log(`   ✓ Created menu item: ${item.label}`);
+  }
+
+  // Simple dropdown under Company
+  const companyMenuItem = await prisma.menuItem.findFirst({
+    where: { headerId: header.id, label: "Company" },
+  });
+
+  if (companyMenuItem) {
+    const companyChildren = [
+      { label: "About",           url: "/about",         sortOrder: 0 },
+      { label: "Contact",         url: "/contact",       sortOrder: 1 },
+      { label: "Privacy Policy",  url: "/privacy",       sortOrder: 2 },
+      { label: "Refund Policy",   url: "/refund-policy", sortOrder: 3 },
+      { label: "Cookies Consent", url: "/cookies",       sortOrder: 4 },
+    ];
+    for (const child of companyChildren) {
+      await prisma.menuItem.create({
+        data: { ...child, parentId: companyMenuItem.id, headerId: header.id, isMegaMenu: false, isVisible: true, visibleOnMobile: true },
+      });
+    }
+    console.log(`   ✓ Company dropdown: 5 items`);
   }
 
   // Mega menu under Planning Tools

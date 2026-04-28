@@ -403,6 +403,33 @@ function MegaMenuDropdown({ categories, columns, richContent }: MegaMenuProps) {
   );
 }
 
+function SimpleDropdown({ links }: { links: { name: string; href: string; icon?: string }[] }) {
+  return (
+    <div className="absolute left-0 top-full pt-2 z-50">
+      <div className="rounded-xl border bg-white py-2 shadow-xl min-w-[220px]">
+        {links.map((link) => {
+          const Icon = getIcon(link.icon);
+          const hasIcon = !!link.icon;
+          return (
+            <Link
+              key={link.href}
+              href={link.href}
+              className="flex items-center gap-3 px-4 py-2 text-sm text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
+            >
+              {hasIcon && (
+                <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-md bg-muted">
+                  <Icon className="h-3.5 w-3.5 text-foreground/70" />
+                </span>
+              )}
+              {link.name}
+            </Link>
+          );
+        })}
+      </div>
+    </div>
+  );
+}
+
 // Map of English nav item labels to translation keys
 const NAV_LABEL_MAP: Record<string, string> = {
   "Home": "nav.home",
@@ -415,6 +442,7 @@ const NAV_LABEL_MAP: Record<string, string> = {
   "Contact Us": "nav.contact",
   "Features": "nav.features",
   "Vendors": "nav.vendors",
+  "Company": "nav.company",
 };
 
 export function Navigation({
@@ -461,7 +489,7 @@ export function Navigation({
               style={{ color: isHovered ? navHoverColor : navColor }}
             >
               {label}
-              {item.hasDropdown && (
+              {(item.hasDropdown || (item.simpleDropdown && item.simpleDropdown.length > 0)) && (
                 <ChevronDown
                   className={cn(
                     "h-4 w-4 transition-transform",
@@ -471,8 +499,13 @@ export function Navigation({
               )}
             </Link>
 
+            {/* Simple Dropdown */}
+            {item.simpleDropdown && item.simpleDropdown.length > 0 && isHovered && (
+              <SimpleDropdown links={item.simpleDropdown} />
+            )}
+
             {/* Mega Menu Dropdown */}
-            {item.hasDropdown && isHovered && (
+            {item.hasDropdown && !item.simpleDropdown && isHovered && (
               <MegaMenuDropdown
                 categories={allServiceCategories?.[item.name] || serviceCategories}
                 columns={item.megaMenuColumns}
