@@ -73,7 +73,7 @@ async function seedFooterDesign() {
       // Text colors
       textColor:        "#c4b8e0",
       headingColor:     "#ffffff",
-      linkColor:        "rgba(255, 255, 255, 0.65)",
+      linkColor:        "rgba(255, 255, 255, 0.90)",
       linkHoverColor:   "#a855f7",
       accentColor:      "#a855f7",
       borderColor:      "#6b21a8",

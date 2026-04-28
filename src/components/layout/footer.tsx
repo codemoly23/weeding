@@ -1239,23 +1239,14 @@ export function Footer() {
     ) : null
   );
 
-  // Dynamic CSS for footer colors (uses direct interpolation for guaranteed application)
-  const linkColor = styling?.linkColor || "inherit";
-  const linkHoverColor = styling?.linkHoverColor || styling?.accentColor || "#22d3ee";
-  const headingColor = styling?.headingColor || "inherit";
   const FooterStyles = () => (
     <style>{`
       .footer-dynamic-styles .footer-link {
-        color: ${linkColor};
-        font-size: 0.875rem;
+        font-size: 1rem;
         line-height: 1.5rem;
         transition: color 0.2s ease;
       }
-      .footer-dynamic-styles .footer-link:hover {
-        color: ${linkHoverColor};
-      }
       .footer-dynamic-styles .footer-heading {
-        color: ${headingColor};
         font-size: ${styling?.headingSize === "xl" ? "1.25rem" : styling?.headingSize === "lg" ? "1.125rem" : styling?.headingSize === "base" ? "1rem" : "0.875rem"};
         font-weight: ${styling?.headingWeight === "bold" ? "700" : styling?.headingWeight === "semibold" ? "600" : "500"};
         line-height: 1.75rem;
@@ -1998,7 +1989,7 @@ export function Footer() {
           opacity={styling.bgPatternOpacity || 10}
         />
       )}
-      <div className="max-w-6xl mx-auto px-6 relative z-10">
+      <div className="max-w-7xl mx-auto px-6 relative z-10">
         {hasDynamicWidgets ? (
           (() => {
             const entries = Object.entries(widgetsByColumn!).filter(([, widgets]) => widgets.length > 0);
