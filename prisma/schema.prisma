@@ -515,7 +515,8 @@ model BlogCategory {
   parentId    String?
   createdAt   DateTime       @default(now())
   updatedAt   DateTime       @default(now()) @updatedAt
-  parent      BlogCategory?  @relation("CategoryHierarchy", fields: [parentId], references: [id], onDelete: Cascade)
+  /// Restrict prevents silent cascade-deletion of child categories; admin must re-assign or delete children first
+  parent      BlogCategory?  @relation("CategoryHierarchy", fields: [parentId], references: [id], onDelete: Restrict)
   children    BlogCategory[] @relation("CategoryHierarchy")
   posts       BlogPost[]     @relation("BlogCategoryToBlogPost")
 
@@ -739,7 +740,9 @@ model FormField {
   order            Int
   width            FieldWidth      @default(FULL)
   required         Boolean         @default(false)
+  /// JSON: { min?: number, max?: number, minLength?: number, maxLength?: number, pattern?: string, message?: string }
   validation       Json?
+  /// JSON: Array<{ label: string, value: string, icon?: string }>
   options          Json?
   dataSourceType   DataSourceType?
   dataSourceKey    String?
@@ -2141,7 +2144,8 @@ model VendorProfile {
   createdAt       DateTime       @default(now())
   updatedAt       DateTime       @updatedAt
 
-  user            User?                @relation(fields: [userId], references: [id], onDelete: SetNull)
+  /// Restrict prevents user account deletion while a vendor profile exists, preserving vendor review/conversation history
+  user            User?                @relation(fields: [userId], references: [id], onDelete: Restrict)
   inquiries       VendorInquiry[]
   reviews         VendorReview[]
   conversations   VendorConversation[]
@@ -2237,6 +2241,7 @@ model VendorConversation {
   inquiryId     String?          @unique
   guestName     String
   guestEmail    String
+  /// Nullable: conversation may exist without a linked project (e.g. pre-auth inquiries or direct vendor contact before project creation)
   projectId     String?
   coupleUserId  String?
   status        VendorConvStatus @default(ACTIVE)

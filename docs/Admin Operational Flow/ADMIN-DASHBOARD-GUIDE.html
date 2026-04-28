@@ -1,0 +1,1630 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ceremoney — Admin Dashboard Operational Guide</title>
+<style>
+  /* ── RESET & BASE ── */
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { font-size: 14px; }
+  body {
+    font-family: 'Segoe UI', Arial, sans-serif;
+    background: #f4f4f7;
+    color: #1a1a2e;
+    line-height: 1.6;
+  }
+
+  /* ── PRINT RULES ── */
+  @media print {
+    body { background: #fff; font-size: 11px; }
+    .no-print { display: none !important; }
+    .page-break { page-break-before: always; }
+    .page-break-avoid { page-break-inside: avoid; }
+    .cover { page-break-after: always; min-height: auto; padding: 60px 50px; }
+    .toc-page { page-break-after: always; }
+    section { page-break-inside: avoid; }
+    .module-card { page-break-inside: avoid; box-shadow: none; border: 1px solid #e0e0e0; }
+    .flow-box { page-break-inside: avoid; }
+    h1, h2, h3 { page-break-after: avoid; }
+    a { color: #1a1a2e; text-decoration: none; }
+  }
+
+  /* ── LAYOUT ── */
+  .container { max-width: 960px; margin: 0 auto; padding: 0 20px 60px; }
+
+  /* ── COVER PAGE ── */
+  .cover {
+    background: linear-gradient(135deg, #1a1a2e 0%, #16213e 40%, #0f3460 70%, #533483 100%);
+    color: #fff;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+    padding: 80px 80px;
+    position: relative;
+    overflow: hidden;
+  }
+  .cover::before {
+    content: '';
+    position: absolute;
+    top: -100px; right: -100px;
+    width: 500px; height: 500px;
+    background: radial-gradient(circle, rgba(255,255,255,0.04) 0%, transparent 70%);
+    border-radius: 50%;
+  }
+  .cover::after {
+    content: '';
+    position: absolute;
+    bottom: -80px; left: -80px;
+    width: 400px; height: 400px;
+    background: radial-gradient(circle, rgba(255,105,180,0.06) 0%, transparent 70%);
+    border-radius: 50%;
+  }
+  .cover-badge {
+    background: rgba(255,255,255,0.12);
+    border: 1px solid rgba(255,255,255,0.2);
+    color: rgba(255,255,255,0.85);
+    padding: 6px 18px;
+    border-radius: 20px;
+    font-size: 11px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-bottom: 32px;
+    display: inline-block;
+  }
+  .cover h1 {
+    font-size: 52px;
+    font-weight: 700;
+    line-height: 1.1;
+    margin-bottom: 16px;
+    letter-spacing: -1px;
+  }
+  .cover h1 span { color: #e879a0; }
+  .cover-subtitle {
+    font-size: 20px;
+    color: rgba(255,255,255,0.7);
+    margin-bottom: 48px;
+    font-weight: 300;
+  }
+  .cover-divider {
+    width: 60px; height: 3px;
+    background: linear-gradient(90deg, #e879a0, #7c3aed);
+    border-radius: 2px;
+    margin-bottom: 40px;
+  }
+  .cover-meta {
+    display: flex;
+    gap: 40px;
+    flex-wrap: wrap;
+  }
+  .cover-meta-item label {
+    display: block;
+    font-size: 10px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.45);
+    margin-bottom: 4px;
+  }
+  .cover-meta-item span {
+    font-size: 14px;
+    color: rgba(255,255,255,0.9);
+    font-weight: 500;
+  }
+  .cover-bottom {
+    position: absolute;
+    bottom: 40px; right: 80px;
+    font-size: 11px;
+    color: rgba(255,255,255,0.3);
+  }
+  .cover-sidebar-preview {
+    position: absolute;
+    right: 80px; top: 50%;
+    transform: translateY(-50%);
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 12px;
+    padding: 20px 24px;
+    min-width: 200px;
+  }
+  .cover-sidebar-preview h4 {
+    font-size: 10px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.4);
+    margin-bottom: 16px;
+  }
+  .csb-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 7px 0;
+    color: rgba(255,255,255,0.7);
+    font-size: 13px;
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+  }
+  .csb-item:last-child { border-bottom: none; }
+  .csb-dot {
+    width: 7px; height: 7px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+  .csb-badge {
+    margin-left: auto;
+    background: #e879a0;
+    color: #fff;
+    font-size: 10px;
+    padding: 1px 7px;
+    border-radius: 10px;
+    font-weight: 600;
+  }
+
+  /* ── TOC ── */
+  .toc-page {
+    background: #fff;
+    padding: 60px 80px;
+    min-height: 100vh;
+  }
+  .toc-page h2 {
+    font-size: 28px;
+    font-weight: 700;
+    color: #1a1a2e;
+    margin-bottom: 8px;
+  }
+  .toc-subtitle { color: #888; font-size: 13px; margin-bottom: 40px; }
+  .toc-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+  }
+  .toc-item {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 14px 16px;
+    background: #f8f8fc;
+    border-radius: 10px;
+    border-left: 3px solid transparent;
+    text-decoration: none;
+    color: #1a1a2e;
+    transition: all 0.2s;
+  }
+  .toc-item:hover { background: #f0f0f9; border-left-color: #7c3aed; }
+  .toc-num {
+    width: 28px; height: 28px;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 11px; font-weight: 700;
+    flex-shrink: 0;
+    color: #fff;
+  }
+  .toc-label { font-size: 13px; font-weight: 500; }
+  .toc-sub { font-size: 11px; color: #999; margin-top: 1px; }
+
+  /* ── SECTION HEADERS ── */
+  .section-header {
+    background: linear-gradient(135deg, #1a1a2e, #16213e);
+    color: #fff;
+    padding: 40px 50px 32px;
+    margin: 40px 0 0;
+    border-radius: 16px 16px 0 0;
+    position: relative;
+    overflow: hidden;
+  }
+  .section-header::after {
+    content: '';
+    position: absolute;
+    top: -30px; right: -30px;
+    width: 160px; height: 160px;
+    background: radial-gradient(circle, rgba(255,255,255,0.04), transparent 70%);
+    border-radius: 50%;
+  }
+  .section-num {
+    font-size: 11px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.4);
+    margin-bottom: 8px;
+  }
+  .section-header h2 {
+    font-size: 26px;
+    font-weight: 700;
+    margin-bottom: 6px;
+  }
+  .section-header p {
+    color: rgba(255,255,255,0.6);
+    font-size: 13px;
+  }
+  .section-header .route-tag {
+    position: absolute;
+    top: 32px; right: 50px;
+    background: rgba(255,255,255,0.1);
+    border: 1px solid rgba(255,255,255,0.15);
+    color: rgba(255,255,255,0.7);
+    font-family: monospace;
+    font-size: 12px;
+    padding: 5px 14px;
+    border-radius: 20px;
+  }
+
+  /* ── MODULE CARD ── */
+  .module-card {
+    background: #fff;
+    border-radius: 0 0 12px 12px;
+    box-shadow: 0 4px 24px rgba(0,0,0,0.06);
+    margin-bottom: 40px;
+    overflow: hidden;
+  }
+  .module-body { padding: 32px 40px; }
+
+  /* ── SUB SECTION ── */
+  .sub-section {
+    margin-bottom: 28px;
+    padding-bottom: 28px;
+    border-bottom: 1px solid #f0f0f5;
+  }
+  .sub-section:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
+  .sub-section h3 {
+    font-size: 15px;
+    font-weight: 600;
+    color: #1a1a2e;
+    margin-bottom: 14px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .sub-section h3::before {
+    content: '';
+    width: 3px; height: 16px;
+    background: linear-gradient(180deg, #7c3aed, #e879a0);
+    border-radius: 2px;
+    flex-shrink: 0;
+  }
+  .sub-section h4 {
+    font-size: 13px;
+    font-weight: 600;
+    color: #333;
+    margin: 16px 0 8px;
+  }
+
+  /* ── TABLES ── */
+  .data-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 12.5px;
+    margin: 12px 0;
+  }
+  .data-table th {
+    background: #f0f0f8;
+    color: #1a1a2e;
+    font-weight: 600;
+    padding: 9px 14px;
+    text-align: left;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  .data-table td {
+    padding: 9px 14px;
+    border-bottom: 1px solid #f5f5f8;
+    vertical-align: top;
+    color: #333;
+  }
+  .data-table tr:last-child td { border-bottom: none; }
+  .data-table tr:hover td { background: #fafafd; }
+
+  /* ── FLOW BOXES ── */
+  .flow-box {
+    background: #f8f8fd;
+    border: 1px solid #e8e8f4;
+    border-radius: 10px;
+    padding: 20px 24px;
+    margin: 12px 0;
+    font-family: monospace;
+    font-size: 12px;
+    color: #333;
+    line-height: 1.9;
+    white-space: pre-wrap;
+    word-break: break-word;
+  }
+
+  /* ── STEP LIST ── */
+  .step-list { list-style: none; margin: 12px 0; }
+  .step-list li {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 8px 0;
+    font-size: 13px;
+    color: #333;
+    border-bottom: 1px solid #f5f5f8;
+  }
+  .step-list li:last-child { border-bottom: none; }
+  .step-num {
+    width: 22px; height: 22px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #7c3aed, #e879a0);
+    color: #fff;
+    font-size: 10px;
+    font-weight: 700;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+    margin-top: 1px;
+  }
+
+  /* ── BADGES / TAGS ── */
+  .badge {
+    display: inline-flex;
+    align-items: center;
+    padding: 3px 10px;
+    border-radius: 12px;
+    font-size: 11px;
+    font-weight: 600;
+    margin: 2px 3px;
+  }
+  .badge-purple { background: #ede9fe; color: #7c3aed; }
+  .badge-pink   { background: #fce7f3; color: #be185d; }
+  .badge-green  { background: #dcfce7; color: #166534; }
+  .badge-red    { background: #fee2e2; color: #991b1b; }
+  .badge-blue   { background: #dbeafe; color: #1e40af; }
+  .badge-amber  { background: #fef3c7; color: #92400e; }
+  .badge-gray   { background: #f1f5f9; color: #475569; }
+
+  /* ── INFO CALLOUTS ── */
+  .callout {
+    display: flex;
+    gap: 12px;
+    padding: 14px 16px;
+    border-radius: 8px;
+    margin: 12px 0;
+    font-size: 12.5px;
+  }
+  .callout-icon { font-size: 16px; flex-shrink: 0; margin-top: 1px; }
+  .callout-purple { background: #f5f3ff; border-left: 3px solid #7c3aed; }
+  .callout-amber  { background: #fffbeb; border-left: 3px solid #f59e0b; }
+  .callout-red    { background: #fff5f5; border-left: 3px solid #ef4444; }
+  .callout-green  { background: #f0fdf4; border-left: 3px solid #22c55e; }
+
+  /* ── GRID LAYOUTS ── */
+  .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin: 12px 0; }
+  .three-col { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; margin: 12px 0; }
+
+  /* ── STAT CARDS ── */
+  .stat-card {
+    background: linear-gradient(135deg, #f8f8fd, #fff);
+    border: 1px solid #e8e8f4;
+    border-radius: 10px;
+    padding: 16px 18px;
+    text-align: center;
+  }
+  .stat-card .stat-icon { font-size: 22px; margin-bottom: 6px; }
+  .stat-card .stat-value { font-size: 22px; font-weight: 700; color: #1a1a2e; }
+  .stat-card .stat-label { font-size: 11px; color: #888; margin-top: 2px; }
+
+  /* ── QUICK REF BOX ── */
+  .qref-box {
+    background: linear-gradient(135deg, #1a1a2e, #0f3460);
+    color: #fff;
+    border-radius: 12px;
+    padding: 24px 28px;
+    margin: 16px 0;
+  }
+  .qref-box h4 { font-size: 12px; letter-spacing: 1.5px; text-transform: uppercase; color: rgba(255,255,255,0.45); margin-bottom: 14px; }
+  .qref-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 8px; }
+  .qref-item {
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 8px;
+    padding: 8px 12px;
+    font-size: 12px;
+  }
+  .qref-item .qref-label { color: rgba(255,255,255,0.45); font-size: 10px; margin-bottom: 2px; }
+  .qref-item .qref-url { color: rgba(255,255,255,0.85); font-family: monospace; font-size: 11px; }
+
+  /* ── CHECKLIST ── */
+  .checklist { list-style: none; margin: 10px 0; }
+  .checklist li {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 6px 0;
+    font-size: 13px;
+    color: #333;
+  }
+  .checklist li::before {
+    content: '□';
+    color: #7c3aed;
+    font-size: 14px;
+    flex-shrink: 0;
+    margin-top: -1px;
+  }
+
+  /* ── ROLE TABLE ── */
+  .role-icon { font-size: 14px; }
+
+  /* ── PAGE DIVIDER ── */
+  .divider {
+    height: 1px;
+    background: linear-gradient(90deg, transparent, #e0e0e8, transparent);
+    margin: 48px 0;
+  }
+
+  /* ── SIDEBAR FLOW VISUAL ── */
+  .sidebar-flow {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    background: #1a1a2e;
+    border-radius: 12px;
+    padding: 24px 20px;
+    font-size: 12px;
+    color: rgba(255,255,255,0.7);
+    width: 220px;
+    float: right;
+    margin: 0 0 20px 24px;
+  }
+  .sf-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 7px 10px;
+    border-radius: 8px;
+  }
+  .sf-active { background: rgba(124,58,237,0.25); color: #fff; }
+  .sf-child { padding-left: 28px; }
+  .sf-dot { width: 6px; height: 6px; border-radius: 50%; flex-shrink: 0; }
+  .sf-badge { margin-left: auto; background: #e879a0; color: #fff; font-size: 10px; padding: 1px 6px; border-radius: 8px; font-weight: 700; }
+
+  /* ── PAGE NUMBERS ── */
+  @page { margin: 15mm 15mm; }
+
+  /* ── PRINT HEADER/FOOTER ── */
+  .print-watermark {
+    position: fixed;
+    bottom: 20px; right: 20px;
+    font-size: 10px;
+    color: #ccc;
+    display: none;
+  }
+  @media print { .print-watermark { display: block; } }
+
+  /* ── TOC COLOR PALETTE ── */
+  .c1 { background: #7c3aed; }
+  .c2 { background: #e879a0; }
+  .c3 { background: #0ea5e9; }
+  .c4 { background: #10b981; }
+  .c5 { background: #f59e0b; }
+  .c6 { background: #ef4444; }
+  .c7 { background: #8b5cf6; }
+  .c8 { background: #06b6d4; }
+  .c9 { background: #84cc16; }
+  .c10 { background: #f97316; }
+
+  /* ── PRINT BUTTON ── */
+  .print-btn {
+    position: fixed;
+    bottom: 30px; right: 30px;
+    background: linear-gradient(135deg, #7c3aed, #e879a0);
+    color: #fff;
+    border: none;
+    padding: 14px 28px;
+    border-radius: 50px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    box-shadow: 0 8px 30px rgba(124,58,237,0.4);
+    z-index: 999;
+  }
+  .print-btn:hover { transform: translateY(-2px); }
+
+  /* ── FOOTER SECTION ── */
+  .doc-footer {
+    background: #1a1a2e;
+    color: rgba(255,255,255,0.5);
+    text-align: center;
+    padding: 40px;
+    margin-top: 60px;
+    font-size: 12px;
+  }
+</style>
+</head>
+<body>
+
+<!-- ══════════════════ COVER PAGE ══════════════════ -->
+<div class="cover">
+  <div class="cover-badge">Internal Operations Manual</div>
+  <h1>Ceremoney<br><span>Admin Dashboard</span><br>Guide</h1>
+  <p class="cover-subtitle">Complete Operational Flow for Platform Administrators</p>
+  <div class="cover-divider"></div>
+  <div class="cover-meta">
+    <div class="cover-meta-item">
+      <label>Version</label>
+      <span>1.0 — 2026</span>
+    </div>
+    <div class="cover-meta-item">
+      <label>Platform</label>
+      <span>Ceremoney SaaS</span>
+    </div>
+    <div class="cover-meta-item">
+      <label>Access Level</label>
+      <span>Admin & Above</span>
+    </div>
+    <div class="cover-meta-item">
+      <label>Admin URL</label>
+      <span>ceremoney.com/admin</span>
+    </div>
+  </div>
+
+  <div class="cover-sidebar-preview">
+    <h4>Sidebar Navigation</h4>
+    <div class="csb-item"><span class="csb-dot" style="background:#e879a0"></span> Dashboard</div>
+    <div class="csb-item"><span class="csb-dot" style="background:#f59e0b"></span> Orders <span class="csb-badge">5</span></div>
+    <div class="csb-item"><span class="csb-dot" style="background:#10b981"></span> Customers</div>
+    <div class="csb-item"><span class="csb-dot" style="background:#0ea5e9"></span> Content ▾</div>
+    <div class="csb-item"><span class="csb-dot" style="background:#8b5cf6"></span> Service Location</div>
+    <div class="csb-item"><span class="csb-dot" style="background:#06b6d4"></span> Venues</div>
+    <div class="csb-item"><span class="csb-dot" style="background:#ef4444"></span> Users</div>
+    <div class="csb-item"><span class="csb-dot" style="background:#84cc16"></span> Wedding Projects ▾</div>
+    <div class="csb-item"><span class="csb-dot" style="background:#f97316"></span> Appearance ▾</div>
+    <div class="csb-item"><span class="csb-dot" style="background:#7c3aed"></span> Settings ▾</div>
+  </div>
+
+  <div class="cover-bottom">Ceremoney Admin Guide v1.0 — Confidential</div>
+</div>
+
+<!-- ══════════════════ TABLE OF CONTENTS ══════════════════ -->
+<div class="toc-page page-break">
+  <h2>Table of Contents</h2>
+  <p class="toc-subtitle">10 modules, complete operational flow for every sidebar item</p>
+  <div class="toc-grid">
+    <a href="#s1" class="toc-item">
+      <div class="toc-num c1">1</div>
+      <div><div class="toc-label">Dashboard</div><div class="toc-sub">KPIs, Stats, Quick Actions, Live Feed</div></div>
+    </a>
+    <a href="#s2" class="toc-item">
+      <div class="toc-num c2">2</div>
+      <div><div class="toc-label">Orders</div><div class="toc-sub">List, Detail, Edit, Refund, Invoice</div></div>
+    </a>
+    <a href="#s3" class="toc-item">
+      <div class="toc-num c3">3</div>
+      <div><div class="toc-label">Customers</div><div class="toc-sub">Profile, Orders, Tickets, Actions</div></div>
+    </a>
+    <a href="#s4" class="toc-item">
+      <div class="toc-num c4">4</div>
+      <div><div class="toc-label">Content</div><div class="toc-sub">Blog, FAQ, Legal, Testimonials, Ticker</div></div>
+    </a>
+    <a href="#s5" class="toc-item">
+      <div class="toc-num c5">5</div>
+      <div><div class="toc-label">Service Location</div><div class="toc-sub">Place, Service, Location options</div></div>
+    </a>
+    <a href="#s6" class="toc-item">
+      <div class="toc-num c6">6</div>
+      <div><div class="toc-label">Venues</div><div class="toc-sub">Add, Edit, Feature, Activate venues</div></div>
+    </a>
+    <a href="#s7" class="toc-item">
+      <div class="toc-num c7">7</div>
+      <div><div class="toc-label">Users & Permissions</div><div class="toc-sub">Roles, Staff, Permission Matrix</div></div>
+    </a>
+    <a href="#s8" class="toc-item">
+      <div class="toc-num c8">8</div>
+      <div><div class="toc-label">Wedding Projects</div><div class="toc-sub">Monitor all active event projects</div></div>
+    </a>
+    <a href="#s9" class="toc-item">
+      <div class="toc-num c9">9</div>
+      <div><div class="toc-label">Appearance</div><div class="toc-sub">Page, Header, Menu, Footer, Themes</div></div>
+    </a>
+    <a href="#s10" class="toc-item">
+      <div class="toc-num c10">10</div>
+      <div><div class="toc-label">Settings</div><div class="toc-sub">Business, Payments, Email, Plugins, Data</div></div>
+    </a>
+  </div>
+
+  <div style="margin-top:36px; padding:20px 24px; background:#f8f8fc; border-radius:10px; border-left:3px solid #7c3aed;">
+    <p style="font-size:13px; color:#555; line-height:1.7;">
+      <strong>How to use this guide:</strong> Each section maps to one sidebar item in the admin dashboard.
+      For every section you will find: <em>what the page shows</em>, <em>what actions are available</em>,
+      <em>step-by-step workflows</em>, and <em>important notes</em>.
+      Follow the numbered steps exactly to manage the platform without prior training.
+    </p>
+  </div>
+</div>
+
+<div class="container">
+
+<!-- ══════════════════ SECTION 1 — DASHBOARD ══════════════════ -->
+<div id="s1" class="page-break">
+  <div class="section-header">
+    <div class="section-num">Section 01</div>
+    <h2>🏠 Dashboard</h2>
+    <p>Platform health at a glance. First screen after login.</p>
+    <span class="route-tag">/admin</span>
+  </div>
+  <div class="module-card">
+    <div class="module-body">
+
+      <div class="sub-section">
+        <h3>What You See Immediately After Login</h3>
+        <div class="three-col">
+          <div class="stat-card"><div class="stat-icon">💰</div><div class="stat-value" style="color:#7c3aed">$12,450</div><div class="stat-label">Total Revenue</div></div>
+          <div class="stat-card"><div class="stat-icon">📦</div><div class="stat-value" style="color:#0ea5e9">48</div><div class="stat-label">Total Orders</div></div>
+          <div class="stat-card"><div class="stat-icon">👥</div><div class="stat-value" style="color:#10b981">156</div><div class="stat-label">New Customers</div></div>
+        </div>
+        <p style="font-size:12px; color:#888; margin-top:8px;">Each stat card shows a percentage change vs last month. Red = decline, Green = growth. Cards auto-refresh every 60 seconds.</p>
+      </div>
+
+      <div class="sub-section">
+        <h3>Quick Actions — Most Used Shortcuts</h3>
+        <table class="data-table">
+          <tr><th>Button</th><th>What It Does</th><th>When to Use</th></tr>
+          <tr><td><span class="badge badge-amber">Pending Orders (3)</span></td><td>Goes to Orders filtered by "Pending" status</td><td>Every morning — process overnight orders</td></tr>
+          <tr><td><span class="badge badge-red">Open Tickets (5)</span></td><td>Goes to Tickets list — open issues</td><td>Check throughout the day</td></tr>
+        </table>
+      </div>
+
+      <div class="sub-section">
+        <h3>Recent Orders (Bottom Left)</h3>
+        <p style="font-size:13px; color:#555; margin-bottom:10px;">Shows the last 4 orders placed. Each row contains: Order ID, Status badge, Customer name, Amount, Date.</p>
+        <div class="callout callout-purple">
+          <span class="callout-icon">💡</span>
+          <div>Click <strong>"View All →"</strong> to go to the full orders list. Click any Order ID to open that order's detail page directly.</div>
+        </div>
+      </div>
+
+      <div class="sub-section">
+        <h3>Recent Tickets (Bottom Right)</h3>
+        <p style="font-size:13px; color:#555; margin-bottom:10px;">Shows the last 3 open support tickets. Each row: Subject, Ticket ID, Customer name, Priority badge.</p>
+        <p style="font-size:13px; color:#555;">Priority colors: <span class="badge badge-red">High</span> <span class="badge badge-amber">Medium</span> <span class="badge badge-gray">Low</span></p>
+      </div>
+
+      <div class="sub-section">
+        <h3>Activity Feed (Bottom)</h3>
+        <p style="font-size:13px; color:#555;">Live log of last 5 actions on the platform — new orders placed, new customers registered, tickets opened. Useful for monitoring activity without checking each module individually.</p>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════ SECTION 2 — ORDERS ══════════════════ -->
+<div id="s2" class="page-break">
+  <div class="section-header">
+    <div class="section-num">Section 02</div>
+    <h2>📦 Orders</h2>
+    <p>Manage all customer orders — view, filter, edit, refund, and generate invoices.</p>
+    <span class="route-tag">/admin/orders</span>
+  </div>
+  <div class="module-card">
+    <div class="module-body">
+
+      <div class="sub-section">
+        <h3>Orders List Page — What You See</h3>
+        <p style="font-size:13px; color:#555; margin-bottom:12px;">The sidebar badge <span class="badge badge-red">5</span> shows how many orders need attention (pending).</p>
+        <div class="two-col">
+          <div>
+            <h4>Status Summary Cards (Top)</h4>
+            <table class="data-table">
+              <tr><th>Card</th><th>Meaning</th></tr>
+              <tr><td><span class="badge badge-gray">Pending</span></td><td>Payment not yet received</td></tr>
+              <tr><td><span class="badge badge-blue">Processing</span></td><td>Payment done, being fulfilled</td></tr>
+              <tr><td><span class="badge badge-amber">In Progress</span></td><td>Service delivery started</td></tr>
+              <tr><td><span class="badge badge-green">Completed</span></td><td>Fully delivered</td></tr>
+            </table>
+          </div>
+          <div>
+            <h4>Filter Options</h4>
+            <ul class="checklist">
+              <li>Search by Order ID, customer name, or email</li>
+              <li>Filter by Status dropdown</li>
+              <li>Filter by Payment Status</li>
+              <li>Results paginate: 10 / 20 / 50 / 100 per page</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="sub-section">
+        <h3>Orders Table — Column by Column</h3>
+        <table class="data-table">
+          <tr><th>Column</th><th>What It Shows</th><th>Can You Edit?</th></tr>
+          <tr><td>☐ Checkbox</td><td>Select for bulk action</td><td>—</td></tr>
+          <tr><td>Order ID + Date</td><td>CRM-2025-ABC123 / Mar 10, 2025</td><td>No (auto-generated)</td></tr>
+          <tr><td>Customer</td><td>Full name + email</td><td>No (click to view profile)</td></tr>
+          <tr><td>Service + Package</td><td>Wedding Planning / Premium</td><td>No</td></tr>
+          <tr><td>Amount</td><td>kr3,499 (in order currency)</td><td>Only via Edit page</td></tr>
+          <tr><td>Status</td><td>Inline dropdown — change directly in table</td><td><strong>Yes — inline</strong></td></tr>
+          <tr><td>Payment Status</td><td>Paid / Failed / Pending badge</td><td>No</td></tr>
+          <tr><td>Actions ⋮</td><td>View, Edit, Send Email</td><td>—</td></tr>
+        </table>
+      </div>
+
+      <div class="sub-section">
+        <h3>Bulk Actions (Select Multiple Orders)</h3>
+        <p style="font-size:13px; color:#555; margin-bottom:8px;">Check multiple order rows → a bulk action bar appears at the top.</p>
+        <ul class="step-list">
+          <li><span class="step-num">1</span><span>Check the header checkbox to select all visible orders, or check individually</span></li>
+          <li><span class="step-num">2</span><span>Bulk action bar appears: <strong>Mark as Processing</strong> / <strong>Mark as Completed</strong> / <strong>Mark as Cancelled</strong> / <strong>Delete</strong></span></li>
+          <li><span class="step-num">3</span><span>Click your action → confirmation dialog → confirm → all selected orders update</span></li>
+        </ul>
+        <div class="callout callout-amber"><span class="callout-icon">⚠️</span><div>Bulk Delete is permanent. Use only when orders are truly invalid or test data.</div></div>
+      </div>
+
+      <div class="sub-section">
+        <h3>Order Detail Page — Full Walkthrough</h3>
+        <p style="font-size:13px; color:#555; margin-bottom:12px;">Click <strong>View</strong> on any order row → opens /admin/orders/[id]</p>
+
+        <h4>Header Action Buttons</h4>
+        <table class="data-table">
+          <tr><th>Button</th><th>What Happens</th></tr>
+          <tr><td>📧 Email Customer</td><td>Dialog opens — type message — Send. Customer receives email immediately.</td></tr>
+          <tr><td>⬇ Download Invoice</td><td>PDF invoice generates with Org.nr, VAT (25% for SE), invoice number. Downloads to your computer.</td></tr>
+          <tr><td>✏️ Edit</td><td>Opens edit page — adjust quantities, apply discount, change status.</td></tr>
+          <tr><td>Cancel Order</td><td>Confirmation dialog → status changes to CANCELLED. Send refund separately if needed.</td></tr>
+          <tr><td>Delete Order</td><td>Permanent deletion. Only use for test/invalid orders.</td></tr>
+        </table>
+
+        <h4>Order Progress Timeline</h4>
+        <div class="flow-box">✅ Order Placed  →  ✅ Payment Confirmed  →  🔄 Processing  →  ⬜ In Progress  →  ⬜ Completed
+
+Each step auto-marks when status changes. You can see exactly where each order stands.</div>
+
+        <h4>Right Sidebar — Payment & Quick Actions</h4>
+        <table class="data-table">
+          <tr><th>Section</th><th>What To Do Here</th></tr>
+          <tr><td>Payment Info</td><td>Change Payment Status via dropdown. See Transaction ID for Stripe reference.</td></tr>
+          <tr><td>Quick Actions</td><td>Send Status Update email, Generate Invoice, Copy Payment Link, Resend Documents</td></tr>
+          <tr><td>Internal Notes</td><td>Write private notes for your team — customer cannot see these.</td></tr>
+        </table>
+      </div>
+
+      <div class="sub-section">
+        <h3>Order Status — Full Reference</h3>
+        <table class="data-table">
+          <tr><th>Status</th><th>Meaning</th><th>Admin Action Required</th></tr>
+          <tr><td><span class="badge badge-gray">PENDING</span></td><td>Awaiting payment</td><td>Monitor — send reminder if > 1 hour</td></tr>
+          <tr><td><span class="badge badge-blue">PROCESSING</span></td><td>Payment received, being fulfilled</td><td>Fulfill service, update when done</td></tr>
+          <tr><td><span class="badge badge-amber">IN PROGRESS</span></td><td>Service delivery started</td><td>Update when completed</td></tr>
+          <tr><td><span class="badge badge-green">COMPLETED</span></td><td>Fully delivered</td><td>None — archive</td></tr>
+          <tr><td><span class="badge badge-red">CANCELLED</span></td><td>Voided before completion</td><td>Issue refund if payment taken</td></tr>
+          <tr><td><span class="badge badge-gray">REFUNDED</span></td><td>Money returned to customer</td><td>None — Stripe handles disbursement</td></tr>
+        </table>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════ SECTION 3 — CUSTOMERS ══════════════════ -->
+<div id="s3" class="page-break">
+  <div class="section-header">
+    <div class="section-num">Section 03</div>
+    <h2>👥 Customers</h2>
+    <p>View and manage all registered customers — profiles, orders, tickets, and account actions.</p>
+    <span class="route-tag">/admin/customers</span>
+  </div>
+  <div class="module-card">
+    <div class="module-body">
+
+      <div class="sub-section">
+        <h3>Customer List Page</h3>
+        <div class="two-col">
+          <div>
+            <h4>Stats Cards (Top)</h4>
+            <table class="data-table">
+              <tr><th>Card</th><th>Shows</th></tr>
+              <tr><td>Total Customers</td><td>All registered accounts</td></tr>
+              <tr><td>Active</td><td>Accounts that can log in</td></tr>
+              <tr><td>Total Revenue</td><td>Sum of all customer spending</td></tr>
+              <tr><td>Avg Order Value</td><td>Total revenue ÷ orders</td></tr>
+            </table>
+          </div>
+          <div>
+            <h4>Filter Options</h4>
+            <ul class="checklist">
+              <li>Search by name or email</li>
+              <li>Status: All / Active / Inactive</li>
+              <li>Country dropdown filter</li>
+              <li>Export button — downloads CSV of all customers</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="sub-section">
+        <h3>Customer Row Actions (Actions ⋮ dropdown)</h3>
+        <table class="data-table">
+          <tr><th>Action</th><th>What It Does</th></tr>
+          <tr><td>View Profile</td><td>Opens full customer detail page</td></tr>
+          <tr><td>Edit</td><td>Edit name, email, phone, country directly</td></tr>
+          <tr><td>Send Email</td><td>Opens email dialog — send direct message to this customer</td></tr>
+          <tr><td>Disable Account</td><td>Customer can no longer log in. Data preserved. Toggle back to re-enable.</td></tr>
+        </table>
+      </div>
+
+      <div class="sub-section">
+        <h3>Customer Detail Page — Tabs</h3>
+        <p style="font-size:13px; color:#555; margin-bottom:12px;">Click "View Profile" on any row → opens /admin/customers/[id]. Header shows name, avatar, status badge.</p>
+
+        <table class="data-table">
+          <tr><th>Tab</th><th>What You See</th><th>What You Can Do</th></tr>
+          <tr><td><strong>Orders</strong></td><td>All orders by this customer: ID, Service, Amount, Status, Date</td><td>Click Order ID → opens order detail</td></tr>
+          <tr><td><strong>Documents</strong></td><td>All uploaded documents: Name, Type, Date, Status</td><td>Download button per document</td></tr>
+          <tr><td><strong>Tickets</strong></td><td>All support tickets filed: ID, Subject, Date, Status</td><td>Click Ticket ID → opens ticket detail</td></tr>
+          <tr><td><strong>Activity</strong></td><td>Timeline of all account actions with timestamps</td><td>Read-only audit trail</td></tr>
+        </table>
+
+        <h4>Right Sidebar — Quick Actions</h4>
+        <table class="data-table">
+          <tr><th>Button</th><th>Action</th></tr>
+          <tr><td>Send Email</td><td>Opens email compose dialog</td></tr>
+          <tr><td>Reset Password</td><td>Sends password reset link to customer's email. Link expires in 24 hours.</td></tr>
+          <tr><td>Create Ticket</td><td>Opens new ticket on behalf of this customer</td></tr>
+          <tr><td>Disable Account</td><td>Blocks login — use for violations or GDPR requests</td></tr>
+        </table>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════ SECTION 4 — CONTENT ══════════════════ -->
+<div id="s4" class="page-break">
+  <div class="section-header">
+    <div class="section-num">Section 04</div>
+    <h2>📝 Content</h2>
+    <p>Manage all public-facing content: blog, FAQs, legal pages, testimonials, and announcement ticker.</p>
+    <span class="route-tag">/admin/content</span>
+  </div>
+  <div class="module-card">
+    <div class="module-body">
+
+      <!-- BLOG -->
+      <div class="sub-section">
+        <h3>Blog Posts &nbsp;<span class="badge badge-purple">/admin/content/blog</span></h3>
+        <div class="two-col">
+          <div>
+            <h4>Status Filter Tabs</h4>
+            <p style="font-size:12.5px; color:#555;">Click a tab to filter: <span class="badge badge-gray">All Posts</span> <span class="badge badge-green">Published</span> <span class="badge badge-amber">Drafts</span> <span class="badge badge-gray">Archived</span></p>
+            <h4 style="margin-top:14px;">Row Actions</h4>
+            <table class="data-table">
+              <tr><th>Icon</th><th>Action</th></tr>
+              <tr><td>🔗 View</td><td>Open on public site (published only)</td></tr>
+              <tr><td>✏️ Edit</td><td>Opens full post editor</td></tr>
+              <tr><td>Status dropdown</td><td>Change status inline</td></tr>
+              <tr><td>🗑️ Delete</td><td>Confirmation → permanent delete</td></tr>
+            </table>
+          </div>
+          <div>
+            <h4>Creating a New Post — Steps</h4>
+            <ul class="step-list">
+              <li><span class="step-num">1</span><span>Click "+ New Post" (top right)</span></li>
+              <li><span class="step-num">2</span><span>Write title — slug auto-generates (editable)</span></li>
+              <li><span class="step-num">3</span><span>Write content in rich text editor</span></li>
+              <li><span class="step-num">4</span><span>Upload featured image</span></li>
+              <li><span class="step-num">5</span><span>Fill SEO tab: meta title, description, og:image</span></li>
+              <li><span class="step-num">6</span><span>Assign category, add tags</span></li>
+              <li><span class="step-num">7</span><span>Publish now OR set schedule date/time</span></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- FAQ -->
+      <div class="sub-section">
+        <h3>FAQs &nbsp;<span class="badge badge-blue">/admin/content/faq</span></h3>
+        <p style="font-size:13px; color:#555; margin-bottom:10px;">FAQs are grouped by category and shown on marketing pages.</p>
+        <div class="two-col">
+          <div>
+            <h4>Category Filter Tabs</h4>
+            <p style="font-size:12.5px; color:#555;">All | General | Pricing & Payments | International | Account & Support</p>
+            <h4 style="margin-top:12px;">Per FAQ Row Actions</h4>
+            <table class="data-table">
+              <tr><th>Icon</th><th>Action</th></tr>
+              <tr><td>👁 Toggle</td><td>Show or hide from public site</td></tr>
+              <tr><td>✏️ Edit</td><td>Edit question + answer</td></tr>
+              <tr><td>🗑️ Delete</td><td>Permanent delete</td></tr>
+            </table>
+          </div>
+          <div>
+            <h4>Add FAQ — Dialog Fields</h4>
+            <ul class="checklist">
+              <li>Category — dropdown</li>
+              <li>Question — text input</li>
+              <li>Answer — rich text editor (bold, italic, links, lists, headings)</li>
+              <li>Sort Order — controls display position</li>
+              <li>Active toggle — on = visible on site</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- LEGAL -->
+      <div class="sub-section">
+        <h3>Legal Pages &nbsp;<span class="badge badge-red">/admin/content/legal</span></h3>
+        <div class="callout callout-amber"><span class="callout-icon">⚠️</span><div>An <strong>amber alert bar</strong> at the top shows which required legal pages are missing (Terms, Privacy, Refund Policy, Disclaimer). Click "Create" next to each missing page to add it.</div></div>
+        <table class="data-table" style="margin-top:12px;">
+          <tr><th>Required Page</th><th>Slug</th><th>Review Frequency</th></tr>
+          <tr><td>Terms of Service</td><td><code>/terms-of-service</code></td><td>Annually</td></tr>
+          <tr><td>Privacy Policy</td><td><code>/privacy-policy</code></td><td>Annually + GDPR updates</td></tr>
+          <tr><td>Refund Policy</td><td><code>/refund-policy</code></td><td>Quarterly</td></tr>
+          <tr><td>Disclaimer</td><td><code>/disclaimer</code></td><td>Annually</td></tr>
+        </table>
+        <p style="font-size:12px; color:#888; margin-top:8px;">Version number auto-increments on each save. Full edit history is maintained.</p>
+      </div>
+
+      <!-- TESTIMONIALS -->
+      <div class="sub-section">
+        <h3>Testimonials &nbsp;<span class="badge badge-green">/admin/content/testimonials</span></h3>
+        <div class="two-col">
+          <div>
+            <h4>Grid View</h4>
+            <p style="font-size:12.5px; color:#555;">Shows as 3-column grid. Each card has: Avatar, Name, Company, Star rating (1–5), Quote, Tag badges.</p>
+            <h4 style="margin-top:12px;">Card Actions</h4>
+            <table class="data-table">
+              <tr><th>Action</th><th>Result</th></tr>
+              <tr><td>Hide/Show</td><td>Remove/restore from public site</td></tr>
+              <tr><td>Edit</td><td>Opens edit dialog</td></tr>
+              <tr><td>Delete</td><td>Permanent removal</td></tr>
+            </table>
+          </div>
+          <div>
+            <h4>Add Testimonial — Fields</h4>
+            <ul class="checklist">
+              <li>Type: Photo or Video</li>
+              <li>Name, Company, Country</li>
+              <li>Star rating (click stars)</li>
+              <li>Photo: Avatar upload</li>
+              <li>Video: Video URL + Thumbnail URL</li>
+              <li>Testimonial text</li>
+              <li>Tags (multi-select)</li>
+              <li>Active toggle</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- TICKER -->
+      <div class="sub-section">
+        <h3>Ticker / Announcement Bar &nbsp;<span class="badge badge-amber">/admin/content/ticker</span></h3>
+        <p style="font-size:13px; color:#555; margin-bottom:10px;">The scrolling bar at the very top of your public website. Useful for promotions, announcements, and urgent notices.</p>
+        <table class="data-table">
+          <tr><th>Control</th><th>What It Does</th></tr>
+          <tr><td>Ticker name</td><td>Internal label — not shown publicly</td></tr>
+          <tr><td>Active toggle</td><td>ON = this ticker shows on the public site</td></tr>
+          <tr><td>Expand button</td><td>Shows all ticker items inside this group</td></tr>
+          <tr><td>Rich Text Editor (per item)</td><td>Bold, italic, text color, link, image — full formatting</td></tr>
+          <tr><td>Link URL + New tab checkbox</td><td>Make ticker text clickable with optional external link</td></tr>
+          <tr><td>↑↓ Move up/down</td><td>Change order items scroll in</td></tr>
+          <tr><td>+ Add Item</td><td>Add another scrolling text segment</td></tr>
+          <tr><td>💾 Save</td><td>Save all changes — updates live on site</td></tr>
+        </table>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════ SECTION 5 — SERVICE LOCATION ══════════════════ -->
+<div id="s5" class="page-break">
+  <div class="section-header">
+    <div class="section-num">Section 05</div>
+    <h2>📍 Service Location</h2>
+    <p>Manage the dropdown options shown in the homepage search bar.</p>
+    <span class="route-tag">/admin/service-locations</span>
+  </div>
+  <div class="module-card">
+    <div class="module-body">
+
+      <div class="sub-section">
+        <h3>What This Controls</h3>
+        <div class="callout callout-purple"><span class="callout-icon">💡</span><div>This page controls exactly what options customers see when they search on the homepage. The three columns — Place, Service, Location — fill the three homepage search dropdowns.</div></div>
+      </div>
+
+      <div class="sub-section">
+        <h3>Three Column Layout</h3>
+        <div class="three-col">
+          <div style="background:#f8f8fd; border-radius:10px; padding:16px; border:1px solid #e8e8f4;">
+            <h4 style="color:#7c3aed; margin-bottom:10px; margin-top:0;">Place</h4>
+            <p style="font-size:12px; color:#555; margin-bottom:10px;">Cities or regions where service is offered</p>
+            <p style="font-size:12px; color:#888;">Examples: Stockholm, Gothenburg, Malmö</p>
+          </div>
+          <div style="background:#f8f8fd; border-radius:10px; padding:16px; border:1px solid #e8e8f4;">
+            <h4 style="color:#0ea5e9; margin-bottom:10px; margin-top:0;">Service</h4>
+            <p style="font-size:12px; color:#555; margin-bottom:10px;">Types of services offered</p>
+            <p style="font-size:12px; color:#888;">Examples: Wedding Planning, Photography, Catering</p>
+          </div>
+          <div style="background:#f8f8fd; border-radius:10px; padding:16px; border:1px solid #e8e8f4;">
+            <h4 style="color:#10b981; margin-bottom:10px; margin-top:0;">Location (Tabbed)</h4>
+            <p style="font-size:12px; color:#555; margin-bottom:10px;">Sweden tab and International tab</p>
+            <p style="font-size:12px; color:#888;">Examples: SE: Uppsala | INT: London</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="sub-section">
+        <h3>How to Add / Edit / Delete an Option</h3>
+        <ul class="step-list">
+          <li><span class="step-num">1</span><span>Type the name in the "Add" input field at the top of the column</span></li>
+          <li><span class="step-num">2</span><span>Optionally add an icon name (Lucide icon library)</span></li>
+          <li><span class="step-num">3</span><span>Click the "Add" button — item appears in the list below</span></li>
+          <li><span class="step-num">4</span><span>To edit an item's icon: click the icon button to the left of the item name</span></li>
+          <li><span class="step-num">5</span><span>To delete: hover over the item — an ✕ button appears on the right — click it</span></li>
+          <li><span class="step-num">6</span><span>If a column has more than 5 items, a search box appears to filter the list</span></li>
+        </ul>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════ SECTION 6 — VENUES ══════════════════ -->
+<div id="s6" class="page-break">
+  <div class="section-header">
+    <div class="section-num">Section 06</div>
+    <h2>🏛️ Venues</h2>
+    <p>Add and manage event venues listed on the platform — wedding halls, party venues, specialty spaces.</p>
+    <span class="route-tag">/admin/venues</span>
+  </div>
+  <div class="module-card">
+    <div class="module-body">
+
+      <div class="sub-section">
+        <h3>Tabs — Venue Categories</h3>
+        <p style="font-size:13px; color:#555;">Three tabs filter venues by type. Each tab shows a count badge.</p>
+        <table class="data-table">
+          <tr><th>Tab</th><th>Venue Types Included</th></tr>
+          <tr><td>Wedding Venues</td><td>Banquet Hall, Garden, Mansion, Winery, Beach Venue</td></tr>
+          <tr><td>Party & Event Venues</td><td>Conference Hall, Rooftop, Clubhouse, Studio</td></tr>
+          <tr><td>Specialty Venues</td><td>Historic Building, Art Gallery, Private Villa</td></tr>
+        </table>
+      </div>
+
+      <div class="sub-section">
+        <h3>Adding a New Venue</h3>
+        <p style="font-size:13px; color:#555; margin-bottom:10px;">A collapsible "Add Venue" form sits at the top of each tab.</p>
+        <table class="data-table">
+          <tr><th>Field</th><th>Example</th><th>Notes</th></tr>
+          <tr><td>Venue Name *</td><td>Grand Ballroom</td><td>Required</td></tr>
+          <tr><td>Type</td><td>Banquet Hall</td><td>Category-specific dropdown</td></tr>
+          <tr><td>Location</td><td>Stockholm, SE</td><td>City, Country format</td></tr>
+          <tr><td>Price</td><td>15000</td><td>Number only, set currency in Settings</td></tr>
+          <tr><td>Badge Text</td><td>Popular</td><td>Short label shown on card</td></tr>
+          <tr><td>Badge Color</td><td>Purple</td><td>None / Purple(Popular) / Orange(Featured) / Green(New)</td></tr>
+          <tr><td>Tags</td><td>Up to 300, Indoor</td><td>Comma-separated — shown as pills</td></tr>
+        </table>
+      </div>
+
+      <div class="sub-section">
+        <h3>Managing Existing Venues</h3>
+        <table class="data-table">
+          <tr><th>Action</th><th>How</th><th>Result</th></tr>
+          <tr><td>Edit venue details</td><td>Hover card → inline fields appear</td><td>Type directly, change is saved on blur</td></tr>
+          <tr><td>Feature a venue</td><td>Click ★ Feature button</td><td>Amber "Featured" badge appears — shows first in listings</td></tr>
+          <tr><td>Unfeature</td><td>Click ☆ again</td><td>Removes featured badge and priority listing</td></tr>
+          <tr><td>Activate / Deactivate</td><td>Toggle button on card</td><td>Inactive venues hidden from public site</td></tr>
+          <tr><td>Delete</td><td>Hover → ✕ appears top-right of card</td><td>Permanent — confirmation dialog</td></tr>
+        </table>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════ SECTION 7 — USERS ══════════════════ -->
+<div id="s7" class="page-break">
+  <div class="section-header">
+    <div class="section-num">Section 07</div>
+    <h2>👤 Users &amp; Permissions</h2>
+    <p>Manage all admin staff accounts and configure what each role can access.</p>
+    <span class="route-tag">/admin/users</span>
+  </div>
+  <div class="module-card">
+    <div class="module-body">
+
+      <div class="sub-section">
+        <h3>User List Page</h3>
+        <div class="two-col">
+          <div>
+            <h4>Stats Cards</h4>
+            <table class="data-table">
+              <tr><td>Total Users</td><td>All accounts (admin + customers)</td></tr>
+              <tr><td>Active (green)</td><td>Can currently log in</td></tr>
+              <tr><td>Inactive (red)</td><td>Disabled accounts</td></tr>
+              <tr><td>Admins (red badge)</td><td>Staff with admin-level access</td></tr>
+            </table>
+          </div>
+          <div>
+            <h4>Filter Options</h4>
+            <ul class="checklist">
+              <li>Search by name or email</li>
+              <li>Role: All / Admin / Content Manager / Sales Agent / Support Agent / Customer</li>
+              <li>Status: All / Active / Inactive</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="sub-section">
+        <h3>User Row Actions (Actions ⋮ dropdown)</h3>
+        <table class="data-table">
+          <tr><th>Action</th><th>What It Does</th></tr>
+          <tr><td>Change Role</td><td>Submenu lists all roles. Current role has ✓ checkmark. Click another role to switch immediately.</td></tr>
+          <tr><td>Disable User</td><td>Blocks login. Shown in red. Toggle back to Enable anytime.</td></tr>
+          <tr><td>Enable User</td><td>Restores login access. Shown in green.</td></tr>
+        </table>
+
+        <div class="callout callout-purple"><span class="callout-icon">💡</span><div>Role changes take effect immediately. The user's next page load will reflect their new permissions with no additional steps needed.</div></div>
+      </div>
+
+      <div class="sub-section">
+        <h3>Admin Staff Roles — What Each Can Do</h3>
+        <table class="data-table">
+          <tr><th>Role</th><th>Can Access</th><th>Cannot Access</th></tr>
+          <tr><td><span class="badge badge-red">Admin</span></td><td>Orders, Customers, Vendors, Leads, Tickets, Content, Marketing, Appearance, most Settings</td><td>Plugin management, Permission configuration</td></tr>
+          <tr><td><span class="badge badge-blue">Support Agent</span></td><td>Tickets (full), Live Chat, Canned Responses, view-only Orders</td><td>Customers (edit), Settings, Content, Marketing</td></tr>
+          <tr><td><span class="badge badge-green">Sales Agent</span></td><td>Leads (full), Vendors (approve/reject), Orders (view), Campaigns</td><td>Settings, Content editing, User management</td></tr>
+          <tr><td><span class="badge badge-purple">Content Manager</span></td><td>Blog, FAQs, Legal Pages, Testimonials, Ticker, Appearance</td><td>Orders, Customers, Settings, Financial data</td></tr>
+        </table>
+      </div>
+
+      <div class="sub-section">
+        <h3>Role Permissions Page &nbsp;<span class="badge badge-gray">/admin/users/permissions</span></h3>
+        <p style="font-size:13px; color:#555; margin-bottom:12px;">Click "Role Permissions" button (top-right of Users page) to access granular permission control.</p>
+        <ul class="step-list">
+          <li><span class="step-num">1</span><span>Select the role tab: Content Manager / Sales Agent / Support Agent</span></li>
+          <li><span class="step-num">2</span><span>Each category (e.g., "Content Management") shows a checkbox list of specific permissions</span></li>
+          <li><span class="step-num">3</span><span>Check/uncheck individual permissions. "Select All / Deselect All" button per category for bulk toggle.</span></li>
+          <li><span class="step-num">4</span><span>Orange dot badge = unsaved changes. Click <strong>"Save Changes"</strong> to apply.</span></li>
+          <li><span class="step-num">5</span><span>Changes apply to ALL users with that role immediately.</span></li>
+        </ul>
+        <div class="callout callout-amber"><span class="callout-icon">⚠️</span><div><strong>Admin</strong> and <strong>Customer</strong> roles are locked — they cannot be edited from this page.</div></div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════ SECTION 8 — WEDDING PROJECTS ══════════════════ -->
+<div id="s8" class="page-break">
+  <div class="section-header">
+    <div class="section-num">Section 08</div>
+    <h2>💍 Wedding Projects</h2>
+    <p>Monitor all active customer wedding planning projects across the platform.</p>
+    <span class="route-tag">/admin/planner</span>
+  </div>
+  <div class="module-card">
+    <div class="module-body">
+
+      <div class="sub-section">
+        <h3>What You See</h3>
+        <p style="font-size:13px; color:#555; margin-bottom:12px;">This is a <strong>read-only monitoring view</strong>. Admins do not edit customer projects here — only observe platform-wide usage.</p>
+        <table class="data-table">
+          <tr><th>Column</th><th>Shows</th></tr>
+          <tr><td>Project Title</td><td>"Anna & Erik Wedding" — the couple's project name</td></tr>
+          <tr><td>Owner</td><td>Customer account name linked to this project</td></tr>
+          <tr><td>Event Date</td><td>The wedding / event date set by customer</td></tr>
+          <tr><td>Guests</td><td>Number of guests added to guest list</td></tr>
+          <tr><td>Plan Tier</td><td><span class="badge badge-purple">Premium</span> or <span class="badge badge-pink">Elite</span> — their subscription</td></tr>
+          <tr><td>Status</td><td>Active / Completed / Draft</td></tr>
+        </table>
+      </div>
+
+      <div class="sub-section">
+        <h3>Stats Summary Cards</h3>
+        <p style="font-size:13px; color:#555;">Cards at the top show: Total Projects, Active (event date upcoming), Completed (past events), Drafts (not yet configured).</p>
+      </div>
+
+      <div class="sub-section">
+        <h3>Why Monitor This?</h3>
+        <ul class="checklist">
+          <li>Track platform adoption — are Premium/Elite customers actually using the planner?</li>
+          <li>Identify customers who signed up but never configured their project (→ trigger onboarding email)</li>
+          <li>Understand peak event dates for server capacity planning</li>
+          <li>Verify Elite plan customers are using collaboration features</li>
+        </ul>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════ SECTION 9 — APPEARANCE ══════════════════ -->
+<div id="s9" class="page-break">
+  <div class="section-header">
+    <div class="section-num">Section 09</div>
+    <h2>🎨 Appearance</h2>
+    <p>Control the visual design of the entire public website — pages, header, menu, footer, and themes.</p>
+    <span class="route-tag">/admin/appearance</span>
+  </div>
+  <div class="module-card">
+    <div class="module-body">
+
+      <!-- PAGE BUILDER -->
+      <div class="sub-section">
+        <h3>Page Builder &nbsp;<span class="badge badge-purple">/admin/appearance/landing-page</span></h3>
+        <p style="font-size:13px; color:#555; margin-bottom:12px;">Visual drag-and-drop builder for marketing landing pages. No coding needed.</p>
+        <div class="two-col">
+          <div>
+            <h4>Three-Panel Layout</h4>
+            <table class="data-table">
+              <tr><th>Panel</th><th>Purpose</th></tr>
+              <tr><td>Left — Block Library</td><td>Drag blocks from here: Hero, Features, Pricing, Testimonials, FAQ, CTA, Gallery, Stats</td></tr>
+              <tr><td>Center — Canvas</td><td>Live preview. Click a block to select. Drag to reorder.</td></tr>
+              <tr><td>Right — Settings</td><td>Edit selected block's content, colors, layout</td></tr>
+            </table>
+          </div>
+          <div>
+            <h4>Top Bar Actions</h4>
+            <ul class="step-list">
+              <li><span class="step-num">1</span><span>Toggle Desktop / Tablet / Mobile preview</span></li>
+              <li><span class="step-num">2</span><span>Undo / Redo buttons</span></li>
+              <li><span class="step-num">3</span><span>Preview button → opens in new tab</span></li>
+              <li><span class="step-num">4</span><span>Save Draft → saves without publishing</span></li>
+              <li><span class="step-num">5</span><span>Publish → makes page live immediately</span></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- HEADER BUILDER -->
+      <div class="sub-section">
+        <h3>Header Builder &nbsp;<span class="badge badge-blue">/admin/appearance/header</span></h3>
+        <div class="callout callout-amber"><span class="callout-icon">⚠️</span><div>Header changes affect the public site immediately on save. Always preview on mobile before saving.</div></div>
+        <div class="two-col" style="margin-top:12px;">
+          <div>
+            <h4>Layout Selector (5 options)</h4>
+            <table class="data-table">
+              <tr><td>Default</td><td>Logo left, Nav center, CTA right</td></tr>
+              <tr><td>Centered</td><td>Logo center, Nav below</td></tr>
+              <tr><td>Split</td><td>Logo center, Nav split on both sides</td></tr>
+              <tr><td>Minimal</td><td>Logo left, Hamburger icon right</td></tr>
+              <tr><td>Mega</td><td>Full-width mega menu style</td></tr>
+            </table>
+          </div>
+          <div>
+            <h4>Accordion Sections</h4>
+            <ul class="checklist">
+              <li>Logo Settings — upload logo, dark logo, favicon, show/hide business name</li>
+              <li>Navigation — mega menu toggle, mobile options</li>
+              <li>CTA Buttons — add/edit buttons with text, URL, style (Default / Outline / Ghost)</li>
+              <li>Top Bar — announcement text, enable/disable, custom style</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- MENU BUILDER -->
+      <div class="sub-section">
+        <h3>Menu Builder &nbsp;<span class="badge badge-green">/admin/appearance/header/menu</span></h3>
+        <p style="font-size:13px; color:#555; margin-bottom:12px;">Manage the main navigation menu items, order, and mega menu structure.</p>
+        <table class="data-table">
+          <tr><th>What You Can Do</th><th>How</th></tr>
+          <tr><td>Reorder menu items</td><td>Drag ⠿ handle left of each item</td></tr>
+          <tr><td>Add child items (dropdown)</td><td>Click ➕ on parent item → creates nested submenu</td></tr>
+          <tr><td>Enable Mega Menu</td><td>Edit item → toggle "Mega Menu" ON → set column count (2–5)</td></tr>
+          <tr><td>Show/Hide item</td><td>Toggle 👁 Eye icon — hidden items not shown in nav</td></tr>
+          <tr><td>Open in new tab</td><td>Edit item → Link Target → "New Tab"</td></tr>
+          <tr><td>Add badge to item</td><td>Edit item → Badge Text field (e.g., "New", "Hot")</td></tr>
+          <tr><td>Edit gallery/forum menus</td><td>Special editor icons on specific items (🖼️ for gallery, ⊞ for forums)</td></tr>
+        </table>
+      </div>
+
+      <!-- FOOTER BUILDER -->
+      <div class="sub-section">
+        <h3>Footer Builder &nbsp;<span class="badge badge-amber">/admin/appearance/footer</span></h3>
+        <div class="two-col">
+          <div>
+            <h4>Layout Options (8)</h4>
+            <p style="font-size:12.5px; color:#555;">Multi-Column, Centered, Minimal, Mega, Stacked, Asymmetric, Mega Plus, App Focused</p>
+            <h4 style="margin-top:12px;">3 Tabs</h4>
+            <table class="data-table">
+              <tr><td><strong>Widgets</strong></td><td>Add/manage content blocks in footer columns</td></tr>
+              <tr><td><strong>Styling</strong></td><td>Colors, fonts, spacing, shadows, animations</td></tr>
+              <tr><td><strong>Content</strong></td><td>Bottom bar, copyright text, bottom links</td></tr>
+            </table>
+          </div>
+          <div>
+            <h4>Widget Types Available</h4>
+            <ul class="checklist">
+              <li>Brand — logo + tagline</li>
+              <li>Links — custom link list</li>
+              <li>Contact — email, phone, address</li>
+              <li>Social — social media icons</li>
+              <li>Text — free text / HTML</li>
+              <li>Recent Posts — auto blog list</li>
+              <li>Services — auto service list</li>
+              <li>Newsletter — email signup form</li>
+              <li>Button — CTA button</li>
+              <li>Custom HTML — raw HTML</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- THEME GALLERY -->
+      <div class="sub-section">
+        <h3>Theme Gallery &nbsp;<span class="badge badge-red">/admin/appearance/themes</span></h3>
+        <div class="callout callout-red"><span class="callout-icon">🚨</span><div>Activating a theme changes the public website immediately. Always preview before activating. Choose "Apply Colors Only" if you only want to update the color scheme without demo content.</div></div>
+        <table class="data-table" style="margin-top:12px;">
+          <tr><th>Action</th><th>How</th><th>Effect</th></tr>
+          <tr><td>Preview a theme</td><td>Hover card to see description and services count</td><td>No change to live site</td></tr>
+          <tr><td>Activate with Demo Content</td><td>Click Activate → confirm dialog → "Activate with Demo Content"</td><td>Theme + sample pages/content apply to live site</td></tr>
+          <tr><td>Apply Colors Only</td><td>Click Activate → confirm dialog → "Apply Colors Only"</td><td>Only color scheme changes — existing content kept</td></tr>
+          <tr><td>Customize active theme</td><td>Click "Customize" on active theme card</td><td>Opens Theme Customizer</td></tr>
+          <tr><td>Save current design to theme</td><td>Click "Save Current Design to Theme" on active theme</td><td>Saves your custom settings back to the theme template</td></tr>
+        </table>
+
+        <h4>Theme Customizer — Two Tabs</h4>
+        <table class="data-table">
+          <tr><th>Tab</th><th>Controls</th></tr>
+          <tr><td>Colors</td><td>8 color groups (Base, Primary, Secondary, Muted, Accent, Card, Destructive, Borders). Toggle Light/Dark mode separately.</td></tr>
+          <tr><td>Fonts</td><td>Heading font, Body font, Accent font — all from Google Fonts. Live preview updates instantly.</td></tr>
+        </table>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════ SECTION 10 — SETTINGS ══════════════════ -->
+<div id="s10" class="page-break">
+  <div class="section-header">
+    <div class="section-num">Section 10</div>
+    <h2>⚙️ Settings</h2>
+    <p>Platform-wide configuration — business info, payments, email, storage, tracking, plugins, and data.</p>
+    <span class="route-tag">/admin/settings</span>
+  </div>
+  <div class="module-card">
+    <div class="module-body">
+
+      <!-- BUSINESS SETTINGS -->
+      <div class="sub-section">
+        <h3>Business Settings &nbsp;<span class="badge badge-purple">/admin/settings</span></h3>
+        <p style="font-size:13px; color:#555; margin-bottom:10px;">Default settings page. All fields here appear on the public website.</p>
+        <div class="two-col">
+          <div>
+            <table class="data-table">
+              <tr><th>Section</th><th>Fields</th></tr>
+              <tr><td>General Info</td><td>Business Name, Tagline, Description</td></tr>
+              <tr><td>Header Display</td><td>Show Logo toggle, Show Business Name toggle</td></tr>
+              <tr><td>Logo (Light)</td><td>Upload image + Logo Text fallback (2 chars max)</td></tr>
+              <tr><td>Logo (Dark)</td><td>Upload image for dark backgrounds</td></tr>
+              <tr><td>Favicon</td><td>Upload 16×16px browser tab icon</td></tr>
+              <tr><td>Contact Info</td><td>Contact Email, Support Email, Phone</td></tr>
+              <tr><td>Business Address</td><td>Address, City, State, ZIP, Country</td></tr>
+              <tr><td>Currency</td><td>Default currency dropdown (SEK, USD, EUR...)</td></tr>
+              <tr><td>Social Media</td><td>Facebook, Twitter/X, LinkedIn, Instagram, YouTube, TikTok URLs</td></tr>
+            </table>
+          </div>
+          <div class="callout callout-green" style="align-self:start; margin:0;">
+            <span class="callout-icon">✅</span>
+            <div><strong>Always click "Save Changes"</strong> after editing. Changes update the public site within 60 seconds after save due to CDN caching.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- PAYMENT SETTINGS -->
+      <div class="sub-section">
+        <h3>Payment Settings &nbsp;<span class="badge badge-green">/admin/settings/payments</span></h3>
+        <div class="callout callout-red"><span class="callout-icon">🔒</span><div>Always use <strong>Test Mode</strong> when setting up. Switch to Live Mode only after successful test transaction. Never share API keys.</div></div>
+        <div class="two-col" style="margin-top:12px;">
+          <div>
+            <h4>Stripe Setup Steps</h4>
+            <ul class="step-list">
+              <li><span class="step-num">1</span><span>Toggle "Enable Stripe" ON</span></li>
+              <li><span class="step-num">2</span><span>Set Mode to "Test Mode"</span></li>
+              <li><span class="step-num">3</span><span>Paste Publishable Key (pk_test_...)</span></li>
+              <li><span class="step-num">4</span><span>Paste Secret Key (sk_test_...)</span></li>
+              <li><span class="step-num">5</span><span>Paste Webhook Secret (whsec_...)</span></li>
+              <li><span class="step-num">6</span><span>Copy the Webhook URL shown → paste in Stripe Dashboard</span></li>
+              <li><span class="step-num">7</span><span>Click "Test Connection" → should show green Connected</span></li>
+              <li><span class="step-num">8</span><span>When ready for live: switch Mode to "Live Mode" → replace keys</span></li>
+            </ul>
+          </div>
+          <div>
+            <h4>PayPal Setup Steps</h4>
+            <ul class="step-list">
+              <li><span class="step-num">1</span><span>Toggle "Enable PayPal" ON</span></li>
+              <li><span class="step-num">2</span><span>Set Mode to "Sandbox Mode"</span></li>
+              <li><span class="step-num">3</span><span>Paste Client ID and Client Secret</span></li>
+              <li><span class="step-num">4</span><span>Paste Webhook ID</span></li>
+              <li><span class="step-num">5</span><span>Copy Webhook URL → paste in PayPal Developer Dashboard</span></li>
+              <li><span class="step-num">6</span><span>Click "Test Connection"</span></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- EMAIL SETTINGS -->
+      <div class="sub-section">
+        <h3>Email Settings &nbsp;<span class="badge badge-blue">/admin/settings/email</span></h3>
+        <p style="font-size:13px; color:#555; margin-bottom:10px;">Configure SMTP server for all transactional emails (orders, tickets, password resets).</p>
+        <div class="two-col">
+          <div>
+            <h4>SMTP Configuration</h4>
+            <table class="data-table">
+              <tr><th>Field</th><th>Example</th></tr>
+              <tr><td>SMTP Host</td><td>smtp.gmail.com</td></tr>
+              <tr><td>SMTP Port</td><td>587 (TLS) or 465 (SSL)</td></tr>
+              <tr><td>SSL/TLS toggle</td><td>ON for Gmail</td></tr>
+              <tr><td>Username</td><td>your@gmail.com</td></tr>
+              <tr><td>Password</td><td>Gmail App Password (not your login password)</td></tr>
+            </table>
+            <p style="font-size:11px; color:#888; margin-top:6px;">After filling fields: click "Send Test Email" → check inbox to confirm delivery.</p>
+          </div>
+          <div>
+            <h4>Notification Toggles</h4>
+            <ul class="checklist">
+              <li>Admin: New Order Notification</li>
+              <li>Customer: Order Placed confirmation</li>
+              <li>Customer: Order Confirmed</li>
+              <li>Customer: Order Processing update</li>
+              <li>Customer: Order Completed</li>
+              <li>Payment Successful confirmation</li>
+              <li>Payment Failed alert</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- MEDIA STORAGE -->
+      <div class="sub-section">
+        <h3>Media Storage &nbsp;<span class="badge badge-amber">/admin/settings/media-storage</span></h3>
+        <p style="font-size:13px; color:#555; margin-bottom:10px;">Connect Cloudflare R2 storage for all image and file uploads.</p>
+        <table class="data-table">
+          <tr><th>Field</th><th>Where to Find It</th></tr>
+          <tr><td>Account ID</td><td>Cloudflare Dashboard → R2 → Overview</td></tr>
+          <tr><td>Access Key ID</td><td>R2 → Manage R2 API Tokens</td></tr>
+          <tr><td>Secret Access Key</td><td>R2 → Manage R2 API Tokens (shown once)</td></tr>
+          <tr><td>Bucket Name</td><td>R2 → Your bucket name</td></tr>
+          <tr><td>Public URL</td><td>R2 bucket → Settings → Custom Domain</td></tr>
+        </table>
+        <p style="font-size:12px; color:#888; margin-top:8px;">After entering all fields: click "Test Connection". Green = working. If red, re-check the Access Key and Secret Key.</p>
+      </div>
+
+      <!-- TRACKING -->
+      <div class="sub-section">
+        <h3>Tracking &nbsp;<span class="badge badge-gray">/admin/settings/tracking</span></h3>
+        <div class="three-col">
+          <div style="background:#f8f8fd; border-radius:10px; padding:14px; border:1px solid #e8e8f4;">
+            <h4 style="margin-top:0; color:#1a1a2e;">Google Tag Manager</h4>
+            <p style="font-size:12px; color:#555;">Container ID: GTM-XXXXXX<br>Toggle: Form tracking, Page view tracking</p>
+          </div>
+          <div style="background:#f8f8fd; border-radius:10px; padding:14px; border:1px solid #e8e8f4;">
+            <h4 style="margin-top:0; color:#1a1a2e;">Facebook Pixel</h4>
+            <p style="font-size:12px; color:#555;">Pixel ID<br>Toggle: Lead, Page view, View content tracking</p>
+          </div>
+          <div style="background:#f8f8fd; border-radius:10px; padding:14px; border:1px solid #e8e8f4;">
+            <h4 style="margin-top:0; color:#1a1a2e;">Google Ads</h4>
+            <p style="font-size:12px; color:#555;">Conversion ID + Label + Default Value</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- PLUGINS -->
+      <div class="sub-section">
+        <h3>Plugins &nbsp;<span class="badge badge-red">/admin/settings/plugins</span></h3>
+        <table class="data-table">
+          <tr><th>Status</th><th>Meaning</th><th>Action</th></tr>
+          <tr><td><span class="badge badge-green">Active</span></td><td>Plugin running normally</td><td>Disable or go to Settings</td></tr>
+          <tr><td><span class="badge badge-gray">Disabled</span></td><td>Installed but turned off</td><td>Enable to activate</td></tr>
+          <tr><td><span class="badge badge-amber">Installed</span></td><td>Uploaded but needs license</td><td>Click "Activate License" → enter license key</td></tr>
+          <tr><td><span class="badge badge-red">Error</span></td><td>Plugin failed to load</td><td>Read error message → check compatibility</td></tr>
+        </table>
+      </div>
+
+      <!-- DATA MANAGEMENT -->
+      <div class="sub-section">
+        <h3>Data Management &nbsp;<span class="badge badge-red">/admin/settings/data</span></h3>
+        <div class="callout callout-red"><span class="callout-icon">🚨</span><div><strong>Reset Data is irreversible.</strong> It deletes services, pages, blogs, FAQs, testimonials, and settings. Customer accounts, orders, invoices, and leads are preserved. Always export a backup first.</div></div>
+        <table class="data-table" style="margin-top:12px;">
+          <tr><th>Action</th><th>How</th><th>What It Includes</th></tr>
+          <tr><td>Export Data</td><td>Click "Download Export File"</td><td>JSON: services, pages, blogs, FAQs, testimonials, settings</td></tr>
+          <tr><td>Import Data</td><td>Upload JSON → preview count → confirm Import</td><td>Same categories as export</td></tr>
+          <tr><td>Reset Data</td><td>Click Reset → type "RESET" in confirmation box</td><td>Deletes all content (NOT users/orders/leads)</td></tr>
+        </table>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════ QUICK REFERENCE ══════════════════ -->
+<div class="page-break" style="margin-top:40px;">
+  <div class="qref-box">
+    <h4>Quick Reference — All Admin URLs</h4>
+    <div class="qref-grid">
+      <div class="qref-item"><div class="qref-label">Dashboard</div><div class="qref-url">/admin</div></div>
+      <div class="qref-item"><div class="qref-label">Orders</div><div class="qref-url">/admin/orders</div></div>
+      <div class="qref-item"><div class="qref-label">Customers</div><div class="qref-url">/admin/customers</div></div>
+      <div class="qref-item"><div class="qref-label">Blog Posts</div><div class="qref-url">/admin/content/blog</div></div>
+      <div class="qref-item"><div class="qref-label">Blog Categories</div><div class="qref-url">/admin/content/blog-categories</div></div>
+      <div class="qref-item"><div class="qref-label">FAQs</div><div class="qref-url">/admin/content/faq</div></div>
+      <div class="qref-item"><div class="qref-label">Legal Pages</div><div class="qref-url">/admin/content/legal</div></div>
+      <div class="qref-item"><div class="qref-label">Testimonials</div><div class="qref-url">/admin/content/testimonials</div></div>
+      <div class="qref-item"><div class="qref-label">Ticker / Announcements</div><div class="qref-url">/admin/content/ticker</div></div>
+      <div class="qref-item"><div class="qref-label">Service Locations</div><div class="qref-url">/admin/service-locations</div></div>
+      <div class="qref-item"><div class="qref-label">Venues</div><div class="qref-url">/admin/venues</div></div>
+      <div class="qref-item"><div class="qref-label">Users</div><div class="qref-url">/admin/users</div></div>
+      <div class="qref-item"><div class="qref-label">Role Permissions</div><div class="qref-url">/admin/users/permissions</div></div>
+      <div class="qref-item"><div class="qref-label">Wedding Projects</div><div class="qref-url">/admin/planner</div></div>
+      <div class="qref-item"><div class="qref-label">Page Builder</div><div class="qref-url">/admin/appearance/landing-page</div></div>
+      <div class="qref-item"><div class="qref-label">Header Builder</div><div class="qref-url">/admin/appearance/header</div></div>
+      <div class="qref-item"><div class="qref-label">Menu Builder</div><div class="qref-url">/admin/appearance/header/menu</div></div>
+      <div class="qref-item"><div class="qref-label">Footer Builder</div><div class="qref-url">/admin/appearance/footer</div></div>
+      <div class="qref-item"><div class="qref-label">Theme Gallery</div><div class="qref-url">/admin/appearance/themes</div></div>
+      <div class="qref-item"><div class="qref-label">Theme Customize</div><div class="qref-url">/admin/appearance/themes/customize</div></div>
+      <div class="qref-item"><div class="qref-label">Business Settings</div><div class="qref-url">/admin/settings</div></div>
+      <div class="qref-item"><div class="qref-label">Payment Settings</div><div class="qref-url">/admin/settings/payments</div></div>
+      <div class="qref-item"><div class="qref-label">Email Settings</div><div class="qref-url">/admin/settings/email</div></div>
+      <div class="qref-item"><div class="qref-label">Media Storage</div><div class="qref-url">/admin/settings/media-storage</div></div>
+      <div class="qref-item"><div class="qref-label">Tracking / Analytics</div><div class="qref-url">/admin/settings/tracking</div></div>
+      <div class="qref-item"><div class="qref-label">Plugins</div><div class="qref-url">/admin/settings/plugins</div></div>
+      <div class="qref-item"><div class="qref-label">Data Export / Import</div><div class="qref-url">/admin/settings/data</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════ DAILY CHECKLIST ══════════════════ -->
+<div style="margin-top:40px; background:#fff; border-radius:16px; box-shadow:0 4px 24px rgba(0,0,0,0.06); padding:32px 40px;">
+  <h2 style="font-size:22px; font-weight:700; margin-bottom:6px;">📋 Daily Admin Checklist</h2>
+  <p style="font-size:13px; color:#888; margin-bottom:24px;">Run through this every morning. Takes 10–15 minutes.</p>
+  <div class="three-col">
+    <div>
+      <h4 style="color:#7c3aed; margin-bottom:10px;">Morning (Start of Day)</h4>
+      <ul class="checklist">
+        <li>Check dashboard stat cards for anomalies</li>
+        <li>Process overnight pending orders</li>
+        <li>Resolve any FAILED payment orders</li>
+        <li>Review urgent/high priority tickets</li>
+        <li>Check pending vendor applications</li>
+      </ul>
+    </div>
+    <div>
+      <h4 style="color:#0ea5e9; margin-bottom:10px;">During Day</h4>
+      <ul class="checklist">
+        <li>Monitor live chat queue</li>
+        <li>Respond to open tickets (&lt;4 hrs)</li>
+        <li>Process incoming orders</li>
+        <li>Review any new vendor signups</li>
+        <li>Check email delivery health</li>
+      </ul>
+    </div>
+    <div>
+      <h4 style="color:#10b981; margin-bottom:10px;">End of Day</h4>
+      <ul class="checklist">
+        <li>Ensure no tickets older than 8 hrs unresolved</li>
+        <li>Review today's orders summary</li>
+        <li>Check Vercel deployment logs for errors</li>
+        <li>Review any scheduled campaigns for tomorrow</li>
+        <li>Export daily report if needed</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+</div><!-- /container -->
+
+<!-- FOOTER -->
+<div class="doc-footer no-print">
+  Ceremoney Admin Dashboard Guide &nbsp;|&nbsp; Version 1.0 — 2026 &nbsp;|&nbsp; Confidential — Internal Use Only
+</div>
+
+<!-- PRINT BUTTON -->
+<button class="print-btn no-print" onclick="window.print()">
+  🖨️ Save as PDF
+</button>
+
+<script>
+// Smooth scroll for TOC links
+document.querySelectorAll('a[href^="#"]').forEach(a => {
+  a.addEventListener('click', e => {
+    e.preventDefault();
+    const el = document.querySelector(a.getAttribute('href'));
+    if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  });
+});
+</script>
+
+</body>
+</html>

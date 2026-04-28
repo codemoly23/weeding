@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useSession } from "next-auth/react";
@@ -47,26 +47,26 @@ export default function VendorLayout({ children }: { children: React.ReactNode }
       .catch(() => {});
   }, [status, session?.user?.role]);
 
+  const fetchUnread = useCallback(async () => {
+    if (status !== "authenticated" || session?.user?.role !== "VENDOR") return;
+    try {
+      const res = await fetch("/api/vendor/conversations/unread-count");
+      if (res.ok) {
+        const data = await res.json();
+        setUnreadCount(data.count ?? 0);
+      }
+    } catch {
+      // silently ignore
+    }
+  }, [status, session?.user?.role]);
+
   // Fetch unread message count every 30s
   useEffect(() => {
     if (status !== "authenticated" || session?.user?.role !== "VENDOR") return;
-
-    async function fetchUnread() {
-      try {
-        const res = await fetch("/api/vendor/conversations/unread-count");
-        if (res.ok) {
-          const data = await res.json();
-          setUnreadCount(data.count ?? 0);
-        }
-      } catch {
-        // silently ignore
-      }
-    }
-
     fetchUnread();
     const interval = setInterval(fetchUnread, 30000);
     return () => clearInterval(interval);
-  }, [status, session?.user?.role]);
+  }, [fetchUnread]);
 
   // Don't apply layout to register page
   if (pathname === "/vendor/register") {

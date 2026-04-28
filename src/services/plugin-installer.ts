@@ -101,6 +101,16 @@ export const pluginInstaller = {
       // Use dynamic import for archiver/unzipper
       const AdmZip = (await import("adm-zip")).default;
       const zip = new AdmZip(zipPath);
+
+      // Guard against zip-slip (path traversal) attacks before extraction
+      const resolvedExtract = path.resolve(extractPath);
+      for (const entry of zip.getEntries()) {
+        const entryPath = path.resolve(extractPath, entry.entryName);
+        if (!entryPath.startsWith(resolvedExtract + path.sep) && entryPath !== resolvedExtract) {
+          return { success: false, error: "Invalid plugin: path traversal detected" };
+        }
+      }
+
       zip.extractAllTo(extractPath, true);
 
       // Find plugin.json in extracted files

@@ -1,5 +1,17 @@
-// server.ts
-// Custom Next.js server with Socket.io integration
+// server.ts — Custom Next.js server with Socket.io integration
+//
+// DEPLOYMENT: Vercel does NOT support custom servers or persistent WebSocket processes.
+// This file must run on a platform that supports long-running Node.js processes:
+//   - Railway (recommended): `railway up` with `npm run start` as start command
+//   - Render: Deploy as a Node.js web service, start command: `npm run start`
+//   - AWS ECS (per CLAUDE.md): Containerize with Docker, expose port via ALB
+//   - Self-hosted VPS: `pm2 start server.ts --interpreter ts-node`
+//
+// Production setup:
+//   - Deploy THIS server on Railway/ECS — handles both Next.js and Socket.io
+//   - Set NEXT_PUBLIC_SOCKET_URL in env to point to this server's public URL
+//   - Alternatively: deploy Next.js on Vercel + Socket.io on a separate Railway service,
+//     then set NEXT_PUBLIC_SOCKET_URL to the standalone Socket server URL
 
 import { createServer } from "http";
 import { parse } from "url";
