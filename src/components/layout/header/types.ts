@@ -16,6 +16,7 @@ export interface NavigationItem {
   hasDropdown: boolean;
   megaMenuColumns?: number;
   megaMenuContent?: unknown;
+  simpleDropdown?: { name: string; href: string; icon?: string }[];
 }
 
 export interface ServiceCategory {

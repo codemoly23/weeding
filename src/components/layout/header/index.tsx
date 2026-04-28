@@ -21,9 +21,20 @@ const fallbackNavigation: NavigationItem[] = [
   { name: "Home", href: "/", hasDropdown: false },
   { name: "Services", href: "/services", hasDropdown: true },
   { name: "Pricing", href: "/pricing", hasDropdown: false },
-  { name: "About", href: "/about", hasDropdown: false },
   { name: "Blog", href: "/blog", hasDropdown: false },
-  { name: "Contact", href: "/contact", hasDropdown: false },
+  {
+    name: "Company",
+    href: "#",
+    hasDropdown: false,
+    simpleDropdown: [
+      { name: "About",             href: "/about",         icon: "Info" },
+      { name: "Contact",           href: "/contact",       icon: "Mail" },
+      { name: "Privacy Policy",    href: "/privacy",       icon: "ShieldCheck" },
+      { name: "Refund Policy",     href: "/refund-policy", icon: "RotateCcw" },
+      { name: "Terms of Service",  href: "/terms",         icon: "ScrollText" },
+      { name: "Cookies Consent",   href: "/cookies",       icon: "Cookie" },
+    ],
+  },
 ];
 
 export function Header() {

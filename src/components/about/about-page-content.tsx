@@ -515,16 +515,22 @@ export function AboutPageContent() {
         <motion.div
           className="absolute left-0 top-1/2 -translate-y-1/2 pointer-events-none select-none hidden md:block"
           initial={{ opacity: 0, y: 40 }}
-          animate={videoInView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.9, delay: 0.2, ease }}
+          animate={videoInView ? { opacity: 1, y: [0, -20, 0] } : {}}
+          transition={{
+            opacity: { duration: 0.9, delay: 0.2, ease: "easeOut" },
+            y: { duration: 3, repeat: Infinity, ease: "easeInOut", delay: 1.1 },
+          }}
         >
           <HeartBalloons />
         </motion.div>
         <motion.div
           className="absolute right-0 top-1/2 -translate-y-1/2 pointer-events-none select-none scale-x-[-1] hidden md:block"
           initial={{ opacity: 0, y: 40 }}
-          animate={videoInView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.9, delay: 0.35, ease }}
+          animate={videoInView ? { opacity: 1, y: [0, -20, 0] } : {}}
+          transition={{
+            opacity: { duration: 0.9, delay: 0.35, ease: "easeOut" },
+            y: { duration: 3, repeat: Infinity, ease: "easeInOut", delay: 1.25 },
+          }}
         >
           <HeartBalloons />
         </motion.div>
