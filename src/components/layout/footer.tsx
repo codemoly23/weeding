@@ -332,7 +332,7 @@ function TrustBadges({
         if (badge.style === "pill") {
           const Icon = badge.iconName ? PILL_BADGE_ICONS[badge.iconName] : null;
           const pillContent = (
-            <span className="inline-flex items-center gap-1.5 rounded-full border border-current/20 bg-white/8 px-3 py-1.5 text-xs font-medium opacity-75 transition-opacity hover:opacity-100">
+            <span className="inline-flex items-center gap-1.5 rounded-full border border-current/25 bg-white/10 px-3.5 py-1.5 text-xs font-medium opacity-80 transition-opacity hover:opacity-100">
               {Icon && <Icon className="h-3.5 w-3.5 shrink-0" style={badge.iconColor ? { color: badge.iconColor } : undefined} aria-hidden="true" />}
               {badge.text || badge.alt}
             </span>
@@ -557,7 +557,7 @@ function FooterWidgetRenderer({
       const showBrandBadges = brandContent?.showBrandBadges;
 
       return (
-        <div className="space-y-4">
+        <div className="space-y-6">
           {/* Logo only - no business name text (aligned with column headings) */}
           <Link href="/" className="inline-block focus:outline-none focus:ring-2 focus:ring-primary rounded">
             {effectiveLogoUrl ? (
@@ -570,10 +570,10 @@ function FooterWidgetRenderer({
               />
             ) : (
               <div className="flex items-center gap-3">
-                <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-violet-500 to-purple-600">
-                  <Sparkles className="h-5 w-5 text-white" />
+                <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-violet-500 to-purple-600">
+                  <Sparkles className="h-6 w-6 text-white" />
                 </div>
-                <span className="text-lg font-semibold">{businessConfig.name}</span>
+                <span className="text-xl font-bold">{businessConfig.name}</span>
               </div>
             )}
           </Link>
@@ -681,7 +681,7 @@ function FooterWidgetRenderer({
               <li key={link.id}>
                 <Link
                   href={link.url}
-                  className={cn("text-base inline-flex items-center gap-1.5", linkClasses)}
+                  className={cn("text-sm inline-flex items-center gap-1.5", linkClasses)}
                 >
                   {linkPrefix === "chevron" && <ChevronRight className="h-3 w-3 shrink-0 opacity-50" aria-hidden="true" />}
                   {linkPrefix === "arrow" && <ArrowRight className="h-3 w-3 shrink-0 opacity-50" aria-hidden="true" />}
