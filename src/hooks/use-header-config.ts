@@ -153,14 +153,27 @@ export function getMainNavigation(menu: MenuItem[]): {
   hasDropdown: boolean;
   megaMenuColumns?: number;
   megaMenuContent?: unknown;
+  simpleDropdown?: { name: string; href: string }[];
 }[] {
   return menu
     .filter((item) => item.isVisible && !item.parentId)
-    .map((item) => ({
-      name: item.label,
-      href: item.url || "#",
-      hasDropdown: item.isMegaMenu,
-      megaMenuColumns: item.megaMenuColumns ?? undefined,
-      megaMenuContent: item.megaMenuContent ?? undefined,
-    }));
+    .map((item) => {
+      const hasSimpleChildren =
+        !item.isMegaMenu &&
+        item.children &&
+        item.children.length > 0;
+
+      return {
+        name: item.label,
+        href: item.url || "#",
+        hasDropdown: item.isMegaMenu,
+        megaMenuColumns: item.megaMenuColumns ?? undefined,
+        megaMenuContent: item.megaMenuContent ?? undefined,
+        simpleDropdown: hasSimpleChildren
+          ? item.children!
+              .filter((c) => c.isVisible)
+              .map((c) => ({ name: c.label, href: c.url || "#", icon: c.icon ?? undefined }))
+          : undefined,
+      };
+    });
 }
