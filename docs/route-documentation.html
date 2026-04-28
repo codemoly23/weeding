@@ -1,0 +1,1370 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Ceremoney — Complete Route Architecture Documentation</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
+
+  :root {
+    --primary: #7c3aed;
+    --primary-light: #ede9fe;
+    --primary-dark: #5b21b6;
+    --accent: #ec4899;
+    --green: #059669;
+    --green-light: #d1fae5;
+    --blue: #2563eb;
+    --blue-light: #dbeafe;
+    --orange: #d97706;
+    --orange-light: #fef3c7;
+    --red: #dc2626;
+    --red-light: #fee2e2;
+    --gray-50: #f9fafb;
+    --gray-100: #f3f4f6;
+    --gray-200: #e5e7eb;
+    --gray-300: #d1d5db;
+    --gray-600: #4b5563;
+    --gray-700: #374151;
+    --gray-800: #1f2937;
+    --gray-900: #111827;
+    --white: #ffffff;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    font-size: 11px;
+    line-height: 1.6;
+    color: var(--gray-800);
+    background: var(--white);
+  }
+
+  /* ── COVER PAGE ── */
+  .cover {
+    min-height: 100vh;
+    background: linear-gradient(135deg, #1e1b4b 0%, #4c1d95 40%, #7c3aed 70%, #a855f7 100%);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding: 60px 40px;
+    page-break-after: always;
+    position: relative;
+    overflow: hidden;
+  }
+  .cover::before {
+    content: '';
+    position: absolute;
+    top: -50%; left: -50%;
+    width: 200%; height: 200%;
+    background: radial-gradient(circle at 30% 40%, rgba(236,72,153,0.15) 0%, transparent 50%),
+                radial-gradient(circle at 70% 60%, rgba(124,58,237,0.2) 0%, transparent 50%);
+    pointer-events: none;
+  }
+  .cover-badge {
+    background: rgba(255,255,255,0.15);
+    border: 1px solid rgba(255,255,255,0.3);
+    color: rgba(255,255,255,0.9);
+    padding: 6px 18px;
+    border-radius: 100px;
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-bottom: 32px;
+    backdrop-filter: blur(8px);
+  }
+  .cover h1 {
+    font-size: 52px;
+    font-weight: 700;
+    color: white;
+    line-height: 1.1;
+    margin-bottom: 8px;
+    letter-spacing: -1px;
+  }
+  .cover h1 span { color: #f9a8d4; }
+  .cover-subtitle {
+    font-size: 18px;
+    color: rgba(255,255,255,0.75);
+    font-weight: 300;
+    margin-bottom: 48px;
+    letter-spacing: 0.5px;
+  }
+  .cover-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+    max-width: 680px;
+    width: 100%;
+    margin-bottom: 48px;
+  }
+  .cover-stat {
+    background: rgba(255,255,255,0.1);
+    border: 1px solid rgba(255,255,255,0.2);
+    border-radius: 12px;
+    padding: 20px 16px;
+    backdrop-filter: blur(8px);
+  }
+  .cover-stat .num {
+    font-size: 32px;
+    font-weight: 700;
+    color: white;
+    line-height: 1;
+    margin-bottom: 4px;
+  }
+  .cover-stat .label {
+    font-size: 10px;
+    color: rgba(255,255,255,0.65);
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+  .cover-stack {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin-bottom: 56px;
+  }
+  .cover-stack span {
+    background: rgba(255,255,255,0.12);
+    border: 1px solid rgba(255,255,255,0.2);
+    color: rgba(255,255,255,0.85);
+    padding: 4px 12px;
+    border-radius: 6px;
+    font-size: 10px;
+    font-weight: 500;
+    font-family: 'JetBrains Mono', monospace;
+  }
+  .cover-footer {
+    position: absolute;
+    bottom: 32px;
+    display: flex;
+    gap: 40px;
+    color: rgba(255,255,255,0.5);
+    font-size: 9px;
+  }
+  .cover-footer span { display: flex; align-items: center; gap: 6px; }
+
+  /* ── TOC ── */
+  .toc-page {
+    padding: 48px 48px 40px;
+    page-break-after: always;
+  }
+  .toc-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 32px;
+    padding-bottom: 16px;
+    border-bottom: 2px solid var(--primary);
+  }
+  .toc-header h2 {
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--gray-900);
+  }
+  .toc-dot {
+    width: 10px; height: 10px;
+    border-radius: 50%;
+    background: var(--primary);
+  }
+  .toc-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+  }
+  .toc-section {
+    background: var(--gray-50);
+    border: 1px solid var(--gray-200);
+    border-radius: 10px;
+    padding: 20px;
+  }
+  .toc-section h3 {
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--primary);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 12px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid var(--gray-200);
+  }
+  .toc-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 5px 0;
+    border-bottom: 1px dotted var(--gray-200);
+  }
+  .toc-item:last-child { border-bottom: none; }
+  .toc-item span:first-child { color: var(--gray-700); font-size: 10px; }
+  .toc-item .pg { color: var(--gray-400); font-size: 9px; font-family: 'JetBrains Mono', monospace; }
+
+  /* ── SECTION PAGES ── */
+  .section {
+    padding: 36px 48px 32px;
+    page-break-before: always;
+  }
+  .section:first-of-type { page-break-before: avoid; }
+
+  .section-header {
+    margin-bottom: 28px;
+  }
+  .section-number {
+    font-size: 9px;
+    font-weight: 700;
+    color: var(--primary);
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    margin-bottom: 4px;
+  }
+  .section-title {
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--gray-900);
+    margin-bottom: 6px;
+    line-height: 1.2;
+  }
+  .section-desc {
+    font-size: 10px;
+    color: var(--gray-600);
+    line-height: 1.5;
+  }
+  .section-divider {
+    height: 3px;
+    background: linear-gradient(90deg, var(--primary), var(--accent), transparent);
+    border-radius: 2px;
+    margin-top: 12px;
+  }
+
+  /* ── TABLES ── */
+  .table-wrap {
+    margin-bottom: 24px;
+    border-radius: 10px;
+    overflow: hidden;
+    border: 1px solid var(--gray-200);
+    page-break-inside: avoid;
+  }
+  .table-label {
+    background: var(--gray-800);
+    color: white;
+    padding: 8px 14px;
+    font-size: 9px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .table-label .dot {
+    width: 6px; height: 6px;
+    border-radius: 50%;
+  }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 9.5px;
+  }
+  thead th {
+    background: var(--gray-100);
+    color: var(--gray-600);
+    font-weight: 600;
+    padding: 7px 10px;
+    text-align: left;
+    font-size: 8.5px;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    border-bottom: 1px solid var(--gray-200);
+  }
+  tbody tr { border-bottom: 1px solid var(--gray-100); }
+  tbody tr:last-child { border-bottom: none; }
+  tbody tr:nth-child(even) { background: #fafafa; }
+  tbody tr:hover { background: var(--primary-light); }
+  td { padding: 6px 10px; vertical-align: top; color: var(--gray-700); }
+
+  /* ── BADGES ── */
+  .badge {
+    display: inline-block;
+    padding: 2px 7px;
+    border-radius: 4px;
+    font-size: 8px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    white-space: nowrap;
+  }
+  .badge-get    { background: var(--blue-light);   color: var(--blue); }
+  .badge-post   { background: var(--green-light);  color: var(--green); }
+  .badge-put    { background: var(--orange-light); color: var(--orange); }
+  .badge-delete { background: var(--red-light);    color: var(--red); }
+  .badge-all    { background: #f3e8ff; color: var(--primary); }
+  .badge-public { background: var(--green-light);  color: var(--green); }
+  .badge-session{ background: var(--blue-light);   color: var(--blue); }
+  .badge-admin  { background: #fce7f3; color: #9d174d; }
+  .badge-vendor { background: var(--orange-light); color: var(--orange); }
+  .badge-token  { background: #f5f3ff; color: var(--primary); }
+  .badge-owner  { background: var(--blue-light);   color: #1d4ed8; }
+
+  .methods { display: flex; gap: 3px; flex-wrap: wrap; }
+
+  code {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 8.5px;
+    background: var(--gray-100);
+    color: var(--primary-dark);
+    padding: 1px 5px;
+    border-radius: 3px;
+  }
+
+  /* ── INFO BOXES ── */
+  .info-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+    margin-bottom: 24px;
+  }
+  .info-card {
+    background: var(--gray-50);
+    border: 1px solid var(--gray-200);
+    border-radius: 8px;
+    padding: 14px;
+  }
+  .info-card h4 {
+    font-size: 9px;
+    font-weight: 700;
+    color: var(--gray-500);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 6px;
+  }
+  .info-card p {
+    font-size: 10px;
+    color: var(--gray-700);
+    font-family: 'JetBrains Mono', monospace;
+  }
+
+  .callout {
+    background: var(--primary-light);
+    border-left: 3px solid var(--primary);
+    border-radius: 0 6px 6px 0;
+    padding: 10px 14px;
+    margin-bottom: 16px;
+    font-size: 9.5px;
+    color: var(--primary-dark);
+  }
+  .callout strong { font-weight: 700; }
+
+  /* ── MIDDLEWARE SPECIAL ── */
+  .middleware-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin-bottom: 24px;
+  }
+  .middleware-card {
+    border-radius: 8px;
+    overflow: hidden;
+    border: 1px solid var(--gray-200);
+  }
+  .middleware-card-header {
+    padding: 8px 12px;
+    font-size: 9px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+  .middleware-card-body { padding: 10px 12px; }
+  .middleware-card-body li {
+    list-style: none;
+    padding: 4px 0;
+    border-bottom: 1px solid var(--gray-100);
+    font-size: 9px;
+    color: var(--gray-700);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .middleware-card-body li:last-child { border-bottom: none; }
+  .arrow { color: var(--primary); font-weight: 700; }
+
+  /* ── SUMMARY STATS ── */
+  .stats-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 14px;
+    margin-bottom: 28px;
+  }
+  .stat-card {
+    border-radius: 10px;
+    padding: 18px 14px;
+    text-align: center;
+  }
+  .stat-card .num {
+    font-size: 28px;
+    font-weight: 700;
+    line-height: 1;
+    margin-bottom: 4px;
+  }
+  .stat-card .lbl {
+    font-size: 9px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+  }
+
+  /* ── SUBSECTION HEADING ── */
+  h3.sub {
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--gray-800);
+    margin: 20px 0 10px;
+    padding: 6px 10px;
+    background: var(--gray-100);
+    border-radius: 5px;
+    border-left: 3px solid var(--primary);
+  }
+  h4.sub2 {
+    font-size: 10px;
+    font-weight: 700;
+    color: var(--gray-600);
+    margin: 16px 0 8px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+
+  /* ── DYNAMIC SEGMENTS ── */
+  .seg-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px;
+    margin-bottom: 20px;
+  }
+  .seg-card {
+    background: var(--gray-50);
+    border: 1px solid var(--gray-200);
+    border-radius: 6px;
+    padding: 10px;
+    text-align: center;
+  }
+  .seg-card code { font-size: 10px; }
+  .seg-card p { font-size: 8.5px; color: var(--gray-600); margin-top: 4px; }
+
+  /* ── PAGE BREAKS ── */
+  .pb { page-break-before: always; }
+  .pba { page-break-after: always; }
+  .pbi { page-break-inside: avoid; }
+
+  /* ── PRINT ── */
+  @media print {
+    body { font-size: 10px; }
+    .cover { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    .table-label, thead th { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    .badge, .stat-card, .callout { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    a { text-decoration: none; color: inherit; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ═══════════════════════════════════════════ COVER ═══════════════════════════ -->
+<div class="cover">
+  <div class="cover-badge">Technical Documentation · v1.0 · 2026</div>
+  <h1>Ceremo<span>ney</span></h1>
+  <div class="cover-subtitle">Complete Route Architecture & API Documentation</div>
+
+  <div class="cover-grid">
+    <div class="cover-stat"><div class="num">149</div><div class="label">Page Routes</div></div>
+    <div class="cover-stat"><div class="num">250+</div><div class="label">API Endpoints</div></div>
+    <div class="cover-stat"><div class="num">8</div><div class="label">Route Modules</div></div>
+  </div>
+
+  <div class="cover-stack">
+    <span>Next.js 15</span><span>App Router</span><span>TypeScript 5.9</span>
+    <span>Tailwind 4</span><span>Prisma 7</span><span>PostgreSQL</span>
+    <span>NextAuth.js</span><span>Socket.io</span>
+  </div>
+
+  <div class="cover-footer">
+    <span>&#x1F4C5; April 28, 2026</span>
+    <span>&#x1F527; Multi-Event SaaS Platform</span>
+    <span>&#x1F30E; SE · EN · AR Markets</span>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════ TOC ═══════════════════════════ -->
+<div class="toc-page">
+  <div class="toc-header">
+    <div class="toc-dot"></div>
+    <h2>Table of Contents</h2>
+  </div>
+  <div class="toc-grid">
+    <div class="toc-section">
+      <h3>Architecture Overview</h3>
+      <div class="toc-item"><span>Route Architecture Summary</span><span class="pg">§1</span></div>
+      <div class="toc-item"><span>Middleware & Access Control</span><span class="pg">§2</span></div>
+      <div class="toc-item"><span>Route Groups</span><span class="pg">§2</span></div>
+      <div class="toc-item"><span>Dynamic Segments</span><span class="pg">§2</span></div>
+    </div>
+    <div class="toc-section">
+      <h3>Page Routes</h3>
+      <div class="toc-item"><span>Authentication Routes</span><span class="pg">§3</span></div>
+      <div class="toc-item"><span>Public / Marketing Routes</span><span class="pg">§4</span></div>
+      <div class="toc-item"><span>Customer Dashboard Routes</span><span class="pg">§5</span></div>
+      <div class="toc-item"><span>Planner (Wedding Projects)</span><span class="pg">§5</span></div>
+      <div class="toc-item"><span>Vendor Routes</span><span class="pg">§6</span></div>
+      <div class="toc-item"><span>Checkout & Payment Pages</span><span class="pg">§6</span></div>
+      <div class="toc-item"><span>Token-Based / Hidden Routes</span><span class="pg">§7</span></div>
+    </div>
+    <div class="toc-section">
+      <h3>Admin Routes</h3>
+      <div class="toc-item"><span>Core Admin & Profile</span><span class="pg">§8</span></div>
+      <div class="toc-item"><span>Appearance & Themes</span><span class="pg">§8</span></div>
+      <div class="toc-item"><span>Content Management</span><span class="pg">§8</span></div>
+      <div class="toc-item"><span>Orders, Customers, Invoices</span><span class="pg">§8</span></div>
+      <div class="toc-item"><span>Leads & Sales Pipeline</span><span class="pg">§9</span></div>
+      <div class="toc-item"><span>Marketing & Campaigns</span><span class="pg">§9</span></div>
+      <div class="toc-item"><span>Tickets & Support</span><span class="pg">§9</span></div>
+      <div class="toc-item"><span>Vendors, Venues, Services</span><span class="pg">§9</span></div>
+      <div class="toc-item"><span>Settings (System)</span><span class="pg">§10</span></div>
+    </div>
+    <div class="toc-section">
+      <h3>API Routes</h3>
+      <div class="toc-item"><span>Auth API</span><span class="pg">§11</span></div>
+      <div class="toc-item"><span>Admin API (250+ endpoints)</span><span class="pg">§11</span></div>
+      <div class="toc-item"><span>Planner API</span><span class="pg">§12</span></div>
+      <div class="toc-item"><span>Vendor API</span><span class="pg">§12</span></div>
+      <div class="toc-item"><span>Customer API</span><span class="pg">§13</span></div>
+      <div class="toc-item"><span>Public API</span><span class="pg">§13</span></div>
+      <div class="toc-item"><span>Webhook / System Routes</span><span class="pg">§14</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════ §1 SUMMARY ═══════════════════ -->
+<div class="section">
+  <div class="section-header">
+    <div class="section-number">Section 1</div>
+    <div class="section-title">Route Architecture Summary</div>
+    <div class="section-desc">High-level statistics and platform overview of all routes in the Ceremoney SaaS platform.</div>
+    <div class="section-divider"></div>
+  </div>
+
+  <div class="stats-grid">
+    <div class="stat-card" style="background:#ede9fe; color:#5b21b6;">
+      <div class="num" style="color:#7c3aed;">149</div>
+      <div class="lbl" style="color:#6d28d9;">Page Routes</div>
+    </div>
+    <div class="stat-card" style="background:#d1fae5; color:#065f46;">
+      <div class="num" style="color:#059669;">250+</div>
+      <div class="lbl" style="color:#047857;">API Endpoints</div>
+    </div>
+    <div class="stat-card" style="background:#dbeafe; color:#1e3a8a;">
+      <div class="num" style="color:#2563eb;">3</div>
+      <div class="lbl" style="color:#1d4ed8;">Webhook Routes</div>
+    </div>
+    <div class="stat-card" style="background:#fce7f3; color:#831843;">
+      <div class="num" style="color:#db2777;">6</div>
+      <div class="lbl" style="color:#9d174d;">User Roles</div>
+    </div>
+  </div>
+
+  <div class="info-grid">
+    <div class="info-card">
+      <h4>Auth Pages (3)</h4>
+      <p>/login · /register · /forgot-password</p>
+    </div>
+    <div class="info-card">
+      <h4>Public Pages (23)</h4>
+      <p>Marketing, blog, vendors, pricing, legal…</p>
+    </div>
+    <div class="info-card">
+      <h4>Customer Pages (30)</h4>
+      <p>Dashboard + 20 planner sub-pages</p>
+    </div>
+    <div class="info-card">
+      <h4>Vendor Pages (8)</h4>
+      <p>Dashboard, profile, inquiries, billing…</p>
+    </div>
+    <div class="info-card">
+      <h4>Admin Pages (85+)</h4>
+      <p>Full CMS, leads, tickets, settings…</p>
+    </div>
+    <div class="info-card">
+      <h4>Route Groups (2)</h4>
+      <p>(auth) · (marketing)</p>
+    </div>
+  </div>
+
+  <div class="table-wrap pbi">
+    <div class="table-label"><span class="dot" style="background:#a78bfa;"></span>User Roles & Access Matrix</div>
+    <table>
+      <thead><tr><th>Role</th><th>Protected Paths</th><th>Post-Login Redirect</th><th>Capabilities</th></tr></thead>
+      <tbody>
+        <tr><td><span class="badge badge-admin">super_admin</span></td><td><code>/admin/*</code></td><td><code>/admin</code></td><td>Full platform: all settings, financials, user management</td></tr>
+        <tr><td><span class="badge badge-admin">admin</span></td><td><code>/admin/*</code></td><td><code>/admin</code></td><td>User support, content moderation, vendor management</td></tr>
+        <tr><td><span class="badge badge-admin">support_agent</span></td><td><code>/admin/*</code></td><td><code>/admin</code></td><td>Ticket management, customer support</td></tr>
+        <tr><td><span class="badge badge-admin">sales_agent</span></td><td><code>/admin/*</code></td><td><code>/admin</code></td><td>Lead management, sales pipeline</td></tr>
+        <tr><td><span class="badge badge-admin">content_manager</span></td><td><code>/admin/*</code></td><td><code>/admin</code></td><td>Blog, FAQ, testimonials, legal pages</td></tr>
+        <tr><td><span class="badge badge-vendor">vendor</span></td><td><code>/vendor/*</code></td><td><code>/vendor/dashboard</code></td><td>Edit profile, view inquiries, manage availability</td></tr>
+        <tr><td><span class="badge badge-session">customer</span></td><td><code>/dashboard/*</code> <code>/planner/*</code></td><td><code>/planner</code></td><td>Create/manage events, guests, website, billing</td></tr>
+        <tr><td><span class="badge badge-token">guest</span></td><td>Token-based routes</td><td>N/A</td><td>RSVP submission, seat finder via QR</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════ §2 MIDDLEWARE ═══════════════ -->
+<div class="section pb">
+  <div class="section-header">
+    <div class="section-number">Section 2</div>
+    <div class="section-title">Middleware & Access Control</div>
+    <div class="section-desc">File: <code>src/middleware.ts</code> — Runs before every matched request, handles auth redirects and role-based routing.</div>
+    <div class="section-divider"></div>
+  </div>
+
+  <div class="callout">
+    <strong>Important:</strong> API routes (<code>/api/*</code>) bypass the middleware entirely. Each API handler performs its own authentication check internally via <code>auth()</code> or <code>getServerSession()</code>.
+  </div>
+
+  <div class="table-wrap pbi">
+    <div class="table-label"><span class="dot" style="background:#f87171;"></span>Middleware Route Matchers</div>
+    <table>
+      <thead><tr><th>Protected Path Pattern</th><th>Required Role</th><th>Redirect If Unauthenticated</th><th>Notes</th></tr></thead>
+      <tbody>
+        <tr><td><code>/admin</code> · <code>/admin/*</code></td><td><span class="badge badge-admin">ADMIN / SUPPORT_AGENT / SALES_AGENT / CONTENT_MANAGER</span></td><td><code>/login</code></td><td>Wrong role → redirect to own dashboard</td></tr>
+        <tr><td><code>/dashboard</code> · <code>/dashboard/*</code></td><td><span class="badge badge-session">Any authenticated session</span></td><td><code>/login</code></td><td>—</td></tr>
+        <tr><td><code>/account</code> · <code>/account/*</code></td><td><span class="badge badge-session">Any authenticated session</span></td><td><code>/login</code></td><td>—</td></tr>
+        <tr><td><code>/vendor/*</code> (excl. <code>/vendor/register</code>)</td><td><span class="badge badge-vendor">VENDOR role</span></td><td><code>/login</code></td><td><code>/vendor/register</code> is public</td></tr>
+        <tr><td><code>/login</code> · <code>/register</code></td><td><span class="badge badge-public">Unauthenticated only</span></td><td>Role-based redirect on re-visit</td><td>Logged-in users are bounced away</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3 class="sub">Route Groups</h3>
+  <div class="table-wrap pbi">
+    <div class="table-label"><span class="dot" style="background:#818cf8;"></span>Next.js App Router Route Groups</div>
+    <table>
+      <thead><tr><th>Group Name</th><th>Directory</th><th>Contains</th><th>Purpose</th></tr></thead>
+      <tbody>
+        <tr><td><code>(auth)</code></td><td><code>src/app/(auth)/</code></td><td>login, register, forgot-password</td><td>Shared layout for all auth/onboarding pages</td></tr>
+        <tr><td><code>(marketing)</code></td><td><code>src/app/(marketing)/</code></td><td>home, about, blog, vendors, pricing, legal, contact, search, faq…</td><td>Shared layout for all public marketing pages</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3 class="sub">Dynamic URL Segments</h3>
+  <div class="seg-grid">
+    <div class="seg-card"><code>[id]</code><p>Generic ID — orders, leads, tickets, planner projects, etc.</p></div>
+    <div class="seg-card"><code>[slug]</code><p>URL slug — blog, services, vendors, legal, CMS pages</p></div>
+    <div class="seg-card"><code>[token]</code><p>Secure token — RSVP, brief, shared project links</p></div>
+    <div class="seg-card"><code>[key]</code><p>System key — settings, dropdown lists</p></div>
+    <div class="seg-card"><code>[...nextauth]</code><p>NextAuth catch-all for all provider routes</p></div>
+    <div class="seg-card"><code>[...pluginPath]</code><p>Catch-all for plugin-registered admin pages</p></div>
+    <div class="seg-card"><code>[projectId]</code><p>Planner project ID — seat finder, public RSVP</p></div>
+    <div class="seg-card"><code>[websiteId]</code><p>Wedding website ID — guestbook, photo uploads</p></div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════ §3 AUTH ROUTES ═══════════════ -->
+<div class="section pb">
+  <div class="section-header">
+    <div class="section-number">Section 3</div>
+    <div class="section-title">Authentication Routes</div>
+    <div class="section-desc">Route group: <code>(auth)</code> — All pages are publicly accessible. Post-login redirects are role-aware.</div>
+    <div class="section-divider"></div>
+  </div>
+
+  <div class="table-wrap pbi">
+    <div class="table-label"><span class="dot" style="background:#34d399;"></span>Auth Page Routes</div>
+    <table>
+      <thead><tr><th>Route Name</th><th>URL</th><th>Method</th><th>File</th><th>Permission</th><th>Purpose</th></tr></thead>
+      <tbody>
+        <tr>
+          <td>Login</td>
+          <td><code>/login</code></td>
+          <td><div class="methods"><span class="badge badge-get">GET</span></div></td>
+          <td><code>(auth)/login/page.tsx</code></td>
+          <td><span class="badge badge-public">Public</span></td>
+          <td>Email/password login; role-based redirect on success</td>
+        </tr>
+        <tr>
+          <td>Register</td>
+          <td><code>/register</code></td>
+          <td><div class="methods"><span class="badge badge-get">GET</span></div></td>
+          <td><code>(auth)/register/page.tsx</code></td>
+          <td><span class="badge badge-public">Public</span></td>
+          <td>New account creation; auto-login after registration</td>
+        </tr>
+        <tr>
+          <td>Forgot Password</td>
+          <td><code>/forgot-password</code></td>
+          <td><div class="methods"><span class="badge badge-get">GET</span></div></td>
+          <td><code>(auth)/forgot-password/page.tsx</code></td>
+          <td><span class="badge badge-public">Public</span></td>
+          <td>Password reset request form</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="table-wrap pbi">
+    <div class="table-label"><span class="dot" style="background:#34d399;"></span>Auth API Endpoints</div>
+    <table>
+      <thead><tr><th>Endpoint</th><th>Method</th><th>File</th><th>Permission</th><th>Purpose</th></tr></thead>
+      <tbody>
+        <tr>
+          <td><code>/api/auth/login</code></td>
+          <td><div class="methods"><span class="badge badge-post">POST</span></div></td>
+          <td><code>api/auth/login/route.ts</code></td>
+          <td><span class="badge badge-public">Public</span></td>
+          <td>Credentials-based login handler</td>
+        </tr>
+        <tr>
+          <td><code>/api/auth/register</code></td>
+          <td><div class="methods"><span class="badge badge-post">POST</span></div></td>
+          <td><code>api/auth/register/route.ts</code></td>
+          <td><span class="badge badge-public">Public</span></td>
+          <td>User registration endpoint</td>
+        </tr>
+        <tr>
+          <td><code>/api/auth/me</code></td>
+          <td><div class="methods"><span class="badge badge-get">GET</span></div></td>
+          <td><code>api/auth/me/route.ts</code></td>
+          <td><span class="badge badge-session">Session</span></td>
+          <td>Returns current authenticated user info</td>
+        </tr>
+        <tr>
+          <td><code>/api/auth/[...nextauth]</code></td>
+          <td><div class="methods"><span class="badge badge-all">ALL</span></div></td>
+          <td><code>api/auth/[...nextauth]/route.ts</code></td>
+          <td><span class="badge badge-public">NextAuth</span></td>
+          <td>NextAuth.js handler — all OAuth providers, callbacks, CSRF</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════ §4 PUBLIC ROUTES ═══════════ -->
+<div class="section pb">
+  <div class="section-header">
+    <div class="section-number">Section 4</div>
+    <div class="section-title">Public / Marketing Routes</div>
+    <div class="section-desc">Route group: <code>(marketing)</code> — All pages publicly accessible, SEO-optimized, no authentication required.</div>
+    <div class="section-divider"></div>
+  </div>
+
+  <div class="table-wrap">
+    <div class="table-label"><span class="dot" style="background:#60a5fa;"></span>Marketing Page Routes</div>
+    <table>
+      <thead><tr><th>Route Name</th><th>URL</th><th>Method</th><th>File</th><th>Permission</th><th>Purpose</th></tr></thead>
+      <tbody>
+        <tr><td>Home</td><td><code>/</code></td><td><span class="badge badge-get">GET</span></td><td><code>(marketing)/page.tsx</code></td><td><span class="badge badge-public">Public</span></td><td>Hero page via WidgetSectionsRenderer (template-driven)</td></tr>
+        <tr><td>Home Alt</td><td><code>/home</code></td><td><span class="badge badge-get">GET</span></td><td><code>(marketing)/home/page.tsx</code></td><td><span class="badge badge-public">Public</span></td><td>Alternative home with JSON-LD: FAQ + Product schema</td></tr>
+        <tr><td>About</td><td><code>/about</code></td><td><span class="badge badge-get">GET</span></td><td><code>(marketing)/about/page.tsx</code></td><td><span class="badge badge-public">Public</span></td><td>Company about page</td></tr>
+        <tr><td>Pricing</td><td><code>/pricing</code></td><td><span class="badge badge-get">GET</span></td><td><code>(marketing)/pricing/page.tsx</code></td><td><span class="badge badge-public">Public</span></td><td>Subscription plans & pricing table</td></tr>
+        <tr><td>Blog List</td><td><code>/blog</code></td><td><span class="badge badge-get">GET</span></td><td><code>(marketing)/blog/page.tsx</code></td><td><span class="badge badge-public">Public</span></td><td>Blog post listing with pagination</td></tr>
+        <tr><td>Blog Post</td><td><code>/blog/[slug]</code></td><td><span class="badge badge-get">GET</span></td><td><code>(marketing)/blog/[slug]/page.tsx</code></td><td><span class="badge badge-public">Public</span></td><td>Individual blog post by slug</td></tr>
+        <tr><td>Services List</td><td><code>/services</code></td><td><span class="badge badge-get">GET</span></td><td><code>(marketing)/services/page.tsx</code></td><td><span class="badge badge-public">Public</span></td><td>Service catalog</td></tr>
+        <tr><td>Service Detail</td><td><code>/services/[slug]</code></td><td><span class="badge badge-get">GET</span></td><td><code>(marketing)/services/[slug]/page.tsx</code></td><td><span class="badge badge-public">Public</span></td><td>Service details with package options & FAQs</td></tr>
+        <tr><td>Vendors Directory</td><td><code>/vendors</code></td><td><span class="badge badge-get">GET</span></td><td><code>(marketing)/vendors/page.tsx</code></td><td><span class="badge badge-public">Public</span></td><td>Vendor directory with filters</td></tr>
+        <tr><td>Vendor Profile</td><td><code>/vendors/[slug]</code></td><td><span class="badge badge-get">GET</span></td><td><code>(marketing)/vendors/[slug]/page.tsx</code></td><td><span class="badge badge-public">Public</span></td><td>Individual vendor profile, portfolio, reviews</td></tr>
+        <tr><td>Venue Detail</td><td><code>/venues/[slug]</code></td><td><span class="badge badge-get">GET</span></td><td><code>(marketing)/venues/[slug]/page.tsx</code></td><td><span class="badge badge-public">Public</span></td><td>Individual venue listing page</td></tr>
+        <tr><td>Contact</td><td><code>/contact</code></td><td><span class="badge badge-get">GET</span></td><td><code>(marketing)/contact/page.tsx</code></td><td><span class="badge badge-public">Public</span></td><td>Contact form page</td></tr>
+        <tr><td>Search</td><td><code>/search</code></td><td><span class="badge badge-get">GET</span></td><td><code>(marketing)/search/page.tsx</code></td><td><span class="badge badge-public">Public</span></td><td>Global search results</td></tr>
+        <tr><td>FAQ</td><td><code>/faq</code></td><td><span class="badge badge-get">GET</span></td><td><code>(marketing)/faq/page.tsx</code></td><td><span class="badge badge-public">Public</span></td><td>Frequently asked questions</td></tr>
+        <tr><td>Terms of Service</td><td><code>/terms</code></td><td><span class="badge badge-get">GET</span></td><td><code>(marketing)/terms/page.tsx</code></td><td><span class="badge badge-public">Public</span></td><td>Terms of Service</td></tr>
+        <tr><td>Privacy Policy</td><td><code>/privacy</code></td><td><span class="badge badge-get">GET</span></td><td><code>(marketing)/privacy/page.tsx</code></td><td><span class="badge badge-public">Public</span></td><td>Privacy Policy</td></tr>
+        <tr><td>Disclaimer</td><td><code>/disclaimer</code></td><td><span class="badge badge-get">GET</span></td><td><code>(marketing)/disclaimer/page.tsx</code></td><td><span class="badge badge-public">Public</span></td><td>Disclaimer page</td></tr>
+        <tr><td>Refund Policy</td><td><code>/refund-policy</code></td><td><span class="badge badge-get">GET</span></td><td><code>(marketing)/refund-policy/page.tsx</code></td><td><span class="badge badge-public">Public</span></td><td>Refund & cancellation policy</td></tr>
+        <tr><td>CMS Page</td><td><code>/[slug]</code></td><td><span class="badge badge-get">GET</span></td><td><code>(marketing)/[slug]/page.tsx</code></td><td><span class="badge badge-public">Public</span></td><td>Catch-all for admin-created CMS pages</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════ §5 CUSTOMER ROUTES ═══════════ -->
+<div class="section pb">
+  <div class="section-header">
+    <div class="section-number">Section 5</div>
+    <div class="section-title">Customer / User Routes</div>
+    <div class="section-desc">Protected by middleware. Requires authenticated session. Includes the main dashboard and the full wedding planner module.</div>
+    <div class="section-divider"></div>
+  </div>
+
+  <h3 class="sub">Customer Dashboard</h3>
+  <div class="table-wrap pbi">
+    <div class="table-label"><span class="dot" style="background:#818cf8;"></span>Dashboard Routes</div>
+    <table>
+      <thead><tr><th>Route Name</th><th>URL</th><th>Permission</th><th>Purpose</th></tr></thead>
+      <tbody>
+        <tr><td>Dashboard Home</td><td><code>/dashboard</code></td><td><span class="badge badge-session">Session</span></td><td>Overview: projects, stats, quick actions</td></tr>
+        <tr><td>Billing</td><td><code>/dashboard/billing</code></td><td><span class="badge badge-session">Session</span></td><td>Subscription & payment method management</td></tr>
+        <tr><td>Invoices</td><td><code>/dashboard/invoices</code></td><td><span class="badge badge-session">Session</span></td><td>Invoice history & downloads</td></tr>
+        <tr><td>Orders</td><td><code>/dashboard/orders</code></td><td><span class="badge badge-session">Session</span></td><td>Order listing</td></tr>
+        <tr><td>Order Detail</td><td><code>/dashboard/orders/[id]</code></td><td><span class="badge badge-session">Session</span></td><td>Single order details</td></tr>
+        <tr><td>Documents</td><td><code>/dashboard/documents</code></td><td><span class="badge badge-session">Session</span></td><td>Downloadable documents</td></tr>
+        <tr><td>Help</td><td><code>/dashboard/help</code></td><td><span class="badge badge-session">Session</span></td><td>Customer support & help centre</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3 class="sub">Planner — Wedding Project Module</h3>
+  <div class="table-wrap">
+    <div class="table-label"><span class="dot" style="background:#c084fc;"></span>Planner Routes</div>
+    <table>
+      <thead><tr><th>Route Name</th><th>URL</th><th>Permission</th><th>Purpose</th></tr></thead>
+      <tbody>
+        <tr><td>Projects List</td><td><code>/planner</code></td><td><span class="badge badge-session">Session</span></td><td>All projects — localStorage + DB dual-mode</td></tr>
+        <tr><td>Create Project</td><td><code>/planner/create</code></td><td><span class="badge badge-session">Session</span></td><td>New wedding project wizard</td></tr>
+        <tr><td>Project Dashboard</td><td><code>/planner/[id]</code></td><td><span class="badge badge-owner">Session + Owner</span></td><td>Project overview: summary, progress, quick links</td></tr>
+        <tr><td>Budget</td><td><code>/planner/[id]/budget</code></td><td><span class="badge badge-owner">Session + Owner</span></td><td>Budget tracking by category</td></tr>
+        <tr><td>Ceremony</td><td><code>/planner/[id]/ceremony</code></td><td><span class="badge badge-owner">Session + Owner</span></td><td>Ceremony details & logistics</td></tr>
+        <tr><td>Reception</td><td><code>/planner/[id]/reception</code></td><td><span class="badge badge-owner">Session + Owner</span></td><td>Reception venue & planning</td></tr>
+        <tr><td>Checklist</td><td><code>/planner/[id]/checklist</code></td><td><span class="badge badge-owner">Session + Owner</span></td><td>Wedding planning checklist</td></tr>
+        <tr><td>Guest List</td><td><code>/planner/[id]/guests</code></td><td><span class="badge badge-owner">Session + Owner</span></td><td>Guest management, RSVP tracking, SMS</td></tr>
+        <tr><td>Itinerary</td><td><code>/planner/[id]/itinerary</code></td><td><span class="badge badge-owner">Session + Owner</span></td><td>Event timeline & schedule</td></tr>
+        <tr><td>Notes</td><td><code>/planner/[id]/notes</code></td><td><span class="badge badge-owner">Session + Owner</span></td><td>Project notes & memos</td></tr>
+        <tr><td>Post Wedding</td><td><code>/planner/[id]/post-wedding</code></td><td><span class="badge badge-owner">Session + Owner</span></td><td>Post-wedding tasks & coordination</td></tr>
+        <tr><td>Seating Chart</td><td><code>/planner/[id]/seating</code></td><td><span class="badge badge-owner">Session + Owner</span></td><td>Seating chart (Konva.js canvas)</td></tr>
+        <tr><td>Place Cards</td><td><code>/planner/[id]/seating/cards-edit</code></td><td><span class="badge badge-owner">Session + Owner</span></td><td>Edit & print place cards</td></tr>
+        <tr><td>Ceremony Layout</td><td><code>/planner/[id]/seating/ceremony-layout-edit</code></td><td><span class="badge badge-owner">Session + Owner</span></td><td>Ceremony floor plan editor</td></tr>
+        <tr><td>Reception Layout</td><td><code>/planner/[id]/seating/reception-layout-edit</code></td><td><span class="badge badge-owner">Session + Owner</span></td><td>Reception floor plan editor</td></tr>
+        <tr><td>Menu Edit</td><td><code>/planner/[id]/seating/menu-edit</code></td><td><span class="badge badge-owner">Session + Owner</span></td><td>Per-seat menu selections</td></tr>
+        <tr><td>Project Settings</td><td><code>/planner/[id]/settings</code></td><td><span class="badge badge-owner">Session + Owner</span></td><td>Project configuration</td></tr>
+        <tr><td>Project Vendors</td><td><code>/planner/[id]/vendors</code></td><td><span class="badge badge-owner">Session + Owner</span></td><td>Vendor coordination for project</td></tr>
+        <tr><td>Website Builder</td><td><code>/planner/[id]/website</code></td><td><span class="badge badge-owner">Session + Owner</span></td><td>Wedding website editor</td></tr>
+        <tr><td>Shared View</td><td><code>/planner/share/[token]</code></td><td><span class="badge badge-token">Token-based</span></td><td>Read-only shared project link</td></tr>
+        <tr><td>Sync</td><td><code>/planner/sync</code></td><td><span class="badge badge-session">Session</span></td><td>Sync localStorage → database</td></tr>
+        <tr><td>Planner Billing</td><td><code>/planner/billing</code></td><td><span class="badge badge-session">Session</span></td><td>Upgrade plan from within planner</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════ §6 VENDOR + CHECKOUT ═══════ -->
+<div class="section pb">
+  <div class="section-header">
+    <div class="section-number">Section 6</div>
+    <div class="section-title">Vendor Routes & Checkout Pages</div>
+    <div class="section-desc">Vendor pages require <code>VENDOR</code> role (middleware-enforced). Checkout pages are public.</div>
+    <div class="section-divider"></div>
+  </div>
+
+  <div class="table-wrap pbi">
+    <div class="table-label"><span class="dot" style="background:#fb923c;"></span>Vendor Routes</div>
+    <table>
+      <thead><tr><th>Route Name</th><th>URL</th><th>Permission</th><th>Purpose</th></tr></thead>
+      <tbody>
+        <tr><td>Vendor Register</td><td><code>/vendor/register</code></td><td><span class="badge badge-public">Public</span></td><td>Vendor sign-up form</td></tr>
+        <tr><td>Vendor Dashboard</td><td><code>/vendor/dashboard</code></td><td><span class="badge badge-vendor">VENDOR</span></td><td>Stats, inquiries, plan status</td></tr>
+        <tr><td>Vendor Profile</td><td><code>/vendor/profile</code></td><td><span class="badge badge-vendor">VENDOR</span></td><td>Edit business profile & portfolio</td></tr>
+        <tr><td>Inquiries</td><td><code>/vendor/inquiries</code></td><td><span class="badge badge-vendor">VENDOR</span></td><td>Customer inquiry management</td></tr>
+        <tr><td>Messages</td><td><code>/vendor/messages</code></td><td><span class="badge badge-vendor">VENDOR</span></td><td>Conversations with customers</td></tr>
+        <tr><td>Reviews</td><td><code>/vendor/reviews</code></td><td><span class="badge badge-vendor">VENDOR</span></td><td>Ratings & review management</td></tr>
+        <tr><td>Billing</td><td><code>/vendor/billing</code></td><td><span class="badge badge-vendor">VENDOR</span></td><td>Subscription & billing</td></tr>
+        <tr><td>Settings</td><td><code>/vendor/settings</code></td><td><span class="badge badge-vendor">VENDOR</span></td><td>Account & notification settings</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="table-wrap pbi">
+    <div class="table-label"><span class="dot" style="background:#34d399;"></span>Checkout & Payment Pages</div>
+    <table>
+      <thead><tr><th>Route Name</th><th>URL</th><th>Permission</th><th>Purpose</th></tr></thead>
+      <tbody>
+        <tr><td>Checkout</td><td><code>/checkout</code></td><td><span class="badge badge-public">Public</span></td><td>Initial checkout landing</td></tr>
+        <tr><td>Service Checkout</td><td><code>/checkout/[service]</code></td><td><span class="badge badge-public">Public</span></td><td>Service-specific checkout form</td></tr>
+        <tr><td>Payment Success</td><td><code>/checkout/success</code></td><td><span class="badge badge-public">Public</span></td><td>Post-payment confirmation page</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════ §7 TOKEN ROUTES ═══════════ -->
+<div class="section pb">
+  <div class="section-header">
+    <div class="section-number">Section 7</div>
+    <div class="section-title">Token-Based / Hidden / Internal Routes</div>
+    <div class="section-desc">These routes are not linked from the main navigation. Access is granted via secure tokens (emailed or QR-coded).</div>
+    <div class="section-divider"></div>
+  </div>
+
+  <div class="table-wrap pbi">
+    <div class="table-label"><span class="dot" style="background:#a78bfa;"></span>Token-Based & System Routes</div>
+    <table>
+      <thead><tr><th>Route Name</th><th>URL</th><th>Methods</th><th>Permission</th><th>Purpose</th></tr></thead>
+      <tbody>
+        <tr>
+          <td>Guest RSVP</td>
+          <td><code>/rsvp/[token]</code></td>
+          <td><div class="methods"><span class="badge badge-get">GET</span><span class="badge badge-post">POST</span></div></td>
+          <td><span class="badge badge-token">Token</span></td>
+          <td>Guest submits RSVP response (token delivered via email/SMS)</td>
+        </tr>
+        <tr>
+          <td>Vendor Brief</td>
+          <td><code>/brief/[token]</code></td>
+          <td><div class="methods"><span class="badge badge-get">GET</span><span class="badge badge-post">POST</span></div></td>
+          <td><span class="badge badge-token">Token</span></td>
+          <td>Vendor receives project brief, submits quote</td>
+        </tr>
+        <tr>
+          <td>Seat Finder</td>
+          <td><code>/seat-finder/[projectId]</code></td>
+          <td><div class="methods"><span class="badge badge-get">GET</span></div></td>
+          <td><span class="badge badge-public">Public</span></td>
+          <td>Guest scans QR code to find assigned table & seat</td>
+        </tr>
+        <tr>
+          <td>Conversation Link</td>
+          <td><code>/conversation/[id]</code></td>
+          <td><div class="methods"><span class="badge badge-get">GET</span></div></td>
+          <td><span class="badge badge-public">Public Link</span></td>
+          <td>Direct link to specific customer-vendor conversation</td>
+        </tr>
+        <tr>
+          <td>Shared Project</td>
+          <td><code>/planner/share/[token]</code></td>
+          <td><div class="methods"><span class="badge badge-get">GET</span></div></td>
+          <td><span class="badge badge-token">Token</span></td>
+          <td>Read-only shared project view for collaborators</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════ §8 ADMIN ROUTES ═══════════ -->
+<div class="section pb">
+  <div class="section-header">
+    <div class="section-number">Section 8</div>
+    <div class="section-title">Admin Routes — Core, Appearance, Content, Orders</div>
+    <div class="section-desc">All admin routes require session + one of: <code>ADMIN</code> / <code>SUPPORT_AGENT</code> / <code>SALES_AGENT</code> / <code>CONTENT_MANAGER</code>. Some sub-sections are <code>ADMIN</code>-only.</div>
+    <div class="section-divider"></div>
+  </div>
+
+  <h3 class="sub">Core Admin</h3>
+  <div class="table-wrap pbi">
+    <div class="table-label"><span class="dot" style="background:#f472b6;"></span>Core Admin Pages</div>
+    <table>
+      <thead><tr><th>URL</th><th>Roles</th><th>Purpose</th></tr></thead>
+      <tbody>
+        <tr><td><code>/admin</code></td><td><span class="badge badge-admin">Any Admin</span></td><td>Dashboard: stats, recent orders, tickets, activity feed</td></tr>
+        <tr><td><code>/admin/profile</code></td><td><span class="badge badge-admin">Any Admin</span></td><td>Admin user profile edit</td></tr>
+        <tr><td><code>/admin/users</code></td><td><span class="badge badge-admin">ADMIN only</span></td><td>Admin user management (create, edit, deactivate)</td></tr>
+        <tr><td><code>/admin/users/permissions</code></td><td><span class="badge badge-admin">ADMIN only</span></td><td>Role & permission matrix management</td></tr>
+        <tr><td><code>/admin/planner</code></td><td><span class="badge badge-admin">Any Admin</span></td><td>Planner project overview & management</td></tr>
+        <tr><td><code>/admin/[...pluginPath]</code></td><td><span class="badge badge-admin">Any Admin</span></td><td>Catch-all for plugin-registered admin pages</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3 class="sub">Appearance & Theme</h3>
+  <div class="table-wrap pbi">
+    <div class="table-label"><span class="dot" style="background:#c084fc;"></span>Appearance Routes</div>
+    <table>
+      <thead><tr><th>URL</th><th>Purpose</th></tr></thead>
+      <tbody>
+        <tr><td><code>/admin/appearance/header</code></td><td>Header customization (logo, sticky, colors)</td></tr>
+        <tr><td><code>/admin/appearance/header/menu</code></td><td>Navigation menu editor (add/reorder/remove items)</td></tr>
+        <tr><td><code>/admin/appearance/footer</code></td><td>Footer layout, links, widgets</td></tr>
+        <tr><td><code>/admin/appearance/themes</code></td><td>Theme management: list, activate, import</td></tr>
+        <tr><td><code>/admin/appearance/themes/customize</code></td><td>Visual theme customizer (colors, fonts, spacing)</td></tr>
+        <tr><td><code>/admin/appearance/landing-page</code></td><td>Landing page drag-and-drop builder</td></tr>
+        <tr><td><code>/admin/appearance/pages</code></td><td>CMS custom pages listing</td></tr>
+        <tr><td><code>/admin/appearance/pages/[slug]</code></td><td>Edit individual CMS page</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3 class="sub">Content Management</h3>
+  <div class="table-wrap pbi">
+    <div class="table-label"><span class="dot" style="background:#34d399;"></span>Content Routes</div>
+    <table>
+      <thead><tr><th>URL</th><th>Roles</th><th>Purpose</th></tr></thead>
+      <tbody>
+        <tr><td><code>/admin/content/blog</code></td><td><span class="badge badge-admin">CONTENT_MANAGER+</span></td><td>Blog post management (list, create, publish)</td></tr>
+        <tr><td><code>/admin/content/blog/[id]</code></td><td><span class="badge badge-admin">CONTENT_MANAGER+</span></td><td>Edit individual blog post</td></tr>
+        <tr><td><code>/admin/content/blog-categories</code></td><td><span class="badge badge-admin">Any Admin</span></td><td>Blog category management</td></tr>
+        <tr><td><code>/admin/content/faq</code></td><td><span class="badge badge-admin">Any Admin</span></td><td>FAQ management</td></tr>
+        <tr><td><code>/admin/content/testimonials</code></td><td><span class="badge badge-admin">Any Admin</span></td><td>Customer testimonials management</td></tr>
+        <tr><td><code>/admin/content/legal</code></td><td><span class="badge badge-admin">Any Admin</span></td><td>Legal pages list (T&C, Privacy, etc.)</td></tr>
+        <tr><td><code>/admin/content/legal/[slug]</code></td><td><span class="badge badge-admin">Any Admin</span></td><td>Edit legal page content</td></tr>
+        <tr><td><code>/admin/content/ticker</code></td><td><span class="badge badge-admin">Any Admin</span></td><td>Site-wide ticker / announcement banners</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3 class="sub">Orders, Customers & Invoices</h3>
+  <div class="table-wrap pbi">
+    <div class="table-label"><span class="dot" style="background:#60a5fa;"></span>Orders & Customers</div>
+    <table>
+      <thead><tr><th>URL</th><th>Purpose</th></tr></thead>
+      <tbody>
+        <tr><td><code>/admin/orders</code></td><td>Orders listing with status filters, search, date range</td></tr>
+        <tr><td><code>/admin/orders/[id]</code></td><td>Order detail view</td></tr>
+        <tr><td><code>/admin/orders/[id]/edit</code></td><td>Edit order details, status, items</td></tr>
+        <tr><td><code>/admin/customers</code></td><td>Customer directory with search & filters</td></tr>
+        <tr><td><code>/admin/customers/[id]</code></td><td>Customer profile: orders, projects, notes</td></tr>
+        <tr><td><code>/admin/invoices</code></td><td>Invoice management with PDF generation</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════ §9 ADMIN LEADS/MKTG ═══════ -->
+<div class="section pb">
+  <div class="section-header">
+    <div class="section-number">Section 9</div>
+    <div class="section-title">Admin Routes — Leads, Marketing, Tickets, Vendors, Services</div>
+    <div class="section-divider"></div>
+  </div>
+
+  <h3 class="sub">Leads & Sales Pipeline</h3>
+  <div class="table-wrap pbi">
+    <div class="table-label"><span class="dot" style="background:#fbbf24;"></span>Lead Management</div>
+    <table>
+      <thead><tr><th>URL</th><th>Roles</th><th>Purpose</th></tr></thead>
+      <tbody>
+        <tr><td><code>/admin/leads</code></td><td><span class="badge badge-admin">SALES_AGENT+</span></td><td>Lead listing with scoring, filtering, pagination</td></tr>
+        <tr><td><code>/admin/leads/[id]</code></td><td><span class="badge badge-admin">SALES_AGENT+</span></td><td>Lead detail view and editing</td></tr>
+        <tr><td><code>/admin/leads/analytics</code></td><td><span class="badge badge-admin">Any Admin</span></td><td>Lead analytics dashboard</td></tr>
+        <tr><td><code>/admin/leads/pipeline</code></td><td><span class="badge badge-admin">Any Admin</span></td><td>Kanban-style sales pipeline view</td></tr>
+        <tr><td><code>/admin/leads/duplicates</code></td><td><span class="badge badge-admin">Any Admin</span></td><td>Duplicate detection & merge tool</td></tr>
+        <tr><td><code>/admin/leads/forms</code></td><td><span class="badge badge-admin">Any Admin</span></td><td>Lead capture form template management</td></tr>
+        <tr><td><code>/admin/leads/settings</code></td><td><span class="badge badge-admin">Any Admin</span></td><td>Lead scoring rules and system config</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3 class="sub">Marketing & Campaigns</h3>
+  <div class="table-wrap pbi">
+    <div class="table-label"><span class="dot" style="background:#f472b6;"></span>Marketing Routes</div>
+    <table>
+      <thead><tr><th>URL</th><th>Purpose</th></tr></thead>
+      <tbody>
+        <tr><td><code>/admin/marketing/campaigns</code></td><td>Email campaign management</td></tr>
+        <tr><td><code>/admin/marketing/campaigns/new</code></td><td>Create new campaign</td></tr>
+        <tr><td><code>/admin/marketing/campaigns/[id]</code></td><td>Campaign details & stats</td></tr>
+        <tr><td><code>/admin/marketing/campaigns/[id]/edit</code></td><td>Edit campaign content, audience, schedule</td></tr>
+        <tr><td><code>/admin/marketing/newsletter</code></td><td>Newsletter subscriber management</td></tr>
+        <tr><td><code>/admin/marketing/templates</code></td><td>Reusable email template library</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3 class="sub">Tickets & Support</h3>
+  <div class="table-wrap pbi">
+    <div class="table-label"><span class="dot" style="background:#f87171;"></span>Support Routes</div>
+    <table>
+      <thead><tr><th>URL</th><th>Roles</th><th>Purpose</th></tr></thead>
+      <tbody>
+        <tr><td><code>/admin/tickets</code></td><td><span class="badge badge-admin">SUPPORT_AGENT+</span></td><td>Ticket queue with status/priority filters</td></tr>
+        <tr><td><code>/admin/tickets/[id]</code></td><td><span class="badge badge-admin">SUPPORT_AGENT+</span></td><td>Ticket detail and reply interface</td></tr>
+        <tr><td><code>/admin/tickets/analytics</code></td><td><span class="badge badge-admin">Any Admin</span></td><td>Support performance analytics</td></tr>
+        <tr><td><code>/admin/tickets/canned-responses</code></td><td><span class="badge badge-admin">Any Admin</span></td><td>Manage canned reply templates</td></tr>
+        <tr><td><code>/admin/tickets/chat</code></td><td><span class="badge badge-admin">Any Admin</span></td><td>Real-time live chat (Socket.io)</td></tr>
+        <tr><td><code>/admin/tickets/settings</code></td><td><span class="badge badge-admin">Any Admin</span></td><td>Ticket system configuration</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3 class="sub">Vendors, Venues & Services</h3>
+  <div class="table-wrap pbi">
+    <div class="table-label"><span class="dot" style="background:#34d399;"></span>Vendor / Service Routes</div>
+    <table>
+      <thead><tr><th>URL</th><th>Purpose</th></tr></thead>
+      <tbody>
+        <tr><td><code>/admin/vendors</code></td><td>Vendor directory management (approve/suspend)</td></tr>
+        <tr><td><code>/admin/vendors/reviews</code></td><td>Vendor review moderation</td></tr>
+        <tr><td><code>/admin/venues</code></td><td>Venue catalog management</td></tr>
+        <tr><td><code>/admin/service-locations</code></td><td>Service location / city management</td></tr>
+        <tr><td><code>/admin/services</code></td><td>Service catalog (list, create, enable/disable)</td></tr>
+        <tr><td><code>/admin/services/categories</code></td><td>Service category management</td></tr>
+        <tr><td><code>/admin/services/[slug]</code></td><td>Edit service (pricing, packages, FAQs, features)</td></tr>
+        <tr><td><code>/admin/services/[slug]/form-builder</code></td><td>Drag-and-drop service order form builder</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════ §10 ADMIN SETTINGS ════════ -->
+<div class="section pb">
+  <div class="section-header">
+    <div class="section-number">Section 10</div>
+    <div class="section-title">Admin Settings Routes</div>
+    <div class="section-desc">System-level configuration. Most pages are ADMIN-only or any admin-role.</div>
+    <div class="section-divider"></div>
+  </div>
+
+  <div class="table-wrap">
+    <div class="table-label"><span class="dot" style="background:#94a3b8;"></span>Settings Routes</div>
+    <table>
+      <thead><tr><th>URL</th><th>Roles</th><th>Purpose</th></tr></thead>
+      <tbody>
+        <tr><td><code>/admin/settings</code></td><td><span class="badge badge-admin">ADMIN only</span></td><td>System settings overview</td></tr>
+        <tr><td><code>/admin/settings/email</code></td><td><span class="badge badge-admin">Any Admin</span></td><td>Email provider config (SMTP / SendGrid / Mailgun)</td></tr>
+        <tr><td><code>/admin/settings/payments</code></td><td><span class="badge badge-admin">Any Admin</span></td><td>Stripe, Swish, Klarna, PayPal configuration</td></tr>
+        <tr><td><code>/admin/settings/plugins</code></td><td><span class="badge badge-admin">Any Admin</span></td><td>Plugin management: install, activate, configure</td></tr>
+        <tr><td><code>/admin/settings/plugins/[slug]</code></td><td><span class="badge badge-admin">Any Admin</span></td><td>Individual plugin settings page</td></tr>
+        <tr><td><code>/admin/settings/lists</code></td><td><span class="badge badge-admin">Any Admin</span></td><td>Manage dropdown/option lists</td></tr>
+        <tr><td><code>/admin/settings/lists/[key]</code></td><td><span class="badge badge-admin">Any Admin</span></td><td>Edit system dropdown list by key</td></tr>
+        <tr><td><code>/admin/settings/lists/custom/[id]</code></td><td><span class="badge badge-admin">Any Admin</span></td><td>Edit custom dropdown list items</td></tr>
+        <tr><td><code>/admin/settings/media-storage</code></td><td><span class="badge badge-admin">Any Admin</span></td><td>S3 bucket / CloudFront CDN configuration</td></tr>
+        <tr><td><code>/admin/settings/state-fees</code></td><td><span class="badge badge-admin">Any Admin</span></td><td>Region/state pricing fee overrides</td></tr>
+        <tr><td><code>/admin/settings/tracking</code></td><td><span class="badge badge-admin">Any Admin</span></td><td>Google Analytics, GTM, Pixel tracking scripts</td></tr>
+        <tr><td><code>/admin/settings/data</code></td><td><span class="badge badge-admin">ADMIN only</span></td><td>Data import, export, and factory reset</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════ §11 AUTH + ADMIN API ═══════ -->
+<div class="section pb">
+  <div class="section-header">
+    <div class="section-number">Section 11</div>
+    <div class="section-title">API Routes — Auth & Admin</div>
+    <div class="section-desc">All API routes handle their own authentication. Admin API routes return <code>401</code> without a valid session and <code>403</code> for insufficient role.</div>
+    <div class="section-divider"></div>
+  </div>
+
+  <div class="table-wrap pbi">
+    <div class="table-label"><span class="dot" style="background:#34d399;"></span>Admin API — Leads Module</div>
+    <table>
+      <thead><tr><th>Endpoint</th><th>Methods</th><th>Purpose</th></tr></thead>
+      <tbody>
+        <tr><td><code>/api/admin/leads</code></td><td><div class="methods"><span class="badge badge-get">GET</span><span class="badge badge-post">POST</span></div></td><td>List leads with scoring & filters / Create lead</td></tr>
+        <tr><td><code>/api/admin/leads/[id]</code></td><td><div class="methods"><span class="badge badge-get">GET</span><span class="badge badge-put">PUT</span><span class="badge badge-delete">DELETE</span></div></td><td>Get / Update / Delete lead</td></tr>
+        <tr><td><code>/api/admin/leads/[id]/convert</code></td><td><div class="methods"><span class="badge badge-post">POST</span></div></td><td>Convert lead to customer</td></tr>
+        <tr><td><code>/api/admin/leads/[id]/notes</code></td><td><div class="methods"><span class="badge badge-get">GET</span><span class="badge badge-post">POST</span></div></td><td>Lead notes management</td></tr>
+        <tr><td><code>/api/admin/leads/[id]/notes/[noteId]</code></td><td><div class="methods"><span class="badge badge-put">PUT</span><span class="badge badge-delete">DELETE</span></div></td><td>Edit / Delete note</td></tr>
+        <tr><td><code>/api/admin/leads/[id]/activities</code></td><td><div class="methods"><span class="badge badge-get">GET</span></div></td><td>Lead activity history</td></tr>
+        <tr><td><code>/api/admin/leads/bulk</code></td><td><div class="methods"><span class="badge badge-post">POST</span></div></td><td>Bulk operations (assign, status change, delete)</td></tr>
+        <tr><td><code>/api/admin/leads/duplicates</code></td><td><div class="methods"><span class="badge badge-post">POST</span></div></td><td>Find duplicate leads</td></tr>
+        <tr><td><code>/api/admin/leads/merge</code></td><td><div class="methods"><span class="badge badge-post">POST</span></div></td><td>Merge duplicate leads</td></tr>
+        <tr><td><code>/api/admin/leads/export</code></td><td><div class="methods"><span class="badge badge-post">POST</span></div></td><td>Export leads CSV/XLS</td></tr>
+        <tr><td><code>/api/admin/leads/score-decay</code></td><td><div class="methods"><span class="badge badge-post">POST</span></div></td><td>Trigger lead score decay job</td></tr>
+        <tr><td><code>/api/admin/leads/stats</code></td><td><div class="methods"><span class="badge badge-get">GET</span></div></td><td>Lead statistics summary</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="table-wrap pbi">
+    <div class="table-label"><span class="dot" style="background:#f472b6;"></span>Admin API — Campaigns, Content, Appearance (Summary)</div>
+    <table>
+      <thead><tr><th>Module</th><th>Base Path</th><th>Methods</th><th>Notes</th></tr></thead>
+      <tbody>
+        <tr><td>Campaigns</td><td><code>/api/admin/campaigns</code></td><td><div class="methods"><span class="badge badge-get">GET</span><span class="badge badge-post">POST</span><span class="badge badge-put">PUT</span><span class="badge badge-delete">DELETE</span></div></td><td><code>[id]/send</code>, <code>[id]/preview</code>, <code>[id]/process</code></td></tr>
+        <tr><td>Services</td><td><code>/api/admin/services</code></td><td><div class="methods"><span class="badge badge-get">GET</span><span class="badge badge-post">POST</span><span class="badge badge-put">PUT</span><span class="badge badge-delete">DELETE</span></div></td><td>With packages, faqs, features, location-fees, reorder</td></tr>
+        <tr><td>Blog</td><td><code>/api/admin/blog</code></td><td><div class="methods"><span class="badge badge-get">GET</span><span class="badge badge-post">POST</span><span class="badge badge-put">PUT</span><span class="badge badge-delete">DELETE</span></div></td><td>With blog-categories CRUD</td></tr>
+        <tr><td>Pages / LPs</td><td><code>/api/admin/pages</code></td><td><div class="methods"><span class="badge badge-all">ALL</span></div></td><td>Sections, templates, landing-pages, blocks</td></tr>
+        <tr><td>Form Templates</td><td><code>/api/admin/form-templates/[serviceId]</code></td><td><div class="methods"><span class="badge badge-all">ALL</span></div></td><td>Tabs, fields, reorder — full drag-and-drop support</td></tr>
+        <tr><td>Appearance</td><td><code>/api/admin/header</code> · <code>/api/admin/footer</code></td><td><div class="methods"><span class="badge badge-all">ALL</span></div></td><td>Header menu, footer widgets, presets, apply-preset</td></tr>
+        <tr><td>Themes</td><td><code>/api/admin/themes</code></td><td><div class="methods"><span class="badge badge-all">ALL</span></div></td><td>customize, import, save-pages, widget-defaults</td></tr>
+        <tr><td>Settings</td><td><code>/api/admin/settings</code></td><td><div class="methods"><span class="badge badge-get">GET</span><span class="badge badge-post">POST</span><span class="badge badge-put">PUT</span></div></td><td>test-email, test-stripe, test-paypal actions</td></tr>
+        <tr><td>Lists</td><td><code>/api/admin/lists</code></td><td><div class="methods"><span class="badge badge-all">ALL</span></div></td><td>System lists, custom lists, list items</td></tr>
+        <tr><td>Tickets</td><td><code>/api/admin/tickets</code></td><td><div class="methods"><span class="badge badge-all">ALL</span></div></td><td>messages, notes, bulk operations, analytics</td></tr>
+        <tr><td>Vendors</td><td><code>/api/admin/vendors</code></td><td><div class="methods"><span class="badge badge-all">ALL</span></div></td><td>create-account, seed-cities, reviews, venues</td></tr>
+        <tr><td>Plugins</td><td><code>/api/admin/plugins</code></td><td><div class="methods"><span class="badge badge-all">ALL</span></div></td><td>upload, activate, reactivate, settings, refresh-tokens</td></tr>
+        <tr><td>Users</td><td><code>/api/admin/users</code></td><td><div class="methods"><span class="badge badge-all">ALL</span></div></td><td>permissions, permissions/[role]</td></tr>
+        <tr><td>Newsletter</td><td><code>/api/admin/newsletter</code></td><td><div class="methods"><span class="badge badge-get">GET</span><span class="badge badge-post">POST</span></div></td><td>subscribers, stats, settings</td></tr>
+        <tr><td>Invoices</td><td><code>/api/admin/invoices</code></td><td><div class="methods"><span class="badge badge-all">ALL</span></div></td><td>Full CRUD + PDF generation</td></tr>
+        <tr><td>Tools</td><td><code>/api/admin/data/*</code></td><td><div class="methods"><span class="badge badge-post">POST</span></div></td><td>import, export, reset — ADMIN only</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════ §12 PLANNER + VENDOR API ══ -->
+<div class="section pb">
+  <div class="section-header">
+    <div class="section-number">Section 12</div>
+    <div class="section-title">API Routes — Planner & Vendor</div>
+    <div class="section-divider"></div>
+  </div>
+
+  <h3 class="sub">Planner API — All require Session + Project Ownership</h3>
+  <div class="table-wrap pbi">
+    <div class="table-label"><span class="dot" style="background:#a78bfa;"></span>Planner API Endpoints</div>
+    <table>
+      <thead><tr><th>Module</th><th>Endpoint</th><th>Methods</th><th>Purpose</th></tr></thead>
+      <tbody>
+        <tr><td>Projects</td><td><code>/api/planner/projects</code></td><td><div class="methods"><span class="badge badge-get">GET</span><span class="badge badge-post">POST</span></div></td><td>List / Create projects</td></tr>
+        <tr><td>Projects</td><td><code>/api/planner/projects/[id]</code></td><td><div class="methods"><span class="badge badge-get">GET</span><span class="badge badge-put">PUT</span><span class="badge badge-delete">DELETE</span></div></td><td>Get / Update / Delete project</td></tr>
+        <tr><td>Projects</td><td><code>/api/planner/projects/[id]/copy</code></td><td><div class="methods"><span class="badge badge-post">POST</span></div></td><td>Duplicate project</td></tr>
+        <tr><td>Brief</td><td><code>/api/planner/projects/[id]/brief</code></td><td><div class="methods"><span class="badge badge-get">GET</span><span class="badge badge-put">PUT</span></div></td><td>Get/update vendor brief</td></tr>
+        <tr><td>Share</td><td><code>/api/planner/projects/[id]/share</code></td><td><div class="methods"><span class="badge badge-post">POST</span></div></td><td>Generate share token</td></tr>
+        <tr><td>Ceremony/Reception</td><td><code>/api/planner/projects/[id]/ceremony</code> · <code>/reception</code> · <code>/post-wedding</code> · <code>/website</code></td><td><div class="methods"><span class="badge badge-get">GET</span><span class="badge badge-put">PUT</span></div></td><td>Get/update event details</td></tr>
+        <tr><td>Seating</td><td><code>/api/planner/projects/[id]/seating/[layoutId]/tables</code></td><td><div class="methods"><span class="badge badge-all">ALL</span></div></td><td>Full CRUD for seating layouts and tables</td></tr>
+        <tr><td>Budget</td><td><code>/api/planner/projects/[id]/budget/[categoryId]/items/[itemId]</code></td><td><div class="methods"><span class="badge badge-all">ALL</span></div></td><td>Nested CRUD: budget → category → items</td></tr>
+        <tr><td>Guests</td><td><code>/api/planner/projects/[id]/guests</code> · <code>[guestId]</code> · <code>bulk</code> · <code>[guestId]/token</code> · <code>[guestId]/sms</code></td><td><div class="methods"><span class="badge badge-all">ALL</span></div></td><td>Guest CRUD, bulk ops, RSVP token, SMS send</td></tr>
+        <tr><td>Families</td><td><code>/api/planner/projects/[id]/families</code> · <code>[familyId]</code></td><td><div class="methods"><span class="badge badge-all">ALL</span></div></td><td>Family grouping CRUD</td></tr>
+        <tr><td>Checklist</td><td><code>/api/planner/projects/[id]/checklist</code> · <code>[taskId]</code></td><td><div class="methods"><span class="badge badge-all">ALL</span></div></td><td>Task CRUD with completion tracking</td></tr>
+        <tr><td>Notes</td><td><code>/api/planner/projects/[id]/notes</code> · <code>[noteId]</code></td><td><div class="methods"><span class="badge badge-all">ALL</span></div></td><td>Notes CRUD</td></tr>
+        <tr><td>Itinerary</td><td><code>/api/planner/projects/[id]/itinerary</code> · <code>[eventId]</code></td><td><div class="methods"><span class="badge badge-all">ALL</span></div></td><td>Timeline event CRUD</td></tr>
+        <tr><td>Conversations</td><td><code>/api/planner/projects/[id]/conversations</code> · <code>[convId]</code></td><td><div class="methods"><span class="badge badge-all">ALL</span></div></td><td>Vendor conversations within project</td></tr>
+        <tr><td>RSVP Questions</td><td><code>/api/planner/projects/[id]/rsvp-questions</code> · <code>[questionId]</code></td><td><div class="methods"><span class="badge badge-all">ALL</span></div></td><td>Custom RSVP question management</td></tr>
+        <tr><td>Vendors</td><td><code>/api/planner/projects/[id]/vendors</code> · <code>[vendorId]</code></td><td><div class="methods"><span class="badge badge-all">ALL</span></div></td><td>Project vendor coordination</td></tr>
+        <tr><td>Shared</td><td><code>/api/planner/share/[token]</code></td><td><div class="methods"><span class="badge badge-get">GET</span></div></td><td>Get shared project via token (public)</td></tr>
+        <tr><td>Sync</td><td><code>/api/planner/sync</code></td><td><div class="methods"><span class="badge badge-post">POST</span></div></td><td>Sync localStorage projects to DB</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3 class="sub">Vendor API — Requires VENDOR Role</h3>
+  <div class="table-wrap pbi">
+    <div class="table-label"><span class="dot" style="background:#fb923c;"></span>Vendor API Endpoints</div>
+    <table>
+      <thead><tr><th>Endpoint</th><th>Methods</th><th>Purpose</th></tr></thead>
+      <tbody>
+        <tr><td><code>/api/vendor/inquiries</code> · <code>[id]</code></td><td><div class="methods"><span class="badge badge-all">ALL</span></div></td><td>Inquiry CRUD management</td></tr>
+        <tr><td><code>/api/vendor/profile</code></td><td><div class="methods"><span class="badge badge-get">GET</span><span class="badge badge-put">PUT</span></div></td><td>Edit vendor business profile</td></tr>
+        <tr><td><code>/api/vendor/quick-replies</code> · <code>[id]</code></td><td><div class="methods"><span class="badge badge-all">ALL</span></div></td><td>Canned reply templates</td></tr>
+        <tr><td><code>/api/vendor/stats</code></td><td><div class="methods"><span class="badge badge-get">GET</span></div></td><td>Dashboard statistics</td></tr>
+        <tr><td><code>/api/vendor/availability</code></td><td><div class="methods"><span class="badge badge-get">GET</span></div></td><td>Calendar availability data</td></tr>
+        <tr><td><code>/api/vendor/conversations</code> · <code>[id]</code></td><td><div class="methods"><span class="badge badge-get">GET</span><span class="badge badge-put">PUT</span></div></td><td>Vendor conversations with customers</td></tr>
+        <tr><td><code>/api/vendor/conversations/unread-count</code></td><td><div class="methods"><span class="badge badge-get">GET</span></div></td><td>Unread conversation count badge</td></tr>
+        <tr><td><code>/api/vendor/plan</code></td><td><div class="methods"><span class="badge badge-get">GET</span></div></td><td>Current subscription plan details</td></tr>
+        <tr><td><code>/api/vendor/billing/checkout</code></td><td><div class="methods"><span class="badge badge-post">POST</span></div></td><td>Initiate Stripe checkout for plan upgrade</td></tr>
+        <tr><td><code>/api/vendor/reviews</code></td><td><div class="methods"><span class="badge badge-get">GET</span></div></td><td>View own reviews & ratings</td></tr>
+        <tr><td><code>/api/vendor/register</code></td><td><div class="methods"><span class="badge badge-post">POST</span></div></td><td>Vendor registration (public)</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════ §13 CUSTOMER + PUBLIC API ══ -->
+<div class="section pb">
+  <div class="section-header">
+    <div class="section-number">Section 13</div>
+    <div class="section-title">API Routes — Customer & Public</div>
+    <div class="section-divider"></div>
+  </div>
+
+  <h3 class="sub">Customer API — Requires Session</h3>
+  <div class="table-wrap pbi">
+    <div class="table-label"><span class="dot" style="background:#818cf8;"></span>Customer / Dashboard API</div>
+    <table>
+      <thead><tr><th>Endpoint</th><th>Methods</th><th>Purpose</th></tr></thead>
+      <tbody>
+        <tr><td><code>/api/customer/account</code></td><td><div class="methods"><span class="badge badge-post">POST</span></div></td><td>Account status check</td></tr>
+        <tr><td><code>/api/customer/profile</code></td><td><div class="methods"><span class="badge badge-get">GET</span><span class="badge badge-put">PUT</span></div></td><td>Profile view & edit</td></tr>
+        <tr><td><code>/api/customer/profile/password</code></td><td><div class="methods"><span class="badge badge-post">POST</span></div></td><td>Change password</td></tr>
+        <tr><td><code>/api/customer/billing</code></td><td><div class="methods"><span class="badge badge-get">GET</span></div></td><td>Billing summary</td></tr>
+        <tr><td><code>/api/customer/billing/payment-methods</code> · <code>[id]</code></td><td><div class="methods"><span class="badge badge-all">ALL</span></div></td><td>Payment method management</td></tr>
+        <tr><td><code>/api/dashboard/overview</code></td><td><div class="methods"><span class="badge badge-get">GET</span></div></td><td>Dashboard stats & overview data</td></tr>
+        <tr><td><code>/api/dashboard/orders</code> · <code>[id]</code></td><td><div class="methods"><span class="badge badge-get">GET</span></div></td><td>Customer orders</td></tr>
+        <tr><td><code>/api/dashboard/invoices</code></td><td><div class="methods"><span class="badge badge-get">GET</span></div></td><td>Customer invoices</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3 class="sub">Public API — No Authentication Required</h3>
+  <div class="table-wrap pbi">
+    <div class="table-label"><span class="dot" style="background:#34d399;"></span>Public API Endpoints</div>
+    <table>
+      <thead><tr><th>Module</th><th>Endpoint</th><th>Methods</th><th>Purpose</th></tr></thead>
+      <tbody>
+        <tr><td>Services</td><td><code>/api/services</code> · <code>[slug]</code> · <code>[slug]/form</code> · <code>categories</code> · <code>search</code> · <code>related</code></td><td><div class="methods"><span class="badge badge-get">GET</span></div></td><td>Public service catalog & form schemas</td></tr>
+        <tr><td>Checkout</td><td><code>/api/checkout</code> · <code>gateways</code> · <code>upload</code></td><td><div class="methods"><span class="badge badge-get">GET</span><span class="badge badge-post">POST</span></div></td><td>Checkout init, available gateways, file upload</td></tr>
+        <tr><td>PayPal</td><td><code>/api/paypal/create-order</code> · <code>capture-order</code></td><td><div class="methods"><span class="badge badge-post">POST</span></div></td><td>PayPal order lifecycle</td></tr>
+        <tr><td>Content</td><td><code>/api/blog</code> · <code>[slug]</code> · <code>/api/faqs</code> · <code>/api/legal/[slug]</code> · <code>/api/testimonials</code> · <code>/api/tickers/[name]</code></td><td><div class="methods"><span class="badge badge-get">GET</span></div></td><td>Public content fetching</td></tr>
+        <tr><td>Site Config</td><td><code>/api/header</code> · <code>/api/footer</code> · <code>/api/business-config</code> · <code>/api/search-options</code> · <code>/api/lists</code> · <code>/api/locations</code> · <code>/api/states</code> · <code>/api/vendor-cities</code></td><td><div class="methods"><span class="badge badge-get">GET</span></div></td><td>Runtime site configuration</td></tr>
+        <tr><td>RSVP</td><td><code>/api/rsvp/[token]</code> · <code>/api/public/rsvp/[slug]</code></td><td><div class="methods"><span class="badge badge-get">GET</span><span class="badge badge-post">POST</span></div></td><td>Guest RSVP submission</td></tr>
+        <tr><td>Seat Finder</td><td><code>/api/public/seat-finder/[projectId]</code></td><td><div class="methods"><span class="badge badge-get">GET</span><span class="badge badge-post">POST</span></div></td><td>Guest seat lookup via name/QR</td></tr>
+        <tr><td>Brief</td><td><code>/api/brief/[token]</code></td><td><div class="methods"><span class="badge badge-get">GET</span><span class="badge badge-put">PUT</span></div></td><td>Vendor brief read & response</td></tr>
+        <tr><td>Leads</td><td><code>/api/leads</code></td><td><div class="methods"><span class="badge badge-post">POST</span></div></td><td>Public lead capture form submission</td></tr>
+        <tr><td>Orders</td><td><code>/api/orders</code> · <code>[id]</code> · <code>[id]/pay</code> · <code>[id]/invoice</code> · <code>calculate</code> · <code>export</code></td><td><div class="methods"><span class="badge badge-all">ALL</span></div></td><td>Order lifecycle including payment & invoice</td></tr>
+        <tr><td>Newsletter</td><td><code>/api/newsletter/subscribe</code> · <code>unsubscribe</code> · <code>track/open</code> · <code>track/click</code></td><td><div class="methods"><span class="badge badge-post">POST</span><span class="badge badge-get">GET</span></div></td><td>Newsletter opt-in/out & pixel tracking</td></tr>
+        <tr><td>Vendors</td><td><code>/api/vendors</code> · <code>[slug]</code> · <code>[slug]/reviews</code> · <code>[slug]/inquiries</code> · <code>[slug]/save</code></td><td><div class="methods"><span class="badge badge-get">GET</span><span class="badge badge-post">POST</span></div></td><td>Public vendor directory & inquiry submission</td></tr>
+        <tr><td>Guestbook</td><td><code>/api/guest-photos/[websiteId]</code> · <code>/api/guestbook/[websiteId]</code></td><td><div class="methods"><span class="badge badge-get">GET</span><span class="badge badge-post">POST</span></div></td><td>Wedding website photo uploads & guestbook</td></tr>
+        <tr><td>Upload</td><td><code>/api/upload</code></td><td><div class="methods"><span class="badge badge-post">POST</span></div></td><td>General file upload to S3</td></tr>
+        <tr><td>PDF</td><td><code>/api/invoices/[id]/pdf</code></td><td><div class="methods"><span class="badge badge-get">GET</span></div></td><td>Generate invoice PDF</td></tr>
+        <tr><td>Chat</td><td><code>/api/chat/config</code></td><td><div class="methods"><span class="badge badge-get">GET</span></div></td><td>Live chat widget configuration</td></tr>
+        <tr><td>Plugins</td><td><code>/api/plugins/widgets</code></td><td><div class="methods"><span class="badge badge-get">GET</span></div></td><td>Active plugin widget registrations</td></tr>
+        <tr><td>Conversations</td><td><code>/api/conversations/[id]</code></td><td><div class="methods"><span class="badge badge-get">GET</span><span class="badge badge-post">POST</span></div></td><td>Public conversation access via direct link</td></tr>
+        <tr><td>Service Orders</td><td><code>/api/service-orders</code></td><td><div class="methods"><span class="badge badge-get">GET</span><span class="badge badge-post">POST</span></div></td><td>Service order submission</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════ §14 WEBHOOKS ════════════════ -->
+<div class="section pb">
+  <div class="section-header">
+    <div class="section-number">Section 14</div>
+    <div class="section-title">Webhook & System Routes</div>
+    <div class="section-desc">Internal system routes that handle external events and real-time communication.</div>
+    <div class="section-divider"></div>
+  </div>
+
+  <div class="table-wrap pbi">
+    <div class="table-label"><span class="dot" style="background:#f87171;"></span>Webhook & System Endpoints</div>
+    <table>
+      <thead><tr><th>Endpoint</th><th>Method</th><th>Auth</th><th>Purpose</th></tr></thead>
+      <tbody>
+        <tr>
+          <td><code>/api/webhooks/stripe</code></td>
+          <td><div class="methods"><span class="badge badge-post">POST</span></div></td>
+          <td>Stripe signature verification</td>
+          <td>Handles Stripe events: <code>checkout.session.completed</code>, <code>invoice.paid</code>, <code>customer.subscription.deleted</code>, etc.</td>
+        </tr>
+        <tr>
+          <td><code>/api/webhooks/paypal</code></td>
+          <td><div class="methods"><span class="badge badge-post">POST</span></div></td>
+          <td>PayPal IPN / webhook signature</td>
+          <td>Handles PayPal payment captured, refund, subscription events</td>
+        </tr>
+        <tr>
+          <td><code>/api/socket</code></td>
+          <td><div class="methods"><span class="badge badge-get">GET</span></div></td>
+          <td>Session-based</td>
+          <td>WebSocket upgrade endpoint for Socket.io (real-time collaborative editing, live preview, chat)</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="callout">
+    <strong>Socket.io Server:</strong> Started separately via <code>npm run dev:socket</code>. Used for collaborative planner editing, live website preview, vendor chat, and admin live chat. Handles session authentication on connection.
+  </div>
+
+  <h3 class="sub">Complete Route Flow Summary</h3>
+  <div class="table-wrap pbi">
+    <div class="table-label"><span class="dot" style="background:#7c3aed;"></span>End-to-End Request Flow</div>
+    <table>
+      <thead><tr><th>Layer</th><th>Component</th><th>Responsibility</th></tr></thead>
+      <tbody>
+        <tr><td>1. DNS/CDN</td><td>Vercel Edge + CloudFront</td><td>TLS, geo-routing, static asset caching</td></tr>
+        <tr><td>2. Middleware</td><td><code>src/middleware.ts</code></td><td>Auth check, role redirect, vendor path guard</td></tr>
+        <tr><td>3. Layout</td><td><code>app/layout.tsx</code> + route group layouts</td><td>Session provider, shared UI shell</td></tr>
+        <tr><td>4. Page (RSC)</td><td><code>page.tsx</code> Server Components</td><td>DB data fetch, initial render, SEO metadata</td></tr>
+        <tr><td>5. Client Components</td><td>Zustand + React Query</td><td>Interactive UI, optimistic updates, real-time</td></tr>
+        <tr><td>6. API Routes</td><td><code>route.ts</code> handlers</td><td>CRUD operations, auth checks, business logic</td></tr>
+        <tr><td>7. DB Layer</td><td>Prisma + PostgreSQL (RDS)</td><td>Data persistence with connection pooling</td></tr>
+        <tr><td>8. Real-time</td><td>Socket.io Server (ECS)</td><td>Live events, collaborative edits, chat</td></tr>
+        <tr><td>9. Storage</td><td>AWS S3 + CloudFront CDN</td><td>Media files via presigned direct upload URLs</td></tr>
+        <tr><td>10. Payments</td><td>Stripe / Swish / Klarna / PayPal</td><td>Payment processing → webhooks → order update</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════ BACK COVER ══════════════════ -->
+<div class="cover pba" style="min-height:50vh; padding: 60px 40px;">
+  <div class="cover-badge">Ceremoney Platform</div>
+  <h1 style="font-size: 32px; margin-bottom: 12px;">Route Documentation</h1>
+  <div class="cover-subtitle" style="font-size:14px;">Generated: April 28, 2026 &nbsp;·&nbsp; Version 1.0</div>
+  <div class="cover-stack" style="margin-top: 32px; margin-bottom: 0;">
+    <span>149 Pages</span><span>250+ APIs</span><span>8 Modules</span><span>6 Roles</span><span>Next.js 15</span>
+  </div>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,938 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ceremoney — Route Documentation</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
+
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+
+:root{
+  --navy:#1a2744;
+  --navy2:#243461;
+  --navy3:#2e4080;
+  --gold:#c9a84c;
+  --gold2:#e8c96a;
+  --gold3:#f7e9b5;
+  --champagne:#fdf6ee;
+  --white:#ffffff;
+  --g50:#f9f8f6;
+  --g100:#f1ede8;
+  --g200:#e4ddd5;
+  --g400:#a89c90;
+  --g600:#6b5f54;
+  --g800:#3a302a;
+  --text:#2a2016;
+
+  --get:#16a34a;    --get-bg:#dcfce7;
+  --post:#2563eb;   --post-bg:#dbeafe;
+  --put:#d97706;    --put-bg:#fef3c7;
+  --patch:#7c3aed;  --patch-bg:#ede9fe;
+  --delete:#dc2626; --delete-bg:#fee2e2;
+
+  --public-c:#0369a1;   --public-bg:#e0f2fe;
+  --auth-c:#15803d;     --auth-bg:#dcfce7;
+  --admin-c:#7c3aed;    --admin-bg:#ede9fe;
+  --vendor-c:#c2410c;   --vendor-bg:#ffedd5;
+  --planner-c:#1d4ed8;  --planner-bg:#dbeafe;
+  --guest-c:#b45309;    --guest-bg:#fef3c7;
+}
+
+html{font-size:13px}
+body{font-family:'Inter',sans-serif;color:var(--text);background:var(--white);line-height:1.5}
+code,pre,tt{font-family:'JetBrains Mono','Fira Code',monospace}
+
+/* ── COVER ── */
+.cover{
+  min-height:100vh;
+  background:linear-gradient(160deg,var(--navy) 0%,var(--navy2) 55%,var(--navy3) 100%);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  text-align:center;padding:60px 48px;position:relative;overflow:hidden;
+  page-break-after:always;
+}
+.cover::before{content:'';position:absolute;top:-100px;right:-100px;width:500px;height:500px;border-radius:50%;background:radial-gradient(circle,rgba(201,168,76,.12) 0%,transparent 65%)}
+.cover::after{content:'';position:absolute;bottom:-80px;left:-80px;width:360px;height:360px;border-radius:50%;background:radial-gradient(circle,rgba(201,168,76,.08) 0%,transparent 65%)}
+
+.cv-badge{display:inline-block;background:rgba(201,168,76,.18);border:1px solid rgba(201,168,76,.4);color:var(--gold2);font-size:.7rem;font-weight:600;letter-spacing:.14em;text-transform:uppercase;padding:5px 18px;border-radius:20px;margin-bottom:28px}
+.cv-logo{font-family:'Playfair Display',serif;font-size:3.8rem;font-weight:700;color:#fff;letter-spacing:-.02em;margin-bottom:6px}
+.cv-logo span{color:var(--gold2)}
+.cv-orn{color:var(--gold);font-size:1.2rem;letter-spacing:.3em;margin:14px 0 20px;opacity:.75}
+.cv-title{font-family:'Playfair Display',serif;font-size:1.6rem;color:rgba(255,255,255,.9);font-weight:400;margin-bottom:8px}
+.cv-sub{font-size:.88rem;color:rgba(255,255,255,.55);font-weight:300;max-width:480px;margin-bottom:44px;line-height:1.7}
+.cv-div{width:64px;height:2px;background:linear-gradient(90deg,transparent,var(--gold),transparent);margin:0 auto 44px}
+
+.cv-stats{display:flex;gap:48px;justify-content:center;margin-bottom:48px}
+.cv-stat-num{font-family:'Playfair Display',serif;font-size:2.4rem;color:var(--gold2);font-weight:600}
+.cv-stat-label{font-size:.68rem;color:rgba(255,255,255,.45);letter-spacing:.1em;text-transform:uppercase;margin-top:2px}
+
+.cv-pills{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin-bottom:56px}
+.cv-pill{background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.13);color:rgba(255,255,255,.75);font-size:.72rem;padding:5px 14px;border-radius:16px}
+.cv-foot{position:absolute;bottom:36px;left:0;right:0;display:flex;justify-content:center;gap:36px;color:rgba(255,255,255,.35);font-size:.68rem;letter-spacing:.07em}
+
+/* ── LEGEND PAGE ── */
+.legend-page{padding:56px 64px;page-break-after:always;background:var(--champagne);min-height:60vh}
+.page-eyebrow{font-size:.68rem;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--gold);margin-bottom:7px;display:flex;align-items:center;gap:8px}
+.page-eyebrow::after{content:'';width:48px;height:1px;background:var(--gold);opacity:.35}
+.page-h1{font-family:'Playfair Display',serif;font-size:1.9rem;color:var(--navy);margin-bottom:5px}
+.page-sub{color:var(--g400);font-size:.82rem;margin-bottom:36px;max-width:560px}
+
+.legend-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.legend-card{background:var(--white);border-radius:10px;padding:18px;border:1px solid var(--g200);box-shadow:0 1px 4px rgba(0,0,0,.04)}
+.legend-card-title{font-weight:600;font-size:.82rem;color:var(--navy);margin-bottom:10px;display:flex;align-items:center;gap:8px}
+.legend-items{display:flex;flex-direction:column;gap:6px}
+.legend-row{display:flex;align-items:center;gap:8px;font-size:.75rem;color:var(--g600)}
+
+/* ── ACCESS BADGES ── */
+.ab{display:inline-flex;align-items:center;gap:4px;padding:2px 9px;border-radius:10px;font-size:.65rem;font-weight:700;letter-spacing:.03em;white-space:nowrap;flex-shrink:0}
+.ab-public {background:var(--public-bg);color:var(--public-c)}
+.ab-auth   {background:var(--auth-bg);  color:var(--auth-c)}
+.ab-admin  {background:var(--admin-bg); color:var(--admin-c)}
+.ab-vendor {background:var(--vendor-bg);color:var(--vendor-c)}
+.ab-planner{background:var(--planner-bg);color:var(--planner-c)}
+.ab-guest  {background:var(--guest-bg); color:var(--guest-c)}
+
+/* ── HTTP METHOD BADGES ── */
+.mb{display:inline-flex;align-items:center;justify-content:center;padding:2px 7px;border-radius:5px;font-size:.63rem;font-weight:700;letter-spacing:.04em;font-family:'JetBrains Mono',monospace;min-width:46px;flex-shrink:0}
+.mb-get   {background:var(--get-bg);   color:var(--get)}
+.mb-post  {background:var(--post-bg);  color:var(--post)}
+.mb-put   {background:var(--put-bg);   color:var(--put)}
+.mb-patch {background:var(--patch-bg); color:var(--patch)}
+.mb-delete{background:var(--delete-bg);color:var(--delete)}
+
+/* ── SECTION WRAPPER ── */
+.section{padding:48px 64px;page-break-before:always}
+.section-alt{background:var(--g50)}
+
+/* ── ROUTE TABLE ── */
+.rt{width:100%;border-collapse:collapse;font-size:.78rem}
+.rt thead tr{background:var(--navy);color:#fff}
+.rt th{padding:10px 14px;text-align:left;font-weight:500;font-size:.68rem;letter-spacing:.05em;text-transform:uppercase;white-space:nowrap}
+.rt td{padding:9px 14px;border-bottom:1px solid var(--g200);vertical-align:middle}
+.rt tbody tr:nth-child(even){background:var(--g50)}
+.rt tbody tr:last-child td{border-bottom:none}
+.rt tbody tr:hover{background:var(--g100)}
+
+.route-path{font-family:'JetBrains Mono',monospace;font-size:.75rem;color:var(--navy2);font-weight:500}
+.route-desc{color:var(--g600);font-size:.75rem;line-height:1.45}
+.route-note{font-size:.68rem;color:var(--g400);margin-top:2px}
+.route-param{color:var(--gold);font-style:normal}
+
+/* dynamic segment highlight */
+.seg{color:var(--gold)}
+
+/* ── GROUP HEADER ── */
+.group-header{
+  background:linear-gradient(90deg,var(--navy),var(--navy2));
+  color:#fff;padding:14px 20px;border-radius:10px 10px 0 0;
+  display:flex;align-items:center;gap:12px;
+  margin-top:28px;
+}
+.group-header:first-child{margin-top:0}
+.group-icon{font-size:1.2rem}
+.group-title{font-family:'Playfair Display',serif;font-size:1rem;font-weight:600}
+.group-count{margin-left:auto;background:rgba(255,255,255,.15);color:rgba(255,255,255,.8);font-size:.68rem;padding:2px 10px;border-radius:10px;font-weight:500}
+.group-table-wrap{border:1px solid var(--g200);border-top:none;border-radius:0 0 10px 10px;overflow:hidden;margin-bottom:4px}
+
+/* ── API ROUTE TABLE ── */
+.art{width:100%;border-collapse:collapse;font-size:.75rem}
+.art thead tr{background:var(--navy);color:#fff}
+.art th{padding:9px 12px;text-align:left;font-weight:500;font-size:.65rem;letter-spacing:.05em;text-transform:uppercase}
+.art td{padding:8px 12px;border-bottom:1px solid var(--g200);vertical-align:middle}
+.art tbody tr:nth-child(even){background:var(--g50)}
+.art tbody tr:last-child td{border-bottom:none}
+.art-path{font-family:'JetBrains Mono',monospace;font-size:.72rem;color:var(--navy2);font-weight:500}
+.art-desc{color:var(--g600);font-size:.72rem}
+
+/* ── DIVIDER ── */
+.dv{height:1px;background:linear-gradient(90deg,transparent,var(--g200),transparent);margin:28px 0}
+
+/* ── HIGHLIGHT ── */
+.hl{border-radius:10px;padding:16px 20px;margin:16px 0;display:flex;gap:14px;align-items:flex-start}
+.hl-blue {background:#eff6ff;border-left:3px solid #3b82f6}
+.hl-gold {background:var(--gold3);border-left:3px solid var(--gold)}
+.hl-green{background:#f0fdf4;border-left:3px solid var(--get)}
+.hl-i{font-size:1.1rem;flex-shrink:0;margin-top:1px}
+.hl-title{font-weight:600;font-size:.82rem;color:var(--navy);margin-bottom:3px}
+.hl-body{font-size:.75rem;color:var(--g600);line-height:1.6}
+
+/* ── FOOTER ── */
+.doc-footer{background:var(--navy);color:rgba(255,255,255,.45);padding:28px 64px;text-align:center;font-size:.7rem}
+.doc-footer strong{color:var(--gold2);font-family:'Playfair Display',serif}
+
+/* ── PRINT ── */
+@media print{
+  *{-webkit-print-color-adjust:exact!important;print-color-adjust:exact!important}
+  html{font-size:11px}
+  @page{margin:0;size:A4}
+  .cover{page-break-after:always}
+  .legend-page{page-break-after:always}
+  .section{page-break-before:auto}
+  .no-break{page-break-inside:avoid}
+}
+</style>
+</head>
+<body>
+
+<!-- ══════════════════════════════
+     COVER
+══════════════════════════════ -->
+<div class="cover">
+  <div class="cv-badge">Technical Documentation · v1.0 · April 2026</div>
+  <div class="cv-logo">Ceremo<span>ney</span></div>
+  <div class="cv-orn">— ✦ —</div>
+  <div class="cv-title">Complete Route Documentation</div>
+  <p class="cv-sub">Every page route, API endpoint, access requirement, and HTTP method in the Ceremoney platform — organized for developers, QA engineers, and product teams.</p>
+  <div class="cv-div"></div>
+
+  <div class="cv-stats">
+    <div>
+      <div class="cv-stat-num">85+</div>
+      <div class="cv-stat-label">Page Routes</div>
+    </div>
+    <div>
+      <div class="cv-stat-num">200+</div>
+      <div class="cv-stat-label">API Endpoints</div>
+    </div>
+    <div>
+      <div class="cv-stat-num">6</div>
+      <div class="cv-stat-label">Role Levels</div>
+    </div>
+    <div>
+      <div class="cv-stat-num">5</div>
+      <div class="cv-stat-label">Route Groups</div>
+    </div>
+  </div>
+
+  <div class="cv-pills">
+    <span class="cv-pill">Public Routes</span>
+    <span class="cv-pill">Auth Routes</span>
+    <span class="cv-pill">Planner Routes</span>
+    <span class="cv-pill">Vendor Routes</span>
+    <span class="cv-pill">Admin Routes</span>
+    <span class="cv-pill">API Endpoints</span>
+    <span class="cv-pill">HTTP Methods</span>
+    <span class="cv-pill">Access Control</span>
+  </div>
+
+  <div class="cv-foot">
+    <span>Next.js 15 App Router</span>
+    <span>REST API · 200+ Endpoints</span>
+    <span>Codemoly Engineering</span>
+  </div>
+</div>
+
+
+<!-- ══════════════════════════════
+     LEGEND
+══════════════════════════════ -->
+<div class="legend-page">
+  <div class="page-eyebrow">How to Read</div>
+  <h2 class="page-h1">Legend &amp; Reference</h2>
+  <p class="page-sub">Color codes, badge meanings, and notation used throughout this document</p>
+
+  <div class="legend-grid">
+    <div class="legend-card no-break">
+      <div class="legend-card-title">🔐 Access Level Badges</div>
+      <div class="legend-items">
+        <div class="legend-row"><span class="ab ab-public">PUBLIC</span> No login required — anyone can access</div>
+        <div class="legend-row"><span class="ab ab-auth">AUTH</span> Any logged-in user</div>
+        <div class="legend-row"><span class="ab ab-planner">PLANNER</span> Logged-in customer with planner access</div>
+        <div class="legend-row"><span class="ab ab-vendor">VENDOR</span> Registered vendor role only</div>
+        <div class="legend-row"><span class="ab ab-admin">ADMIN</span> Admin or super_admin role</div>
+        <div class="legend-row"><span class="ab ab-guest">GUEST</span> Event guest — no account, token-based</div>
+      </div>
+    </div>
+
+    <div class="legend-card no-break">
+      <div class="legend-card-title">⚡ HTTP Method Badges</div>
+      <div class="legend-items">
+        <div class="legend-row"><span class="mb mb-get">GET</span> Retrieve data — safe, cacheable</div>
+        <div class="legend-row"><span class="mb mb-post">POST</span> Create new resource</div>
+        <div class="legend-row"><span class="mb mb-put">PUT</span> Replace entire resource</div>
+        <div class="legend-row"><span class="mb mb-patch">PATCH</span> Partial update of resource</div>
+        <div class="legend-row"><span class="mb mb-delete">DELETE</span> Remove a resource</div>
+      </div>
+    </div>
+
+    <div class="legend-card no-break">
+      <div class="legend-card-title">📝 Path Notation</div>
+      <div class="legend-items">
+        <div class="legend-row" style="font-family:monospace;font-size:.75rem"><span style="color:var(--gold)">[id]</span> — Dynamic segment (any value)</div>
+        <div class="legend-row" style="font-family:monospace;font-size:.75rem"><span style="color:var(--gold)">[slug]</span> — URL-friendly string identifier</div>
+        <div class="legend-row" style="font-family:monospace;font-size:.75rem"><span style="color:var(--gold)">[token]</span> — Secure share token</div>
+        <div class="legend-row" style="font-family:monospace;font-size:.75rem"><span style="color:var(--gold)">[...path]</span> — Catch-all segments</div>
+        <div class="legend-row" style="font-family:monospace;font-size:.75rem"><span style="color:var(--gold2)">(group)</span> — Next.js route group (not in URL)</div>
+      </div>
+    </div>
+
+    <div class="legend-card no-break">
+      <div class="legend-card-title">📁 Route Groups (Next.js)</div>
+      <div class="legend-items">
+        <div class="legend-row"><code style="background:var(--g100);padding:1px 6px;border-radius:3px">(marketing)</code> Public-facing site</div>
+        <div class="legend-row"><code style="background:var(--g100);padding:1px 6px;border-radius:3px">(auth)</code> Login / Register pages</div>
+        <div class="legend-row"><code style="background:var(--g100);padding:1px 6px;border-radius:3px">dashboard/</code> Customer portal</div>
+        <div class="legend-row"><code style="background:var(--g100);padding:1px 6px;border-radius:3px">planner/</code> Event planning suite</div>
+        <div class="legend-row"><code style="background:var(--g100);padding:1px 6px;border-radius:3px">admin/</code> Admin control panel</div>
+        <div class="legend-row"><code style="background:var(--g100);padding:1px 6px;border-radius:3px">vendor/</code> Vendor business portal</div>
+      </div>
+    </div>
+
+    <div class="legend-card no-break">
+      <div class="legend-card-title">🗝️ Special Tokens</div>
+      <div class="legend-items">
+        <div class="legend-row" style="font-size:.72rem">RSVP slug — Human-readable couple identifier</div>
+        <div class="legend-row" style="font-size:.72rem">Share token — Cryptographic project share URL</div>
+        <div class="legend-row" style="font-size:.72rem">Brief token — Vendor event brief access token</div>
+        <div class="legend-row" style="font-size:.72rem">Project ID — Cuid-format database identifier</div>
+        <div class="legend-row" style="font-size:.72rem">Webhook secret — Stripe/PayPal event verification</div>
+      </div>
+    </div>
+
+    <div class="legend-card no-break">
+      <div class="legend-card-title">⚠️ Auth Notes</div>
+      <div class="legend-items">
+        <div class="legend-row" style="font-size:.72rem">All API routes return <code style="background:var(--delete-bg);color:var(--delete);padding:0 4px;border-radius:3px">401</code> for unauthenticated requests where auth is required</div>
+        <div class="legend-row" style="font-size:.72rem">Role mismatch returns <code style="background:var(--delete-bg);color:var(--delete);padding:0 4px;border-radius:3px">403</code> Forbidden</div>
+        <div class="legend-row" style="font-size:.72rem">Anonymous planner data stored in localStorage, synced on login</div>
+        <div class="legend-row" style="font-size:.72rem">Vendor routes require admin approval first</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ══════════════════════════════
+     SECTION 1 — PUBLIC ROUTES
+══════════════════════════════ -->
+<div class="section">
+  <div class="page-eyebrow">Section 01</div>
+  <h2 class="page-h1">Public Page Routes</h2>
+  <p class="page-sub">Marketing site, legal pages, and event pages accessible without authentication</p>
+
+  <div class="hl hl-blue">
+    <div class="hl-i">🌐</div>
+    <div>
+      <div class="hl-title">Route Group: <code>(marketing)</code></div>
+      <div class="hl-body">All routes in this group are wrapped in the marketing layout (Header + Footer + TrackingScripts + PluginLoader). No authentication middleware applied. Indexed by search engines. Supports i18n (SE, EN, AR).</div>
+    </div>
+  </div>
+
+  <div class="group-header">
+    <span class="group-icon">🏠</span>
+    <div>
+      <div class="group-title">Core Marketing Pages</div>
+    </div>
+    <span class="group-count">8 routes</span>
+  </div>
+  <div class="group-table-wrap no-break">
+    <table class="rt">
+      <thead><tr><th>Route</th><th>Page / Purpose</th><th>Access</th><th>Notes</th></tr></thead>
+      <tbody>
+        <tr><td><span class="route-path">/</span></td><td><div class="route-desc">Homepage — hero, features, pricing preview, testimonials</div></td><td><span class="ab ab-public">PUBLIC</span></td><td><span class="route-note">Dynamic landing page builder (admin-configurable)</span></td></tr>
+        <tr><td><span class="route-path">/pricing</span></td><td><div class="route-desc">Plan comparison — Basic, Premium, Elite, Vendor, White-Label</div></td><td><span class="ab ab-public">PUBLIC</span></td><td><span class="route-note">Prices pulled from DB settings</span></td></tr>
+        <tr><td><span class="route-path">/about</span></td><td><div class="route-desc">About Ceremoney — company info, mission, team</div></td><td><span class="ab ab-public">PUBLIC</span></td><td></td></tr>
+        <tr><td><span class="route-path">/contact</span></td><td><div class="route-desc">Contact form — submits lead to admin CRM</div></td><td><span class="ab ab-public">PUBLIC</span></td><td><span class="route-note">Has own layout wrapper</span></td></tr>
+        <tr><td><span class="route-path">/faq</span></td><td><div class="route-desc">Global FAQ page with accordion sections</div></td><td><span class="ab ab-public">PUBLIC</span></td><td></td></tr>
+        <tr><td><span class="route-path">/search</span></td><td><div class="route-desc">Site-wide search results page</div></td><td><span class="ab ab-public">PUBLIC</span></td><td><span class="route-note">Query param: <code>?q=</code></span></td></tr>
+        <tr><td><span class="route-path">/newsletter</span></td><td><div class="route-desc">Newsletter subscription landing page</div></td><td><span class="ab ab-public">PUBLIC</span></td><td></td></tr>
+        <tr><td><span class="route-path">/<span class="seg">[slug]</span></span></td><td><div class="route-desc">Dynamic CMS pages created in admin panel</div></td><td><span class="ab ab-public">PUBLIC</span></td><td><span class="route-note">Catch-all for custom pages</span></td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="group-header" style="margin-top:20px">
+    <span class="group-icon">🛍️</span>
+    <div><div class="group-title">Services &amp; Vendors</div></div>
+    <span class="group-count">5 routes</span>
+  </div>
+  <div class="group-table-wrap no-break">
+    <table class="rt">
+      <thead><tr><th>Route</th><th>Page / Purpose</th><th>Access</th><th>Notes</th></tr></thead>
+      <tbody>
+        <tr><td><span class="route-path">/services</span></td><td><div class="route-desc">Service catalog listing with category filters</div></td><td><span class="ab ab-public">PUBLIC</span></td><td></td></tr>
+        <tr><td><span class="route-path">/services/<span class="seg">[slug]</span></span></td><td><div class="route-desc">Individual service page — packages, features, FAQ, CTA</div></td><td><span class="ab ab-public">PUBLIC</span></td><td><span class="route-note">Package comparison table</span></td></tr>
+        <tr><td><span class="route-path">/vendors</span></td><td><div class="route-desc">Vendor directory — browse by category &amp; city</div></td><td><span class="ab ab-public">PUBLIC</span></td><td><span class="route-note">13 vendor categories</span></td></tr>
+        <tr><td><span class="route-path">/vendors/<span class="seg">[slug]</span></span></td><td><div class="route-desc">Public vendor profile — portfolio, pricing, reviews</div></td><td><span class="ab ab-public">PUBLIC</span></td><td><span class="route-note">Save requires login</span></td></tr>
+        <tr><td><span class="route-path">/conversation</span></td><td><div class="route-desc">Couple ↔ Vendor messaging threads</div></td><td><span class="ab ab-auth">AUTH</span></td><td></td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="group-header" style="margin-top:20px">
+    <span class="group-icon">✍️</span>
+    <div><div class="group-title">Blog &amp; Content</div></div>
+    <span class="group-count">4 routes</span>
+  </div>
+  <div class="group-table-wrap no-break">
+    <table class="rt">
+      <thead><tr><th>Route</th><th>Page / Purpose</th><th>Access</th><th>Notes</th></tr></thead>
+      <tbody>
+        <tr><td><span class="route-path">/blog</span></td><td><div class="route-desc">Blog listing with category filters and search</div></td><td><span class="ab ab-public">PUBLIC</span></td><td><span class="route-note">Paginated, SEO-optimized</span></td></tr>
+        <tr><td><span class="route-path">/blog/<span class="seg">[slug]</span></span></td><td><div class="route-desc">Individual blog post with author, categories, related posts</div></td><td><span class="ab ab-public">PUBLIC</span></td><td><span class="route-note">JSON-LD structured data</span></td></tr>
+        <tr><td><span class="route-path">/privacy</span></td><td><div class="route-desc">Privacy Policy (GDPR compliant)</div></td><td><span class="ab ab-public">PUBLIC</span></td><td><span class="route-note">Editable from admin</span></td></tr>
+        <tr><td><span class="route-path">/terms</span></td><td><div class="route-desc">Terms of Service</div></td><td><span class="ab ab-public">PUBLIC</span></td><td><span class="route-note">Editable from admin</span></td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="group-header" style="margin-top:20px">
+    <span class="group-icon">💌</span>
+    <div><div class="group-title">Guest-Facing Event Routes</div></div>
+    <span class="group-count">5 routes</span>
+  </div>
+  <div class="group-table-wrap no-break">
+    <table class="rt">
+      <thead><tr><th>Route</th><th>Page / Purpose</th><th>Access</th><th>Notes</th></tr></thead>
+      <tbody>
+        <tr><td><span class="route-path">/rsvp/<span class="seg">[slug]</span></span></td><td><div class="route-desc">Wedding RSVP page — couple's custom wedding website</div></td><td><span class="ab ab-guest">GUEST</span></td><td><span class="route-note">No account needed. Slug set by couple.</span></td></tr>
+        <tr><td><span class="route-path">/brief/<span class="seg">[token]</span></span></td><td><div class="route-desc">Event brief page — shared with vendors via secure token</div></td><td><span class="ab ab-guest">GUEST</span></td><td><span class="route-note">Token expires after use</span></td></tr>
+        <tr><td><span class="route-path">/checkout</span></td><td><div class="route-desc">Service checkout — form, location, payment</div></td><td><span class="ab ab-auth">AUTH</span></td><td><span class="route-note">Requires login to complete order</span></td></tr>
+        <tr><td><span class="route-path">/planner/share/<span class="seg">[token]</span></span></td><td><div class="route-desc">Shared planner project view for collaborators</div></td><td><span class="ab ab-auth">AUTH</span></td><td><span class="route-note">Token-based project access</span></td></tr>
+        <tr><td><span class="route-path">/planner/sync</span></td><td><div class="route-desc">Sync localStorage data to database after login</div></td><td><span class="ab ab-auth">AUTH</span></td><td><span class="route-note">One-time migration page</span></td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+
+<!-- ══════════════════════════════
+     SECTION 2 — AUTH ROUTES
+══════════════════════════════ -->
+<div class="section section-alt">
+  <div class="page-eyebrow">Section 02</div>
+  <h2 class="page-h1">Authentication Routes</h2>
+  <p class="page-sub">Login, registration, and password recovery — wrapped in the auth layout (no header/footer)</p>
+
+  <div class="group-header">
+    <span class="group-icon">🔑</span>
+    <div><div class="group-title">Auth Pages — Route Group: <code>(auth)</code></div></div>
+    <span class="group-count">3 routes</span>
+  </div>
+  <div class="group-table-wrap no-break">
+    <table class="rt">
+      <thead><tr><th>Route</th><th>Page / Purpose</th><th>Access</th><th>Post-Login Redirect</th></tr></thead>
+      <tbody>
+        <tr>
+          <td><span class="route-path">/login</span></td>
+          <td><div class="route-desc">Sign-in form — email + password</div><div class="route-note">OAuth providers can be added</div></td>
+          <td><span class="ab ab-public">PUBLIC</span></td>
+          <td><div class="route-note">customer → <code>/dashboard</code><br>vendor → <code>/vendor/dashboard</code><br>admin → <code>/admin</code></div></td>
+        </tr>
+        <tr>
+          <td><span class="route-path">/register</span></td>
+          <td><div class="route-desc">New account creation — name, email, password</div></td>
+          <td><span class="ab ab-public">PUBLIC</span></td>
+          <td><div class="route-note">→ <code>/planner</code> after registration</div></td>
+        </tr>
+        <tr>
+          <td><span class="route-path">/forgot-password</span></td>
+          <td><div class="route-desc">Password recovery — sends reset link via email</div></td>
+          <td><span class="ab ab-public">PUBLIC</span></td>
+          <td><div class="route-note">→ Email with reset link</div></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+
+<!-- ══════════════════════════════
+     SECTION 3 — CUSTOMER DASHBOARD
+══════════════════════════════ -->
+<div class="section">
+  <div class="page-eyebrow">Section 03</div>
+  <h2 class="page-h1">Customer Dashboard Routes</h2>
+  <p class="page-sub">Order management, invoices, documents, profile — all require authentication</p>
+
+  <div class="group-header">
+    <span class="group-icon">📋</span>
+    <div><div class="group-title">Dashboard — <code>/dashboard/*</code></div></div>
+    <span class="group-count">8 routes</span>
+  </div>
+  <div class="group-table-wrap no-break">
+    <table class="rt">
+      <thead><tr><th>Route</th><th>Page / Purpose</th><th>Access</th><th>Notes</th></tr></thead>
+      <tbody>
+        <tr><td><span class="route-path">/dashboard</span></td><td><div class="route-desc">Overview — active projects, recent orders, quick actions</div></td><td><span class="ab ab-auth">AUTH</span></td><td><span class="route-note">Shows planner project cards</span></td></tr>
+        <tr><td><span class="route-path">/dashboard/orders</span></td><td><div class="route-desc">Full order history with status badges</div></td><td><span class="ab ab-auth">AUTH</span></td><td></td></tr>
+        <tr><td><span class="route-path">/dashboard/orders/<span class="seg">[id]</span></span></td><td><div class="route-desc">Individual order detail — timeline, documents, notes</div></td><td><span class="ab ab-auth">AUTH</span></td><td><span class="route-note">Shows progress steps</span></td></tr>
+        <tr><td><span class="route-path">/dashboard/invoices</span></td><td><div class="route-desc">Invoice listing with download buttons</div></td><td><span class="ab ab-auth">AUTH</span></td><td><span class="route-note">PDF download available</span></td></tr>
+        <tr><td><span class="route-path">/dashboard/documents</span></td><td><div class="route-desc">Uploaded documents per order</div></td><td><span class="ab ab-auth">AUTH</span></td><td></td></tr>
+        <tr><td><span class="route-path">/dashboard/profile</span></td><td><div class="route-desc">Edit name, email, password, profile photo</div></td><td><span class="ab ab-auth">AUTH</span></td><td></td></tr>
+        <tr><td><span class="route-path">/dashboard/billing</span></td><td><div class="route-desc">Subscription status, saved payment methods</div></td><td><span class="ab ab-auth">AUTH</span></td><td><span class="route-note">Stripe Customer Portal link</span></td></tr>
+        <tr><td><span class="route-path">/dashboard/help</span></td><td><div class="route-desc">Help center — FAQs, create support ticket</div></td><td><span class="ab ab-auth">AUTH</span></td><td></td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+
+<!-- ══════════════════════════════
+     SECTION 4 — PLANNER ROUTES
+══════════════════════════════ -->
+<div class="section section-alt">
+  <div class="page-eyebrow">Section 04</div>
+  <h2 class="page-h1">Wedding Planner Routes</h2>
+  <p class="page-sub">The core planning suite — 20+ dedicated routes for full event management</p>
+
+  <div class="hl hl-gold">
+    <div class="hl-i">💡</div>
+    <div>
+      <div class="hl-title">Dual-Mode Architecture</div>
+      <div class="hl-body">All planner routes work in <strong>anonymous mode</strong> (data stored in localStorage via <code>planner-storage.ts</code>) and <strong>authenticated mode</strong> (data synced to PostgreSQL via API). Users can start planning immediately without an account.</div>
+    </div>
+  </div>
+
+  <div class="group-header">
+    <span class="group-icon">📁</span>
+    <div><div class="group-title">Planner Root — <code>/planner/*</code></div></div>
+    <span class="group-count">4 routes</span>
+  </div>
+  <div class="group-table-wrap no-break">
+    <table class="rt">
+      <thead><tr><th>Route</th><th>Page / Purpose</th><th>Access</th><th>Notes</th></tr></thead>
+      <tbody>
+        <tr><td><span class="route-path">/planner</span></td><td><div class="route-desc">Projects list — all events created by user</div></td><td><span class="ab ab-planner">PLANNER</span></td><td><span class="route-note">Shows project cards with status</span></td></tr>
+        <tr><td><span class="route-path">/planner/create</span></td><td><div class="route-desc">Create new event project — type, name, date, city</div></td><td><span class="ab ab-planner">PLANNER</span></td><td><span class="route-note">4 event types available</span></td></tr>
+        <tr><td><span class="route-path">/planner/billing</span></td><td><div class="route-desc">Upgrade plan — Basic → Premium → Elite</div></td><td><span class="ab ab-planner">PLANNER</span></td><td><span class="route-note">Stripe Checkout integration</span></td></tr>
+        <tr><td><span class="route-path">/planner/sync</span></td><td><div class="route-desc">Migrate localStorage data to database after login</div></td><td><span class="ab ab-planner">PLANNER</span></td><td><span class="route-note">One-time sync on first login</span></td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="group-header" style="margin-top:20px">
+    <span class="group-icon">💍</span>
+    <div><div class="group-title">Project Pages — <code>/planner/<span class="seg">[id]</span>/*</code></div></div>
+    <span class="group-count">16 routes</span>
+  </div>
+  <div class="group-table-wrap no-break">
+    <table class="rt">
+      <thead><tr><th>Route</th><th>Page / Purpose</th><th>Plan Required</th><th>Notes</th></tr></thead>
+      <tbody>
+        <tr><td><span class="route-path">/planner/<span class="seg">[id]</span></span></td><td><div class="route-desc">Project overview — stat cards, quick navigation</div></td><td><span class="ab ab-auth">Basic+</span></td><td><span class="route-note">Guests confirmed, budget %, tasks done</span></td></tr>
+        <tr><td><span class="route-path">/planner/<span class="seg">[id]</span>/guests</span></td><td><div class="route-desc">Guest list management — add, edit, RSVP tracking</div></td><td><span class="ab ab-auth">Basic+</span></td><td><span class="route-note">CSV import available</span></td></tr>
+        <tr><td><span class="route-path">/planner/<span class="seg">[id]</span>/seating</span></td><td><div class="route-desc">Seating chart hub — choose ceremony or reception layout</div></td><td style="color:var(--post)"><strong>Premium+</strong></td><td></td></tr>
+        <tr><td><span class="route-path">/planner/<span class="seg">[id]</span>/seating/ceremony-layout-edit</span></td><td><div class="route-desc">Konva.js canvas editor — ceremony row seating</div></td><td style="color:var(--post)"><strong>Premium+</strong></td><td><span class="route-note">Drag-and-drop, aisle support</span></td></tr>
+        <tr><td><span class="route-path">/planner/<span class="seg">[id]</span>/seating/reception-layout-edit</span></td><td><div class="route-desc">Konva.js canvas editor — reception table seating</div></td><td style="color:var(--post)"><strong>Premium+</strong></td><td><span class="route-note">Round, Rectangle, Head Table types</span></td></tr>
+        <tr><td><span class="route-path">/planner/<span class="seg">[id]</span>/seating/cards-edit</span></td><td><div class="route-desc">Place card / name card designer + PDF export</div></td><td style="color:var(--patch)"><strong>Elite+</strong></td><td><span class="route-note">Stationery engine</span></td></tr>
+        <tr><td><span class="route-path">/planner/<span class="seg">[id]</span>/seating/menu-edit</span></td><td><div class="route-desc">Per-table or per-guest menu assignment</div></td><td style="color:var(--post)"><strong>Premium+</strong></td><td></td></tr>
+        <tr><td><span class="route-path">/planner/<span class="seg">[id]</span>/budget</span></td><td><div class="route-desc">Budget tracker — categories, line items, spending overview</div></td><td><span class="ab ab-auth">Basic+</span></td><td><span class="route-note">SEK / USD / BDT</span></td></tr>
+        <tr><td><span class="route-path">/planner/<span class="seg">[id]</span>/checklist</span></td><td><div class="route-desc">Pre-populated planning checklist by timeline</div></td><td><span class="ab ab-auth">Basic+</span></td><td><span class="route-note">Custom tasks supported</span></td></tr>
+        <tr><td><span class="route-path">/planner/<span class="seg">[id]</span>/itinerary</span></td><td><div class="route-desc">Day-of timeline editor — time, title, location, person</div></td><td><span class="ab ab-auth">Basic+</span></td><td><span class="route-note">Drag-to-reorder events</span></td></tr>
+        <tr><td><span class="route-path">/planner/<span class="seg">[id]</span>/vendors</span></td><td><div class="route-desc">Vendor coordination — add, track payments, contact</div></td><td><span class="ab ab-auth">Basic+</span></td><td></td></tr>
+        <tr><td><span class="route-path">/planner/<span class="seg">[id]</span>/website</span></td><td><div class="route-desc">Wedding website block builder + RSVP management</div></td><td><span class="ab ab-auth">Basic+</span></td><td><span class="route-note">Custom domain: Premium+</span></td></tr>
+        <tr><td><span class="route-path">/planner/<span class="seg">[id]</span>/ceremony</span></td><td><div class="route-desc">Ceremony venue details — name, address, time, notes</div></td><td><span class="ab ab-auth">Basic+</span></td><td></td></tr>
+        <tr><td><span class="route-path">/planner/<span class="seg">[id]</span>/reception</span></td><td><div class="route-desc">Reception venue details — name, address, time, notes</div></td><td><span class="ab ab-auth">Basic+</span></td><td></td></tr>
+        <tr><td><span class="route-path">/planner/<span class="seg">[id]</span>/notes</span></td><td><div class="route-desc">Free-form notes and ideas throughout planning</div></td><td><span class="ab ab-auth">Basic+</span></td><td></td></tr>
+        <tr><td><span class="route-path">/planner/<span class="seg">[id]</span>/settings</span></td><td><div class="route-desc">Project settings — name, date, share link, clone, archive</div></td><td><span class="ab ab-auth">Basic+</span></td><td><span class="route-note">Generate share token here</span></td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+
+<!-- ══════════════════════════════
+     SECTION 5 — VENDOR & ADMIN ROUTES
+══════════════════════════════ -->
+<div class="section">
+  <div class="page-eyebrow">Section 05</div>
+  <h2 class="page-h1">Vendor &amp; Admin Routes</h2>
+  <p class="page-sub">Business portal for vendors and the full admin control panel</p>
+
+  <div class="group-header">
+    <span class="group-icon">🏪</span>
+    <div><div class="group-title">Vendor Portal — <code>/vendor/*</code></div></div>
+    <span class="group-count">1 main route</span>
+  </div>
+  <div class="group-table-wrap no-break">
+    <table class="rt">
+      <thead><tr><th>Route</th><th>Page / Purpose</th><th>Access</th><th>Notes</th></tr></thead>
+      <tbody>
+        <tr><td><span class="route-path">/vendor/dashboard</span></td><td><div class="route-desc">Vendor hub — profile, inquiries, messages, calendar, reviews, analytics</div></td><td><span class="ab ab-vendor">VENDOR</span></td><td><span class="route-note">Admin approval required before access</span></td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="group-header" style="margin-top:20px">
+    <span class="group-icon">⚙️</span>
+    <div><div class="group-title">Admin Panel — <code>/admin/*</code></div></div>
+    <span class="group-count">50+ routes</span>
+  </div>
+  <div class="group-table-wrap no-break">
+    <table class="rt">
+      <thead><tr><th>Route</th><th>Page / Purpose</th><th>Access</th></tr></thead>
+      <tbody>
+        <tr><td><span class="route-path">/admin</span></td><td><div class="route-desc">Admin dashboard — KPIs, revenue, orders, leads overview</div></td><td><span class="ab ab-admin">ADMIN</span></td></tr>
+        <tr><td><span class="route-path">/admin/users</span></td><td><div class="route-desc">User management — list, search, role assignment</div></td><td><span class="ab ab-admin">ADMIN</span></td></tr>
+        <tr><td><span class="route-path">/admin/customers</span></td><td><div class="route-desc">Customer database with order history</div></td><td><span class="ab ab-admin">ADMIN</span></td></tr>
+        <tr><td><span class="route-path">/admin/customers/<span class="seg">[id]</span></span></td><td><div class="route-desc">Individual customer profile — orders, tickets, notes</div></td><td><span class="ab ab-admin">ADMIN</span></td></tr>
+        <tr><td><span class="route-path">/admin/orders</span></td><td><div class="route-desc">All orders — status, filtering, bulk actions</div></td><td><span class="ab ab-admin">ADMIN</span></td></tr>
+        <tr><td><span class="route-path">/admin/orders/<span class="seg">[id]</span></span></td><td><div class="route-desc">Order detail — edit, documents, notes, status update</div></td><td><span class="ab ab-admin">ADMIN</span></td></tr>
+        <tr><td><span class="route-path">/admin/invoices</span></td><td><div class="route-desc">All invoices — download, filter, regenerate</div></td><td><span class="ab ab-admin">ADMIN</span></td></tr>
+        <tr><td><span class="route-path">/admin/leads</span></td><td><div class="route-desc">Lead database with scoring and status</div></td><td><span class="ab ab-admin">ADMIN</span></td></tr>
+        <tr><td><span class="route-path">/admin/leads/pipeline</span></td><td><div class="route-desc">Kanban pipeline — New, Contacted, Qualified, Won</div></td><td><span class="ab ab-admin">ADMIN</span></td></tr>
+        <tr><td><span class="route-path">/admin/leads/analytics</span></td><td><div class="route-desc">Lead conversion analytics dashboard</div></td><td><span class="ab ab-admin">ADMIN</span></td></tr>
+        <tr><td><span class="route-path">/admin/services</span></td><td><div class="route-desc">Service catalog management</div></td><td><span class="ab ab-admin">ADMIN</span></td></tr>
+        <tr><td><span class="route-path">/admin/services/<span class="seg">[slug]</span>/form-builder</span></td><td><div class="route-desc">Dynamic form builder for service checkout</div></td><td><span class="ab ab-admin">ADMIN</span></td></tr>
+        <tr><td><span class="route-path">/admin/tickets</span></td><td><div class="route-desc">Support ticket inbox — priority, assignment</div></td><td><span class="ab ab-admin">ADMIN</span></td></tr>
+        <tr><td><span class="route-path">/admin/marketing/newsletters</span></td><td><div class="route-desc">Newsletter campaign management</div></td><td><span class="ab ab-admin">ADMIN</span></td></tr>
+        <tr><td><span class="route-path">/admin/appearance/landing-page</span></td><td><div class="route-desc">No-code page builder with 70+ widgets</div></td><td><span class="ab ab-admin">ADMIN</span></td></tr>
+        <tr><td><span class="route-path">/admin/appearance/themes</span></td><td><div class="route-desc">Theme selection and installation</div></td><td><span class="ab ab-admin">ADMIN</span></td></tr>
+        <tr><td><span class="route-path">/admin/appearance/themes/customize</span></td><td><div class="route-desc">Theme color, font, spacing customization</div></td><td><span class="ab ab-admin">ADMIN</span></td></tr>
+        <tr><td><span class="route-path">/admin/appearance/header</span></td><td><div class="route-desc">Visual header builder — layout, logo, menu</div></td><td><span class="ab ab-admin">ADMIN</span></td></tr>
+        <tr><td><span class="route-path">/admin/appearance/footer</span></td><td><div class="route-desc">Footer builder — 7 layout presets, widgets</div></td><td><span class="ab ab-admin">ADMIN</span></td></tr>
+        <tr><td><span class="route-path">/admin/content/blog</span></td><td><div class="route-desc">Blog CMS — create, edit, publish posts</div></td><td><span class="ab ab-admin">ADMIN</span></td></tr>
+        <tr><td><span class="route-path">/admin/content/legal</span></td><td><div class="route-desc">Legal page editor — privacy, terms, refund</div></td><td><span class="ab ab-admin">ADMIN</span></td></tr>
+        <tr><td><span class="route-path">/admin/settings/payments</span></td><td><div class="route-desc">Payment gateway config — Stripe, PayPal keys</div></td><td><span class="ab ab-admin">ADMIN</span></td></tr>
+        <tr><td><span class="route-path">/admin/settings/plugins</span></td><td><div class="route-desc">Plugin management — install, activate, configure</div></td><td><span class="ab ab-admin">ADMIN</span></td></tr>
+        <tr><td><span class="route-path">/admin/settings/tracking</span></td><td><div class="route-desc">Analytics pixels — GTM, GA4, Facebook, TikTok</div></td><td><span class="ab ab-admin">ADMIN</span></td></tr>
+        <tr><td><span class="route-path">/admin/planner</span></td><td><div class="route-desc">Monitor all active wedding projects platform-wide</div></td><td><span class="ab ab-admin">ADMIN</span></td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+
+<!-- ══════════════════════════════
+     SECTION 6 — API ROUTES
+══════════════════════════════ -->
+<div class="section section-alt">
+  <div class="page-eyebrow">Section 06</div>
+  <h2 class="page-h1">API Routes — Authentication &amp; Users</h2>
+  <p class="page-sub">All endpoints under <code>/api/</code> — RESTful JSON API</p>
+
+  <div class="hl hl-blue">
+    <div class="hl-i">ℹ️</div>
+    <div>
+      <div class="hl-title">Base URL</div>
+      <div class="hl-body">All API routes are prefixed with <code>/api/</code> in Next.js App Router. Protected routes validate JWT via NextAuth and return <code style="background:#fee2e2;color:#dc2626;padding:0 5px;border-radius:3px">401 Unauthorized</code> or <code style="background:#fee2e2;color:#dc2626;padding:0 5px;border-radius:3px">403 Forbidden</code> when access is denied.</div>
+    </div>
+  </div>
+
+  <div class="group-header">
+    <span class="group-icon">🔐</span>
+    <div><div class="group-title">Authentication &amp; Session</div></div>
+    <span class="group-count">6 endpoints</span>
+  </div>
+  <div class="group-table-wrap no-break">
+    <table class="art">
+      <thead><tr><th>Method</th><th>Endpoint</th><th>Purpose</th><th>Access</th></tr></thead>
+      <tbody>
+        <tr><td><span class="mb mb-get">GET</span></td><td><span class="art-path">/auth/me</span></td><td><span class="art-desc">Get current authenticated user</span></td><td><span class="ab ab-auth">AUTH</span></td></tr>
+        <tr><td><span class="mb mb-post">POST</span></td><td><span class="art-path">/auth/login</span></td><td><span class="art-desc">Email + password sign-in</span></td><td><span class="ab ab-public">PUBLIC</span></td></tr>
+        <tr><td><span class="mb mb-post">POST</span></td><td><span class="art-path">/auth/register</span></td><td><span class="art-desc">Create new customer account</span></td><td><span class="ab ab-public">PUBLIC</span></td></tr>
+        <tr><td><span class="mb mb-get">GET</span><span class="mb mb-post">POST</span></td><td><span class="art-path">/auth/[...nextauth]</span></td><td><span class="art-desc">NextAuth.js handler — sessions, JWT, providers</span></td><td><span class="ab ab-public">PUBLIC</span></td></tr>
+        <tr><td><span class="mb mb-patch">PATCH</span></td><td><span class="art-path">/customer/profile/password</span></td><td><span class="art-desc">Change password (requires current password)</span></td><td><span class="ab ab-auth">AUTH</span></td></tr>
+        <tr><td><span class="mb mb-get">GET</span><span class="mb mb-put">PUT</span></td><td><span class="art-path">/customer/profile</span></td><td><span class="art-desc">Get and update customer profile</span></td><td><span class="ab ab-auth">AUTH</span></td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="group-header" style="margin-top:20px">
+    <span class="group-icon">💳</span>
+    <div><div class="group-title">Billing &amp; Payments</div></div>
+    <span class="group-count">10 endpoints</span>
+  </div>
+  <div class="group-table-wrap no-break">
+    <table class="art">
+      <thead><tr><th>Method</th><th>Endpoint</th><th>Purpose</th><th>Access</th></tr></thead>
+      <tbody>
+        <tr><td><span class="mb mb-post">POST</span></td><td><span class="art-path">/billing/checkout</span></td><td><span class="art-desc">Create Stripe Checkout session for subscription</span></td><td><span class="ab ab-auth">AUTH</span></td></tr>
+        <tr><td><span class="mb mb-post">POST</span></td><td><span class="art-path">/billing/portal</span></td><td><span class="art-desc">Open Stripe Customer Portal for subscription management</span></td><td><span class="ab ab-auth">AUTH</span></td></tr>
+        <tr><td><span class="mb mb-get">GET</span></td><td><span class="art-path">/billing/subscription</span></td><td><span class="art-desc">Get current subscription plan and status</span></td><td><span class="ab ab-auth">AUTH</span></td></tr>
+        <tr><td><span class="mb mb-post">POST</span></td><td><span class="art-path">/billing/verify-session</span></td><td><span class="art-desc">Verify Stripe session after redirect</span></td><td><span class="ab ab-auth">AUTH</span></td></tr>
+        <tr><td><span class="mb mb-post">POST</span></td><td><span class="art-path">/webhooks/stripe</span></td><td><span class="art-desc">Stripe webhook — payment confirmed, subscription updated</span></td><td><span class="ab ab-public">WEBHOOK</span></td></tr>
+        <tr><td><span class="mb mb-post">POST</span></td><td><span class="art-path">/webhooks/paypal</span></td><td><span class="art-desc">PayPal webhook — order captured, subscription events</span></td><td><span class="ab ab-public">WEBHOOK</span></td></tr>
+        <tr><td><span class="mb mb-post">POST</span></td><td><span class="art-path">/paypal/create-order</span></td><td><span class="art-desc">Create PayPal order for checkout</span></td><td><span class="ab ab-auth">AUTH</span></td></tr>
+        <tr><td><span class="mb mb-post">POST</span></td><td><span class="art-path">/paypal/capture-order</span></td><td><span class="art-desc">Capture approved PayPal payment</span></td><td><span class="ab ab-auth">AUTH</span></td></tr>
+        <tr><td><span class="mb mb-get">GET</span></td><td><span class="art-path">/checkout/gateways</span></td><td><span class="art-desc">List available payment methods for user's region</span></td><td><span class="ab ab-auth">AUTH</span></td></tr>
+        <tr><td><span class="mb mb-get">GET</span><span class="mb mb-put">PUT</span></td><td><span class="art-path">/customer/billing/payment-methods</span></td><td><span class="art-desc">Manage saved payment cards</span></td><td><span class="ab ab-auth">AUTH</span></td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+
+<!-- ══════════════════════════════
+     SECTION 7 — PLANNER API
+══════════════════════════════ -->
+<div class="section">
+  <div class="page-eyebrow">Section 07</div>
+  <h2 class="page-h1">Planner API Routes</h2>
+  <p class="page-sub">40+ endpoints powering the wedding planning suite</p>
+
+  <div class="group-header">
+    <span class="group-icon">📁</span>
+    <div><div class="group-title">Projects</div></div>
+    <span class="group-count">5 endpoints</span>
+  </div>
+  <div class="group-table-wrap no-break">
+    <table class="art">
+      <thead><tr><th>Method</th><th>Endpoint</th><th>Purpose</th><th>Access</th></tr></thead>
+      <tbody>
+        <tr><td><span class="mb mb-get">GET</span></td><td><span class="art-path">/planner/projects</span></td><td><span class="art-desc">List all projects for current user</span></td><td><span class="ab ab-planner">PLANNER</span></td></tr>
+        <tr><td><span class="mb mb-post">POST</span></td><td><span class="art-path">/planner/projects</span></td><td><span class="art-desc">Create new event project</span></td><td><span class="ab ab-planner">PLANNER</span></td></tr>
+        <tr><td><span class="mb mb-get">GET</span></td><td><span class="art-path">/planner/projects/<span class="seg">[id]</span></span></td><td><span class="art-desc">Get single project with full details</span></td><td><span class="ab ab-planner">PLANNER</span></td></tr>
+        <tr><td><span class="mb mb-put">PUT</span></td><td><span class="art-path">/planner/projects/<span class="seg">[id]</span></span></td><td><span class="art-desc">Update project name, date, venue, status</span></td><td><span class="ab ab-planner">PLANNER</span></td></tr>
+        <tr><td><span class="mb mb-post">POST</span></td><td><span class="art-path">/planner/projects/<span class="seg">[id]</span>/copy</span></td><td><span class="art-desc">Clone entire project (all data)</span></td><td><span class="ab ab-planner">PLANNER</span></td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="group-header" style="margin-top:20px">
+    <span class="group-icon">👥</span>
+    <div><div class="group-title">Guests</div></div>
+    <span class="group-count">8 endpoints</span>
+  </div>
+  <div class="group-table-wrap no-break">
+    <table class="art">
+      <thead><tr><th>Method</th><th>Endpoint</th><th>Purpose</th><th>Access</th></tr></thead>
+      <tbody>
+        <tr><td><span class="mb mb-get">GET</span></td><td><span class="art-path">/planner/projects/<span class="seg">[id]</span>/guests</span></td><td><span class="art-desc">List all guests with RSVP status, meal prefs</span></td><td><span class="ab ab-planner">PLANNER</span></td></tr>
+        <tr><td><span class="mb mb-post">POST</span></td><td><span class="art-path">/planner/projects/<span class="seg">[id]</span>/guests</span></td><td><span class="art-desc">Add single guest</span></td><td><span class="ab ab-planner">PLANNER</span></td></tr>
+        <tr><td><span class="mb mb-put">PUT</span></td><td><span class="art-path">/planner/projects/<span class="seg">[id]</span>/guests/<span class="seg">[gid]</span></span></td><td><span class="art-desc">Update guest details, RSVP, meal</span></td><td><span class="ab ab-planner">PLANNER</span></td></tr>
+        <tr><td><span class="mb mb-delete">DELETE</span></td><td><span class="art-path">/planner/projects/<span class="seg">[id]</span>/guests/<span class="seg">[gid]</span></span></td><td><span class="art-desc">Remove guest from list</span></td><td><span class="ab ab-planner">PLANNER</span></td></tr>
+        <tr><td><span class="mb mb-post">POST</span></td><td><span class="art-path">/planner/projects/<span class="seg">[id]</span>/guests/bulk</span></td><td><span class="art-desc">Bulk import guests from CSV</span></td><td><span class="ab ab-planner">PLANNER</span></td></tr>
+        <tr><td><span class="mb mb-get">GET</span></td><td><span class="art-path">/planner/projects/<span class="seg">[id]</span>/families</span></td><td><span class="art-desc">List family groups</span></td><td><span class="ab ab-planner">PLANNER</span></td></tr>
+        <tr><td><span class="mb mb-post">POST</span></td><td><span class="art-path">/planner/projects/<span class="seg">[id]</span>/families</span></td><td><span class="art-desc">Create guest family group</span></td><td><span class="ab ab-planner">PLANNER</span></td></tr>
+        <tr><td><span class="mb mb-get">GET</span><span class="mb mb-put">PUT</span></td><td><span class="art-path">/planner/projects/<span class="seg">[id]</span>/rsvp-questions</span></td><td><span class="art-desc">Custom RSVP form questions</span></td><td><span class="ab ab-planner">PLANNER</span></td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="group-header" style="margin-top:20px">
+    <span class="group-icon">🪑</span>
+    <div><div class="group-title">Seating · Budget · Checklist · Itinerary</div></div>
+    <span class="group-count">16 endpoints</span>
+  </div>
+  <div class="group-table-wrap no-break">
+    <table class="art">
+      <thead><tr><th>Method</th><th>Endpoint</th><th>Purpose</th><th>Access</th></tr></thead>
+      <tbody>
+        <tr><td><span class="mb mb-get">GET</span><span class="mb mb-post">POST</span></td><td><span class="art-path">/planner/projects/<span class="seg">[id]</span>/seating</span></td><td><span class="art-desc">Get / create seating layouts (ceremony &amp; reception)</span></td><td><span class="ab ab-planner">PLANNER</span></td></tr>
+        <tr><td><span class="mb mb-put">PUT</span></td><td><span class="art-path">/planner/projects/<span class="seg">[id]</span>/seating/<span class="seg">[lid]</span></span></td><td><span class="art-desc">Update layout — tables, positions, assignments</span></td><td><span class="ab ab-planner">PLANNER</span></td></tr>
+        <tr><td><span class="mb mb-get">GET</span><span class="mb mb-post">POST</span></td><td><span class="art-path">/planner/projects/<span class="seg">[id]</span>/budget</span></td><td><span class="art-desc">Get all budget categories with line items</span></td><td><span class="ab ab-planner">PLANNER</span></td></tr>
+        <tr><td><span class="mb mb-post">POST</span></td><td><span class="art-path">/planner/projects/<span class="seg">[id]</span>/budget/categories</span></td><td><span class="art-desc">Add budget category</span></td><td><span class="ab ab-planner">PLANNER</span></td></tr>
+        <tr><td><span class="mb mb-post">POST</span></td><td><span class="art-path">/planner/projects/<span class="seg">[id]</span>/budget/items</span></td><td><span class="art-desc">Add budget line item to category</span></td><td><span class="ab ab-planner">PLANNER</span></td></tr>
+        <tr><td><span class="mb mb-patch">PATCH</span></td><td><span class="art-path">/planner/projects/<span class="seg">[id]</span>/budget/items/<span class="seg">[bid]</span></span></td><td><span class="art-desc">Update line item (actual amount, paid status)</span></td><td><span class="ab ab-planner">PLANNER</span></td></tr>
+        <tr><td><span class="mb mb-get">GET</span><span class="mb mb-post">POST</span></td><td><span class="art-path">/planner/projects/<span class="seg">[id]</span>/checklist</span></td><td><span class="art-desc">Get / add checklist tasks</span></td><td><span class="ab ab-planner">PLANNER</span></td></tr>
+        <tr><td><span class="mb mb-patch">PATCH</span></td><td><span class="art-path">/planner/projects/<span class="seg">[id]</span>/checklist/<span class="seg">[tid]</span></span></td><td><span class="art-desc">Mark task complete / incomplete</span></td><td><span class="ab ab-planner">PLANNER</span></td></tr>
+        <tr><td><span class="mb mb-get">GET</span><span class="mb mb-post">POST</span></td><td><span class="art-path">/planner/projects/<span class="seg">[id]</span>/itinerary</span></td><td><span class="art-desc">Get / add day-of timeline events</span></td><td><span class="ab ab-planner">PLANNER</span></td></tr>
+        <tr><td><span class="mb mb-put">PUT</span></td><td><span class="art-path">/planner/projects/<span class="seg">[id]</span>/itinerary/<span class="seg">[eid]</span></span></td><td><span class="art-desc">Update itinerary event — time, title, location</span></td><td><span class="ab ab-planner">PLANNER</span></td></tr>
+        <tr><td><span class="mb mb-get">GET</span><span class="mb mb-put">PUT</span></td><td><span class="art-path">/planner/projects/<span class="seg">[id]</span>/website</span></td><td><span class="art-desc">Get / update wedding website configuration &amp; blocks</span></td><td><span class="ab ab-planner">PLANNER</span></td></tr>
+        <tr><td><span class="mb mb-get">GET</span><span class="mb mb-put">PUT</span></td><td><span class="art-path">/planner/projects/<span class="seg">[id]</span>/ceremony</span></td><td><span class="art-desc">Ceremony venue details</span></td><td><span class="ab ab-planner">PLANNER</span></td></tr>
+        <tr><td><span class="mb mb-get">GET</span><span class="mb mb-put">PUT</span></td><td><span class="art-path">/planner/projects/<span class="seg">[id]</span>/reception</span></td><td><span class="art-desc">Reception venue details</span></td><td><span class="ab ab-planner">PLANNER</span></td></tr>
+        <tr><td><span class="mb mb-post">POST</span></td><td><span class="art-path">/planner/projects/<span class="seg">[id]</span>/share</span></td><td><span class="art-desc">Generate secure share token for project</span></td><td><span class="ab ab-planner">PLANNER</span></td></tr>
+        <tr><td><span class="mb mb-post">POST</span></td><td><span class="art-path">/planner/projects/<span class="seg">[id]</span>/brief</span></td><td><span class="art-desc">Generate vendor event brief token</span></td><td><span class="ab ab-planner">PLANNER</span></td></tr>
+        <tr><td><span class="mb mb-post">POST</span></td><td><span class="art-path">/planner/sync</span></td><td><span class="art-desc">Migrate localStorage data to database</span></td><td><span class="ab ab-planner">PLANNER</span></td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+
+<!-- ══════════════════════════════
+     SECTION 8 — VENDOR API
+══════════════════════════════ -->
+<div class="section section-alt">
+  <div class="page-eyebrow">Section 08</div>
+  <h2 class="page-h1">Vendor &amp; Public API Routes</h2>
+  <p class="page-sub">Vendor management, public directory, RSVP submissions, and content endpoints</p>
+
+  <div class="group-header">
+    <span class="group-icon">🏪</span>
+    <div><div class="group-title">Vendor Portal API</div></div>
+    <span class="group-count">12 endpoints</span>
+  </div>
+  <div class="group-table-wrap no-break">
+    <table class="art">
+      <thead><tr><th>Method</th><th>Endpoint</th><th>Purpose</th><th>Access</th></tr></thead>
+      <tbody>
+        <tr><td><span class="mb mb-post">POST</span></td><td><span class="art-path">/vendor/register</span></td><td><span class="art-desc">Register as vendor (pending admin approval)</span></td><td><span class="ab ab-auth">AUTH</span></td></tr>
+        <tr><td><span class="mb mb-get">GET</span><span class="mb mb-put">PUT</span></td><td><span class="art-path">/vendor/profile</span></td><td><span class="art-desc">Get / update vendor business profile</span></td><td><span class="ab ab-vendor">VENDOR</span></td></tr>
+        <tr><td><span class="mb mb-get">GET</span><span class="mb mb-post">POST</span></td><td><span class="art-path">/vendor/availability</span></td><td><span class="art-desc">Get / set availability calendar dates</span></td><td><span class="ab ab-vendor">VENDOR</span></td></tr>
+        <tr><td><span class="mb mb-get">GET</span></td><td><span class="art-path">/vendor/inquiries</span></td><td><span class="art-desc">List all inquiries received from couples</span></td><td><span class="ab ab-vendor">VENDOR</span></td></tr>
+        <tr><td><span class="mb mb-get">GET</span></td><td><span class="art-path">/vendor/conversations</span></td><td><span class="art-desc">List all messaging threads</span></td><td><span class="ab ab-vendor">VENDOR</span></td></tr>
+        <tr><td><span class="mb mb-get">GET</span></td><td><span class="art-path">/vendor/reviews</span></td><td><span class="art-desc">View all reviews from couples</span></td><td><span class="ab ab-vendor">VENDOR</span></td></tr>
+        <tr><td><span class="mb mb-get">GET</span><span class="mb mb-post">POST</span></td><td><span class="art-path">/vendor/quick-replies</span></td><td><span class="art-desc">Quick reply message templates</span></td><td><span class="ab ab-vendor">VENDOR</span></td></tr>
+        <tr><td><span class="mb mb-get">GET</span></td><td><span class="art-path">/vendor/stats</span></td><td><span class="art-desc">Profile views, inquiry count, response rate</span></td><td><span class="ab ab-vendor">VENDOR</span></td></tr>
+        <tr><td><span class="mb mb-get">GET</span></td><td><span class="art-path">/vendor/plan</span></td><td><span class="art-desc">Current vendor plan and expiry</span></td><td><span class="ab ab-vendor">VENDOR</span></td></tr>
+        <tr><td><span class="mb mb-get">GET</span></td><td><span class="art-path">/vendors</span></td><td><span class="art-desc">Public vendor directory — filter by category/city</span></td><td><span class="ab ab-public">PUBLIC</span></td></tr>
+        <tr><td><span class="mb mb-get">GET</span></td><td><span class="art-path">/vendors/<span class="seg">[slug]</span></span></td><td><span class="art-desc">Public vendor profile data</span></td><td><span class="ab ab-public">PUBLIC</span></td></tr>
+        <tr><td><span class="mb mb-post">POST</span></td><td><span class="art-path">/vendors/<span class="seg">[slug]</span>/inquiries</span></td><td><span class="art-desc">Send inquiry to vendor (creates conversation)</span></td><td><span class="ab ab-auth">AUTH</span></td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="group-header" style="margin-top:20px">
+    <span class="group-icon">💌</span>
+    <div><div class="group-title">Public Event &amp; RSVP API</div></div>
+    <span class="group-count">8 endpoints</span>
+  </div>
+  <div class="group-table-wrap no-break">
+    <table class="art">
+      <thead><tr><th>Method</th><th>Endpoint</th><th>Purpose</th><th>Access</th></tr></thead>
+      <tbody>
+        <tr><td><span class="mb mb-get">GET</span></td><td><span class="art-path">/public/rsvp/<span class="seg">[slug]</span></span></td><td><span class="art-desc">Get wedding website data for RSVP page</span></td><td><span class="ab ab-public">PUBLIC</span></td></tr>
+        <tr><td><span class="mb mb-post">POST</span></td><td><span class="art-path">/rsvp/<span class="seg">[token]</span></span></td><td><span class="art-desc">Submit guest RSVP response</span></td><td><span class="ab ab-public">PUBLIC</span></td></tr>
+        <tr><td><span class="mb mb-get">GET</span></td><td><span class="art-path">/public/seat-finder/<span class="seg">[projectId]</span></span></td><td><span class="art-desc">Look up guest seat assignment by name</span></td><td><span class="ab ab-public">PUBLIC</span></td></tr>
+        <tr><td><span class="mb mb-get">GET</span><span class="mb mb-post">POST</span></td><td><span class="art-path">/guestbook/<span class="seg">[websiteId]</span></span></td><td><span class="art-desc">Get / add guestbook entries</span></td><td><span class="ab ab-public">PUBLIC</span></td></tr>
+        <tr><td><span class="mb mb-post">POST</span></td><td><span class="art-path">/guest-photos/<span class="seg">[websiteId]</span></span></td><td><span class="art-desc">Upload guest photos to wedding website</span></td><td><span class="ab ab-public">PUBLIC</span></td></tr>
+        <tr><td><span class="mb mb-get">GET</span></td><td><span class="art-path">/brief/<span class="seg">[token]</span></span></td><td><span class="art-desc">Get event brief data (vendor access)</span></td><td><span class="ab ab-guest">TOKEN</span></td></tr>
+        <tr><td><span class="mb mb-get">GET</span></td><td><span class="art-path">/planner/share/<span class="seg">[token]</span></span></td><td><span class="art-desc">Access shared project via token</span></td><td><span class="ab ab-auth">AUTH</span></td></tr>
+        <tr><td><span class="mb mb-post">POST</span></td><td><span class="art-path">/newsletter/subscribe</span></td><td><span class="art-desc">Subscribe email to newsletter</span></td><td><span class="ab ab-public">PUBLIC</span></td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+
+<!-- ══════════════════════════════
+     SECTION 9 — ADMIN API
+══════════════════════════════ -->
+<div class="section">
+  <div class="page-eyebrow">Section 09</div>
+  <h2 class="page-h1">Admin API Routes</h2>
+  <p class="page-sub">100+ admin endpoints for complete platform management</p>
+
+  <div class="group-header">
+    <span class="group-icon">📦</span>
+    <div><div class="group-title">Orders &amp; Invoices</div></div>
+    <span class="group-count">10 endpoints</span>
+  </div>
+  <div class="group-table-wrap no-break">
+    <table class="art">
+      <thead><tr><th>Method</th><th>Endpoint</th><th>Purpose</th><th>Access</th></tr></thead>
+      <tbody>
+        <tr><td><span class="mb mb-get">GET</span></td><td><span class="art-path">/admin/orders</span></td><td><span class="art-desc">List all orders with filters (status, date, customer)</span></td><td><span class="ab ab-admin">ADMIN</span></td></tr>
+        <tr><td><span class="mb mb-get">GET</span></td><td><span class="art-path">/admin/orders/<span class="seg">[id]</span></span></td><td><span class="art-desc">Single order detail with items, documents, notes</span></td><td><span class="ab ab-admin">ADMIN</span></td></tr>
+        <tr><td><span class="mb mb-put">PUT</span></td><td><span class="art-path">/admin/orders/<span class="seg">[id]</span></span></td><td><span class="art-desc">Update order status, assigned staff, notes</span></td><td><span class="ab ab-admin">ADMIN</span></td></tr>
+        <tr><td><span class="mb mb-post">POST</span></td><td><span class="art-path">/admin/orders/bulk</span></td><td><span class="art-desc">Bulk status update, export</span></td><td><span class="ab ab-admin">ADMIN</span></td></tr>
+        <tr><td><span class="mb mb-get">GET</span></td><td><span class="art-path">/admin/invoices</span></td><td><span class="art-desc">All invoices with download links</span></td><td><span class="ab ab-admin">ADMIN</span></td></tr>
+        <tr><td><span class="mb mb-get">GET</span></td><td><span class="art-path">/admin/customers</span></td><td><span class="art-desc">Customer list with order counts, plan tier</span></td><td><span class="ab ab-admin">ADMIN</span></td></tr>
+        <tr><td><span class="mb mb-get">GET</span></td><td><span class="art-path">/admin/customers/<span class="seg">[id]</span></span></td><td><span class="art-desc">Customer profile, orders, tickets, activity</span></td><td><span class="ab ab-admin">ADMIN</span></td></tr>
+        <tr><td><span class="mb mb-get">GET</span></td><td><span class="art-path">/admin/users</span></td><td><span class="art-desc">All users with role filter</span></td><td><span class="ab ab-admin">ADMIN</span></td></tr>
+        <tr><td><span class="mb mb-put">PUT</span></td><td><span class="art-path">/admin/users/<span class="seg">[id]</span></span></td><td><span class="art-desc">Update user role, status, permissions</span></td><td><span class="ab ab-admin">ADMIN</span></td></tr>
+        <tr><td><span class="mb mb-delete">DELETE</span></td><td><span class="art-path">/admin/users/<span class="seg">[id]</span></span></td><td><span class="art-desc">Delete user account</span></td><td><span class="ab ab-admin">ADMIN</span></td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="group-header" style="margin-top:20px">
+    <span class="group-icon">📈</span>
+    <div><div class="group-title">Leads &amp; Marketing</div></div>
+    <span class="group-count">12 endpoints</span>
+  </div>
+  <div class="group-table-wrap no-break">
+    <table class="art">
+      <thead><tr><th>Method</th><th>Endpoint</th><th>Purpose</th><th>Access</th></tr></thead>
+      <tbody>
+        <tr><td><span class="mb mb-get">GET</span></td><td><span class="art-path">/admin/leads</span></td><td><span class="art-desc">Lead list with score, status, source</span></td><td><span class="ab ab-admin">ADMIN</span></td></tr>
+        <tr><td><span class="mb mb-get">GET</span></td><td><span class="art-path">/admin/leads/<span class="seg">[id]</span></span></td><td><span class="art-desc">Lead detail with activity timeline</span></td><td><span class="ab ab-admin">ADMIN</span></td></tr>
+        <tr><td><span class="mb mb-patch">PATCH</span></td><td><span class="art-path">/admin/leads/<span class="seg">[id]</span></span></td><td><span class="art-desc">Update lead stage, assigned rep</span></td><td><span class="ab ab-admin">ADMIN</span></td></tr>
+        <tr><td><span class="mb mb-post">POST</span></td><td><span class="art-path">/admin/leads/<span class="seg">[id]</span>/convert</span></td><td><span class="art-desc">Convert lead to customer account</span></td><td><span class="ab ab-admin">ADMIN</span></td></tr>
+        <tr><td><span class="mb mb-post">POST</span></td><td><span class="art-path">/admin/leads/<span class="seg">[id]</span>/activities</span></td><td><span class="art-desc">Log call, email, meeting activity</span></td><td><span class="ab ab-admin">ADMIN</span></td></tr>
+        <tr><td><span class="mb mb-get">GET</span></td><td><span class="art-path">/admin/leads/duplicates</span></td><td><span class="art-desc">Find duplicate leads by email/phone</span></td><td><span class="ab ab-admin">ADMIN</span></td></tr>
+        <tr><td><span class="mb mb-post">POST</span></td><td><span class="art-path">/leads</span></td><td><span class="art-desc">Submit web form lead (from contact page)</span></td><td><span class="ab ab-public">PUBLIC</span></td></tr>
+        <tr><td><span class="mb mb-get">GET</span><span class="mb mb-post">POST</span></td><td><span class="art-path">/admin/campaigns</span></td><td><span class="art-desc">Email marketing campaigns</span></td><td><span class="ab ab-admin">ADMIN</span></td></tr>
+        <tr><td><span class="mb mb-get">GET</span><span class="mb mb-post">POST</span></td><td><span class="art-path">/admin/marketing/newsletters</span></td><td><span class="art-desc">Newsletter subscriber list management</span></td><td><span class="ab ab-admin">ADMIN</span></td></tr>
+        <tr><td><span class="mb mb-get">GET</span><span class="mb mb-post">POST</span></td><td><span class="art-path">/admin/email-templates</span></td><td><span class="art-desc">Email template library</span></td><td><span class="ab ab-admin">ADMIN</span></td></tr>
+        <tr><td><span class="mb mb-get">GET</span></td><td><span class="art-path">/newsletter/track/open</span></td><td><span class="art-desc">Track email open (pixel hit)</span></td><td><span class="ab ab-public">PUBLIC</span></td></tr>
+        <tr><td><span class="mb mb-get">GET</span></td><td><span class="art-path">/newsletter/track/click</span></td><td><span class="art-desc">Track email link click + redirect</span></td><td><span class="ab ab-public">PUBLIC</span></td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="group-header" style="margin-top:20px">
+    <span class="group-icon">🎨</span>
+    <div><div class="group-title">Appearance &amp; Settings</div></div>
+    <span class="group-count">12 endpoints</span>
+  </div>
+  <div class="group-table-wrap no-break">
+    <table class="art">
+      <thead><tr><th>Method</th><th>Endpoint</th><th>Purpose</th><th>Access</th></tr></thead>
+      <tbody>
+        <tr><td><span class="mb mb-get">GET</span><span class="mb mb-put">PUT</span></td><td><span class="art-path">/admin/header</span></td><td><span class="art-desc">Header layout, logo, menu config</span></td><td><span class="ab ab-admin">ADMIN</span></td></tr>
+        <tr><td><span class="mb mb-get">GET</span><span class="mb mb-put">PUT</span></td><td><span class="art-path">/admin/footer</span></td><td><span class="art-desc">Footer layout, widgets, social links</span></td><td><span class="ab ab-admin">ADMIN</span></td></tr>
+        <tr><td><span class="mb mb-get">GET</span></td><td><span class="art-path">/admin/footer/presets</span></td><td><span class="art-desc">Pre-built footer template designs</span></td><td><span class="ab ab-admin">ADMIN</span></td></tr>
+        <tr><td><span class="mb mb-get">GET</span><span class="mb mb-put">PUT</span></td><td><span class="art-path">/admin/appearance</span></td><td><span class="art-desc">Active theme, global colors, fonts</span></td><td><span class="ab ab-admin">ADMIN</span></td></tr>
+        <tr><td><span class="mb mb-get">GET</span><span class="mb mb-post">POST</span></td><td><span class="art-path">/admin/themes</span></td><td><span class="art-desc">List installed themes, import/export</span></td><td><span class="ab ab-admin">ADMIN</span></td></tr>
+        <tr><td><span class="mb mb-get">GET</span><span class="mb mb-post">POST</span></td><td><span class="art-path">/admin/landing-pages</span></td><td><span class="art-desc">Landing page list and creation</span></td><td><span class="ab ab-admin">ADMIN</span></td></tr>
+        <tr><td><span class="mb mb-put">PUT</span></td><td><span class="art-path">/admin/landing-pages/<span class="seg">[id]</span>/blocks</span></td><td><span class="art-desc">Save page builder block layout</span></td><td><span class="ab ab-admin">ADMIN</span></td></tr>
+        <tr><td><span class="mb mb-get">GET</span><span class="mb mb-put">PUT</span></td><td><span class="art-path">/admin/settings/<span class="seg">[key]</span></span></td><td><span class="art-desc">Key-value settings (email, payments, etc.)</span></td><td><span class="ab ab-admin">ADMIN</span></td></tr>
+        <tr><td><span class="mb mb-get">GET</span><span class="mb mb-post">POST</span></td><td><span class="art-path">/admin/plugins</span></td><td><span class="art-desc">Plugin install, activate, configure</span></td><td><span class="ab ab-admin">ADMIN</span></td></tr>
+        <tr><td><span class="mb mb-get">GET</span></td><td><span class="art-path">/header</span></td><td><span class="art-desc">Public header config for site rendering</span></td><td><span class="ab ab-public">PUBLIC</span></td></tr>
+        <tr><td><span class="mb mb-get">GET</span></td><td><span class="art-path">/footer</span></td><td><span class="art-desc">Public footer config for site rendering</span></td><td><span class="ab ab-public">PUBLIC</span></td></tr>
+        <tr><td><span class="mb mb-get">GET</span></td><td><span class="art-path">/business-config</span></td><td><span class="art-desc">Business name, logo, contact info</span></td><td><span class="ab ab-public">PUBLIC</span></td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+
+<!-- ══════════════════════════════
+     SECTION 10 — ROUTE SUMMARY
+══════════════════════════════ -->
+<div class="section section-alt">
+  <div class="page-eyebrow">Section 10</div>
+  <h2 class="page-h1">Route Summary &amp; Statistics</h2>
+  <p class="page-sub">Complete breakdown of all routes by category and access level</p>
+
+  <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:28px">
+    <div style="background:var(--white);border-radius:12px;padding:24px;border:1px solid var(--g200);text-align:center" class="no-break">
+      <div style="font-family:'Playfair Display',serif;font-size:2.8rem;font-weight:700;color:var(--navy)">85+</div>
+      <div style="font-weight:600;color:var(--navy);margin-top:4px">Page Routes</div>
+      <div style="font-size:.75rem;color:var(--g400);margin-top:6px">Next.js App Router pages visible to users</div>
+    </div>
+    <div style="background:var(--white);border-radius:12px;padding:24px;border:1px solid var(--g200);text-align:center" class="no-break">
+      <div style="font-family:'Playfair Display',serif;font-size:2.8rem;font-weight:700;color:var(--gold)">200+</div>
+      <div style="font-weight:600;color:var(--navy);margin-top:4px">API Endpoints</div>
+      <div style="font-size:.75rem;color:var(--g400);margin-top:6px">RESTful JSON endpoints under <code>/api/</code></div>
+    </div>
+    <div style="background:var(--white);border-radius:12px;padding:24px;border:1px solid var(--g200);text-align:center" class="no-break">
+      <div style="font-family:'Playfair Display',serif;font-size:2.8rem;font-weight:700;color:var(--get)">6</div>
+      <div style="font-weight:600;color:var(--navy);margin-top:4px">Role Levels</div>
+      <div style="font-size:.75rem;color:var(--g400);margin-top:6px">super_admin · admin · vendor · customer · collaborator · guest</div>
+    </div>
+  </div>
+
+  <table class="rt no-break">
+    <thead>
+      <tr><th>Route Group</th><th>Page Count</th><th>API Endpoints</th><th>Auth Required</th><th>Primary Users</th></tr>
+    </thead>
+    <tbody>
+      <tr><td><span class="ab ab-public">PUBLIC (marketing)</span></td><td>~20 routes</td><td>~15 endpoints</td><td>❌ None</td><td>Visitors, Guests</td></tr>
+      <tr><td><span class="ab ab-auth">Auth Pages</span></td><td>3 routes</td><td>4 endpoints</td><td>❌ None (pre-auth)</td><td>New &amp; returning users</td></tr>
+      <tr><td><span class="ab ab-auth">Customer Dashboard</span></td><td>8 routes</td><td>10 endpoints</td><td>✅ Any login</td><td>Customers</td></tr>
+      <tr><td><span class="ab ab-planner">Planner Suite</span></td><td>20 routes</td><td>40+ endpoints</td><td>✅ Customer login</td><td>Couples, Planners</td></tr>
+      <tr><td><span class="ab ab-vendor">Vendor Portal</span></td><td>1 route</td><td>12 endpoints</td><td>✅ Vendor role</td><td>Wedding Vendors</td></tr>
+      <tr><td><span class="ab ab-admin">Admin Panel</span></td><td>50+ routes</td><td>100+ endpoints</td><td>✅ Admin role</td><td>Platform Operators</td></tr>
+      <tr><td><span class="ab ab-guest">Guest / Token</span></td><td>3 routes</td><td>8 endpoints</td><td>❌ Token-based</td><td>Wedding Guests</td></tr>
+    </tbody>
+  </table>
+
+  <div class="hl hl-green" style="margin-top:20px">
+    <div class="hl-i">✅</div>
+    <div>
+      <div class="hl-title">Key Design Principle: Anonymous-First</div>
+      <div class="hl-body">All planner page routes work without authentication using localStorage. The API layer (<code>/api/planner/</code>) is auth-protected, but the UI degrades gracefully to local storage — so users can start planning with zero friction. The <code>/planner/sync</code> route handles the one-time migration when a user registers.</div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ══════════════════════════════
+     FOOTER
+══════════════════════════════ -->
+<div class="doc-footer">
+  <strong>Ceremoney</strong> — Route Documentation
+  <br><br>
+  <span>v1.0 · April 2026 · Confidential — Engineering Team</span>
+  <br>
+  <span>Next.js 15 App Router · REST API · PostgreSQL · Vercel · AWS</span>
+</div>
+
+</body>
+</html>

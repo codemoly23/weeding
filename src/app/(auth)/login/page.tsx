@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, Suspense } from "react";
+import { useState, Suspense, useCallback } from "react";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { signIn } from "next-auth/react";
@@ -27,6 +27,24 @@ function LoginForm() {
   const [error, setError] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [emailError, setEmailError] = useState("");
+  const [passwordError, setPasswordError] = useState("");
+
+  const validateEmail = useCallback((value: string) => {
+    if (value && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)) {
+      setEmailError("Please enter a valid email address");
+    } else {
+      setEmailError("");
+    }
+  }, []);
+
+  const validatePassword = useCallback((value: string) => {
+    if (!value) {
+      setPasswordError("Password is required");
+    } else {
+      setPasswordError("");
+    }
+  }, []);
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -102,13 +120,15 @@ function LoginForm() {
                 name="email"
                 type="email"
                 placeholder="you@example.com"
-                className="pl-10"
+                className={`pl-10 ${emailError ? "border-destructive" : ""}`}
                 required
                 disabled={isLoading}
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
+                onBlur={(e) => validateEmail(e.target.value)}
               />
             </div>
+            {emailError && <p className="text-xs text-destructive">{emailError}</p>}
           </div>
 
           <div className="space-y-2">
@@ -128,11 +148,12 @@ function LoginForm() {
                 name="password"
                 type={showPassword ? "text" : "password"}
                 placeholder="••••••••"
-                className="pl-10 pr-10"
+                className={`pl-10 pr-10 ${passwordError ? "border-destructive" : ""}`}
                 required
                 disabled={isLoading}
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
+                onBlur={(e) => validatePassword(e.target.value)}
               />
               <button
                 type="button"
@@ -146,6 +167,7 @@ function LoginForm() {
                 )}
               </button>
             </div>
+            {passwordError && <p className="text-xs text-destructive">{passwordError}</p>}
           </div>
 
           <div className="flex items-center space-x-2">
@@ -155,7 +177,12 @@ function LoginForm() {
             </Label>
           </div>
 
-          <Button type="submit" className="w-full" disabled={isLoading}>
+          <Button
+            type="submit"
+            className={`w-full transition-opacity ${isLoading ? "opacity-60 cursor-not-allowed" : ""}`}
+            disabled={isLoading}
+            aria-busy={isLoading}
+          >
             {isLoading ? (
               <>
                 <Loader2 className="mr-2 h-4 w-4 animate-spin" />

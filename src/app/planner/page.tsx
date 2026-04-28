@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, memo } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useSession } from "next-auth/react";
@@ -112,7 +112,7 @@ const STATUS_PILL: Record<string, string> = {
 };
 
 // Beautiful folder-style project card
-function ProjectCard({ project, onClick, onDelete }: {
+const ProjectCard = memo(function ProjectCard({ project, onClick, onDelete }: {
   project: Project;
   onClick: () => void;
   onDelete: (e: React.MouseEvent) => void;
@@ -191,7 +191,7 @@ function ProjectCard({ project, onClick, onDelete }: {
       </div>
     </div>
   );
-}
+});
 
 // Create new card
 function CreateNewCard() {
@@ -285,12 +285,12 @@ export default function MyProjectsPage() {
           {loading && (
             <div className="flex flex-col items-center justify-center py-24 gap-4">
               <div className="h-9 w-9 animate-spin rounded-full border-4 border-violet-200 border-t-violet-500" />
-              <p className="text-sm text-gray-400">Loading your projects...</p>
+              <p className="text-sm text-muted-foreground">Loading your projects...</p>
             </div>
           )}
 
           {!loading && (
-            <div className="grid gap-6 grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
+            <div className="grid gap-6 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
               {projects.map((project) => (
                 <ProjectCard
                   key={project.id}

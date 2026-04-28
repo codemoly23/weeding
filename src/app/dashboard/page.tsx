@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import Link from "next/link";
 import {
   CalendarHeart,
@@ -84,29 +84,32 @@ export default function DashboardPage() {
     .sort((a, b) => new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime())
     .slice(0, 5);
 
-  const stats = [
-    {
-      title: "Active Projects",
-      value: totalProjects,
-      icon: CalendarHeart,
-      color: "text-primary",
-      bgColor: "bg-primary/10",
-    },
-    {
-      title: "Completed",
-      value: completedProjects,
-      icon: CheckCircle,
-      color: "text-green-600",
-      bgColor: "bg-green-100",
-    },
-    {
-      title: "In Progress",
-      value: activeProjects,
-      icon: Clock,
-      color: "text-amber-600",
-      bgColor: "bg-amber-100",
-    },
-  ];
+  const stats = useMemo(
+    () => [
+      {
+        title: "Active Projects",
+        value: totalProjects,
+        icon: CalendarHeart,
+        color: "text-primary",
+        bgColor: "bg-primary/10",
+      },
+      {
+        title: "Completed",
+        value: completedProjects,
+        icon: CheckCircle,
+        color: "text-green-600",
+        bgColor: "bg-green-100",
+      },
+      {
+        title: "In Progress",
+        value: activeProjects,
+        icon: Clock,
+        color: "text-amber-600",
+        bgColor: "bg-amber-100",
+      },
+    ],
+    [totalProjects, completedProjects, activeProjects]
+  );
 
   if (loading) {
     return (

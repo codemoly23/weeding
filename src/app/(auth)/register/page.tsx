@@ -47,6 +47,35 @@ export default function RegisterPage() {
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
+  const [fieldErrors, setFieldErrors] = useState({ name: "", email: "", password: "" });
+
+  function handleBlur(e: React.FocusEvent<HTMLInputElement>) {
+    const { name, value } = e.target;
+    if (name === "name" && !value.trim()) {
+      setFieldErrors((p) => ({ ...p, name: "Full name is required" }));
+    } else if (name === "name") {
+      setFieldErrors((p) => ({ ...p, name: "" }));
+    } else if (name === "email" && value && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)) {
+      setFieldErrors((p) => ({ ...p, email: "Please enter a valid email address" }));
+    } else if (name === "email") {
+      setFieldErrors((p) => ({ ...p, email: "" }));
+    } else if (name === "password" && value) {
+      const tooShort = value.length < 12;
+      const noUpper = !/[A-Z]/.test(value);
+      const noLower = !/[a-z]/.test(value);
+      const noDigit = !/\d/.test(value);
+      const noSpecial = !/[^a-zA-Z\d]/.test(value);
+      if (tooShort) {
+        setFieldErrors((p) => ({ ...p, password: "Must be at least 12 characters" }));
+      } else if (noUpper || noLower || noDigit || noSpecial) {
+        setFieldErrors((p) => ({ ...p, password: "Must include uppercase, lowercase, number, and special character" }));
+      } else {
+        setFieldErrors((p) => ({ ...p, password: "" }));
+      }
+    } else if (name === "password") {
+      setFieldErrors((p) => ({ ...p, password: "" }));
+    }
+  }
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -120,11 +149,13 @@ export default function RegisterPage() {
                 name="name"
                 type="text"
                 placeholder="John Doe"
-                className="pl-10"
+                className={`pl-10 ${fieldErrors.name ? "border-destructive" : ""}`}
                 required
                 disabled={isLoading}
+                onBlur={handleBlur}
               />
             </div>
+            {fieldErrors.name && <p className="text-xs text-destructive">{fieldErrors.name}</p>}
           </div>
 
           <div className="space-y-2">
@@ -136,11 +167,13 @@ export default function RegisterPage() {
                 name="email"
                 type="email"
                 placeholder="you@example.com"
-                className="pl-10"
+                className={`pl-10 ${fieldErrors.email ? "border-destructive" : ""}`}
                 required
                 disabled={isLoading}
+                onBlur={handleBlur}
               />
             </div>
+            {fieldErrors.email && <p className="text-xs text-destructive">{fieldErrors.email}</p>}
           </div>
 
           <div className="space-y-2">
@@ -169,10 +202,11 @@ export default function RegisterPage() {
                 name="password"
                 type={showPassword ? "text" : "password"}
                 placeholder="••••••••"
-                className="pl-10 pr-10"
+                className={`pl-10 pr-10 ${fieldErrors.password ? "border-destructive" : ""}`}
                 required
-                minLength={8}
+                minLength={12}
                 disabled={isLoading}
+                onBlur={handleBlur}
               />
               <button
                 type="button"
@@ -186,9 +220,13 @@ export default function RegisterPage() {
                 )}
               </button>
             </div>
-            <p className="text-xs text-muted-foreground">
-              Must be at least 8 characters
-            </p>
+            {fieldErrors.password ? (
+              <p className="text-xs text-destructive">{fieldErrors.password}</p>
+            ) : (
+              <p className="text-xs text-muted-foreground">
+                12+ chars with uppercase, lowercase, number &amp; special character
+              </p>
+            )}
           </div>
 
           <div className="flex items-start space-x-2">

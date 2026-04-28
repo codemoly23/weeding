@@ -1,9 +1,13 @@
 // Plugin ZIP Upload API
 import { NextRequest, NextResponse } from "next/server";
+import { checkAdminOnly, authError } from "@/lib/admin-auth";
 import { pluginInstaller } from "@/services/plugin-installer";
 
 // POST /api/admin/plugins/upload - Upload and extract plugin ZIP
 export async function POST(request: NextRequest) {
+  const accessCheck = await checkAdminOnly();
+  if ("error" in accessCheck) return authError(accessCheck);
+
   try {
     const formData = await request.formData();
     const file = formData.get("file") as File | null;
