@@ -607,3 +607,14 @@
   0% { background-position: 0 0; }
   100% { background-position: 0 40px; }
 }
+
+/* Footer dynamic colors — CSS variables set inline on <footer> element */
+.footer-dynamic-styles .footer-link {
+  color: var(--footer-link-color, inherit);
+}
+.footer-dynamic-styles .footer-link:hover {
+  color: var(--footer-link-hover-color, currentColor);
+}
+.footer-dynamic-styles .footer-heading {
+  color: var(--footer-heading-color, inherit);
+}

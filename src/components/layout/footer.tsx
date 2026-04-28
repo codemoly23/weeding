@@ -327,12 +327,12 @@ function TrustBadges({
   if (!badges || badges.length === 0) return null;
 
   return (
-    <div className="flex flex-wrap items-center gap-2" role="list" aria-label="Trust badges">
+    <div className="flex flex-nowrap items-center gap-1.5" role="list" aria-label="Trust badges">
       {badges.map((badge, index) => {
         if (badge.style === "pill") {
           const Icon = badge.iconName ? PILL_BADGE_ICONS[badge.iconName] : null;
           const pillContent = (
-            <span className="inline-flex items-center gap-1.5 rounded-full border border-current/20 bg-white/8 px-3 py-1.5 text-xs font-medium opacity-75 transition-opacity hover:opacity-100">
+            <span className="inline-flex items-center gap-1.5 rounded-full border border-current/25 bg-white/10 px-3.5 py-1.5 text-xs font-medium opacity-80 transition-opacity hover:opacity-100">
               {Icon && <Icon className="h-3.5 w-3.5 shrink-0" style={badge.iconColor ? { color: badge.iconColor } : undefined} aria-hidden="true" />}
               {badge.text || badge.alt}
             </span>
@@ -557,7 +557,7 @@ function FooterWidgetRenderer({
       const showBrandBadges = brandContent?.showBrandBadges;
 
       return (
-        <div className="space-y-4">
+        <div className="space-y-6">
           {/* Logo only - no business name text (aligned with column headings) */}
           <Link href="/" className="inline-block focus:outline-none focus:ring-2 focus:ring-primary rounded">
             {effectiveLogoUrl ? (
@@ -570,12 +570,10 @@ function FooterWidgetRenderer({
               />
             ) : (
               <div className="flex items-center gap-3">
-                <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-primary">
-                  <span className="text-lg font-bold text-primary-foreground">
-                    {businessConfig.logo.text || businessConfig.name.charAt(0)}
-                  </span>
+                <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-violet-500 to-purple-600">
+                  <Sparkles className="h-6 w-6 text-white" />
                 </div>
-                <span className="text-lg font-semibold">{businessConfig.name}</span>
+                <span className="text-xl font-bold">{businessConfig.name}</span>
               </div>
             )}
           </Link>
@@ -592,6 +590,24 @@ function FooterWidgetRenderer({
             <p className="max-w-md text-xs opacity-60">
               {subtitle}
             </p>
+          )}
+
+          {/* Social icons in brand column */}
+          {showSocial && (
+            <EnhancedSocialLinks
+              links={socialLinks.length > 0 ? socialLinks : [
+                { name: "Facebook", href: "#", icon: Facebook, color: "#1877F2" },
+                { name: "Twitter", href: "#", icon: Twitter, color: "#1DA1F2" },
+                { name: "Instagram", href: "#", icon: Instagram, color: "#E4405F" },
+                { name: "LinkedIn", href: "#", icon: Linkedin, color: "#0A66C2" },
+              ]}
+              shape={footerConfig?.social?.shape || "circle"}
+              size={footerConfig?.social?.size || "md"}
+              colorMode={footerConfig?.social?.colorMode || "brand"}
+              hoverEffect={footerConfig?.social?.hoverEffect || "scale"}
+              accentColor={footerConfig?.styling?.accentColor || undefined}
+              bgStyle={(footerConfig?.social?.bgStyle as "none" | "subtle" | "solid" | "outline") || "subtle"}
+            />
           )}
 
           {/* CTA Buttons (from preset) */}
@@ -665,7 +681,7 @@ function FooterWidgetRenderer({
               <li key={link.id}>
                 <Link
                   href={link.url}
-                  className={cn("text-base inline-flex items-center gap-1.5", linkClasses)}
+                  className={cn("text-sm inline-flex items-center gap-1.5", linkClasses)}
                 >
                   {linkPrefix === "chevron" && <ChevronRight className="h-3 w-3 shrink-0 opacity-50" aria-hidden="true" />}
                   {linkPrefix === "arrow" && <ArrowRight className="h-3 w-3 shrink-0 opacity-50" aria-hidden="true" />}
@@ -1223,23 +1239,14 @@ export function Footer() {
     ) : null
   );
 
-  // Dynamic CSS for footer colors (uses direct interpolation for guaranteed application)
-  const linkColor = styling?.linkColor || "inherit";
-  const linkHoverColor = styling?.linkHoverColor || styling?.accentColor || "#22d3ee";
-  const headingColor = styling?.headingColor || "inherit";
   const FooterStyles = () => (
     <style>{`
       .footer-dynamic-styles .footer-link {
-        color: ${linkColor};
-        font-size: 0.875rem;
+        font-size: 1rem;
         line-height: 1.5rem;
         transition: color 0.2s ease;
       }
-      .footer-dynamic-styles .footer-link:hover {
-        color: ${linkHoverColor};
-      }
       .footer-dynamic-styles .footer-heading {
-        color: ${headingColor};
         font-size: ${styling?.headingSize === "xl" ? "1.25rem" : styling?.headingSize === "lg" ? "1.125rem" : styling?.headingSize === "base" ? "1rem" : "0.875rem"};
         font-weight: ${styling?.headingWeight === "bold" ? "700" : styling?.headingWeight === "semibold" ? "600" : "500"};
         line-height: 1.75rem;
@@ -1982,12 +1989,12 @@ export function Footer() {
           opacity={styling.bgPatternOpacity || 10}
         />
       )}
-      <div className="container mx-auto px-4 relative z-10">
+      <div className="max-w-7xl mx-auto px-6 relative z-10">
         {hasDynamicWidgets ? (
           (() => {
             const entries = Object.entries(widgetsByColumn!).filter(([, widgets]) => widgets.length > 0);
             const hasBrandWidget = entries.some(([, widgets]) => widgets.some((w) => w.type === "BRAND"));
-            const desktopCols = hasBrandWidget ? entries.length + 1 : entries.length;
+            const desktopCols = entries.length;
 
             return (
               <>
@@ -2012,10 +2019,10 @@ export function Footer() {
                   }
                   @media (min-width: 1024px) {
                     .footer-grid {
-                      grid-template-columns: repeat(${desktopCols}, 1fr);
+                      grid-template-columns: ${hasBrandWidget ? `1.5fr repeat(${desktopCols - 1}, 1fr)` : `repeat(${desktopCols}, 1fr)`};
                     }
                     .footer-grid .brand-col {
-                      grid-column: span 2;
+                      grid-column: span 1;
                     }
                   }
                 `}</style>
