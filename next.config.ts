@@ -1,6 +1,9 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
+  // ESLint runs as a separate CI step; FlatCompat + eslint-plugin-react has
+  // a known circular-reference serialisation bug that crashes next build.
+  eslint: { ignoreDuringBuilds: true },
   compiler: {
     removeConsole:
       process.env.NODE_ENV === "production" ? { exclude: ["error", "warn"] } : false,
