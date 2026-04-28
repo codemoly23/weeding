@@ -558,24 +558,24 @@ function FooterWidgetRenderer({
 
       return (
         <div className="space-y-6">
-          {/* Logo only - no business name text (aligned with column headings) */}
-          <Link href="/" className="inline-block focus:outline-none focus:ring-2 focus:ring-primary rounded">
-            {effectiveLogoUrl ? (
-              <Image
-                src={effectiveLogoUrl}
-                alt={businessConfig.name}
-                width={160}
-                height={48}
-                className="h-12 w-auto rounded-lg object-contain"
-              />
-            ) : (
-              <div className="flex items-center gap-3">
+          {/* Logo + name */}
+          <Link href="/" className="inline-flex items-center gap-3 focus:outline-none focus:ring-2 focus:ring-primary rounded">
+            {businessConfig.display?.showLogo !== false && (
+              effectiveLogoUrl ? (
+                <Image
+                  src={effectiveLogoUrl}
+                  alt={businessConfig.name}
+                  width={160}
+                  height={48}
+                  className="h-12 w-auto rounded-lg object-contain"
+                />
+              ) : (
                 <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-violet-500 to-purple-600">
                   <Sparkles className="h-6 w-6 text-white" />
                 </div>
-                <span className="text-xl font-bold">{businessConfig.name}</span>
-              </div>
+              )
             )}
+            <span className="text-xl font-bold">{businessConfig.name}</span>
           </Link>
 
           {/* Tagline / Description */}
@@ -1276,20 +1276,22 @@ export function Footer() {
           {/* Brand Section */}
           <div className="flex flex-col items-center text-center py-8">
             <Link href="/" className="flex items-center space-x-3 focus:outline-none focus:ring-2 focus:ring-primary rounded">
-              {footerLogoUrl ? (
-                <Image
-                  src={footerLogoUrl}
-                  alt={businessConfig.name}
-                  width={96}
-                  height={96}
-                  className="h-24 w-24 rounded-lg object-contain"
-                />
-              ) : (
-                <div className="flex h-24 w-24 items-center justify-center rounded-lg bg-primary">
-                  <span className="text-2xl font-bold text-primary-foreground">
-                    {businessConfig.logo.text || businessConfig.name.charAt(0)}
-                  </span>
-                </div>
+              {businessConfig.display?.showLogo !== false && (
+                footerLogoUrl ? (
+                  <Image
+                    src={footerLogoUrl}
+                    alt={businessConfig.name}
+                    width={96}
+                    height={96}
+                    className="h-24 w-24 rounded-lg object-contain"
+                  />
+                ) : (
+                  <div className="flex h-24 w-24 items-center justify-center rounded-lg bg-primary">
+                    <span className="text-2xl font-bold text-primary-foreground">
+                      {businessConfig.logo.text || businessConfig.name.charAt(0)}
+                    </span>
+                  </div>
+                )
               )}
               <span className="text-2xl font-bold" style={{ color: styling?.headingColor }}>
                 {businessConfig.name}
@@ -1360,20 +1362,22 @@ export function Footer() {
           <div className="flex flex-col items-center justify-between gap-4 md:flex-row">
             {/* Logo */}
             <Link href="/" className="flex items-center space-x-2 focus:outline-none focus:ring-2 focus:ring-primary rounded">
-              {footerLogoUrl ? (
-                <Image
-                  src={footerLogoUrl}
-                  alt={businessConfig.name}
-                  width={32}
-                  height={32}
-                  className="h-8 w-8 rounded-lg object-contain"
-                />
-              ) : (
-                <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary">
-                  <span className="text-sm font-bold text-primary-foreground">
-                    {businessConfig.logo.text || businessConfig.name.charAt(0)}
-                  </span>
-                </div>
+              {businessConfig.display?.showLogo !== false && (
+                footerLogoUrl ? (
+                  <Image
+                    src={footerLogoUrl}
+                    alt={businessConfig.name}
+                    width={32}
+                    height={32}
+                    className="h-8 w-8 rounded-lg object-contain"
+                  />
+                ) : (
+                  <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary">
+                    <span className="text-sm font-bold text-primary-foreground">
+                      {businessConfig.logo.text || businessConfig.name.charAt(0)}
+                    </span>
+                  </div>
+                )
               )}
               <span className="font-semibold">{businessConfig.name}</span>
             </Link>
@@ -1450,20 +1454,22 @@ export function Footer() {
           {/* Centered Logo & Description */}
           <div className="flex flex-col items-center text-center">
             <Link href="/" className="flex items-center space-x-3 focus:outline-none focus:ring-2 focus:ring-primary rounded">
-              {footerLogoUrl ? (
-                <Image
-                  src={footerLogoUrl}
-                  alt={businessConfig.name}
-                  width={96}
-                  height={96}
-                  className="h-24 w-24 rounded-lg object-contain"
-                />
-              ) : (
-                <div className="flex h-24 w-24 items-center justify-center rounded-lg bg-primary">
-                  <span className="text-2xl font-bold text-primary-foreground">
-                    {businessConfig.logo.text || businessConfig.name.charAt(0)}
-                  </span>
-                </div>
+              {businessConfig.display?.showLogo !== false && (
+                footerLogoUrl ? (
+                  <Image
+                    src={footerLogoUrl}
+                    alt={businessConfig.name}
+                    width={96}
+                    height={96}
+                    className="h-24 w-24 rounded-lg object-contain"
+                  />
+                ) : (
+                  <div className="flex h-24 w-24 items-center justify-center rounded-lg bg-primary">
+                    <span className="text-2xl font-bold text-primary-foreground">
+                      {businessConfig.logo.text || businessConfig.name.charAt(0)}
+                    </span>
+                  </div>
+                )
               )}
               <span className="text-2xl font-bold" style={{ color: styling?.headingColor }}>
                 {businessConfig.name}
