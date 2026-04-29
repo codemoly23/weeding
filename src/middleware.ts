@@ -53,11 +53,34 @@ export async function middleware(request: NextRequest) {
     }
   }
 
+  // /dashboard is customer-only — staff/vendor should be sent to their own portals
+  if (pathname.startsWith("/dashboard") && token) {
+    const userRole = token.role as string;
+    if (adminRoles.includes(userRole)) {
+      return NextResponse.redirect(new URL("/admin", request.url));
+    }
+    if (userRole === "VENDOR") {
+      return NextResponse.redirect(new URL("/vendor/dashboard", request.url));
+    }
+  }
+
   // If trying to access vendor portal, must be VENDOR role
   if (pathname.startsWith("/vendor") && !pathname.startsWith("/vendor/register") && token) {
     const userRole = token.role as string;
     if (userRole !== "VENDOR") {
       return NextResponse.redirect(new URL("/dashboard", request.url));
+    }
+  }
+
+  // If trying to access planner routes while authenticated, redirect staff/vendor away.
+  // Anonymous users (no token) and customers can use /planner freely (localStorage mode).
+  if (pathname.startsWith("/planner") && token) {
+    const userRole = token.role as string;
+    if (adminRoles.includes(userRole)) {
+      return NextResponse.redirect(new URL("/admin", request.url));
+    }
+    if (userRole === "VENDOR") {
+      return NextResponse.redirect(new URL("/vendor/dashboard", request.url));
     }
   }
 
@@ -89,6 +112,7 @@ export const config = {
     "/dashboard/:path*",
     "/account/:path*",
     "/vendor/:path*",
+    "/planner/:path*",
     "/login",
     "/register",
   ],
