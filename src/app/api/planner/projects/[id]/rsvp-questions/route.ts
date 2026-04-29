@@ -49,6 +49,18 @@ export async function POST(
     return NextResponse.json({ error: "Invalid question type" }, { status: 400 });
   }
 
+  const choiceTypes = ["SINGLE_CHOICE", "MULTIPLE_CHOICE"];
+  const resolvedType = type ?? "SHORT_TEXT";
+  if (choiceTypes.includes(resolvedType)) {
+    if (!Array.isArray(options) || options.length === 0 ||
+        !options.every((o: unknown) => typeof o === "string" && o.trim())) {
+      return NextResponse.json(
+        { error: "options must be a non-empty array of strings for choice questions" },
+        { status: 400 }
+      );
+    }
+  }
+
   // Count existing to set default order
   const count = await prisma.rsvpQuestion.count({ where: { projectId: id } });
 

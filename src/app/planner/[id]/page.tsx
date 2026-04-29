@@ -57,11 +57,14 @@ function Section({ title, children, defaultOpen = true }: {
   title: string; children: React.ReactNode; defaultOpen?: boolean;
 }) {
   const [open, setOpen] = useState(defaultOpen);
+  const contentId = `section-${title.toLowerCase().replace(/[^a-z0-9]+/g, "-")}`;
   return (
     <div className="bg-white rounded-2xl overflow-hidden shadow-sm">
       <button
         className="w-full flex items-center gap-2 px-5 py-3.5 text-left hover:bg-gray-50/70 transition-colors"
         onClick={() => setOpen(o => !o)}
+        aria-expanded={open}
+        aria-controls={contentId}
       >
         {open
           ? <ChevronDown className="h-4 w-4 text-gray-400 flex-shrink-0" />
@@ -69,7 +72,7 @@ function Section({ title, children, defaultOpen = true }: {
         }
         <span className="text-sm text-gray-500 font-medium">{title}</span>
       </button>
-      {open && <div className="border-t border-gray-100">{children}</div>}
+      {open && <div id={contentId} className="border-t border-gray-100">{children}</div>}
     </div>
   );
 }

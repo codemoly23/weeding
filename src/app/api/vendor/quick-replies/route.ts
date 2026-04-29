@@ -31,7 +31,12 @@ export async function POST(req: NextRequest) {
   const profile = await getProfile(session.user.id);
   if (!profile) return NextResponse.json({ error: "Profile not found" }, { status: 404 });
 
-  const body = await req.json();
+  let body: Record<string, unknown>;
+  try {
+    body = await req.json();
+  } catch {
+    return NextResponse.json({ error: "Invalid request body" }, { status: 400 });
+  }
   const title = String(body.title ?? "").trim();
   const content = String(body.content ?? "").trim();
   if (!title || !content) {

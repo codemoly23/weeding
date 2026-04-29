@@ -17,6 +17,7 @@ export async function GET(
   const events = await prisma.itineraryEvent.findMany({
     where: { projectId: id },
     orderBy: [{ startTime: "asc" }, { order: "asc" }],
+    take: 200,
   });
 
   return NextResponse.json({ events });

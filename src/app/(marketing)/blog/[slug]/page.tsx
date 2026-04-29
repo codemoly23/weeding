@@ -11,7 +11,20 @@ import { MultiJsonLd } from "@/components/seo/json-ld";
 import { generateBreadcrumbSchema } from "@/lib/seo";
 import { calculateReadingTime } from "@/lib/reading-time";
 
-export const dynamic = "force-dynamic";
+export const revalidate = 3600;
+export const dynamicParams = true;
+
+export async function generateStaticParams() {
+  try {
+    const posts = await prisma.blogPost.findMany({
+      where: { status: "PUBLISHED" },
+      select: { slug: true },
+    });
+    return posts.map((p) => ({ slug: p.slug }));
+  } catch {
+    return [];
+  }
+}
 
 interface PageProps {
   params: Promise<{ slug: string }>;

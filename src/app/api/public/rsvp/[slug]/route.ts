@@ -14,7 +14,13 @@ export async function POST(req: NextRequest, { params }: { params: Promise<{ slu
     return NextResponse.json({ error: "Website not found" }, { status: 404 });
   }
 
-  const body = await req.json();
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  let body: Record<string, any>;
+  try {
+    body = await req.json();
+  } catch {
+    return NextResponse.json({ error: "Invalid request body" }, { status: 400 });
+  }
   const { firstName, lastName, email, phone, attending, dietary, hasPlusOne, plusOneName, message, gdprConsent, side } = body;
 
   if (!firstName?.trim()) {
@@ -25,6 +31,9 @@ export async function POST(req: NextRequest, { params }: { params: Promise<{ slu
   }
   if (!gdprConsent) {
     return NextResponse.json({ error: "GDPR consent is required" }, { status: 400 });
+  }
+  if (side !== undefined && side !== null && !["BRIDE", "GROOM"].includes(String(side))) {
+    return NextResponse.json({ error: "Invalid side value — must be BRIDE or GROOM" }, { status: 400 });
   }
 
   const guest = await prisma.weddingGuest.create({

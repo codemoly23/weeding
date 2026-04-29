@@ -91,8 +91,11 @@ export async function GET(request: NextRequest) {
     const page = parseInt(searchParams.get("page") || "1");
     const limit = parseInt(searchParams.get("limit") || "20");
     const skip = (page - 1) * limit;
-    const sortBy = searchParams.get("sortBy") || "createdAt";
-    const sortOrder = searchParams.get("sortOrder") || "desc";
+    const ALLOWED_SORT = new Set(["createdAt", "updatedAt", "score", "firstName", "lastName", "email", "status", "priority"]);
+    const rawSort = searchParams.get("sortBy") || "createdAt";
+    const sortBy = ALLOWED_SORT.has(rawSort) ? rawSort : "createdAt";
+    const rawOrder = searchParams.get("sortOrder") || "desc";
+    const sortOrder = rawOrder === "asc" ? "asc" : "desc";
 
     // Build where clause
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -117,10 +120,12 @@ export async function GET(request: NextRequest) {
       where.score = { ...where.score, lte: parseInt(scoreMax) };
     }
     if (dateFrom) {
-      where.createdAt = { ...where.createdAt, gte: new Date(dateFrom) };
+      const d = new Date(dateFrom);
+      if (!isNaN(d.getTime())) where.createdAt = { ...where.createdAt, gte: d };
     }
     if (dateTo) {
-      where.createdAt = { ...where.createdAt, lte: new Date(dateTo) };
+      const d = new Date(dateTo);
+      if (!isNaN(d.getTime())) where.createdAt = { ...where.createdAt, lte: d };
     }
     // Form template filter
     const formTemplateId = searchParams.get("formTemplateId");

@@ -507,6 +507,7 @@ model BlogPost {
   @@index([slug])
   @@index([status])
   @@index([publishedAt])
+  @@index([authorId])
 }
 
 model BlogCategory {
@@ -1211,6 +1212,7 @@ model Lead {
   source           LeadSource        @default(WEBSITE)
   sourceDetail     String?
   score            Int               @default(0)
+  /// ScoreHistoryEntry[]: [{ score: number, date: ISO8601, reason: string, delta: number }]
   scoreHistory     Json?
   scoreDecayDays   Int               @default(0)
   priority         LeadPriority      @default(MEDIUM)
@@ -1242,7 +1244,7 @@ model Lead {
   newsletterToken      String?          @unique
   newsletterUnsubAt    DateTime?
   assignedTo           User?             @relation("AssignedLeads", fields: [assignedToId], references: [id])
-  formTemplate         LeadFormTemplate? @relation(fields: [formTemplateId], references: [id])
+  formTemplate         LeadFormTemplate? @relation(fields: [formTemplateId], references: [id], onDelete: SetNull)
   activities           LeadActivity[]
   leadNotes            LeadNote[]
   campaignRecipients   EmailCampaignRecipient[]
@@ -1875,7 +1877,7 @@ model WeddingGuest {
   // Task 24 — Family grouping
   familyId         String?
   // Task 26 — Table invitation
-  invitationCode   String?
+  invitationCode   String?       @unique
   invitationSent   Boolean       @default(false)
   invitationSentAt DateTime?
   // Task 10 — GDPR consent
@@ -1889,6 +1891,7 @@ model WeddingGuest {
   family  GuestFamily?   @relation(fields: [familyId], references: [id])
   rsvpAnswers RsvpAnswer[]
 
+  @@unique([projectId, email])
   @@index([projectId, side])
   @@index([projectId, rsvpStatus])
   @@index([projectId, familyId])
@@ -2253,6 +2256,7 @@ model VendorConversation {
   createdAt     DateTime         @default(now())
   updatedAt     DateTime         @updatedAt
 
+  /// vendor→Cascade: deleting a vendor removes all conversations. inquiry→SetNull: deleting an inquiry preserves conversation history.
   vendor      VendorProfile   @relation(fields: [vendorId], references: [id], onDelete: Cascade)
   inquiry     VendorInquiry?  @relation(fields: [inquiryId], references: [id], onDelete: SetNull)
   project     WeddingProject? @relation(fields: [projectId], references: [id], onDelete: SetNull)

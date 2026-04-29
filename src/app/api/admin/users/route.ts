@@ -27,6 +27,9 @@ export async function GET(request: NextRequest) {
       }
     }
 
+    const page = Math.max(1, parseInt(searchParams.get("page") || "1"));
+    const limit = Math.min(100, Math.max(1, parseInt(searchParams.get("limit") || "50")));
+    const skip = (page - 1) * limit;
     const role = searchParams.get("role");
     const search = searchParams.get("search");
     const status = searchParams.get("status"); // "active" | "inactive" | "all"
@@ -79,24 +82,29 @@ export async function GET(request: NextRequest) {
         { role: "asc" },
         { createdAt: "desc" },
       ],
+      skip,
+      take: limit,
     });
 
-    // Get role stats
-    const roleStats = await prisma.user.groupBy({
-      by: ["role"],
-      _count: { id: true },
-    });
+    const [totalCount, activeCount, inactiveCount, roleStats] = await Promise.all([
+      prisma.user.count({ where }),
+      prisma.user.count({ where: { ...where, isActive: true } }),
+      prisma.user.count({ where: { ...where, isActive: false } }),
+      prisma.user.groupBy({ by: ["role"], _count: { id: true } }),
+    ]);
 
     const stats = {
-      total: users.length,
-      active: users.filter(u => u.isActive).length,
-      inactive: users.filter(u => !u.isActive).length,
-      byRole: Object.fromEntries(
-        roleStats.map(r => [r.role, r._count.id])
-      ),
+      total: totalCount,
+      active: activeCount,
+      inactive: inactiveCount,
+      byRole: Object.fromEntries(roleStats.map(r => [r.role, r._count.id])),
     };
 
-    return NextResponse.json({ users, stats });
+    return NextResponse.json({
+      users,
+      stats,
+      pagination: { page, limit, total: totalCount, totalPages: Math.ceil(totalCount / limit) },
+    });
   } catch (error) {
     console.error("Error fetching users:", error);
     return NextResponse.json(

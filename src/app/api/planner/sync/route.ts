@@ -10,7 +10,13 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
-  const body = await req.json();
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  let body: Record<string, any>;
+  try {
+    body = await req.json();
+  } catch {
+    return NextResponse.json({ error: "Invalid request body" }, { status: 400 });
+  }
   const {
     localId, title, role, eventType, eventDate, budgetGoal, brideName, groomName,
     guests, families, budget, checklist, itinerary, notes, vendors, ceremony, reception,

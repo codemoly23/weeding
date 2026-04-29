@@ -15,6 +15,7 @@ export async function GET(request: NextRequest) {
     where,
     orderBy: [{ sortOrder: "asc" }, { name: "asc" }],
     select: { id: true, name: true, type: true, icon: true, group: true },
+    take: 100,
   });
 
   return NextResponse.json(options);

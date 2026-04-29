@@ -16,6 +16,7 @@ export async function GET(request: NextRequest) {
     const posts = await prisma.blogPost.findMany({
       where: status ? { status: status as "DRAFT" | "PUBLISHED" | "ARCHIVED" } : undefined,
       orderBy: { createdAt: "desc" },
+      take: 100,
     });
 
     return NextResponse.json(posts);

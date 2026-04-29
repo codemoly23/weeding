@@ -4,6 +4,7 @@ import { decode } from "next-auth/jwt";
 import prisma from "@/lib/db";
 import { UserRole } from "@prisma/client";
 import { Permission } from "@/lib/permissions";
+import { logger } from "@/lib/logger";
 
 type RoleCheck = UserRole | UserRole[];
 
@@ -42,7 +43,7 @@ async function getSession(): Promise<AuthResult["session"] | null> {
 
     const token = await decode({
       token: sessionCookie.value,
-      secret: process.env.AUTH_SECRET!,
+      secret: process.env.AUTH_SECRET as string,
       salt: cookieName,
     });
 
@@ -59,7 +60,10 @@ async function getSession(): Promise<AuthResult["session"] | null> {
       },
     };
   } catch (error) {
-    console.error("[getSession] Error reading session:", error);
+    // Log as warn — cookie present but decode failed indicates tampered or expired token
+    logger.warn("Session decode failed — possible tampered or expired token", {
+      error: String(error),
+    });
     return null;
   }
 }

@@ -21,6 +21,7 @@ export async function GET() {
         },
       },
       orderBy: { sortOrder: "asc" },
+      take: 100,
     });
 
     const transformedCategories = categories.map((category) => ({

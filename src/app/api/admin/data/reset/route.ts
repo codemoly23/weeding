@@ -9,12 +9,20 @@ export async function POST(request: NextRequest) {
 
   try {
     const body = await request.json();
-    const { confirmation } = body as { confirmation: string };
+    const { confirmation, adminEmail } = body as { confirmation: string; adminEmail?: string };
 
     if (confirmation !== "RESET") {
       return NextResponse.json(
         { error: 'Type "RESET" to confirm factory reset' },
         { status: 400 }
+      );
+    }
+
+    // Require admin email re-entry as second confirmation factor
+    if (!adminEmail || adminEmail.trim().toLowerCase() !== auth.session?.user?.email?.toLowerCase()) {
+      return NextResponse.json(
+        { error: "Admin email confirmation required" },
+        { status: 403 }
       );
     }
 

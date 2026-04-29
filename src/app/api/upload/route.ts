@@ -40,6 +40,14 @@ export async function POST(request: NextRequest) {
     const bytes = await file.arrayBuffer();
     const buffer = Buffer.from(bytes);
 
+    // Sanitize filename — strip .., leading dots, keep only safe chars
+    const timestamp = Date.now();
+    const sanitizedName = (file.name
+      .replace(/\.\./g, "")
+      .replace(/[^a-zA-Z0-9._-]/g, "_")
+      .replace(/^[._]+/, "") || "file");
+    const filename = `${timestamp}-${sanitizedName}`;
+
     // Check if R2 is configured
     const r2Config = await getR2Config();
 
@@ -48,7 +56,7 @@ export async function POST(request: NextRequest) {
       const result = await uploadToR2(
         r2Config,
         buffer,
-        file.name,
+        filename,
         file.type
       );
 
@@ -60,18 +68,15 @@ export async function POST(request: NextRequest) {
       }
     }
 
-    // Fall back to local storage
-    const uploadFolder = folder || "uploads";
+    // Whitelist allowed upload folders — prevents path traversal via folder param
+    const ALLOWED_FOLDERS = new Set(["uploads", "avatars", "covers", "blog", "vendors", "services", "venues"]);
+    const uploadFolder = folder && ALLOWED_FOLDERS.has(folder) ? folder : "uploads";
     const uploadsDir = path.join(process.cwd(), "public", uploadFolder);
 
     if (!existsSync(uploadsDir)) {
       await mkdir(uploadsDir, { recursive: true });
     }
 
-    // Generate unique filename
-    const timestamp = Date.now();
-    const originalName = file.name.replace(/[^a-zA-Z0-9.-]/g, "_");
-    const filename = `${timestamp}-${originalName}`;
     const filepath = path.join(uploadsDir, filename);
 
     // Write file

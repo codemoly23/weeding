@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, memo } from "react";
+import { useState, useEffect, memo, useCallback } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useSession } from "next-auth/react";
@@ -17,6 +17,7 @@ import {
 import {
   getAllLocalProjects,
   deleteLocalProject,
+  pruneOldProjects,
   type LocalProject,
 } from "@/lib/planner-storage";
 import { useLanguage } from "@/lib/i18n/language-context";
@@ -216,12 +217,10 @@ export default function MyProjectsPage() {
   const [projects, setProjects] = useState<Project[]>([]);
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    loadProjects();
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [session?.user?.id]);
+  // Prune stale local projects once on mount (90-day threshold)
+  useEffect(() => { pruneOldProjects(90); }, []);
 
-  async function loadProjects() {
+  const loadProjects = useCallback(async () => {
     setLoading(true);
     const local = getAllLocalProjects().map(localToProject);
 
@@ -242,7 +241,11 @@ export default function MyProjectsPage() {
       setProjects(local);
     }
     setLoading(false);
-  }
+  }, [session?.user?.id]);
+
+  useEffect(() => {
+    loadProjects();
+  }, [loadProjects]);
 
   async function handleDelete(project: Project) {
     if (!confirm(t("projects.deleteConfirm"))) return;
@@ -284,7 +287,12 @@ export default function MyProjectsPage() {
         <div className="mx-auto max-w-6xl px-4 pb-16">
           {loading && (
             <div className="flex flex-col items-center justify-center py-24 gap-4">
-              <div className="h-9 w-9 animate-spin rounded-full border-4 border-violet-200 border-t-violet-500" />
+              <div
+                role="status"
+                aria-label="Loading projects"
+                aria-busy={true}
+                className="h-9 w-9 animate-spin rounded-full border-4 border-violet-200 border-t-violet-500"
+              />
               <p className="text-sm text-muted-foreground">Loading your projects...</p>
             </div>
           )}
