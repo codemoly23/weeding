@@ -6,10 +6,10 @@ import prisma from "@/lib/db";
 import { UserRole } from "@prisma/client";
 
 export const authConfig = {
-  trustHost: true,
+  trustHost: process.env.AUTH_TRUST_HOST === "true" || process.env.NODE_ENV === "development",
   session: {
     strategy: "jwt" as const,
-    maxAge: 30 * 24 * 60 * 60, // 30 days
+    maxAge: 14 * 24 * 60 * 60, // 14 days
   },
   cookies: {
     sessionToken: {

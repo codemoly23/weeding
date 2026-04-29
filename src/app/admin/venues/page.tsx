@@ -59,7 +59,7 @@ interface Venue {
   sortOrder: number;
 }
 
-type EditableField = "name" | "type" | "location" | "city" | "rating" | "reviewCount" | "price" | "priceUnit" | "badge" | "badgeColor" | "tags" | "image" | "href" | "sortOrder";
+type EditableField = "name" | "type" | "location" | "city" | "rating" | "reviewCount" | "price" | "priceUnit" | "badge" | "badgeColor" | "tags" | "image" | "href" | "sortOrder" | "isActive" | "isFeatured";
 
 function InlineEdit({
   venue,

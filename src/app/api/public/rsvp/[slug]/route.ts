@@ -43,7 +43,7 @@ export async function POST(req: NextRequest, { params }: { params: Promise<{ slu
       gdprConsentAt: new Date(),
       rsvpSubmittedAt: new Date(),
       selfRegistered: true,
-      rsvpToken: randomBytes(16).toString("hex"),
+      rsvpToken: randomBytes(32).toString("hex"),
     },
   });
 

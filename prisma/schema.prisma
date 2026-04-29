@@ -45,6 +45,7 @@ model User {
   vendorProfile         VendorProfile?
   coupleConversations   VendorConversation[] @relation("CoupleConversations")
   savedVendors          SavedVendor[]
+  emailCampaigns        EmailCampaign[]      @relation("CampaignCreator")
 
   @@index([email])
   @@index([role])
@@ -501,6 +502,7 @@ model BlogPost {
   createdAt       DateTime       @default(now())
   updatedAt       DateTime       @updatedAt
   categories      BlogCategory[] @relation("BlogCategoryToBlogPost")
+  emailCampaigns  EmailCampaign[]
 
   @@index([slug])
   @@index([status])
@@ -515,7 +517,8 @@ model BlogCategory {
   parentId    String?
   createdAt   DateTime       @default(now())
   updatedAt   DateTime       @default(now()) @updatedAt
-  parent      BlogCategory?  @relation("CategoryHierarchy", fields: [parentId], references: [id], onDelete: Cascade)
+  /// Restrict prevents silent cascade-deletion of child categories; admin must re-assign or delete children first
+  parent      BlogCategory?  @relation("CategoryHierarchy", fields: [parentId], references: [id], onDelete: Restrict)
   children    BlogCategory[] @relation("CategoryHierarchy")
   posts       BlogPost[]     @relation("BlogCategoryToBlogPost")
 
@@ -739,7 +742,9 @@ model FormField {
   order            Int
   width            FieldWidth      @default(FULL)
   required         Boolean         @default(false)
+  /// JSON: { min?: number, max?: number, minLength?: number, maxLength?: number, pattern?: string, message?: string }
   validation       Json?
+  /// JSON: Array<{ label: string, value: string, icon?: string }>
   options          Json?
   dataSourceType   DataSourceType?
   dataSourceKey    String?
@@ -1236,10 +1241,11 @@ model Lead {
   newsletterSubscribed Boolean          @default(false)
   newsletterToken      String?          @unique
   newsletterUnsubAt    DateTime?
-  assignedTo       User?             @relation("AssignedLeads", fields: [assignedToId], references: [id])
-  formTemplate     LeadFormTemplate? @relation(fields: [formTemplateId], references: [id])
-  activities       LeadActivity[]
-  leadNotes        LeadNote[]
+  assignedTo           User?             @relation("AssignedLeads", fields: [assignedToId], references: [id])
+  formTemplate         LeadFormTemplate? @relation(fields: [formTemplateId], references: [id])
+  activities           LeadActivity[]
+  leadNotes            LeadNote[]
+  campaignRecipients   EmailCampaignRecipient[]
 
   @@index([email])
   @@index([status])
@@ -2053,6 +2059,7 @@ enum ProjectStatus {
 }
 
 enum MemberRole {
+  OWNER
   BRIDE
   GROOM
   PLANNER
@@ -2141,7 +2148,8 @@ model VendorProfile {
   createdAt       DateTime       @default(now())
   updatedAt       DateTime       @updatedAt
 
-  user            User?                @relation(fields: [userId], references: [id], onDelete: SetNull)
+  /// Restrict prevents user account deletion while a vendor profile exists, preserving vendor review/conversation history
+  user            User?                @relation(fields: [userId], references: [id], onDelete: Restrict)
   inquiries       VendorInquiry[]
   reviews         VendorReview[]
   conversations   VendorConversation[]
@@ -2237,6 +2245,7 @@ model VendorConversation {
   inquiryId     String?          @unique
   guestName     String
   guestEmail    String
+  /// Nullable: conversation may exist without a linked project (e.g. pre-auth inquiries or direct vendor contact before project creation)
   projectId     String?
   coupleUserId  String?
   status        VendorConvStatus @default(ACTIVE)
@@ -2383,4 +2392,68 @@ model Venue {
   @@index([category, isActive])
   @@index([type, isActive])
   @@index([isFeatured, isActive])
+}
+
+model EmailTemplate {
+  id        String   @id @default(cuid())
+  name      String
+  subject   String
+  body      String
+  variables String[]
+  isDefault Boolean  @default(false)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  campaigns EmailCampaign[]
+}
+
+model EmailCampaign {
+  id               String    @id @default(cuid())
+  subject          String
+  previewText      String?
+  body             String
+  templateId       String?
+  audienceFilter   Json?
+  status           String    @default("DRAFT") // DRAFT | SCHEDULED | SENDING | SENT | FAILED
+  scheduledAt      DateTime?
+  sentAt           DateTime?
+  totalRecipients  Int       @default(0)
+  sentCount        Int       @default(0)
+  openCount        Int       @default(0)
+  clickCount       Int       @default(0)
+  createdById      String?
+  blogPostId       String?
+  createdAt        DateTime  @default(now())
+  updatedAt        DateTime  @updatedAt
+
+  template    EmailTemplate?           @relation(fields: [templateId], references: [id])
+  createdBy   User?                    @relation("CampaignCreator", fields: [createdById], references: [id])
+  blogPost    BlogPost?                @relation(fields: [blogPostId], references: [id])
+  recipients  EmailCampaignRecipient[]
+
+  @@index([status])
+  @@index([scheduledAt])
+  @@index([blogPostId])
+}
+
+model EmailCampaignRecipient {
+  id           String    @id @default(cuid())
+  campaignId   String
+  leadId       String
+  email        String
+  firstName    String?
+  status       String    @default("PENDING") // PENDING | SENT | FAILED
+  sentAt       DateTime?
+  errorMessage String?
+  openCount    Int       @default(0)
+  openedAt     DateTime?
+  clickCount   Int       @default(0)
+  clickedAt    DateTime?
+  createdAt    DateTime  @default(now())
+
+  campaign EmailCampaign @relation(fields: [campaignId], references: [id], onDelete: Cascade)
+  lead     Lead          @relation(fields: [leadId], references: [id], onDelete: Cascade)
+
+  @@unique([campaignId, leadId])
+  @@index([campaignId, status])
 }

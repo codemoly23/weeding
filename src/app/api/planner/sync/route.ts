@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import prisma from "@/lib/db";
+import { GuestSide, GuestRelation, RsvpStatus, BudgetPaymentStatus, VendorCategory } from "@prisma/client";
 import { auth } from "@/lib/auth";
 
 // POST /api/planner/sync — migrate a local (localStorage) project into the DB
@@ -65,8 +66,8 @@ export async function POST(req: NextRequest) {
           firstName: (g.firstName as string)?.trim() || "",
           lastName: (g.lastName as string)?.trim() || null,
           title: (g.title as string)?.trim() || null,
-          side: g.side as string || "BRIDE",
-          relation: g.relation as string || "OTHER",
+          side: (g.side as string || "BRIDE") as GuestSide,
+          relation: (g.relation as string || "OTHER") as GuestRelation,
           email: (g.email as string)?.trim() || null,
           phone: (g.phone as string)?.trim() || null,
           dietary: (g.dietary as string)?.trim() || null,
@@ -80,7 +81,7 @@ export async function POST(req: NextRequest) {
           invitationCode: (g.invitationCode as string)?.trim() || null,
           invitationSent: (g.invitationSent as boolean) ?? false,
           invitationSentAt: g.invitationSentAt ? new Date(g.invitationSentAt as string) : null,
-          rsvpStatus: g.rsvpStatus as string || "PENDING",
+          rsvpStatus: (g.rsvpStatus as string || "PENDING") as RsvpStatus,
         })),
       });
     }
@@ -107,7 +108,7 @@ export async function POST(req: NextRequest) {
               planned: Number(item.planned) || 0,
               actual: Number(item.actual) || 0,
               paid: Number(item.paid) || 0,
-              status: (item.status as string) ?? "UNPAID",
+              status: ((item.status as string) ?? "UNPAID") as BudgetPaymentStatus,
               notes: (item.notes as string) ?? null,
               order: Number(item.order) || i,
             })),
@@ -168,7 +169,7 @@ export async function POST(req: NextRequest) {
         data: (vendors as Record<string, unknown>[]).map((v) => ({
           projectId: pid,
           name: (v.name as string)?.trim() || "Vendor",
-          category: v.category as string,
+          category: v.category as VendorCategory,
           email: (v.email as string)?.trim() || null,
           phone: (v.phone as string)?.trim() || null,
           website: (v.website as string)?.trim() || null,

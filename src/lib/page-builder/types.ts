@@ -221,6 +221,7 @@ export type WidgetType =
   | "button-group"
   // Advanced Widgets
   | "faq"
+  | "faq-section"
   | "faq-accordion"
   | "timeline"
   | "team-grid"
@@ -4033,7 +4034,6 @@ export interface FeaturesShowcaseWidgetSettings {
   showCta: boolean;
   ctaText: string;
   ctaHref: string;
-  headingFontSize?: number;
 }
 
 // ── Trending Venues Widget ────────────────────────────────────────────────────
@@ -4068,4 +4068,5 @@ export interface TrendingVenuesWidgetSettings {
   showCta: boolean;
   ctaText: string;
   ctaHref: string;
+  headingFontSize?: number;
 }
