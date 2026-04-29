@@ -7,6 +7,7 @@ export async function GET() {
   const cities = await prisma.vendorCity.findMany({
     orderBy: [{ sortOrder: "asc" }, { name: "asc" }],
     select: { id: true, name: true, country: true },
+    take: 100,
   });
   return NextResponse.json(cities);
 }

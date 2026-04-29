@@ -13,6 +13,7 @@ export async function GET(request: NextRequest) {
       ...(featured === "true" && { isFeatured: true }),
     },
     orderBy: [{ sortOrder: "asc" }, { name: "asc" }],
+    take: 100,
   });
 
   return NextResponse.json(venues);

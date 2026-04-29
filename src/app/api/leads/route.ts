@@ -76,9 +76,12 @@ export async function POST(request: NextRequest) {
     const data = enhancedSubmitLeadSchema.parse(body);
 
     // Get IP and user agent
-    const ipAddress = request.headers.get("x-forwarded-for")?.split(",")[0] ||
-                      request.headers.get("x-real-ip") ||
-                      "unknown";
+    // Prefer x-real-ip (set by trusted proxy/Vercel) over x-forwarded-for (user-spoofable)
+    // Use last entry in x-forwarded-for as fallback — it's added by the outermost trusted proxy
+    const ipAddress =
+      request.headers.get("x-real-ip") ||
+      request.headers.get("x-forwarded-for")?.split(",").at(-1)?.trim() ||
+      "unknown";
     const userAgent = request.headers.get("user-agent") || undefined;
 
     // Email already normalized by schema transform

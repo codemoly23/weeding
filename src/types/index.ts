@@ -118,6 +118,14 @@ export interface DashboardStats {
   openTickets: number;
 }
 
+// Lead score history entry — shape of Lead.scoreHistory JSON array
+export interface ScoreHistoryEntry {
+  score: number;
+  date: string; // ISO 8601
+  reason: string;
+  delta: number;
+}
+
 // State info for pricing
 export interface StateInfo {
   code: string;

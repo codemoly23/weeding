@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { getStripeConfig, getPayPalConfig } from "@/lib/payment-settings";
+import { logger } from "@/lib/logger";
 
 interface GatewayConfig {
   enabled: boolean;
@@ -30,8 +31,8 @@ export async function GET() {
           publicKey: stripeConfig.publishableKey,
         };
       }
-    } catch {
-      // Stripe not configured, skip
+    } catch (err) {
+      logger.warn("Stripe gateway config unavailable", { error: String(err) });
     }
 
     // Check PayPal
@@ -45,8 +46,8 @@ export async function GET() {
           clientId: paypalConfig.clientId,
         };
       }
-    } catch {
-      // PayPal not configured, skip
+    } catch (err) {
+      logger.warn("PayPal gateway config unavailable", { error: String(err) });
     }
 
     response.gateways = gateways;

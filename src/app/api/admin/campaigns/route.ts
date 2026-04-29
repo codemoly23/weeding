@@ -24,6 +24,7 @@ export async function GET() {
 
   const campaigns = await prisma.emailCampaign.findMany({
     orderBy: { createdAt: "desc" },
+    take: 100,
     include: {
       template: { select: { id: true, name: true } },
       _count: { select: { recipients: true } },

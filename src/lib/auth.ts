@@ -18,7 +18,7 @@ export const authConfig = {
         : "authjs.session-token",
       options: {
         httpOnly: true,
-        sameSite: "lax" as const,
+        sameSite: "strict" as const,
         path: "/",
         secure: process.env.NODE_ENV === "production",
       },

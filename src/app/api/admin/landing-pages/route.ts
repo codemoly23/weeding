@@ -6,6 +6,7 @@ export async function GET() {
   try {
     const pages = await prisma.landingPage.findMany({
       orderBy: { updatedAt: "desc" },
+      take: 100,
       include: {
         blocks: {
           orderBy: { sortOrder: "asc" },

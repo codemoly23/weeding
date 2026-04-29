@@ -6,6 +6,7 @@ export async function GET() {
   try {
     const testimonials = await prisma.testimonial.findMany({
       orderBy: { sortOrder: "asc" },
+      take: 100,
     });
 
     return NextResponse.json(testimonials);

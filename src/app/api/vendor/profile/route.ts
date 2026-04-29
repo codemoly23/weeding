@@ -29,13 +29,46 @@ export async function PUT(req: NextRequest) {
   const existing = await getVendorProfile(session.user.id);
   if (!existing) return NextResponse.json({ error: "Profile not found" }, { status: 404 });
 
-  const body = await req.json();
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  let body: Record<string, any>;
+  try {
+    body = await req.json();
+  } catch {
+    return NextResponse.json({ error: "Invalid request body" }, { status: 400 });
+  }
   const {
     businessName, category, description, tagline, email, phone, website,
     instagram, facebook, pinterest, slaHours, faqItems,
     city, country, lat, lng, serviceRadiusKm, photos, videoUrls,
     startingPrice, priceMin, priceMax, currency, yearsInBusiness, languages,
   } = body;
+
+  if (lat !== undefined && lat !== null && lat !== "") {
+    const n = parseFloat(lat);
+    if (isNaN(n) || n < -90 || n > 90) return NextResponse.json({ error: "Invalid latitude" }, { status: 400 });
+  }
+  if (lng !== undefined && lng !== null && lng !== "") {
+    const n = parseFloat(lng);
+    if (isNaN(n) || n < -180 || n > 180) return NextResponse.json({ error: "Invalid longitude" }, { status: 400 });
+  }
+  if (slaHours !== undefined && slaHours !== null && slaHours !== "") {
+    const n = parseInt(slaHours);
+    if (isNaN(n) || n < 1 || n > 720) return NextResponse.json({ error: "slaHours must be 1–720" }, { status: 400 });
+  }
+  if (serviceRadiusKm !== undefined && serviceRadiusKm !== null && serviceRadiusKm !== "") {
+    const n = parseInt(serviceRadiusKm);
+    if (isNaN(n) || n < 1 || n > 5000) return NextResponse.json({ error: "serviceRadiusKm must be 1–5000" }, { status: 400 });
+  }
+  if (yearsInBusiness !== undefined && yearsInBusiness !== null && yearsInBusiness !== "") {
+    const n = parseInt(yearsInBusiness);
+    if (isNaN(n) || n < 0 || n > 100) return NextResponse.json({ error: "yearsInBusiness must be 0–100" }, { status: 400 });
+  }
+  for (const [field, val] of [["startingPrice", startingPrice], ["priceMin", priceMin], ["priceMax", priceMax]] as const) {
+    if (val !== undefined && val !== null && val !== "") {
+      const n = parseInt(val);
+      if (isNaN(n) || n < 0) return NextResponse.json({ error: `${field} must be a non-negative number` }, { status: 400 });
+    }
+  }
 
   const profile = await prisma.vendorProfile.update({
     where: { id: existing.id },

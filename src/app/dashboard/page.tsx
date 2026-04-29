@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useMemo } from "react";
+import { useState, useEffect, useMemo, useCallback } from "react";
 import Link from "next/link";
 import {
   CalendarHeart,
@@ -51,7 +51,7 @@ export default function DashboardPage() {
   const [projects, setProjects] = useState<DbProject[]>([]);
   const [loading, setLoading] = useState(true);
 
-  const fetchProjects = async () => {
+  const fetchProjects = useCallback(async () => {
     setLoading(true);
     try {
       if (session?.user?.id) {
@@ -68,12 +68,11 @@ export default function DashboardPage() {
     } finally {
       setLoading(false);
     }
-  };
+  }, [session?.user?.id]);
 
   useEffect(() => {
     fetchProjects();
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [session?.user?.id]);
+  }, [fetchProjects]);
 
   const localProjects = typeof window !== "undefined" ? getAllLocalProjects() : [];
   const totalProjects = projects.length + localProjects.length;

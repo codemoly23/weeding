@@ -223,7 +223,6 @@ export default function SettingsPage() {
     import("qrcode").then((QRCode) => {
       QRCode.toDataURL(shareLink, { width: 200, margin: 1 }).then(setQrDataUrl);
     }).catch(() => {});
-  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [shareLink]);
 
   // ── Copy project ────────────────────────────────────────────────────────────

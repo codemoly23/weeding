@@ -34,8 +34,20 @@ import {
 import { getActiveTemplateForType } from "@/lib/data/templates";
 import { PageBuilderRenderer } from "@/components/page-builder/renderer";
 
-// Force dynamic rendering to avoid SSG issues with client components
-export const dynamic = "force-dynamic";
+export const revalidate = 3600;
+export const dynamicParams = true;
+
+export async function generateStaticParams() {
+  try {
+    const services = await prisma.service.findMany({
+      where: { isActive: true },
+      select: { slug: true },
+    });
+    return services.map((s) => ({ slug: s.slug }));
+  } catch {
+    return [];
+  }
+}
 
 interface PackageFeatureMapping {
   id: string;
