@@ -75,14 +75,14 @@ export default function VendorLayout({ children }: { children: React.ReactNode }
 
   if (status === "loading") {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gray-50">
+      <div className="min-h-screen flex items-center justify-center bg-[#f5f3ff]">
         <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-purple-600" />
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 flex">
+    <div className="min-h-screen bg-[#f5f3ff] flex">
       {/* Mobile overlay */}
       {sidebarOpen && (
         <div
@@ -93,15 +93,12 @@ export default function VendorLayout({ children }: { children: React.ReactNode }
 
       {/* Sidebar */}
       <aside
-        className={`fixed top-0 left-0 h-full w-64 bg-white border-r border-gray-200 z-30 flex flex-col transition-transform duration-300
+        className={`fixed top-0 left-0 h-full w-64 bg-white border-r border-purple-100 z-30 flex flex-col transition-transform duration-300
           ${sidebarOpen ? "translate-x-0" : "-translate-x-full"} lg:translate-x-0 lg:static lg:z-auto`}
       >
         {/* Logo */}
-        <div className="flex items-center justify-between px-5 py-4 border-b border-gray-100">
-          <Link href="/vendor/dashboard" className="flex items-center gap-2">
-            <div className="w-8 h-8 rounded-lg bg-purple-600 flex items-center justify-center">
-              <Store className="w-4 h-4 text-white" />
-            </div>
+        <div className="flex items-center justify-between px-5 py-4 border-b border-purple-100">
+          <Link href="/vendor/dashboard" className="flex items-center">
             <span className="font-semibold text-gray-900 text-sm">Vendor Portal</span>
           </Link>
           <button
@@ -114,7 +111,7 @@ export default function VendorLayout({ children }: { children: React.ReactNode }
 
         {/* Business name */}
         {(businessName || session?.user?.name) && (
-          <div className="px-5 py-3 border-b border-gray-100">
+          <div className="px-5 py-3 border-b border-purple-100">
             <p className="text-xs text-gray-400 uppercase tracking-wide font-medium">Logged in as</p>
             <p className="text-sm font-medium text-gray-700 truncate mt-0.5">
               {businessName || session?.user?.name}
@@ -152,7 +149,7 @@ export default function VendorLayout({ children }: { children: React.ReactNode }
         </nav>
 
         {/* Footer */}
-        <div className="px-3 py-4 border-t border-gray-100 space-y-0.5">
+        <div className="px-3 py-4 border-t border-purple-100 space-y-0.5">
           <Link
             href="/vendors"
             target="_blank"
@@ -174,7 +171,7 @@ export default function VendorLayout({ children }: { children: React.ReactNode }
       {/* Main */}
       <div className="flex-1 flex flex-col min-w-0">
         {/* Top bar (mobile) */}
-        <header className="sticky top-0 z-10 bg-white border-b border-gray-200 px-4 py-3 flex items-center gap-3 lg:hidden">
+        <header className="sticky top-0 z-10 bg-white border-b border-purple-100 px-4 py-3 flex items-center gap-3 lg:hidden">
           <button
             onClick={() => setSidebarOpen(true)}
             className="p-2 rounded-lg text-gray-500 hover:bg-gray-100"
