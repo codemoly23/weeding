@@ -335,7 +335,7 @@ export default function VendorProfilePage() {
             <Field label="Phone">
               <input
                 type="tel"
-                value={profile.phone}
+                value={profile.phone ?? ""}
                 onChange={(e) => set("phone", e.target.value)}
                 className="input"
                 placeholder="+1 555 000 0000"
@@ -344,7 +344,7 @@ export default function VendorProfilePage() {
             <Field label="Website">
               <input
                 type="url"
-                value={profile.website}
+                value={profile.website ?? ""}
                 onChange={(e) => set("website", e.target.value)}
                 className="input"
                 placeholder="https://yourbusiness.com"
