@@ -117,7 +117,6 @@ export default function BudgetPage() {
       budgetGoalLoadedRef.current = true;
       setBudgetGoal(parseFloat(stored) || 0);
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [budgetGoalKey, local]);
 
   const autoSeededRef = useRef(false);
@@ -126,6 +125,7 @@ export default function BudgetPage() {
       autoSeededRef.current = true;
       loadDefaults();
     }
+    // loadDefaults intentionally omitted: called at most once (autoSeededRef guards re-entry)
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [loading, categories.length]);
 

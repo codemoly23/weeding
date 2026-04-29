@@ -54,6 +54,7 @@ export async function GET(request: NextRequest) {
         { adminMenuPosition: "asc" },
         { name: "asc" },
       ],
+      take: 100,
     });
 
     return NextResponse.json({ plugins });

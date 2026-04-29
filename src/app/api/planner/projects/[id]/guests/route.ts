@@ -20,6 +20,7 @@ export async function GET(
   const guests = await prisma.weddingGuest.findMany({
     where: { projectId: id },
     orderBy: { createdAt: "asc" },
+    take: 1000,
   });
 
   return NextResponse.json({ guests });

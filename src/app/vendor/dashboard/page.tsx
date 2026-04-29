@@ -343,7 +343,10 @@ function StatCard({
   highlight?: boolean;
 }) {
   return (
-    <div className={`bg-white rounded-xl border p-4 ${highlight ? "border-purple-200" : "border-gray-200"}`}>
+    <div
+      className={`bg-white rounded-xl border p-4 ${highlight ? "border-purple-200" : "border-gray-200"}`}
+      aria-label={`${label}: ${value}`}
+    >
       <div className={`w-9 h-9 rounded-lg ${bg} flex items-center justify-center mb-3`}>
         <Icon className={`w-4 h-4 ${color}`} />
       </div>

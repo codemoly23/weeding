@@ -22,6 +22,7 @@ export async function GET() {
         },
       },
       orderBy: { sortOrder: "asc" },
+      take: 100,
     });
 
     // Transform the data for frontend consumption

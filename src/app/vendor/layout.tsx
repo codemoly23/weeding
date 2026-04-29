@@ -191,7 +191,7 @@ export default function VendorLayout({ children }: { children: React.ReactNode }
           )}
         </header>
 
-        <main className="flex-1 p-4 lg:p-8">
+        <main id="main-content" className="flex-1 p-4 lg:p-8">
           {children}
         </main>
       </div>

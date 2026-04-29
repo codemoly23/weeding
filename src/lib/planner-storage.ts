@@ -99,8 +99,21 @@ export interface LocalProject {
   groomName?: string | null;
   budgetGoal?: number | null;
   settings?: Record<string, unknown> | null;
+  schemaVersion?: number;
   createdAt: string;
   updatedAt: string;
+}
+
+// Increment when LocalProject shape changes; migrate-on-read handles old data
+const SCHEMA_VERSION = 1;
+
+function migrateProject(raw: Record<string, unknown>): LocalProject {
+  const version = (raw.schemaVersion as number) ?? 0;
+  if (version < SCHEMA_VERSION) {
+    raw.schemaVersion = SCHEMA_VERSION;
+    // Future field migrations go here (e.g. rename, add defaults)
+  }
+  return raw as unknown as LocalProject;
 }
 
 const INDEX_KEY = "planner_projects_index";
@@ -119,6 +132,7 @@ export function createLocalProject(role: string): LocalProject {
     eventType: "WEDDING",
     eventDate: null,
     status: "ACTIVE",
+    schemaVersion: SCHEMA_VERSION,
     createdAt: now,
     updatedAt: now,
   };
@@ -132,7 +146,13 @@ export function getLocalProject(id: string): LocalProject | null {
   const raw = localStorage.getItem(projectKey(id));
   if (!raw) return null;
   try {
-    return JSON.parse(raw) as LocalProject;
+    const parsed = JSON.parse(raw) as Record<string, unknown>;
+    const project = migrateProject(parsed);
+    // Persist migration if schema version changed
+    if ((Number(parsed.schemaVersion) || 0) < SCHEMA_VERSION) {
+      localStorage.setItem(projectKey(id), JSON.stringify(project));
+    }
+    return project;
   } catch {
     return null;
   }
@@ -157,6 +177,39 @@ export function deleteLocalProject(id: string): void {
   localStorage.removeItem(projectKey(id));
   const index = getAllLocalProjectIds().filter((i) => i !== id);
   localStorage.setItem(INDEX_KEY, JSON.stringify(index));
+}
+
+/**
+ * Removes local projects not updated within maxAgeDays and all their associated data.
+ * Returns the number of projects pruned.
+ */
+export function pruneOldProjects(maxAgeDays = 90): number {
+  if (typeof window === "undefined") return 0;
+  const cutoff = Date.now() - maxAgeDays * 24 * 60 * 60 * 1000;
+  const ids = getAllLocalProjectIds();
+  let pruned = 0;
+  const remaining: string[] = [];
+
+  for (const id of ids) {
+    const project = getLocalProject(id);
+    if (!project || new Date(project.updatedAt).getTime() < cutoff) {
+      localStorage.removeItem(`planner_project_${id}`);
+      localStorage.removeItem(`planner_guests_${id}`);
+      localStorage.removeItem(`planner_families_${id}`);
+      localStorage.removeItem(`planner_budget_${id}`);
+      localStorage.removeItem(`planner_checklist_${id}`);
+      localStorage.removeItem(`planner_itinerary_${id}`);
+      localStorage.removeItem(`planner_venue_${id}_ceremony`);
+      localStorage.removeItem(`planner_venue_${id}_reception`);
+      localStorage.removeItem(`planner-${id}-budget-goal`);
+      pruned++;
+    } else {
+      remaining.push(id);
+    }
+  }
+
+  if (pruned > 0) localStorage.setItem(INDEX_KEY, JSON.stringify(remaining));
+  return pruned;
 }
 
 export function getAllLocalProjectIds(): string[] {

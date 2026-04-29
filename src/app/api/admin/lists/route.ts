@@ -18,6 +18,7 @@ export async function GET(request: NextRequest) {
           },
         },
         orderBy: { name: "asc" },
+        take: 100,
       }),
       prisma.customList.findMany({
         include: {
@@ -26,6 +27,7 @@ export async function GET(request: NextRequest) {
           },
         },
         orderBy: { name: "asc" },
+        take: 100,
       }),
     ]);
 

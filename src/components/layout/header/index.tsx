@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useMemo } from "react";
+import { useState, useEffect, useLayoutEffect, useMemo } from "react";
 import { useSession, signOut } from "next-auth/react";
 import { cn } from "@/lib/utils";
 import { useBusinessConfig } from "@/hooks/use-business-config";
@@ -13,6 +13,10 @@ import { HeaderSplit } from "./layouts/HeaderSplit";
 import { HeaderMinimal } from "./layouts/HeaderMinimal";
 import { HeaderMega } from "./layouts/HeaderMega";
 import type { LoggedInUser, NavigationItem, ServiceCategory } from "./types";
+
+// SSR-safe layout effect — runs before paint on client, falls back to effect on server
+const useIsomorphicLayoutEffect =
+  typeof window !== "undefined" ? useLayoutEffect : useEffect;
 
 // Fallback data when API fails - generic, no service-specific links
 const fallbackServiceCategories: ServiceCategory[] = [];
@@ -71,7 +75,19 @@ export function Header() {
     return {};
   }, [headerConfig?.menu]);
 
-  // Check for logged-in user
+  // Synchronously pre-populate user from localStorage before first paint to avoid flicker
+  useIsomorphicLayoutEffect(() => {
+    const stored = localStorage.getItem("user");
+    if (!stored) return;
+    try {
+      const data = JSON.parse(stored) as Record<string, unknown>;
+      if (data.id && data.email) setUser(data as unknown as LoggedInUser);
+    } catch {
+      localStorage.removeItem("user");
+    }
+  }, []);
+
+  // Keep user in sync with session changes and custom storage events
   useEffect(() => {
     const checkUser = () => {
       if (session?.user) {

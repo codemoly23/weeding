@@ -615,6 +615,14 @@
 .footer-dynamic-styles .footer-link:hover {
   color: var(--footer-link-hover-color, currentColor);
 }
+/* Global focus ring for raw <button> elements not using the shadcn Button component */
+button:focus-visible:not([data-slot="button"]),
+[role="button"]:focus-visible:not([data-slot="button"]) {
+  outline: 2px solid currentColor;
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
 .footer-dynamic-styles .footer-heading {
   color: var(--footer-heading-color, inherit);
 }

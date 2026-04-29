@@ -303,6 +303,7 @@ export default function ChecklistPage() {
       autoSeededRef.current = true;
       handleSeed();
     }
+    // handleSeed intentionally omitted: called at most once (autoSeededRef guards re-entry)
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [loading, seeding, tasks.length]);
 

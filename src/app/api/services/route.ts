@@ -46,6 +46,7 @@ export async function GET(request: NextRequest) {
         },
       },
       orderBy: [{ sortOrder: "asc" }, { name: "asc" }],
+      take: 100,
     });
 
     // Transform the data for frontend consumption

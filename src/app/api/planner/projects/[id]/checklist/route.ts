@@ -17,6 +17,7 @@ export async function GET(
   const tasks = await prisma.checklistTask.findMany({
     where: { projectId: id },
     orderBy: [{ dueMonths: "desc" }, { order: "asc" }],
+    take: 500,
   });
 
   return NextResponse.json({ tasks });
@@ -44,7 +45,7 @@ export async function POST(
     } else {
       const count = await prisma.checklistTask.count({ where: { projectId: id } });
       if (count > 0) {
-        const tasks = await prisma.checklistTask.findMany({ where: { projectId: id }, orderBy: [{ dueMonths: "desc" }, { order: "asc" }] });
+        const tasks = await prisma.checklistTask.findMany({ where: { projectId: id }, orderBy: [{ dueMonths: "desc" }, { order: "asc" }], take: 500 });
         return NextResponse.json({ tasks }, { status: 201 });
       }
     }
@@ -77,7 +78,7 @@ export async function POST(
         order: i,
       })),
     });
-    const tasks = await prisma.checklistTask.findMany({ where: { projectId: id }, orderBy: [{ dueMonths: "desc" }, { order: "asc" }] });
+    const tasks = await prisma.checklistTask.findMany({ where: { projectId: id }, orderBy: [{ dueMonths: "desc" }, { order: "asc" }], take: 500 });
     return NextResponse.json({ tasks }, { status: 201 });
   }
 

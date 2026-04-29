@@ -20,6 +20,7 @@ export async function GET(
   const vendors = await prisma.weddingVendor.findMany({
     where: { projectId: id },
     orderBy: { createdAt: "asc" },
+    take: 100,
   });
 
   return NextResponse.json({ vendors });

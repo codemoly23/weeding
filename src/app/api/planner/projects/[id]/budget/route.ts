@@ -55,6 +55,9 @@ export async function POST(
   const body = await req.json();
   const { name, planned, color } = body;
   if (!name?.trim()) return NextResponse.json({ error: "Name required" }, { status: 400 });
+  if (color !== undefined && !/^#[0-9a-fA-F]{6}$/.test(color)) {
+    return NextResponse.json({ error: "Invalid color format. Use hex e.g. #6366f1" }, { status: 400 });
+  }
 
   const count = await prisma.budgetCategory.count({ where: { projectId: id } });
   const category = await prisma.budgetCategory.create({

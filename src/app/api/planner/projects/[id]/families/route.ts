@@ -21,6 +21,7 @@ export async function GET(
     where: { projectId: id },
     include: { guests: { select: { id: true, firstName: true, lastName: true } } },
     orderBy: { createdAt: "asc" },
+    take: 200,
   });
 
   return NextResponse.json({ families });

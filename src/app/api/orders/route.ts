@@ -3,6 +3,7 @@ import { z } from "zod";
 import bcrypt from "bcryptjs";
 import { prisma } from "@/lib/db";
 import { generateOrderNumber } from "@/lib/order-utils";
+import { logger } from "@/lib/logger";
 
 const orderSchema = z.object({
   // Service & Package
@@ -108,143 +109,126 @@ export async function POST(request: NextRequest) {
       ? await bcrypt.hash(data.owner.password, 10)
       : undefined;
 
-    // Find or create user by email
-    let user = data.userId
-      ? await prisma.user.findUnique({ where: { id: data.userId } })
-      : await prisma.user.findUnique({ where: { email: data.owner.email } });
-
-    if (!user) {
-      user = await prisma.user.create({
-        data: {
-          email: data.owner.email,
-          name: `${data.owner.firstName} ${data.owner.lastName}`,
-          phone: data.owner.phone,
-          country: data.owner.country,
-          role: "CUSTOMER",
-          ...(hashedPassword ? { password: hashedPassword } : {}),
-        },
-      });
-    } else if (!user.password && hashedPassword) {
-      // Update existing user with password if they don't have one
-      user = await prisma.user.update({
-        where: { id: user.id },
-        data: { password: hashedPassword },
-      });
-    }
-
-    // Generate order number
+    // Generate order number outside transaction (read-only)
     const orderNumber = await generateOrderNumber();
 
-    // Find or create service by slug
-    let service = await prisma.service.findUnique({
-      where: { slug: data.serviceId },
-    });
-
-    if (!service) {
-      // Create default service if not found
-      service = await prisma.service.create({
-        data: {
-          name: data.serviceName || "Wedding Planning",
-          slug: data.serviceId,
-          shortDesc: "Ceremoney Wedding Planning Service",
-          description: "Ceremoney Wedding Planning Service",
-          isActive: true,
-        },
-      });
-    }
-
-    // Build order metadata (store additional info)
+    // Build order metadata
     const orderMetadata = {
       llcNameAlt1: data.llcNameAlt1,
       llcNameAlt2: data.llcNameAlt2,
       managementType: data.managementType,
       businessPurpose: data.businessPurpose,
       businessIndustry: data.businessIndustry,
-      // Manager details (for manager-managed LLC)
       managerType: data.managerType,
       nonMemberManager: data.nonMemberManager,
-      // Multi-member details
       profitDistribution: data.profitDistribution,
       additionalMembers: data.additionalMembers || [],
-      // Owner details
       ownerAddress: data.owner.address,
       ownerCity: data.owner.city,
       ownerPostalCode: data.owner.postalCode,
       ownerPassportNumber: data.owner.passportNumber,
       ownerDateOfBirth: data.owner.dateOfBirth,
       ownershipPercentage: data.owner.ownershipPercentage,
-      // Additional services
       needsEIN: data.needsEIN,
       needsRegisteredAgent: data.needsRegisteredAgent,
       needsBankingAssistance: data.needsBankingAssistance,
       expeditedProcessing: data.expeditedProcessing,
-      // Add-ons
       addons: data.addons || [],
       addonsTotal: data.addonsTotal,
     };
 
-    // Create order with items and notes
-    const order = await prisma.order.create({
-      data: {
-        orderNumber,
-        userId: user.id,
-        status: "PENDING",
-        paymentStatus: "PENDING",
-        subtotalUSD: data.serviceFee,
-        totalUSD: data.totalAmount,
-        currency: "USD",
-        llcName: data.llcName,
-        llcState: data.locationCode || data.stateCode,
-        llcType: data.llcType,
-        customerName: `${data.owner.firstName} ${data.owner.lastName}`,
-        customerEmail: data.owner.email,
-        customerPhone: data.owner.phone,
-        customerCountry: data.owner.country,
-        items: {
-          create: [
-            {
-              serviceId: service.id,
-              name: `${data.serviceName || "Wedding Planning"} - ${data.packageName || "Premium"} Package`,
-              description: `${data.locationName || data.stateName || ""} Formation`,
-              priceUSD: data.serviceFee,
-              stateFee: data.locationFee || data.stateFee,
-              locationCode: data.locationCode || (data.stateCode ? `US-${data.stateCode}` : undefined),
-              locationName: data.locationName || data.stateName,
-              locationFeeLabel: data.locationFeeLabel,
-            },
-            // Add-on items
-            ...(data.addons || []).map((addon) => ({
-              serviceId: service!.id,
-              name: addon.name,
-              description: "Add-on service",
-              priceUSD: addon.price,
-              stateFee: 0,
-            })),
-          ],
-        },
-        notes: {
-          create: [
-            {
-              content: JSON.stringify(orderMetadata, null, 2),
-              isInternal: true,
-            },
-          ],
-        },
-      },
-      include: {
-        items: true,
-        user: {
-          select: {
-            id: true,
-            email: true,
-            name: true,
+    // Atomic: user creation + service creation + order creation in one transaction
+    const { order, user } = await prisma.$transaction(async (tx) => {
+      // Find or create user
+      let txUser = data.userId
+        ? await tx.user.findUnique({ where: { id: data.userId } })
+        : await tx.user.findUnique({ where: { email: data.owner.email } });
+
+      if (!txUser) {
+        txUser = await tx.user.create({
+          data: {
+            email: data.owner.email,
+            name: `${data.owner.firstName} ${data.owner.lastName}`,
+            phone: data.owner.phone,
+            country: data.owner.country,
+            role: "CUSTOMER",
+            ...(hashedPassword ? { password: hashedPassword } : {}),
+          },
+        });
+      } else if (!txUser.password && hashedPassword) {
+        txUser = await tx.user.update({
+          where: { id: txUser.id },
+          data: { password: hashedPassword },
+        });
+      }
+
+      // Find or create service
+      let txService = await tx.service.findUnique({ where: { slug: data.serviceId } });
+      if (!txService) {
+        txService = await tx.service.create({
+          data: {
+            name: data.serviceName || "Wedding Planning",
+            slug: data.serviceId,
+            shortDesc: "Ceremoney Wedding Planning Service",
+            description: "Ceremoney Wedding Planning Service",
+            isActive: true,
+          },
+        });
+      }
+
+      // Create order with items and notes
+      const txOrder = await tx.order.create({
+        data: {
+          orderNumber,
+          userId: txUser.id,
+          status: "PENDING",
+          paymentStatus: "PENDING",
+          subtotalUSD: data.serviceFee,
+          totalUSD: data.totalAmount,
+          currency: "USD",
+          llcName: data.llcName,
+          llcState: data.locationCode || data.stateCode,
+          llcType: data.llcType,
+          customerName: `${data.owner.firstName} ${data.owner.lastName}`,
+          customerEmail: data.owner.email,
+          customerPhone: data.owner.phone,
+          customerCountry: data.owner.country,
+          items: {
+            create: [
+              {
+                serviceId: txService.id,
+                name: `${data.serviceName || "Wedding Planning"} - ${data.packageName || "Premium"} Package`,
+                description: `${data.locationName || data.stateName || ""} Formation`,
+                priceUSD: data.serviceFee,
+                stateFee: data.locationFee || data.stateFee,
+                locationCode: data.locationCode || (data.stateCode ? `US-${data.stateCode}` : undefined),
+                locationName: data.locationName || data.stateName,
+                locationFeeLabel: data.locationFeeLabel,
+              },
+              ...(data.addons || []).map((addon) => ({
+                serviceId: txService!.id,
+                name: addon.name,
+                description: "Add-on service",
+                priceUSD: addon.price,
+                stateFee: 0,
+              })),
+            ],
+          },
+          notes: {
+            create: [{ content: JSON.stringify(orderMetadata, null, 2), isInternal: true }],
           },
         },
-      },
+        include: {
+          items: true,
+          user: { select: { id: true, email: true, name: true } },
+        },
+      });
+
+      return { order: txOrder, user: txUser };
     });
 
-    // Log activity
-    await prisma.activityLog.create({
+    // Activity log is non-critical — do not block the response if it fails
+    prisma.activityLog.create({
       data: {
         userId: user.id,
         action: "ORDER_CREATED",
@@ -257,7 +241,7 @@ export async function POST(request: NextRequest) {
           total: data.totalAmount,
         },
       },
-    });
+    }).catch((err) => logger.error("Failed to log order activity", { error: String(err) }));
 
     return NextResponse.json({
       success: true,
@@ -303,8 +287,13 @@ export async function GET(request: NextRequest) {
     // Build where clause
     const where: Record<string, unknown> = {};
 
+    const VALID_ORDER_STATUSES = new Set(["PENDING", "PROCESSING", "IN_PROGRESS", "WAITING_FOR_INFO", "COMPLETED", "CANCELLED"]);
     if (status && status !== "all") {
-      where.status = status.toUpperCase();
+      const upperStatus = status.toUpperCase();
+      if (!VALID_ORDER_STATUSES.has(upperStatus)) {
+        return NextResponse.json({ error: "Invalid status value" }, { status: 400 });
+      }
+      where.status = upperStatus;
     }
 
     if (search) {
