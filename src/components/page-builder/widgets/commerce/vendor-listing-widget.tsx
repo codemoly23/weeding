@@ -244,10 +244,13 @@ function OverlayVendorCard({
           src={vendor.coverPhoto ?? (CATEGORY_PLACEHOLDER[vendor.category] ?? CATEGORY_PLACEHOLDER.OTHER)}
           alt={vendor.businessName}
           style={{
+            position: "absolute",
+            inset: 0,
             width: "100%",
             height: "100%",
             objectFit: "cover",
-            transform: hovered ? "scale(1.1)" : "scale(1)",
+            objectPosition: "center 30%",
+            transform: hovered ? "scale(1.08)" : "scale(1)",
             transition: "transform 0.7s ease",
             display: "block",
           }}
@@ -330,52 +333,43 @@ function OverlayVendorCard({
             </p>
           )}
 
-          {/* Bottom row: Stars LEFT | Price RIGHT — fixed height, no shift */}
-          <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
-            {/* Multiple stars + rating number */}
-            {vendor.avgRating !== null && (
-              <div style={{ display: "flex", alignItems: "center", gap: "0.375rem" }}>
-                <div style={{ display: "flex", gap: "2px" }}>
-                  {Array.from({ length: 5 }).map((_, i) => (
-                    <Star
-                      key={i}
-                      size={14}
-                      fill={i < fullStars ? "#fbbf24" : "rgba(255,255,255,0.25)"}
-                      color={i < fullStars ? "#fbbf24" : "rgba(255,255,255,0.25)"}
-                      strokeWidth={1.5}
-                    />
-                  ))}
-                </div>
-                <span style={{ fontWeight: 600, color: "white", fontSize: "0.875rem" }}>
-                  {vendor.avgRating.toFixed(1)}
-                </span>
-              </div>
-            )}
+          {/* Bottom row: [Stars/ViewProfile LEFT] | [Price RIGHT] */}
+          <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", minHeight: "2rem" }}>
 
-            {/* Price (hidden on hover) + View Profile (shown on hover) — same slot, no layout shift */}
-            <div style={{ position: "relative", height: "1.5rem", display: "flex", alignItems: "center" }}>
-              {/* Price */}
-              {vendor.startingPrice !== null && (
-                <p style={{
-                  background: `linear-gradient(to right, ${badgeFrom}, ${badgeTo})`,
-                  WebkitBackgroundClip: "text",
-                  WebkitTextFillColor: "transparent",
-                  backgroundClip: "text",
-                  fontWeight: 700,
-                  fontSize: "1rem",
-                  filter: "brightness(1.8)",
-                  margin: 0,
+            {/* LEFT slot — stars fade out, View Profile fade in */}
+            <div style={{ position: "relative", display: "flex", alignItems: "center" }}>
+              {vendor.avgRating !== null && (
+                <div style={{
+                  display: "flex", alignItems: "center", gap: "0.375rem",
                   opacity: hovered ? 0 : 1,
-                  transition: "opacity 0.2s",
+                  transition: "opacity 0.15s",
+                  pointerEvents: hovered ? "none" : "auto",
                 }}>
-                  {vendor.currency ?? "SEK"} {vendor.startingPrice.toLocaleString()}+
-                </p>
+                  <div style={{ display: "flex", gap: "2px" }}>
+                    {Array.from({ length: 5 }).map((_, i) => (
+                      <Star
+                        key={i}
+                        size={14}
+                        fill={i < fullStars ? "#fbbf24" : "rgba(255,255,255,0.25)"}
+                        color={i < fullStars ? "#fbbf24" : "rgba(255,255,255,0.25)"}
+                        strokeWidth={1.5}
+                      />
+                    ))}
+                  </div>
+                  <span style={{ fontWeight: 600, color: "white", fontSize: "0.875rem" }}>
+                    {vendor.avgRating.toFixed(1)}
+                  </span>
+                </div>
               )}
 
-              {/* View Profile — absolute, same position as price, no layout shift */}
+              {/* View Profile — always LEFT, fades in on hover */}
               <div style={{
-                position: "absolute",
-                right: 0,
+                position: vendor.avgRating !== null ? "absolute" : "relative",
+                left: 0,
+                top: "50%",
+                transform: hovered
+                  ? (vendor.avgRating !== null ? "translateY(-50%)" : "translateY(0)")
+                  : (vendor.avgRating !== null ? "translateY(calc(-50% + 4px))" : "translateY(4px)"),
                 background: "white",
                 color: "#7c3aed",
                 padding: "0.3rem 0.75rem",
@@ -388,7 +382,6 @@ function OverlayVendorCard({
                 boxShadow: "0 4px 6px rgba(0,0,0,0.15)",
                 whiteSpace: "nowrap",
                 opacity: hovered ? 1 : 0,
-                transform: hovered ? "translateY(0)" : "translateY(4px)",
                 transition: "opacity 0.2s, transform 0.2s",
                 pointerEvents: hovered ? "auto" : "none",
               }}>
@@ -396,6 +389,23 @@ function OverlayVendorCard({
                 <ArrowRight size={12} />
               </div>
             </div>
+
+            {/* RIGHT slot — price, always visible */}
+            {vendor.startingPrice !== null && (
+              <p style={{
+                background: `linear-gradient(to right, ${badgeFrom}, ${badgeTo})`,
+                WebkitBackgroundClip: "text",
+                WebkitTextFillColor: "transparent",
+                backgroundClip: "text",
+                fontWeight: 700,
+                fontSize: "1rem",
+                filter: "brightness(1.8)",
+                margin: 0,
+                flexShrink: 0,
+              }}>
+                {vendor.currency ?? "SEK"} {vendor.startingPrice.toLocaleString()}+
+              </p>
+            )}
           </div>
         </div>
       </div>

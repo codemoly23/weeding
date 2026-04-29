@@ -164,8 +164,8 @@ export default function VendorDashboardPage() {
       </div>
 
       {/* Recent inquiries */}
-      <div className="bg-white rounded-xl border border-gray-200">
-        <div className="flex items-center justify-between px-5 py-4 border-b border-gray-100">
+      <div className="bg-white rounded-xl border border-purple-100">
+        <div className="flex items-center justify-between px-5 py-4 border-b border-purple-100">
           <h2 className="font-semibold text-gray-900">Recent Inquiries</h2>
           <Link
             href="/vendor/inquiries"
@@ -184,7 +184,7 @@ export default function VendorDashboardPage() {
             </p>
           </div>
         ) : (
-          <ul className="divide-y divide-gray-100">
+          <ul className="divide-y divide-purple-50">
             {recentInquiries.map((inq) => (
               <li key={inq.id} className="px-5 py-3.5 flex items-start gap-3">
                 <div className="w-8 h-8 rounded-full bg-purple-100 flex items-center justify-center shrink-0 mt-0.5">
@@ -230,7 +230,7 @@ export default function VendorDashboardPage() {
       <div className="grid sm:grid-cols-2 gap-4">
         <Link
           href="/vendor/profile"
-          className="bg-white rounded-xl border border-gray-200 p-5 hover:border-purple-200 hover:shadow-sm transition-all group"
+          className="bg-white rounded-xl border border-purple-100 p-5 hover:border-purple-300 hover:shadow-sm transition-all group"
         >
           <p className="font-medium text-gray-900 group-hover:text-purple-700 transition-colors">
             Update Your Profile
@@ -245,7 +245,7 @@ export default function VendorDashboardPage() {
 
         <Link
           href="/vendor/inquiries"
-          className="bg-white rounded-xl border border-gray-200 p-5 hover:border-purple-200 hover:shadow-sm transition-all group"
+          className="bg-white rounded-xl border border-purple-100 p-5 hover:border-purple-300 hover:shadow-sm transition-all group"
         >
           <p className="font-medium text-gray-900 group-hover:text-purple-700 transition-colors">
             Manage Inquiries
@@ -265,14 +265,14 @@ export default function VendorDashboardPage() {
 function PlanCard({ plan }: { plan: VendorPlanStatus }) {
   if (plan.tier === "BUSINESS") {
     return (
-      <div className="bg-gradient-to-r from-purple-600 to-indigo-600 rounded-xl p-4 flex items-center justify-between">
+      <div className="bg-gradient-to-r from-purple-600 to-pink-500 rounded-xl p-4 flex items-center justify-between">
         <div className="flex items-center gap-3">
           <div className="w-9 h-9 rounded-lg bg-white/20 flex items-center justify-center">
             <Crown className="w-5 h-5 text-white" />
           </div>
           <div>
             <p className="text-sm font-semibold text-white">Business Plan</p>
-            <p className="text-xs text-purple-200">Full directory listing · Inquiries active</p>
+            <p className="text-xs text-pink-200">Full directory listing · Inquiries active</p>
           </div>
         </div>
         <Link href="/vendor/billing" className="text-xs text-white/80 hover:text-white underline underline-offset-2">
@@ -344,7 +344,7 @@ function StatCard({
 }) {
   return (
     <div
-      className={`bg-white rounded-xl border p-4 ${highlight ? "border-purple-200" : "border-gray-200"}`}
+      className={`bg-white rounded-xl border p-4 ${highlight ? "border-purple-300" : "border-purple-100"}`}
       aria-label={`${label}: ${value}`}
     >
       <div className={`w-9 h-9 rounded-lg ${bg} flex items-center justify-center mb-3`}>
