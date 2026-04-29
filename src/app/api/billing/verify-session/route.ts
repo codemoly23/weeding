@@ -26,7 +26,7 @@ export async function POST(req: NextRequest) {
   }
 
   const stripe = new Stripe(config.secretKey, {
-    apiVersion: "2025-11-17.clover" as Parameters<typeof Stripe>[1]["apiVersion"],
+    apiVersion: "2025-11-17.clover",
     typescript: true,
   });
 

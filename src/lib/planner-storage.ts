@@ -18,6 +18,8 @@ export interface LocalGuest {
   plusOneMeal: string | null;
   // Task 23 — Chief guest
   isChiefGuest: boolean;
+  // Open RSVP — self-registered via wedding website
+  selfRegistered: boolean;
   // Task 24 — Family grouping
   familyId: string | null;
   // Task 26 — Table invitation
@@ -95,6 +97,8 @@ export interface LocalProject {
   status: string;
   brideName?: string | null;
   groomName?: string | null;
+  budgetGoal?: number | null;
+  settings?: Record<string, unknown> | null;
   createdAt: string;
   updatedAt: string;
 }
@@ -202,6 +206,7 @@ export function addLocalGuest(
     plusOneName: null,
     plusOneMeal: null,
     isChiefGuest: false,
+    selfRegistered: false,
     familyId: null,
     invitationCode: null,
     invitationSent: false,
