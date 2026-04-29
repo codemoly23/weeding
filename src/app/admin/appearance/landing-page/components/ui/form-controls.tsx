@@ -192,7 +192,8 @@ export function TextAreaInput({
 interface ToggleSwitchProps {
   label: string;
   description?: string;
-  checked: boolean;
+  checked?: boolean;
+  value?: boolean;
   onChange: (checked: boolean) => void;
 }
 
@@ -200,8 +201,10 @@ export function ToggleSwitch({
   label,
   description,
   checked,
+  value,
   onChange,
 }: ToggleSwitchProps) {
+  const isChecked = checked ?? value ?? false;
   return (
     <div className="flex items-center justify-between py-1">
       <div>
@@ -210,7 +213,7 @@ export function ToggleSwitch({
           <p className="text-xs text-muted-foreground">{description}</p>
         )}
       </div>
-      <Switch checked={checked} onCheckedChange={onChange} />
+      <Switch checked={isChecked} onCheckedChange={onChange} />
     </div>
   );
 }

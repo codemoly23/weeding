@@ -82,7 +82,7 @@ function getInitials(name: string) {
 type TestimonialItem = {
   id: string;
   name: string;
-  country: string;
+  country: string | null;
   company: string | null;
   content: string;
   rating: number;

@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import prisma from "@/lib/db";
+import { Prisma } from "@prisma/client";
 import { auth } from "@/lib/auth";
 
 export async function POST(
@@ -108,7 +109,7 @@ export async function POST(
         projectId: newProject.id,
         title: t.title,
         description: t.description,
-        subtasks: t.subtasks,
+        subtasks: t.subtasks ?? Prisma.JsonNull,
         dueMonths: t.dueMonths,
         category: t.category,
         completed: false,

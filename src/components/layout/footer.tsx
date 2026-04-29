@@ -37,10 +37,11 @@ import {
   Tag,
   Headphones,
   HelpCircle,
+  type LucideIcon,
 } from "lucide-react";
 
 // Icon map for footer link column headings
-const HEADING_ICONS: Record<string, React.ComponentType<{ className?: string }>> = {
+const HEADING_ICONS: Record<string, LucideIcon> = {
   users: Users,
   building: Building,
   "building-2": Building2,
@@ -59,7 +60,7 @@ const HEADING_ICONS: Record<string, React.ComponentType<{ className?: string }>>
 };
 
 // Icon map for pill-style trust badges
-const PILL_BADGE_ICONS: Record<string, React.ComponentType<{ className?: string }>> = {
+const PILL_BADGE_ICONS: Record<string, LucideIcon> = {
   star: Star,
   shield: Shield,
   zap: Zap,
@@ -529,6 +530,7 @@ function FooterWidgetRenderer({
     secondaryCtaUrl?: string;
     showContact?: boolean;
     showSocial?: boolean;
+    showBrandBadges?: boolean;
     logoMode?: "auto" | "light" | "dark";
   } | null;
 

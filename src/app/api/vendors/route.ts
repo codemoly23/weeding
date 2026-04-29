@@ -53,8 +53,8 @@ export async function GET(req: NextRequest) {
     const countryCode = COUNTRY_NAME_TO_CODE[city.trim().toLowerCase()];
     AND.push({
       OR: [
-        { city: { contains: city, mode: "insensitive" } },
-        ...(countryCode ? [{ country: countryCode }] : [{ country: { contains: city, mode: "insensitive" } }]),
+        { city: { contains: city, mode: Prisma.QueryMode.insensitive } },
+        ...(countryCode ? [{ country: countryCode }] : [{ country: { contains: city, mode: Prisma.QueryMode.insensitive } }]),
       ],
     });
   }
