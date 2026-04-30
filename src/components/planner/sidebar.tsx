@@ -179,9 +179,6 @@ function SidebarInner({
       <div className="flex h-16 items-center justify-between border-b border-gray-100 px-4">
         {!collapsed && (
           <Link href="/planner" className="flex items-center gap-2 min-w-0">
-            <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-gradient-to-br from-rose-500 to-purple-600 shadow-sm">
-              <span className="text-xs font-bold text-white">WP</span>
-            </div>
             <div className="min-w-0">
               <p className="truncate font-semibold text-sm text-slate-700 leading-tight">{projectTitle}</p>
               {eventDate && (
@@ -189,13 +186,6 @@ function SidebarInner({
                   {new Date(eventDate).toLocaleDateString("en-US", { month: "long", day: "numeric", year: "numeric" }).toUpperCase()}
                 </p>
               )}
-            </div>
-          </Link>
-        )}
-        {collapsed && (
-          <Link href="/planner" className="mx-auto">
-            <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-gradient-to-br from-rose-500 to-purple-600 shadow-sm">
-              <span className="text-xs font-bold text-white">WP</span>
             </div>
           </Link>
         )}

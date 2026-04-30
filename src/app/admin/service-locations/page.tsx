@@ -422,23 +422,23 @@ export default function ServiceLocationsPage() {
   return (
     <div className="space-y-6">
       {/* Header */}
-      <div className="rounded-2xl bg-gradient-to-br from-primary to-primary/70 p-6 text-primary-foreground">
+      <div className="rounded-2xl bg-white border border-border p-6">
         <div className="flex items-start justify-between gap-4">
           <div className="flex items-center gap-4">
-            <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-white/20 backdrop-blur-sm">
-              <MapPin className="h-6 w-6" />
+            <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-purple-50 border border-purple-100">
+              <MapPin className="h-6 w-6 text-purple-600" />
             </div>
             <div>
-              <h1 className="text-2xl font-bold">Search Options</h1>
-              <p className="mt-0.5 text-sm text-primary-foreground/75">
+              <h1 className="text-2xl font-bold text-gray-900">Search Options</h1>
+              <p className="mt-0.5 text-sm text-muted-foreground">
                 Manage Place, Service, and Location options shown in the homepage search bar
               </p>
             </div>
           </div>
           {!loading && (
-            <div className="shrink-0 rounded-xl bg-white/20 px-4 py-2 text-center backdrop-blur-sm">
-              <p className="text-2xl font-bold">{total}</p>
-              <p className="text-xs text-primary-foreground/75">Total options</p>
+            <div className="shrink-0 rounded-xl bg-purple-50 border border-purple-100 px-4 py-2 text-center">
+              <p className="text-2xl font-bold text-purple-700">{total}</p>
+              <p className="text-xs text-muted-foreground">Total options</p>
             </div>
           )}
         </div>
