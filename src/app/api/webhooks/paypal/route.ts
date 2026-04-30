@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { headers } from "next/headers";
 import { verifyWebhookSignature, getPayPalWebhookId } from "@/lib/paypal";
 import prisma from "@/lib/db";
+import { processWebhookEvent } from "@/lib/webhook-idempotency";
 
 export const runtime = "nodejs";
 
@@ -233,29 +234,31 @@ export async function POST(request: NextRequest) {
 
     console.log("PayPal webhook event:", event.event_type);
 
-    // Handle different event types
-    switch (event.event_type) {
-      case "PAYMENT.CAPTURE.COMPLETED":
-        await handlePaymentCaptureCompleted(event);
-        break;
+    const result = await processWebhookEvent("paypal", event.id, event.event_type, async () => {
+      // Handle different event types
+      switch (event.event_type) {
+        case "PAYMENT.CAPTURE.COMPLETED":
+          await handlePaymentCaptureCompleted(event);
+          break;
 
-      case "PAYMENT.CAPTURE.DENIED":
-        await handlePaymentCaptureDenied(event);
-        break;
+        case "PAYMENT.CAPTURE.DENIED":
+          await handlePaymentCaptureDenied(event);
+          break;
 
-      case "PAYMENT.CAPTURE.REFUNDED":
-        await handlePaymentCaptureRefunded(event);
-        break;
+        case "PAYMENT.CAPTURE.REFUNDED":
+          await handlePaymentCaptureRefunded(event);
+          break;
 
-      case "CHECKOUT.ORDER.APPROVED":
-        console.log("Checkout order approved:", event.resource.id);
-        break;
+        case "CHECKOUT.ORDER.APPROVED":
+          console.log("Checkout order approved:", event.resource.id);
+          break;
 
-      default:
-        console.log(`Unhandled PayPal event type: ${event.event_type}`);
-    }
+        default:
+          console.log(`Unhandled PayPal event type: ${event.event_type}`);
+      }
+    });
 
-    return NextResponse.json({ received: true });
+    return NextResponse.json({ received: true, duplicate: !result.processed });
   } catch (error) {
     console.error("PayPal webhook error:", error);
     return NextResponse.json(

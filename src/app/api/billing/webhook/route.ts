@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { constructWebhookEvent } from "@/lib/stripe";
 import prisma from "@/lib/db";
+import { processWebhookEvent } from "@/lib/webhook-idempotency";
 
 export const config = { api: { bodyParser: false } };
 
@@ -22,97 +23,99 @@ export async function POST(req: NextRequest) {
   }
 
   try {
-    switch (event.type) {
-      case "checkout.session.completed": {
-        const session = event.data.object as {
-          metadata?: { userId?: string; plannerTier?: string };
-          customer?: string;
-          subscription?: string;
-        };
-        const userId = session.metadata?.userId;
-        const tier = session.metadata?.plannerTier as "premium" | "elite" | undefined;
+    const result = await processWebhookEvent("stripe", event.id, event.type, async () => {
+      switch (event.type) {
+        case "checkout.session.completed": {
+          const session = event.data.object as {
+            metadata?: { userId?: string; plannerTier?: string };
+            customer?: string;
+            subscription?: string;
+          };
+          const userId = session.metadata?.userId;
+          const tier = session.metadata?.plannerTier as "premium" | "elite" | undefined;
 
-        if (userId && tier) {
-          await prisma.user.update({
-            where: { id: userId },
-            data: {
-              plannerTier: tier,
-              plannerStatus: "active",
-              stripeCustomerId: session.customer as string ?? undefined,
-              stripeSubscriptionId: session.subscription as string ?? undefined,
-            },
-          });
+          if (userId && tier) {
+            await prisma.user.update({
+              where: { id: userId },
+              data: {
+                plannerTier: tier,
+                plannerStatus: "active",
+                stripeCustomerId: session.customer as string ?? undefined,
+                stripeSubscriptionId: session.subscription as string ?? undefined,
+              },
+            });
+          }
+          break;
         }
-        break;
-      }
 
-      case "customer.subscription.updated": {
-        const sub = event.data.object as unknown as {
-          id: string;
-          status: string;
-          current_period_end: number;
-          metadata?: { plannerTier?: string };
-        };
-        const tier = sub.metadata?.plannerTier as "premium" | "elite" | undefined;
+        case "customer.subscription.updated": {
+          const sub = event.data.object as unknown as {
+            id: string;
+            status: string;
+            current_period_end: number;
+            metadata?: { plannerTier?: string };
+          };
+          const tier = sub.metadata?.plannerTier as "premium" | "elite" | undefined;
 
-        const user = await prisma.user.findFirst({
-          where: { stripeSubscriptionId: sub.id },
-        });
-
-        if (user) {
-          await prisma.user.update({
-            where: { id: user.id },
-            data: {
-              plannerStatus: sub.status,
-              plannerPeriodEnd: new Date(sub.current_period_end * 1000),
-              ...(tier ? { plannerTier: tier } : {}),
-            },
-          });
-        }
-        break;
-      }
-
-      case "customer.subscription.deleted": {
-        const sub = event.data.object as { id: string };
-
-        const user = await prisma.user.findFirst({
-          where: { stripeSubscriptionId: sub.id },
-        });
-
-        if (user) {
-          await prisma.user.update({
-            where: { id: user.id },
-            data: {
-              plannerTier: "basic",
-              plannerStatus: "canceled",
-              stripeSubscriptionId: null,
-              plannerPeriodEnd: null,
-            },
-          });
-        }
-        break;
-      }
-
-      case "invoice.payment_failed": {
-        const invoice = event.data.object as { subscription?: string };
-        if (invoice.subscription) {
           const user = await prisma.user.findFirst({
-            where: { stripeSubscriptionId: invoice.subscription as string },
+            where: { stripeSubscriptionId: sub.id },
           });
+
           if (user) {
             await prisma.user.update({
               where: { id: user.id },
-              data: { plannerStatus: "past_due" },
+              data: {
+                plannerStatus: sub.status,
+                plannerPeriodEnd: new Date(sub.current_period_end * 1000),
+                ...(tier ? { plannerTier: tier } : {}),
+              },
             });
           }
+          break;
         }
-        break;
+
+        case "customer.subscription.deleted": {
+          const sub = event.data.object as { id: string };
+
+          const user = await prisma.user.findFirst({
+            where: { stripeSubscriptionId: sub.id },
+          });
+
+          if (user) {
+            await prisma.user.update({
+              where: { id: user.id },
+              data: {
+                plannerTier: "basic",
+                plannerStatus: "canceled",
+                stripeSubscriptionId: null,
+                plannerPeriodEnd: null,
+              },
+            });
+          }
+          break;
+        }
+
+        case "invoice.payment_failed": {
+          const invoice = event.data.object as { subscription?: string };
+          if (invoice.subscription) {
+            const user = await prisma.user.findFirst({
+              where: { stripeSubscriptionId: invoice.subscription as string },
+            });
+            if (user) {
+              await prisma.user.update({
+                where: { id: user.id },
+                data: { plannerStatus: "past_due" },
+              });
+            }
+          }
+          break;
+        }
       }
-    }
+    });
+
+    return NextResponse.json({ received: true, duplicate: !result.processed });
   } catch (err) {
     console.error("Webhook handler error:", err);
     return NextResponse.json({ error: "Webhook processing failed" }, { status: 500 });
   }
-
-  return NextResponse.json({ received: true });
 }

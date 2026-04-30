@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import prisma from "@/lib/db";
 import { auth } from "@/lib/auth";
 import bcrypt from "bcryptjs";
+import { randomUUID } from "crypto";
 
 function requireAdmin(role: string | undefined) {
   return role === "ADMIN" || role === "CONTENT_MANAGER";
@@ -134,7 +135,7 @@ export async function POST(req: NextRequest) {
   trialEndsAt.setDate(trialEndsAt.getDate() + 30);
 
   const profileData = {
-    id: Math.random().toString(36).slice(2) + Date.now().toString(36),
+    id: randomUUID(),
     slug,
     businessName: String(businessName).trim(),
     category,

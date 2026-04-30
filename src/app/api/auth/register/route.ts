@@ -1,10 +1,28 @@
 import { NextRequest, NextResponse } from "next/server";
 import { hash } from "bcryptjs";
 import prisma from "@/lib/db";
+import { checkRateLimit, getClientIp } from "@/lib/rate-limit";
 
 export async function POST(request: NextRequest) {
   try {
     const { name, email, password, country } = await request.json();
+    const clientIp = getClientIp(request);
+    const normalizedEmail = typeof email === "string" ? email.toLowerCase().trim() : "unknown";
+
+    const ipLimit = checkRateLimit(`auth:register:ip:${clientIp}`, 5, 60 * 60 * 1000);
+    const emailLimit = checkRateLimit(`auth:register:email:${normalizedEmail}`, 3, 60 * 60 * 1000);
+    if (!ipLimit.allowed) {
+      return NextResponse.json(
+        { error: "Too many registration attempts. Please try again later." },
+        { status: 429, headers: { "Retry-After": String(ipLimit.retryAfter) } }
+      );
+    }
+    if (!emailLimit.allowed) {
+      return NextResponse.json(
+        { error: "Too many registration attempts. Please try again later." },
+        { status: 429, headers: { "Retry-After": String(emailLimit.retryAfter) } }
+      );
+    }
 
     if (!name || !email || !password) {
       return NextResponse.json(
@@ -29,7 +47,7 @@ export async function POST(request: NextRequest) {
     }
 
     const existing = await prisma.user.findUnique({
-      where: { email: email.toLowerCase() },
+      where: { email: normalizedEmail },
     });
 
     if (existing) {
@@ -44,7 +62,7 @@ export async function POST(request: NextRequest) {
     await prisma.user.create({
       data: {
         name,
-        email: email.toLowerCase(),
+        email: normalizedEmail,
         password: hashedPassword,
         country: country || null,
         role: "CUSTOMER",

@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import prisma from "@/lib/db";
 import { auth } from "@/lib/auth";
+import { randomUUID } from "crypto";
 
 async function getProfile(userId: string) {
   return prisma.vendorProfile.findUnique({ where: { userId }, select: { id: true } });
@@ -45,7 +46,7 @@ export async function POST(req: NextRequest) {
 
   const reply = await prisma.vendorQuickReply.create({
     data: {
-      id: Math.random().toString(36).slice(2) + Date.now().toString(36),
+      id: randomUUID(),
       vendorId: profile.id,
       title,
       content,

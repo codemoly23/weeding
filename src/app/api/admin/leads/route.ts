@@ -5,6 +5,16 @@ import { z } from "zod";
 import { LeadStatus, LeadSource, LeadPriority, Prisma } from "@prisma/client";
 import { enhancedCreateLeadSchema } from "@/lib/leads/validation";
 
+function parsePositiveInt(value: string | null, fallback: number, max?: number): number {
+  const parsed = Number.parseInt(value || "", 10);
+  const normalized = Number.isFinite(parsed) && parsed > 0 ? parsed : fallback;
+  return max ? Math.min(normalized, max) : normalized;
+}
+
+function isEnumValue<T extends string>(values: Record<string, T>, value: string): value is T {
+  return Object.values(values).includes(value as T);
+}
+
 // Helper to check admin access
 async function checkAdminAccess() {
   const session = await auth();
@@ -88,8 +98,8 @@ export async function GET(request: NextRequest) {
     const scoreMax = searchParams.get("scoreMax");
     const dateFrom = searchParams.get("dateFrom");
     const dateTo = searchParams.get("dateTo");
-    const page = parseInt(searchParams.get("page") || "1");
-    const limit = parseInt(searchParams.get("limit") || "20");
+    const page = parsePositiveInt(searchParams.get("page"), 1);
+    const limit = parsePositiveInt(searchParams.get("limit"), 20, 100);
     const skip = (page - 1) * limit;
     const ALLOWED_SORT = new Set(["createdAt", "updatedAt", "score", "firstName", "lastName", "email", "status", "priority"]);
     const rawSort = searchParams.get("sortBy") || "createdAt";
@@ -98,34 +108,64 @@ export async function GET(request: NextRequest) {
     const sortOrder = rawOrder === "asc" ? "asc" : "desc";
 
     // Build where clause
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const where: Record<string, any> = {};
+    const where: Prisma.LeadWhereInput = {};
 
     if (status && status !== "all") {
-      where.status = status as LeadStatus;
+      if (!isEnumValue(LeadStatus, status)) {
+        return NextResponse.json({ error: "Invalid status value" }, { status: 400 });
+      }
+      where.status = status;
     }
     if (source && source !== "all") {
-      where.source = source as LeadSource;
+      if (!isEnumValue(LeadSource, source)) {
+        return NextResponse.json({ error: "Invalid source value" }, { status: 400 });
+      }
+      where.source = source;
     }
     if (priority && priority !== "all") {
-      where.priority = priority as LeadPriority;
+      if (!isEnumValue(LeadPriority, priority)) {
+        return NextResponse.json({ error: "Invalid priority value" }, { status: 400 });
+      }
+      where.priority = priority;
     }
     if (assignedTo) {
       where.assignedToId = assignedTo === "unassigned" ? null : assignedTo;
     }
     if (scoreMin) {
-      where.score = { ...where.score, gte: parseInt(scoreMin) };
+      const value = Number.parseInt(scoreMin, 10);
+      if (!Number.isFinite(value) || value < 0 || value > 100) {
+        return NextResponse.json({ error: "Invalid scoreMin value" }, { status: 400 });
+      }
+      const currentScoreFilter =
+        typeof where.score === "object" && where.score !== null ? where.score as Prisma.IntFilter : {};
+      where.score = { ...currentScoreFilter, gte: value };
     }
     if (scoreMax) {
-      where.score = { ...where.score, lte: parseInt(scoreMax) };
+      const value = Number.parseInt(scoreMax, 10);
+      if (!Number.isFinite(value) || value < 0 || value > 100) {
+        return NextResponse.json({ error: "Invalid scoreMax value" }, { status: 400 });
+      }
+      const currentScoreFilter =
+        typeof where.score === "object" && where.score !== null ? where.score as Prisma.IntFilter : {};
+      where.score = { ...currentScoreFilter, lte: value };
     }
     if (dateFrom) {
       const d = new Date(dateFrom);
-      if (!isNaN(d.getTime())) where.createdAt = { ...where.createdAt, gte: d };
+      if (Number.isNaN(d.getTime())) {
+        return NextResponse.json({ error: "Invalid dateFrom value" }, { status: 400 });
+      }
+      const currentDateFilter =
+        typeof where.createdAt === "object" && where.createdAt !== null ? where.createdAt as Prisma.DateTimeFilter : {};
+      where.createdAt = { ...currentDateFilter, gte: d };
     }
     if (dateTo) {
       const d = new Date(dateTo);
-      if (!isNaN(d.getTime())) where.createdAt = { ...where.createdAt, lte: d };
+      if (Number.isNaN(d.getTime())) {
+        return NextResponse.json({ error: "Invalid dateTo value" }, { status: 400 });
+      }
+      const currentDateFilter =
+        typeof where.createdAt === "object" && where.createdAt !== null ? where.createdAt as Prisma.DateTimeFilter : {};
+      where.createdAt = { ...currentDateFilter, lte: d };
     }
     // Form template filter
     const formTemplateId = searchParams.get("formTemplateId");
@@ -146,9 +186,7 @@ export async function GET(request: NextRequest) {
     }
 
     // Build orderBy
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const orderBy: Record<string, any> = {};
-    orderBy[sortBy] = sortOrder;
+    const orderBy = { [sortBy]: sortOrder } as Prisma.LeadOrderByWithRelationInput;
 
     // Get leads with pagination
     const [leads, total] = await Promise.all([

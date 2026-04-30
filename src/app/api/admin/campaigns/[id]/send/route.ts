@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { checkAdminOnly } from "@/lib/admin-auth";
 import { startCampaign } from "@/lib/newsletter/campaign-sender";
+import prisma from "@/lib/db";
 
 // POST — start sending a campaign
 export async function POST(
@@ -15,6 +16,14 @@ export async function POST(
   const { id } = await params;
 
   try {
+    const campaign = await prisma.emailCampaign.findUnique({
+      where: { id },
+      select: { id: true },
+    });
+    if (!campaign) {
+      return NextResponse.json({ success: false, error: "Campaign not found" }, { status: 404 });
+    }
+
     await startCampaign(id);
     return NextResponse.json({ success: true, message: "Campaign sending started" });
   } catch (error) {

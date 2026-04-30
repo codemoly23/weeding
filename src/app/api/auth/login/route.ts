@@ -1,10 +1,28 @@
 import { NextRequest, NextResponse } from "next/server";
 import bcrypt from "bcryptjs";
 import prisma from "@/lib/db";
+import { checkRateLimit, getClientIp } from "@/lib/rate-limit";
 
 export async function POST(request: NextRequest) {
   try {
     const { email, password } = await request.json();
+    const clientIp = getClientIp(request);
+    const normalizedEmail = typeof email === "string" ? email.toLowerCase().trim() : "unknown";
+
+    const ipLimit = checkRateLimit(`auth:login:ip:${clientIp}`, 20, 15 * 60 * 1000);
+    const emailLimit = checkRateLimit(`auth:login:email:${normalizedEmail}`, 8, 15 * 60 * 1000);
+    if (!ipLimit.allowed) {
+      return NextResponse.json(
+        { error: "Too many login attempts. Please try again later." },
+        { status: 429, headers: { "Retry-After": String(ipLimit.retryAfter) } }
+      );
+    }
+    if (!emailLimit.allowed) {
+      return NextResponse.json(
+        { error: "Too many login attempts. Please try again later." },
+        { status: 429, headers: { "Retry-After": String(emailLimit.retryAfter) } }
+      );
+    }
 
     if (!email || !password) {
       return NextResponse.json(
@@ -15,7 +33,7 @@ export async function POST(request: NextRequest) {
 
     // Find user by email
     const user = await prisma.user.findUnique({
-      where: { email: email.toLowerCase() },
+      where: { email: normalizedEmail },
       select: {
         id: true,
         email: true,

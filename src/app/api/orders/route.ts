@@ -1,9 +1,28 @@
 import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
-import bcrypt from "bcryptjs";
+import { Prisma, OrderStatus } from "@prisma/client";
 import { prisma } from "@/lib/db";
+import { auth } from "@/lib/auth";
 import { generateOrderNumber } from "@/lib/order-utils";
 import { logger } from "@/lib/logger";
+import { createAdminNotification } from "@/lib/admin-notifications";
+
+const ADMIN_ORDER_ROLES = new Set(["ADMIN", "SALES_AGENT", "SUPPORT_AGENT"]);
+const VALID_ORDER_STATUSES = new Set<OrderStatus>([
+  "PENDING",
+  "PROCESSING",
+  "IN_PROGRESS",
+  "WAITING_FOR_INFO",
+  "COMPLETED",
+  "CANCELLED",
+  "REFUNDED",
+]);
+
+function parsePositiveInt(value: string | null, fallback: number, max?: number): number {
+  const parsed = Number.parseInt(value || "", 10);
+  const normalized = Number.isFinite(parsed) && parsed > 0 ? parsed : fallback;
+  return max ? Math.min(normalized, max) : normalized;
+}
 
 const orderSchema = z.object({
   // Service & Package
@@ -99,15 +118,28 @@ const orderSchema = z.object({
 
 export async function POST(request: NextRequest) {
   try {
+    const session = await auth();
+    if (!session?.user?.id) {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    }
+
     const body = await request.json();
 
     // Validate request body
     const data = orderSchema.parse(body);
 
-    // Hash the password if provided
-    const hashedPassword = data.owner.password
-      ? await bcrypt.hash(data.owner.password, 10)
-      : undefined;
+    if (data.userId && data.userId !== session.user.id) {
+      return NextResponse.json({ error: "Cannot create orders for another user" }, { status: 403 });
+    }
+
+    const currentUser = await prisma.user.findUnique({
+      where: { id: session.user.id },
+      select: { id: true, email: true, name: true, role: true },
+    });
+
+    if (!currentUser) {
+      return NextResponse.json({ error: "User not found" }, { status: 401 });
+    }
 
     // Generate order number outside transaction (read-only)
     const orderNumber = await generateOrderNumber();
@@ -137,31 +169,8 @@ export async function POST(request: NextRequest) {
       addonsTotal: data.addonsTotal,
     };
 
-    // Atomic: user creation + service creation + order creation in one transaction
-    const { order, user } = await prisma.$transaction(async (tx) => {
-      // Find or create user
-      let txUser = data.userId
-        ? await tx.user.findUnique({ where: { id: data.userId } })
-        : await tx.user.findUnique({ where: { email: data.owner.email } });
-
-      if (!txUser) {
-        txUser = await tx.user.create({
-          data: {
-            email: data.owner.email,
-            name: `${data.owner.firstName} ${data.owner.lastName}`,
-            phone: data.owner.phone,
-            country: data.owner.country,
-            role: "CUSTOMER",
-            ...(hashedPassword ? { password: hashedPassword } : {}),
-          },
-        });
-      } else if (!txUser.password && hashedPassword) {
-        txUser = await tx.user.update({
-          where: { id: txUser.id },
-          data: { password: hashedPassword },
-        });
-      }
-
+    // Atomic service creation + order creation for the authenticated user.
+    const order = await prisma.$transaction(async (tx) => {
       // Find or create service
       let txService = await tx.service.findUnique({ where: { slug: data.serviceId } });
       if (!txService) {
@@ -180,7 +189,7 @@ export async function POST(request: NextRequest) {
       const txOrder = await tx.order.create({
         data: {
           orderNumber,
-          userId: txUser.id,
+          userId: currentUser.id,
           status: "PENDING",
           paymentStatus: "PENDING",
           subtotalUSD: data.serviceFee,
@@ -224,13 +233,13 @@ export async function POST(request: NextRequest) {
         },
       });
 
-      return { order: txOrder, user: txUser };
+      return txOrder;
     });
 
     // Activity log is non-critical — do not block the response if it fails
     prisma.activityLog.create({
       data: {
-        userId: user.id,
+        userId: currentUser.id,
         action: "ORDER_CREATED",
         entity: "Order",
         entityId: order.id,
@@ -243,15 +252,22 @@ export async function POST(request: NextRequest) {
       },
     }).catch((err) => logger.error("Failed to log order activity", { error: String(err) }));
 
+    await createAdminNotification({
+      type: "NEW_ORDER",
+      title: "New Order Received",
+      message: `Order ${order.orderNumber} placed by ${currentUser.name || currentUser.email}.`,
+      link: `/admin/orders/${order.id}`,
+    });
+
     return NextResponse.json({
       success: true,
       orderId: order.orderNumber,
       message: "Order created successfully",
       user: {
-        id: user.id,
-        email: user.email,
-        name: user.name,
-        role: user.role,
+        id: currentUser.id,
+        email: currentUser.email,
+        name: currentUser.name,
+        role: currentUser.role,
       },
     });
   } catch (error) {
@@ -276,24 +292,31 @@ export async function POST(request: NextRequest) {
 // Get orders (for admin)
 export async function GET(request: NextRequest) {
   try {
+    const session = await auth();
+    if (!session?.user?.id) {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    }
+    if (!ADMIN_ORDER_ROLES.has(session.user.role)) {
+      return NextResponse.json({ error: "Forbidden" }, { status: 403 });
+    }
+
     const searchParams = request.nextUrl.searchParams;
     const status = searchParams.get("status");
-    const page = parseInt(searchParams.get("page") || "1");
-    const limit = parseInt(searchParams.get("limit") || "10");
+    const page = parsePositiveInt(searchParams.get("page"), 1);
+    const limit = parsePositiveInt(searchParams.get("limit"), 10, 100);
     const search = searchParams.get("search") || "";
 
     const skip = (page - 1) * limit;
 
     // Build where clause
-    const where: Record<string, unknown> = {};
+    const where: Prisma.OrderWhereInput = {};
 
-    const VALID_ORDER_STATUSES = new Set(["PENDING", "PROCESSING", "IN_PROGRESS", "WAITING_FOR_INFO", "COMPLETED", "CANCELLED"]);
     if (status && status !== "all") {
       const upperStatus = status.toUpperCase();
-      if (!VALID_ORDER_STATUSES.has(upperStatus)) {
+      if (!VALID_ORDER_STATUSES.has(upperStatus as OrderStatus)) {
         return NextResponse.json({ error: "Invalid status value" }, { status: 400 });
       }
-      where.status = upperStatus;
+      where.status = upperStatus as OrderStatus;
     }
 
     if (search) {

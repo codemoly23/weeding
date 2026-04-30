@@ -7,6 +7,7 @@ import { getNewLeadEmail } from "@/lib/email-templates/new-lead";
 import { getLeadAutoResponseEmail } from "@/lib/email-templates/lead-auto-response";
 import { enhancedSubmitLeadSchema, normalizePhone } from "@/lib/leads/validation";
 import { getSetting } from "@/lib/settings";
+import { createAdminNotification } from "@/lib/admin-notifications";
 
 // Calculate lead score based on various factors
 function calculateLeadScore(data: {
@@ -283,6 +284,13 @@ export async function POST(request: NextRequest) {
       interestedIn,
     }).catch((err) => {
       console.error("Failed to send lead auto-response email:", err);
+    });
+
+    await createAdminNotification({
+      type: "NEW_LEAD",
+      title: "New Lead Submitted",
+      message: `${data.firstName || email} submitted a lead form.`,
+      link: `/admin/leads/${lead.id}`,
     });
 
     // Return success with tracking data for client-side tracking

@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
 import bcrypt from "bcryptjs";
 import { prisma } from "@/lib/db";
+import { auth } from "@/lib/auth";
 import { generateOrderNumber } from "@/lib/order-utils";
 import { generateInvoiceNumber, buildInvoiceItems } from "@/lib/invoice-utils";
 
@@ -92,6 +93,14 @@ export async function POST(request: NextRequest) {
 
     // Case 1: User is logged in (userId provided)
     if (data.userId) {
+      const session = await auth();
+      if (!session?.user?.id || session.user.id !== data.userId) {
+        return NextResponse.json(
+          { error: "Cannot create orders for another user" },
+          { status: 403 }
+        );
+      }
+
       user = await prisma.user.findUnique({
         where: { id: data.userId },
       });
