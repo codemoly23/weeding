@@ -3,7 +3,7 @@
 import { useState, Suspense, useCallback } from "react";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
-import { signIn } from "next-auth/react";
+import { signIn, getSession } from "next-auth/react";
 import { Eye, EyeOff, Mail, Lock, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -72,21 +72,19 @@ function LoginForm() {
         router.push(callbackUrl);
         router.refresh();
       } else {
-        // Fetch user info to determine redirect
-        const userResponse = await fetch("/api/auth/me");
-        if (userResponse.ok) {
-          const userData = await userResponse.json();
-          const adminRoles = ["ADMIN", "CONTENT_MANAGER", "SALES_AGENT", "SUPPORT_AGENT"];
-          const vendorRoles = ["VENDOR"];
-          let redirectUrl = "/planner";
-          if (adminRoles.includes(userData.role)) redirectUrl = "/admin";
-          else if (vendorRoles.includes(userData.role)) redirectUrl = "/vendor/dashboard";
-          router.push(redirectUrl);
-          router.refresh();
-        } else {
-          router.push("/planner");
-          router.refresh();
-        }
+        // Resolve session client-side (decodes the JWT cookie just set by signIn).
+        // More reliable than fetching /api/auth/me, which can race with cookie propagation.
+        const session = await getSession();
+        const role = session?.user?.role as string | undefined;
+        const adminRoles = ["ADMIN", "CONTENT_MANAGER", "SALES_AGENT", "SUPPORT_AGENT"];
+        let redirectUrl: string;
+        if (role && adminRoles.includes(role)) redirectUrl = "/admin";
+        else if (role === "VENDOR") redirectUrl = "/vendor/dashboard";
+        else if (role) redirectUrl = "/planner";
+        // Role still unknown — send to /dashboard so middleware can route by token role.
+        else redirectUrl = "/dashboard";
+        router.push(redirectUrl);
+        router.refresh();
       }
     } catch (err) {
       setError("An error occurred. Please try again.");
