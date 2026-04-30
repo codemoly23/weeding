@@ -21,7 +21,7 @@ export default function AdminLayout({
       {/* Main Content */}
       <div className="flex flex-1 flex-col overflow-hidden">
         <AdminHeader />
-        <main className="flex-1 overflow-y-auto bg-muted/30 p-4 lg:p-6">
+        <main className="flex-1 overflow-y-auto bg-[#f5f3ff] p-6 lg:px-12 lg:py-8">
           {children}
         </main>
       </div>

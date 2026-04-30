@@ -117,7 +117,7 @@ export function AdminHeader() {
             <Button variant="ghost" size="icon" className="relative">
               <Bell className="h-5 w-5" />
               {unreadCount > 0 && (
-                <Badge className="absolute -right-1 -top-1 h-5 w-5 justify-center rounded-full p-0 text-xs">
+                <Badge className="absolute -right-1 -top-1 h-5 w-5 justify-center rounded-full p-0 text-xs bg-purple-600 text-white border-0">
                   {unreadCount}
                 </Badge>
               )}
@@ -139,7 +139,7 @@ export function AdminHeader() {
                 <div className="flex w-full items-start justify-between">
                   <p className="font-medium">{notification.title}</p>
                   {notification.unread && (
-                    <span className="h-2 w-2 rounded-full bg-primary" />
+                    <span className="h-2 w-2 rounded-full bg-purple-600" />
                   )}
                 </div>
                 <p className="text-sm text-muted-foreground">
@@ -162,7 +162,7 @@ export function AdminHeader() {
           <DropdownMenuTrigger asChild>
             <Button variant="ghost" className="gap-2 px-2">
               <Avatar className="h-8 w-8">
-                <AvatarFallback className="bg-primary text-primary-foreground">
+                <AvatarFallback className="bg-purple-600 text-white">
                   AD
                 </AvatarFallback>
               </Avatar>

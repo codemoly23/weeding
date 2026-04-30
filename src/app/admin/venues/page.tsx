@@ -460,23 +460,23 @@ export default function VenuesPage() {
   return (
     <div className="space-y-6">
       {/* Header */}
-      <div className="rounded-2xl bg-gradient-to-br from-violet-600 to-pink-500 p-6 text-white">
+      <div className="rounded-2xl bg-white border border-border p-6">
         <div className="flex items-start justify-between gap-4">
           <div className="flex items-center gap-4">
-            <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-white/20 backdrop-blur-sm">
-              <Building2 className="h-6 w-6" />
+            <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-purple-50 border border-purple-100">
+              <Building2 className="h-6 w-6 text-purple-600" />
             </div>
             <div>
-              <h1 className="text-2xl font-bold">Venues</h1>
-              <p className="mt-0.5 text-sm text-white/75">
+              <h1 className="text-2xl font-bold text-gray-900">Venues</h1>
+              <p className="mt-0.5 text-sm text-muted-foreground">
                 Manage wedding, party, and specialty venues shown across the platform
               </p>
             </div>
           </div>
           {!loading && (
-            <div className="shrink-0 rounded-xl bg-white/20 px-4 py-2 text-center backdrop-blur-sm">
-              <p className="text-2xl font-bold">{venues.length}</p>
-              <p className="text-xs text-white/75">Total venues</p>
+            <div className="shrink-0 rounded-xl bg-purple-50 border border-purple-100 px-4 py-2 text-center">
+              <p className="text-2xl font-bold text-purple-700">{venues.length}</p>
+              <p className="text-xs text-muted-foreground">Total venues</p>
             </div>
           )}
         </div>

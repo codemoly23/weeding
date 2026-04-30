@@ -124,7 +124,7 @@ export default async function AdminDashboardPage() {
             Welcome back! Here's what's happening today.
           </p>
         </div>
-        <Button asChild>
+        <Button asChild className="bg-purple-600 hover:bg-purple-700 text-white border-0">
           <Link href="/admin/orders/new">
             <Package className="mr-2 h-4 w-4" />
             New Order
@@ -175,18 +175,18 @@ export default async function AdminDashboardPage() {
         </CardHeader>
         <CardContent>
           <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-            <Button variant="outline" className="h-auto flex-col gap-2 py-4" asChild>
+            <Button variant="outline" className="h-auto flex-col gap-2 py-4 bg-gradient-to-br from-white to-blue-50 border-blue-100 hover:border-blue-200 hover:shadow-sm transition-all" asChild>
               <Link href="/admin/orders?status=pending">
                 <Clock className="h-5 w-5" />
                 <span>Pending Orders</span>
-                <Badge>3</Badge>
+                <Badge className="bg-blue-100 text-blue-700 border-0">3</Badge>
               </Link>
             </Button>
-            <Button variant="outline" className="h-auto flex-col gap-2 py-4" asChild>
+            <Button variant="outline" className="h-auto flex-col gap-2 py-4 bg-gradient-to-br from-white to-blue-50 border-blue-100 hover:border-blue-200 hover:shadow-sm transition-all" asChild>
               <Link href="/admin/tickets?status=open">
                 <MessageSquare className="h-5 w-5" />
                 <span>Open Tickets</span>
-                <Badge>5</Badge>
+                <Badge className="bg-blue-100 text-blue-700 border-0">5</Badge>
               </Link>
             </Button>
           </div>

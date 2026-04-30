@@ -311,7 +311,7 @@ export default function AdminVendorsPage() {
       </form>
 
       {/* Table */}
-      <div className="rounded-lg border overflow-hidden">
+      <div className="rounded-lg border overflow-hidden bg-white">
         <Table>
           <TableHeader>
             <TableRow>

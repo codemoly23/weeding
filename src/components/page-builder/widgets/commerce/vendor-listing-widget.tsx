@@ -238,7 +238,7 @@ function OverlayVendorCard({
       onMouseLeave={() => setHovered(false)}
     >
       {/* Image */}
-      <div style={{ position: "relative", height: "20rem", overflow: "hidden" }}>
+      <div style={{ position: "relative", height: "20rem", overflow: "hidden", background: "#111827" }}>
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
           src={vendor.coverPhoto ?? (CATEGORY_PLACEHOLDER[vendor.category] ?? CATEGORY_PLACEHOLDER.OTHER)}
@@ -249,8 +249,8 @@ function OverlayVendorCard({
             width: "100%",
             height: "100%",
             objectFit: "cover",
-            objectPosition: "center 30%",
-            transform: hovered ? "scale(1.08)" : "scale(1)",
+            objectPosition: "top center",
+            transform: hovered ? "scale(1.05)" : "scale(1)",
             transition: "transform 0.7s ease",
             display: "block",
           }}
