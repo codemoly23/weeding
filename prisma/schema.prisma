@@ -674,6 +674,22 @@ model PaymentMethod {
   @@index([stripePaymentMethodId])
 }
 
+model WebhookEvent {
+  id          String             @id @default(cuid())
+  provider    String
+  eventId     String
+  eventType   String
+  status      WebhookEventStatus @default(PROCESSING)
+  error       String?
+  processedAt DateTime?
+  createdAt   DateTime           @default(now())
+  updatedAt   DateTime           @updatedAt
+
+  @@unique([provider, eventId])
+  @@index([provider, status])
+  @@index([createdAt])
+}
+
 model ActivityLog {
   id        String   @id @default(cuid())
   userId    String?
@@ -1391,6 +1407,12 @@ enum PaymentStatus {
   FAILED
   REFUNDED
   PARTIALLY_REFUNDED
+}
+
+enum WebhookEventStatus {
+  PROCESSING
+  PROCESSED
+  FAILED
 }
 
 enum DocumentType {
@@ -2460,4 +2482,17 @@ model EmailCampaignRecipient {
 
   @@unique([campaignId, leadId])
   @@index([campaignId, status])
+}
+
+model AdminNotification {
+  id        String   @id @default(cuid())
+  type      String   // NEW_ORDER | NEW_VENDOR | NEW_TICKET | PAYMENT_RECEIVED | PAYMENT_FAILED | NEW_CUSTOMER | NEW_LEAD
+  title     String
+  message   String
+  link      String?
+  isRead    Boolean  @default(false)
+  createdAt DateTime @default(now())
+
+  @@index([isRead])
+  @@index([createdAt(sort: Desc)])
 }

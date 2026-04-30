@@ -1,6 +1,9 @@
 import { NextRequest, NextResponse } from "next/server";
 import prisma from "@/lib/db";
 import bcrypt from "bcryptjs";
+import { randomUUID } from "crypto";
+import { VendorCategory } from "@prisma/client";
+import { createAdminNotification } from "@/lib/admin-notifications";
 
 function slugify(name: string): string {
   return name
@@ -22,12 +25,28 @@ async function uniqueSlug(base: string): Promise<string> {
 
 // POST /api/vendor/register
 export async function POST(req: NextRequest) {
-  const body = await req.json();
-  const { name, email, password, phone, businessName, category, city, country, description, tagline } = body;
+  let body: Record<string, unknown>;
+  try {
+    body = await req.json();
+  } catch {
+    return NextResponse.json({ error: "Invalid request body" }, { status: 400 });
+  }
+  const name = typeof body.name === "string" ? body.name.trim() : "";
+  const email = typeof body.email === "string" ? body.email.trim().toLowerCase() : "";
+  const password = typeof body.password === "string" ? body.password : "";
+  const phone = typeof body.phone === "string" ? body.phone : "";
+  const businessName = typeof body.businessName === "string" ? body.businessName.trim() : "";
+  const category = typeof body.category === "string" && Object.values(VendorCategory).includes(body.category as VendorCategory)
+    ? body.category as VendorCategory
+    : undefined;
+  const city = typeof body.city === "string" ? body.city : "";
+  const country = typeof body.country === "string" ? body.country : "";
+  const description = typeof body.description === "string" ? body.description : "";
+  const tagline = typeof body.tagline === "string" ? body.tagline : "";
 
   if (!name || !email || !password || !businessName || !category) {
     return NextResponse.json(
-      { error: "name, email, password, businessName, and category are required" },
+      { error: "name, email, password, businessName, and valid category are required" },
       { status: 400 }
     );
   }
@@ -37,18 +56,26 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: "Invalid email" }, { status: 400 });
   }
 
-  if (String(password).length < 8) {
-    return NextResponse.json({ error: "Password must be at least 8 characters" }, { status: 400 });
+  if (password.length < 12) {
+    return NextResponse.json({ error: "Password must be at least 12 characters" }, { status: 400 });
+  }
+
+  const passwordComplexity = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^a-zA-Z\d])/;
+  if (!passwordComplexity.test(password)) {
+    return NextResponse.json(
+      { error: "Password must include uppercase, lowercase, a number, and a special character" },
+      { status: 400 }
+    );
   }
 
   // Check if email already exists
-  const existing = await prisma.user.findUnique({ where: { email: String(email).toLowerCase() } });
+  const existing = await prisma.user.findUnique({ where: { email } });
   if (existing) {
     return NextResponse.json({ error: "An account with this email already exists" }, { status: 409 });
   }
 
-  const hashedPassword = await bcrypt.hash(String(password), 12);
-  const slug = await uniqueSlug(slugify(String(businessName)));
+  const hashedPassword = await bcrypt.hash(password, 12);
+  const slug = await uniqueSlug(slugify(businessName));
 
   // Create user + vendor profile in a transaction
   const trialEndsAt = new Date();
@@ -59,25 +86,25 @@ export async function POST(req: NextRequest) {
   result = await prisma.$transaction(async (tx) => {
     const user = await tx.user.create({
       data: {
-        name: String(name).trim(),
-        email: String(email).toLowerCase().trim(),
+        name,
+        email,
         password: hashedPassword,
-        phone: phone ? String(phone).trim() : null,
+        phone: phone ? phone.trim() : null,
         role: "VENDOR",
       },
     });
 
     const profile = await tx.vendorProfile.create({
       data: {
-        id: Math.random().toString(36).slice(2) + Date.now().toString(36),
+        id: randomUUID(),
         slug,
         userId: user.id,
-        businessName: String(businessName).trim(),
+        businessName,
         category,
-        description: description ? String(description).trim() : null,
-        tagline: tagline ? String(tagline).trim() : null,
-        city: city ? String(city).trim() : null,
-        country: country ? String(country).trim() : "SE",
+        description: description ? description.trim() : null,
+        tagline: tagline ? tagline.trim() : null,
+        city: city ? city.trim() : null,
+        country: country ? country.trim() : "SE",
         status: "PENDING",
         isApproved: false,
         isActive: true,
@@ -92,6 +119,13 @@ export async function POST(req: NextRequest) {
     console.error("[vendor/register] transaction error:", msg);
     return NextResponse.json({ error: "Server error: " + msg }, { status: 500 });
   }
+
+  await createAdminNotification({
+    type: "NEW_VENDOR",
+    title: "New Vendor Registration",
+    message: `${businessName} has registered and is awaiting approval.`,
+    link: "/admin/vendors",
+  });
 
   return NextResponse.json(
     {

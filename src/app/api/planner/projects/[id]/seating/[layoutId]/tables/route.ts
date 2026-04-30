@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import prisma from "@/lib/db";
 import { auth } from "@/lib/auth";
 import { randomBytes } from "crypto";
+import { normalizeGuestIds, applyTableGuestIds } from "@/lib/seating-sync";
 
 function genId() { return randomBytes(12).toString("hex"); }
 
@@ -27,20 +28,29 @@ export async function POST(
   const count = await prisma.seatingTable.count({ where: { layoutId } });
   const tableName = name?.trim() || `Table ${count + 1}`;
 
-  const table = await prisma.seatingTable.create({
-    data: {
-      id: genId(),
-      layoutId,
-      projectId: id,
-      name: tableName,
-      type: type || "ROUND",
-      x: x ?? 200,
-      y: y ?? 200,
-      seats: seats ?? 8,
-      rotation: rotation ?? 0,
-      color: color ?? "#ffffff",
-      guestIds: guestIds ?? [],
-    },
+  const table = await prisma.$transaction(async (tx) => {
+    const created = await tx.seatingTable.create({
+      data: {
+        id: genId(),
+        layoutId,
+        projectId: id,
+        name: tableName,
+        type: type || "ROUND",
+        x: x ?? 200,
+        y: y ?? 200,
+        seats: seats ?? 8,
+        rotation: rotation ?? 0,
+        color: color ?? "#ffffff",
+        guestIds: [],
+      },
+    });
+
+    if (guestIds !== undefined) {
+      await applyTableGuestIds(tx, id, layoutId, created.id, normalizeGuestIds(guestIds));
+      return tx.seatingTable.findUniqueOrThrow({ where: { id: created.id } });
+    }
+
+    return created;
   });
 
   return NextResponse.json({ table }, { status: 201 });

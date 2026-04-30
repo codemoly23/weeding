@@ -3,6 +3,7 @@ import { writeFile, mkdir } from "fs/promises";
 import path from "path";
 import { existsSync } from "fs";
 import { getR2Config, uploadToR2 } from "@/lib/storage/r2";
+import { assertPathInside, safeUploadFilename, validateUploadBuffer } from "@/lib/upload-validation";
 
 export async function POST(request: NextRequest) {
   try {
@@ -21,13 +22,7 @@ export async function POST(request: NextRequest) {
       "image/gif",
       "image/webp",
       "image/svg+xml",
-    ];
-    if (!validTypes.includes(file.type)) {
-      return NextResponse.json(
-        { error: "Invalid file type. Only images are allowed." },
-        { status: 400 }
-      );
-    }
+    ] as const;
 
     // Limit file size to 10MB
     if (file.size > 10 * 1024 * 1024) {
@@ -39,13 +34,14 @@ export async function POST(request: NextRequest) {
 
     const bytes = await file.arrayBuffer();
     const buffer = Buffer.from(bytes);
+    const validation = validateUploadBuffer(buffer, file.type, validTypes);
+    if (!validation.ok) {
+      return NextResponse.json({ error: validation.error }, { status: 400 });
+    }
 
     // Sanitize filename — strip .., leading dots, keep only safe chars
     const timestamp = Date.now();
-    const sanitizedName = (file.name
-      .replace(/\.\./g, "")
-      .replace(/[^a-zA-Z0-9._-]/g, "_")
-      .replace(/^[._]+/, "") || "file");
+    const sanitizedName = safeUploadFilename(file.name);
     const filename = `${timestamp}-${sanitizedName}`;
 
     // Check if R2 is configured
@@ -57,7 +53,7 @@ export async function POST(request: NextRequest) {
         r2Config,
         buffer,
         filename,
-        file.type
+        validation.mimeType
       );
 
       if (result.success && result.url) {
@@ -78,6 +74,9 @@ export async function POST(request: NextRequest) {
     }
 
     const filepath = path.join(uploadsDir, filename);
+    if (!assertPathInside(uploadsDir, filepath)) {
+      return NextResponse.json({ error: "Invalid upload path" }, { status: 400 });
+    }
 
     // Write file
     await writeFile(filepath, buffer);

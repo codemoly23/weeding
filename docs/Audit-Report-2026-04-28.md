@@ -3,17 +3,70 @@
 **Branch:** sagor
 **Auditor:** Senior Full-Stack Code Auditor (Multi-layer: Security + API + DB + Frontend)
 **Total Issues Found:** 122
-**Status:** NOT PRODUCTION READY
+**Status:** PARTIALLY REMEDIATED - NOT PRODUCTION READY
+
+---
+
+## Remediation Update - 2026-04-30
+
+The audit findings below are the original 2026-04-28 report. A validation and first remediation pass was completed on 2026-04-30.
+
+### Fixed in this pass
+
+| ID | Status | Notes |
+|----|--------|-------|
+| C1 | Fixed | `GET /api/orders` now requires an authenticated admin/team role and caps pagination. |
+| C2 | Fixed | Legacy `POST /api/orders` now requires a session and creates the order only for the logged-in user. It no longer auto-creates arbitrary users. |
+| C3 | Fixed | `src/lib/encryption.ts` now throws when `ENCRYPTION_KEY` is missing; hardcoded fallback was removed. |
+| C4 | Fixed | Server-side API IDs using `Math.random().toString(36)` were replaced with `crypto.randomUUID()` in vendor registration, inquiries, vendor/admin vendor creation, quick replies, and conversation messages. |
+| C5 | Fixed | Public RSVP `attending` validation was corrected and moved into a Zod schema. |
+| C7 | Fixed | Admin leads list now uses `Prisma.LeadWhereInput`, validates enums/dates/scores, keeps sort whitelisted, and caps `limit` at 100. |
+| C8 | Fixed | Guest creation now validates input with Zod before writing to `WeddingGuest`. |
+| H15 | Fixed | Vendor inquiry POST now has Zod validation. |
+| H17 | Fixed | Orders list `limit` is capped at 100. |
+| H18 | Fixed | Admin leads list `limit` is capped at 100. |
+| H22 | Fixed | Public RSVP submission now has schema validation. |
+| Build verification | Fixed | Prisma Client was regenerated to match current schema; `tsc --noEmit` now passes. |
+| C9/H10 | Partially fixed | Seating table guest assignment now syncs `WeddingGuest.tableNumber` as a derived value from `SeatingTable.guestIds` in the seating table APIs. Full schema cleanup is still recommended. |
+| H2 | Fixed | Login endpoint now has per-IP and per-email rate limiting with `Retry-After`. |
+| H3 | Fixed | Registration endpoint now has per-IP and per-email rate limiting with `Retry-After`. |
+| H5 | Fixed | Non-admin `/api/admin/users?roles=...` access is restricted to team-assignable roles only. |
+| H6 | Fixed | Stripe and PayPal webhooks now use durable event-id idempotency tracking. |
+| H7 | Fixed | Stripe payment line items default invalid/missing quantity to `1`. |
+| H13 | Fixed | Planner budget goal/category creation now uses Zod validation for bounds and hex colors. |
+| H16 | Fixed | Vendor review rating now uses Zod coercion and rejects `NaN`/out-of-range values. |
+| H19 | Fixed | Campaign send checks campaign existence before calling `startCampaign(id)`. |
+| H20/M15 | Fixed | Upload endpoints now validate file magic bytes/content and use safer filename/path handling. |
+| H23 | Fixed | Vendor registration now requires 12+ character complex passwords. |
+
+### Validated false positive
+
+| ID | Status | Notes |
+|----|--------|-------|
+| C6 | False positive in current schema | `VendorProfile` has `startingPrice` and `maxPrice`; there is no `priceMin` DB column. The vendor profile UI uses `priceMin` as form state and maps it to `startingPrice`, which matches the current Prisma schema. |
+
+### Additional hardening completed
+
+- `POST /api/service-orders` no longer trusts client-supplied `userId`; the session user must match.
+- Targeted search confirmed no remaining `Math.random().toString(36)` ID generation in `src/app/api`.
+
+### Verification notes
+
+- `git diff --check` passed.
+- `.\node_modules\.bin\tsc.cmd --noEmit` passes after regenerating Prisma Client.
+
+The project remains **not production ready** until the remaining high-risk items, broader schema cleanup, DB constraints/indexes, localStorage sync strategy, frontend hardening, and full regression testing are completed.
 
 ---
 
 ## Production Readiness Verdict
 
+**Current status after 2026-04-30 remediation:** PARTIALLY REMEDIATED - NOT PRODUCTION READY.
+
 > ❌ **NOT PRODUCTION READY**
 >
-> The project contains **9 Critical**, **31 High**, **52 Medium**, and **30 Low** severity issues.
-> Several Critical issues allow **unauthenticated access to sensitive data** and **unsafe object creation**.
-> These must be fixed before any public launch.
+> The original audit found **9 Critical**, **31 High**, **52 Medium**, and **30 Low** severity issues.
+> A first remediation pass fixed several confirmed Critical/High issues, but remaining unresolved findings still block public launch.
 
 ---
 
@@ -357,23 +410,23 @@
 
 ### Week 1 — Before Any Traffic (Blockers)
 
-- [ ] Fix C1: Add auth to GET `/api/orders`
-- [ ] Fix C2: Add auth to POST `/api/orders`
-- [ ] Fix C3: Remove hardcoded encryption key fallback
-- [ ] Fix C4: Replace all `Math.random()` IDs with `crypto.randomUUID()`
-- [ ] Fix C5: Fix RSVP validation logic bug (`!attending === undefined`)
-- [ ] Fix C6: Fix `priceMin` → wrong DB field mapping in vendor profile
-- [ ] Fix H6: Add webhook idempotency check (prevent double-charge)
-- [ ] Fix H17 + H18: Add max cap on `?limit=` parameters
+- [x] Fix C1: Add auth to GET `/api/orders`
+- [x] Fix C2: Add auth to POST `/api/orders`
+- [x] Fix C3: Remove hardcoded encryption key fallback
+- [x] Fix C4: Replace all `Math.random()` IDs with `crypto.randomUUID()`
+- [x] Fix C5: Fix RSVP validation logic bug (`!attending === undefined`)
+- [x] Validate C6: `priceMin` → wrong DB field mapping in vendor profile is a false positive in the current schema
+- [x] Fix H6: Add webhook idempotency check (prevent double-charge)
+- [x] Fix H17 + H18: Add max cap on `?limit=` parameters
 - [ ] Remove `ignoreBuildErrors: true` from `next.config.ts` and fix all resulting TS errors
 
 ### Week 2 — Before Beta
 
-- [ ] Fix C7: Type-safe Prisma query builder in admin leads
-- [ ] Fix C8: Add Zod validation to guest creation endpoint
-- [ ] Fix C9: Resolve seating chart dual source of truth
-- [ ] Fix H2 + H3: Add rate limiting to login and registration
-- [ ] Add missing Zod validation to all unvalidated API routes (H13–H22)
+- [x] Fix C7: Type-safe Prisma query builder in admin leads
+- [x] Fix C8: Add Zod validation to guest creation endpoint
+- [x] Partially fix C9: Sync seating chart guest assignments into `WeddingGuest.tableNumber`
+- [x] Fix H2 + H3: Add rate limiting to login and registration
+- [ ] Add missing Zod validation to all unvalidated API routes (H13–H22) - partially completed for H13, H15, H16, H19, H22
 - [ ] Fix DB: Add missing `onDelete` rules (H8)
 - [ ] Fix DB: Add missing indexes (M23–M26)
 - [ ] Fix DB: Add composite unique constraints (M24, M25)

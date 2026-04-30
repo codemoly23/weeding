@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import prisma from "@/lib/db";
+import { randomUUID } from "crypto";
 
 // GET /api/conversations/[id] — public: guest reads their conversation
 export async function GET(
@@ -74,7 +75,7 @@ export async function POST(
     return NextResponse.json({ error: "Message too long (max 4000 chars)" }, { status: 400 });
   }
 
-  const msgId = Math.random().toString(36).slice(2) + Date.now().toString(36);
+  const msgId = randomUUID();
   const now = new Date();
 
   const [message] = await prisma.$transaction([

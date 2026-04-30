@@ -1,6 +1,17 @@
 import { NextRequest, NextResponse } from "next/server";
 import prisma from "@/lib/db";
 import { auth } from "@/lib/auth";
+import { z } from "zod";
+
+const budgetGoalSchema = z.object({
+  budgetGoal: z.number().finite().min(0).max(100_000_000).default(0),
+});
+
+const categorySchema = z.object({
+  name: z.string().trim().min(1).max(100),
+  planned: z.number().finite().min(0).max(100_000_000).default(0),
+  color: z.string().regex(/^#[0-9a-fA-F]{6}$/).default("#6366f1"),
+});
 
 // GET /api/planner/projects/[id]/budget — list categories + items
 export async function GET(
@@ -35,9 +46,14 @@ export async function PATCH(
   const project = await prisma.weddingProject.findFirst({ where: { id, userId: session.user.id } });
   if (!project) return NextResponse.json({ error: "Not found" }, { status: 404 });
 
-  const { budgetGoal } = await req.json();
-  await prisma.weddingProject.update({ where: { id }, data: { budgetGoal: budgetGoal ?? 0 } });
-  return NextResponse.json({ budgetGoal });
+  const body = await req.json();
+  const parsed = budgetGoalSchema.safeParse(body);
+  if (!parsed.success) {
+    return NextResponse.json({ error: "Invalid budget data", details: parsed.error.issues }, { status: 400 });
+  }
+
+  await prisma.weddingProject.update({ where: { id }, data: { budgetGoal: parsed.data.budgetGoal } });
+  return NextResponse.json({ budgetGoal: parsed.data.budgetGoal });
 }
 
 // POST /api/planner/projects/[id]/budget — create category
@@ -53,15 +69,15 @@ export async function POST(
   if (!project) return NextResponse.json({ error: "Not found" }, { status: 404 });
 
   const body = await req.json();
-  const { name, planned, color } = body;
-  if (!name?.trim()) return NextResponse.json({ error: "Name required" }, { status: 400 });
-  if (color !== undefined && !/^#[0-9a-fA-F]{6}$/.test(color)) {
-    return NextResponse.json({ error: "Invalid color format. Use hex e.g. #6366f1" }, { status: 400 });
+  const parsed = categorySchema.safeParse(body);
+  if (!parsed.success) {
+    return NextResponse.json({ error: "Invalid category data", details: parsed.error.issues }, { status: 400 });
   }
+  const { name, planned, color } = parsed.data;
 
   const count = await prisma.budgetCategory.count({ where: { projectId: id } });
   const category = await prisma.budgetCategory.create({
-    data: { projectId: id, name: name.trim(), planned: planned ?? 0, color: color ?? "#6366f1", order: count },
+    data: { projectId: id, name, planned, color, order: count },
     include: { items: true },
   });
 

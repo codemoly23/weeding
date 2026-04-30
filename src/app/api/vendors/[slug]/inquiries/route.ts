@@ -1,6 +1,22 @@
 import { NextRequest, NextResponse } from "next/server";
 import prisma from "@/lib/db";
 import { getVendorPlanStatus } from "@/lib/vendor-plan";
+import { randomUUID } from "crypto";
+import { z } from "zod";
+
+const inquirySchema = z.object({
+  name: z.string().trim().min(1).max(120),
+  email: z.string().trim().toLowerCase().email().max(254),
+  phone: z.string().trim().max(50).optional().nullable(),
+  eventType: z.string().trim().min(1).max(120),
+  eventDate: z.preprocess(
+    (value) => (value === undefined || value === null || value === "" ? null : new Date(String(value))),
+    z.date().nullable()
+  ).optional(),
+  message: z.string().trim().min(1).max(5000),
+  budget: z.union([z.string(), z.number()]).optional().nullable(),
+});
+
 // POST /api/vendors/[slug]/inquiries
 export async function POST(
   req: NextRequest,
@@ -28,28 +44,26 @@ export async function POST(
     return NextResponse.json({ error: "This vendor is not currently accepting inquiries" }, { status: 403 });
   }
 
-  const body = await req.json();
-  const { name, email, phone, eventType, eventDate, message, budget } = body;
+  let body: unknown;
+  try {
+    body = await req.json();
+  } catch {
+    return NextResponse.json({ error: "Invalid request body" }, { status: 400 });
+  }
 
-  if (!name || !email || !eventType || !message) {
+  const parsed = inquirySchema.safeParse(body);
+  if (!parsed.success) {
     return NextResponse.json(
-      { error: "name, email, eventType, and message are required" },
+      { error: "Invalid inquiry data", details: parsed.error.issues },
       { status: 400 }
     );
   }
 
-  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-  if (!emailRegex.test(email)) {
-    return NextResponse.json({ error: "Invalid email" }, { status: 400 });
-  }
+  const { name, email, phone, eventType, eventDate, message, budget } = parsed.data;
 
-  const guestName = String(name).trim();
-  const guestEmail = String(email).trim().toLowerCase();
-  const msgContent = String(message).trim();
-
-  const inquiryId = Math.random().toString(36).slice(2) + Date.now().toString(36);
-  const convId = Math.random().toString(36).slice(2) + Date.now().toString(36);
-  const msgId = Math.random().toString(36).slice(2) + Date.now().toString(36);
+  const inquiryId = randomUUID();
+  const convId = randomUUID();
+  const msgId = randomUUID();
   const now = new Date();
 
   // Create inquiry + conversation + first message atomically
@@ -58,12 +72,12 @@ export async function POST(
       data: {
         id: inquiryId,
         vendorId: vendor.id,
-        name: guestName,
-        email: guestEmail,
-        phone: phone ? String(phone).trim() : null,
-        eventType: String(eventType).trim(),
-        eventDate: eventDate ? new Date(eventDate) : null,
-        message: msgContent,
+        name,
+        email,
+        phone: phone || null,
+        eventType,
+        eventDate: eventDate || null,
+        message,
         budget: budget ? String(budget).trim() : null,
       },
     }),
@@ -72,14 +86,14 @@ export async function POST(
         id: convId,
         vendorId: vendor.id,
         inquiryId: inquiryId,
-        guestName,
-        guestEmail,
+        guestName: name,
+        guestEmail: email,
         lastMessageAt: now,
         messages: {
           create: {
             id: msgId,
             senderRole: "GUEST",
-            content: msgContent,
+            content: message,
             isRead: false,
             createdAt: now,
           },

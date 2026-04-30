@@ -3,6 +3,7 @@ import { headers } from "next/headers";
 import { constructWebhookEvent } from "@/lib/stripe";
 import prisma from "@/lib/db";
 import Stripe from "stripe";
+import { processWebhookEvent } from "@/lib/webhook-idempotency";
 
 export const runtime = "nodejs";
 
@@ -262,41 +263,43 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: "Invalid signature" }, { status: 400 });
     }
 
-    switch (event.type) {
-      case "checkout.session.completed":
-        await handleCheckoutSessionCompleted(event.data.object as Stripe.Checkout.Session);
-        break;
+    const result = await processWebhookEvent("stripe", event.id, event.type, async () => {
+      switch (event.type) {
+        case "checkout.session.completed":
+          await handleCheckoutSessionCompleted(event.data.object as Stripe.Checkout.Session);
+          break;
 
-      case "customer.subscription.created":
-      case "customer.subscription.updated":
-        await handleSubscriptionUpdated(event.data.object as Stripe.Subscription);
-        break;
+        case "customer.subscription.created":
+        case "customer.subscription.updated":
+          await handleSubscriptionUpdated(event.data.object as Stripe.Subscription);
+          break;
 
-      case "customer.subscription.deleted":
-        await handleSubscriptionDeleted(event.data.object as Stripe.Subscription);
-        break;
+        case "customer.subscription.deleted":
+          await handleSubscriptionDeleted(event.data.object as Stripe.Subscription);
+          break;
 
-      case "invoice.paid":
-        console.log("Invoice paid:", (event.data.object as Stripe.Invoice).id);
-        break;
+        case "invoice.paid":
+          console.log("Invoice paid:", (event.data.object as Stripe.Invoice).id);
+          break;
 
-      case "invoice.payment_failed":
-        console.log("Invoice payment failed:", (event.data.object as Stripe.Invoice).id);
-        break;
+        case "invoice.payment_failed":
+          console.log("Invoice payment failed:", (event.data.object as Stripe.Invoice).id);
+          break;
 
-      case "payment_intent.succeeded":
-        await handlePaymentIntentSucceeded(event.data.object as Stripe.PaymentIntent);
-        break;
+        case "payment_intent.succeeded":
+          await handlePaymentIntentSucceeded(event.data.object as Stripe.PaymentIntent);
+          break;
 
-      case "payment_intent.payment_failed":
-        await handlePaymentIntentFailed(event.data.object as Stripe.PaymentIntent);
-        break;
+        case "payment_intent.payment_failed":
+          await handlePaymentIntentFailed(event.data.object as Stripe.PaymentIntent);
+          break;
 
-      default:
-        console.log(`Unhandled event type: ${event.type}`);
-    }
+        default:
+          console.log(`Unhandled event type: ${event.type}`);
+      }
+    });
 
-    return NextResponse.json({ received: true });
+    return NextResponse.json({ received: true, duplicate: !result.processed });
   } catch (error) {
     console.error("Webhook error:", error);
     return NextResponse.json({ error: "Webhook handler failed" }, { status: 500 });

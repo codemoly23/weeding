@@ -11,25 +11,31 @@ const AUTH_TAG_LENGTH = 16;
 const SALT_LENGTH = 32;
 
 /**
- * Get encryption key from environment or generate one
+ * Get encryption key from environment.
  */
 function getEncryptionKey(): Buffer {
   const key = process.env.ENCRYPTION_KEY;
 
   if (!key) {
-    // For development, use a default key (NOT for production)
-    console.warn("WARNING: ENCRYPTION_KEY not set, using default key. Set ENCRYPTION_KEY in .env for production!");
-    return crypto.scryptSync("default-dev-key-change-in-production", "salt", 32);
+    throw new Error("ENCRYPTION_KEY is required for encrypting or decrypting secrets.");
   }
 
   // If key is base64 encoded
   if (key.length === 44) {
-    return Buffer.from(key, "base64");
+    const decoded = Buffer.from(key, "base64");
+    if (decoded.length !== 32) {
+      throw new Error("ENCRYPTION_KEY base64 value must decode to 32 bytes.");
+    }
+    return decoded;
   }
 
   // If key is hex encoded
   if (key.length === 64) {
-    return Buffer.from(key, "hex");
+    const decoded = Buffer.from(key, "hex");
+    if (decoded.length !== 32) {
+      throw new Error("ENCRYPTION_KEY hex value must decode to 32 bytes.");
+    }
+    return decoded;
   }
 
   // Derive key from passphrase

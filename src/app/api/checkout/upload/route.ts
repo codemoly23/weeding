@@ -3,6 +3,7 @@ import { writeFile, mkdir } from "fs/promises";
 import path from "path";
 import { existsSync } from "fs";
 import { getR2Config, uploadToR2 } from "@/lib/storage/r2";
+import { assertPathInside, safeUploadFilename, validateUploadBuffer } from "@/lib/upload-validation";
 
 // Allowed file types for checkout form uploads
 const ALLOWED_TYPES = [
@@ -18,7 +19,7 @@ const ALLOWED_TYPES = [
   "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
   "text/plain",
   "text/csv",
-];
+] as const;
 
 const MAX_FILE_SIZE = 10 * 1024 * 1024; // 10MB
 
@@ -33,13 +34,6 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: "No file provided" }, { status: 400 });
     }
 
-    if (!ALLOWED_TYPES.includes(file.type)) {
-      return NextResponse.json(
-        { error: "Invalid file type. Allowed: images, PDF, Word, Excel, CSV, text." },
-        { status: 400 }
-      );
-    }
-
     if (file.size > MAX_FILE_SIZE) {
       return NextResponse.json(
         { error: "File size too large. Maximum 10MB allowed." },
@@ -49,19 +43,26 @@ export async function POST(request: NextRequest) {
 
     const bytes = await file.arrayBuffer();
     const buffer = Buffer.from(bytes);
+    const validation = validateUploadBuffer(buffer, file.type, ALLOWED_TYPES);
+    if (!validation.ok) {
+      return NextResponse.json({ error: validation.error }, { status: 400 });
+    }
+
+    const timestamp = Date.now();
+    const filename = `${timestamp}-${safeUploadFilename(file.name)}`;
 
     // Try R2 first, fall back to local
     const r2Config = await getR2Config();
 
     if (r2Config) {
-      const result = await uploadToR2(r2Config, buffer, file.name, file.type);
+      const result = await uploadToR2(r2Config, buffer, filename, validation.mimeType);
 
       if (result.success && result.url) {
         return NextResponse.json({
           url: result.url,
           fileName: file.name,
           fileSize: file.size,
-          mimeType: file.type,
+          mimeType: validation.mimeType,
           fieldName: fieldName || null,
           storage: "r2",
         });
@@ -76,10 +77,10 @@ export async function POST(request: NextRequest) {
       await mkdir(uploadsDir, { recursive: true });
     }
 
-    const timestamp = Date.now();
-    const cleanName = file.name.replace(/[^a-zA-Z0-9.-]/g, "_");
-    const filename = `${timestamp}-${cleanName}`;
     const filepath = path.join(uploadsDir, filename);
+    if (!assertPathInside(uploadsDir, filepath)) {
+      return NextResponse.json({ error: "Invalid upload path" }, { status: 400 });
+    }
 
     await writeFile(filepath, buffer);
 
@@ -87,7 +88,7 @@ export async function POST(request: NextRequest) {
       url: `/checkout-uploads/${filename}`,
       fileName: file.name,
       fileSize: file.size,
-      mimeType: file.type,
+      mimeType: validation.mimeType,
       fieldName: fieldName || null,
       storage: "local",
     });

@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import prisma from "@/lib/db";
 import { auth } from "@/lib/auth";
+import { randomUUID } from "crypto";
 
 async function getVendorProfile(userId: string) {
   return prisma.vendorProfile.findUnique({
@@ -75,7 +76,7 @@ export async function POST(
   const content = String(body.content ?? "").trim();
   if (!content) return NextResponse.json({ error: "Message content is required" }, { status: 400 });
 
-  const msgId = Math.random().toString(36).slice(2) + Date.now().toString(36);
+  const msgId = randomUUID();
   const now = new Date();
 
   const [message] = await prisma.$transaction([

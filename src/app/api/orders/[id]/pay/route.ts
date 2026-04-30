@@ -61,7 +61,7 @@ export async function POST(
           },
           unit_amount: Math.round(Number(item.priceUSD) * 100),
         },
-        quantity: item.quantity,
+        quantity: Number.isInteger(item.quantity) && item.quantity > 0 ? item.quantity : 1,
       }));
 
       const appUrl = process.env.NEXT_PUBLIC_APP_URL || "";

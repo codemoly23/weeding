@@ -9,6 +9,11 @@ export async function GET(request: NextRequest) {
     const { searchParams } = new URL(request.url);
     const roles = searchParams.get("roles"); // comma-separated roles
 
+    const requestedRoles = roles
+      ? roles.split(",").map((value) => value.trim()).filter(Boolean)
+      : [];
+    const teamAssignableRoles = ["ADMIN", "SALES_AGENT", "SUPPORT_AGENT"];
+
     // If fetching team members (for assignment), allow sales/support agents
     if (roles) {
       const session = await auth();
@@ -18,6 +23,9 @@ export async function GET(request: NextRequest) {
       const allowedRoles = ["ADMIN", "SALES_AGENT", "SUPPORT_AGENT"];
       if (!allowedRoles.includes(session.user.role)) {
         return NextResponse.json({ error: "Forbidden" }, { status: 403 });
+      }
+      if (requestedRoles.some((requestedRole) => !teamAssignableRoles.includes(requestedRole))) {
+        return NextResponse.json({ error: "Forbidden role filter" }, { status: 403 });
       }
     } else {
       // Full user management requires admin
@@ -42,7 +50,7 @@ export async function GET(request: NextRequest) {
     }
     // Filter by multiple roles
     if (roles) {
-      where.role = { in: roles.split(",") };
+      where.role = { in: requestedRoles };
     }
 
     // Filter by active status

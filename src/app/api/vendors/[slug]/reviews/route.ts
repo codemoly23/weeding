@@ -1,5 +1,12 @@
 import { NextRequest, NextResponse } from "next/server";
 import prisma from "@/lib/db";
+import { z } from "zod";
+
+const reviewSchema = z.object({
+  authorName: z.string().trim().min(1).max(100),
+  rating: z.coerce.number().int().min(1).max(5),
+  comment: z.string().trim().max(2000).optional().nullable(),
+});
 
 // POST /api/vendors/[slug]/reviews
 export async function POST(
@@ -18,23 +25,21 @@ export async function POST(
   }
 
   const body = await req.json();
-  const { authorName, rating, comment } = body;
-
-  if (!authorName || typeof authorName !== "string" || !authorName.trim()) {
-    return NextResponse.json({ error: "Name is required" }, { status: 400 });
+  const parsed = reviewSchema.safeParse(body);
+  if (!parsed.success) {
+    return NextResponse.json(
+      { error: "Invalid review data", details: parsed.error.issues },
+      { status: 400 }
+    );
   }
-
-  const ratingNum = Number(rating);
-  if (!ratingNum || ratingNum < 1 || ratingNum > 5) {
-    return NextResponse.json({ error: "Rating must be between 1 and 5" }, { status: 400 });
-  }
+  const { authorName, rating, comment } = parsed.data;
 
   await prisma.vendorReview.create({
     data: {
       vendorId: vendor.id,
-      authorName: authorName.trim(),
-      rating: ratingNum,
-      comment: comment ? String(comment).trim() || null : null,
+      authorName,
+      rating,
+      comment: comment || null,
       isApproved: false,
     },
   });
