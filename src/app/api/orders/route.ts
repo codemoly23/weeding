@@ -78,7 +78,6 @@ const orderSchema = z.object({
     passportNumber: z.string().optional(),
     dateOfBirth: z.string().optional(),
     ownershipPercentage: z.number().default(100),
-    password: z.string().min(8, "Password must be at least 8 characters").optional(),
   }),
 
   // Additional Members (for multi-member LLC)

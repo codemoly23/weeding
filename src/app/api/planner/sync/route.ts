@@ -4,6 +4,12 @@ import { GuestSide, GuestRelation, RsvpStatus, BudgetPaymentStatus, VendorCatego
 import { auth } from "@/lib/auth";
 import { syncLayoutGuestTableNumbers } from "@/lib/seating-sync";
 
+function safeDate(value: unknown): Date | null {
+  if (!value || typeof value !== "string") return null;
+  const d = new Date(value);
+  return Number.isNaN(d.getTime()) ? null : d;
+}
+
 // POST /api/planner/sync — migrate a local (localStorage) project into the DB
 export async function POST(req: NextRequest) {
   const session = await auth();
@@ -54,7 +60,7 @@ export async function POST(req: NextRequest) {
       data: {
         title: title || "Untitled",
         eventType: eventType || "WEDDING",
-        eventDate: eventDate ? new Date(eventDate) : null,
+        eventDate: safeDate(eventDate),
         budgetGoal: budgetGoal ? Number(budgetGoal) : 0,
         brideName: brideName || null,
         groomName: groomName || null,
@@ -103,12 +109,12 @@ export async function POST(req: NextRequest) {
             plusOneName: (g.plusOneName as string)?.trim() || null,
             plusOneMeal: (g.plusOneMeal as string)?.trim() || null,
             isChiefGuest: (g.isChiefGuest as boolean) ?? false,
-            gdprConsentAt: g.gdprConsentAt ? new Date(g.gdprConsentAt as string) : null,
+            gdprConsentAt: safeDate(g.gdprConsentAt),
             selfRegistered: (g.selfRegistered as boolean) ?? false,
             familyId: g.familyId ? (familyIdMap[g.familyId as string] ?? null) : null,
             invitationCode: (g.invitationCode as string)?.trim() || null,
             invitationSent: (g.invitationSent as boolean) ?? false,
-            invitationSentAt: g.invitationSentAt ? new Date(g.invitationSentAt as string) : null,
+            invitationSentAt: safeDate(g.invitationSentAt),
             rsvpStatus: (g.rsvpStatus as string || "PENDING") as RsvpStatus,
           },
         });
