@@ -90,7 +90,11 @@ export async function PATCH(request: NextRequest, { params }: RouteParams) {
     } else if (isSecret && finalValue.includes("••••")) {
       // Masked value submitted — skip update, return existing
       const existing = await prisma.setting.findUnique({ where: { key: decodedKey } });
-      return NextResponse.json({ setting: existing });
+      return NextResponse.json({
+        setting: existing,
+        unchanged: true,
+        message: "Masked secret value was preserved. Submit a new secret value to update it.",
+      });
     }
 
     const setting = await prisma.setting.upsert({

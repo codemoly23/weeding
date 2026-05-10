@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import prisma from "@/lib/db";
 import { auth } from "@/lib/auth";
+import { assignGuestsToTableNumber, removeGuestsFromSeating } from "@/lib/seating-sync";
 
 // POST /api/planner/projects/[id]/guests/bulk
 export async function POST(
@@ -35,7 +36,9 @@ export async function POST(
   switch (action) {
     case "assign_table":
       if (tableNumber === undefined) return NextResponse.json({ error: "tableNumber required" }, { status: 400 });
-      await prisma.weddingGuest.updateMany({ where, data: { tableNumber: Number(tableNumber) } });
+      await prisma.$transaction(async (tx) => {
+        await assignGuestsToTableNumber(tx, id, guestIds, Number(tableNumber));
+      });
       break;
 
     case "assign_family":
@@ -47,7 +50,10 @@ export async function POST(
       break;
 
     case "delete":
-      await prisma.weddingGuest.deleteMany({ where });
+      await prisma.$transaction(async (tx) => {
+        await removeGuestsFromSeating(tx, id, guestIds);
+        await tx.weddingGuest.deleteMany({ where });
+      });
       break;
 
     case "mark_attending":

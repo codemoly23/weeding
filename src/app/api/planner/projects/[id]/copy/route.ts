@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import prisma from "@/lib/db";
 import { Prisma } from "@prisma/client";
 import { auth } from "@/lib/auth";
+import { syncLayoutGuestTableNumbers } from "@/lib/seating-sync";
 
 export async function POST(
   _req: NextRequest,
@@ -27,6 +28,7 @@ export async function POST(
       notes: true,
       eventVenues: true,
       vendors: true,
+      seatingLayouts: { include: { tables: true } },
     },
   });
   if (!original) return NextResponse.json({ error: "Not found" }, { status: 404 });
@@ -51,26 +53,70 @@ export async function POST(
   });
 
   // Copy guests (clear RSVP tokens & answers)
+  const guestIdMap: Record<string, string> = {};
   if (original.guests.length > 0) {
-    await prisma.weddingGuest.createMany({
-      data: original.guests.map((g) => ({
+    for (const g of original.guests) {
+      const copiedGuest = await prisma.weddingGuest.create({
+        data: {
+          projectId: newProject.id,
+          firstName: g.firstName,
+          lastName: g.lastName,
+          title: g.title,
+          side: g.side,
+          relation: g.relation,
+          email: g.email,
+          phone: g.phone,
+          dietary: g.dietary,
+          rsvpStatus: "PENDING",
+          notes: g.notes,
+          hasPlusOne: g.hasPlusOne,
+          plusOneName: g.plusOneName,
+          plusOneMeal: g.plusOneMeal,
+          isChiefGuest: g.isChiefGuest,
+        },
+      });
+      guestIdMap[g.id] = copiedGuest.id;
+    }
+  }
+
+  // Copy seating layouts and tables. Table assignments are rebuilt from guestIds.
+  for (const layout of original.seatingLayouts) {
+    const newLayout = await prisma.seatingLayout.create({
+      data: {
         projectId: newProject.id,
-        firstName: g.firstName,
-        lastName: g.lastName,
-        title: g.title,
-        side: g.side,
-        relation: g.relation,
-        email: g.email,
-        phone: g.phone,
-        dietary: g.dietary,
-        rsvpStatus: "PENDING",
-        tableNumber: g.tableNumber,
-        notes: g.notes,
-        hasPlusOne: g.hasPlusOne,
-        plusOneName: g.plusOneName,
-        plusOneMeal: g.plusOneMeal,
-        isChiefGuest: g.isChiefGuest,
-      })),
+        name: layout.name,
+        type: layout.type,
+        width: layout.width,
+        height: layout.height,
+        bgColor: layout.bgColor,
+      },
+    });
+
+    for (const table of layout.tables) {
+      const guestIds = Array.isArray(table.guestIds)
+        ? table.guestIds
+            .map((guestId) => typeof guestId === "string" ? guestIdMap[guestId] : null)
+            .filter((guestId): guestId is string => Boolean(guestId))
+        : [];
+
+      await prisma.seatingTable.create({
+        data: {
+          projectId: newProject.id,
+          layoutId: newLayout.id,
+          name: table.name,
+          type: table.type,
+          x: table.x,
+          y: table.y,
+          seats: table.seats,
+          rotation: table.rotation,
+          color: table.color,
+          guestIds,
+        },
+      });
+    }
+
+    await prisma.$transaction(async (tx) => {
+      await syncLayoutGuestTableNumbers(tx, newProject.id, newLayout.id);
     });
   }
 

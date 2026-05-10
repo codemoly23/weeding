@@ -5,6 +5,7 @@ import prisma from "@/lib/db";
 import { UserRole } from "@prisma/client";
 import { Permission } from "@/lib/permissions";
 import { logger } from "@/lib/logger";
+import { getRequiredEnv } from "@/lib/env";
 
 type RoleCheck = UserRole | UserRole[];
 
@@ -30,6 +31,8 @@ const CACHE_TTL = 5 * 60 * 1000; // 5 minutes
  * Directly decodes the JWT from the session cookie using next-auth's decode function.
  */
 async function getSession(): Promise<AuthResult["session"] | null> {
+  const authSecret = getRequiredEnv("AUTH_SECRET");
+
   try {
     const cookieStore = await cookies();
     const cookieName = process.env.NODE_ENV === "production"
@@ -43,7 +46,7 @@ async function getSession(): Promise<AuthResult["session"] | null> {
 
     const token = await decode({
       token: sessionCookie.value,
-      secret: process.env.AUTH_SECRET as string,
+      secret: authSecret,
       salt: cookieName,
     });
 

@@ -129,6 +129,7 @@ export const verifyPluginAccess = cache(
 
       const tokenResult = await verifyLicenseToken(plugin.licenseToken, {
         publicKey: plugin.licensePublicKey,
+        expectedAudience: process.env.LICENSE_JWT_AUDIENCE || undefined,
       });
 
       if (!tokenResult.valid) {
@@ -139,6 +140,8 @@ export const verifyPluginAccess = cache(
           reason = "TOKEN_EXPIRED";
         } else if (tokenResult.reason === "DOMAIN_MISMATCH") {
           reason = "DOMAIN_MISMATCH";
+        } else if (tokenResult.reason === "INVALID_AUDIENCE") {
+          reason = "TOKEN_INVALID";
         }
 
         return {

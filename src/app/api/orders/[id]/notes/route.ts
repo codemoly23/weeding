@@ -1,11 +1,12 @@
 import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
 import { prisma } from "@/lib/db";
+import { authError, checkAnyPermission } from "@/lib/admin-auth";
+import { PERMISSIONS } from "@/lib/permissions";
 
 const addNoteSchema = z.object({
   content: z.string().min(1, "Note content is required"),
   isInternal: z.boolean().default(true),
-  authorId: z.string().optional(),
 });
 
 // Add note to order
@@ -14,6 +15,9 @@ export async function POST(
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const access = await checkAnyPermission([PERMISSIONS.ORDERS_EDIT]);
+    if ("error" in access) return authError(access);
+
     const { id } = await params;
     const body = await request.json();
 
@@ -42,14 +46,14 @@ export async function POST(
         orderId: order.id,
         content: data.content,
         isInternal: data.isInternal,
-        authorId: data.authorId,
+        authorId: access.session!.user.id,
       },
     });
 
     // Log activity
     await prisma.activityLog.create({
       data: {
-        userId: data.authorId,
+        userId: access.session!.user.id,
         action: "ORDER_NOTE_ADDED",
         entity: "OrderNote",
         entityId: note.id,
@@ -87,6 +91,9 @@ export async function GET(
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const access = await checkAnyPermission([PERMISSIONS.ORDERS_VIEW]);
+    if ("error" in access) return authError(access);
+
     const { id } = await params;
 
     // Find order
@@ -100,6 +107,11 @@ export async function GET(
       include: {
         notes: {
           orderBy: { createdAt: "desc" },
+          include: {
+            author: {
+              select: { id: true, name: true, email: true },
+            },
+          },
         },
       },
     });
@@ -129,6 +141,9 @@ export async function DELETE(
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const access = await checkAnyPermission([PERMISSIONS.ORDERS_EDIT]);
+    if ("error" in access) return authError(access);
+
     const { id } = await params;
     const { searchParams } = new URL(request.url);
     const noteId = searchParams.get("noteId");
@@ -168,6 +183,7 @@ export async function DELETE(
     // Log activity
     await prisma.activityLog.create({
       data: {
+        userId: access.session!.user.id,
         action: "ORDER_NOTE_DELETED",
         entity: "OrderNote",
         entityId: noteId,

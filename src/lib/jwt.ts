@@ -29,6 +29,7 @@ export interface JWTVerifyResult {
     | "INVALID_SIGNATURE"
     | "TOKEN_EXPIRED"
     | "DOMAIN_MISMATCH"
+    | "INVALID_AUDIENCE"
     | "PARSE_ERROR"
     | "NO_TOKEN"
     | "NO_PUBLIC_KEY";
@@ -72,6 +73,7 @@ export async function verifyLicenseToken(
     publicKey?: string; // RSA public key (PEM format) from database
     skipDomainCheck?: boolean;
     currentDomain?: string;
+    expectedAudience?: string;
   }
 ): Promise<JWTVerifyResult> {
   if (!token) {
@@ -100,6 +102,23 @@ export async function verifyLicenseToken(
     });
 
     const data = payload as LicenseTokenPayload;
+
+    if (options?.expectedAudience) {
+      const audiences = Array.isArray(data.aud)
+        ? data.aud
+        : data.aud
+          ? [data.aud]
+          : [];
+
+      if (!audiences.includes(options.expectedAudience)) {
+        return {
+          valid: false,
+          error: "License token audience is not valid for this installation",
+          reason: "INVALID_AUDIENCE",
+          data,
+        };
+      }
+    }
 
     // Check domain lock if enabled
     if (!options?.skipDomainCheck && data.domainLockMode === "LOCKED") {
@@ -188,7 +207,11 @@ export async function shouldRefreshToken(
   if (!token || !publicKey) return true;
 
   try {
-    const result = await verifyLicenseToken(token, { publicKey, skipDomainCheck: true });
+    const result = await verifyLicenseToken(token, {
+      publicKey,
+      skipDomainCheck: true,
+      expectedAudience: process.env.LICENSE_JWT_AUDIENCE || undefined,
+    });
 
     if (!result.valid) return true;
 
@@ -221,7 +244,11 @@ export async function getTokenAgeDays(
   if (!token || !publicKey) return null;
 
   try {
-    const result = await verifyLicenseToken(token, { publicKey, skipDomainCheck: true });
+    const result = await verifyLicenseToken(token, {
+      publicKey,
+      skipDomainCheck: true,
+      expectedAudience: process.env.LICENSE_JWT_AUDIENCE || undefined,
+    });
 
     if (!result.valid || !result.data?.iat) return null;
 
@@ -251,7 +278,11 @@ export async function hasFeature(
   if (!token || !publicKey) return false;
 
   try {
-    const result = await verifyLicenseToken(token, { publicKey, skipDomainCheck: true });
+    const result = await verifyLicenseToken(token, {
+      publicKey,
+      skipDomainCheck: true,
+      expectedAudience: process.env.LICENSE_JWT_AUDIENCE || undefined,
+    });
 
     if (!result.valid || !result.data?.features) return false;
 
@@ -275,7 +306,11 @@ export async function getLicenseTier(
   if (!token || !publicKey) return null;
 
   try {
-    const result = await verifyLicenseToken(token, { publicKey, skipDomainCheck: true });
+    const result = await verifyLicenseToken(token, {
+      publicKey,
+      skipDomainCheck: true,
+      expectedAudience: process.env.LICENSE_JWT_AUDIENCE || undefined,
+    });
     return result.data?.tier || null;
   } catch {
     return null;

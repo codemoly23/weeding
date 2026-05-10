@@ -7,7 +7,7 @@ import {
   getLocalProject, deleteLocalProject,
   getLocalGuests, getLocalFamilies, getLocalBudget,
   getLocalChecklist, getLocalItinerary, getLocalNotes,
-  getLocalVendors, getLocalVenue,
+  getLocalVendors, getLocalVenue, getLocalSeatingLayouts,
 } from "@/lib/planner-storage";
 
 function SyncContent() {
@@ -60,6 +60,7 @@ function SyncContent() {
         const vendors = getLocalVendors(from!);
         const ceremony = getLocalVenue(from!, "CEREMONY");
         const reception = getLocalVenue(from!, "RECEPTION");
+        const seatingLayouts = getLocalSeatingLayouts(from!);
 
         const res = await fetch("/api/planner/sync", {
           method: "POST",
@@ -70,6 +71,7 @@ function SyncContent() {
             role: local!.role,
             eventType: local!.eventType,
             eventDate: local!.eventDate,
+            budgetGoal: local!.budgetGoal ?? null,
             brideName: local!.brideName ?? null,
             groomName: local!.groomName ?? null,
             guests,
@@ -81,6 +83,7 @@ function SyncContent() {
             vendors,
             ceremony,
             reception,
+            seatingLayouts,
           }),
         });
 

@@ -1,7 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
 import prisma from "@/lib/db";
-import { GuestSide, GuestRelation, RsvpStatus, BudgetPaymentStatus, VendorCategory } from "@prisma/client";
+import { GuestSide, GuestRelation, RsvpStatus, BudgetPaymentStatus, VendorCategory, Prisma } from "@prisma/client";
 import { auth } from "@/lib/auth";
+import { syncLayoutGuestTableNumbers } from "@/lib/seating-sync";
 
 // POST /api/planner/sync — migrate a local (localStorage) project into the DB
 export async function POST(req: NextRequest) {
@@ -19,18 +20,35 @@ export async function POST(req: NextRequest) {
   }
   const {
     localId, title, role, eventType, eventDate, budgetGoal, brideName, groomName,
-    guests, families, budget, checklist, itinerary, notes, vendors, ceremony, reception,
+    guests, families, budget, checklist, itinerary, notes, vendors, ceremony, reception, seatingLayouts,
   } = body;
 
   if (!localId || !role) {
     return NextResponse.json({ error: "localId and role are required" }, { status: 400 });
   }
 
+  if (typeof localId !== "string" || !localId.startsWith("local-")) {
+    return NextResponse.json({ error: "Invalid localId" }, { status: 400 });
+  }
+
   if (!["BRIDE", "GROOM", "PLANNER", "OTHER"].includes(role)) {
     return NextResponse.json({ error: "Invalid role" }, { status: 400 });
   }
 
-  const project = await prisma.$transaction(async (tx) => {
+  const result = await prisma.$transaction(async (tx) => {
+    await tx.$executeRaw`SELECT pg_advisory_xact_lock(hashtext(${`${session.user.id}:${localId}`}))`;
+
+    const existing = await tx.weddingProject.findFirst({
+      where: {
+        userId: session.user.id,
+        sourceLocalId: localId,
+      },
+    });
+
+    if (existing) {
+      return { project: existing, alreadySynced: true };
+    }
+
     // 1. Create the project
     const proj = await tx.weddingProject.create({
       data: {
@@ -41,6 +59,7 @@ export async function POST(req: NextRequest) {
         brideName: brideName || null,
         groomName: groomName || null,
         userId: session.user.id,
+        sourceLocalId: localId,
         members: {
           create: {
             userId: session.user.id,
@@ -65,31 +84,83 @@ export async function POST(req: NextRequest) {
     }
 
     // 3. Guests
+    const guestIdMap: Record<string, string> = {};
     if (Array.isArray(guests) && guests.length > 0) {
-      await tx.weddingGuest.createMany({
-        data: guests.map((g: Record<string, unknown>) => ({
-          projectId: pid,
-          firstName: (g.firstName as string)?.trim() || "",
-          lastName: (g.lastName as string)?.trim() || null,
-          title: (g.title as string)?.trim() || null,
-          side: (g.side as string || "BRIDE") as GuestSide,
-          relation: (g.relation as string || "OTHER") as GuestRelation,
-          email: (g.email as string)?.trim() || null,
-          phone: (g.phone as string)?.trim() || null,
-          dietary: (g.dietary as string)?.trim() || null,
-          tableNumber: g.tableNumber ? Number(g.tableNumber) : null,
-          notes: (g.notes as string)?.trim() || null,
-          hasPlusOne: (g.hasPlusOne as boolean) ?? false,
-          plusOneName: (g.plusOneName as string)?.trim() || null,
-          plusOneMeal: (g.plusOneMeal as string)?.trim() || null,
-          isChiefGuest: (g.isChiefGuest as boolean) ?? false,
-          familyId: g.familyId ? (familyIdMap[g.familyId as string] ?? null) : null,
-          invitationCode: (g.invitationCode as string)?.trim() || null,
-          invitationSent: (g.invitationSent as boolean) ?? false,
-          invitationSentAt: g.invitationSentAt ? new Date(g.invitationSentAt as string) : null,
-          rsvpStatus: (g.rsvpStatus as string || "PENDING") as RsvpStatus,
-        })),
-      });
+      for (const g of guests as Record<string, unknown>[]) {
+        const dbGuest = await tx.weddingGuest.create({
+          data: {
+            projectId: pid,
+            firstName: (g.firstName as string)?.trim() || "",
+            lastName: (g.lastName as string)?.trim() || null,
+            title: (g.title as string)?.trim() || null,
+            side: (g.side as string || "BRIDE") as GuestSide,
+            relation: (g.relation as string || "OTHER") as GuestRelation,
+            email: (g.email as string)?.trim() || null,
+            phone: (g.phone as string)?.trim() || null,
+            dietary: (g.dietary as string)?.trim() || null,
+            notes: (g.notes as string)?.trim() || null,
+            hasPlusOne: (g.hasPlusOne as boolean) ?? false,
+            plusOneName: (g.plusOneName as string)?.trim() || null,
+            plusOneMeal: (g.plusOneMeal as string)?.trim() || null,
+            isChiefGuest: (g.isChiefGuest as boolean) ?? false,
+            gdprConsentAt: g.gdprConsentAt ? new Date(g.gdprConsentAt as string) : null,
+            selfRegistered: (g.selfRegistered as boolean) ?? false,
+            familyId: g.familyId ? (familyIdMap[g.familyId as string] ?? null) : null,
+            invitationCode: (g.invitationCode as string)?.trim() || null,
+            invitationSent: (g.invitationSent as boolean) ?? false,
+            invitationSentAt: g.invitationSentAt ? new Date(g.invitationSentAt as string) : null,
+            rsvpStatus: (g.rsvpStatus as string || "PENDING") as RsvpStatus,
+          },
+        });
+
+        if (typeof g.id === "string") {
+          guestIdMap[g.id] = dbGuest.id;
+        }
+      }
+    }
+
+    // 3b. Seating layouts + tables. Seating tables are the source of truth for table assignment.
+    if (Array.isArray(seatingLayouts) && seatingLayouts.length > 0) {
+      for (const layout of seatingLayouts as Record<string, unknown>[]) {
+        const dbLayout = await tx.seatingLayout.create({
+          data: {
+            projectId: pid,
+            name: (layout.name as string) || "Layout",
+            type: (layout.type as string) || "RECEPTION",
+            width: Number(layout.width) || 1200,
+            height: Number(layout.height) || 800,
+            bgColor: (layout.bgColor as string) || "#f5f5f0",
+          },
+        });
+
+        const tables = layout.tables as Record<string, unknown>[];
+        if (Array.isArray(tables) && tables.length > 0) {
+          for (const table of tables) {
+            const guestIds = Array.isArray(table.guestIds)
+              ? table.guestIds
+                  .map((guestId) => typeof guestId === "string" ? guestIdMap[guestId] : null)
+                  .filter((guestId): guestId is string => Boolean(guestId))
+              : [];
+
+            await tx.seatingTable.create({
+              data: {
+                projectId: pid,
+                layoutId: dbLayout.id,
+                name: (table.name as string) || "Table",
+                type: (table.type as string) || "ROUND",
+                x: Number(table.x) || 100,
+                y: Number(table.y) || 100,
+                seats: Number(table.seats) || 8,
+                rotation: Number(table.rotation) || 0,
+                color: (table.color as string) || "#ffffff",
+                guestIds,
+              },
+            });
+          }
+        }
+
+        await syncLayoutGuestTableNumbers(tx, pid, dbLayout.id);
+      }
     }
 
     // 4. Budget categories + items
@@ -224,8 +295,8 @@ export async function POST(req: NextRequest) {
       });
     }
 
-    return proj;
-  });
+    return { project: proj, alreadySynced: false };
+  }, { isolationLevel: Prisma.TransactionIsolationLevel.Serializable });
 
-  return NextResponse.json({ project }, { status: 201 });
+  return NextResponse.json(result, { status: result.alreadySynced ? 200 : 201 });
 }

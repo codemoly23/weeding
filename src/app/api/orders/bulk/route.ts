@@ -1,6 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
 import { prisma } from "@/lib/db";
+import { authError, checkAnyPermission } from "@/lib/admin-auth";
+import { PERMISSIONS } from "@/lib/permissions";
 
 const bulkUpdateSchema = z.object({
   orderIds: z.array(z.string()).min(1, "At least one order ID is required"),
@@ -27,6 +29,9 @@ const bulkUpdateSchema = z.object({
 // Bulk update orders
 export async function POST(request: NextRequest) {
   try {
+    const access = await checkAnyPermission([PERMISSIONS.ORDERS_EDIT]);
+    if ("error" in access) return authError(access);
+
     const body = await request.json();
     const data = bulkUpdateSchema.parse(body);
 
@@ -81,6 +86,7 @@ export async function POST(request: NextRequest) {
               orderId,
               content: data.note || `Bulk status update to ${data.status}`,
               isInternal: true,
+              authorId: access.session!.user.id,
             })),
           });
         }
@@ -90,6 +96,7 @@ export async function POST(request: NextRequest) {
           data: {
             action: "BULK_STATUS_UPDATE",
             entity: "Order",
+            userId: access.session!.user.id,
             metadata: {
               orderCount: updatedCount,
               newStatus: data.status,
@@ -124,6 +131,7 @@ export async function POST(request: NextRequest) {
               orderId,
               content: data.note || `Bulk payment status update to ${data.paymentStatus}`,
               isInternal: true,
+              authorId: access.session!.user.id,
             })),
           });
         }
@@ -133,6 +141,7 @@ export async function POST(request: NextRequest) {
           data: {
             action: "BULK_PAYMENT_STATUS_UPDATE",
             entity: "Order",
+            userId: access.session!.user.id,
             metadata: {
               orderCount: updatedCount,
               newPaymentStatus: data.paymentStatus,
@@ -155,6 +164,7 @@ export async function POST(request: NextRequest) {
           data: {
             action: "BULK_ORDER_DELETE",
             entity: "Order",
+            userId: access.session!.user.id,
             metadata: {
               orderCount: updatedCount,
               orderNumbers: orders.map((o) => o.orderNumber),

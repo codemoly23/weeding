@@ -1,100 +1,56 @@
-"use client";
+import type { Metadata } from "next";
+import { auth } from "@/lib/auth";
+import prisma from "@/lib/db";
+import { PlannerProjectLayoutShell } from "@/components/planner/project-layout-shell";
 
-import { useState, useEffect } from "react";
-import { useParams } from "next/navigation";
-import { PlannerSidebar } from "@/components/planner/sidebar";
-import { PlannerHeader } from "@/components/planner/header";
-import { AnonymousBanner } from "@/components/planner/anonymous-banner";
-import { Sheet, SheetContent, SheetTitle } from "@/components/ui/sheet";
-import { getLocalProject } from "@/lib/planner-storage";
-import { PlannerProvider } from "@/lib/planner-context";
-
-export default function PlannerProjectLayout({
-  children,
-}: {
+type LayoutProps = {
   children: React.ReactNode;
-}) {
-  const params = useParams();
-  const projectId = params.id as string;
-  const isLocal = projectId.startsWith("local-");
+  params: Promise<{ id: string }>;
+};
 
-  const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [projectTitle, setProjectTitle] = useState("Untitled");
-  const [eventDate, setEventDate] = useState<string | null>(null);
-  const [initialBride, setInitialBride] = useState("");
-  const [initialGroom, setInitialGroom] = useState("");
+export async function generateMetadata({ params }: { params: Promise<{ id: string }> }): Promise<Metadata> {
+  const { id } = await params;
 
-  useEffect(() => {
-    if (!projectId) return;
+  if (id.startsWith("local-")) {
+    return {
+      title: "Wedding Planner | Ceremoney",
+      robots: { index: false, follow: false },
+    };
+  }
 
-    if (isLocal) {
-      const project = getLocalProject(projectId);
-      const title = project?.title || "Untitled";
-      setProjectTitle(title);
-      setEventDate(project?.eventDate ?? null);
-      setInitialBride(project?.brideName || "");
-      setInitialGroom(project?.groomName || "");
-      document.title = `${title} | Wedding Planner`;
-      return;
-    }
+  const session = await auth();
+  if (!session?.user?.id) {
+    return {
+      title: "Wedding Planner | Ceremoney",
+      robots: { index: false, follow: false },
+    };
+  }
 
-    async function fetchProject() {
-      try {
-        const res = await fetch(`/api/planner/projects/${projectId}`);
-        if (res.ok) {
-          const data = await res.json();
-          const title = data.project?.title || "Untitled";
-          setProjectTitle(title);
-          setEventDate(data.project?.eventDate ?? null);
-          setInitialBride(data.project?.brideName || "");
-          setInitialGroom(data.project?.groomName || "");
-          document.title = `${title} | Wedding Planner`;
-        }
-      } catch {}
-    }
-    fetchProject();
-  }, [projectId, isLocal]);
+  const project = await prisma.weddingProject.findFirst({
+    where: {
+      id,
+      OR: [
+        { userId: session.user.id },
+        { members: { some: { userId: session.user.id } } },
+      ],
+    },
+    select: { title: true, eventDate: true, brideName: true, groomName: true },
+  });
 
-  return (
-    <PlannerProvider initialBrideName={initialBride} initialGroomName={initialGroom}>
-      <div className="flex h-screen flex-col overflow-hidden bg-white">
-        {/* Anonymous warning banner */}
-        <AnonymousBanner projectId={projectId} />
+  const title = project?.title || "Wedding Planner";
+  const couple = [project?.brideName, project?.groomName].filter(Boolean).join(" & ");
+  const description = couple
+    ? `${couple}'s event planning workspace on Ceremoney.`
+    : "Private event planning workspace on Ceremoney.";
 
-        <div className="flex flex-1 overflow-hidden">
-          {/* Desktop Sidebar */}
-          <div className="hidden lg:block">
-            <PlannerSidebar
-              projectId={projectId}
-              projectTitle={projectTitle}
-              eventDate={eventDate}
-              collapsed={sidebarCollapsed}
-              onToggle={() => setSidebarCollapsed(!sidebarCollapsed)}
-            />
-          </div>
+  return {
+    title: `${title} | Ceremoney Planner`,
+    description,
+    robots: { index: false, follow: false },
+  };
+}
 
-          {/* Mobile Sidebar */}
-          <Sheet open={mobileMenuOpen} onOpenChange={setMobileMenuOpen}>
-            <SheetContent side="left" className="w-64 p-0">
-              <SheetTitle className="sr-only">Planner Menu</SheetTitle>
-              <PlannerSidebar
-                projectId={projectId}
-                projectTitle={projectTitle}
-                eventDate={eventDate}
-                mobile
-                onToggle={() => setMobileMenuOpen(false)}
-              />
-            </SheetContent>
-          </Sheet>
-
-          {/* Main Content */}
-          <div className="flex flex-1 flex-col overflow-hidden">
-            <PlannerHeader onMenuClick={() => setMobileMenuOpen(true)} projectId={projectId} />
-            <main id="main-content" className="flex-1 overflow-y-auto p-4 lg:p-6">{children}</main>
-          </div>
-        </div>
-      </div>
-    </PlannerProvider>
-  );
+export default async function PlannerProjectLayout({ children, params }: LayoutProps) {
+  const { id } = await params;
+  return <PlannerProjectLayoutShell projectId={id}>{children}</PlannerProjectLayoutShell>;
 }

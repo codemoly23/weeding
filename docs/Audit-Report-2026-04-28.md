@@ -3,7 +3,75 @@
 **Branch:** sagor
 **Auditor:** Senior Full-Stack Code Auditor (Multi-layer: Security + API + DB + Frontend)
 **Total Issues Found:** 122
-**Status:** PARTIALLY REMEDIATED - NOT PRODUCTION READY
+**Status:** CRITICAL/HIGH REMEDIATED - MEDIUM/LOW AND RELEASE HARDENING REMAIN
+
+---
+
+## Remediation Update - 2026-05-03
+
+The audit findings below are the original 2026-04-28 report. A second remediation pass was completed on 2026-05-03 focused on the remaining confirmed Critical/High items.
+
+### Current high-level status
+
+| Severity | Current confirmed open count | Notes |
+|----------|------------------------------|-------|
+| Critical | 0 | All confirmed Critical findings have been fixed or validated as false positive/currently non-exploitable. |
+| High | 0 | All confirmed High findings from the tracked audit list have been remediated or validated as already fixed. |
+| Medium | Partially remediated | Security/API/schema Medium pass has started; broad pagination/date-validation/transaction coverage still needs more passes. |
+| Low | Not fully remediated | Low/polish findings still need a separate pass. |
+
+The project should still be treated as **not production ready** until Medium/Low findings, database migration/backfill, regression testing, and deployment hardening are completed.
+
+### Fixed in this pass
+
+| ID | Status | Notes |
+|----|--------|-------|
+| H1 | Fixed | Middleware now provides a second auth layer for sensitive API namespaces: `/api/admin/*`, `/api/vendor/*`, `/api/customer/*`, `/api/dashboard/*`, `/api/user/*`, `/api/planner/projects/*`, `/api/planner/sync`, and sensitive `/api/orders/*` routes. Public/vendor registration, planner share, and cron routes remain explicitly open where needed. |
+| H9 | Fixed for future writes | `OrderNote.authorId` is now required in Prisma and all current order-note creation paths set the authenticated/server-side author. Existing databases with legacy null order-note authors need a one-time backfill before applying the schema migration. |
+| H11 | Fixed | Local planner sync now carries guest GDPR/self-registration related fields that exist in the DB. |
+| H12 | Fixed | Planner localStorage-to-DB sync is now idempotent by storing `WeddingProject.sourceLocalId` and enforcing `@@unique([userId, sourceLocalId])`; repeated syncs for the same local project return the existing DB project instead of creating duplicates. |
+| H14 | Already fixed | Vendor profile latitude/longitude bounds validation is present in `src/app/api/vendor/profile/route.ts`. |
+| H21 | Fixed | Public lead submission now uses a transaction plus a Postgres advisory lock per email, closing the check-then-insert duplicate race. |
+| H24 | Fixed | `/planner/[id]` now has server-side `generateMetadata`; the client layout behavior was moved into `PlannerProjectLayoutShell`. |
+| H25 | Fixed | Vendor profile pages now have server-side title, description, Open Graph, and Twitter metadata. |
+| H26 | Fixed | Header/business config hooks now use module-level cache/inflight request de-duplication to avoid repeated config fetches across header mounts. |
+| H27 | Validated fixed | `src/app/dashboard/layout.tsx` has the required `"use client"` directive. |
+| H28 | Fixed | Planner dashboard now separates required project loading from optional section loads and shows visible partial-load warnings instead of silently rendering broken/zero state. |
+| H29 | Fixed | Vendor dashboard now has visible full/partial error states and retry behavior. |
+| H30 | Fixed | Added route-level `loading.tsx` boundaries for root, planner, vendor, dashboard, and admin segments. |
+| H31 | Fixed | Added route-level `error.tsx` boundaries for root, planner, vendor, dashboard, and admin segments. |
+| M1 | Fixed | Admin auth now reads `AUTH_SECRET` through a required-env helper instead of a non-null assertion, so missing config is surfaced as a configuration error. |
+| M3 | Fixed/configurable | License JWT verification now supports `aud` validation through `LICENSE_JWT_AUDIENCE` and applies it in plugin guard/token helper paths when configured. |
+| M5 | Hardened | Admin reset already requires `"RESET"` plus admin email confirmation; malformed JSON now returns `400` instead of falling into a server error. |
+| M8 | Fixed | Masked settings secret submissions now return `unchanged: true` and an explicit message instead of silently no-oping. |
+| M12 | Fixed | RSVP/share token generation paths now use 32 random bytes for newly generated public tokens. |
+| M19 | Partially fixed | Added invalid-JSON handling to admin reset, planner share, RSVP submission, and RSVP question create/update routes. Broad route sweep remains. |
+| M28 | Partially fixed | RSVP question options now have explicit schema documentation and create/update API validation for choice-question option arrays. |
+| M32 | Partially fixed | RSVP submission now applies guest status update plus custom answer upserts in one Prisma transaction. Broader order/coupon transaction review remains. |
+
+### Additional hardening completed
+
+- Sensitive order subroutes were hardened: order payment now requires the order owner or staff/admin; order documents now require owner/admin and no longer trust client-supplied `userId`; order export now requires `orders.view` permission and logs the exporting user.
+- Ticket internal notes now require support/admin access and use the authenticated user as the note author.
+- Prisma relation cleanup was expanded with explicit `onDelete` behavior for optional order/document/service/package relations.
+- Planner RSVP/share APIs now validate malformed request bodies, choice-question JSON shape, boolean fields, non-negative order values, and public token entropy.
+
+### Verification notes
+
+- `npx.cmd prisma generate` passed after schema updates.
+- `.\node_modules\.bin\tsc.cmd --noEmit` passed.
+- `npx.cmd prisma validate` passed.
+- `git diff --check` passed.
+
+### Migration note
+
+Before applying the new Prisma schema to an existing database, check for old order notes with null authors:
+
+```sql
+SELECT COUNT(*) FROM "OrderNote" WHERE "authorId" IS NULL;
+```
+
+If any rows exist, backfill them to an admin/system user or delete/archive them before enforcing the non-null `authorId` constraint.
 
 ---
 
@@ -27,7 +95,7 @@ The audit findings below are the original 2026-04-28 report. A validation and fi
 | H18 | Fixed | Admin leads list `limit` is capped at 100. |
 | H22 | Fixed | Public RSVP submission now has schema validation. |
 | Build verification | Fixed | Prisma Client was regenerated to match current schema; `tsc --noEmit` now passes. |
-| C9/H10 | Partially fixed | Seating table guest assignment now syncs `WeddingGuest.tableNumber` as a derived value from `SeatingTable.guestIds` in the seating table APIs. Full schema cleanup is still recommended. |
+| C9/H10 | Fixed at API layer | `SeatingTable.guestIds` is now treated as the source of truth across seating table APIs, guest create/update/bulk/delete, project copy, and local planner sync. `WeddingGuest.tableNumber` is synced as derived compatibility data. Full schema removal can be a later cleanup. |
 | H2 | Fixed | Login endpoint now has per-IP and per-email rate limiting with `Retry-After`. |
 | H3 | Fixed | Registration endpoint now has per-IP and per-email rate limiting with `Retry-After`. |
 | H5 | Fixed | Non-admin `/api/admin/users?roles=...` access is restricted to team-assignable roles only. |
@@ -61,12 +129,12 @@ The project remains **not production ready** until the remaining high-risk items
 
 ## Production Readiness Verdict
 
-**Current status after 2026-04-30 remediation:** PARTIALLY REMEDIATED - NOT PRODUCTION READY.
+**Current status after 2026-05-03 remediation:** CRITICAL/HIGH REMEDIATED - NOT PRODUCTION READY.
 
 > ❌ **NOT PRODUCTION READY**
 >
 > The original audit found **9 Critical**, **31 High**, **52 Medium**, and **30 Low** severity issues.
-> A first remediation pass fixed several confirmed Critical/High issues, but remaining unresolved findings still block public launch.
+> Current remediation has addressed the confirmed Critical and High findings from the tracked audit list. Public launch is still blocked by Medium/Low findings, database migration/backfill requirements, deployment hardening, and full regression testing.
 
 ---
 
@@ -74,10 +142,10 @@ The project remains **not production ready** until the remaining high-risk items
 
 | Severity | Count | Status |
 |----------|-------|--------|
-| 🔴 Critical | 9 | Must fix immediately |
-| 🟠 High | 31 | Fix before beta |
-| 🟡 Medium | 52 | Fix before launch |
-| 🟢 Low | 30 | Fix during polish |
+| 🔴 Critical | 9 | Original count; current confirmed open: 0 |
+| 🟠 High | 31 | Original count; current confirmed open: 0 |
+| 🟡 Medium | 52 | Remaining follow-up pass required |
+| 🟢 Low | 30 | Remaining polish pass required |
 | **Total** | **122** | |
 
 ---
@@ -418,16 +486,16 @@ The project remains **not production ready** until the remaining high-risk items
 - [x] Validate C6: `priceMin` → wrong DB field mapping in vendor profile is a false positive in the current schema
 - [x] Fix H6: Add webhook idempotency check (prevent double-charge)
 - [x] Fix H17 + H18: Add max cap on `?limit=` parameters
-- [ ] Remove `ignoreBuildErrors: true` from `next.config.ts` and fix all resulting TS errors
+- [x] Remove `ignoreBuildErrors: true` from `next.config.ts` and fix all resulting TS errors
 
 ### Week 2 — Before Beta
 
 - [x] Fix C7: Type-safe Prisma query builder in admin leads
 - [x] Fix C8: Add Zod validation to guest creation endpoint
-- [x] Partially fix C9: Sync seating chart guest assignments into `WeddingGuest.tableNumber`
+- [x] Fix C9: Enforce seating chart guest assignments as source of truth and sync `WeddingGuest.tableNumber`
 - [x] Fix H2 + H3: Add rate limiting to login and registration
 - [ ] Add missing Zod validation to all unvalidated API routes (H13–H22) - partially completed for H13, H15, H16, H19, H22
-- [ ] Fix DB: Add missing `onDelete` rules (H8)
+- [x] Fix DB: Add missing `onDelete` rules for tracked H8 order/document/item relations
 - [ ] Fix DB: Add missing indexes (M23–M26)
 - [ ] Fix DB: Add composite unique constraints (M24, M25)
 - [ ] Fix H11 + H12: localStorage→DB sync strategy with GDPR fields

@@ -46,6 +46,7 @@ model User {
   coupleConversations   VendorConversation[] @relation("CoupleConversations")
   savedVendors          SavedVendor[]
   emailCampaigns        EmailCampaign[]      @relation("CampaignCreator")
+  orderNotes            OrderNote[]          @relation("OrderNoteAuthors")
 
   @@index([email])
   @@index([role])
@@ -279,7 +280,7 @@ model Order {
   documents       Document[]
   formSubmissions FormSubmission[]
   invoices        Invoice[]
-  coupon          Coupon?          @relation(fields: [couponId], references: [id])
+  coupon          Coupon?          @relation(fields: [couponId], references: [id], onDelete: SetNull)
   user            User             @relation(fields: [userId], references: [id])
   items           OrderItem[]
   notes           OrderNote[]
@@ -308,8 +309,8 @@ model OrderItem {
   locationId       String?
   locationName     String?
   order            Order    @relation(fields: [orderId], references: [id], onDelete: Cascade)
-  package          Package? @relation(fields: [packageId], references: [id])
-  service          Service? @relation(fields: [serviceId], references: [id])
+  package          Package? @relation(fields: [packageId], references: [id], onDelete: SetNull)
+  service          Service? @relation(fields: [serviceId], references: [id], onDelete: SetNull)
 
   @@index([orderId])
 }
@@ -317,13 +318,15 @@ model OrderItem {
 model OrderNote {
   id         String   @id @default(cuid())
   orderId    String
-  authorId   String?
+  authorId   String
   content    String
   isInternal Boolean  @default(false)
   createdAt  DateTime @default(now())
   order      Order    @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  author     User     @relation("OrderNoteAuthors", fields: [authorId], references: [id], onDelete: Restrict)
 
   @@index([orderId])
+  @@index([authorId])
 }
 
 model Document {
@@ -339,7 +342,7 @@ model Document {
   status    DocumentStatus @default(PENDING)
   createdAt DateTime       @default(now())
   updatedAt DateTime       @updatedAt
-  order     Order?         @relation(fields: [orderId], references: [id])
+  order     Order?         @relation(fields: [orderId], references: [id], onDelete: SetNull)
   user      User           @relation(fields: [userId], references: [id])
 
   @@index([orderId])
@@ -1666,6 +1669,7 @@ model WeddingProject {
   groomName   String?
   budgetGoal  Float         @default(0)
   userId       String
+  sourceLocalId String?
   shareToken   String?  @unique
   shareEnabled Boolean  @default(false)
   createdAt   DateTime      @default(now())
@@ -1690,6 +1694,7 @@ model WeddingProject {
   rsvpQuestions         RsvpQuestion[]
   @@index([userId])
   @@index([status])
+  @@unique([userId, sourceLocalId])
 }
 
 // ─── Seating Chart ────────────────────────────────────────────────────────────
@@ -1846,7 +1851,8 @@ model RsvpQuestion {
   projectId String
   text      String
   type      RsvpQuestionType @default(SHORT_TEXT)
-  options   Json?            // string[] for SINGLE/MULTIPLE_CHOICE
+  /// JSON: string[] for SINGLE_CHOICE/MULTIPLE_CHOICE questions
+  options   Json?
   required  Boolean          @default(false)
   order     Int              @default(0)
   createdAt DateTime         @default(now())

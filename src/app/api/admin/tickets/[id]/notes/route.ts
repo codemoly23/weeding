@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import prisma from "@/lib/db";
 import { requirePluginAccess } from "@/lib/plugin-guard";
 import { z } from "zod";
+import { authError, checkSupportAccess } from "@/lib/admin-auth";
 
 // GET - List internal notes for a ticket
 export async function GET(
@@ -9,6 +10,9 @@ export async function GET(
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const access = await checkSupportAccess();
+    if ("error" in access) return authError(access);
+
     // Plugin access check
     await requirePluginAccess("livesupport-pro");
 
@@ -58,7 +62,6 @@ export async function GET(
 // POST - Create internal note
 const createNoteSchema = z.object({
   content: z.string().min(1, "Content is required"),
-  authorId: z.string().min(1, "Author ID is required"),
 });
 
 export async function POST(
@@ -66,6 +69,9 @@ export async function POST(
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const access = await checkSupportAccess();
+    if ("error" in access) return authError(access);
+
     // Plugin access check
     await requirePluginAccess("livesupport-pro");
 
@@ -91,7 +97,7 @@ export async function POST(
       data: {
         ticketId,
         content: data.content,
-        authorId: data.authorId,
+        authorId: access.session!.user.id,
       },
       include: {
         author: {
@@ -131,6 +137,9 @@ export async function DELETE(
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const access = await checkSupportAccess();
+    if ("error" in access) return authError(access);
+
     // Plugin access check
     await requirePluginAccess("livesupport-pro");
 

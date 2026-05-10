@@ -1,6 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
 import { prisma } from "@/lib/db";
+import { authError, checkAnyPermission } from "@/lib/admin-auth";
+import { PERMISSIONS } from "@/lib/permissions";
 
 // Get single order
 export async function GET(
@@ -8,6 +10,9 @@ export async function GET(
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const access = await checkAnyPermission([PERMISSIONS.ORDERS_VIEW]);
+    if ("error" in access) return authError(access);
+
     const { id } = await params;
 
     const order = await prisma.order.findFirst({
@@ -37,6 +42,11 @@ export async function GET(
         },
         notes: {
           orderBy: { createdAt: "desc" },
+          include: {
+            author: {
+              select: { id: true, name: true, email: true },
+            },
+          },
         },
         documents: true,
         invoices: {
@@ -142,6 +152,9 @@ export async function PATCH(
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const access = await checkAnyPermission([PERMISSIONS.ORDERS_EDIT]);
+    if ("error" in access) return authError(access);
+
     const { id } = await params;
     const body = await request.json();
 
@@ -321,6 +334,7 @@ export async function PATCH(
             orderId: existingOrder.id,
             content: data.note,
             isInternal: true,
+            authorId: access.session!.user.id,
           },
         });
       }
@@ -331,6 +345,7 @@ export async function PATCH(
           action: "ORDER_UPDATED",
           entity: "Order",
           entityId: existingOrder.id,
+          userId: access.session!.user.id,
           metadata: {
             orderNumber: existingOrder.orderNumber,
             changes: Object.keys(updateData),
@@ -349,6 +364,11 @@ export async function PATCH(
         items: true,
         notes: {
           orderBy: { createdAt: "desc" },
+          include: {
+            author: {
+              select: { id: true, name: true, email: true },
+            },
+          },
         },
         documents: true,
         user: {
@@ -390,6 +410,9 @@ export async function DELETE(
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const access = await checkAnyPermission([PERMISSIONS.ORDERS_EDIT]);
+    if ("error" in access) return authError(access);
+
     const { id } = await params;
 
     // Find order
@@ -420,6 +443,7 @@ export async function DELETE(
         action: "ORDER_DELETED",
         entity: "Order",
         entityId: existingOrder.id,
+        userId: access.session!.user.id,
         metadata: {
           orderNumber: existingOrder.orderNumber,
         },

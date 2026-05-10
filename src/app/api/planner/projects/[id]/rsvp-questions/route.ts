@@ -1,6 +1,18 @@
 import { NextRequest, NextResponse } from "next/server";
 import prisma from "@/lib/db";
 import { auth } from "@/lib/auth";
+import { Prisma, RsvpQuestionType } from "@prisma/client";
+
+function validateQuestionOptions(type: string, options: unknown) {
+  if (type === "SINGLE_CHOICE" || type === "MULTIPLE_CHOICE") {
+    return Array.isArray(options) &&
+      options.length > 0 &&
+      options.length <= 50 &&
+      options.every((o) => typeof o === "string" && o.trim().length > 0 && o.trim().length <= 100);
+  }
+
+  return options === undefined || options === null || Array.isArray(options);
+}
 
 // GET /api/planner/projects/[id]/rsvp-questions
 export async function GET(
@@ -40,26 +52,48 @@ export async function POST(
   });
   if (!project) return NextResponse.json({ error: "Not found" }, { status: 404 });
 
-  const { text, type, options, required, order } = await req.json();
+  let body: unknown;
+  try {
+    body = await req.json();
+  } catch {
+    return NextResponse.json({ error: "Invalid request body" }, { status: 400 });
+  }
 
-  if (!text?.trim()) return NextResponse.json({ error: "Question text is required" }, { status: 400 });
+  const { text, type, options, required, order } = body as {
+    text?: unknown;
+    type?: unknown;
+    options?: unknown;
+    required?: unknown;
+    order?: unknown;
+  };
 
-  const validTypes = ["SHORT_TEXT", "LONG_TEXT", "SINGLE_CHOICE", "MULTIPLE_CHOICE"];
-  if (type && !validTypes.includes(type)) {
+  if (typeof text !== "string" || !text.trim()) {
+    return NextResponse.json({ error: "Question text is required" }, { status: 400 });
+  }
+
+  const validTypes = Object.values(RsvpQuestionType);
+  if (type !== undefined && (typeof type !== "string" || !validTypes.includes(type as RsvpQuestionType))) {
     return NextResponse.json({ error: "Invalid question type" }, { status: 400 });
   }
 
-  const choiceTypes = ["SINGLE_CHOICE", "MULTIPLE_CHOICE"];
-  const resolvedType = type ?? "SHORT_TEXT";
-  if (choiceTypes.includes(resolvedType)) {
-    if (!Array.isArray(options) || options.length === 0 ||
-        !options.every((o: unknown) => typeof o === "string" && o.trim())) {
-      return NextResponse.json(
-        { error: "options must be a non-empty array of strings for choice questions" },
-        { status: 400 }
-      );
-    }
+  const resolvedType = typeof type === "string" ? type as RsvpQuestionType : RsvpQuestionType.SHORT_TEXT;
+  if (!validateQuestionOptions(resolvedType, options)) {
+    return NextResponse.json(
+      { error: "options must be a non-empty array of strings for choice questions" },
+      { status: 400 }
+    );
   }
+
+  if (required !== undefined && typeof required !== "boolean") {
+    return NextResponse.json({ error: "required must be a boolean" }, { status: 400 });
+  }
+
+  if (order !== undefined && (typeof order !== "number" || !Number.isInteger(order) || order < 0)) {
+    return NextResponse.json({ error: "order must be a non-negative integer" }, { status: 400 });
+  }
+  const normalizedOptions = Array.isArray(options)
+    ? options.map((o) => String(o).trim())
+    : Prisma.JsonNull;
 
   // Count existing to set default order
   const count = await prisma.rsvpQuestion.count({ where: { projectId: id } });
@@ -68,10 +102,10 @@ export async function POST(
     data: {
       projectId: id,
       text: text.trim(),
-      type: type ?? "SHORT_TEXT",
-      options: options ?? null,
-      required: required ?? false,
-      order: order ?? count,
+      type: resolvedType,
+      options: normalizedOptions,
+      required: typeof required === "boolean" ? required : false,
+      order: typeof order === "number" ? order : count,
     },
   });
 

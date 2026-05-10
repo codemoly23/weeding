@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import { useParams, useRouter } from "next/navigation";
 import {
   Users, DollarSign, CheckSquare, Calendar,
-  Pencil, Check, X, ChevronDown, ChevronRight,
+  Pencil, Check, X, ChevronDown, ChevronRight, AlertCircle,
 } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -183,6 +183,8 @@ export default function PlannerOverviewPage() {
 
   const [project, setProject] = useState<Project | null>(null);
   const [loading, setLoading] = useState(true);
+  const [loadError, setLoadError] = useState<string | null>(null);
+  const [partialErrors, setPartialErrors] = useState<string[]>([]);
 
   // title edit
   const [editing, setEditing] = useState(false);
@@ -250,21 +252,43 @@ export default function PlannerOverviewPage() {
 
     async function fetchAll() {
       try {
-        const [projRes, guestsRes, budgetRes, checklistRes, itinRes, ceremRes, recepRes, pwRes] = await Promise.all([
-          fetch(`/api/planner/projects/${projectId}`),
-          fetch(`/api/planner/projects/${projectId}/guests`),
-          fetch(`/api/planner/projects/${projectId}/budget`),
-          fetch(`/api/planner/projects/${projectId}/checklist`),
-          fetch(`/api/planner/projects/${projectId}/itinerary`),
-          fetch(`/api/planner/projects/${projectId}/ceremony`),
-          fetch(`/api/planner/projects/${projectId}/reception`),
-          fetch(`/api/planner/projects/${projectId}/post-wedding`),
-        ]);
-        if (!projRes.ok) { router.push("/planner"); return; }
+        setLoadError(null);
+        setPartialErrors([]);
+        const requests = [
+          ["project", `/api/planner/projects/${projectId}`],
+          ["guests", `/api/planner/projects/${projectId}/guests`],
+          ["budget", `/api/planner/projects/${projectId}/budget`],
+          ["checklist", `/api/planner/projects/${projectId}/checklist`],
+          ["itinerary", `/api/planner/projects/${projectId}/itinerary`],
+          ["ceremony", `/api/planner/projects/${projectId}/ceremony`],
+          ["reception", `/api/planner/projects/${projectId}/reception`],
+          ["post-wedding", `/api/planner/projects/${projectId}/post-wedding`],
+        ] as const;
+        const responses = await Promise.all(
+          requests.map(async ([key, url]) => {
+            try {
+              return [key, await fetch(url)] as const;
+            } catch {
+              return [key, null] as const;
+            }
+          })
+        );
+        const byKey = Object.fromEntries(responses) as Record<string, Response | null>;
+        const projRes = byKey.project;
+        if (!projRes?.ok) {
+          setLoadError(projRes?.status === 404 ? "Project not found." : "Unable to load this project.");
+          return;
+        }
+        setPartialErrors(
+          responses
+            .filter(([key, res]) => key !== "project" && !res?.ok)
+            .map(([key]) => key)
+        );
         const data = await projRes.json();
         setProject(data.project);
 
-        if (guestsRes.ok) {
+        const guestsRes = byKey.guests;
+        if (guestsRes?.ok) {
           const d = await guestsRes.json();
           const gs = d.guests ?? [];
           setGuestCount(gs.length);
@@ -272,14 +296,16 @@ export default function PlannerOverviewPage() {
           setGroomGuests(gs.filter((g: { side: string }) => g.side === "GROOM").length);
           setConfirmedRsvp(gs.filter((g: { rsvpStatus: string }) => g.rsvpStatus === "ATTENDING").length);
         }
-        if (budgetRes.ok) {
+        const budgetRes = byKey.budget;
+        if (budgetRes?.ok) {
           const d = await budgetRes.json();
           const cats = d.categories ?? [];
           setBudgetCategories(cats);
           setBudgetTotal(d.budgetGoal ?? 0);
           setBudgetSpent(cats.reduce((s: number, c: LocalBudgetCategory) => s + c.items.reduce((ss: number, i: { planned: number }) => ss + i.planned, 0), 0));
         }
-        if (checklistRes.ok) {
+        const checklistRes = byKey.checklist;
+        if (checklistRes?.ok) {
           const d = await checklistRes.json();
           const tasks = d.tasks ?? [];
           const allItems = tasks.reduce((s: number, t: { subtasks?: unknown[] }) => s + 1 + (t.subtasks?.length || 0), 0);
@@ -288,17 +314,21 @@ export default function PlannerOverviewPage() {
           setChecklistTotal(allItems);
           setChecklistDone(doneItems);
         }
-        if (itinRes.ok) { const d = await itinRes.json(); setItineraryEvents(d.events ?? []); }
-        if (ceremRes.ok) { const d = await ceremRes.json(); setCeremony(d.venue ?? null); }
-        if (recepRes.ok) { const d = await recepRes.json(); setReception(d.venue ?? null); }
-        if (pwRes.ok) {
+        const itinRes = byKey.itinerary;
+        if (itinRes?.ok) { const d = await itinRes.json(); setItineraryEvents(d.events ?? []); }
+        const ceremRes = byKey.ceremony;
+        if (ceremRes?.ok) { const d = await ceremRes.json(); setCeremony(d.venue ?? null); }
+        const recepRes = byKey.reception;
+        if (recepRes?.ok) { const d = await recepRes.json(); setReception(d.venue ?? null); }
+        const pwRes = byKey["post-wedding"];
+        if (pwRes?.ok) {
           const d = await pwRes.json();
           setPwPhotos((d.guestPhotos ?? []).length);
           setPwGuestbook((d.guestbookEntries ?? []).length);
           setPwAttending(d.rsvpCounts?.attending ?? 0);
         }
       } catch {
-        router.push("/planner");
+        setLoadError("Unable to load this project.");
       } finally {
         setLoading(false);
       }
@@ -344,7 +374,18 @@ export default function PlannerOverviewPage() {
       </div>
     );
   }
-  if (!project) return null;
+  if (!project) {
+    return (
+      <div className="mx-auto max-w-xl rounded-lg border border-red-200 bg-red-50 p-5 text-center">
+        <AlertCircle className="mx-auto mb-3 h-8 w-8 text-red-500" />
+        <h1 className="text-base font-semibold text-red-900">{loadError || "Project unavailable."}</h1>
+        <p className="mt-1 text-sm text-red-700">Return to your planner projects and try again.</p>
+        <Link href="/planner" className="mt-4 inline-flex rounded-md bg-red-600 px-4 py-2 text-sm font-medium text-white hover:bg-red-700">
+          Back to projects
+        </Link>
+      </div>
+    );
+  }
 
   const daysLeft = project.eventDate
     ? Math.max(0, Math.ceil((new Date(project.eventDate).getTime() - Date.now()) / (1000 * 60 * 60 * 24)))
@@ -365,6 +406,12 @@ export default function PlannerOverviewPage() {
 
   return (
     <div>
+      {partialErrors.length > 0 && (
+        <div className="mb-4 flex items-start gap-3 rounded-lg border border-amber-200 bg-amber-50 p-3 text-sm text-amber-800">
+          <AlertCircle className="mt-0.5 h-4 w-4 flex-shrink-0" />
+          <p>Some dashboard sections could not load: {partialErrors.join(", ")}. Refresh the page to retry.</p>
+        </div>
+      )}
       {/* ── Existing: title + status ────────────────────────────────────── */}
       <div className="mb-6">
         {editing ? (

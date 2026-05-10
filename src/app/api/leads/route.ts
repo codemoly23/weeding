@@ -69,11 +69,20 @@ function calculateLeadScore(data: {
 
 // Schema imported from validation module (enhancedSubmitLeadSchema)
 // normalizePhone imported from validation module
+async function lockLeadEmail(tx: Prisma.TransactionClient, email: string) {
+  await tx.$executeRaw`SELECT pg_advisory_xact_lock(hashtext(${email}))`;
+}
 
 // POST - Public lead submission endpoint
 export async function POST(request: NextRequest) {
   try {
-    const body = await request.json();
+    let body: unknown;
+    try {
+      body = await request.json();
+    } catch {
+      return NextResponse.json({ error: "Invalid request body" }, { status: 400 });
+    }
+
     const data = enhancedSubmitLeadSchema.parse(body);
 
     // Get IP and user agent
@@ -87,76 +96,6 @@ export async function POST(request: NextRequest) {
 
     // Email already normalized by schema transform
     const email = data.email;
-
-    // Check for duplicate (existing active lead with same email)
-    const existingLead = await prisma.lead.findFirst({
-      where: {
-        email,
-        status: { notIn: ["WON", "LOST", "UNQUALIFIED"] },
-      },
-    });
-
-    if (existingLead) {
-      // Update existing lead with new data instead of creating duplicate
-      const updatedLead = await prisma.lead.update({
-        where: { id: existingLead.id },
-        data: {
-          // Update with latest data (already normalized by schema)
-          ...(data.phone && { phone: data.phone }),
-          ...(data.company && { company: data.company }),
-          ...(data.country && { country: data.country }),
-          visitCount: { increment: 1 },
-          lastActivityAt: new Date(),
-          lastPageViewed: data.lastPageViewed,
-          // Update UTM if provided (new campaign might have different UTM)
-          ...(data.utmSource && { utmSource: data.utmSource }),
-          ...(data.utmMedium && { utmMedium: data.utmMedium }),
-          ...(data.utmCampaign && { utmCampaign: data.utmCampaign }),
-          // Add activity
-          activities: {
-            create: {
-              type: "form_resubmitted",
-              description: "Lead resubmitted form",
-              metadata: {
-                formTemplateId: data.formTemplateId,
-                sourceDetail: data.sourceDetail,
-              },
-            },
-          },
-        },
-      });
-
-      return NextResponse.json({
-        success: true,
-        message: "Lead information updated",
-        leadId: updatedLead.id,
-        isExisting: true,
-      });
-    }
-
-    // Get form template if provided
-    let formTemplate: { id: string; name: string; autoAssignToId: string | null } | null = null;
-    let autoAssignToId: string | null = null;
-
-    if (data.formTemplateId) {
-      formTemplate = await prisma.leadFormTemplate.findUnique({
-        where: { id: data.formTemplateId },
-        select: { id: true, name: true, autoAssignToId: true },
-      });
-
-      if (formTemplate) {
-        autoAssignToId = formTemplate.autoAssignToId;
-
-        // Update template stats
-        await prisma.leadFormTemplate.update({
-          where: { id: formTemplate.id },
-          data: {
-            submissionCount: { increment: 1 },
-            lastSubmission: new Date(),
-          },
-        });
-      }
-    }
 
     // Determine source
     let leadSource: LeadSource = "WEBSITE";
@@ -211,103 +150,182 @@ export async function POST(request: NextRequest) {
       customFields.message = data.message;
     }
 
-    // Create lead (data already normalized by schema transforms)
-    const lead = await prisma.lead.create({
-      data: {
+    const result = await prisma.$transaction(
+      async (tx) => {
+        await lockLeadEmail(tx, email);
+
+        const existingLead = await tx.lead.findFirst({
+          where: {
+            email,
+            status: { notIn: ["WON", "LOST", "UNQUALIFIED"] },
+          },
+        });
+
+        if (existingLead) {
+          const updatedLead = await tx.lead.update({
+            where: { id: existingLead.id },
+            data: {
+              ...(data.phone && { phone: data.phone }),
+              ...(data.company && { company: data.company }),
+              ...(data.country && { country: data.country }),
+              visitCount: { increment: 1 },
+              lastActivityAt: new Date(),
+              lastPageViewed: data.lastPageViewed,
+              ...(data.utmSource && { utmSource: data.utmSource }),
+              ...(data.utmMedium && { utmMedium: data.utmMedium }),
+              ...(data.utmCampaign && { utmCampaign: data.utmCampaign }),
+              activities: {
+                create: {
+                  type: "form_resubmitted",
+                  description: "Lead resubmitted form",
+                  metadata: {
+                    formTemplateId: data.formTemplateId,
+                    sourceDetail: data.sourceDetail,
+                  },
+                },
+              },
+            },
+          });
+
+          return {
+            status: 200,
+            body: {
+              success: true,
+              message: "Lead information updated",
+              leadId: updatedLead.id,
+              isExisting: true,
+            },
+          };
+        }
+
+        let formTemplate: { id: string; name: string; autoAssignToId: string | null } | null = null;
+        let autoAssignToId: string | null = null;
+
+        if (data.formTemplateId) {
+          formTemplate = await tx.leadFormTemplate.findUnique({
+            where: { id: data.formTemplateId },
+            select: { id: true, name: true, autoAssignToId: true },
+          });
+
+          if (formTemplate) {
+            autoAssignToId = formTemplate.autoAssignToId;
+            await tx.leadFormTemplate.update({
+              where: { id: formTemplate.id },
+              data: {
+                submissionCount: { increment: 1 },
+                lastSubmission: new Date(),
+              },
+            });
+          }
+        }
+
+        const lead = await tx.lead.create({
+          data: {
+            firstName: data.firstName,
+            lastName: data.lastName,
+            email,
+            phone: data.phone || undefined,
+            company: data.company,
+            country: data.country,
+            city: data.city,
+            source: leadSource,
+            sourceDetail: data.sourceDetail || data.lastPageViewed,
+            interestedIn,
+            budget: data.budget,
+            timeline: data.timeline,
+            notes: data.message,
+            customFields: Object.keys(customFields).length > 0 ? customFields as Prisma.InputJsonValue : undefined,
+            score,
+            assignedToId: autoAssignToId,
+            assignedAt: autoAssignToId ? new Date() : undefined,
+            utmSource: data.utmSource,
+            utmMedium: data.utmMedium,
+            utmCampaign: data.utmCampaign,
+            utmTerm: data.utmTerm,
+            utmContent: data.utmContent,
+            formTemplateId: formTemplate?.id,
+            formTemplateName: formTemplate?.name,
+            pageViews: data.pageViews || 0,
+            visitCount: data.visitCount || 1,
+            lastPageViewed: data.lastPageViewed,
+            ipAddress,
+            userAgent,
+            activities: {
+              create: {
+                type: "lead_created",
+                description: "Lead submitted form",
+                metadata: {
+                  source: leadSource,
+                  formTemplateId: formTemplate?.id,
+                  score,
+                },
+              },
+            },
+          },
+        });
+
+        return {
+          status: 201,
+          body: {
+            success: true,
+            leadId: lead.id,
+            score: lead.score,
+            formTemplateId: formTemplate?.id,
+            trackingData: {
+              event: "lead_form_submit",
+              leadId: lead.id,
+              score: lead.score,
+              service: interestedIn[0] || null,
+              source: leadSource,
+            },
+          },
+          notifications: {
+            leadId: lead.id,
+            formName: formTemplate?.name,
+          },
+        };
+      },
+      { isolationLevel: Prisma.TransactionIsolationLevel.Serializable }
+    );
+
+    const notifications = "notifications" in result ? result.notifications : undefined;
+    if (notifications) {
+      sendLeadNotificationEmail({
+        leadId: notifications.leadId,
         firstName: data.firstName,
         lastName: data.lastName,
         email,
         phone: data.phone || undefined,
         company: data.company,
         country: data.country,
-        city: data.city,
         source: leadSource,
-        sourceDetail: data.sourceDetail || data.lastPageViewed,
+        score,
         interestedIn,
         budget: data.budget,
         timeline: data.timeline,
-        notes: data.message,
-        customFields: Object.keys(customFields).length > 0 ? customFields as Prisma.InputJsonValue : undefined,
-        score,
-        assignedToId: autoAssignToId,
-        assignedAt: autoAssignToId ? new Date() : undefined,
-        utmSource: data.utmSource,
-        utmMedium: data.utmMedium,
-        utmCampaign: data.utmCampaign,
-        utmTerm: data.utmTerm,
-        utmContent: data.utmContent,
-        formTemplateId: formTemplate?.id,
-        formTemplateName: formTemplate?.name,
-        pageViews: data.pageViews || 0,
-        visitCount: data.visitCount || 1,
-        lastPageViewed: data.lastPageViewed,
-        ipAddress,
-        userAgent,
-        activities: {
-          create: {
-            type: "lead_created",
-            description: "Lead submitted form",
-            metadata: {
-              source: leadSource,
-              formTemplateId: formTemplate?.id,
-              score,
-            },
-          },
-        },
-      },
-    });
+        message: data.message,
+        formName: notifications.formName,
+      }).catch((err) => {
+        console.error("Failed to send lead notification email:", err);
+      });
 
-    // Send email notification to admin (non-blocking)
-    sendLeadNotificationEmail({
-      leadId: lead.id,
-      firstName: data.firstName,
-      lastName: data.lastName,
-      email,
-      phone: data.phone || undefined,
-      company: data.company,
-      country: data.country,
-      source: leadSource,
-      score,
-      interestedIn,
-      budget: data.budget,
-      timeline: data.timeline,
-      message: data.message,
-      formName: formTemplate?.name,
-    }).catch((err) => {
-      console.error("Failed to send lead notification email:", err);
-    });
+      sendLeadAutoResponseEmail({
+        firstName: data.firstName,
+        email,
+        interestedIn,
+      }).catch((err) => {
+        console.error("Failed to send lead auto-response email:", err);
+      });
 
-    // Send auto-response email to lead (non-blocking)
-    sendLeadAutoResponseEmail({
-      firstName: data.firstName,
-      email,
-      interestedIn,
-    }).catch((err) => {
-      console.error("Failed to send lead auto-response email:", err);
-    });
+      await createAdminNotification({
+        type: "NEW_LEAD",
+        title: "New Lead Submitted",
+        message: `${data.firstName || email} submitted a lead form.`,
+        link: `/admin/leads/${notifications.leadId}`,
+      });
+    }
 
-    await createAdminNotification({
-      type: "NEW_LEAD",
-      title: "New Lead Submitted",
-      message: `${data.firstName || email} submitted a lead form.`,
-      link: `/admin/leads/${lead.id}`,
-    });
-
-    // Return success with tracking data for client-side tracking
-    return NextResponse.json({
-      success: true,
-      leadId: lead.id,
-      score: lead.score,
-      formTemplateId: formTemplate?.id,
-      // Data for GTM/FB Pixel tracking
-      trackingData: {
-        event: "lead_form_submit",
-        leadId: lead.id,
-        score: lead.score,
-        service: interestedIn[0] || null,
-        source: leadSource,
-      },
-    }, { status: 201 });
+    return NextResponse.json(result.body, { status: result.status });
   } catch (error) {
     if (error instanceof z.ZodError) {
       return NextResponse.json(

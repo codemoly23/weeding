@@ -30,7 +30,17 @@ export async function POST(
   if (!session?.user?.id) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 
   const { id } = await params;
-  const { enabled } = await req.json() as { enabled: boolean };
+  let body: unknown;
+  try {
+    body = await req.json();
+  } catch {
+    return NextResponse.json({ error: "Invalid request body" }, { status: 400 });
+  }
+
+  const { enabled } = body as { enabled?: unknown };
+  if (typeof enabled !== "boolean") {
+    return NextResponse.json({ error: "enabled must be a boolean" }, { status: 400 });
+  }
 
   const existing = await prisma.weddingProject.findFirst({
     where: { id, userId: session.user.id },
@@ -38,7 +48,7 @@ export async function POST(
   });
   if (!existing) return NextResponse.json({ error: "Not found" }, { status: 404 });
 
-  const token = existing.shareToken ?? crypto.randomBytes(16).toString("hex");
+  const token = existing.shareToken ?? crypto.randomBytes(32).toString("hex");
 
   const updated = await prisma.weddingProject.update({
     where: { id },

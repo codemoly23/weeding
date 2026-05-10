@@ -8,7 +8,16 @@ export async function POST(request: NextRequest) {
   if (auth.error) return authError(auth);
 
   try {
-    const body = await request.json();
+    let body: unknown;
+    try {
+      body = await request.json();
+    } catch {
+      return NextResponse.json(
+        { error: "Invalid request body" },
+        { status: 400 }
+      );
+    }
+
     const { confirmation, adminEmail } = body as { confirmation: string; adminEmail?: string };
 
     if (confirmation !== "RESET") {
