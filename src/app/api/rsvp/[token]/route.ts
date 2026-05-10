@@ -219,13 +219,13 @@ export async function POST(
             <p style="margin:0;font-size:18px;font-weight:700;color:#111827;">${guestName}</p>
             <p style="margin:4px 0 0;font-size:14px;font-weight:600;color:${statusColor};">${statusLabel}</p>
           </div>
-          ${dietary ? `<div style="background:#f9fafb;border-radius:12px;padding:16px;margin-bottom:16px;">
+          ${validated.dietary ? `<div style="background:#f9fafb;border-radius:12px;padding:16px;margin-bottom:16px;">
             <p style="margin:0 0 4px;font-size:12px;font-weight:600;color:#6b7280;text-transform:uppercase;letter-spacing:0.05em;">Dietary requirements</p>
-            <p style="margin:0;font-size:14px;color:#374151;">${dietary}</p>
+            <p style="margin:0;font-size:14px;color:#374151;">${validated.dietary}</p>
           </div>` : ""}
-          ${rsvpMessage ? `<div style="background:#f9fafb;border-radius:12px;padding:16px;margin-bottom:16px;">
+          ${validated.rsvpMessage ? `<div style="background:#f9fafb;border-radius:12px;padding:16px;margin-bottom:16px;">
             <p style="margin:0 0 4px;font-size:12px;font-weight:600;color:#6b7280;text-transform:uppercase;letter-spacing:0.05em;">Message</p>
-            <p style="margin:0;font-size:14px;color:#374151;font-style:italic;">"${rsvpMessage}"</p>
+            <p style="margin:0;font-size:14px;color:#374151;font-style:italic;">"${validated.rsvpMessage}"</p>
           </div>` : ""}
           ${answersHtml}
           <p style="margin:24px 0 0;font-size:12px;color:#9ca3af;text-align:center;">

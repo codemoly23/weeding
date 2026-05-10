@@ -76,7 +76,12 @@ export async function POST(
     await requirePluginAccess("livesupport-pro");
 
     const { id: ticketId } = await params;
-    const body = await request.json();
+    let body: unknown;
+    try {
+      body = await request.json();
+    } catch {
+      return NextResponse.json({ error: "Invalid request body" }, { status: 400 });
+    }
     const data = createNoteSchema.parse(body);
 
     // Check if ticket exists

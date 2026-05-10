@@ -39,6 +39,7 @@ function isSensitiveApiRoute(pathname: string) {
     pathname.startsWith("/api/user/") ||
     pathname.startsWith("/api/planner/projects") ||
     pathname === "/api/planner/sync" ||
+    pathname === "/api/orders" ||
     pathname === "/api/orders/bulk" ||
     pathname === "/api/orders/export" ||
     /^\/api\/orders\/[^/]+$/.test(pathname) ||
@@ -190,6 +191,7 @@ export const config = {
     "/api/dashboard/:path*",
     "/api/user/:path*",
     "/api/planner/:path*",
+    "/api/orders",
     "/api/orders/:path*",
     "/login",
     "/register",

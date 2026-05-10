@@ -91,7 +91,9 @@ export function decrypt(encryptedText: string): string {
 
     return decrypted;
   } catch (error) {
-    console.error("Decryption failed:", error);
+    // Decryption failure indicates tampered, corrupted, or wrong-key ciphertext.
+    // Returning "" so callers degrade gracefully; callers should treat "" as missing/invalid.
+    console.error("Decryption failed — possible tampered or corrupted data:", error);
     return "";
   }
 }
