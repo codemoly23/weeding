@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import prisma from "@/lib/db";
 import { auth } from "@/lib/auth";
 import { z } from "zod";
+import { assignGuestsToTableNumber } from "@/lib/seating-sync";
 
 const emptyToUndefined = (value: unknown) =>
   value === undefined || value === null || value === "" ? undefined : value;
@@ -114,28 +115,36 @@ export async function POST(
 
   const data = parsed.data;
 
-  const guest = await prisma.weddingGuest.create({
-    data: {
-      projectId: id,
-      firstName: data.firstName,
-      lastName: data.lastName || null,
-      title: data.title || null,
-      side: data.side,
-      relation: data.relation,
-      email: data.email || null,
-      phone: data.phone || null,
-      dietary: data.dietary || null,
-      tableNumber: data.tableNumber || null,
-      notes: data.notes || null,
-      hasPlusOne: data.hasPlusOne,
-      plusOneName: data.hasPlusOne ? data.plusOneName || null : null,
-      plusOneMeal: data.hasPlusOne ? data.plusOneMeal || null : null,
-      isChiefGuest: data.isChiefGuest,
-      familyId: data.familyId || null,
-      invitationCode: data.invitationCode || null,
-      invitationSent: data.invitationSent,
-      invitationSentAt: data.invitationSentAt || null,
-    },
+  const guest = await prisma.$transaction(async (tx) => {
+    const created = await tx.weddingGuest.create({
+      data: {
+        projectId: id,
+        firstName: data.firstName,
+        lastName: data.lastName || null,
+        title: data.title || null,
+        side: data.side,
+        relation: data.relation,
+        email: data.email || null,
+        phone: data.phone || null,
+        dietary: data.dietary || null,
+        notes: data.notes || null,
+        hasPlusOne: data.hasPlusOne,
+        plusOneName: data.hasPlusOne ? data.plusOneName || null : null,
+        plusOneMeal: data.hasPlusOne ? data.plusOneMeal || null : null,
+        isChiefGuest: data.isChiefGuest,
+        familyId: data.familyId || null,
+        invitationCode: data.invitationCode || null,
+        invitationSent: data.invitationSent,
+        invitationSentAt: data.invitationSentAt || null,
+      },
+    });
+
+    if (data.tableNumber) {
+      await assignGuestsToTableNumber(tx, id, [created.id], data.tableNumber);
+      return tx.weddingGuest.findUniqueOrThrow({ where: { id: created.id } });
+    }
+
+    return created;
   });
 
   return NextResponse.json({ guest }, { status: 201 });

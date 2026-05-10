@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import prisma from "@/lib/db";
 import { auth } from "@/lib/auth";
+import { assignGuestsToTableNumber, removeGuestsFromSeating } from "@/lib/seating-sync";
 
 // PUT /api/planner/projects/[id]/guests/[guestId]
 export async function PUT(
@@ -29,29 +30,36 @@ export async function PUT(
     invitationCode, invitationSent, invitationSentAt,
   } = body;
 
-  const updated = await prisma.weddingGuest.update({
-    where: { id: guestId },
-    data: {
-      ...(firstName !== undefined && { firstName: firstName.trim() }),
-      ...(lastName !== undefined && { lastName: lastName?.trim() || null }),
-      ...(title !== undefined && { title: title?.trim() || null }),
-      ...(side !== undefined && { side }),
-      ...(relation !== undefined && { relation }),
-      ...(email !== undefined && { email: email?.trim() || null }),
-      ...(phone !== undefined && { phone: phone?.trim() || null }),
-      ...(dietary !== undefined && { dietary: dietary?.trim() || null }),
-      ...(rsvpStatus !== undefined && { rsvpStatus }),
-      ...(tableNumber !== undefined && { tableNumber: tableNumber ? Number(tableNumber) : null }),
-      ...(notes !== undefined && { notes: notes?.trim() || null }),
-      ...(hasPlusOne !== undefined && { hasPlusOne }),
-      ...(plusOneName !== undefined && { plusOneName: plusOneName?.trim() || null }),
-      ...(plusOneMeal !== undefined && { plusOneMeal: plusOneMeal?.trim() || null }),
-      ...(isChiefGuest !== undefined && { isChiefGuest }),
-      ...(familyId !== undefined && { familyId: familyId || null }),
-      ...(invitationCode !== undefined && { invitationCode: invitationCode?.trim() || null }),
-      ...(invitationSent !== undefined && { invitationSent }),
-      ...(invitationSentAt !== undefined && { invitationSentAt: invitationSentAt ? new Date(invitationSentAt) : null }),
-    },
+  const updated = await prisma.$transaction(async (tx) => {
+    await tx.weddingGuest.update({
+      where: { id: guestId },
+      data: {
+        ...(firstName !== undefined && { firstName: firstName.trim() }),
+        ...(lastName !== undefined && { lastName: lastName?.trim() || null }),
+        ...(title !== undefined && { title: title?.trim() || null }),
+        ...(side !== undefined && { side }),
+        ...(relation !== undefined && { relation }),
+        ...(email !== undefined && { email: email?.trim() || null }),
+        ...(phone !== undefined && { phone: phone?.trim() || null }),
+        ...(dietary !== undefined && { dietary: dietary?.trim() || null }),
+        ...(rsvpStatus !== undefined && { rsvpStatus }),
+        ...(notes !== undefined && { notes: notes?.trim() || null }),
+        ...(hasPlusOne !== undefined && { hasPlusOne }),
+        ...(plusOneName !== undefined && { plusOneName: plusOneName?.trim() || null }),
+        ...(plusOneMeal !== undefined && { plusOneMeal: plusOneMeal?.trim() || null }),
+        ...(isChiefGuest !== undefined && { isChiefGuest }),
+        ...(familyId !== undefined && { familyId: familyId || null }),
+        ...(invitationCode !== undefined && { invitationCode: invitationCode?.trim() || null }),
+        ...(invitationSent !== undefined && { invitationSent }),
+        ...(invitationSentAt !== undefined && { invitationSentAt: invitationSentAt ? new Date(invitationSentAt) : null }),
+      },
+    });
+
+    if (tableNumber !== undefined) {
+      await assignGuestsToTableNumber(tx, id, [guestId], tableNumber ? Number(tableNumber) : null);
+    }
+
+    return tx.weddingGuest.findUniqueOrThrow({ where: { id: guestId } });
   });
 
   return NextResponse.json({ guest: updated });
@@ -77,7 +85,10 @@ export async function DELETE(
   });
   if (!guest) return NextResponse.json({ error: "Guest not found" }, { status: 404 });
 
-  await prisma.weddingGuest.delete({ where: { id: guestId } });
+  await prisma.$transaction(async (tx) => {
+    await removeGuestsFromSeating(tx, id, [guestId]);
+    await tx.weddingGuest.delete({ where: { id: guestId } });
+  });
 
   return NextResponse.json({ success: true });
 }

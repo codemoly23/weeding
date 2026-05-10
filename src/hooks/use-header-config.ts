@@ -10,7 +10,6 @@ interface UseHeaderConfigResult {
   refetch: () => void;
 }
 
-// Default fallback config matching the original hardcoded values
 const defaultConfig: PublicHeaderResponse = {
   id: "default",
   layout: "DEFAULT",
@@ -44,32 +43,41 @@ const defaultConfig: PublicHeaderResponse = {
   styling: {},
 };
 
+let cachedHeaderConfig: PublicHeaderResponse | null = null;
+let inflightHeaderConfig: Promise<PublicHeaderResponse> | null = null;
+
+async function loadHeaderConfig(): Promise<PublicHeaderResponse> {
+  if (cachedHeaderConfig) return cachedHeaderConfig;
+  if (!inflightHeaderConfig) {
+    inflightHeaderConfig = fetch("/api/header", { cache: "no-store" })
+      .then(async (response) => {
+        if (response.status === 404) return defaultConfig;
+        if (!response.ok) {
+          throw new Error(`Failed to fetch header config: ${response.status}`);
+        }
+        return response.json() as Promise<PublicHeaderResponse>;
+      })
+      .then((data) => {
+        cachedHeaderConfig = data;
+        return data;
+      })
+      .finally(() => {
+        inflightHeaderConfig = null;
+      });
+  }
+  return inflightHeaderConfig;
+}
+
 export function useHeaderConfig(): UseHeaderConfigResult {
-  const [config, setConfig] = useState<PublicHeaderResponse | null>(null);
-  const [isLoading, setIsLoading] = useState(true);
+  const [config, setConfig] = useState<PublicHeaderResponse | null>(cachedHeaderConfig);
+  const [isLoading, setIsLoading] = useState(!cachedHeaderConfig);
   const [error, setError] = useState<Error | null>(null);
 
   const fetchConfig = async () => {
     try {
       setIsLoading(true);
       setError(null);
-
-      const response = await fetch("/api/header", {
-        cache: "no-store",
-      });
-
-      if (response.status === 404) {
-        // No active header config in DB yet — use defaults silently
-        setConfig(defaultConfig);
-        return;
-      }
-
-      if (!response.ok) {
-        throw new Error(`Failed to fetch header config: ${response.status}`);
-      }
-
-      const data = await response.json();
-      setConfig(data);
+      setConfig(await loadHeaderConfig());
     } catch (err) {
       console.error("Error fetching header config:", err);
       setError(err instanceof Error ? err : new Error("Unknown error"));
@@ -91,7 +99,6 @@ export function useHeaderConfig(): UseHeaderConfigResult {
   };
 }
 
-// Helper function to convert flat menu items to mega menu categories
 export function getMegaMenuCategories(menu: MenuItem[]): {
   name: string;
   description: string;
@@ -102,14 +109,12 @@ export function getMegaMenuCategories(menu: MenuItem[]): {
     popular?: boolean;
   }[];
 }[] {
-  // Find the Services menu item with mega menu enabled
   const servicesItem = menu.find((item) => item.isMegaMenu && item.children && item.children.length > 0);
 
   if (!servicesItem || !servicesItem.children) {
     return [];
   }
 
-  // Convert children to categories format
   return servicesItem.children.map((category) => ({
     name: category.categoryName || category.label,
     description: category.categoryDesc || "",
@@ -123,9 +128,10 @@ export function getMegaMenuCategories(menu: MenuItem[]): {
   }));
 }
 
-// Helper to get mega menu categories for ALL mega menu items (keyed by item label)
 export function getAllMegaMenuCategories(menu: MenuItem[]): Record<string, {
-  name: string; description: string; icon: string;
+  name: string;
+  description: string;
+  icon: string;
   services: { name: string; href: string; icon?: string; popular?: boolean }[];
 }[]> {
   const result: Record<string, { name: string; description: string; icon: string; services: { name: string; href: string; icon?: string; popular?: boolean }[] }[]> = {};
@@ -146,14 +152,13 @@ export function getAllMegaMenuCategories(menu: MenuItem[]): Record<string, {
   return result;
 }
 
-// Helper to get main navigation items (non-mega menu)
 export function getMainNavigation(menu: MenuItem[]): {
   name: string;
   href: string;
   hasDropdown: boolean;
   megaMenuColumns?: number;
   megaMenuContent?: unknown;
-  simpleDropdown?: { name: string; href: string }[];
+  simpleDropdown?: { name: string; href: string; icon?: string }[];
 }[] {
   return menu
     .filter((item) => item.isVisible && !item.parentId)

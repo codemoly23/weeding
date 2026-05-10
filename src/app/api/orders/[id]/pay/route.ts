@@ -2,6 +2,9 @@ import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
 import { createCheckoutSession } from "@/lib/stripe";
 import { prisma } from "@/lib/db";
+import { auth } from "@/lib/auth";
+
+const ADMIN_ORDER_ROLES = new Set(["ADMIN", "SUPPORT_AGENT", "SALES_AGENT"]);
 
 const paySchema = z.object({
   gateway: z.enum(["stripe", "paypal"]),
@@ -13,6 +16,11 @@ export async function POST(
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const session = await auth();
+    if (!session?.user?.id) {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    }
+
     const { id: orderIdentifier } = await params;
     const body = await request.json();
     const { gateway } = paySchema.parse(body);
@@ -40,6 +48,10 @@ export async function POST(
         { error: "Order not found" },
         { status: 404 }
       );
+    }
+
+    if (order.userId !== session.user.id && !ADMIN_ORDER_ROLES.has(session.user.role)) {
+      return NextResponse.json({ error: "Forbidden" }, { status: 403 });
     }
 
     // Don't allow payment for already paid orders

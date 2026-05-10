@@ -1,9 +1,14 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/db";
+import { authError, checkAnyPermission } from "@/lib/admin-auth";
+import { PERMISSIONS } from "@/lib/permissions";
 
 // Export orders as CSV
 export async function GET(request: NextRequest) {
   try {
+    const access = await checkAnyPermission([PERMISSIONS.ORDERS_VIEW]);
+    if ("error" in access) return authError(access);
+
     const searchParams = request.nextUrl.searchParams;
     const status = searchParams.get("status");
     const paymentStatus = searchParams.get("paymentStatus");
@@ -119,6 +124,7 @@ export async function GET(request: NextRequest) {
     // Log activity
     await prisma.activityLog.create({
       data: {
+        userId: access.session!.user.id,
         action: "ORDERS_EXPORTED",
         entity: "Order",
         metadata: {

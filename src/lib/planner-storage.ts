@@ -18,6 +18,7 @@ export interface LocalGuest {
   plusOneMeal: string | null;
   // Task 23 — Chief guest
   isChiefGuest: boolean;
+  gdprConsentAt?: string | null;
   // Open RSVP — self-registered via wedding website
   selfRegistered: boolean;
   // Task 24 — Family grouping
@@ -259,6 +260,7 @@ export function addLocalGuest(
     plusOneName: null,
     plusOneMeal: null,
     isChiefGuest: false,
+    gdprConsentAt: null,
     selfRegistered: false,
     familyId: null,
     invitationCode: null,

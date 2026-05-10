@@ -1,6 +1,15 @@
 import { NextRequest, NextResponse } from "next/server";
 import prisma from "@/lib/db";
 import { sendEmail } from "@/lib/email";
+import { z } from "zod";
+
+const rsvpSubmissionSchema = z.object({
+  rsvpStatus: z.enum(["ATTENDING", "NOT_ATTENDING"]),
+  dietary: z.string().trim().max(500).nullable().optional(),
+  rsvpMessage: z.string().trim().max(2000).nullable().optional(),
+  gdprConsent: z.boolean().optional(),
+  answers: z.record(z.string(), z.string().trim().max(1000)).optional().default({}),
+});
 
 // GET /api/rsvp/[token] — public, no auth required
 export async function GET(
@@ -82,7 +91,15 @@ export async function POST(
     return NextResponse.json({ error: "Invalid RSVP link" }, { status: 404 });
   }
 
-  const body = await req.json();
+  let body: unknown;
+  try {
+    body = await req.json();
+  } catch {
+    return NextResponse.json({ error: "Invalid request body" }, { status: 400 });
+  }
+  if (!body || typeof body !== "object") {
+    return NextResponse.json({ error: "Invalid RSVP data" }, { status: 400 });
+  }
   const { rsvpStatus, dietary, rsvpMessage, gdprConsent, answers } = body as {
     rsvpStatus: string;
     dietary?: string;
@@ -95,13 +112,22 @@ export async function POST(
     return NextResponse.json({ error: "Invalid RSVP status" }, { status: 400 });
   }
 
+  const parsed = rsvpSubmissionSchema.safeParse(body);
+  if (!parsed.success) {
+    return NextResponse.json(
+      { error: "Invalid RSVP data", details: parsed.error.issues },
+      { status: 400 }
+    );
+  }
+  const validated = parsed.data;
+
   // Validate required custom questions
   const requiredIds = existing.project.rsvpQuestions
     .filter((q) => q.required)
     .map((q) => q.id);
 
   for (const qId of requiredIds) {
-    if (!answers?.[qId]?.trim()) {
+    if (!validated.answers[qId]?.trim()) {
       return NextResponse.json(
         { error: "Please answer all required questions" },
         { status: 400 }
@@ -110,14 +136,14 @@ export async function POST(
   }
 
   // Update guest
-  const updated = await prisma.weddingGuest.update({
+  const updateGuest = prisma.weddingGuest.update({
     where: { rsvpToken: token },
     data: {
-      rsvpStatus: rsvpStatus as "ATTENDING" | "NOT_ATTENDING",
-      dietary: dietary?.trim() || existing.dietary,
-      rsvpMessage: rsvpMessage?.trim() || null,
+      rsvpStatus: validated.rsvpStatus,
+      dietary: validated.dietary?.trim() || existing.dietary,
+      rsvpMessage: validated.rsvpMessage?.trim() || null,
       rsvpSubmittedAt: new Date(),
-      ...(gdprConsent && { gdprConsentAt: new Date() }),
+      ...(validated.gdprConsent && { gdprConsentAt: new Date() }),
     },
     select: {
       id: true,
@@ -131,20 +157,18 @@ export async function POST(
     },
   });
 
-  // Upsert custom answers
-  if (answers && Object.keys(answers).length > 0) {
-    const validIds = existing.project.rsvpQuestions.map((q) => q.id);
-    const upserts = Object.entries(answers)
-      .filter(([qId, ans]) => validIds.includes(qId) && ans.trim())
-      .map(([questionId, answer]) =>
-        prisma.rsvpAnswer.upsert({
-          where: { guestId_questionId: { guestId: existing.id, questionId } },
-          create: { guestId: existing.id, questionId, answer: answer.trim() },
-          update: { answer: answer.trim() },
-        })
-      );
-    await Promise.all(upserts);
-  }
+  // Upsert custom answers in the same transaction as the RSVP status update.
+  const validIds = existing.project.rsvpQuestions.map((q) => q.id);
+  const upserts = Object.entries(validated.answers)
+    .filter(([qId, ans]) => validIds.includes(qId) && ans.trim())
+    .map(([questionId, answer]) =>
+      prisma.rsvpAnswer.upsert({
+        where: { guestId_questionId: { guestId: existing.id, questionId } },
+        create: { guestId: existing.id, questionId, answer: answer.trim() },
+        update: { answer: answer.trim() },
+      })
+    );
+  const [updated] = await prisma.$transaction([updateGuest, ...upserts]);
 
   // Fire-and-forget email notification
   const coupleEmail = existing.project.user?.email;
@@ -152,7 +176,7 @@ export async function POST(
     const guestName = [existing.title, existing.firstName, existing.lastName]
       .filter(Boolean)
       .join(" ");
-    const isAttending = rsvpStatus === "ATTENDING";
+    const isAttending = validated.rsvpStatus === "ATTENDING";
     const eventTitle = existing.project.title;
     const eventDate = existing.project.eventDate
       ? new Date(existing.project.eventDate).toLocaleDateString("en-US", {
@@ -167,10 +191,10 @@ export async function POST(
     const statusColor = isAttending ? "#16a34a" : "#dc2626";
 
     const answersHtml =
-      answers && Object.keys(answers).length > 0
+      Object.keys(validated.answers).length > 0
         ? `<div style="background:#f9fafb;border-radius:12px;padding:16px;margin-bottom:16px;">
             <p style="margin:0 0 8px;font-size:12px;font-weight:600;color:#6b7280;text-transform:uppercase;letter-spacing:0.05em;">Custom Answers</p>
-            ${Object.entries(answers)
+            ${Object.entries(validated.answers)
               .filter(([, ans]) => ans.trim())
               .map(
                 ([, ans]) =>

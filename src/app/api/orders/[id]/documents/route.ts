@@ -1,6 +1,13 @@
 import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
 import { prisma } from "@/lib/db";
+import { auth } from "@/lib/auth";
+
+const ADMIN_ORDER_ROLES = new Set(["ADMIN", "SUPPORT_AGENT", "SALES_AGENT"]);
+
+function isOrderAdmin(role: string) {
+  return ADMIN_ORDER_ROLES.has(role);
+}
 
 const uploadDocumentSchema = z.object({
   name: z.string().min(1, "Document name is required"),
@@ -18,7 +25,6 @@ const uploadDocumentSchema = z.object({
     "BANK_STATEMENT",
     "OTHER",
   ]).default("OTHER"),
-  userId: z.string().optional(),
 });
 
 const updateDocumentSchema = z.object({
@@ -33,6 +39,11 @@ export async function POST(
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const session = await auth();
+    if (!session?.user?.id) {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    }
+
     const { id } = await params;
     const body = await request.json();
 
@@ -55,11 +66,15 @@ export async function POST(
       );
     }
 
+    if (order.userId !== session.user.id && !isOrderAdmin(session.user.role)) {
+      return NextResponse.json({ error: "Forbidden" }, { status: 403 });
+    }
+
     // Create document
     const document = await prisma.document.create({
       data: {
         orderId: order.id,
-        userId: data.userId || order.userId,
+        userId: order.userId,
         name: data.name,
         fileName: data.fileName,
         fileUrl: data.fileUrl,
@@ -73,7 +88,7 @@ export async function POST(
     // Log activity
     await prisma.activityLog.create({
       data: {
-        userId: data.userId || order.userId,
+        userId: session.user.id,
         action: "DOCUMENT_UPLOADED",
         entity: "Document",
         entityId: document.id,
@@ -112,6 +127,11 @@ export async function GET(
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const session = await auth();
+    if (!session?.user?.id) {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    }
+
     const { id } = await params;
 
     // Find order
@@ -136,6 +156,10 @@ export async function GET(
       );
     }
 
+    if (order.userId !== session.user.id && !isOrderAdmin(session.user.role)) {
+      return NextResponse.json({ error: "Forbidden" }, { status: 403 });
+    }
+
     return NextResponse.json({
       documents: order.documents,
     });
@@ -154,6 +178,14 @@ export async function PATCH(
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const session = await auth();
+    if (!session?.user?.id) {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    }
+    if (!isOrderAdmin(session.user.role)) {
+      return NextResponse.json({ error: "Forbidden" }, { status: 403 });
+    }
+
     const { id } = await params;
     const body = await request.json();
 
@@ -192,6 +224,7 @@ export async function PATCH(
     // Log activity
     await prisma.activityLog.create({
       data: {
+        userId: session.user.id,
         action: "DOCUMENT_UPDATED",
         entity: "Document",
         entityId: document.id,
@@ -229,6 +262,11 @@ export async function DELETE(
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const session = await auth();
+    if (!session?.user?.id) {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    }
+
     const { id } = await params;
     const { searchParams } = new URL(request.url);
     const documentId = searchParams.get("documentId");
@@ -257,6 +295,10 @@ export async function DELETE(
       );
     }
 
+    if (order.userId !== session.user.id && !isOrderAdmin(session.user.role)) {
+      return NextResponse.json({ error: "Forbidden" }, { status: 403 });
+    }
+
     // Delete document
     await prisma.document.delete({
       where: {
@@ -268,6 +310,7 @@ export async function DELETE(
     // Log activity
     await prisma.activityLog.create({
       data: {
+        userId: session.user.id,
         action: "DOCUMENT_DELETED",
         entity: "Document",
         entityId: documentId,

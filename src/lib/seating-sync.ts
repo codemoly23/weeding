@@ -72,6 +72,100 @@ export async function syncLayoutGuestTableNumbers(
   await syncGuestTableNumbers(tx, projectId, tables);
 }
 
+export async function assignGuestsToTableNumber(
+  tx: Prisma.TransactionClient,
+  projectId: string,
+  guestIds: string[],
+  tableNumber: number | null
+) {
+  const validGuests = await tx.weddingGuest.findMany({
+    where: { projectId, id: { in: guestIds } },
+    select: { id: true },
+  });
+  const validIds = validGuests.map((guest) => guest.id);
+  if (validIds.length === 0) return;
+
+  const layouts = await tx.seatingLayout.findMany({
+    where: { projectId },
+    orderBy: [{ type: "desc" }, { createdAt: "asc" }],
+    select: { id: true, type: true },
+  });
+
+  let targetLayoutId = layouts.find((layout) => layout.type === "RECEPTION")?.id ?? layouts[0]?.id;
+  if (tableNumber !== null && !targetLayoutId) {
+    const layout = await tx.seatingLayout.create({
+      data: { projectId, name: "Reception Layout", type: "RECEPTION" },
+      select: { id: true },
+    });
+    targetLayoutId = layout.id;
+  }
+
+  const tables = await tx.seatingTable.findMany({
+    where: { projectId },
+    orderBy: [{ createdAt: "asc" }, { id: "asc" }],
+    select: { id: true, layoutId: true, name: true, guestIds: true },
+  });
+  const validIdSet = new Set(validIds);
+
+  for (const table of tables) {
+    await tx.seatingTable.update({
+      where: { id: table.id },
+      data: {
+        guestIds: toGuestIds(table.guestIds).filter((id) => !validIdSet.has(id)),
+      },
+    });
+  }
+
+  if (tableNumber !== null && targetLayoutId) {
+    let targetTable = await tx.seatingTable.findFirst({
+      where: { projectId, layoutId: targetLayoutId, name: `Table ${tableNumber}` },
+      select: { id: true, guestIds: true },
+    });
+
+    if (!targetTable) {
+      targetTable = await tx.seatingTable.create({
+        data: {
+          projectId,
+          layoutId: targetLayoutId,
+          name: `Table ${tableNumber}`,
+          guestIds: [],
+        },
+        select: { id: true, guestIds: true },
+      });
+    }
+
+    await tx.seatingTable.update({
+      where: { id: targetTable.id },
+      data: {
+        guestIds: [...new Set([...toGuestIds(targetTable.guestIds), ...validIds])],
+      },
+    });
+  }
+
+  const touchedLayoutIds = new Set(layouts.map((layout) => layout.id));
+  if (targetLayoutId) touchedLayoutIds.add(targetLayoutId);
+
+  if (touchedLayoutIds.size === 0) {
+    await tx.weddingGuest.updateMany({
+      where: { projectId, id: { in: validIds } },
+      data: { tableNumber },
+    });
+    return;
+  }
+
+  for (const layoutId of touchedLayoutIds) {
+    await syncLayoutGuestTableNumbers(tx, projectId, layoutId);
+  }
+}
+
+export async function removeGuestsFromSeating(
+  tx: Prisma.TransactionClient,
+  projectId: string,
+  guestIds: string[]
+) {
+  await assignGuestsToTableNumber(tx, projectId, guestIds, null);
+}
+
 async function syncGuestTableNumbers(
   tx: Prisma.TransactionClient,
   projectId: string,

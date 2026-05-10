@@ -224,7 +224,11 @@ export async function POST(request: NextRequest) {
             ],
           },
           notes: {
-            create: [{ content: JSON.stringify(orderMetadata, null, 2), isInternal: true }],
+            create: [{
+              content: JSON.stringify(orderMetadata, null, 2),
+              isInternal: true,
+              authorId: currentUser.id,
+            }],
           },
         },
         include: {

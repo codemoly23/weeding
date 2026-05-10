@@ -150,6 +150,7 @@ async function refreshPluginToken(plugin: {
   const currentTokenInfo = await verifyLicenseToken(plugin.licenseToken, {
     publicKey: plugin.licensePublicKey,
     skipDomainCheck: true,
+    expectedAudience: process.env.LICENSE_JWT_AUDIENCE || undefined,
   });
   const oldExpiresAt = currentTokenInfo.data?.exp
     ? new Date(currentTokenInfo.data.exp * 1000)
@@ -318,6 +319,7 @@ export async function checkPluginTokenStatus(
     const result = await verifyLicenseToken(plugin.licenseToken, {
       publicKey: plugin.licensePublicKey,
       skipDomainCheck: true,
+      expectedAudience: process.env.LICENSE_JWT_AUDIENCE || undefined,
     });
 
     if (!result.valid) {

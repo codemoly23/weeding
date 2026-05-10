@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import Link from "next/link";
 import {
   MessageSquare,
@@ -40,48 +40,76 @@ export default function VendorDashboardPage() {
   const [stats, setStats] = useState<Stats | null>(null);
   const [recentInquiries, setRecentInquiries] = useState<Inquiry[]>([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
   const [profileStatus, setProfileStatus] = useState<string>("PENDING");
   const [plan, setPlan] = useState<VendorPlanStatus | null>(null);
 
-  useEffect(() => {
-    async function load() {
-      try {
-        const [statsRes, inquiriesRes, profileRes, planRes] = await Promise.all([
-          fetch("/api/vendor/stats"),
-          fetch("/api/vendor/inquiries?page=1&limit=5"),
-          fetch("/api/vendor/profile"),
-          fetch("/api/vendor/plan"),
-        ]);
+  const load = useCallback(async () => {
+    try {
+      setLoading(true);
+      setError(null);
+      const [statsRes, inquiriesRes, profileRes, planRes] = await Promise.all([
+        fetch("/api/vendor/stats").catch(() => null),
+        fetch("/api/vendor/inquiries?page=1&limit=5").catch(() => null),
+        fetch("/api/vendor/profile").catch(() => null),
+        fetch("/api/vendor/plan").catch(() => null),
+      ]);
 
-        if (statsRes.ok) {
-          const data = await statsRes.json();
-          setStats(data.stats ?? data);
-        }
-        if (inquiriesRes.ok) {
-          const data = await inquiriesRes.json();
-          setRecentInquiries(data.inquiries || []);
-        }
-        if (profileRes.ok) {
-          const data = await profileRes.json();
-          setProfileStatus(data.profile?.status || "PENDING");
-        }
-        if (planRes.ok) {
-          const data = await planRes.json();
-          setPlan(data.plan ?? null);
-        }
-      } catch (err) {
-        console.error(err);
-      } finally {
-        setLoading(false);
+      const failed = [statsRes, inquiriesRes, profileRes, planRes].filter((res) => !res?.ok).length;
+      if (failed === 4) {
+        setError("Unable to load your vendor dashboard.");
+        return;
       }
+      if (failed > 0) {
+        setError("Some dashboard data could not load. Refresh to retry.");
+      }
+
+      if (statsRes?.ok) {
+        const data = await statsRes.json();
+        setStats(data.stats ?? data);
+      }
+      if (inquiriesRes?.ok) {
+        const data = await inquiriesRes.json();
+        setRecentInquiries(data.inquiries || []);
+      }
+      if (profileRes?.ok) {
+        const data = await profileRes.json();
+        setProfileStatus(data.profile?.status || "PENDING");
+      }
+      if (planRes?.ok) {
+        const data = await planRes.json();
+        setPlan(data.plan ?? null);
+      }
+    } finally {
+      setLoading(false);
     }
-    load();
   }, []);
+
+  useEffect(() => {
+    load();
+  }, [load]);
 
   if (loading) {
     return (
       <div className="flex items-center justify-center h-64">
         <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-purple-600" />
+      </div>
+    );
+  }
+
+  if (error && !stats && recentInquiries.length === 0 && !plan) {
+    return (
+      <div className="mx-auto max-w-xl rounded-xl border border-red-200 bg-red-50 p-6 text-center">
+        <AlertCircle className="mx-auto mb-3 h-9 w-9 text-red-500" />
+        <h1 className="text-base font-semibold text-red-900">{error}</h1>
+        <p className="mt-1 text-sm text-red-700">Check your connection and try again.</p>
+        <button
+          type="button"
+          onClick={load}
+          className="mt-4 rounded-lg bg-red-600 px-4 py-2 text-sm font-medium text-white hover:bg-red-700"
+        >
+          Retry
+        </button>
       </div>
     );
   }
@@ -97,6 +125,12 @@ export default function VendorDashboardPage() {
 
   return (
     <div className="max-w-5xl mx-auto space-y-6">
+      {error && (
+        <div className="flex items-start gap-3 rounded-xl border border-amber-200 bg-amber-50 p-3 text-sm text-amber-800">
+          <AlertCircle className="mt-0.5 h-4 w-4 flex-shrink-0" />
+          <p>{error}</p>
+        </div>
+      )}
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>

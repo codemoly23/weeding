@@ -25,7 +25,7 @@ export async function POST(
   if (!guest) return NextResponse.json({ error: "Guest not found" }, { status: 404 });
 
   // Return existing token or generate a new one
-  const token = guest.rsvpToken ?? randomBytes(16).toString("hex");
+  const token = guest.rsvpToken ?? randomBytes(32).toString("hex");
 
   if (!guest.rsvpToken) {
     await prisma.weddingGuest.update({

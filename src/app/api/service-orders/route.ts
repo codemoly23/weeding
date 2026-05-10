@@ -253,6 +253,7 @@ export async function POST(request: NextRequest) {
             {
               content: JSON.stringify(data.formData, null, 2),
               isInternal: true,
+              authorId: user.id,
             },
           ],
         },

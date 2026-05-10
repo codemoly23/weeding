@@ -10,14 +10,44 @@ const authRoutes = ["/login", "/register"];
 
 // Admin allowed roles
 const adminRoles = ["ADMIN", "SUPPORT_AGENT", "SALES_AGENT", "CONTENT_MANAGER"];
+const customerRoles = ["CUSTOMER"];
+
+function jsonError(message: string, status: number) {
+  return NextResponse.json({ error: message }, { status });
+}
+
+function hasRole(token: unknown, roles: string[]) {
+  if (!token || typeof token !== "object") return false;
+  const role = (token as { role?: unknown }).role;
+  return typeof role === "string" && roles.includes(role);
+}
+
+function isSensitiveApiRoute(pathname: string) {
+  if (
+    pathname === "/api/admin/campaigns/process-scheduled" ||
+    pathname === "/api/vendor/register" ||
+    pathname.startsWith("/api/planner/share/")
+  ) {
+    return false;
+  }
+
+  return (
+    pathname.startsWith("/api/admin/") ||
+    pathname.startsWith("/api/vendor/") ||
+    pathname.startsWith("/api/customer/") ||
+    pathname.startsWith("/api/dashboard/") ||
+    pathname.startsWith("/api/user/") ||
+    pathname.startsWith("/api/planner/projects") ||
+    pathname === "/api/planner/sync" ||
+    pathname === "/api/orders/bulk" ||
+    pathname === "/api/orders/export" ||
+    /^\/api\/orders\/[^/]+$/.test(pathname) ||
+    /^\/api\/orders\/[^/]+\/(documents|invoice|notes|pay)$/.test(pathname)
+  );
+}
 
 export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
-
-  // Skip middleware for API routes - they handle their own auth and return JSON errors
-  if (pathname.startsWith("/api/")) {
-    return NextResponse.next();
-  }
 
   // Check if the route requires protection
   const isProtectedRoute = protectedRoutes.some(
@@ -37,6 +67,47 @@ export async function middleware(request: NextRequest) {
       ? "__Secure-authjs.session-token"
       : "authjs.session-token",
   });
+
+  if (pathname.startsWith("/api/")) {
+    if (!isSensitiveApiRoute(pathname)) {
+      return NextResponse.next();
+    }
+
+    if (!token) {
+      return jsonError("Unauthorized", 401);
+    }
+
+    if (pathname.startsWith("/api/admin/")) {
+      return hasRole(token, adminRoles)
+        ? NextResponse.next()
+        : jsonError("Forbidden", 403);
+    }
+
+    if (pathname.startsWith("/api/vendor/")) {
+      return hasRole(token, ["VENDOR"])
+        ? NextResponse.next()
+        : jsonError("Forbidden", 403);
+    }
+
+    if (pathname.startsWith("/api/planner/")) {
+      return hasRole(token, customerRoles)
+        ? NextResponse.next()
+        : jsonError("Forbidden", 403);
+    }
+
+    if (
+      pathname === "/api/orders/bulk" ||
+      pathname === "/api/orders/export" ||
+      /^\/api\/orders\/[^/]+$/.test(pathname) ||
+      /^\/api\/orders\/[^/]+\/(invoice|notes)$/.test(pathname)
+    ) {
+      return hasRole(token, adminRoles)
+        ? NextResponse.next()
+        : jsonError("Forbidden", 403);
+    }
+
+    return NextResponse.next();
+  }
 
   // If trying to access protected route without authentication
   if (isProtectedRoute && !token) {
@@ -113,6 +184,13 @@ export const config = {
     "/account/:path*",
     "/vendor/:path*",
     "/planner/:path*",
+    "/api/admin/:path*",
+    "/api/vendor/:path*",
+    "/api/customer/:path*",
+    "/api/dashboard/:path*",
+    "/api/user/:path*",
+    "/api/planner/:path*",
+    "/api/orders/:path*",
     "/login",
     "/register",
   ],
