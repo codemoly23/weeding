@@ -41,6 +41,29 @@ export interface ThemeColorValues {
   midnight?: string;
   "midnight-light"?: string;
   "midnight-700"?: string;
+  // Planigate homepage palette (all optional — fall back to globals.css defaults)
+  "planigate-bg-section"?: string;
+  "planigate-bg-soft"?: string;
+  "planigate-bg-card"?: string;
+  "planigate-bg-hero-from"?: string;
+  "planigate-bg-hero-via"?: string;
+  "planigate-bg-hero-to"?: string;
+  "planigate-bg-input"?: string;
+  "planigate-surface"?: string;
+  "planigate-fg"?: string;
+  "planigate-fg-hover"?: string;
+  "planigate-fg-strong"?: string;
+  "planigate-fg-muted"?: string;
+  "planigate-fg-soft"?: string;
+  "planigate-fg-placeholder"?: string;
+  "planigate-fg-faint"?: string;
+  "planigate-accent"?: string;
+  "planigate-accent-light"?: string;
+  "planigate-star"?: string;
+  "planigate-border"?: string;
+  "planigate-border-soft"?: string;
+  "planigate-border-subtle"?: string;
+  "planigate-divider"?: string;
 }
 
 export interface ThemeColorPalette {

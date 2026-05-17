@@ -1,6 +1,6 @@
 {
   "version": "1.0",
-  "exportedAt": "2026-04-26T10:51:03.800Z",
+  "exportedAt": "2026-05-17T11:50:30.810Z",
   "colorPalette": {
     "light": {
       "background": "#FDFAF7",
@@ -681,7 +681,7 @@
     },
     {
       "slug": "home",
-      "name": "Home",
+      "name": "Homepage (Planigate)",
       "templateType": "HOME",
       "isSystem": true,
       "isTemplateActive": true,
@@ -690,248 +690,100 @@
       "blocks": [
         {
           "type": "widget-page-sections",
-          "name": "Home Sections",
+          "name": "Widget Page Sections",
           "sortOrder": 0,
           "isActive": true,
           "settings": [
             {
-              "id": "section_1776226584183_udn1a9emg",
+              "id": "sec_dkvcp760",
               "order": 0,
-              "layout": "1",
+              "layout": "1-col",
               "columns": [
                 {
-                  "id": "col_1776226584183_kc1hpqt3l",
+                  "id": "col_e7rzen5v",
                   "widgets": [
                     {
-                      "id": "widget_1776226591887_wzce8gprg",
-                      "type": "top-utility-bar",
+                      "id": "w_iz8ilx9u",
+                      "type": "planigate-hero",
                       "settings": {
-                        "gap": 24,
-                        "links": [
-                          {
-                            "id": "link-1",
-                            "href": "/vendor/register",
-                            "icon": "ShoppingCart",
-                            "label": "ARE YOU A VENDOR?",
-                            "showIcon": true
-                          },
-                          {
-                            "id": "link-2",
-                            "href": "vendor/dashboard",
-                            "icon": "",
-                            "label": "Log in",
-                            "showIcon": false
-                          },
-                          {
-                            "id": "link-3",
-                            "href": "/vendor/register",
-                            "icon": "",
-                            "label": "Join now",
-                            "showIcon": false
-                          }
+                        "rating": 5,
+                        "avatars": [
+                          "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=80&h=80&fit=crop&crop=face&q=80",
+                          "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=80&h=80&fit=crop&crop=face&q=80",
+                          "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=80&h=80&fit=crop&crop=face&q=80",
+                          "https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=80&h=80&fit=crop&crop=face&q=80"
                         ],
-                        "height": 40,
-                        "fontSize": 14,
-                        "paddingX": 180,
-                        "textColor": "#ffffff",
-                        "gradientTo": "#ec4899",
-                        "hoverColor": "#e9d5ff",
-                        "gradientFrom": "#9333ea",
-                        "_translations": {
-                          "ar": {
-                            "links.0.label": "هل أنت مورد؟",
-                            "links.1.label": "تسجيل الدخول",
-                            "links.2.label": "انضم الآن"
-                          },
-                          "bn": {
-                            "links.0.label": "আপনি কি একজন ভেন্ডর?",
-                            "links.1.label": "লগইন",
-                            "links.2.label": "এখনই যোগ দিন"
-                          },
-                          "sv": {
-                            "links.0.label": "ÄR DU EN LEVERANTÖR?",
-                            "links.1.label": "Logga in",
-                            "links.2.label": "Registrera dig"
-                          }
-                        },
-                        "gradientAngle": 90,
-                        "showBorderBottom": true,
-                        "borderBottomColor": "#7e22ce"
-                      }
-                    },
-                    {
-                      "id": "widget_1776425312308_de6q8ppgp",
-                      "type": "custom-html",
-                      "settings": {
-                        "css": "padding-bottom: 0 !important;\nmargin-bottom: 0 !important;",
-                        "html": "",
-                        "container": {
-                          "shadow": "none",
-                          "padding": 0,
-                          "borderWidth": 2,
-                          "borderRadius": 0,
-                          "backgroundType": "solid",
-                          "gradientBorder": {
-                            "angle": 135,
-                            "colors": [
-                              "#ec4899",
-                              "#8b5cf6"
-                            ],
-                            "enabled": false
-                          }
-                        }
-                      }
-                    }
-                  ],
-                  "settings": {
-                    "padding": 0,
-                    "verticalAlign": "top"
-                  }
-                }
-              ],
-              "settings": {
-                "gap": 32,
-                "maxWidth": "full",
-                "customCSS": "padding-bottom: 0 !important;\nmargin-bottom: 0 !important;",
-                "fullWidth": true,
-                "isVisible": true,
-                "marginTop": 0,
-                "background": {
-                  "type": "solid",
-                  "color": "#ffffff",
-                  "image": {
-                    "url": "",
-                    "size": "cover",
-                    "fixed": false,
-                    "repeat": "no-repeat",
-                    "position": "center"
-                  },
-                  "video": {
-                    "url": "",
-                    "loop": true,
-                    "muted": true
-                  },
-                  "overlay": {
-                    "color": "#000000",
-                    "enabled": false,
-                    "opacity": 0.5
-                  },
-                  "gradient": {
-                    "type": "linear",
-                    "angle": 180,
-                    "colors": [
-                      {
-                        "color": "#1e293b",
-                        "position": 0
-                      },
-                      {
-                        "color": "#0f172a",
-                        "position": 100
-                      }
-                    ]
-                  },
-                  "patternOverlay": {
-                    "type": "dots",
-                    "color": "#ffffff",
-                    "opacity": 0.1
-                  }
-                },
-                "paddingTop": 0,
-                "paddingLeft": 16,
-                "borderRadius": 0,
-                "marginBottom": 0,
-                "paddingRight": 16,
-                "paddingBottom": 0,
-                "visibleOnMobile": true,
-                "visibleOnDesktop": true
-              }
-            },
-            {
-              "id": "section_1776226595102_xlxhp1nvp",
-              "order": 1,
-              "layout": "1",
-              "columns": [
-                {
-                  "id": "col_1776226595102_dpk9m9atb",
-                  "widgets": [
-                    {
-                      "id": "widget_1776226600462_sab1xugsg",
-                      "type": "event-search-hero",
-                      "settings": {
-                        "title": "Plan Your Perfect Event Stress-Free",
-                        "subtitle": "Search over 250,000 local professionals with reviews, pricing, and more.",
-                        "dateLabel": "Location",
-                        "eventTypes": [
+                        "ctaHref": "/onboarding",
+                        "ctaText": "Starta ditt event gratis",
+                        "subtitle": "Skapa inbjudningar, hantera gäster, bygg eventhemsidor och hitta leverantörer för bröllop, fester, företagsevent och mycket mer.",
+                        "eventPills": [
                           {
-                            "label": "Wedding",
+                            "id": "p1",
+                            "icon": "Heart",
+                            "label": "Bröllop",
                             "value": "wedding"
                           },
                           {
-                            "label": "Birthday Party",
+                            "id": "p2",
+                            "icon": "Cake",
+                            "label": "Födelsedag",
                             "value": "birthday"
                           },
                           {
-                            "label": "Corporate Event",
+                            "id": "p3",
+                            "icon": "Briefcase",
+                            "label": "Företagsevent",
                             "value": "corporate"
                           },
                           {
-                            "label": "Anniversary",
-                            "value": "anniversary"
+                            "id": "p4",
+                            "icon": "GraduationCap",
+                            "label": "Student",
+                            "value": "graduation"
                           },
                           {
-                            "label": "Baptism",
+                            "id": "p5",
+                            "icon": "TreePine",
+                            "label": "Julbord",
+                            "value": "christmas"
+                          },
+                          {
+                            "id": "p6",
+                            "icon": "PartyPopper",
+                            "label": "Fest",
+                            "value": "party"
+                          },
+                          {
+                            "id": "p7",
+                            "icon": "Droplet",
+                            "label": "Dop",
                             "value": "baptism"
                           },
                           {
-                            "label": "Other",
-                            "value": "other"
+                            "id": "p8",
+                            "icon": "MoreHorizontal",
+                            "label": "Fler",
+                            "value": "more"
                           }
                         ],
-                        "_translations": {
-                          "ar": {
-                            "title": "خطط لحدثك المثالي",
-                            "subtitle": "اكتشف أماكن رائعة، تواصل مع أفضل الموردين، وأنشئ احتفالات لا تُنسى",
-                            "dateLabel": "التاريخ",
-                            "locationLabel": "الموقع",
-                            "eventTypeLabel": "نوع الحدث",
-                            "searchButtonLabel": "بحث عن الأحداث",
-                            "locationPlaceholder": "أدخل المدينة أو القاعة"
-                          },
-                          "bn": {
-                            "title": "আপনার নিখুঁত ইভেন্ট পরিকল্পনা করুন",
-                            "subtitle": "অসাধারণ ভেন্যু খুঁজুন, শীর্ষ ভেন্ডরদের সাথে সংযোগ করুন এবং অবিস্মরণীয় উৎসব তৈরি করুন",
-                            "dateLabel": "তারিখ",
-                            "locationLabel": "অবস্থান",
-                            "eventTypeLabel": "ইভেন্টের ধরন",
-                            "searchButtonLabel": "ইভেন্ট খুঁজুন",
-                            "locationPlaceholder": "শহর বা ভেন্যু লিখুন"
-                          },
-                          "sv": {
-                            "title": "Planera ditt perfekta evenemang",
-                            "subtitle": "Hitta fantastiska lokaler, ta kontakt med toppleverantörer och skapa oförglömliga fester",
-                            "dateLabel": "Datum",
-                            "locationLabel": "Plats",
-                            "eventTypeLabel": "Evenemangstyp",
-                            "searchButtonLabel": "Sök evenemang",
-                            "locationPlaceholder": "Ange stad eller lokal"
-                          }
+                        "headingPart1": "Allt för livets Event",
+                        "headingPart2": "event – på ett ställe",
+                        "collageImages": {
+                          "phone": "https://images.unsplash.com/photo-1556656793-08538906a9f8?w=300&h=600&fit=crop&q=80",
+                          "couple": "https://images.unsplash.com/photo-1519741497674-611481863552?w=600&h=800&fit=crop&q=80",
+                          "dinner": "https://images.unsplash.com/photo-1464366400600-7168b8af9bc3?w=800&h=500&fit=crop&q=80",
+                          "laptop": "https://images.unsplash.com/photo-1593642632559-0c6d3fc62b89?w=700&h=400&fit=crop&q=80",
+                          "toasting": "https://images.unsplash.com/photo-1530023367847-a683933f4172?w=700&h=600&fit=crop&q=80"
                         },
-                        "locationLabel": "Service",
-                        "showDateField": true,
-                        "eventTypeLabel": "Place",
-                        "autoplayInterval": 5000,
-                        "backgroundImages": [
-                          "/hero/1776767843369-couple.png",
-                          "/hero/1776767852388-flowers.jpg",
-                          "/hero/1776767865167-venue.jpg"
-                        ],
-                        "searchButtonHref": "/vendors",
-                        "overlayOpacityTop": 0.5,
-                        "searchButtonLabel": "Search Events",
-                        "showLocationField": true,
-                        "showEventTypeField": true,
-                        "locationPlaceholder": "Enter city or venue",
-                        "overlayOpacityBottom": 0.3
+                        "searchHeading": "Vad planerar du?",
+                        "exploreLinkHref": "/vendors",
+                        "exploreLinkText": "Utforska leverantörer",
+                        "ratingCountText": "12 000+ nöjda användare",
+                        "ratingDividerText": "Sveriges nya plattform för eventplanering",
+                        "serviceInputLabel": "Vad behöver du?",
+                        "locationInputLabel": "Var?",
+                        "serviceInputPlaceholder": "Ex. Lokal, Fotograf, Catering...",
+                        "locationInputPlaceholder": "Ex. Stockholm, Göteborg..."
                       }
                     }
                   ],
@@ -944,136 +796,73 @@
               "settings": {
                 "gap": 32,
                 "maxWidth": "full",
-                "customCSS": "padding-top: 0 !important;\nmargin-top: 0 !important;",
                 "fullWidth": true,
                 "isVisible": true,
                 "marginTop": 0,
                 "background": {
                   "type": "solid",
-                  "color": "#ffffff",
-                  "image": {
-                    "url": "",
-                    "size": "cover",
-                    "fixed": false,
-                    "repeat": "no-repeat",
-                    "position": "center"
-                  },
-                  "video": {
-                    "url": "",
-                    "loop": true,
-                    "muted": true
-                  },
-                  "overlay": {
-                    "color": "#000000",
-                    "enabled": false,
-                    "opacity": 0.5
-                  },
-                  "gradient": {
-                    "type": "linear",
-                    "angle": 180,
-                    "colors": [
-                      {
-                        "color": "#1e293b",
-                        "position": 0
-                      },
-                      {
-                        "color": "#0f172a",
-                        "position": 100
-                      }
-                    ]
-                  },
-                  "patternOverlay": {
-                    "type": "dots",
-                    "color": "#ffffff",
-                    "opacity": 0.1
-                  }
+                  "color": "transparent"
                 },
-                "paddingTop": 64,
-                "paddingLeft": 16,
+                "paddingTop": 0,
+                "paddingLeft": 0,
                 "borderRadius": 0,
                 "marginBottom": 0,
-                "paddingRight": 16,
+                "paddingRight": 0,
                 "paddingBottom": 0,
                 "visibleOnMobile": true,
                 "visibleOnDesktop": true
               }
             },
             {
-              "id": "section_1776767751091_epxwr2lka",
-              "order": 2,
-              "layout": "1",
+              "id": "sec_bkdvkxjh",
+              "order": 1,
+              "layout": "1-col",
               "columns": [
                 {
-                  "id": "col_1776767751091_9lvdcr6tw",
+                  "id": "col_4syg7it5",
                   "widgets": [
                     {
-                      "id": "widget_1776767760363_nwugmpl7a",
-                      "type": "features-showcase",
+                      "id": "w_62fz6d3d",
+                      "type": "planigate-features",
                       "settings": {
-                        "gap": 12,
-                        "badge": {
-                          "show": true,
-                          "text": "Powerful Features"
-                        },
                         "items": [
                           {
-                            "id": "feat_1",
-                            "href": "/features/dashboard",
-                            "icon": "LayoutGrid",
-                            "image": "https://images.unsplash.com/photo-1551818255-e6e10975bc17?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&w=800&q=80",
-                            "title": "Event Dashboad",
-                            "description": "Centralized command center to manage all your event details, timelines, and tasks in one beautiful interface"
-                          },
-                          {
-                            "id": "feat_2",
-                            "href": "/features/guests",
-                            "icon": "Users",
-                            "image": "https://images.unsplash.com/photo-1511578314322-379afb476865?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&w=800&q=80",
-                            "title": "Guest Management",
-                            "description": "Track RSVPs, manage guest lists, send invitations, and organize seating arrangements with ease"
-                          },
-                          {
-                            "id": "feat_3",
-                            "href": "/features/budget",
-                            "icon": "DollarSign",
-                            "image": "https://images.unsplash.com/photo-1554224155-6726b3ff858f?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&w=800&q=80",
-                            "title": "Budget Tracker",
-                            "description": "Monitor expenses, track payments, and stay within budget with real-time financial insights and alerts"
-                          },
-                          {
-                            "id": "feat_4",
-                            "href": "/features/vendors",
-                            "icon": "Store",
-                            "image": "https://images.unsplash.com/photo-1555396273-367ea4eb4db5?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&w=800&q=80",
-                            "title": "Vendor Marketplace",
-                            "description": "Browse, compare, and book thousands of verified vendors including caterers, photographers, and DJs"
-                          },
-                          {
-                            "id": "feat_5",
-                            "href": "/features/checklist",
-                            "icon": "ListChecks",
-                            "image": "https://images.unsplash.com/photo-1484480974693-6ca0a78fb36b?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&w=800&q=80",
-                            "title": "Smart Checklist",
-                            "description": "AI-powered checklists that adapt to your event type and ensure you never miss an important detail"
-                          },
-                          {
-                            "id": "feat_6",
+                            "id": "f1",
                             "href": "/features/invitations",
                             "icon": "Mail",
-                            "image": "https://images.unsplash.com/photo-1585776245991-cf89dd7fc73a?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&w=800&q=80",
-                            "title": "Digital Invitations",
-                            "description": "Design stunning digital invitations with customizable templates and track who's opened and responded"
+                            "title": "Digitala inbjudningar",
+                            "linkText": "Läs mer",
+                            "description": "Skapa vackra inbjudningar på några minuter.",
+                            "iconBgColor": "#E8E2D7"
+                          },
+                          {
+                            "id": "f2",
+                            "href": "/features/guests",
+                            "icon": "Users",
+                            "title": "Gästlista & RSVP",
+                            "linkText": "Läs mer",
+                            "description": "Hantera svar, allergier och plus-ones enkelt.",
+                            "iconBgColor": "#F5E6D8"
+                          },
+                          {
+                            "id": "f3",
+                            "href": "/features/seating",
+                            "icon": "LayoutGrid",
+                            "title": "Seating chart",
+                            "linkText": "Läs mer",
+                            "description": "Dra och släpp gäster till bord visuellt.",
+                            "iconBgColor": "#E5EAE3"
+                          },
+                          {
+                            "id": "f4",
+                            "href": "/vendors",
+                            "icon": "Store",
+                            "title": "Hitta leverantörer",
+                            "linkText": "Läs mer",
+                            "description": "Jämför och boka lokaler, leverantörer och tjänster.",
+                            "iconBgColor": "#EFE4D2"
                           }
-                        ],
-                        "columns": 3,
-                        "ctaHref": "/features",
-                        "ctaText": "Explore All Features",
-                        "heading": "Everything You Need to Plan Amazing Events",
-                        "showCta": true,
-                        "cardHeight": 260,
-                        "subheading": "From planning to execution, our all-in-one platform makes event management effortless",
-                        "cardAspectRatio": "4/3",
-                        "headingFontSize": 60
+                        ]
                       }
                     }
                   ],
@@ -1091,447 +880,70 @@
                 "marginTop": 0,
                 "background": {
                   "type": "solid",
-                  "color": "#ffffff",
-                  "image": {
-                    "url": "",
-                    "size": "cover",
-                    "fixed": false,
-                    "repeat": "no-repeat",
-                    "position": "center"
-                  },
-                  "video": {
-                    "url": "",
-                    "loop": true,
-                    "muted": true
-                  },
-                  "overlay": {
-                    "color": "#000000",
-                    "enabled": false,
-                    "opacity": 0.5
-                  },
-                  "gradient": {
-                    "type": "linear",
-                    "angle": 180,
-                    "colors": [
-                      {
-                        "color": "#1e293b",
-                        "position": 0
-                      },
-                      {
-                        "color": "#0f172a",
-                        "position": 100
-                      }
-                    ]
-                  },
-                  "patternOverlay": {
-                    "type": "dots",
-                    "color": "#ffffff",
-                    "opacity": 0.1
-                  }
+                  "color": "transparent"
                 },
-                "paddingTop": -100,
-                "paddingLeft": 16,
+                "paddingTop": 0,
+                "paddingLeft": 0,
                 "borderRadius": 0,
                 "marginBottom": 0,
-                "paddingRight": 16,
+                "paddingRight": 0,
                 "paddingBottom": 0,
                 "visibleOnMobile": true,
                 "visibleOnDesktop": true
               }
             },
             {
-              "id": "section_1776768204856_agzckaeja",
-              "order": 3,
-              "layout": "1",
+              "id": "sec_0zt6yg3y",
+              "order": 2,
+              "layout": "1-col",
               "columns": [
                 {
-                  "id": "col_1776768204856_fc5gxxznx",
+                  "id": "col_knmcpyb7",
                   "widgets": [
                     {
-                      "id": "widget_1776768264201_p1v2lce25",
-                      "type": "vendor-listing",
+                      "id": "w_e7vo7ttr",
+                      "type": "planigate-event-types",
                       "settings": {
-                        "badge": {
-                          "show": true,
-                          "text": "Premium Selection"
-                        },
-                        "limit": 6,
-                        "title": "Featured Event Vendors",
-                        "badgeTo": "#ec4899",
-                        "columns": 3,
-                        "category": "",
-                        "subtitle": "Explore additional trusted professionals ready to make your event unforgettable",
-                        "badgeFrom": "#9333ea",
-                        "cardStyle": "overlay",
-                        "container": {
-                          "shadow": "none",
-                          "padding": 0,
-                          "borderWidth": 2,
-                          "borderRadius": 0,
-                          "backgroundType": "solid",
-                          "gradientBorder": {
-                            "angle": 135,
-                            "colors": [
-                              "#ec4899",
-                              "#8b5cf6"
-                            ],
-                            "enabled": false
-                          }
-                        },
-                        "sectionBg": "linear-gradient(to bottom, #f9fafb, #ffffff)",
-                        "showViewAll": true,
-                        "viewAllLink": "/vendors",
-                        "viewAllText": "Explore More Vendors",
-                        "featuredOnly": false,
-                        "headerTextColor": "#ffffff",
-                        "headingFontSize": 60
-                      }
-                    }
-                  ],
-                  "settings": {
-                    "padding": 0,
-                    "verticalAlign": "top"
-                  }
-                }
-              ],
-              "settings": {
-                "gap": 32,
-                "maxWidth": "xl",
-                "fullWidth": true,
-                "isVisible": true,
-                "marginTop": 0,
-                "background": {
-                  "type": "solid",
-                  "color": "#000000",
-                  "image": {
-                    "url": "",
-                    "size": "cover",
-                    "fixed": false,
-                    "repeat": "no-repeat",
-                    "position": "center"
-                  },
-                  "video": {
-                    "url": "",
-                    "loop": true,
-                    "muted": true
-                  },
-                  "overlay": {
-                    "color": "#000000",
-                    "enabled": false,
-                    "opacity": 0.5
-                  },
-                  "gradient": {
-                    "type": "linear",
-                    "angle": 180,
-                    "colors": [
-                      {
-                        "color": "#1e293b",
-                        "position": 0
-                      },
-                      {
-                        "color": "#0f172a",
-                        "position": 100
-                      }
-                    ]
-                  },
-                  "patternOverlay": {
-                    "type": "dots",
-                    "color": "#ffffff",
-                    "opacity": 0.1
-                  }
-                },
-                "paddingTop": 64,
-                "paddingLeft": 16,
-                "borderRadius": 0,
-                "marginBottom": 0,
-                "paddingRight": 16,
-                "paddingBottom": 64,
-                "visibleOnMobile": true,
-                "visibleOnDesktop": true
-              }
-            },
-            {
-              "id": "section_1776769611573_ngsafbdd7",
-              "order": 4,
-              "layout": "1",
-              "columns": [
-                {
-                  "id": "col_1776769611573_b94k391jf",
-                  "widgets": [
-                    {
-                      "id": "widget_1776769618708_fftmmouug",
-                      "type": "trending-venues",
-                      "settings": {
-                        "gap": 24,
-                        "badge": {
-                          "show": true,
-                          "text": "Handpicked for You"
-                        },
-                        "venues": [
-                          {
-                            "id": "venue_1",
-                            "href": "/venues/historic-mansion",
-                            "name": "Historic Mansion",
-                            "tags": [
-                              "180 guests",
-                              "Historic"
-                            ],
-                            "badge": {
-                              "text": "Popular",
-                              "color": "purple"
-                            },
-                            "image": "https://images.unsplash.com/photo-1464366400600-7168b8af9bc3?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&w=800&q=80",
-                            "price": 7200,
-                            "rating": 5,
-                            "location": "Charleston, SC",
-                            "priceUnit": "/day",
-                            "reviewCount": 142
-                          },
-                          {
-                            "id": "venue_2",
-                            "href": "/venues/skyline-ballroom",
-                            "name": "Skyline Ballroom",
-                            "tags": [
-                              "500 guests",
-                              "Ballroom"
-                            ],
-                            "badge": {
-                              "text": "Featured",
-                              "color": "orange"
-                            },
-                            "image": "https://images.unsplash.com/photo-1519167758481-83f550bb49b3?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&w=800&q=80",
-                            "price": 5000,
-                            "rating": 5,
-                            "location": "New York, NY",
-                            "priceUnit": "/day",
-                            "reviewCount": 89
-                          },
-                          {
-                            "id": "venue_3",
-                            "href": "/venues/modern-art-gallery",
-                            "name": "Modern Art Gallery",
-                            "tags": [
-                              "120 guests",
-                              "Gallery"
-                            ],
-                            "badge": {
-                              "text": "none",
-                              "color": "none"
-                            },
-                            "image": "https://images.unsplash.com/photo-1549294413-26f195200c16?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&w=800&q=80",
-                            "price": 3800,
-                            "rating": 4.7,
-                            "location": "Chicago, IL",
-                            "priceUnit": "/day",
-                            "reviewCount": 67
-                          },
-                          {
-                            "id": "venue_4",
-                            "href": "/venues/garden-terrace",
-                            "name": "Garden Terrace",
-                            "tags": [
-                              "200 guests",
-                              "Outdoor"
-                            ],
-                            "badge": {
-                              "text": "none",
-                              "color": "none"
-                            },
-                            "image": "/hero/1776769664956-wedding1.jpeg",
-                            "price": 4500,
-                            "rating": 4.8,
-                            "location": "Miami, FL",
-                            "priceUnit": "/day",
-                            "reviewCount": 54
-                          }
-                        ],
-                        "columns": 4,
-                        "ctaHref": "/venues",
-                        "ctaText": "Explore All Venues",
-                        "heading": "Trending Venues",
-                        "showCta": true,
-                        "viewMode": "marquee",
-                        "subheading": "Discover the most sought-after event spaces perfect for your special occasion",
-                        "headingFontSize": 60
-                      }
-                    }
-                  ],
-                  "settings": {
-                    "padding": 0,
-                    "verticalAlign": "top"
-                  }
-                }
-              ],
-              "settings": {
-                "gap": 32,
-                "maxWidth": "lg",
-                "fullWidth": true,
-                "isVisible": true,
-                "marginTop": 0,
-                "background": {
-                  "type": "solid",
-                  "color": "#ffffff",
-                  "image": {
-                    "url": "",
-                    "size": "cover",
-                    "fixed": false,
-                    "repeat": "no-repeat",
-                    "position": "center"
-                  },
-                  "video": {
-                    "url": "",
-                    "loop": true,
-                    "muted": true
-                  },
-                  "overlay": {
-                    "color": "#000000",
-                    "enabled": false,
-                    "opacity": 0.5
-                  },
-                  "gradient": {
-                    "type": "linear",
-                    "angle": 180,
-                    "colors": [
-                      {
-                        "color": "#1e293b",
-                        "position": 0
-                      },
-                      {
-                        "color": "#0f172a",
-                        "position": 100
-                      }
-                    ]
-                  },
-                  "patternOverlay": {
-                    "type": "dots",
-                    "color": "#ffffff",
-                    "opacity": 0.1
-                  }
-                },
-                "paddingTop": 64,
-                "paddingLeft": 16,
-                "borderRadius": 0,
-                "marginBottom": 0,
-                "paddingRight": 16,
-                "paddingBottom": 0,
-                "visibleOnMobile": true,
-                "visibleOnDesktop": true
-              }
-            },
-            {
-              "id": "section_1776769890364_lgemr5fjb",
-              "order": 5,
-              "layout": "1",
-              "columns": [
-                {
-                  "id": "col_1776769890364_k1sm34251",
-                  "widgets": [
-                    {
-                      "id": "widget_1776856278817_moyls862f",
-                      "type": "event-gallery-grid",
-                      "settings": {
-                        "badge": {
-                          "icon": "Camera",
-                          "show": true,
-                          "text": "Real Event Inspiration"
-                        },
                         "items": [
                           {
-                            "id": "1",
-                            "date": "March 15, 2026",
-                            "href": "/planner",
-                            "type": "Birthday",
-                            "image": "https://images.unsplash.com/photo-1530103862676-de8c9debad1d?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&w=800&q=80",
-                            "likes": 124,
-                            "title": "Sarah's 30th Birthday Bash",
-                            "views": 1243,
-                            "location": "Los Angeles, CA"
+                            "id": "e1",
+                            "href": "/events/wedding",
+                            "image": "https://images.unsplash.com/photo-1519741497674-611481863552?w=500&h=600&fit=crop&q=80",
+                            "label": "Bröllop"
                           },
                           {
-                            "id": "2",
-                            "date": "June 20, 2026",
-                            "href": "/planner",
-                            "type": "Wedding",
-                            "image": "https://images.unsplash.com/photo-1519741497674-611481863552?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&w=800&q=80",
-                            "likes": 256,
-                            "title": "Emma & James Wedding",
-                            "views": 2567,
-                            "location": "Miami, FL"
+                            "id": "e2",
+                            "href": "/events/birthday",
+                            "image": "https://images.unsplash.com/photo-1530103862676-de8c9debad1d?w=500&h=600&fit=crop&q=80",
+                            "label": "Födelsedag"
                           },
                           {
-                            "id": "3",
-                            "date": "April 8, 2026",
-                            "href": "/planner",
-                            "type": "Corporate",
-                            "image": "https://images.unsplash.com/photo-1511578314322-379afb476865?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&w=800&q=80",
-                            "likes": 89,
-                            "title": "Tech Corp Annual Summit",
-                            "views": 892,
-                            "location": "New York, NY"
+                            "id": "e3",
+                            "href": "/events/corporate",
+                            "image": "https://images.unsplash.com/photo-1591115765373-5207764f72e7?w=500&h=600&fit=crop&q=80",
+                            "label": "Företagsevent"
                           },
                           {
-                            "id": "4",
-                            "date": "May 3, 2026",
-                            "href": "/planner",
-                            "type": "Parties",
-                            "image": "/hero/1776856812898-i1.jfif",
-                            "likes": 65,
-                            "title": "Baby Shower for Maya",
-                            "views": 654,
-                            "location": "Austin, TX"
+                            "id": "e4",
+                            "href": "/events/christmas",
+                            "image": "https://images.unsplash.com/photo-1464366400600-7168b8af9bc3?w=500&h=600&fit=crop&q=80",
+                            "label": "Julbord"
                           },
                           {
-                            "id": "5",
-                            "date": "June 5, 2026",
-                            "href": "/planner",
-                            "type": "Parties",
-                            "image": "/hero/1776856822751-i2.jpg",
-                            "likes": 187,
-                            "title": "Class of 2026 Graduation",
-                            "views": 1876,
-                            "location": "Boston, MA"
+                            "id": "e5",
+                            "href": "/events/graduation",
+                            "image": "https://images.unsplash.com/photo-1523050854058-8df90110c9f1?w=500&h=600&fit=crop&q=80",
+                            "label": "Student"
                           },
                           {
-                            "id": "6",
-                            "date": "July 12, 2026",
-                            "href": "/planner",
-                            "type": "Parties",
-                            "image": "https://images.unsplash.com/photo-1464366400600-7168b8af9bc3?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&w=800&q=80",
-                            "likes": 43,
-                            "title": "25th Anniversary Dinner",
-                            "views": 432,
-                            "location": "Seattle, WA"
+                            "id": "e6",
+                            "href": "/events/baptism",
+                            "image": "https://images.unsplash.com/photo-1602631985686-1bb2456a9d48?w=500&h=600&fit=crop&q=80",
+                            "label": "Dop"
                           }
                         ],
-                        "title": "Get Inspired by Real Events",
-                        "columns": 3,
-                        "ctaHref": "/vendors",
-                        "showCta": true,
-                        "ctaLabel": "View More Events",
-                        "subtitle": "Explore stunning celebrations from our community and find ideas for your next event",
-                        "container": {
-                          "shadow": "none",
-                          "padding": 0,
-                          "borderWidth": 2,
-                          "borderRadius": 0,
-                          "backgroundType": "solid",
-                          "gradientBorder": {
-                            "angle": 135,
-                            "colors": [
-                              "#ec4899",
-                              "#8b5cf6"
-                            ],
-                            "enabled": false
-                          }
-                        },
-                        "sectionBg": "linear-gradient(to bottom, #faf5ff, #ffffff)",
-                        "cardBadgeTo": "#ec4899",
-                        "cardBadgeFrom": "#9333ea",
-                        "ctaGradientTo": "#ec4899",
-                        "ctaGradientFrom": "#9333ea",
-                        "headingFontSize": 60,
-                        "planSimilarHref": "",
-                        "planSimilarLabel": "Plan Similar"
+                        "heading": "Utforska efter eventtyp",
+                        "dataSource": "manual"
                       }
                     }
                   ],
@@ -1549,549 +961,148 @@
                 "marginTop": 0,
                 "background": {
                   "type": "solid",
-                  "color": "#ffffff",
-                  "image": {
-                    "url": "",
-                    "size": "cover",
-                    "fixed": false,
-                    "repeat": "no-repeat",
-                    "position": "center"
-                  },
-                  "video": {
-                    "url": "",
-                    "loop": true,
-                    "muted": true
-                  },
-                  "overlay": {
-                    "color": "#000000",
-                    "enabled": false,
-                    "opacity": 0.5
-                  },
-                  "gradient": {
-                    "type": "linear",
-                    "angle": 180,
-                    "colors": [
-                      {
-                        "color": "#1e293b",
-                        "position": 0
-                      },
-                      {
-                        "color": "#0f172a",
-                        "position": 100
-                      }
-                    ]
-                  },
-                  "patternOverlay": {
-                    "type": "dots",
-                    "color": "#ffffff",
-                    "opacity": 0.1
-                  }
+                  "color": "transparent"
                 },
-                "paddingTop": 64,
-                "paddingLeft": 16,
+                "paddingTop": 0,
+                "paddingLeft": 0,
                 "borderRadius": 0,
                 "marginBottom": 0,
-                "paddingRight": 16,
-                "paddingBottom": 64,
+                "paddingRight": 0,
+                "paddingBottom": 0,
                 "visibleOnMobile": true,
                 "visibleOnDesktop": true
               }
             },
             {
-              "id": "section_1776770369097_nrbvot4af",
-              "order": 6,
-              "layout": "1",
+              "id": "sec_4t81km4o",
+              "order": 3,
+              "layout": "1-col",
               "columns": [
                 {
-                  "id": "col_1776770369097_iddn7tdus",
+                  "id": "col_pvucwfxy",
                   "widgets": [
                     {
-                      "id": "widget_1776770377801_b1h9ose3o",
-                      "type": "process-steps",
+                      "id": "w_yxu5ozc0",
+                      "type": "planigate-vendors",
                       "settings": {
-                        "card": {
-                          "show": true,
-                          "shadow": "sm",
-                          "padding": 45,
-                          "borderColor": "#e5e7eb",
-                          "borderWidth": 2,
-                          "hoverEffect": "lift",
-                          "borderRadius": 12,
-                          "backgroundType": "solid",
-                          "backgroundColor": "#ffffff"
-                        },
-                        "steps": [
+                        "items": [
                           {
-                            "id": "step_1",
-                            "icon": "UserPlus",
-                            "title": "Create Event",
-                            "description": "Set up your event details and preferences"
+                            "id": "v1",
+                            "name": "Villa Vanahem",
+                            "image": "https://images.unsplash.com/photo-1519167758481-83f550bb49b3?w=500&h=400&fit=crop&q=80",
+                            "rating": 4.9,
+                            "category": "Festlokal · Stockholm",
+                            "reviewCount": 128
                           },
                           {
-                            "id": "step_2",
+                            "id": "v2",
+                            "name": "Fotograf Erika Norén",
+                            "image": "https://images.unsplash.com/photo-1554080353-a576cf803bda?w=500&h=400&fit=crop&q=80",
+                            "rating": 5,
+                            "category": "Fotograf · Göteborg",
+                            "reviewCount": 96
+                          },
+                          {
+                            "id": "v3",
+                            "name": "Catering by Seasons",
+                            "image": "https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=500&h=400&fit=crop&q=80",
+                            "rating": 4.8,
+                            "category": "Catering · Malmö",
+                            "reviewCount": 74
+                          },
+                          {
+                            "id": "v4",
+                            "name": "DJ Nordqvist",
+                            "image": "https://images.unsplash.com/photo-1493676304819-0d7a8d026dcf?w=500&h=400&fit=crop&q=80",
+                            "rating": 4.9,
+                            "category": "DJ · Stockholm",
+                            "reviewCount": 56
+                          },
+                          {
+                            "id": "v5",
+                            "name": "Blomsterverket",
+                            "image": "https://images.unsplash.com/photo-1519225421980-715cb0215aed?w=500&h=400&fit=crop&q=80",
+                            "rating": 4.8,
+                            "category": "Dekoration · Uppsala",
+                            "reviewCount": 43
+                          }
+                        ],
+                        "limit": 5,
+                        "heading": "Populära leverantörer nära dig",
+                        "dataSource": "auto",
+                        "viewAllHref": "/vendors",
+                        "viewAllText": "Visa alla",
+                        "onlyFeatured": false
+                      }
+                    }
+                  ],
+                  "settings": {
+                    "padding": 0,
+                    "verticalAlign": "top"
+                  }
+                }
+              ],
+              "settings": {
+                "gap": 32,
+                "maxWidth": "full",
+                "fullWidth": true,
+                "isVisible": true,
+                "marginTop": 0,
+                "background": {
+                  "type": "solid",
+                  "color": "transparent"
+                },
+                "paddingTop": 0,
+                "paddingLeft": 0,
+                "borderRadius": 0,
+                "marginBottom": 0,
+                "paddingRight": 0,
+                "paddingBottom": 0,
+                "visibleOnMobile": true,
+                "visibleOnDesktop": true
+              }
+            },
+            {
+              "id": "sec_lhtow2og",
+              "order": 4,
+              "layout": "1-col",
+              "columns": [
+                {
+                  "id": "col_uqqyif56",
+                  "widgets": [
+                    {
+                      "id": "w_nj7vdrt2",
+                      "type": "planigate-stats",
+                      "settings": {
+                        "items": [
+                          {
+                            "id": "s1",
+                            "icon": "Sparkles",
+                            "label": "🎉 TEST Events",
+                            "number": "99 999+",
+                            "dataKey": "totalEvents"
+                          },
+                          {
+                            "id": "s2",
+                            "icon": "Users",
+                            "label": "Gäster hanterade",
+                            "number": "250 000+",
+                            "dataKey": "totalGuests"
+                          },
+                          {
+                            "id": "s3",
+                            "icon": "Store",
+                            "label": "Leverantörer anslutna",
+                            "number": "1 500+",
+                            "dataKey": "approvedVendors"
+                          },
+                          {
+                            "id": "s4",
                             "icon": "Globe",
-                            "title": "Find Vendors",
-                            "description": "Browse verified vendors and services"
-                          },
-                          {
-                            "id": "step_3",
-                            "icon": "Mail",
-                            "title": "Manage Everything",
-                            "description": "Track tasks, guests, and budget"
-                          },
-                          {
-                            "id": "step_4",
-                            "icon": "Heart",
-                            "title": "Celebrate!",
-                            "description": "Enjoy your perfectly planned event"
+                            "label": "Vi finns här för dig",
+                            "number": "Sverige & Skandinavien"
                           }
-                        ],
-                        "colors": {
-                          "useTheme": true
-                        },
-                        "header": {
-                          "show": false,
-                          "badge": {
-                            "show": false,
-                            "text": "Simple Process",
-                            "style": "outline",
-                            "bgColor": "transparent",
-                            "textColor": "#BE6B8B",
-                            "fontWeight": 700,
-                            "borderColor": "transparent",
-                            "letterSpacing": "1.5px",
-                            "textTransform": "uppercase",
-                            "customFontSize": "12px"
-                          },
-                          "heading": {
-                            "size": "xl",
-                            "text": "How It Works",
-                            "color": "#2C1A1A",
-                            "fontWeight": 700,
-                            "lineHeight": 1.2,
-                            "letterSpacing": "-0.02em",
-                            "customFontSize": "clamp(28px, 3.5vw, 44px)",
-                            "highlightColor": "",
-                            "highlightWords": ""
-                          },
-                          "alignment": "center",
-                          "description": {
-                            "show": true,
-                            "size": "lg",
-                            "text": "Plan your perfect event in four simple steps",
-                            "color": "#64748b"
-                          },
-                          "marginBottom": 60
-                        },
-                        "layout": {
-                          "gap": 17,
-                          "type": "horizontal",
-                          "columns": 4,
-                          "verticalSpacing": 48
-                        },
-                        "stepIcon": {
-                          "show": true,
-                          "size": "md",
-                          "style": "rounded",
-                          "bgColor": "#9333ea",
-                          "iconColor": "#ffffff",
-                          "borderColor": "transparent",
-                          "hoverAnimation": "none"
-                        },
-                        "animation": {
-                          "staggerDelay": 150,
-                          "animateOnScroll": true
-                        },
-                        "connector": {
-                          "show": false,
-                          "color": "rgba(190,107,139,0.3)",
-                          "style": "dotted",
-                          "dotSize": 8,
-                          "dotColor": "#9333ea",
-                          "animation": "none",
-                          "thickness": 2,
-                          "animationSpeed": "medium",
-                          "secondaryColor": "#9333ea",
-                          "animationDirection": "forward"
-                        },
-                        "container": {
-                          "shadow": "none",
-                          "padding": 0,
-                          "borderWidth": 2,
-                          "borderRadius": 0,
-                          "backgroundType": "solid",
-                          "gradientBorder": {
-                            "angle": 135,
-                            "colors": [
-                              "#ec4899",
-                              "#8b5cf6"
-                            ],
-                            "enabled": false
-                          }
-                        },
-                        "stepLabel": {
-                          "show": true,
-                          "prefix": "STEP",
-                          "bgColor": "#f3f4f6",
-                          "textColor": "#6b7280"
-                        },
-                        "stepStyle": {
-                          "iconSize": 22,
-                          "descColor": "#6B5555",
-                          "numberSize": 48,
-                          "titleColor": "#2C1A1A",
-                          "numberStyle": "circle-filled",
-                          "numberBgColor": "#BE6B8B",
-                          "numberTextColor": "#ffffff"
-                        },
-                        "responsive": {
-                          "mobile": {
-                            "layout": "vertical",
-                            "columns": 1
-                          },
-                          "tablet": {
-                            "layout": "horizontal",
-                            "columns": 2
-                          }
-                        },
-                        "stepNumber": {
-                          "show": false,
-                          "size": "sm",
-                          "style": "circle",
-                          "bgColor": "#9333ea",
-                          "position": "top-left",
-                          "textColor": "#ffffff",
-                          "borderColor": "#9333ea"
-                        },
-                        "stepContent": {
-                          "alignment": "left",
-                          "titleSize": "lg",
-                          "titleColor": "#111827",
-                          "descriptionSize": "sm",
-                          "descriptionColor": "#6b7280",
-                          "customTitleFontSize": "24px"
-                        },
-                        "_translations": {
-                          "ar": {
-                            "steps.0.title": "أنشئ حسابك",
-                            "steps.1.title": "أنشئ موقع زفافك",
-                            "steps.2.title": "ادعُ الضيوف واجمع تأكيدات الحضور",
-                            "steps.3.title": "احتفل بيومك المثالي",
-                            "header.badge.text": "عملية بسيطة",
-                            "header.heading.text": "كيف يعمل",
-                            "steps.0.description": "سجّل مجاناً في أقل من دقيقة. لا بطاقة ائتمان مطلوبة. تبدأ رحلة تخطيط زفافك فوراً.",
-                            "steps.1.description": "اختر قالباً أنيقاً، خصّص ألوانك، ارفع الصور وأضف قصتك. مباشر في دقائق.",
-                            "steps.2.description": "شارك رابط موقعك. يؤكد الضيوف حضورهم مباشرة عبر الإنترنت — يتتبع الحضور والاحتياجات الغذائية تلقائياً.",
-                            "steps.3.description": "أدِر مخطط الجلوس، نسّق مع الموردين، واستمتع بكل لحظة — Ceremoney يتولى التنظيم.",
-                            "header.description.text": "خطط لحدثك المثالي في أربع خطوات بسيطة"
-                          },
-                          "bn": {
-                            "steps.0.title": "আপনার অ্যাকাউন্ট তৈরি করুন",
-                            "steps.1.title": "আপনার বিয়ের ওয়েবসাইট তৈরি করুন",
-                            "steps.2.title": "অতিথিদের আমন্ত্রণ জানান ও RSVP সংগ্রহ করুন",
-                            "steps.3.title": "আপনার নিখুঁত দিন উদযাপন করুন",
-                            "header.badge.text": "সহজ প্রক্রিয়া",
-                            "header.heading.text": "কীভাবে কাজ করে",
-                            "steps.0.description": "এক মিনিটেরও কম সময়ে বিনামূল্যে নিবন্ধন করুন। ক্রেডিট কার্ডের প্রয়োজন নেই।",
-                            "steps.1.description": "একটি মার্জিত টেমপ্লেট বেছে নিন, রঙ কাস্টমাইজ করুন, ছবি আপলোড করুন এবং আপনার গল্প যোগ করুন।",
-                            "steps.2.description": "আপনার ওয়েবসাইটের লিংক শেয়ার করুন। অতিথিরা অনলাইনে RSVP দেন — উপস্থিতি, খাবারের পছন্দ স্বয়ংক্রিয়ভাবে ট্র্যাক হয়।",
-                            "steps.3.description": "আসন বিন্যাস পরিচালনা করুন, ভেন্ডরদের সমন্বয় করুন এবং প্রতিটি মুহূর্ত উপভোগ করুন।",
-                            "header.description.text": "চারটি সহজ ধাপে আপনার নিখুঁত ইভেন্ট পরিকল্পনা করুন"
-                          },
-                          "sv": {
-                            "steps.0.title": "Skapa ditt konto",
-                            "steps.1.title": "Bygg din bröllopssida",
-                            "steps.2.title": "Bjud in gäster och samla in OSA",
-                            "steps.3.title": "Fira din perfekta dag",
-                            "header.badge.text": "Enkel process",
-                            "header.heading.text": "Så fungerar det",
-                            "steps.0.description": "Registrera dig gratis på under en minut. Inget kreditkort krävs. Din bröllopplanering börjar omedelbart.",
-                            "steps.1.description": "Välj en elegant mall, anpassa dina färger, ladda upp foton och lägg till din historia. Live på några minuter.",
-                            "steps.2.description": "Dela länken till din sida. Gäster svarar direkt online — närvaro, kostbehov och sällskap spåras automatiskt.",
-                            "steps.3.description": "Hantera din bordplacering, koordinera leverantörer och njut av varje ögonblick — Ceremoney sköter organisationen.",
-                            "header.description.text": "Planera ditt perfekta evenemang i fyra enkla steg"
-                          }
-                        }
-                      }
-                    }
-                  ],
-                  "settings": {
-                    "padding": 0,
-                    "verticalAlign": "top"
-                  }
-                }
-              ],
-              "settings": {
-                "gap": 32,
-                "maxWidth": "xl",
-                "fullWidth": true,
-                "isVisible": true,
-                "marginTop": 0,
-                "background": {
-                  "type": "solid",
-                  "color": "#ffffff",
-                  "image": {
-                    "url": "",
-                    "size": "cover",
-                    "fixed": false,
-                    "repeat": "no-repeat",
-                    "position": "center"
-                  },
-                  "video": {
-                    "url": "",
-                    "loop": true,
-                    "muted": true
-                  },
-                  "overlay": {
-                    "color": "#000000",
-                    "enabled": false,
-                    "opacity": 0.5
-                  },
-                  "gradient": {
-                    "type": "linear",
-                    "angle": 180,
-                    "colors": [
-                      {
-                        "color": "#1e293b",
-                        "position": 0
-                      },
-                      {
-                        "color": "#0f172a",
-                        "position": 100
-                      }
-                    ]
-                  },
-                  "patternOverlay": {
-                    "type": "dots",
-                    "color": "#ffffff",
-                    "opacity": 0.1
-                  }
-                },
-                "paddingTop": 64,
-                "paddingLeft": 16,
-                "borderRadius": 0,
-                "marginBottom": 0,
-                "paddingRight": 16,
-                "paddingBottom": 64,
-                "visibleOnMobile": true,
-                "visibleOnDesktop": true
-              }
-            },
-            {
-              "id": "section_1776770671585_strgxbf9e",
-              "order": 7,
-              "layout": "1",
-              "columns": [
-                {
-                  "id": "col_1776770671585_5odffwpuf",
-                  "widgets": [
-                    {
-                      "id": "widget_1776770678664_r5fo0t8k8",
-                      "type": "testimonials-carousel",
-                      "settings": {
-                        "avatar": {
-                          "size": "md",
-                          "shape": "circle",
-                          "style": "initials",
-                          "textColor": "#ffffff",
-                          "borderColor": "#ec4899",
-                          "borderWidth": 0,
-                          "backgroundColor": "#ec4899"
-                        },
-                        "header": {
-                          "show": true,
-                          "badge": {
-                            "show": true,
-                            "text": "Trusted by Thousands",
-                            "style": "pill",
-                            "bgColor": "#ffffff",
-                            "textColor": "#7c3aed",
-                            "fontWeight": 600,
-                            "borderColor": "#ddd6fe",
-                            "letterSpacing": "0px",
-                            "textTransform": "none",
-                            "customFontSize": "13px"
-                          },
-                          "heading": {
-                            "size": "xl",
-                            "text": "What Event Planners Say",
-                            "color": "#111827",
-                            "fontWeight": 700,
-                            "lineHeight": 1.15,
-                            "letterSpacing": "-0.02em",
-                            "customFontSize": "48px",
-                            "highlightColor": "#7c3aed",
-                            "highlightWords": ""
-                          },
-                          "alignment": "center",
-                          "description": {
-                            "show": true,
-                            "size": "lg",
-                            "text": "Join thousands of happy planners who've created unforgettable events",
-                            "color": "#6b7280",
-                            "lineHeight": 1.7,
-                            "customFontSize": "15px"
-                          },
-                          "marginBottom": 56
-                        },
-                        "content": {
-                          "infoColor": "#9ca3af",
-                          "nameColor": "#111827",
-                          "quoteColor": "#4b5563",
-                          "quoteStyle": "normal",
-                          "showRating": true,
-                          "countryFlag": false,
-                          "ratingColor": "#facc15",
-                          "ratingStyle": "stars",
-                          "showCompany": true,
-                          "showCountry": false,
-                          "infoFontSize": "xs",
-                          "nameFontSize": "sm",
-                          "quoteFontSize": "sm",
-                          "quoteMaxLines": 0,
-                          "nameFontWeight": "semibold"
-                        },
-                        "gridView": {
-                          "gap": 32,
-                          "columns": 3,
-                          "quoteIconSize": "lg",
-                          "showQuoteIcon": true,
-                          "quoteIconColor": "#c4b5fd",
-                          "quoteIconPosition": "top-right"
-                        },
-                        "viewMode": "marquee",
-                        "animation": {
-                          "enabled": true,
-                          "duration": 500,
-                          "entrance": "fade",
-                          "staggerDelay": 100
-                        },
-                        "cardStyle": {
-                          "style": "elevated",
-                          "shadow": "sm",
-                          "padding": 32,
-                          "borderColor": "#f3f4f6",
-                          "borderWidth": 1,
-                          "glassEffect": {
-                            "blur": 10,
-                            "enabled": false,
-                            "opacity": 0.1
-                          },
-                          "hoverEffect": "lift",
-                          "borderRadius": 16,
-                          "gradientBorder": {
-                            "angle": 135,
-                            "colors": [
-                              "#ec4899",
-                              "#8b5cf6"
-                            ],
-                            "enabled": false
-                          },
-                          "backgroundColor": "#ffffff"
-                        },
-                        "container": {
-                          "shadow": "none",
-                          "padding": 0,
-                          "borderWidth": 2,
-                          "borderRadius": 0,
-                          "backgroundType": "solid",
-                          "gradientBorder": {
-                            "angle": 135,
-                            "colors": [
-                              "#ec4899",
-                              "#8b5cf6"
-                            ],
-                            "enabled": false
-                          }
-                        },
-                        "videoView": {
-                          "gap": 16,
-                          "columns": 4,
-                          "darkTheme": true,
-                          "hoverEffect": "scale",
-                          "overlayColor": "#000000",
-                          "overlayOpacity": 0.3,
-                          "playButtonSize": "lg",
-                          "playButtonColor": "#ffffff",
-                          "playButtonStyle": "circle",
-                          "showCustomerInfo": true,
-                          "thumbnailAspectRatio": "9:16"
-                        },
-                        "dataSource": {
-                          "limit": 6,
-                          "sortBy": "sort-order",
-                          "testimonialType": "all"
-                        },
-                        "responsive": {
-                          "mobile": {
-                            "layout": "vertical",
-                            "columns": 1,
-                            "slidesPerView": 1
-                          },
-                          "tablet": {
-                            "columns": 2,
-                            "slidesPerView": 2
-                          }
-                        },
-                        "trustFooter": {
-                          "show": false,
-                          "alignment": "center",
-                          "marginTop": 48,
-                          "totalReviews": "(1,200+ reviews)",
-                          "averageRating": 4.9,
-                          "showAvatarStack": true,
-                          "avatarStackCount": 4,
-                          "customerCountText": "Join thousands of happy planners",
-                          "showAverageRating": true
-                        },
-                        "carouselView": {
-                          "loop": true,
-                          "effect": "slide",
-                          "layout": "rail",
-                          "autoplay": true,
-                          "navigation": {
-                            "arrows": {
-                              "size": "md",
-                              "color": "#ffffff",
-                              "style": "rounded",
-                              "enabled": false,
-                              "position": "bottom-right",
-                              "showOnHover": false,
-                              "backgroundColor": "#ffffff20"
-                            },
-                            "pagination": {
-                              "type": "dots",
-                              "enabled": true,
-                              "activeColor": "#BE6B8B",
-                              "inactiveColor": "rgba(190,107,139,0.2)"
-                            }
-                          },
-                          "splitLayout": {
-                            "photoSize": "50",
-                            "photoPosition": "left"
-                          },
-                          "spaceBetween": 24,
-                          "autoplayDelay": 5000,
-                          "slidesPerView": 3
-                        },
-                        "_translations": {
-                          "ar": {
-                            "header.badge.text": "قصص نجاح",
-                            "header.heading.text": "ما يقوله مستخدمونا",
-                            "header.description.text": "قصص حقيقية من أزواج حقيقيين خططوا لحفل زفاف أحلامهم مع Ceremoney."
-                          },
-                          "bn": {
-                            "header.badge.text": "সাফল্যের গল্প",
-                            "header.heading.text": "আমাদের ব্যবহারকারীরা কী বলেন",
-                            "header.description.text": "Ceremoney দিয়ে স্বপ্নের বিয়ে পরিকল্পনা করা বাস্তব দম্পতিদের বাস্তব গল্প।"
-                          },
-                          "sv": {
-                            "header.badge.text": "Framgångshistorier",
-                            "header.heading.text": "Vad våra användare säger",
-                            "header.description.text": "Riktiga berättelser från riktiga par som planerade sitt drömbröllopp med Ceremoney."
-                          }
-                        },
-                        "testimonialType": "photo"
+                        ]
                       }
                     }
                   ],
@@ -2109,113 +1120,37 @@
                 "marginTop": 0,
                 "background": {
                   "type": "solid",
-                  "color": "#ffffff",
-                  "image": {
-                    "url": "",
-                    "size": "cover",
-                    "fixed": false,
-                    "repeat": "no-repeat",
-                    "position": "center"
-                  },
-                  "video": {
-                    "url": "",
-                    "loop": true,
-                    "muted": true
-                  },
-                  "overlay": {
-                    "color": "#000000",
-                    "enabled": false,
-                    "opacity": 0.5
-                  },
-                  "gradient": {
-                    "type": "linear",
-                    "angle": 180,
-                    "colors": [
-                      {
-                        "color": "#1e293b",
-                        "position": 0
-                      },
-                      {
-                        "color": "#0f172a",
-                        "position": 100
-                      }
-                    ]
-                  },
-                  "patternOverlay": {
-                    "type": "dots",
-                    "color": "#ffffff",
-                    "opacity": 0.1
-                  }
+                  "color": "transparent"
                 },
-                "paddingTop": 64,
-                "paddingLeft": 16,
+                "paddingTop": 0,
+                "paddingLeft": 0,
                 "borderRadius": 0,
                 "marginBottom": 0,
-                "paddingRight": 16,
-                "paddingBottom": 64,
+                "paddingRight": 0,
+                "paddingBottom": 0,
                 "visibleOnMobile": true,
                 "visibleOnDesktop": true
               }
             },
             {
-              "id": "section_1776771438813_zw8veeqo5",
-              "order": 8,
-              "layout": "1",
+              "id": "sec_vx5n2uv1",
+              "order": 5,
+              "layout": "1-col",
               "columns": [
                 {
-                  "id": "col_1776771438813_6woj5h9zf",
+                  "id": "col_662upesb",
                   "widgets": [
                     {
-                      "id": "widget_1776771471493_c97pmkamq",
-                      "type": "faq-accordion",
+                      "id": "w_y5dh9atv",
+                      "type": "planigate-cta",
                       "settings": {
-                        "style": "cards",
-                        "colors": {
-                          "useTheme": false
-                        },
-                        "header": {
-                          "show": true,
-                          "badge": {
-                            "show": true,
-                            "text": "Got Questions?"
-                          },
-                          "heading": "Frequently Asked Questions",
-                          "alignment": "center",
-                          "description": "Everything you need to know about event planning with EventPlanner Pro"
-                        },
-                        "source": "all",
-                        "columns": 2,
-                        "maxItems": 10,
-                        "container": {
-                          "shadow": "none",
-                          "padding": 0,
-                          "borderWidth": 2,
-                          "borderRadius": 0,
-                          "backgroundType": "solid",
-                          "gradientBorder": {
-                            "angle": 135,
-                            "colors": [
-                              "#ec4899",
-                              "#8b5cf6"
-                            ],
-                            "enabled": false
-                          }
-                        },
-                        "itemStyle": {
-                          "gap": 16,
-                          "padding": 20,
-                          "borderRadius": 12,
-                          "questionSize": "base"
-                        },
-                        "categories": [],
-                        "accentColor": "#7c3aed",
-                        "expandFirst": false,
-                        "headerStyle": {
-                          "headingSize": "xl",
-                          "headingColor": "#0f172a"
-                        },
-                        "allowMultipleOpen": false,
-                        "showCategoryFilter": false
+                        "heading": "Redo att skapa ditt nästa oförglömliga event?",
+                        "subtitle": "Kom igång gratis – det tar mindre än en minut.",
+                        "backgroundImage": "https://images.unsplash.com/photo-1464366400600-7168b8af9bc3?w=900&h=400&fit=crop&q=80",
+                        "primaryButtonHref": "/onboarding",
+                        "primaryButtonText": "Skapa ditt event gratis",
+                        "secondaryButtonHref": "/contact",
+                        "secondaryButtonText": "Boka demo för företag"
                       }
                     }
                   ],
@@ -2227,186 +1162,20 @@
               ],
               "settings": {
                 "gap": 32,
-                "maxWidth": "xl",
+                "maxWidth": "full",
                 "fullWidth": true,
                 "isVisible": true,
                 "marginTop": 0,
                 "background": {
                   "type": "solid",
-                  "color": "#ffffff",
-                  "image": {
-                    "url": "",
-                    "size": "cover",
-                    "fixed": false,
-                    "repeat": "no-repeat",
-                    "position": "center"
-                  },
-                  "video": {
-                    "url": "",
-                    "loop": true,
-                    "muted": true
-                  },
-                  "overlay": {
-                    "color": "#000000",
-                    "enabled": false,
-                    "opacity": 0.5
-                  },
-                  "gradient": {
-                    "type": "linear",
-                    "angle": 180,
-                    "colors": [
-                      {
-                        "color": "#1e293b",
-                        "position": 0
-                      },
-                      {
-                        "color": "#0f172a",
-                        "position": 100
-                      }
-                    ]
-                  },
-                  "patternOverlay": {
-                    "type": "dots",
-                    "color": "#ffffff",
-                    "opacity": 0.1
-                  }
+                  "color": "transparent"
                 },
-                "paddingTop": 64,
-                "paddingLeft": 16,
+                "paddingTop": 0,
+                "paddingLeft": 0,
                 "borderRadius": 0,
                 "marginBottom": 0,
-                "paddingRight": 16,
-                "paddingBottom": 64,
-                "visibleOnMobile": true,
-                "visibleOnDesktop": true
-              }
-            },
-            {
-              "id": "section_1776771861728_8mwj6gc8i",
-              "order": 9,
-              "layout": "1",
-              "columns": [
-                {
-                  "id": "col_1776771861728_wvhstjt6f",
-                  "widgets": [
-                    {
-                      "id": "widget_1776771872432_iv785zzsu",
-                      "type": "cta-banner",
-                      "settings": {
-                        "title": "Ready to Plan Your Dream Event?",
-                        "variant": "light",
-                        "subtitle": "Start planning in minutes with our intuitive platform. Find vendors, manage guests, and create unforgettable moments.",
-                        "sectionBgTo": "#ffffff",
-                        "showPattern": true,
-                        "trustBadges": {
-                          "show": true,
-                          "items": [
-                            "Free forever plan",
-                            "No credit card required",
-                            "Cancel anytime"
-                          ]
-                        },
-                        "cardPaddingH": 32,
-                        "cardPaddingV": 64,
-                        "_translations": {
-                          "ar": {
-                            "title": "هل أنت مستعد لتخطيط حدثك القادم؟",
-                            "subtitle": "انضم إلى آلاف مخططي الفعاليات الذين يثقون في Ceremoney لاحتفالاتهم",
-                            "primaryButton.label": "ابدأ مجاناً",
-                            "secondaryButton.label": "شاهد العرض التوضيحي"
-                          },
-                          "bn": {
-                            "title": "আপনার পরবর্তী ইভেন্ট পরিকল্পনা করতে প্রস্তুত?",
-                            "subtitle": "হাজার হাজার ইভেন্ট পরিকল্পনাকারীদের সাথে যোগ দিন যারা তাদের উৎসবের জন্য Ceremoney বিশ্বাস করেন",
-                            "primaryButton.label": "বিনামূল্যে শুরু করুন",
-                            "secondaryButton.label": "ডেমো দেখুন"
-                          },
-                          "sv": {
-                            "title": "Redo att planera ditt nästa evenemang?",
-                            "subtitle": "Gå med tusentals eventplanerare som litar på Ceremoney för sina firanden",
-                            "primaryButton.label": "Kom igång gratis",
-                            "secondaryButton.label": "Se demo"
-                          }
-                        },
-                        "primaryButton": {
-                          "href": "/planner",
-                          "icon": "ArrowRight",
-                          "show": true,
-                          "label": "Start Planning for Free"
-                        },
-                        "sectionBgFrom": "#ffffff",
-                        "cardGradientTo": "#f7f7f7",
-                        "headingFontSize": 48,
-                        "secondaryButton": {
-                          "href": "#demo",
-                          "icon": "calendar",
-                          "show": true,
-                          "label": "Schedele a Demo "
-                        },
-                        "cardBorderRadius": 24,
-                        "cardGradientFrom": "#ffffff",
-                        "cardGradientAngle": 0
-                      }
-                    }
-                  ],
-                  "settings": {
-                    "padding": 0,
-                    "verticalAlign": "top"
-                  }
-                }
-              ],
-              "settings": {
-                "gap": 32,
-                "maxWidth": "xl",
-                "fullWidth": true,
-                "isVisible": true,
-                "marginTop": 0,
-                "background": {
-                  "type": "solid",
-                  "color": "#ffffff",
-                  "image": {
-                    "url": "",
-                    "size": "cover",
-                    "fixed": false,
-                    "repeat": "no-repeat",
-                    "position": "center"
-                  },
-                  "video": {
-                    "url": "",
-                    "loop": true,
-                    "muted": true
-                  },
-                  "overlay": {
-                    "color": "#000000",
-                    "enabled": false,
-                    "opacity": 0.5
-                  },
-                  "gradient": {
-                    "type": "linear",
-                    "angle": 180,
-                    "colors": [
-                      {
-                        "color": "#1e293b",
-                        "position": 0
-                      },
-                      {
-                        "color": "#0f172a",
-                        "position": 100
-                      }
-                    ]
-                  },
-                  "patternOverlay": {
-                    "type": "dots",
-                    "color": "#ffffff",
-                    "opacity": 0.1
-                  }
-                },
-                "paddingTop": 64,
-                "paddingLeft": 16,
-                "borderRadius": 0,
-                "marginBottom": 0,
-                "paddingRight": 16,
-                "paddingBottom": 64,
+                "paddingRight": 0,
+                "paddingBottom": 0,
                 "visibleOnMobile": true,
                 "visibleOnDesktop": true
               }

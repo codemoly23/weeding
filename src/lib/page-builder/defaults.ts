@@ -54,6 +54,12 @@ import type {
   TickerMarqueeWidgetSettings,
   FeaturesShowcaseWidgetSettings,
   TrendingVenuesWidgetSettings,
+  PlanigateHeroWidgetSettings,
+  PlanigateFeaturesWidgetSettings,
+  PlanigateEventTypesWidgetSettings,
+  PlanigateVendorsWidgetSettings,
+  PlanigateStatsWidgetSettings,
+  PlanigateCtaWidgetSettings,
 } from "./types";
 
 // ============================================
@@ -2951,4 +2957,221 @@ export const DEFAULT_NEWSLETTER_CTA_SETTINGS: NewsletterCtaWidgetSettings = {
     variant: "dark",
   },
   container: DEFAULT_WIDGET_CONTAINER,
+};
+
+// ============================================
+// PLANIGATE HOMEPAGE DEFAULTS (pixel-perfect reference match)
+// ============================================
+
+export const DEFAULT_PLANIGATE_HERO_SETTINGS: PlanigateHeroWidgetSettings = {
+  headingPart1: "Allt för livets",
+  headingPart2: "event – på ett ställe",
+  subtitle:
+    "Skapa inbjudningar, hantera gäster, bygg eventhemsidor och hitta leverantörer för bröllop, fester, företagsevent och mycket mer.",
+  avatars: [
+    "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=80&h=80&fit=crop&crop=face&q=80",
+    "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=80&h=80&fit=crop&crop=face&q=80",
+    "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=80&h=80&fit=crop&crop=face&q=80",
+    "https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=80&h=80&fit=crop&crop=face&q=80",
+  ],
+  rating: 5,
+  ratingCountText: "12 000+ nöjda användare",
+  ratingDividerText: "Sveriges nya plattform för eventplanering",
+  collageImages: {
+    couple:
+      "https://images.unsplash.com/photo-1519741497674-611481863552?w=600&h=800&fit=crop&q=80",
+    dinner:
+      "https://images.unsplash.com/photo-1464366400600-7168b8af9bc3?w=800&h=500&fit=crop&q=80",
+    toasting:
+      "https://images.unsplash.com/photo-1530023367847-a683933f4172?w=700&h=600&fit=crop&q=80",
+    laptop:
+      "https://images.unsplash.com/photo-1593642632559-0c6d3fc62b89?w=700&h=400&fit=crop&q=80",
+    phone:
+      "https://images.unsplash.com/photo-1556656793-08538906a9f8?w=300&h=600&fit=crop&q=80",
+  },
+  searchHeading: "Vad planerar du?",
+  eventPills: [
+    { id: "p1", label: "Bröllop", icon: "Heart", value: "wedding" },
+    { id: "p2", label: "Födelsedag", icon: "Cake", value: "birthday" },
+    { id: "p3", label: "Företagsevent", icon: "Briefcase", value: "corporate" },
+    { id: "p4", label: "Student", icon: "GraduationCap", value: "graduation" },
+    { id: "p5", label: "Julbord", icon: "TreePine", value: "christmas" },
+    { id: "p6", label: "Fest", icon: "PartyPopper", value: "party" },
+    { id: "p7", label: "Dop", icon: "Droplet", value: "baptism" },
+    { id: "p8", label: "Fler", icon: "MoreHorizontal", value: "more" },
+  ],
+  serviceInputLabel: "Vad behöver du?",
+  serviceInputPlaceholder: "Ex. Lokal, Fotograf, Catering...",
+  locationInputLabel: "Var?",
+  locationInputPlaceholder: "Ex. Stockholm, Göteborg...",
+  ctaText: "Starta ditt event gratis",
+  ctaHref: "/onboarding",
+  exploreLinkText: "Utforska leverantörer",
+  exploreLinkHref: "/vendors",
+};
+
+export const DEFAULT_PLANIGATE_FEATURES_SETTINGS: PlanigateFeaturesWidgetSettings = {
+  items: [
+    {
+      id: "f1",
+      icon: "Mail",
+      iconBgColor: "#E8E2D7",
+      title: "Digitala inbjudningar",
+      description: "Skapa vackra inbjudningar på några minuter.",
+      linkText: "Läs mer",
+      href: "/features/invitations",
+    },
+    {
+      id: "f2",
+      icon: "Users",
+      iconBgColor: "#F5E6D8",
+      title: "Gästlista & RSVP",
+      description: "Hantera svar, allergier och plus-ones enkelt.",
+      linkText: "Läs mer",
+      href: "/features/guests",
+    },
+    {
+      id: "f3",
+      icon: "LayoutGrid",
+      iconBgColor: "#E5EAE3",
+      title: "Seating chart",
+      description: "Dra och släpp gäster till bord visuellt.",
+      linkText: "Läs mer",
+      href: "/features/seating",
+    },
+    {
+      id: "f4",
+      icon: "Store",
+      iconBgColor: "#EFE4D2",
+      title: "Hitta leverantörer",
+      description: "Jämför och boka lokaler, leverantörer och tjänster.",
+      linkText: "Läs mer",
+      href: "/vendors",
+    },
+  ],
+};
+
+export const DEFAULT_PLANIGATE_EVENT_TYPES_SETTINGS: PlanigateEventTypesWidgetSettings = {
+  heading: "Utforska efter eventtyp",
+  dataSource: "manual",
+  items: [
+    {
+      id: "e1",
+      label: "Bröllop",
+      image:
+        "https://images.unsplash.com/photo-1519741497674-611481863552?w=500&h=600&fit=crop&q=80",
+      href: "/events/wedding",
+    },
+    {
+      id: "e2",
+      label: "Födelsedag",
+      image:
+        "https://images.unsplash.com/photo-1530103862676-de8c9debad1d?w=500&h=600&fit=crop&q=80",
+      href: "/events/birthday",
+    },
+    {
+      id: "e3",
+      label: "Företagsevent",
+      image:
+        "https://images.unsplash.com/photo-1591115765373-5207764f72e7?w=500&h=600&fit=crop&q=80",
+      href: "/events/corporate",
+    },
+    {
+      id: "e4",
+      label: "Julbord",
+      image:
+        "https://images.unsplash.com/photo-1464366400600-7168b8af9bc3?w=500&h=600&fit=crop&q=80",
+      href: "/events/christmas",
+    },
+    {
+      id: "e5",
+      label: "Student",
+      image:
+        "https://images.unsplash.com/photo-1523050854058-8df90110c9f1?w=500&h=600&fit=crop&q=80",
+      href: "/events/graduation",
+    },
+    {
+      id: "e6",
+      label: "Dop",
+      image:
+        "https://images.unsplash.com/photo-1602631985686-1bb2456a9d48?w=500&h=600&fit=crop&q=80",
+      href: "/events/baptism",
+    },
+  ],
+};
+
+export const DEFAULT_PLANIGATE_VENDORS_SETTINGS: PlanigateVendorsWidgetSettings = {
+  heading: "Populära leverantörer nära dig",
+  viewAllText: "Visa alla",
+  viewAllHref: "/vendors",
+  dataSource: "auto",
+  onlyFeatured: false,
+  limit: 5,
+  items: [
+    {
+      id: "v1",
+      image:
+        "https://images.unsplash.com/photo-1519167758481-83f550bb49b3?w=500&h=400&fit=crop&q=80",
+      name: "Villa Vanahem",
+      category: "Festlokal · Stockholm",
+      rating: 4.9,
+      reviewCount: 128,
+    },
+    {
+      id: "v2",
+      image:
+        "https://images.unsplash.com/photo-1554080353-a576cf803bda?w=500&h=400&fit=crop&q=80",
+      name: "Fotograf Erika Norén",
+      category: "Fotograf · Göteborg",
+      rating: 5.0,
+      reviewCount: 96,
+    },
+    {
+      id: "v3",
+      image:
+        "https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=500&h=400&fit=crop&q=80",
+      name: "Catering by Seasons",
+      category: "Catering · Malmö",
+      rating: 4.8,
+      reviewCount: 74,
+    },
+    {
+      id: "v4",
+      image:
+        "https://images.unsplash.com/photo-1493676304819-0d7a8d026dcf?w=500&h=400&fit=crop&q=80",
+      name: "DJ Nordqvist",
+      category: "DJ · Stockholm",
+      rating: 4.9,
+      reviewCount: 56,
+    },
+    {
+      id: "v5",
+      image:
+        "https://images.unsplash.com/photo-1519225421980-715cb0215aed?w=500&h=400&fit=crop&q=80",
+      name: "Blomsterverket",
+      category: "Dekoration · Uppsala",
+      rating: 4.8,
+      reviewCount: 43,
+    },
+  ],
+};
+
+export const DEFAULT_PLANIGATE_STATS_SETTINGS: PlanigateStatsWidgetSettings = {
+  items: [
+    { id: "s1", icon: "Sparkles", number: "12 000+", label: "Event skapade", dataKey: "totalEvents" },
+    { id: "s2", icon: "Users", number: "250 000+", label: "Gäster hanterade", dataKey: "totalGuests" },
+    { id: "s3", icon: "Store", number: "1 500+", label: "Leverantörer anslutna", dataKey: "approvedVendors" },
+    { id: "s4", icon: "Globe", number: "Sverige & Skandinavien", label: "Vi finns här för dig" },
+  ],
+};
+
+export const DEFAULT_PLANIGATE_CTA_SETTINGS: PlanigateCtaWidgetSettings = {
+  heading: "Redo att skapa ditt nästa oförglömliga event?",
+  subtitle: "Kom igång gratis – det tar mindre än en minut.",
+  primaryButtonText: "Skapa ditt event gratis",
+  primaryButtonHref: "/onboarding",
+  secondaryButtonText: "Boka demo för företag",
+  secondaryButtonHref: "/contact",
+  backgroundImage:
+    "https://images.unsplash.com/photo-1464366400600-7168b8af9bc3?w=900&h=400&fit=crop&q=80",
 };

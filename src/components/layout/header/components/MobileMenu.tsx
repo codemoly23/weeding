@@ -124,7 +124,7 @@ export function MobileMenu({
       </SheetTrigger>
       <SheetContent side="right" className="w-80 overflow-y-auto">
         <SheetTitle className="sr-only">Navigation Menu</SheetTitle>
-        <div className="flex flex-col gap-4 py-4">
+        <div className="flex flex-col gap-4 px-4 py-4">
           {/* Logo */}
           <div className="flex items-center justify-between">
             <Link href="/" className="flex items-center space-x-2">
