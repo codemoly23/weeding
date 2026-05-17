@@ -194,12 +194,12 @@ widgets: [
 
 **Admin Live Preview:**
 
-- Shows logo + "LLCPad" text
+- Shows logo + "Weeding Ceremony" text
 - Shows "Your Business Formation Partner" tagline
 
 **Landing Page:**
 
-- Shows logo + "LLCPad"
+- Shows logo + "Weeding Ceremony"
 - Shows full business description from businessConfig
 - Shows contact info (email, location)
 - These come from the top header section, not from BRAND widget

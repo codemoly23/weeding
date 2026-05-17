@@ -1,4 +1,4 @@
-# LLCPad Business Operations Guide
+# Weeding Ceremony Business Operations Guide
 
 > Internal documentation for service fulfillment, pricing, and operations.
 > **Confidential - For Internal Use Only**

@@ -8,7 +8,7 @@
 
 1. [Executive Summary](#executive-summary)
 2. [2025 CMS Market Analysis](#2025-cms-market-analysis)
-3. [Existing LLCPad Architecture Analysis](#existing-llcpad-architecture-analysis)
+3. [Existing Weeding Ceremony Architecture Analysis](#existing-weeding-ceremony-architecture-analysis)
 4. [Widget System Architecture](#widget-system-architecture)
 5. [Pricing Table Widget Design](#pricing-table-widget-design)
 6. [State Fees Integration](#state-fees-integration)
@@ -89,7 +89,7 @@ Section/Container → Columns → Widgets
 
 ---
 
-## Existing LLCPad Architecture Analysis
+## Existing Weeding Ceremony Architecture Analysis
 
 ### Database Models (Current)
 
@@ -1293,7 +1293,7 @@ GET    /api/public/state-fees/popular  # Popular states only
 │                                                             │
 │  Meta Title:                                                │
 │  ┌─────────────────────────────────────────────────────┐   │
-│  │ Form an LLC in Wyoming - $100 Filing Fee | LLCPad   │   │
+│  │ Form an LLC in Wyoming - $100 Filing Fee | Weeding Ceremony   │   │
 │  └─────────────────────────────────────────────────────┘   │
 │                                                             │
 │  Meta Description:                                          │

@@ -1,14 +1,10 @@
 import { NextRequest, NextResponse } from "next/server";
 import prisma from "@/lib/db";
-import { requirePluginAccess } from "@/lib/plugin-guard";
 import { z } from "zod";
 
 // GET - List tickets with filters and pagination
 export async function GET(request: NextRequest) {
   try {
-    // Plugin access check
-    await requirePluginAccess("livesupport-pro");
-
     const { searchParams } = new URL(request.url);
     const page = parseInt(searchParams.get("page") || "1");
     const limit = parseInt(searchParams.get("limit") || "20");
@@ -106,9 +102,6 @@ const createTicketSchema = z.object({
 
 export async function POST(request: NextRequest) {
   try {
-    // Plugin access check
-    await requirePluginAccess("livesupport-pro");
-
     const body = await request.json();
     const data = createTicketSchema.parse(body);
 

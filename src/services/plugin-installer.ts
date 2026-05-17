@@ -145,7 +145,7 @@ export const pluginInstaller = {
       }
 
       // Store temp path for later installation
-      const requiresLicense = manifest.manifest?.requiresLicense !== false;
+      const requiresLicense = false;
 
       return {
         success: true,
@@ -259,7 +259,7 @@ export const pluginInstaller = {
           hasPublicPages: manifest.features?.publicPages ?? false,
           hasWidgets: manifest.features?.widgets ?? false,
           hasApiRoutes: manifest.features?.apiRoutes ?? false,
-          requiresLicense: manifest.manifest?.requiresLicense !== false,
+          requiresLicense: false,
           licenseKey: licenseData?.licenseKey,
           licenseToken: licenseData?.token,
           licenseType: licenseData?.tier,
@@ -301,75 +301,19 @@ export const pluginInstaller = {
   },
 
   /**
-   * Verify license with license server
+   * Keep the old installer contract, but activate locally now that the license app is removed.
    */
   async verifyLicense(
     licenseKey: string,
     pluginSlug: string,
     pluginVersion: string
   ): Promise<LicenseVerifyResult> {
-    const licenseServerUrl =
-      process.env.LICENSE_SERVER_URL || "https://license.ceremoney.com";
-    const domain = this.getCurrentDomain();
-
-    try {
-      const response = await fetch(`${licenseServerUrl}/api/licenses/verify`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          licenseKey: licenseKey.toUpperCase().trim(),
-          domain,
-          pluginSlug,
-          pluginVersion,
-          cmsVersion: process.env.npm_package_version || "1.0.0",
-          serverInfo: {
-            nodeVersion: process.version,
-            os: process.platform,
-            timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
-          },
-        }),
-      });
-
-      const data = await response.json();
-
-      if (!response.ok || !data.valid) {
-        return {
-          valid: false,
-          error: data.error || "VERIFICATION_FAILED",
-          message: data.message || "License verification failed",
-        };
-      }
-
-      return {
-        valid: true,
-        token: data.token,
-        features: data.features,
-        tier: data.tier,
-        expiresAt: data.license?.expiresAt,
-        supportExpiresAt: data.license?.supportExpiresAt,
-      };
-    } catch (error) {
-      console.error("License verification error:", error);
-
-      // For development, allow bypass
-      if (process.env.NODE_ENV === "development") {
-        console.warn("DEV MODE: Bypassing license verification");
-        return {
-          valid: true,
-          token: "dev-token",
-          tier: "DEVELOPER",
-          message: "Development mode - license bypassed",
-        };
-      }
-
-      return {
-        valid: false,
-        error: "CONNECTION_FAILED",
-        message: "Could not connect to license server",
-      };
-    }
+    return {
+      valid: true,
+      token: "",
+      tier: "LOCAL",
+      message: `${pluginSlug}@${pluginVersion} activated locally`,
+    };
   },
 
   /**

@@ -186,7 +186,7 @@ async function sendWelcomeEmail(email: string, firstName: string) {
           email,
           unsubscribeUrl,
           siteUrl: baseUrl,
-          companyName: "LLCPad",
+          companyName: "Weeding Ceremony",
         };
         subject = renderTemplate(template.subject, variables);
         body = renderTemplate(template.body, variables);

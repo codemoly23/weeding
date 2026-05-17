@@ -114,7 +114,7 @@ export default function EditCampaignPage({
                   id="subject"
                   value={subject}
                   onChange={(e) => setSubject(e.target.value)}
-                  placeholder="e.g. Big news from LLCPad!"
+                  placeholder="e.g. Big news from Weeding Ceremony!"
                   maxLength={200}
                 />
               </div>

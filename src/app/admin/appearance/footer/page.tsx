@@ -3555,7 +3555,7 @@ export default function FooterBuilderPage() {
                         opacity: formData.brandRevealOpacity,
                       }}
                     >
-                      {formData.brandRevealText || "LLCPAD"}
+                      {formData.brandRevealText || "WEEDING CEREMONY"}
                     </span>
                   </div>
                 </>

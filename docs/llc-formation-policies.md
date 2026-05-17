@@ -260,7 +260,7 @@ FinCEN Interim Final Rule, March 26, 2025
 
 ### Important Notices
 
-1. **Not a Law Firm**: LLCPad is a business formation service, NOT a law firm. We do not provide legal advice.
+1. **Not a Law Firm**: Weeding Ceremony is a business formation service, NOT a law firm. We do not provide legal advice.
 
 2. **No Attorney-Client Relationship**: Using our services does not create an attorney-client relationship.
 

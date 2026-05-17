@@ -1,10 +1,10 @@
 module.exports = {
   apps: [
     {
-      name: 'llcpad',
+      name: 'weeding',
       script: 'npm',
       args: 'start',
-      cwd: '/home/ubuntu/llcpad',
+      cwd: '/home/ubuntu/weeding',
       instances: 1,
       autorestart: true,
       watch: false,

@@ -2,12 +2,11 @@
 import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
 import prisma from "@/lib/db";
-import { verifyPluginLicense } from "@/lib/license-verification";
 
 // Schema for pre-installed plugin activation (Option A)
 const activatePreinstalledSchema = z.object({
-  licenseKey: z.string().min(10).max(50),
-  agreedToTerms: z.boolean(),
+  licenseKey: z.string().max(50).optional(),
+  agreedToTerms: z.boolean().optional(),
 });
 
 // POST /api/admin/plugins/[slug]/activate - Activate pre-installed plugin with license
@@ -24,14 +23,6 @@ export async function POST(
     const validatedData = activatePreinstalledSchema.parse(body);
 
     console.log("[Plugin Activate] Validated data:", validatedData);
-
-    // Check terms agreement
-    if (!validatedData.agreedToTerms) {
-      return NextResponse.json(
-        { success: false, message: "You must agree to the terms and conditions" },
-        { status: 400 }
-      );
-    }
 
     // Check if plugin exists and is in INSTALLED status
     const plugin = await prisma.plugin.findUnique({
@@ -56,48 +47,18 @@ export async function POST(
       );
     }
 
-    // Get domain for license verification
-    const domain = request.headers.get("host")?.split(":")[0] || "localhost";
-
-    // Verify license with license server
-    console.log("[Plugin Activate] Verifying license:", {
-      licenseKey: validatedData.licenseKey.substring(0, 10) + "...",
-      productSlug: slug,
-      productVersion: plugin.version,
-      domain,
-    });
-
-    const licenseResult = await verifyPluginLicense({
-      licenseKey: validatedData.licenseKey,
-      productSlug: slug,
-      productVersion: plugin.version,
-      domain,
-    });
-
-    console.log("[Plugin Activate] License result:", licenseResult);
-
-    if (!licenseResult.valid) {
-      return NextResponse.json(
-        {
-          success: false,
-          message: licenseResult.error || "Invalid license key",
-        },
-        { status: 400 }
-      );
-    }
-
-    // Update plugin with license info and activate
+    // Update plugin and activate locally.
     const updatedPlugin = await prisma.plugin.update({
       where: { slug },
       data: {
         status: "ACTIVE",
-        licenseKey: validatedData.licenseKey.toUpperCase().trim(),
-        licenseToken: licenseResult.token,
-        licensePublicKey: licenseResult.publicKey, // Store RSA public key for verification
-        licenseType: licenseResult.licenseType || "standard",
-        licenseTier: licenseResult.tier,
-        licenseVerifiedAt: new Date(),
-        licenseExpiresAt: licenseResult.expiresAt ? new Date(licenseResult.expiresAt) : null,
+        licenseKey: validatedData.licenseKey?.toUpperCase().trim() || null,
+        licenseToken: null,
+        licensePublicKey: null,
+        licenseType: null,
+        licenseTier: null,
+        licenseVerifiedAt: null,
+        licenseExpiresAt: null,
         lastActivatedAt: new Date(),
         lastError: null,
       },
@@ -151,14 +112,6 @@ export async function PUT(
       return NextResponse.json(
         { success: false, message: "Plugin not found" },
         { status: 404 }
-      );
-    }
-
-    // Only allow toggle if plugin has been activated with license
-    if (!existing.licenseKey && existing.requiresLicense) {
-      return NextResponse.json(
-        { success: false, message: "This plugin requires license activation first" },
-        { status: 400 }
       );
     }
 

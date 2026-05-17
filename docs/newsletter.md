@@ -445,4 +445,4 @@ src/app/admin/settings/email/page.tsx          — Add Newsletter settings secti
 | Large recipient inserts (5000+ subscribers) | Use `createMany` with chunks of 500 rows |
 | SMTP rate limits | Configurable batch size/delay, default 50/2s |
 | Email tracking blocked by privacy-focused clients | Document limitation in analytics UI |
-| Cron not running after VPS restart | Add to `/etc/cron.d/llcpad`, store `newsletter.cron.lastRun` setting for monitoring |
+| Cron not running after VPS restart | Add to `/etc/cron.d/weeding-ceremony`, store `newsletter.cron.lastRun` setting for monitoring |

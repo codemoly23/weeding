@@ -84,7 +84,7 @@ export async function generateMetadata({
   }
 
   return {
-    title: post.metaTitle || `${post.title} | LLCPad Blog`,
+    title: post.metaTitle || `${post.title} | Weeding Ceremony Blog`,
     description: post.metaDescription || post.excerpt || undefined,
     keywords: post.tags,
     openGraph: {
@@ -136,7 +136,7 @@ export default async function BlogPostPage({ params }: PageProps) {
       dateModified: post.publishedAt,
       author: {
         "@type": "Organization",
-        name: "LLCPad",
+        name: "Weeding Ceremony",
       },
       publisher: {
         "@type": "Organization",
@@ -207,7 +207,7 @@ export default async function BlogPostPage({ params }: PageProps) {
                   L
                 </div>
                 <div>
-                  <p className="font-medium">LLCPad Team</p>
+                  <p className="font-medium">Weeding Ceremony Team</p>
                   <p className="text-sm text-muted-foreground">Author</p>
                 </div>
               </div>

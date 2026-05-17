@@ -1118,7 +1118,7 @@ export const isPluginActive = cache(async (slug: string): Promise<boolean> => {
 });
 
 export async function activatePlugin(slug: string, key: string): Promise<boolean> {
-  const isValid = await verifyActivationKey(slug, key); // Envato API or license server
+  const isValid = await verifyActivationKey(slug, key);
   if (!isValid) return false;
   await db.plugin.update({
     where: { slug },

@@ -1,4 +1,4 @@
-# LLCPad Footer — Review & Redesign Notes
+# Weeding Ceremony Footer — Review & Redesign Notes
 
 > Source: v3-forge.html footer analysis
 > References: services-and-keywords.md, competitor research (Stripe, Vercel, Linear, Mercury, Doola, Firstbase)
@@ -93,7 +93,7 @@ Based on research of Stripe, Vercel, Linear, Mercury, Doola, Firstbase and curre
   "Ready to start your US business?"  ───  [Start My LLC →]   [WhatsApp Us]
 
 [Bottom Bar — darkest shade for clear separation]
-  © 2026 LLCPad. All rights reserved.
+  © 2026 Weeding Ceremony. All rights reserved.
   Privacy · Terms · Guarantee · Disclaimer · Sitemap
   ─────────
   Disclaimer text (12px, minimum rgba 0.35 for readability)
@@ -148,7 +148,7 @@ Based on research of Stripe, Vercel, Linear, Mercury, Doola, Firstbase and curre
 
 ## Competitor Reference Summary
 
-| Competitor | Key Takeaway for LLCPad |
+| Competitor | Key Takeaway for Weeding Ceremony |
 |---|---|
 | **Doola** | Collapsible mobile accordion, "Backed By" investor logos, newsletter CTA |
 | **Firstbase** | Duplicate CTA at footer bottom, extensive resource links |

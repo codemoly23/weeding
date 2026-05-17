@@ -1,6 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
 import prisma from "@/lib/db";
-import { requirePluginAccess } from "@/lib/plugin-guard";
 import { z } from "zod";
 import { authError, checkSupportAccess } from "@/lib/admin-auth";
 
@@ -12,9 +11,6 @@ export async function GET(
   try {
     const access = await checkSupportAccess();
     if ("error" in access) return authError(access);
-
-    // Plugin access check
-    await requirePluginAccess("livesupport-pro");
 
     const { id: ticketId } = await params;
 
@@ -71,9 +67,6 @@ export async function POST(
   try {
     const access = await checkSupportAccess();
     if ("error" in access) return authError(access);
-
-    // Plugin access check
-    await requirePluginAccess("livesupport-pro");
 
     const { id: ticketId } = await params;
     let body: unknown;
@@ -144,9 +137,6 @@ export async function DELETE(
   try {
     const access = await checkSupportAccess();
     if ("error" in access) return authError(access);
-
-    // Plugin access check
-    await requirePluginAccess("livesupport-pro");
 
     const { searchParams } = new URL(request.url);
     const noteId = searchParams.get("noteId");

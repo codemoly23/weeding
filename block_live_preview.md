@@ -1028,4 +1028,4 @@ interface ResponsiveIndicatorProps {
 | Click "Preview" button | Always visible real-time preview |
 | Static block cards | Interactive canvas with inline editing |
 
-এই redesign implement করলে LLCPad এর Landing Page Builder Elementor এর মতো professional এবং intuitive হবে।
+এই redesign implement করলে Weeding Ceremony এর Landing Page Builder Elementor এর মতো professional এবং intuitive হবে।

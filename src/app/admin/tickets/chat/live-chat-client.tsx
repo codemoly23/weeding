@@ -714,7 +714,7 @@ export function LiveChatDashboardClient({
             <MessageCircle className="h-16 w-16 text-muted-foreground/30 mb-4" />
             <h3 className="text-lg font-semibold mb-2">Upgrade Required</h3>
             <p className="text-muted-foreground text-center max-w-md mb-4">
-              Upgrade your LiveSupport Pro license to access real-time chat
+              Enable chat access to use real-time support
               features.
             </p>
             <Button asChild>

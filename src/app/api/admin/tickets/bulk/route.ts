@@ -1,6 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
 import prisma from "@/lib/db";
-import { requirePluginAccess } from "@/lib/plugin-guard";
 import { z } from "zod";
 
 // POST - Bulk actions on tickets
@@ -14,9 +13,6 @@ const bulkActionSchema = z.object({
 
 export async function POST(request: NextRequest) {
   try {
-    // Plugin access check
-    await requirePluginAccess("livesupport-pro");
-
     const body = await request.json();
     const data = bulkActionSchema.parse(body);
 

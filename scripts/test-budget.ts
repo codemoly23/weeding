@@ -3,10 +3,10 @@ import { PrismaPg } from "@prisma/adapter-pg";
 import { Pool } from "pg";
 import { readFileSync } from "fs";
 
-const env = readFileSync("d:/projects/llcpad/.env", "utf8");
+const env = readFileSync("n:/codemoly/weeding/.env", "utf8");
 const pw = env.match(/DATABASE_PASSWORD=(.+)/)![1].trim();
 
-const pool = new Pool({ host: "localhost", port: 5432, user: "postgres", password: pw, database: "llcpad" });
+const pool = new Pool({ host: "localhost", port: 5432, user: "postgres", password: pw, database: "weeding" });
 const adapter = new PrismaPg(pool);
 const prisma = new PrismaClient({ adapter } as any);
 

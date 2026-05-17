@@ -63,7 +63,7 @@ public/themes/
   "category": "legal-business",
   "thumbnail": "thumbnail.jpg",
   "serviceCount": 24,
-  "author": "LLCPad"
+  "author": "Weeding Ceremony"
 }
 ```
 
@@ -95,7 +95,7 @@ public/themes/
     "services-grid": { "heading": "Our Services" }
   },
 
-  "settings": { "site_name": "LLCPad", "..." },
+  "settings": { "site_name": "Weeding Ceremony", "..." },
   "serviceCategories": [],
   "services": [],
   "pages": [],
@@ -159,7 +159,7 @@ Colors follow shadcn/ui's CSS variable pattern. Theme activation overrides Tailw
 
 Three sections:
 
-1. **Export Data** → Downloads `llcpad-export-{date}.json`
+1. **Export Data** → Downloads `weeding-ceremony-export-{date}.json`
 2. **Import Data** → File upload, validation preview, typed "CONFIRM" confirmation
 3. **Reset Data** → Danger zone, typed "RESET" confirmation, factory reset
 

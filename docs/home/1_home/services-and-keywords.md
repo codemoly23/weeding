@@ -1,4 +1,4 @@
-# LLCPad — Service List & Keyword Research
+# Weeding Ceremony — Service List & Keyword Research
 
 > Target market: International entrepreneurs from Bangladesh, India, Pakistan, UAE
 > All services deliverable 100% remotely with AI assistance
@@ -427,7 +427,7 @@ These shifts directly impact blog content strategy and keyword relevance:
 | **llcbuddy.com** | Service comparison reviews (LegalZoom vs Rocket Lawyer, ZenBusiness vs Bizee), state filing fee guides |
 | **Stripe Atlas** | Delaware C-Corp/LLC formation, integrated banking |
 
-#### Content gaps LLCPad can exploit:
+#### Content gaps Weeding Ceremony can exploit:
 1. **Form 5472 step-by-step filing guide** — competitors mention briefly, no one has a definitive walkthrough
 2. **2026 remittance tax impact on foreign LLC owners** — brand new topic, almost no coverage
 3. **TikTok Shop setup for non-residents** — huge Fiverr demand (dozens of gigs), very few authoritative blog posts
@@ -560,7 +560,7 @@ These 5 articles are displayed on the homepage insights section in a bento grid 
 - How the 1% excise tax works
 - Impact on common scenarios (LLC profits to home country, paying foreign contractors)
 - Mitigation strategies
-- How LLCPad helps with compliance
+- How Weeding Ceremony helps with compliance
 - FAQ schema
 
 **Source references:**
@@ -582,7 +582,7 @@ These 5 articles are displayed on the homepage insights section in a bento grid 
 | **Competition** | **Low** |
 | **Intent** | Transactional (setup intent → service purchase) |
 | **AI Overview eligible** | Moderate — multi-step process |
-| **Why chosen** | Blue ocean opportunity. Massive Fiverr demand (dozens of gigs). Very few authoritative blog posts exist. Targets younger, e-commerce-savvy audience. TikTok Shop's LOA requirement creates a genuine barrier that LLCPad can solve. |
+| **Why chosen** | Blue ocean opportunity. Massive Fiverr demand (dozens of gigs). Very few authoritative blog posts exist. Targets younger, e-commerce-savvy audience. TikTok Shop's LOA requirement creates a genuine barrier that Weeding Ceremony can solve. |
 
 **Suggested structure:**
 - Requirements checklist (LLC, EIN, US address, LOA)

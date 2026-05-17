@@ -1,9 +1,9 @@
 # Client Site (Landing Page) Implementation Plan
 
 ## Overview
-Public-facing website for LLCPad - US LLC Formation & Amazon Seller Services platform.
+Public-facing website for Weeding Ceremony - US LLC Formation & Amazon Seller Services platform.
 
-**Target URL Structure:** `llcpad.com`
+**Target URL Structure:** `weeding-ceremony.com`
 
 ---
 
@@ -11,7 +11,7 @@ Public-facing website for LLCPad - US LLC Formation & Amazon Seller Services pla
 
 ### 1.1 Initialize Next.js Project
 ```bash
-npx create-next-app@latest llcpad --typescript --tailwind --eslint --app --turbopack
+npx create-next-app@latest weeding --typescript --tailwind --eslint --app --turbopack
 ```
 
 **Configuration:**

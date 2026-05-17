@@ -81,7 +81,7 @@ A task is ONLY complete when:
 
 ## 1. Executive Summary
 
-This document outlines the complete specification for building a Lead Management System (LMS) integrated with the LLCPad CMS. The system will capture leads from landing page forms, store them in a centralized database, and provide a comprehensive dashboard for managing, tracking, and converting leads into customers.
+This document outlines the complete specification for building a Lead Management System (LMS) integrated with the Weeding Ceremony CMS. The system will capture leads from landing page forms, store them in a centralized database, and provide a comprehensive dashboard for managing, tracking, and converting leads into customers.
 
 ### 1.1 Industry Research Sources
 
@@ -2412,7 +2412,7 @@ Website chatbot that:
 
 ---
 
-## Appendix D: LLCPad-Specific Considerations
+## Appendix D: Weeding Ceremony-Specific Considerations
 
 ### D.1 Service-Based Scoring Weights
 
@@ -2730,7 +2730,7 @@ Action Required:
 │  │ Hi {{firstName}},                                        │   │
 │  │                                                          │   │
 │  │ Thank you for your interest in our {{service}} service.  │   │
-│  │ I'm {{agentName}} from LLCPad. How can I help you today?│   │
+│  │ I'm {{agentName}} from Weeding Ceremony. How can I help you today?│   │
 │  └─────────────────────────────────────────────────────────┘   │
 │                                                                  │
 │  Available Variables: {{firstName}}, {{lastName}}, {{service}},  │

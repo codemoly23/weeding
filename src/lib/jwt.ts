@@ -56,7 +56,7 @@ function getCurrentDomain(): string {
 }
 
 /**
- * Verify a JWT token signed by the license server
+ * Verify a signed plugin JWT token
  *
  * This function:
  * 1. Verifies the RSA-256 signature (cannot be forged)

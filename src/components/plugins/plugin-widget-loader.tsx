@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState, Suspense, lazy } from "react";
+import { useEffect, useState } from "react";
 
 interface PluginWidget {
   pluginSlug: string;
@@ -13,34 +13,10 @@ interface PluginWidgetLoaderProps {
   position: "body-end" | "body-start" | "header" | "footer";
 }
 
-// Lazy load the LiveSupport chat widget for better performance
-const LiveSupportChatWidget = lazy(() =>
-  import("./livesupport-chat-widget").then((mod) => ({
-    default: mod.LiveSupportChatWidget,
-  }))
-);
-
 /**
  * Render widget component based on plugin and widget name
  */
 function renderWidget(widget: PluginWidget) {
-  // LiveSupport Pro Chat Widget
-  if (widget.pluginSlug === "livesupport-pro" && widget.widgetName === "ChatWidget") {
-    return (
-      <Suspense fallback={null}>
-        <LiveSupportChatWidget
-          config={widget.config as {
-            position?: "bottom-right" | "bottom-left";
-            primaryColor?: string;
-            welcomeMessage?: string;
-            enabled?: boolean;
-          }}
-        />
-      </Suspense>
-    );
-  }
-
-  // For other plugins, render a placeholder div that can be hydrated by external scripts
   return (
     <div
       id={`plugin-widget-${widget.pluginSlug}-${widget.widgetName}`}
@@ -57,12 +33,6 @@ function renderWidget(widget: PluginWidget) {
  *
  * This component fetches active plugin widgets from the API and renders
  * the appropriate widget component for each plugin.
- *
- * Supported widgets:
- * - livesupport-pro/ChatWidget - Live chat widget for customer support
- *
- * For unsupported plugins, it renders placeholder divs that can be
- * hydrated by the plugin's own scripts.
  */
 export function PluginWidgetLoader({ position }: PluginWidgetLoaderProps) {
   const [widgets, setWidgets] = useState<PluginWidget[]>([]);

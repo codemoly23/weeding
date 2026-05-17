@@ -525,7 +525,7 @@ Order #ORD-2024-00156
 ### Project Structure
 
 ```
-llcpad/
+weeding/
 ├── src/
 │   ├── app/                    # Next.js App Router
 │   │   ├── (public)/           # Public pages (home, services, pricing)
@@ -561,7 +561,7 @@ llcpad/
 
 ```env
 # Database (VPS PostgreSQL)
-DATABASE_URL="postgresql://user:password@localhost:5432/llcpad"
+DATABASE_URL="postgresql://user:password@localhost:5432/weeding"
 
 # Auth
 AUTH_SECRET="..."

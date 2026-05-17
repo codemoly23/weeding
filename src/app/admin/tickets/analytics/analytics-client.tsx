@@ -208,7 +208,7 @@ export function AnalyticsDashboardClient({
             <BarChart3 className="h-16 w-16 text-muted-foreground/30 mb-4" />
             <h3 className="text-lg font-semibold mb-2">Upgrade Required</h3>
             <p className="text-muted-foreground text-center max-w-md mb-4">
-              Upgrade your LiveSupport Pro license to access detailed analytics,
+              Enable analytics access to view detailed support metrics,
               including response times, agent performance, and customer satisfaction metrics.
             </p>
             <Button asChild>

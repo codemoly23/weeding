@@ -1,5 +1,3 @@
-import { verifyPluginAccess } from "@/lib/plugin-guard";
-import { redirect } from "next/navigation";
 import { AnalyticsDashboardClient } from "./analytics-client";
 
 export const metadata = {
@@ -8,22 +6,12 @@ export const metadata = {
 };
 
 export default async function AnalyticsPage() {
-  // Server-side plugin access check (5-layer protection)
-  const access = await verifyPluginAccess("livesupport-pro");
-
-  if (!access.allowed) {
-    redirect("/admin/settings/plugins?activate=livesupport-pro");
-  }
-
-  // Check if analytics feature is enabled in license tier
-  const hasAnalyticsFeature = access.features.includes("analytics");
-
   return (
     <AnalyticsDashboardClient
-      pluginName={access.pluginName}
-      tier={access.tier}
-      features={access.features}
-      hasAnalyticsFeature={hasAnalyticsFeature}
+      pluginName="Support"
+      tier={null}
+      features={["chat", "analytics", "ai-responses"]}
+      hasAnalyticsFeature={true}
     />
   );
 }

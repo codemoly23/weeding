@@ -1,9 +1,9 @@
 # Admin Dashboard Implementation Plan
 
 ## Overview
-Internal admin panel for managing LLCPad operations - orders, customers, content, and business settings.
+Internal admin panel for managing Weeding Ceremony operations - orders, customers, content, and business settings.
 
-**Target URL Structure:** `llcpad.com/admin`
+**Target URL Structure:** `weeding-ceremony.com/admin`
 
 ---
 
