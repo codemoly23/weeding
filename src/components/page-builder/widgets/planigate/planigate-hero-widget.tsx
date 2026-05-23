@@ -83,8 +83,8 @@ export function PlanigateHeroWidget({ settings: raw }: Props) {
                 fontFamily:
                   "var(--font-serif), 'Cormorant Garamond', 'Playfair Display', Georgia, serif",
                 fontWeight: 500,
-                fontSize: "clamp(2.75rem, 5.5vw, 4.25rem)",
-                lineHeight: 1.02,
+                fontSize: "clamp(3rem, 5.5vw, 4.5rem)",
+                lineHeight: 1.0,
                 letterSpacing: "-0.01em",
               }}
             >
@@ -178,7 +178,7 @@ export function PlanigateHeroWidget({ settings: raw }: Props) {
           </motion.div>
 
           {/* RIGHT: image collage */}
-          <div className="relative h-[320px] sm:h-[400px] md:h-[460px] lg:h-[440px] mx-auto w-full max-w-[520px] lg:max-w-none">
+          <div className="relative h-[360px] sm:h-[440px] md:h-[510px] lg:h-[530px] mx-auto w-full max-w-[540px] lg:max-w-none">
             <Collage images={settings.collageImages} />
           </div>
         </div>
@@ -221,49 +221,49 @@ function Collage({ images }: { images: PlanigateHeroWidgetSettings["collageImage
         show: { transition: { staggerChildren: 0.12, delayChildren: 0.2 } },
       }}
     >
-      {/* couple — top left, vertical portrait */}
+      {/* couple — left, tall portrait fills most of height */}
       <motion.div
         variants={collagePiece(-1)}
         whileHover={{ scale: 1.03, rotate: 0, transition: { duration: 0.4 } }}
-        className="absolute left-0 top-0 w-[42%] h-[72%] rounded-[22px] overflow-hidden shadow-xl ring-1 ring-black/5"
+        className="absolute left-0 top-0 w-[44%] h-[85%] rounded-[22px] overflow-hidden shadow-xl ring-1 ring-black/5"
       >
-        <Image src={images.couple} alt="" fill sizes="(max-width: 1024px) 50vw, 320px" className="object-cover" priority />
+        <Image src={images.couple} alt="" fill sizes="(max-width: 1024px) 50vw, 340px" className="object-cover object-top" priority />
       </motion.div>
 
-      {/* dinner — top right, BIG horizontal */}
+      {/* dinner — top right, wide horizontal */}
       <motion.div
         variants={collagePiece(1)}
         whileHover={{ scale: 1.03, rotate: 0, transition: { duration: 0.4 } }}
-        className="absolute right-0 top-0 w-[56%] h-[44%] rounded-[22px] overflow-hidden shadow-xl ring-1 ring-black/5"
+        className="absolute right-0 top-0 w-[54%] h-[46%] rounded-[22px] overflow-hidden shadow-xl ring-1 ring-black/5"
       >
         <Image src={images.dinner} alt="" fill sizes="(max-width: 1024px) 50vw, 420px" className="object-cover" />
       </motion.div>
 
-      {/* toasting — right middle, large */}
+      {/* toasting — right, bottom half, flush with right edge */}
       <motion.div
         variants={collagePiece(-1)}
         whileHover={{ scale: 1.03, rotate: 0, transition: { duration: 0.4 } }}
-        className="absolute right-[8%] top-[46%] w-[48%] h-[44%] rounded-[22px] overflow-hidden shadow-2xl ring-1 ring-black/5"
+        className="absolute right-0 top-[48%] w-[54%] h-[44%] rounded-[22px] overflow-hidden shadow-2xl ring-1 ring-black/5"
       >
-        <Image src={images.toasting} alt="" fill sizes="(max-width: 1024px) 60vw, 380px" className="object-cover" />
+        <Image src={images.toasting} alt="" fill sizes="(max-width: 1024px) 60vw, 400px" className="object-cover" />
       </motion.div>
 
-      {/* laptop — overlay, center-bottom, larger */}
+      {/* laptop — floating overlay, center-bottom */}
       <motion.div
         variants={collagePiece(-2)}
         whileHover={{ scale: 1.05, rotate: 0, y: -4, transition: { duration: 0.4 } }}
         animate={{ y: [0, -3, 0], transition: { duration: 5, repeat: Infinity, ease: "easeInOut" } }}
-        className="absolute left-[10%] bottom-[8%] w-[46%] h-[30%] rounded-2xl overflow-hidden shadow-2xl ring-1 ring-black/10 bg-white"
+        className="absolute left-[6%] bottom-[3%] w-[48%] h-[33%] rounded-2xl overflow-hidden shadow-2xl ring-1 ring-black/10 bg-white"
       >
-        <Image src={images.laptop} alt="" fill sizes="(max-width: 1024px) 40vw, 360px" className="object-cover" />
+        <Image src={images.laptop} alt="" fill sizes="(max-width: 1024px) 40vw, 370px" className="object-cover" />
       </motion.div>
 
-      {/* phone — overlay, far right edge */}
+      {/* phone — far right overlay */}
       <motion.div
         variants={collagePiece(8)}
         whileHover={{ scale: 1.08, rotate: 4, transition: { duration: 0.4 } }}
         animate={{ y: [0, 4, 0], transition: { duration: 4, repeat: Infinity, ease: "easeInOut", delay: 1 } }}
-        className="absolute right-[-2%] bottom-[8%] w-[19%] h-[38%] rounded-[26px] overflow-hidden shadow-2xl ring-[3px] ring-white"
+        className="absolute right-[-2%] bottom-[3%] w-[18%] h-[44%] rounded-[26px] overflow-hidden shadow-2xl ring-[3px] ring-white"
       >
         <Image src={images.phone} alt="" fill sizes="(max-width: 1024px) 20vw, 150px" className="object-cover" />
       </motion.div>
