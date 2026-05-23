@@ -50,10 +50,24 @@ import {
   DEFAULT_BLOG_POST_TAGS_SETTINGS,
   DEFAULT_FEATURES_SHOWCASE_SETTINGS,
   DEFAULT_TRENDING_VENUES_SETTINGS,
+  DEFAULT_PLANIGATE_HERO_SETTINGS,
+  DEFAULT_PLANIGATE_FEATURES_SETTINGS,
+  DEFAULT_PLANIGATE_EVENT_TYPES_SETTINGS,
+  DEFAULT_PLANIGATE_VENDORS_SETTINGS,
+  DEFAULT_PLANIGATE_STATS_SETTINGS,
+  DEFAULT_PLANIGATE_CTA_SETTINGS,
 } from "./defaults";
 
 // Import widget components
 import { HeroContentWidget, ProcessStepsWidget, HeadingWidget, TextBlockWidget, TickerMarqueeWidget, SocialShareRailWidget, EventSearchHeroWidget, EventGalleryGridWidget, CtaBannerWidget, FeaturesShowcaseWidget, TrendingVenuesWidget } from "@/components/page-builder/widgets/content";
+import {
+  PlanigateHeroWidget,
+  PlanigateFeaturesWidget,
+  PlanigateEventTypesWidget,
+  PlanigateVendorsWidget,
+  PlanigateStatsWidget,
+  PlanigateCtaWidget,
+} from "@/components/page-builder/widgets/planigate";
 import { ImageWidget, ImageSliderWidget } from "@/components/page-builder/widgets/media";
 import {
   TrustBadgesWidget,
@@ -430,6 +444,67 @@ export function registerAllWidgets() {
     category: "wedding",
     defaultSettings: DEFAULT_TRENDING_VENUES_SETTINGS,
     component: TrendingVenuesWidget,
+  });
+
+  // ── Planigate-style homepage widgets (pixel-perfect) ────────────────
+  WidgetRegistry.register({
+    type: "planigate-hero",
+    name: "Planigate Hero",
+    description: "Pixel-perfect hero: split layout with text + image collage and embedded event search module",
+    icon: "Sparkles",
+    category: "wedding",
+    defaultSettings: DEFAULT_PLANIGATE_HERO_SETTINGS,
+    component: PlanigateHeroWidget,
+  });
+
+  WidgetRegistry.register({
+    type: "planigate-features",
+    name: "Planigate Features",
+    description: "4-up feature cards row with icon-in-circle, title, description and 'Läs mer' link",
+    icon: "LayoutGrid",
+    category: "wedding",
+    defaultSettings: DEFAULT_PLANIGATE_FEATURES_SETTINGS,
+    component: PlanigateFeaturesWidget,
+  });
+
+  WidgetRegistry.register({
+    type: "planigate-event-types",
+    name: "Planigate Event Types",
+    description: "Horizontal-scrolling event type cards (Bröllop, Födelsedag, ...) with overlay labels",
+    icon: "Heart",
+    category: "wedding",
+    defaultSettings: DEFAULT_PLANIGATE_EVENT_TYPES_SETTINGS,
+    component: PlanigateEventTypesWidget,
+  });
+
+  WidgetRegistry.register({
+    type: "planigate-vendors",
+    name: "Planigate Vendors",
+    description: "Horizontal-scrolling vendor cards with image, name, category, rating, and review count",
+    icon: "Store",
+    category: "wedding",
+    defaultSettings: DEFAULT_PLANIGATE_VENDORS_SETTINGS,
+    component: PlanigateVendorsWidget,
+  });
+
+  WidgetRegistry.register({
+    type: "planigate-stats",
+    name: "Planigate Stats",
+    description: "4-up stats bar with icon, number, and label (12 000+ Event skapade, etc.)",
+    icon: "BarChart3",
+    category: "wedding",
+    defaultSettings: DEFAULT_PLANIGATE_STATS_SETTINGS,
+    component: PlanigateStatsWidget,
+  });
+
+  WidgetRegistry.register({
+    type: "planigate-cta",
+    name: "Planigate CTA",
+    description: "Final CTA banner: heading + 2 buttons on the left, hero image on the right",
+    icon: "Megaphone",
+    category: "wedding",
+    defaultSettings: DEFAULT_PLANIGATE_CTA_SETTINGS,
+    component: PlanigateCtaWidget,
   });
 
   // CTA Banner Widget

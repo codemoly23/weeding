@@ -50,3 +50,11 @@ export { BlogPostTocSettingsPanel } from "./blog/blog-post-toc-settings";
 export { SocialShareRailSettingsPanel } from "./blog/social-share-rail-settings";
 export { BlogPostAuthorCardSettingsPanel } from "./blog/blog-post-author-card-settings";
 export { BlogPostTagsSettingsPanel } from "./blog/blog-post-tags-settings";
+
+// Planigate homepage widget settings
+export { PlanigateHeroSettingsPanel } from "./planigate-hero-settings";
+export { PlanigateFeaturesSettingsPanel } from "./planigate-features-settings";
+export { PlanigateEventTypesSettingsPanel } from "./planigate-event-types-settings";
+export { PlanigateVendorsSettingsPanel } from "./planigate-vendors-settings";
+export { PlanigateStatsSettingsPanel } from "./planigate-stats-settings";
+export { PlanigateCtaSettingsPanel } from "./planigate-cta-settings";

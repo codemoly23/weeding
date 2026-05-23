@@ -87,6 +87,46 @@ const COLOR_GROUPS: ColorGroup[] = [
     description: "Form inputs, borders, and focus rings",
     keys: ["border", "input", "ring"],
   },
+  {
+    title: "Planigate · Backgrounds",
+    description: "Homepage section, card, and hero gradient backgrounds",
+    keys: [
+      "planigate-bg-section",
+      "planigate-bg-soft",
+      "planigate-bg-card",
+      "planigate-bg-hero-from",
+      "planigate-bg-hero-via",
+      "planigate-bg-hero-to",
+      "planigate-bg-input",
+      "planigate-surface",
+    ],
+  },
+  {
+    title: "Planigate · Text",
+    description: "Homepage typography colors (primary, muted, placeholder, etc.)",
+    keys: [
+      "planigate-fg",
+      "planigate-fg-hover",
+      "planigate-fg-strong",
+      "planigate-fg-muted",
+      "planigate-fg-soft",
+      "planigate-fg-placeholder",
+      "planigate-fg-faint",
+    ],
+  },
+  {
+    title: "Planigate · Accent & Borders",
+    description: "Gold accent (italic headline + hover), star color, dividers, borders",
+    keys: [
+      "planigate-accent",
+      "planigate-accent-light",
+      "planigate-star",
+      "planigate-border",
+      "planigate-border-soft",
+      "planigate-border-subtle",
+      "planigate-divider",
+    ],
+  },
 ];
 
 // ---- Human-readable labels ----
@@ -111,6 +151,29 @@ const COLOR_LABELS: Record<string, string> = {
   border: "Border",
   input: "Input Border",
   ring: "Focus Ring",
+  // Planigate
+  "planigate-bg-section": "Section BG",
+  "planigate-bg-soft": "Soft Card BG",
+  "planigate-bg-card": "CTA Card BG",
+  "planigate-bg-hero-from": "Hero Gradient · Top",
+  "planigate-bg-hero-via": "Hero Gradient · Middle",
+  "planigate-bg-hero-to": "Hero Gradient · Bottom",
+  "planigate-bg-input": "Input BG",
+  "planigate-surface": "Surface (Pills/Cards)",
+  "planigate-fg": "Primary Text",
+  "planigate-fg-hover": "Primary Text (Hover)",
+  "planigate-fg-strong": "Strong Text",
+  "planigate-fg-muted": "Muted Text",
+  "planigate-fg-soft": "Soft Text",
+  "planigate-fg-placeholder": "Placeholder",
+  "planigate-fg-faint": "Faint Text",
+  "planigate-accent": "Gold Accent",
+  "planigate-accent-light": "Gold Divider",
+  "planigate-star": "Rating Star",
+  "planigate-border": "Border",
+  "planigate-border-soft": "Border (Soft)",
+  "planigate-border-subtle": "Border (Subtle)",
+  "planigate-divider": "Divider",
 };
 
 // ---- Google Fonts list ----
@@ -156,6 +219,58 @@ const ACCENT_FONTS = [
 
 // ---- Default empty palette ----
 
+// Planigate defaults — kept in sync with globals.css. Used as the seed for
+// new themes so admins see meaningful starting values in the color pickers.
+const PLANIGATE_LIGHT_DEFAULTS: Partial<ThemeColorValues> = {
+  "planigate-bg-section": "#EFE8DB",
+  "planigate-bg-soft": "#F5EFE5",
+  "planigate-bg-card": "#FAF6EE",
+  "planigate-bg-hero-from": "#FBF8F3",
+  "planigate-bg-hero-via": "#F5EFE5",
+  "planigate-bg-hero-to": "#EFE8DB",
+  "planigate-bg-input": "#FBF8F3",
+  "planigate-surface": "#FFFFFF",
+  "planigate-fg": "#1A1A1A",
+  "planigate-fg-hover": "#2A2A2A",
+  "planigate-fg-strong": "#3C3C3C",
+  "planigate-fg-muted": "#5C5C5C",
+  "planigate-fg-soft": "#6B6B6B",
+  "planigate-fg-placeholder": "#9A9286",
+  "planigate-fg-faint": "#8A8A8A",
+  "planigate-accent": "#8A6F3E",
+  "planigate-accent-light": "#C2A86A",
+  "planigate-star": "#E4A93B",
+  "planigate-border": "#E5DFD3",
+  "planigate-border-soft": "#E8E0D0",
+  "planigate-border-subtle": "#D6CFC0",
+  "planigate-divider": "#D9D2C5",
+};
+
+const PLANIGATE_DARK_DEFAULTS: Partial<ThemeColorValues> = {
+  "planigate-bg-section": "#0F172A",
+  "planigate-bg-soft": "#1E293B",
+  "planigate-bg-card": "#1E293B",
+  "planigate-bg-hero-from": "#0F172A",
+  "planigate-bg-hero-via": "#1E293B",
+  "planigate-bg-hero-to": "#0F172A",
+  "planigate-bg-input": "#1E293B",
+  "planigate-surface": "#1E293B",
+  "planigate-fg": "#F8FAFC",
+  "planigate-fg-hover": "#FFFFFF",
+  "planigate-fg-strong": "#E2E8F0",
+  "planigate-fg-muted": "#94A3B8",
+  "planigate-fg-soft": "#94A3B8",
+  "planigate-fg-placeholder": "#64748B",
+  "planigate-fg-faint": "#64748B",
+  "planigate-accent": "#FBBF24",
+  "planigate-accent-light": "#F59E0B",
+  "planigate-star": "#FBBF24",
+  "planigate-border": "#334155",
+  "planigate-border-soft": "#334155",
+  "planigate-border-subtle": "#475569",
+  "planigate-divider": "#475569",
+};
+
 const EMPTY_PALETTE: ThemeColorPalette = {
   light: {
     background: "#ffffff",
@@ -177,6 +292,7 @@ const EMPTY_PALETTE: ThemeColorPalette = {
     border: "#E2E8F0",
     input: "#E2E8F0",
     ring: "#F97316",
+    ...PLANIGATE_LIGHT_DEFAULTS,
   },
   dark: {
     background: "#0f172a",
@@ -198,6 +314,7 @@ const EMPTY_PALETTE: ThemeColorPalette = {
     border: "#1e293b",
     input: "#1e293b",
     ring: "#F97316",
+    ...PLANIGATE_DARK_DEFAULTS,
   },
 };
 
@@ -300,12 +417,27 @@ export default function ThemeCustomizePage() {
         if (!res.ok) throw new Error("Failed to fetch");
         const data = await res.json();
 
-        const palette = data.colorPalette || EMPTY_PALETTE;
+        // Merge fetched palette with EMPTY_PALETTE so any new keys (e.g. Planigate)
+        // get their default values even on older themes saved before the key existed.
+        const fetchedPalette = data.colorPalette;
+        const palette: ThemeColorPalette = fetchedPalette
+          ? {
+              light: { ...EMPTY_PALETTE.light, ...fetchedPalette.light },
+              dark: { ...EMPTY_PALETTE.dark, ...fetchedPalette.dark },
+            }
+          : EMPTY_PALETTE;
         const fonts = data.fontConfig || DEFAULT_FONT_CONFIG;
 
         setThemeName(data.themeName || "");
         setColorPalette(palette);
-        setOriginalColorPalette(data.originalColorPalette || palette);
+        setOriginalColorPalette(
+          data.originalColorPalette
+            ? {
+                light: { ...EMPTY_PALETTE.light, ...data.originalColorPalette.light },
+                dark: { ...EMPTY_PALETTE.dark, ...data.originalColorPalette.dark },
+              }
+            : palette
+        );
         setFontConfig(fonts);
         setInitialState({ colorPalette: palette, fontConfig: fonts });
       } catch (error) {

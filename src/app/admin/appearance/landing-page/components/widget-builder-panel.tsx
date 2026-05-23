@@ -70,6 +70,12 @@ import {
   ServiceFeaturesWidgetSettingsPanel,
   CustomHtmlWidgetSettingsPanel,
   TickerMarqueeWidgetSettingsPanel,
+  PlanigateHeroSettingsPanel,
+  PlanigateFeaturesSettingsPanel,
+  PlanigateEventTypesSettingsPanel,
+  PlanigateVendorsSettingsPanel,
+  PlanigateStatsSettingsPanel,
+  PlanigateCtaSettingsPanel,
 } from "@/components/page-builder/settings";
 import { NumberInput } from "@/app/admin/appearance/landing-page/components/ui/form-controls";
 import { AccordionSection } from "@/app/admin/appearance/landing-page/components/ui/accordion-section";
@@ -773,8 +779,68 @@ function EditMode({ widget, section, columnId, activeFieldId, onBack, onUpdateSe
             />
           )}
 
+          {/* Planigate Hero Widget */}
+          {widget.type === "planigate-hero" && (
+            <PlanigateHeroSettingsPanel
+              settings={widget.settings as any}
+              onChange={onUpdateSettings}
+              activeTab={activeTab}
+              activeFieldId={activeFieldId}
+            />
+          )}
+
+          {/* Planigate Features Widget */}
+          {widget.type === "planigate-features" && (
+            <PlanigateFeaturesSettingsPanel
+              settings={widget.settings as any}
+              onChange={onUpdateSettings}
+              activeTab={activeTab}
+              activeFieldId={activeFieldId}
+            />
+          )}
+
+          {/* Planigate Event Types Widget */}
+          {widget.type === "planigate-event-types" && (
+            <PlanigateEventTypesSettingsPanel
+              settings={widget.settings as any}
+              onChange={onUpdateSettings}
+              activeTab={activeTab}
+              activeFieldId={activeFieldId}
+            />
+          )}
+
+          {/* Planigate Vendors Widget */}
+          {widget.type === "planigate-vendors" && (
+            <PlanigateVendorsSettingsPanel
+              settings={widget.settings as any}
+              onChange={onUpdateSettings}
+              activeTab={activeTab}
+              activeFieldId={activeFieldId}
+            />
+          )}
+
+          {/* Planigate Stats Widget */}
+          {widget.type === "planigate-stats" && (
+            <PlanigateStatsSettingsPanel
+              settings={widget.settings as any}
+              onChange={onUpdateSettings}
+              activeTab={activeTab}
+              activeFieldId={activeFieldId}
+            />
+          )}
+
+          {/* Planigate CTA Widget */}
+          {widget.type === "planigate-cta" && (
+            <PlanigateCtaSettingsPanel
+              settings={widget.settings as any}
+              onChange={onUpdateSettings}
+              activeTab={activeTab}
+              activeFieldId={activeFieldId}
+            />
+          )}
+
           {/* Fallback for unknown widget types */}
-          {!["hero-content", "heading", "text-block", "image", "image-slider", "trust-badges", "stats-section", "divider", "service-card", "service-list", "process-steps", "pricing-table", "testimonials-carousel", "lead-form", "service-hero", "faq", "faq-accordion", "service-features", "service-description", "service-breadcrumb", "related-services", "blog-post-grid", "blog-post-carousel", "blog-featured-post", "blog-post-list", "blog-recent-posts", "event-search-hero", "event-gallery-grid", "features-showcase", "trending-venues", "cta-banner", "top-utility-bar"].includes(widget.type) && (
+          {!["hero-content", "heading", "text-block", "image", "image-slider", "trust-badges", "stats-section", "divider", "service-card", "service-list", "process-steps", "pricing-table", "testimonials-carousel", "lead-form", "service-hero", "faq", "faq-accordion", "service-features", "service-description", "service-breadcrumb", "related-services", "blog-post-grid", "blog-post-carousel", "blog-featured-post", "blog-post-list", "blog-recent-posts", "event-search-hero", "event-gallery-grid", "features-showcase", "trending-venues", "cta-banner", "top-utility-bar", "planigate-hero", "planigate-features", "planigate-event-types", "planigate-vendors", "planigate-stats", "planigate-cta"].includes(widget.type) && (
             <p className="text-center text-sm text-muted-foreground">
               Settings for {widget.type} coming soon.
             </p>

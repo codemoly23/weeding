@@ -28,6 +28,12 @@ import {
   TrendingVenuesWidget,
   TickerMarqueeWidget,
   SocialShareRailWidget,
+  PlanigateHeroWidget,
+  PlanigateFeaturesWidget,
+  PlanigateEventTypesWidget,
+  PlanigateVendorsWidget,
+  PlanigateStatsWidget,
+  PlanigateCtaWidget,
 } from "@/components/page-builder/widgets";
 import { TopUtilityBarWidget, BreadcrumbWidget } from "@/components/page-builder/widgets/layout";
 import { ServiceCardWidget, ServiceListWidget, PricingTableWidget, VendorListingWidget } from "@/components/page-builder/widgets/commerce";
@@ -523,6 +529,24 @@ function WidgetRenderer({ widget }: WidgetRendererProps) {
 
       case "vendor-listing":
         return <VendorListingWidget settings={resolvedSettings as any} />;
+
+      case "planigate-hero":
+        return <PlanigateHeroWidget settings={resolvedSettings as any} />;
+
+      case "planigate-features":
+        return <PlanigateFeaturesWidget settings={resolvedSettings as any} />;
+
+      case "planigate-event-types":
+        return <PlanigateEventTypesWidget settings={resolvedSettings as any} />;
+
+      case "planigate-vendors":
+        return <PlanigateVendorsWidget settings={resolvedSettings as any} />;
+
+      case "planigate-stats":
+        return <PlanigateStatsWidget settings={resolvedSettings as any} />;
+
+      case "planigate-cta":
+        return <PlanigateCtaWidget settings={resolvedSettings as any} />;
 
       default:
         // Unknown widget type - render nothing in production
