@@ -37,7 +37,7 @@ export function PlanigateFeaturesWidget({ settings: raw }: Props) {
       className="relative"
       style={{ background: "var(--color-planigate-bg-section)" }}
     >
-      <div className="mx-auto max-w-[1240px] px-4 sm:px-6 lg:px-8 pt-8 lg:pt-12 pb-10">
+      <div className="mx-auto max-w-[1240px] px-4 sm:px-6 lg:px-8 pt-4 pb-4">
         <motion.div
           className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 rounded-2xl overflow-hidden divide-y sm:divide-y-0 sm:divide-x shadow-sm"
           style={{

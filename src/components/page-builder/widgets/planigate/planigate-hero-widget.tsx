@@ -66,7 +66,7 @@ export function PlanigateHeroWidget({ settings: raw }: Props) {
         }}
       />
 
-      <div className="relative mx-auto max-w-[1240px] px-4 sm:px-6 lg:px-8 pt-8 lg:pt-12 pb-10 lg:pb-14">
+      <div className="relative mx-auto max-w-[1240px] px-4 sm:px-6 lg:px-8 pt-8 lg:pt-12 pb-6 lg:pb-8">
         {/* Top: two-column hero text + collage */}
         <div className="grid grid-cols-1 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.05fr)] gap-10 lg:gap-12 items-end">
           {/* LEFT: copy */}
