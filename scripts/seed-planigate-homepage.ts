@@ -2,84 +2,45 @@
  * Seed the homepage with the Planigate-style landing template.
  * Run with: npx tsx scripts/seed-planigate-homepage.ts
  *
+ * Reads sections from public/themes/wedding/data.json (the saved design snapshot).
  * Idempotent: upserts the "home" landing page and replaces its widget block.
  */
 import "dotenv/config";
 import { PrismaClient } from "@prisma/client";
 import { PrismaPg } from "@prisma/adapter-pg";
 import { Pool } from "pg";
+import fs from "fs";
+import path from "path";
 
 const pool = new Pool({ connectionString: process.env.DATABASE_URL });
 const adapter = new PrismaPg(pool);
 const prisma = new PrismaClient({ adapter });
-import {
-  DEFAULT_PLANIGATE_HERO_SETTINGS,
-  DEFAULT_PLANIGATE_FEATURES_SETTINGS,
-  DEFAULT_PLANIGATE_EVENT_TYPES_SETTINGS,
-  DEFAULT_PLANIGATE_VENDORS_SETTINGS,
-  DEFAULT_PLANIGATE_STATS_SETTINGS,
-  DEFAULT_PLANIGATE_CTA_SETTINGS,
-  DEFAULT_SECTION_SETTINGS,
-  DEFAULT_COLUMN_SETTINGS,
-} from "../src/lib/page-builder/defaults";
-import type { Section, WidgetType } from "../src/lib/page-builder/types";
+import type { Section } from "../src/lib/page-builder/types";
 
 const SLUG = "home";
 const BLOCK_TYPE = "widget-page-sections";
 
-function makeId(prefix: string) {
-  return `${prefix}_${Math.random().toString(36).slice(2, 10)}`;
-}
+function loadSectionsFromTheme(): Section[] {
+  const dataPath = path.join(process.cwd(), "public", "themes", "wedding", "data.json");
+  const raw = fs.readFileSync(dataPath, "utf-8");
+  const themeData = JSON.parse(raw);
 
-function singleWidgetSection(
-  order: number,
-  widgetType: WidgetType,
-  widgetSettings: unknown,
-  options: { paddingTop?: number; paddingBottom?: number; bg?: string } = {}
-): Section {
-  return {
-    id: makeId("sec"),
-    order,
-    layout: "1-col",
-    columns: [
-      {
-        id: makeId("col"),
-        widgets: [
-          {
-            id: makeId("w"),
-            type: widgetType,
-            settings: widgetSettings as Record<string, unknown>,
-          },
-        ],
-        settings: { ...DEFAULT_COLUMN_SETTINGS },
-      },
-    ],
-    settings: {
-      ...DEFAULT_SECTION_SETTINGS,
-      fullWidth: true,
-      paddingTop: options.paddingTop ?? 0,
-      paddingBottom: options.paddingBottom ?? 0,
-      paddingLeft: 0,
-      paddingRight: 0,
-      maxWidth: "full",
-      background: options.bg
-        ? { type: "solid", color: options.bg }
-        : { type: "solid", color: "transparent" },
-    },
-  };
+  const homePage = (themeData.pages as Array<{ slug: string; blocks: Array<{ type: string; settings: unknown }> }> | undefined)
+    ?.find((p) => p.slug === "home");
+
+  if (!homePage) throw new Error("No 'home' page found in data.json");
+
+  const block = homePage.blocks.find((b) => b.type === BLOCK_TYPE);
+  if (!block || !Array.isArray(block.settings) || block.settings.length === 0) {
+    throw new Error("No widget-page-sections block found in home page in data.json");
+  }
+
+  return block.settings as Section[];
 }
 
 async function main() {
-  const sections: Section[] = [
-    singleWidgetSection(0, "planigate-hero", DEFAULT_PLANIGATE_HERO_SETTINGS),
-    singleWidgetSection(1, "planigate-features", DEFAULT_PLANIGATE_FEATURES_SETTINGS),
-    singleWidgetSection(2, "planigate-event-types", DEFAULT_PLANIGATE_EVENT_TYPES_SETTINGS),
-    singleWidgetSection(3, "planigate-vendors", DEFAULT_PLANIGATE_VENDORS_SETTINGS),
-    singleWidgetSection(4, "planigate-stats", DEFAULT_PLANIGATE_STATS_SETTINGS),
-    singleWidgetSection(5, "planigate-cta", DEFAULT_PLANIGATE_CTA_SETTINGS),
-  ];
+  const sections = loadSectionsFromTheme();
 
-  // Upsert the landing page itself
   const page = await prisma.landingPage.upsert({
     where: { slug: SLUG },
     create: {
@@ -101,7 +62,6 @@ async function main() {
     },
   });
 
-  // Replace the widget block
   await prisma.landingPageBlock.deleteMany({
     where: { landingPageId: page.id, type: BLOCK_TYPE },
   });
@@ -113,21 +73,16 @@ async function main() {
       name: "Widget Page Sections",
       sortOrder: 0,
       isActive: true,
-      // Prisma JSON expects unknown; cast for type system
       settings: sections as unknown as object,
     },
   });
 
-  // Also deactivate any other HOME templates so this one wins
   await prisma.landingPage.updateMany({
-    where: {
-      templateType: "HOME",
-      id: { not: page.id },
-    },
+    where: { templateType: "HOME", id: { not: page.id } },
     data: { isTemplateActive: false },
   });
 
-  console.log(`Seeded Planigate homepage. Page id=${page.id}, sections=${sections.length}`);
+  console.log(`Seeded Planigate homepage from data.json. Page id=${page.id}, sections=${sections.length}`);
 }
 
 main()

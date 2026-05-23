@@ -1,6 +1,6 @@
 {
   "version": "1.0",
-  "exportedAt": "2026-05-17T11:50:30.810Z",
+  "exportedAt": "2026-05-23T04:20:04.522Z",
   "colorPalette": {
     "light": {
       "background": "#FDFAF7",
@@ -695,15 +695,15 @@
           "isActive": true,
           "settings": [
             {
-              "id": "sec_dkvcp760",
+              "id": "sec_h1u2x42z",
               "order": 0,
               "layout": "1-col",
               "columns": [
                 {
-                  "id": "col_e7rzen5v",
+                  "id": "col_7iub2g8c",
                   "widgets": [
                     {
-                      "id": "w_iz8ilx9u",
+                      "id": "w_wftkdcit",
                       "type": "planigate-hero",
                       "settings": {
                         "rating": 5,
@@ -766,7 +766,7 @@
                             "value": "more"
                           }
                         ],
-                        "headingPart1": "Allt för livets Event",
+                        "headingPart1": "Allt för livets",
                         "headingPart2": "event – på ett ställe",
                         "collageImages": {
                           "phone": "https://images.unsplash.com/photo-1556656793-08538906a9f8?w=300&h=600&fit=crop&q=80",
@@ -814,15 +814,15 @@
               }
             },
             {
-              "id": "sec_bkdvkxjh",
+              "id": "sec_e6pu9uvv",
               "order": 1,
               "layout": "1-col",
               "columns": [
                 {
-                  "id": "col_4syg7it5",
+                  "id": "col_h6pd676u",
                   "widgets": [
                     {
-                      "id": "w_62fz6d3d",
+                      "id": "w_pjo41hog",
                       "type": "planigate-features",
                       "settings": {
                         "items": [
@@ -893,15 +893,15 @@
               }
             },
             {
-              "id": "sec_0zt6yg3y",
+              "id": "sec_ihhdtcnh",
               "order": 2,
               "layout": "1-col",
               "columns": [
                 {
-                  "id": "col_knmcpyb7",
+                  "id": "col_sytiwz5u",
                   "widgets": [
                     {
-                      "id": "w_e7vo7ttr",
+                      "id": "w_iqh92bod",
                       "type": "planigate-event-types",
                       "settings": {
                         "items": [
@@ -974,15 +974,15 @@
               }
             },
             {
-              "id": "sec_4t81km4o",
+              "id": "sec_onxz436u",
               "order": 3,
               "layout": "1-col",
               "columns": [
                 {
-                  "id": "col_pvucwfxy",
+                  "id": "col_27nrvdey",
                   "widgets": [
                     {
-                      "id": "w_yxu5ozc0",
+                      "id": "w_gtzlyjzk",
                       "type": "planigate-vendors",
                       "settings": {
                         "items": [
@@ -1063,23 +1063,23 @@
               }
             },
             {
-              "id": "sec_lhtow2og",
+              "id": "sec_c1v8mrtb",
               "order": 4,
               "layout": "1-col",
               "columns": [
                 {
-                  "id": "col_uqqyif56",
+                  "id": "col_8cib2xvj",
                   "widgets": [
                     {
-                      "id": "w_nj7vdrt2",
+                      "id": "w_4w5yys43",
                       "type": "planigate-stats",
                       "settings": {
                         "items": [
                           {
                             "id": "s1",
                             "icon": "Sparkles",
-                            "label": "🎉 TEST Events",
-                            "number": "99 999+",
+                            "label": "Event skapade",
+                            "number": "12 000+",
                             "dataKey": "totalEvents"
                           },
                           {
@@ -1133,15 +1133,15 @@
               }
             },
             {
-              "id": "sec_vx5n2uv1",
+              "id": "sec_n7cn7cb6",
               "order": 5,
               "layout": "1-col",
               "columns": [
                 {
-                  "id": "col_662upesb",
+                  "id": "col_baktvj48",
                   "widgets": [
                     {
-                      "id": "w_y5dh9atv",
+                      "id": "w_396rvgxf",
                       "type": "planigate-cta",
                       "settings": {
                         "heading": "Redo att skapa ditt nästa oförglömliga event?",
