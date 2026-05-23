@@ -3015,7 +3015,7 @@ export const DEFAULT_PLANIGATE_FEATURES_SETTINGS: PlanigateFeaturesWidgetSetting
     {
       id: "f1",
       icon: "Mail",
-      iconBgColor: "#E8E2D7",
+      iconBgColor: "#D6E8D2",
       title: "Digitala inbjudningar",
       description: "Skapa vackra inbjudningar på några minuter.",
       linkText: "Läs mer",
@@ -3024,7 +3024,7 @@ export const DEFAULT_PLANIGATE_FEATURES_SETTINGS: PlanigateFeaturesWidgetSetting
     {
       id: "f2",
       icon: "Users",
-      iconBgColor: "#F5E6D8",
+      iconBgColor: "#EDE0D0",
       title: "Gästlista & RSVP",
       description: "Hantera svar, allergier och plus-ones enkelt.",
       linkText: "Läs mer",
@@ -3033,7 +3033,7 @@ export const DEFAULT_PLANIGATE_FEATURES_SETTINGS: PlanigateFeaturesWidgetSetting
     {
       id: "f3",
       icon: "LayoutGrid",
-      iconBgColor: "#E5EAE3",
+      iconBgColor: "#D5DFE9",
       title: "Seating chart",
       description: "Dra och släpp gäster till bord visuellt.",
       linkText: "Läs mer",
@@ -3042,7 +3042,7 @@ export const DEFAULT_PLANIGATE_FEATURES_SETTINGS: PlanigateFeaturesWidgetSetting
     {
       id: "f4",
       icon: "Store",
-      iconBgColor: "#EFE4D2",
+      iconBgColor: "#E5DCCF",
       title: "Hitta leverantörer",
       description: "Jämför och boka lokaler, leverantörer och tjänster.",
       linkText: "Läs mer",

@@ -833,7 +833,7 @@
                             "title": "Digitala inbjudningar",
                             "linkText": "Läs mer",
                             "description": "Skapa vackra inbjudningar på några minuter.",
-                            "iconBgColor": "#E8E2D7"
+                            "iconBgColor": "#D6E8D2"
                           },
                           {
                             "id": "f2",
@@ -842,7 +842,7 @@
                             "title": "Gästlista & RSVP",
                             "linkText": "Läs mer",
                             "description": "Hantera svar, allergier och plus-ones enkelt.",
-                            "iconBgColor": "#F5E6D8"
+                            "iconBgColor": "#EDE0D0"
                           },
                           {
                             "id": "f3",
@@ -851,7 +851,7 @@
                             "title": "Seating chart",
                             "linkText": "Läs mer",
                             "description": "Dra och släpp gäster till bord visuellt.",
-                            "iconBgColor": "#E5EAE3"
+                            "iconBgColor": "#D5DFE9"
                           },
                           {
                             "id": "f4",
@@ -860,7 +860,7 @@
                             "title": "Hitta leverantörer",
                             "linkText": "Läs mer",
                             "description": "Jämför och boka lokaler, leverantörer och tjänster.",
-                            "iconBgColor": "#EFE4D2"
+                            "iconBgColor": "#E5DCCF"
                           }
                         ]
                       }

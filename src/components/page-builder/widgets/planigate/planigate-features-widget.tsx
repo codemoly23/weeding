@@ -39,7 +39,11 @@ export function PlanigateFeaturesWidget({ settings: raw }: Props) {
     >
       <div className="mx-auto max-w-[1240px] px-4 sm:px-6 lg:px-8 pt-8 lg:pt-12 pb-10">
         <motion.div
-          className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4"
+          className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 rounded-2xl overflow-hidden divide-y sm:divide-y-0 sm:divide-x shadow-sm"
+          style={{
+            boxShadow: "0 1px 3px 0 rgba(0,0,0,0.06), 0 0 0 1px var(--color-planigate-border)",
+            "--tw-divide-color": "var(--color-planigate-border)",
+          } as React.CSSProperties}
           initial="hidden"
           whileInView="show"
           viewport={viewportOnce}
@@ -56,38 +60,29 @@ export function PlanigateFeaturesWidget({ settings: raw }: Props) {
 
 function FeatureCard({ item }: { item: PlanigateFeatureItem }) {
   return (
-    <motion.div variants={staggerItem}>
+    <motion.div variants={staggerItem} className="h-full">
       <Link
         href={item.href}
-        className="group relative flex flex-row items-start gap-4 rounded-2xl border p-5 transition-all duration-300 hover:shadow-lg hover:-translate-y-1 h-full"
-        style={{
-          backgroundColor: "var(--color-planigate-surface)",
-          borderColor: "var(--color-planigate-border)",
-        }}
+        className="group relative flex flex-row items-start gap-4 p-6 transition-colors duration-200 h-full"
+        style={{ backgroundColor: "var(--color-planigate-surface)" }}
       >
-        {/* gradient halo on hover */}
+        {/* subtle hover bg */}
         <span
           aria-hidden
-          className="pointer-events-none absolute inset-0 rounded-2xl opacity-0 transition-opacity duration-300 group-hover:opacity-100"
-          style={{
-            background:
-              "radial-gradient(60% 50% at 0% 50%, color-mix(in srgb, var(--color-planigate-accent) 14%, transparent) 0%, transparent 100%)",
-          }}
+          className="pointer-events-none absolute inset-0 opacity-0 transition-opacity duration-200 group-hover:opacity-100"
+          style={{ background: "color-mix(in srgb, var(--color-planigate-accent) 4%, transparent)" }}
         />
 
-        {/* Icon on the LEFT */}
+        {/* Icon */}
         <div
-          className="relative shrink-0 flex h-10 w-10 items-center justify-center rounded-full transition-transform duration-300 group-hover:scale-110 group-hover:rotate-[-6deg]"
-          style={{ backgroundColor: item.iconBgColor }}
+          className="relative shrink-0 flex h-12 w-12 items-center justify-center rounded-full transition-transform duration-300 group-hover:scale-110 group-hover:rotate-[-6deg]"
+          style={{ backgroundColor: item.iconBgColor, color: "var(--color-planigate-fg)" }}
         >
-          <Icon name={item.icon} className="size-[18px]" />
+          <Icon name={item.icon} className="size-[22px]" />
         </div>
 
-        {/* Content on the RIGHT */}
-        <div
-          className="relative flex flex-col gap-1 min-w-0"
-          style={{ color: "var(--color-planigate-fg-strong)" }}
-        >
+        {/* Content */}
+        <div className="relative flex flex-col gap-1.5 min-w-0">
           <div
             className="text-[15px] font-semibold leading-tight"
             style={{ color: "var(--color-planigate-fg)" }}
@@ -101,7 +96,7 @@ function FeatureCard({ item }: { item: PlanigateFeatureItem }) {
             {item.description}
           </p>
           <div
-            className="mt-2 inline-flex items-center gap-1 text-[13px] font-medium transition-colors"
+            className="mt-1 inline-flex items-center gap-1 text-[13px] font-medium"
             style={{ color: "var(--color-planigate-fg)" }}
           >
             <span className="relative">
