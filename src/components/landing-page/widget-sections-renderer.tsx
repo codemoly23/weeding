@@ -400,7 +400,7 @@ function WidgetRenderer({ widget }: WidgetRendererProps) {
   // Merge stored settings on top of defaults so missing keys never crash widgets
   const resolvedSettings = useMemo(() => {
     const defaults = (WIDGET_DEFAULTS[widget.type] as Record<string, unknown>) ?? {};
-    const merged = { ...defaults, ...widget.settings };
+    const merged = { ...defaults, ...(widget.settings as Record<string, unknown>) };
     return resolveWidgetTranslations(merged, lang);
   }, [widget.settings, widget.type, lang]);
 
