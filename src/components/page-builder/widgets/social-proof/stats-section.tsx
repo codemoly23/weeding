@@ -304,7 +304,7 @@ function CardGridValue({
 }
 
 export function StatsSectionWidget({ settings, isPreview = false }: StatsSectionWidgetProps) {
-  const { stats = [], columns, style = {}, centered, animateOnScroll } = settings;
+  const { stats = [], columns, style = {} as StatsSectionWidgetSettings["style"], centered, animateOnScroll } = settings;
   const variant = settings.variant ?? "default";
   const [isVisible, setIsVisible] = useState(!animateOnScroll);
   const containerRef = useRef<HTMLDivElement>(null);
