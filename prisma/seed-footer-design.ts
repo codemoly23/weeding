@@ -53,32 +53,21 @@ async function seedFooterDesign() {
       bgGradient: JSON.stringify({
         type:   "linear",
         colors: [
-          { color: "#1a1040", position: 0 },
-          { color: "#0f0826", position: 100 },
+          { color: "#1C1410", position: 0 },
+          { color: "#110D0A", position: 100 },
         ],
         angle: 180,
       }),
-      // Custom CSS — radial glow overlays on left and right edges (matches reference)
-      customCSS: `
-.footer-dynamic-styles::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background:
-    radial-gradient(ellipse at -5% 55%, rgba(192, 38, 211, 0.15) 0%, transparent 38%),
-    radial-gradient(ellipse at 105% 45%, rgba(147, 51, 234, 0.10) 0%, transparent 38%);
-  pointer-events: none;
-  z-index: 0;
-}`,
+      customCSS: "",
       // Text colors
-      textColor:        "#c4b8e0",
+      textColor:        "#C8BFB0",
       headingColor:     "#ffffff",
-      linkColor:        "rgba(255, 255, 255, 0.90)",
-      linkHoverColor:   "#a855f7",
-      accentColor:      "#a855f7",
-      borderColor:      "#6b21a8",
+      linkColor:        "rgba(255, 255, 255, 0.85)",
+      linkHoverColor:   "#C2A86A",
+      accentColor:      "#8A6F3E",
+      borderColor:      "#3C2A1E",
       dividerStyle:     "solid",
-      dividerColor:     "rgba(255,255,255,0.15)",
+      dividerColor:     "rgba(255,255,255,0.10)",
       // Typography
       headingSize:      "xl",
       headingWeight:    "bold",
@@ -117,7 +106,7 @@ async function seedFooterDesign() {
       paddingBottom:    40,
       topBorderStyle:   "solid",
       topBorderHeight:  1,
-      topBorderColor:   "#6b21a8",
+      topBorderColor:   "#3C2A1E",
       shadow:           "none",
       enableAnimations: false,
     },

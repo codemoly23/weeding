@@ -56,8 +56,8 @@ export function StyledCTAButton({
         size="lg"
         className={cn(
           "group/cta w-full sm:w-auto",
-          variant === "solid" && "bg-orange-500 text-white",
-          variant === "solid" && !isPreview && "hover:bg-orange-600",
+          variant === "solid" && "bg-[#1A1A1A] text-white",
+          variant === "solid" && !isPreview && "hover:bg-[#2A2A2A]",
           variant === "outline" && "border-white/20 bg-transparent text-white",
           variant === "outline" && !isPreview && "hover:bg-white/10",
           variant === "secondary" && "bg-white text-slate-900",

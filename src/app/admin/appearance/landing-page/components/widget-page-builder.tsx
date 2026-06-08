@@ -560,8 +560,8 @@ export function WidgetPageBuilder({
             onClick={() => openLayoutSelector()}
             className={cn(
               "flex items-center gap-2 px-6 py-3 rounded-lg",
-              "bg-orange-500 text-white font-medium",
-              "hover:bg-orange-600 transition-colors"
+              "bg-[#1A1A1A] text-white font-medium",
+              "hover:bg-[#2A2A2A] transition-colors"
             )}
           >
             <Plus className="h-5 w-5" />

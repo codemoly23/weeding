@@ -3,7 +3,7 @@
 import { useMemo } from "react";
 import { useLanguage } from "@/lib/i18n/language-context";
 import type { Section, Widget, SectionBackground, SectionWatermark } from "@/lib/page-builder/types";
-import { DEFAULT_SECTION_BACKGROUND } from "@/lib/page-builder/defaults";
+import { DEFAULT_SECTION_BACKGROUND, WIDGET_DEFAULTS } from "@/lib/page-builder/defaults";
 import { cn } from "@/lib/utils";
 import { getLayoutGridClass, getColumnSpanClasses, getMaxWidthClass } from "@/lib/page-builder/section-layouts";
 import { getPatternCSS, getPatternBackgroundSize } from "@/lib/page-builder/pattern-utils";
@@ -28,6 +28,12 @@ import {
   TrendingVenuesWidget,
   TickerMarqueeWidget,
   SocialShareRailWidget,
+  PlanigateHeroWidget,
+  PlanigateFeaturesWidget,
+  PlanigateEventTypesWidget,
+  PlanigateVendorsWidget,
+  PlanigateStatsWidget,
+  PlanigateCtaWidget,
 } from "@/components/page-builder/widgets";
 import { TopUtilityBarWidget, BreadcrumbWidget } from "@/components/page-builder/widgets/layout";
 import { ServiceCardWidget, ServiceListWidget, PricingTableWidget, VendorListingWidget } from "@/components/page-builder/widgets/commerce";
@@ -391,11 +397,12 @@ interface WidgetRendererProps {
 function WidgetRenderer({ widget }: WidgetRendererProps) {
   const { lang } = useLanguage();
 
-  // Resolve per-widget translations from settings._translations[lang]
-  const resolvedSettings = useMemo(
-    () => resolveWidgetTranslations(widget.settings, lang),
-    [widget.settings, lang]
-  );
+  // Merge stored settings on top of defaults so missing keys never crash widgets
+  const resolvedSettings = useMemo(() => {
+    const defaults = (WIDGET_DEFAULTS[widget.type] as Record<string, unknown>) ?? {};
+    const merged = { ...defaults, ...widget.settings };
+    return resolveWidgetTranslations(merged, lang);
+  }, [widget.settings, widget.type, lang]);
 
   // Get widget spacing styles
   const spacingStyles: React.CSSProperties = {
@@ -522,6 +529,24 @@ function WidgetRenderer({ widget }: WidgetRendererProps) {
 
       case "vendor-listing":
         return <VendorListingWidget settings={resolvedSettings as any} />;
+
+      case "planigate-hero":
+        return <PlanigateHeroWidget settings={resolvedSettings as any} />;
+
+      case "planigate-features":
+        return <PlanigateFeaturesWidget settings={resolvedSettings as any} />;
+
+      case "planigate-event-types":
+        return <PlanigateEventTypesWidget settings={resolvedSettings as any} />;
+
+      case "planigate-vendors":
+        return <PlanigateVendorsWidget settings={resolvedSettings as any} />;
+
+      case "planigate-stats":
+        return <PlanigateStatsWidget settings={resolvedSettings as any} />;
+
+      case "planigate-cta":
+        return <PlanigateCtaWidget settings={resolvedSettings as any} />;
 
       default:
         // Unknown widget type - render nothing in production

@@ -215,7 +215,7 @@ function MegaMenuDropdown({ categories, columns, richContent }: MegaMenuProps) {
           )}
           {content.featuredLink && (
             <div className="mb-4">
-              <Link href={content.featuredLink.href} className="text-sm font-medium" style={{ color: "#9810fa" }}>
+              <Link href={content.featuredLink.href} className="text-sm font-medium transition-colors text-[#C2A86A] hover:text-[#8A6F3E]">
                 {content.featuredLink.text}
               </Link>
             </div>
@@ -264,7 +264,7 @@ function MegaMenuDropdown({ categories, columns, richContent }: MegaMenuProps) {
           )}
           {content.footerLink && (
             <div className="mt-4 pt-3 border-t border-border">
-              <Link href={content.footerLink.href} className="text-sm font-medium" style={{ color: "#9810fa" }}>
+              <Link href={content.footerLink.href} className="text-sm font-medium transition-colors text-[#C2A86A] hover:text-[#8A6F3E]">
                 {content.footerLink.text}
               </Link>
             </div>

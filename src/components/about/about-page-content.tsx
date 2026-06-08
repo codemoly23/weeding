@@ -354,7 +354,7 @@ export function AboutPageContent() {
               <motion.div variants={fadeRight} className="pt-2">
                 <Link
                   href="/services"
-                  className="inline-flex items-center gap-2 px-7 py-3 rounded-lg bg-primary text-white text-sm font-semibold hover:bg-orange-600 transition-colors shadow-md shadow-primary/25"
+                  className="inline-flex items-center gap-2 px-7 py-3 rounded-lg bg-primary text-white text-sm font-semibold hover:bg-[#2A2A2A] transition-colors shadow-md shadow-primary/25"
                 >
                   Explore Our Services
                   <ChevronRight className="w-4 h-4" />
@@ -425,7 +425,7 @@ export function AboutPageContent() {
                 onClick={() => paginate(1)}
                 disabled={!canNext}
                 aria-label="Next team members"
-                className="w-11 h-11 rounded-lg bg-primary flex items-center justify-center text-white hover:bg-orange-600 transition-colors disabled:opacity-30 disabled:cursor-not-allowed"
+                className="w-11 h-11 rounded-lg bg-primary flex items-center justify-center text-white hover:bg-[#2A2A2A] transition-colors disabled:opacity-30 disabled:cursor-not-allowed"
               >
                 <ChevronRight className="w-5 h-5" />
               </button>
@@ -497,7 +497,7 @@ export function AboutPageContent() {
                     whileHover={{ scale: 1.05 }}
                     whileTap={{ scale: 0.96 }}
                     transition={{ type: "spring", stiffness: 300, damping: 18 }}
-                    className="group/btn px-8 py-2.5 rounded-full bg-primary text-white text-sm font-semibold hover:bg-orange-600 transition-colors duration-200 shadow-md shadow-primary/25 flex items-center gap-2"
+                    className="group/btn px-8 py-2.5 rounded-full bg-primary text-white text-sm font-semibold hover:bg-[#2A2A2A] transition-colors duration-200 shadow-md shadow-primary/25 flex items-center gap-2"
                   >
                     View Profile
                     <ArrowRight className="w-4 h-4 transition-transform duration-200 group-hover/btn:translate-x-1" />

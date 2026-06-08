@@ -435,7 +435,7 @@ export function ContactPageContent() {
                       <motion.button
                         type="submit"
                         disabled={submitting}
-                        className="inline-flex items-center gap-2 rounded-lg bg-primary px-8 py-3 text-sm font-semibold text-white disabled:cursor-not-allowed disabled:opacity-60 hover:bg-orange-600"
+                        className="inline-flex items-center gap-2 rounded-lg bg-primary px-8 py-3 text-sm font-semibold text-white disabled:cursor-not-allowed disabled:opacity-60 hover:bg-[#2A2A2A]"
                         whileHover={{ scale: 1.04, opacity: 0.93 }}
                         whileTap={{ scale: 0.97 }}
                         transition={{ type: "spring", stiffness: 400, damping: 17 }}

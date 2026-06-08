@@ -7,3 +7,11 @@ export { ButtonGroupWidget, NewsletterCtaWidget } from "./cta";
 export { CustomHtmlWidget } from "./advanced";
 export { BlogPostGridWidget, BlogPostCarouselWidget, BlogFeaturedPostWidget, BlogPostListWidget, BlogRecentPostsWidget, BlogPostHeroWidget, BlogPostContentWidget, BlogPostTocWidget, BlogPostAuthorCardWidget, BlogPostTagsWidget } from "./blog";
 export { ServiceCardWidget, ServiceListWidget, PricingTableWidget, VendorListingWidget } from "./commerce";
+export {
+  PlanigateHeroWidget,
+  PlanigateFeaturesWidget,
+  PlanigateEventTypesWidget,
+  PlanigateVendorsWidget,
+  PlanigateStatsWidget,
+  PlanigateCtaWidget,
+} from "./planigate";

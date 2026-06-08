@@ -411,8 +411,8 @@ export function HeroContentWidget({ settings: rawSettings, isPreview = false }: 
       <Button
         size="lg"
         className={cn(
-          "group/btn w-full sm:w-auto bg-orange-500",
-          !isPreview && "hover:bg-orange-600"
+          "group/btn w-full sm:w-auto bg-[#1A1A1A]",
+          !isPreview && "hover:bg-[#2A2A2A]"
         )}
         asChild
       >

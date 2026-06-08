@@ -60,7 +60,6 @@ const navItems: NavItem[] = [
     title: "Orders",
     href: "/admin/orders",
     icon: Package,
-    badge: 5,
   },
   {
     title: "Customers",

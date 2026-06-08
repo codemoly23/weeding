@@ -98,7 +98,7 @@ export function WidgetBrowser({ isOpen, onClose, onSelect }: WidgetBrowserProps)
                 className={cn(
                   "px-3 py-1.5 rounded-md text-sm font-medium whitespace-nowrap transition-colors",
                   !selectedCategory
-                    ? "bg-orange-500 text-white"
+                    ? "bg-[#1A1A1A] text-white"
                     : "text-slate-400 hover:text-white hover:bg-slate-800"
                 )}
               >
@@ -113,7 +113,7 @@ export function WidgetBrowser({ isOpen, onClose, onSelect }: WidgetBrowserProps)
                     className={cn(
                       "flex items-center gap-1.5 px-3 py-1.5 rounded-md text-sm font-medium whitespace-nowrap transition-colors",
                       selectedCategory === category.id
-                        ? "bg-orange-500 text-white"
+                        ? "bg-[#1A1A1A] text-white"
                         : "text-slate-400 hover:text-white hover:bg-slate-800"
                     )}
                   >

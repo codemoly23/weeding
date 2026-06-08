@@ -6,8 +6,8 @@
  */
 
 // Primary brand colors
-export const ORANGE_PRIMARY = '#F97316' as const
-export const ORANGE_PRIMARY_HOVER = '#EA580C' as const
+export const ORANGE_PRIMARY = '#1A1A1A' as const
+export const ORANGE_PRIMARY_HOVER = '#2A2A2A' as const
 
 // Craft button colors
 export const CRAFT_BG_DARK = '#18181b' as const

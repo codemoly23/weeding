@@ -47,8 +47,8 @@ export function Header() {
   const { data: session, status } = useSession();
   const [user, setUser] = useState<LoggedInUser | null>(null);
 
-  // Transparent header on scroll
-  const isScrolled = useScrollTransparency(headerConfig?.transparent ?? false, 100);
+  // Scroll progress: 0 (top) → 1 (100px scrolled)
+  const scrollProgress = useScrollTransparency(headerConfig?.transparent ?? false, 100);
 
   // Process menu data from API
   const navigation = useMemo(() => {
@@ -153,16 +153,25 @@ export function Header() {
   // Check if user has set a custom background color
   const hasCustomBgColor = !!headerConfig?.styling?.bgColor;
 
-  // Get styling from header config - always set background color
-  const headerStyle: React.CSSProperties = {
-    ...((!headerConfig?.transparent || hasCustomBgColor) && { backgroundColor: bgColor }),
-    color: textColor,
-  };
+  // Build header style — glass effect driven by JS scroll progress (no CSS transition fighting)
+  const isGlassMode = headerConfig?.transparent && !hasCustomBgColor;
+  const headerStyle: React.CSSProperties = isGlassMode
+    ? {
+        backgroundColor: `rgba(255,255,255,${(scrollProgress * 0.85).toFixed(3)})`,
+        backdropFilter: scrollProgress > 0 ? `blur(${(scrollProgress * 12).toFixed(2)}px)` : undefined,
+        WebkitBackdropFilter: scrollProgress > 0 ? `blur(${(scrollProgress * 12).toFixed(2)}px)` : undefined,
+        boxShadow: scrollProgress > 0.2 ? `0 1px 6px rgba(0,0,0,${(scrollProgress * 0.07).toFixed(3)})` : undefined,
+        borderBottom: scrollProgress > 0.05 ? `1px solid rgba(255,255,255,${(scrollProgress * 0.35).toFixed(3)})` : undefined,
+        color: textColor,
+        transition: "none",
+      }
+    : {
+        backgroundColor: bgColor,
+        color: textColor,
+      };
 
-  // Transparent header styles - only go transparent if no custom bg color is set
-  const transparentStyles = headerConfig?.transparent && !isScrolled && !hasCustomBgColor
-    ? "bg-transparent text-white"
-    : "border-b"; // Let inline style handle background
+  // Static class: glass mode handles everything via inline style
+  const transparentStyles = isGlassMode ? "" : "border-b";
 
   // Common layout props
   const layoutProps = {
@@ -173,7 +182,7 @@ export function Header() {
     user,
     session,
     sessionStatus: status,
-    isScrolled,
+    isScrolled: scrollProgress >= 1,
     businessConfig: {
       name: businessConfig.name,
       display: businessConfig.display,
@@ -227,7 +236,8 @@ export function Header() {
       {/* Main Header */}
       <header
         className={cn(
-          "w-full transition-all duration-300 z-50",
+          "w-full z-50",
+          !isGlassMode && "transition-all duration-300",
           headerConfig?.sticky && "sticky top-0",
           transparentStyles
         )}

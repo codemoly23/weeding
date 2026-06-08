@@ -270,7 +270,14 @@ export type WidgetType =
   // Features Showcase Widget
   | "features-showcase"
   // Trending Venues Widget
-  | "trending-venues";
+  | "trending-venues"
+  // Planigate-style Homepage Widgets (pixel-perfect)
+  | "planigate-hero"
+  | "planigate-features"
+  | "planigate-event-types"
+  | "planigate-vendors"
+  | "planigate-stats"
+  | "planigate-cta";
 
 export type WidgetCategory =
   | "most-used"
@@ -4069,4 +4076,133 @@ export interface TrendingVenuesWidgetSettings {
   ctaText: string;
   ctaHref: string;
   headingFontSize?: number;
+}
+
+// ────────────────────────────────────────────────────────────────────
+// PLANIGATE-STYLE WIDGETS (pixel-perfect homepage match)
+// ────────────────────────────────────────────────────────────────────
+
+export interface PlanigateEventTypePill {
+  id: string;
+  label: string;
+  icon: string; // Lucide icon name
+  value: string; // routed value when selected
+}
+
+export interface PlanigateHeroWidgetSettings {
+  // Left column text
+  headingPart1: string; // e.g. "Allt för livets event"
+  headingPart2: string; // italic serif part, e.g. "– på ett ställe"
+  subtitle: string;
+  // Trust row
+  avatars: string[]; // 3-4 image URLs
+  rating: number; // 0-5
+  ratingCountText: string; // "12 000+ nöjda användare"
+  ratingDividerText: string; // "Sveriges nya plattform för eventplanering"
+  // Right column image collage (5 images)
+  collageImages: {
+    couple: string;       // top-left wedding couple
+    dinner: string;       // top-right elegant dinner table
+    toasting: string;     // middle large people toasting
+    laptop: string;       // overlay laptop screenshot
+    phone: string;        // overlay phone screenshot
+  };
+  // Search module
+  searchHeading: string; // "Vad planerar du?"
+  eventPills: PlanigateEventTypePill[];
+  serviceInputLabel: string; // "Vad behöver du?"
+  serviceInputPlaceholder: string; // "Ex. Lokal, Fotograf..."
+  locationInputLabel: string; // "Var?"
+  locationInputPlaceholder: string; // "Ex. Stockholm..."
+  ctaText: string; // "Starta ditt event gratis"
+  ctaHref: string; // "/onboarding"
+  exploreLinkText: string; // "Utforska leverantörer →"
+  exploreLinkHref: string;
+}
+
+export interface PlanigateFeatureItem {
+  id: string;
+  icon: string; // Lucide icon name
+  iconBgColor: string; // tailwind tone, e.g. "#E8E2D7"
+  title: string;
+  description: string;
+  linkText: string; // "Läs mer"
+  href: string;
+}
+
+export interface PlanigateFeaturesWidgetSettings {
+  items: PlanigateFeatureItem[]; // exactly 4 for the row
+}
+
+export interface PlanigateEventTypeCard {
+  id: string;
+  label: string;
+  image: string;
+  href: string;
+}
+
+export interface PlanigateEventTypesWidgetSettings {
+  heading: string; // "Utforska efter eventtyp"
+  /**
+   * "manual" → use items array (admin-curated).
+   * "auto" → pull active ServiceCategory rows from DB; images/labels fallback to defaults
+   *           if the DB rows lack them.
+   */
+  dataSource?: "manual" | "auto";
+  items: PlanigateEventTypeCard[];
+}
+
+export interface PlanigateVendorCard {
+  id: string;
+  image: string;
+  name: string;
+  category: string; // "Festlokal · Stockholm"
+  rating: number;
+  reviewCount: number;
+}
+
+export interface PlanigateVendorsWidgetSettings {
+  heading: string; // "Populära leverantörer nära dig"
+  viewAllText: string; // "Visa alla →"
+  viewAllHref: string;
+  /**
+   * "manual" → use items array (admin-curated demo vendors).
+   * "auto" → fetch from /api/vendors (real approved+active vendors from DB).
+   */
+  dataSource?: "manual" | "auto";
+  /** When dataSource="auto", filter to featured vendors only. */
+  onlyFeatured?: boolean;
+  /** When dataSource="auto", how many vendors to display (1-12). */
+  limit?: number;
+  items: PlanigateVendorCard[];
+}
+
+export interface PlanigateStatItem {
+  id: string;
+  icon: string;
+  number: string; // "12 000+" — used when dataKey is unset OR data fetch fails
+  label: string;
+  /**
+   * When set, the number is REPLACED at render time with a live count from
+   * /api/public/stats. Suffix in `number` (e.g. "+") is preserved.
+   *  - "totalEvents"     → prisma.weddingProject.count()
+   *  - "totalGuests"     → prisma.weddingGuest.count()
+   *  - "approvedVendors" → prisma.vendorProfile.count({ where: { isApproved: true }})
+   * Leave unset to use the static `number` text (e.g. "Sverige & Skandinavien").
+   */
+  dataKey?: "totalEvents" | "totalGuests" | "approvedVendors";
+}
+
+export interface PlanigateStatsWidgetSettings {
+  items: PlanigateStatItem[]; // exactly 4
+}
+
+export interface PlanigateCtaWidgetSettings {
+  heading: string; // "Redo att skapa ditt nästa oförglömliga event?"
+  subtitle: string; // "Kom igång gratis..."
+  primaryButtonText: string; // "Skapa ditt event gratis"
+  primaryButtonHref: string;
+  secondaryButtonText: string; // "Boka demo för företag"
+  secondaryButtonHref: string;
+  backgroundImage: string; // right-side image
 }

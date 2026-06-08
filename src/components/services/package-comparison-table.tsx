@@ -190,7 +190,7 @@ export function PackageComparisonTable({
               className={cn(
                 "h-8 px-3 text-sm font-medium transition-all",
                 isSelected
-                  ? "bg-orange-500 text-white border-orange-500 hover:bg-orange-600 hover:border-orange-600"
+                  ? "bg-[#1A1A1A] text-white border-[#1A1A1A] hover:bg-[#2A2A2A] hover:border-[#2A2A2A]"
                   : isSelectedColumn
                   ? "border-orange-300 hover:border-orange-500 hover:bg-orange-50"
                   : "border-gray-300 hover:border-gray-400"
@@ -230,7 +230,7 @@ export function PackageComparisonTable({
               className={cn(
                 "inline-flex h-6 w-6 items-center justify-center rounded-full",
                 isSelectedColumn
-                  ? "bg-orange-500 text-white"
+                  ? "bg-[#1A1A1A] text-white"
                   : "bg-gray-400 text-white"
               )}
             >
@@ -516,7 +516,7 @@ export function PackageComparisonTable({
             </CardContent>
             <CardFooter className="flex-col gap-3">
               <Button
-                className="w-full bg-orange-500 hover:bg-orange-600 text-white font-semibold py-6"
+                className="w-full bg-[#1A1A1A] hover:bg-[#2A2A2A] text-white font-semibold py-6"
                 asChild
               >
                 <Link
@@ -584,7 +584,7 @@ export function PackageComparisonTable({
             </div>
           </CardContent>
           <CardFooter>
-            <Button className="w-full bg-orange-500 hover:bg-orange-600" asChild>
+            <Button className="w-full bg-[#1A1A1A] hover:bg-[#2A2A2A]" asChild>
               <Link
                 href={`/checkout/${serviceSlug}?package=${getPackageSlug(selectedPackage)}${selectedLocation?.code ? `&location=${selectedLocation.code}` : ""}${selectedAddons.length > 0 ? `&addons=${selectedAddons.map((a) => a.featureId).join(",")}` : ""}`}
                 onClick={() => {

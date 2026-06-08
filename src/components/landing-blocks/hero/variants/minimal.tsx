@@ -1,8 +1,5 @@
 "use client";
 
-import Link from "next/link";
-import { Button } from "@/components/ui/button";
-import { ArrowRight } from "lucide-react";
 import { cn } from "@/lib/utils";
 import type { HeroSettings } from "@/lib/landing-blocks/types";
 import { HeroBackground } from "@/components/landing-blocks/shared";
@@ -10,9 +7,12 @@ import { StyledCTAButton } from "@/components/landing-blocks/hero/styled-cta-but
 
 interface HeroMinimalProps {
   settings: HeroSettings;
+  isPreview?: boolean;
+  device?: "desktop" | "mobile";
 }
 
-export function HeroMinimal({ settings }: HeroMinimalProps) {
+export function HeroMinimal({ settings, isPreview = false, device }: HeroMinimalProps) {
+  const forceMobileLayout = device === "mobile";
   // Parse headline with highlight
   const renderHeadline = () => {
     if (!settings.headline.highlightWord) {
@@ -55,7 +55,10 @@ export function HeroMinimal({ settings }: HeroMinimalProps) {
 
   return (
     <HeroBackground settings={settings.background}>
-      <div className="container mx-auto px-4 py-24 lg:py-32">
+      <div className={cn(
+        "container mx-auto px-4",
+        forceMobileLayout ? "py-16" : "py-16 lg:py-32"
+      )}>
         <div className="mx-auto max-w-3xl text-center">
           {/* Headline */}
           <h1
@@ -71,7 +74,7 @@ export function HeroMinimal({ settings }: HeroMinimalProps) {
           {/* Subheadline */}
           <p
             className={cn(
-              "mt-6 text-xl",
+              "mt-6 text-base sm:text-lg lg:text-xl",
               subTextColor
             )}
           >
@@ -80,26 +83,17 @@ export function HeroMinimal({ settings }: HeroMinimalProps) {
 
           {/* CTA Buttons */}
           <div className="mt-10 flex flex-col items-center justify-center gap-4 sm:flex-row">
-            <Button
-              size="lg"
-              className={cn(
-                "group",
-                settings.primaryCTA.variant === "solid" &&
-                  "bg-orange-500 text-white hover:bg-orange-600",
-                settings.primaryCTA.variant === "outline" && isDarkBg &&
-                  "border-white/20 bg-transparent text-white hover:bg-white/10",
-                settings.primaryCTA.variant === "outline" && !isDarkBg &&
-                  "border-slate-300 bg-transparent text-slate-900 hover:bg-slate-100",
-                settings.primaryCTA.variant === "secondary" &&
-                  "bg-slate-900 text-white hover:bg-slate-800"
-              )}
-              asChild
-            >
-              <Link href={settings.primaryCTA.link}>
-                {settings.primaryCTA.text}
-                <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
-              </Link>
-            </Button>
+            <StyledCTAButton
+              href={settings.primaryCTA.link}
+              text={settings.primaryCTA.text}
+              style={settings.primaryCTA.style}
+              showPrice={settings.primaryCTA.showPrice}
+              priceText={settings.primaryCTA.priceText}
+              showArrow={true}
+              variant={settings.primaryCTA.variant}
+              isPreview={isPreview}
+              openInNewTab={settings.primaryCTA.openInNewTab}
+            />
 
             {settings.secondaryCTA.enabled && (
               <StyledCTAButton
@@ -110,6 +104,7 @@ export function HeroMinimal({ settings }: HeroMinimalProps) {
                 priceText={settings.secondaryCTA.priceText}
                 showArrow={false}
                 variant={settings.secondaryCTA.variant || "ghost"}
+                isPreview={isPreview}
                 openInNewTab={settings.secondaryCTA.openInNewTab}
               />
             )}

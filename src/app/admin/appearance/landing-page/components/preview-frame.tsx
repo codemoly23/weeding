@@ -111,6 +111,7 @@ export function PreviewFrame({ blocks, device, className }: PreviewFrameProps) {
                     <HeroBlock
                       key={block.id}
                       settings={heroSettings}
+                      device={device}
                     />
                   );
                 }

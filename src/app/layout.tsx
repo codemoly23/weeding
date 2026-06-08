@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
+import { Inter, Cormorant_Garamond } from "next/font/google";
 import { AuthProvider } from "@/components/providers/auth-provider";
 import { ToasterProvider } from "@/components/providers/toaster-provider";
 import { ScrollToTop } from "@/components/ui/scroll-to-top";
@@ -12,6 +12,14 @@ const inter = Inter({
   weight: ["400", "500", "600", "700", "800"],
   display: "swap",
   variable: "--font-sans",
+});
+
+const cormorant = Cormorant_Garamond({
+  subsets: ["latin"],
+  weight: ["400", "500", "600", "700"],
+  style: ["normal", "italic"],
+  display: "swap",
+  variable: "--font-serif",
 });
 
 export const metadata: Metadata = {
@@ -64,7 +72,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={inter.variable}>
+    <html lang="en" className={`${inter.variable} ${cormorant.variable}`}>
       <body className="min-h-screen bg-background font-sans antialiased">
         <a
           href="#main-content"
