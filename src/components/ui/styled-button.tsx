@@ -313,8 +313,8 @@ export function StyledButton({
       <Button
         size={size === "lg" ? "lg" : size === "sm" ? "sm" : "default"}
         className={cn(
-          "bg-orange-500",
-          !isPreview && "hover:bg-orange-600",
+          "bg-[#1A1A1A]",
+          !isPreview && "hover:bg-[#2A2A2A]",
           fullWidth && "w-full",
           className
         )}
@@ -333,8 +333,8 @@ export function StyledButton({
       type={type}
       size={size === "lg" ? "lg" : size === "sm" ? "sm" : "default"}
       className={cn(
-        "bg-orange-500",
-        !isPreview && "hover:bg-orange-600",
+        "bg-[#1A1A1A]",
+        !isPreview && "hover:bg-[#2A2A2A]",
         fullWidth && "w-full",
         className
       )}

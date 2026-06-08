@@ -23,6 +23,7 @@ export function HeroBackground({ settings, children, className }: HeroBackground
           backgroundImage: `url(${settings.imageUrl})`,
           backgroundSize: "cover",
           backgroundPosition: "center",
+          backgroundRepeat: "no-repeat",
         };
       default:
         return { backgroundColor: "#0A0F1E" };
@@ -34,9 +35,22 @@ export function HeroBackground({ settings, children, className }: HeroBackground
       className={cn("relative overflow-hidden", className)}
       style={getBackgroundStyle()}
     >
-      {/* Pattern Overlay */}
+      {/* Video Background — z-0 so it sits above section bg but below overlays */}
+      {settings.type === "video" && settings.videoUrl && (
+        <video
+          autoPlay
+          muted
+          loop
+          playsInline
+          className="absolute inset-0 h-full w-full object-cover z-0"
+        >
+          <source src={settings.videoUrl} type="video/mp4" />
+        </video>
+      )}
+
+      {/* Pattern Overlay — z-[1] so it renders above video/image bg */}
       {settings.pattern && (
-        <div className="absolute inset-0 -z-10">
+        <div className="absolute inset-0 z-[1]">
           {settings.pattern.type === "grid" && (
             <div
               className="absolute inset-0"
@@ -60,23 +74,10 @@ export function HeroBackground({ settings, children, className }: HeroBackground
         </div>
       )}
 
-      {/* Video Background */}
-      {settings.type === "video" && settings.videoUrl && (
-        <video
-          autoPlay
-          muted
-          loop
-          playsInline
-          className="absolute inset-0 h-full w-full object-cover -z-10"
-        >
-          <source src={settings.videoUrl} type="video/mp4" />
-        </video>
-      )}
-
-      {/* Overlay */}
+      {/* Color Overlay — z-[2] so it sits above pattern and video */}
       {settings.overlay?.enabled && (
         <div
-          className="absolute inset-0 -z-10"
+          className="absolute inset-0 z-[2]"
           style={{
             backgroundColor: settings.overlay.color,
             opacity: settings.overlay.opacity,
@@ -84,7 +85,10 @@ export function HeroBackground({ settings, children, className }: HeroBackground
         />
       )}
 
-      {children}
+      {/* Content — z-[3] so it's always above all background layers */}
+      <div className="relative z-[3]">
+        {children}
+      </div>
     </section>
   );
 }

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -44,9 +44,21 @@ export function PlanigateHeroWidget({ settings: raw }: Props) {
     avatars: raw?.avatars?.length ? raw.avatars : DEFAULT_PLANIGATE_HERO_SETTINGS.avatars,
   }), [raw]);
 
+  const bgImages = useMemo(() => {
+    const c = settings.collageImages;
+    return [c.couple, c.dinner, c.toasting, c.laptop].filter(Boolean) as string[];
+  }, [settings.collageImages]);
+
+  const [bgIndex, setBgIndex] = useState(0);
   const [activePill, setActivePill] = useState<string>("");
   const [serviceQuery, setServiceQuery] = useState("");
   const [locationQuery, setLocationQuery] = useState("");
+
+  useEffect(() => {
+    if (bgImages.length <= 1) return;
+    const id = setInterval(() => setBgIndex((i) => (i + 1) % bgImages.length), 5500);
+    return () => clearInterval(id);
+  }, [bgImages.length]);
 
   return (
     <section
@@ -56,6 +68,28 @@ export function PlanigateHeroWidget({ settings: raw }: Props) {
           "linear-gradient(180deg, var(--color-planigate-bg-hero-from) 0%, var(--color-planigate-bg-hero-via) 60%, var(--color-planigate-bg-hero-to) 100%)",
       }}
     >
+      {/* Background image slideshow */}
+      {bgImages.map((src, i) => (
+        <div
+          key={i}
+          aria-hidden
+          className="pointer-events-none absolute inset-0"
+          style={{
+            opacity: i === bgIndex ? 1 : 0,
+            transition: "opacity 1.4s ease-in-out",
+          }}
+        >
+          <Image src={src} alt="" fill sizes="100vw" className="object-cover" priority={i === 0} />
+        </div>
+      ))}
+
+      {/* Cream overlay — keeps text readable */}
+      <div
+        aria-hidden
+        className="pointer-events-none absolute inset-0"
+        style={{ background: "rgba(0, 0, 0, 0.62)" }}
+      />
+
       {/* Subtle decorative wash */}
       <div
         aria-hidden
@@ -66,7 +100,7 @@ export function PlanigateHeroWidget({ settings: raw }: Props) {
         }}
       />
 
-      <div className="relative mx-auto max-w-[1240px] px-4 sm:px-6 lg:px-8 pt-8 lg:pt-12 pb-10 lg:pb-14">
+      <div className="relative z-10 mx-auto max-w-[1240px] px-4 sm:px-6 lg:px-8 pt-8 lg:pt-12 pb-10 lg:pb-14">
         {/* Top: two-column hero text + collage */}
         <div className="grid grid-cols-1 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.05fr)] gap-10 lg:gap-12 items-end">
           {/* LEFT: copy */}
@@ -79,7 +113,7 @@ export function PlanigateHeroWidget({ settings: raw }: Props) {
             <motion.h1
               variants={fadeUp}
               style={{
-                color: "var(--color-planigate-fg)",
+                color: "#ffffff",
                 fontFamily:
                   "var(--font-serif), 'Cormorant Garamond', 'Playfair Display', Georgia, serif",
                 fontWeight: 500,
@@ -95,7 +129,7 @@ export function PlanigateHeroWidget({ settings: raw }: Props) {
               <span
                 style={{
                   fontStyle: "italic",
-                  color: "var(--color-planigate-accent)",
+                  color: "#E8C97A",
                 }}
               >
                 {settings.headingPart2}
@@ -105,7 +139,7 @@ export function PlanigateHeroWidget({ settings: raw }: Props) {
             <motion.p
               variants={fadeUp}
               className="mt-5 max-w-[360px] text-[14px] sm:text-[15px] leading-relaxed"
-              style={{ color: "var(--color-planigate-fg-muted)" }}
+              style={{ color: "rgba(255,255,255,0.82)" }}
             >
               {settings.subtitle}
             </motion.p>
@@ -157,7 +191,7 @@ export function PlanigateHeroWidget({ settings: raw }: Props) {
               {/* Count */}
               <span
                 className="text-[13px] font-medium"
-                style={{ color: "var(--color-planigate-fg)" }}
+                style={{ color: "#ffffff" }}
               >
                 {settings.ratingCountText}
               </span>
@@ -170,7 +204,7 @@ export function PlanigateHeroWidget({ settings: raw }: Props) {
               />
               <span
                 className="text-[13px] max-w-[200px] leading-tight"
-                style={{ color: "var(--color-planigate-fg-muted)" }}
+                style={{ color: "rgba(255,255,255,0.70)" }}
               >
                 {settings.ratingDividerText}
               </span>
@@ -295,6 +329,8 @@ function SearchModule({
   onLocationChange,
 }: SearchModuleProps) {
   const router = useRouter();
+  const [serviceFocused, setServiceFocused] = useState(false);
+  const [locationFocused, setLocationFocused] = useState(false);
 
   const handleStart = () => {
     const params = new URLSearchParams();
@@ -308,14 +344,18 @@ function SearchModule({
 
   return (
     <div
-      className="w-full rounded-[28px] shadow-[0_30px_60px_-20px_rgba(80,60,30,0.18)] ring-1 ring-black/[0.04] px-5 sm:px-8 pt-6 sm:pt-7 pb-5 sm:pb-6"
-      style={{ background: "var(--color-planigate-surface)" }}
+      className="w-full rounded-[28px] shadow-[0_30px_60px_-20px_rgba(0,0,0,0.35)] px-5 sm:px-8 pt-6 sm:pt-7 pb-5 sm:pb-6"
+      style={{
+        background: "rgba(255,255,255,0.15)",
+        backdropFilter: "blur(20px)",
+        WebkitBackdropFilter: "blur(20px)",
+      }}
     >
       {/* "Vad planerar du?" + pills */}
       <div>
         <div
           className="text-[13px] font-medium"
-          style={{ color: "var(--color-planigate-fg)" }}
+          style={{ color: "#ffffff" }}
         >
           {settings.searchHeading}
         </div>
@@ -337,7 +377,7 @@ function SearchModule({
         <div>
           <label
             className="block text-xs font-medium mb-1.5"
-            style={{ color: "var(--color-planigate-fg-muted)" }}
+            style={{ color: "rgba(255,255,255,0.75)" }}
           >
             {settings.serviceInputLabel}
           </label>
@@ -345,18 +385,20 @@ function SearchModule({
             <Search
               className="absolute left-3.5 top-1/2 -translate-y-1/2"
               size={16}
-              style={{ color: "var(--color-planigate-fg-placeholder)" }}
+              style={{ color: "rgba(255,255,255,0.45)" }}
             />
             <input
               type="text"
               value={serviceQuery}
               onChange={(e) => onServiceChange(e.target.value)}
+              onFocus={() => setServiceFocused(true)}
+              onBlur={() => setServiceFocused(false)}
               placeholder={settings.serviceInputPlaceholder}
               className="planigate-input w-full h-[50px] rounded-[14px] border pl-10 pr-4 text-sm focus:outline-none transition"
               style={{
-                borderColor: "var(--color-planigate-border)",
-                backgroundColor: "var(--color-planigate-bg-input)",
-                color: "var(--color-planigate-fg)",
+                borderColor: serviceFocused ? "#E8C97A" : "rgba(255,255,255,0.25)",
+                backgroundColor: "rgba(255,255,255,0.12)",
+                color: "#ffffff",
               }}
             />
           </div>
@@ -366,7 +408,7 @@ function SearchModule({
         <div>
           <label
             className="block text-xs font-medium mb-1.5"
-            style={{ color: "var(--color-planigate-fg-muted)" }}
+            style={{ color: "rgba(255,255,255,0.75)" }}
           >
             {settings.locationInputLabel}
           </label>
@@ -374,18 +416,20 @@ function SearchModule({
             <MapPin
               className="absolute left-3.5 top-1/2 -translate-y-1/2"
               size={16}
-              style={{ color: "var(--color-planigate-fg-placeholder)" }}
+              style={{ color: "rgba(255,255,255,0.45)" }}
             />
             <input
               type="text"
               value={locationQuery}
               onChange={(e) => onLocationChange(e.target.value)}
+              onFocus={() => setLocationFocused(true)}
+              onBlur={() => setLocationFocused(false)}
               placeholder={settings.locationInputPlaceholder}
               className="planigate-input w-full h-[50px] rounded-[14px] border pl-10 pr-4 text-sm focus:outline-none transition"
               style={{
-                borderColor: "var(--color-planigate-border)",
-                backgroundColor: "var(--color-planigate-bg-input)",
-                color: "var(--color-planigate-fg)",
+                borderColor: locationFocused ? "#E8C97A" : "rgba(255,255,255,0.25)",
+                backgroundColor: "rgba(255,255,255,0.12)",
+                color: "#ffffff",
               }}
             />
           </div>
@@ -415,13 +459,13 @@ function SearchModule({
         <Link
           href={settings.exploreLinkHref}
           className="group inline-flex items-center gap-1.5 text-sm font-medium transition-colors"
-          style={{ color: "var(--color-planigate-fg-strong)" }}
+          style={{ color: "rgba(255,255,255,0.90)" }}
         >
           <span className="relative">
             {settings.exploreLinkText}
             <span
               className="absolute left-0 -bottom-0.5 h-px w-0 transition-all duration-300 group-hover:w-full"
-              style={{ backgroundColor: "var(--color-planigate-fg)" }}
+              style={{ backgroundColor: "#ffffff" }}
             />
           </span>
           <ArrowRight size={14} className="transition-transform duration-300 group-hover:translate-x-0.5" />
@@ -444,19 +488,15 @@ function Pill({
     <motion.button
       type="button"
       onClick={onClick}
-      whileHover={{ scale: 1.04, y: -2 }}
+      whileHover={{ scale: 1.04, y: -2, color: "#E8C97A", borderColor: "#E8C97A" }}
       whileTap={{ scale: 0.96 }}
       transition={{ duration: 0.15 }}
-      className="group flex flex-col items-center justify-center gap-1.5 h-[68px] rounded-[14px] text-[12px] font-medium transition-colors border hover:shadow-sm"
+      className="group flex flex-col items-center justify-center gap-1.5 h-[68px] rounded-[14px] text-[12px] font-medium border hover:shadow-sm"
       style={{
-        backgroundColor: "var(--color-planigate-surface)",
-        borderColor: active
-          ? "var(--color-planigate-fg)"
-          : "var(--color-planigate-border)",
-        color: active
-          ? "var(--color-planigate-fg)"
-          : "var(--color-planigate-fg-strong)",
-        boxShadow: active ? "0 1px 2px 0 rgba(0,0,0,0.05)" : undefined,
+        backgroundColor: active ? "rgba(232,201,122,0.15)" : "rgba(255,255,255,0.10)",
+        borderColor: active ? "#E8C97A" : "rgba(255,255,255,0.25)",
+        color: active ? "#E8C97A" : "#ffffff",
+        boxShadow: active ? "0 0 0 1px rgba(232,201,122,0.3)" : undefined,
       }}
     >
       <PillIcon

@@ -34,10 +34,7 @@ export function Logo({ businessConfig, maxHeight = 36, className, variant = "lig
         <span
           className="text-2xl font-extrabold tracking-tight"
           style={{
-            background: "linear-gradient(to right, #9810fa, #e60076)",
-            WebkitBackgroundClip: "text",
-            WebkitTextFillColor: "transparent",
-            backgroundClip: "text",
+            color: "#8a6f3e",
           }}
         >{businessConfig.name}</span>
       )}

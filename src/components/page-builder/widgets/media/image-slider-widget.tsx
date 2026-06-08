@@ -322,7 +322,7 @@ function SlideContent({
                   rel={button.openInNewTab ? "noopener noreferrer" : undefined}
                   className={cn(
                     "px-6 py-3 rounded-lg font-semibold transition-all",
-                    button.style === "primary" && "bg-orange-500 text-white hover:bg-orange-600",
+                    button.style === "primary" && "bg-[#1A1A1A] text-white hover:bg-[#2A2A2A]",
                     button.style === "secondary" && "bg-slate-700 text-white hover:bg-slate-600",
                     button.style === "outline" && "border-2 border-white text-white hover:bg-white/10",
                     button.style === "ghost" && "text-white hover:bg-white/10"

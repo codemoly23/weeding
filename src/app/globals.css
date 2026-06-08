@@ -229,12 +229,12 @@
   --color-info-text: #1E40AF;
   --color-star: #FBBF24;
 
-  /* Theme Colors - Midnight Orange System */
-  --color-primary: #F97316;
+  /* Theme Colors - Charcoal Gold System */
+  --color-primary: #1A1A1A;
   --color-primary-foreground: #ffffff;
   --color-secondary: #0A0F1E;
   --color-secondary-foreground: #ffffff;
-  --color-accent: #F97316;
+  --color-accent: #8A6F3E;
   --color-accent-foreground: #ffffff;
   --color-destructive: #EF4444;
   --color-destructive-foreground: #ffffff;
@@ -246,7 +246,7 @@
   --color-popover-foreground: #0f172a;
   --color-border: #E2E8F0;
   --color-input: #E2E8F0;
-  --color-ring: #F97316;
+  --color-ring: #8A6F3E;
   --color-background: #ffffff;
   --color-foreground: #0f172a;
 

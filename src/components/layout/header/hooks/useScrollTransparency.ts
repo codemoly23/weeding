@@ -1,26 +1,35 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 
 export function useScrollTransparency(enabled: boolean, threshold: number = 100) {
-  const [isScrolled, setIsScrolled] = useState(false);
+  const [progress, setProgress] = useState(0);
+  const rafRef = useRef<number | null>(null);
 
   useEffect(() => {
     if (!enabled) {
-      setIsScrolled(false);
+      setProgress(0);
       return;
     }
 
-    const handleScroll = () => {
-      setIsScrolled(window.scrollY > threshold);
+    const update = () => {
+      setProgress(Math.min(window.scrollY / threshold, 1));
+      rafRef.current = null;
     };
 
-    // Check initial scroll position
-    handleScroll();
+    const onScroll = () => {
+      if (rafRef.current === null) {
+        rafRef.current = requestAnimationFrame(update);
+      }
+    };
 
-    window.addEventListener("scroll", handleScroll, { passive: true });
-    return () => window.removeEventListener("scroll", handleScroll);
+    update();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => {
+      window.removeEventListener("scroll", onScroll);
+      if (rafRef.current !== null) cancelAnimationFrame(rafRef.current);
+    };
   }, [enabled, threshold]);
 
-  return isScrolled;
+  return progress;
 }
