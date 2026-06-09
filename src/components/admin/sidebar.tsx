@@ -170,7 +170,7 @@ const iconMap: Record<string, React.ComponentType<{ className?: string }>> = {
   Building2,
 };
 
-export function AdminSidebar() {
+export function AdminSidebar({ mobile = false }: { mobile?: boolean }) {
   const pathname = usePathname();
   const { config } = useBusinessConfig();
   const [mounted, setMounted] = useState(false); // Prevent transition flash on initial load
@@ -221,17 +221,16 @@ export function AdminSidebar() {
   }, []);
 
   useEffect(() => {
-    if (isPageBuilder) {
-      // Page builder: always collapsed for maximum workspace
+    if (mobile) {
+      setCollapsed(false);
+    } else if (isPageBuilder) {
       setCollapsed(true);
     } else {
-      // Other pages: use localStorage preference (default: expanded/false)
       const saved = localStorage.getItem("admin-sidebar-collapsed");
       setCollapsed(saved === "true");
     }
-    // Mark as mounted after state is set to prevent transition flash
     setMounted(true);
-  }, [isPageBuilder]);
+  }, [isPageBuilder, mobile]);
 
   // Combine static nav items with plugin menu items
   // Insert plugin items before Appearance and Settings (last 2 items)
@@ -301,18 +300,20 @@ export function AdminSidebar() {
               <span className="font-bold">{config.name} Admin</span>
             </Link>
           )}
-          <Button
-            variant="ghost"
-            size="icon"
-            onClick={() => handleCollapsedChange(!collapsed)}
-            className={cn(collapsed && "mx-auto")}
-          >
-            {collapsed ? (
-              <ChevronRight className="h-4 w-4" />
-            ) : (
-              <ChevronLeft className="h-4 w-4" />
-            )}
-          </Button>
+          {!mobile && (
+            <Button
+              variant="ghost"
+              size="icon"
+              onClick={() => handleCollapsedChange(!collapsed)}
+              className={cn(collapsed && "mx-auto")}
+            >
+              {collapsed ? (
+                <ChevronRight className="h-4 w-4" />
+              ) : (
+                <ChevronLeft className="h-4 w-4" />
+              )}
+            </Button>
+          )}
         </div>
 
         {/* Navigation */}
