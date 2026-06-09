@@ -2,6 +2,7 @@
 
 import { cn } from "@/lib/utils";
 import type { HeroBackgroundSettings } from "@/lib/landing-blocks/types";
+import { getPatternCSS, getPatternBackgroundSize } from "@/lib/page-builder/pattern-utils";
 
 interface HeroBackgroundProps {
   settings: HeroBackgroundSettings;
@@ -50,28 +51,13 @@ export function HeroBackground({ settings, children, className }: HeroBackground
 
       {/* Pattern Overlay — z-[1] so it renders above video/image bg */}
       {settings.pattern && (
-        <div className="absolute inset-0 z-[1]">
-          {settings.pattern.type === "grid" && (
-            <div
-              className="absolute inset-0"
-              style={{
-                backgroundImage: `linear-gradient(to right, ${settings.pattern.color} 1px, transparent 1px), linear-gradient(to bottom, ${settings.pattern.color} 1px, transparent 1px)`,
-                backgroundSize: "60px 60px",
-                opacity: settings.pattern.opacity,
-              }}
-            />
-          )}
-          {settings.pattern.type === "dots" && (
-            <div
-              className="absolute inset-0"
-              style={{
-                backgroundImage: `radial-gradient(${settings.pattern.color} 1px, transparent 1px)`,
-                backgroundSize: "20px 20px",
-                opacity: settings.pattern.opacity,
-              }}
-            />
-          )}
-        </div>
+        <div
+          className="absolute inset-0 z-[1] pointer-events-none"
+          style={{
+            backgroundImage: getPatternCSS(settings.pattern.type, settings.pattern.color, settings.pattern.opacity),
+            backgroundSize: getPatternBackgroundSize(settings.pattern.type),
+          }}
+        />
       )}
 
       {/* Color Overlay — z-[2] so it sits above pattern and video */}

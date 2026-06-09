@@ -729,7 +729,7 @@ export function HeroSettingsForm({
                       ...currentBg,
                       pattern: {
                         ...currentPattern,
-                        type: value as "grid" | "dots" | "lines",
+                        type: value as "dots" | "grid" | "grid-fine" | "diagonal" | "waves" | "circuit" | "geometric" | "confetti",
                       },
                     },
                   });
@@ -739,9 +739,14 @@ export function HeroSettingsForm({
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="grid">Grid</SelectItem>
                   <SelectItem value="dots">Dots</SelectItem>
-                  <SelectItem value="lines">Lines</SelectItem>
+                  <SelectItem value="grid">Grid</SelectItem>
+                  <SelectItem value="grid-fine">Grid (Fine)</SelectItem>
+                  <SelectItem value="diagonal">Diagonal</SelectItem>
+                  <SelectItem value="waves">Waves</SelectItem>
+                  <SelectItem value="circuit">Circuit</SelectItem>
+                  <SelectItem value="geometric">Geometric</SelectItem>
+                  <SelectItem value="confetti">Confetti</SelectItem>
                 </SelectContent>
               </Select>
             </div>

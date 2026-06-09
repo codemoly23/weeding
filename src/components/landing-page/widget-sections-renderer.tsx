@@ -7,6 +7,7 @@ import { DEFAULT_SECTION_BACKGROUND, WIDGET_DEFAULTS } from "@/lib/page-builder/
 import { cn } from "@/lib/utils";
 import { getLayoutGridClass, getColumnSpanClasses, getMaxWidthClass } from "@/lib/page-builder/section-layouts";
 import { getPatternCSS, getPatternBackgroundSize } from "@/lib/page-builder/pattern-utils";
+import { DecorativeGlows } from "@/components/page-builder/shared/decorative-glows";
 import {
   HeroContentWidget,
   ImageWidget,
@@ -240,6 +241,12 @@ function SectionRenderer({ section }: SectionRendererProps) {
           }}
         />
       )}
+
+      {/* Decorative Glows */}
+      <DecorativeGlows
+        glows={settings.decorativeGlows}
+        borderRadius={innerBorderRadius ? `${innerBorderRadius}px` : undefined}
+      />
 
       {/* Pattern Overlay */}
       {patternOverlay && patternOverlay.opacity > 0 && (

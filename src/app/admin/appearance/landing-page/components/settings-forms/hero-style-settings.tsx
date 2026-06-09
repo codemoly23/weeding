@@ -191,15 +191,20 @@ export function HeroStyleSettings({
                     ...s.background,
                     pattern: {
                       ...currentPattern,
-                      type: v as "grid" | "dots" | "lines",
+                      type: v as "dots" | "grid" | "grid-fine" | "diagonal" | "waves" | "circuit" | "geometric" | "confetti",
                     },
                   },
                 });
               }}
               options={[
-                { value: "grid", label: "Grid" },
                 { value: "dots", label: "Dots" },
-                { value: "lines", label: "Lines" },
+                { value: "grid", label: "Grid" },
+                { value: "grid-fine", label: "Grid (Fine)" },
+                { value: "diagonal", label: "Diagonal" },
+                { value: "waves", label: "Waves" },
+                { value: "circuit", label: "Circuit" },
+                { value: "geometric", label: "Geometric" },
+                { value: "confetti", label: "Confetti" },
               ]}
             />
             <ColorPicker

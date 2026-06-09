@@ -119,7 +119,7 @@ export default async function AdminDashboardPage() {
       {/* Page Header */}
       <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div>
-          <h1 className="text-2xl font-bold">Dashboard</h1>
+          <h1 className="text-xl sm:text-2xl font-bold">Dashboard</h1>
           <p className="text-muted-foreground">
             Welcome back! Here's what's happening today.
           </p>
@@ -213,16 +213,11 @@ export default async function AdminDashboardPage() {
               {recentOrders.map((order) => (
                 <div
                   key={order.id}
-                  className="flex items-center justify-between rounded-lg border p-4"
+                  className="flex flex-col gap-2 rounded-lg border p-4 sm:flex-row sm:items-center sm:justify-between"
                 >
                   <div className="space-y-1">
                     <div className="flex items-center gap-2">
-                      <Link
-                        href={`/admin/orders/${order.id}`}
-                        className="font-medium hover:underline"
-                      >
-                        {order.id}
-                      </Link>
+                      <span className="font-medium">{order.id}</span>
                       <Badge
                         variant="secondary"
                         className={statusColors[order.status]}
@@ -263,16 +258,11 @@ export default async function AdminDashboardPage() {
               {recentTickets.map((ticket) => (
                 <div
                   key={ticket.id}
-                  className="flex items-center justify-between rounded-lg border p-4"
+                  className="flex flex-col gap-2 rounded-lg border p-4 sm:flex-row sm:items-center sm:justify-between"
                 >
                   <div className="space-y-1">
                     <div className="flex items-center gap-2">
-                      <Link
-                        href={`/admin/tickets/${ticket.id}`}
-                        className="font-medium hover:underline"
-                      >
-                        {ticket.subject}
-                      </Link>
+                      <span className="font-medium">{ticket.subject}</span>
                     </div>
                     <p className="text-sm text-muted-foreground">
                       {ticket.id} - {ticket.customer}
