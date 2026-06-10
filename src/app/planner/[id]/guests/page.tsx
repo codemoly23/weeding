@@ -108,13 +108,13 @@ function RsvpLinkModal({
   return (
     <>
       <div className="fixed inset-0 z-50 bg-black/40 backdrop-blur-[2px]" onClick={onClose} />
-      <div className="fixed left-1/2 top-1/2 z-50 w-[calc(100vw-2rem)] max-w-sm -translate-x-1/2 -translate-y-1/2 rounded-2xl bg-white p-6 shadow-2xl">
+      <div className="fixed left-1/2 top-1/2 z-50 w-[calc(100vw-2rem)] max-w-sm -translate-x-1/2 -translate-y-1/2 rounded-2xl bg-card p-6 shadow-2xl">
         <div className="mb-4 flex items-start justify-between">
           <div>
-            <h3 className="text-sm font-semibold text-gray-900">RSVP Link</h3>
-            <p className="mt-0.5 text-xs text-gray-400">{guestName}</p>
+            <h3 className="text-sm font-semibold text-foreground">RSVP Link</h3>
+            <p className="mt-0.5 text-xs text-muted-foreground">{guestName}</p>
           </div>
-          <button onClick={onClose} className="rounded-lg p-1 text-gray-400 hover:bg-gray-100 hover:text-gray-700">
+          <button onClick={onClose} className="rounded-lg p-1 text-muted-foreground hover:bg-muted hover:text-foreground/80">
             <X className="h-4 w-4" />
           </button>
         </div>
@@ -127,25 +127,25 @@ function RsvpLinkModal({
           </div>
         ) : (
           <div className="mb-4 flex h-40 items-center justify-center">
-            <QrCode className="h-8 w-8 animate-pulse text-gray-300" />
+            <QrCode className="h-8 w-8 animate-pulse text-muted-foreground/50" />
           </div>
         )}
 
         {/* URL + Copy */}
-        <div className="flex items-center gap-2 rounded-xl bg-gray-50 px-3 py-2">
-          <span className="flex-1 truncate text-xs text-gray-500">{url}</span>
+        <div className="flex items-center gap-2 rounded-xl bg-muted px-3 py-2">
+          <span className="flex-1 truncate text-xs text-muted-foreground">{url}</span>
           <button
             onClick={handleCopy}
             className={cn(
               "flex-shrink-0 rounded-lg p-1.5 transition-colors",
-              copied ? "bg-green-100 text-green-600" : "text-gray-400 hover:bg-gray-100 hover:text-gray-700"
+              copied ? "bg-[var(--color-success-bg)] text-[var(--color-success-text)]" : "text-muted-foreground hover:bg-muted hover:text-foreground"
             )}
           >
             {copied ? <Check className="h-3.5 w-3.5" /> : <Copy className="h-3.5 w-3.5" />}
           </button>
         </div>
 
-        <p className="mt-3 text-center text-[10px] text-gray-400">
+        <p className="mt-3 text-center text-[10px] text-muted-foreground">
           Share this link or QR code with your guest so they can RSVP online.
         </p>
       </div>
@@ -196,9 +196,9 @@ function getTitles(t: TFunc): string[] {
 }
 
 const RSVP_COLORS: Record<RsvpStatus, string> = {
-  PENDING: "text-gray-400",
-  ATTENDING: "text-green-600",
-  NOT_ATTENDING: "text-red-500",
+  PENDING: "text-muted-foreground",
+  ATTENDING: "text-[var(--color-success-text)]",
+  NOT_ATTENDING: "text-[var(--color-error-text)]",
 };
 
 function relationLabel(rel: GuestRelation, t: TFunc): string {
@@ -228,7 +228,7 @@ function TitleDropdown({ value, onChange }: { value: string | null; onChange: (v
         type="button"
         onMouseDown={(e) => e.preventDefault()}
         onClick={() => setOpen((v) => !v)}
-        className="flex items-center gap-0.5 border-r border-gray-200 px-2 py-1 text-sm text-gray-500 hover:text-black bg-gray-50 rounded-l transition-colors"
+        className="flex items-center gap-0.5 border-r border-border px-2 py-1 text-sm text-muted-foreground hover:text-foreground bg-muted rounded-l transition-colors"
       >
         <span>{value || "…"}</span>
         <ChevronDown className="h-3 w-3" />
@@ -236,7 +236,7 @@ function TitleDropdown({ value, onChange }: { value: string | null; onChange: (v
       {open && (
         <>
           <div className="fixed inset-0 z-10" onClick={() => setOpen(false)} />
-          <div className="absolute left-0 top-full z-20 mt-1 w-36 rounded-lg border border-gray-100 bg-white py-1 shadow-lg">
+          <div className="absolute left-0 top-full z-20 mt-1 w-36 rounded-lg border border-border bg-card py-1 shadow-lg">
             {titles.map((title) => (
               <button
                 key={title}
@@ -244,8 +244,8 @@ function TitleDropdown({ value, onChange }: { value: string | null; onChange: (v
                 onMouseDown={(e) => e.preventDefault()}
                 onClick={() => { onChange(title === noFormalitiesLabel ? null : title); setOpen(false); }}
                 className={cn(
-                  "flex w-full items-center px-4 py-1.5 text-sm hover:bg-gray-50",
-                  (value === title || (title === noFormalitiesLabel && !value)) ? "bg-gray-50 font-semibold text-black" : "text-gray-700"
+                  "flex w-full items-center px-4 py-1.5 text-sm hover:bg-muted",
+                  (value === title || (title === noFormalitiesLabel && !value)) ? "bg-muted font-semibold text-foreground" : "text-foreground/80"
                 )}
               >
                 {title}
@@ -267,7 +267,7 @@ function AddGuestButton({ side, onSelect }: { side: GuestSide; onSelect: (rel: G
     <div className="relative mt-1">
       <button
         onClick={() => setOpen((v) => !v)}
-        className="flex items-center gap-1 text-sm text-indigo-500 hover:text-indigo-700 transition-colors py-1"
+        className="flex items-center gap-1 text-sm text-primary hover:text-primary/90 transition-colors py-1"
       >
         <Plus className="h-3.5 w-3.5" />
         {t("guests.addGuest")}
@@ -275,12 +275,12 @@ function AddGuestButton({ side, onSelect }: { side: GuestSide; onSelect: (rel: G
       {open && (
         <>
           <div className="fixed inset-0 z-10" onClick={() => setOpen(false)} />
-          <div className="absolute left-0 top-full z-20 mt-1 w-44 rounded-lg border border-gray-100 bg-white py-1 shadow-lg">
+          <div className="absolute left-0 top-full z-20 mt-1 w-44 rounded-lg border border-border bg-card py-1 shadow-lg">
             {relations.map((rel) => (
               <button
                 key={rel.value}
                 onClick={() => { onSelect(rel.value); setOpen(false); }}
-                className="flex w-full items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-black"
+                className="flex w-full items-center px-4 py-2 text-sm text-foreground/80 hover:bg-muted hover:text-foreground"
               >
                 {rel.label}
               </button>
@@ -307,7 +307,7 @@ function AddGuestButtonCombined({ onSelect }: { onSelect: (side: GuestSide, rel:
     <div className="relative mt-1">
       <button
         onClick={() => setOpen((v) => !v)}
-        className="flex items-center gap-1 text-sm text-indigo-500 hover:text-indigo-700 transition-colors py-1"
+        className="flex items-center gap-1 text-sm text-primary hover:text-primary/90 transition-colors py-1"
       >
         <Plus className="h-3.5 w-3.5" />
         {t("guests.addGuest")}
@@ -315,7 +315,7 @@ function AddGuestButtonCombined({ onSelect }: { onSelect: (side: GuestSide, rel:
       {open && (
         <>
           <div className="fixed inset-0 z-10" onClick={() => { setOpen(false); setHoveredSide(null); }} />
-          <div className="absolute left-0 top-full z-20 mt-1 w-44 rounded-lg border border-gray-100 bg-white py-1 shadow-lg">
+          <div className="absolute left-0 top-full z-20 mt-1 w-44 rounded-lg border border-border bg-card py-1 shadow-lg">
             {sides.map(({ side, label, relations }) => (
               <div
                 key={side}
@@ -323,17 +323,17 @@ function AddGuestButtonCombined({ onSelect }: { onSelect: (side: GuestSide, rel:
                 onMouseEnter={() => setHoveredSide(side)}
                 onMouseLeave={() => setHoveredSide(null)}
               >
-                <button className="flex w-full items-center justify-between px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-black">
+                <button className="flex w-full items-center justify-between px-4 py-2 text-sm text-foreground/80 hover:bg-muted hover:text-foreground">
                   {label}
-                  <ChevronDown className="h-3.5 w-3.5 -rotate-90 text-gray-400" />
+                  <ChevronDown className="h-3.5 w-3.5 -rotate-90 text-muted-foreground" />
                 </button>
                 {hoveredSide === side && (
-                  <div className="absolute left-full top-0 z-30 ml-0.5 w-44 rounded-lg border border-gray-100 bg-white py-1 shadow-lg">
+                  <div className="absolute left-full top-0 z-30 ml-0.5 w-44 rounded-lg border border-border bg-card py-1 shadow-lg">
                     {relations.map((rel) => (
                       <button
                         key={rel.value}
                         onClick={() => { onSelect(side, rel.value); setOpen(false); setHoveredSide(null); }}
-                        className="flex w-full items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-black"
+                        className="flex w-full items-center px-4 py-2 text-sm text-foreground/80 hover:bg-muted hover:text-foreground"
                       >
                         {rel.label}
                       </button>
@@ -391,10 +391,10 @@ function GuestRow({
 
   const DIETARY_OPTIONS = [null, "Vegetarian", "Vegan", "Gluten-free", "Halal"];
   const DIETARY_COLORS: Record<string, string> = {
-    "Vegetarian": "text-green-600",
-    "Vegan": "text-emerald-600",
-    "Gluten-free": "text-orange-500",
-    "Halal": "text-blue-500",
+    "Vegetarian": "text-muted-foreground",
+    "Vegan": "text-muted-foreground",
+    "Gluten-free": "text-muted-foreground",
+    "Halal": "text-muted-foreground",
   };
   function cycleDietary() {
     const cur = guest.dietary ?? null;
@@ -418,22 +418,22 @@ function GuestRow({
   }
 
   return (
-    <div className="group border-b border-gray-100 last:border-0 py-2.5">
-      <p className="text-xs text-gray-400 mb-0.5 flex items-center gap-1">
+    <div className="group border-b border-border/50 last:border-0 py-2.5">
+      <p className="text-xs text-muted-foreground mb-0.5 flex items-center gap-1">
         {relationLabel(guest.relation, t)}
         {guest.isChiefGuest && (
-          <span className="inline-flex items-center gap-0.5 rounded-full bg-amber-50 px-1.5 py-0.5 text-[9px] font-semibold text-amber-600">
-            <Star className="h-2.5 w-2.5 fill-amber-500" /> Chief
+          <span className="inline-flex items-center gap-0.5 rounded-full bg-[var(--color-warning-bg)] px-1.5 py-0.5 text-[9px] font-semibold text-[var(--color-warning-text)]">
+            <Star className="h-2.5 w-2.5 fill-[var(--color-warning-text)]" /> Chief
           </span>
         )}
         {guest.selfRegistered && (
-          <span className="inline-flex items-center rounded-full bg-blue-50 px-1.5 py-0.5 text-[9px] font-semibold text-blue-600">
+          <span className="inline-flex items-center rounded-full bg-primary/5 px-1.5 py-0.5 text-[9px] font-semibold text-primary">
             Self-registered
           </span>
         )}
       </p>
       {editing ? (
-        <div className="flex items-center rounded border border-gray-200 focus-within:border-indigo-300">
+        <div className="flex items-center rounded border border-border focus-within:border-primary/30">
           <TitleDropdown value={title} onChange={handleTitleChange} />
           <input
             autoFocus
@@ -446,7 +446,7 @@ function GuestRow({
           />
           <button
             onMouseDown={(e) => { e.preventDefault(); onDelete(guest.id); }}
-            className="px-2 text-gray-300 hover:text-red-400 transition-colors"
+            className="px-2 text-muted-foreground/50 hover:text-[var(--color-error-text)] transition-colors"
           >
             <Trash2 className="h-3.5 w-3.5" />
           </button>
@@ -455,11 +455,11 @@ function GuestRow({
         <div className="flex items-center justify-between gap-2">
           <button
             onClick={() => setEditing(true)}
-            className="text-sm text-gray-800 hover:text-indigo-600 text-left transition-colors"
+            className="text-sm text-foreground hover:text-primary text-left transition-colors"
           >
-            {displayFullName(guest) || <span className="italic text-gray-300">—</span>}
+            {displayFullName(guest) || <span className="italic text-muted-foreground/50">—</span>}
             {guest.hasPlusOne && (
-              <span className="ml-1.5 text-[10px] text-indigo-400 font-medium">+1{guest.plusOneName ? ` (${guest.plusOneName})` : ""}</span>
+              <span className="ml-1.5 text-[10px] text-primary/60 font-medium">+1{guest.plusOneName ? ` (${guest.plusOneName})` : ""}</span>
             )}
           </button>
           <div className="flex items-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
@@ -467,15 +467,15 @@ function GuestRow({
             <button
               onClick={toggleChiefGuest}
               title={guest.isChiefGuest ? "Remove chief guest" : "Mark as chief guest"}
-              className={cn("transition-colors", guest.isChiefGuest ? "text-amber-500" : "text-gray-300 hover:text-amber-400")}
+              className={cn("transition-colors", guest.isChiefGuest ? "text-[var(--color-warning-text)]" : "text-muted-foreground/50 hover:text-[var(--color-warning-text)]")}
             >
-              <Star className={cn("h-3.5 w-3.5", guest.isChiefGuest && "fill-amber-500")} />
+              <Star className={cn("h-3.5 w-3.5", guest.isChiefGuest && "fill-[var(--color-warning-text)]")} />
             </button>
             {/* Plus-one toggle */}
             <button
               onClick={togglePlusOne}
               title={guest.hasPlusOne ? "Remove +1" : "Add +1"}
-              className={cn("text-xs font-bold transition-colors", guest.hasPlusOne ? "text-indigo-500" : "text-gray-300 hover:text-indigo-400")}
+              className={cn("text-xs font-bold transition-colors", guest.hasPlusOne ? "text-primary" : "text-muted-foreground/50 hover:text-primary")}
             >
               +1
             </button>
@@ -483,7 +483,7 @@ function GuestRow({
             <button
               onClick={cycleDietary}
               title={`Dietary: ${guest.dietary ?? "None"} — click to cycle`}
-              className={cn("flex items-center gap-0.5 text-xs font-medium transition-colors", guest.dietary ? DIETARY_COLORS[guest.dietary] ?? "text-gray-500" : "text-gray-300 hover:text-green-500")}
+              className={cn("flex items-center gap-0.5 text-xs font-medium transition-colors", guest.dietary ? DIETARY_COLORS[guest.dietary] ?? "text-muted-foreground" : "text-muted-foreground/50 hover:text-[var(--color-success-text)]")}
             >
               <UtensilsCrossed className="h-3 w-3" />
               {guest.dietary ? <span>{guest.dietary}</span> : null}
@@ -492,11 +492,11 @@ function GuestRow({
               {guest.rsvpStatus === "PENDING" ? t("guests.pending") : guest.rsvpStatus === "ATTENDING" ? t("guests.attending") : t("guests.declined")}
             </button>
             {onShareRsvp && (
-              <button onClick={() => onShareRsvp(guest)} className="text-gray-300 hover:text-indigo-400 transition-colors" title="RSVP Link">
+              <button onClick={() => onShareRsvp(guest)} className="text-muted-foreground/50 hover:text-primary transition-colors" title="RSVP Link">
                 <Link2 className="h-3.5 w-3.5" />
               </button>
             )}
-            <button onClick={() => onDelete(guest.id)} className="text-gray-300 hover:text-red-400 transition-colors">
+            <button onClick={() => onDelete(guest.id)} className="text-muted-foreground/50 hover:text-[var(--color-error-text)] transition-colors">
               <Trash2 className="h-3.5 w-3.5" />
             </button>
           </div>
@@ -505,24 +505,24 @@ function GuestRow({
 
       {/* Plus-one expanded section */}
       {plusOneExpanded && (
-        <div className="mt-2 ml-3 flex items-center gap-2 rounded-lg bg-indigo-50/60 px-3 py-2">
-          <UserCheck className="h-3.5 w-3.5 flex-shrink-0 text-indigo-400" />
+        <div className="mt-2 ml-3 flex items-center gap-2 rounded-lg bg-primary/5 px-3 py-2">
+          <UserCheck className="h-3.5 w-3.5 flex-shrink-0 text-primary/60" />
           <input
             value={plusOneName}
             onChange={(e) => setPlusOneName(e.target.value)}
             onBlur={savePlusOne}
             onKeyDown={(e) => e.key === "Enter" && savePlusOne()}
             placeholder="+1 name"
-            className="flex-1 bg-transparent text-xs text-gray-700 placeholder:text-gray-400 outline-none"
+            className="flex-1 bg-transparent text-xs text-foreground/80 placeholder:text-muted-foreground outline-none"
           />
-          <span className="text-gray-300">·</span>
+          <span className="text-muted-foreground/50">·</span>
           <input
             value={plusOneMeal}
             onChange={(e) => setPlusOneMeal(e.target.value)}
             onBlur={savePlusOne}
             onKeyDown={(e) => e.key === "Enter" && savePlusOne()}
             placeholder="Meal preference"
-            className="w-28 bg-transparent text-xs text-gray-700 placeholder:text-gray-400 outline-none"
+            className="w-28 bg-transparent text-xs text-foreground/80 placeholder:text-muted-foreground outline-none"
           />
         </div>
       )}
@@ -576,12 +576,12 @@ const GUIDELINES = [
     content: (
       <>
         <p>Already have your list in a spreadsheet? Click <strong>Import guest list</strong> and upload a <strong>CSV or XLS/XLSX</strong> file.</p>
-        <p className="mt-2">Your file must have a <strong>First Name</strong> column (or <code className="rounded bg-gray-100 px-1 text-xs">first_name</code> / <code className="rounded bg-gray-100 px-1 text-xs">name</code>). Other supported columns:</p>
-        <ul className="mt-1 space-y-0.5 text-sm text-gray-500">
+        <p className="mt-2">Your file must have a <strong>First Name</strong> column (or <code className="rounded bg-muted px-1 text-xs">first_name</code> / <code className="rounded bg-muted px-1 text-xs">name</code>). Other supported columns:</p>
+        <ul className="mt-1 space-y-0.5 text-sm text-muted-foreground">
           <li>Last Name · Title · Side (BRIDE or GROOM)</li>
           <li>Email · Phone · Dietary · Notes</li>
         </ul>
-        <p className="mt-2 text-xs text-gray-400">All imported guests get RSVP status "Pending" by default. Guests without a Side are assigned to Bride.</p>
+        <p className="mt-2 text-xs text-muted-foreground">All imported guests get RSVP status "Pending" by default. Guests without a Side are assigned to Bride.</p>
       </>
     ),
   },
@@ -608,9 +608,9 @@ const GUIDELINES = [
       <>
         <p>Each guest has one of three RSVP statuses:</p>
         <ul className="mt-2 space-y-1.5 text-sm">
-          <li><span className="font-medium text-gray-400">Pending</span> — No response yet (default).</li>
-          <li><span className="font-medium text-green-600">Attending</span> — Guest confirmed they will come.</li>
-          <li><span className="font-medium text-red-500">Declined</span> — Guest cannot attend.</li>
+          <li><span className="font-medium text-muted-foreground">Pending</span> — No response yet (default).</li>
+          <li><span className="font-medium text-[var(--color-success-text)]">Attending</span> — Guest confirmed they will come.</li>
+          <li><span className="font-medium text-[var(--color-error-text)]">Declined</span> — Guest cannot attend.</li>
         </ul>
         <p className="mt-2">Hover over a guest&apos;s name in any view and click their RSVP status to cycle through the three options. In the Full Table view, the status is always visible.</p>
       </>
@@ -624,7 +624,7 @@ const GUIDELINES = [
       <>
         <p>Use the <strong>search box</strong> to find a guest by name or email instantly.</p>
         <p className="mt-2">Use the <strong>RSVP filter</strong> buttons (All / Attending / Pending / Declined) to focus on a specific group — for example, to quickly see who still hasn&apos;t responded.</p>
-        <p className="mt-2 text-xs text-gray-400">The summary at the bottom always shows total counts from your <em>full</em> list, not just the filtered view.</p>
+        <p className="mt-2 text-xs text-muted-foreground">The summary at the bottom always shows total counts from your <em>full</em> list, not just the filtered view.</p>
       </>
     ),
   },
@@ -646,18 +646,18 @@ function GuidelinesPanel({ open, onClose }: { open: boolean; onClose: () => void
       {/* Drawer */}
       <div
         className={cn(
-          "fixed right-0 top-0 z-50 flex h-full w-full max-w-sm flex-col bg-white shadow-2xl transition-transform duration-300 ease-in-out",
+          "fixed right-0 top-0 z-50 flex h-full w-full max-w-sm flex-col bg-card shadow-2xl transition-transform duration-300 ease-in-out",
           open ? "translate-x-0" : "translate-x-full"
         )}
       >
         {/* Header */}
-        <div className="flex items-start justify-between border-b border-gray-100 px-5 py-4">
-          <h2 className="text-sm font-semibold leading-snug text-gray-900 pr-4">
+        <div className="flex items-start justify-between border-b border-border px-5 py-4">
+          <h2 className="text-sm font-semibold leading-snug text-foreground pr-4">
             Guidelines on How to Use the Guest List
           </h2>
           <button
             onClick={onClose}
-            className="mt-0.5 flex-shrink-0 rounded p-0.5 text-gray-400 hover:bg-gray-100 hover:text-gray-700 transition-colors"
+            className="mt-0.5 flex-shrink-0 rounded p-0.5 text-muted-foreground hover:bg-muted hover:text-foreground/80 transition-colors"
           >
             <svg viewBox="0 0 16 16" className="h-4 w-4" fill="none">
               <path d="M4 4l8 8M12 4l-8 8" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
@@ -666,7 +666,7 @@ function GuidelinesPanel({ open, onClose }: { open: boolean; onClose: () => void
         </div>
 
         {/* Scrollable body */}
-        <div className="flex-1 overflow-y-auto px-5 py-4 text-sm text-gray-600">
+        <div className="flex-1 overflow-y-auto px-5 py-4 text-sm text-foreground/80">
           {/* Table of contents */}
           <ul className="mb-6 space-y-1">
             {GUIDELINES.map((g) => (
@@ -677,8 +677,8 @@ function GuidelinesPanel({ open, onClose }: { open: boolean; onClose: () => void
                     document.getElementById(`guide-${g.id}`)?.scrollIntoView({ behavior: "smooth", block: "start" });
                   }}
                   className={cn(
-                    "flex w-full items-center gap-2 rounded-md px-2 py-1 text-left text-sm transition-colors hover:bg-gray-50",
-                    activeSection === g.id ? "bg-indigo-50 text-indigo-700 font-medium" : "text-gray-500"
+                    "flex w-full items-center gap-2 rounded-md px-2 py-1 text-left text-sm transition-colors hover:bg-muted",
+                    activeSection === g.id ? "bg-primary/5 text-primary font-medium" : "text-muted-foreground"
                   )}
                 >
                   <span className="text-base">{g.emoji}</span>
@@ -692,11 +692,11 @@ function GuidelinesPanel({ open, onClose }: { open: boolean; onClose: () => void
           <div className="space-y-8">
             {GUIDELINES.map((g) => (
               <div key={g.id} id={`guide-${g.id}`}>
-                <h3 className="mb-3 flex items-center gap-2 text-base font-semibold text-gray-800">
+                <h3 className="mb-3 flex items-center gap-2 text-base font-semibold text-foreground/80">
                   <span>{g.emoji}</span>
                   {g.title}
                 </h3>
-                <div className="leading-relaxed text-gray-600">{g.content}</div>
+                <div className="leading-relaxed text-foreground/80">{g.content}</div>
               </div>
             ))}
           </div>
@@ -1412,11 +1412,11 @@ export default function GuestListPage() {
     return (
       <>
         {before}
-        <button onClick={() => setGuidelinesOpen(true)} className="text-indigo-500 underline hover:text-indigo-700 transition-colors">
+        <button onClick={() => setGuidelinesOpen(true)} className="text-primary underline hover:text-primary/90 transition-colors">
           {t("guests.guidelineLink")}
         </button>
         {between}
-        <button onClick={() => importRef.current?.click()} className="text-indigo-500 underline hover:text-indigo-700 transition-colors">
+        <button onClick={() => importRef.current?.click()} className="text-primary underline hover:text-primary/90 transition-colors">
           {t("guests.importLink")}
         </button>
         {after}
@@ -1441,8 +1441,8 @@ export default function GuestListPage() {
 
       {/* Header */}
       <div className="mb-5">
-        <h1 className="text-xl font-semibold text-gray-900">{t("guests.heading")}</h1>
-        <p className="mt-1 text-sm text-gray-400">{renderHeadingDesc()}</p>
+        <h1 className="text-xl font-semibold text-foreground">{t("guests.heading")}</h1>
+        <p className="mt-1 text-sm text-muted-foreground">{renderHeadingDesc()}</p>
       </div>
 
       {/* Search + Filter */}
@@ -1451,15 +1451,15 @@ export default function GuestListPage() {
           value={search}
           onChange={(e) => setSearch(e.target.value)}
           placeholder={t("guests.searchPlaceholder")}
-          className="h-8 rounded-md border border-gray-200 bg-white px-3 text-sm text-gray-700 placeholder:text-gray-400 focus:border-indigo-300 focus:outline-none flex-1 min-w-36"
+          className="h-8 rounded-md border border-border bg-card px-3 text-sm text-foreground/80 placeholder:text-muted-foreground focus:border-primary/30 focus:outline-none flex-1 min-w-36"
         />
-        <div className="flex items-center rounded-md border border-gray-200 bg-white overflow-hidden text-sm">
+        <div className="flex items-center rounded-md border border-border bg-card overflow-hidden text-sm">
           {(["ALL", "ATTENDING", "PENDING", "NOT_ATTENDING"] as const).map((f) => (
             <button
               key={f}
               onClick={() => setRsvpFilter(f === "PENDING" ? "PENDING" : f === "NOT_ATTENDING" ? "NOT_ATTENDING" : f === "ATTENDING" ? "ATTENDING" : "ALL")}
-              className={cn("px-3 py-1.5 font-medium transition-colors border-r border-gray-200 last:border-0 text-xs",
-                rsvpFilter === f ? "bg-indigo-500 text-white" : "text-gray-500 hover:text-black hover:bg-gray-50")}
+              className={cn("px-3 py-1.5 font-medium transition-colors border-r border-border last:border-0 text-xs",
+                rsvpFilter === f ? "bg-primary text-primary-foreground" : "text-muted-foreground hover:text-foreground hover:bg-muted")}
             >
               {f === "ALL" ? t("guests.filterAll") : f === "ATTENDING" ? t("guests.filterAttending") : f === "PENDING" ? t("guests.filterPending") : t("guests.filterDeclined")}
             </button>
@@ -1470,23 +1470,23 @@ export default function GuestListPage() {
       {/* RSVP Questions Modal */}
       {rsvpQuestionsOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 px-4">
-          <div className="w-full max-w-lg rounded-2xl bg-white shadow-xl flex flex-col max-h-[90vh]">
-            <div className="flex items-center justify-between border-b border-gray-100 px-5 py-4">
-              <h2 className="font-semibold text-gray-900">Custom RSVP Questions</h2>
-              <button onClick={() => setRsvpQuestionsOpen(false)} className="text-gray-400 hover:text-gray-600"><X className="h-4 w-4" /></button>
+          <div className="w-full max-w-lg rounded-2xl bg-card shadow-xl flex flex-col max-h-[90vh]">
+            <div className="flex items-center justify-between border-b border-border px-5 py-4">
+              <h2 className="font-semibold text-foreground">Custom RSVP Questions</h2>
+              <button onClick={() => setRsvpQuestionsOpen(false)} className="text-muted-foreground hover:text-foreground/80"><X className="h-4 w-4" /></button>
             </div>
             <div className="flex-1 overflow-y-auto px-5 py-4 space-y-3">
               {rsvpQuestions.length === 0 && (
-                <p className="text-sm text-gray-400">No custom questions yet. Add one below.</p>
+                <p className="text-sm text-muted-foreground">No custom questions yet. Add one below.</p>
               )}
               {rsvpQuestions.map((q) => (
-                <div key={q.id} className="rounded-xl border border-gray-100 p-3">
+                <div key={q.id} className="rounded-xl border border-border p-3">
                   {editingQuestion?.id === q.id ? (
                     <div className="space-y-2">
                       <input
                         value={editQText}
                         onChange={(e) => setEditQText(e.target.value)}
-                        className="w-full rounded-lg border border-gray-200 px-3 py-1.5 text-sm focus:border-indigo-300 focus:outline-none"
+                        className="w-full rounded-lg border border-border px-3 py-1.5 text-sm focus:border-primary/30 focus:outline-none"
                       />
                       {(q.type === "SINGLE_CHOICE" || q.type === "MULTIPLE_CHOICE") && (
                         <textarea
@@ -1494,36 +1494,36 @@ export default function GuestListPage() {
                           onChange={(e) => setEditQOptions(e.target.value)}
                           rows={3}
                           placeholder="One option per line"
-                          className="w-full rounded-lg border border-gray-200 px-3 py-1.5 text-sm focus:border-indigo-300 focus:outline-none resize-none"
+                          className="w-full rounded-lg border border-border px-3 py-1.5 text-sm focus:border-primary/30 focus:outline-none resize-none"
                         />
                       )}
-                      <label className="flex items-center gap-1.5 text-sm text-gray-600 cursor-pointer">
+                      <label className="flex items-center gap-1.5 text-sm text-foreground/80 cursor-pointer">
                         <input type="checkbox" checked={editQRequired} onChange={(e) => setEditQRequired(e.target.checked)} className="rounded" />
                         Required
                       </label>
                       <div className="flex gap-2">
-                        <button onClick={() => handleUpdateQuestion(q)} className="rounded-lg bg-indigo-500 px-3 py-1 text-xs font-medium text-white hover:bg-indigo-600">Save</button>
-                        <button onClick={() => setEditingQuestion(null)} className="rounded-lg border border-gray-200 px-3 py-1 text-xs text-gray-500 hover:bg-gray-50">Cancel</button>
+                        <button onClick={() => handleUpdateQuestion(q)} className="rounded-lg bg-primary px-3 py-1 text-xs font-medium text-primary-foreground hover:bg-primary/90">Save</button>
+                        <button onClick={() => setEditingQuestion(null)} className="rounded-lg border border-border px-3 py-1 text-xs text-muted-foreground hover:bg-muted">Cancel</button>
                       </div>
                     </div>
                   ) : (
                     <div className="flex items-start gap-2">
                       <div className="flex-1">
-                        <p className="text-sm font-medium text-gray-800">{q.text}</p>
+                        <p className="text-sm font-medium text-foreground/80">{q.text}</p>
                         <div className="mt-0.5 flex items-center gap-2">
-                          <span className="rounded bg-gray-100 px-1.5 py-0.5 text-[10px] font-medium text-gray-500 uppercase">{q.type.replace("_", " ")}</span>
-                          {q.required && <span className="text-[10px] font-medium text-rose-500">Required</span>}
+                          <span className="rounded bg-muted px-1.5 py-0.5 text-[10px] font-medium text-muted-foreground uppercase">{q.type.replace("_", " ")}</span>
+                          {q.required && <span className="text-[10px] font-medium text-accent">Required</span>}
                         </div>
                         {q.options && (q.options as string[]).length > 0 && (
-                          <p className="mt-1 text-xs text-gray-400">{(q.options as string[]).join(" · ")}</p>
+                          <p className="mt-1 text-xs text-muted-foreground">{(q.options as string[]).join(" · ")}</p>
                         )}
                       </div>
                       <div className="flex gap-1 shrink-0">
                         <button
                           onClick={() => { setEditingQuestion(q); setEditQText(q.text); setEditQOptions((q.options as string[] | null)?.join("\n") ?? ""); setEditQRequired(q.required); }}
-                          className="rounded-lg border border-gray-200 px-2 py-1 text-xs text-gray-500 hover:bg-gray-50"
+                          className="rounded-lg border border-border px-2 py-1 text-xs text-muted-foreground hover:bg-muted"
                         >Edit</button>
-                        <button onClick={() => handleDeleteQuestion(q.id)} className="rounded-lg border border-red-100 px-2 py-1 text-xs text-red-500 hover:bg-red-50">
+                        <button onClick={() => handleDeleteQuestion(q.id)} className="rounded-lg border border-[var(--color-error-text)]/20 px-2 py-1 text-xs text-[var(--color-error-text)] hover:bg-[var(--color-error-bg)]">
                           <Trash2 className="h-3 w-3" />
                         </button>
                       </div>
@@ -1534,26 +1534,26 @@ export default function GuestListPage() {
             </div>
 
             {/* Add new question */}
-            <div className="border-t border-gray-100 px-5 py-4 space-y-3">
-              <p className="text-xs font-semibold uppercase tracking-wider text-gray-400">Add question</p>
+            <div className="border-t border-border px-5 py-4 space-y-3">
+              <p className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">Add question</p>
               <input
                 value={newQText}
                 onChange={(e) => setNewQText(e.target.value)}
                 placeholder="Question text…"
-                className="w-full rounded-lg border border-gray-200 px-3 py-2 text-sm focus:border-indigo-300 focus:outline-none"
+                className="w-full rounded-lg border border-border px-3 py-2 text-sm focus:border-primary/30 focus:outline-none"
               />
               <div className="flex gap-2 items-center">
                 <select
                   value={newQType}
                   onChange={(e) => setNewQType(e.target.value as RsvpQuestionType)}
-                  className="flex-1 rounded-lg border border-gray-200 px-2 py-1.5 text-sm focus:border-indigo-300 focus:outline-none"
+                  className="flex-1 rounded-lg border border-border px-2 py-1.5 text-sm focus:border-primary/30 focus:outline-none"
                 >
                   <option value="SHORT_TEXT">Short text</option>
                   <option value="LONG_TEXT">Long text</option>
                   <option value="SINGLE_CHOICE">Single choice</option>
                   <option value="MULTIPLE_CHOICE">Multiple choice</option>
                 </select>
-                <label className="flex items-center gap-1.5 text-sm text-gray-600 cursor-pointer">
+                <label className="flex items-center gap-1.5 text-sm text-foreground/80 cursor-pointer">
                   <input type="checkbox" checked={newQRequired} onChange={(e) => setNewQRequired(e.target.checked)} className="rounded" />
                   Required
                 </label>
@@ -1564,13 +1564,13 @@ export default function GuestListPage() {
                   onChange={(e) => setNewQOptions(e.target.value)}
                   rows={3}
                   placeholder="One option per line"
-                  className="w-full rounded-lg border border-gray-200 px-3 py-2 text-sm focus:border-indigo-300 focus:outline-none resize-none"
+                  className="w-full rounded-lg border border-border px-3 py-2 text-sm focus:border-primary/30 focus:outline-none resize-none"
                 />
               )}
               <button
                 onClick={handleAddQuestion}
                 disabled={!newQText.trim()}
-                className="w-full rounded-xl bg-indigo-500 py-2 text-sm font-medium text-white hover:bg-indigo-600 disabled:opacity-40 transition-colors"
+                className="w-full rounded-xl bg-primary py-2 text-sm font-medium text-primary-foreground hover:bg-primary/90 disabled:opacity-40 transition-colors"
               >
                 <Plus className="inline h-4 w-4 mr-1" />Add Question
               </button>
@@ -1582,14 +1582,14 @@ export default function GuestListPage() {
       {/* Controls */}
       <div className="mb-6 flex items-center justify-between gap-3">
         {/* View toggle */}
-        <div className="flex items-center rounded-md border border-gray-200 bg-white overflow-hidden text-sm">
+        <div className="flex items-center rounded-md border border-border bg-card overflow-hidden text-sm">
           {viewModes.map((m) => (
             <button
               key={m.id}
               onClick={() => setViewMode(m.id)}
               className={cn(
-                "px-3.5 py-1.5 font-medium transition-colors border-r border-gray-200 last:border-0",
-                viewMode === m.id ? "bg-indigo-500 text-white" : "text-gray-500 hover:text-black hover:bg-gray-50"
+                "px-3.5 py-1.5 font-medium transition-colors border-r border-border last:border-0",
+                viewMode === m.id ? "bg-primary text-primary-foreground" : "text-muted-foreground hover:text-foreground hover:bg-muted"
               )}
             >
               {m.label}
@@ -1599,7 +1599,7 @@ export default function GuestListPage() {
         {!isLocal && (
           <button
             onClick={() => setRsvpQuestionsOpen(true)}
-            className="flex items-center gap-1.5 rounded-lg border border-gray-200 bg-white px-3 py-1.5 text-xs font-medium text-gray-600 hover:border-indigo-200 hover:text-indigo-600 transition-colors"
+            className="flex items-center gap-1.5 rounded-lg border border-border bg-card px-3 py-1.5 text-xs font-medium text-foreground/80 hover:border-primary/20 hover:text-primary transition-colors"
           >
             <MessageSquarePlus className="h-3.5 w-3.5" />
             RSVP Questions{rsvpQuestions.length > 0 ? ` (${rsvpQuestions.length})` : ""}
@@ -1609,7 +1609,7 @@ export default function GuestListPage() {
 
       {loading ? (
         <div className="flex items-center justify-center py-20">
-          <div className="h-5 w-5 animate-spin rounded-full border-2 border-gray-200 border-t-indigo-500" />
+          <div className="h-5 w-5 animate-spin rounded-full border-2 border-muted border-t-primary" />
         </div>
       ) : (
         <>
@@ -1619,10 +1619,10 @@ export default function GuestListPage() {
               {/* Bride */}
               <div>
                 <div className="mb-4 flex flex-col items-center gap-2">
-                  <div className="flex h-12 w-12 items-center justify-center rounded-full bg-rose-50">
+                  <div className="flex h-12 w-12 items-center justify-center rounded-full bg-accent/10">
                     <BrideIcon className="h-7 w-7" />
                   </div>
-                  <h2 className="text-sm font-semibold text-gray-700">{t("guests.brideGuests")}</h2>
+                  <h2 className="text-sm font-semibold text-foreground/80">{t("guests.brideGuests")}</h2>
                 </div>
                 <div>
                   {brideGuests.map((g) => (
@@ -1635,10 +1635,10 @@ export default function GuestListPage() {
               {/* Groom */}
               <div>
                 <div className="mb-4 flex flex-col items-center gap-2">
-                  <div className="flex h-12 w-12 items-center justify-center rounded-full bg-blue-50">
+                  <div className="flex h-12 w-12 items-center justify-center rounded-full bg-primary/5">
                     <GroomIcon className="h-7 w-7" />
                   </div>
-                  <h2 className="text-sm font-semibold text-gray-700">{t("guests.groomGuests")}</h2>
+                  <h2 className="text-sm font-semibold text-foreground/80">{t("guests.groomGuests")}</h2>
                 </div>
                 <div>
                   {groomGuests.map((g) => (
@@ -1661,7 +1661,7 @@ export default function GuestListPage() {
               {/* Letter groups */}
               {Object.keys(alphaGroups).sort().map((letter) => (
                 <div key={letter} className="mt-4">
-                  <p className="mb-1 text-lg font-bold text-gray-800">{letter}</p>
+                  <p className="mb-1 text-lg font-bold text-foreground/80">{letter}</p>
                   {alphaGroups[letter]
                     .filter(g => g.relation !== "BRIDE" && g.relation !== "GROOM")
                     .map((g) => (
@@ -1671,7 +1671,7 @@ export default function GuestListPage() {
               ))}
 
               {guests.length === 0 && (
-                <p className="py-8 text-center text-sm text-gray-400">{t("guests.noGuestsAlpha")}</p>
+                <p className="py-8 text-center text-sm text-muted-foreground">{t("guests.noGuestsAlpha")}</p>
               )}
 
               {/* Add guest (both sides) */}
@@ -1683,17 +1683,17 @@ export default function GuestListPage() {
 
           {/* ── FULL TABLE ── */}
           {viewMode === "full-table" && (
-            <div className="rounded-lg border border-gray-100 bg-white overflow-hidden">
+            <div className="rounded-lg border border-border bg-card overflow-hidden">
               {guests.length === 0 ? (
-                <p className="p-10 text-center text-sm text-gray-400">{t("guests.noGuests")}</p>
+                <p className="p-10 text-center text-sm text-muted-foreground">{t("guests.noGuests")}</p>
               ) : (
                 <table className="w-full text-sm">
                   <thead>
-                    <tr className="border-b border-gray-100 bg-gray-50 text-left text-xs font-semibold uppercase tracking-wider text-gray-400">
+                    <tr className="border-b border-border bg-muted text-left text-xs font-semibold uppercase tracking-wider text-muted-foreground">
                       <th className="px-3 py-3">
-                        <button onClick={toggleSelectAll} className="text-gray-400 hover:text-indigo-500 transition-colors">
+                        <button onClick={toggleSelectAll} className="text-muted-foreground hover:text-primary transition-colors">
                           {selectedIds.size === filteredGuests.length && filteredGuests.length > 0
-                            ? <CheckSquare className="h-4 w-4 text-indigo-500" />
+                            ? <CheckSquare className="h-4 w-4 text-primary" />
                             : <Square className="h-4 w-4" />}
                         </button>
                       </th>
@@ -1707,26 +1707,26 @@ export default function GuestListPage() {
                   </thead>
                   <tbody>
                     {[...filteredGuests].sort((a,b) => `${a.firstName}${a.lastName}`.localeCompare(`${b.firstName}${b.lastName}`)).map((g) => (
-                      <tr key={g.id} className={cn("border-b border-gray-100 last:border-0 hover:bg-gray-50 group", selectedIds.has(g.id) && "bg-indigo-50/40")}>
+                      <tr key={g.id} className={cn("border-b border-border/50 last:border-0 hover:bg-muted/30 group", selectedIds.has(g.id) && "bg-primary/5")}>
                         <td className="px-3 py-3">
-                          <button onClick={() => toggleSelect(g.id)} className="text-gray-400 hover:text-indigo-500 transition-colors">
-                            {selectedIds.has(g.id) ? <CheckSquare className="h-4 w-4 text-indigo-500" /> : <Square className="h-4 w-4" />}
+                          <button onClick={() => toggleSelect(g.id)} className="text-muted-foreground hover:text-primary transition-colors">
+                            {selectedIds.has(g.id) ? <CheckSquare className="h-4 w-4 text-primary" /> : <Square className="h-4 w-4" />}
                           </button>
                         </td>
-                        <td className="px-4 py-3 font-medium text-gray-800">
+                        <td className="px-4 py-3 font-medium text-foreground">
                           <span className="flex items-center gap-1.5">
-                            {g.isChiefGuest && <Star className="h-3 w-3 fill-amber-400 text-amber-400 flex-shrink-0" />}
-                            {displayFullName(g) || <span className="italic text-gray-300">—</span>}
-                            {g.hasPlusOne && <span className="text-[10px] font-medium text-indigo-400">+1</span>}
+                            {g.isChiefGuest && <Star className="h-3 w-3 fill-[var(--color-warning-text)] text-[var(--color-warning-text)] flex-shrink-0" />}
+                            {displayFullName(g) || <span className="italic text-muted-foreground/50">—</span>}
+                            {g.hasPlusOne && <span className="text-[10px] font-medium text-primary/60">+1</span>}
                           </span>
                         </td>
                         <td className="px-4 py-3">
                           <span className={cn("rounded-full px-2 py-0.5 text-[11px] font-semibold",
-                            g.side === "BRIDE" ? "bg-rose-50 text-rose-500" : "bg-blue-50 text-blue-500")}>
+                            g.side === "BRIDE" ? "bg-accent/10 text-accent" : "bg-primary/5 text-primary")}>
                             {g.side === "BRIDE" ? t("guests.bride") : t("guests.groom")}
                           </span>
                         </td>
-                        <td className="px-4 py-3 text-gray-500">{relationLabel(g.relation, t)}</td>
+                        <td className="px-4 py-3 text-muted-foreground">{relationLabel(g.relation, t)}</td>
                         <td className="px-4 py-3">
                           <button
                             onClick={() => {
@@ -1745,12 +1745,12 @@ export default function GuestListPage() {
                               onBlur={(e) => handleUpdate(g.id, { invitationCode: e.target.value.trim() || null })}
                               onKeyDown={(e) => e.key === "Enter" && (e.target as HTMLInputElement).blur()}
                               placeholder="INV-001"
-                              className="w-20 rounded border border-gray-100 px-1.5 py-0.5 text-xs text-gray-600 placeholder:text-gray-300 focus:border-indigo-300 focus:outline-none"
+                              className="w-20 rounded border border-border/50 px-1.5 py-0.5 text-xs text-foreground/80 placeholder:text-muted-foreground/50 focus:border-primary/30 focus:outline-none"
                             />
                             <button
                               onClick={() => handleUpdate(g.id, { invitationSent: !g.invitationSent, invitationSentAt: !g.invitationSent ? new Date().toISOString() : null })}
                               title={g.invitationSent ? "Mark as not sent" : "Mark as sent"}
-                              className={cn("transition-colors text-xs font-medium", g.invitationSent ? "text-emerald-600" : "text-gray-300 hover:text-emerald-500")}
+                              className={cn("transition-colors text-xs font-medium", g.invitationSent ? "text-[var(--color-success-text)]" : "text-muted-foreground/50 hover:text-[var(--color-success-text)]")}
                             >
                               {g.invitationSent ? <Check className="h-3.5 w-3.5" /> : <X className="h-3.5 w-3.5" />}
                             </button>
@@ -1759,7 +1759,7 @@ export default function GuestListPage() {
                         <td className="px-4 py-3 text-right">
                           <div className="flex items-center justify-end gap-2 opacity-0 group-hover:opacity-100 transition-all">
                             {!isLocal && (
-                              <button onClick={() => handleShareRsvp(g)} className="text-gray-300 hover:text-indigo-400 transition-colors" title="RSVP Link">
+                              <button onClick={() => handleShareRsvp(g)} className="text-muted-foreground/50 hover:text-primary transition-colors" title="RSVP Link">
                                 <Link2 className="h-3.5 w-3.5" />
                               </button>
                             )}
@@ -1768,14 +1768,14 @@ export default function GuestListPage() {
                                 onClick={() => handleSendSms(g)}
                                 disabled={smsSending === g.id}
                                 title="Send RSVP via SMS"
-                                className="text-gray-300 hover:text-emerald-500 transition-colors disabled:opacity-50"
+                                className="text-muted-foreground/50 hover:text-[var(--color-success-text)] transition-colors disabled:opacity-50"
                               >
                                 {smsSending === g.id
-                                  ? <div className="h-3.5 w-3.5 animate-spin rounded-full border-2 border-gray-300 border-t-emerald-500" />
+                                  ? <div className="h-3.5 w-3.5 animate-spin rounded-full border-2 border-muted border-t-[var(--color-success-text)]" />
                                   : <Smartphone className="h-3.5 w-3.5" />}
                               </button>
                             )}
-                            <button onClick={() => handleDelete(g.id)} className="text-gray-200 hover:text-red-400 transition-colors">
+                            <button onClick={() => handleDelete(g.id)} className="text-muted-foreground/30 hover:text-[var(--color-error-text)] transition-colors">
                               <Trash2 className="h-3.5 w-3.5" />
                             </button>
                           </div>
@@ -1793,10 +1793,10 @@ export default function GuestListPage() {
             <div>
               {/* Family management header */}
               <div className="mb-4 flex items-center justify-between">
-                <p className="text-sm text-gray-500">{families.length} {families.length === 1 ? "family" : "families"}</p>
+                <p className="text-sm text-muted-foreground">{families.length} {families.length === 1 ? "family" : "families"}</p>
                 <button
                   onClick={() => setFamilyModalOpen(true)}
-                  className="flex items-center gap-1.5 rounded-lg border border-gray-200 bg-white px-3 py-1.5 text-xs font-medium text-gray-600 hover:border-indigo-200 hover:text-indigo-600 transition-colors shadow-sm"
+                  className="flex items-center gap-1.5 rounded-lg border border-border bg-card px-3 py-1.5 text-xs font-medium text-foreground/80 hover:border-primary/20 hover:text-primary transition-colors shadow-sm"
                 >
                   <Plus className="h-3.5 w-3.5" /> New Family
                 </button>
@@ -1807,15 +1807,15 @@ export default function GuestListPage() {
                 const unassigned = filteredGuests.filter((g) => !g.familyId);
                 return unassigned.length > 0 ? (
                   <div className="mb-6">
-                    <p className="mb-2 text-xs font-semibold uppercase tracking-wide text-gray-400">Unassigned ({unassigned.length})</p>
-                    <div className="rounded-lg border border-dashed border-gray-200 bg-gray-50/50 p-3">
+                    <p className="mb-2 text-xs font-semibold uppercase tracking-wide text-muted-foreground">Unassigned ({unassigned.length})</p>
+                    <div className="rounded-lg border border-dashed border-border bg-muted/30 p-3">
                       {unassigned.map((g) => (
                         <div key={g.id} className="flex items-center justify-between py-1.5 group">
-                          <span className="text-sm text-gray-700">{displayFullName(g) || <span className="italic text-gray-300">—</span>}</span>
+                          <span className="text-sm text-foreground/80">{displayFullName(g) || <span className="italic text-muted-foreground/50">—</span>}</span>
                           <select
                             value=""
                             onChange={(e) => { if (e.target.value) handleUpdate(g.id, { familyId: e.target.value }); }}
-                            className="text-xs border border-gray-200 rounded px-1.5 py-0.5 text-gray-500 bg-white opacity-0 group-hover:opacity-100 transition-opacity"
+                            className="text-xs border border-border rounded px-1.5 py-0.5 text-muted-foreground bg-card opacity-0 group-hover:opacity-100 transition-opacity"
                           >
                             <option value="">Assign to family…</option>
                             {families.map((f) => <option key={f.id} value={f.id}>{f.name}</option>)}
@@ -1829,10 +1829,10 @@ export default function GuestListPage() {
 
               {/* Family groups */}
               {families.length === 0 ? (
-                <div className="rounded-xl border border-dashed border-gray-200 py-12 text-center">
-                  <Users className="mx-auto mb-2 h-8 w-8 text-gray-300" />
-                  <p className="text-sm text-gray-400">No families yet.</p>
-                  <button onClick={() => setFamilyModalOpen(true)} className="mt-2 text-xs text-indigo-500 hover:underline">Create your first family group</button>
+                <div className="rounded-xl border border-dashed border-border py-12 text-center">
+                  <Users className="mx-auto mb-2 h-8 w-8 text-muted-foreground/50" />
+                  <p className="text-sm text-muted-foreground">No families yet.</p>
+                  <button onClick={() => setFamilyModalOpen(true)} className="mt-2 text-xs text-primary hover:underline">Create your first family group</button>
                 </div>
               ) : (
                 families.map((family) => {
@@ -1841,40 +1841,40 @@ export default function GuestListPage() {
                     <div key={family.id} className="mb-5">
                       <div className="mb-2 flex items-center justify-between">
                         <div className="flex items-center gap-2">
-                          <Users className="h-4 w-4 text-indigo-400" />
+                          <Users className="h-4 w-4 text-primary/60" />
                           {editingFamily?.id === family.id ? (
                             <input
                               autoFocus
                               defaultValue={family.name}
                               onBlur={(e) => handleRenameFamily(family.id, e.target.value)}
                               onKeyDown={(e) => { if (e.key === "Enter") handleRenameFamily(family.id, (e.target as HTMLInputElement).value); if (e.key === "Escape") setEditingFamily(null); }}
-                              className="text-sm font-semibold text-gray-800 border-b border-indigo-300 outline-none bg-transparent"
+                              className="text-sm font-semibold text-foreground border-b border-primary/30 outline-none bg-transparent"
                             />
                           ) : (
-                            <button onClick={() => setEditingFamily(family)} className="text-sm font-semibold text-gray-800 hover:text-indigo-600 transition-colors">
+                            <button onClick={() => setEditingFamily(family)} className="text-sm font-semibold text-foreground hover:text-primary transition-colors">
                               {family.name}
                             </button>
                           )}
-                          <span className="text-xs text-gray-400">({members.length})</span>
+                          <span className="text-xs text-muted-foreground">({members.length})</span>
                         </div>
-                        <button onClick={() => handleDeleteFamily(family.id)} className="text-gray-300 hover:text-red-400 transition-colors">
+                        <button onClick={() => handleDeleteFamily(family.id)} className="text-muted-foreground/50 hover:text-[var(--color-error-text)] transition-colors">
                           <Trash2 className="h-3.5 w-3.5" />
                         </button>
                       </div>
-                      <div className="rounded-lg border border-gray-100 bg-white p-3">
+                      <div className="rounded-lg border border-border bg-card p-3">
                         {members.length === 0 ? (
-                          <p className="text-xs text-gray-400 italic">No members yet. Assign guests from above.</p>
+                          <p className="text-xs text-muted-foreground italic">No members yet. Assign guests from above.</p>
                         ) : (
                           members.map((g) => (
                             <div key={g.id} className="flex items-center justify-between py-1.5 group">
-                              <span className="text-sm text-gray-700 flex items-center gap-1.5">
-                                {g.isChiefGuest && <Star className="h-3 w-3 fill-amber-400 text-amber-400" />}
+                              <span className="text-sm text-foreground/80 flex items-center gap-1.5">
+                                {g.isChiefGuest && <Star className="h-3 w-3 fill-[var(--color-warning-text)] text-[var(--color-warning-text)]" />}
                                 {displayFullName(g)}
-                                {g.hasPlusOne && <span className="text-[10px] text-indigo-400">+1</span>}
+                                {g.hasPlusOne && <span className="text-[10px] text-primary/60">+1</span>}
                               </span>
                               <button
                                 onClick={() => handleUpdate(g.id, { familyId: null })}
-                                className="text-gray-300 hover:text-red-400 opacity-0 group-hover:opacity-100 transition-all"
+                                className="text-muted-foreground/50 hover:text-[var(--color-error-text)] opacity-0 group-hover:opacity-100 transition-all"
                                 title="Remove from family"
                               >
                                 <X className="h-3.5 w-3.5" />
@@ -1895,30 +1895,30 @@ export default function GuestListPage() {
       {/* ── Bulk Actions Floating Bar ── */}
       {selectedIds.size > 0 && (
         <div className="fixed bottom-6 left-1/2 z-50 -translate-x-1/2 w-[calc(100vw-2rem)] max-w-2xl">
-          <div className="rounded-2xl bg-gray-900 px-4 py-3 shadow-2xl flex flex-wrap items-center gap-3">
+          <div className="rounded-2xl bg-foreground px-4 py-3 shadow-2xl flex flex-wrap items-center gap-3">
             <span className="text-sm font-medium text-white flex-shrink-0">
               {selectedIds.size} selected
             </span>
-            <button onClick={() => setSelectedIds(new Set())} className="text-gray-400 hover:text-white transition-colors ml-0.5">
+            <button onClick={() => setSelectedIds(new Set())} className="text-muted-foreground hover:text-white transition-colors ml-0.5">
               <X className="h-4 w-4" />
             </button>
             <div className="flex-1 min-w-0" />
 
             {/* Assign table */}
             <div className="flex items-center gap-1.5">
-              <Table2 className="h-3.5 w-3.5 text-gray-400" />
+              <Table2 className="h-3.5 w-3.5 text-muted-foreground" />
               <input
                 value={bulkTableInput}
                 onChange={(e) => setBulkTableInput(e.target.value)}
                 placeholder="Table #"
                 type="number"
                 min={1}
-                className="w-16 rounded-lg bg-gray-800 px-2 py-1 text-xs text-white placeholder:text-gray-500 outline-none focus:ring-1 focus:ring-indigo-500"
+                className="w-16 rounded-lg bg-foreground/80 px-2 py-1 text-xs text-background placeholder:text-background/50 outline-none focus:ring-1 focus:ring-primary"
               />
               <button
                 onClick={() => handleBulkAction("assign_table")}
                 disabled={!bulkTableInput}
-                className="rounded-lg bg-indigo-600 px-2.5 py-1 text-xs font-medium text-white hover:bg-indigo-500 disabled:opacity-40 transition-colors"
+                className="rounded-lg bg-primary px-2.5 py-1 text-xs font-medium text-primary-foreground hover:bg-primary/90 disabled:opacity-40 transition-colors"
               >
                 Assign
               </button>
@@ -1927,11 +1927,11 @@ export default function GuestListPage() {
             {/* Assign family */}
             {families.length > 0 && (
               <div className="flex items-center gap-1.5">
-                <Users className="h-3.5 w-3.5 text-gray-400" />
+                <Users className="h-3.5 w-3.5 text-muted-foreground" />
                 <select
                   value={bulkFamilyId}
                   onChange={(e) => setBulkFamilyId(e.target.value)}
-                  className="rounded-lg bg-gray-800 px-2 py-1 text-xs text-white outline-none focus:ring-1 focus:ring-indigo-500"
+                  className="rounded-lg bg-foreground/80 px-2 py-1 text-xs text-background outline-none focus:ring-1 focus:ring-primary"
                 >
                   <option value="">Family…</option>
                   {families.map((f) => <option key={f.id} value={f.id}>{f.name}</option>)}
@@ -1939,7 +1939,7 @@ export default function GuestListPage() {
                 <button
                   onClick={() => handleBulkAction("assign_family")}
                   disabled={!bulkFamilyId}
-                  className="rounded-lg bg-indigo-600 px-2.5 py-1 text-xs font-medium text-white hover:bg-indigo-500 disabled:opacity-40 transition-colors"
+                  className="rounded-lg bg-primary px-2.5 py-1 text-xs font-medium text-primary-foreground hover:bg-primary/90 disabled:opacity-40 transition-colors"
                 >
                   Assign
                 </button>
@@ -1947,12 +1947,12 @@ export default function GuestListPage() {
             )}
 
             {/* RSVP shortcuts */}
-            <button onClick={() => handleBulkAction("mark_attending")} className="rounded-lg bg-emerald-700 px-2.5 py-1 text-xs font-medium text-white hover:bg-emerald-600 transition-colors">Attending</button>
-            <button onClick={() => handleBulkAction("mark_not_attending")} className="rounded-lg bg-red-800 px-2.5 py-1 text-xs font-medium text-white hover:bg-red-700 transition-colors">Declined</button>
-            <button onClick={() => handleBulkAction("mark_pending")} className="rounded-lg bg-gray-700 px-2.5 py-1 text-xs font-medium text-white hover:bg-gray-600 transition-colors">Pending</button>
+            <button onClick={() => handleBulkAction("mark_attending")} className="rounded-lg bg-[var(--color-success-text)] px-2.5 py-1 text-xs font-medium text-white hover:opacity-90 transition-colors">Attending</button>
+            <button onClick={() => handleBulkAction("mark_not_attending")} className="rounded-lg bg-[var(--color-error-text)] px-2.5 py-1 text-xs font-medium text-white hover:opacity-90 transition-colors">Declined</button>
+            <button onClick={() => handleBulkAction("mark_pending")} className="rounded-lg bg-foreground/60 px-2.5 py-1 text-xs font-medium text-background hover:bg-foreground/70 transition-colors">Pending</button>
 
             {/* Delete */}
-            <button onClick={() => handleBulkAction("delete")} className="rounded-lg bg-red-900/60 px-2.5 py-1 text-xs font-medium text-red-300 hover:bg-red-900 transition-colors flex items-center gap-1">
+            <button onClick={() => handleBulkAction("delete")} className="rounded-lg bg-[var(--color-error-text)]/30 px-2.5 py-1 text-xs font-medium text-[var(--color-error-text)] hover:bg-[var(--color-error-text)]/60 transition-colors flex items-center gap-1">
               <Trash2 className="h-3.5 w-3.5" /> Delete
             </button>
           </div>
@@ -1963,27 +1963,27 @@ export default function GuestListPage() {
       {familyModalOpen && (
         <>
           <div className="fixed inset-0 z-50 bg-black/40 backdrop-blur-[2px]" onClick={() => setFamilyModalOpen(false)} />
-          <div className="fixed left-1/2 top-1/2 z-50 w-[calc(100vw-2rem)] max-w-sm -translate-x-1/2 -translate-y-1/2 rounded-2xl bg-white p-6 shadow-2xl">
-            <h3 className="mb-4 text-base font-semibold text-gray-900">New Family Group</h3>
+          <div className="fixed left-1/2 top-1/2 z-50 w-[calc(100vw-2rem)] max-w-sm -translate-x-1/2 -translate-y-1/2 rounded-2xl bg-card p-6 shadow-2xl">
+            <h3 className="mb-4 text-base font-semibold text-foreground">New Family Group</h3>
             <input
               autoFocus
               value={newFamilyName}
               onChange={(e) => setNewFamilyName(e.target.value)}
               onKeyDown={(e) => e.key === "Enter" && handleCreateFamily()}
               placeholder="e.g. Smith Family"
-              className="w-full rounded-lg border border-gray-200 px-3 py-2 text-sm text-gray-800 focus:border-indigo-300 focus:outline-none"
+              className="w-full rounded-lg border border-border px-3 py-2 text-sm text-foreground focus:border-primary/30 focus:outline-none"
             />
             <div className="mt-4 flex gap-2">
               <button
                 onClick={handleCreateFamily}
                 disabled={!newFamilyName.trim()}
-                className="flex-1 rounded-xl bg-indigo-600 py-2 text-sm font-medium text-white hover:bg-indigo-700 disabled:opacity-50 transition-colors"
+                className="flex-1 rounded-xl bg-primary py-2 text-sm font-medium text-primary-foreground hover:bg-primary/90 disabled:opacity-50 transition-colors"
               >
                 Create
               </button>
               <button
                 onClick={() => { setFamilyModalOpen(false); setNewFamilyName(""); }}
-                className="flex-1 rounded-xl border border-gray-200 py-2 text-sm font-medium text-gray-600 hover:bg-gray-50 transition-colors"
+                className="flex-1 rounded-xl border border-border py-2 text-sm font-medium text-foreground/80 hover:bg-muted transition-colors"
               >
                 Cancel
               </button>
@@ -1994,39 +1994,39 @@ export default function GuestListPage() {
 
       {/* Summary */}
       <div className="mt-10 text-center">
-        <p className="text-[10px] font-semibold uppercase tracking-widest text-gray-400">{t("guests.ratioBySides")}</p>
-        <p className="mt-1 text-4xl font-bold text-gray-900">{guests.filter(g => g.side === "BRIDE").length}/{guests.filter(g => g.side === "GROOM").length}</p>
-        <p className="mt-1 text-sm text-gray-400">
-          {t("guests.weddingParty")} <span className="font-semibold text-gray-700">{guests.length}</span>
-          <span className="mx-2 text-gray-200">·</span>
-          {t("guests.totalGuests")} <span className="font-semibold text-gray-700">{guests.filter(g => g.relation !== "BRIDE" && g.relation !== "GROOM").length}</span>
+        <p className="text-[10px] font-semibold uppercase tracking-widest text-muted-foreground">{t("guests.ratioBySides")}</p>
+        <p className="mt-1 text-4xl font-bold text-foreground">{guests.filter(g => g.side === "BRIDE").length}/{guests.filter(g => g.side === "GROOM").length}</p>
+        <p className="mt-1 text-sm text-muted-foreground">
+          {t("guests.weddingParty")} <span className="font-semibold text-foreground/80">{guests.length}</span>
+          <span className="mx-2 text-border">·</span>
+          {t("guests.totalGuests")} <span className="font-semibold text-foreground/80">{guests.filter(g => g.relation !== "BRIDE" && g.relation !== "GROOM").length}</span>
           {guests.filter(g => g.hasPlusOne).length > 0 && (
             <>
-              <span className="mx-2 text-gray-200">·</span>
-              Plus-ones <span className="font-semibold text-indigo-600">+{guests.filter(g => g.hasPlusOne).length}</span>
+              <span className="mx-2 text-border">·</span>
+              Plus-ones <span className="font-semibold text-primary">+{guests.filter(g => g.hasPlusOne).length}</span>
             </>
           )}
         </p>
         {guests.filter(g => g.hasPlusOne).length > 0 && (
-          <p className="mt-0.5 text-xs text-gray-400">
+          <p className="mt-0.5 text-xs text-muted-foreground">
             Total attending (incl. +1s):{" "}
-            <span className="font-semibold text-emerald-600">
+            <span className="font-semibold text-[var(--color-success-text)]">
               {guests.filter(g => g.rsvpStatus === "ATTENDING").length + guests.filter(g => g.rsvpStatus === "ATTENDING" && g.hasPlusOne).length}
             </span>
           </p>
         )}
-        <div className="mt-2 flex items-center justify-center gap-4 text-xs text-gray-400">
+        <div className="mt-2 flex items-center justify-center gap-4 text-xs text-muted-foreground">
           <span className="flex items-center gap-1">
-            <span className="inline-block h-2 w-2 rounded-full bg-emerald-400" />
-            {t("guests.filterAttending")} <span className="ml-1 font-semibold text-gray-600">{guests.filter(g => g.rsvpStatus === "ATTENDING").length}</span>
+            <span className="inline-block h-2 w-2 rounded-full bg-[var(--color-success-bg)]" />
+            {t("guests.filterAttending")} <span className="ml-1 font-semibold text-foreground/80">{guests.filter(g => g.rsvpStatus === "ATTENDING").length}</span>
           </span>
           <span className="flex items-center gap-1">
-            <span className="inline-block h-2 w-2 rounded-full bg-amber-400" />
-            {t("guests.filterPending")} <span className="ml-1 font-semibold text-gray-600">{guests.filter(g => g.rsvpStatus === "PENDING").length}</span>
+            <span className="inline-block h-2 w-2 rounded-full bg-[var(--color-warning-bg)]" />
+            {t("guests.filterPending")} <span className="ml-1 font-semibold text-foreground/80">{guests.filter(g => g.rsvpStatus === "PENDING").length}</span>
           </span>
           <span className="flex items-center gap-1">
-            <span className="inline-block h-2 w-2 rounded-full bg-red-400" />
-            {t("guests.filterDeclined")} <span className="ml-1 font-semibold text-gray-600">{guests.filter(g => g.rsvpStatus === "NOT_ATTENDING").length}</span>
+            <span className="inline-block h-2 w-2 rounded-full bg-[var(--color-error-bg)]" />
+            {t("guests.filterDeclined")} <span className="ml-1 font-semibold text-foreground/80">{guests.filter(g => g.rsvpStatus === "NOT_ATTENDING").length}</span>
           </span>
         </div>
       </div>
@@ -2046,10 +2046,10 @@ export default function GuestListPage() {
         <button
           onClick={() => importRef.current?.click()}
           disabled={importing}
-          className="flex w-full max-w-xs items-center justify-center gap-2 rounded-xl border border-gray-200 bg-white px-5 py-2.5 text-sm font-medium text-gray-600 hover:border-gray-300 hover:text-black transition-colors shadow-sm disabled:opacity-50"
+          className="flex w-full max-w-xs items-center justify-center gap-2 rounded-xl border border-border bg-card px-5 py-2.5 text-sm font-medium text-foreground/80 hover:border-border hover:text-foreground transition-colors shadow-sm disabled:opacity-50"
         >
           {importing ? (
-            <div className="h-4 w-4 animate-spin rounded-full border-2 border-gray-300 border-t-gray-600" />
+            <div className="h-4 w-4 animate-spin rounded-full border-2 border-muted border-t-foreground/80" />
           ) : (
             <Upload className="h-4 w-4" />
           )}
@@ -2060,14 +2060,14 @@ export default function GuestListPage() {
         <div className="flex w-full max-w-xs flex-col gap-2 sm:flex-row">
           <button
             onClick={exportPDF}
-            className="flex flex-1 items-center justify-center gap-2 rounded-xl border border-gray-200 bg-white px-4 py-2.5 text-sm font-medium text-gray-600 hover:border-indigo-200 hover:text-indigo-600 transition-colors shadow-sm"
+            className="flex flex-1 items-center justify-center gap-2 rounded-xl border border-border bg-card px-4 py-2.5 text-sm font-medium text-foreground/80 hover:border-primary/20 hover:text-primary transition-colors shadow-sm"
           >
             <FileText className="h-4 w-4" />
             {t("guests.exportPdf")}
           </button>
           <button
             onClick={exportXLS}
-            className="flex flex-1 items-center justify-center gap-2 rounded-xl border border-gray-200 bg-white px-4 py-2.5 text-sm font-medium text-gray-600 hover:border-green-200 hover:text-green-600 transition-colors shadow-sm"
+            className="flex flex-1 items-center justify-center gap-2 rounded-xl border border-border bg-card px-4 py-2.5 text-sm font-medium text-foreground/80 hover:border-[var(--color-success-bg)] hover:text-[var(--color-success-text)] transition-colors shadow-sm"
           >
             <FileSpreadsheet className="h-4 w-4" />
             {t("guests.exportXls")}
@@ -2075,7 +2075,7 @@ export default function GuestListPage() {
         </div>
 
         {/* CSV link */}
-        <button onClick={exportCSV} className="text-xs text-gray-400 hover:text-gray-600 transition-colors">
+        <button onClick={exportCSV} className="text-xs text-muted-foreground hover:text-foreground/80 transition-colors">
           {t("guests.exportCsv")}
         </button>
       </div>

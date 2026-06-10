@@ -106,9 +106,9 @@ function SyncContent() {
   }, [session, status, searchParams, router]);
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-gradient-to-b from-blue-50 to-white dark:from-blue-950/20 dark:to-background">
+    <div className="flex min-h-screen items-center justify-center bg-background">
       <div className="text-center">
-        <div className="mb-4 h-8 w-8 mx-auto animate-spin rounded-full border-4 border-blue-200 border-t-blue-600" />
+        <div className="mb-4 h-8 w-8 mx-auto animate-spin rounded-full border-4 border-muted border-t-primary" />
         <p className="text-muted-foreground">{message}</p>
       </div>
     </div>
@@ -118,9 +118,9 @@ function SyncContent() {
 export default function PlannerSyncPage() {
   return (
     <Suspense fallback={
-      <div className="flex min-h-screen items-center justify-center bg-gradient-to-b from-blue-50 to-white dark:from-blue-950/20 dark:to-background">
+      <div className="flex min-h-screen items-center justify-center bg-background">
         <div className="text-center">
-          <div className="mb-4 h-8 w-8 mx-auto animate-spin rounded-full border-4 border-blue-200 border-t-blue-600" />
+          <div className="mb-4 h-8 w-8 mx-auto animate-spin rounded-full border-4 border-muted border-t-primary" />
           <p className="text-muted-foreground">Loading...</p>
         </div>
       </div>

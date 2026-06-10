@@ -164,8 +164,8 @@ export function BlogPostListWidget({
 
       {/* Error State */}
       {error && (
-        <div className="rounded-lg border border-red-200 bg-red-50 p-6 text-center dark:border-red-900/50 dark:bg-red-900/10">
-          <p className="text-sm text-red-600 dark:text-red-400">{error}</p>
+        <div className="rounded-lg border border-[var(--color-error-text)]/20 bg-[var(--color-error-bg)] p-6 text-center">
+          <p className="text-sm text-[var(--color-error-text)]">{error}</p>
         </div>
       )}
 
@@ -249,8 +249,8 @@ export function BlogPostListWidget({
                         className={cn(
                           "inline-block w-fit text-xs font-medium",
                           s.item.categoryBadge.style === "pill"
-                            ? "rounded-full bg-blue-100 px-2.5 py-0.5 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400"
-                            : "text-blue-600 dark:text-blue-400"
+                            ? "rounded-full bg-[var(--color-info-bg)] px-2.5 py-0.5 text-[var(--color-info-text)]"
+                            : "text-[var(--color-info-text)]"
                         )}
                       >
                         {primaryCategory.name}
@@ -260,7 +260,7 @@ export function BlogPostListWidget({
                     {/* Title */}
                     <h3
                       className={cn(
-                        "text-slate-900 transition-colors group-hover:text-blue-600 dark:text-slate-100 dark:group-hover:text-blue-400",
+                        "text-foreground transition-colors group-hover:text-[var(--color-info-text)]",
                         s.item.title.fontSize === "sm" && "text-sm",
                         s.item.title.fontSize === "md" && "text-base",
                         s.item.title.fontSize === "lg" && "text-lg",

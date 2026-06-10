@@ -140,31 +140,31 @@ export default function NotesPage() {
   return (
     <div className="flex h-[calc(100vh-8rem)] overflow-hidden">
       {/* Sidebar */}
-      <div className="flex w-56 flex-shrink-0 flex-col border-r border-gray-100 bg-gray-50/50">
-        <div className="flex items-center justify-between px-4 py-3 border-b border-gray-100">
-          <span className="text-sm font-semibold text-gray-700">{t("notes.heading")}</span>
-          <button onClick={createNote} className="rounded-lg p-1 text-gray-400 hover:text-indigo-600 hover:bg-indigo-50 transition-colors">
+      <div className="flex w-56 flex-shrink-0 flex-col border-r border-border bg-muted/30">
+        <div className="flex items-center justify-between px-4 py-3 border-b border-border">
+          <span className="text-sm font-semibold text-foreground/80">{t("notes.heading")}</span>
+          <button onClick={createNote} className="rounded-lg p-1 text-muted-foreground hover:text-primary hover:bg-primary/10 transition-colors">
             <Plus className="h-4 w-4" />
           </button>
         </div>
         <div className="flex-1 overflow-y-auto py-1">
           {loading ? (
             <div className="flex justify-center py-8">
-              <div className="h-4 w-4 animate-spin rounded-full border-2 border-indigo-300 border-t-indigo-600" />
+              <div className="h-4 w-4 animate-spin rounded-full border-2 border-primary/30 border-t-primary" />
             </div>
           ) : notes.length === 0 ? (
-            <p className="px-4 py-6 text-center text-xs text-gray-400">{t("notes.noNotes")}</p>
+            <p className="px-4 py-6 text-center text-xs text-muted-foreground">{t("notes.noNotes")}</p>
           ) : (
             notes.map(note => (
               <button
                 key={note.id}
                 onClick={() => setActiveId(note.id)}
                 className={`group w-full px-4 py-2.5 text-left transition-colors ${
-                  activeId === note.id ? "bg-white border-r-2 border-indigo-500" : "hover:bg-white"
+                  activeId === note.id ? "bg-card border-r-2 border-primary" : "hover:bg-card"
                 }`}
               >
-                <p className="truncate text-sm font-medium text-gray-700">{note.title || t("notes.untitled")}</p>
-                <p className="mt-0.5 truncate text-[10px] text-gray-400">{timeAgo(note.updatedAt)}</p>
+                <p className="truncate text-sm font-medium text-foreground/80">{note.title || t("notes.untitled")}</p>
+                <p className="mt-0.5 truncate text-[10px] text-muted-foreground">{timeAgo(note.updatedAt)}</p>
               </button>
             ))
           )}
@@ -176,9 +176,9 @@ export default function NotesPage() {
         {!activeNote ? (
           <div className="flex flex-1 items-center justify-center">
             <div className="text-center">
-              <p className="text-sm text-gray-400 mb-3">{t("notes.noNotes")}</p>
+              <p className="text-sm text-muted-foreground mb-3">{t("notes.noNotes")}</p>
               <button onClick={createNote}
-                className="flex items-center gap-1.5 rounded-xl bg-indigo-600 px-4 py-2 text-sm font-medium text-white hover:bg-indigo-700">
+                className="flex items-center gap-1.5 rounded-xl bg-primary px-4 py-2 text-sm font-medium text-primary-foreground hover:bg-primary/90">
                 <Plus className="h-4 w-4" /> {t("notes.addNote")}
               </button>
             </div>
@@ -186,23 +186,23 @@ export default function NotesPage() {
         ) : (
           <>
             {/* Note header */}
-            <div className="flex items-center gap-2 border-b border-gray-100 px-6 py-3">
+            <div className="flex items-center gap-2 border-b border-border px-6 py-3">
               <input
                 value={activeNote.title}
                 onChange={e => updateField(activeNote.id, "title", e.target.value)}
                 placeholder={t("notes.titlePlaceholder")}
-                className="flex-1 bg-transparent text-lg font-semibold text-gray-800 placeholder-gray-300 focus:outline-none"
+                className="flex-1 bg-transparent text-lg font-semibold text-foreground placeholder-muted-foreground/50 focus:outline-none"
               />
               <div className="flex items-center gap-2">
-                {saving && <span className="text-xs text-gray-400">Saving...</span>}
+                {saving && <span className="text-xs text-muted-foreground">Saving...</span>}
                 <button
                   onClick={downloadPDF}
-                  className="rounded-lg p-1.5 text-gray-400 hover:text-indigo-500 hover:bg-indigo-50 transition-colors"
+                  className="rounded-lg p-1.5 text-muted-foreground hover:text-primary hover:bg-primary/10 transition-colors"
                   title="Download as PDF"
                 >
                   <Download className="h-4 w-4" />
                 </button>
-                <button onClick={() => deleteNote(activeNote.id)} className="rounded-lg p-1.5 text-gray-400 hover:text-red-400 hover:bg-red-50 transition-colors">
+                <button onClick={() => deleteNote(activeNote.id)} className="rounded-lg p-1.5 text-muted-foreground hover:text-[var(--color-error-text)] hover:bg-[var(--color-error-bg)] transition-colors">
                   <Trash2 className="h-4 w-4" />
                 </button>
               </div>
@@ -213,7 +213,7 @@ export default function NotesPage() {
               value={activeNote.content}
               onChange={e => updateField(activeNote.id, "content", e.target.value)}
               placeholder={t("notes.placeholder")}
-              className="flex-1 resize-none bg-white px-6 py-4 text-sm text-gray-700 placeholder-gray-300 focus:outline-none leading-relaxed"
+              className="flex-1 resize-none bg-background px-6 py-4 text-sm text-foreground/80 placeholder-muted-foreground/50 focus:outline-none leading-relaxed"
             />
           </>
         )}

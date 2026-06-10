@@ -29,13 +29,13 @@ function FallbackPrivacyContent() {
   return (
     <div className="space-y-8">
       <section>
-        <h2 className="text-xl font-semibold mb-4 text-slate-900">1. Information We Collect</h2>
-        <p className="text-slate-700 mb-4">
+        <h2 className="text-xl font-semibold mb-4 text-foreground">1. Information We Collect</h2>
+        <p className="text-foreground/80 mb-4">
           We collect information you provide directly to us, such as when you create an account,
           place an order, contact us for support, or communicate with us via live chat.
         </p>
-        <p className="text-slate-700 mb-3">This information may include:</p>
-        <ul className="list-disc pl-6 space-y-2 text-slate-700">
+        <p className="text-foreground/80 mb-3">This information may include:</p>
+        <ul className="list-disc pl-6 space-y-2 text-foreground/80">
           <li>Name, email address, and phone number</li>
           <li>Billing and payment information</li>
           <li>Event information (wedding date, guest count, venue details, etc.)</li>
@@ -45,9 +45,9 @@ function FallbackPrivacyContent() {
       </section>
 
       <section>
-        <h2 className="text-xl font-semibold mb-4 text-slate-900">2. How We Use Your Information</h2>
-        <p className="text-slate-700 mb-3">We use the information we collect to:</p>
-        <ul className="list-disc pl-6 space-y-2 text-slate-700">
+        <h2 className="text-xl font-semibold mb-4 text-foreground">2. How We Use Your Information</h2>
+        <p className="text-foreground/80 mb-3">We use the information we collect to:</p>
+        <ul className="list-disc pl-6 space-y-2 text-foreground/80">
           <li>Process and fulfill your orders</li>
           <li>Communicate with you about your orders and services</li>
           <li>Provide customer support</li>
@@ -58,11 +58,11 @@ function FallbackPrivacyContent() {
       </section>
 
       <section>
-        <h2 className="text-xl font-semibold mb-4 text-slate-900">3. Information Sharing</h2>
-        <p className="text-slate-700 mb-3">
+        <h2 className="text-xl font-semibold mb-4 text-foreground">3. Information Sharing</h2>
+        <p className="text-foreground/80 mb-3">
           We do not sell your personal information. We may share your information with:
         </p>
-        <ul className="list-disc pl-6 space-y-2 text-slate-700">
+        <ul className="list-disc pl-6 space-y-2 text-foreground/80">
           <li>Service providers who assist in our operations (payment processors, registered agents, etc.)</li>
           <li>Government agencies as required for business formation services</li>
           <li>Professional advisors (lawyers, accountants) when necessary</li>
@@ -71,17 +71,17 @@ function FallbackPrivacyContent() {
       </section>
 
       <section>
-        <h2 className="text-xl font-semibold mb-4 text-slate-900">4. Data Security</h2>
-        <p className="text-slate-700">
+        <h2 className="text-xl font-semibold mb-4 text-foreground">4. Data Security</h2>
+        <p className="text-foreground/80">
           We implement appropriate technical and organizational measures to protect your personal
           information against unauthorized access, alteration, disclosure, or destruction.
         </p>
       </section>
 
       <section>
-        <h2 className="text-xl font-semibold mb-4 text-slate-900">5. Your Rights</h2>
-        <p className="text-slate-700 mb-3">You have the right to:</p>
-        <ul className="list-disc pl-6 space-y-2 text-slate-700">
+        <h2 className="text-xl font-semibold mb-4 text-foreground">5. Your Rights</h2>
+        <p className="text-foreground/80 mb-3">You have the right to:</p>
+        <ul className="list-disc pl-6 space-y-2 text-foreground/80">
           <li>Access the personal information we hold about you</li>
           <li>Request correction of inaccurate information</li>
           <li>Request deletion of your information (subject to legal requirements)</li>
@@ -90,8 +90,8 @@ function FallbackPrivacyContent() {
       </section>
 
       <section>
-        <h2 className="text-xl font-semibold mb-4 text-slate-900">6. Contact Us</h2>
-        <p className="text-slate-700">
+        <h2 className="text-xl font-semibold mb-4 text-foreground">6. Contact Us</h2>
+        <p className="text-foreground/80">
           If you have any questions about this Privacy Policy, please contact us at{" "}
           <a href="mailto:support@ceremoney.com" className="text-primary hover:underline">
             support@ceremoney.com
@@ -108,16 +108,16 @@ export default async function PrivacyPolicyPage() {
   });
 
   return (
-    <div className="bg-white py-16 lg:py-24">
+    <div className="bg-background py-16 lg:py-24">
       <div className="container mx-auto px-4">
         <div className="mx-auto max-w-3xl">
           {/* Header */}
           <div className="mb-12 text-center">
             <Badge variant="secondary" className="mb-4">Legal</Badge>
-            <h1 className="text-4xl font-bold tracking-tight text-slate-900">
+            <h1 className="text-4xl font-bold tracking-tight text-foreground">
               {page?.title || "Privacy Policy"}
             </h1>
-            <p className="mt-4 text-sm text-slate-500">
+            <p className="mt-4 text-sm text-muted-foreground">
               Last updated: {page ? formatDate(page.updatedAt) : "December 15, 2025"}
               {page && ` (Version ${page.version})`}
             </p>
@@ -126,7 +126,7 @@ export default async function PrivacyPolicyPage() {
           {/* Content */}
           {page ? (
             <div
-              className="prose prose-slate max-w-none prose-headings:text-slate-900 prose-p:text-slate-700 prose-a:text-primary prose-strong:text-slate-900 prose-li:text-slate-700"
+              className="prose max-w-none prose-headings:text-foreground prose-p:text-foreground/80 prose-a:text-primary prose-strong:text-foreground prose-li:text-foreground/80"
               dangerouslySetInnerHTML={{ __html: page.content }}
             />
           ) : (
@@ -134,9 +134,9 @@ export default async function PrivacyPolicyPage() {
           )}
 
           {/* Footer Note */}
-          <div className="mt-12 rounded-lg border border-slate-200 bg-slate-50 p-6">
-            <p className="text-sm text-slate-600">
-              <strong className="text-slate-900">Important:</strong> Ceremoney is a business formation service, not a law firm.
+          <div className="mt-12 rounded-lg border border-border bg-muted p-6">
+            <p className="text-sm text-muted-foreground">
+              <strong className="text-foreground">Important:</strong> Ceremoney is a business formation service, not a law firm.
               This document does not constitute legal advice. Please consult with a licensed attorney
               for legal matters specific to your situation.
             </p>

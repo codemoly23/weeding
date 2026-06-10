@@ -65,7 +65,7 @@ export default async function PublicWeddingSite({ params }: PageProps) {
     .sort((a, b) => a.order - b.order);
 
   const content = (
-    <div style={{ fontFamily }} className="min-h-screen bg-white text-gray-800">
+    <div style={{ fontFamily }} className="min-h-screen bg-background text-foreground">
       {blocks.map(block => {
         const s = block.settings;
         switch (block.type) {
@@ -108,7 +108,7 @@ export default async function PublicWeddingSite({ params }: PageProps) {
                     </div>
                   )}
                   {(s.quote as string) && (
-                    <p className={`text-base mb-4 ${bgImg ? "text-white/80" : "text-gray-500"}`}>{s.quote as string}</p>
+                    <p className={`text-base mb-4 ${bgImg ? "text-white/80" : "text-muted-foreground"}`}>{s.quote as string}</p>
                   )}
                   <h1 className={`text-4xl sm:text-5xl font-bold leading-tight ${bgImg ? "text-white" : ""}`}
                     style={!bgImg ? { color: primaryHex } : undefined}>
@@ -129,7 +129,7 @@ export default async function PublicWeddingSite({ params }: PageProps) {
                   {(s.title as string) || "Our Wedding"}
                 </h1>
                 {(s.subtitle as string) && (
-                  <p className="text-lg text-gray-600 mb-6">{s.subtitle as string}</p>
+                  <p className="text-lg text-foreground/80 mb-6">{s.subtitle as string}</p>
                 )}
                 {(s.date as string) && (
                   <p className="text-base font-medium" style={{ color: primaryHex }}>
@@ -137,7 +137,7 @@ export default async function PublicWeddingSite({ params }: PageProps) {
                   </p>
                 )}
                 {(s.location as string) && (
-                  <p className="text-sm text-gray-500 mt-2">📍 {s.location as string}</p>
+                  <p className="text-sm text-muted-foreground mt-2">📍 {s.location as string}</p>
                 )}
               </section>
             );
@@ -149,7 +149,7 @@ export default async function PublicWeddingSite({ params }: PageProps) {
                   {(s.title as string) || "Our Story"}
                 </h2>
                 <div className="w-12 h-0.5 mx-auto mb-8" style={{ background: primaryHex }} />
-                <p className="text-gray-600 leading-relaxed whitespace-pre-line">{s.content as string}</p>
+                <p className="text-foreground/80 leading-relaxed whitespace-pre-line">{s.content as string}</p>
               </section>
             );
 
@@ -162,18 +162,18 @@ export default async function PublicWeddingSite({ params }: PageProps) {
                   </h2>
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-8">
                     {(s.ceremonyName as string) && (
-                      <div className="bg-white rounded-2xl p-6 shadow-sm">
-                        <p className="text-xs uppercase tracking-widest text-gray-400 mb-2">Ceremony</p>
+                      <div className="bg-card rounded-2xl p-6 shadow-sm">
+                        <p className="text-xs uppercase tracking-widest text-muted-foreground/70 mb-2">Ceremony</p>
                         <p className="font-medium" style={{ color: primaryHex }}>{s.ceremonyName as string}</p>
-                        {(s.ceremonyAddress as string) && <p className="text-sm text-gray-500 mt-1">{s.ceremonyAddress as string}</p>}
+                        {(s.ceremonyAddress as string) && <p className="text-sm text-muted-foreground mt-1">{s.ceremonyAddress as string}</p>}
                         {(s.ceremonyTime as string) && <p className="text-sm font-medium mt-2">{s.ceremonyTime as string}</p>}
                       </div>
                     )}
                     {(s.receptionName as string) && (
-                      <div className="bg-white rounded-2xl p-6 shadow-sm">
-                        <p className="text-xs uppercase tracking-widest text-gray-400 mb-2">Reception</p>
+                      <div className="bg-card rounded-2xl p-6 shadow-sm">
+                        <p className="text-xs uppercase tracking-widest text-muted-foreground/70 mb-2">Reception</p>
                         <p className="font-medium" style={{ color: primaryHex }}>{s.receptionName as string}</p>
-                        {(s.receptionAddress as string) && <p className="text-sm text-gray-500 mt-1">{s.receptionAddress as string}</p>}
+                        {(s.receptionAddress as string) && <p className="text-sm text-muted-foreground mt-1">{s.receptionAddress as string}</p>}
                         {(s.receptionTime as string) && <p className="text-sm font-medium mt-2">{s.receptionTime as string}</p>}
                       </div>
                     )}
@@ -182,7 +182,7 @@ export default async function PublicWeddingSite({ params }: PageProps) {
                     <div className="mt-8 grid grid-cols-1 sm:grid-cols-2 gap-6">
                       {(s.ceremonyMapQuery as string) && (
                         <div className="rounded-2xl overflow-hidden shadow-sm">
-                          <p className="text-xs uppercase tracking-widest text-gray-400 mb-2 text-center">Ceremony Location</p>
+                          <p className="text-xs uppercase tracking-widest text-muted-foreground/70 mb-2 text-center">Ceremony Location</p>
                           <iframe
                             title="Ceremony Map"
                             width="100%"
@@ -196,7 +196,7 @@ export default async function PublicWeddingSite({ params }: PageProps) {
                       )}
                       {(s.receptionMapQuery as string) && (
                         <div className="rounded-2xl overflow-hidden shadow-sm">
-                          <p className="text-xs uppercase tracking-widest text-gray-400 mb-2 text-center">Reception Location</p>
+                          <p className="text-xs uppercase tracking-widest text-muted-foreground/70 mb-2 text-center">Reception Location</p>
                           <iframe
                             title="Reception Map"
                             width="100%"
@@ -227,7 +227,7 @@ export default async function PublicWeddingSite({ params }: PageProps) {
                     <div key={i} className="flex items-start gap-6 mb-6">
                       <span className="w-[76px] text-right text-sm font-medium" style={{ color: primaryHex }}>{item.time}</span>
                       <div className="h-3 w-3 rounded-full mt-0.5 flex-shrink-0 z-10" style={{ background: primaryHex }} />
-                      <span className="text-gray-700">{item.title}</span>
+                      <span className="text-foreground">{item.title}</span>
                     </div>
                   ))}
                 </div>
@@ -259,9 +259,9 @@ export default async function PublicWeddingSite({ params }: PageProps) {
                 <h2 className="text-3xl font-light mb-4" style={{ color: primaryHex }}>
                   {(s.title as string) || "RSVP"}
                 </h2>
-                <p className="text-gray-600 mb-2">{s.message as string}</p>
+                <p className="text-foreground/80 mb-2">{s.message as string}</p>
                 {(s.deadline as string) && (
-                  <p className="text-sm text-gray-400 mb-6">RSVP by {s.deadline as string}</p>
+                  <p className="text-sm text-muted-foreground/70 mb-6">RSVP by {s.deadline as string}</p>
                 )}
                 <RsvpModal slug={slug} primaryColor={primaryHex} accentColor={accentHex} />
               </section>
@@ -300,7 +300,7 @@ export default async function PublicWeddingSite({ params }: PageProps) {
                       <div className="h-16 w-16 rounded-full mx-auto mb-2 flex items-center justify-center text-2xl"
                         style={{ background: primaryHex + "22" }}>👤</div>
                       <p className="font-medium text-sm">{p.name}</p>
-                      <p className="text-xs text-gray-500">{p.role}</p>
+                      <p className="text-xs text-muted-foreground">{p.role}</p>
                     </div>
                   ))}
                 </div>
@@ -312,11 +312,11 @@ export default async function PublicWeddingSite({ params }: PageProps) {
             const days = daysLeft(s.targetDate as string);
             return (
               <section key={block.id} id="countdown" className="py-16 px-6 text-center">
-                <h2 className="text-2xl font-light mb-6 text-gray-600">{s.title as string}</h2>
+                <h2 className="text-2xl font-light mb-6 text-foreground/80">{s.title as string}</h2>
                 {days !== null ? (
                   <div className="inline-flex flex-col items-center">
                     <span className="text-7xl font-light" style={{ color: primaryHex }}>{days}</span>
-                    <span className="text-sm uppercase tracking-widest text-gray-400 mt-2">Days to go</span>
+                    <span className="text-sm uppercase tracking-widest text-muted-foreground/70 mt-2">Days to go</span>
                   </div>
                 ) : null}
               </section>
@@ -356,7 +356,7 @@ export default async function PublicWeddingSite({ params }: PageProps) {
       />
 
       {/* Footer */}
-      <footer className="py-8 text-center text-xs text-gray-400"
+      <footer className="py-8 text-center text-xs text-muted-foreground/70"
         style={{ borderTop: `1px solid ${accentHex}` }}>
         Made with ♥ using Ceremoney
       </footer>

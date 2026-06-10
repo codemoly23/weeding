@@ -76,14 +76,14 @@ export default function RsvpModal({ slug, primaryColor, accentColor, buttonLabel
 
       {open && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4" style={{ background: "rgba(0,0,0,0.5)" }}>
-          <div className="relative w-full max-w-lg max-h-[90vh] overflow-y-auto rounded-3xl bg-white shadow-2xl">
+          <div className="relative w-full max-w-lg max-h-[90vh] overflow-y-auto rounded-3xl bg-card shadow-2xl">
             {/* Header */}
-            <div className="sticky top-0 z-10 flex items-center justify-between rounded-t-3xl px-6 py-4 border-b border-gray-100 bg-white">
+            <div className="sticky top-0 z-10 flex items-center justify-between rounded-t-3xl px-6 py-4 border-b border-border bg-card">
               <div className="flex items-center gap-2">
                 <Heart className="h-5 w-5" style={{ color: primaryColor }} />
-                <h2 className="text-lg font-semibold text-gray-800">RSVP</h2>
+                <h2 className="text-lg font-semibold text-foreground">RSVP</h2>
               </div>
-              <button onClick={handleClose} className="rounded-full p-1.5 text-gray-400 hover:bg-gray-100 transition">
+              <button onClick={handleClose} className="rounded-full p-1.5 text-muted-foreground hover:bg-muted transition">
                 <X className="h-5 w-5" />
               </button>
             </div>
@@ -93,18 +93,18 @@ export default function RsvpModal({ slug, primaryColor, accentColor, buttonLabel
                 {attending ? (
                   <>
                     <Heart className="mb-4 h-12 w-12" style={{ color: primaryColor }} />
-                    <h3 className="text-2xl font-bold text-gray-900">
+                    <h3 className="text-2xl font-bold text-foreground">
                       {attending ? "You're Attending!" : "We'll Miss You"}
                     </h3>
-                    <p className="mt-2 text-gray-500">
+                    <p className="mt-2 text-muted-foreground">
                       Thank you, <span className="font-semibold" style={{ color: primaryColor }}>{firstName}</span>! We can&apos;t wait to celebrate with you.
                     </p>
                   </>
                 ) : (
                   <>
-                    <XCircle className="mb-4 h-12 w-12 text-gray-400" />
-                    <h3 className="text-2xl font-bold text-gray-900">We&apos;ll Miss You</h3>
-                    <p className="mt-2 text-gray-500">
+                    <XCircle className="mb-4 h-12 w-12 text-muted-foreground" />
+                    <h3 className="text-2xl font-bold text-foreground">We&apos;ll Miss You</h3>
+                    <p className="mt-2 text-muted-foreground">
                       Thank you for letting us know, <span className="font-semibold">{firstName}</span>.
                     </p>
                   </>
@@ -122,24 +122,24 @@ export default function RsvpModal({ slug, primaryColor, accentColor, buttonLabel
                 {/* Name */}
                 <div className="grid grid-cols-2 gap-3">
                   <div>
-                    <label className="mb-1 block text-sm font-medium text-gray-700">First name <span className="text-rose-500">*</span></label>
+                    <label className="mb-1 block text-sm font-medium text-foreground/80">First name <span className="text-accent">*</span></label>
                     <input
                       type="text"
                       value={firstName}
                       onChange={e => setFirstName(e.target.value)}
                       required
                       placeholder="Jane"
-                      className="w-full rounded-xl border border-gray-200 px-3 py-2.5 text-sm focus:border-rose-300 focus:outline-none focus:ring-2 focus:ring-rose-100"
+                      className="w-full rounded-xl border border-border px-3 py-2.5 text-sm focus:border-accent/30 focus:outline-none focus:ring-2 focus:ring-accent/10"
                     />
                   </div>
                   <div>
-                    <label className="mb-1 block text-sm font-medium text-gray-700">Last name</label>
+                    <label className="mb-1 block text-sm font-medium text-foreground/80">Last name</label>
                     <input
                       type="text"
                       value={lastName}
                       onChange={e => setLastName(e.target.value)}
                       placeholder="Smith"
-                      className="w-full rounded-xl border border-gray-200 px-3 py-2.5 text-sm focus:border-rose-300 focus:outline-none focus:ring-2 focus:ring-rose-100"
+                      className="w-full rounded-xl border border-border px-3 py-2.5 text-sm focus:border-accent/30 focus:outline-none focus:ring-2 focus:ring-accent/10"
                     />
                   </div>
                 </div>
@@ -147,30 +147,30 @@ export default function RsvpModal({ slug, primaryColor, accentColor, buttonLabel
                 {/* Email & Phone */}
                 <div className="grid grid-cols-2 gap-3">
                   <div>
-                    <label className="mb-1 block text-sm font-medium text-gray-700">Email</label>
+                    <label className="mb-1 block text-sm font-medium text-foreground/80">Email</label>
                     <input
                       type="email"
                       value={email}
                       onChange={e => setEmail(e.target.value)}
                       placeholder="jane@example.com"
-                      className="w-full rounded-xl border border-gray-200 px-3 py-2.5 text-sm focus:border-rose-300 focus:outline-none focus:ring-2 focus:ring-rose-100"
+                      className="w-full rounded-xl border border-border px-3 py-2.5 text-sm focus:border-accent/30 focus:outline-none focus:ring-2 focus:ring-accent/10"
                     />
                   </div>
                   <div>
-                    <label className="mb-1 block text-sm font-medium text-gray-700">Phone</label>
+                    <label className="mb-1 block text-sm font-medium text-foreground/80">Phone</label>
                     <input
                       type="tel"
                       value={phone}
                       onChange={e => setPhone(e.target.value)}
                       placeholder="+46 70 123 4567"
-                      className="w-full rounded-xl border border-gray-200 px-3 py-2.5 text-sm focus:border-rose-300 focus:outline-none focus:ring-2 focus:ring-rose-100"
+                      className="w-full rounded-xl border border-border px-3 py-2.5 text-sm focus:border-accent/30 focus:outline-none focus:ring-2 focus:ring-accent/10"
                     />
                   </div>
                 </div>
 
                 {/* Side */}
                 <div>
-                  <label className="mb-1 block text-sm font-medium text-gray-700">Guest of</label>
+                  <label className="mb-1 block text-sm font-medium text-foreground/80">Guest of</label>
                   <div className="grid grid-cols-2 gap-2">
                     {(["BRIDE", "GROOM"] as const).map(s => (
                       <button
@@ -178,7 +178,7 @@ export default function RsvpModal({ slug, primaryColor, accentColor, buttonLabel
                         type="button"
                         onClick={() => setSide(s)}
                         style={side === s ? { borderColor: primaryColor, background: accentColor, color: primaryColor } : {}}
-                        className={`rounded-xl border-2 py-2.5 text-sm font-medium transition-all ${side === s ? "" : "border-gray-100 bg-gray-50 text-gray-500 hover:border-gray-200"}`}
+                        className={`rounded-xl border-2 py-2.5 text-sm font-medium transition-all ${side === s ? "" : "border-border bg-muted/30 text-muted-foreground hover:border-border"}`}
                       >
                         {s === "BRIDE" ? "Bride's side" : "Groom's side"}
                       </button>
@@ -188,13 +188,13 @@ export default function RsvpModal({ slug, primaryColor, accentColor, buttonLabel
 
                 {/* Attending */}
                 <div>
-                  <p className="mb-2 text-sm font-medium text-gray-700">Will you be attending? <span className="text-rose-500">*</span></p>
+                  <p className="mb-2 text-sm font-medium text-foreground/80">Will you be attending? <span className="text-accent">*</span></p>
                   <div className="grid grid-cols-2 gap-3">
                     <button
                       type="button"
                       onClick={() => setAttending(true)}
                       style={attending === true ? { borderColor: primaryColor, background: accentColor, color: primaryColor } : {}}
-                      className={`flex flex-col items-center gap-2 rounded-2xl border-2 py-4 transition-all ${attending === true ? "" : "border-gray-100 bg-gray-50 text-gray-500 hover:border-gray-200"}`}
+                      className={`flex flex-col items-center gap-2 rounded-2xl border-2 py-4 transition-all ${attending === true ? "" : "border-border bg-muted/30 text-muted-foreground hover:border-border"}`}
                     >
                       <CheckCircle2 className="h-6 w-6" />
                       <span className="text-sm font-medium">Joyfully accepts</span>
@@ -202,7 +202,7 @@ export default function RsvpModal({ slug, primaryColor, accentColor, buttonLabel
                     <button
                       type="button"
                       onClick={() => setAttending(false)}
-                      className={`flex flex-col items-center gap-2 rounded-2xl border-2 py-4 transition-all ${attending === false ? "border-gray-400 bg-gray-100 text-gray-600" : "border-gray-100 bg-gray-50 text-gray-500 hover:border-gray-200"}`}
+                      className={`flex flex-col items-center gap-2 rounded-2xl border-2 py-4 transition-all ${attending === false ? "border-border bg-muted text-foreground/80" : "border-border bg-muted/30 text-muted-foreground hover:border-border"}`}
                     >
                       <XCircle className="h-6 w-6" />
                       <span className="text-sm font-medium">Regretfully declines</span>
@@ -213,8 +213,8 @@ export default function RsvpModal({ slug, primaryColor, accentColor, buttonLabel
                 {/* Dietary — only when attending */}
                 {attending === true && (
                   <div>
-                    <label className="mb-2 block text-sm font-medium text-gray-700">
-                      Dietary requirements <span className="text-xs font-normal text-gray-400">(optional)</span>
+                    <label className="mb-2 block text-sm font-medium text-foreground/80">
+                      Dietary requirements <span className="text-xs font-normal text-muted-foreground">(optional)</span>
                     </label>
                     <div className="space-y-2 mb-3">
                       {dietaryOptions.map(opt => {
@@ -232,7 +232,7 @@ export default function RsvpModal({ slug, primaryColor, accentColor, buttonLabel
                               className="h-4 w-4 rounded"
                               style={{ accentColor: primaryColor }}
                             />
-                            <span className="text-sm text-gray-700">{opt}</span>
+                            <span className="text-sm text-foreground/80">{opt}</span>
                           </label>
                         );
                       })}
@@ -246,7 +246,7 @@ export default function RsvpModal({ slug, primaryColor, accentColor, buttonLabel
                         setDietary([...standard, ...(custom ? [custom] : [])].join(", "));
                       }}
                       placeholder="Other (e.g. Nut allergy, Kosher…)"
-                      className="w-full rounded-xl border border-gray-200 px-3 py-2 text-sm focus:border-rose-300 focus:outline-none focus:ring-2 focus:ring-rose-100"
+                      className="w-full rounded-xl border border-border px-3 py-2 text-sm focus:border-accent/30 focus:outline-none focus:ring-2 focus:ring-accent/10"
                     />
                   </div>
                 )}
@@ -262,7 +262,7 @@ export default function RsvpModal({ slug, primaryColor, accentColor, buttonLabel
                         className="h-4 w-4 rounded"
                         style={{ accentColor: primaryColor }}
                       />
-                      <span className="text-sm font-medium text-gray-700">Bringing a plus-one?</span>
+                      <span className="text-sm font-medium text-foreground/80">Bringing a plus-one?</span>
                     </label>
                     {hasPlusOne && (
                       <input
@@ -270,7 +270,7 @@ export default function RsvpModal({ slug, primaryColor, accentColor, buttonLabel
                         value={plusOneName}
                         onChange={e => setPlusOneName(e.target.value)}
                         placeholder="Plus-one's full name"
-                        className="mt-2 w-full rounded-xl border border-gray-200 px-3 py-2.5 text-sm focus:border-rose-300 focus:outline-none focus:ring-2 focus:ring-rose-100"
+                        className="mt-2 w-full rounded-xl border border-border px-3 py-2.5 text-sm focus:border-accent/30 focus:outline-none focus:ring-2 focus:ring-accent/10"
                       />
                     )}
                   </div>
@@ -279,16 +279,16 @@ export default function RsvpModal({ slug, primaryColor, accentColor, buttonLabel
                 {/* Message */}
                 {attending !== null && (
                   <div>
-                    <label className="mb-1.5 block text-sm font-medium text-gray-700">
+                    <label className="mb-1.5 block text-sm font-medium text-foreground/80">
                       {attending ? "Leave a message for the couple" : "A note for the couple"}{" "}
-                      <span className="text-xs font-normal text-gray-400">(optional)</span>
+                      <span className="text-xs font-normal text-muted-foreground">(optional)</span>
                     </label>
                     <textarea
                       value={message}
                       onChange={e => setMessage(e.target.value)}
                       rows={3}
                       placeholder={attending ? "We can't wait to celebrate with you!" : "Wishing you a beautiful day…"}
-                      className="w-full rounded-xl border border-gray-200 px-3 py-2.5 text-sm focus:border-rose-300 focus:outline-none focus:ring-2 focus:ring-rose-100 resize-none"
+                      className="w-full rounded-xl border border-border px-3 py-2.5 text-sm focus:border-accent/30 focus:outline-none focus:ring-2 focus:ring-accent/10 resize-none"
                     />
                   </div>
                 )}
@@ -304,22 +304,22 @@ export default function RsvpModal({ slug, primaryColor, accentColor, buttonLabel
                       className="mt-0.5 h-4 w-4 rounded shrink-0"
                       style={{ accentColor: primaryColor }}
                     />
-                    <span className="text-xs text-gray-500 leading-relaxed">
-                      <Shield className="inline h-3 w-3 mr-1 text-gray-400" />
-                      I consent to my personal data being stored and used solely for the purpose of managing this event. <span className="text-rose-500">*</span>
+                    <span className="text-xs text-muted-foreground leading-relaxed">
+                      <Shield className="inline h-3 w-3 mr-1 text-muted-foreground" />
+                      I consent to my personal data being stored and used solely for the purpose of managing this event. <span className="text-accent">*</span>
                     </span>
                   </label>
                 )}
 
                 {error && (
-                  <p className="rounded-xl bg-red-50 px-3 py-2 text-xs text-red-600">{error}</p>
+                  <p className="rounded-xl bg-[var(--color-error-bg)] px-3 py-2 text-xs text-[var(--color-error-text)]">{error}</p>
                 )}
 
                 <button
                   type="submit"
                   disabled={attending === null || saving || (attending !== null && !gdprConsent)}
                   style={attending !== null && gdprConsent ? { background: primaryColor } : {}}
-                  className="w-full rounded-2xl py-3 text-sm font-semibold text-white transition-all hover:opacity-90 disabled:opacity-40 disabled:cursor-not-allowed disabled:bg-gray-300"
+                  className="w-full rounded-2xl py-3 text-sm font-semibold text-primary-foreground transition-all hover:opacity-90 disabled:opacity-40 disabled:cursor-not-allowed disabled:bg-muted-foreground"
                 >
                   {saving ? <Loader2 className="mx-auto h-5 w-5 animate-spin" /> : "Send RSVP"}
                 </button>

@@ -73,22 +73,22 @@ export default function VendorMap({ vendors }: Props) {
         <Marker key={v.id} position={[v.lat as number, v.lng as number]}>
           <Popup minWidth={200}>
             <div className="text-sm">
-              <p className="font-semibold text-gray-900 text-base leading-tight">{v.businessName}</p>
-              <p className="text-xs text-indigo-600 mt-0.5">{formatCategory(v.category)}</p>
+              <p className="font-semibold text-foreground text-base leading-tight">{v.businessName}</p>
+              <p className="text-xs text-primary mt-0.5">{formatCategory(v.category)}</p>
               {v.city && (
-                <p className="text-xs text-gray-500 mt-0.5">{v.city}{v.country ? `, ${v.country}` : ""}</p>
+                <p className="text-xs text-muted-foreground mt-0.5">{v.city}{v.country ? `, ${v.country}` : ""}</p>
               )}
               {v.avgRating !== null && (
-                <p className="text-xs text-amber-500 mt-1">★ {v.avgRating.toFixed(1)} ({v.reviewCount})</p>
+                <p className="text-xs text-[var(--color-star)] mt-1">★ {v.avgRating.toFixed(1)} ({v.reviewCount})</p>
               )}
               {v.startingPrice !== null && (
-                <p className="text-xs text-gray-700 mt-0.5">
+                <p className="text-xs text-foreground/80 mt-0.5">
                   From {v.currency} {v.startingPrice.toLocaleString()}
                 </p>
               )}
               <Link
                 href={`/vendors/${v.slug}`}
-                className="mt-2 inline-block rounded-lg bg-emerald-500 px-3 py-1 text-xs font-medium text-white hover:bg-emerald-600"
+                className="mt-2 inline-block rounded-lg bg-[var(--color-success-text)] px-3 py-1 text-xs font-medium text-primary-foreground hover:bg-[var(--color-success-text)]/90"
               >
                 View Profile
               </Link>
@@ -111,7 +111,7 @@ export default function VendorMap({ vendors }: Props) {
             pointerEvents: "none",
           }}
         >
-          <p className="text-sm text-gray-500">No vendors with location data found.</p>
+          <p className="text-sm text-muted-foreground">No vendors with location data found.</p>
         </div>
       )}
     </MapContainer>

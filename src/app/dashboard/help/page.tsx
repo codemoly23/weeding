@@ -46,25 +46,25 @@ const helpCategories = [
     title: "Event Planning",
     description: "Questions about planning your event",
     icon: Building2,
-    color: "bg-blue-100 text-blue-600",
+    color: "bg-[var(--color-info-bg)] text-[var(--color-info-text)]",
   },
   {
     title: "Payments & Billing",
     description: "Payment methods, invoices, refunds",
     icon: CreditCard,
-    color: "bg-green-100 text-green-600",
+    color: "bg-[var(--color-success-bg)] text-[var(--color-success-text)]",
   },
   {
     title: "Documents",
     description: "Uploading and downloading documents",
     icon: FileCheck,
-    color: "bg-purple-100 text-purple-600",
+    color: "bg-primary/10 text-primary",
   },
   {
     title: "Account Security",
     description: "Password, 2FA, account access",
     icon: ShieldCheck,
-    color: "bg-orange-100 text-orange-600",
+    color: "bg-[var(--color-warning-bg)] text-[var(--color-warning-text)]",
   },
 ];
 

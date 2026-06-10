@@ -155,8 +155,8 @@ function SidebarInner({
         className={cn(
           "flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-all duration-200",
           active
-            ? "bg-gradient-to-r from-rose-500 to-purple-500 text-white shadow-md shadow-rose-200/50"
-            : "text-gray-700 hover:bg-gray-50 hover:text-black",
+            ? "bg-primary text-primary-foreground shadow-md shadow-primary/20"
+            : "text-foreground/80 hover:bg-muted/50 hover:text-foreground",
           collapsed && "justify-center px-2"
         )}
         title={collapsed ? item.name : undefined}
@@ -170,19 +170,19 @@ function SidebarInner({
   return (
     <aside
       className={cn(
-        "flex h-full flex-col border-r border-gray-100 bg-white transition-all duration-300",
+        "flex h-full flex-col border-r border-border bg-card transition-all duration-300",
         collapsed ? "w-16" : "w-64",
         mobile && "w-64"
       )}
     >
       {/* Header — Project Title */}
-      <div className="flex h-16 items-center justify-between border-b border-gray-100 px-4">
+      <div className="flex h-16 items-center justify-between border-b border-border px-4">
         {!collapsed && (
           <Link href="/planner" className="flex items-center gap-2 min-w-0">
             <div className="min-w-0">
               <p className="truncate font-semibold text-sm text-slate-700 leading-tight">{projectTitle}</p>
               {eventDate && (
-                <p className="text-[10px] font-semibold uppercase tracking-widest text-gray-400 leading-tight mt-0.5">
+                <p className="text-[10px] font-semibold uppercase tracking-widest text-muted-foreground leading-tight mt-0.5">
                   {new Date(eventDate).toLocaleDateString("en-US", { month: "long", day: "numeric", year: "numeric" }).toUpperCase()}
                 </p>
               )}
@@ -228,7 +228,7 @@ function SidebarInner({
                 onOpenChange={() => toggleGroup(entry.label)}
               >
                 <CollapsibleTrigger asChild>
-                  <button className="flex w-full items-center justify-between px-3 pt-4 pb-1 text-xs font-semibold uppercase tracking-wider text-gray-400 hover:text-gray-600">
+                  <button className="flex w-full items-center justify-between px-3 pt-4 pb-1 text-xs font-semibold uppercase tracking-wider text-muted-foreground hover:text-foreground/80">
                     <span>{entry.label}</span>
                     <ChevronDown
                       className={cn(
@@ -252,16 +252,16 @@ function SidebarInner({
 
       {/* Upgrade button — hidden for Elite users */}
       {tier !== "elite" && (
-        <div className="border-t border-gray-100 p-2">
+        <div className="border-t border-border p-2">
           <button
             onClick={() => setUpgradeOpen(true)}
             className={cn(
-              "w-full flex items-center gap-2 rounded-lg px-3 py-2.5 text-sm font-medium transition-all duration-200 bg-gradient-to-r from-rose-50 to-purple-50 text-rose-600 hover:from-rose-100 hover:to-purple-100 border border-rose-200/60",
+              "w-full flex items-center gap-2 rounded-lg px-3 py-2.5 text-sm font-medium transition-all duration-200 bg-accent/5 text-accent hover:bg-accent/10 border border-accent/20",
               collapsed && "justify-center px-2"
             )}
             title={collapsed ? (tier === "premium" ? "Upgrade to Elite" : "Upgrade to Premium") : undefined}
           >
-            <Star className="h-4 w-4 shrink-0 text-rose-500" />
+            <Star className="h-4 w-4 shrink-0 text-accent" />
             {!collapsed && (
               <span>{tier === "premium" ? "Upgrade to Elite" : "Upgrade to Premium"}</span>
             )}

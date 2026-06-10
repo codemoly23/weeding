@@ -353,12 +353,12 @@ function LayoutPanel({
     <div className={cn("mx-auto", wide ? "max-w-3xl" : "max-w-xl")}>
       {/* Title */}
       <div className="mb-5 text-center">
-        <h2 className="text-lg font-light text-gray-700">{title}</h2>
-        <p className="text-sm text-gray-400">{subtitle}</p>
+        <h2 className="text-lg font-light text-foreground">{title}</h2>
+        <p className="text-sm text-muted-foreground/70">{subtitle}</p>
       </div>
 
       {/* Preview card */}
-      <div className={cn("mx-auto overflow-hidden rounded-xl border border-gray-200 bg-white shadow-sm", wide ? "w-full" : "max-w-xs")}>
+      <div className={cn("mx-auto overflow-hidden rounded-xl border border-border bg-card shadow-sm", wide ? "w-full" : "max-w-xs")}>
         {diagram}
       </div>
 
@@ -366,38 +366,38 @@ function LayoutPanel({
       <div className="mt-4 text-center">
         <button
           onClick={onEdit}
-          className="text-sm font-medium text-purple-600 underline underline-offset-2 hover:text-purple-800 transition-colors"
+          className="text-sm font-medium text-primary underline underline-offset-2 hover:text-primary/80 transition-colors"
         >
           Click here to edit layout
         </button>
-        <p className="mt-1 text-xs text-gray-400">A1 portrait 23.4 inch × 33.1 inch</p>
+        <p className="mt-1 text-xs text-muted-foreground/70">A1 portrait 23.4 inch × 33.1 inch</p>
       </div>
 
       {/* Download + arrow hint */}
       <div className="mt-3 flex items-center justify-center gap-3">
         <button
           onClick={() => pdfSvgId ? downloadLayoutPDF(pdfSvgId, title) : window.print()}
-          className="flex items-center gap-2 rounded-lg border border-gray-300 bg-white px-5 py-2 text-sm text-gray-600 hover:bg-gray-50 transition-colors"
+          className="flex items-center gap-2 rounded-lg border border-border bg-card px-5 py-2 text-sm text-foreground/80 hover:bg-muted/30 transition-colors"
         >
-          <Download className="h-4 w-4 text-purple-500" />
+          <Download className="h-4 w-4 text-primary" />
           Download PDF file
         </button>
-        <span className="text-xs text-gray-400">←</span>
+        <span className="text-xs text-muted-foreground/70">←</span>
       </div>
 
       {/* Recommendation */}
-      <div className="mt-6 rounded-xl border border-gray-200 bg-white px-5 py-4 shadow-sm">
-        <p className="mb-1.5 text-sm font-semibold text-gray-800">Recommendation</p>
-        <p className="text-xs leading-relaxed text-gray-500">
+      <div className="mt-6 rounded-xl border border-border bg-card px-5 py-4 shadow-sm">
+        <p className="mb-1.5 text-sm font-semibold text-foreground">Recommendation</p>
+        <p className="text-xs leading-relaxed text-muted-foreground">
           For printing, opt for thick paper! You&apos;re welcome to select any variety of{" "}
-          <span className="text-purple-500">subtly colored, textured card stock or paper.</span>
+          <span className="text-primary">subtly colored, textured card stock or paper.</span>
         </p>
       </div>
 
       {/* Gallery */}
       {photos.length > 0 && (
         <div className="mt-6">
-          <h3 className="mb-3 text-center text-sm font-medium text-gray-600">
+          <h3 className="mb-3 text-center text-sm font-medium text-foreground/80">
             Elegant {title.toLowerCase()} seating chart
           </h3>
           <div ref={scrollRef} className="flex gap-3 overflow-x-auto pb-2" style={{ scrollbarWidth: "none" }}>
@@ -408,7 +408,7 @@ function LayoutPanel({
                 className={cn(
                   "relative h-44 flex-shrink-0 cursor-pointer overflow-hidden rounded-xl transition-all",
                   wide ? "w-48" : "w-32",
-                  i === activePhoto ? "ring-2 ring-purple-400 ring-offset-1 opacity-100" : "opacity-85 hover:opacity-100"
+                  i === activePhoto ? "ring-2 ring-primary/40 ring-offset-1 opacity-100" : "opacity-85 hover:opacity-100"
                 )}
               >
                 {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -429,7 +429,7 @@ function LayoutPanel({
                 onClick={() => scrollToPhoto(i)}
                 className={cn(
                   "h-1.5 rounded-full transition-all",
-                  i === activePhoto ? "w-5 bg-gray-600" : "w-1.5 bg-gray-300"
+                  i === activePhoto ? "w-5 bg-foreground/60" : "w-1.5 bg-muted/80"
                 )}
               />
             ))}
@@ -525,8 +525,8 @@ function SeatingCardsPanel({
     <div className="mx-auto max-w-sm">
       {/* Title */}
       <div className="mb-5 text-center">
-        <h2 className="text-lg font-light text-gray-700">Seating Cards by Table</h2>
-        <p className="mx-auto mt-1.5 max-w-xs text-xs leading-relaxed text-gray-400">
+        <h2 className="text-lg font-light text-foreground">Seating Cards by Table</h2>
+        <p className="mx-auto mt-1.5 max-w-xs text-xs leading-relaxed text-muted-foreground/70">
           Create and print table cards using the seating plan, then place them on the
           seating board to help guests quickly find where they&apos;re seated.
         </p>
@@ -537,9 +537,9 @@ function SeatingCardsPanel({
         <button
           onClick={onPrev}
           disabled={currentIndex === 0}
-          className="flex-shrink-0 rounded-full bg-white p-2.5 shadow-md transition-all hover:bg-gray-50 disabled:opacity-20"
+          className="flex-shrink-0 rounded-full bg-card p-2.5 shadow-md transition-all hover:bg-muted/30 disabled:opacity-20"
         >
-          <ChevronLeft className="h-5 w-5 text-gray-500" />
+          <ChevronLeft className="h-5 w-5 text-muted-foreground" />
         </button>
 
         <div className="flex flex-1 flex-col items-center">
@@ -548,7 +548,7 @@ function SeatingCardsPanel({
 
           {/* Card body */}
           <div
-            className="w-full rounded-2xl border border-gray-200 bg-white px-8 pb-8 pt-5 text-center shadow-lg"
+            className="w-full rounded-2xl border border-border bg-card px-8 pb-8 pt-5 text-center shadow-lg"
             style={{ marginTop: -2 }}
           >
             {/* Load Dancing Script font inline */}
@@ -583,7 +583,7 @@ function SeatingCardsPanel({
             </div>
 
             {/* Divider */}
-            <div className="mx-auto mb-4 w-3/4 border-t border-gray-200" />
+            <div className="mx-auto mb-4 w-3/4 border-t border-border" />
 
             {/* Guest names */}
             <div className="space-y-1">
@@ -599,9 +599,9 @@ function SeatingCardsPanel({
         <button
           onClick={onNext}
           disabled={total === 0 || currentIndex >= total - 1}
-          className="flex-shrink-0 rounded-full bg-white p-2.5 shadow-md transition-all hover:bg-gray-50 disabled:opacity-20"
+          className="flex-shrink-0 rounded-full bg-card p-2.5 shadow-md transition-all hover:bg-muted/30 disabled:opacity-20"
         >
-          <ChevronRight className="h-5 w-5 text-gray-500" />
+          <ChevronRight className="h-5 w-5 text-muted-foreground" />
         </button>
       </div>
 
@@ -609,13 +609,13 @@ function SeatingCardsPanel({
       <div className="mt-5 text-center">
         <button
           onClick={onEdit}
-          className="text-sm font-medium text-purple-600 underline underline-offset-2 transition-colors hover:text-purple-800"
+          className="text-sm font-medium text-primary underline underline-offset-2 transition-colors hover:text-primary/80"
         >
           Click here to edit layout
         </button>
-        <p className="mt-1 text-xs text-gray-400">Format 4.33 inch × 7.87 inch</p>
+        <p className="mt-1 text-xs text-muted-foreground/70">Format 4.33 inch × 7.87 inch</p>
         {total > 0 && (
-          <p className="mt-0.5 text-xs text-gray-400">Total {total} table card{total !== 1 ? "s" : ""}</p>
+          <p className="mt-0.5 text-xs text-muted-foreground/70">Total {total} table card{total !== 1 ? "s" : ""}</p>
         )}
       </div>
 
@@ -623,24 +623,24 @@ function SeatingCardsPanel({
       <div className="mt-4 flex flex-col items-center gap-2.5">
         <button
           onClick={onEdit}
-          className="flex items-center gap-2 rounded-lg border border-purple-200 bg-purple-50 px-5 py-2 text-sm font-medium text-purple-700 transition-colors hover:bg-purple-100"
+          className="flex items-center gap-2 rounded-lg border border-primary/20 bg-primary/5 px-5 py-2 text-sm font-medium text-primary transition-colors hover:bg-primary/10"
         >
           <Eye className="h-4 w-4" /> Preview Result
         </button>
         <div className="flex items-center gap-3">
-          <button className="flex items-center gap-2 rounded-lg border border-gray-300 bg-white px-5 py-2 text-sm text-gray-600 transition-colors hover:bg-gray-50">
-            <Download className="h-4 w-4 text-purple-500" /> Download PDF file
+          <button className="flex items-center gap-2 rounded-lg border border-border bg-card px-5 py-2 text-sm text-foreground/80 transition-colors hover:bg-muted/30">
+            <Download className="h-4 w-4 text-primary" /> Download PDF file
           </button>
-          <span className="text-xs text-gray-400">←</span>
+          <span className="text-xs text-muted-foreground/70">←</span>
         </div>
       </div>
 
       {/* Recommendation */}
-      <div className="mt-6 rounded-xl border border-gray-200 bg-white px-5 py-4 shadow-sm">
-        <p className="mb-1.5 text-sm font-semibold text-gray-800">Recommendation</p>
-        <p className="text-xs leading-relaxed text-gray-500">
+      <div className="mt-6 rounded-xl border border-border bg-card px-5 py-4 shadow-sm">
+        <p className="mb-1.5 text-sm font-semibold text-foreground">Recommendation</p>
+        <p className="text-xs leading-relaxed text-muted-foreground">
           For printing, opt for thick paper! You&apos;re welcome to select any variety of{" "}
-          <span className="text-purple-500">subtly colored, textured card stock or paper.</span>
+          <span className="text-primary">subtly colored, textured card stock or paper.</span>
         </p>
       </div>
     </div>
@@ -772,8 +772,8 @@ function NameCardsPanel({ guests, layouts, projectId }: { guests: Guest[]; layou
     <div className="mx-auto max-w-xl">
       {/* Title */}
       <div className="mb-5 text-center">
-        <h2 className="text-lg font-light text-gray-700">Classic Name Cards</h2>
-        <p className="text-sm text-gray-400">Create and print name cards for every guest so they can easily find their seat.</p>
+        <h2 className="text-lg font-light text-foreground">Classic Name Cards</h2>
+        <p className="text-sm text-muted-foreground/70">Create and print name cards for every guest so they can easily find their seat.</p>
       </div>
 
       {/* Card preview with navigation */}
@@ -781,12 +781,12 @@ function NameCardsPanel({ guests, layouts, projectId }: { guests: Guest[]; layou
         <button
           onClick={() => setCardIndex(i => Math.max(0, i - 1))}
           disabled={safeIndex === 0}
-          className="absolute left-0 z-10 flex h-10 w-10 items-center justify-center rounded-full border border-gray-200 bg-white text-xl text-gray-500 shadow-sm hover:bg-gray-50 disabled:opacity-30 disabled:cursor-not-allowed transition-all"
+          className="absolute left-0 z-10 flex h-10 w-10 items-center justify-center rounded-full border border-border bg-card text-xl text-muted-foreground shadow-sm hover:bg-muted/30 disabled:opacity-30 disabled:cursor-not-allowed transition-all"
         >
           ‹
         </button>
 
-        <div className="w-full overflow-hidden rounded-xl border border-gray-200 bg-white shadow-sm">
+        <div className="w-full overflow-hidden rounded-xl border border-border bg-card shadow-sm">
           <NameCardSvg
             name={displayName}
             template={template}
@@ -798,37 +798,37 @@ function NameCardsPanel({ guests, layouts, projectId }: { guests: Guest[]; layou
         <button
           onClick={() => setCardIndex(i => Math.min(total - 1, i + 1))}
           disabled={safeIndex >= total - 1}
-          className="absolute right-0 z-10 flex h-10 w-10 items-center justify-center rounded-full border border-gray-200 bg-white text-xl text-gray-500 shadow-sm hover:bg-gray-50 disabled:opacity-30 disabled:cursor-not-allowed transition-all"
+          className="absolute right-0 z-10 flex h-10 w-10 items-center justify-center rounded-full border border-border bg-card text-xl text-muted-foreground shadow-sm hover:bg-muted/30 disabled:opacity-30 disabled:cursor-not-allowed transition-all"
         >
           ›
         </button>
       </div>
 
       {/* Settings panel */}
-      <div className="mt-5 overflow-hidden rounded-xl border border-gray-200 bg-white shadow-sm">
+      <div className="mt-5 overflow-hidden rounded-xl border border-border bg-card shadow-sm">
         {/* Template dropdown */}
-        <div className="relative border-b border-gray-100">
+        <div className="relative border-b border-border/50">
           <button
             onClick={() => setTemplateOpen(v => !v)}
-            className="flex w-full items-center justify-between px-4 py-3 text-sm text-gray-700 hover:bg-gray-50 transition-colors"
+            className="flex w-full items-center justify-between px-4 py-3 text-sm text-foreground hover:bg-muted/30 transition-colors"
           >
-            <span className="text-gray-500 text-xs">This style applies to all name cards</span>
+            <span className="text-muted-foreground text-xs">This style applies to all name cards</span>
             <div className="flex items-center gap-2">
-              <span className="text-sm font-medium text-gray-700">{NAME_CARD_TEMPLATES.find(t => t.id === template)?.label}</span>
-              <ChevronDown className={cn("h-4 w-4 text-gray-400 transition-transform", templateOpen && "rotate-180")} />
+              <span className="text-sm font-medium text-foreground">{NAME_CARD_TEMPLATES.find(t => t.id === template)?.label}</span>
+              <ChevronDown className={cn("h-4 w-4 text-muted-foreground/70 transition-transform", templateOpen && "rotate-180")} />
             </div>
           </button>
           {templateOpen && (
             <>
               <div className="fixed inset-0 z-10" onClick={() => setTemplateOpen(false)} />
-              <div className="absolute left-0 right-0 top-full z-20 overflow-hidden rounded-b-xl border border-t-0 border-gray-200 bg-white shadow-lg">
+              <div className="absolute left-0 right-0 top-full z-20 overflow-hidden rounded-b-xl border border-t-0 border-border bg-card shadow-lg">
                 {NAME_CARD_TEMPLATES.map(t => (
                   <button
                     key={t.id}
                     onClick={() => { setTemplate(t.id); setTemplateOpen(false); }}
                     className={cn(
                       "flex w-full items-center px-4 py-2.5 text-left text-sm transition-colors",
-                      t.id === template ? "bg-blue-600 text-white font-medium" : "text-purple-600 hover:bg-gray-50"
+                      t.id === template ? "bg-primary text-primary-foreground font-medium" : "text-primary hover:bg-muted/30"
                     )}
                   >
                     {t.label}
@@ -840,7 +840,7 @@ function NameCardsPanel({ guests, layouts, projectId }: { guests: Guest[]; layou
         </div>
 
         {/* Checkboxes */}
-        <div className="space-y-2.5 border-b border-gray-100 px-4 py-3">
+        <div className="space-y-2.5 border-b border-border/50 px-4 py-3">
           {([
             { key: "honorific", label: "Add honorific (Mr., Mrs., Ms.)",  val: showHonorific,  fn: () => setShowHonorific((v: boolean) => !v) },
             { key: "table",     label: "Display table number",             val: showTableNumber, fn: () => setShowTableNumber((v: boolean) => !v) },
@@ -849,36 +849,36 @@ function NameCardsPanel({ guests, layouts, projectId }: { guests: Guest[]; layou
             <label key={key} className="flex cursor-pointer items-center gap-2.5" onClick={fn}>
               <div className={cn(
                 "flex h-4 w-4 flex-shrink-0 items-center justify-center rounded-full border-2 transition-colors",
-                val ? "border-purple-500" : "border-gray-300"
+                val ? "border-primary" : "border-border"
               )}>
-                {val && <div className="h-2 w-2 rounded-full bg-purple-500" />}
+                {val && <div className="h-2 w-2 rounded-full bg-primary" />}
               </div>
-              <span className="text-sm text-gray-600">{label}</span>
+              <span className="text-sm text-foreground/80">{label}</span>
             </label>
           ))}
         </div>
 
         {/* Count */}
-        <div className="border-b border-gray-100 px-4 py-3">
-          <p className="text-sm font-medium text-gray-700">Total {total} place cards</p>
+        <div className="border-b border-border/50 px-4 py-3">
+          <p className="text-sm font-medium text-foreground">Total {total} place cards</p>
           {displayGuests.length === 0 && (
-            <p className="mt-1 text-xs text-purple-500 underline cursor-pointer">Let&apos;s add more guests to the list</p>
+            <p className="mt-1 text-xs text-primary underline cursor-pointer">Let&apos;s add more guests to the list</p>
           )}
         </div>
 
         {/* Radio options */}
-        <div className="space-y-2 border-b border-gray-100 px-4 py-3">
+        <div className="space-y-2 border-b border-border/50 px-4 py-3">
           <label className="flex cursor-pointer items-center gap-2.5" onClick={() => { setConfirmedOnly((v: boolean) => !v); setPrintEmpty(false); }}>
-            <div className={cn("flex h-4 w-4 flex-shrink-0 items-center justify-center rounded-full border-2 transition-colors", confirmedOnly ? "border-purple-500" : "border-gray-300")}>
-              {confirmedOnly && <div className="h-2 w-2 rounded-full bg-purple-500" />}
+            <div className={cn("flex h-4 w-4 flex-shrink-0 items-center justify-center rounded-full border-2 transition-colors", confirmedOnly ? "border-primary" : "border-border")}>
+              {confirmedOnly && <div className="h-2 w-2 rounded-full bg-primary" />}
             </div>
-            <span className="text-sm text-gray-600">Include only guests who confirmed attendance</span>
+            <span className="text-sm text-foreground/80">Include only guests who confirmed attendance</span>
           </label>
           <label className="flex cursor-pointer items-start gap-2.5" onClick={() => { setPrintEmpty((v: boolean) => !v); setConfirmedOnly(false); }}>
-            <div className={cn("mt-0.5 flex h-4 w-4 flex-shrink-0 items-center justify-center rounded-full border-2 transition-colors", printEmpty ? "border-purple-500" : "border-gray-300")}>
-              {printEmpty && <div className="h-2 w-2 rounded-full bg-purple-500" />}
+            <div className={cn("mt-0.5 flex h-4 w-4 flex-shrink-0 items-center justify-center rounded-full border-2 transition-colors", printEmpty ? "border-primary" : "border-border")}>
+              {printEmpty && <div className="h-2 w-2 rounded-full bg-primary" />}
             </div>
-            <span className="text-sm text-gray-600">Print empty cards<br /><span className="text-xs text-gray-400">(in case of filling in names by hand)</span></span>
+            <span className="text-sm text-foreground/80">Print empty cards<br /><span className="text-xs text-muted-foreground/70">(in case of filling in names by hand)</span></span>
           </label>
         </div>
 
@@ -886,27 +886,27 @@ function NameCardsPanel({ guests, layouts, projectId }: { guests: Guest[]; layou
         <div className="flex items-center gap-3 px-4 py-3">
           <button
             onClick={() => window.print()}
-            className="flex items-center gap-2 rounded-lg border border-gray-300 bg-white px-5 py-2 text-sm text-gray-600 hover:bg-gray-50 transition-colors"
+            className="flex items-center gap-2 rounded-lg border border-border bg-card px-5 py-2 text-sm text-foreground/80 hover:bg-muted/30 transition-colors"
           >
-            <Download className="h-4 w-4 text-purple-500" />
+            <Download className="h-4 w-4 text-primary" />
             Download PDF file
           </button>
-          <span className="text-xs text-gray-400">←</span>
+          <span className="text-xs text-muted-foreground/70">←</span>
         </div>
       </div>
 
       {/* Recommendation */}
-      <div className="mt-4 rounded-xl border border-gray-200 bg-white px-5 py-4 shadow-sm">
-        <p className="mb-1 text-sm font-semibold text-gray-800">Recommendation</p>
-        <p className="text-xs leading-relaxed text-gray-500">
+      <div className="mt-4 rounded-xl border border-border bg-card px-5 py-4 shadow-sm">
+        <p className="mb-1 text-sm font-semibold text-foreground">Recommendation</p>
+        <p className="text-xs leading-relaxed text-muted-foreground">
           For printing, opt for thick paper! You&apos;re welcome to select any variety of{" "}
-          <span className="text-purple-500">subtly colored, textured card stock or paper.</span>
+          <span className="text-primary">subtly colored, textured card stock or paper.</span>
         </p>
       </div>
 
       {/* Gallery */}
       <div className="mt-6">
-        <h3 className="mb-3 text-center text-sm font-medium text-gray-600">
+        <h3 className="mb-3 text-center text-sm font-medium text-foreground/80">
           Elegant name card inspiration
         </h3>
         <div className="flex gap-3 overflow-x-auto pb-2" style={{ scrollbarWidth: "none" }}>
@@ -1099,13 +1099,13 @@ function TableNumbersPanel({ projectId }: { projectId: string }) {
         <svg width="2" height="32" viewBox="0 0 2 32">
           <line x1="1" y1="0" x2="1" y2="32" stroke="#c4b5d0" strokeWidth="1.5" strokeDasharray="4 3" />
         </svg>
-        <div className="w-2 h-2 rounded-full border border-purple-300" />
+        <div className="w-2 h-2 rounded-full border border-primary/30" />
       </div>
 
       {/* Title */}
       <div className="text-center">
-        <h2 className="text-xl font-semibold text-gray-800">Table Numbers</h2>
-        <p className="text-sm text-gray-500 mt-1">Design and print table number cards for each table based on the seating plan.</p>
+        <h2 className="text-xl font-semibold text-foreground">Table Numbers</h2>
+        <p className="text-sm text-muted-foreground mt-1">Design and print table number cards for each table based on the seating plan.</p>
       </div>
 
       {/* Navigation + Card */}
@@ -1113,7 +1113,7 @@ function TableNumbersPanel({ projectId }: { projectId: string }) {
         <button
           onClick={() => setCardIndex(i => Math.max(0, i - 1))}
           disabled={safeIdx === 0}
-          className="w-10 h-10 rounded-full border border-gray-200 bg-white flex items-center justify-center text-gray-400 hover:text-purple-600 hover:border-purple-300 disabled:opacity-30 transition-colors flex-shrink-0"
+          className="w-10 h-10 rounded-full border border-border bg-card flex items-center justify-center text-muted-foreground/70 hover:text-primary hover:border-primary/30 disabled:opacity-30 transition-colors flex-shrink-0"
         >
           <ChevronLeft size={18} />
         </button>
@@ -1133,34 +1133,34 @@ function TableNumbersPanel({ projectId }: { projectId: string }) {
         <button
           onClick={() => setCardIndex(i => Math.min(total - 1, i + 1))}
           disabled={safeIdx >= total - 1}
-          className="w-10 h-10 rounded-full border border-gray-200 bg-white flex items-center justify-center text-gray-400 hover:text-purple-600 hover:border-purple-300 disabled:opacity-30 transition-colors flex-shrink-0"
+          className="w-10 h-10 rounded-full border border-border bg-card flex items-center justify-center text-muted-foreground/70 hover:text-primary hover:border-primary/30 disabled:opacity-30 transition-colors flex-shrink-0"
         >
           <ChevronRight size={18} />
         </button>
       </div>
 
       {/* Settings panel */}
-      <div className="w-full max-w-sm bg-white rounded-xl border border-gray-200 overflow-visible">
+      <div className="w-full max-w-sm bg-card rounded-xl border border-border overflow-visible">
         {/* Header toggle */}
         <button
           onClick={() => setTemplateOpen(v => !v)}
-          className="w-full flex items-center justify-between px-4 py-3 text-sm text-gray-500 hover:bg-gray-50 rounded-xl"
+          className="w-full flex items-center justify-between px-4 py-3 text-sm text-muted-foreground hover:bg-muted/30 rounded-xl"
         >
           <span>This style applies to all cards</span>
           <div className="flex items-center gap-2">
-            <span className="text-gray-700 font-medium">Template — {templateLabel}</span>
+            <span className="text-foreground font-medium">Template — {templateLabel}</span>
             <ChevronDown size={15} className={`transition-transform ${templateOpen ? "rotate-180" : ""}`} />
           </div>
         </button>
 
         {/* Template dropdown */}
         {templateOpen && (
-          <div className="border-t border-gray-100">
+          <div className="border-t border-border/50">
             {(["standard", "wide", "tall"] as TableNumTemplate[]).map(t => (
               <button
                 key={t}
                 onClick={() => { setTemplate(t); setTemplateOpen(false); }}
-                className={`w-full text-left px-4 py-2.5 text-sm ${template === t ? "bg-blue-600 text-white" : "text-gray-700 hover:bg-gray-50"}`}
+                className={`w-full text-left px-4 py-2.5 text-sm ${template === t ? "bg-primary text-primary-foreground" : "text-foreground hover:bg-muted/30"}`}
               >
                 Template — {t.charAt(0).toUpperCase() + t.slice(1)}
               </button>
@@ -1170,52 +1170,52 @@ function TableNumbersPanel({ projectId }: { projectId: string }) {
 
         {/* Settings rows (when dropdown closed) */}
         {!templateOpen && (
-          <div className="border-t border-gray-100 px-4 py-2 space-y-1">
+          <div className="border-t border-border/50 px-4 py-2 space-y-1">
             {/* Number font */}
-            <div className="flex items-center justify-between py-2 border-b border-gray-100">
-              <span className="text-sm text-gray-600">Font — {TN_NUMBER_FONTS[numFontIdx].name}</span>
-              <div className="flex items-center gap-2 text-gray-400 text-xs">
-                <button onClick={() => setNumFontIdx(i => (i - 1 + TN_NUMBER_FONTS.length) % TN_NUMBER_FONTS.length)} className="hover:text-purple-600">◄</button>
-                <button onClick={() => setNumFontIdx(i => (i + 1) % TN_NUMBER_FONTS.length)} className="hover:text-purple-600">►</button>
+            <div className="flex items-center justify-between py-2 border-b border-border/50">
+              <span className="text-sm text-foreground/80">Font — {TN_NUMBER_FONTS[numFontIdx].name}</span>
+              <div className="flex items-center gap-2 text-muted-foreground/70 text-xs">
+                <button onClick={() => setNumFontIdx(i => (i - 1 + TN_NUMBER_FONTS.length) % TN_NUMBER_FONTS.length)} className="hover:text-primary">◄</button>
+                <button onClick={() => setNumFontIdx(i => (i + 1) % TN_NUMBER_FONTS.length)} className="hover:text-primary">►</button>
               </div>
             </div>
             {/* Top text */}
-            <div className="py-1.5 border-b border-gray-100">
+            <div className="py-1.5 border-b border-border/50">
               <input
                 value={topText}
                 onChange={e => setTopText(e.target.value)}
-                className="w-full border border-gray-200 rounded px-3 py-1.5 text-sm text-gray-700 focus:outline-none focus:ring-1 focus:ring-purple-300"
+                className="w-full border border-border rounded px-3 py-1.5 text-sm text-foreground focus:outline-none focus:ring-1 focus:ring-primary/30"
               />
             </div>
             {/* Bottom text */}
-            <div className="py-1.5 border-b border-gray-100">
+            <div className="py-1.5 border-b border-border/50">
               <input
                 value={bottomText}
                 onChange={e => setBottomText(e.target.value)}
-                className="w-full border border-gray-200 rounded px-3 py-1.5 text-sm text-gray-700 focus:outline-none focus:ring-1 focus:ring-purple-300"
+                className="w-full border border-border rounded px-3 py-1.5 text-sm text-foreground focus:outline-none focus:ring-1 focus:ring-primary/30"
               />
             </div>
             {/* Hashtag font */}
-            <div className="flex items-center justify-between py-2 border-b border-gray-100">
-              <span className="text-sm text-gray-600">Font — {TN_HASHTAG_FONTS[hashFontIdx].name}</span>
-              <div className="flex items-center gap-2 text-gray-400 text-xs">
-                <button onClick={() => setHashFontIdx(i => (i - 1 + TN_HASHTAG_FONTS.length) % TN_HASHTAG_FONTS.length)} className="hover:text-purple-600">◄</button>
-                <button onClick={() => setHashFontIdx(i => (i + 1) % TN_HASHTAG_FONTS.length)} className="hover:text-purple-600">►</button>
+            <div className="flex items-center justify-between py-2 border-b border-border/50">
+              <span className="text-sm text-foreground/80">Font — {TN_HASHTAG_FONTS[hashFontIdx].name}</span>
+              <div className="flex items-center gap-2 text-muted-foreground/70 text-xs">
+                <button onClick={() => setHashFontIdx(i => (i - 1 + TN_HASHTAG_FONTS.length) % TN_HASHTAG_FONTS.length)} className="hover:text-primary">◄</button>
+                <button onClick={() => setHashFontIdx(i => (i + 1) % TN_HASHTAG_FONTS.length)} className="hover:text-primary">►</button>
               </div>
             </div>
             {/* Rounded corners */}
             <div className="py-2">
               <div className="flex items-center justify-between mb-1">
-                <span className="text-sm text-gray-600">Rounded corners</span>
+                <span className="text-sm text-foreground/80">Rounded corners</span>
               </div>
               <div className="flex items-center gap-2">
-                <span className="text-xs text-gray-400">0</span>
+                <span className="text-xs text-muted-foreground/70">0</span>
                 <input
                   type="range" min={0} max={130} value={cornerRadius}
                   onChange={e => setCornerRadius(Number(e.target.value))}
-                  className="flex-1 accent-purple-500"
+                  className="flex-1 accent-primary"
                 />
-                <span className="text-xs text-gray-500 w-8 text-right">{cornerRadius}</span>
+                <span className="text-xs text-muted-foreground w-8 text-right">{cornerRadius}</span>
               </div>
             </div>
           </div>
@@ -1223,13 +1223,13 @@ function TableNumbersPanel({ projectId }: { projectId: string }) {
       </div>
 
       {/* Total */}
-      <p className="text-lg font-medium text-gray-700">Total {total} table cards</p>
+      <p className="text-lg font-medium text-foreground">Total {total} table cards</p>
 
       {/* Buttons */}
       <div className="flex flex-col items-center gap-3 w-full max-w-xs">
         <button
           onClick={handlePreviewResult}
-          className="w-full flex items-center justify-center gap-2 bg-purple-100 hover:bg-purple-200 text-purple-700 rounded-full py-2.5 text-sm font-medium transition-colors"
+          className="w-full flex items-center justify-center gap-2 bg-primary/10 hover:bg-primary/20 text-primary rounded-full py-2.5 text-sm font-medium transition-colors"
         >
           <Eye size={16} />
           Preview Result
@@ -1237,19 +1237,19 @@ function TableNumbersPanel({ projectId }: { projectId: string }) {
         <div className="flex items-center gap-3">
           <button
             onClick={handleDownloadPDF}
-            className="flex items-center gap-2 border border-gray-200 bg-white hover:bg-gray-50 text-gray-700 rounded-lg px-4 py-2 text-sm transition-colors"
+            className="flex items-center gap-2 border border-border bg-card hover:bg-muted/30 text-foreground rounded-lg px-4 py-2 text-sm transition-colors"
           >
             <Download size={15} />
             Download PDF file
           </button>
-          <span className="text-gray-400 text-sm">←</span>
+          <span className="text-muted-foreground/70 text-sm">←</span>
         </div>
       </div>
 
       {/* Recommendation */}
-      <div className="w-full max-w-sm bg-white border border-gray-200 rounded-xl p-4">
-        <p className="text-sm font-semibold text-gray-700 mb-1">Recommendation</p>
-        <p className="text-xs text-gray-500">
+      <div className="w-full max-w-sm bg-card border border-border rounded-xl p-4">
+        <p className="text-sm font-semibold text-foreground mb-1">Recommendation</p>
+        <p className="text-xs text-muted-foreground">
           For printing, opt for thick paper! You&apos;re welcome to select any variety of subtly colored,
           slightly textured paper for an elevated aesthetic.
         </p>
@@ -1257,7 +1257,7 @@ function TableNumbersPanel({ projectId }: { projectId: string }) {
 
       {/* Gallery */}
       <div className="w-full max-w-2xl">
-        <h3 className="text-sm font-semibold text-gray-600 mb-3">Gallery</h3>
+        <h3 className="text-sm font-semibold text-foreground/80 mb-3">Gallery</h3>
         <div className="flex gap-3 overflow-x-auto pb-2" style={{ scrollbarWidth: "none" }}>
           {GALLERY["table-numbers"].map((src, i) => (
             <div key={i} className="relative h-44 w-32 flex-shrink-0 overflow-hidden rounded-xl opacity-85 hover:opacity-100 transition-all">
@@ -1361,13 +1361,13 @@ function ReceptionMenuPanel({ projectId, onEdit }: { projectId: string; onEdit: 
 
       {/* Title */}
       <div className="mb-5 text-center">
-        <h2 className="text-lg font-light text-gray-700">Reception Menu</h2>
-        <p className="text-sm text-gray-400">Print a beautiful menu card for each guest at the reception.</p>
+        <h2 className="text-lg font-light text-foreground">Reception Menu</h2>
+        <p className="text-sm text-muted-foreground/70">Print a beautiful menu card for each guest at the reception.</p>
       </div>
 
       {/* Menu card — renders actual saved content */}
       <div
-        className="mx-auto rounded-2xl shadow-lg bg-white"
+        className="mx-auto rounded-2xl shadow-lg bg-card"
         style={{ width: "100%", maxWidth: 480, border: "1px solid #e9d5f5", position: "relative" }}
       >
         <div style={{ position: "absolute", inset: 12, border: "1px solid #f3e8ff", borderRadius: 10, pointerEvents: "none" }} />
@@ -1426,37 +1426,37 @@ function ReceptionMenuPanel({ projectId, onEdit }: { projectId: string; onEdit: 
       <div className="mt-4 text-center">
         <button
           onClick={onEdit}
-          className="text-sm font-medium text-purple-600 underline underline-offset-2 hover:text-purple-800 transition-colors"
+          className="text-sm font-medium text-primary underline underline-offset-2 hover:text-primary/80 transition-colors"
         >
           Click here to edit layout
         </button>
-        <p className="mt-1 text-xs text-gray-400">A1 portrait 23.4 inch × 33.1 inch</p>
+        <p className="mt-1 text-xs text-muted-foreground/70">A1 portrait 23.4 inch × 33.1 inch</p>
       </div>
 
       {/* Download + arrow */}
       <div className="mt-3 flex items-center justify-center gap-3">
         <button
           onClick={() => window.print()}
-          className="flex items-center gap-2 rounded-lg border border-gray-300 bg-white px-5 py-2 text-sm text-gray-600 hover:bg-gray-50 transition-colors"
+          className="flex items-center gap-2 rounded-lg border border-border bg-card px-5 py-2 text-sm text-foreground/80 hover:bg-muted/30 transition-colors"
         >
-          <Download className="h-4 w-4 text-purple-500" />
+          <Download className="h-4 w-4 text-primary" />
           Download PDF file
         </button>
-        <span className="text-xs text-gray-400">←</span>
+        <span className="text-xs text-muted-foreground/70">←</span>
       </div>
 
       {/* Recommendation */}
-      <div className="mt-6 rounded-xl border border-gray-200 bg-white px-5 py-4 shadow-sm">
-        <p className="mb-1.5 text-sm font-semibold text-gray-800">Recommendation</p>
-        <p className="text-xs leading-relaxed text-gray-500">
+      <div className="mt-6 rounded-xl border border-border bg-card px-5 py-4 shadow-sm">
+        <p className="mb-1.5 text-sm font-semibold text-foreground">Recommendation</p>
+        <p className="text-xs leading-relaxed text-muted-foreground">
           For printing, opt for thick paper! You&apos;re welcome to select any variety of{" "}
-          <span className="text-purple-500">subtly colored, textured card stock or paper.</span>
+          <span className="text-primary">subtly colored, textured card stock or paper.</span>
         </p>
       </div>
 
       {/* Gallery */}
       <div className="mt-6">
-        <h3 className="mb-3 text-center text-sm font-medium text-gray-600">
+        <h3 className="mb-3 text-center text-sm font-medium text-foreground/80">
           Design your reception menu
         </h3>
         <div className="flex gap-3 overflow-x-auto pb-2" style={{ scrollbarWidth: "none" }}>
@@ -1560,12 +1560,12 @@ function AlphabeticalAtlasPanel({
     <div className="mx-auto max-w-2xl">
       {/* Page subtitle */}
       <div className="mb-5 text-center">
-        <h2 className="text-lg font-light text-gray-700">Alphabetical Guest Atlas</h2>
-        <p className="text-sm text-gray-400">This layout is automatically generated from the reception layout.</p>
+        <h2 className="text-lg font-light text-foreground">Alphabetical Guest Atlas</h2>
+        <p className="text-sm text-muted-foreground/70">This layout is automatically generated from the reception layout.</p>
       </div>
 
       {/* Printable document card */}
-      <div className="mx-auto w-fit overflow-hidden rounded-xl border border-gray-200 shadow-sm" style={{ zoom: 0.95 }}>
+      <div className="mx-auto w-fit overflow-hidden rounded-xl border border-border shadow-sm" style={{ zoom: 0.95 }}>
         <AtlasPreviewDoc guests={guests} layouts={layouts} settings={settings} />
       </div>
 
@@ -1573,21 +1573,21 @@ function AlphabeticalAtlasPanel({
       <div className="mt-4 text-center">
         <button
           onClick={onEditLayout}
-          className="text-sm font-medium text-purple-600 underline underline-offset-2 hover:text-purple-800 transition-colors"
+          className="text-sm font-medium text-primary underline underline-offset-2 hover:text-primary/80 transition-colors"
         >
           Click here to edit layout
         </button>
-        <p className="mt-1 text-xs text-gray-400">A1 landscape 33.1 inch × 23.4 inch</p>
+        <p className="mt-1 text-xs text-muted-foreground/70">A1 landscape 33.1 inch × 23.4 inch</p>
       </div>
 
       {/* Stats */}
-      <div className="mt-2 text-center text-sm text-gray-600">
+      <div className="mt-2 text-center text-sm text-foreground/80">
         <p>Total {guests.length} guests</p>
         <p className="mt-0.5">Seated {seatedCount} guests</p>
         {seatedCount < guests.length && (
           <button
             onClick={onEditLayout}
-            className="mt-1 text-xs text-purple-500 underline underline-offset-1 hover:text-purple-700"
+            className="mt-1 text-xs text-primary underline underline-offset-1 hover:text-primary/80"
           >
             Let&apos;s seat more guests on the layout
           </button>
@@ -1596,25 +1596,25 @@ function AlphabeticalAtlasPanel({
 
       {/* Download + arrow */}
       <div className="mt-3 flex items-center justify-center gap-3">
-        <button className="flex items-center gap-2 rounded-lg border border-gray-300 bg-white px-5 py-2 text-sm text-gray-600 hover:bg-gray-50 transition-colors">
-          <Download className="h-4 w-4 text-purple-500" />
+        <button className="flex items-center gap-2 rounded-lg border border-border bg-card px-5 py-2 text-sm text-foreground/80 hover:bg-muted/30 transition-colors">
+          <Download className="h-4 w-4 text-primary" />
           Download PDF file
         </button>
-        <span className="text-xs text-gray-400">←</span>
+        <span className="text-xs text-muted-foreground/70">←</span>
       </div>
 
       {/* Recommendation */}
-      <div className="mt-6 rounded-xl border border-gray-200 bg-white px-5 py-4 shadow-sm">
-        <p className="mb-1.5 text-sm font-semibold text-gray-800">Recommendation</p>
-        <p className="text-xs leading-relaxed text-gray-500">
+      <div className="mt-6 rounded-xl border border-border bg-card px-5 py-4 shadow-sm">
+        <p className="mb-1.5 text-sm font-semibold text-foreground">Recommendation</p>
+        <p className="text-xs leading-relaxed text-muted-foreground">
           For printing, opt for thick paper! You&apos;re welcome to select any variety of{" "}
-          <span className="text-purple-500">subtly colored, textured card stock or paper.</span>
+          <span className="text-primary">subtly colored, textured card stock or paper.</span>
         </p>
       </div>
 
       {/* Gallery */}
       <div className="mt-6">
-        <h3 className="mb-3 text-center text-sm font-medium text-gray-600">
+        <h3 className="mb-3 text-center text-sm font-medium text-foreground/80">
           Elegant alphabetical guest atlas seating chart
         </h3>
         <div ref={scrollRef} className="flex gap-3 overflow-x-auto pb-2" style={{ scrollbarWidth: "none" }}>
@@ -1624,7 +1624,7 @@ function AlphabeticalAtlasPanel({
               onClick={() => scrollToPhoto(i)}
               className={cn(
                 "relative h-44 w-32 flex-shrink-0 cursor-pointer overflow-hidden rounded-xl transition-all",
-                i === activePhoto ? "ring-2 ring-purple-400 ring-offset-1 opacity-100" : "opacity-85 hover:opacity-100"
+                i === activePhoto ? "ring-2 ring-primary/40 ring-offset-1 opacity-100" : "opacity-85 hover:opacity-100"
               )}
             >
               {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -1645,7 +1645,7 @@ function AlphabeticalAtlasPanel({
               onClick={() => scrollToPhoto(i)}
               className={cn(
                 "h-1.5 rounded-full transition-all",
-                i === activePhoto ? "w-5 bg-gray-600" : "w-1.5 bg-gray-300"
+                i === activePhoto ? "w-5 bg-foreground/60" : "w-1.5 bg-muted/80"
               )}
             />
           ))}
@@ -1718,7 +1718,7 @@ function AtlasPreviewDoc({
 
   return (
     <div
-      className="bg-white"
+      className="bg-card"
       style={{
         width: "595px",
         minHeight: "842px",
@@ -1836,10 +1836,10 @@ function AtlasLayoutEditor({
   return (
     <div className="fixed inset-0 z-50 flex flex-col" style={{ background: "#f0ebf4" }}>
       {/* Top bar */}
-      <div className="flex items-center justify-between bg-white border-b border-gray-200 px-4 py-2 flex-shrink-0">
+      <div className="flex items-center justify-between bg-card border-b border-border px-4 py-2 flex-shrink-0">
         <button
           onClick={onClose}
-          className="flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-sm text-gray-600 hover:bg-gray-100 transition-colors border border-gray-200"
+          className="flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-sm text-foreground/80 hover:bg-muted transition-colors border border-border"
         >
           <X className="h-3.5 w-3.5" /> Close
         </button>
@@ -1853,11 +1853,11 @@ function AtlasLayoutEditor({
               printWin.document.write(`<!DOCTYPE html><html><head><title>Guest Atlas</title><style>@page{size:A4 portrait;margin:0}body{margin:0;background:white}*{box-sizing:border-box}@media print{body{margin:0}}</style></head><body>${el.outerHTML}<script>window.addEventListener('load',()=>setTimeout(()=>window.print(),300));<\/script></body></html>`);
               printWin.document.close();
             }}
-            className="flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-sm text-gray-600 hover:bg-gray-100 border border-gray-200"
+            className="flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-sm text-foreground/80 hover:bg-muted border border-border"
           >
-            <Download className="h-3.5 w-3.5 text-purple-500" /> File
+            <Download className="h-3.5 w-3.5 text-primary" /> File
           </button>
-          <button className="flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-sm text-white bg-purple-600 hover:bg-purple-700">
+          <button className="flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-sm text-white bg-primary hover:bg-primary/90">
             <Plus className="h-3.5 w-3.5" /> Add element
           </button>
         </div>
@@ -1873,16 +1873,16 @@ function AtlasLayoutEditor({
         </div>
 
         {/* Settings sidebar */}
-        <div className="w-56 flex-shrink-0 overflow-y-auto bg-white border-l border-gray-200 p-4 space-y-4">
-          <h3 className="text-sm font-semibold text-gray-700">Guest list</h3>
+        <div className="w-56 flex-shrink-0 overflow-y-auto bg-card border-l border-border p-4 space-y-4">
+          <h3 className="text-sm font-semibold text-foreground">Guest list</h3>
 
           {/* Display mode */}
           <div>
-            <p className="text-xs text-gray-400 mb-1">Display mode</p>
+            <p className="text-xs text-muted-foreground/70 mb-1">Display mode</p>
             <select
               value={settings.displayMode}
               onChange={e => set("displayMode", e.target.value as AtlasSettings["displayMode"])}
-              className="w-full rounded-lg border border-gray-200 px-2 py-1.5 text-sm text-gray-700 focus:outline-none"
+              className="w-full rounded-lg border border-border px-2 py-1.5 text-sm text-foreground focus:outline-none"
             >
               <option value="alphabetical">Alphabetical</option>
               <option value="table">By table</option>
@@ -1891,11 +1891,11 @@ function AtlasLayoutEditor({
 
           {/* Group by */}
           <div>
-            <p className="text-xs text-gray-400 mb-1">Group by</p>
+            <p className="text-xs text-muted-foreground/70 mb-1">Group by</p>
             <select
               value={settings.groupBy}
               onChange={e => set("groupBy", e.target.value as AtlasSettings["groupBy"])}
-              className="w-full rounded-lg border border-gray-200 px-2 py-1.5 text-sm text-gray-700 focus:outline-none"
+              className="w-full rounded-lg border border-border px-2 py-1.5 text-sm text-foreground focus:outline-none"
             >
               <option value="first">First name</option>
               <option value="last">Last name</option>
@@ -1904,11 +1904,11 @@ function AtlasLayoutEditor({
 
           {/* Name format */}
           <div>
-            <p className="text-xs text-gray-400 mb-1">Name format</p>
+            <p className="text-xs text-muted-foreground/70 mb-1">Name format</p>
             <select
               value={settings.nameFormat}
               onChange={e => set("nameFormat", e.target.value as AtlasSettings["nameFormat"])}
-              className="w-full rounded-lg border border-gray-200 px-2 py-1.5 text-sm text-gray-700 focus:outline-none"
+              className="w-full rounded-lg border border-border px-2 py-1.5 text-sm text-foreground focus:outline-none"
             >
               <option value="first-only">First name only</option>
               <option value="full">Full name</option>
@@ -1918,11 +1918,11 @@ function AtlasLayoutEditor({
 
           {/* Sort within group */}
           <div>
-            <p className="text-xs text-gray-400 mb-1">Sort within group</p>
+            <p className="text-xs text-muted-foreground/70 mb-1">Sort within group</p>
             <select
               value={settings.sortWithin}
               onChange={e => set("sortWithin", e.target.value as AtlasSettings["sortWithin"])}
-              className="w-full rounded-lg border border-gray-200 px-2 py-1.5 text-sm text-gray-700 focus:outline-none"
+              className="w-full rounded-lg border border-border px-2 py-1.5 text-sm text-foreground focus:outline-none"
             >
               <option value="first">By first name</option>
               <option value="last">By last name</option>
@@ -1931,32 +1931,32 @@ function AtlasLayoutEditor({
 
           {/* Alphabet font */}
           <div>
-            <p className="text-xs text-gray-400 mb-1">Alphabet font</p>
-            <div className="flex items-center gap-1 rounded-lg border border-gray-200 px-1 py-1">
+            <p className="text-xs text-muted-foreground/70 mb-1">Alphabet font</p>
+            <div className="flex items-center gap-1 rounded-lg border border-border px-1 py-1">
               <button
                 onClick={() => set("alphabetFont", cycleFont(ALPHABET_FONTS, settings.alphabetFont, -1))}
-                className="rounded p-0.5 hover:bg-gray-100 text-gray-500 text-base leading-none"
+                className="rounded p-0.5 hover:bg-muted text-muted-foreground text-base leading-none"
               >‹</button>
-              <span className="flex-1 text-center text-xs text-gray-700 truncate">{settings.alphabetFont}</span>
+              <span className="flex-1 text-center text-xs text-foreground truncate">{settings.alphabetFont}</span>
               <button
                 onClick={() => set("alphabetFont", cycleFont(ALPHABET_FONTS, settings.alphabetFont, 1))}
-                className="rounded p-0.5 hover:bg-gray-100 text-gray-500 text-base leading-none"
+                className="rounded p-0.5 hover:bg-muted text-muted-foreground text-base leading-none"
               >›</button>
             </div>
           </div>
 
           {/* Names font */}
           <div>
-            <p className="text-xs text-gray-400 mb-1">Names font</p>
-            <div className="flex items-center gap-1 rounded-lg border border-gray-200 px-1 py-1">
+            <p className="text-xs text-muted-foreground/70 mb-1">Names font</p>
+            <div className="flex items-center gap-1 rounded-lg border border-border px-1 py-1">
               <button
                 onClick={() => set("namesFont", cycleFont(NAMES_FONTS, settings.namesFont, -1))}
-                className="rounded p-0.5 hover:bg-gray-100 text-gray-500 text-base leading-none"
+                className="rounded p-0.5 hover:bg-muted text-muted-foreground text-base leading-none"
               >‹</button>
-              <span className="flex-1 text-center text-xs text-gray-700 truncate">{settings.namesFont}</span>
+              <span className="flex-1 text-center text-xs text-foreground truncate">{settings.namesFont}</span>
               <button
                 onClick={() => set("namesFont", cycleFont(NAMES_FONTS, settings.namesFont, 1))}
-                className="rounded p-0.5 hover:bg-gray-100 text-gray-500 text-base leading-none"
+                className="rounded p-0.5 hover:bg-muted text-muted-foreground text-base leading-none"
               >›</button>
             </div>
           </div>
@@ -1968,16 +1968,16 @@ function AtlasLayoutEditor({
               { key: "underlineNames", label: "Underline names" },
             ] as { key: keyof AtlasSettings; label: string }[]).map(({ key, label }) => (
               <label key={key} className="flex items-center justify-between cursor-pointer">
-                <span className="text-xs text-gray-600">{label}</span>
+                <span className="text-xs text-foreground/80">{label}</span>
                 <button
                   onClick={() => set(key, !settings[key] as AtlasSettings[typeof key])}
                   className={cn(
                     "relative inline-flex h-5 w-9 items-center rounded-full transition-colors",
-                    settings[key] ? "bg-purple-500" : "bg-gray-200"
+                    settings[key] ? "bg-primary" : "bg-muted/70"
                   )}
                 >
                   <span className={cn(
-                    "inline-block h-3.5 w-3.5 rounded-full bg-white shadow transition-transform",
+                    "inline-block h-3.5 w-3.5 rounded-full bg-card shadow transition-transform",
                     settings[key] ? "translate-x-4" : "translate-x-1"
                   )} />
                 </button>
@@ -1989,20 +1989,20 @@ function AtlasLayoutEditor({
           {sliders.map(({ key, label, min, max }) => (
             <div key={key}>
               <div className="flex items-center justify-between mb-1">
-                <p className="text-xs text-gray-400">{label}</p>
-                <span className="text-xs font-medium text-gray-700 bg-gray-100 rounded px-1.5 py-0.5">
+                <p className="text-xs text-muted-foreground/70">{label}</p>
+                <span className="text-xs font-medium text-foreground bg-muted rounded px-1.5 py-0.5">
                   {settings[key] as number}
                 </span>
               </div>
               <div className="flex items-center gap-1.5">
-                <span className="text-[10px] text-gray-300">{min}</span>
+                <span className="text-[10px] text-muted-foreground/50">{min}</span>
                 <input
                   type="range" min={min} max={max}
                   value={settings[key] as number}
                   onChange={e => set(key, Number(e.target.value) as AtlasSettings[typeof key])}
-                  className="flex-1 accent-purple-500"
+                  className="flex-1 accent-primary"
                 />
-                <span className="text-[10px] text-gray-300">{max}</span>
+                <span className="text-[10px] text-muted-foreground/50">{max}</span>
               </div>
             </div>
           ))}
@@ -2249,8 +2249,8 @@ export default function SeatingPage() {
 
         {/* Title */}
         <div className="mb-6 text-center">
-          <h1 className="text-2xl font-semibold text-gray-700">Seating Chart &amp; Supplies</h1>
-          <p className="mx-auto mt-1.5 max-w-lg text-sm text-gray-500">
+          <h1 className="text-2xl font-semibold text-foreground">Seating Chart &amp; Supplies</h1>
+          <p className="mx-auto mt-1.5 max-w-lg text-sm text-muted-foreground">
             These tools make it easy to design your seating chart and all the related details.
             Everything is connected through your guest list, so changes update automatically.
           </p>
@@ -2262,9 +2262,9 @@ export default function SeatingPage() {
                   if (raw) exportGuestCSV(JSON.parse(raw) as PreviewElement[], guests);
                 } catch {}
               }}
-              className="flex items-center gap-2 rounded-lg border border-gray-300 bg-white px-4 py-1.5 text-sm text-gray-600 hover:bg-gray-50 transition-colors"
+              className="flex items-center gap-2 rounded-lg border border-border bg-card px-4 py-1.5 text-sm text-foreground/80 hover:bg-muted/30 transition-colors"
             >
-              <Download className="h-4 w-4 text-purple-500" />
+              <Download className="h-4 w-4 text-primary" />
               Export Guest List CSV
             </button>
           </div>
@@ -2285,13 +2285,13 @@ export default function SeatingPage() {
                 className={cn(
                   "relative rounded-xl border px-2 py-3 text-center text-xs leading-snug transition-colors",
                   activeTab === tab.id
-                    ? "border-gray-700 bg-white font-semibold text-gray-800 shadow-sm"
-                    : "border-gray-200 bg-white/70 text-gray-500 hover:bg-white hover:text-gray-700"
+                    ? "border-foreground/70 bg-card font-semibold text-foreground shadow-sm"
+                    : "border-border bg-card/70 text-muted-foreground hover:bg-card hover:text-foreground"
                 )}
               >
                 {tab.lines.map((line, li) => <div key={li}>{line}</div>)}
                 {locked && (
-                  <span className="absolute -top-1 -right-1 flex h-4 w-4 items-center justify-center rounded-full bg-purple-500">
+                  <span className="absolute -top-1 -right-1 flex h-4 w-4 items-center justify-center rounded-full bg-primary">
                     <Lock className="h-2.5 w-2.5 text-white" />
                   </span>
                 )}
@@ -2342,44 +2342,44 @@ export default function SeatingPage() {
                   if (receptionElements) exportGuestCSV(receptionElements, guests);
                 }}
                 disabled={!receptionElements || receptionElements.length === 0}
-                className="flex items-center gap-2 rounded-lg border border-gray-300 bg-white px-5 py-2 text-sm text-gray-600 hover:bg-gray-50 transition-colors disabled:opacity-40"
+                className="flex items-center gap-2 rounded-lg border border-border bg-card px-5 py-2 text-sm text-foreground/80 hover:bg-muted/30 transition-colors disabled:opacity-40"
               >
-                <Download className="h-4 w-4 text-purple-500" />
+                <Download className="h-4 w-4 text-primary" />
                 Export Guest CSV
               </button>
             </div>
 
             {/* Catering Mode toggle */}
-            <div className="mx-auto mt-6 max-w-3xl rounded-xl border border-gray-200 bg-white px-5 py-4 shadow-sm">
+            <div className="mx-auto mt-6 max-w-3xl rounded-xl border border-border bg-card px-5 py-4 shadow-sm">
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2">
-                  <UtensilsCrossed className="h-4 w-4 text-purple-500" />
-                  <span className="text-sm font-semibold text-gray-700">Catering Mode</span>
+                  <UtensilsCrossed className="h-4 w-4 text-primary" />
+                  <span className="text-sm font-semibold text-foreground">Catering Mode</span>
                 </div>
                 <button
                   onClick={() => setCateringMode(m => !m)}
                   className={cn(
                     "relative inline-flex h-6 w-11 items-center rounded-full transition-colors",
-                    cateringMode ? "bg-purple-500" : "bg-gray-200"
+                    cateringMode ? "bg-primary" : "bg-muted/70"
                   )}
                 >
                   <span className={cn(
-                    "inline-block h-4 w-4 rounded-full bg-white shadow transition-transform",
+                    "inline-block h-4 w-4 rounded-full bg-card shadow transition-transform",
                     cateringMode ? "translate-x-6" : "translate-x-1"
                   )} />
                 </button>
               </div>
-              <p className="mt-1 text-xs text-gray-400">Show a dietary breakdown per table for catering staff.</p>
+              <p className="mt-1 text-xs text-muted-foreground/70">Show a dietary breakdown per table for catering staff.</p>
 
               {cateringMode && receptionElements && (
                 <div className="mt-4 overflow-x-auto">
                   {(() => {
                     const summary = buildCateringSummary(receptionElements, guests);
-                    if (summary.length === 0) return <p className="text-xs text-gray-400">No tables found in the reception layout.</p>;
+                    if (summary.length === 0) return <p className="text-xs text-muted-foreground/70">No tables found in the reception layout.</p>;
                     return (
                       <table className="w-full text-xs border-collapse">
                         <thead>
-                          <tr className="border-b border-gray-200 text-gray-500">
+                          <tr className="border-b border-border text-muted-foreground">
                             <th className="py-1.5 text-start font-medium">Table</th>
                             <th className="py-1.5 text-center font-medium">Total</th>
                             <th className="py-1.5 text-center font-medium">Vegan</th>
@@ -2390,13 +2390,13 @@ export default function SeatingPage() {
                         </thead>
                         <tbody>
                           {summary.map((row, i) => (
-                            <tr key={i} className={cn("border-b border-gray-100", i % 2 === 0 ? "bg-gray-50" : "bg-white")}>
-                              <td className="py-1.5 pr-2 text-gray-700 font-medium">{row.tableName}</td>
-                              <td className="py-1.5 text-center text-gray-600">{row.total}</td>
-                              <td className="py-1.5 text-center text-green-600">{row.vegan || "—"}</td>
-                              <td className="py-1.5 text-center text-amber-600">{row.glutenFree || "—"}</td>
-                              <td className="py-1.5 text-center text-blue-600">{row.vegetarian || "—"}</td>
-                              <td className="py-1.5 text-center text-gray-500">{row.standard || "—"}</td>
+                            <tr key={i} className={cn("border-b border-border/50", i % 2 === 0 ? "bg-muted/30" : "bg-card")}>
+                              <td className="py-1.5 pr-2 text-foreground font-medium">{row.tableName}</td>
+                              <td className="py-1.5 text-center text-foreground/80">{row.total}</td>
+                              <td className="py-1.5 text-center text-[var(--color-success-text)]">{row.vegan || "—"}</td>
+                              <td className="py-1.5 text-center text-[var(--color-warning-text)]">{row.glutenFree || "—"}</td>
+                              <td className="py-1.5 text-center text-primary">{row.vegetarian || "—"}</td>
+                              <td className="py-1.5 text-center text-muted-foreground">{row.standard || "—"}</td>
                             </tr>
                           ))}
                         </tbody>
@@ -2408,12 +2408,12 @@ export default function SeatingPage() {
             </div>
 
             {/* QR Entrance Mode */}
-            <div className="mx-auto mt-6 max-w-3xl rounded-xl border border-gray-200 bg-white px-5 py-4 shadow-sm">
-              <p className="mb-2 text-sm font-semibold text-gray-700">QR Entrance Mode</p>
-              <p className="mb-3 text-xs text-gray-400">Share this link with venue staff to look up guests on arrival.</p>
+            <div className="mx-auto mt-6 max-w-3xl rounded-xl border border-border bg-card px-5 py-4 shadow-sm">
+              <p className="mb-2 text-sm font-semibold text-foreground">QR Entrance Mode</p>
+              <p className="mb-3 text-xs text-muted-foreground/70">Share this link with venue staff to look up guests on arrival.</p>
               <div className="flex items-start gap-4">
-                <div className="flex-1 rounded-lg border-2 border-dashed border-gray-300 bg-gray-50 px-4 py-3">
-                  <p className="break-all font-mono text-xs text-gray-600">{`${typeof window !== "undefined" ? window.location.origin : ""}/seat-finder/${projectId}`}</p>
+                <div className="flex-1 rounded-lg border-2 border-dashed border-border bg-muted/30 px-4 py-3">
+                  <p className="break-all font-mono text-xs text-foreground/80">{`${typeof window !== "undefined" ? window.location.origin : ""}/seat-finder/${projectId}`}</p>
                 </div>
                 <div className="flex flex-col gap-2">
                   <button
@@ -2421,7 +2421,7 @@ export default function SeatingPage() {
                       const url = `${window.location.origin}/seat-finder/${projectId}`;
                       navigator.clipboard.writeText(url).catch(() => {});
                     }}
-                    className="rounded-lg border border-gray-300 bg-white px-3 py-1.5 text-xs text-gray-600 hover:bg-gray-50 transition-colors"
+                    className="rounded-lg border border-border bg-card px-3 py-1.5 text-xs text-foreground/80 hover:bg-muted/30 transition-colors"
                   >
                     Copy link
                   </button>
@@ -2429,7 +2429,7 @@ export default function SeatingPage() {
                     href={`/seat-finder/${projectId}`}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="flex items-center justify-center gap-1.5 rounded-lg bg-purple-600 px-3 py-1.5 text-xs font-medium text-white hover:bg-purple-700 transition-colors"
+                    className="flex items-center justify-center gap-1.5 rounded-lg bg-primary px-3 py-1.5 text-xs font-medium text-white hover:bg-primary/90 transition-colors"
                   >
                     Open Entrance Scanner
                   </a>

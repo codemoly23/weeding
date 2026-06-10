@@ -273,7 +273,7 @@ function DetailedFeatureCard({
   const tagColors = TAG_CARD_COLORS[feature.tagType || "custom"] || TAG_CARD_COLORS.custom;
 
   return (
-    <div className="group relative overflow-hidden rounded-[18px] border-[1.5px] border-border bg-white p-8 transition-all duration-[350ms] ease-[cubic-bezier(.16,1,.3,1)] hover:border-[#1b3a2d] hover:shadow-[0_16px_48px_rgba(27,58,45,0.1)] hover:-translate-y-1">
+    <div className="group relative overflow-hidden rounded-[18px] border-[1.5px] border-border bg-card p-8 transition-all duration-[350ms] ease-[cubic-bezier(.16,1,.3,1)] hover:border-[#1b3a2d] hover:shadow-[0_16px_48px_rgba(27,58,45,0.1)] hover:-translate-y-1">
       {/* Bottom accent bar on hover */}
       <div className="absolute bottom-0 left-0 right-0 h-[3px] bg-[#1b3a2d] origin-left scale-x-0 transition-transform duration-[350ms] ease-out group-hover:scale-x-100" />
 

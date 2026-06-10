@@ -201,7 +201,7 @@ export function DashboardSidebar({
                       >
                         <span className="truncate">{project.title}</span>
                         {project.isLocal && (
-                          <span className="ml-auto shrink-0 rounded text-[10px] text-amber-500">●</span>
+                          <span className="ml-auto shrink-0 rounded text-[10px] text-[var(--color-warning-text)]">●</span>
                         )}
                       </Link>
                     );

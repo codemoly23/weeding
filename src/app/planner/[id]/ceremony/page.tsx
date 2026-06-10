@@ -185,7 +185,7 @@ export default function CeremonyPage() {
   if (loading) {
     return (
       <div className="flex h-full items-center justify-center bg-[#ede9f0]">
-        <div className="h-5 w-5 animate-spin rounded-full border-2 border-purple-300 border-t-purple-600" />
+        <div className="h-5 w-5 animate-spin rounded-full border-2 border-muted border-t-primary" />
       </div>
     );
   }
@@ -197,8 +197,8 @@ export default function CeremonyPage() {
 
         {/* Title */}
         <div className="mb-6 text-center">
-          <h1 className="text-2xl font-semibold text-gray-700">{t("ceremony.title")}</h1>
-          <p className="mt-1.5 text-sm text-gray-500">{t("ceremony.desc")}</p>
+          <h1 className="text-2xl font-semibold text-foreground/80">{t("ceremony.title")}</h1>
+          <p className="mt-1.5 text-sm text-muted-foreground">{t("ceremony.desc")}</p>
         </div>
 
         {/* Three info cards */}
@@ -206,17 +206,17 @@ export default function CeremonyPage() {
 
           {/* Date card */}
           <div
-            className="relative cursor-pointer rounded-xl border border-gray-200 bg-white/80 px-4 py-4 hover:bg-white transition-colors"
+            className="relative cursor-pointer rounded-xl border border-border bg-card/80 px-4 py-4 hover:bg-card transition-colors"
             onClick={() => { setDatePickerOpen(v => !v); setLocPopupOpen(false); setEditingLocation(false); }}
           >
-            <p className="mb-1 text-xs text-gray-400">{t("ceremony.date")}</p>
-            <p className={`text-sm font-medium ${form.date ? "text-purple-600" : "text-purple-400"}`}>
+            <p className="mb-1 text-xs text-muted-foreground">{t("ceremony.date")}</p>
+            <p className={`text-sm font-medium ${form.date ? "text-primary" : "text-primary/60"}`}>
               {formatDate(form.date, t("ceremony.setDate"))}
             </p>
             {/* Calendar icon — click to open date picker */}
             <div className="absolute bottom-2 right-2" onClick={e => e.stopPropagation()}>
               <Calendar
-                className="h-12 w-12 text-purple-200 cursor-pointer hover:text-purple-400 transition-colors"
+                className="h-12 w-12 text-primary/20 cursor-pointer hover:text-primary/60 transition-colors"
                 onClick={() => { setDatePickerOpen(v => !v); setLocPopupOpen(false); setEditingLocation(false); }}
               />
               {datePickerOpen && (
@@ -232,10 +232,10 @@ export default function CeremonyPage() {
 
           {/* Location card */}
           <div
-            className="relative cursor-pointer rounded-xl border border-gray-200 bg-white/80 px-4 py-4 hover:bg-white transition-colors"
+            className="relative cursor-pointer rounded-xl border border-border bg-card/80 px-4 py-4 hover:bg-card transition-colors"
             onClick={() => { setEditingLocation(true); setDatePickerOpen(false); setLocPopupOpen(false); }}
           >
-            <p className="mb-1 text-xs text-gray-400">{t("ceremony.location")}</p>
+            <p className="mb-1 text-xs text-muted-foreground">{t("ceremony.location")}</p>
             {editingLocation ? (
               <LocationEditInline
                 city={form.city ?? ""}
@@ -246,14 +246,14 @@ export default function CeremonyPage() {
                 t={t}
               />
             ) : (
-              <p className={`text-sm font-medium truncate ${(form.city || form.country || form.address) ? "text-purple-600" : "text-purple-400"}`}>
+              <p className={`text-sm font-medium truncate ${(form.city || form.country || form.address) ? "text-primary" : "text-primary/60"}`}>
                 {formatLocation(form.city, form.country, form.address, t("ceremony.setLocation"))}
               </p>
             )}
             {/* MapPin icon — click to open location popup */}
             <div className="absolute bottom-2 right-2" onClick={e => e.stopPropagation()}>
               <MapPin
-                className="h-12 w-12 text-purple-200 cursor-pointer hover:text-purple-400 transition-colors"
+                className="h-12 w-12 text-primary/20 cursor-pointer hover:text-primary/60 transition-colors"
                 onClick={() => { setLocPopupOpen(v => !v); setDatePickerOpen(false); setEditingLocation(false); }}
               />
               {locPopupOpen && (
@@ -271,37 +271,37 @@ export default function CeremonyPage() {
 
           {/* Layout card */}
           <div
-            className="relative cursor-pointer rounded-xl border border-gray-200 bg-white/80 px-4 py-4 hover:bg-white transition-colors"
+            className="relative cursor-pointer rounded-xl border border-border bg-card/80 px-4 py-4 hover:bg-card transition-colors"
             onClick={() => router.push(`/planner/${id}/seating?tab=ceremony&src=ceremony`)}
           >
-            <p className="mb-1 text-xs text-gray-400">{t("ceremony.layout")}</p>
-            <p className="text-sm font-medium text-purple-600">{t("ceremony.planLayout")}</p>
-            <LayoutTemplate className="absolute bottom-2 right-2 h-12 w-12 text-purple-200" />
+            <p className="mb-1 text-xs text-muted-foreground">{t("ceremony.layout")}</p>
+            <p className="text-sm font-medium text-primary">{t("ceremony.planLayout")}</p>
+            <LayoutTemplate className="absolute bottom-2 right-2 h-12 w-12 text-primary/20" />
           </div>
         </div>
 
         {/* Description */}
-        <div className="mb-4 rounded-xl border border-gray-200 bg-white/80 px-4 py-3">
+        <div className="mb-4 rounded-xl border border-border bg-card/80 px-4 py-3">
           <textarea
             rows={4}
             value={form.description ?? ""}
             onChange={e => handleDescriptionChange(e.target.value)}
             placeholder={t("ceremony.descPlaceholder")}
-            className="w-full resize-none bg-transparent text-sm text-gray-700 placeholder-gray-400 focus:outline-none"
+            className="w-full resize-none bg-transparent text-sm text-foreground/80 placeholder-muted-foreground focus:outline-none"
           />
         </div>
 
         {/* Photo upload area */}
-        <div className="mb-6 rounded-xl border-2 border-dashed border-purple-200 bg-white/60 px-6 py-10 text-center">
-          <CloudUpload className="mx-auto mb-3 h-12 w-12 text-gray-400" />
-          <p className="mb-1 text-sm font-semibold text-gray-600">{t("ceremony.uploadPhotos")}</p>
-          <p className="mb-1 text-xs text-gray-400">{t("ceremony.dropPhotos")}</p>
-          <p className="mb-4 text-xs font-semibold text-gray-500">
-            {t("ceremony.photoLimit")} <span className="text-purple-500">{t("ceremony.photoSize")}</span>
+        <div className="mb-6 rounded-xl border-2 border-dashed border-primary/20 bg-card/60 px-6 py-10 text-center">
+          <CloudUpload className="mx-auto mb-3 h-12 w-12 text-muted-foreground" />
+          <p className="mb-1 text-sm font-semibold text-foreground/80">{t("ceremony.uploadPhotos")}</p>
+          <p className="mb-1 text-xs text-muted-foreground">{t("ceremony.dropPhotos")}</p>
+          <p className="mb-4 text-xs font-semibold text-muted-foreground">
+            {t("ceremony.photoLimit")} <span className="text-primary">{t("ceremony.photoSize")}</span>
           </p>
           <button
             onClick={() => alert(t("ceremony.photoDeferred"))}
-            className="rounded-lg bg-purple-600 px-6 py-2 text-sm font-medium text-white hover:bg-purple-700 transition-colors"
+            className="rounded-lg bg-primary px-6 py-2 text-sm font-medium text-white hover:bg-primary/90 transition-colors"
           >
             {t("ceremony.upload")}
           </button>
@@ -311,9 +311,9 @@ export default function CeremonyPage() {
         <div className="flex justify-center">
           <button
             onClick={handleDownloadPDF}
-            className="flex items-center gap-2 rounded-lg border border-gray-300 bg-white px-5 py-2.5 text-sm text-gray-600 hover:bg-gray-50 transition-colors"
+            className="flex items-center gap-2 rounded-lg border border-border bg-card px-5 py-2.5 text-sm text-muted-foreground hover:bg-muted transition-colors"
           >
-            <Download className="h-4 w-4 text-purple-500" />
+            <Download className="h-4 w-4 text-primary" />
             {t("ceremony.downloadPdf")}
           </button>
         </div>
@@ -335,18 +335,18 @@ function DatePickerPopup({ date, onSave, onClose, t }: {
 }) {
   const [val, setVal] = useState(date ?? "");
   return (
-    <div className="absolute bottom-full right-0 mb-1 z-50 w-56 rounded-xl border border-gray-200 bg-white shadow-xl p-3">
-      <p className="mb-2 text-xs font-medium text-gray-500">{t("ceremony.selectDate")}</p>
+    <div className="absolute bottom-full right-0 mb-1 z-50 w-56 rounded-xl border border-border bg-card shadow-xl p-3">
+      <p className="mb-2 text-xs font-medium text-muted-foreground">{t("ceremony.selectDate")}</p>
       <input
         autoFocus
         type="date"
         value={val}
         onChange={e => setVal(e.target.value)}
-        className="w-full rounded-lg border border-gray-200 px-2.5 py-1.5 text-sm text-gray-700 focus:outline-none focus:border-purple-400"
+        className="w-full rounded-lg border border-border px-2.5 py-1.5 text-sm text-foreground/80 focus:outline-none focus:border-primary"
       />
       <div className="flex gap-2 mt-2">
-        <button onClick={() => onSave(val)} className="flex-1 rounded-lg bg-purple-600 py-1.5 text-xs font-medium text-white hover:bg-purple-700">{t("ceremony.save")}</button>
-        <button onClick={onClose} className="flex-1 rounded-lg bg-gray-100 py-1.5 text-xs text-gray-500 hover:bg-gray-200">{t("ceremony.cancel")}</button>
+        <button onClick={() => onSave(val)} className="flex-1 rounded-lg bg-primary py-1.5 text-xs font-medium text-white hover:bg-primary/90">{t("ceremony.save")}</button>
+        <button onClick={onClose} className="flex-1 rounded-lg bg-muted py-1.5 text-xs text-muted-foreground hover:bg-muted/80">{t("ceremony.cancel")}</button>
       </div>
     </div>
   );
@@ -365,19 +365,19 @@ function LocationPopup({ city, country, address, onCommit, onClose, t }: {
   const [a, setA] = useState(address);
 
   return (
-    <div className="absolute bottom-full right-0 mb-1 z-50 w-64 rounded-xl border border-gray-200 bg-white shadow-xl p-3">
-      <p className="mb-2 text-xs font-medium text-gray-500">{t("ceremony.locationDetails")}</p>
+    <div className="absolute bottom-full right-0 mb-1 z-50 w-64 rounded-xl border border-border bg-card shadow-xl p-3">
+      <p className="mb-2 text-xs font-medium text-muted-foreground">{t("ceremony.locationDetails")}</p>
       <div className="space-y-1.5">
         <input autoFocus value={a} onChange={e => setA(e.target.value)} placeholder={t("ceremony.streetAddress")}
-          className="w-full rounded-lg border border-gray-200 px-2.5 py-1.5 text-xs text-gray-700 focus:outline-none focus:border-purple-400" />
+          className="w-full rounded-lg border border-border px-2.5 py-1.5 text-xs text-foreground/80 focus:outline-none focus:border-primary" />
         <input value={c} onChange={e => setC(e.target.value)} placeholder={t("ceremony.city")}
-          className="w-full rounded-lg border border-gray-200 px-2.5 py-1.5 text-xs text-gray-700 focus:outline-none focus:border-purple-400" />
+          className="w-full rounded-lg border border-border px-2.5 py-1.5 text-xs text-foreground/80 focus:outline-none focus:border-primary" />
         <input value={co} onChange={e => setCo(e.target.value)} placeholder={t("ceremony.country")}
-          className="w-full rounded-lg border border-gray-200 px-2.5 py-1.5 text-xs text-gray-700 focus:outline-none focus:border-purple-400" />
+          className="w-full rounded-lg border border-border px-2.5 py-1.5 text-xs text-foreground/80 focus:outline-none focus:border-primary" />
       </div>
       <div className="flex gap-2 mt-2">
-        <button onClick={() => onCommit(c, co, a)} className="flex-1 rounded-lg bg-purple-600 py-1.5 text-xs font-medium text-white hover:bg-purple-700">{t("ceremony.save")}</button>
-        <button onClick={onClose} className="flex-1 rounded-lg bg-gray-100 py-1.5 text-xs text-gray-500 hover:bg-gray-200">{t("ceremony.cancel")}</button>
+        <button onClick={() => onCommit(c, co, a)} className="flex-1 rounded-lg bg-primary py-1.5 text-xs font-medium text-white hover:bg-primary/90">{t("ceremony.save")}</button>
+        <button onClick={onClose} className="flex-1 rounded-lg bg-muted py-1.5 text-xs text-muted-foreground hover:bg-muted/80">{t("ceremony.cancel")}</button>
       </div>
     </div>
   );
@@ -400,18 +400,18 @@ function LocationEditInline({
   return (
     <div className="space-y-1" onClick={e => e.stopPropagation()}>
       <input autoFocus value={a} onChange={e => setA(e.target.value)} placeholder={t("ceremony.streetAddress")}
-        className="w-full rounded border border-purple-300 bg-transparent px-2 py-0.5 text-xs text-purple-700 focus:outline-none" />
+        className="w-full rounded border border-primary/30 bg-transparent px-2 py-0.5 text-xs text-primary focus:outline-none" />
       <div className="flex gap-1">
         <input value={c} onChange={e => setC(e.target.value)} placeholder={t("ceremony.city")}
-          className="w-full rounded border border-purple-300 bg-transparent px-2 py-0.5 text-xs text-purple-700 focus:outline-none" />
+          className="w-full rounded border border-primary/30 bg-transparent px-2 py-0.5 text-xs text-primary focus:outline-none" />
         <input value={co} onChange={e => setCo(e.target.value)} placeholder={t("ceremony.country")}
-          className="w-full rounded border border-purple-300 bg-transparent px-2 py-0.5 text-xs text-purple-700 focus:outline-none" />
+          className="w-full rounded border border-primary/30 bg-transparent px-2 py-0.5 text-xs text-primary focus:outline-none" />
       </div>
       <div className="flex gap-1 pt-0.5">
         <button onClick={() => onCommit(c, co, a)}
-          className="rounded bg-purple-600 px-2 py-0.5 text-xs text-white hover:bg-purple-700">{t("ceremony.save")}</button>
+          className="rounded bg-primary px-2 py-0.5 text-xs text-white hover:bg-primary/90">{t("ceremony.save")}</button>
         <button onClick={onCancel}
-          className="rounded bg-gray-100 px-2 py-0.5 text-xs text-gray-500 hover:bg-gray-200">{t("ceremony.cancel")}</button>
+          className="rounded bg-muted px-2 py-0.5 text-xs text-muted-foreground hover:bg-muted/80">{t("ceremony.cancel")}</button>
       </div>
     </div>
   );

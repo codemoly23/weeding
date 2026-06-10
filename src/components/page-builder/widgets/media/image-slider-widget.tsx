@@ -250,9 +250,9 @@ function SlideContent({
             <div
               className={cn(
                 "inline-flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium mb-4",
-                content.badge.style === "pill" && "bg-orange-500/20 text-orange-400 border border-orange-500/30",
+                content.badge.style === "pill" && "bg-[var(--color-warning-bg)] text-[var(--color-warning-text)] border border-[var(--color-warning-text)]/30",
                 content.badge.style === "outline" && "bg-transparent border border-white/30 text-white",
-                content.badge.style === "solid" && "bg-orange-500 text-white"
+                content.badge.style === "solid" && "bg-[var(--color-warning-text)] text-primary-foreground"
               )}
             >
               {content.badge.text}

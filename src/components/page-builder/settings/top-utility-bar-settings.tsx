@@ -130,7 +130,7 @@ export function TopUtilityBarSettingsPanel({
 
             <button
               onClick={addLink}
-              className="w-full flex items-center justify-center gap-1.5 rounded-lg border border-dashed border-gray-300 py-2 text-xs text-gray-500 hover:border-purple-400 hover:text-purple-600 transition-colors mt-1"
+              className="w-full flex items-center justify-center gap-1.5 rounded-lg border border-dashed border-border py-2 text-xs text-muted-foreground hover:border-primary/40 hover:text-primary transition-colors mt-1"
             >
               <Plus className="h-3.5 w-3.5" />
               Add Link

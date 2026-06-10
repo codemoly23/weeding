@@ -46,11 +46,11 @@ interface Invoice {
 }
 
 const paymentStatusColors: Record<string, string> = {
-  PENDING: "bg-yellow-100 text-yellow-800",
-  PAID: "bg-green-100 text-green-700",
-  FAILED: "bg-red-100 text-red-700",
-  REFUNDED: "bg-gray-100 text-gray-700",
-  PARTIALLY_REFUNDED: "bg-orange-100 text-orange-700",
+  PENDING: "bg-[var(--color-warning-bg)] text-[var(--color-warning-text)]",
+  PAID: "bg-[var(--color-success-bg)] text-[var(--color-success-text)]",
+  FAILED: "bg-[var(--color-error-bg)] text-[var(--color-error-text)]",
+  REFUNDED: "bg-muted text-muted-foreground",
+  PARTIALLY_REFUNDED: "bg-[var(--color-warning-bg)] text-[var(--color-warning-text)]",
 };
 
 const paymentStatusLabels: Record<string, string> = {
@@ -159,19 +159,19 @@ export default function CustomerInvoicesPage() {
                       <TableCell className="text-right font-medium">
                         {currencySymbol}{total.toFixed(2)}
                       </TableCell>
-                      <TableCell className="text-right font-medium text-green-600">
+                      <TableCell className="text-right font-medium text-[var(--color-success-text)]">
                         {currencySymbol}{paid.toFixed(2)}
                       </TableCell>
                       <TableCell className="text-right font-medium">
                         {due > 0 ? (
-                          <span className="text-red-600">{currencySymbol}{due.toFixed(2)}</span>
+                          <span className="text-[var(--color-error-text)]">{currencySymbol}{due.toFixed(2)}</span>
                         ) : (
                           <span className="text-muted-foreground">{currencySymbol}0.00</span>
                         )}
                       </TableCell>
                       <TableCell>
                         <Badge
-                          className={paymentStatusColors[paymentStatus] || "bg-gray-100 text-gray-700"}
+                          className={paymentStatusColors[paymentStatus] || "bg-muted text-muted-foreground"}
                           variant="secondary"
                         >
                           {paymentStatusLabels[paymentStatus] || paymentStatus}

@@ -205,7 +205,7 @@ export function LeadFormWidgetSettingsPanel({
 
           {/* Template not found warning */}
           {settings.templateId && !templateExists && !loadingTemplates && (
-            <div className="flex items-start gap-2 rounded-md border border-yellow-300 bg-yellow-50 p-2 text-xs text-yellow-800 dark:border-yellow-700 dark:bg-yellow-950 dark:text-yellow-300">
+            <div className="flex items-start gap-2 rounded-md border border-[var(--color-warning-text)]/30 bg-[var(--color-warning-bg)] p-2 text-xs text-[var(--color-warning-text)]">
               <AlertTriangle className="h-4 w-4 shrink-0 mt-0.5" />
               <span>
                 Template no longer exists. Fields shown are from last sync.
@@ -242,7 +242,7 @@ export function LeadFormWidgetSettingsPanel({
                       {FIELD_TYPE_LABELS[field.type] || field.type}
                     </Badge>
                     {field.required && (
-                      <span className="text-red-500 text-[10px]">*</span>
+                      <span className="text-[var(--color-error-text)] text-[10px]">*</span>
                     )}
                   </div>
                 ))}

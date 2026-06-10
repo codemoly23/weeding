@@ -71,9 +71,9 @@ export default function CreateProjectPage() {
 
   if (isCreating) {
     return (
-      <div className="flex min-h-screen items-center justify-center bg-gradient-to-b from-blue-50 to-white dark:from-blue-950/20 dark:to-background">
+      <div className="flex min-h-screen items-center justify-center bg-background">
         <div className="text-center">
-          <div className="mb-4 h-8 w-8 mx-auto animate-spin rounded-full border-4 border-blue-200 border-t-blue-600" />
+          <div className="mb-4 h-8 w-8 mx-auto animate-spin rounded-full border-4 border-muted border-t-primary" />
           <p className="text-muted-foreground">{t("create.creating")}</p>
         </div>
       </div>
@@ -81,7 +81,7 @@ export default function CreateProjectPage() {
   }
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-gradient-to-b from-blue-50 to-white dark:from-blue-950/20 dark:to-background">
+    <div className="flex min-h-screen items-center justify-center bg-background">
       <div className="mx-auto max-w-2xl text-center px-4">
         <h1 className="mb-10 text-3xl font-semibold text-foreground">
           {t("create.whoAreYou")}
@@ -98,8 +98,8 @@ export default function CreateProjectPage() {
                 className={cn(
                   "flex flex-col items-center gap-3 rounded-xl border-2 bg-card p-6 transition-all hover:shadow-md",
                   selected
-                    ? "border-blue-600 shadow-md shadow-blue-100 dark:shadow-blue-900/20"
-                    : "border-border hover:border-blue-200"
+                    ? "border-primary shadow-md shadow-primary/10"
+                    : "border-border hover:border-primary/20"
                 )}
               >
                 <div className="flex h-24 w-24 items-center justify-center rounded-full bg-muted/50">
@@ -116,35 +116,35 @@ export default function CreateProjectPage() {
             size="lg"
             onClick={handleCreate}
             disabled={isCreating}
-            className="bg-blue-600 hover:bg-blue-700 text-white border-0 px-8 py-3 text-base"
+            className="bg-primary hover:bg-primary/90 text-white border-0 px-8 py-3 text-base"
           >
             {t("create.createProject")}
           </Button>
         )}
 
         {error && (
-          <p className="mt-4 text-sm text-red-600 dark:text-red-400">{error}</p>
+          <p className="mt-4 text-sm text-[var(--color-error-text)]">{error}</p>
         )}
 
         <p className="mt-6 text-sm text-muted-foreground">
           {t("create.termsAgree")}{" "}
-          <Link href="/legal/privacy-policy" className="text-blue-600 hover:underline">
+          <Link href="/legal/privacy-policy" className="text-primary hover:underline">
             {t("create.privacyTerms")}
           </Link>
         </p>
 
         <Link
           href="/planner"
-          className="mt-4 inline-block text-sm text-blue-600 hover:underline"
+          className="mt-4 inline-block text-sm text-primary hover:underline"
         >
           {t("create.goToProjects")}
         </Link>
 
-        <div className="mt-6 pt-6 border-t border-gray-200">
+        <div className="mt-6 pt-6 border-t border-border">
           <p className="text-sm text-muted-foreground mb-2">Are you a wedding vendor?</p>
           <Link
             href="/vendor/register"
-            className="inline-flex items-center gap-1.5 text-sm font-medium text-purple-600 hover:text-purple-700 hover:underline"
+            className="inline-flex items-center gap-1.5 text-sm font-medium text-primary hover:text-primary/80 hover:underline"
           >
             <Briefcase className="w-3.5 h-3.5" />
             Register as a Vendor

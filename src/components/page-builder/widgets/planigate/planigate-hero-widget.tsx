@@ -287,7 +287,7 @@ function Collage({ images }: { images: PlanigateHeroWidgetSettings["collageImage
         variants={collagePiece(-2)}
         whileHover={{ scale: 1.05, rotate: 0, y: -4, transition: { duration: 0.4 } }}
         animate={{ y: [0, -3, 0], transition: { duration: 5, repeat: Infinity, ease: "easeInOut" } }}
-        className="absolute left-[10%] bottom-[8%] w-[46%] h-[30%] rounded-2xl overflow-hidden shadow-2xl ring-1 ring-black/10 bg-white"
+        className="absolute left-[10%] bottom-[8%] w-[46%] h-[30%] rounded-2xl overflow-hidden shadow-2xl ring-1 ring-black/10 bg-card"
       >
         <Image src={images.laptop} alt="" fill sizes="(max-width: 1024px) 40vw, 360px" className="object-cover" />
       </motion.div>

@@ -222,7 +222,7 @@ export function ServiceSelector({
             <Package className="h-4 w-4 shrink-0 text-primary" />
             <span className="font-medium truncate">{selectedService.name}</span>
             {selectedService.isPopular && (
-              <Star className="h-3 w-3 shrink-0 fill-amber-400 text-amber-400" />
+              <Star className="h-3 w-3 shrink-0 fill-[var(--color-star)] text-[var(--color-star)]" />
             )}
           </span>
         ) : (
@@ -320,7 +320,7 @@ export function ServiceSelector({
                   <span className="font-medium truncate">{service.name}</span>
                 </span>
                 {service.isPopular && (
-                  <Star className="h-3 w-3 shrink-0 fill-amber-400 text-amber-400" />
+                  <Star className="h-3 w-3 shrink-0 fill-[var(--color-star)] text-[var(--color-star)]" />
                 )}
               </button>
             ))}

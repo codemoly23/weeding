@@ -24,9 +24,9 @@ class WidgetErrorBoundary extends React.Component<
   render() {
     if (this.state.hasError) {
       return (
-        <div className="p-4 bg-red-950/50 border border-red-500 rounded-lg text-sm">
-          <p className="text-red-400 font-medium">Widget Error: {this.props.widgetType}</p>
-          <p className="text-red-300/70 mt-1 text-xs font-mono break-all">
+        <div className="p-4 bg-[var(--color-error-bg)] border border-[var(--color-error-text)] rounded-lg text-sm">
+          <p className="text-[var(--color-error-text)] font-medium">Widget Error: {this.props.widgetType}</p>
+          <p className="text-[var(--color-error-text)]/70 mt-1 text-xs font-mono break-all">
             {this.state.error?.message}
           </p>
         </div>

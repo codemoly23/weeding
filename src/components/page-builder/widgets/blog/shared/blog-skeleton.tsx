@@ -24,7 +24,7 @@ function SkeletonPulse({ className }: { className?: string }) {
 
 function CardSkeleton() {
   return (
-    <div className="overflow-hidden rounded-xl border border-slate-200 bg-white dark:border-slate-700 dark:bg-slate-900">
+    <div className="overflow-hidden rounded-xl border border-border bg-card">
       {/* Image placeholder */}
       <SkeletonPulse className="aspect-video w-full rounded-none" />
 
@@ -59,7 +59,7 @@ function CardSkeleton() {
 
 function ListItemSkeleton() {
   return (
-    <div className="flex gap-4 rounded-xl border border-slate-200 bg-white p-4 dark:border-slate-700 dark:bg-slate-900">
+    <div className="flex gap-4 rounded-xl border border-border bg-card p-4">
       {/* Image placeholder on side */}
       <SkeletonPulse className="h-24 w-32 shrink-0 rounded-lg sm:h-28 sm:w-40" />
 

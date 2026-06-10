@@ -134,7 +134,7 @@ export function HeroContentWidgetSettingsPanel({
                     </div>
                   </div>
                 ) : (
-                  <div className="mt-2 text-sm text-amber-600">
+                  <div className="mt-2 text-sm text-[var(--color-warning-text)]">
                     Icon "{s.badge.icon}" not found. Try: Flag, Star, Zap, CheckCircle
                   </div>
                 );

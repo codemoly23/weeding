@@ -261,7 +261,7 @@ const BLOCK_BAR_HEIGHTS: Record<WebsiteBlockType, number> = {
 
 function TemplateThumbnail({ tpl }: { tpl: WebsiteTemplate }) {
   return (
-    <div className="rounded-lg overflow-hidden border border-gray-100" style={{ background: tpl.accentColor }}>
+    <div className="rounded-lg overflow-hidden border border-border" style={{ background: tpl.accentColor }}>
       <div className="h-8 w-full" style={{ background: `linear-gradient(135deg, ${tpl.primaryColor}, ${tpl.primaryColor}88)` }} />
       <div className="p-2 space-y-1">
         {tpl.blocks.slice(0, 6).map((b, i) => (
@@ -292,17 +292,17 @@ function BlockSettingsForm({
       );
       return (
         <div className="space-y-3">
-          <p className="text-xs font-medium text-gray-500 pb-1">Couple & Date</p>
+          <p className="text-xs font-medium text-muted-foreground pb-1">Couple & Date</p>
           <Field label="Bride's Name" value={s.brideName as string} onChange={v => set("brideName", v)} placeholder="e.g. Sarah" />
           <Field label="Groom's Name" value={s.groomName as string} onChange={v => set("groomName", v)} placeholder="e.g. John" />
           <Field label="Date (displayed as-is)" value={s.date as string} onChange={v => set("date", v)} placeholder="e.g. March 31, 2026" />
           <Field label="Tagline / Quote" value={s.quote as string} onChange={v => set("quote", v)} placeholder="e.g. We're Getting Married!" />
-          <p className="text-xs font-medium text-gray-500 pt-1">Background Image</p>
+          <p className="text-xs font-medium text-muted-foreground pt-1">Background Image</p>
           <div className="space-y-2">
             <Field label="Image URL" value={(s.backgroundImage as string) ?? ""} onChange={v => set("backgroundImage", v || null)} placeholder="https://..." />
             <div className="flex items-center gap-2">
-              <span className="text-xs text-gray-400">or</span>
-              <label className="cursor-pointer text-xs text-violet-600 border border-violet-300 rounded px-3 py-1 hover:bg-violet-50 transition">
+              <span className="text-xs text-muted-foreground">or</span>
+              <label className="cursor-pointer text-xs text-primary border border-primary/30 rounded px-3 py-1 hover:bg-primary/5 transition">
                 Upload from device
                 <input type="file" accept="image/*" className="hidden"
                   onChange={e => {
@@ -315,12 +315,12 @@ function BlockSettingsForm({
                 />
               </label>
               {(s.backgroundImage as string) && (
-                <button onClick={() => set("backgroundImage", null)} className="text-xs text-red-400 hover:text-red-600">Remove</button>
+                <button onClick={() => set("backgroundImage", null)} className="text-xs text-[var(--color-error-text)]/70 hover:text-[var(--color-error-text)]">Remove</button>
               )}
             </div>
           </div>
-          <p className="text-xs font-medium text-gray-500 pt-1">Navigation Links</p>
-          <p className="text-xs text-gray-400">Use anchor IDs like <code className="bg-gray-100 px-1 rounded">#hero</code>, <code className="bg-gray-100 px-1 rounded">#our-story</code>, <code className="bg-gray-100 px-1 rounded">#venue</code>, <code className="bg-gray-100 px-1 rounded">#rsvp</code>, etc.</p>
+          <p className="text-xs font-medium text-muted-foreground pt-1">Navigation Links</p>
+          <p className="text-xs text-muted-foreground">Use anchor IDs like <code className="bg-muted px-1 rounded">#hero</code>, <code className="bg-muted px-1 rounded">#our-story</code>, <code className="bg-muted px-1 rounded">#venue</code>, <code className="bg-muted px-1 rounded">#rsvp</code>, etc.</p>
           {navLinks.map((link, i) => (
             <div key={i} className="flex gap-2 items-center">
               <input value={link.label} onChange={e => { const n=[...navLinks]; n[i]={...n[i],label:e.target.value}; set("navLinks",n); }}
@@ -328,17 +328,17 @@ function BlockSettingsForm({
               <input value={link.href} onChange={e => { const n=[...navLinks]; n[i]={...n[i],href:e.target.value}; set("navLinks",n); }}
                 className="flex-1 border rounded px-2 py-1 text-sm" placeholder="#section or URL" />
               <button onClick={() => set("navLinks", navLinks.filter((_,j) => j!==i))}
-                className="text-gray-400 hover:text-red-500"><X className="h-3.5 w-3.5"/></button>
+                className="text-muted-foreground hover:text-[var(--color-error-text)]"><X className="h-3.5 w-3.5"/></button>
             </div>
           ))}
           <button onClick={() => set("navLinks", [...navLinks, { label: "", href: "" }])}
-            className="text-xs text-violet-600 flex items-center gap-1">
+            className="text-xs text-primary flex items-center gap-1">
             <Plus className="h-3 w-3"/> Add nav link
           </button>
-          <p className="text-xs font-medium text-gray-500 pt-1">Site Logo (optional)</p>
+          <p className="text-xs font-medium text-muted-foreground pt-1">Site Logo (optional)</p>
           <div className="space-y-2">
             <Field label="Logo URL" value={(s.logoUrl as string) ?? ""} onChange={v => set("logoUrl", v || null)} placeholder="https://..." />
-            <label className="cursor-pointer text-xs text-violet-600 border border-violet-300 rounded px-3 py-1 hover:bg-violet-50 transition">
+            <label className="cursor-pointer text-xs text-primary border border-primary/30 rounded px-3 py-1 hover:bg-primary/5 transition">
               Upload logo
               <input type="file" accept="image/*" className="hidden"
                 onChange={e => {
@@ -351,7 +351,7 @@ function BlockSettingsForm({
               />
             </label>
             {(s.logoUrl as string) && (
-              <button onClick={() => set("logoUrl", null)} className="text-xs text-red-400 hover:text-red-600">Remove logo</button>
+              <button onClick={() => set("logoUrl", null)} className="text-xs text-[var(--color-error-text)]/70 hover:text-[var(--color-error-text)]">Remove logo</button>
             )}
           </div>
         </div>
@@ -377,7 +377,7 @@ function BlockSettingsForm({
       return (
         <div className="space-y-3">
           <Field label="Section Title" value={s.title as string} onChange={v => set("title", v)} />
-          <p className="text-xs font-medium text-gray-500 pt-1">Ceremony</p>
+          <p className="text-xs font-medium text-muted-foreground pt-1">Ceremony</p>
           <Field label="Venue Name" value={s.ceremonyName as string} onChange={v => set("ceremonyName", v)} />
           <Field label="Address" value={s.ceremonyAddress as string} onChange={v => set("ceremonyAddress", v)} />
           <Field label="Time" value={s.ceremonyTime as string} onChange={v => set("ceremonyTime", v)} placeholder="e.g. 4:00 PM" />
@@ -387,7 +387,7 @@ function BlockSettingsForm({
             onChange={v => set("ceremonyMapQuery", v || null)}
             placeholder="e.g. Stockholm City Hall, Stockholm"
           />
-          <p className="text-xs font-medium text-gray-500 pt-1">Reception</p>
+          <p className="text-xs font-medium text-muted-foreground pt-1">Reception</p>
           <Field label="Venue Name" value={s.receptionName as string} onChange={v => set("receptionName", v)} />
           <Field label="Address" value={s.receptionAddress as string} onChange={v => set("receptionAddress", v)} />
           <Field label="Time" value={s.receptionTime as string} onChange={v => set("receptionTime", v)} placeholder="e.g. 7:00 PM" />
@@ -404,7 +404,7 @@ function BlockSettingsForm({
       return (
         <div className="space-y-3">
           <Field label="Section Title" value={s.title as string} onChange={v => set("title", v)} />
-          <p className="text-xs font-medium text-gray-500">Schedule Items</p>
+          <p className="text-xs font-medium text-muted-foreground">Schedule Items</p>
           {items.map((item, i) => (
             <div key={i} className="flex gap-2 items-center">
               <input value={item.time} onChange={e => { const n=[...items]; n[i]={...n[i],time:e.target.value}; set("items",n); }}
@@ -412,11 +412,11 @@ function BlockSettingsForm({
               <input value={item.title} onChange={e => { const n=[...items]; n[i]={...n[i],title:e.target.value}; set("items",n); }}
                 className="flex-1 border rounded px-2 py-1 text-sm" placeholder="Event name" />
               <button onClick={() => set("items", items.filter((_,j) => j!==i))}
-                className="text-gray-400 hover:text-red-500"><X className="h-3.5 w-3.5"/></button>
+                className="text-muted-foreground hover:text-[var(--color-error-text)]"><X className="h-3.5 w-3.5"/></button>
             </div>
           ))}
           <button onClick={() => set("items", [...items, { time: "", title: "" }])}
-            className="text-xs text-violet-600 flex items-center gap-1">
+            className="text-xs text-primary flex items-center gap-1">
             <Plus className="h-3 w-3"/> Add item
           </button>
         </div>
@@ -427,17 +427,17 @@ function BlockSettingsForm({
       return (
         <div className="space-y-3">
           <Field label="Section Title" value={s.title as string} onChange={v => set("title", v)} />
-          <p className="text-xs font-medium text-gray-500">Image URLs</p>
+          <p className="text-xs font-medium text-muted-foreground">Image URLs</p>
           {images.map((url, i) => (
             <div key={i} className="flex gap-2 items-center">
               <input value={url} onChange={e => { const n=[...images]; n[i]=e.target.value; set("images",n); }}
                 className="flex-1 border rounded px-2 py-1 text-sm" placeholder="https://..." />
               <button onClick={() => set("images", images.filter((_,j) => j!==i))}
-                className="text-gray-400 hover:text-red-500"><X className="h-3.5 w-3.5"/></button>
+                className="text-muted-foreground hover:text-[var(--color-error-text)]"><X className="h-3.5 w-3.5"/></button>
             </div>
           ))}
           <button onClick={() => set("images", [...images, ""])}
-            className="text-xs text-violet-600 flex items-center gap-1">
+            className="text-xs text-primary flex items-center gap-1">
             <Plus className="h-3 w-3"/> Add image URL
           </button>
         </div>
@@ -456,7 +456,7 @@ function BlockSettingsForm({
       return (
         <div className="space-y-3">
           <Field label="Section Title" value={s.title as string} onChange={v => set("title", v)} />
-          <p className="text-xs font-medium text-gray-500">Registry Links</p>
+          <p className="text-xs font-medium text-muted-foreground">Registry Links</p>
           {items.map((item, i) => (
             <div key={i} className="flex gap-2 items-center">
               <input value={item.name} onChange={e => { const n=[...items]; n[i]={...n[i],name:e.target.value}; set("items",n); }}
@@ -464,11 +464,11 @@ function BlockSettingsForm({
               <input value={item.url} onChange={e => { const n=[...items]; n[i]={...n[i],url:e.target.value}; set("items",n); }}
                 className="flex-1 border rounded px-2 py-1 text-sm" placeholder="https://..." />
               <button onClick={() => set("items", items.filter((_,j) => j!==i))}
-                className="text-gray-400 hover:text-red-500"><X className="h-3.5 w-3.5"/></button>
+                className="text-muted-foreground hover:text-[var(--color-error-text)]"><X className="h-3.5 w-3.5"/></button>
             </div>
           ))}
           <button onClick={() => set("items", [...items, { name: "", url: "" }])}
-            className="text-xs text-violet-600 flex items-center gap-1">
+            className="text-xs text-primary flex items-center gap-1">
             <Plus className="h-3 w-3"/> Add registry
           </button>
         </div>
@@ -479,7 +479,7 @@ function BlockSettingsForm({
       return (
         <div className="space-y-3">
           <Field label="Section Title" value={s.title as string} onChange={v => set("title", v)} />
-          <p className="text-xs font-medium text-gray-500">Wedding Party Members</p>
+          <p className="text-xs font-medium text-muted-foreground">Wedding Party Members</p>
           {people.map((p, i) => (
             <div key={i} className="flex gap-2 items-center">
               <input value={p.name} onChange={e => { const n=[...people]; n[i]={...n[i],name:e.target.value}; set("people",n); }}
@@ -487,11 +487,11 @@ function BlockSettingsForm({
               <input value={p.role} onChange={e => { const n=[...people]; n[i]={...n[i],role:e.target.value}; set("people",n); }}
                 className="w-36 border rounded px-2 py-1 text-sm" placeholder="Role" />
               <button onClick={() => set("people", people.filter((_,j) => j!==i))}
-                className="text-gray-400 hover:text-red-500"><X className="h-3.5 w-3.5"/></button>
+                className="text-muted-foreground hover:text-[var(--color-error-text)]"><X className="h-3.5 w-3.5"/></button>
             </div>
           ))}
           <button onClick={() => set("people", [...people, { name: "", role: "" }])}
-            className="text-xs text-violet-600 flex items-center gap-1">
+            className="text-xs text-primary flex items-center gap-1">
             <Plus className="h-3 w-3"/> Add person
           </button>
         </div>
@@ -512,14 +512,14 @@ function BlockSettingsForm({
         </div>
       );
     default:
-      return <p className="text-sm text-gray-400">No settings for this block.</p>;
+      return <p className="text-sm text-muted-foreground">No settings for this block.</p>;
   }
 }
 
 function Field({ label, value, onChange, placeholder }: { label: string; value: string; onChange: (v: string) => void; placeholder?: string }) {
   return (
     <div>
-      <label className="block text-xs text-gray-500 mb-1">{label}</label>
+      <label className="block text-xs text-muted-foreground mb-1">{label}</label>
       <Input value={value ?? ""} onChange={e => onChange(e.target.value)} placeholder={placeholder} className="h-8 text-sm" />
     </div>
   );
@@ -528,9 +528,9 @@ function Field({ label, value, onChange, placeholder }: { label: string; value: 
 function AreaField({ label, value, onChange, rows = 3 }: { label: string; value: string; onChange: (v: string) => void; rows?: number }) {
   return (
     <div>
-      <label className="block text-xs text-gray-500 mb-1">{label}</label>
+      <label className="block text-xs text-muted-foreground mb-1">{label}</label>
       <textarea value={value ?? ""} onChange={e => onChange(e.target.value)} rows={rows}
-        className="w-full border border-input rounded-md px-3 py-1.5 text-sm resize-none focus:outline-none focus:ring-1 focus:ring-violet-400" />
+        className="w-full border border-input rounded-md px-3 py-1.5 text-sm resize-none focus:outline-none focus:ring-1 focus:ring-primary/40" />
     </div>
   );
 }
@@ -603,7 +603,7 @@ function WebsitePreview({
                 </div>
               )}
               {(s.quote as string) && (
-                <p className={`text-base mb-4 ${bgImg ? "text-white/80" : "text-gray-500"}`}>{s.quote as string}</p>
+                <p className={`text-base mb-4 ${bgImg ? "text-white/80" : "text-muted-foreground"}`}>{s.quote as string}</p>
               )}
               <h1 className={`text-4xl sm:text-5xl font-bold leading-tight ${bgImg ? "text-white" : ""}`}
                 style={!bgImg ? { color: primaryHex } : undefined}>
@@ -624,7 +624,7 @@ function WebsitePreview({
               {(s.title as string) || "Our Wedding"}
             </h1>
             {(s.subtitle as string) && (
-              <p className="text-lg text-gray-600 mb-6">{s.subtitle as string}</p>
+              <p className="text-lg text-foreground/80 mb-6">{s.subtitle as string}</p>
             )}
             {(s.date as string) && (
               <p className="text-base font-medium" style={{ color: primaryHex }}>
@@ -632,7 +632,7 @@ function WebsitePreview({
               </p>
             )}
             {(s.location as string) && (
-              <p className="text-sm text-gray-500 mt-2">📍 {s.location as string}</p>
+              <p className="text-sm text-muted-foreground mt-2">📍 {s.location as string}</p>
             )}
           </div>
         );
@@ -643,7 +643,7 @@ function WebsitePreview({
               {(s.title as string) || "Our Story"}
             </h2>
             <div className="w-12 h-0.5 mx-auto mb-8" style={{ background: primaryHex }} />
-            <p className="text-gray-600 leading-relaxed whitespace-pre-line">{s.content as string}</p>
+            <p className="text-foreground/80 leading-relaxed whitespace-pre-line">{s.content as string}</p>
           </div>
         );
       case "venue":
@@ -655,25 +655,25 @@ function WebsitePreview({
               </h2>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-8">
                 {(s.ceremonyName as string) && (
-                  <div className="bg-white rounded-2xl p-6 shadow-sm">
-                    <p className="text-xs uppercase tracking-widest text-gray-400 mb-2">Ceremony</p>
+                  <div className="bg-card rounded-2xl p-6 shadow-sm">
+                    <p className="text-xs uppercase tracking-widest text-muted-foreground mb-2">Ceremony</p>
                     <p className="font-medium" style={{ color: primaryHex }}>{s.ceremonyName as string}</p>
-                    {(s.ceremonyAddress as string) && <p className="text-sm text-gray-500 mt-1">{s.ceremonyAddress as string}</p>}
+                    {(s.ceremonyAddress as string) && <p className="text-sm text-muted-foreground mt-1">{s.ceremonyAddress as string}</p>}
                     {(s.ceremonyTime as string) && <p className="text-sm font-medium mt-2">{s.ceremonyTime as string}</p>}
                   </div>
                 )}
                 {(s.receptionName as string) && (
-                  <div className="bg-white rounded-2xl p-6 shadow-sm">
-                    <p className="text-xs uppercase tracking-widest text-gray-400 mb-2">Reception</p>
+                  <div className="bg-card rounded-2xl p-6 shadow-sm">
+                    <p className="text-xs uppercase tracking-widest text-muted-foreground mb-2">Reception</p>
                     <p className="font-medium" style={{ color: primaryHex }}>{s.receptionName as string}</p>
-                    {(s.receptionAddress as string) && <p className="text-sm text-gray-500 mt-1">{s.receptionAddress as string}</p>}
+                    {(s.receptionAddress as string) && <p className="text-sm text-muted-foreground mt-1">{s.receptionAddress as string}</p>}
                     {(s.receptionTime as string) && <p className="text-sm font-medium mt-2">{s.receptionTime as string}</p>}
                   </div>
                 )}
               </div>
               {(s.ceremonyMapQuery as string) && (
                 <div className="mt-6">
-                  <p className="text-sm text-gray-500 mb-2 text-left">Ceremony Location</p>
+                  <p className="text-sm text-muted-foreground mb-2 text-left">Ceremony Location</p>
                   <iframe
                     src={`https://maps.google.com/maps?q=${encodeURIComponent(s.ceremonyMapQuery as string)}&output=embed`}
                     className="w-full rounded-xl border-0" height="220" loading="lazy"
@@ -683,7 +683,7 @@ function WebsitePreview({
               )}
               {(s.receptionMapQuery as string) && (
                 <div className="mt-6">
-                  <p className="text-sm text-gray-500 mb-2 text-left">Reception Location</p>
+                  <p className="text-sm text-muted-foreground mb-2 text-left">Reception Location</p>
                   <iframe
                     src={`https://maps.google.com/maps?q=${encodeURIComponent(s.receptionMapQuery as string)}&output=embed`}
                     className="w-full rounded-xl border-0" height="220" loading="lazy"
@@ -709,7 +709,7 @@ function WebsitePreview({
                     {item.time}
                   </span>
                   <div className="h-3 w-3 rounded-full mt-0.5 flex-shrink-0 z-10" style={{ background: primaryHex }} />
-                  <span className="text-gray-700">{item.title}</span>
+                  <span className="text-foreground/80">{item.title}</span>
                 </div>
               ))}
             </div>
@@ -723,7 +723,7 @@ function WebsitePreview({
             <h2 className="text-3xl font-light mb-4" style={{ color: primaryHex }}>
               {(s.title as string) || "Our Photos"}
             </h2>
-            <p className="text-sm text-gray-400">Add image URLs in the settings to show your gallery</p>
+            <p className="text-sm text-muted-foreground">Add image URLs in the settings to show your gallery</p>
           </div>
         );
         return (
@@ -746,9 +746,9 @@ function WebsitePreview({
             <h2 className="text-3xl font-light mb-4" style={{ color: primaryHex }}>
               {(s.title as string) || "RSVP"}
             </h2>
-            <p className="text-gray-600 mb-2">{s.message as string}</p>
+            <p className="text-foreground/80 mb-2">{s.message as string}</p>
             {(s.deadline as string) && (
-              <p className="text-sm text-gray-400 mb-6">RSVP by {s.deadline as string}</p>
+              <p className="text-sm text-muted-foreground mb-6">RSVP by {s.deadline as string}</p>
             )}
             <button
               style={{ background: primaryHex }}
@@ -792,11 +792,11 @@ function WebsitePreview({
                     👤
                   </div>
                   <p className="font-medium text-sm">{p.name}</p>
-                  <p className="text-xs text-gray-500">{p.role}</p>
+                  <p className="text-xs text-muted-foreground">{p.role}</p>
                 </div>
               ))}
               {people.length === 0 && (
-                <p className="text-sm text-gray-400">Add wedding party members in the settings</p>
+                <p className="text-sm text-muted-foreground">Add wedding party members in the settings</p>
               )}
             </div>
           </div>
@@ -806,14 +806,14 @@ function WebsitePreview({
         const days = daysLeft(s.targetDate as string);
         return (
           <div id="countdown" className="py-16 px-6 text-center">
-            <h2 className="text-2xl font-light mb-6 text-gray-600">{s.title as string}</h2>
+            <h2 className="text-2xl font-light mb-6 text-foreground/80">{s.title as string}</h2>
             {days !== null ? (
               <div className="inline-flex flex-col items-center">
                 <span className="text-7xl font-light" style={{ color: primaryHex }}>{days}</span>
-                <span className="text-sm uppercase tracking-widest text-gray-400 mt-2">Days to go</span>
+                <span className="text-sm uppercase tracking-widest text-muted-foreground mt-2">Days to go</span>
               </div>
             ) : (
-              <p className="text-gray-400 text-sm">Set your wedding date to see the countdown</p>
+              <p className="text-muted-foreground text-sm">Set your wedding date to see the countdown</p>
             )}
           </div>
         );
@@ -824,10 +824,10 @@ function WebsitePreview({
             <h2 className="text-3xl font-light mb-4" style={{ color: primaryHex }}>
               {(s.title as string) || "Guestbook"}
             </h2>
-            <p className="text-gray-600 mb-6">{s.message as string}</p>
-            <div className="bg-white rounded-2xl p-6 max-w-lg mx-auto shadow-sm">
+            <p className="text-foreground/80 mb-6">{s.message as string}</p>
+            <div className="bg-card rounded-2xl p-6 max-w-lg mx-auto shadow-sm">
               <textarea rows={3} placeholder="Leave a message for the couple..."
-                className="w-full text-sm border-none outline-none resize-none text-gray-600" readOnly />
+                className="w-full text-sm border-none outline-none resize-none text-foreground/80" readOnly />
               <div className="flex justify-end mt-3">
                 <button style={{ background: primaryHex }}
                   className="px-5 py-2 rounded-full text-white text-sm">Send</button>
@@ -841,7 +841,7 @@ function WebsitePreview({
   }
 
   return (
-    <div style={{ fontFamily: font }} className="min-h-full bg-white text-gray-800">
+    <div style={{ fontFamily: font }} className="min-h-full bg-background text-foreground">
       {site.blocks
         .filter(b => b.visible)
         .sort((a, b) => a.order - b.order)
@@ -856,11 +856,11 @@ function WebsitePreview({
                 {content}
                 <div className={`absolute inset-0 z-10 pointer-events-none ring-2 ring-inset transition-all duration-150 ${
                   isActive
-                    ? "ring-violet-500 bg-violet-500/5"
-                    : "ring-transparent group-hover:ring-violet-300/70"
+                    ? "ring-primary bg-primary/5"
+                    : "ring-transparent group-hover:ring-primary/30"
                 }`} />
                 {isActive && (
-                  <div className="absolute top-2 right-2 z-20 bg-violet-600 text-white text-xs px-2 py-0.5 rounded-full pointer-events-none">
+                  <div className="absolute top-2 right-2 z-20 bg-primary text-white text-xs px-2 py-0.5 rounded-full pointer-events-none">
                     {BLOCK_META[block.type]?.label}
                   </div>
                 )}
@@ -869,7 +869,7 @@ function WebsitePreview({
           }
           return <div key={block.id}>{content}</div>;
         })}
-      <div className="py-8 text-center text-xs text-gray-400" style={{ borderTop: `1px solid ${accentHex}` }}>
+      <div className="py-8 text-center text-xs text-muted-foreground" style={{ borderTop: `1px solid ${accentHex}` }}>
         Made with ♥ using Ceremoney
       </div>
     </div>
@@ -1119,7 +1119,7 @@ export default function WebsitePage() {
   if (loading) {
     return (
       <div className="flex items-center justify-center py-20">
-        <div className="h-8 w-8 animate-spin rounded-full border-4 border-violet-200 border-t-violet-600" />
+        <div className="h-8 w-8 animate-spin rounded-full border-4 border-primary/20 border-t-primary" />
       </div>
     );
   }
@@ -1127,8 +1127,8 @@ export default function WebsitePage() {
   if (loadError) {
     return (
       <div className="flex flex-col items-center justify-center py-20 gap-3 text-center">
-        <p className="text-red-600 font-medium">Failed to load website data.</p>
-        <p className="text-sm text-gray-500">Please refresh the page. If the problem persists, check your connection.</p>
+        <p className="text-[var(--color-error-text)] font-medium">Failed to load website data.</p>
+        <p className="text-sm text-muted-foreground">Please refresh the page. If the problem persists, check your connection.</p>
       </div>
     );
   }
@@ -1143,7 +1143,7 @@ export default function WebsitePage() {
 
       {/* ── Left panel: editor ─────────────────────────────────────────── */}
       <div ref={leftPanelRef}
-        className="w-full lg:w-[440px] xl:w-[480px] flex-shrink-0 overflow-y-auto border-r border-gray-100 bg-white">
+        className="w-full lg:w-[440px] xl:w-[480px] flex-shrink-0 overflow-y-auto border-r border-border bg-card">
         <div className="p-4 lg:p-6 space-y-5 pb-12">
 
           {/* Header */}
@@ -1152,19 +1152,19 @@ export default function WebsitePage() {
               <h1 className="text-xl font-bold">Wedding Website</h1>
               <div className="flex items-center gap-2 mt-1 flex-wrap">
                 <span className={`text-xs px-2 py-0.5 rounded-full font-medium ${
-                  site.published ? "bg-green-100 text-green-700" : "bg-gray-100 text-gray-500"
+                  site.published ? "bg-[var(--color-success-bg)] text-[var(--color-success-text)]" : "bg-muted text-muted-foreground"
                 }`}>
                   {site.published ? "Published" : "Draft"}
                 </span>
                 {!local && site.published && (
                   <a href={`/wedding/${site.slug}`} target="_blank" rel="noopener noreferrer"
-                    className="text-xs text-violet-600 flex items-center gap-1 hover:underline">
+                    className="text-xs text-primary flex items-center gap-1 hover:underline">
                     <ExternalLink className="h-3 w-3"/> /wedding/{site.slug}
                   </a>
                 )}
-                {saving    && <span className="text-xs text-gray-400">Saving…</span>}
-                {saved     && <span className="text-xs text-green-500 flex items-center gap-1"><Check className="h-3 w-3"/>Saved</span>}
-                {saveError && <span className="text-xs text-red-500">Save failed</span>}
+                {saving    && <span className="text-xs text-muted-foreground">Saving…</span>}
+                {saved     && <span className="text-xs text-[var(--color-success-text)] flex items-center gap-1"><Check className="h-3 w-3"/>Saved</span>}
+                {saveError && <span className="text-xs text-[var(--color-error-text)]">Save failed</span>}
               </div>
             </div>
             <div className="flex items-center gap-2 flex-wrap">
@@ -1177,7 +1177,7 @@ export default function WebsitePage() {
               </Button>
               <Button
                 size="sm"
-                className={`gap-1.5 ${site.published ? "bg-gray-700 hover:bg-gray-800" : "bg-violet-600 hover:bg-violet-700"} text-white`}
+                className={`gap-1.5 ${site.published ? "bg-foreground/80 hover:bg-foreground" : "bg-primary hover:bg-primary/90"} text-white`}
                 onClick={() => update({ published: !site.published })}
               >
                 <Globe className="h-3.5 w-3.5"/>
@@ -1187,33 +1187,33 @@ export default function WebsitePage() {
           </div>
 
           {/* Theme & Settings */}
-          <div className="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
+          <div className="bg-card rounded-2xl border border-border shadow-sm overflow-hidden">
             <ThemeSection site={site} onUpdate={update} />
           </div>
 
           {/* Blocks */}
-          <div className="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
-            <div className="px-5 py-4 border-b border-gray-100 flex items-center justify-between">
-              <h2 className="font-semibold text-gray-800">Page Blocks</h2>
-              <span className="text-xs text-gray-400">{sortedBlocks.length} blocks</span>
+          <div className="bg-card rounded-2xl border border-border shadow-sm overflow-hidden">
+            <div className="px-5 py-4 border-b border-border flex items-center justify-between">
+              <h2 className="font-semibold text-foreground">Page Blocks</h2>
+              <span className="text-xs text-muted-foreground">{sortedBlocks.length} blocks</span>
             </div>
 
             {sortedBlocks.length === 0 && (
-              <p className="px-5 py-8 text-center text-sm text-gray-400">
+              <p className="px-5 py-8 text-center text-sm text-muted-foreground">
                 No blocks yet. Choose a template or add blocks below.
               </p>
             )}
 
-            <div className="divide-y divide-gray-50">
+            <div className="divide-y divide-border/30">
               {sortedBlocks.map((block, idx) => {
                 const meta = BLOCK_META[block.type];
                 const isExpanded = expandedBlock === block.id;
                 return (
                   <div key={block.id} ref={el => { if (el) blockRefs.current.set(block.id, el); else blockRefs.current.delete(block.id); }}>
                     {/* Block row */}
-                    <div className={`flex items-center gap-3 px-5 py-3 hover:bg-gray-50/60 transition-colors ${!block.visible ? "opacity-50" : ""} ${isExpanded ? "bg-violet-50/40" : ""}`}>
+                    <div className={`flex items-center gap-3 px-5 py-3 hover:bg-muted/30 transition-colors ${!block.visible ? "opacity-50" : ""} ${isExpanded ? "bg-primary/5" : ""}`}>
                       <button onClick={() => toggleBlockVisibility(block.id)}
-                        className="text-gray-400 hover:text-violet-600 transition-colors flex-shrink-0" title={block.visible ? "Hide block" : "Show block"}>
+                        className="text-muted-foreground hover:text-primary transition-colors flex-shrink-0" title={block.visible ? "Hide block" : "Show block"}>
                         {block.visible ? <Eye className="h-4 w-4"/> : <EyeOff className="h-4 w-4"/>}
                       </button>
 
@@ -1221,30 +1221,30 @@ export default function WebsitePage() {
                         onClick={() => setExpandedBlock(isExpanded ? null : block.id)}>
                         <span className="text-lg flex-shrink-0">{meta.icon}</span>
                         <div className="min-w-0">
-                          <p className="text-sm font-medium text-gray-800 truncate">{meta.label}</p>
-                          <p className="text-xs text-gray-400 truncate">{meta.description}</p>
+                          <p className="text-sm font-medium text-foreground truncate">{meta.label}</p>
+                          <p className="text-xs text-muted-foreground truncate">{meta.description}</p>
                         </div>
                       </button>
 
                       <div className="flex items-center gap-1 flex-shrink-0">
                         <button onClick={() => moveBlock(block.id, "up")} disabled={idx === 0}
-                          className="p-1 text-gray-400 hover:text-gray-600 disabled:opacity-20">
+                          className="p-1 text-muted-foreground hover:text-foreground/80 disabled:opacity-20">
                           <ArrowUp className="h-3.5 w-3.5"/>
                         </button>
                         <button onClick={() => moveBlock(block.id, "down")} disabled={idx === sortedBlocks.length - 1}
-                          className="p-1 text-gray-400 hover:text-gray-600 disabled:opacity-20">
+                          className="p-1 text-muted-foreground hover:text-foreground/80 disabled:opacity-20">
                           <ArrowDown className="h-3.5 w-3.5"/>
                         </button>
                         <button onClick={() => setExpandedBlock(isExpanded ? null : block.id)}
-                          className={`p-1 transition-colors ${isExpanded ? "text-violet-600" : "text-gray-400 hover:text-gray-600"}`}>
+                          className={`p-1 transition-colors ${isExpanded ? "text-primary" : "text-muted-foreground hover:text-foreground/80"}`}>
                           <Settings2 className="h-3.5 w-3.5"/>
                         </button>
                         <button onClick={() => deleteBlock(block.id)}
-                          className="p-1 text-gray-400 hover:text-red-500">
+                          className="p-1 text-muted-foreground hover:text-[var(--color-error-text)]">
                           <Trash2 className="h-3.5 w-3.5"/>
                         </button>
                         <button onClick={() => setExpandedBlock(isExpanded ? null : block.id)}
-                          className="p-1 text-gray-400">
+                          className="p-1 text-muted-foreground">
                           {isExpanded ? <ChevronDown className="h-3.5 w-3.5"/> : <ChevronRight className="h-3.5 w-3.5"/>}
                         </button>
                       </div>
@@ -1252,7 +1252,7 @@ export default function WebsitePage() {
 
                     {/* Expanded settings */}
                     {isExpanded && (
-                      <div className="px-5 pb-5 pt-2 bg-gray-50/50 border-t border-gray-100">
+                      <div className="px-5 pb-5 pt-2 bg-muted/30 border-t border-border">
                         <BlockSettingsForm block={block} onChange={settings => updateBlock(block.id, settings)} />
                       </div>
                     )}
@@ -1262,12 +1262,12 @@ export default function WebsitePage() {
             </div>
 
             {/* Add block */}
-            <div className="px-5 py-4 border-t border-gray-100">
+            <div className="px-5 py-4 border-t border-border">
               {showAddBlock ? (
                 <div>
                   <div className="flex items-center justify-between mb-3">
-                    <p className="text-sm font-medium text-gray-700">Choose a block to add</p>
-                    <button onClick={() => setShowAddBlock(false)} className="text-gray-400 hover:text-gray-600">
+                    <p className="text-sm font-medium text-foreground/80">Choose a block to add</p>
+                    <button onClick={() => setShowAddBlock(false)} className="text-muted-foreground hover:text-foreground/80">
                       <X className="h-4 w-4"/>
                     </button>
                   </div>
@@ -1276,10 +1276,10 @@ export default function WebsitePage() {
                       const meta = BLOCK_META[type];
                       return (
                         <button key={type} onClick={() => addBlock(type)}
-                          className="flex items-center gap-2 p-3 border border-gray-200 rounded-xl hover:border-violet-400 hover:bg-violet-50 transition-colors text-left">
+                          className="flex items-center gap-2 p-3 border border-border rounded-xl hover:border-primary/40 hover:bg-primary/5 transition-colors text-left">
                           <span className="text-lg">{meta.icon}</span>
                           <div>
-                            <p className="text-xs font-medium text-gray-700">{meta.label}</p>
+                            <p className="text-xs font-medium text-foreground/80">{meta.label}</p>
                           </div>
                         </button>
                       );
@@ -1288,7 +1288,7 @@ export default function WebsitePage() {
                 </div>
               ) : (
                 <button onClick={() => setShowAddBlock(true)}
-                  className="w-full flex items-center justify-center gap-2 py-2 border-2 border-dashed border-gray-200 rounded-xl text-sm text-gray-500 hover:border-violet-400 hover:text-violet-600 transition-colors">
+                  className="w-full flex items-center justify-center gap-2 py-2 border-2 border-dashed border-border rounded-xl text-sm text-muted-foreground hover:border-primary/40 hover:text-primary transition-colors">
                   <Plus className="h-4 w-4"/> Add Block
                 </button>
               )}
@@ -1299,18 +1299,18 @@ export default function WebsitePage() {
       </div>
 
       {/* ── Right panel: live preview ───────────────────────────────────── */}
-      <div className="hidden lg:flex flex-col flex-1 overflow-hidden bg-gray-50">
+      <div className="hidden lg:flex flex-col flex-1 overflow-hidden bg-muted/30">
         {/* Preview toolbar */}
-        <div className="flex-shrink-0 bg-white border-b border-gray-100 px-4 py-2 flex items-center gap-3">
+        <div className="flex-shrink-0 bg-card border-b border-border px-4 py-2 flex items-center gap-3">
           <div className="flex items-center gap-1.5">
-            <div className="h-3 w-3 rounded-full bg-red-400" />
-            <div className="h-3 w-3 rounded-full bg-yellow-400" />
-            <div className="h-3 w-3 rounded-full bg-green-400" />
+            <div className="h-3 w-3 rounded-full bg-[var(--color-error-text)]/60" />
+            <div className="h-3 w-3 rounded-full bg-[var(--color-warning-text)]/60" />
+            <div className="h-3 w-3 rounded-full bg-[var(--color-success-text)]/60" />
           </div>
-          <div className="flex-1 bg-gray-100 rounded-md px-3 py-1 text-xs text-gray-400 font-mono truncate">
+          <div className="flex-1 bg-muted rounded-md px-3 py-1 text-xs text-muted-foreground font-mono truncate">
             {local ? "preview" : site.published ? `/wedding/${site.slug}` : "preview (draft)"}
           </div>
-          <span className="text-xs text-gray-400">Click a section to edit</span>
+          <span className="text-xs text-muted-foreground">Click a section to edit</span>
         </div>
         {/* Preview content */}
         <div className="flex-1 overflow-y-auto">
@@ -1325,13 +1325,13 @@ export default function WebsitePage() {
       {/* ── Template picker modal ───────────────────────────────────────── */}
       {showTemplates && (
         <div className="fixed inset-0 z-50 bg-black/60 flex items-center justify-center p-4">
-          <div className="bg-white rounded-2xl shadow-2xl w-full max-w-3xl max-h-[90vh] flex flex-col">
-            <div className="flex items-center justify-between px-6 py-4 border-b border-gray-100">
+          <div className="bg-card rounded-2xl shadow-2xl w-full max-w-3xl max-h-[90vh] flex flex-col">
+            <div className="flex items-center justify-between px-6 py-4 border-b border-border">
               <div>
                 <h2 className="text-lg font-bold">Choose a Template</h2>
-                <p className="text-sm text-gray-500 mt-0.5">Applying a template replaces your current blocks and theme</p>
+                <p className="text-sm text-muted-foreground mt-0.5">Applying a template replaces your current blocks and theme</p>
               </div>
-              <button onClick={() => setShowTemplates(false)} className="p-2 rounded-lg hover:bg-gray-100 text-gray-500">
+              <button onClick={() => setShowTemplates(false)} className="p-2 rounded-lg hover:bg-muted text-muted-foreground">
                 <X className="h-5 w-5"/>
               </button>
             </div>
@@ -1339,14 +1339,14 @@ export default function WebsitePage() {
               <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
                 {WEBSITE_TEMPLATES.map(tpl => (
                   <button key={tpl.id} onClick={() => applyTemplate(tpl)}
-                    className="group text-left border-2 border-gray-100 rounded-2xl overflow-hidden hover:border-violet-400 transition-all hover:shadow-md">
+                    className="group text-left border-2 border-border rounded-2xl overflow-hidden hover:border-primary/40 transition-all hover:shadow-md">
                     <TemplateThumbnail tpl={tpl} />
                     <div className="p-3">
-                      <p className="text-sm font-semibold text-gray-800 flex items-center gap-1.5">
+                      <p className="text-sm font-semibold text-foreground flex items-center gap-1.5">
                         <span>{tpl.emoji}</span> {tpl.name}
                       </p>
-                      <p className="text-xs text-gray-500 mt-0.5 leading-snug">{tpl.description}</p>
-                      <p className="text-xs text-gray-400 mt-1.5">
+                      <p className="text-xs text-muted-foreground mt-0.5 leading-snug">{tpl.description}</p>
+                      <p className="text-xs text-muted-foreground mt-1.5">
                         {tpl.blocks.length} blocks · {tpl.fontFamily}
                       </p>
                     </div>
@@ -1379,17 +1379,17 @@ function ThemeSection({
 
   return (
     <>
-      <button className="w-full flex items-center gap-2 px-5 py-4 text-left hover:bg-gray-50/60 transition-colors"
+      <button className="w-full flex items-center gap-2 px-5 py-4 text-left hover:bg-muted/30 transition-colors"
         onClick={() => setOpen(o => !o)}>
-        {open ? <ChevronDown className="h-4 w-4 text-gray-400"/> : <ChevronRight className="h-4 w-4 text-gray-400"/>}
-        <span className="font-semibold text-gray-800">Theme & Settings</span>
+        {open ? <ChevronDown className="h-4 w-4 text-muted-foreground"/> : <ChevronRight className="h-4 w-4 text-muted-foreground"/>}
+        <span className="font-semibold text-foreground">Theme & Settings</span>
       </button>
 
       {open && (
-        <div className="px-5 pb-5 space-y-5 border-t border-gray-100">
+        <div className="px-5 pb-5 space-y-5 border-t border-border">
           {/* Theme selector */}
           <div>
-            <p className="text-xs font-medium text-gray-500 mb-2 mt-4">Theme</p>
+            <p className="text-xs font-medium text-muted-foreground mb-2 mt-4">Theme</p>
             <div className="grid grid-cols-2 gap-2">
               {(Object.keys(THEMES) as (keyof typeof THEMES)[]).map(key => {
                 const th = THEMES[key];
@@ -1397,10 +1397,10 @@ function ThemeSection({
                 return (
                   <button key={key} onClick={() => onUpdate({ theme: key, primaryColor: th.primary, accentColor: th.accent, fontFamily: th.font })}
                     className={`flex flex-col items-center gap-1.5 p-3 rounded-xl border-2 transition-all text-sm ${
-                      active ? "border-violet-500 bg-violet-50" : "border-gray-100 hover:border-gray-200"
+                      active ? "border-primary bg-primary/5" : "border-border hover:border-border"
                     }`}>
                     <div className="h-8 w-full rounded-lg" style={{ background: `linear-gradient(135deg, ${th.primary}, ${th.accent})` }} />
-                    <span className={`text-xs font-medium ${active ? "text-violet-700" : "text-gray-600"}`}>
+                    <span className={`text-xs font-medium ${active ? "text-primary" : "text-foreground/80"}`}>
                       {th.emoji} {th.label}
                     </span>
                   </button>
@@ -1412,19 +1412,19 @@ function ThemeSection({
           {/* Color customization */}
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <p className="text-xs font-medium text-gray-500 mb-2">Primary Color</p>
+              <p className="text-xs font-medium text-muted-foreground mb-2">Primary Color</p>
               <div className="flex items-center gap-2">
                 <input type="color" value={site.primaryColor} onChange={e => onUpdate({ primaryColor: e.target.value })}
-                  className="h-9 w-12 cursor-pointer rounded border border-gray-200 p-0.5" />
+                  className="h-9 w-12 cursor-pointer rounded border border-border p-0.5" />
                 <Input value={site.primaryColor} onChange={e => onUpdate({ primaryColor: e.target.value })}
                   className="h-9 text-sm font-mono" maxLength={7} />
               </div>
             </div>
             <div>
-              <p className="text-xs font-medium text-gray-500 mb-2">Accent Color</p>
+              <p className="text-xs font-medium text-muted-foreground mb-2">Accent Color</p>
               <div className="flex items-center gap-2">
                 <input type="color" value={site.accentColor} onChange={e => onUpdate({ accentColor: e.target.value })}
-                  className="h-9 w-12 cursor-pointer rounded border border-gray-200 p-0.5" />
+                  className="h-9 w-12 cursor-pointer rounded border border-border p-0.5" />
                 <Input value={site.accentColor} onChange={e => onUpdate({ accentColor: e.target.value })}
                   className="h-9 text-sm font-mono" maxLength={7} />
               </div>
@@ -1433,9 +1433,9 @@ function ThemeSection({
 
           {/* Font selector */}
           <div>
-            <p className="text-xs font-medium text-gray-500 mb-2">Font Family</p>
+            <p className="text-xs font-medium text-muted-foreground mb-2">Font Family</p>
             <select value={site.fontFamily} onChange={e => onUpdate({ fontFamily: e.target.value })}
-              className="w-full border border-input rounded-md px-3 py-2 text-sm bg-white focus:outline-none focus:ring-1 focus:ring-violet-400">
+              className="w-full border border-input rounded-md px-3 py-2 text-sm bg-card focus:outline-none focus:ring-1 focus:ring-primary/40">
               <option value="Inter">Inter (Modern)</option>
               <option value="Georgia">Georgia (Classic)</option>
               <option value="Merriweather">Merriweather (Elegant)</option>
@@ -1446,9 +1446,9 @@ function ThemeSection({
           {/* Slug */}
           {!isLocal(site.projectId) && (
             <div>
-              <p className="text-xs font-medium text-gray-500 mb-2">Public URL Slug</p>
+              <p className="text-xs font-medium text-muted-foreground mb-2">Public URL Slug</p>
               <div className="flex items-center gap-2">
-                <span className="text-sm text-gray-400 whitespace-nowrap">/wedding/</span>
+                <span className="text-sm text-muted-foreground whitespace-nowrap">/wedding/</span>
                 <Input value={site.slug} onChange={e => onUpdate({ slug: e.target.value.toLowerCase().replace(/[^a-z0-9-]/g, "-") })}
                   className="h-9 text-sm font-mono" />
               </div>
@@ -1457,7 +1457,7 @@ function ThemeSection({
 
           {/* Password protection */}
           <div>
-            <p className="text-xs font-medium text-gray-500 mb-2">Password Protection (optional)</p>
+            <p className="text-xs font-medium text-muted-foreground mb-2">Password Protection (optional)</p>
             <Input value={site.password ?? ""} onChange={e => onUpdate({ password: e.target.value || null })}
               type="password" placeholder="Leave empty for no password"
               className="h-9 text-sm max-w-sm" />

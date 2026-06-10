@@ -316,7 +316,7 @@ export function PricingTableWidgetSettingsPanel({
             ]}
           />
           {s.dataSource.mode === "auto" ? (
-            <div className="rounded-md border border-amber-200 bg-amber-50 px-3 py-2 text-xs text-amber-700">
+            <div className="rounded-md border border-[var(--color-warning-text)]/30 bg-[var(--color-warning-bg)] px-3 py-2 text-xs text-[var(--color-warning-text)]">
               <strong>Service Details pages only.</strong> Auto mode reads the service from the current page context. For Homepage or other pages, use Manual mode and select a service below.
             </div>
           ) : (
@@ -336,7 +336,7 @@ export function PricingTableWidgetSettingsPanel({
                 placeholder="Search and select a service..."
               />
               {!s.dataSource.serviceSlug && (
-                <p className="text-xs text-amber-600">No service selected — the pricing table will not display until a service is chosen.</p>
+                <p className="text-xs text-[var(--color-warning-text)]">No service selected — the pricing table will not display until a service is chosen.</p>
               )}
             </div>
           )}

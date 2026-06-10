@@ -120,7 +120,7 @@ export function PricingTable() {
           >
             <span
               className={cn(
-                "inline-block h-4 w-4 transform rounded-full bg-white transition-transform",
+                "inline-block h-4 w-4 transform rounded-full bg-card transition-transform",
                 billing === "yearly" ? "translate-x-6" : "translate-x-1"
               )}
             />
@@ -133,7 +133,7 @@ export function PricingTable() {
             )}
           >
             Yearly
-            <Badge className="bg-green-100 text-green-700 text-xs">Save ~25%</Badge>
+            <Badge className="bg-[var(--color-success-bg)] text-[var(--color-success-text)] text-xs">Save ~25%</Badge>
           </button>
         </div>
 

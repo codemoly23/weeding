@@ -378,7 +378,7 @@ function getElementCategories(): { label: string; items: ElementDef[] }[] {
       label: "Custom elements",
       items: [
         { kind: "arch", label: "Upload custom SVG", preview: (
-          <div className="flex flex-col items-center gap-1 text-gray-400">
+          <div className="flex flex-col items-center gap-1 text-muted-foreground/70">
             <Upload className="h-7 w-7" />
           </div>
         )},
@@ -462,25 +462,25 @@ function AddElementPanel({ onAdd, onClose }: {
       <div className="absolute inset-0 bg-black/30" onClick={onClose} />
 
       {/* Panel — slides in from right, similar to reference */}
-      <div className="relative ml-auto flex h-full w-80 flex-col bg-white shadow-2xl">
+      <div className="relative ml-auto flex h-full w-80 flex-col bg-card shadow-2xl">
         {/* Header */}
-        <div className="flex shrink-0 items-center justify-between border-b border-gray-100 px-4 py-3">
-          <span className="text-sm font-semibold text-gray-700">Add element</span>
-          <button onClick={onClose} className="flex h-7 w-7 items-center justify-center rounded-lg text-gray-400 hover:bg-gray-100 hover:text-gray-600">
+        <div className="flex shrink-0 items-center justify-between border-b border-border/50 px-4 py-3">
+          <span className="text-sm font-semibold text-foreground">Add element</span>
+          <button onClick={onClose} className="flex h-7 w-7 items-center justify-center rounded-lg text-muted-foreground/70 hover:bg-muted hover:text-foreground/80">
             <X className="h-4 w-4" />
           </button>
         </div>
 
         {/* Search */}
-        <div className="shrink-0 border-b border-gray-100 px-4 py-2.5">
-          <div className="flex items-center gap-2 rounded-lg border border-gray-200 bg-gray-50 px-3 py-1.5">
-            <Search className="h-3.5 w-3.5 shrink-0 text-gray-400" />
+        <div className="shrink-0 border-b border-border/50 px-4 py-2.5">
+          <div className="flex items-center gap-2 rounded-lg border border-border bg-muted/30 px-3 py-1.5">
+            <Search className="h-3.5 w-3.5 shrink-0 text-muted-foreground/70" />
             <input
               type="text"
               placeholder="Search elements..."
               value={query}
               onChange={e => setQuery(e.target.value)}
-              className="flex-1 bg-transparent text-sm text-gray-700 placeholder:text-gray-400 focus:outline-none"
+              className="flex-1 bg-transparent text-sm text-foreground placeholder:text-muted-foreground/70 focus:outline-none"
             />
           </div>
         </div>
@@ -488,19 +488,19 @@ function AddElementPanel({ onAdd, onClose }: {
         {/* Scrollable categories */}
         <div className="flex-1 overflow-y-auto">
           {filtered.map(cat => (
-            <div key={cat.label} className="border-b border-gray-100">
-              <div className="px-4 py-2.5 text-[11px] font-semibold uppercase tracking-wide text-gray-400">{cat.label}</div>
+            <div key={cat.label} className="border-b border-border/50">
+              <div className="px-4 py-2.5 text-[11px] font-semibold uppercase tracking-wide text-muted-foreground/70">{cat.label}</div>
               <div className="grid grid-cols-3 gap-2 px-3 pb-3">
                 {cat.items.map(item => (
                   <button
                     key={`${item.kind}-${item.assetType ?? ""}`}
                     onClick={() => onAdd(item)}
-                    className="flex flex-col items-center gap-1.5 rounded-xl border border-gray-100 bg-gray-50 p-2 transition-colors hover:border-purple-200 hover:bg-purple-50"
+                    className="flex flex-col items-center gap-1.5 rounded-xl border border-border/50 bg-muted/30 p-2 transition-colors hover:border-primary/20 hover:bg-primary/5"
                   >
                     <div className="flex h-14 w-14 items-center justify-center">
                       {item.preview}
                     </div>
-                    <span className="w-full text-center text-[10px] leading-tight text-gray-600">{item.label}</span>
+                    <span className="w-full text-center text-[10px] leading-tight text-foreground/80">{item.label}</span>
                   </button>
                 ))}
               </div>
@@ -508,7 +508,7 @@ function AddElementPanel({ onAdd, onClose }: {
           ))}
 
           {filtered.length === 0 && (
-            <div className="flex flex-col items-center gap-2 py-12 text-gray-400">
+            <div className="flex flex-col items-center gap-2 py-12 text-muted-foreground/70">
               <Search className="h-8 w-8 opacity-40" />
               <p className="text-sm">No elements found</p>
             </div>
@@ -524,12 +524,12 @@ function AddElementPanel({ onAdd, onClose }: {
 function PanelSection({ label, children }: { label: string; children: React.ReactNode }) {
   const [open, setOpen] = useState(false);
   return (
-    <div className="border-t border-gray-100">
-      <button onClick={() => setOpen(o => !o)} className="flex w-full items-center justify-between px-4 py-3 text-sm text-gray-600 hover:bg-gray-50">
+    <div className="border-t border-border/50">
+      <button onClick={() => setOpen(o => !o)} className="flex w-full items-center justify-between px-4 py-3 text-sm text-foreground/80 hover:bg-muted/30">
         <span>{label}</span>
-        <ChevronRight className={cn("h-4 w-4 text-gray-400 transition-transform", open && "rotate-90")} />
+        <ChevronRight className={cn("h-4 w-4 text-muted-foreground/70 transition-transform", open && "rotate-90")} />
       </button>
-      {open && <div className="px-4 pb-3 text-sm text-gray-500">{children}</div>}
+      {open && <div className="px-4 pb-3 text-sm text-muted-foreground">{children}</div>}
     </div>
   );
 }
@@ -537,10 +537,10 @@ function PanelSection({ label, children }: { label: string; children: React.Reac
 function PropRow({ label, value, unit, onChange }: { label: string; value: number; unit?: string; onChange: (v: number) => void }) {
   return (
     <div className="mb-3">
-      <p className="mb-1 text-[11px] text-gray-400">{label}</p>
+      <p className="mb-1 text-[11px] text-muted-foreground/70">{label}</p>
       <div className="flex items-center gap-2">
-        <input type="number" value={Math.round(value * 100) / 100} onChange={e => onChange(parseFloat(e.target.value) || 0)} className="h-8 w-full rounded border border-gray-200 px-2 text-sm text-gray-700 focus:outline-none focus:ring-1 focus:ring-purple-400" />
-        {unit && <span className="shrink-0 text-xs text-gray-400">{unit}</span>}
+        <input type="number" value={Math.round(value * 100) / 100} onChange={e => onChange(parseFloat(e.target.value) || 0)} className="h-8 w-full rounded border border-border px-2 text-sm text-foreground focus:outline-none focus:ring-1 focus:ring-primary/40" />
+        {unit && <span className="shrink-0 text-xs text-muted-foreground/70">{unit}</span>}
       </div>
     </div>
   );
@@ -555,7 +555,7 @@ function LockButtons({ active }: { active?: "rotation" | "move" | "size" }) {
   return (
     <div className="mb-4 flex gap-1.5">
       {btns.map(b => (
-        <button key={b.key} className={cn("flex flex-1 flex-col items-center gap-1 rounded-lg border py-2 text-[10px] font-medium transition-colors", b.key === active ? "border-purple-400 bg-purple-600 text-white" : "border-gray-200 bg-white text-gray-500 hover:bg-gray-50")}>
+        <button key={b.key} className={cn("flex flex-1 flex-col items-center gap-1 rounded-lg border py-2 text-[10px] font-medium transition-colors", b.key === active ? "border-primary bg-primary text-primary-foreground" : "border-border bg-card text-muted-foreground hover:bg-muted/30")}>
           {b.icon}{b.label}
         </button>
       ))}
@@ -565,16 +565,16 @@ function LockButtons({ active }: { active?: "rotation" | "move" | "size" }) {
 
 function LayerBtn({ label, chevron }: { label: string; chevron: "up" | "down" }) {
   return (
-    <button className="flex w-full items-center justify-between px-4 py-2.5 text-sm text-gray-600 hover:bg-gray-50">
+    <button className="flex w-full items-center justify-between px-4 py-2.5 text-sm text-foreground/80 hover:bg-muted/30">
       <span>{label}</span>
-      <ChevronRight className={cn("h-4 w-4 text-gray-400", chevron === "up" ? "rotate-[-90deg]" : "rotate-90")} />
+      <ChevronRight className={cn("h-4 w-4 text-muted-foreground/70", chevron === "up" ? "rotate-[-90deg]" : "rotate-90")} />
     </button>
   );
 }
 
 function ActionRow({ icon, label, danger, onClick }: { icon: React.ReactNode; label: string; danger?: boolean; onClick?: () => void }) {
   return (
-    <button onClick={onClick} className={cn("flex w-full items-center gap-2 px-4 py-2.5 text-sm hover:bg-gray-50", danger ? "text-red-500" : "text-gray-600")}>
+    <button onClick={onClick} className={cn("flex w-full items-center gap-2 px-4 py-2.5 text-sm hover:bg-muted/30", danger ? "text-[var(--color-error-text)]" : "text-foreground/80")}>
       {icon}{label}
     </button>
   );
@@ -812,34 +812,34 @@ export default function CeremonyLayoutEditPage() {
       const assignedGuest = guests.find(g => g.id === guestId) ?? null;
       return (
         <div className="flex flex-col divide-y divide-gray-100">
-          <div className="px-4 py-4 text-center font-semibold text-gray-700">Table</div>
+          <div className="px-4 py-4 text-center font-semibold text-foreground">Table</div>
           <div className="flex flex-col items-center gap-2 px-4 py-4">
-            <div className="flex h-14 w-14 items-center justify-center rounded-full border-2 border-dashed border-purple-300 text-xs text-purple-400">
-              {assignedGuest ? <span className="px-1 text-center text-[10px] font-semibold leading-tight text-purple-700">{assignedGuest.firstName}</span> : "Vacant seat"}
+            <div className="flex h-14 w-14 items-center justify-center rounded-full border-2 border-dashed border-primary/30 text-xs text-primary/60">
+              {assignedGuest ? <span className="px-1 text-center text-[10px] font-semibold leading-tight text-primary">{assignedGuest.firstName}</span> : "Vacant seat"}
             </div>
-            <button onClick={() => assignGuest(selectedSeatEl.id, seatIdx, null)} className="flex items-center gap-1.5 rounded-lg border border-gray-200 px-3 py-1.5 text-xs text-gray-500 hover:bg-gray-50"><X className="h-3 w-3" /> Release seat</button>
-            <button className="flex items-center gap-1.5 rounded-lg border border-gray-200 px-3 py-1.5 text-xs text-gray-500 hover:bg-gray-50"><Eye className="h-3 w-3" /> Hide this seat from layout</button>
+            <button onClick={() => assignGuest(selectedSeatEl.id, seatIdx, null)} className="flex items-center gap-1.5 rounded-lg border border-border px-3 py-1.5 text-xs text-muted-foreground hover:bg-muted/30"><X className="h-3 w-3" /> Release seat</button>
+            <button className="flex items-center gap-1.5 rounded-lg border border-border px-3 py-1.5 text-xs text-muted-foreground hover:bg-muted/30"><Eye className="h-3 w-3" /> Hide this seat from layout</button>
           </div>
           <div className="px-4 py-3">
-            <p className="mb-2 text-xs font-medium text-gray-600">Guests with unassigned seats:</p>
-            <select className="mb-2 w-full rounded border border-gray-200 py-1.5 text-xs text-gray-600 focus:outline-none"><option>All guests in the list</option></select>
+            <p className="mb-2 text-xs font-medium text-foreground/80">Guests with unassigned seats:</p>
+            <select className="mb-2 w-full rounded border border-border py-1.5 text-xs text-foreground/80 focus:outline-none"><option>All guests in the list</option></select>
             {unassignedGuests.length === 0 ? (
-              <p className="py-2 text-center text-[11px] text-gray-400">All guests assigned</p>
+              <p className="py-2 text-center text-[11px] text-muted-foreground/70">All guests assigned</p>
             ) : (
               <div className="max-h-40 space-y-2 overflow-y-auto">
                 {unassignedGuests.map(g => (
                   <div key={g.id} className="flex items-center justify-between">
-                    <span className="truncate text-xs text-gray-700">{g.firstName} {g.lastName}</span>
-                    <button onClick={() => assignGuest(selectedSeatEl.id, seatIdx, g.id)} className="ml-2 shrink-0 rounded border border-gray-200 px-2 py-1 text-[10px] text-gray-600 hover:bg-gray-50">Take a seat</button>
+                    <span className="truncate text-xs text-foreground">{g.firstName} {g.lastName}</span>
+                    <button onClick={() => assignGuest(selectedSeatEl.id, seatIdx, g.id)} className="ml-2 shrink-0 rounded border border-border px-2 py-1 text-[10px] text-foreground/80 hover:bg-muted/30">Take a seat</button>
                   </div>
                 ))}
               </div>
             )}
           </div>
           <div className="flex flex-col items-center gap-2 px-4 py-3">
-            <button className="flex w-full items-center justify-center gap-1.5 rounded-lg bg-purple-600 px-3 py-2 text-xs font-medium text-white hover:bg-purple-700"><Plus className="h-3 w-3" /> Add a guest quickly</button>
-            <span className="text-[11px] text-gray-400">or</span>
-            <button className="text-xs text-purple-600 underline underline-offset-2 hover:text-purple-800">Open guest list</button>
+            <button className="flex w-full items-center justify-center gap-1.5 rounded-lg bg-primary px-3 py-2 text-xs font-medium text-white hover:bg-primary/90"><Plus className="h-3 w-3" /> Add a guest quickly</button>
+            <span className="text-[11px] text-muted-foreground/70">or</span>
+            <button className="text-xs text-primary underline underline-offset-2 hover:text-primary/80">Open guest list</button>
           </div>
         </div>
       );
@@ -848,11 +848,11 @@ export default function CeremonyLayoutEditPage() {
     if (selectedElement?.kind === "arch") {
       return (
         <div className="flex flex-col divide-y divide-gray-100">
-          <div className="px-4 py-4 font-semibold text-gray-700">Custom SVG</div>
+          <div className="px-4 py-4 font-semibold text-foreground">Custom SVG</div>
           <div className="px-4 py-4">
             <PropRow label="Width" value={selectedElement.width * 0.53} unit="Inches" onChange={v => updateElement(selectedElement.id, { width: v / 0.53 })} />
             <PropRow label="Angle" value={selectedElement.angle} onChange={v => updateElement(selectedElement.id, { angle: v })} />
-            <div className="mb-4"><p className="mb-1.5 text-[11px] text-gray-400">Border color</p><input type="color" value={selectedElement.borderColor ?? "#111111"} onChange={e => updateElement(selectedElement.id, { borderColor: e.target.value })} className="h-7 w-7 cursor-pointer rounded border border-gray-200 p-0.5" /></div>
+            <div className="mb-4"><p className="mb-1.5 text-[11px] text-muted-foreground/70">Border color</p><input type="color" value={selectedElement.borderColor ?? "#111111"} onChange={e => updateElement(selectedElement.id, { borderColor: e.target.value })} className="h-7 w-7 cursor-pointer rounded border border-border p-0.5" /></div>
             <LockButtons />
           </div>
           <div className="divide-y divide-gray-100">
@@ -868,9 +868,9 @@ export default function CeremonyLayoutEditPage() {
     if (selectedElement?.kind === "aisle") {
       return (
         <div className="flex flex-col divide-y divide-gray-100">
-          <div className="px-4 py-4 font-semibold text-gray-700">Element</div>
+          <div className="px-4 py-4 font-semibold text-foreground">Element</div>
           <div className="px-4 py-4">
-            <div className="mb-3"><p className="mb-1 text-[11px] text-gray-400">Element name</p><input type="text" value={selectedElement.name ?? ""} onChange={e => updateElement(selectedElement.id, { name: e.target.value })} className="h-8 w-full rounded border border-gray-200 px-2 text-sm text-gray-700 focus:outline-none focus:ring-1 focus:ring-purple-400" /></div>
+            <div className="mb-3"><p className="mb-1 text-[11px] text-muted-foreground/70">Element name</p><input type="text" value={selectedElement.name ?? ""} onChange={e => updateElement(selectedElement.id, { name: e.target.value })} className="h-8 w-full rounded border border-border px-2 text-sm text-foreground focus:outline-none focus:ring-1 focus:ring-primary/40" /></div>
             <PropRow label="Width" value={selectedElement.width * 0.53} unit="Inches" onChange={v => updateElement(selectedElement.id, { width: v / 0.53 })} />
             <PropRow label="Height" value={(selectedElement.height ?? 100) * 0.53} unit="Inches" onChange={v => updateElement(selectedElement.id, { height: v / 0.53 })} />
             <PropRow label="Angle" value={selectedElement.angle} onChange={v => updateElement(selectedElement.id, { angle: v })} />
@@ -891,11 +891,11 @@ export default function CeremonyLayoutEditPage() {
       const seats = selectedElement.seats ?? 5;
       return (
         <div className="flex flex-col divide-y divide-gray-100">
-          <div className="px-4 py-4 font-semibold text-gray-700">Row of Chairs</div>
+          <div className="px-4 py-4 font-semibold text-foreground">Row of Chairs</div>
           <div className="px-4 py-4">
-            <p className="mb-2 text-[11px] text-gray-400">Space between seats</p>
-            <input type="range" min={50} max={120} value={spacing} onChange={e => { const s = Number(e.target.value); const newW = (seats - 1) * spacingToPx(s) + CHAIR_R * 2; updateElement(selectedElement.id, { spacing: s, width: newW }); }} className="mb-1 w-full accent-purple-600" />
-            <div className="mb-4 flex justify-between text-[10px] text-gray-400">{[50, 60, 70, 80, 90, 100, 110, 120].map(v => <span key={v}>{v}</span>)}</div>
+            <p className="mb-2 text-[11px] text-muted-foreground/70">Space between seats</p>
+            <input type="range" min={50} max={120} value={spacing} onChange={e => { const s = Number(e.target.value); const newW = (seats - 1) * spacingToPx(s) + CHAIR_R * 2; updateElement(selectedElement.id, { spacing: s, width: newW }); }} className="mb-1 w-full accent-primary" />
+            <div className="mb-4 flex justify-between text-[10px] text-muted-foreground/70">{[50, 60, 70, 80, 90, 100, 110, 120].map(v => <span key={v}>{v}</span>)}</div>
             <PropRow label="Width" value={selectedElement.width * 0.53} unit="Inches" onChange={v => updateElement(selectedElement.id, { width: v / 0.53 })} />
             <PropRow label="Angle" value={selectedElement.angle} onChange={v => updateElement(selectedElement.id, { angle: v })} />
             <LockButtons />
@@ -912,12 +912,12 @@ export default function CeremonyLayoutEditPage() {
       const kindLabel = selectedElement.kind.replace("buffet-", "").replace("table-", "").replace("-", " ");
       return (
         <div className="flex flex-col divide-y divide-gray-100">
-          <div className="px-4 py-4 font-semibold text-gray-700 capitalize">{selectedElement.kind.startsWith("buffet-") ? "Buffet " : ""}{kindLabel} table</div>
+          <div className="px-4 py-4 font-semibold text-foreground capitalize">{selectedElement.kind.startsWith("buffet-") ? "Buffet " : ""}{kindLabel} table</div>
           <div className="px-4 py-4">
             {!selectedElement.kind.startsWith("buffet-") && (
               <div className="mb-3">
-                <p className="mb-1 text-[11px] text-gray-400">Seats</p>
-                <input type="number" min={1} max={30} value={selectedElement.seats ?? 8} onChange={e => { const s = Math.max(1, Number(e.target.value)); updateElement(selectedElement.id, { seats: s, guestIds: Array(s).fill(null) }); }} className="h-8 w-full rounded border border-gray-200 px-2 text-sm text-gray-700 focus:outline-none focus:ring-1 focus:ring-purple-400" />
+                <p className="mb-1 text-[11px] text-muted-foreground/70">Seats</p>
+                <input type="number" min={1} max={30} value={selectedElement.seats ?? 8} onChange={e => { const s = Math.max(1, Number(e.target.value)); updateElement(selectedElement.id, { seats: s, guestIds: Array(s).fill(null) }); }} className="h-8 w-full rounded border border-border px-2 text-sm text-foreground focus:outline-none focus:ring-1 focus:ring-primary/40" />
               </div>
             )}
             <PropRow label="Width" value={selectedElement.width * 0.53} unit="Inches" onChange={v => updateElement(selectedElement.id, { width: v / 0.53 })} />
@@ -938,7 +938,7 @@ export default function CeremonyLayoutEditPage() {
     if (selectedElement?.kind === "asset") {
       return (
         <div className="flex flex-col divide-y divide-gray-100">
-          <div className="px-4 py-4 font-semibold text-gray-700 capitalize">{selectedElement.assetType?.replace(/-/g, " ") ?? "Asset"}</div>
+          <div className="px-4 py-4 font-semibold text-foreground capitalize">{selectedElement.assetType?.replace(/-/g, " ") ?? "Asset"}</div>
           <div className="px-4 py-4">
             <PropRow label="Width" value={selectedElement.width * 0.53} unit="Inches" onChange={v => updateElement(selectedElement.id, { width: v / 0.53 })} />
             <PropRow label="Height" value={(selectedElement.height ?? selectedElement.width) * 0.53} unit="Inches" onChange={v => updateElement(selectedElement.id, { height: v / 0.53 })} />
@@ -959,72 +959,72 @@ export default function CeremonyLayoutEditPage() {
       <div className="flex flex-col divide-y divide-gray-100">
         {/* Venue Blueprint section */}
         <div className="px-4 py-3">
-          <p className="mb-2 text-xs font-semibold text-gray-600">Venue Blueprint</p>
+          <p className="mb-2 text-xs font-semibold text-foreground/80">Venue Blueprint</p>
           {venueImage ? (
             <div className="space-y-2">
               {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src={venueImage} alt="Venue blueprint" className="w-full rounded border border-gray-200 object-contain" style={{ maxHeight: 80 }} />
+              <img src={venueImage} alt="Venue blueprint" className="w-full rounded border border-border object-contain" style={{ maxHeight: 80 }} />
               <div>
-                <p className="mb-1 text-[11px] text-gray-400">Opacity</p>
+                <p className="mb-1 text-[11px] text-muted-foreground/70">Opacity</p>
                 <input
                   type="range" min={0.1} max={1.0} step={0.05}
                   value={venueOpacity}
                   onChange={e => setVenueOpacity(parseFloat(e.target.value))}
-                  className="w-full accent-purple-600"
+                  className="w-full accent-primary"
                 />
-                <div className="flex justify-between text-[10px] text-gray-400"><span>10%</span><span>{Math.round(venueOpacity * 100)}%</span></div>
+                <div className="flex justify-between text-[10px] text-muted-foreground/70"><span>10%</span><span>{Math.round(venueOpacity * 100)}%</span></div>
               </div>
               <button
                 onClick={() => setVenueImage(null)}
-                className="flex items-center gap-1 rounded-lg border border-red-200 px-2 py-1 text-xs text-red-500 hover:bg-red-50"
+                className="flex items-center gap-1 rounded-lg border border-[var(--color-error-text)]/20 px-2 py-1 text-xs text-[var(--color-error-text)] hover:bg-[var(--color-error-bg)]"
               >
                 <X className="h-3 w-3" /> Remove
               </button>
             </div>
           ) : (
-            <p className="text-xs text-gray-400">Upload floor plan to use as background reference.</p>
+            <p className="text-xs text-muted-foreground/70">Upload floor plan to use as background reference.</p>
           )}
         </div>
-        <div className="bg-gray-50 px-4 py-3 text-sm font-semibold text-orange-500">How to display guests&apos; names</div>
+        <div className="bg-muted/30 px-4 py-3 text-sm font-semibold text-[var(--color-warning-text)]">How to display guests&apos; names</div>
         <div className="px-4 py-4">
           <div className="mb-3 flex gap-2">
             {([{ key: "full", label: "Full name", icon: "👤" }, { key: "initials", label: "Initials", icon: "🔵" }, { key: "first", label: "First name", icon: "👥" }] as const).map(opt => (
-              <button key={opt.key} onClick={() => setNameDisplay(opt.key)} className={cn("flex flex-1 flex-col items-center gap-1 rounded-lg border p-2 text-[10px] transition-colors", nameDisplay === opt.key ? "border-purple-400 bg-purple-50 text-purple-700" : "border-gray-200 text-gray-500 hover:bg-gray-50")}>
+              <button key={opt.key} onClick={() => setNameDisplay(opt.key)} className={cn("flex flex-1 flex-col items-center gap-1 rounded-lg border p-2 text-[10px] transition-colors", nameDisplay === opt.key ? "border-primary bg-primary/5 text-primary" : "border-border text-muted-foreground hover:bg-muted/50")}>
                 <span className="text-lg">{opt.icon}</span>
               </button>
             ))}
           </div>
-          <p className="mb-3 text-xs text-gray-500">Display names as — <span className="font-medium text-gray-700">{nameDisplay === "full" ? "Full name" : nameDisplay === "initials" ? "Initials" : "First name"}</span></p>
-          <label className="mb-2 flex cursor-pointer items-center gap-2 text-sm text-gray-600"><input type="radio" name="iconMode" checked={coloredIcons} onChange={() => setColoredIcons(true)} className="accent-purple-600" />Person icons are colored</label>
-          <label className="flex cursor-pointer items-center gap-2 text-sm text-gray-600"><input type="radio" name="iconMode" checked={!coloredIcons} onChange={() => setColoredIcons(false)} className="accent-purple-600" />Person icons are generic</label>
+          <p className="mb-3 text-xs text-muted-foreground">Display names as — <span className="font-medium text-foreground">{nameDisplay === "full" ? "Full name" : nameDisplay === "initials" ? "Initials" : "First name"}</span></p>
+          <label className="mb-2 flex cursor-pointer items-center gap-2 text-sm text-foreground/80"><input type="radio" name="iconMode" checked={coloredIcons} onChange={() => setColoredIcons(true)} className="accent-primary" />Person icons are colored</label>
+          <label className="flex cursor-pointer items-center gap-2 text-sm text-foreground/80"><input type="radio" name="iconMode" checked={!coloredIcons} onChange={() => setColoredIcons(false)} className="accent-primary" />Person icons are generic</label>
         </div>
-        <PanelSection label="Font scheme"><p className="text-gray-400">Font options coming soon.</p></PanelSection>
-        <PanelSection label="Color scheme"><p className="text-gray-400">Color options coming soon.</p></PanelSection>
-        <PanelSection label="Paper"><p className="text-gray-400">A1 portrait 23.4 × 33.1 inch</p></PanelSection>
+        <PanelSection label="Font scheme"><p className="text-muted-foreground/70">Font options coming soon.</p></PanelSection>
+        <PanelSection label="Color scheme"><p className="text-muted-foreground/70">Color options coming soon.</p></PanelSection>
+        <PanelSection label="Paper"><p className="text-muted-foreground/70">A1 portrait 23.4 × 33.1 inch</p></PanelSection>
       </div>
     );
   }
 
   return (
-    <div className="fixed inset-0 z-50 flex flex-col bg-white">
+    <div className="fixed inset-0 z-50 flex flex-col bg-card">
       {/* Hidden file input for venue blueprint */}
       <input ref={fileInputRef} type="file" accept="image/*,.svg" className="hidden" onChange={handleVenueUpload} />
 
       {/* Top bar */}
-      <div className="flex h-12 shrink-0 items-center justify-between border-b border-gray-100 bg-white px-4 shadow-sm">
-        <button onClick={() => router.push(`/planner/${projectId}/seating?tab=ceremony`)} className="flex items-center gap-1.5 rounded-lg px-2 py-1.5 text-sm text-gray-500 hover:bg-gray-50">
-          <X className="h-4 w-4 text-red-400" />Close
+      <div className="flex h-12 shrink-0 items-center justify-between border-b border-border/50 bg-card px-4 shadow-sm">
+        <button onClick={() => router.push(`/planner/${projectId}/seating?tab=ceremony`)} className="flex items-center gap-1.5 rounded-lg px-2 py-1.5 text-sm text-muted-foreground hover:bg-muted/30">
+          <X className="h-4 w-4 text-[var(--color-error-text)]" />Close
         </button>
         <div className="flex items-center gap-2">
-          <button className="flex h-8 w-8 items-center justify-center rounded-lg border border-gray-200 text-gray-500 hover:bg-gray-50"><Keyboard className="h-4 w-4" /></button>
-          <button className="flex items-center gap-1.5 rounded-lg border border-gray-200 px-3 py-1.5 text-sm text-gray-600 hover:bg-gray-50"><FileText className="h-4 w-4" />File</button>
-          <button onClick={() => fileInputRef.current?.click()} className="flex items-center gap-1.5 rounded-lg border border-gray-200 px-3 py-1.5 text-sm text-gray-600 hover:bg-gray-50">
+          <button className="flex h-8 w-8 items-center justify-center rounded-lg border border-border text-muted-foreground hover:bg-muted/30"><Keyboard className="h-4 w-4" /></button>
+          <button className="flex items-center gap-1.5 rounded-lg border border-border px-3 py-1.5 text-sm text-foreground/80 hover:bg-muted/30"><FileText className="h-4 w-4" />File</button>
+          <button onClick={() => fileInputRef.current?.click()} className="flex items-center gap-1.5 rounded-lg border border-border px-3 py-1.5 text-sm text-foreground/80 hover:bg-muted/30">
             <Upload className="h-4 w-4" />Upload Blueprint
           </button>
-          <button onClick={() => setShowHistory(h => !h)} className="flex items-center gap-1.5 rounded-lg border border-gray-200 px-3 py-1.5 text-sm text-gray-600 hover:bg-gray-50">
+          <button onClick={() => setShowHistory(h => !h)} className="flex items-center gap-1.5 rounded-lg border border-border px-3 py-1.5 text-sm text-foreground/80 hover:bg-muted/30">
             <Clock className="h-4 w-4" />History
           </button>
-          <button onClick={() => setShowAddPanel(true)} className="flex items-center gap-1.5 rounded-lg bg-purple-600 px-3 py-1.5 text-sm font-medium text-white hover:bg-purple-700">
+          <button onClick={() => setShowAddPanel(true)} className="flex items-center gap-1.5 rounded-lg bg-primary px-3 py-1.5 text-sm font-medium text-white hover:bg-primary/90">
             <Plus className="h-4 w-4" />Add element
           </button>
         </div>
@@ -1100,11 +1100,11 @@ export default function CeremonyLayoutEditPage() {
           </div>
 
           {/* Zoom controls */}
-          <div className="absolute bottom-4 right-4 flex flex-col overflow-hidden rounded-lg border border-gray-200 bg-white shadow-sm">
-            <button onClick={() => setZoom(z => Math.min(3, z + 0.1))} className="flex h-8 w-8 items-center justify-center border-b border-gray-100 text-gray-500 hover:bg-gray-50">+</button>
-            <button onClick={() => setZoom(z => Math.max(0.25, z - 0.1))} className="flex h-8 w-8 items-center justify-center text-gray-500 hover:bg-gray-50">−</button>
+          <div className="absolute bottom-4 right-4 flex flex-col overflow-hidden rounded-lg border border-border bg-card shadow-sm">
+            <button onClick={() => setZoom(z => Math.min(3, z + 0.1))} className="flex h-8 w-8 items-center justify-center border-b border-border/50 text-muted-foreground hover:bg-muted/30">+</button>
+            <button onClick={() => setZoom(z => Math.max(0.25, z - 0.1))} className="flex h-8 w-8 items-center justify-center text-muted-foreground hover:bg-muted/30">−</button>
           </div>
-          <button onClick={() => { setZoom(0.82); setPan({ x: 0, y: 0 }); }} className="absolute bottom-16 right-4 flex h-8 w-8 items-center justify-center rounded-lg border border-gray-200 bg-white text-gray-400 shadow-sm hover:bg-gray-50">
+          <button onClick={() => { setZoom(0.82); setPan({ x: 0, y: 0 }); }} className="absolute bottom-16 right-4 flex h-8 w-8 items-center justify-center rounded-lg border border-border bg-card text-muted-foreground/70 shadow-sm hover:bg-muted/30">
             <svg viewBox="0 0 20 20" className="h-4 w-4" fill="none" stroke="currentColor" strokeWidth={1.5}>
               <circle cx="10" cy="10" r="3" /><line x1="10" y1="1" x2="10" y2="6" /><line x1="10" y1="14" x2="10" y2="19" /><line x1="1" y1="10" x2="6" y2="10" /><line x1="14" y1="10" x2="19" y2="10" />
             </svg>
@@ -1112,7 +1112,7 @@ export default function CeremonyLayoutEditPage() {
         </div>
 
         {/* Right panel */}
-        <div className="w-60 shrink-0 overflow-y-auto border-l border-gray-100 bg-white">{renderRightPanel()}</div>
+        <div className="w-60 shrink-0 overflow-y-auto border-l border-border/50 bg-card">{renderRightPanel()}</div>
       </div>
 
       {/* Add element panel overlay */}
@@ -1122,36 +1122,36 @@ export default function CeremonyLayoutEditPage() {
       {showHistory && (
         <div className="fixed inset-0 z-50 flex">
           <div className="absolute inset-0 bg-black/30" onClick={() => setShowHistory(false)} />
-          <div className="relative ml-auto flex h-full w-[300px] flex-col bg-white shadow-2xl">
-            <div className="flex shrink-0 items-center justify-between border-b border-gray-100 px-4 py-3">
-              <span className="text-sm font-semibold text-gray-700">History</span>
-              <button onClick={() => setShowHistory(false)} className="flex h-7 w-7 items-center justify-center rounded-lg text-gray-400 hover:bg-gray-100 hover:text-gray-600">
+          <div className="relative ml-auto flex h-full w-[300px] flex-col bg-card shadow-2xl">
+            <div className="flex shrink-0 items-center justify-between border-b border-border/50 px-4 py-3">
+              <span className="text-sm font-semibold text-foreground">History</span>
+              <button onClick={() => setShowHistory(false)} className="flex h-7 w-7 items-center justify-center rounded-lg text-muted-foreground/70 hover:bg-muted hover:text-foreground/80">
                 <X className="h-4 w-4" />
               </button>
             </div>
-            <div className="shrink-0 border-b border-gray-100 px-4 py-3">
+            <div className="shrink-0 border-b border-border/50 px-4 py-3">
               <button
                 onClick={saveSnapshot}
-                className="flex w-full items-center justify-center gap-1.5 rounded-lg bg-purple-600 px-3 py-2 text-xs font-medium text-white hover:bg-purple-700"
+                className="flex w-full items-center justify-center gap-1.5 rounded-lg bg-primary px-3 py-2 text-xs font-medium text-white hover:bg-primary/90"
               >
                 <Plus className="h-3.5 w-3.5" /> Save current snapshot
               </button>
-              <p className="mt-1.5 text-center text-[10px] text-gray-400">Max 5 snapshots stored</p>
+              <p className="mt-1.5 text-center text-[10px] text-muted-foreground/70">Max 5 snapshots stored</p>
             </div>
             <div className="flex-1 overflow-y-auto px-4 py-3 space-y-2">
               {snapshots.length === 0 ? (
-                <p className="py-6 text-center text-xs text-gray-400">No snapshots saved yet.</p>
+                <p className="py-6 text-center text-xs text-muted-foreground/70">No snapshots saved yet.</p>
               ) : (
                 snapshots.map((snap, i) => (
-                  <div key={i} className="rounded-lg border border-gray-200 bg-gray-50 px-3 py-2.5">
+                  <div key={i} className="rounded-lg border border-border bg-muted/30 px-3 py-2.5">
                     <div className="flex items-center justify-between">
                       <div>
-                        <p className="text-xs font-medium text-gray-700">{snap.label}</p>
-                        <p className="text-[10px] text-gray-400">{formatSnapshotTime(snap.timestamp)}</p>
+                        <p className="text-xs font-medium text-foreground">{snap.label}</p>
+                        <p className="text-[10px] text-muted-foreground/70">{formatSnapshotTime(snap.timestamp)}</p>
                       </div>
                       <button
                         onClick={() => restoreSnapshot(snap)}
-                        className="rounded-lg border border-purple-200 bg-purple-50 px-2 py-1 text-[10px] font-medium text-purple-700 hover:bg-purple-100"
+                        className="rounded-lg border border-primary/30 bg-primary/5 px-2 py-1 text-[10px] font-medium text-primary hover:bg-primary/10"
                       >
                         Restore
                       </button>

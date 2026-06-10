@@ -56,11 +56,11 @@ export function StyledCTAButton({
         size="lg"
         className={cn(
           "group/cta w-full sm:w-auto",
-          variant === "solid" && "bg-[#1A1A1A] text-white",
+          variant === "solid" && "bg-primary text-primary-foreground",
           variant === "solid" && !isPreview && "hover:bg-[#2A2A2A]",
           variant === "outline" && "border-white/20 bg-transparent text-white",
           variant === "outline" && !isPreview && "hover:bg-white/10",
-          variant === "secondary" && "bg-white text-slate-900",
+          variant === "secondary" && "bg-card text-foreground",
           variant === "secondary" && !isPreview && "hover:bg-slate-100",
           className
         )}

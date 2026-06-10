@@ -195,7 +195,7 @@ export function PricingTableForge({
   return (
     <div className="overflow-x-auto md:overflow-x-visible md:overflow-y-visible -webkit-overflow-scrolling-touch">
       <div
-        className="rounded-[20px] border-[1.5px] border-[rgba(14,17,9,0.1)] bg-white shadow-[0_4px_24px_rgba(0,0,0,0.04)] relative"
+        className="rounded-[20px] border-[1.5px] border-[rgba(14,17,9,0.1)] bg-card shadow-[0_4px_24px_rgba(0,0,0,0.04)] relative"
         style={{ minWidth: "640px" }}
       >
         <table className="w-full border-separate border-spacing-0 table-fixed">
@@ -204,7 +204,7 @@ export function PricingTableForge({
             <tr>
               {/* Feature column header */}
               <th
-                className="w-[38%] p-0 bg-white text-left align-bottom border-b-[1.5px] border-[rgba(14,17,9,0.1)] rounded-tl-[20px]"
+                className="w-[38%] p-0 bg-card text-left align-bottom border-b-[1.5px] border-[rgba(14,17,9,0.1)] rounded-tl-[20px]"
                 style={{ minWidth: "180px" }}
               >
                 <div
@@ -229,7 +229,7 @@ export function PricingTableForge({
                   <th
                     key={pkg.id}
                     className={cn(
-                      "p-0 bg-white text-center align-bottom border-b-[1.5px] border-[rgba(14,17,9,0.1)] relative transition-colors duration-150",
+                      "p-0 bg-card text-center align-bottom border-b-[1.5px] border-[rgba(14,17,9,0.1)] relative transition-colors duration-150",
                       isLast && "rounded-tr-[20px]",
                       isHovered && "bg-[rgba(27,58,45,0.02)]"
                     )}
@@ -258,7 +258,7 @@ export function PricingTableForge({
                           "flex flex-col items-center gap-1 w-full py-3.5 px-5 rounded-xl border-2 cursor-pointer transition-all duration-250",
                           isActive
                             ? "border-[#1b3a2d] bg-[#1b3a2d]"
-                            : "border-[rgba(14,17,9,0.1)] bg-white hover:border-[#1b3a2d] hover:bg-[rgba(27,58,45,0.07)]"
+                            : "border-[rgba(14,17,9,0.1)] bg-card hover:border-[#1b3a2d] hover:bg-[rgba(27,58,45,0.07)]"
                         )}
                       >
                         {/* Plan name */}
@@ -450,7 +450,7 @@ export function PricingTableForge({
                           "w-6 h-6 rounded-full border-[1.5px] flex items-center justify-center shrink-0 transition-all duration-200",
                           isExpanded
                             ? "border-[#1b3a2d] bg-[rgba(27,58,45,0.08)] text-[#1b3a2d]"
-                            : "border-[rgba(14,17,9,0.1)] bg-white text-[#8a9086] hover:border-[#1b3a2d] hover:text-[#1b3a2d] hover:bg-[rgba(27,58,45,0.06)]"
+                            : "border-[rgba(14,17,9,0.1)] bg-card text-[#8a9086] hover:border-[#1b3a2d] hover:text-[#1b3a2d] hover:bg-[rgba(27,58,45,0.06)]"
                         )}
                       >
                         <Plus
@@ -552,7 +552,7 @@ export function PricingTableForge({
           {/* ============= FOOTER ============= */}
           <tfoot>
             <tr>
-              <td className="px-7 py-5 bg-white border-t-[1.5px] border-[rgba(14,17,9,0.1)] rounded-bl-[20px] sticky left-0 z-[2] md:static" />
+              <td className="px-7 py-5 bg-card border-t-[1.5px] border-[rgba(14,17,9,0.1)] rounded-bl-[20px] sticky left-0 z-[2] md:static" />
               {sortedPackages.map((pkg, colIdx) => {
                 const override = getOverride(colIdx);
                 const isLast = colIdx === colCount - 1;
@@ -562,7 +562,7 @@ export function PricingTableForge({
                   <td
                     key={pkg.id}
                     className={cn(
-                      "px-4 py-5 bg-white border-t-[1.5px] border-[rgba(14,17,9,0.1)] text-center transition-colors duration-150",
+                      "px-4 py-5 bg-card border-t-[1.5px] border-[rgba(14,17,9,0.1)] text-center transition-colors duration-150",
                       isLast && "rounded-br-[20px]",
                       isHovered && "bg-[rgba(27,58,45,0.02)]"
                     )}

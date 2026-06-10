@@ -307,17 +307,17 @@ const SeatingCanvas = forwardRef<{ downloadImage: () => void }, Props>(function 
       <div className="absolute bottom-4 right-4 flex flex-col gap-1">
         <button
           onClick={() => setScale(s => Math.min(s * 1.2, 3))}
-          className="flex h-8 w-8 items-center justify-center rounded-lg bg-white shadow text-gray-600 hover:bg-gray-50 text-lg font-bold"
+          className="flex h-8 w-8 items-center justify-center rounded-lg bg-card shadow text-foreground/80 hover:bg-muted/50 text-lg font-bold"
         >+</button>
         <button
           onClick={() => setScale(1)}
-          className="flex h-8 w-8 items-center justify-center rounded-lg bg-white shadow text-xs text-gray-600 hover:bg-gray-50"
+          className="flex h-8 w-8 items-center justify-center rounded-lg bg-card shadow text-xs text-foreground/80 hover:bg-muted/50"
         >
           {Math.round(scale * 100)}%
         </button>
         <button
           onClick={() => setScale(s => Math.max(s / 1.2, 0.3))}
-          className="flex h-8 w-8 items-center justify-center rounded-lg bg-white shadow text-gray-600 hover:bg-gray-50 text-lg font-bold"
+          className="flex h-8 w-8 items-center justify-center rounded-lg bg-card shadow text-foreground/80 hover:bg-muted/50 text-lg font-bold"
         >−</button>
       </div>
 
@@ -325,9 +325,9 @@ const SeatingCanvas = forwardRef<{ downloadImage: () => void }, Props>(function 
       {layout.tables.length === 0 && (
         <div className="pointer-events-none absolute inset-0 flex items-center justify-center">
           <div className="rounded-2xl bg-white/80 px-6 py-4 text-center shadow backdrop-blur-sm">
-            <p className="text-sm font-medium text-gray-700">Canvas is empty</p>
-            <p className="mt-1 text-xs text-gray-400">Click &quot;Add Table&quot; in the toolbar to place tables.</p>
-            <p className="mt-1 text-xs text-gray-400">Double-click a table to assign guests. Drag to reposition.</p>
+            <p className="text-sm font-medium text-foreground">Canvas is empty</p>
+            <p className="mt-1 text-xs text-muted-foreground">Click &quot;Add Table&quot; in the toolbar to place tables.</p>
+            <p className="mt-1 text-xs text-muted-foreground">Double-click a table to assign guests. Drag to reposition.</p>
           </div>
         </div>
       )}

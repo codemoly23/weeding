@@ -75,14 +75,14 @@ export default function VendorLayout({ children }: { children: React.ReactNode }
 
   if (status === "loading") {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-[#f5f3ff]">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-purple-600" />
+      <div className="min-h-screen flex items-center justify-center bg-background">
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary" />
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-[#f5f3ff] flex">
+    <div className="min-h-screen bg-background flex">
       {/* Mobile overlay */}
       {sidebarOpen && (
         <div
@@ -93,17 +93,17 @@ export default function VendorLayout({ children }: { children: React.ReactNode }
 
       {/* Sidebar */}
       <aside
-        className={`fixed top-0 left-0 h-full w-64 bg-white border-r border-purple-100 z-30 flex flex-col transition-transform duration-300
+        className={`fixed top-0 left-0 h-full w-64 bg-card border-r border-primary/10 z-30 flex flex-col transition-transform duration-300
           ${sidebarOpen ? "translate-x-0" : "-translate-x-full"} lg:translate-x-0 lg:static lg:z-auto`}
       >
         {/* Logo */}
-        <div className="flex items-center justify-between px-5 py-4 border-b border-purple-100">
+        <div className="flex items-center justify-between px-5 py-4 border-b border-primary/10">
           <Link href="/vendor/dashboard" className="flex items-center">
-            <span className="font-semibold text-gray-900 text-sm">Vendor Portal</span>
+            <span className="font-semibold text-foreground text-sm">Vendor Portal</span>
           </Link>
           <button
             onClick={() => setSidebarOpen(false)}
-            className="lg:hidden p-1 rounded text-gray-400 hover:text-gray-600"
+            className="lg:hidden p-1 rounded text-muted-foreground/70 hover:text-foreground/80"
           >
             <X className="w-5 h-5" />
           </button>
@@ -111,9 +111,9 @@ export default function VendorLayout({ children }: { children: React.ReactNode }
 
         {/* Business name */}
         {(businessName || session?.user?.name) && (
-          <div className="px-5 py-3 border-b border-purple-100">
-            <p className="text-xs text-gray-400 uppercase tracking-wide font-medium">Logged in as</p>
-            <p className="text-sm font-medium text-gray-700 truncate mt-0.5">
+          <div className="px-5 py-3 border-b border-primary/10">
+            <p className="text-xs text-muted-foreground/70 uppercase tracking-wide font-medium">Logged in as</p>
+            <p className="text-sm font-medium text-foreground truncate mt-0.5">
               {businessName || session?.user?.name}
             </p>
           </div>
@@ -131,36 +131,36 @@ export default function VendorLayout({ children }: { children: React.ReactNode }
                 onClick={() => setSidebarOpen(false)}
                 className={`flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors
                   ${active
-                    ? "bg-purple-50 text-purple-700"
-                    : "text-gray-600 hover:bg-gray-50 hover:text-gray-900"
+                    ? "bg-primary/5 text-primary"
+                    : "text-foreground/80 hover:bg-muted/30 hover:text-foreground"
                   }`}
               >
                 <Icon className="w-4 h-4 shrink-0" />
                 {label}
                 {showBadge && (
-                  <span className="ml-auto bg-purple-600 text-white text-[10px] font-bold rounded-full min-w-[18px] h-[18px] flex items-center justify-center px-1">
+                  <span className="ml-auto bg-primary text-white text-[10px] font-bold rounded-full min-w-[18px] h-[18px] flex items-center justify-center px-1">
                     {unreadCount > 99 ? "99+" : unreadCount}
                   </span>
                 )}
-                {active && !showBadge && <ChevronRight className="w-3.5 h-3.5 ml-auto text-purple-400" />}
+                {active && !showBadge && <ChevronRight className="w-3.5 h-3.5 ml-auto text-primary/60" />}
               </Link>
             );
           })}
         </nav>
 
         {/* Footer */}
-        <div className="px-3 py-4 border-t border-purple-100 space-y-0.5">
+        <div className="px-3 py-4 border-t border-primary/10 space-y-0.5">
           <Link
             href="/vendors"
             target="_blank"
-            className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-gray-500 hover:bg-gray-50 hover:text-gray-700 transition-colors"
+            className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-muted-foreground hover:bg-muted/30 hover:text-foreground transition-colors"
           >
             <Store className="w-4 h-4 shrink-0" />
             View Public Listing
           </Link>
           <button
             onClick={() => signOut({ callbackUrl: "/login" })}
-            className="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-gray-500 hover:bg-red-50 hover:text-red-600 transition-colors"
+            className="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-muted-foreground hover:bg-[var(--color-error-bg)] hover:text-[var(--color-error-text)] transition-colors"
           >
             <LogOut className="w-4 h-4 shrink-0" />
             Sign Out
@@ -171,17 +171,17 @@ export default function VendorLayout({ children }: { children: React.ReactNode }
       {/* Main */}
       <div className="flex-1 flex flex-col min-w-0">
         {/* Top bar (mobile) */}
-        <header className="sticky top-0 z-10 bg-white border-b border-purple-100 px-4 py-3 flex items-center gap-3 lg:hidden">
+        <header className="sticky top-0 z-10 bg-card border-b border-primary/10 px-4 py-3 flex items-center gap-3 lg:hidden">
           <button
             onClick={() => setSidebarOpen(true)}
-            className="p-2 rounded-lg text-gray-500 hover:bg-gray-100"
+            className="p-2 rounded-lg text-muted-foreground hover:bg-muted"
           >
             <Menu className="w-5 h-5" />
           </button>
-          <span className="font-semibold text-gray-900 text-sm">Vendor Portal</span>
+          <span className="font-semibold text-foreground text-sm">Vendor Portal</span>
           {unreadCount > 0 && (
             <Link href="/vendor/messages" className="ml-auto">
-              <span className="bg-purple-600 text-white text-xs font-bold rounded-full px-2 py-0.5">
+              <span className="bg-primary text-white text-xs font-bold rounded-full px-2 py-0.5">
                 {unreadCount} new
               </span>
             </Link>

@@ -196,7 +196,7 @@ export function BlogRecentPostsWidget({
         <h3
           data-field-id="header"
           className={cn(
-            "mb-4 font-semibold text-slate-900 dark:text-white",
+            "mb-4 font-semibold text-foreground",
             getHeaderSizeClass(s.header.size)
           )}
           style={{ color: s.header.color || undefined }}
@@ -255,7 +255,7 @@ export function BlogRecentPostsWidget({
                   {/* Title */}
                   <h4
                     className={cn(
-                      "font-medium text-slate-900 transition-colors group-hover:text-blue-600 dark:text-slate-100 dark:group-hover:text-blue-400",
+                      "font-medium text-foreground transition-colors group-hover:text-[var(--color-info-text)]",
                       getTitleSizeClass(s.display.titleFontSize)
                     )}
                     style={{
@@ -284,7 +284,7 @@ export function BlogRecentPostsWidget({
 
                   {/* Category (for title-meta style) */}
                   {s.display.style === "title-meta" && primaryCategory && (
-                    <span className="text-xs text-blue-600 dark:text-blue-400">
+                    <span className="text-xs text-[var(--color-info-text)]">
                       {primaryCategory.name}
                     </span>
                   )}
@@ -311,7 +311,7 @@ export function BlogRecentPostsWidget({
         <div className="mt-4">
           <Link
             href={s.viewAllLink.url}
-            className="text-sm font-medium text-blue-600 transition-colors hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300"
+            className="text-sm font-medium text-[var(--color-info-text)] transition-colors hover:text-[var(--color-info-text)]/80"
             style={{ color: s.viewAllLink.color || undefined }}
           >
             {s.viewAllLink.text}

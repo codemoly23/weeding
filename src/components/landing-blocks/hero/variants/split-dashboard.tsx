@@ -68,7 +68,7 @@ export function HeroSplitDashboard({ settings, isPreview = false, device }: Hero
           <div className="flex flex-col justify-center">
             {/* Badge */}
             {settings.badge.enabled && (
-              <Badge className="mb-6 w-fit border-orange-500/50 bg-orange-500/20 px-4 py-2 text-sm font-medium text-orange-400 hover:bg-orange-500/30">
+              <Badge className="mb-6 w-fit border-[var(--color-warning-text)]/50 bg-[var(--color-warning-bg)] px-4 py-2 text-sm font-medium text-[var(--color-warning-text)] hover:bg-[var(--color-warning-bg)]/70">
                 {settings.badge.emoji && `${settings.badge.emoji} `}
                 {settings.badge.text}
               </Badge>
@@ -77,7 +77,7 @@ export function HeroSplitDashboard({ settings, isPreview = false, device }: Hero
             {/* Headline with Animated Words */}
             <h1
               className={cn(
-                "font-bold tracking-tight text-white",
+                "font-bold tracking-tight text-primary-foreground",
                 getHeadlineSize()
               )}
             >
@@ -182,7 +182,7 @@ export function HeroSplitDashboard({ settings, isPreview = false, device }: Hero
                         key={i}
                         className="h-10 w-10 border-2 border-midnight ring-2 ring-midnight"
                       >
-                        <AvatarFallback className="bg-gradient-to-br from-orange-400 to-orange-600 text-xs text-white">
+                        <AvatarFallback className="bg-[var(--color-warning-text)] text-xs text-primary-foreground">
                           {initials}
                         </AvatarFallback>
                       </Avatar>
@@ -210,7 +210,7 @@ export function HeroSplitDashboard({ settings, isPreview = false, device }: Hero
                           className={cn(
                             "h-4 w-4",
                             i < Math.floor(settings.trustText.rating)
-                              ? "fill-amber-400 text-amber-400"
+                              ? "fill-[var(--color-star)] text-[var(--color-star)]"
                               : "fill-slate-600 text-slate-600"
                           )}
                         />

@@ -739,7 +739,7 @@ function StepItem({
                 numberSizeClasses[stepNumber.size],
                 numberPositionClasses[stepNumber.position],
                 stepNumber.style === "circle" && "rounded-full",
-                stepNumber.style === "circle-outline" && "rounded-full border-2 bg-white",
+                stepNumber.style === "circle-outline" && "rounded-full border-2 bg-card",
                 stepNumber.style === "rounded-square" && "rounded-md",
                 stepNumber.style === "badge" && "rounded-full px-2"
               )}

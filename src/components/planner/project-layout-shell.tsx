@@ -57,7 +57,7 @@ export function PlannerProjectLayoutShell({
 
   return (
     <PlannerProvider initialBrideName={initialBride} initialGroomName={initialGroom}>
-      <div className="flex h-screen flex-col overflow-hidden bg-white">
+      <div className="flex h-screen flex-col overflow-hidden bg-background">
         <AnonymousBanner projectId={projectId} />
 
         <div className="flex flex-1 overflow-hidden">
