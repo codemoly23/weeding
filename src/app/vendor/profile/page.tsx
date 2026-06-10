@@ -504,7 +504,7 @@ export default function VendorProfilePage() {
               const daysInMonth = new Date(year, month + 1, 0).getDate();
               const cells = [...Array(firstDay).fill(null), ...Array.from({ length: daysInMonth }, (_, i) => i + 1)];
               const statusColor: Record<string, string> = {
-                AVAILABLE: "bg-emerald-100 text-emerald-800",
+                AVAILABLE: "bg-[var(--color-success-bg)] text-[var(--color-success-text)]",
                 BOOKED: "bg-[var(--color-error-bg)] text-[var(--color-error-text)]",
                 TENTATIVE: "bg-[var(--color-warning-bg)] text-[var(--color-warning-text)]",
               };
@@ -531,7 +531,7 @@ export default function VendorProfilePage() {
             })()}
           </div>
           <div className="flex items-center gap-4 mt-4 text-xs text-muted-foreground">
-            <span className="flex items-center gap-1.5"><span className="w-3 h-3 rounded bg-emerald-100 inline-block" />Available</span>
+            <span className="flex items-center gap-1.5"><span className="w-3 h-3 rounded bg-[var(--color-success-bg)] inline-block" />Available</span>
             <span className="flex items-center gap-1.5"><span className="w-3 h-3 rounded bg-[var(--color-error-bg)] inline-block" />Booked</span>
             <span className="flex items-center gap-1.5"><span className="w-3 h-3 rounded bg-[var(--color-warning-bg)] inline-block" />Tentative</span>
           </div>
