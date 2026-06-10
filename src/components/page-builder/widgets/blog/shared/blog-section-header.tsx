@@ -155,8 +155,8 @@ function ViewAllLink({
           href={link.url}
           className={cn(
             baseClasses,
-            "rounded-lg px-4 py-2 text-white hover:opacity-90",
-            "bg-blue-600 dark:bg-blue-500"
+            "rounded-lg px-4 py-2 text-primary-foreground hover:opacity-90",
+            "bg-[var(--color-info-text)]"
           )}
           style={{
             backgroundColor: link.color || undefined,
@@ -173,8 +173,7 @@ function ViewAllLink({
           href={link.url}
           className={cn(
             baseClasses,
-            "text-blue-600 hover:text-blue-700",
-            "dark:text-blue-400 dark:hover:text-blue-300"
+            "text-[var(--color-info-text)] hover:text-[var(--color-info-text)]/80"
           )}
           style={{ color: link.color || undefined }}
         >
@@ -244,7 +243,7 @@ export function BlogSectionHeader({ settings }: BlogSectionHeaderProps) {
               className={cn(
                 !heading.fontWeight && "font-bold",
                 !heading.letterSpacing && "tracking-tight",
-                "text-slate-900 dark:text-white",
+                "text-foreground",
                 !heading.customFontSize && headingSizeClasses[heading.size]
               )}
               style={{
@@ -309,7 +308,7 @@ export function BlogSectionHeader({ settings }: BlogSectionHeaderProps) {
         className={cn(
           !heading.fontWeight && "font-bold",
           !heading.letterSpacing && "tracking-tight",
-          "text-slate-900 dark:text-white",
+          "text-foreground",
           !heading.customFontSize && headingSizeClasses[heading.size]
         )}
         style={{

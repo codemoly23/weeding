@@ -44,13 +44,13 @@ function getResultIcon(type: SearchResult["type"]) {
     case "service":
       return <Star className="h-5 w-5 text-primary" />;
     case "blog":
-      return <Newspaper className="h-5 w-5 text-blue-500" />;
+      return <Newspaper className="h-5 w-5 text-muted-foreground" />;
     case "faq":
-      return <HelpCircle className="h-5 w-5 text-green-500" />;
+      return <HelpCircle className="h-5 w-5 text-muted-foreground" />;
     case "legal":
-      return <Scale className="h-5 w-5 text-purple-500" />;
+      return <Scale className="h-5 w-5 text-muted-foreground" />;
     case "page":
-      return <FileText className="h-5 w-5 text-gray-500" />;
+      return <FileText className="h-5 w-5 text-muted-foreground" />;
     default:
       return <ArrowRight className="h-5 w-5 text-muted-foreground" />;
   }
@@ -315,7 +315,7 @@ function SearchPageContent() {
                             <div className="flex items-start justify-between gap-2">
                               <h3 className="font-medium group-hover:text-primary transition-colors">
                                 {result.popular && (
-                                  <Star className="inline h-4 w-4 text-yellow-500 fill-yellow-500 mr-1" />
+                                  <Star className="inline h-4 w-4 text-[var(--color-star)] fill-[var(--color-star)] mr-1" />
                                 )}
                                 {result.title}
                               </h3>

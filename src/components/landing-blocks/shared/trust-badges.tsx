@@ -41,7 +41,7 @@ export function TrustBadges({
   items,
   className,
   variant = "grid",
-  iconColor = "text-orange-500",
+  iconColor = "text-[var(--color-warning-text)]",
   textColor = "text-white",
   bgColor = "bg-midnight-light/50",
   borderColor = "border-slate-700/50",

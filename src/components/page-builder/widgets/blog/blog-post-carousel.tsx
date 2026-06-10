@@ -118,8 +118,8 @@ export function BlogPostCarouselWidget({
 
       {/* Error State */}
       {error && (
-        <div className="rounded-lg border border-red-200 bg-red-50 p-6 text-center dark:border-red-900/50 dark:bg-red-900/10">
-          <p className="text-sm text-red-600 dark:text-red-400">{error}</p>
+        <div className="rounded-lg border border-[var(--color-error-text)]/20 bg-[var(--color-error-bg)] p-6 text-center">
+          <p className="text-sm text-[var(--color-error-text)]">{error}</p>
         </div>
       )}
 

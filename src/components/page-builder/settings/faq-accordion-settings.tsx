@@ -152,7 +152,7 @@ export function FaqAccordionWidgetSettingsPanel({
               ]}
             />
             {settings.source === "service" && (
-              <div className="rounded-md border border-amber-200 bg-amber-50 px-3 py-2 text-xs text-amber-700">
+              <div className="rounded-md border border-[var(--color-warning-text)]/30 bg-[var(--color-warning-bg)] px-3 py-2 text-xs text-[var(--color-warning-text)]">
                 <strong>Service Detail pages only.</strong> This mode reads FAQs from the current service page context. For Homepage or other pages, use &quot;All Categories&quot; instead.
               </div>
             )}

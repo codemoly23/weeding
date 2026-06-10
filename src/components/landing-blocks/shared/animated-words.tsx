@@ -57,15 +57,15 @@ export function AnimatedWords({ settings, className }: AnimatedWordsProps) {
   const getColorClass = () => {
     switch (style.color) {
       case "primary":
-        return "text-orange-500";
+        return "text-[var(--color-warning-text)]";
       case "accent":
-        return "text-amber-400";
+        return "text-[var(--color-star)]";
       case "gradient":
-        return "bg-gradient-to-r from-orange-500 to-amber-400 bg-clip-text text-transparent";
+        return "text-accent";
       case "custom":
         return "";
       default:
-        return "text-orange-500";
+        return "text-[var(--color-warning-text)]";
     }
   };
 
@@ -93,8 +93,8 @@ export function AnimatedWords({ settings, className }: AnimatedWordsProps) {
           className={cn(
             "inline-block",
             getColorClass(),
-            style.background && "rounded-lg bg-orange-500/20 px-3 py-1",
-            style.underline && "underline decoration-orange-500 decoration-2 underline-offset-4"
+            style.background && "rounded-lg bg-[var(--color-warning-bg)] px-3 py-1",
+            style.underline && "underline decoration-accent decoration-2 underline-offset-4"
           )}
           style={style.color === "custom" ? { color: style.customColor } : undefined}
         >

@@ -59,20 +59,20 @@ function Section({ title, children, defaultOpen = true }: {
   const [open, setOpen] = useState(defaultOpen);
   const contentId = `section-${title.toLowerCase().replace(/[^a-z0-9]+/g, "-")}`;
   return (
-    <div className="bg-white rounded-2xl overflow-hidden shadow-sm">
+    <div className="bg-card rounded-2xl overflow-hidden shadow-sm">
       <button
-        className="w-full flex items-center gap-2 px-5 py-3.5 text-left hover:bg-gray-50/70 transition-colors"
+        className="w-full flex items-center gap-2 px-5 py-3.5 text-left hover:bg-muted/30 transition-colors"
         onClick={() => setOpen(o => !o)}
         aria-expanded={open}
         aria-controls={contentId}
       >
         {open
-          ? <ChevronDown className="h-4 w-4 text-gray-400 flex-shrink-0" />
-          : <ChevronRight className="h-4 w-4 text-gray-400 flex-shrink-0" />
+          ? <ChevronDown className="h-4 w-4 text-muted-foreground flex-shrink-0" />
+          : <ChevronRight className="h-4 w-4 text-muted-foreground flex-shrink-0" />
         }
-        <span className="text-sm text-gray-500 font-medium">{title}</span>
+        <span className="text-sm text-muted-foreground font-medium">{title}</span>
       </button>
-      {open && <div id={contentId} className="border-t border-gray-100">{children}</div>}
+      {open && <div id={contentId} className="border-t border-border">{children}</div>}
     </div>
   );
 }
@@ -138,7 +138,7 @@ function MapPinIcon() {
 }
 
 function BudgetBarChart({ categories }: { categories: LocalBudgetCategory[] }) {
-  if (categories.length === 0) return <p className="text-xs text-gray-400 py-4 text-center">No budget data yet</p>;
+  if (categories.length === 0) return <p className="text-xs text-muted-foreground py-4 text-center">No budget data yet</p>;
   const maxVal = Math.max(...categories.map(c => c.planned), 1);
   const chartH = 80;
   const barW = Math.max(6, Math.min(18, Math.floor(500 / categories.length) - 6));
@@ -370,17 +370,17 @@ export default function PlannerOverviewPage() {
   if (loading) {
     return (
       <div className="flex items-center justify-center py-20">
-        <div className="h-8 w-8 animate-spin rounded-full border-4 border-blue-200 border-t-blue-600" />
+        <div className="h-8 w-8 animate-spin rounded-full border-4 border-primary/20 border-t-primary" />
       </div>
     );
   }
   if (!project) {
     return (
-      <div className="mx-auto max-w-xl rounded-lg border border-red-200 bg-red-50 p-5 text-center">
-        <AlertCircle className="mx-auto mb-3 h-8 w-8 text-red-500" />
-        <h1 className="text-base font-semibold text-red-900">{loadError || "Project unavailable."}</h1>
-        <p className="mt-1 text-sm text-red-700">Return to your planner projects and try again.</p>
-        <Link href="/planner" className="mt-4 inline-flex rounded-md bg-red-600 px-4 py-2 text-sm font-medium text-white hover:bg-red-700">
+      <div className="mx-auto max-w-xl rounded-lg border border-[var(--color-error-text)]/20 bg-[var(--color-error-bg)] p-5 text-center">
+        <AlertCircle className="mx-auto mb-3 h-8 w-8 text-[var(--color-error-text)]" />
+        <h1 className="text-base font-semibold text-[var(--color-error-text)]">{loadError || "Project unavailable."}</h1>
+        <p className="mt-1 text-sm text-[var(--color-error-text)]/80">Return to your planner projects and try again.</p>
+        <Link href="/planner" className="mt-4 inline-flex rounded-md bg-[var(--color-error-text)] px-4 py-2 text-sm font-medium text-white hover:bg-[var(--color-error-text)]/90">
           Back to projects
         </Link>
       </div>
@@ -392,10 +392,10 @@ export default function PlannerOverviewPage() {
     : null;
 
   const stats = [
-    { label: t("overview.totalGuests"), value: String(guestCount), icon: Users, color: "text-blue-600", bg: "bg-blue-100 dark:bg-blue-900/30" },
-    { label: t("overview.budget"), value: `$${budgetTotal.toLocaleString(undefined, { maximumFractionDigits: 0 })}`, icon: DollarSign, color: "text-green-600", bg: "bg-green-100 dark:bg-green-900/30" },
-    { label: t("overview.tasksDone"), value: checklistTotal > 0 ? `${checklistDone}/${checklistTotal}` : "0/0", icon: CheckSquare, color: "text-blue-600", bg: "bg-blue-100 dark:bg-blue-900/30" },
-    { label: t("overview.daysLeft"), value: daysLeft !== null ? daysLeft.toString() : "—", icon: Calendar, color: "text-indigo-600", bg: "bg-indigo-100 dark:bg-indigo-900/30" },
+    { label: t("overview.totalGuests"), value: String(guestCount), icon: Users, color: "text-primary", bg: "bg-primary/10" },
+    { label: t("overview.budget"), value: `$${budgetTotal.toLocaleString(undefined, { maximumFractionDigits: 0 })}`, icon: DollarSign, color: "text-[var(--color-success-text)]", bg: "bg-[var(--color-success-bg)]" },
+    { label: t("overview.tasksDone"), value: checklistTotal > 0 ? `${checklistDone}/${checklistTotal}` : "0/0", icon: CheckSquare, color: "text-primary", bg: "bg-primary/10" },
+    { label: t("overview.daysLeft"), value: daysLeft !== null ? daysLeft.toString() : "—", icon: Calendar, color: "text-primary", bg: "bg-primary/10" },
   ];
 
   const pct = checklistTotal > 0 ? Math.round((checklistDone / checklistTotal) * 100) : 0;
@@ -407,7 +407,7 @@ export default function PlannerOverviewPage() {
   return (
     <div>
       {partialErrors.length > 0 && (
-        <div className="mb-4 flex items-start gap-3 rounded-lg border border-amber-200 bg-amber-50 p-3 text-sm text-amber-800">
+        <div className="mb-4 flex items-start gap-3 rounded-lg border border-[var(--color-warning-text)]/20 bg-[var(--color-warning-bg)] p-3 text-sm text-[var(--color-warning-text)]">
           <AlertCircle className="mt-0.5 h-4 w-4 flex-shrink-0" />
           <p>Some dashboard sections could not load: {partialErrors.join(", ")}. Refresh the page to retry.</p>
         </div>
@@ -437,12 +437,12 @@ export default function PlannerOverviewPage() {
             isLoggedIn ? (
               <Link
                 href={`/planner/sync?from=${projectId}`}
-                className="ml-2 rounded-full bg-red-100 px-2 py-0.5 text-xs font-semibold text-red-600 hover:bg-red-200 dark:bg-red-900/30 dark:text-red-400"
+                className="ml-2 rounded-full bg-[var(--color-error-bg)] px-2 py-0.5 text-xs font-semibold text-[var(--color-error-text)] hover:bg-[var(--color-error-bg)]/80"
               >
                 {t("common.notSaved")} · Save now
               </Link>
             ) : (
-              <span className="ml-2 rounded-full bg-red-100 px-2 py-0.5 text-xs font-semibold text-red-600 dark:bg-red-900/30 dark:text-red-400">
+              <span className="ml-2 rounded-full bg-[var(--color-error-bg)] px-2 py-0.5 text-xs font-semibold text-[var(--color-error-text)]">
                 {t("common.notSaved")}
               </span>
             )
@@ -480,8 +480,8 @@ export default function PlannerOverviewPage() {
               <Card key={action.label} className="cursor-pointer transition-shadow hover:shadow-md"
                 onClick={() => router.push(action.href)}>
                 <CardContent className="flex items-center gap-3 p-4">
-                  <div className="rounded-lg bg-blue-100 p-2 dark:bg-blue-900/30">
-                    <Icon className="h-5 w-5 text-blue-600"/>
+                  <div className="rounded-lg bg-primary/10 p-2">
+                    <Icon className="h-5 w-5 text-primary"/>
                   </div>
                   <span className="font-medium">{action.label}</span>
                 </CardContent>
@@ -493,8 +493,8 @@ export default function PlannerOverviewPage() {
 
       {/* ── Reference sections (lavender bg) ────────────────────────────── */}
       <div className="-mx-4 lg:-mx-6 mt-10 bg-[#ebe8f1] px-4 lg:px-6 py-10 -mb-4 lg:-mb-6">
-        <h2 className="text-center text-2xl font-light text-gray-600 mb-1 tracking-wide">Overview</h2>
-        <p className="text-center text-sm text-gray-500 mb-8">
+        <h2 className="text-center text-2xl font-light text-foreground/80 mb-1 tracking-wide">Overview</h2>
+        <p className="text-center text-sm text-muted-foreground mb-8">
           Keep up to date with your wedding planning as you go.
         </p>
 
@@ -508,17 +508,17 @@ export default function PlannerOverviewPage() {
                 {editingBride ? (
                   <div className="flex items-center gap-1">
                     <Input value={tempBride} onChange={e => setTempBride(e.target.value)}
-                      className="h-7 text-sm w-36 border-violet-300"
+                      className="h-7 text-sm w-36 border-primary/30"
                       autoFocus placeholder="Bride's name"
                       onKeyDown={e => { if (e.key === "Enter") saveBrideName(); if (e.key === "Escape") setEditingBride(false); }}
                     />
-                    <button onClick={saveBrideName} className="text-violet-600"><Check className="h-3.5 w-3.5"/></button>
-                    <button onClick={() => setEditingBride(false)} className="text-gray-400"><X className="h-3.5 w-3.5"/></button>
+                    <button onClick={saveBrideName} className="text-primary"><Check className="h-3.5 w-3.5"/></button>
+                    <button onClick={() => setEditingBride(false)} className="text-muted-foreground"><X className="h-3.5 w-3.5"/></button>
                   </div>
                 ) : (
                   <button
                     onClick={() => { setTempBride(brideName); setEditingBride(true); }}
-                    className="text-sm text-violet-600 border-b border-dashed border-violet-400 pb-0.5 hover:text-violet-700"
+                    className="text-sm text-primary border-b border-dashed border-primary/40 pb-0.5 hover:text-primary/80"
                   >
                     {brideName || "Set bride's name"}
                   </button>
@@ -527,17 +527,17 @@ export default function PlannerOverviewPage() {
                 {editingGroom ? (
                   <div className="flex items-center gap-1">
                     <Input value={tempGroom} onChange={e => setTempGroom(e.target.value)}
-                      className="h-7 text-sm w-36 border-violet-300"
+                      className="h-7 text-sm w-36 border-primary/30"
                       autoFocus placeholder="Groom's name"
                       onKeyDown={e => { if (e.key === "Enter") saveGroomName(); if (e.key === "Escape") setEditingGroom(false); }}
                     />
-                    <button onClick={saveGroomName} className="text-violet-600"><Check className="h-3.5 w-3.5"/></button>
-                    <button onClick={() => setEditingGroom(false)} className="text-gray-400"><X className="h-3.5 w-3.5"/></button>
+                    <button onClick={saveGroomName} className="text-primary"><Check className="h-3.5 w-3.5"/></button>
+                    <button onClick={() => setEditingGroom(false)} className="text-muted-foreground"><X className="h-3.5 w-3.5"/></button>
                   </div>
                 ) : (
                   <button
                     onClick={() => { setTempGroom(groomName); setEditingGroom(true); }}
-                    className="text-sm text-violet-600 border-b border-dashed border-violet-400 pb-0.5 hover:text-violet-700"
+                    className="text-sm text-primary border-b border-dashed border-primary/40 pb-0.5 hover:text-primary/80"
                   >
                     {groomName || "Set groom's name"}
                   </button>
@@ -551,20 +551,20 @@ export default function PlannerOverviewPage() {
           <Section title="Event information">
             <div className="px-6 pt-4 pb-5 grid grid-cols-2 gap-4">
               <div>
-                <p className="text-xs text-gray-400 mb-1">Ceremony Date</p>
+                <p className="text-xs text-muted-foreground mb-1">Ceremony Date</p>
                 <button
                   onClick={() => router.push(`/planner/${projectId}/ceremony`)}
-                  className="text-sm text-violet-600 border-b border-dashed border-violet-400 pb-0.5 text-left"
+                  className="text-sm text-primary border-b border-dashed border-primary/40 pb-0.5 text-left"
                 >
                   {ceremonyDate || "Set ceremony date"}
                 </button>
               </div>
               <div className="flex items-start justify-between">
                 <div>
-                  <p className="text-xs text-gray-400 mb-1">Ceremony Location</p>
+                  <p className="text-xs text-muted-foreground mb-1">Ceremony Location</p>
                   <button
                     onClick={() => router.push(`/planner/${projectId}/ceremony`)}
-                    className="text-sm text-violet-600 border-b border-dashed border-violet-400 pb-0.5 text-left"
+                    className="text-sm text-primary border-b border-dashed border-primary/40 pb-0.5 text-left"
                   >
                     {ceremonyLocation || "Set ceremony location"}
                   </button>
@@ -580,7 +580,7 @@ export default function PlannerOverviewPage() {
               <div className="flex gap-6 mb-4">
                 {/* Bride's side */}
                 <div className="flex-1">
-                  <p className="text-xs text-gray-400 mb-2">Bride&apos;s side</p>
+                  <p className="text-xs text-muted-foreground mb-2">Bride&apos;s side</p>
                   {brideGuests > 0 ? (
                     <>
                       <div className="flex gap-1 flex-wrap">
@@ -588,15 +588,15 @@ export default function PlannerOverviewPage() {
                           <PersonIcon key={i} />
                         ))}
                         {brideGuests > 6 && (
-                          <span className="text-xs text-gray-400 self-end ml-1">+{brideGuests - 6}</span>
+                          <span className="text-xs text-muted-foreground self-end ml-1">+{brideGuests - 6}</span>
                         )}
                       </div>
-                      <p className="text-xs text-gray-400 mt-1">{brideGuests} guests</p>
+                      <p className="text-xs text-muted-foreground mt-1">{brideGuests} guests</p>
                     </>
                   ) : (
                     <button
                       onClick={() => router.push(`/planner/${projectId}/guests`)}
-                      className="text-sm text-violet-600 border-b border-dashed border-violet-400"
+                      className="text-sm text-primary border-b border-dashed border-primary/40"
                     >
                       Add more guests
                     </button>
@@ -604,7 +604,7 @@ export default function PlannerOverviewPage() {
                 </div>
                 {/* Groom's side */}
                 <div className="flex-1">
-                  <p className="text-xs text-gray-400 mb-2">Groom&apos;s side</p>
+                  <p className="text-xs text-muted-foreground mb-2">Groom&apos;s side</p>
                   {groomGuests > 0 ? (
                     <>
                       <div className="flex gap-1 flex-wrap">
@@ -612,25 +612,25 @@ export default function PlannerOverviewPage() {
                           <PersonIcon key={i} />
                         ))}
                         {groomGuests > 6 && (
-                          <span className="text-xs text-gray-400 self-end ml-1">+{groomGuests - 6}</span>
+                          <span className="text-xs text-muted-foreground self-end ml-1">+{groomGuests - 6}</span>
                         )}
                       </div>
-                      <p className="text-xs text-gray-400 mt-1">{groomGuests} guests</p>
+                      <p className="text-xs text-muted-foreground mt-1">{groomGuests} guests</p>
                     </>
                   ) : (
                     <button
                       onClick={() => router.push(`/planner/${projectId}/guests`)}
-                      className="text-sm text-violet-600 border-b border-dashed border-violet-400"
+                      className="text-sm text-primary border-b border-dashed border-primary/40"
                     >
                       Add more guests
                     </button>
                   )}
                 </div>
               </div>
-              <div className="flex flex-wrap gap-x-5 gap-y-1 border-t border-gray-100 pt-3 text-sm text-gray-500">
-                <span>Wedding party: <span className="text-violet-600 font-medium">{guestCount}</span></span>
-                <span>Total guests: <span className="text-violet-600 font-medium">{guestCount}</span></span>
-                <span>Confirmed RSVP : <span className="text-pink-500 font-medium">{confirmedRsvp}</span></span>
+              <div className="flex flex-wrap gap-x-5 gap-y-1 border-t border-border pt-3 text-sm text-muted-foreground">
+                <span>Wedding party: <span className="text-primary font-medium">{guestCount}</span></span>
+                <span>Total guests: <span className="text-primary font-medium">{guestCount}</span></span>
+                <span>Confirmed RSVP : <span className="text-accent font-medium">{confirmedRsvp}</span></span>
               </div>
             </div>
           </Section>
@@ -638,17 +638,17 @@ export default function PlannerOverviewPage() {
           {/* ── Checklist ─────────────────────────────────────────────── */}
           <Section title="Checklist">
             <div className="px-6 pt-4 pb-5">
-              <p className="text-xs text-gray-400 mb-2">Progress</p>
-              <div className="w-full bg-gray-100 rounded-full h-2 mb-3 overflow-hidden">
+              <p className="text-xs text-muted-foreground mb-2">Progress</p>
+              <div className="w-full bg-muted rounded-full h-2 mb-3 overflow-hidden">
                 <div
-                  className="h-2 rounded-full bg-gradient-to-r from-pink-300 to-violet-400 transition-all"
+                  className="h-2 rounded-full bg-gradient-to-r from-accent/60 to-primary transition-all"
                   style={{ width: `${pct}%` }}
                 />
               </div>
-              <div className="flex flex-wrap gap-x-5 gap-y-1 text-sm text-gray-500">
-                <span>Total tasks: <span className="text-violet-600 font-semibold">{checklistTotal}</span></span>
-                <span>Completed: <span className="text-pink-500 font-semibold">{checklistDone}</span></span>
-                <span>Still on the way: <span className="text-violet-600 font-semibold">{checklistTotal - checklistDone}</span></span>
+              <div className="flex flex-wrap gap-x-5 gap-y-1 text-sm text-muted-foreground">
+                <span>Total tasks: <span className="text-primary font-semibold">{checklistTotal}</span></span>
+                <span>Completed: <span className="text-accent font-semibold">{checklistDone}</span></span>
+                <span>Still on the way: <span className="text-primary font-semibold">{checklistTotal - checklistDone}</span></span>
               </div>
             </div>
           </Section>
@@ -658,14 +658,14 @@ export default function PlannerOverviewPage() {
             <div className="px-6 pt-4 pb-5">
               <div className="flex justify-end gap-6 mb-3">
                 <div className="text-right">
-                  <p className="text-xs text-gray-400">Budget:</p>
-                  <p className="text-sm font-medium text-gray-700">
+                  <p className="text-xs text-muted-foreground">Budget:</p>
+                  <p className="text-sm font-medium text-foreground/80">
                     ${budgetTotal.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                   </p>
                 </div>
                 <div className="text-right">
-                  <p className="text-xs text-gray-400">Actual cost:</p>
-                  <p className="text-sm font-medium text-violet-600">
+                  <p className="text-xs text-muted-foreground">Actual cost:</p>
+                  <p className="text-sm font-medium text-primary">
                     ${budgetSpent.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                   </p>
                 </div>
@@ -678,9 +678,9 @@ export default function PlannerOverviewPage() {
           <Section title="Event Itinerary">
             <div className="px-6 pt-2 pb-5">
               {itineraryEvents.length === 0 ? (
-                <p className="text-sm text-gray-400 py-3">
+                <p className="text-sm text-muted-foreground py-3">
                   <button onClick={() => router.push(`/planner/${projectId}/itinerary`)}
-                    className="text-violet-600 border-b border-dashed border-violet-400">
+                    className="text-primary border-b border-dashed border-primary/40">
                     Set up your event itinerary
                   </button>
                 </p>
@@ -688,14 +688,14 @@ export default function PlannerOverviewPage() {
                 itineraryEvents.map(ev => (
                   <div key={ev.id} className="flex items-start gap-3 py-1.5">
                     <div className="text-right w-[72px] flex-shrink-0">
-                      <span className="text-sm text-gray-700">{to12h(ev.startTime)}</span>
+                      <span className="text-sm text-foreground/80">{to12h(ev.startTime)}</span>
                       <br />
-                      <span className="text-xs text-pink-400">{getDuration(ev.startTime, ev.endTime)} min</span>
+                      <span className="text-xs text-accent/80">{getDuration(ev.startTime, ev.endTime)} min</span>
                     </div>
                     <div className="pt-1.5 flex-shrink-0">
-                      <div className="h-3 w-3 rounded-full border-2 border-gray-300 bg-white" />
+                      <div className="h-3 w-3 rounded-full border-2 border-border bg-card" />
                     </div>
-                    <span className="text-sm text-gray-700 pt-0.5">{ev.title}</span>
+                    <span className="text-sm text-foreground/80 pt-0.5">{ev.title}</span>
                   </div>
                 ))
               )}
@@ -706,20 +706,20 @@ export default function PlannerOverviewPage() {
           <Section title="Ceremony">
             <div className="px-6 pt-4 pb-5 grid grid-cols-2 gap-4">
               <div>
-                <p className="text-xs text-gray-400 mb-1">Ceremony Date</p>
+                <p className="text-xs text-muted-foreground mb-1">Ceremony Date</p>
                 <button
                   onClick={() => router.push(`/planner/${projectId}/ceremony`)}
-                  className="text-sm text-violet-600 border-b border-dashed border-violet-400 pb-0.5 text-left"
+                  className="text-sm text-primary border-b border-dashed border-primary/40 pb-0.5 text-left"
                 >
                   {ceremonyDate || "Set ceremony date"}
                 </button>
               </div>
               <div className="flex items-start justify-between">
                 <div>
-                  <p className="text-xs text-gray-400 mb-1">Ceremony Location</p>
+                  <p className="text-xs text-muted-foreground mb-1">Ceremony Location</p>
                   <button
                     onClick={() => router.push(`/planner/${projectId}/ceremony`)}
-                    className="text-sm text-violet-600 border-b border-dashed border-violet-400 pb-0.5 text-left"
+                    className="text-sm text-primary border-b border-dashed border-primary/40 pb-0.5 text-left"
                   >
                     {ceremonyLocation || "Set ceremony location"}
                   </button>
@@ -733,20 +733,20 @@ export default function PlannerOverviewPage() {
           <Section title="Reception">
             <div className="px-6 pt-4 pb-5 grid grid-cols-2 gap-4">
               <div>
-                <p className="text-xs text-gray-400 mb-1">Reception Date</p>
+                <p className="text-xs text-muted-foreground mb-1">Reception Date</p>
                 <button
                   onClick={() => router.push(`/planner/${projectId}/reception`)}
-                  className="text-sm text-violet-600 border-b border-dashed border-violet-400 pb-0.5 text-left"
+                  className="text-sm text-primary border-b border-dashed border-primary/40 pb-0.5 text-left"
                 >
                   {receptionDate || "Set reception date"}
                 </button>
               </div>
               <div className="flex items-start justify-between">
                 <div>
-                  <p className="text-xs text-gray-400 mb-1">Reception Location</p>
+                  <p className="text-xs text-muted-foreground mb-1">Reception Location</p>
                   <button
                     onClick={() => router.push(`/planner/${projectId}/reception`)}
-                    className="text-sm text-violet-600 border-b border-dashed border-violet-400 pb-0.5 text-left"
+                    className="text-sm text-primary border-b border-dashed border-primary/40 pb-0.5 text-left"
                   >
                     {receptionLocation || "Set reception location"}
                   </button>
@@ -761,20 +761,20 @@ export default function PlannerOverviewPage() {
             <div className="px-6 pt-4 pb-5">
               {!isLocal && (pwPhotos > 0 || pwGuestbook > 0 || pwAttending > 0) ? (
                 <>
-                  <div className="flex flex-wrap gap-x-5 gap-y-1 text-sm text-gray-500 mb-3">
-                    <span>Attending: <span className="text-violet-600 font-semibold">{pwAttending}</span></span>
-                    <span>Guestbook: <span className="text-pink-500 font-semibold">{pwGuestbook}</span></span>
-                    <span>Photos: <span className="text-violet-600 font-semibold">{pwPhotos}</span></span>
+                  <div className="flex flex-wrap gap-x-5 gap-y-1 text-sm text-muted-foreground mb-3">
+                    <span>Attending: <span className="text-primary font-semibold">{pwAttending}</span></span>
+                    <span>Guestbook: <span className="text-accent font-semibold">{pwGuestbook}</span></span>
+                    <span>Photos: <span className="text-primary font-semibold">{pwPhotos}</span></span>
                   </div>
                   <button
                     onClick={() => router.push(`/planner/${projectId}/post-wedding`)}
-                    className="text-sm text-violet-600 border-b border-dashed border-violet-400"
+                    className="text-sm text-primary border-b border-dashed border-primary/40"
                   >
                     View post-wedding memories →
                   </button>
                 </>
               ) : (
-                <p className="text-sm text-gray-400 text-center py-2">
+                <p className="text-sm text-muted-foreground text-center py-2">
                   {isLocal
                     ? "Sign in to save your project and access post-wedding memories."
                     : "Post-wedding memories will appear here once guests submit them."

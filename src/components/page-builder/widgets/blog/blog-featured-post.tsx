@@ -258,8 +258,8 @@ export function BlogFeaturedPostWidget({
   if (error) {
     return (
       <WidgetContainer container={s.container}>
-      <div className="rounded-lg border border-red-200 bg-red-50 p-6 text-center dark:border-red-900/50 dark:bg-red-900/10">
-        <p className="text-sm text-red-600 dark:text-red-400">{error}</p>
+      <div className="rounded-lg border border-[var(--color-error-text)]/20 bg-[var(--color-error-bg)] p-6 text-center">
+        <p className="text-sm text-[var(--color-error-text)]">{error}</p>
       </div>
       </WidgetContainer>
     );
@@ -324,8 +324,8 @@ export function BlogFeaturedPostWidget({
           className={cn(
             "inline-block w-fit text-xs font-medium",
             s.content.categoryBadge.style === "pill"
-              ? "rounded-full bg-blue-500/90 px-3 py-1 text-white"
-              : "rounded bg-blue-500/90 px-2 py-0.5 text-white"
+              ? "rounded-full bg-[var(--color-info-text)]/90 px-3 py-1 text-primary-foreground"
+              : "rounded bg-[var(--color-info-text)]/90 px-2 py-0.5 text-primary-foreground"
           )}
         >
           {primaryCategory.name}

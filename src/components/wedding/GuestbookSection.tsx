@@ -82,14 +82,14 @@ export default function GuestbookSection({
       <h2 className="text-3xl font-light mb-4" style={{ color: primaryColor }}>
         {title || "Guestbook"}
       </h2>
-      {message && <p className="text-gray-600 mb-8">{message}</p>}
+      {message && <p className="text-foreground/80 mb-8">{message}</p>}
 
       {/* Form */}
-      <div className="bg-white rounded-2xl p-6 max-w-lg mx-auto shadow-sm text-left mb-8">
+      <div className="bg-card rounded-2xl p-6 max-w-lg mx-auto shadow-sm text-left mb-8">
         {success ? (
           <div className="flex flex-col items-center py-4 gap-2">
             <BookOpen className="w-8 h-8" style={{ color: primaryColor }} />
-            <p className="text-sm font-medium text-gray-700">Your message has been added!</p>
+            <p className="text-sm font-medium text-foreground/80">Your message has been added!</p>
             <button
               onClick={() => setSuccess(false)}
               className="text-xs underline mt-1"
@@ -100,14 +100,14 @@ export default function GuestbookSection({
           </div>
         ) : (
           <form onSubmit={submit} className="space-y-3">
-            <p className="text-sm font-semibold text-gray-700 mb-3">Leave a message for the couple</p>
+            <p className="text-sm font-semibold text-foreground/80 mb-3">Leave a message for the couple</p>
             <div>
               <input
                 value={name}
                 onChange={e => setName(e.target.value)}
                 placeholder="Your name"
                 maxLength={100}
-                className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2"
+                className="w-full border border-border rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2"
                 style={{ "--tw-ring-color": primaryColor } as React.CSSProperties}
               />
             </div>
@@ -118,12 +118,12 @@ export default function GuestbookSection({
                 placeholder="Write your wishes here…"
                 rows={4}
                 maxLength={1000}
-                className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 resize-none"
+                className="w-full border border-border rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 resize-none"
                 style={{ "--tw-ring-color": primaryColor } as React.CSSProperties}
               />
-              <p className="text-[11px] text-gray-300 text-right mt-0.5">{text.length}/1000</p>
+              <p className="text-[11px] text-muted-foreground/50 text-right mt-0.5">{text.length}/1000</p>
             </div>
-            {error && <p className="text-xs text-red-500">{error}</p>}
+            {error && <p className="text-xs text-[var(--color-error-text)]">{error}</p>}
             <button
               type="submit"
               disabled={submitting}
@@ -145,12 +145,12 @@ export default function GuestbookSection({
       {entries.length > 0 && (
         <div className="max-w-2xl mx-auto space-y-3 text-left">
           {entries.map(entry => (
-            <div key={entry.id} className="bg-white rounded-xl px-5 py-4 shadow-sm">
+            <div key={entry.id} className="bg-card rounded-xl px-5 py-4 shadow-sm">
               <div className="flex items-center justify-between mb-1">
-                <span className="text-sm font-semibold text-gray-800">{entry.authorName}</span>
-                <span className="text-xs text-gray-400">{formatDate(entry.createdAt)}</span>
+                <span className="text-sm font-semibold text-foreground">{entry.authorName}</span>
+                <span className="text-xs text-muted-foreground">{formatDate(entry.createdAt)}</span>
               </div>
-              <p className="text-sm text-gray-600 leading-relaxed">{entry.message}</p>
+              <p className="text-sm text-foreground/80 leading-relaxed">{entry.message}</p>
             </div>
           ))}
         </div>

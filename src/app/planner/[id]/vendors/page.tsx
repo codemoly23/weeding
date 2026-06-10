@@ -68,19 +68,19 @@ interface ConvThread {
 }
 
 const CATEGORY_GRADIENTS: Record<VendorCategory, string> = {
-  VENUE:           "from-purple-500 to-indigo-700",
-  PHOTOGRAPHY:     "from-pink-500 to-rose-600",
-  VIDEOGRAPHY:     "from-rose-500 to-red-600",
-  CATERING:        "from-orange-400 to-amber-600",
-  MUSIC_DJ:        "from-yellow-400 to-orange-500",
-  FLOWERS:         "from-green-400 to-emerald-600",
-  DRESS_ATTIRE:    "from-fuchsia-500 to-pink-700",
-  RINGS:           "from-amber-400 to-yellow-600",
-  DECORATIONS:     "from-teal-400 to-cyan-600",
-  TRANSPORTATION:  "from-blue-500 to-indigo-600",
-  HAIR_MAKEUP:     "from-indigo-400 to-purple-600",
-  WEDDING_PLANNER: "from-violet-500 to-purple-700",
-  OTHER:           "from-gray-400 to-slate-600",
+  VENUE:           "from-primary to-primary/70",
+  PHOTOGRAPHY:     "from-accent to-accent/70",
+  VIDEOGRAPHY:     "from-accent/80 to-[var(--color-error-text)]/60",
+  CATERING:        "from-[var(--color-warning-text)]/70 to-[var(--color-warning-bg)]",
+  MUSIC_DJ:        "from-[var(--color-warning-bg)] to-[var(--color-warning-text)]/70",
+  FLOWERS:         "from-[var(--color-success-text)]/70 to-[var(--color-success-bg)]",
+  DRESS_ATTIRE:    "from-accent to-accent/80",
+  RINGS:           "from-[var(--color-warning-text)]/60 to-[var(--color-warning-bg)]/80",
+  DECORATIONS:     "from-primary/60 to-primary/40",
+  TRANSPORTATION:  "from-primary to-primary/80",
+  HAIR_MAKEUP:     "from-primary/60 to-primary",
+  WEDDING_PLANNER: "from-primary to-primary/90",
+  OTHER:           "from-muted-foreground/60 to-muted-foreground/40",
 };
 
 async function apiFetch(url: string, options?: RequestInit) {
@@ -119,18 +119,18 @@ function VendorFormFields({ form, setForm }: {
   return (
     <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
       <div className="sm:col-span-2">
-        <label className="block text-xs font-medium text-gray-600 mb-1">Vendor Name *</label>
+        <label className="block text-xs font-medium text-foreground/80 mb-1">Vendor Name *</label>
         <input
-          className="w-full border rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-purple-400"
+          className="w-full border rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary/40"
           placeholder="e.g. Sakura Photography"
           value={form.name}
           onChange={e => setForm({ ...form, name: e.target.value })}
         />
       </div>
       <div className="sm:col-span-2">
-        <label className="block text-xs font-medium text-gray-600 mb-1">Category *</label>
+        <label className="block text-xs font-medium text-foreground/80 mb-1">Category *</label>
         <select
-          className="w-full border rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-purple-400"
+          className="w-full border rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary/40"
           value={form.category}
           onChange={e => setForm({ ...form, category: e.target.value as VendorCategory })}
         >
@@ -140,38 +140,38 @@ function VendorFormFields({ form, setForm }: {
         </select>
       </div>
       <div>
-        <label className="block text-xs font-medium text-gray-600 mb-1">Phone</label>
+        <label className="block text-xs font-medium text-foreground/80 mb-1">Phone</label>
         <input
-          className="w-full border rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-purple-400"
+          className="w-full border rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary/40"
           placeholder="+1 234 567 8900"
           value={form.phone}
           onChange={e => setForm({ ...form, phone: e.target.value })}
         />
       </div>
       <div>
-        <label className="block text-xs font-medium text-gray-600 mb-1">Email</label>
+        <label className="block text-xs font-medium text-foreground/80 mb-1">Email</label>
         <input
           type="email"
-          className="w-full border rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-purple-400"
+          className="w-full border rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary/40"
           placeholder="vendor@example.com"
           value={form.email}
           onChange={e => setForm({ ...form, email: e.target.value })}
         />
       </div>
       <div className="sm:col-span-2">
-        <label className="block text-xs font-medium text-gray-600 mb-1">Website</label>
+        <label className="block text-xs font-medium text-foreground/80 mb-1">Website</label>
         <input
-          className="w-full border rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-purple-400"
+          className="w-full border rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary/40"
           placeholder="https://vendor.com"
           value={form.website}
           onChange={e => setForm({ ...form, website: e.target.value })}
         />
       </div>
       <div className="sm:col-span-2">
-        <label className="block text-xs font-medium text-gray-600 mb-1">Notes</label>
+        <label className="block text-xs font-medium text-foreground/80 mb-1">Notes</label>
         <textarea
           rows={2}
-          className="w-full border rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-purple-400 resize-none"
+          className="w-full border rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary/40 resize-none"
           placeholder="Any notes about this vendor..."
           value={form.notes}
           onChange={e => setForm({ ...form, notes: e.target.value })}
@@ -629,8 +629,8 @@ export default function VendorsPage() {
     <div className="p-4 sm:p-6 max-w-5xl mx-auto">
       {/* Header */}
       <div className="mb-6 text-center">
-        <h1 className="text-2xl font-bold text-gray-900">All Vendors</h1>
-        <p className="text-sm text-gray-500 mt-1 max-w-2xl mx-auto">
+        <h1 className="text-2xl font-bold text-foreground">All Vendors</h1>
+        <p className="text-sm text-muted-foreground mt-1 max-w-2xl mx-auto">
           Discover the perfect <strong>vendors</strong>, <strong>venues</strong>, and <strong>services</strong> for
           your wedding day by trying your luck in our extensive database of verified professionals. Additionally,
           you have the freedom to add a <strong>custom vendor</strong> to your personal list, ensuring that every
@@ -642,31 +642,31 @@ export default function VendorsPage() {
       <div className="flex flex-wrap gap-2 mb-6">
         <button
           onClick={() => { setShowAdd(true); setAddForm(emptyForm()); setAddError(null); }}
-          className="flex items-center gap-2 bg-purple-600 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-purple-700 transition-colors"
+          className="flex items-center gap-2 bg-primary text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-primary/90 transition-colors"
         >
           <PlusCircle className="w-4 h-4" />
           Add custom vendor
         </button>
 
-        <label className="flex items-center gap-2 bg-white border border-gray-300 text-gray-700 px-4 py-2 rounded-lg text-sm font-medium hover:bg-gray-50 transition-colors cursor-pointer">
+        <label className="flex items-center gap-2 bg-card border border-border text-foreground/80 px-4 py-2 rounded-lg text-sm font-medium hover:bg-muted transition-colors cursor-pointer">
           <Upload className="w-4 h-4" />
           {importing ? "Importing…" : "Import from file"}
           <input ref={fileRef} type="file" accept=".csv,.xls,.xlsx" className="hidden" onChange={handleImport} />
         </label>
 
         <div className="flex items-center gap-1 text-xs">
-          <button onClick={() => handleDownloadTemplate("xlsx")} className="text-purple-600 hover:underline px-2 py-2">
+          <button onClick={() => handleDownloadTemplate("xlsx")} className="text-primary hover:underline px-2 py-2">
             Template XLS
           </button>
-          <span className="text-gray-300">|</span>
-          <button onClick={() => handleDownloadTemplate("csv")} className="text-purple-600 hover:underline px-2 py-2">
+          <span className="text-muted-foreground/50">|</span>
+          <button onClick={() => handleDownloadTemplate("csv")} className="text-primary hover:underline px-2 py-2">
             Template CSV
           </button>
         </div>
 
         <button
           onClick={handleCopyInvite}
-          className="flex items-center gap-2 bg-white border border-gray-300 text-gray-700 px-4 py-2 rounded-lg text-sm font-medium hover:bg-gray-50 transition-colors ml-auto"
+          className="flex items-center gap-2 bg-card border border-border text-foreground/80 px-4 py-2 rounded-lg text-sm font-medium hover:bg-muted transition-colors ml-auto"
         >
           <Link2 className="w-4 h-4" />
           Copy invite link for supplier
@@ -676,7 +676,7 @@ export default function VendorsPage() {
           <button
             onClick={handleOpenBrief}
             disabled={briefGenerating}
-            className="flex items-center gap-2 bg-purple-50 border border-purple-200 text-purple-700 px-4 py-2 rounded-lg text-sm font-medium hover:bg-purple-100 transition-colors disabled:opacity-50"
+            className="flex items-center gap-2 bg-primary/5 border border-primary/20 text-primary px-4 py-2 rounded-lg text-sm font-medium hover:bg-primary/10 transition-colors disabled:opacity-50"
           >
             <FileText className="w-4 h-4" />
             {briefGenerating ? "Generating…" : "Share Event Brief"}
@@ -685,19 +685,19 @@ export default function VendorsPage() {
       </div>
 
       {/* Error */}
-      {error && <div className="mb-4 text-sm text-red-500 bg-red-50 rounded-lg px-4 py-2">{error}</div>}
+      {error && <div className="mb-4 text-sm text-[var(--color-error-text)] bg-[var(--color-error-bg)] rounded-lg px-4 py-2">{error}</div>}
 
       {/* ── Horizontal row: public directory vendors ── */}
       {loading ? (
         <div className="flex justify-center py-10">
-          <div className="h-6 w-6 animate-spin rounded-full border-2 border-purple-300 border-t-purple-600" />
+          <div className="h-6 w-6 animate-spin rounded-full border-2 border-primary/30 border-t-primary" />
         </div>
       ) : (
         <div className="flex gap-4 overflow-x-auto pb-2 mb-6" style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}>
           {publicVendors.slice(0, 4).map(v => {
             const existingConv = conversations.find(c => c.vendor.id === v.id);
             return (
-              <div key={v.id} className="flex-shrink-0 w-48 h-56 rounded-2xl overflow-hidden relative group shadow-sm hover:shadow-lg transition-shadow bg-gradient-to-br from-purple-500 to-indigo-700">
+              <div key={v.id} className="flex-shrink-0 w-48 h-56 rounded-2xl overflow-hidden relative group shadow-sm hover:shadow-lg transition-shadow bg-gradient-to-br from-primary to-primary/70">
                 {v.coverPhoto && (
                   // eslint-disable-next-line @next/next/no-img-element
                   <img src={v.coverPhoto} alt={v.businessName} className="absolute inset-0 w-full h-full object-cover" />
@@ -708,7 +708,7 @@ export default function VendorsPage() {
                     {v.category.replace(/_/g, " ")}
                   </span>
                   {existingConv && existingConv.unreadCount > 0 && (
-                    <span className="bg-pink-500 text-white text-[10px] font-bold rounded-full w-4 h-4 flex items-center justify-center">
+                    <span className="bg-accent text-white text-[10px] font-bold rounded-full w-4 h-4 flex items-center justify-center">
                       {existingConv.unreadCount}
                     </span>
                   )}
@@ -740,12 +740,12 @@ export default function VendorsPage() {
           {/* Search and Add Vendors */}
           <Link
             href="/vendors"
-            className="flex-shrink-0 w-48 h-56 group flex flex-col items-center justify-center gap-3 border-2 border-dashed border-purple-200 rounded-2xl hover:border-purple-400 hover:bg-purple-50/50 transition-colors"
+            className="flex-shrink-0 w-48 h-56 group flex flex-col items-center justify-center gap-3 border-2 border-dashed border-primary/20 rounded-2xl hover:border-primary/40 hover:bg-primary/5 transition-colors"
           >
-            <div className="w-10 h-10 rounded-full border-2 border-purple-300 group-hover:border-purple-500 flex items-center justify-center transition-colors">
-              <Plus className="w-5 h-5 text-purple-400 group-hover:text-purple-600" />
+            <div className="w-10 h-10 rounded-full border-2 border-primary/30 group-hover:border-primary flex items-center justify-center transition-colors">
+              <Plus className="w-5 h-5 text-primary/60 group-hover:text-primary" />
             </div>
-            <span className="text-xs font-medium text-purple-500 group-hover:text-purple-700 transition-colors text-center px-4">
+            <span className="text-xs font-medium text-primary/70 group-hover:text-primary transition-colors text-center px-4">
               Search and Add Vendors
             </span>
           </Link>
@@ -757,13 +757,13 @@ export default function VendorsPage() {
       {!loading && vendors.length > 0 && (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
           {vendors.map(v => (
-            <div key={v.id} className="rounded-xl overflow-hidden border border-gray-200 shadow-sm group bg-white">
+            <div key={v.id} className="rounded-xl overflow-hidden border border-border shadow-sm group bg-card">
               <div className={`relative h-36 bg-gradient-to-br ${CATEGORY_GRADIENTS[v.category]}`}>
                 <div className="absolute top-2 right-2 flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
                   <button onClick={() => openEdit(v)} className="p-1.5 rounded-md bg-white/20 backdrop-blur-sm text-white hover:bg-white/40 transition-colors">
                     <Pencil className="w-3.5 h-3.5" />
                   </button>
-                  <button onClick={() => handleDelete(v.id)} className="p-1.5 rounded-md bg-white/20 backdrop-blur-sm text-white hover:bg-red-500/60 transition-colors">
+                  <button onClick={() => handleDelete(v.id)} className="p-1.5 rounded-md bg-white/20 backdrop-blur-sm text-white hover:bg-[var(--color-error-text)]/60 transition-colors">
                     <Trash2 className="w-3.5 h-3.5" />
                   </button>
                 </div>
@@ -776,27 +776,27 @@ export default function VendorsPage() {
               </div>
               <div className="px-3 py-2.5 space-y-1">
                 {v.phone && (
-                  <a href={`tel:${v.phone}`} className="flex items-center gap-2 text-xs text-gray-500 hover:text-purple-600 transition-colors">
+                  <a href={`tel:${v.phone}`} className="flex items-center gap-2 text-xs text-muted-foreground hover:text-primary transition-colors">
                     <Phone className="w-3 h-3 flex-shrink-0" /><span className="truncate">{v.phone}</span>
                   </a>
                 )}
                 {v.email && (
-                  <a href={`mailto:${v.email}`} className="flex items-center gap-2 text-xs text-gray-500 hover:text-purple-600 transition-colors">
+                  <a href={`mailto:${v.email}`} className="flex items-center gap-2 text-xs text-muted-foreground hover:text-primary transition-colors">
                     <Mail className="w-3 h-3 flex-shrink-0" /><span className="truncate">{v.email}</span>
                   </a>
                 )}
                 {v.website && (
-                  <a href={v.website} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 text-xs text-gray-500 hover:text-purple-600 transition-colors">
+                  <a href={v.website} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 text-xs text-muted-foreground hover:text-primary transition-colors">
                     <Globe className="w-3 h-3 flex-shrink-0" /><span className="truncate">{v.website.replace(/^https?:\/\//, "")}</span>
                   </a>
                 )}
                 {v.notes && (
-                  <div className="flex items-start gap-2 text-xs text-gray-400 mt-0.5">
+                  <div className="flex items-start gap-2 text-xs text-muted-foreground mt-0.5">
                     <StickyNote className="w-3 h-3 flex-shrink-0 mt-0.5" /><span className="line-clamp-2">{v.notes}</span>
                   </div>
                 )}
                 {!v.phone && !v.email && !v.website && !v.notes && (
-                  <p className="text-xs text-gray-300 py-1">No contact info</p>
+                  <p className="text-xs text-muted-foreground/50 py-1">No contact info</p>
                 )}
               </div>
             </div>
@@ -806,20 +806,20 @@ export default function VendorsPage() {
 
       {/* Vendor count */}
       {vendors.length > 0 && (
-        <p className="mt-4 text-xs text-gray-400">
+        <p className="mt-4 text-xs text-muted-foreground">
           {vendors.length} vendor{vendors.length !== 1 ? "s" : ""} total
         </p>
       )}
 
       {/* ── Vendor Conversations ── */}
       {!local && (
-        <div className="mt-10 border-t border-gray-100 pt-8">
+        <div className="mt-10 border-t border-border pt-8">
           <div className="flex items-center justify-between mb-4">
             <div className="flex items-center gap-2">
-              <MessageSquare className="w-5 h-5 text-purple-500" />
-              <h2 className="text-base font-bold text-gray-900">Vendor Messages</h2>
+              <MessageSquare className="w-5 h-5 text-primary" />
+              <h2 className="text-base font-bold text-foreground">Vendor Messages</h2>
               {totalUnread > 0 && (
-                <span className="bg-purple-600 text-white text-xs font-bold rounded-full px-1.5 py-0.5 min-w-[20px] text-center">
+                <span className="bg-primary text-white text-xs font-bold rounded-full px-1.5 py-0.5 min-w-[20px] text-center">
                   {totalUnread}
                 </span>
               )}
@@ -828,51 +828,51 @@ export default function VendorsPage() {
 
           {convLoading ? (
             <div className="flex justify-center py-6">
-              <div className="h-5 w-5 animate-spin rounded-full border-2 border-purple-300 border-t-purple-600" />
+              <div className="h-5 w-5 animate-spin rounded-full border-2 border-primary/30 border-t-primary" />
             </div>
           ) : conversations.length === 0 ? (
-            <div className="text-center py-8 bg-gray-50 rounded-xl border border-dashed border-gray-200">
-              <MessageSquare className="w-8 h-8 text-gray-200 mx-auto mb-2" />
-              <p className="text-sm text-gray-500">No vendor conversations yet</p>
-              <p className="text-xs text-gray-400 mt-1">Click &quot;Message&quot; on a vendor above to start a conversation</p>
+            <div className="text-center py-8 bg-muted rounded-xl border border-dashed border-border">
+              <MessageSquare className="w-8 h-8 text-muted-foreground/50 mx-auto mb-2" />
+              <p className="text-sm text-muted-foreground">No vendor conversations yet</p>
+              <p className="text-xs text-muted-foreground mt-1">Click &quot;Message&quot; on a vendor above to start a conversation</p>
             </div>
           ) : (
             <div className="space-y-2">
               {conversations.map(conv => (
                 <div
                   key={conv.id}
-                  className="flex items-center gap-3 p-3 bg-white rounded-xl border border-gray-200 hover:border-purple-200 hover:bg-purple-50/30 transition-colors cursor-pointer group"
+                  className="flex items-center gap-3 p-3 bg-card rounded-xl border border-border hover:border-primary/20 hover:bg-primary/5 transition-colors cursor-pointer group"
                   onClick={() => openConvPanel(conv.vendor.id, conv.vendor.businessName)}
                 >
                   {conv.vendor.photos[0] ? (
                     // eslint-disable-next-line @next/next/no-img-element
                     <img src={conv.vendor.photos[0]} alt={conv.vendor.businessName} className="w-10 h-10 rounded-lg object-cover flex-shrink-0" />
                   ) : (
-                    <div className="w-10 h-10 rounded-lg bg-purple-100 flex items-center justify-center flex-shrink-0">
-                      <Store className="w-4 h-4 text-purple-500" />
+                    <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center flex-shrink-0">
+                      <Store className="w-4 h-4 text-primary" />
                     </div>
                   )}
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-2">
-                      <span className="text-sm font-semibold text-gray-900 truncate">{conv.vendor.businessName}</span>
+                      <span className="text-sm font-semibold text-foreground truncate">{conv.vendor.businessName}</span>
                       {conv.status === "ARCHIVED" && (
-                        <span className="text-[10px] text-gray-400 bg-gray-100 px-1.5 py-0.5 rounded">Archived</span>
+                        <span className="text-[10px] text-muted-foreground bg-muted px-1.5 py-0.5 rounded">Archived</span>
                       )}
                     </div>
-                    <p className="text-xs text-gray-400 mt-0.5">
+                    <p className="text-xs text-muted-foreground mt-0.5">
                       {conv.vendor.category.replace(/_/g, " ")} · {conv.totalMessages} message{conv.totalMessages !== 1 ? "s" : ""}
                     </p>
                   </div>
                   <div className="flex items-center gap-2 shrink-0">
                     {conv.unreadCount > 0 && (
-                      <span className="bg-purple-600 text-white text-xs font-bold rounded-full w-5 h-5 flex items-center justify-center">
+                      <span className="bg-primary text-white text-xs font-bold rounded-full w-5 h-5 flex items-center justify-center">
                         {conv.unreadCount}
                       </span>
                     )}
-                    <span className="text-xs text-gray-400">{formatTime(conv.lastMessageAt)}</span>
+                    <span className="text-xs text-muted-foreground">{formatTime(conv.lastMessageAt)}</span>
                     <button
                       onClick={(e) => { e.stopPropagation(); archiveConv(conv.id); }}
-                      className="p-1 opacity-0 group-hover:opacity-100 text-gray-300 hover:text-gray-500 transition-all"
+                      className="p-1 opacity-0 group-hover:opacity-100 text-muted-foreground/50 hover:text-muted-foreground transition-all"
                       title="Archive"
                     >
                       <Archive className="w-3.5 h-3.5" />
@@ -886,9 +886,9 @@ export default function VendorsPage() {
       )}
 
       {/* ── Info sections ── */}
-      <div className="mt-10 space-y-6 border-t border-gray-100 pt-8">
+      <div className="mt-10 space-y-6 border-t border-border pt-8">
         <div>
-          <p className="text-sm text-gray-600 leading-relaxed">
+          <p className="text-sm text-foreground/80 leading-relaxed">
             If you haven&apos;t found the supplier you&apos;re looking for in our existing categories, you can
             easily <strong>add a custom vendor</strong> to the list. This feature helps you keep all your
             contacts and essential details organized in one convenient location, ensuring everything remains up
@@ -897,13 +897,13 @@ export default function VendorsPage() {
           <div className="mt-3 flex items-center gap-3">
             <button
               onClick={() => { setShowAdd(true); setAddForm(emptyForm()); setAddError(null); }}
-              className="flex items-center gap-1.5 text-sm text-gray-600 hover:text-purple-600 transition-colors"
+              className="flex items-center gap-1.5 text-sm text-foreground/80 hover:text-primary transition-colors"
             >
               <Plus className="w-3.5 h-3.5" />
               Add custom vendor
             </button>
-            <span className="text-gray-400 text-sm">or</span>
-            <label className="flex items-center gap-1.5 text-sm text-gray-600 hover:text-purple-600 transition-colors cursor-pointer">
+            <span className="text-muted-foreground text-sm">or</span>
+            <label className="flex items-center gap-1.5 text-sm text-foreground/80 hover:text-primary transition-colors cursor-pointer">
               <Download className="w-3.5 h-3.5" />
               Import from file
               <input ref={fileRef2} type="file" accept=".csv,.xls,.xlsx" className="hidden" onChange={handleImport} />
@@ -912,14 +912,14 @@ export default function VendorsPage() {
         </div>
 
         <div>
-          <p className="text-sm text-gray-600 leading-relaxed">
+          <p className="text-sm text-foreground/80 leading-relaxed">
             If you know a reliable and trustworthy supplier, venue, or wedding professional who would be a
             valuable addition to our platform, you can use the <strong>invite link below</strong> to recommend
             our platform.
           </p>
           <button
             onClick={handleCopyInvite}
-            className="mt-3 flex items-center gap-1.5 text-sm text-gray-600 hover:text-purple-600 transition-colors"
+            className="mt-3 flex items-center gap-1.5 text-sm text-foreground/80 hover:text-primary transition-colors"
           >
             <Link2 className="w-3.5 h-3.5" />
             Copy invite link for supplier
@@ -927,12 +927,12 @@ export default function VendorsPage() {
         </div>
 
         <div>
-          <p className="text-sm text-gray-600 leading-relaxed">
+          <p className="text-sm text-foreground/80 leading-relaxed">
             We also display <strong>recommended vendors</strong> conveniently located near you or within your area.
           </p>
           <button
             onClick={() => setHideSuggested(h => !h)}
-            className="mt-3 flex items-center gap-1.5 text-sm text-gray-600 hover:text-purple-600 transition-colors"
+            className="mt-3 flex items-center gap-1.5 text-sm text-foreground/80 hover:text-primary transition-colors"
           >
             <X className="w-3.5 h-3.5" />
             {hideSuggested ? "Show suggested vendors" : "Hide suggested vendors"}
@@ -944,9 +944,9 @@ export default function VendorsPage() {
       <div className="mt-8">
         <button
           onClick={handleDownloadPDF}
-          className="flex items-center gap-2 px-6 py-3 border border-gray-200 bg-white hover:bg-gray-50 rounded-xl text-sm text-gray-700 shadow-sm transition-colors"
+          className="flex items-center gap-2 px-6 py-3 border border-border bg-card hover:bg-muted rounded-xl text-sm text-foreground/80 shadow-sm transition-colors"
         >
-          <Download className="w-4 h-4 text-gray-500" />
+          <Download className="w-4 h-4 text-muted-foreground" />
           Download PDF file
         </button>
       </div>
@@ -958,28 +958,28 @@ export default function VendorsPage() {
           onClick={() => setShowBrief(false)}
         >
           <div
-            className="bg-white rounded-2xl shadow-xl w-full max-w-md p-6"
+            className="bg-card rounded-2xl shadow-xl w-full max-w-md p-6"
             onClick={(e) => e.stopPropagation()}
           >
             <div className="flex items-center justify-between mb-4">
               <div className="flex items-center gap-2">
-                <div className="w-8 h-8 bg-purple-100 rounded-lg flex items-center justify-center">
-                  <FileText className="w-4 h-4 text-purple-600" />
+                <div className="w-8 h-8 bg-primary/10 rounded-lg flex items-center justify-center">
+                  <FileText className="w-4 h-4 text-primary" />
                 </div>
-                <h2 className="text-base font-bold text-gray-900">Share Event Brief</h2>
+                <h2 className="text-base font-bold text-foreground">Share Event Brief</h2>
               </div>
-              <button onClick={() => setShowBrief(false)} className="text-gray-400 hover:text-gray-600">
+              <button onClick={() => setShowBrief(false)} className="text-muted-foreground hover:text-foreground/80">
                 <X className="w-5 h-5" />
               </button>
             </div>
 
-            <p className="text-sm text-gray-500 mb-4">
+            <p className="text-sm text-muted-foreground mb-4">
               Share this link with a vendor so they can see your event details — date, venue, guest count, budget, and confirmed vendors.
             </p>
 
-            <div className="bg-gray-50 rounded-xl border border-gray-200 px-3 py-2.5 mb-4">
-              <p className="text-xs text-gray-400 mb-1">Brief link</p>
-              <p className="text-sm text-gray-700 font-mono break-all">
+            <div className="bg-muted rounded-xl border border-border px-3 py-2.5 mb-4">
+              <p className="text-xs text-muted-foreground mb-1">Brief link</p>
+              <p className="text-sm text-foreground/80 font-mono break-all">
                 {typeof window !== "undefined"
                   ? `${window.location.origin}/brief/${briefToken}`
                   : `/brief/${briefToken}`}
@@ -989,7 +989,7 @@ export default function VendorsPage() {
             <div className="flex gap-2">
               <button
                 onClick={handleCopyBriefLink}
-                className="flex-1 flex items-center justify-center gap-2 bg-purple-600 text-white px-4 py-2.5 rounded-lg text-sm font-medium hover:bg-purple-700 transition-colors"
+                className="flex-1 flex items-center justify-center gap-2 bg-primary text-white px-4 py-2.5 rounded-lg text-sm font-medium hover:bg-primary/90 transition-colors"
               >
                 <Copy className="w-4 h-4" />
                 {briefCopied ? "Copied!" : "Copy Link"}
@@ -998,20 +998,20 @@ export default function VendorsPage() {
                 href={briefToken ? `/brief/${briefToken}` : "#"}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex items-center justify-center gap-2 bg-gray-100 text-gray-700 px-4 py-2.5 rounded-lg text-sm font-medium hover:bg-gray-200 transition-colors"
+                className="flex items-center justify-center gap-2 bg-muted text-foreground/80 px-4 py-2.5 rounded-lg text-sm font-medium hover:bg-muted/80 transition-colors"
               >
                 Preview
               </a>
             </div>
 
-            <div className="border-t border-gray-100 mt-4 pt-4">
-              <p className="text-xs text-gray-400 mb-2">
+            <div className="border-t border-border mt-4 pt-4">
+              <p className="text-xs text-muted-foreground mb-2">
                 Anyone with this link can view your event brief. Revoke to disable access.
               </p>
               <button
                 onClick={handleRevokeBrief}
                 disabled={briefRevoking}
-                className="flex items-center gap-1.5 text-xs text-red-500 hover:text-red-700 disabled:opacity-50"
+                className="flex items-center gap-1.5 text-xs text-[var(--color-error-text)] hover:text-[var(--color-error-text)]/80 disabled:opacity-50"
               >
                 <Trash className="w-3.5 h-3.5" />
                 {briefRevoking ? "Revoking…" : "Revoke this link"}
@@ -1024,23 +1024,23 @@ export default function VendorsPage() {
       {/* ── Add Vendor Modal ── */}
       {showAdd && (
         <div className="fixed inset-0 bg-black/40 z-50 flex items-center justify-center p-4" onClick={() => setShowAdd(false)}>
-          <div className="bg-white rounded-2xl shadow-xl w-full max-w-lg p-6" onClick={e => e.stopPropagation()}>
+          <div className="bg-card rounded-2xl shadow-xl w-full max-w-lg p-6" onClick={e => e.stopPropagation()}>
             <div className="flex items-center justify-between mb-4">
-              <h2 className="text-lg font-bold text-gray-900">Add Custom Vendor</h2>
-              <button onClick={() => setShowAdd(false)} className="text-gray-400 hover:text-gray-600">
+              <h2 className="text-lg font-bold text-foreground">Add Custom Vendor</h2>
+              <button onClick={() => setShowAdd(false)} className="text-muted-foreground hover:text-foreground/80">
                 <X className="w-5 h-5" />
               </button>
             </div>
             <VendorFormFields form={addForm} setForm={setAddForm} />
-            {addError && <p className="text-red-500 text-xs mt-3">{addError}</p>}
+            {addError && <p className="text-[var(--color-error-text)] text-xs mt-3">{addError}</p>}
             <div className="flex gap-3 mt-5 justify-end">
-              <button onClick={() => setShowAdd(false)} className="px-4 py-2 text-sm text-gray-600 border rounded-lg hover:bg-gray-50">
+              <button onClick={() => setShowAdd(false)} className="px-4 py-2 text-sm text-foreground/80 border rounded-lg hover:bg-muted">
                 Cancel
               </button>
               <button
                 onClick={handleAdd}
                 disabled={addSaving}
-                className="flex items-center gap-2 px-4 py-2 text-sm bg-purple-600 text-white rounded-lg hover:bg-purple-700 disabled:opacity-50"
+                className="flex items-center gap-2 px-4 py-2 text-sm bg-primary text-white rounded-lg hover:bg-primary/90 disabled:opacity-50"
               >
                 <Check className="w-4 h-4" />
                 {addSaving ? "Adding…" : "Add Vendor"}
@@ -1053,23 +1053,23 @@ export default function VendorsPage() {
       {/* ── Edit Vendor Modal ── */}
       {editId && (
         <div className="fixed inset-0 bg-black/40 z-50 flex items-center justify-center p-4" onClick={() => setEditId(null)}>
-          <div className="bg-white rounded-2xl shadow-xl w-full max-w-lg p-6" onClick={e => e.stopPropagation()}>
+          <div className="bg-card rounded-2xl shadow-xl w-full max-w-lg p-6" onClick={e => e.stopPropagation()}>
             <div className="flex items-center justify-between mb-4">
-              <h2 className="text-lg font-bold text-gray-900">Edit Vendor</h2>
-              <button onClick={() => setEditId(null)} className="text-gray-400 hover:text-gray-600">
+              <h2 className="text-lg font-bold text-foreground">Edit Vendor</h2>
+              <button onClick={() => setEditId(null)} className="text-muted-foreground hover:text-foreground/80">
                 <X className="w-5 h-5" />
               </button>
             </div>
             <VendorFormFields form={editForm} setForm={setEditForm} />
-            {editError && <p className="text-red-500 text-xs mt-3">{editError}</p>}
+            {editError && <p className="text-[var(--color-error-text)] text-xs mt-3">{editError}</p>}
             <div className="flex gap-3 mt-5 justify-end">
-              <button onClick={() => setEditId(null)} className="px-4 py-2 text-sm text-gray-600 border rounded-lg hover:bg-gray-50">
+              <button onClick={() => setEditId(null)} className="px-4 py-2 text-sm text-foreground/80 border rounded-lg hover:bg-muted">
                 Cancel
               </button>
               <button
                 onClick={handleEdit}
                 disabled={editSaving}
-                className="flex items-center gap-2 px-4 py-2 text-sm bg-purple-600 text-white rounded-lg hover:bg-purple-700 disabled:opacity-50"
+                className="flex items-center gap-2 px-4 py-2 text-sm bg-primary text-white rounded-lg hover:bg-primary/90 disabled:opacity-50"
               >
                 <Check className="w-4 h-4" />
                 {editSaving ? "Saving…" : "Save Changes"}
@@ -1088,31 +1088,31 @@ export default function VendorsPage() {
             if (pollRef.current) clearInterval(pollRef.current);
           }} />
           {/* Panel */}
-          <div className="w-full max-w-md bg-white flex flex-col shadow-2xl h-full">
+          <div className="w-full max-w-md bg-card flex flex-col shadow-2xl h-full">
             {/* Header */}
-            <div className="flex items-center gap-3 px-4 py-3 border-b border-gray-100 shrink-0">
+            <div className="flex items-center gap-3 px-4 py-3 border-b border-border shrink-0">
               <button
                 onClick={() => {
                   setMsgPanelVendorId(null);
                   if (pollRef.current) clearInterval(pollRef.current);
                 }}
-                className="p-1.5 rounded text-gray-400 hover:text-gray-600"
+                className="p-1.5 rounded text-muted-foreground hover:text-foreground/80"
               >
                 <ChevronLeft className="w-4 h-4" />
               </button>
-              <div className="w-8 h-8 rounded-lg bg-purple-100 flex items-center justify-center shrink-0">
-                <Store className="w-4 h-4 text-purple-500" />
+              <div className="w-8 h-8 rounded-lg bg-primary/10 flex items-center justify-center shrink-0">
+                <Store className="w-4 h-4 text-primary" />
               </div>
               <div className="flex-1 min-w-0">
-                <p className="text-sm font-semibold text-gray-900 truncate">{msgPanelVendorName}</p>
-                <p className="text-xs text-gray-400">
+                <p className="text-sm font-semibold text-foreground truncate">{msgPanelVendorName}</p>
+                <p className="text-xs text-muted-foreground">
                   {thread ? `${thread.messages.length} messages` : "Start a conversation"}
                 </p>
               </div>
               {thread && thread.status === "ACTIVE" && (
                 <button
                   onClick={() => archiveConv(thread.id)}
-                  className="p-1.5 text-gray-400 hover:text-gray-600"
+                  className="p-1.5 text-muted-foreground hover:text-foreground/80"
                   title="Archive"
                 >
                   <Archive className="w-4 h-4" />
@@ -1122,7 +1122,7 @@ export default function VendorsPage() {
 
             {threadLoading ? (
               <div className="flex-1 flex items-center justify-center">
-                <div className="h-6 w-6 animate-spin rounded-full border-2 border-purple-300 border-t-purple-600" />
+                <div className="h-6 w-6 animate-spin rounded-full border-2 border-primary/30 border-t-primary" />
               </div>
             ) : thread ? (
               <>
@@ -1134,17 +1134,17 @@ export default function VendorsPage() {
                       className={`flex ${msg.senderRole === "GUEST" ? "justify-end" : "justify-start"}`}
                     >
                       {msg.senderRole === "VENDOR" && (
-                        <div className="w-6 h-6 rounded-full bg-purple-100 flex items-center justify-center mr-2 mt-1 shrink-0">
-                          <Store className="w-3 h-3 text-purple-500" />
+                        <div className="w-6 h-6 rounded-full bg-primary/10 flex items-center justify-center mr-2 mt-1 shrink-0">
+                          <Store className="w-3 h-3 text-primary" />
                         </div>
                       )}
                       <div className={`max-w-[78%] rounded-2xl px-3.5 py-2.5 text-sm leading-relaxed ${
                         msg.senderRole === "GUEST"
-                          ? "bg-purple-600 text-white rounded-br-sm"
-                          : "bg-gray-100 text-gray-800 rounded-bl-sm"
+                          ? "bg-primary text-white rounded-br-sm"
+                          : "bg-muted text-foreground rounded-bl-sm"
                       }`}>
                         <p className="whitespace-pre-wrap">{msg.content}</p>
-                        <p className={`text-[10px] mt-1 text-right ${msg.senderRole === "GUEST" ? "text-purple-200" : "text-gray-400"}`}>
+                        <p className={`text-[10px] mt-1 text-right ${msg.senderRole === "GUEST" ? "text-primary/20" : "text-muted-foreground"}`}>
                           {formatTime(msg.createdAt)}
                         </p>
                       </div>
@@ -1155,7 +1155,7 @@ export default function VendorsPage() {
 
                 {/* Reply compose */}
                 {thread.status !== "ARCHIVED" ? (
-                  <div className="border-t border-gray-100 px-4 py-3 shrink-0">
+                  <div className="border-t border-border px-4 py-3 shrink-0">
                     <div className="flex items-end gap-2">
                       <textarea
                         value={msgText}
@@ -1165,24 +1165,24 @@ export default function VendorsPage() {
                         }}
                         rows={2}
                         placeholder="Type a message… (Enter to send)"
-                        className="flex-1 resize-none border border-gray-200 rounded-xl px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-purple-400"
+                        className="flex-1 resize-none border border-border rounded-xl px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary/40"
                       />
                       <button
                         onClick={sendReply}
                         disabled={msgSending || !msgText.trim()}
-                        className="p-2.5 bg-purple-600 text-white rounded-xl hover:bg-purple-700 disabled:opacity-50 transition-colors shrink-0"
+                        className="p-2.5 bg-primary text-white rounded-xl hover:bg-primary/90 disabled:opacity-50 transition-colors shrink-0"
                       >
                         <Send className="w-4 h-4" />
                       </button>
                     </div>
-                    {msgError && <p className="text-xs text-red-500 mt-1">{msgError}</p>}
+                    {msgError && <p className="text-xs text-[var(--color-error-text)] mt-1">{msgError}</p>}
                   </div>
                 ) : (
-                  <div className="border-t border-gray-100 px-4 py-3 text-center text-xs text-gray-400 shrink-0">
+                  <div className="border-t border-border px-4 py-3 text-center text-xs text-muted-foreground shrink-0">
                     This conversation is archived.
                     <button
                       onClick={() => { if (thread) { archiveConv(thread.id); setThread(prev => prev ? { ...prev, status: "ACTIVE" } : null); } }}
-                      className="ml-1 text-purple-600 underline"
+                      className="ml-1 text-primary underline"
                     >Restore</button>
                   </div>
                 )}
@@ -1192,14 +1192,14 @@ export default function VendorsPage() {
               <div className="flex-1 flex flex-col">
                 <div className="flex-1 flex items-center justify-center px-6">
                   <div className="text-center">
-                    <div className="w-14 h-14 rounded-full bg-purple-50 flex items-center justify-center mx-auto mb-3">
-                      <MessageSquare className="w-7 h-7 text-purple-400" />
+                    <div className="w-14 h-14 rounded-full bg-primary/5 flex items-center justify-center mx-auto mb-3">
+                      <MessageSquare className="w-7 h-7 text-primary/60" />
                     </div>
-                    <p className="text-sm font-medium text-gray-700">Start a conversation</p>
-                    <p className="text-xs text-gray-400 mt-1">Send your first message to {msgPanelVendorName}</p>
+                    <p className="text-sm font-medium text-foreground/80">Start a conversation</p>
+                    <p className="text-xs text-muted-foreground mt-1">Send your first message to {msgPanelVendorName}</p>
                   </div>
                 </div>
-                <div className="border-t border-gray-100 px-4 py-3 shrink-0">
+                <div className="border-t border-border px-4 py-3 shrink-0">
                   <div className="flex items-end gap-2">
                     <textarea
                       value={newMsgText}
@@ -1209,18 +1209,18 @@ export default function VendorsPage() {
                       }}
                       rows={3}
                       placeholder={`Hi ${msgPanelVendorName}, I'm interested in your services for my wedding…`}
-                      className="flex-1 resize-none border border-gray-200 rounded-xl px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-purple-400"
+                      className="flex-1 resize-none border border-border rounded-xl px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary/40"
                     />
                     <button
                       onClick={sendNewMessage}
                       disabled={newMsgSending || !newMsgText.trim()}
-                      className="p-2.5 bg-purple-600 text-white rounded-xl hover:bg-purple-700 disabled:opacity-50 transition-colors shrink-0"
+                      className="p-2.5 bg-primary text-white rounded-xl hover:bg-primary/90 disabled:opacity-50 transition-colors shrink-0"
                     >
                       <Send className="w-4 h-4" />
                     </button>
                   </div>
-                  {newMsgError && <p className="text-xs text-red-500 mt-1">{newMsgError}</p>}
-                  <p className="text-[11px] text-gray-400 text-center mt-2">
+                  {newMsgError && <p className="text-xs text-[var(--color-error-text)] mt-1">{newMsgError}</p>}
+                  <p className="text-[11px] text-muted-foreground text-center mt-2">
                     This message will appear in the vendor&apos;s inbox.
                   </p>
                 </div>

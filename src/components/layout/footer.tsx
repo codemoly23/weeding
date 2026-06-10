@@ -464,7 +464,7 @@ function NewsletterWidget({ widget, headingClasses }: { widget: FooterWidget; he
           {nlContent?.text || "Get LLC tips & US business insights"}
         </p>
         {status === "success" ? (
-          <p className="text-sm text-green-400">{message}</p>
+          <p className="text-sm text-[var(--color-success-text)]">{message}</p>
         ) : (
           <>
             <form onSubmit={handleSubmit} className="flex gap-0 newsletter-form">
@@ -487,7 +487,7 @@ function NewsletterWidget({ widget, headingClasses }: { widget: FooterWidget; he
               </button>
             </form>
             {status === "error" && (
-              <p className="text-sm text-red-400 mt-2">{message}</p>
+              <p className="text-sm text-[var(--color-error-text)] mt-2">{message}</p>
             )}
           </>
         )}
@@ -572,8 +572,8 @@ function FooterWidgetRenderer({
                   className="h-12 w-auto rounded-lg object-contain"
                 />
               ) : (
-                <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-violet-500 to-purple-600">
-                  <Sparkles className="h-6 w-6 text-white" />
+                <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-primary">
+                  <Sparkles className="h-6 w-6 text-primary-foreground" />
                 </div>
               )
             )}

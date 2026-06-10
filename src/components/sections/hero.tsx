@@ -39,14 +39,14 @@ export function Hero() {
       <div className="container mx-auto px-4 py-16 lg:py-24">
         <div className="mx-auto max-w-4xl text-center">
           {/* Badge */}
-          <Badge className="mb-6 border-orange-500/50 bg-orange-500/20 px-4 py-2 text-sm font-medium text-orange-400 hover:bg-orange-500/30">
+          <Badge className="mb-6 border-[var(--color-warning-text)]/50 bg-[var(--color-warning-bg)] px-4 py-2 text-sm font-medium text-[var(--color-warning-text)] hover:bg-[var(--color-warning-bg)]/70">
             Trusted by 5,000+ Couples & Wedding Planners
           </Badge>
 
           {/* Headline */}
-          <h1 className="text-4xl font-bold tracking-tight text-white sm:text-5xl lg:text-6xl">
+          <h1 className="text-4xl font-bold tracking-tight text-primary-foreground sm:text-5xl lg:text-6xl">
             Plan Your Perfect{" "}
-            <span className="text-orange-500">Wedding</span>{" "}
+            <span className="text-[var(--color-warning-text)]">Wedding</span>{" "}
             with Ease
           </h1>
 
@@ -64,7 +64,7 @@ export function Hero() {
                 key={feature}
                 className="flex items-center gap-2 text-sm text-slate-400"
               >
-                <CheckCircle className="h-5 w-5 text-green-500" />
+                <CheckCircle className="h-5 w-5 text-[var(--color-success-text)]" />
                 <span>{feature}</span>
               </div>
             ))}
@@ -77,7 +77,7 @@ export function Hero() {
           <div className="mt-8 flex items-center justify-center gap-2 text-sm text-slate-400">
             <div className="flex">
               {[...Array(5)].map((_, i) => (
-                <Star key={i} className="h-4 w-4 fill-amber-400 text-amber-400" />
+                <Star key={i} className="h-4 w-4 fill-[var(--color-star)] text-[var(--color-star)]" />
               ))}
             </div>
             <span>4.9/5 from 1,200+ reviews</span>
@@ -93,8 +93,8 @@ export function Hero() {
                   key={badge.text}
                   className="flex flex-col items-center gap-2 rounded-xl border border-slate-700/50 bg-midnight-light/50 p-4 backdrop-blur"
                 >
-                  <badge.icon className="h-6 w-6 text-orange-500" />
-                  <span className="text-sm font-medium text-white">
+                  <badge.icon className="h-6 w-6 text-[var(--color-warning-text)]" />
+                  <span className="text-sm font-medium text-primary-foreground">
                     {badge.text}
                   </span>
                 </div>
@@ -107,25 +107,25 @@ export function Hero() {
         <div className="mt-16 border-t border-slate-700/50 pt-12">
           <div className="grid grid-cols-2 gap-8 md:grid-cols-4">
             <div className="text-center">
-              <p className="text-3xl font-bold text-orange-500 sm:text-4xl">
+              <p className="text-3xl font-bold text-[var(--color-warning-text)] sm:text-4xl">
                 5,000+
               </p>
               <p className="mt-1 text-sm text-slate-400">Weddings Planned</p>
             </div>
             <div className="text-center">
-              <p className="text-3xl font-bold text-orange-500 sm:text-4xl">
+              <p className="text-3xl font-bold text-[var(--color-warning-text)] sm:text-4xl">
                 250,000+
               </p>
               <p className="mt-1 text-sm text-slate-400">Guests Managed</p>
             </div>
             <div className="text-center">
-              <p className="text-3xl font-bold text-orange-500 sm:text-4xl">
+              <p className="text-3xl font-bold text-[var(--color-warning-text)] sm:text-4xl">
                 4.9/5
               </p>
               <p className="mt-1 text-sm text-slate-400">Customer Rating</p>
             </div>
             <div className="text-center">
-              <p className="text-3xl font-bold text-orange-500 sm:text-4xl">
+              <p className="text-3xl font-bold text-[var(--color-warning-text)] sm:text-4xl">
                 Free
               </p>
               <p className="mt-1 text-sm text-slate-400">To Get Started</p>

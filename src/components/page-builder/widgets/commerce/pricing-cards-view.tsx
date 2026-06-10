@@ -281,7 +281,7 @@ export function PricingCardsView({
                     className="flex items-start gap-3"
                   >
                     {feature.included ? (
-                      <Check className="h-5 w-5 shrink-0 text-green-600 mt-0.5" />
+                      <Check className="h-5 w-5 shrink-0 text-[var(--color-success-text)] mt-0.5" />
                     ) : (
                       <X className="h-5 w-5 shrink-0 text-muted-foreground/40 mt-0.5" />
                     )}

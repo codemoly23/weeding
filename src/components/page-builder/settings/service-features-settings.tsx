@@ -203,7 +203,7 @@ export function ServiceFeaturesWidgetSettingsPanel({
           </p>
           <div className="space-y-1 text-xs">
             <div className="flex gap-2">
-              <code className="font-mono text-orange-600 bg-orange-50 px-1.5 py-0.5 rounded">
+              <code className="font-mono text-[var(--color-warning-text)] bg-[var(--color-warning-bg)] px-1.5 py-0.5 rounded">
                 {"{{service.name}}"}
               </code>
               <span className="text-muted-foreground">Service title</span>

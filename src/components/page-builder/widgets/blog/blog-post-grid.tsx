@@ -220,7 +220,7 @@ export function BlogPostGridWidget({
             <select
               value={sortValue}
               onChange={(e) => setSortValue(e.target.value)}
-              className="rounded-lg border border-slate-200 bg-white px-4 py-2.5 text-sm font-medium text-slate-900 cursor-pointer font-display focus:outline-none focus:ring-2 focus:ring-orange-500/30"
+              className="rounded-lg border border-border bg-card px-4 py-2.5 text-sm font-medium text-foreground cursor-pointer font-display focus:outline-none focus:ring-2 focus:ring-primary/30"
             >
               {s.sort.options!.map((opt) => (
                 <option key={opt.value} value={opt.value}>
@@ -239,8 +239,8 @@ export function BlogPostGridWidget({
 
       {/* Error State */}
       {error && (
-        <div className="rounded-lg border border-red-200 bg-red-50 p-6 text-center dark:border-red-900/50 dark:bg-red-900/10">
-          <p className="text-sm text-red-600 dark:text-red-400">{error}</p>
+        <div className="rounded-lg border border-[var(--color-error-text)]/20 bg-[var(--color-error-bg)] p-6 text-center">
+          <p className="text-sm text-[var(--color-error-text)]">{error}</p>
         </div>
       )}
 

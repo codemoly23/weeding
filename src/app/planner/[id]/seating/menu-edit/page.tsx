@@ -58,13 +58,13 @@ function cycleFont(fonts: string[], current: string, dir: number) {
 function FontRow({ fonts, value, onChange }: { fonts: string[]; value: string; onChange: (v: string) => void }) {
   return (
     <div>
-      <p className="text-xs text-gray-500 mb-1">Font</p>
-      <div className="flex items-center rounded-lg border border-gray-200 px-1 py-1">
+      <p className="text-xs text-muted-foreground mb-1">Font</p>
+      <div className="flex items-center rounded-lg border border-border px-1 py-1">
         <button onClick={() => onChange(cycleFont(fonts, value, -1))}
-          className="rounded p-0.5 hover:bg-gray-100 text-gray-500 text-base leading-none">‹</button>
-        <span className="flex-1 text-center text-xs text-gray-700 truncate px-1">{value}</span>
+          className="rounded p-0.5 hover:bg-muted text-muted-foreground text-base leading-none">‹</button>
+        <span className="flex-1 text-center text-xs text-foreground truncate px-1">{value}</span>
         <button onClick={() => onChange(cycleFont(fonts, value, 1))}
-          className="rounded p-0.5 hover:bg-gray-100 text-gray-500 text-base leading-none">›</button>
+          className="rounded p-0.5 hover:bg-muted text-muted-foreground text-base leading-none">›</button>
       </div>
     </div>
   );
@@ -76,13 +76,13 @@ function SliderRow({ label, value, min, max, onChange }: {
   return (
     <div>
       <div className="flex items-center justify-between mb-1">
-        <p className="text-xs text-gray-500">{label}</p>
-        <span className="text-xs font-medium text-gray-700 bg-gray-100 rounded px-1.5 py-0.5">{value}</span>
+        <p className="text-xs text-muted-foreground">{label}</p>
+        <span className="text-xs font-medium text-foreground bg-muted rounded px-1.5 py-0.5">{value}</span>
       </div>
       <input type="range" min={min} max={max} value={value}
         onChange={e => onChange(Number(e.target.value))}
-        className="w-full accent-purple-500" />
-      <div className="flex justify-between text-[10px] text-gray-300 mt-0.5">
+        className="w-full accent-primary" />
+      <div className="flex justify-between text-[10px] text-muted-foreground/50 mt-0.5">
         <span>{min}</span><span>{max}</span>
       </div>
     </div>
@@ -181,7 +181,7 @@ export default function MenuEditPage() {
   const paraPx   = Math.round(settings.paragraphSize    * 0.65);
 
   return (
-    <div className="flex h-screen overflow-hidden bg-white">
+    <div className="flex h-screen overflow-hidden bg-background">
 
       {/* Google Fonts */}
       <style>{`@import url('https://fonts.googleapis.com/css2?family=Overlock:ital,wght@0,400;0,700;1,400&family=Playfair+Display:ital@0;1&family=Dancing+Script&display=swap');`}</style>
@@ -190,17 +190,17 @@ export default function MenuEditPage() {
       <div className="flex flex-1 flex-col overflow-hidden">
 
         {/* Header */}
-        <div className="flex items-center gap-2 px-3 py-2 bg-white border-b border-gray-200">
+        <div className="flex items-center gap-2 px-3 py-2 bg-card border-b border-border">
           {/* Close */}
           <button
             onClick={() => router.push(`/planner/${projectId}/seating?tab=menu`)}
-            className="flex items-center gap-1.5 rounded-lg bg-purple-600 px-3 py-1.5 text-sm font-medium text-white hover:bg-purple-700 transition-colors"
+            className="flex items-center gap-1.5 rounded-lg bg-primary px-3 py-1.5 text-sm font-medium text-primary-foreground hover:bg-primary/90 transition-colors"
           >
             <X className="h-4 w-4" /> Close
           </button>
 
           {/* File */}
-          <button className="flex items-center gap-1.5 rounded-lg border border-purple-300 bg-white px-3 py-1.5 text-sm font-medium text-purple-700 hover:bg-purple-50 transition-colors">
+          <button className="flex items-center gap-1.5 rounded-lg border border-primary/30 bg-card px-3 py-1.5 text-sm font-medium text-primary hover:bg-primary/5 transition-colors">
             <FileText className="h-4 w-4" /> File
           </button>
 
@@ -208,17 +208,17 @@ export default function MenuEditPage() {
           <div className="relative">
             <button
               onClick={() => setAddOpen(v => !v)}
-              className="flex items-center gap-1.5 rounded-lg bg-purple-600 px-3 py-1.5 text-sm font-medium text-white hover:bg-purple-700 transition-colors"
+              className="flex items-center gap-1.5 rounded-lg bg-primary px-3 py-1.5 text-sm font-medium text-primary-foreground hover:bg-primary/90 transition-colors"
             >
               <Plus className="h-4 w-4" /> Add element
             </button>
             {addOpen && (
               <>
                 <div className="fixed inset-0 z-10" onClick={() => setAddOpen(false)} />
-                <div className="absolute left-0 top-full z-20 mt-1 w-48 overflow-hidden rounded-xl border border-gray-200 bg-white shadow-lg">
+                <div className="absolute left-0 top-full z-20 mt-1 w-48 overflow-hidden rounded-xl border border-border bg-card shadow-lg">
                   {(["main-heading", "second-heading", "paragraph", "flourish"] as SectionType[]).map(type => (
                     <button key={type} onClick={() => addSection(type)}
-                      className="flex w-full items-center px-4 py-2.5 text-left text-sm text-gray-700 hover:bg-purple-50 hover:text-purple-700 transition-colors">
+                      className="flex w-full items-center px-4 py-2.5 text-left text-sm text-foreground hover:bg-primary/5 hover:text-primary transition-colors">
                       {SECTION_LABELS[type]}
                     </button>
                   ))}
@@ -237,7 +237,7 @@ export default function MenuEditPage() {
           {/* Menu Card */}
           <div
             ref={cardRef}
-            className="bg-white shadow-xl"
+            className="bg-card shadow-xl"
             style={{ width: 280, minHeight: 600 }}
             onClick={e => e.stopPropagation()}
           >
@@ -315,32 +315,32 @@ export default function MenuEditPage() {
       </div>
 
       {/* ── Right Panel ── */}
-      <div className="w-64 flex-shrink-0 overflow-y-auto border-l border-gray-200 bg-white">
+      <div className="w-64 flex-shrink-0 overflow-y-auto border-l border-border bg-card">
 
         {selectedSection ? (
           /* ── Element panel ── */
           <div className="px-4 py-4">
-            <p className="text-sm font-semibold text-gray-800 mb-4">{SECTION_LABELS[selectedSection.type]}</p>
+            <p className="text-sm font-semibold text-foreground mb-4">{SECTION_LABELS[selectedSection.type]}</p>
 
             {selectedSection.type !== "flourish" && (
               <div className="mb-4">
-                <p className="text-xs text-gray-500 mb-1.5">Text</p>
+                <p className="text-xs text-muted-foreground mb-1.5">Text</p>
                 <textarea
                   value={selectedSection.text}
                   onChange={e => updateText(selectedSection.id, e.target.value)}
                   rows={Math.max(3, selectedSection.text.split("\n").length + 1)}
-                  className="w-full rounded-lg border border-gray-200 px-3 py-2 text-sm text-gray-700 focus:outline-none focus:border-purple-300 resize-none"
+                  className="w-full rounded-lg border border-border px-3 py-2 text-sm text-foreground focus:outline-none focus:border-primary/30 resize-none"
                 />
               </div>
             )}
 
-            <p className="text-xs text-gray-400 mb-5">
+            <p className="text-xs text-muted-foreground mb-5">
               x: {selectedPos.x} &nbsp;&nbsp; y: {selectedPos.y}
             </p>
 
             <button
               onClick={() => deleteSection(selectedSection.id)}
-              className="flex items-center gap-1.5 text-sm font-medium text-red-500 hover:text-red-700 transition-colors"
+              className="flex items-center gap-1.5 text-sm font-medium text-[var(--color-error-text)] hover:text-[var(--color-error-text)]/80 transition-colors"
             >
               <Trash2 className="h-3.5 w-3.5" /> Delete
             </button>
@@ -349,28 +349,28 @@ export default function MenuEditPage() {
         ) : (
           /* ── Global style panel ── */
           <>
-            <div className="px-4 pt-4 pb-2 border-b border-gray-100">
-              <p className="text-sm font-medium text-gray-700">This style applies to menu</p>
+            <div className="px-4 pt-4 pb-2 border-b border-border/50">
+              <p className="text-sm font-medium text-foreground">This style applies to menu</p>
             </div>
 
             {/* Template */}
-            <div className="border-b border-gray-100 px-4 py-3">
+            <div className="border-b border-border/50 px-4 py-3">
               <div className="relative">
                 <button
                   onClick={() => setTplOpen(v => !v)}
-                  className="flex w-full items-center justify-between rounded-lg border border-gray-200 px-3 py-2 text-left text-sm text-gray-700 hover:bg-gray-50 transition-colors"
+                  className="flex w-full items-center justify-between rounded-lg border border-border px-3 py-2 text-left text-sm text-foreground hover:bg-muted/50 transition-colors"
                 >
                   <span>Template — {settings.template}</span>
-                  <ChevronDown className={cn("h-4 w-4 text-gray-400 transition-transform", tplOpen && "rotate-180")} />
+                  <ChevronDown className={cn("h-4 w-4 text-muted-foreground transition-transform", tplOpen && "rotate-180")} />
                 </button>
                 {tplOpen && (
                   <>
                     <div className="fixed inset-0 z-10" onClick={() => setTplOpen(false)} />
-                    <div className="absolute left-0 right-0 top-full z-20 mt-1 overflow-hidden rounded-xl border border-gray-200 bg-white shadow-lg">
+                    <div className="absolute left-0 right-0 top-full z-20 mt-1 overflow-hidden rounded-xl border border-border bg-card shadow-lg">
                       {TEMPLATES.map(t => (
                         <button key={t} onClick={() => { set("template", t); setTplOpen(false); }}
                           className={cn("flex w-full items-center px-4 py-2.5 text-left text-sm transition-colors",
-                            t === settings.template ? "bg-purple-600 text-white font-medium" : "text-gray-700 hover:bg-gray-50")}>
+                            t === settings.template ? "bg-primary text-primary-foreground font-medium" : "text-foreground hover:bg-muted/50")}>
                           Template — {t}
                         </button>
                       ))}
@@ -381,8 +381,8 @@ export default function MenuEditPage() {
             </div>
 
             {/* Main heading */}
-            <div className="border-b border-gray-100 px-4 py-4">
-              <p className="mb-3 text-sm font-semibold text-gray-700">Main heading</p>
+            <div className="border-b border-border/50 px-4 py-4">
+              <p className="mb-3 text-sm font-semibold text-foreground">Main heading</p>
               <div className="space-y-3">
                 <FontRow fonts={HEADING_FONTS} value={settings.mainHeadingFont} onChange={v => set("mainHeadingFont", v)} />
                 <SliderRow label="Font size" value={settings.mainHeadingSize} min={10} max={130} onChange={v => set("mainHeadingSize", v)} />
@@ -390,8 +390,8 @@ export default function MenuEditPage() {
             </div>
 
             {/* Second heading */}
-            <div className="border-b border-gray-100 px-4 py-4">
-              <p className="mb-3 text-sm font-semibold text-gray-700">Second heading</p>
+            <div className="border-b border-border/50 px-4 py-4">
+              <p className="mb-3 text-sm font-semibold text-foreground">Second heading</p>
               <div className="space-y-3">
                 <FontRow fonts={HEADING_FONTS} value={settings.secondHeadingFont} onChange={v => set("secondHeadingFont", v)} />
                 <SliderRow label="Font size" value={settings.secondHeadingSize} min={10} max={60} onChange={v => set("secondHeadingSize", v)} />
@@ -400,7 +400,7 @@ export default function MenuEditPage() {
 
             {/* Paragraph */}
             <div className="px-4 py-4">
-              <p className="mb-3 text-sm font-semibold text-gray-700">Paragraph</p>
+              <p className="mb-3 text-sm font-semibold text-foreground">Paragraph</p>
               <div className="space-y-3">
                 <FontRow fonts={PARA_FONTS} value={settings.paragraphFont} onChange={v => set("paragraphFont", v)} />
                 <SliderRow label="Font size" value={settings.paragraphSize} min={10} max={40} onChange={v => set("paragraphSize", v)} />

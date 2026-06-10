@@ -19,7 +19,7 @@ export function FooterLanguageSwitcher() {
       {/* Trigger button */}
       <button
         onClick={() => setOpen(true)}
-        className="flex items-center gap-2 rounded-full border border-gray-300 bg-white px-3.5 py-1.5 text-sm font-medium text-gray-700 hover:border-gray-400 hover:bg-gray-50 transition-colors shadow-sm"
+        className="flex items-center gap-2 rounded-full border border-border bg-card px-3.5 py-1.5 text-sm font-medium text-foreground hover:border-border/80 hover:bg-muted/50 transition-colors shadow-sm"
         aria-label="Choose language"
       >
         {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -31,7 +31,7 @@ export function FooterLanguageSwitcher() {
           className="rounded-sm object-cover"
         />
         <span>{currentLanguage.label}</span>
-        <ChevronDown className="h-3.5 w-3.5 text-gray-400" />
+        <ChevronDown className="h-3.5 w-3.5 text-muted-foreground" />
       </button>
 
       {/* Modal overlay */}
@@ -44,14 +44,14 @@ export function FooterLanguageSwitcher() {
             {/* Close */}
             <button
               onClick={() => setOpen(false)}
-              className="absolute right-5 top-5 rounded-full p-1.5 text-gray-400 hover:bg-black/10 hover:text-gray-700 transition-colors"
+              className="absolute right-5 top-5 rounded-full p-1.5 text-muted-foreground hover:bg-black/10 hover:text-foreground/80 transition-colors"
               aria-label="Close"
             >
               <X className="h-5 w-5" />
             </button>
 
             {/* Title */}
-            <h2 className="mb-8 text-center text-xl font-bold text-gray-900">
+            <h2 className="mb-8 text-center text-xl font-bold text-foreground">
               {t("lang.choose")}
             </h2>
 
@@ -64,8 +64,8 @@ export function FooterLanguageSwitcher() {
                   className={cn(
                     "flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition-colors text-left",
                     lang === l.code
-                      ? "bg-white shadow-sm text-gray-900 font-semibold"
-                      : "text-gray-600 hover:bg-white/60 hover:text-gray-900"
+                      ? "bg-card shadow-sm text-foreground font-semibold"
+                      : "text-foreground/80 hover:bg-card/60 hover:text-foreground"
                   )}
                 >
                   {/* eslint-disable-next-line @next/next/no-img-element */}

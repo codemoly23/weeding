@@ -43,13 +43,13 @@ export default function VendorSingleMap({ lat, lng, name, city, country, phone }
       <Marker position={[lat, lng]}>
         <Popup>
           <div className="text-sm">
-            <p className="font-semibold text-gray-900">{name}</p>
+            <p className="font-semibold text-foreground">{name}</p>
             {(city || country) && (
-              <p className="text-xs text-gray-500 mt-0.5">
+              <p className="text-xs text-muted-foreground mt-0.5">
                 {[city, country].filter(Boolean).join(", ")}
               </p>
             )}
-            {phone && <p className="text-xs text-gray-500 mt-0.5">{phone}</p>}
+            {phone && <p className="text-xs text-muted-foreground mt-0.5">{phone}</p>}
           </div>
         </Popup>
       </Marker>

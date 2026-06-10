@@ -21,19 +21,19 @@ type VendorCategory =
   | "HAIR_MAKEUP" | "WEDDING_PLANNER" | "OTHER";
 
 const CATEGORY_CONFIG: Record<VendorCategory, { tKey: string; icon: React.ReactNode; color: string; bg: string }> = {
-  VENUE:          { tKey: "vendors.cat.venue",        icon: <Building2 className="w-4 h-4" />,       color: "text-purple-700", bg: "bg-purple-50" },
-  PHOTOGRAPHY:    { tKey: "vendors.cat.photography",  icon: <Camera className="w-4 h-4" />,           color: "text-pink-700",   bg: "bg-pink-50" },
-  VIDEOGRAPHY:    { tKey: "vendors.cat.videography",  icon: <Video className="w-4 h-4" />,            color: "text-red-700",    bg: "bg-red-50" },
-  CATERING:       { tKey: "vendors.cat.catering",     icon: <UtensilsCrossed className="w-4 h-4" />,  color: "text-orange-700", bg: "bg-orange-50" },
-  MUSIC_DJ:       { tKey: "vendors.cat.music",        icon: <Music className="w-4 h-4" />,            color: "text-yellow-700", bg: "bg-yellow-50" },
-  FLOWERS:        { tKey: "vendors.cat.flowers",      icon: <Flower2 className="w-4 h-4" />,          color: "text-green-700",  bg: "bg-green-50" },
-  DRESS_ATTIRE:   { tKey: "vendors.cat.dress",        icon: <Shirt className="w-4 h-4" />,            color: "text-teal-700",   bg: "bg-teal-50" },
-  RINGS:          { tKey: "vendors.cat.rings",        icon: <Gem className="w-4 h-4" />,              color: "text-cyan-700",   bg: "bg-cyan-50" },
-  DECORATIONS:    { tKey: "vendors.cat.decorations",  icon: <Sparkles className="w-4 h-4" />,         color: "text-indigo-700", bg: "bg-indigo-50" },
-  TRANSPORTATION: { tKey: "vendors.cat.transport",    icon: <Car className="w-4 h-4" />,              color: "text-blue-700",   bg: "bg-blue-50" },
-  HAIR_MAKEUP:    { tKey: "vendors.cat.hair",         icon: <Scissors className="w-4 h-4" />,         color: "text-rose-700",   bg: "bg-rose-50" },
-  WEDDING_PLANNER:{ tKey: "vendors.cat.planner",      icon: <CalendarHeart className="w-4 h-4" />,    color: "text-violet-700", bg: "bg-violet-50" },
-  OTHER:          { tKey: "vendors.cat.other",        icon: <Package className="w-4 h-4" />,          color: "text-gray-700",   bg: "bg-gray-100" },
+  VENUE:          { tKey: "vendors.cat.venue",        icon: <Building2 className="w-4 h-4" />,       color: "text-accent",            bg: "bg-accent/10" },
+  PHOTOGRAPHY:    { tKey: "vendors.cat.photography",  icon: <Camera className="w-4 h-4" />,           color: "text-accent",            bg: "bg-accent/10" },
+  VIDEOGRAPHY:    { tKey: "vendors.cat.videography",  icon: <Video className="w-4 h-4" />,            color: "text-foreground/70",     bg: "bg-muted" },
+  CATERING:       { tKey: "vendors.cat.catering",     icon: <UtensilsCrossed className="w-4 h-4" />,  color: "text-foreground/70",     bg: "bg-muted" },
+  MUSIC_DJ:       { tKey: "vendors.cat.music",        icon: <Music className="w-4 h-4" />,            color: "text-accent",            bg: "bg-accent/10" },
+  FLOWERS:        { tKey: "vendors.cat.flowers",      icon: <Flower2 className="w-4 h-4" />,          color: "text-foreground/70",     bg: "bg-muted" },
+  DRESS_ATTIRE:   { tKey: "vendors.cat.dress",        icon: <Shirt className="w-4 h-4" />,            color: "text-accent",            bg: "bg-accent/10" },
+  RINGS:          { tKey: "vendors.cat.rings",        icon: <Gem className="w-4 h-4" />,              color: "text-accent",            bg: "bg-accent/10" },
+  DECORATIONS:    { tKey: "vendors.cat.decorations",  icon: <Sparkles className="w-4 h-4" />,         color: "text-foreground/70",     bg: "bg-muted" },
+  TRANSPORTATION: { tKey: "vendors.cat.transport",    icon: <Car className="w-4 h-4" />,              color: "text-foreground/70",     bg: "bg-muted" },
+  HAIR_MAKEUP:    { tKey: "vendors.cat.hair",         icon: <Scissors className="w-4 h-4" />,         color: "text-accent",            bg: "bg-accent/10" },
+  WEDDING_PLANNER:{ tKey: "vendors.cat.planner",      icon: <CalendarHeart className="w-4 h-4" />,    color: "text-primary",           bg: "bg-primary/5" },
+  OTHER:          { tKey: "vendors.cat.other",        icon: <Package className="w-4 h-4" />,          color: "text-muted-foreground",  bg: "bg-muted" },
 };
 
 // Price ranges in SEK
@@ -393,7 +393,7 @@ function VendorsPage() {
                 className="w-4 h-4 border-input text-primary focus:ring-ring cursor-pointer"
               />
               <span className="text-sm text-foreground/80 group-hover:text-foreground flex items-center gap-1">
-                {opt.value && <Star className="w-3.5 h-3.5 fill-yellow-400 text-yellow-400" />}
+                {opt.value && <Star className="w-3.5 h-3.5 fill-[var(--color-star)] text-[var(--color-star)]" />}
                 {opt.label}
               </span>
             </label>
@@ -576,19 +576,19 @@ function VendorsPage() {
                   </span>
                 )}
                 {cityFilter && (
-                  <span className="flex items-center gap-1 bg-blue-100 text-blue-700 text-xs px-2.5 py-1 rounded-full font-medium">
+                  <span className="flex items-center gap-1 bg-[var(--color-info-bg)] text-[var(--color-info-text)] text-xs px-2.5 py-1 rounded-full font-medium">
                     <MapPin className="w-3 h-3" />{cityFilter}
                     <button onClick={() => { setCityFilter(""); setCityInput(""); }}><X className="w-3 h-3 ml-0.5" /></button>
                   </span>
                 )}
                 {dateFilter && (
-                  <span className="flex items-center gap-1 bg-green-100 text-green-700 text-xs px-2.5 py-1 rounded-full font-medium">
+                  <span className="flex items-center gap-1 bg-[var(--color-success-bg)] text-[var(--color-success-text)] text-xs px-2.5 py-1 rounded-full font-medium">
                     <Clock className="w-3 h-3" />{new Date(dateFilter).toLocaleDateString()}
                     <button onClick={() => { setDateFilter(""); setPage(1); }}><X className="w-3 h-3 ml-0.5" /></button>
                   </span>
                 )}
                 {eventTypeLabel && (
-                  <span className="flex items-center gap-1 bg-pink-100 text-pink-700 text-xs px-2.5 py-1 rounded-full font-medium capitalize">
+                  <span className="flex items-center gap-1 bg-muted text-muted-foreground text-xs px-2.5 py-1 rounded-full font-medium capitalize">
                     {eventTypeLabel}
                     <button onClick={() => setEventTypeLabel("")}><X className="w-3 h-3 ml-0.5" /></button>
                   </span>
@@ -600,19 +600,19 @@ function VendorsPage() {
                   </span>
                 )}
                 {selectedPriceRange && (
-                  <span className="flex items-center gap-1 bg-green-100 text-green-700 text-xs px-2.5 py-1 rounded-full font-medium">
+                  <span className="flex items-center gap-1 bg-[var(--color-success-bg)] text-[var(--color-success-text)] text-xs px-2.5 py-1 rounded-full font-medium">
                     {PRICE_RANGES.find(r => r.min === selectedPriceRange.min && r.max === selectedPriceRange.max)?.label}
                     <button onClick={() => setSelectedPriceRange(null)}><X className="w-3 h-3 ml-0.5" /></button>
                   </span>
                 )}
                 {minRating && (
-                  <span className="flex items-center gap-1 bg-yellow-100 text-yellow-700 text-xs px-2.5 py-1 rounded-full font-medium">
-                    <Star className="w-3 h-3 fill-yellow-500 text-yellow-500" />{minRating}+ stars
+                  <span className="flex items-center gap-1 bg-[var(--color-warning-bg)] text-[var(--color-warning-text)] text-xs px-2.5 py-1 rounded-full font-medium">
+                    <Star className="w-3 h-3 fill-[var(--color-star)] text-[var(--color-star)]" />{minRating}+ stars
                     <button onClick={() => setMinRating("")}><X className="w-3 h-3 ml-0.5" /></button>
                   </span>
                 )}
                 {featuredOnly && (
-                  <span className="flex items-center gap-1 bg-amber-100 text-amber-700 text-xs px-2.5 py-1 rounded-full font-medium">
+                  <span className="flex items-center gap-1 bg-[var(--color-warning-bg)] text-[var(--color-warning-text)] text-xs px-2.5 py-1 rounded-full font-medium">
                     Featured
                     <button onClick={() => setFeaturedOnly(false)}><X className="w-3 h-3 ml-0.5" /></button>
                   </span>
@@ -697,7 +697,7 @@ function VendorsPage() {
                                 <span className={meta.color}>{meta.icon}</span>
                               </div>
                             )}
-                            {v.isFeatured && <span className="absolute top-2 left-2 bg-yellow-400 text-yellow-900 text-xs font-bold px-2 py-0.5 rounded-full">{t("vendors.featured")}</span>}
+                            {v.isFeatured && <span className="absolute top-2 left-2 bg-[var(--color-star)] text-primary text-xs font-bold px-2 py-0.5 rounded-full">{t("vendors.featured")}</span>}
                             {v.isVerified && (
                               <span className="absolute bottom-2 left-2 flex items-center gap-1 bg-card text-primary text-xs font-semibold px-2 py-0.5 rounded-full shadow-sm">
                                 <BadgeCheck className="w-3 h-3" /> Verified
@@ -709,7 +709,7 @@ function VendorsPage() {
                               title={savedIds.has(v.id) ? "Unsave" : "Save"}
                               className="absolute bottom-2 right-2 w-7 h-7 flex items-center justify-center bg-card rounded-full shadow-sm hover:scale-110 transition-transform"
                             >
-                              <Heart className={`w-3.5 h-3.5 ${savedIds.has(v.id) ? "fill-rose-500 text-rose-500" : "text-muted-foreground"}`} />
+                              <Heart className={`w-3.5 h-3.5 ${savedIds.has(v.id) ? "fill-accent text-accent" : "text-muted-foreground"}`} />
                             </button>
                           </div>
                           <div className="p-4">
@@ -722,7 +722,7 @@ function VendorsPage() {
                               </div>
                               {v.avgRating !== null && (
                                 <div className="flex items-center gap-1 text-xs">
-                                  <Star className="w-3 h-3 fill-yellow-400 text-yellow-400" />
+                                  <Star className="w-3 h-3 fill-[var(--color-star)] text-[var(--color-star)]" />
                                   <span className="font-medium text-foreground/80">{v.avgRating.toFixed(1)}</span>
                                   <span className="text-muted-foreground">({v.reviewCount})</span>
                                 </div>
@@ -732,7 +732,7 @@ function VendorsPage() {
                               <p className="mt-2 text-sm font-semibold text-primary">{formatPrice(v.startingPrice, v.currency)}</p>
                             )}
                             {v.slaHours && (
-                              <p className="mt-1 flex items-center gap-1 text-xs text-emerald-600">
+                              <p className="mt-1 flex items-center gap-1 text-xs text-[var(--color-success-text)]">
                                 <Clock className="w-3 h-3" />{t("vendors.respondsWithin")} {v.slaHours}h
                               </p>
                             )}

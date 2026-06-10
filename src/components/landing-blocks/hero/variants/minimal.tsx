@@ -27,7 +27,7 @@ export function HeroMinimal({ settings, isPreview = false, device }: HeroMinimal
     return (
       <>
         {parts[0]}
-        <span className="text-orange-500">{settings.headline.highlightWord}</span>
+        <span className="text-[var(--color-warning-text)]">{settings.headline.highlightWord}</span>
         {parts[1]}
       </>
     );

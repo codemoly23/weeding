@@ -340,7 +340,7 @@ export function ServiceHeroWidgetSettingsPanel({
         <div className="space-y-2 text-xs">
           <div className="flex items-start gap-2">
             <span
-              className="font-mono text-orange-600 whitespace-nowrap"
+              className="font-mono text-[var(--color-warning-text)] whitespace-nowrap"
               style={{ backgroundColor: "#fff7ed", padding: "2px 6px", borderRadius: "4px" }}
             >
               {`{{service.name}}`}
@@ -349,7 +349,7 @@ export function ServiceHeroWidgetSettingsPanel({
           </div>
           <div className="flex items-start gap-2">
             <span
-              className="font-mono text-orange-600 whitespace-nowrap"
+              className="font-mono text-[var(--color-warning-text)] whitespace-nowrap"
               style={{ backgroundColor: "#fff7ed", padding: "2px 6px", borderRadius: "4px" }}
             >
               {`{{service.slug}}`}
@@ -358,7 +358,7 @@ export function ServiceHeroWidgetSettingsPanel({
           </div>
           <div className="flex items-start gap-2">
             <span
-              className="font-mono text-orange-600 whitespace-nowrap"
+              className="font-mono text-[var(--color-warning-text)] whitespace-nowrap"
               style={{ backgroundColor: "#fff7ed", padding: "2px 6px", borderRadius: "4px" }}
             >
               {`{{service.startingPrice}}`}
@@ -367,7 +367,7 @@ export function ServiceHeroWidgetSettingsPanel({
           </div>
           <div className="flex items-start gap-2">
             <span
-              className="font-mono text-orange-600 whitespace-nowrap"
+              className="font-mono text-[var(--color-warning-text)] whitespace-nowrap"
               style={{ backgroundColor: "#fff7ed", padding: "2px 6px", borderRadius: "4px" }}
             >
               {`{{service.shortDesc}}`}
@@ -376,7 +376,7 @@ export function ServiceHeroWidgetSettingsPanel({
           </div>
           <div className="flex items-start gap-2">
             <span
-              className="font-mono text-orange-600 whitespace-nowrap"
+              className="font-mono text-[var(--color-warning-text)] whitespace-nowrap"
               style={{ backgroundColor: "#fff7ed", padding: "2px 6px", borderRadius: "4px" }}
             >
               {`{{service.processingTime}}`}

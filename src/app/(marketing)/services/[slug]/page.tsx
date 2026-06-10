@@ -295,13 +295,6 @@ export default async function ServicePage({ params }: PageProps) {
   // Check for SERVICE_DETAILS template
   const template = await getActiveTemplateForType("SERVICE_DETAILS");
 
-  // Debug: Log template info
-  console.log("[Service Page] Template found:", template ? {
-    id: template.id,
-    name: template.name,
-    sectionsCount: template.sections.length,
-  } : null);
-
   // Prepare service data for context
   const serviceContextData: ServiceContextData = {
     id: service.id,
@@ -458,7 +451,7 @@ export default async function ServicePage({ params }: PageProps) {
                   key={index}
                   className="flex items-start gap-3 rounded-lg bg-muted/30 p-4"
                 >
-                  <Check className="mt-0.5 h-5 w-5 shrink-0 text-green-600" />
+                  <Check className="mt-0.5 h-5 w-5 shrink-0 text-[var(--color-success-text)]" />
                   <span className="text-sm">{feature}</span>
                 </div>
               ))}

@@ -42,17 +42,17 @@ export function PlannerHeader({ onMenuClick, projectId }: PlannerHeaderProps) {
   const { logout } = useLogout({ userRole: "CUSTOMER" });
 
   return (
-    <header className="flex h-16 items-center justify-between border-b border-gray-100 bg-white px-4 lg:px-6">
+    <header className="flex h-16 items-center justify-between border-b border-border bg-card px-4 lg:px-6">
       <div className="flex items-center gap-4">
-        <Button variant="ghost" size="icon" className="lg:hidden text-gray-700" onClick={onMenuClick}>
+        <Button variant="ghost" size="icon" className="lg:hidden text-foreground/80" onClick={onMenuClick}>
           <Menu className="h-5 w-5" />
         </Button>
         <div className="hidden md:block">
           <Link href="/vendors">
-            <button className="flex items-center gap-2 w-64 px-4 py-2 rounded-full border border-gray-200 bg-gray-50 text-sm text-gray-500 hover:border-purple-300 hover:text-purple-600 hover:bg-purple-50 transition-colors text-left">
+            <button className="flex items-center gap-2 w-64 px-4 py-2 rounded-full border border-border bg-muted/50 text-sm text-muted-foreground hover:border-primary/30 hover:text-primary hover:bg-primary/5 transition-colors text-left">
               <Search className="h-4 w-4 shrink-0" />
               <span>Find vendor or venue</span>
-              <Store className="h-4 w-4 ml-auto shrink-0 text-gray-300" />
+              <Store className="h-4 w-4 ml-auto shrink-0 text-muted-foreground/40" />
             </button>
           </Link>
         </div>
@@ -62,21 +62,21 @@ export function PlannerHeader({ onMenuClick, projectId }: PlannerHeaderProps) {
         <LanguageSwitcher />
 
         <Link href="/planner">
-          <Button variant="ghost" size="sm" className="gap-2 text-gray-700 hover:text-black hover:bg-gray-50">
+          <Button variant="ghost" size="sm" className="gap-2 text-foreground/80 hover:text-foreground hover:bg-muted/50">
             <FolderOpen className="h-4 w-4" />
             <span className="hidden sm:inline">{t("planner.header.myProjects")}</span>
           </Button>
         </Link>
 
         <Link href="/planner/create">
-          <Button variant="ghost" size="icon" className="text-gray-700 hover:text-black hover:bg-gray-50">
+          <Button variant="ghost" size="icon" className="text-foreground/80 hover:text-foreground hover:bg-muted/50">
             <Plus className="h-5 w-5" />
           </Button>
         </Link>
 
         {!isLoggedIn && (
           <Link href={loginUrl}>
-            <Button size="sm" className="gap-1.5 border-0 bg-gradient-to-r from-rose-500 to-purple-500 text-white hover:from-rose-600 hover:to-purple-600 shadow-sm">
+            <Button size="sm" className="gap-1.5 border-0 bg-primary text-primary-foreground hover:bg-primary/90 shadow-sm">
               <LogIn className="h-4 w-4" />
               <span className="hidden sm:inline">{t("common.signIn")}</span>
             </Button>
@@ -86,13 +86,13 @@ export function PlannerHeader({ onMenuClick, projectId }: PlannerHeaderProps) {
         {isLoggedIn && (
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <Button variant="ghost" className="gap-2 px-2 hover:bg-gray-50">
+              <Button variant="ghost" className="gap-2 px-2 hover:bg-muted/50">
                 <Avatar className="h-8 w-8">
-                  <AvatarFallback className="bg-gradient-to-br from-rose-400 to-purple-500 text-white font-semibold text-xs">
+                  <AvatarFallback className="bg-primary text-primary-foreground font-semibold text-xs">
                     {userInitials}
                   </AvatarFallback>
                 </Avatar>
-                <span className="hidden text-sm font-medium md:inline-block text-black">{userName}</span>
+                <span className="hidden text-sm font-medium md:inline-block text-foreground">{userName}</span>
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end" className="w-56">

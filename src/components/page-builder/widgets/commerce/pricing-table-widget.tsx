@@ -333,7 +333,7 @@ function OrderSummary({
     <div className="hidden lg:block w-80 shrink-0">
       <Card
         className={cn(
-          "shadow-lg border-gray-200",
+          "shadow-lg border-border",
           orderSummary.stickyOnScroll && "sticky top-24"
         )}
       >
@@ -343,7 +343,7 @@ function OrderSummary({
         <CardContent className="space-y-3">
           {orderSummary.showPackageDetails && selectedPackage && (
             <div className="flex justify-between text-sm">
-              <span className="text-gray-600">
+              <span className="text-foreground/80">
                 {selectedPackage.name} Package:
               </span>
               <span className="font-medium">{currencySymbol}{selectedPackage.price}</span>
@@ -352,7 +352,7 @@ function OrderSummary({
 
           {orderSummary.showStateFee && selectedLocation && locationFee > 0 && (
             <div className="flex justify-between text-sm">
-              <span className="text-gray-600">
+              <span className="text-foreground/80">
                 {selectedLocation.name} {settings.stateFee.label || "Fee"}:
               </span>
               <span className="font-medium">{currencySymbol}{locationFee}</span>
@@ -365,7 +365,7 @@ function OrderSummary({
                 key={`${addon.featureId}-${addon.packageId}`}
                 className="flex justify-between text-sm"
               >
-                <span className="text-gray-600 truncate max-w-40">
+                <span className="text-foreground/80 truncate max-w-40">
                   {addon.featureText}:
                 </span>
                 <span className="font-medium">{currencySymbol}{addon.price}</span>
@@ -377,7 +377,7 @@ function OrderSummary({
           {orderSummary.showTotal && (
             <div className="flex justify-between items-center">
               <span className="text-base font-semibold">Total:</span>
-              <span className="text-2xl font-bold text-gray-900">
+              <span className="text-2xl font-bold text-foreground">
                 {currencySymbol}{grandTotal}
               </span>
             </div>
@@ -397,13 +397,13 @@ function OrderSummary({
             <Link href={checkoutUrl}>{orderSummary.ctaButton?.text || "Proceed to Checkout"}</Link>
           </Button>
           {checkoutBadgeText && (
-            <div className="flex items-center justify-center gap-2 text-xs text-gray-500">
+            <div className="flex items-center justify-center gap-2 text-xs text-muted-foreground">
               <RefreshCw className="h-3 w-3" />
               <span>{checkoutBadgeText}</span>
             </div>
           )}
           {checkoutBadgeDescription && (
-            <p className="text-xs text-center text-gray-500">
+            <p className="text-xs text-center text-muted-foreground">
               {checkoutBadgeDescription}
             </p>
           )}
@@ -642,7 +642,7 @@ function ComparisonTable({
   return (
     <div className="pt-4 overflow-x-auto md:overflow-x-visible md:overflow-y-visible">
       <div
-        className="rounded-[20px] border-[1.5px] bg-white relative"
+        className="rounded-[20px] border-[1.5px] bg-card relative"
         style={{ borderColor: BORDER, boxShadow: "0 4px 24px rgba(0,0,0,0.04)", minWidth: "640px" }}
       >
         <table className="w-full border-separate border-spacing-0 table-fixed">
@@ -652,7 +652,7 @@ function ComparisonTable({
             {/* Single header row (badge + package info combined) */}
             <tr>
               <th
-                className="w-[38%] p-0 bg-white text-left align-bottom border-b-[1.5px] rounded-tl-[20px]"
+                className="w-[38%] p-0 bg-card text-left align-bottom border-b-[1.5px] rounded-tl-[20px]"
                 style={{ borderColor: BORDER, minWidth: "180px" }}
               >
                 <div
@@ -672,7 +672,7 @@ function ComparisonTable({
                   <th
                     key={pkg.id}
                     className={cn(
-                      "p-0 bg-white text-center align-bottom border-b-[1.5px] relative transition-colors duration-150",
+                      "p-0 bg-card text-center align-bottom border-b-[1.5px] relative transition-colors duration-150",
                       isLast ? "rounded-tr-[20px]" : "",
                       hoveredCol === colIdx ? "bg-[rgba(27,58,45,0.02)]" : ""
                     )}
@@ -696,7 +696,7 @@ function ComparisonTable({
                           "flex flex-col items-center gap-1 w-full py-3.5 px-4 rounded-xl border-2 cursor-pointer transition-all duration-200 font-inherit",
                           isActive
                             ? "border-[#1b3a2d] bg-[#1b3a2d]"
-                            : "border-[rgba(14,17,9,0.1)] bg-white hover:border-[#1b3a2d] hover:bg-[rgba(27,58,45,0.07)]"
+                            : "border-[rgba(14,17,9,0.1)] bg-card hover:border-[#1b3a2d] hover:bg-[rgba(27,58,45,0.07)]"
                         )}
                       >
                         <span
@@ -820,7 +820,7 @@ function ComparisonTable({
                             "w-6 h-6 rounded-full border-[1.5px] flex items-center justify-center shrink-0 transition-all duration-200",
                             isExpanded
                               ? "border-[#1b3a2d] bg-[rgba(27,58,45,0.08)] text-[#1b3a2d]"
-                              : "border-[rgba(14,17,9,0.1)] bg-white text-[#8a9086] hover:border-[#1b3a2d] hover:text-[#1b3a2d] hover:bg-[rgba(27,58,45,0.06)]"
+                              : "border-[rgba(14,17,9,0.1)] bg-card text-[#8a9086] hover:border-[#1b3a2d] hover:text-[#1b3a2d] hover:bg-[rgba(27,58,45,0.06)]"
                           )}
                         >
                           <Plus className={cn("w-3 h-3 transition-transform duration-300", isExpanded && "rotate-45")} style={{ transitionTimingFunction: "cubic-bezier(0.16,1,0.3,1)" }} />
@@ -898,7 +898,7 @@ function ComparisonTable({
           {/* ── TFOOT ── CTA row ─────────────────────────────────────────── */}
           <tfoot>
             <tr>
-              <td className="px-7 py-5 bg-white border-t-[1.5px] rounded-bl-[20px] sticky left-0 z-[2] md:static" style={{ borderColor: BORDER }} />
+              <td className="px-7 py-5 bg-card border-t-[1.5px] rounded-bl-[20px] sticky left-0 z-[2] md:static" style={{ borderColor: BORDER }} />
               {sortedPackages.map((pkg, colIdx) => {
                 const isActive = activeColIndex === colIdx;
                 const isLast = colIdx === colCount - 1;
@@ -913,7 +913,7 @@ function ComparisonTable({
                   <td
                     key={pkg.id}
                     className={cn(
-                      "px-4 py-5 bg-white border-t-[1.5px] text-center transition-colors duration-150",
+                      "px-4 py-5 bg-card border-t-[1.5px] text-center transition-colors duration-150",
                       isLast ? "rounded-br-[20px]" : "",
                       hoveredCol === colIdx ? "bg-[rgba(27,58,45,0.02)]" : ""
                     )}
@@ -972,7 +972,7 @@ function MobilePackageCards({
 
   return (
     <div className="lg:hidden">
-      <div className="text-center text-sm text-gray-500 mb-4">
+      <div className="text-center text-sm text-muted-foreground mb-4">
         Tap a package to select it
       </div>
       <div className="flex snap-x snap-mandatory gap-4 overflow-x-auto pb-4">
@@ -1004,10 +1004,10 @@ function MobilePackageCards({
                 <h3 className="text-xl font-semibold">{pkg.name}</h3>
                 <p className="text-3xl font-bold font-display mt-1">{currencySymbol}{pkg.price}</p>
                 {locationFee > 0 && (
-                  <p className="text-xs text-gray-500">+ {currencySymbol}{locationFee} {settings.stateFee.label?.toLowerCase() || "location fee"}</p>
+                  <p className="text-xs text-muted-foreground">+ {currencySymbol}{locationFee} {settings.stateFee.label?.toLowerCase() || "location fee"}</p>
                 )}
                 {pkg.processingTime && (
-                  <div className="flex items-center justify-center gap-1 mt-2 text-xs text-gray-500">
+                  <div className="flex items-center justify-center gap-1 mt-2 text-xs text-muted-foreground">
                     {pkg.processingIcon === "zap" ? (
                       <Zap className="h-3 w-3" style={{ color: accentColor }} />
                     ) : (
@@ -1040,7 +1040,7 @@ function MobilePackageCards({
                         key={feature.id}
                         className={cn(
                           "flex items-start gap-2 text-sm",
-                          !isIncluded && "text-gray-400"
+                          !isIncluded && "text-muted-foreground"
                         )}
                       >
                         {isIncluded ? (
@@ -1049,7 +1049,7 @@ function MobilePackageCards({
                             style={{ color: isSelected ? accentColor : "#6b7280" }}
                           />
                         ) : (
-                          <X className="mt-0.5 h-4 w-4 shrink-0 text-gray-300" />
+                          <X className="mt-0.5 h-4 w-4 shrink-0 text-muted-foreground/50" />
                         )}
                         <span>{feature.text}</span>
                       </div>
@@ -1057,7 +1057,7 @@ function MobilePackageCards({
                   })}
                 {!responsive.mobileCard.showAllFeatures &&
                   features.length > responsive.mobileCard.keyFeaturesCount && (
-                    <p className="text-xs text-gray-500 text-center">
+                    <p className="text-xs text-muted-foreground text-center">
                       +{features.length - responsive.mobileCard.keyFeaturesCount}{" "}
                       more features
                     </p>

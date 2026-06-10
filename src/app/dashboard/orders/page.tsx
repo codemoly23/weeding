@@ -51,13 +51,13 @@ interface Order {
 }
 
 const statusColors: Record<string, string> = {
-  PENDING: "bg-gray-100 text-gray-700",
-  PROCESSING: "bg-blue-100 text-blue-700",
-  IN_PROGRESS: "bg-amber-100 text-amber-700",
-  WAITING_FOR_INFO: "bg-purple-100 text-purple-700",
-  COMPLETED: "bg-green-100 text-green-700",
-  CANCELLED: "bg-red-100 text-red-700",
-  REFUNDED: "bg-gray-100 text-gray-700",
+  PENDING: "bg-muted text-muted-foreground",
+  PROCESSING: "bg-[var(--color-info-bg)] text-[var(--color-info-text)]",
+  IN_PROGRESS: "bg-[var(--color-warning-bg)] text-[var(--color-warning-text)]",
+  WAITING_FOR_INFO: "bg-primary/10 text-primary",
+  COMPLETED: "bg-[var(--color-success-bg)] text-[var(--color-success-text)]",
+  CANCELLED: "bg-[var(--color-error-bg)] text-[var(--color-error-text)]",
+  REFUNDED: "bg-muted text-muted-foreground",
 };
 
 const statusLabels: Record<string, string> = {
@@ -71,11 +71,11 @@ const statusLabels: Record<string, string> = {
 };
 
 const paymentStatusColors: Record<string, string> = {
-  PENDING: "bg-yellow-100 text-yellow-800",
-  PAID: "bg-green-100 text-green-700",
-  FAILED: "bg-red-100 text-red-700",
-  REFUNDED: "bg-gray-100 text-gray-700",
-  PARTIALLY_REFUNDED: "bg-orange-100 text-orange-700",
+  PENDING: "bg-[var(--color-warning-bg)] text-[var(--color-warning-text)]",
+  PAID: "bg-[var(--color-success-bg)] text-[var(--color-success-text)]",
+  FAILED: "bg-[var(--color-error-bg)] text-[var(--color-error-text)]",
+  REFUNDED: "bg-muted text-muted-foreground",
+  PARTIALLY_REFUNDED: "bg-[var(--color-warning-bg)] text-[var(--color-warning-text)]",
 };
 
 const paymentStatusLabels: Record<string, string> = {
@@ -301,7 +301,7 @@ export default function OrdersPage() {
                       <TableCell>
                         <Badge
                           variant="secondary"
-                          className={paymentStatusColors[order.paymentStatus] || "bg-gray-100 text-gray-700"}
+                          className={paymentStatusColors[order.paymentStatus] || "bg-muted text-muted-foreground"}
                         >
                           {paymentStatusLabels[order.paymentStatus] || order.paymentStatus}
                         </Badge>

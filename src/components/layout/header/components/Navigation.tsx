@@ -40,7 +40,7 @@ function MegaMenuDropdown({ categories, columns, richContent }: MegaMenuProps) {
     const hasSidebar = content.sidebar && content.sidebar.items && content.sidebar.items.length > 0;
     return (
       <div className="absolute left-1/2 top-full -translate-x-1/2 pt-2">
-        <div className="rounded-xl border bg-white p-6 shadow-xl w-[900px]">
+        <div className="rounded-xl border bg-card p-6 shadow-xl w-[900px]">
           {content.header && (
             <h4 className="mb-4 font-sans text-base font-bold leading-6 text-foreground">{content.header}</h4>
           )}
@@ -117,7 +117,7 @@ function MegaMenuDropdown({ categories, columns, richContent }: MegaMenuProps) {
     const hasIcons = content.columns?.some((col) => col.items?.some((i) => i.icon));
     return (
       <div className="absolute left-1/2 top-full -translate-x-1/2 pt-2">
-        <div className="rounded-xl border bg-white p-6 shadow-xl w-[520px]">
+        <div className="rounded-xl border bg-card p-6 shadow-xl w-[520px]">
           {content.header && (
             <h4 className="mb-4 font-sans text-base font-bold leading-6 text-foreground">{content.header}</h4>
           )}
@@ -177,7 +177,7 @@ function MegaMenuDropdown({ categories, columns, richContent }: MegaMenuProps) {
     };
     return (
       <div className="absolute left-1/2 top-full -translate-x-1/2 pt-2">
-        <div className="rounded-xl border bg-white p-6 shadow-xl" style={{ width: "clamp(380px, 50vw, 900px)" }}>
+        <div className="rounded-xl border bg-card p-6 shadow-xl" style={{ width: "clamp(380px, 50vw, 900px)" }}>
           {content.sectionHeader && (
             <h4 className="mb-4 font-sans text-base font-bold leading-6 text-foreground">
               {content.sectionHeader}
@@ -282,7 +282,7 @@ function MegaMenuDropdown({ categories, columns, richContent }: MegaMenuProps) {
   if (isVendorsStyle) {
     return (
       <div className="absolute left-1/2 top-full -translate-x-1/2 pt-2">
-        <div className="rounded-xl border bg-white p-6 shadow-xl w-[700px]">
+        <div className="rounded-xl border bg-card p-6 shadow-xl w-[700px]">
           {iconCategories.map((category) => (
             <div key={category.name}>
               {category.name && (
@@ -350,7 +350,7 @@ function MegaMenuDropdown({ categories, columns, richContent }: MegaMenuProps) {
 
   return (
     <div className="absolute left-1/2 top-full -translate-x-1/2 pt-2">
-      <div className={`rounded-xl border bg-white p-6 shadow-xl ${width}`}>
+      <div className={`rounded-xl border bg-card p-6 shadow-xl ${width}`}>
         {sectionHeader && (
           <h4 className="mb-4 font-sans text-base font-bold leading-6 text-foreground">{sectionHeader}</h4>
         )}
@@ -406,7 +406,7 @@ function MegaMenuDropdown({ categories, columns, richContent }: MegaMenuProps) {
 function SimpleDropdown({ links }: { links: { name: string; href: string; icon?: string }[] }) {
   return (
     <div className="absolute left-0 top-full pt-2 z-50">
-      <div className="rounded-xl border bg-white py-2 shadow-xl min-w-[220px]">
+      <div className="rounded-xl border bg-card py-2 shadow-xl min-w-[220px]">
         {links.map((link) => {
           const Icon = getIcon(link.icon);
           const hasIcon = !!link.icon;

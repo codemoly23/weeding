@@ -98,7 +98,7 @@ function ToolbarButton({
       className={cn(
         "p-1.5 rounded transition-colors",
         isActive
-          ? "bg-orange-500/30 text-orange-400"
+          ? "bg-[var(--color-warning-bg)] text-[var(--color-warning-text)]"
           : "text-slate-400 hover:text-white hover:bg-slate-700",
         disabled && "opacity-50 cursor-not-allowed"
       )}
