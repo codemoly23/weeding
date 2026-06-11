@@ -1,6 +1,7 @@
 "use client";
 
-import { useState, useMemo, useEffect } from "react";
+import { useState, useMemo, useEffect, useRef } from "react";
+import { createPortal } from "react-dom";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -8,7 +9,12 @@ import { motion } from "framer-motion";
 import {
   Heart, Cake, Briefcase, GraduationCap, TreePine, PartyPopper,
   Droplet, MoreHorizontal, Search, MapPin, ArrowRight, Star,
-  Mail, Users, LayoutGrid, Store, Sparkles, Globe,
+  Mail, Users, LayoutGrid, Store, Sparkles, Globe, Building2,
+  ChevronDown, Home, Hotel, UtensilsCrossed, Sailboat, Waves,
+  Warehouse, Flag, Landmark, Leaf, Building, Church, Flower2,
+  Ship, Anchor, Music, Camera, Utensils, Coffee, Mountain, Sun,
+  Gift, Car, Shirt, ClipboardList, Video, Gem, Plane, Lightbulb,
+  Disc3, Package, User,
 } from "lucide-react";
 import type { PlanigateHeroWidgetSettings, PlanigateEventTypePill } from "@/lib/page-builder/types";
 import { DEFAULT_PLANIGATE_HERO_SETTINGS } from "@/lib/page-builder/defaults";
@@ -21,10 +27,27 @@ import {
   EASE_OUT,
 } from "./motion-variants";
 
-const ICON_MAP: Record<string, React.ComponentType<{ className?: string; size?: number; strokeWidth?: number }>> = {
+const ICON_MAP: Record<string, React.ComponentType<{ className?: string; size?: number; strokeWidth?: number; style?: React.CSSProperties }>> = {
   Heart, Cake, Briefcase, GraduationCap, TreePine, PartyPopper,
   Droplet, MoreHorizontal, Mail, Users, LayoutGrid, Store, Sparkles, Globe,
+  Building2, Home, Hotel, UtensilsCrossed, Sailboat, Waves, Warehouse,
+  Flag, Landmark, Leaf, Building, Church, Flower2, Ship, Anchor, Music,
+  Camera, Utensils, Coffee, Mountain, Sun, Gift, Car, Shirt, ClipboardList,
+  Video, Gem, Plane, Lightbulb, Disc3, Package, User, MapPin, Search,
 };
+
+interface SearchOption {
+  id: string;
+  name: string;
+  type: string;
+  icon?: string | null;
+  group?: string | null;
+}
+
+function getOptionIcon(name?: string | null) {
+  if (!name) return null;
+  return ICON_MAP[name] ?? null;
+}
 
 function PillIcon({ name, className }: { name: string; className?: string }) {
   const Comp = ICON_MAP[name] ?? Heart;
@@ -51,6 +74,7 @@ export function PlanigateHeroWidget({ settings: raw }: Props) {
 
   const [bgIndex, setBgIndex] = useState(0);
   const [activePill, setActivePill] = useState<string>("");
+  const [placeQuery, setPlaceQuery] = useState("");
   const [serviceQuery, setServiceQuery] = useState("");
   const [locationQuery, setLocationQuery] = useState("");
 
@@ -62,43 +86,46 @@ export function PlanigateHeroWidget({ settings: raw }: Props) {
 
   return (
     <section
-      className="relative overflow-hidden"
+      className="relative z-[50]"
       style={{
         background:
           "linear-gradient(180deg, var(--color-planigate-bg-hero-from) 0%, var(--color-planigate-bg-hero-via) 60%, var(--color-planigate-bg-hero-to) 100%)",
       }}
     >
-      {/* Background image slideshow */}
-      {bgImages.map((src, i) => (
+      {/* Background layer — overflow-hidden kept here so collage doesn't bleed */}
+      <div className="absolute inset-0 overflow-hidden">
+        {/* Background image slideshow */}
+        {bgImages.map((src, i) => (
+          <div
+            key={i}
+            aria-hidden
+            className="pointer-events-none absolute inset-0"
+            style={{
+              opacity: i === bgIndex ? 1 : 0,
+              transition: "opacity 1.4s ease-in-out",
+            }}
+          >
+            <Image src={src} alt="" fill sizes="100vw" className="object-cover" priority={i === 0} />
+          </div>
+        ))}
+
+        {/* Dark overlay — keeps text readable */}
         <div
-          key={i}
+          aria-hidden
+          className="pointer-events-none absolute inset-0"
+          style={{ background: "rgba(0, 0, 0, 0.62)" }}
+        />
+
+        {/* Subtle decorative wash */}
+        <div
           aria-hidden
           className="pointer-events-none absolute inset-0"
           style={{
-            opacity: i === bgIndex ? 1 : 0,
-            transition: "opacity 1.4s ease-in-out",
+            background:
+              "radial-gradient(60% 50% at 20% 20%, rgba(255,255,255,0.55) 0%, transparent 70%), radial-gradient(50% 40% at 85% 15%, rgba(232,213,180,0.45) 0%, transparent 70%)",
           }}
-        >
-          <Image src={src} alt="" fill sizes="100vw" className="object-cover" priority={i === 0} />
-        </div>
-      ))}
-
-      {/* Cream overlay — keeps text readable */}
-      <div
-        aria-hidden
-        className="pointer-events-none absolute inset-0"
-        style={{ background: "rgba(0, 0, 0, 0.62)" }}
-      />
-
-      {/* Subtle decorative wash */}
-      <div
-        aria-hidden
-        className="pointer-events-none absolute inset-0"
-        style={{
-          background:
-            "radial-gradient(60% 50% at 20% 20%, rgba(255,255,255,0.55) 0%, transparent 70%), radial-gradient(50% 40% at 85% 15%, rgba(232,213,180,0.45) 0%, transparent 70%)",
-        }}
-      />
+        />
+      </div>
 
       <div className="relative z-10 mx-auto max-w-[1240px] px-4 sm:px-6 lg:px-8 pt-8 lg:pt-12 pb-10 lg:pb-14">
         {/* Top: two-column hero text + collage */}
@@ -228,6 +255,8 @@ export function PlanigateHeroWidget({ settings: raw }: Props) {
             settings={settings}
             activePill={activePill}
             onPillChange={setActivePill}
+            placeQuery={placeQuery}
+            onPlaceChange={setPlaceQuery}
             serviceQuery={serviceQuery}
             onServiceChange={setServiceQuery}
             locationQuery={locationQuery}
@@ -313,6 +342,8 @@ interface SearchModuleProps {
   settings: PlanigateHeroWidgetSettings;
   activePill: string;
   onPillChange: (value: string) => void;
+  placeQuery: string;
+  onPlaceChange: (value: string) => void;
   serviceQuery: string;
   onServiceChange: (value: string) => void;
   locationQuery: string;
@@ -323,18 +354,35 @@ function SearchModule({
   settings,
   activePill,
   onPillChange,
+  placeQuery,
+  onPlaceChange,
   serviceQuery,
   onServiceChange,
   locationQuery,
   onLocationChange,
 }: SearchModuleProps) {
   const router = useRouter();
-  const [serviceFocused, setServiceFocused] = useState(false);
-  const [locationFocused, setLocationFocused] = useState(false);
+
+  const [placeOptions, setPlaceOptions] = useState<SearchOption[]>([]);
+  const [serviceOptions, setServiceOptions] = useState<SearchOption[]>([]);
+  const [locationOptions, setLocationOptions] = useState<SearchOption[]>([]);
+
+  useEffect(() => {
+    Promise.all([
+      fetch("/api/search-options?type=PLACE").then((r) => r.json()),
+      fetch("/api/search-options?type=SERVICE").then((r) => r.json()),
+      fetch("/api/search-options?type=LOCATION").then((r) => r.json()),
+    ]).then(([places, services, locations]) => {
+      if (Array.isArray(places)) setPlaceOptions(places);
+      if (Array.isArray(services)) setServiceOptions(services);
+      if (Array.isArray(locations)) setLocationOptions(locations);
+    }).catch(() => {});
+  }, []);
 
   const handleStart = () => {
     const params = new URLSearchParams();
     if (activePill) params.set("type", activePill);
+    if (placeQuery) params.set("place", placeQuery);
     if (serviceQuery) params.set("service", serviceQuery);
     if (locationQuery) params.set("location", locationQuery);
     const qs = params.toString();
@@ -372,67 +420,47 @@ function SearchModule({
       </div>
 
       {/* Inputs row */}
-      <div className="mt-5 grid grid-cols-1 md:grid-cols-[1fr_1fr_auto] gap-3">
-        {/* Service input */}
+      <div className="mt-5 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-[1fr_1fr_1fr_auto] gap-3">
+        {/* Place dropdown */}
         <div>
-          <label
-            className="block text-xs font-medium mb-1.5"
-            style={{ color: "rgba(255,255,255,0.75)" }}
-          >
-            {settings.serviceInputLabel}
+          <label className="block text-xs font-medium mb-1.5" style={{ color: "rgba(255,255,255,0.75)" }}>
+            {settings.placeInputLabel}
           </label>
-          <div className="relative">
-            <Search
-              className="absolute left-3.5 top-1/2 -translate-y-1/2"
-              size={16}
-              style={{ color: "rgba(255,255,255,0.45)" }}
-            />
-            <input
-              type="text"
-              value={serviceQuery}
-              onChange={(e) => onServiceChange(e.target.value)}
-              onFocus={() => setServiceFocused(true)}
-              onBlur={() => setServiceFocused(false)}
-              placeholder={settings.serviceInputPlaceholder}
-              className="planigate-input w-full h-[50px] rounded-[14px] border pl-10 pr-4 text-sm focus:outline-none transition"
-              style={{
-                borderColor: serviceFocused ? "#E8C97A" : "rgba(255,255,255,0.25)",
-                backgroundColor: "rgba(255,255,255,0.12)",
-                color: "#ffffff",
-              }}
-            />
-          </div>
+          <PlanigateDropdown
+            options={placeOptions}
+            value={placeQuery}
+            onChange={onPlaceChange}
+            placeholder={settings.placeInputPlaceholder}
+            icon={<Building2 size={16} style={{ color: "rgba(255,255,255,0.5)", flexShrink: 0 }} />}
+          />
         </div>
 
-        {/* Location input */}
+        {/* Service dropdown */}
         <div>
-          <label
-            className="block text-xs font-medium mb-1.5"
-            style={{ color: "rgba(255,255,255,0.75)" }}
-          >
+          <label className="block text-xs font-medium mb-1.5" style={{ color: "rgba(255,255,255,0.75)" }}>
+            {settings.serviceInputLabel}
+          </label>
+          <PlanigateDropdown
+            options={serviceOptions}
+            value={serviceQuery}
+            onChange={onServiceChange}
+            placeholder={settings.serviceInputPlaceholder}
+            icon={<Briefcase size={16} style={{ color: "rgba(255,255,255,0.5)", flexShrink: 0 }} />}
+          />
+        </div>
+
+        {/* Location grouped dropdown */}
+        <div>
+          <label className="block text-xs font-medium mb-1.5" style={{ color: "rgba(255,255,255,0.75)" }}>
             {settings.locationInputLabel}
           </label>
-          <div className="relative">
-            <MapPin
-              className="absolute left-3.5 top-1/2 -translate-y-1/2"
-              size={16}
-              style={{ color: "rgba(255,255,255,0.45)" }}
-            />
-            <input
-              type="text"
-              value={locationQuery}
-              onChange={(e) => onLocationChange(e.target.value)}
-              onFocus={() => setLocationFocused(true)}
-              onBlur={() => setLocationFocused(false)}
-              placeholder={settings.locationInputPlaceholder}
-              className="planigate-input w-full h-[50px] rounded-[14px] border pl-10 pr-4 text-sm focus:outline-none transition"
-              style={{
-                borderColor: locationFocused ? "#E8C97A" : "rgba(255,255,255,0.25)",
-                backgroundColor: "rgba(255,255,255,0.12)",
-                color: "#ffffff",
-              }}
-            />
-          </div>
+          <PlanigateGroupedDropdown
+            options={locationOptions}
+            value={locationQuery}
+            onChange={onLocationChange}
+            placeholder={settings.locationInputPlaceholder}
+            icon={<MapPin size={16} style={{ color: "rgba(255,255,255,0.5)", flexShrink: 0 }} />}
+          />
         </div>
 
         {/* CTA button */}
@@ -446,7 +474,6 @@ function SearchModule({
             className="group relative inline-flex items-center justify-center gap-2 h-[50px] rounded-[14px] px-6 text-sm font-medium text-white w-full md:w-auto whitespace-nowrap overflow-hidden"
             style={{ backgroundColor: "var(--color-planigate-fg)" }}
           >
-            {/* shimmer */}
             <span className="absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/15 to-transparent transition-transform duration-700 group-hover:translate-x-full" />
             <span className="relative">{settings.ctaText}</span>
             <ArrowRight size={16} className="relative transition-transform duration-300 group-hover:translate-x-1" />
@@ -471,6 +498,270 @@ function SearchModule({
           <ArrowRight size={14} className="transition-transform duration-300 group-hover:translate-x-0.5" />
         </Link>
       </div>
+    </div>
+  );
+}
+
+// ─────────────────────────────────────────────
+// Shared glass dropdown styles
+// ─────────────────────────────────────────────
+
+const GLASS_DROPDOWN: React.CSSProperties = {
+  background: "rgba(20,20,20,0.88)",
+  backdropFilter: "blur(24px)",
+  WebkitBackdropFilter: "blur(24px)",
+  border: "1px solid rgba(255,255,255,0.12)",
+  boxShadow: "0 20px 48px rgba(0,0,0,0.5)",
+  borderRadius: "16px",
+};
+
+interface PlanigateDropdownProps {
+  options: SearchOption[];
+  value: string;
+  onChange: (val: string) => void;
+  placeholder: string;
+  icon: React.ReactNode;
+}
+
+// ─────────────────────────────────────────────
+// Planigate-styled dropdown (Place & Service)
+// ─────────────────────────────────────────────
+
+function PlanigateDropdown({ options, value, onChange, placeholder, icon }: PlanigateDropdownProps) {
+  const [open, setOpen] = useState(false);
+  const [pos, setPos] = useState({ top: 0, left: 0, width: 0 });
+  const wrapRef = useRef<HTMLDivElement>(null);
+  const btnRef = useRef<HTMLButtonElement>(null);
+  const selected = options.find((o) => o.name === value);
+
+  function handleOpen() {
+    if (btnRef.current) {
+      const r = btnRef.current.getBoundingClientRect();
+      setPos({ top: r.bottom + 6, left: r.left, width: r.width });
+    }
+    setOpen((p) => !p);
+  }
+
+  useEffect(() => {
+    function onOutside(e: MouseEvent) {
+      if (wrapRef.current && !wrapRef.current.contains(e.target as Node)) setOpen(false);
+    }
+    function onClose() { setOpen(false); }
+    document.addEventListener("mousedown", onOutside);
+    window.addEventListener("scroll", onClose, true);
+    window.addEventListener("resize", onClose);
+    return () => {
+      document.removeEventListener("mousedown", onOutside);
+      window.removeEventListener("scroll", onClose, true);
+      window.removeEventListener("resize", onClose);
+    };
+  }, []);
+
+  return (
+    <div ref={wrapRef} className="relative">
+      <button
+        ref={btnRef}
+        type="button"
+        onClick={handleOpen}
+        className="w-full h-[50px] rounded-[14px] border flex items-center gap-2.5 px-3.5 text-sm transition-colors text-left"
+        style={{
+          backgroundColor: "rgba(255,255,255,0.12)",
+          borderColor: open ? "#E8C97A" : "rgba(255,255,255,0.25)",
+          color: selected ? "#ffffff" : "rgba(255,255,255,0.5)",
+        }}
+      >
+        {icon}
+        <span className="flex-1 truncate">{selected ? selected.name : placeholder}</span>
+        <ChevronDown
+          size={14}
+          style={{
+            color: "rgba(255,255,255,0.4)",
+            flexShrink: 0,
+            transform: open ? "rotate(180deg)" : "rotate(0deg)",
+            transition: "transform 0.2s",
+          }}
+        />
+      </button>
+
+      {open && typeof document !== "undefined" && createPortal(
+        <div
+          style={{
+            ...GLASS_DROPDOWN,
+            position: "fixed",
+            top: pos.top,
+            left: pos.left,
+            width: pos.width,
+            zIndex: 9999,
+            maxHeight: "260px",
+            overflowY: "auto",
+          }}
+        >
+          {options.length === 0 ? (
+            <p className="py-4 text-center text-xs" style={{ color: "rgba(255,255,255,0.4)" }}>No options</p>
+          ) : (
+            <div className="p-1.5">
+              {options.map((opt) => {
+                const IconComp = getOptionIcon(opt.icon);
+                const isSelected = opt.name === value;
+                return (
+                  <button
+                    key={opt.id}
+                    type="button"
+                    onMouseDown={(e) => { e.preventDefault(); onChange(opt.name); setOpen(false); }}
+                    className="w-full flex items-center gap-2.5 px-3 py-2 rounded-xl text-sm text-left transition-colors"
+                    style={{
+                      color: isSelected ? "#E8C97A" : "rgba(255,255,255,0.85)",
+                      backgroundColor: isSelected ? "rgba(232,201,122,0.15)" : "transparent",
+                    }}
+                    onMouseEnter={(e) => { if (!isSelected) e.currentTarget.style.backgroundColor = "rgba(255,255,255,0.08)"; }}
+                    onMouseLeave={(e) => { if (!isSelected) e.currentTarget.style.backgroundColor = "transparent"; }}
+                  >
+                    {IconComp
+                      ? <IconComp size={15} style={{ color: "#E8C97A", flexShrink: 0 }} strokeWidth={1.75} />
+                      : <span className="w-[15px] shrink-0" />
+                    }
+                    {opt.name}
+                  </button>
+                );
+              })}
+            </div>
+          )}
+        </div>,
+        document.body
+      )}
+    </div>
+  );
+}
+
+// ─────────────────────────────────────────────
+// Planigate-styled grouped dropdown (Location)
+// ─────────────────────────────────────────────
+
+function PlanigateGroupedDropdown({ options, value, onChange, placeholder, icon }: PlanigateDropdownProps) {
+  const [open, setOpen] = useState(false);
+  const [activeTab, setActiveTab] = useState<"Sweden" | "International">("Sweden");
+  const [pos, setPos] = useState({ top: 0, left: 0, width: 0 });
+  const wrapRef = useRef<HTMLDivElement>(null);
+  const btnRef = useRef<HTMLButtonElement>(null);
+  const selected = options.find((o) => o.name === value);
+  const tabOptions = options.filter((o) => o.group === activeTab);
+
+  function handleOpen() {
+    if (btnRef.current) {
+      const r = btnRef.current.getBoundingClientRect();
+      setPos({ top: r.bottom + 6, left: r.left, width: r.width });
+    }
+    setOpen((p) => !p);
+  }
+
+  useEffect(() => {
+    function onOutside(e: MouseEvent) {
+      if (wrapRef.current && !wrapRef.current.contains(e.target as Node)) setOpen(false);
+    }
+    function onClose() { setOpen(false); }
+    document.addEventListener("mousedown", onOutside);
+    window.addEventListener("scroll", onClose, true);
+    window.addEventListener("resize", onClose);
+    return () => {
+      document.removeEventListener("mousedown", onOutside);
+      window.removeEventListener("scroll", onClose, true);
+      window.removeEventListener("resize", onClose);
+    };
+  }, []);
+
+  return (
+    <div ref={wrapRef} className="relative">
+      <button
+        ref={btnRef}
+        type="button"
+        onClick={handleOpen}
+        className="w-full h-[50px] rounded-[14px] border flex items-center gap-2.5 px-3.5 text-sm transition-colors text-left"
+        style={{
+          backgroundColor: "rgba(255,255,255,0.12)",
+          borderColor: open ? "#E8C97A" : "rgba(255,255,255,0.25)",
+          color: selected ? "#ffffff" : "rgba(255,255,255,0.5)",
+        }}
+      >
+        {icon}
+        <span className="flex-1 truncate">{selected ? selected.name : placeholder}</span>
+        <ChevronDown
+          size={14}
+          style={{
+            color: "rgba(255,255,255,0.4)",
+            flexShrink: 0,
+            transform: open ? "rotate(180deg)" : "rotate(0deg)",
+            transition: "transform 0.2s",
+          }}
+        />
+      </button>
+
+      {open && typeof document !== "undefined" && createPortal(
+        <div
+          style={{
+            ...GLASS_DROPDOWN,
+            position: "fixed",
+            top: pos.top,
+            left: pos.left,
+            width: pos.width,
+            zIndex: 9999,
+          }}
+        >
+          {/* Tabs */}
+          <div className="flex" style={{ borderBottom: "1px solid rgba(255,255,255,0.1)" }}>
+            {(["Sweden", "International"] as const).map((tab) => (
+              <button
+                key={tab}
+                type="button"
+                onMouseDown={(e) => { e.preventDefault(); setActiveTab(tab); }}
+                className="flex-1 flex items-center justify-center gap-1 py-2.5 text-xs font-semibold transition-colors"
+                style={{
+                  color: activeTab === tab ? "#E8C97A" : "rgba(255,255,255,0.45)",
+                  borderBottom: activeTab === tab ? "2px solid #E8C97A" : "2px solid transparent",
+                  background: "none",
+                }}
+              >
+                {tab === "Sweden" ? <MapPin size={11} /> : <Globe size={11} />}
+                {tab}
+              </button>
+            ))}
+          </div>
+
+          {/* Options */}
+          <div style={{ maxHeight: "220px", overflowY: "auto" }}>
+            {tabOptions.length === 0 ? (
+              <p className="py-4 text-center text-xs" style={{ color: "rgba(255,255,255,0.4)" }}>No options</p>
+            ) : (
+              <div className="p-1.5">
+                {tabOptions.map((opt) => {
+                  const IconComp = getOptionIcon(opt.icon);
+                  const isSelected = opt.name === value;
+                  return (
+                    <button
+                      key={opt.id}
+                      type="button"
+                      onMouseDown={(e) => { e.preventDefault(); onChange(opt.name); setOpen(false); }}
+                      className="w-full flex items-center gap-2.5 px-3 py-2 rounded-xl text-sm text-left transition-colors"
+                      style={{
+                        color: isSelected ? "#E8C97A" : "rgba(255,255,255,0.85)",
+                        backgroundColor: isSelected ? "rgba(232,201,122,0.15)" : "transparent",
+                      }}
+                      onMouseEnter={(e) => { if (!isSelected) e.currentTarget.style.backgroundColor = "rgba(255,255,255,0.08)"; }}
+                      onMouseLeave={(e) => { if (!isSelected) e.currentTarget.style.backgroundColor = "transparent"; }}
+                    >
+                      {IconComp
+                        ? <IconComp size={15} style={{ color: "#E8C97A", flexShrink: 0 }} strokeWidth={1.75} />
+                        : <span className="w-[15px] shrink-0" />
+                      }
+                      {opt.name}
+                    </button>
+                  );
+                })}
+              </div>
+            )}
+          </div>
+        </div>,
+        document.body
+      )}
     </div>
   );
 }

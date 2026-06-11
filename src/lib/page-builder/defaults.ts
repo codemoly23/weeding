@@ -3000,6 +3000,8 @@ export const DEFAULT_PLANIGATE_HERO_SETTINGS: PlanigateHeroWidgetSettings = {
     { id: "p7", label: "Dop", icon: "Droplet", value: "baptism" },
     { id: "p8", label: "Fler", icon: "MoreHorizontal", value: "more" },
   ],
+  placeInputLabel: "Plats",
+  placeInputPlaceholder: "Ex. Inomhus, Utomhus, Strand...",
   serviceInputLabel: "Vad behöver du?",
   serviceInputPlaceholder: "Ex. Lokal, Fotograf, Catering...",
   locationInputLabel: "Var?",
