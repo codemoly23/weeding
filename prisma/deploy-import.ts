@@ -107,6 +107,29 @@ async function main() {
     console.log("⚠️  No pages found in data.json");
   }
 
+  // Deactivate any stale pages that share a templateType with our pages but have a different slug.
+  // Without this, getActiveTemplate("HOME") would find the old page first via findFirst().
+  const importedSlugs = pages.map((p) => p.slug);
+  const templateTypes = pages
+    .filter((p) => p.templateType)
+    .map((p) => p.templateType as string);
+
+  if (templateTypes.length > 0) {
+    const staleResult = await prisma.landingPage.updateMany({
+      where: {
+        templateType: { in: templateTypes },
+        slug: { notIn: importedSlugs },
+        isTemplateActive: true,
+      },
+      data: { isTemplateActive: false },
+    });
+    if (staleResult.count > 0) {
+      console.log(
+        `✅ Deactivated ${staleResult.count} stale template page(s) (old slugs replaced)`
+      );
+    }
+  }
+
   let pageCount = 0;
   let blockCount = 0;
 
