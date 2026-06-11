@@ -1,54 +1,98 @@
 {
   "version": "1.0",
-  "exportedAt": "2026-05-23T04:20:04.522Z",
+  "exportedAt": "2026-06-11T09:39:57.443Z",
   "colorPalette": {
-    "light": {
-      "background": "#FDFAF7",
-      "foreground": "#2C1A1A",
-      "card": "#FFFFFF",
-      "card-foreground": "#2C1A1A",
-      "popover": "#FFFFFF",
-      "popover-foreground": "#2C1A1A",
-      "primary": "#BE6B8B",
-      "primary-foreground": "#FFFFFF",
-      "secondary": "#F5EDE8",
-      "secondary-foreground": "#2C1A1A",
-      "muted": "#F5EDE8",
-      "muted-foreground": "#8C6E6E",
-      "accent": "#C9A84C",
-      "accent-foreground": "#FFFFFF",
-      "destructive": "#EF4444",
-      "destructive-foreground": "#FFFFFF",
-      "border": "#EDD5C8",
-      "input": "#EDD5C8",
-      "ring": "#BE6B8B"
-    },
     "dark": {
+      "card": "#231515",
+      "ring": "#8A6F3E",
+      "input": "#3D2020",
+      "muted": "#2E1C1C",
+      "accent": "#C9A84C",
+      "border": "#3D2020",
+      "popover": "#231515",
+      "primary": "#2A2A2A",
+      "secondary": "#2E1C1C",
       "background": "#1A0F0F",
       "foreground": "#F5EDE8",
-      "card": "#231515",
-      "card-foreground": "#F5EDE8",
-      "popover": "#231515",
-      "popover-foreground": "#F5EDE8",
-      "primary": "#D4879F",
-      "primary-foreground": "#FFFFFF",
-      "secondary": "#2E1C1C",
-      "secondary-foreground": "#F5EDE8",
-      "muted": "#2E1C1C",
-      "muted-foreground": "#A08080",
-      "accent": "#C9A84C",
-      "accent-foreground": "#FFFFFF",
       "destructive": "#7F1D1D",
+      "planigate-fg": "#F8FAFC",
+      "planigate-star": "#FBBF24",
+      "card-foreground": "#F5EDE8",
+      "muted-foreground": "#A08080",
+      "planigate-accent": "#FBBF24",
+      "planigate-border": "#334155",
+      "accent-foreground": "#FFFFFF",
+      "planigate-bg-card": "#1E293B",
+      "planigate-bg-soft": "#1E293B",
+      "planigate-divider": "#475569",
+      "planigate-fg-soft": "#94A3B8",
+      "planigate-surface": "#1E293B",
+      "planigate-bg-input": "#1E293B",
+      "planigate-fg-faint": "#64748B",
+      "planigate-fg-hover": "#FFFFFF",
+      "planigate-fg-muted": "#94A3B8",
+      "popover-foreground": "#F5EDE8",
+      "primary-foreground": "#ffffff",
+      "planigate-fg-strong": "#E2E8F0",
+      "planigate-bg-hero-to": "#0F172A",
+      "planigate-bg-section": "#0F172A",
+      "secondary-foreground": "#F5EDE8",
+      "planigate-bg-hero-via": "#1E293B",
+      "planigate-border-soft": "#334155",
       "destructive-foreground": "#FFFFFF",
-      "border": "#3D2020",
-      "input": "#3D2020",
-      "ring": "#D4879F"
+      "planigate-accent-light": "#F59E0B",
+      "planigate-bg-hero-from": "#0F172A",
+      "planigate-border-subtle": "#475569",
+      "planigate-fg-placeholder": "#64748B"
+    },
+    "light": {
+      "card": "#FFFFFF",
+      "ring": "#8A6F3E",
+      "input": "#EDD5C8",
+      "muted": "#F5EDE8",
+      "accent": "#C9A84C",
+      "border": "#EDD5C8",
+      "popover": "#FFFFFF",
+      "primary": "#1A1A1A",
+      "secondary": "#F5EDE8",
+      "background": "#FDFAF7",
+      "foreground": "#2C1A1A",
+      "destructive": "#EF4444",
+      "planigate-fg": "#1A1A1A",
+      "planigate-star": "#E4A93B",
+      "card-foreground": "#2C1A1A",
+      "muted-foreground": "#8C6E6E",
+      "planigate-accent": "#8A6F3E",
+      "planigate-border": "#E5DFD3",
+      "accent-foreground": "#FFFFFF",
+      "planigate-bg-card": "#FAF6EE",
+      "planigate-bg-soft": "#F5EFE5",
+      "planigate-divider": "#D9D2C5",
+      "planigate-fg-soft": "#6B6B6B",
+      "planigate-surface": "#FFFFFF",
+      "planigate-bg-input": "#FBF8F3",
+      "planigate-fg-faint": "#8A8A8A",
+      "planigate-fg-hover": "#2A2A2A",
+      "planigate-fg-muted": "#5C5C5C",
+      "popover-foreground": "#2C1A1A",
+      "primary-foreground": "#ffffff",
+      "planigate-fg-strong": "#3C3C3C",
+      "planigate-bg-hero-to": "#EFE8DB",
+      "planigate-bg-section": "#EFE8DB",
+      "secondary-foreground": "#2C1A1A",
+      "planigate-bg-hero-via": "#F5EFE5",
+      "planigate-border-soft": "#E8E0D0",
+      "destructive-foreground": "#FFFFFF",
+      "planigate-accent-light": "#C2A86A",
+      "planigate-bg-hero-from": "#FBF8F3",
+      "planigate-border-subtle": "#D6CFC0",
+      "planigate-fg-placeholder": "#9A9286"
     }
   },
   "fontConfig": {
-    "headingFont": "Inter",
     "bodyFont": "Inter",
-    "accentFont": "Inter"
+    "accentFont": "Inter",
+    "headingFont": "Inter"
   },
   "settings": {
     "business.name": "EventPlanner Pro",
@@ -594,7 +638,7 @@
       "name": "About",
       "templateType": "ABOUT",
       "isSystem": true,
-      "isTemplateActive": false,
+      "isTemplateActive": true,
       "metaTitle": "About Ceremoney — Your Wedding Planning Partner",
       "metaDescription": "Learn about Ceremoney, the all-in-one wedding planning platform.",
       "blocks": [
@@ -603,7 +647,295 @@
           "name": "About Sections",
           "sortOrder": 0,
           "isActive": true,
-          "settings": []
+          "settings": {
+            "sections": [
+              {
+                "id": "as_hero",
+                "order": 0,
+                "layout": "1",
+                "columns": [
+                  {
+                    "id": "as_hero_col",
+                    "widgets": [
+                      {
+                        "id": "as_hero_widget",
+                        "type": "about-hero",
+                        "spacing": {
+                          "marginTop": 0,
+                          "marginBottom": 0
+                        },
+                        "settings": {
+                          "badge": "Om oss",
+                          "image": "https://images.unsplash.com/photo-1511795409834-ef04bbd61622?w=800&h=600&fit=crop&q=80",
+                          "stats": [
+                            {
+                              "id": "s1",
+                              "label": "Event skapade",
+                              "value": "12 000+"
+                            },
+                            {
+                              "id": "s2",
+                              "label": "Gäster hanterade",
+                              "value": "250 000+"
+                            },
+                            {
+                              "id": "s3",
+                              "label": "Leverantörer",
+                              "value": "1 500+"
+                            }
+                          ],
+                          "ctaHref": "/onboarding",
+                          "ctaText": "Skapa ditt event gratis",
+                          "heading": "Sveriges moderna eventplattform",
+                          "imageAlt": "Ceremoney team",
+                          "description": "Vi hjälper par och arrangörer att skapa oförglömliga events – från bröllop och dop till företagsfester. Allt på ett ställe, enkelt och smidigt.",
+                          "headingHighlight": "eventplattform"
+                        }
+                      }
+                    ],
+                    "settings": {
+                      "padding": 0,
+                      "verticalAlign": "top"
+                    }
+                  }
+                ],
+                "settings": {
+                  "gap": 0,
+                  "maxWidth": "2xl",
+                  "fullWidth": false,
+                  "isVisible": true,
+                  "marginTop": 0,
+                  "background": {
+                    "type": "solid",
+                    "color": "transparent"
+                  },
+                  "paddingTop": 0,
+                  "paddingLeft": 0,
+                  "marginBottom": 0,
+                  "paddingRight": 0,
+                  "paddingBottom": 0,
+                  "visibleOnMobile": true,
+                  "visibleOnDesktop": true
+                }
+              },
+              {
+                "id": "as_stats",
+                "order": 1,
+                "layout": "1",
+                "columns": [
+                  {
+                    "id": "as_stats_col",
+                    "widgets": [
+                      {
+                        "id": "as_stats_widget",
+                        "type": "stats-section",
+                        "spacing": {
+                          "marginTop": 0,
+                          "marginBottom": 0
+                        },
+                        "settings": {
+                          "stats": [
+                            {
+                              "id": "st1",
+                              "icon": "Sparkles",
+                              "label": "Event skapade",
+                              "value": 12000,
+                              "suffix": "+"
+                            },
+                            {
+                              "id": "st2",
+                              "icon": "Users",
+                              "label": "Gäster hanterade",
+                              "value": 250000,
+                              "suffix": "+"
+                            },
+                            {
+                              "id": "st3",
+                              "icon": "Store",
+                              "label": "Leverantörer anslutna",
+                              "value": 1500,
+                              "suffix": "+"
+                            },
+                            {
+                              "id": "st4",
+                              "icon": "Calendar",
+                              "label": "På marknaden",
+                              "value": 4,
+                              "suffix": " år"
+                            }
+                          ],
+                          "style": {
+                            "divider": true,
+                            "valueSize": "xl",
+                            "labelColor": "#64748b",
+                            "valueColor": "#0f172a"
+                          },
+                          "columns": 4,
+                          "variant": "default",
+                          "centered": true,
+                          "animateOnScroll": true
+                        }
+                      }
+                    ],
+                    "settings": {
+                      "padding": 0,
+                      "verticalAlign": "top"
+                    }
+                  }
+                ],
+                "settings": {
+                  "gap": 0,
+                  "maxWidth": "xl",
+                  "fullWidth": false,
+                  "isVisible": true,
+                  "marginTop": 0,
+                  "background": {
+                    "type": "solid",
+                    "color": "#f8fafc"
+                  },
+                  "paddingTop": 48,
+                  "paddingLeft": 16,
+                  "marginBottom": 0,
+                  "paddingRight": 16,
+                  "paddingBottom": 48,
+                  "visibleOnMobile": true,
+                  "visibleOnDesktop": true
+                }
+              },
+              {
+                "id": "as_team",
+                "order": 2,
+                "layout": "1",
+                "columns": [
+                  {
+                    "id": "as_team_col",
+                    "widgets": [
+                      {
+                        "id": "as_team_widget",
+                        "type": "about-team",
+                        "spacing": {
+                          "marginTop": 0,
+                          "marginBottom": 0
+                        },
+                        "settings": {
+                          "columns": 3,
+                          "heading": "Möt vårt team",
+                          "members": [
+                            {
+                              "id": "m1",
+                              "bio": "Bröllopplanerare med 10 års erfarenhet som grundade Ceremoney 2021.",
+                              "name": "Anna Lindström",
+                              "role": "VD & Grundare",
+                              "image": "https://images.unsplash.com/photo-1494790108755-2616b612b789?w=400&h=400&fit=crop&q=80"
+                            },
+                            {
+                              "id": "m2",
+                              "bio": "Tech-veteran med passion för att bygga produkter som gör skillnad.",
+                              "name": "Erik Johansson",
+                              "role": "CTO",
+                              "image": "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=400&h=400&fit=crop&q=80"
+                            },
+                            {
+                              "id": "m3",
+                              "bio": "Designer med öga för detaljer och kärlek till vackra upplevelser.",
+                              "name": "Sara Nilsson",
+                              "role": "Head of Design",
+                              "image": "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=400&h=400&fit=crop&q=80"
+                            }
+                          ],
+                          "subheading": "Passionerade människor bakom plattformen"
+                        }
+                      }
+                    ],
+                    "settings": {
+                      "padding": 0,
+                      "verticalAlign": "top"
+                    }
+                  }
+                ],
+                "settings": {
+                  "gap": 0,
+                  "maxWidth": "2xl",
+                  "fullWidth": false,
+                  "isVisible": true,
+                  "marginTop": 0,
+                  "background": {
+                    "type": "solid",
+                    "color": "transparent"
+                  },
+                  "paddingTop": 0,
+                  "paddingLeft": 0,
+                  "marginBottom": 0,
+                  "paddingRight": 0,
+                  "paddingBottom": 0,
+                  "visibleOnMobile": true,
+                  "visibleOnDesktop": true
+                }
+              },
+              {
+                "id": "as_cta",
+                "order": 3,
+                "layout": "1",
+                "columns": [
+                  {
+                    "id": "as_cta_col",
+                    "widgets": [
+                      {
+                        "id": "as_cta_widget",
+                        "type": "cta-banner",
+                        "spacing": {
+                          "marginTop": 0,
+                          "marginBottom": 0
+                        },
+                        "settings": {
+                          "style": {
+                            "padding": 64,
+                            "textColor": "#ffffff",
+                            "gradientTo": "#1e293b",
+                            "borderRadius": 20,
+                            "gradientFrom": "#0f172a",
+                            "backgroundType": "gradient"
+                          },
+                          "title": "Redo att skapa ditt event?",
+                          "subtitle": "Kom igång gratis – det tar mindre än en minut.",
+                          "primaryButton": {
+                            "href": "/onboarding",
+                            "text": "Skapa event gratis"
+                          },
+                          "secondaryButton": {
+                            "href": "/contact",
+                            "text": "Kontakta oss"
+                          }
+                        }
+                      }
+                    ],
+                    "settings": {
+                      "padding": 0,
+                      "verticalAlign": "top"
+                    }
+                  }
+                ],
+                "settings": {
+                  "gap": 0,
+                  "maxWidth": "xl",
+                  "fullWidth": false,
+                  "isVisible": true,
+                  "marginTop": 0,
+                  "background": {
+                    "type": "solid",
+                    "color": "transparent"
+                  },
+                  "paddingTop": 0,
+                  "paddingLeft": 16,
+                  "marginBottom": 0,
+                  "paddingRight": 16,
+                  "paddingBottom": 64,
+                  "visibleOnMobile": true,
+                  "visibleOnDesktop": true
+                }
+              }
+            ]
+          }
         }
       ]
     },
@@ -612,7 +944,7 @@
       "name": "Contact",
       "templateType": "CONTACT",
       "isSystem": true,
-      "isTemplateActive": false,
+      "isTemplateActive": true,
       "metaTitle": "Contact Ceremoney",
       "metaDescription": "Get in touch with the Ceremoney team.",
       "blocks": [
@@ -621,7 +953,199 @@
           "name": "Contact Sections",
           "sortOrder": 0,
           "isActive": true,
-          "settings": []
+          "settings": {
+            "sections": [
+              {
+                "id": "cs_hero",
+                "order": 0,
+                "layout": "1",
+                "columns": [
+                  {
+                    "id": "cs_hero_col",
+                    "widgets": [
+                      {
+                        "id": "cs_hero_widget",
+                        "type": "contact-hero",
+                        "spacing": {
+                          "marginTop": 0,
+                          "marginBottom": 0
+                        },
+                        "settings": {
+                          "badge": "Kontakta oss",
+                          "heading": "Vi är här för att hjälpa",
+                          "infoCards": [
+                            {
+                              "id": "card_phone",
+                              "icon": "Phone",
+                              "link": "tel:+46812345678",
+                              "title": "Telefon",
+                              "value": "+46 8 123 456 78"
+                            },
+                            {
+                              "id": "card_email",
+                              "icon": "Mail",
+                              "link": "mailto:hej@ceremoney.se",
+                              "title": "E-post",
+                              "value": "hej@ceremoney.se"
+                            },
+                            {
+                              "id": "card_location",
+                              "icon": "MapPin",
+                              "title": "Kontor",
+                              "value": "Stockholm, Sverige"
+                            }
+                          ],
+                          "subheading": "Har du frågor om våra tjänster? Vårt team svarar inom 24 timmar.",
+                          "headingHighlight": "hjälpa"
+                        }
+                      }
+                    ],
+                    "settings": {
+                      "padding": 0,
+                      "verticalAlign": "top"
+                    }
+                  }
+                ],
+                "settings": {
+                  "gap": 0,
+                  "maxWidth": "xl",
+                  "fullWidth": false,
+                  "isVisible": true,
+                  "marginTop": 0,
+                  "background": {
+                    "type": "solid",
+                    "color": "transparent"
+                  },
+                  "paddingTop": 0,
+                  "paddingLeft": 0,
+                  "marginBottom": 0,
+                  "paddingRight": 0,
+                  "paddingBottom": 0,
+                  "visibleOnMobile": true,
+                  "visibleOnDesktop": true
+                }
+              },
+              {
+                "id": "cs_form",
+                "order": 1,
+                "layout": "1-2",
+                "columns": [
+                  {
+                    "id": "cs_form_left",
+                    "widgets": [
+                      {
+                        "id": "cs_form_info",
+                        "type": "text-block",
+                        "spacing": {
+                          "marginTop": 0,
+                          "marginBottom": 0
+                        },
+                        "settings": {
+                          "lists": {
+                            "bulletStyle": "disc",
+                            "indentation": 24,
+                            "numberStyle": "decimal"
+                          },
+                          "editor": {
+                            "toolbar": "minimal",
+                            "minHeight": 60
+                          },
+                          "content": "<h3 style=\"font-size:20px;font-weight:700;margin-bottom:12px\">Skicka ett meddelande</h3><p style=\"color:#64748b;line-height:1.7\">Fyll i formuläret så återkommer vi till dig så snart som möjligt. Du kan också nå oss direkt via telefon eller e-post.</p><div style=\"margin-top:24px;padding:20px;background:#f8fafc;border-radius:12px;border:1px solid #e2e8f0\"><p style=\"font-weight:600;margin-bottom:4px\">Öppettider</p><p style=\"color:#64748b;font-size:14px\">Mån–Fre: 09:00–18:00<br/>Lör–Sön: Stängt</p></div>",
+                          "dropCap": {
+                            "size": 3,
+                            "enabled": false
+                          },
+                          "container": {
+                            "padding": 0,
+                            "borderRadius": 0
+                          },
+                          "blockquote": {
+                            "padding": 16,
+                            "fontStyle": "italic",
+                            "borderColor": "#f97316",
+                            "borderWidth": 4
+                          },
+                          "typography": {
+                            "color": "#0f172a",
+                            "fontSize": 15,
+                            "linkColor": "#f97316",
+                            "lineHeight": 1.6,
+                            "linkUnderline": true,
+                            "linkHoverColor": "#ea580c"
+                          },
+                          "paragraphSpacing": 16
+                        }
+                      }
+                    ],
+                    "settings": {
+                      "padding": 0,
+                      "verticalAlign": "top"
+                    }
+                  },
+                  {
+                    "id": "cs_form_right",
+                    "widgets": [
+                      {
+                        "id": "cs_lead_form",
+                        "type": "lead-form",
+                        "spacing": {
+                          "marginTop": 0,
+                          "marginBottom": 0
+                        },
+                        "settings": {
+                          "style": {
+                            "padding": 32,
+                            "formStyle": "card",
+                            "labelColor": "#374151",
+                            "borderColor": "#e2e8f0",
+                            "inputRadius": 8,
+                            "borderRadius": 16,
+                            "submitButton": {
+                              "size": "md",
+                              "text": "Skicka meddelande",
+                              "fullWidth": true,
+                              "textColor": "#ffffff",
+                              "borderRadius": 8,
+                              "backgroundColor": "#0f172a"
+                            },
+                            "backgroundColor": "#ffffff",
+                            "inputFocusColor": "#f97316",
+                            "inputBorderColor": "#d1d5db"
+                          },
+                          "title": "",
+                          "templateId": "",
+                          "description": "",
+                          "successMessage": "Tack för ditt meddelande! Vi återkommer inom 24 timmar."
+                        }
+                      }
+                    ],
+                    "settings": {
+                      "padding": 0,
+                      "verticalAlign": "top"
+                    }
+                  }
+                ],
+                "settings": {
+                  "gap": 40,
+                  "maxWidth": "xl",
+                  "fullWidth": false,
+                  "isVisible": true,
+                  "marginTop": 0,
+                  "background": {
+                    "type": "solid",
+                    "color": "transparent"
+                  },
+                  "paddingTop": 0,
+                  "paddingLeft": 16,
+                  "marginBottom": 0,
+                  "paddingRight": 16,
+                  "paddingBottom": 64,
+                  "visibleOnMobile": true,
+                  "visibleOnDesktop": true
+                }
+              }
+            ]
+          }
         }
       ]
     },
@@ -769,11 +1293,11 @@
                         "headingPart1": "Allt för livets",
                         "headingPart2": "event – på ett ställe",
                         "collageImages": {
-                          "phone": "https://images.unsplash.com/photo-1556656793-08538906a9f8?w=300&h=600&fit=crop&q=80",
-                          "couple": "https://images.unsplash.com/photo-1519741497674-611481863552?w=600&h=800&fit=crop&q=80",
-                          "dinner": "https://images.unsplash.com/photo-1464366400600-7168b8af9bc3?w=800&h=500&fit=crop&q=80",
-                          "laptop": "https://images.unsplash.com/photo-1593642632559-0c6d3fc62b89?w=700&h=400&fit=crop&q=80",
-                          "toasting": "https://images.unsplash.com/photo-1530023367847-a683933f4172?w=700&h=600&fit=crop&q=80"
+                          "phone": "/uploads/1780912908305-loitran97-woman-8628792_1920.jpg",
+                          "couple": "https://images.unsplash.com/photo-1537633552985-df8429e8048b?w=700&h=1000&fit=crop&crop=top&q=85",
+                          "dinner": "https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=900&h=560&fit=crop&q=85",
+                          "laptop": "/uploads/1780912895796-jeanborges-rings-1196145_1920.jpg",
+                          "toasting": "/uploads/1780912876100-Free-Golden-Wedding-Invitation-Photoshop-Template-1180x664.jpg"
                         },
                         "searchHeading": "Vad planerar du?",
                         "exploreLinkHref": "/vendors",
@@ -833,7 +1357,7 @@
                             "title": "Digitala inbjudningar",
                             "linkText": "Läs mer",
                             "description": "Skapa vackra inbjudningar på några minuter.",
-                            "iconBgColor": "#E8E2D7"
+                            "iconBgColor": "#D6E8D2"
                           },
                           {
                             "id": "f2",
@@ -842,7 +1366,7 @@
                             "title": "Gästlista & RSVP",
                             "linkText": "Läs mer",
                             "description": "Hantera svar, allergier och plus-ones enkelt.",
-                            "iconBgColor": "#F5E6D8"
+                            "iconBgColor": "#EDE0D0"
                           },
                           {
                             "id": "f3",
@@ -851,7 +1375,7 @@
                             "title": "Seating chart",
                             "linkText": "Läs mer",
                             "description": "Dra och släpp gäster till bord visuellt.",
-                            "iconBgColor": "#E5EAE3"
+                            "iconBgColor": "#D5DFE9"
                           },
                           {
                             "id": "f4",
@@ -860,7 +1384,7 @@
                             "title": "Hitta leverantörer",
                             "linkText": "Läs mer",
                             "description": "Jämför och boka lokaler, leverantörer och tjänster.",
-                            "iconBgColor": "#EFE4D2"
+                            "iconBgColor": "#E5DCCF"
                           }
                         ]
                       }
