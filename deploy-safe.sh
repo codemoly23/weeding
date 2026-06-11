@@ -68,6 +68,9 @@ npx prisma generate || rollback "prisma generate failed"
 log "Running Prisma db push..."
 npx prisma db push --accept-data-loss || rollback "prisma db push failed"
 
+log "Importing theme design (colors + pages)..."
+npx tsx prisma/deploy-import.ts || rollback "theme import failed"
+
 log "Backing up current build..."
 if [ -d ".next" ]; then
     rm -rf .next-old
