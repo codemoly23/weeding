@@ -823,7 +823,7 @@ export function LeadFormWidget({
             variant="link"
             onClick={() => setIsSubmitted(false)}
             className="mt-4"
-            style={{ color: submitButton.style?.bgColor || "#f97316" }}
+            style={{ color: submitButton.style?.bgColor || "#8A6F3E" }}
           >
             Submit another response
           </Button>

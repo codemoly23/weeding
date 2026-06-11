@@ -502,7 +502,7 @@ export default function PagesListPage() {
                           {page.name}
                         </Link>
                         {page.isSystem && (
-                          <Badge variant="outline" className="text-xs gap-1 border-amber-300 text-amber-700 bg-amber-50">
+                          <Badge variant="outline" className="text-xs gap-1 admin-status-warning">
                             <Lock className="h-3 w-3" />
                             System
                           </Badge>
@@ -748,7 +748,7 @@ export default function PagesListPage() {
                 disabled={selectedPage?.isSystem}
               />
               {selectedPage?.isSystem ? (
-                <p className="text-xs text-amber-600">
+                <p className="text-xs text-[var(--ast-warning-icon)]">
                   System page slugs cannot be changed
                 </p>
               ) : (

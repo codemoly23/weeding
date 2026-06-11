@@ -93,7 +93,7 @@ export function SocialShareRailWidget({ settings: rawSettings }: Props) {
 
         {s.showCounter && s.counterValue && (
           <div className="mt-5 pt-4 border-t" style={{ borderColor: s.buttonBorderColor }}>
-            <div className="font-display font-bold text-[24px]" style={{ color: "var(--color-primary, #f97316)" }}>
+            <div className="font-display font-bold text-[24px]" style={{ color: "var(--color-primary, #1A1A1A)" }}>
               {s.counterValue}
             </div>
             <div className="text-[11px] uppercase tracking-wider" style={{ color: s.labelColor }}>

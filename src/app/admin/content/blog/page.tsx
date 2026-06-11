@@ -115,11 +115,11 @@ export default function BlogPage() {
   const statusIcon = (status: string) => {
     switch (status) {
       case "PUBLISHED":
-        return <CheckCircle className="h-4 w-4 text-green-500" />;
+        return <CheckCircle className="h-4 w-4 text-[var(--ast-success-icon)]" />;
       case "DRAFT":
-        return <Clock className="h-4 w-4 text-yellow-500" />;
+        return <Clock className="h-4 w-4 text-[var(--ast-warning-icon)]" />;
       case "ARCHIVED":
-        return <Archive className="h-4 w-4 text-gray-500" />;
+        return <Archive className="h-4 w-4 text-[var(--ast-neutral-icon)]" />;
       default:
         return null;
     }
@@ -128,7 +128,7 @@ export default function BlogPage() {
   const statusBadge = (status: string) => {
     switch (status) {
       case "PUBLISHED":
-        return <Badge className="bg-green-100 text-green-700">Published</Badge>;
+        return <Badge className="admin-status-success">Published</Badge>;
       case "DRAFT":
         return <Badge variant="secondary">Draft</Badge>;
       case "ARCHIVED":

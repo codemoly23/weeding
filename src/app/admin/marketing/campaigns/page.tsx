@@ -55,12 +55,12 @@ interface Campaign {
 }
 
 const statusColors: Record<string, string> = {
-  DRAFT: "bg-gray-100 text-gray-800",
-  SCHEDULED: "bg-blue-100 text-blue-800",
-  SENDING: "bg-yellow-100 text-yellow-800",
-  SENT: "bg-green-100 text-green-800",
-  CANCELLED: "bg-red-100 text-red-800",
-  FAILED: "bg-red-100 text-red-800",
+  DRAFT:     "admin-status-neutral",
+  SCHEDULED: "admin-status-info",
+  SENDING:   "admin-status-warning",
+  SENT:      "admin-status-success",
+  CANCELLED: "admin-status-error",
+  FAILED:    "admin-status-error",
 };
 
 export default function CampaignsPage() {

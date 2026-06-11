@@ -82,8 +82,8 @@ export function VendorListingWidget({ settings, isPreview = false }: VendorListi
     columns,
     container,
     cardStyle = "overlay",
-    badgeFrom = "#9333ea",
-    badgeTo = "#ec4899",
+    badgeFrom = "#8A6F3E",
+    badgeTo = "#E4A93B",
     headingFontSize,
   } = settings;
 
@@ -316,7 +316,7 @@ function OverlayVendorCard({
             boxShadow: "0 2px 6px rgba(0,0,0,0.18)",
           }}
         >
-          <Heart size={14} fill={hearted ? "#ec4899" : "none"} color={hearted ? "#ec4899" : "#6b7280"} strokeWidth={2} />
+          <Heart size={14} fill={hearted ? "#E4A93B" : "none"} color={hearted ? "#E4A93B" : "#6b7280"} strokeWidth={2} />
         </button>
 
         {/* Card content at bottom */}

@@ -69,14 +69,14 @@
 
   /* Ordered list: branded counter */
   & :where(ol > li)::marker {
-    color: var(--color-primary, #e84c1e);
+    color: var(--color-primary, #1A1A1A);
     font-weight: 700;
     font-family: var(--font-heading);
   }
 
   /* Unordered list: branded bullet */
   & :where(ul > li)::marker {
-    color: var(--color-primary, #e84c1e);
+    color: var(--color-primary, #1A1A1A);
   }
 
   /* ------------------------------------------------
@@ -152,7 +152,7 @@
      LINKS — primary color, underline on hover
      ------------------------------------------------ */
   & :where(a) {
-    color: var(--color-primary, #e84c1e);
+    color: var(--color-primary, #1A1A1A);
     text-decoration: none;
     font-weight: 500;
   }

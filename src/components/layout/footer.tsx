@@ -481,7 +481,7 @@ function NewsletterWidget({ widget, headingClasses }: { widget: FooterWidget; he
               <button
                 type="submit"
                 disabled={status === "loading"}
-                className="rounded-r-lg bg-(--footer-accent-color,#e84c1e) px-5 py-2.5 text-sm font-semibold text-white transition-colors hover:opacity-90 disabled:opacity-50"
+                className="rounded-r-lg bg-(--footer-accent-color,#8A6F3E) px-5 py-2.5 text-sm font-semibold text-white transition-colors hover:opacity-90 disabled:opacity-50"
               >
                 {status === "loading" ? "..." : nlContent?.buttonText || "Subscribe"}
               </button>

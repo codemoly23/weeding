@@ -153,7 +153,7 @@ function SearchDropdown({ options, value, onChange, placeholder, triggerIcon, ha
                   onMouseLeave={(e) => { if (!isSelected) e.currentTarget.style.background = "none"; }}
                 >
                   {IconComp ? (
-                    <IconComp size={15} style={{ color: "#9333ea", flexShrink: 0 }} strokeWidth={1.75} />
+                    <IconComp size={15} style={{ color: "#8A6F3E", flexShrink: 0 }} strokeWidth={1.75} />
                   ) : (
                     <span style={{ width: 15, flexShrink: 0 }} />
                   )}
@@ -330,7 +330,7 @@ function GroupedSearchDropdown({ options, value, onChange, placeholder, triggerI
                     onMouseLeave={(e) => { if (!isSelected) e.currentTarget.style.background = "none"; }}
                   >
                     {IconComp ? (
-                      <IconComp size={15} style={{ color: "#9333ea", flexShrink: 0 }} strokeWidth={1.75} />
+                      <IconComp size={15} style={{ color: "#8A6F3E", flexShrink: 0 }} strokeWidth={1.75} />
                     ) : (
                       <span style={{ width: 15, flexShrink: 0 }} />
                     )}
@@ -524,7 +524,7 @@ export function EventSearchHeroWidget({
                 value={eventType}
                 onChange={(v) => { setEventType(v); setErrors((p) => ({ ...p, eventType: false })); }}
                 placeholder={eventTypeLabel}
-                triggerIcon={<MapPin size={16} style={{ color: "#9333ea", flexShrink: 0 }} />}
+                triggerIcon={<MapPin size={16} style={{ color: "#8A6F3E", flexShrink: 0 }} />}
                 hasError={errors.eventType}
               />
               {(showLocationField || showDateField) && (
@@ -541,7 +541,7 @@ export function EventSearchHeroWidget({
                 value={service}
                 onChange={(v) => { setService(v); setErrors((p) => ({ ...p, location: false })); }}
                 placeholder={locationLabel}
-                triggerIcon={<Briefcase size={16} style={{ color: "#9333ea", flexShrink: 0 }} />}
+                triggerIcon={<Briefcase size={16} style={{ color: "#8A6F3E", flexShrink: 0 }} />}
                 hasError={errors.location}
               />
               {showDateField && (
@@ -557,7 +557,7 @@ export function EventSearchHeroWidget({
               value={location}
               onChange={(v) => { setLocation(v); setErrors((p) => ({ ...p, date: false })); }}
               placeholder={dateLabel}
-              triggerIcon={<Globe size={16} style={{ color: "#9333ea", flexShrink: 0 }} />}
+              triggerIcon={<Globe size={16} style={{ color: "#8A6F3E", flexShrink: 0 }} />}
               hasError={errors.date}
             />
           )}
@@ -570,7 +570,7 @@ export function EventSearchHeroWidget({
               flexShrink: 0,
               width: "58px",
               height: "58px",
-              background: "linear-gradient(135deg, #9333ea 0%, #ec4899 100%)",
+              background: "linear-gradient(135deg, #8A6F3E 0%, #E4A93B 100%)",
               border: "none",
               borderRadius: "12px",
               cursor: isPreview ? "default" : "pointer",

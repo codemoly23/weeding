@@ -26,7 +26,7 @@ function hexToRgba(hex: string, opacity: number): string {
 
 function getGlowBoxShadow(glow?: WidgetContainerStyle["glow"]): string | undefined {
   if (!glow?.enabled) return undefined;
-  const color = hexToRgba(glow.color || "#8b5cf6", glow.opacity ?? 0.4);
+  const color = hexToRgba(glow.color || "#8A6F3E", glow.opacity ?? 0.4);
   return `0 0 ${glow.blur ?? 20}px ${glow.spread ?? 5}px ${color}`;
 }
 

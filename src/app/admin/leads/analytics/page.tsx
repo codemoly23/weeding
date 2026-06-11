@@ -84,15 +84,15 @@ const statusLabels: Record<string, string> = {
   UNQUALIFIED: "Unqualified",
 };
 
-const statusColors: Record<string, string> = {
-  NEW: "bg-blue-500",
-  CONTACTED: "bg-purple-500",
-  QUALIFIED: "bg-emerald-500",
-  PROPOSAL: "bg-amber-500",
-  NEGOTIATION: "bg-orange-500",
-  WON: "bg-green-500",
-  LOST: "bg-red-500",
-  UNQUALIFIED: "bg-gray-500",
+const statusBgColors: Record<string, string> = {
+  NEW:         "bg-[var(--ast-info-icon)]",
+  CONTACTED:   "bg-[var(--ast-lead-contacted)]",
+  QUALIFIED:   "bg-[var(--ast-lead-qualified)]",
+  PROPOSAL:    "bg-[var(--ast-warning-icon)]",
+  NEGOTIATION: "bg-[var(--ast-processing-icon)]",
+  WON:         "bg-[var(--ast-success-icon)]",
+  LOST:        "bg-[var(--ast-error-icon)]",
+  UNQUALIFIED: "bg-[var(--ast-lead-unqualified)]",
 };
 
 export default function AnalyticsPage() {
@@ -181,7 +181,7 @@ export default function AnalyticsPage() {
               <CardContent>
                 <div className="text-2xl font-bold">{stats.overview.total}</div>
                 <p className="text-xs text-muted-foreground">
-                  <span className="text-green-600">+{stats.overview.thisMonth}</span> this month
+                  <span className="text-[var(--ast-success-icon)]">+{stats.overview.thisMonth}</span> this month
                 </p>
               </CardContent>
             </Card>
@@ -189,7 +189,7 @@ export default function AnalyticsPage() {
             <Card>
               <CardHeader className="flex flex-row items-center justify-between pb-2">
                 <CardTitle className="text-sm font-medium">Hot Leads</CardTitle>
-                <Flame className="h-4 w-4 text-red-500" />
+                <Flame className="h-4 w-4 text-[var(--ast-error-icon)]" />
               </CardHeader>
               <CardContent>
                 <div className="text-2xl font-bold">{stats.overview.hotLeads}</div>
@@ -244,7 +244,7 @@ export default function AnalyticsPage() {
                   <div key={status} className="space-y-2">
                     <div className="flex items-center justify-between text-sm">
                       <div className="flex items-center gap-2">
-                        <div className={`w-3 h-3 rounded-full ${statusColors[status]}`} />
+                        <div className={`w-3 h-3 rounded-full ${statusBgColors[status]}`} />
                         <span>{statusLabels[status] || status}</span>
                       </div>
                       <span className="font-medium">{count}</span>
@@ -308,7 +308,7 @@ export default function AnalyticsPage() {
                   return (
                     <div key={status} className="flex items-center">
                       <div className="text-center min-w-[100px]">
-                        <div className={`mx-auto w-12 h-12 rounded-full ${statusColors[status]} flex items-center justify-center text-white font-bold`}>
+                        <div className={`mx-auto w-12 h-12 rounded-full ${statusBgColors[status]} flex items-center justify-center text-white font-bold`}>
                           {count}
                         </div>
                         <div className="mt-2 text-xs font-medium">
@@ -358,7 +358,7 @@ export default function AnalyticsPage() {
                       </TableCell>
                       <TableCell>{lead.email}</TableCell>
                       <TableCell>
-                        <Badge className={`${statusColors[lead.status]} text-white`}>
+                        <Badge className={`${statusBgColors[lead.status]} text-white`}>
                           {statusLabels[lead.status]}
                         </Badge>
                       </TableCell>

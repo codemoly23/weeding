@@ -33,7 +33,7 @@ export function BlogFilterTabs({
   inactiveBg = "#ffffff",
   inactiveColor = "#64748b",
   inactiveBorder = "#e2e8f0",
-  hoverBorder = "#f97316",
+  hoverBorder = "#8A6F3E",
 }: BlogFilterTabsProps) {
   const [hoveredId, setHoveredId] = useState<string | null>(null);
 

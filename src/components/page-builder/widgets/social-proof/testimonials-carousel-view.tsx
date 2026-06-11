@@ -155,7 +155,7 @@ export function TestimonialsCarouselView({
       return <div className={className}>{children}</div>;
     }
 
-    const defaultColors = ["#f97316", "#3b82f6"];
+    const defaultColors = ["#8A6F3E", "#3b82f6"];
     const gradientColors = cardStyle.gradientBorder?.colors?.length
       ? cardStyle.gradientBorder.colors.join(", ")
       : defaultColors.join(", ");

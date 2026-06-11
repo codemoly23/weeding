@@ -117,7 +117,7 @@ export function ServiceFeaturesWidget({
         <div className={cn("mb-8", s.header.alignment === "center" ? "text-center" : "text-left")}>
           {s.header.eyebrow && (
             <span
-              style={{ color: s.header.eyebrowColor || "#e84c1e" }}
+              style={{ color: s.header.eyebrowColor || "#8A6F3E" }}
               className="block text-xs font-bold uppercase tracking-[1.5px] mb-3"
             >
               {s.header.eyebrow}
@@ -256,8 +256,8 @@ export function ServiceFeaturesWidget({
 const TAG_CARD_COLORS: Record<string, { bg: string; text: string }> = {
   included: { bg: "rgba(27,58,45,0.08)", text: "#1b3a2d" },
   free: { bg: "rgba(27,58,45,0.08)", text: "#1b3a2d" },
-  addon: { bg: "rgba(232,76,30,0.1)", text: "#e84c1e" },
-  premium: { bg: "rgba(168,85,247,0.1)", text: "#9333ea" },
+  addon: { bg: "rgba(138,111,62,0.1)", text: "#8A6F3E" },
+  premium: { bg: "rgba(138,111,62,0.15)", text: "#E4A93B" },
   custom: { bg: "rgba(107,114,128,0.1)", text: "#4b5563" },
 };
 
@@ -363,7 +363,7 @@ function ServiceFeaturesPlaceholder({
         <div className={cn("mb-8", s.header.alignment === "center" ? "text-center" : "text-left")}>
           {s.header.eyebrow && (
             <span
-              style={{ color: s.header.eyebrowColor || "#e84c1e" }}
+              style={{ color: s.header.eyebrowColor || "#8A6F3E" }}
               className="block text-xs font-bold uppercase tracking-[1.5px] mb-3"
             >
               {s.header.eyebrow}

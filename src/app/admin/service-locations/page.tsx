@@ -23,7 +23,7 @@ const SECTIONS: SectionConfig[] = [
     description: "Venue types and places (e.g. Garden, Ballroom, Beach)",
     placeholder: "e.g. Outdoor Garden",
     icon: <Building2 className="h-5 w-5" />,
-    color: "text-violet-600 bg-violet-50 border-violet-200",
+    color: "text-[var(--admin-primary)] bg-[var(--ast-hold-bg)] border-[var(--ast-hold-border)]",
   },
   {
     type: "SERVICE",
@@ -31,7 +31,7 @@ const SECTIONS: SectionConfig[] = [
     description: "Service categories (e.g. Photography, Catering, DJ)",
     placeholder: "e.g. Photography",
     icon: <Briefcase className="h-5 w-5" />,
-    color: "text-pink-600 bg-pink-50 border-pink-200",
+    color: "text-[var(--ast-processing-icon)] bg-[var(--ast-processing-bg)] border-[var(--ast-processing-border)]",
   },
 ];
 
@@ -69,7 +69,7 @@ function IconEditCell({ opt, onUpdate }: { opt: Option; onUpdate: (id: string, i
         <button
           onClick={handleSave}
           disabled={saving}
-          className="rounded p-0.5 text-green-600 hover:bg-green-50"
+          className="rounded p-0.5 text-[var(--ast-success-icon)] hover:bg-[var(--ast-success-bg)]"
         >
           {saving ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <Check className="h-3.5 w-3.5" />}
         </button>
@@ -87,7 +87,7 @@ function IconEditCell({ opt, onUpdate }: { opt: Option; onUpdate: (id: string, i
       className="flex items-center gap-1 shrink-0 rounded px-1.5 py-0.5 text-xs font-mono text-muted-foreground hover:bg-muted hover:text-foreground transition-colors"
     >
       {opt.icon ? (
-        <span className="text-violet-600">{opt.icon}</span>
+        <span className="text-[var(--admin-primary)]">{opt.icon}</span>
       ) : (
         <span className="text-muted-foreground/50 italic">icon</span>
       )}
@@ -425,8 +425,8 @@ export default function ServiceLocationsPage() {
       <div className="rounded-2xl bg-white border border-border p-6">
         <div className="flex items-start justify-between gap-4">
           <div className="flex items-center gap-4">
-            <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-purple-50 border border-purple-100">
-              <MapPin className="h-6 w-6 text-purple-600" />
+            <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-[var(--ast-hold-bg)] border border-[var(--ast-hold-border)]">
+              <MapPin className="h-6 w-6 text-[var(--admin-primary)]" />
             </div>
             <div>
               <h1 className="text-2xl font-bold text-gray-900">Search Options</h1>
@@ -436,8 +436,8 @@ export default function ServiceLocationsPage() {
             </div>
           </div>
           {!loading && (
-            <div className="shrink-0 rounded-xl bg-purple-50 border border-purple-100 px-4 py-2 text-center">
-              <p className="text-2xl font-bold text-purple-700">{total}</p>
+            <div className="shrink-0 rounded-xl bg-[var(--ast-hold-bg)] border border-[var(--ast-hold-border)] px-4 py-2 text-center">
+              <p className="text-2xl font-bold text-[var(--ast-hold-text)]">{total}</p>
               <p className="text-xs text-muted-foreground">Total options</p>
             </div>
           )}

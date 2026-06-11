@@ -148,7 +148,7 @@ export function NewsletterCtaWidget({
           }}
         >
           {s.title.line1}{" "}
-          <span style={{ color: s.title.line2Color || "#f97316" }}>
+          <span style={{ color: s.title.line2Color || "#8A6F3E" }}>
             {s.title.line2}
           </span>
         </h2>
@@ -183,7 +183,7 @@ export function NewsletterCtaWidget({
             onChange={(e) => setEmail(e.target.value)}
             placeholder={s.form.placeholder}
             disabled={status === "loading"}
-            className="flex-1 px-4 py-3 text-sm outline-none transition-shadow focus:ring-2 focus:ring-orange-500/30"
+            className="flex-1 px-4 py-3 text-sm outline-none transition-shadow focus:ring-2 focus:ring-[#8A6F3E]/30"
             style={{
               background: s.form.inputBgColor || "#ffffff",
               color: s.form.inputTextColor || "#0f172a",
@@ -196,7 +196,7 @@ export function NewsletterCtaWidget({
             disabled={status === "loading"}
             className="font-display font-semibold text-sm px-6 py-3 transition-opacity hover:opacity-90 disabled:opacity-60"
             style={{
-              background: s.form.buttonBgColor || "#f97316",
+              background: s.form.buttonBgColor || "#8A6F3E",
               color: s.form.buttonTextColor || "#ffffff",
               borderRadius: s.form.borderRadius ?? 12,
               whiteSpace: "nowrap",

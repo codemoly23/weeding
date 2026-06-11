@@ -138,18 +138,18 @@ const mockAnalytics: AnalyticsData = {
 };
 
 const statusColors: Record<string, string> = {
-  Open: "bg-blue-500",
-  "In Progress": "bg-purple-500",
-  "Waiting Customer": "bg-amber-500",
-  Resolved: "bg-green-500",
-  Closed: "bg-gray-500",
+  Open:               "bg-[var(--ast-info-icon)]",
+  "In Progress":      "bg-[var(--ast-lead-contacted)]",
+  "Waiting Customer": "bg-[var(--ast-warning-icon)]",
+  Resolved:           "bg-[var(--ast-success-icon)]",
+  Closed:             "bg-[var(--ast-lead-unqualified)]",
 };
 
 const priorityColors: Record<string, string> = {
-  Urgent: "bg-red-500",
-  High: "bg-orange-500",
-  Medium: "bg-blue-500",
-  Low: "bg-gray-500",
+  Urgent: "bg-[var(--ast-error-icon)]",
+  High:   "bg-[var(--ast-processing-icon)]",
+  Medium: "bg-[var(--ast-info-icon)]",
+  Low:    "bg-[var(--ast-lead-unqualified)]",
 };
 
 export function AnalyticsDashboardClient({
@@ -273,20 +273,20 @@ export function AnalyticsDashboardClient({
                 <p className="text-sm text-muted-foreground">Total Tickets</p>
                 <p className="text-3xl font-bold">{data.overview.totalTickets}</p>
               </div>
-              <div className="h-12 w-12 rounded-full bg-blue-100 flex items-center justify-center">
-                <MessageSquare className="h-6 w-6 text-blue-600" />
+              <div className="h-12 w-12 rounded-full bg-[var(--ast-info-bg)] flex items-center justify-center">
+                <MessageSquare className="h-6 w-6 text-[var(--ast-info-icon)]" />
               </div>
             </div>
             <div className="flex items-center gap-1 mt-2 text-sm">
               {data.overview.ticketsChange > 0 ? (
                 <>
-                  <ArrowUpRight className="h-4 w-4 text-green-500" />
-                  <span className="text-green-500">+{data.overview.ticketsChange}%</span>
+                  <ArrowUpRight className="h-4 w-4 text-[var(--ast-success-icon)]" />
+                  <span className="text-[var(--ast-success-icon)]">+{data.overview.ticketsChange}%</span>
                 </>
               ) : (
                 <>
-                  <ArrowDownRight className="h-4 w-4 text-red-500" />
-                  <span className="text-red-500">{data.overview.ticketsChange}%</span>
+                  <ArrowDownRight className="h-4 w-4 text-[var(--ast-error-icon)]" />
+                  <span className="text-[var(--ast-error-icon)]">{data.overview.ticketsChange}%</span>
                 </>
               )}
               <span className="text-muted-foreground">from last period</span>
@@ -301,20 +301,20 @@ export function AnalyticsDashboardClient({
                 <p className="text-sm text-muted-foreground">Avg. Response Time</p>
                 <p className="text-3xl font-bold">{data.overview.avgResponseTime}h</p>
               </div>
-              <div className="h-12 w-12 rounded-full bg-green-100 flex items-center justify-center">
-                <Clock className="h-6 w-6 text-green-600" />
+              <div className="h-12 w-12 rounded-full bg-[var(--ast-success-bg)] flex items-center justify-center">
+                <Clock className="h-6 w-6 text-[var(--ast-success-icon)]" />
               </div>
             </div>
             <div className="flex items-center gap-1 mt-2 text-sm">
               {data.overview.responseTimeChange < 0 ? (
                 <>
-                  <TrendingDown className="h-4 w-4 text-green-500" />
-                  <span className="text-green-500">{data.overview.responseTimeChange}%</span>
+                  <TrendingDown className="h-4 w-4 text-[var(--ast-success-icon)]" />
+                  <span className="text-[var(--ast-success-icon)]">{data.overview.responseTimeChange}%</span>
                 </>
               ) : (
                 <>
-                  <TrendingUp className="h-4 w-4 text-red-500" />
-                  <span className="text-red-500">+{data.overview.responseTimeChange}%</span>
+                  <TrendingUp className="h-4 w-4 text-[var(--ast-error-icon)]" />
+                  <span className="text-[var(--ast-error-icon)]">+{data.overview.responseTimeChange}%</span>
                 </>
               )}
               <span className="text-muted-foreground">from last period</span>
@@ -329,20 +329,20 @@ export function AnalyticsDashboardClient({
                 <p className="text-sm text-muted-foreground">Avg. Resolution Time</p>
                 <p className="text-3xl font-bold">{data.overview.avgResolutionTime}h</p>
               </div>
-              <div className="h-12 w-12 rounded-full bg-amber-100 flex items-center justify-center">
-                <CheckCircle className="h-6 w-6 text-amber-600" />
+              <div className="h-12 w-12 rounded-full bg-[var(--ast-warning-bg)] flex items-center justify-center">
+                <CheckCircle className="h-6 w-6 text-[var(--ast-warning-icon)]" />
               </div>
             </div>
             <div className="flex items-center gap-1 mt-2 text-sm">
               {data.overview.resolutionTimeChange < 0 ? (
                 <>
-                  <TrendingDown className="h-4 w-4 text-green-500" />
-                  <span className="text-green-500">{data.overview.resolutionTimeChange}%</span>
+                  <TrendingDown className="h-4 w-4 text-[var(--ast-success-icon)]" />
+                  <span className="text-[var(--ast-success-icon)]">{data.overview.resolutionTimeChange}%</span>
                 </>
               ) : (
                 <>
-                  <TrendingUp className="h-4 w-4 text-red-500" />
-                  <span className="text-red-500">+{data.overview.resolutionTimeChange}%</span>
+                  <TrendingUp className="h-4 w-4 text-[var(--ast-error-icon)]" />
+                  <span className="text-[var(--ast-error-icon)]">+{data.overview.resolutionTimeChange}%</span>
                 </>
               )}
               <span className="text-muted-foreground">from last period</span>
@@ -357,20 +357,20 @@ export function AnalyticsDashboardClient({
                 <p className="text-sm text-muted-foreground">Satisfaction Score</p>
                 <p className="text-3xl font-bold">{data.overview.satisfactionScore}%</p>
               </div>
-              <div className="h-12 w-12 rounded-full bg-purple-100 flex items-center justify-center">
-                <Users className="h-6 w-6 text-purple-600" />
+              <div className="h-12 w-12 rounded-full bg-[var(--ast-hold-bg)] flex items-center justify-center">
+                <Users className="h-6 w-6 text-[var(--ast-hold-icon)]" />
               </div>
             </div>
             <div className="flex items-center gap-1 mt-2 text-sm">
               {data.overview.satisfactionChange > 0 ? (
                 <>
-                  <ArrowUpRight className="h-4 w-4 text-green-500" />
-                  <span className="text-green-500">+{data.overview.satisfactionChange}%</span>
+                  <ArrowUpRight className="h-4 w-4 text-[var(--ast-success-icon)]" />
+                  <span className="text-[var(--ast-success-icon)]">+{data.overview.satisfactionChange}%</span>
                 </>
               ) : (
                 <>
-                  <ArrowDownRight className="h-4 w-4 text-red-500" />
-                  <span className="text-red-500">{data.overview.satisfactionChange}%</span>
+                  <ArrowDownRight className="h-4 w-4 text-[var(--ast-error-icon)]" />
+                  <span className="text-[var(--ast-error-icon)]">{data.overview.satisfactionChange}%</span>
                 </>
               )}
               <span className="text-muted-foreground">from last period</span>
@@ -438,11 +438,11 @@ export function AnalyticsDashboardClient({
               <div key={day.date} className="flex-1 flex flex-col items-center gap-1">
                 <div className="flex-1 w-full flex items-end gap-1">
                   <div
-                    className="flex-1 bg-blue-500 rounded-t"
+                    className="flex-1 bg-[var(--ast-info-icon)] rounded-t"
                     style={{ height: `${(day.created / 20) * 100}%` }}
                   />
                   <div
-                    className="flex-1 bg-green-500 rounded-t"
+                    className="flex-1 bg-[var(--ast-success-icon)] rounded-t"
                     style={{ height: `${(day.resolved / 20) * 100}%` }}
                   />
                 </div>
@@ -452,11 +452,11 @@ export function AnalyticsDashboardClient({
           </div>
           <div className="flex items-center justify-center gap-6 mt-4">
             <div className="flex items-center gap-2">
-              <div className="h-3 w-3 rounded bg-blue-500" />
+              <div className="h-3 w-3 rounded bg-[var(--ast-info-icon)]" />
               <span className="text-sm text-muted-foreground">Created</span>
             </div>
             <div className="flex items-center gap-2">
-              <div className="h-3 w-3 rounded bg-green-500" />
+              <div className="h-3 w-3 rounded bg-[var(--ast-success-icon)]" />
               <span className="text-sm text-muted-foreground">Resolved</span>
             </div>
           </div>
@@ -484,7 +484,7 @@ export function AnalyticsDashboardClient({
                       {agent.ticketsResolved} tickets • {agent.avgResponseTime}h avg
                     </p>
                   </div>
-                  <Badge variant="secondary" className="bg-green-100 text-green-700">
+                  <Badge variant="secondary" className="admin-status-success">
                     {agent.satisfaction}%
                   </Badge>
                 </div>

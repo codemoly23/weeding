@@ -58,16 +58,16 @@ function formatDate(date: string) {
 
 function getStatusColor(status: string) {
   const colors: Record<string, string> = {
-    NEW: "bg-blue-100 text-blue-800",
-    CONTACTED: "bg-yellow-100 text-yellow-800",
-    QUALIFIED: "bg-green-100 text-green-800",
-    PROPOSAL: "bg-purple-100 text-purple-800",
-    NEGOTIATION: "bg-orange-100 text-orange-800",
-    WON: "bg-emerald-100 text-emerald-800",
-    LOST: "bg-red-100 text-red-800",
-    UNQUALIFIED: "bg-gray-100 text-gray-800",
+    NEW:          "admin-status-info",
+    CONTACTED:    "admin-status-hold",
+    QUALIFIED:    "admin-status-success",
+    PROPOSAL:     "admin-status-warning",
+    NEGOTIATION:  "admin-status-processing",
+    WON:          "admin-status-success",
+    LOST:         "admin-status-error",
+    UNQUALIFIED:  "admin-status-neutral",
   };
-  return colors[status] || "bg-gray-100 text-gray-800";
+  return colors[status] || "admin-status-neutral";
 }
 
 export default function DuplicatesPage() {
@@ -285,7 +285,7 @@ export default function DuplicatesPage() {
         <AlertDialogContent>
           <AlertDialogHeader>
             <AlertDialogTitle className="flex items-center gap-2">
-              <AlertTriangle className="h-5 w-5 text-amber-500" />
+              <AlertTriangle className="h-5 w-5 text-[var(--ast-warning-icon)]" />
               Confirm Merge
             </AlertDialogTitle>
             <AlertDialogDescription>

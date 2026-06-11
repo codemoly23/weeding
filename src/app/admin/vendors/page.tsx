@@ -85,10 +85,10 @@ const emptyForm = (): FormData => ({
 });
 
 const STATUS_COLORS: Record<VendorStatus, string> = {
-  PENDING: "bg-yellow-100 text-yellow-700",
-  APPROVED: "bg-green-100 text-green-700",
-  REJECTED: "bg-red-100 text-red-700",
-  SUSPENDED: "bg-gray-100 text-gray-600",
+  PENDING:   "admin-status-warning",
+  APPROVED:  "admin-status-success",
+  REJECTED:  "admin-status-error",
+  SUSPENDED: "admin-status-neutral",
 };
 
 export default function AdminVendorsPage() {
@@ -240,11 +240,11 @@ export default function AdminVendorsPage() {
   }
 
   const statCards = [
-    { label: "Total Vendors", value: stats.total, color: "text-gray-900" },
-    { label: "Approved", value: stats.approved, color: "text-green-700" },
-    { label: "Pending", value: stats.pending, color: "text-yellow-700" },
-    { label: "Featured", value: stats.featured, color: "text-amber-600" },
-    { label: "Verified", value: stats.verified, color: "text-purple-700" },
+    { label: "Total Vendors", value: stats.total, color: "text-foreground" },
+    { label: "Approved", value: stats.approved, color: "text-[var(--ast-success-text)]" },
+    { label: "Pending", value: stats.pending, color: "text-[var(--ast-warning-text)]" },
+    { label: "Featured", value: stats.featured, color: "text-[var(--ast-warning-icon)]" },
+    { label: "Verified", value: stats.verified, color: "text-[var(--ast-hold-text)]" },
   ];
 
   return (
@@ -252,7 +252,7 @@ export default function AdminVendorsPage() {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-3">
-          <Store className="h-6 w-6 text-purple-600" />
+          <Store className="h-6 w-6 text-[var(--admin-primary)]" />
           <div>
             <h1 className="text-2xl font-bold">Vendor Marketplace</h1>
             <p className="text-sm text-muted-foreground">Manage business listings in the vendor directory</p>
@@ -266,7 +266,7 @@ export default function AdminVendorsPage() {
           </Link>
           <button
             onClick={openAdd}
-            className="flex items-center gap-2 px-4 py-2 text-sm bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors"
+            className="flex items-center gap-2 px-4 py-2 text-sm bg-[var(--admin-primary)] text-[var(--admin-primary-fg)] rounded-lg hover:bg-[var(--admin-primary-hover)] transition-colors"
           >
             <Plus className="h-4 w-4" /> Add Vendor
           </button>
@@ -296,7 +296,7 @@ export default function AdminVendorsPage() {
             value={searchInput}
             onChange={(e) => setSearchInput(e.target.value)}
             placeholder="Search vendors..."
-            className="w-full pl-9 pr-3 py-2 text-sm border rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-400"
+            className="w-full pl-9 pr-3 py-2 text-sm border rounded-lg focus:outline-none focus:ring-2 focus:ring-[var(--admin-primary)]"
           />
         </div>
         <button type="submit" className="px-4 py-2 text-sm bg-gray-100 hover:bg-gray-200 rounded-lg transition-colors">
@@ -348,12 +348,12 @@ export default function AdminVendorsPage() {
                     )}
                     <div className="flex items-center gap-2 mt-0.5">
                       {v.isFeatured && (
-                        <span className="inline-flex items-center gap-1 text-xs text-yellow-600">
-                          <Star className="h-3 w-3 fill-yellow-400 text-yellow-400" /> Featured
+                        <span className="inline-flex items-center gap-1 text-xs text-[var(--ast-warning-icon)]">
+                          <Star className="h-3 w-3 fill-[var(--admin-star)] text-[var(--admin-star)]" /> Featured
                         </span>
                       )}
                       {v.isVerified && (
-                        <span className="inline-flex items-center gap-1 text-xs text-purple-600">
+                        <span className="inline-flex items-center gap-1 text-xs text-[var(--admin-primary)]">
                           <BadgeCheck className="h-3 w-3" /> Verified
                         </span>
                       )}
@@ -368,15 +368,15 @@ export default function AdminVendorsPage() {
                     {v.city ? `${v.city}, ${v.country}` : v.country}
                   </TableCell>
                   <TableCell>
-                    <span className={`text-xs font-medium px-2 py-0.5 rounded-full ${STATUS_COLORS[v.status as VendorStatus] || "bg-gray-100 text-gray-600"}`}>
+                    <span className={`text-xs font-medium px-2 py-0.5 rounded-full ${STATUS_COLORS[v.status as VendorStatus] || "admin-status-neutral"}`}>
                       {v.status ?? (v.isApproved ? "APPROVED" : "PENDING")}
                     </span>
                   </TableCell>
                   <TableCell>
                     <span className={`text-xs font-medium px-2 py-0.5 rounded-full ${
-                      v.planTier === "BUSINESS" ? "bg-purple-100 text-purple-700" :
-                      v.planTier === "TRIAL" ? "bg-blue-100 text-blue-700" :
-                      "bg-gray-100 text-gray-500"
+                      v.planTier === "BUSINESS" ? "admin-status-hold" :
+                      v.planTier === "TRIAL" ? "admin-status-info" :
+                      "admin-status-neutral"
                     }`}>
                       {v.planTier ?? "TRIAL"}
                     </span>
@@ -388,7 +388,7 @@ export default function AdminVendorsPage() {
                       {v.status !== "APPROVED" && (
                         <button
                           onClick={() => quickUpdate(v.id, { isApproved: true, status: "APPROVED" })}
-                          className="p-1.5 rounded text-gray-400 hover:text-green-600 hover:bg-green-50 transition-colors"
+                          className="p-1.5 rounded text-gray-400 hover:text-[var(--ast-success-icon)] hover:bg-[var(--ast-success-bg)] transition-colors"
                           title="Approve"
                         >
                           <Check className="h-4 w-4" />
@@ -397,7 +397,7 @@ export default function AdminVendorsPage() {
                       {v.status === "APPROVED" && (
                         <button
                           onClick={() => quickUpdate(v.id, { isApproved: false, status: "SUSPENDED" })}
-                          className="p-1.5 rounded text-gray-400 hover:text-red-600 hover:bg-red-50 transition-colors"
+                          className="p-1.5 rounded text-gray-400 hover:text-[var(--ast-error-icon)] hover:bg-[var(--ast-error-bg)] transition-colors"
                           title="Suspend"
                         >
                           <X className="h-4 w-4" />
@@ -410,27 +410,27 @@ export default function AdminVendorsPage() {
                             setCreateLoginPassword("");
                             setCreateLoginError("");
                           }}
-                          className="p-1.5 rounded text-gray-400 hover:text-amber-600 hover:bg-amber-50 transition-colors"
+                          className="p-1.5 rounded text-gray-400 hover:text-[var(--ast-warning-icon)] hover:bg-[var(--ast-warning-bg)] transition-colors"
                           title="Create login account"
                         >
                           <KeyRound className="h-4 w-4" />
                         </button>
                       )}
                       <Link href={`/vendors/${v.slug}`} target="_blank">
-                        <button className="p-1.5 rounded text-gray-400 hover:text-purple-600 hover:bg-purple-50 transition-colors" title="View public profile">
+                        <button className="p-1.5 rounded text-gray-400 hover:text-[var(--admin-primary)] hover:bg-[var(--ast-hold-bg)] transition-colors" title="View public profile">
                           <ExternalLink className="h-4 w-4" />
                         </button>
                       </Link>
                       <button
                         onClick={() => openEdit(v)}
-                        className="p-1.5 rounded text-gray-400 hover:text-blue-600 hover:bg-blue-50 transition-colors"
+                        className="p-1.5 rounded text-gray-400 hover:text-[var(--ast-info-icon)] hover:bg-[var(--ast-info-bg)] transition-colors"
                         title="Edit"
                       >
                         <Pencil className="h-4 w-4" />
                       </button>
                       <button
                         onClick={() => handleDelete(v.id, v.businessName)}
-                        className="p-1.5 rounded text-gray-400 hover:text-red-600 hover:bg-red-50 transition-colors"
+                        className="p-1.5 rounded text-gray-400 hover:text-[var(--ast-error-icon)] hover:bg-[var(--ast-error-bg)] transition-colors"
                         title="Delete"
                       >
                         <Trash2 className="h-4 w-4" />
@@ -477,7 +477,7 @@ export default function AdminVendorsPage() {
               {createLoginVendor.email ? (
                 <span className="block mt-1 text-xs text-gray-500">Email: <strong>{createLoginVendor.email}</strong></span>
               ) : (
-                <span className="block mt-1 text-xs text-red-500">এই vendor এর email নেই — আগে Edit করে email add করুন।</span>
+                <span className="block mt-1 text-xs text-[var(--ast-error-icon)]">এই vendor এর email নেই — আগে Edit করে email add করুন।</span>
               )}
             </p>
             {createLoginVendor.email && (
@@ -488,12 +488,12 @@ export default function AdminVendorsPage() {
                     type="password"
                     value={createLoginPassword}
                     onChange={(e) => setCreateLoginPassword(e.target.value)}
-                    className="w-full border rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-purple-400"
+                    className="w-full border rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[var(--admin-primary)]"
                     placeholder="Set a password for this vendor"
                     autoFocus
                   />
                 </div>
-                {createLoginError && <p className="text-red-500 text-xs">{createLoginError}</p>}
+                {createLoginError && <p className="text-[var(--ast-error-icon)] text-xs">{createLoginError}</p>}
                 <div className="flex justify-end gap-2 mt-4">
                   <button onClick={() => setCreateLoginVendor(null)} className="px-4 py-2 text-sm border rounded-lg hover:bg-gray-50">
                     Cancel
@@ -501,7 +501,7 @@ export default function AdminVendorsPage() {
                   <button
                     onClick={handleCreateLogin}
                     disabled={createLoginSaving || createLoginPassword.length < 8}
-                    className="flex items-center gap-2 px-4 py-2 text-sm bg-amber-500 text-white rounded-lg hover:bg-amber-600 disabled:opacity-50"
+                    className="flex items-center gap-2 px-4 py-2 text-sm bg-[var(--ast-warning-icon)] text-[var(--admin-primary-fg)] rounded-lg hover:bg-[var(--ast-warning-text)] disabled:opacity-50"
                   >
                     <KeyRound className="h-4 w-4" />
                     {createLoginSaving ? "Creating…" : "Create Account"}
@@ -528,26 +528,26 @@ export default function AdminVendorsPage() {
               <div className="sm:col-span-2">
                 <label className="block text-xs font-medium text-gray-700 mb-1">Business Name *</label>
                 <input value={form.businessName} onChange={(e) => setForm({ ...form, businessName: e.target.value })}
-                  className="w-full border rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-purple-400"
+                  className="w-full border rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[var(--admin-primary)]"
                   placeholder="e.g. Stockholm Photography Studio" />
               </div>
               <div>
                 <label className="block text-xs font-medium text-gray-700 mb-1">Category *</label>
                 <select value={form.category} onChange={(e) => setForm({ ...form, category: e.target.value as VendorCategory })}
-                  className="w-full border rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-purple-400">
+                  className="w-full border rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[var(--admin-primary)]">
                   {CATEGORIES.map((c) => <option key={c} value={c}>{CATEGORY_LABELS[c]}</option>)}
                 </select>
               </div>
               <div>
                 <label className="block text-xs font-medium text-gray-700 mb-1">City</label>
                 <input value={form.city} onChange={(e) => setForm({ ...form, city: e.target.value })}
-                  className="w-full border rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-purple-400"
+                  className="w-full border rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[var(--admin-primary)]"
                   placeholder="Stockholm" />
               </div>
               <div>
                 <label className="block text-xs font-medium text-gray-700 mb-1">Email</label>
                 <input type="email" value={form.email} onChange={(e) => setForm({ ...form, email: e.target.value })}
-                  className="w-full border rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-purple-400"
+                  className="w-full border rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[var(--admin-primary)]"
                   placeholder="contact@business.com" />
               </div>
               {!editId && (
@@ -556,29 +556,29 @@ export default function AdminVendorsPage() {
                     Login Password <span className="text-gray-400 font-normal">(optional — lets vendor log in)</span>
                   </label>
                   <input type="password" value={form.password} onChange={(e) => setForm({ ...form, password: e.target.value })}
-                    className="w-full border rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-purple-400"
+                    className="w-full border rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[var(--admin-primary)]"
                     placeholder="Min 8 characters" />
                   {form.email && !form.password && (
-                    <p className="text-xs text-amber-600 mt-1">Password ছাড়া vendor login করতে পারবে না</p>
+                    <p className="text-xs text-[var(--ast-warning-icon)] mt-1">Password ছাড়া vendor login করতে পারবে না</p>
                   )}
                 </div>
               )}
               <div>
                 <label className="block text-xs font-medium text-gray-700 mb-1">Phone</label>
                 <input value={form.phone} onChange={(e) => setForm({ ...form, phone: e.target.value })}
-                  className="w-full border rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-purple-400"
+                  className="w-full border rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[var(--admin-primary)]"
                   placeholder="+46 70 123 4567" />
               </div>
               <div>
                 <label className="block text-xs font-medium text-gray-700 mb-1">Starting Price</label>
                 <input type="number" value={form.startingPrice} onChange={(e) => setForm({ ...form, startingPrice: e.target.value })}
-                  className="w-full border rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-purple-400"
+                  className="w-full border rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[var(--admin-primary)]"
                   placeholder="5000" />
               </div>
               <div>
                 <label className="block text-xs font-medium text-gray-700 mb-1">Currency</label>
                 <select value={form.currency} onChange={(e) => setForm({ ...form, currency: e.target.value })}
-                  className="w-full border rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-purple-400">
+                  className="w-full border rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[var(--admin-primary)]">
                   <option value="SEK">SEK</option>
                   <option value="USD">USD</option>
                   <option value="EUR">EUR</option>
@@ -588,24 +588,24 @@ export default function AdminVendorsPage() {
               <div className="sm:col-span-2">
                 <label className="block text-xs font-medium text-gray-700 mb-1">Tagline</label>
                 <input value={form.tagline} onChange={(e) => setForm({ ...form, tagline: e.target.value })}
-                  className="w-full border rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-purple-400"
+                  className="w-full border rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[var(--admin-primary)]"
                   placeholder="Short catchy description" />
               </div>
               <div className="sm:col-span-2">
                 <label className="block text-xs font-medium text-gray-700 mb-1">Description</label>
                 <textarea rows={3} value={form.description} onChange={(e) => setForm({ ...form, description: e.target.value })}
-                  className="w-full border rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-purple-400 resize-none"
+                  className="w-full border rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[var(--admin-primary)] resize-none"
                   placeholder="About this business..." />
               </div>
               <div className="sm:col-span-2">
                 <label className="block text-xs font-medium text-gray-700 mb-1">Cover Photo</label>
                 <input value={form.coverPhotoUrl.startsWith("data:") ? "" : form.coverPhotoUrl}
                   onChange={(e) => setForm({ ...form, coverPhotoUrl: e.target.value })}
-                  className="w-full border rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-purple-400"
+                  className="w-full border rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[var(--admin-primary)]"
                   placeholder="https://example.com/photo.jpg" />
                 <div className="flex items-center gap-2 mt-1.5">
                   <span className="text-xs text-gray-400">or</span>
-                  <label className="cursor-pointer text-xs text-purple-600 border border-purple-300 rounded px-3 py-1 hover:bg-purple-50 transition">
+                  <label className="cursor-pointer text-xs text-[var(--admin-primary)] border border-[var(--ast-hold-border)] rounded px-3 py-1 hover:bg-[var(--ast-hold-bg)] transition">
                     Upload from device
                     <input type="file" accept="image/*" className="hidden"
                       onChange={(e) => {
@@ -619,7 +619,7 @@ export default function AdminVendorsPage() {
                   </label>
                   {form.coverPhotoUrl && (
                     <button type="button" onClick={() => setForm({ ...form, coverPhotoUrl: "" })}
-                      className="text-xs text-red-400 hover:text-red-600">Remove</button>
+                      className="text-xs text-[var(--ast-error-border)] hover:text-[var(--ast-error-icon)]">Remove</button>
                   )}
                 </div>
                 {form.coverPhotoUrl && (
@@ -630,7 +630,7 @@ export default function AdminVendorsPage() {
               <div>
                 <label className="block text-xs font-medium text-gray-700 mb-1">Plan Tier</label>
                 <select value={form.planTier} onChange={(e) => setForm({ ...form, planTier: e.target.value as VendorPlanTier })}
-                  className="w-full border rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-purple-400">
+                  className="w-full border rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[var(--admin-primary)]">
                   <option value="TRIAL">Trial (Free 30-day)</option>
                   <option value="BUSINESS">Business ($19/mo)</option>
                   <option value="EXPIRED">Expired</option>
@@ -660,14 +660,14 @@ export default function AdminVendorsPage() {
               </div>
             </div>
 
-            {formError && <p className="text-red-500 text-xs mt-3">{formError}</p>}
+            {formError && <p className="text-[var(--ast-error-icon)] text-xs mt-3">{formError}</p>}
 
             <div className="flex justify-end gap-3 mt-5">
               <button onClick={() => setShowForm(false)} className="px-4 py-2 text-sm border rounded-lg hover:bg-gray-50">
                 Cancel
               </button>
               <button onClick={handleSave} disabled={saving}
-                className="flex items-center gap-2 px-4 py-2 text-sm bg-purple-600 text-white rounded-lg hover:bg-purple-700 disabled:opacity-50">
+                className="flex items-center gap-2 px-4 py-2 text-sm bg-[var(--admin-primary)] text-[var(--admin-primary-fg)] rounded-lg hover:bg-[var(--admin-primary-hover)] disabled:opacity-50">
                 <Check className="h-4 w-4" />
                 {saving ? "Saving…" : editId ? "Save Changes" : "Add Vendor"}
               </button>

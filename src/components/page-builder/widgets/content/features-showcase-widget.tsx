@@ -235,7 +235,7 @@ function FeatureCard({ item, height, aspectRatio, isPreview }: FeatureCardProps)
               sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
             />
           ) : (
-            <div style={{ position: "absolute", inset: 0, background: "linear-gradient(135deg, #9333ea, #ec4899)" }} />
+            <div style={{ position: "absolute", inset: 0, background: "linear-gradient(135deg, #8A6F3E, #E4A93B)" }} />
           )}
 
           {/* Bottom gradient */}

@@ -332,7 +332,7 @@ function SortableFieldItem({
             </Badge>
           )}
           {field.conditionalLogic && Object.keys(field.conditionalLogic).length > 0 && (
-            <Badge variant="outline" className="text-xs gap-1 text-orange-600 border-orange-300">
+            <Badge variant="outline" className="text-xs gap-1 admin-status-processing">
               <GitBranch className="h-3 w-3" />
               Conditional
             </Badge>
@@ -1455,7 +1455,7 @@ export default function FormBuilderPage() {
                   <div className="space-y-4">
                     <div className="flex items-center justify-between">
                       <h4 className="text-sm font-semibold text-foreground flex items-center gap-2">
-                        <GitBranch className="h-4 w-4 text-orange-500" />
+                        <GitBranch className="h-4 w-4 text-[var(--ast-processing-icon)]" />
                         Conditional Visibility
                       </h4>
                     </div>
@@ -1486,7 +1486,7 @@ export default function FormBuilderPage() {
                     </div>
 
                     {conditionalEnabled && (
-                      <div className="space-y-3 rounded-lg border border-orange-200 bg-orange-50/50 p-4">
+                      <div className="space-y-3 rounded-lg border border-[var(--ast-processing-border)] bg-[var(--ast-processing-bg)]/50 p-4">
                         {/* When Field */}
                         <div className="space-y-2">
                           <Label className="text-xs font-medium">Show this field when</Label>

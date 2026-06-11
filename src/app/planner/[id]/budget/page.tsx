@@ -23,17 +23,17 @@ const isLocal = (id: string) => id.startsWith("local-");
 
 const DEFAULT_CATEGORIES = [
   { name: "Venue", color: "#6366f1" },
-  { name: "Catering & Food", color: "#8b5cf6" },
-  { name: "Photography & Video", color: "#ec4899" },
+  { name: "Catering & Food", color: "#8A6F3E" },
+  { name: "Photography & Video", color: "#E4A93B" },
   { name: "Music & Entertainment", color: "#f43f5e" },
-  { name: "Flowers & Decorations", color: "#f97316" },
+  { name: "Flowers & Decorations", color: "#8A6F3E" },
   { name: "Dress & Attire", color: "#eab308" },
   { name: "Beauty & Hair", color: "#22c55e" },
   { name: "Transportation", color: "#14b8a6" },
   { name: "Cake & Sweets", color: "#3b82f6" },
   { name: "Rings & Jewelry", color: "#06b6d4" },
   { name: "Stationery & Invites", color: "#6366f1" },
-  { name: "Miscellaneous", color: "#8b5cf6" },
+  { name: "Miscellaneous", color: "#8A6F3E" },
 ];
 
 async function apiFetch(url: string, options?: RequestInit) {

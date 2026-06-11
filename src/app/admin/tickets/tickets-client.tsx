@@ -138,19 +138,19 @@ interface TicketsPageClientProps {
 }
 
 const statusConfig: Record<TicketStatus, { label: string; color: string; icon: typeof AlertCircle }> = {
-  OPEN: { label: "Open", color: "bg-blue-100 text-blue-700 border-blue-200", icon: AlertCircle },
-  IN_PROGRESS: { label: "In Progress", color: "bg-purple-100 text-purple-700 border-purple-200", icon: Clock },
-  WAITING_FOR_CUSTOMER: { label: "Awaiting Customer", color: "bg-amber-100 text-amber-700 border-amber-200", icon: Clock },
-  WAITING_FOR_AGENT: { label: "Awaiting Agent", color: "bg-orange-100 text-orange-700 border-orange-200", icon: Clock },
-  RESOLVED: { label: "Resolved", color: "bg-green-100 text-green-700 border-green-200", icon: CheckCircle },
-  CLOSED: { label: "Closed", color: "bg-gray-100 text-gray-700 border-gray-200", icon: CheckCircle },
+  OPEN:                 { label: "Open",              color: "admin-status-info",       icon: AlertCircle },
+  IN_PROGRESS:          { label: "In Progress",       color: "admin-status-hold",       icon: Clock },
+  WAITING_FOR_CUSTOMER: { label: "Awaiting Customer", color: "admin-status-warning",    icon: Clock },
+  WAITING_FOR_AGENT:    { label: "Awaiting Agent",    color: "admin-status-processing", icon: Clock },
+  RESOLVED:             { label: "Resolved",          color: "admin-status-success",    icon: CheckCircle },
+  CLOSED:               { label: "Closed",            color: "admin-status-neutral",    icon: CheckCircle },
 };
 
 const priorityConfig: Record<TicketPriority, { label: string; color: string }> = {
-  LOW: { label: "Low", color: "bg-gray-100 text-gray-700" },
-  MEDIUM: { label: "Medium", color: "bg-blue-100 text-blue-700" },
-  HIGH: { label: "High", color: "bg-orange-100 text-orange-700" },
-  URGENT: { label: "Urgent", color: "bg-red-100 text-red-700" },
+  LOW:    { label: "Low",    color: "admin-status-neutral"    },
+  MEDIUM: { label: "Medium", color: "admin-status-info"       },
+  HIGH:   { label: "High",   color: "admin-status-processing" },
+  URGENT: { label: "Urgent", color: "admin-status-error"      },
 };
 
 const PER_PAGE_OPTIONS = [10, 20, 50, 100];
@@ -490,8 +490,8 @@ export function TicketsPageClient({
         <Card>
           <CardContent className="pt-6">
             <div className="flex items-center gap-4">
-              <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-blue-100">
-                <MessageSquare className="h-5 w-5 text-blue-600" />
+              <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-[var(--ast-info-bg)]">
+                <MessageSquare className="h-5 w-5 text-[var(--ast-info-icon)]" />
               </div>
               <div>
                 <p className="text-2xl font-bold">
@@ -505,8 +505,8 @@ export function TicketsPageClient({
         <Card>
           <CardContent className="pt-6">
             <div className="flex items-center gap-4">
-              <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-orange-100">
-                <Clock className="h-5 w-5 text-orange-600" />
+              <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-[var(--ast-processing-bg)]">
+                <Clock className="h-5 w-5 text-[var(--ast-processing-icon)]" />
               </div>
               <div>
                 <p className="text-2xl font-bold">{stats?.waitingAgent || 0}</p>
@@ -518,8 +518,8 @@ export function TicketsPageClient({
         <Card>
           <CardContent className="pt-6">
             <div className="flex items-center gap-4">
-              <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-amber-100">
-                <AlertCircle className="h-5 w-5 text-amber-600" />
+              <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-[var(--ast-warning-bg)]">
+                <AlertCircle className="h-5 w-5 text-[var(--ast-warning-icon)]" />
               </div>
               <div>
                 <p className="text-2xl font-bold">{stats?.waitingCustomer || 0}</p>
@@ -531,8 +531,8 @@ export function TicketsPageClient({
         <Card>
           <CardContent className="pt-6">
             <div className="flex items-center gap-4">
-              <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-green-100">
-                <CheckCircle className="h-5 w-5 text-green-600" />
+              <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-[var(--ast-success-bg)]">
+                <CheckCircle className="h-5 w-5 text-[var(--ast-success-icon)]" />
               </div>
               <div>
                 <p className="text-2xl font-bold">
@@ -765,7 +765,7 @@ export function TicketsPageClient({
                                 </Link>
                               </DropdownMenuItem>
                               <DropdownMenuItem
-                                className="text-red-600"
+                                className="text-[var(--ast-error-text)]"
                                 onClick={() => handleDeleteTicket(ticket.id)}
                               >
                                 <Trash2 className="mr-2 h-4 w-4" />
@@ -891,10 +891,10 @@ export function TicketsPageClient({
               <div className="space-y-2">
                 <Label>Search Customer</Label>
                 {selectedCustomer ? (
-                  <div className="flex items-center justify-between p-3 border rounded-lg bg-blue-50">
+                  <div className="flex items-center justify-between p-3 border rounded-lg bg-[var(--ast-info-bg)]">
                     <div className="flex items-center gap-3">
-                      <div className="w-10 h-10 rounded-full bg-blue-200 flex items-center justify-center">
-                        <User className="h-5 w-5 text-blue-700" />
+                      <div className="w-10 h-10 rounded-full bg-[var(--ast-info-border)] flex items-center justify-center">
+                        <User className="h-5 w-5 text-[var(--ast-info-text)]" />
                       </div>
                       <div>
                         <p className="font-medium">{selectedCustomer.name}</p>

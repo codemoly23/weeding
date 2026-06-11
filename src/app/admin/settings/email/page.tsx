@@ -269,13 +269,13 @@ export default function EmailSettingsPage() {
       </div>
 
       {/* Security Notice */}
-      <Card className="border-yellow-200 bg-yellow-50">
+      <Card className="border-[var(--ast-warning-border)] bg-[var(--ast-warning-bg)]">
         <CardContent className="pt-6">
           <div className="flex gap-4">
-            <AlertTriangle className="h-5 w-5 text-yellow-600 shrink-0 mt-0.5" />
+            <AlertTriangle className="h-5 w-5 text-[var(--ast-warning-icon)] shrink-0 mt-0.5" />
             <div className="space-y-1">
-              <p className="font-medium text-yellow-900">Security Notice</p>
-              <p className="text-sm text-yellow-700">
+              <p className="font-medium text-[var(--ast-warning-text)]">Security Notice</p>
+              <p className="text-sm text-[var(--ast-warning-text)]">
                 SMTP password is encrypted before storing in the database. For Gmail,
                 use an{" "}
                 <a
@@ -298,8 +298,8 @@ export default function EmailSettingsPage() {
         <CardHeader>
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
-              <div className="p-2 bg-blue-100 rounded-lg">
-                <Server className="h-6 w-6 text-blue-600" />
+              <div className="p-2 bg-[var(--ast-info-bg)] rounded-lg">
+                <Server className="h-6 w-6 text-[var(--ast-info-icon)]" />
               </div>
               <div>
                 <CardTitle>SMTP Configuration</CardTitle>
@@ -386,7 +386,7 @@ export default function EmailSettingsPage() {
               {emailConnected === null ? (
                 <Badge variant="outline">Not Tested</Badge>
               ) : emailConnected ? (
-                <Badge className="bg-green-100 text-green-700">
+                <Badge className="admin-status-success">
                   <CheckCircle className="h-3 w-3 mr-1" />
                   Connected
                 </Badge>
@@ -476,8 +476,8 @@ export default function EmailSettingsPage() {
       <Card>
         <CardHeader>
           <div className="flex items-center gap-3">
-            <div className="p-2 bg-purple-100 rounded-lg">
-              <Bell className="h-6 w-6 text-purple-600" />
+            <div className="p-2 bg-[var(--ast-hold-bg)] rounded-lg">
+              <Bell className="h-6 w-6 text-[var(--ast-hold-icon)]" />
             </div>
             <div>
               <CardTitle>Admin Notifications</CardTitle>
@@ -517,8 +517,8 @@ export default function EmailSettingsPage() {
       <Card>
         <CardHeader>
           <div className="flex items-center gap-3">
-            <div className="p-2 bg-green-100 rounded-lg">
-              <Mail className="h-6 w-6 text-green-600" />
+            <div className="p-2 bg-[var(--ast-success-bg)] rounded-lg">
+              <Mail className="h-6 w-6 text-[var(--ast-success-icon)]" />
             </div>
             <div>
               <CardTitle>Customer Notifications</CardTitle>
@@ -558,8 +558,8 @@ export default function EmailSettingsPage() {
       <Card>
         <CardHeader>
           <div className="flex items-center gap-3">
-            <div className="p-2 bg-amber-100 rounded-lg">
-              <Mail className="h-6 w-6 text-amber-600" />
+            <div className="p-2 bg-[var(--ast-warning-bg)] rounded-lg">
+              <Mail className="h-6 w-6 text-[var(--ast-warning-icon)]" />
             </div>
             <div>
               <CardTitle>Payment Notifications</CardTitle>
@@ -586,15 +586,15 @@ export default function EmailSettingsPage() {
       </Card>
 
       {/* Gmail Info Card */}
-      <Card className="bg-blue-50 border-blue-200">
+      <Card className="bg-[var(--ast-info-bg)] border-[var(--ast-info-border)]">
         <CardContent className="pt-6">
           <div className="flex gap-4">
-            <div className="p-2 bg-blue-100 rounded-lg h-fit">
-              <Mail className="h-5 w-5 text-blue-600" />
+            <div className="p-2 bg-[var(--ast-info-bg)] rounded-lg h-fit">
+              <Mail className="h-5 w-5 text-[var(--ast-info-icon)]" />
             </div>
             <div className="space-y-2">
-              <p className="font-medium text-blue-900">Gmail Setup Guide</p>
-              <ol className="text-sm text-blue-700 list-decimal list-inside space-y-1">
+              <p className="font-medium text-[var(--ast-info-text)]">Gmail Setup Guide</p>
+              <ol className="text-sm text-[var(--ast-info-text)] list-decimal list-inside space-y-1">
                 <li>Enable 2-Factor Authentication on your Google Account</li>
                 <li>
                   Go to{" "}

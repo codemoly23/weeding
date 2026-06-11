@@ -136,7 +136,7 @@ function getBadgeStyles(
       return {
         className: cn(baseClasses, "rounded-md border-0"),
         style: {
-          backgroundColor: colors.bgColor || "#f97316",
+          backgroundColor: colors.bgColor || "#8A6F3E",
           color: colors.textColor || "#ffffff",
         },
       };
@@ -168,7 +168,7 @@ function renderHighlightedText(
   return parts.map((part, index) => {
     if (part.toLowerCase() === highlightWords.toLowerCase()) {
       return (
-        <span key={index} style={{ color: highlightColor || "#f97316" }}>
+        <span key={index} style={{ color: highlightColor || "#8A6F3E" }}>
           {part}
         </span>
       );
@@ -312,7 +312,7 @@ function OrderSummary({
 }: OrderSummaryProps) {
   const { orderSummary, ctaButtons } = settings;
   const useTheme = settings.colors?.useTheme !== false;
-  const effectiveBgColor = useTheme ? "var(--color-primary)" : (ctaButtons.defaultBgColor || "#f97316");
+  const effectiveBgColor = useTheme ? "var(--color-primary)" : (ctaButtons.defaultBgColor || "#8A6F3E");
 
   if (!orderSummary.enabled) return null;
 
@@ -440,7 +440,7 @@ function MobileOrderSummary({
 }: MobileOrderSummaryProps) {
   const { orderSummary, ctaButtons } = settings;
   const useTheme = settings.colors?.useTheme !== false;
-  const effectiveBgColor = useTheme ? "var(--color-primary)" : (ctaButtons.defaultBgColor || "#f97316");
+  const effectiveBgColor = useTheme ? "var(--color-primary)" : (ctaButtons.defaultBgColor || "#8A6F3E");
 
   if (!orderSummary.enabled) return null;
 
@@ -580,7 +580,7 @@ function ComparisonTable({
   // ── colour tokens ──────────────────────────────────────────────────────────
   const FOREST = "#1b3a2d";
   const CREAM  = "#faf8f4";
-  const CORAL  = "#e84c1e";
+  const CORAL  = "#8A6F3E";
   const BORDER = "rgba(14,17,9,0.1)";
 
   // ── local state ────────────────────────────────────────────────────────────
@@ -904,7 +904,7 @@ function ComparisonTable({
                 const isLast = colIdx === colCount - 1;
                 // Last package (Premium) → coral, selected → forest, others → outline
                 const btnClass = isLast
-                  ? "bg-[#e84c1e] text-white border-[#e84c1e] hover:bg-[#d13d10] hover:-translate-y-0.5 hover:shadow-[0_8px_24px_rgba(232,76,30,0.35)]"
+                  ? "bg-[#8A6F3E] text-white border-[#8A6F3E] hover:bg-[#6B5530] hover:-translate-y-0.5 hover:shadow-[0_8px_24px_rgba(138,111,62,0.35)]"
                   : isActive
                     ? "bg-[#1b3a2d] text-white border-[#1b3a2d] hover:bg-[#0f2318] hover:-translate-y-0.5 hover:shadow-[0_8px_24px_rgba(27,58,45,0.3)]"
                     : "bg-transparent text-[#1a1f16] border-[rgba(14,17,9,0.1)] hover:border-[#1a1f16] hover:bg-[rgba(27,58,45,0.04)]";
@@ -967,8 +967,8 @@ function MobilePackageCards({
 }: MobilePackageCardsProps) {
   const { responsive } = settings;
   const useTheme = settings.colors?.useTheme !== false;
-  const accentColor = useTheme ? "var(--color-primary)" : (settings.ctaButtons?.defaultBgColor || "#f97316");
-  const accentBgLight = useTheme ? "color-mix(in srgb, var(--color-primary) 8%, transparent)" : `${settings.ctaButtons?.defaultBgColor || "#f97316"}15`;
+  const accentColor = useTheme ? "var(--color-primary)" : (settings.ctaButtons?.defaultBgColor || "#8A6F3E");
+  const accentBgLight = useTheme ? "color-mix(in srgb, var(--color-primary) 8%, transparent)" : `${settings.ctaButtons?.defaultBgColor || "#8A6F3E"}15`;
 
   return (
     <div className="lg:hidden">
