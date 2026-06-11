@@ -288,8 +288,8 @@ export default function AdminCustomersPage() {
                       variant="secondary"
                       className={
                         customer.status === "active"
-                          ? "bg-green-100 text-green-700"
-                          : "bg-gray-100 text-gray-700"
+                          ? "admin-status-success"
+                          : "admin-status-neutral"
                       }
                     >
                       {customer.status}

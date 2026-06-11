@@ -52,27 +52,27 @@ interface Lead {
 }
 
 const PIPELINE_STAGES = [
-  { key: "NEW", label: "New", color: "bg-blue-500" },
-  { key: "CONTACTED", label: "Contacted", color: "bg-purple-500" },
-  { key: "QUALIFIED", label: "Qualified", color: "bg-emerald-500" },
-  { key: "PROPOSAL", label: "Proposal", color: "bg-amber-500" },
-  { key: "NEGOTIATION", label: "Negotiation", color: "bg-orange-500" },
-  { key: "WON", label: "Won", color: "bg-green-500" },
-  { key: "LOST", label: "Lost", color: "bg-red-500" },
-  { key: "UNQUALIFIED", label: "Unqualified", color: "bg-gray-500" },
+  { key: "NEW",         label: "New",         color: "bg-[var(--ast-info-icon)]" },
+  { key: "CONTACTED",   label: "Contacted",   color: "bg-[var(--ast-lead-contacted)]" },
+  { key: "QUALIFIED",   label: "Qualified",   color: "bg-[var(--ast-lead-qualified)]" },
+  { key: "PROPOSAL",    label: "Proposal",    color: "bg-[var(--ast-warning-icon)]" },
+  { key: "NEGOTIATION", label: "Negotiation", color: "bg-[var(--ast-processing-icon)]" },
+  { key: "WON",         label: "Won",         color: "bg-[var(--ast-success-icon)]" },
+  { key: "LOST",        label: "Lost",        color: "bg-[var(--ast-error-icon)]" },
+  { key: "UNQUALIFIED", label: "Unqualified", color: "bg-[var(--ast-lead-unqualified)]" },
 ];
 
 const priorityColors: Record<string, string> = {
-  LOW: "border-gray-300",
-  MEDIUM: "border-blue-300",
-  HIGH: "border-orange-300",
-  URGENT: "border-red-500",
+  LOW:    "border-[var(--ast-neutral-border)]",
+  MEDIUM: "border-[var(--ast-info-border)]",
+  HIGH:   "border-[var(--ast-processing-border)]",
+  URGENT: "border-[var(--ast-error-icon)]",
 };
 
 function getScoreIcon(score: number) {
-  if (score >= 70) return <Flame className="h-3 w-3 text-red-500" />;
-  if (score >= 40) return <Thermometer className="h-3 w-3 text-orange-500" />;
-  return <Snowflake className="h-3 w-3 text-blue-500" />;
+  if (score >= 70) return <Flame className="h-3 w-3 text-[var(--ast-error-icon)]" />;
+  if (score >= 40) return <Thermometer className="h-3 w-3 text-[var(--ast-processing-icon)]" />;
+  return <Snowflake className="h-3 w-3 text-[var(--ast-info-icon)]" />;
 }
 
 export default function PipelinePage() {

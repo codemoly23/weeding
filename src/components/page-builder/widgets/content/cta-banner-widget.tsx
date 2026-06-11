@@ -170,7 +170,7 @@ export function CtaBannerWidget({
                     >
                       <path
                         d="M2 7L5.5 10.5L12 4"
-                        stroke={isLight ? "#9333ea" : "rgba(255,255,255,0.9)"}
+                        stroke={isLight ? "#8A6F3E" : "rgba(255,255,255,0.9)"}
                         strokeWidth="2"
                         strokeLinecap="round"
                         strokeLinejoin="round"

@@ -733,7 +733,7 @@ function BrideIcon({ className }: { className?: string }) {
           <stop stopColor="#fda4af"/><stop offset="1" stopColor="#c084fc"/>
         </linearGradient>
         <linearGradient id="brdS" x1="6" y1="36" x2="56" y2="42" gradientUnits="userSpaceOnUse">
-          <stop stopColor="#f43f5e"/><stop offset="1" stopColor="#a855f7"/>
+          <stop stopColor="#f43f5e"/><stop offset="1" stopColor="#8A6F3E"/>
         </linearGradient>
       </defs>
     </svg>

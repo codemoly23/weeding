@@ -323,7 +323,7 @@ export default function StateFeesPage() {
                     </TableCell>
                     <TableCell>
                       {fee.isPopular && (
-                        <Star className="h-4 w-4 fill-yellow-400 text-yellow-400" />
+                        <Star className="h-4 w-4 fill-[var(--admin-star)] text-[var(--admin-star)]" />
                       )}
                     </TableCell>
                     <TableCell className="text-right">

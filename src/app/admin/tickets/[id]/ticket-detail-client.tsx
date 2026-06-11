@@ -104,19 +104,19 @@ interface TicketDetailClientProps {
 }
 
 const statusConfig: Record<TicketStatus, { label: string; color: string }> = {
-  OPEN: { label: "Open", color: "bg-blue-100 text-blue-700 border-blue-200" },
-  IN_PROGRESS: { label: "In Progress", color: "bg-purple-100 text-purple-700 border-purple-200" },
-  WAITING_CUSTOMER: { label: "Awaiting Customer", color: "bg-amber-100 text-amber-700 border-amber-200" },
-  WAITING_AGENT: { label: "Awaiting Agent", color: "bg-orange-100 text-orange-700 border-orange-200" },
-  RESOLVED: { label: "Resolved", color: "bg-green-100 text-green-700 border-green-200" },
-  CLOSED: { label: "Closed", color: "bg-gray-100 text-gray-700 border-gray-200" },
+  OPEN:             { label: "Open",              color: "admin-status-info"       },
+  IN_PROGRESS:      { label: "In Progress",       color: "admin-status-hold"       },
+  WAITING_CUSTOMER: { label: "Awaiting Customer", color: "admin-status-warning"    },
+  WAITING_AGENT:    { label: "Awaiting Agent",    color: "admin-status-processing" },
+  RESOLVED:         { label: "Resolved",          color: "admin-status-success"    },
+  CLOSED:           { label: "Closed",            color: "admin-status-neutral"    },
 };
 
 const priorityConfig: Record<TicketPriority, { label: string; color: string }> = {
-  LOW: { label: "Low", color: "bg-gray-100 text-gray-700" },
-  MEDIUM: { label: "Medium", color: "bg-blue-100 text-blue-700" },
-  HIGH: { label: "High", color: "bg-orange-100 text-orange-700" },
-  URGENT: { label: "Urgent", color: "bg-red-100 text-red-700" },
+  LOW:    { label: "Low",    color: "admin-status-neutral"    },
+  MEDIUM: { label: "Medium", color: "admin-status-info"       },
+  HIGH:   { label: "High",   color: "admin-status-processing" },
+  URGENT: { label: "Urgent", color: "admin-status-error"      },
 };
 
 export function TicketDetailClient({
@@ -345,7 +345,7 @@ export function TicketDetailClient({
                 Close Ticket
               </DropdownMenuItem>
               <DropdownMenuSeparator />
-              <DropdownMenuItem className="text-red-600">
+              <DropdownMenuItem className="text-[var(--ast-error-text)]">
                 <Trash2 className="mr-2 h-4 w-4" />
                 Delete Ticket
               </DropdownMenuItem>

@@ -12,7 +12,7 @@ interface TestimonialsRailViewProps {
 }
 
 /** Star SVG matching v3-forge design (filled, coral) */
-function StarIcon({ color = "#ff6a3d" }: { color?: string }) {
+function StarIcon({ color = "#8A6F3E" }: { color?: string }) {
   return (
     <svg
       viewBox="0 0 24 24"
@@ -30,7 +30,7 @@ function StarIcon({ color = "#ff6a3d" }: { color?: string }) {
 
 /** Default avatar colors per index */
 const AVATAR_COLORS = [
-  "rgba(232,76,30,0.7)",
+  "rgba(138,111,62,0.7)",
   "rgba(5,150,105,0.7)",
   "rgba(124,58,237,0.7)",
   "rgba(220,38,38,0.6)",
@@ -39,7 +39,7 @@ const AVATAR_COLORS = [
   "rgba(239,68,68,0.6)",
   "rgba(16,185,129,0.6)",
   "rgba(59,130,246,0.6)",
-  "rgba(168,85,247,0.6)",
+  "rgba(138,111,62,0.6)",
 ];
 
 export function TestimonialsRailView({
@@ -47,7 +47,7 @@ export function TestimonialsRailView({
   settings,
 }: TestimonialsRailViewProps) {
   const { carouselView, content } = settings;
-  const ratingColor = content.ratingColor || "#ff6a3d";
+  const ratingColor = content.ratingColor || "#8A6F3E";
 
   const railRef = useRef<HTMLDivElement>(null);
   const outerRef = useRef<HTMLDivElement>(null);
@@ -182,10 +182,10 @@ export function TestimonialsRailView({
               )}
               style={{
                 background: i === currentIndex
-                  ? (carouselView.navigation.pagination.activeColor || "#ff6a3d")
+                  ? (carouselView.navigation.pagination.activeColor || "#8A6F3E")
                   : (carouselView.navigation.pagination.inactiveColor || "rgba(255,255,255,0.2)"),
                 ...(i === currentIndex
-                  ? { borderRadius: "5px", borderColor: "rgba(232,76,30,0.3)" }
+                  ? { borderRadius: "5px", borderColor: "rgba(138,111,62,0.3)" }
                   : {}),
               }}
               aria-label={`Go to card ${i + 1}`}
@@ -238,7 +238,7 @@ function RailCard({
       }}
       onMouseEnter={(e) => {
         e.currentTarget.style.transform = "translateY(-4px)";
-        e.currentTarget.style.boxShadow = "0 12px 32px rgba(168,85,247,0.15)";
+        e.currentTarget.style.boxShadow = "0 12px 32px rgba(138,111,62,0.15)";
         e.currentTarget.style.background = "#faf5ff";
         e.currentTarget.style.borderColor = "#e9d5ff";
       }}
@@ -280,7 +280,7 @@ function RailCard({
           height: "2px",
           width: "48px",
           borderRadius: "999px",
-          background: "linear-gradient(to right, #a855f7, #ec4899)",
+          background: "linear-gradient(to right, #8A6F3E, #E4A93B)",
           margin: "20px 0 16px",
         }}
       />
@@ -298,7 +298,7 @@ function RailCard({
         ) : (
           <div
             className="shrink-0 flex items-center justify-center rounded-full text-white font-semibold text-sm"
-            style={{ width: "44px", height: "44px", background: "#ec4899" }}
+            style={{ width: "44px", height: "44px", background: "#E4A93B" }}
           >
             {getInitials(testimonial.name)}
           </div>

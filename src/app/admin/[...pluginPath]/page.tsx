@@ -56,8 +56,8 @@ function PluginPageFallback({
         {/* Status Card */}
         <div className="rounded-xl border bg-card p-6 mb-6 shadow-sm">
           <div className="flex items-start gap-4">
-            <div className="h-12 w-12 rounded-full bg-green-100 dark:bg-green-900/30 flex items-center justify-center flex-shrink-0">
-              <CheckCircle className="h-6 w-6 text-green-600 dark:text-green-400" />
+            <div className="h-12 w-12 rounded-full bg-[var(--ast-success-bg)] flex items-center justify-center flex-shrink-0">
+              <CheckCircle className="h-6 w-6 text-[var(--ast-success-icon)]" />
             </div>
             <div>
               <h2 className="font-semibold text-lg mb-1">Plugin Active</h2>

@@ -671,7 +671,7 @@ export default function TickerPage() {
                             updateTicker(ticker.id, { isActive: checked })
                           }
                         />
-                        <Power className={`h-3.5 w-3.5 ${ticker.isActive ? "text-green-500" : "text-muted-foreground"}`} />
+                        <Power className={`h-3.5 w-3.5 ${ticker.isActive ? "text-[var(--ast-success-icon)]" : "text-muted-foreground"}`} />
                       </div>
 
                       <Button

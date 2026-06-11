@@ -35,7 +35,7 @@ function getBadgeStyles(
       return {
         className: cn(baseClasses, "rounded-md border-0"),
         style: {
-          backgroundColor: colors.bgColor || "#f97316",
+          backgroundColor: colors.bgColor || "#8A6F3E",
           color: colors.textColor || "#ffffff",
         },
       };
@@ -81,7 +81,7 @@ function renderHighlightedText(
     parts.forEach((part, partIdx) => {
       if (part.toLowerCase() === highlightWords.toLowerCase()) {
         elements.push(
-          <span key={`hl-${lineIdx}-${partIdx}`} style={{ color: highlightColor || "#f97316" }}>
+          <span key={`hl-${lineIdx}-${partIdx}`} style={{ color: highlightColor || "#8A6F3E" }}>
             {part}
           </span>
         );

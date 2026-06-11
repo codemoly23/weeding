@@ -19,8 +19,8 @@ const FOREST = "#1b3a2d";
 const FOREST_DARK = "#0f2318";
 const FOREST_LIGHT = "rgba(27,58,45,0.07)";
 const FOREST_BG = "rgba(27,58,45,0.08)";
-const CORAL = "#e84c1e";
-const CORAL_DARK = "#d13d10";
+const CORAL = "#8A6F3E";
+const CORAL_DARK = "#6B5530";
 const INK = "#0e1109";
 const TEXT_MID = "#4b5249";
 const TEXT_FAINT = "#8a9086";
@@ -207,7 +207,7 @@ export function PricingCardsForge({
   const buttonStyles: Record<string, string> = {
     "outline-dark": `bg-transparent text-[${INK}] border-[1.5px] border-[${BORDER}] hover:border-[${INK}] hover:bg-[${FOREST_LIGHT}]`,
     forest: `bg-[${FOREST}] text-white border-[1.5px] border-[${FOREST}] hover:bg-[${FOREST_DARK}] hover:shadow-[0_8px_24px_rgba(27,58,45,0.3)] hover:-translate-y-0.5`,
-    coral: `bg-[${CORAL}] text-white border-[1.5px] border-[${CORAL}] hover:bg-[${CORAL_DARK}] hover:shadow-[0_8px_24px_rgba(232,76,30,0.35)] hover:-translate-y-0.5`,
+    coral: `bg-[${CORAL}] text-white border-[1.5px] border-[${CORAL}] hover:bg-[${CORAL_DARK}] hover:shadow-[0_8px_24px_rgba(138,111,62,0.35)] hover:-translate-y-0.5`,
   };
 
   return (

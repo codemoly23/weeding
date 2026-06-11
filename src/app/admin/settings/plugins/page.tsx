@@ -85,22 +85,22 @@ interface Plugin {
 const statusConfig = {
   ACTIVE: {
     label: "Active",
-    color: "bg-green-100 text-green-800 border-green-200",
+    color: "admin-status-success",
     icon: CheckCircle2,
   },
   INSTALLED: {
     label: "Installed",
-    color: "bg-amber-100 text-amber-800 border-amber-200",
+    color: "admin-status-warning",
     icon: Package,
   },
   DISABLED: {
     label: "Disabled",
-    color: "bg-gray-100 text-gray-800 border-gray-200",
+    color: "admin-status-neutral",
     icon: PowerOff,
   },
   ERROR: {
     label: "Error",
-    color: "bg-red-100 text-red-800 border-red-200",
+    color: "admin-status-error",
     icon: XCircle,
   },
 };
@@ -270,12 +270,12 @@ export default function PluginsPage() {
               <div
                 className={`absolute top-0 left-0 right-0 h-1 ${
                   plugin.status === "ACTIVE"
-                    ? "bg-green-500"
+                    ? "bg-[var(--ast-success-icon)]"
                     : plugin.status === "ERROR"
-                    ? "bg-red-500"
+                    ? "bg-[var(--ast-error-icon)]"
                     : plugin.status === "DISABLED"
-                    ? "bg-gray-400"
-                    : "bg-amber-500"
+                    ? "bg-[var(--ast-neutral-icon)]"
+                    : "bg-[var(--ast-warning-icon)]"
                 }`}
               />
 
@@ -359,8 +359,8 @@ export default function PluginsPage() {
 
                 {/* Error message */}
                 {plugin.status === "ERROR" && plugin.lastError && (
-                  <div className="bg-red-50 border border-red-200 rounded-md p-2">
-                    <p className="text-xs text-red-700 flex items-start gap-1">
+                  <div className="bg-[var(--ast-error-bg)] border border-[var(--ast-error-border)] rounded-md p-2">
+                    <p className="text-xs text-[var(--ast-error-text)] flex items-start gap-1">
                       <AlertCircle className="h-3 w-3 mt-0.5 flex-shrink-0" />
                       <span className="line-clamp-2">{plugin.lastError}</span>
                     </p>

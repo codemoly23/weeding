@@ -130,7 +130,7 @@ export function ImageWidget({ settings, isPreview = false }: ImageWidgetProps) {
       case "xl": return "0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1)";
       case "2xl": return "0 25px 50px -12px rgb(0 0 0 / 0.25)";
       case "inner": return "inset 0 2px 4px 0 rgb(0 0 0 / 0.05)";
-      case "glow": return `0 0 40px ${shadowColor || "#f97316"}66`;
+      case "glow": return `0 0 40px ${shadowColor || "#8A6F3E"}66`;
       default: return "none";
     }
   };
@@ -367,7 +367,7 @@ export function ImageWidget({ settings, isPreview = false }: ImageWidgetProps) {
         <div
           className="absolute inset-0 opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity"
           style={{
-            boxShadow: `inset 0 0 60px ${shadowColor || "#f97316"}44`,
+            boxShadow: `inset 0 0 60px ${shadowColor || "#8A6F3E"}44`,
             transitionDuration: `${hoverTransitionDuration}ms`,
           }}
         />

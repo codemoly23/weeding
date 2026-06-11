@@ -162,7 +162,7 @@
   /* Blockquote */
   blockquote {
     border-left: var(--text-block-blockquote-border-width, 4px) solid
-      var(--text-block-blockquote-border-color, #f97316) !important;
+      var(--text-block-blockquote-border-color, #8A6F3E) !important;
     background-color: var(--text-block-blockquote-bg, transparent) !important;
     padding: var(--text-block-blockquote-padding, 16px) !important;
     padding-left: calc(var(--text-block-blockquote-padding, 16px) + 8px) !important;
@@ -256,7 +256,7 @@
 .text-block-content.prose blockquote {
   border-left-width: var(--text-block-blockquote-border-width, 4px) !important;
   border-left-style: solid !important;
-  border-left-color: var(--text-block-blockquote-border-color, #f97316) !important;
+  border-left-color: var(--text-block-blockquote-border-color, #8A6F3E) !important;
   background-color: var(--text-block-blockquote-bg, transparent) !important;
   padding: var(--text-block-blockquote-padding, 16px) !important;
   padding-left: calc(var(--text-block-blockquote-padding, 16px) + 8px) !important;
@@ -277,7 +277,7 @@
   padding-right: 0.1em;
   padding-top: 0.1em;
   font-weight: 700 !important;
-  color: var(--drop-cap-color, #f97316) !important;
+  color: var(--drop-cap-color, #8A6F3E) !important;
   font-family: var(--drop-cap-font-family, inherit);
 }
 

@@ -26,7 +26,7 @@ function Stars({ rating }: { rating: number }) {
   return (
     <div className="flex gap-0.5">
       {[1, 2, 3, 4, 5].map((n) => (
-        <Star key={n} className={`w-3.5 h-3.5 ${n <= rating ? "fill-yellow-400 text-yellow-400" : "fill-gray-200 text-gray-200"}`} />
+        <Star key={n} className={`w-3.5 h-3.5 ${n <= rating ? "fill-[var(--admin-star)] text-[var(--admin-star)]" : "fill-[var(--ast-neutral-border)] text-[var(--ast-neutral-border)]"}`} />
       ))}
     </div>
   );
@@ -89,9 +89,9 @@ export default function AdminVendorReviewsPage() {
   }
 
   const statCards = [
-    { label: "Pending Approval", value: stats.pending, color: "text-yellow-700" },
-    { label: "Approved", value: stats.approved, color: "text-green-700" },
-    { label: "Total", value: stats.pending + stats.approved, color: "text-gray-900" },
+    { label: "Pending Approval", value: stats.pending, color: "text-[var(--ast-warning-text)]" },
+    { label: "Approved", value: stats.approved, color: "text-[var(--ast-success-text)]" },
+    { label: "Total", value: stats.pending + stats.approved, color: "text-foreground" },
   ];
 
   return (
@@ -121,7 +121,7 @@ export default function AdminVendorReviewsPage() {
             onClick={() => { setStatus(f); setPage(1); }}
             className={`px-4 py-1.5 rounded-lg text-sm font-medium capitalize transition-colors ${
               status === f
-                ? "bg-purple-600 text-white"
+                ? "bg-[var(--admin-primary)] text-[var(--admin-primary-fg)]"
                 : "bg-white border border-gray-200 text-gray-600 hover:bg-gray-50"
             }`}
           >
@@ -133,7 +133,7 @@ export default function AdminVendorReviewsPage() {
       {/* Reviews list */}
       {loading ? (
         <div className="flex justify-center py-12">
-          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-purple-600" />
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[var(--admin-primary)]" />
         </div>
       ) : reviews.length === 0 ? (
         <div className="bg-white rounded-xl border border-gray-200 px-6 py-14 text-center">
@@ -150,7 +150,7 @@ export default function AdminVendorReviewsPage() {
                   <div className="flex items-center gap-3 flex-wrap mb-1">
                     <span className="font-semibold text-gray-900">{r.authorName}</span>
                     <Stars rating={r.rating} />
-                    <Badge variant={r.isApproved ? "default" : "secondary"} className={r.isApproved ? "bg-green-100 text-green-700 border-green-200" : "bg-yellow-100 text-yellow-700 border-yellow-200"}>
+                    <Badge variant="outline" className={r.isApproved ? "admin-status-success" : "admin-status-warning"}>
                       {r.isApproved ? "Approved" : "Pending"}
                     </Badge>
                   </div>
@@ -160,7 +160,7 @@ export default function AdminVendorReviewsPage() {
                     <Link
                       href={`/vendors/${r.vendor.slug}`}
                       target="_blank"
-                      className="text-xs text-purple-600 hover:underline flex items-center gap-0.5"
+                      className="text-xs text-[var(--admin-primary)] hover:underline flex items-center gap-0.5"
                     >
                       {r.vendor.businessName} <ExternalLink className="w-3 h-3" />
                     </Link>
@@ -172,7 +172,7 @@ export default function AdminVendorReviewsPage() {
                     <p className="text-sm text-gray-700 leading-relaxed">{r.comment}</p>
                   )}
                   {r.reply && (
-                    <div className="mt-2 pl-3 border-l-2 border-purple-200">
+                    <div className="mt-2 pl-3 border-l-2 border-[var(--ast-hold-border)]">
                       <p className="text-xs text-gray-400 mb-0.5">Vendor reply:</p>
                       <p className="text-sm text-gray-600">{r.reply}</p>
                     </div>
@@ -185,7 +185,7 @@ export default function AdminVendorReviewsPage() {
                     <button
                       onClick={() => approve(r.id)}
                       disabled={!!actionLoading}
-                      className="flex items-center gap-1 px-3 py-1.5 bg-green-600 hover:bg-green-700 disabled:opacity-60 text-white text-xs font-medium rounded-lg transition-colors"
+                      className="flex items-center gap-1 px-3 py-1.5 bg-[var(--ast-success-icon)] hover:bg-[var(--ast-success-text)] disabled:opacity-60 text-white text-xs font-medium rounded-lg transition-colors"
                     >
                       <Check className="w-3.5 h-3.5" />
                       {actionLoading === r.id + "_approve" ? "..." : "Approve"}
@@ -195,7 +195,7 @@ export default function AdminVendorReviewsPage() {
                     <button
                       onClick={() => reject(r.id)}
                       disabled={!!actionLoading}
-                      className="flex items-center gap-1 px-3 py-1.5 bg-yellow-100 hover:bg-yellow-200 disabled:opacity-60 text-yellow-800 text-xs font-medium rounded-lg transition-colors"
+                      className="flex items-center gap-1 px-3 py-1.5 bg-[var(--ast-warning-bg)] hover:bg-[var(--ast-warning-border)] disabled:opacity-60 text-[var(--ast-warning-text)] text-xs font-medium rounded-lg transition-colors"
                     >
                       <X className="w-3.5 h-3.5" />
                       {actionLoading === r.id + "_reject" ? "..." : "Unapprove"}
@@ -204,7 +204,7 @@ export default function AdminVendorReviewsPage() {
                   <button
                     onClick={() => remove(r.id)}
                     disabled={!!actionLoading}
-                    className="flex items-center gap-1 px-3 py-1.5 bg-red-50 hover:bg-red-100 disabled:opacity-60 text-red-600 text-xs font-medium rounded-lg transition-colors"
+                    className="flex items-center gap-1 px-3 py-1.5 bg-[var(--ast-error-bg)] hover:bg-[var(--ast-error-bg)] disabled:opacity-60 text-[var(--ast-error-icon)] text-xs font-medium rounded-lg transition-colors"
                   >
                     <Trash2 className="w-3.5 h-3.5" />
                     {actionLoading === r.id + "_delete" ? "..." : "Delete"}

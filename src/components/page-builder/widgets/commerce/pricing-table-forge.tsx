@@ -183,7 +183,7 @@ export function PricingTableForge({
     forest:
       "bg-[#1b3a2d] text-white border-[1.5px] border-[#1b3a2d] hover:bg-[#0f2318] hover:shadow-[0_8px_24px_rgba(27,58,45,0.3)] hover:-translate-y-0.5",
     coral:
-      "bg-[#e84c1e] text-white border-[1.5px] border-[#e84c1e] hover:bg-[#d13d10] hover:shadow-[0_8px_24px_rgba(232,76,30,0.35)] hover:-translate-y-0.5",
+      "bg-[#8A6F3E] text-white border-[1.5px] border-[#8A6F3E] hover:bg-[#6B5530] hover:shadow-[0_8px_24px_rgba(138,111,62,0.35)] hover:-translate-y-0.5",
   };
 
   // Determine which column is "active" (recommended/popular or selected)
@@ -243,7 +243,7 @@ export function PricingTableForge({
                         className="absolute -top-[13px] left-1/2 -translate-x-1/2 px-3.5 py-1 rounded-full text-[10px] font-bold uppercase tracking-[0.6px] text-white whitespace-nowrap z-[3]"
                         style={{
                           fontFamily: "var(--font-heading)",
-                          backgroundColor: "#e84c1e",
+                          backgroundColor: "#8A6F3E",
                         }}
                       >
                         Recommended

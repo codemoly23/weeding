@@ -227,7 +227,7 @@ function SlideContent({
         const regex = new RegExp(`(${word})`, "gi");
         result = result.replace(
           regex,
-          `<span style="color: ${highlightColor || '#f97316'}">$1</span>`
+          `<span style="color: ${highlightColor || '#8A6F3E'}">$1</span>`
         );
       }
     });
@@ -732,7 +732,7 @@ export function ImageSliderWidget({ settings, isPreview = false }: ImageSliderWi
               settings.navigation.arrows.style === "square" && "w-10 h-10 rounded-md",
               settings.navigation.arrows.style === "floating" && "w-12 h-12 rounded-full shadow-lg",
               settings.navigation.arrows.hoverEffect === "scale" && "hover:scale-110",
-              settings.navigation.arrows.hoverEffect === "glow" && "hover:shadow-lg hover:shadow-orange-500/30"
+              settings.navigation.arrows.hoverEffect === "glow" && "hover:shadow-lg hover:shadow-[#8A6F3E]/30"
             )}
             style={{
               color: settings.navigation.arrows.color || "#ffffff",
@@ -766,7 +766,7 @@ export function ImageSliderWidget({ settings, isPreview = false }: ImageSliderWi
               settings.navigation.arrows.style === "square" && "w-10 h-10 rounded-md",
               settings.navigation.arrows.style === "floating" && "w-12 h-12 rounded-full shadow-lg",
               settings.navigation.arrows.hoverEffect === "scale" && "hover:scale-110",
-              settings.navigation.arrows.hoverEffect === "glow" && "hover:shadow-lg hover:shadow-orange-500/30"
+              settings.navigation.arrows.hoverEffect === "glow" && "hover:shadow-lg hover:shadow-[#8A6F3E]/30"
             )}
             style={{
               color: settings.navigation.arrows.color || "#ffffff",
@@ -828,7 +828,7 @@ export function ImageSliderWidget({ settings, isPreview = false }: ImageSliderWi
                   settings.navigation.thumbnails.activeStyle === "scale" &&
                     (index === activeIndex ? "scale-100" : "scale-90"),
                   settings.navigation.thumbnails.activeStyle === "border" &&
-                    index === activeIndex && "ring-2 ring-orange-500"
+                    index === activeIndex && "ring-2 ring-[#8A6F3E]"
                 )}
                 style={{
                   width: settings.navigation.thumbnails.size,
@@ -869,7 +869,7 @@ export function ImageSliderWidget({ settings, isPreview = false }: ImageSliderWi
           margin: 0 4px !important;
         }
         .image-slider-widget .swiper-pagination-bullet-active {
-          background-color: ${settings.navigation.pagination.activeColor || "#f97316"};
+          background-color: ${settings.navigation.pagination.activeColor || "#8A6F3E"};
         }
 
         /* Dynamic Bullets */
@@ -894,7 +894,7 @@ export function ImageSliderWidget({ settings, isPreview = false }: ImageSliderWi
           height: 4px;
         }
         .image-slider-widget .swiper-pagination-progressbar-fill {
-          background-color: ${settings.navigation.pagination.activeColor || "#f97316"};
+          background-color: ${settings.navigation.pagination.activeColor || "#8A6F3E"};
         }
 
         /* Fraction */

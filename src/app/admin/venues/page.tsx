@@ -112,7 +112,7 @@ function InlineEdit({
           >
             {types.map((t) => <option key={t} value={t}>{t}</option>)}
           </select>
-          <button onClick={handleSave} disabled={saving} className="rounded p-0.5 text-green-600 hover:bg-green-50">
+          <button onClick={handleSave} disabled={saving} className="rounded p-0.5 text-[var(--ast-success-icon)] hover:bg-[var(--ast-success-bg)]">
             {saving ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <Check className="h-3.5 w-3.5" />}
           </button>
           <button onClick={() => setEditing(false)} className="rounded p-0.5 text-muted-foreground hover:bg-muted">
@@ -132,7 +132,7 @@ function InlineEdit({
           >
             {BADGE_COLOR_OPTIONS.map((o) => <option key={o.value} value={o.value}>{o.label}</option>)}
           </select>
-          <button onClick={handleSave} disabled={saving} className="rounded p-0.5 text-green-600 hover:bg-green-50">
+          <button onClick={handleSave} disabled={saving} className="rounded p-0.5 text-[var(--ast-success-icon)] hover:bg-[var(--ast-success-bg)]">
             {saving ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <Check className="h-3.5 w-3.5" />}
           </button>
           <button onClick={() => setEditing(false)} className="rounded p-0.5 text-muted-foreground hover:bg-muted">
@@ -151,7 +151,7 @@ function InlineEdit({
           onKeyDown={(e) => { if (e.key === "Enter") handleSave(); if (e.key === "Escape") setEditing(false); }}
           className="w-28 rounded border border-primary/40 bg-background px-1.5 py-0.5 text-xs focus:outline-none focus:ring-1 focus:ring-ring"
         />
-        <button onClick={handleSave} disabled={saving} className="rounded p-0.5 text-green-600 hover:bg-green-50">
+        <button onClick={handleSave} disabled={saving} className="rounded p-0.5 text-[var(--ast-success-icon)] hover:bg-[var(--ast-success-bg)]">
           {saving ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <Check className="h-3.5 w-3.5" />}
         </button>
         <button onClick={() => setEditing(false)} className="rounded p-0.5 text-muted-foreground hover:bg-muted">
@@ -295,9 +295,9 @@ function VenueCard({
   const [deleting, setDeleting] = useState(false);
 
   const badgeColorMap: Record<string, string> = {
-    purple: "bg-violet-100 text-violet-700",
-    orange: "bg-orange-100 text-orange-700",
-    green: "bg-green-100 text-green-700",
+    purple: "bg-[var(--ast-hold-bg)] text-[var(--ast-hold-text)]",
+    orange: "bg-[var(--ast-processing-bg)] text-[var(--ast-processing-text)]",
+    green:  "bg-[var(--ast-success-bg)] text-[var(--ast-success-text)]",
   };
 
   return (
@@ -326,7 +326,7 @@ function VenueCard({
               </span>
             )}
             {venue.isFeatured && (
-              <span className="rounded-full bg-amber-100 text-amber-700 px-1.5 py-0.5 text-[10px] font-semibold">Featured</span>
+              <span className="rounded-full bg-[var(--ast-warning-bg)] text-[var(--ast-warning-text)] px-1.5 py-0.5 text-[10px] font-semibold">Featured</span>
             )}
           </div>
           <div className="flex items-center gap-3 text-xs text-muted-foreground">
@@ -340,11 +340,11 @@ function VenueCard({
             )}
             {venue.rating > 0 && (
               <span className="flex items-center gap-0.5">
-                <Star className="h-3 w-3 fill-amber-400 text-amber-400" /> {venue.rating}
+                <Star className="h-3 w-3 fill-[var(--admin-star)] text-[var(--admin-star)]" /> {venue.rating}
               </span>
             )}
             {venue.price && (
-              <span className="font-medium text-pink-600">{venue.price.toLocaleString()}{venue.priceUnit}</span>
+              <span className="font-medium text-[var(--ast-processing-icon)]">{venue.price.toLocaleString()}{venue.priceUnit}</span>
             )}
           </div>
           {venue.tags.length > 0 && (
@@ -381,13 +381,13 @@ function VenueCard({
         <div className="ml-auto flex items-center gap-2">
           <button
             onClick={() => onToggleFeatured(venue.id, !venue.isFeatured)}
-            className={`rounded-full px-2 py-0.5 text-[10px] font-medium transition-colors ${venue.isFeatured ? "bg-amber-100 text-amber-700 hover:bg-amber-200" : "bg-muted text-muted-foreground hover:bg-muted/80"}`}
+            className={`rounded-full px-2 py-0.5 text-[10px] font-medium transition-colors ${venue.isFeatured ? "bg-[var(--ast-warning-bg)] text-[var(--ast-warning-text)] hover:bg-[var(--ast-warning-border)]" : "bg-muted text-muted-foreground hover:bg-muted/80"}`}
           >
             {venue.isFeatured ? "★ Featured" : "☆ Feature"}
           </button>
           <button
             onClick={() => onToggleActive(venue.id, !venue.isActive)}
-            className={`rounded-full px-2 py-0.5 text-[10px] font-medium transition-colors ${venue.isActive ? "bg-green-100 text-green-700 hover:bg-green-200" : "bg-muted text-muted-foreground hover:bg-muted/80"}`}
+            className={`rounded-full px-2 py-0.5 text-[10px] font-medium transition-colors ${venue.isActive ? "bg-[var(--ast-success-bg)] text-[var(--ast-success-text)] hover:bg-[var(--ast-success-border)]" : "bg-muted text-muted-foreground hover:bg-muted/80"}`}
           >
             {venue.isActive ? "Active" : "Inactive"}
           </button>
@@ -463,8 +463,8 @@ export default function VenuesPage() {
       <div className="rounded-2xl bg-white border border-border p-6">
         <div className="flex items-start justify-between gap-4">
           <div className="flex items-center gap-4">
-            <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-purple-50 border border-purple-100">
-              <Building2 className="h-6 w-6 text-purple-600" />
+            <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-[var(--ast-hold-bg)] border border-[var(--ast-hold-border)]">
+              <Building2 className="h-6 w-6 text-[var(--admin-primary)]" />
             </div>
             <div>
               <h1 className="text-2xl font-bold text-gray-900">Venues</h1>
@@ -474,8 +474,8 @@ export default function VenuesPage() {
             </div>
           </div>
           {!loading && (
-            <div className="shrink-0 rounded-xl bg-purple-50 border border-purple-100 px-4 py-2 text-center">
-              <p className="text-2xl font-bold text-purple-700">{venues.length}</p>
+            <div className="shrink-0 rounded-xl bg-[var(--ast-hold-bg)] border border-[var(--ast-hold-border)] px-4 py-2 text-center">
+              <p className="text-2xl font-bold text-[var(--ast-hold-text)]">{venues.length}</p>
               <p className="text-xs text-muted-foreground">Total venues</p>
             </div>
           )}

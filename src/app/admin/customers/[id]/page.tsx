@@ -115,13 +115,13 @@ const getCustomer = (id: string) => ({
 });
 
 const statusColors: Record<string, string> = {
-  processing: "bg-blue-100 text-blue-700",
-  completed: "bg-green-100 text-green-700",
-  pending: "bg-amber-100 text-amber-700",
-  open: "bg-blue-100 text-blue-700",
-  resolved: "bg-green-100 text-green-700",
-  approved: "bg-green-100 text-green-700",
-  ready: "bg-green-100 text-green-700",
+  processing: "admin-status-info",
+  completed:  "admin-status-success",
+  pending:    "admin-status-warning",
+  open:       "admin-status-info",
+  resolved:   "admin-status-success",
+  approved:   "admin-status-success",
+  ready:      "admin-status-success",
 };
 
 export default async function AdminCustomerDetailPage({ params }: PageProps) {
@@ -159,8 +159,8 @@ export default async function AdminCustomerDetailPage({ params }: PageProps) {
                 variant="secondary"
                 className={
                   customer.status === "active"
-                    ? "bg-green-100 text-green-700"
-                    : "bg-gray-100 text-gray-700"
+                    ? "admin-status-success"
+                    : "admin-status-neutral"
                 }
               >
                 {customer.status}

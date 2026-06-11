@@ -138,30 +138,30 @@ interface Note {
 }
 
 const statusColors: Record<string, string> = {
-  NEW: "bg-blue-100 text-blue-700",
-  CONTACTED: "bg-purple-100 text-purple-700",
-  QUALIFIED: "bg-emerald-100 text-emerald-700",
-  PROPOSAL: "bg-amber-100 text-amber-700",
-  NEGOTIATION: "bg-orange-100 text-orange-700",
-  WON: "bg-green-100 text-green-700",
-  LOST: "bg-red-100 text-red-700",
-  UNQUALIFIED: "bg-gray-100 text-gray-700",
+  NEW:         "admin-status-info",
+  CONTACTED:   "admin-status-hold",
+  QUALIFIED:   "admin-status-success",
+  PROPOSAL:    "admin-status-warning",
+  NEGOTIATION: "admin-status-processing",
+  WON:         "admin-status-success",
+  LOST:        "admin-status-error",
+  UNQUALIFIED: "admin-status-neutral",
 };
 
 const activityIcons: Record<string, React.ReactNode> = {
-  lead_created: <CheckCircle className="h-4 w-4 text-green-500" />,
-  status_change: <Activity className="h-4 w-4 text-blue-500" />,
-  note_added: <MessageSquare className="h-4 w-4 text-purple-500" />,
-  assignment_change: <UserPlus className="h-4 w-4 text-orange-500" />,
-  email_sent: <Send className="h-4 w-4 text-blue-500" />,
-  call_made: <Phone className="h-4 w-4 text-green-500" />,
-  score_updated: <Flame className="h-4 w-4 text-orange-500" />,
+  lead_created:      <CheckCircle className="h-4 w-4 text-[var(--ast-success-icon)]" />,
+  status_change:     <Activity className="h-4 w-4 text-[var(--ast-info-icon)]" />,
+  note_added:        <MessageSquare className="h-4 w-4 text-[var(--ast-hold-icon)]" />,
+  assignment_change: <UserPlus className="h-4 w-4 text-[var(--ast-processing-icon)]" />,
+  email_sent:        <Send className="h-4 w-4 text-[var(--ast-info-icon)]" />,
+  call_made:         <Phone className="h-4 w-4 text-[var(--ast-success-icon)]" />,
+  score_updated:     <Flame className="h-4 w-4 text-[var(--ast-processing-icon)]" />,
 };
 
 function getScoreIcon(score: number) {
-  if (score >= 70) return <Flame className="h-5 w-5 text-red-500" />;
-  if (score >= 40) return <Thermometer className="h-5 w-5 text-orange-500" />;
-  return <Snowflake className="h-5 w-5 text-blue-500" />;
+  if (score >= 70) return <Flame className="h-5 w-5 text-[var(--ast-error-icon)]" />;
+  if (score >= 40) return <Thermometer className="h-5 w-5 text-[var(--ast-processing-icon)]" />;
+  return <Snowflake className="h-5 w-5 text-[var(--ast-info-icon)]" />;
 }
 
 function getScoreLabel(score: number) {
@@ -461,7 +461,7 @@ export default function LeadDetailPage({ params }: { params: Promise<{ id: strin
                 </Button>
               )}
               {lead.convertedAt && (
-                <Badge className="bg-green-100 text-green-700">
+                <Badge className="admin-status-success">
                   <CheckCircle className="mr-1 h-3 w-3" />
                   Converted
                 </Badge>
@@ -742,7 +742,7 @@ export default function LeadDetailPage({ params }: { params: Promise<{ id: strin
                     {lead.activities.map((activity) => (
                       <div key={activity.id} className="flex gap-4">
                         <div className="flex-shrink-0 mt-1">
-                          {activityIcons[activity.type] || <Activity className="h-4 w-4 text-gray-500" />}
+                          {activityIcons[activity.type] || <Activity className="h-4 w-4 text-[var(--ast-neutral-icon)]" />}
                         </div>
                         <div className="flex-1">
                           <div className="font-medium">{activity.description}</div>
@@ -801,7 +801,7 @@ export default function LeadDetailPage({ params }: { params: Promise<{ id: strin
                               {formatDistanceToNow(new Date(note.createdAt), { addSuffix: true })}
                             </span>
                           </div>
-                          {note.isPinned && <Pin className="h-4 w-4 text-amber-500" />}
+                          {note.isPinned && <Pin className="h-4 w-4 text-[var(--ast-warning-icon)]" />}
                         </div>
                         <div className="mt-2 whitespace-pre-wrap">{note.content}</div>
                       </div>
@@ -941,7 +941,7 @@ export default function LeadDetailPage({ params }: { params: Promise<{ id: strin
           )}
 
           {lead.status === "QUALIFIED" && (
-            <Card className="border-green-200 bg-green-50">
+            <Card className="border-[var(--ast-success-border)] bg-[var(--ast-success-bg)]">
               <CardContent className="pt-6">
                 <Button className="w-full" variant="default">
                   <CheckCircle className="mr-2 h-4 w-4" />

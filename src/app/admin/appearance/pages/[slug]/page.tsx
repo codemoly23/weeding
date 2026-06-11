@@ -768,7 +768,7 @@ export default function PageEditorPage({ params }: { params: Promise<{ slug: str
           </Sheet>
 
           {isDirty && (
-            <span className="text-xs text-amber-500 font-medium">
+            <span className="text-xs text-[var(--ast-warning-icon)] font-medium">
               Unsaved changes
             </span>
           )}

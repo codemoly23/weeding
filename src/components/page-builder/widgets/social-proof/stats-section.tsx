@@ -325,7 +325,7 @@ export function StatsSectionWidget({ settings, isPreview = false }: StatsSection
 
   const layout = style.layout ?? "vertical";
   const useTheme = settings.colors?.useTheme !== false;
-  const iconColor = useTheme ? "var(--color-primary)" : (style.iconColor ?? "#f97316");
+  const iconColor = useTheme ? "var(--color-primary)" : (style.iconColor ?? "#8A6F3E");
   const iconSize = style.iconSize ?? "md";
   const labelSize = style.labelSize ?? "sm";
   const labelUppercase = style.labelUppercase ?? true; // backwards-compat default

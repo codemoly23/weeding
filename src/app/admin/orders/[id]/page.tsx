@@ -172,28 +172,28 @@ const PAYMENT_STATUS_OPTIONS: { value: PaymentStatus; label: string }[] = [
 ];
 
 const statusColors: Record<string, string> = {
-  PENDING: "bg-gray-100 text-gray-700",
-  PROCESSING: "bg-blue-100 text-blue-700",
-  IN_PROGRESS: "bg-amber-100 text-amber-700",
-  WAITING_FOR_INFO: "bg-purple-100 text-purple-700",
-  COMPLETED: "bg-green-100 text-green-700",
-  CANCELLED: "bg-red-100 text-red-700",
-  REFUNDED: "bg-gray-100 text-gray-700",
+  PENDING:          "admin-status-neutral",
+  PROCESSING:       "admin-status-info",
+  IN_PROGRESS:      "admin-status-warning",
+  WAITING_FOR_INFO: "admin-status-hold",
+  COMPLETED:        "admin-status-success",
+  CANCELLED:        "admin-status-error",
+  REFUNDED:         "admin-status-neutral",
 };
 
 const paymentStatusColors: Record<string, string> = {
-  PENDING: "bg-amber-100 text-amber-700",
-  PAID: "bg-green-100 text-green-700",
-  FAILED: "bg-red-100 text-red-700",
-  REFUNDED: "bg-gray-100 text-gray-700",
-  PARTIALLY_REFUNDED: "bg-orange-100 text-orange-700",
+  PENDING:            "admin-status-warning",
+  PAID:               "admin-status-success",
+  FAILED:             "admin-status-error",
+  REFUNDED:           "admin-status-neutral",
+  PARTIALLY_REFUNDED: "admin-status-processing",
 };
 
 const documentStatusColors: Record<string, string> = {
-  PENDING: "bg-amber-100 text-amber-700",
-  APPROVED: "bg-green-100 text-green-700",
-  REJECTED: "bg-red-100 text-red-700",
-  EXPIRED: "bg-gray-100 text-gray-700",
+  PENDING:  "admin-status-warning",
+  APPROVED: "admin-status-success",
+  REJECTED: "admin-status-error",
+  EXPIRED:  "admin-status-neutral",
 };
 
 // Timeline steps based on order status
@@ -972,7 +972,7 @@ export default function AdminOrderDetailPage({ params }: PageProps) {
               {parseFloat(order.discountUSD) > 0 && (
                 <div className="flex justify-between text-sm">
                   <span className="text-muted-foreground">Discount</span>
-                  <span className="text-green-600">-{fmtPrice(order.discountUSD)}</span>
+                  <span className="text-[var(--ast-success-icon)]">-{fmtPrice(order.discountUSD)}</span>
                 </div>
               )}
               <Separator />
@@ -1121,7 +1121,7 @@ export default function AdminOrderDetailPage({ params }: PageProps) {
                   <AlertDialogTrigger asChild>
                     <Button
                       variant="outline"
-                      className="w-full justify-start text-amber-600 hover:text-amber-600"
+                      className="w-full justify-start text-[var(--ast-warning-icon)] hover:text-[var(--ast-warning-icon)]"
                       disabled={isUpdating}
                     >
                       <X className="mr-2 h-4 w-4" />
@@ -1139,7 +1139,7 @@ export default function AdminOrderDetailPage({ params }: PageProps) {
                       <AlertDialogCancel>No, keep order</AlertDialogCancel>
                       <AlertDialogAction
                         onClick={handleCancelOrder}
-                        className="bg-amber-600 hover:bg-amber-700"
+                        className="bg-[var(--ast-warning-icon)] hover:bg-[var(--ast-warning-text)]"
                       >
                         Yes, cancel order
                       </AlertDialogAction>

@@ -330,7 +330,7 @@ export function paymentFailedEmail(data: OrderEmailData): string {
 export function adminNewOrderEmail(data: OrderEmailData): string {
   const content = `
     <div style="text-align: center; margin-bottom: 32px;">
-      ${statusBadge("New Order", "#8b5cf6")}
+      ${statusBadge("New Order", "#8A6F3E")}
     </div>
 
     <h2 style="margin: 0 0 16px; color: #1e293b; font-size: 24px; font-weight: 600; text-align: center;">

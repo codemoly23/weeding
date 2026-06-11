@@ -96,7 +96,7 @@ function getBadgeStyles(
       return {
         className: cn(baseClasses, "rounded-md border-0"),
         style: {
-          backgroundColor: colors.bgColor || "#f97316",
+          backgroundColor: colors.bgColor || "#8A6F3E",
           color: colors.textColor || "#ffffff",
         },
       };
@@ -129,7 +129,7 @@ function renderHighlightedText(
   return parts.map((part, index) => {
     if (part.toLowerCase() === highlightWords.toLowerCase()) {
       return (
-        <span key={index} style={{ color: highlightColor || "#f97316" }}>
+        <span key={index} style={{ color: highlightColor || "#8A6F3E" }}>
           {part}
         </span>
       );
@@ -303,7 +303,7 @@ function StyledButton({
       <PrimaryFlowButton
         asChild
         className="text-sm"
-        ringColor={btnStyle.bgColor || "#f97316"}
+        ringColor={btnStyle.bgColor || "#8A6F3E"}
       >
         <Link href={link} target={linkTarget} rel={linkRel}>
           {text}

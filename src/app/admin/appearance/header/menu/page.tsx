@@ -735,7 +735,7 @@ export default function MenuBuilderPage() {
               <Button
                 variant="ghost"
                 size="icon"
-                className="h-7 w-7 text-blue-500"
+                className="h-7 w-7 text-[var(--ast-info-icon)]"
                 title="Edit Featured Gallery"
                 onClick={() => openGalleryEditor(item)}
               >
@@ -747,7 +747,7 @@ export default function MenuBuilderPage() {
               <Button
                 variant="ghost"
                 size="icon"
-                className="h-7 w-7 text-emerald-600"
+                className="h-7 w-7 text-[var(--ast-success-icon)]"
                 title="Edit Forums Menu"
                 onClick={() => openForumsEditor(item)}
               >
@@ -759,7 +759,7 @@ export default function MenuBuilderPage() {
               <Button
                 variant="ghost"
                 size="icon"
-                className="h-7 w-7 text-violet-600"
+                className="h-7 w-7 text-[var(--admin-primary)]"
                 title="Edit Two-Column Menu"
                 onClick={() => openIdeasEditor(item)}
               >

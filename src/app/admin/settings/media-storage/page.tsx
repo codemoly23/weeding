@@ -172,8 +172,8 @@ export default function MediaStorageSettingsPage() {
         <CardHeader>
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
-              <div className="p-2 bg-orange-100 rounded-lg">
-                <Cloud className="h-6 w-6 text-orange-600" />
+              <div className="p-2 bg-[var(--ast-processing-bg)] rounded-lg">
+                <Cloud className="h-6 w-6 text-[var(--ast-processing-icon)]" />
               </div>
               <div>
                 <CardTitle>Cloudflare R2 Storage</CardTitle>
@@ -184,7 +184,7 @@ export default function MediaStorageSettingsPage() {
             </div>
             <div className="flex items-center gap-2">
               {connectionStatus === "success" && (
-                <Badge variant="default" className="bg-green-500">
+                <Badge variant="default" className="bg-[var(--ast-success-icon)]">
                   <CheckCircle className="h-3 w-3 mr-1" />
                   Connected
                 </Badge>
@@ -302,17 +302,17 @@ export default function MediaStorageSettingsPage() {
       </Card>
 
       {/* Help Card */}
-      <Card className="bg-blue-50 border-blue-200">
+      <Card className="bg-[var(--ast-info-bg)] border-[var(--ast-info-border)]">
         <CardContent className="pt-6">
           <div className="flex gap-4">
-            <div className="p-2 bg-blue-100 rounded-lg h-fit">
-              <Cloud className="h-5 w-5 text-blue-600" />
+            <div className="p-2 bg-[var(--ast-info-bg)] rounded-lg h-fit">
+              <Cloud className="h-5 w-5 text-[var(--ast-info-icon)]" />
             </div>
             <div className="space-y-2">
-              <p className="font-medium text-blue-900">
+              <p className="font-medium text-[var(--ast-info-text)]">
                 How to Set Up Cloudflare R2
               </p>
-              <ol className="text-sm text-blue-700 space-y-1 list-decimal list-inside">
+              <ol className="text-sm text-[var(--ast-info-text)] space-y-1 list-decimal list-inside">
                 <li>Go to Cloudflare Dashboard and enable R2</li>
                 <li>Create a new bucket (e.g., "ceremoney-media")</li>
                 <li>Go to R2 &gt; Manage R2 API Tokens &gt; Create API Token</li>
@@ -324,7 +324,7 @@ export default function MediaStorageSettingsPage() {
                 href="https://developers.cloudflare.com/r2/get-started/"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-1 text-sm text-blue-600 hover:underline mt-2"
+                className="inline-flex items-center gap-1 text-sm text-[var(--ast-info-icon)] hover:underline mt-2"
               >
                 View Documentation <ExternalLink className="h-3 w-3" />
               </a>

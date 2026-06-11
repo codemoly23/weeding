@@ -79,11 +79,11 @@ interface Stats {
 }
 
 const roleColors: Record<string, string> = {
-  ADMIN: "bg-red-100 text-red-700",
-  CONTENT_MANAGER: "bg-purple-100 text-purple-700",
-  SALES_AGENT: "bg-blue-100 text-blue-700",
-  SUPPORT_AGENT: "bg-green-100 text-green-700",
-  CUSTOMER: "bg-gray-100 text-gray-700",
+  ADMIN: "admin-status-error",
+  CONTENT_MANAGER: "admin-status-hold",
+  SALES_AGENT: "admin-status-info",
+  SUPPORT_AGENT: "admin-status-success",
+  CUSTOMER: "admin-status-neutral",
 };
 
 const roleLabels: Record<string, string> = {
@@ -236,7 +236,7 @@ export default function AdminUsersPage() {
         <Card>
           <CardContent className="pt-6">
             <div className="flex items-center gap-2">
-              <UserCheck className="h-5 w-5 text-green-600" />
+              <UserCheck className="h-5 w-5 text-[var(--ast-success-icon)]" />
               <div>
                 <div className="text-2xl font-bold">{stats.active}</div>
                 <p className="text-sm text-muted-foreground">Active</p>
@@ -247,7 +247,7 @@ export default function AdminUsersPage() {
         <Card>
           <CardContent className="pt-6">
             <div className="flex items-center gap-2">
-              <UserX className="h-5 w-5 text-red-600" />
+              <UserX className="h-5 w-5 text-[var(--ast-error-icon)]" />
               <div>
                 <div className="text-2xl font-bold">{stats.inactive}</div>
                 <p className="text-sm text-muted-foreground">Inactive</p>
@@ -258,7 +258,7 @@ export default function AdminUsersPage() {
         <Card>
           <CardContent className="pt-6">
             <div className="flex items-center gap-2">
-              <ShieldCheck className="h-5 w-5 text-red-600" />
+              <ShieldCheck className="h-5 w-5 text-[var(--ast-error-icon)]" />
               <div>
                 <div className="text-2xl font-bold">{stats.byRole?.ADMIN || 0}</div>
                 <p className="text-sm text-muted-foreground">Admins</p>
@@ -378,8 +378,8 @@ export default function AdminUsersPage() {
                       </TableCell>
                       <TableCell className="hidden sm:table-cell">
                         <Badge
-                          variant={user.isActive ? "default" : "destructive"}
-                          className={user.isActive ? "bg-green-100 text-green-700" : ""}
+                          variant="outline"
+                          className={user.isActive ? "admin-status-success" : "admin-status-error"}
                         >
                           {user.isActive ? "Active" : "Inactive"}
                         </Badge>
@@ -432,7 +432,7 @@ export default function AdminUsersPage() {
                             <DropdownMenuItem
                               onClick={() => handleToggleActive(user.id, user.isActive)}
                               disabled={isCurrentUser}
-                              className={user.isActive ? "text-red-600" : "text-green-600"}
+                              className={user.isActive ? "text-[var(--ast-error-text)]" : "text-[var(--ast-success-icon)]"}
                             >
                               {user.isActive ? (
                                 <>

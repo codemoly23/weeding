@@ -175,8 +175,8 @@ export function UpgradeModal({ open, onClose, defaultTab }: UpgradeModalProps) {
                 <svg width="72" height="72" viewBox="0 0 72 72" fill="none" xmlns="http://www.w3.org/2000/svg">
                   <defs>
                     <linearGradient id="starGrad" x1="0" y1="0" x2="1" y2="1">
-                      <stop offset="0%" stopColor={selectedTab === "premium" ? "#f43f5e" : "#8b5cf6"} />
-                      <stop offset="100%" stopColor={selectedTab === "premium" ? "#a855f7" : "#ec4899"} />
+                      <stop offset="0%" stopColor={selectedTab === "premium" ? "#f43f5e" : "#8A6F3E"} />
+                      <stop offset="100%" stopColor={selectedTab === "premium" ? "#8A6F3E" : "#E4A93B"} />
                     </linearGradient>
                   </defs>
                   <path d="M36 6L43.5 27H66L48 40.5L55.5 61.5L36 48L16.5 61.5L24 40.5L6 27H28.5L36 6Z" fill="url(#starGrad)" />

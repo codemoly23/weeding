@@ -254,8 +254,8 @@ export default function DataManagementPage() {
       <Card>
         <CardHeader>
           <div className="flex items-center gap-3">
-            <div className="p-2 bg-blue-100 rounded-lg">
-              <Download className="h-6 w-6 text-blue-600" />
+            <div className="p-2 bg-[var(--ast-info-bg)] rounded-lg">
+              <Download className="h-6 w-6 text-[var(--ast-info-icon)]" />
             </div>
             <div>
               <CardTitle>Export Data</CardTitle>
@@ -282,8 +282,8 @@ export default function DataManagementPage() {
       <Card>
         <CardHeader>
           <div className="flex items-center gap-3">
-            <div className="p-2 bg-green-100 rounded-lg">
-              <Upload className="h-6 w-6 text-green-600" />
+            <div className="p-2 bg-[var(--ast-success-bg)] rounded-lg">
+              <Upload className="h-6 w-6 text-[var(--ast-success-icon)]" />
             </div>
             <div>
               <CardTitle>Import Data</CardTitle>
@@ -334,8 +334,8 @@ export default function DataManagementPage() {
             <div className="space-y-3">
               <Separator />
               <div className="flex items-center gap-2">
-                <CheckCircle className="h-4 w-4 text-green-600" />
-                <span className="text-sm font-medium text-green-700">
+                <CheckCircle className="h-4 w-4 text-[var(--ast-success-icon)]" />
+                <span className="text-sm font-medium text-[var(--ast-success-text)]">
                   File validated successfully
                 </span>
               </div>
@@ -365,7 +365,7 @@ export default function DataManagementPage() {
                   setImportDialogOpen(true);
                 }}
                 disabled={importing}
-                className="bg-green-600 hover:bg-green-700 text-white"
+                className="bg-[var(--ast-success-icon)] hover:bg-[var(--ast-success-text)] text-white"
               >
                 {importing ? (
                   <Loader2 className="h-4 w-4 animate-spin mr-2" />
@@ -388,14 +388,14 @@ export default function DataManagementPage() {
       </Card>
 
       {/* Section 3: Reset Data (Danger Zone) */}
-      <Card className="border-red-200">
+      <Card className="border-[var(--ast-error-border)]">
         <CardHeader>
           <div className="flex items-center gap-3">
-            <div className="p-2 bg-red-100 rounded-lg">
-              <AlertTriangle className="h-6 w-6 text-red-600" />
+            <div className="p-2 bg-[var(--ast-error-bg)] rounded-lg">
+              <AlertTriangle className="h-6 w-6 text-[var(--ast-error-icon)]" />
             </div>
             <div>
-              <CardTitle className="text-red-700">Reset All Data</CardTitle>
+              <CardTitle className="text-[var(--ast-error-text)]">Reset All Data</CardTitle>
               <CardDescription>
                 Permanently delete all content data from your website
               </CardDescription>
@@ -417,7 +417,7 @@ export default function DataManagementPage() {
               setResetDialogOpen(true);
             }}
             disabled={resetting}
-            className="bg-red-600 hover:bg-red-700 text-white"
+            className="bg-[var(--ast-error-icon)] hover:bg-[var(--ast-error-text)] text-white"
           >
             {resetting ? (
               <Loader2 className="h-4 w-4 animate-spin mr-2" />
@@ -460,7 +460,7 @@ export default function DataManagementPage() {
             <Button
               onClick={handleImport}
               disabled={importConfirmation !== "CONFIRM"}
-              className="bg-green-600 hover:bg-green-700 text-white"
+              className="bg-[var(--ast-success-icon)] hover:bg-[var(--ast-success-text)] text-white"
             >
               <Upload className="h-4 w-4 mr-2" />
               Import Data
@@ -473,7 +473,7 @@ export default function DataManagementPage() {
       <Dialog open={resetDialogOpen} onOpenChange={setResetDialogOpen}>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle className="text-red-700">
+            <DialogTitle className="text-[var(--ast-error-text)]">
               Confirm Data Reset
             </DialogTitle>
             <DialogDescription>
@@ -504,7 +504,7 @@ export default function DataManagementPage() {
             <Button
               onClick={handleReset}
               disabled={resetConfirmation !== "RESET"}
-              className="bg-red-600 hover:bg-red-700 text-white disabled:bg-red-300"
+              className="bg-[var(--ast-error-icon)] hover:bg-[var(--ast-error-text)] text-white disabled:bg-[var(--ast-error-border)]"
             >
               <Trash2 className="h-4 w-4 mr-2" />
               Reset All Data

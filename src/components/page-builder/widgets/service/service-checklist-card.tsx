@@ -22,7 +22,7 @@ const TAG_STYLES: Record<string, { bg: string; color: string }> = {
   included: { bg: "rgba(74,222,128,0.15)", color: "#4ade80" },
   free: { bg: "rgba(251,191,36,0.15)", color: "#fbbf24" },
   addon: { bg: "rgba(251,146,60,0.15)", color: "#fb923c" },
-  premium: { bg: "rgba(168,85,247,0.15)", color: "#a855f7" },
+  premium: { bg: "#8A6F3E1A", color: "#8A6F3E" },
   custom: { bg: "rgba(255,255,255,0.1)", color: "rgba(250,248,244,0.6)" },
 };
 
@@ -46,7 +46,7 @@ const DEFAULTS: ServiceChecklistCardWidgetSettings = {
     { value: "4.9\u2605", label: "Rating" },
   ],
   backgroundColor: "#1b3a2d",
-  accentColor: "#e84c1e",
+  accentColor: "#8A6F3E",
   borderRadius: 20,
   shadow: "0 24px 64px rgba(27,58,45,0.22)",
 };
@@ -239,7 +239,7 @@ function ChecklistItem({
           width: "28px",
           height: "28px",
           borderRadius: "8px",
-          background: "#059669",
+          background: "#22C55E",
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
@@ -300,7 +300,7 @@ function StatsRow({ stats }: { stats: Array<{ value: string; label: string }> })
               fontFamily: "var(--font-heading)",
               fontSize: "20px",
               fontWeight: 800,
-              color: "#ff6a3d",
+              color: "#8A6F3E",
               display: "block",
               letterSpacing: "-0.02em",
             }}

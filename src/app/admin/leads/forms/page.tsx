@@ -440,7 +440,7 @@ export default function FormsPage() {
                             <>
                               <DropdownMenuSeparator />
                               <DropdownMenuItem
-                                className="text-red-600"
+                                className="text-[var(--ast-error-text)]"
                                 onClick={() => openDeleteDialog(template)}
                               >
                                 <Trash2 className="mr-2 h-4 w-4" />
@@ -616,7 +616,7 @@ export default function FormsPage() {
                         <Button
                           variant="ghost"
                           size="icon"
-                          className="h-7 w-7 text-muted-foreground hover:text-red-600"
+                          className="h-7 w-7 text-muted-foreground hover:text-[var(--ast-error-icon)]"
                           onClick={() => removeTemplateField(index)}
                         >
                           <Trash2 className="h-3.5 w-3.5" />
@@ -697,7 +697,7 @@ export default function FormsPage() {
             <AlertDialogAction
               onClick={handleDelete}
               disabled={deleting}
-              className="bg-red-600 hover:bg-red-700"
+              className="bg-[var(--ast-error-icon)] hover:bg-[var(--ast-error-text)]"
             >
               {deleting && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
               Delete
