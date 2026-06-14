@@ -60,15 +60,8 @@ export default function RegisterPage() {
     } else if (name === "email") {
       setFieldErrors((p) => ({ ...p, email: "" }));
     } else if (name === "password" && value) {
-      const tooShort = value.length < 12;
-      const noUpper = !/[A-Z]/.test(value);
-      const noLower = !/[a-z]/.test(value);
-      const noDigit = !/\d/.test(value);
-      const noSpecial = !/[^a-zA-Z\d]/.test(value);
-      if (tooShort) {
-        setFieldErrors((p) => ({ ...p, password: "Must be at least 12 characters" }));
-      } else if (noUpper || noLower || noDigit || noSpecial) {
-        setFieldErrors((p) => ({ ...p, password: "Must include uppercase, lowercase, number, and special character" }));
+      if (value.length < 8) {
+        setFieldErrors((p) => ({ ...p, password: "Must be at least 8 characters" }));
       } else {
         setFieldErrors((p) => ({ ...p, password: "" }));
       }
@@ -204,7 +197,7 @@ export default function RegisterPage() {
                 placeholder="••••••••"
                 className={`pl-10 pr-10 ${fieldErrors.password ? "border-destructive" : ""}`}
                 required
-                minLength={12}
+                minLength={8}
                 disabled={isLoading}
                 onBlur={handleBlur}
               />
@@ -224,7 +217,7 @@ export default function RegisterPage() {
               <p className="text-xs text-destructive">{fieldErrors.password}</p>
             ) : (
               <p className="text-xs text-muted-foreground">
-                12+ chars with uppercase, lowercase, number &amp; special character
+                Minimum 8 characters
               </p>
             )}
           </div>

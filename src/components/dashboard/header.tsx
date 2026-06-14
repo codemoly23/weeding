@@ -42,6 +42,7 @@ export function DashboardHeader({ onMenuClick }: DashboardHeaderProps) {
     <header className="flex h-16 items-center justify-between border-b bg-card px-4 lg:px-6">
       {/* Left side */}
       <div className="flex items-center gap-4">
+        {/* Mobile hamburger — only on small screens */}
         <Button
           variant="ghost"
           size="icon"

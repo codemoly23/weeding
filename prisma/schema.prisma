@@ -20,6 +20,12 @@ model User {
   createdAt           DateTime         @default(now())
   updatedAt           DateTime         @updatedAt
   isActive            Boolean          @default(true)
+  twoFactorEnabled          Boolean          @default(false)
+  notifOrderUpdates         Boolean          @default(true)
+  notifDocumentReady        Boolean          @default(true)
+  notifSupportReplies       Boolean          @default(true)
+  notifComplianceReminders  Boolean          @default(true)
+  notifMarketingEmails      Boolean          @default(false)
   // Wedding planner subscription
   plannerTier         String           @default("basic")  // basic | premium | elite
   plannerStatus       String           @default("active") // active | canceled | past_due

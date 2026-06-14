@@ -236,7 +236,7 @@ export default function DashboardPage() {
           <CardTitle>Quick Actions</CardTitle>
         </CardHeader>
         <CardContent>
-          <div className="flex flex-wrap gap-3">
+          <div className="grid grid-cols-2 gap-3 sm:flex sm:flex-wrap">
             <Button asChild>
               <Link href="/planner/create">
                 <Plus className="mr-2 h-4 w-4" />
