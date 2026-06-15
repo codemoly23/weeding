@@ -90,6 +90,7 @@ function PlannerBillingPage() {
   const router = useRouter();
 
   const isSuccess = searchParams.get("success") === "1";
+  const isUpgraded = searchParams.get("upgraded") === "1";
   const isCancelled = searchParams.get("cancelled") === "1";
   const sessionId = searchParams.get("session_id");
   const returnTo = searchParams.get("returnTo");
@@ -113,19 +114,28 @@ function PlannerBillingPage() {
         .then((d) => {
           if (d.tier) {
             setVerifiedTier(d.tier);
-            // Clear the module-level tier cache so feature gates re-check
             clearTierCache();
           }
         })
         .catch(() => {})
         .finally(() => {
-          // Also refresh sub info from DB
           fetch("/api/billing/subscription")
             .then((r) => r.json())
             .then((d) => setSub(d))
             .catch(() => {})
             .finally(() => setLoading(false));
         });
+    } else if (isUpgraded) {
+      // Inline upgrade already applied to DB — just clear cache and refresh
+      clearTierCache();
+      fetch("/api/billing/subscription")
+        .then((r) => r.json())
+        .then((d) => {
+          setSub(d);
+          setVerifiedTier(d.tier ?? null);
+        })
+        .catch(() => {})
+        .finally(() => setLoading(false));
     } else {
       fetch("/api/billing/subscription")
         .then((r) => r.json())
@@ -133,7 +143,7 @@ function PlannerBillingPage() {
         .catch(() => {})
         .finally(() => setLoading(false));
     }
-  }, [isSuccess, sessionId]);
+  }, [isSuccess, isUpgraded, sessionId]);
 
   async function handleUpgrade(tier: PlanId) {
     if (tier === "basic") return;
@@ -191,13 +201,13 @@ function PlannerBillingPage() {
       </div>
 
       {/* Success banner */}
-      {isSuccess && (
+      {(isSuccess || isUpgraded) && (
         <div className="flex flex-col gap-3 rounded-2xl bg-[var(--color-success-bg)] border border-[var(--color-success-text)]/20 px-5 py-4">
           <div className="flex items-center gap-3">
             <PartyPopper className="w-5 h-5 text-[var(--color-success-text)] shrink-0" />
             <div>
               <p className="text-sm font-semibold text-[var(--color-success-text)]">
-                Payment successful! Welcome to {successTierName}.
+                {isUpgraded ? "Plan upgraded!" : "Payment successful!"} Welcome to {successTierName}.
               </p>
               <p className="text-xs text-[var(--color-success-text)]">
                 Your plan has been upgraded. All {successTierName} features are now unlocked.
@@ -218,8 +228,17 @@ function PlannerBillingPage() {
 
       {/* Cancelled banner */}
       {isCancelled && (
-        <div className="flex items-center gap-3 rounded-2xl bg-[var(--color-warning-bg)] border border-[var(--color-warning-text)]/30 px-5 py-4">
+        <div className="flex flex-col gap-2 rounded-2xl bg-[var(--color-warning-bg)] border border-[var(--color-warning-text)]/30 px-5 py-4">
           <p className="text-sm text-[var(--color-warning-text)]">Checkout was cancelled. Your plan was not changed.</p>
+          {returnTo && (
+            <button
+              onClick={() => router.push(returnTo)}
+              className="self-start flex items-center gap-1.5 text-sm font-medium text-[var(--color-warning-text)] hover:opacity-80 transition-opacity"
+            >
+              <ArrowLeft className="w-4 h-4" />
+              Go back
+            </button>
+          )}
         </div>
       )}
 

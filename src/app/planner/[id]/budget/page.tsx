@@ -65,6 +65,7 @@ export default function BudgetPage() {
   const [newItemPlanned, setNewItemPlanned] = useState("");
   const [newItemActual, setNewItemActual] = useState("");
   const newItemDescRef = useRef<HTMLInputElement>(null);
+  const committingRef = useRef(false);
 
   // New category state
   const [showNewCat, setShowNewCat] = useState(false);
@@ -313,19 +314,43 @@ export default function BudgetPage() {
     await loadBudget();
   }
 
-  async function commitNewItem(catId: string) {
+  async function commitNewItem(catId: string, keepOpen = false) {
+    if (committingRef.current) return;
     if (!newItemDesc.trim()) { setAddingItemCatId(null); setNewItemDesc(""); setNewItemPlanned(""); setNewItemActual(""); return; }
-    try {
-      const data = { description: newItemDesc.trim(), planned: parseFloat(newItemPlanned) || 0, actual: 0, paid: 0, status: "UNPAID" as const, notes: null };
-      if (local) { addLocalBudgetItem(id, catId, data); }
-      else {
-        await apiFetch(`/api/planner/projects/${id}/budget/${catId}/items`, {
-          method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(data),
-        });
-      }
-      setNewItemDesc(""); setNewItemPlanned(""); setNewItemActual(""); setAddingItemCatId(null);
-      await loadBudget();
-    } catch (e) { setError(e instanceof Error ? e.message : "Failed to add item"); }
+    committingRef.current = true;
+
+    const data = { description: newItemDesc.trim(), planned: parseFloat(newItemPlanned) || 0, actual: 0, paid: 0, status: "UNPAID" as const, notes: null };
+
+    if (keepOpen) {
+      // Clear form + re-focus IMMEDIATELY — no waiting on network
+      setNewItemDesc(""); setNewItemPlanned(""); setNewItemActual("");
+      requestAnimationFrame(() => { newItemDescRef.current?.focus(); committingRef.current = false; });
+      // Save + refresh in background (won't block the user)
+      try {
+        if (local) {
+          addLocalBudgetItem(id, catId, data);
+          setCategories(getLocalBudget(id));
+        } else {
+          await apiFetch(`/api/planner/projects/${id}/budget/${catId}/items`, {
+            method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(data),
+          });
+          loadBudget();
+        }
+      } catch (e) { setError(e instanceof Error ? e.message : "Failed to add item"); }
+    } else {
+      try {
+        if (local) { addLocalBudgetItem(id, catId, data); }
+        else {
+          await apiFetch(`/api/planner/projects/${id}/budget/${catId}/items`, {
+            method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(data),
+          });
+        }
+        setNewItemDesc(""); setNewItemPlanned(""); setNewItemActual("");
+        setAddingItemCatId(null);
+        await loadBudget();
+      } catch (e) { setError(e instanceof Error ? e.message : "Failed to add item"); }
+      finally { committingRef.current = false; }
+    }
   }
 
   // ── PDF export ────────────────────────────────────────────────────────────
@@ -672,9 +697,9 @@ export default function BudgetPage() {
                             type="number"
                             value={newItemPlanned}
                             onChange={e => setNewItemPlanned(e.target.value)}
-                            onBlur={() => commitNewItem(cat.id)}
+                            onBlur={() => commitNewItem(cat.id, false)}
                             onKeyDown={e => {
-                              if (e.key === "Enter") commitNewItem(cat.id);
+                              if (e.key === "Enter") commitNewItem(cat.id, true);
                               if (e.key === "Escape") { setAddingItemCatId(null); setNewItemDesc(""); setNewItemPlanned(""); }
                             }}
                             placeholder="0"

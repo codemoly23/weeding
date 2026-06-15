@@ -357,16 +357,17 @@ export default function ChecklistPage() {
   async function toggleTask(task: LocalChecklistTask) {
     const completed = !task.completed;
     const completedAt = completed ? new Date().toISOString() : null;
-    const updated = { ...task, completed, completedAt };
+    const subtasks = (task.subtasks as SubTask[]).map(s => ({ ...s, completed }));
+    const updated = { ...task, completed, completedAt, subtasks };
     setTasks(prev => prev.map(t => t.id === task.id ? updated : t));
     try {
       if (local) {
-        updateLocalChecklistTask(id, task.id, { completed, completedAt });
+        updateLocalChecklistTask(id, task.id, { completed, completedAt, subtasks });
       } else {
         await apiFetch(`/api/planner/projects/${id}/checklist/${task.id}`, {
           method: "PUT",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ completed, completedAt }),
+          body: JSON.stringify({ completed, completedAt, subtasks }),
         });
       }
     } catch {
@@ -515,7 +516,8 @@ export default function ChecklistPage() {
 
   const totalDone = tasks.reduce((s, t) => {
     const subs = t.subtasks as SubTask[];
-    return s + (subs.length > 0 ? subs.filter(s => s.completed).length : (t.completed ? 1 : 0));
+    if (t.completed) return s + (subs.length > 0 ? subs.length : 1);
+    return s + (subs.length > 0 ? subs.filter(st => st.completed).length : 0);
   }, 0);
   const totalItems = tasks.reduce((s, t) => {
     const subs = t.subtasks as SubTask[];

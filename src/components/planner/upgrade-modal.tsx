@@ -5,6 +5,7 @@ import { Check, Loader2, ExternalLink, X } from "lucide-react";
 import {
   Dialog,
   DialogContent,
+  DialogTitle,
 } from "@/components/ui/dialog";
 
 interface SubscriptionInfo {
@@ -17,13 +18,12 @@ interface SubscriptionInfo {
 type PlanId = "basic" | "premium" | "elite";
 
 const BASIC_FEATURES = [
-  "Guest list",
-  "RSVPs",
-  "Wedding website",
+  "Wedding website (free subdomain)",
+  "Basic RSVPs",
   "Checklist",
-  "Budget",
-  "Event Itinerary",
-  "Vendors & Venues",
+  "Budget tracker",
+  "Event itinerary",
+  "Vendors & venues directory",
   "Notes",
   "Post-Wedding (30 photos)",
   "Custom vendors",
@@ -33,7 +33,7 @@ const PREMIUM_FEATURES = [
   { text: "Unlimited export", bold: "Unlimited export", rest: " to PDF & Excel" },
   { text: "All seating chart & supplies features in high resolution", bold: "All seating chart & supplies", rest: " features in high resolution" },
   { text: "Advanced wedding website features", bold: "Advanced wedding website features", rest: "" },
-  { text: "Memories! Extra storage space in the Post-Wedding section allows your guests to upload up to 1000 photos of your beautiful day", bold: "storage space", rest: "" },
+  { text: "Post-Wedding memories: guests can upload up to 1,000 photos", bold: "Post-Wedding memories", rest: ": guests can upload up to 1,000 photos" },
 ];
 
 const ELITE_FEATURES = [
@@ -114,6 +114,7 @@ export function UpgradeModal({ open, onClose, defaultTab }: UpgradeModalProps) {
   return (
     <Dialog open={open} onOpenChange={(v) => !v && onClose()}>
       <DialogContent className="max-w-2xl w-full p-0 overflow-hidden rounded-2xl gap-0 [&>button]:hidden">
+        <DialogTitle className="sr-only">Upgrade your plan</DialogTitle>
         {/* Close button */}
         <button
           onClick={onClose}

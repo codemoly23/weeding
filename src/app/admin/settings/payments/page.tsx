@@ -45,6 +45,9 @@ interface PaymentSettings {
   "payment.stripe.live.publishableKey": string;
   "payment.stripe.live.secretKey": string;
   "payment.stripe.live.webhookSecret": string;
+  "payment.stripe.price.premium": string;
+  "payment.stripe.price.elite": string;
+  "payment.stripe.price.vendor": string;
   // PayPal
   "payment.paypal.enabled": boolean;
   "payment.paypal.mode": "sandbox" | "live";
@@ -65,6 +68,9 @@ const defaultSettings: PaymentSettings = {
   "payment.stripe.live.publishableKey": "",
   "payment.stripe.live.secretKey": "",
   "payment.stripe.live.webhookSecret": "",
+  "payment.stripe.price.premium": "",
+  "payment.stripe.price.elite": "",
+  "payment.stripe.price.vendor": "",
   "payment.paypal.enabled": false,
   "payment.paypal.mode": "sandbox",
   "payment.paypal.sandbox.clientId": "",
@@ -457,6 +463,45 @@ export default function PaymentSettingsPage() {
             <p className="text-xs text-muted-foreground">
               Add this URL to your Stripe Dashboard &rarr; Developers &rarr; Webhooks
             </p>
+          </div>
+
+          {/* Subscription Price IDs */}
+          <div className="space-y-3 pt-2 border-t border-border">
+            <div>
+              <p className="text-sm font-medium">Subscription Price IDs</p>
+              <p className="text-xs text-muted-foreground mt-0.5">
+                Create recurring prices in Stripe Dashboard → Products, then paste the Price IDs here.
+              </p>
+            </div>
+            <div className="grid gap-3 sm:grid-cols-3">
+              <div className="space-y-2">
+                <Label>Premium Plan (299 SEK/mo)</Label>
+                <Input
+                  value={settings["payment.stripe.price.premium"]}
+                  onChange={(e) => updateSetting("payment.stripe.price.premium", e.target.value)}
+                  placeholder="price_..."
+                  className="font-mono text-sm"
+                />
+              </div>
+              <div className="space-y-2">
+                <Label>Elite Plan (499 SEK/mo)</Label>
+                <Input
+                  value={settings["payment.stripe.price.elite"]}
+                  onChange={(e) => updateSetting("payment.stripe.price.elite", e.target.value)}
+                  placeholder="price_..."
+                  className="font-mono text-sm"
+                />
+              </div>
+              <div className="space-y-2">
+                <Label>Vendor Plan ($19/mo)</Label>
+                <Input
+                  value={settings["payment.stripe.price.vendor"]}
+                  onChange={(e) => updateSetting("payment.stripe.price.vendor", e.target.value)}
+                  placeholder="price_..."
+                  className="font-mono text-sm"
+                />
+              </div>
+            </div>
           </div>
 
           <div className="flex items-center gap-2 text-sm">
