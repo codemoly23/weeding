@@ -126,6 +126,7 @@ export default function SettingsPage() {
 
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
+  const [saveStatus, setSaveStatus] = useState<"idle" | "success" | "error">("idle");
   const [form, setForm] = useState({
     title: "",
     eventType: "WEDDING",
@@ -326,6 +327,13 @@ export default function SettingsPage() {
     setA11y(next);
     localStorage.setItem("planner-a11y", next ? "1" : "0");
     document.documentElement.classList.toggle("planner-a11y", next);
+    if (!isLocal) {
+      fetch(`/api/planner/projects/${projectId}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ settings: { a11y: next } }),
+      }).catch(() => {});
+    }
   }
 
   async function handleUpgrade(tier: PlanId) {
@@ -363,6 +371,7 @@ export default function SettingsPage() {
 
   const handleSave = async () => {
     setSaving(true);
+    setSaveStatus("idle");
     try {
       if (isLocal) {
         updateLocalProject(projectId, {
@@ -372,7 +381,7 @@ export default function SettingsPage() {
           status: form.status,
         });
       } else {
-        await fetch(`/api/planner/projects/${projectId}`, {
+        const res = await fetch(`/api/planner/projects/${projectId}`, {
           method: "PUT",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
@@ -382,8 +391,14 @@ export default function SettingsPage() {
             status: form.status,
           }),
         });
+        if (!res.ok) throw new Error("Save failed");
       }
-    } catch {} finally {
+      setSaveStatus("success");
+      setTimeout(() => setSaveStatus("idle"), 3000);
+    } catch {
+      setSaveStatus("error");
+      setTimeout(() => setSaveStatus("idle"), 4000);
+    } finally {
       setSaving(false);
     }
   };
@@ -491,10 +506,22 @@ export default function SettingsPage() {
             </Select>
           </div>
 
-          <Button onClick={handleSave} disabled={saving} className="gap-2">
-            <Save className="h-4 w-4" />
-            {saving ? t("settings.saving") : t("settings.saveChanges")}
-          </Button>
+          <div className="flex items-center gap-3">
+            <Button onClick={handleSave} disabled={saving} className="gap-2">
+              <Save className="h-4 w-4" />
+              {saving ? t("settings.saving") : t("settings.saveChanges")}
+            </Button>
+            {saveStatus === "success" && (
+              <span className="flex items-center gap-1.5 text-sm text-[var(--color-success-text)]">
+                <Check className="h-4 w-4" /> {t("settings.saved")}
+              </span>
+            )}
+            {saveStatus === "error" && (
+              <span className="text-sm text-[var(--color-error-text)]">
+                {t("settings.saveFailed")}
+              </span>
+            )}
+          </div>
         </CardContent>
       </Card>
 

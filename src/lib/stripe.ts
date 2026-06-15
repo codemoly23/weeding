@@ -11,6 +11,9 @@ interface StripeConfigType {
   secretKey: string;
   webhookSecret: string;
   mode: "test" | "live";
+  pricePremium: string;
+  priceElite: string;
+  priceVendor: string;
 }
 
 // Cache for Stripe instance and config
@@ -45,6 +48,9 @@ async function getStripeConfig(): Promise<StripeConfigType> {
     secretKey: config.secretKey,
     webhookSecret: config.webhookSecret,
     mode: config.mode,
+    pricePremium: config.pricePremium,
+    priceElite: config.priceElite,
+    priceVendor: config.priceVendor,
   };
   configCacheTime = Date.now();
 
@@ -68,7 +74,7 @@ async function getStripe(): Promise<Stripe> {
 
   if (!stripeInstance) {
     stripeInstance = new Stripe(config.secretKey, {
-      apiVersion: "2025-11-17.clover",
+      apiVersion: "2024-11-20.acacia",
       typescript: true,
     });
   }
@@ -233,6 +239,36 @@ export async function createCustomerPortalSession({
   });
 
   return session;
+}
+
+/**
+ * Upgrade an existing Stripe subscription to a new price (plan change with proration)
+ */
+export async function upgradeSubscription({
+  subscriptionId,
+  newPriceId,
+}: {
+  subscriptionId: string;
+  newPriceId: string;
+}): Promise<void> {
+  const stripe = await getStripe();
+  const subscription = await stripe.subscriptions.retrieve(subscriptionId);
+  const item = subscription.items.data[0];
+  if (!item) throw new Error("No subscription item found");
+
+  await stripe.subscriptions.update(subscriptionId, {
+    items: [{ id: item.id, price: newPriceId }],
+    proration_behavior: "create_prorations",
+  });
+}
+
+/**
+ * Get the Stripe Price ID for a planner subscription tier.
+ * Reads from DB admin settings first, falls back to env vars.
+ */
+export async function getPlannerPriceId(tier: "premium" | "elite"): Promise<string> {
+  const config = await getStripeConfig();
+  return tier === "premium" ? config.pricePremium : config.priceElite;
 }
 
 /**

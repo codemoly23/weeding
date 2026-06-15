@@ -355,11 +355,13 @@ function GuestRow({
   onUpdate,
   onDelete,
   onShareRsvp,
+  showSide,
 }: {
   guest: Guest;
   onUpdate: (id: string, data: Partial<Guest>) => void;
   onDelete: (id: string) => void;
   onShareRsvp?: (guest: Guest) => void;
+  showSide?: boolean;
 }) {
   const isEmpty = !guest.firstName;
   const [editing, setEditing] = useState(isEmpty);
@@ -419,8 +421,18 @@ function GuestRow({
 
   return (
     <div className="group border-b border-border/50 last:border-0 py-2.5">
-      <p className="text-xs text-muted-foreground mb-0.5 flex items-center gap-1">
+      <p className="text-xs text-muted-foreground mb-0.5 flex items-center gap-1 flex-wrap">
         {relationLabel(guest.relation, t)}
+        {showSide && (
+          <span className={cn(
+            "inline-flex items-center rounded-full px-1.5 py-0.5 text-[9px] font-semibold",
+            guest.side === "BRIDE"
+              ? "bg-accent/10 text-accent"
+              : "bg-primary/5 text-primary"
+          )}>
+            {guest.side === "BRIDE" ? "Bride side" : "Groom side"}
+          </span>
+        )}
         {guest.isChiefGuest && (
           <span className="inline-flex items-center gap-0.5 rounded-full bg-[var(--color-warning-bg)] px-1.5 py-0.5 text-[9px] font-semibold text-[var(--color-warning-text)]">
             <Star className="h-2.5 w-2.5 fill-[var(--color-warning-text)]" /> Chief
@@ -792,8 +804,10 @@ export default function GuestListPage() {
   const [viewMode, setViewMode] = useState<ViewMode>("alphabetic");
   const [guests, setGuests] = useState<Guest[]>([]);
   const [families, setFamilies] = useState<LocalGuestFamily[]>([]);
+  const [expandedFamilies, setExpandedFamilies] = useState<Set<string>>(new Set());
   const [loading, setLoading] = useState(true);
   const [importing, setImporting] = useState(false);
+  const [importProgress, setImportProgress] = useState<{ current: number; total: number } | null>(null);
   const [guidelinesOpen, setGuidelinesOpen] = useState(false);
   const [search, setSearch] = useState("");
   const [rsvpFilter, setRsvpFilter] = useState<"ALL" | RsvpStatus>("ALL");
@@ -951,25 +965,28 @@ export default function GuestListPage() {
   }, [groomName]);
 
   async function handleAdd(side: GuestSide, relation: GuestRelation) {
+    const emptyData = {
+      firstName: "", lastName: null, title: null, side, relation, email: null,
+      phone: null, dietary: null, rsvpStatus: "PENDING" as RsvpStatus, tableNumber: null, notes: null,
+      hasPlusOne: false, plusOneName: null, plusOneMeal: null,
+      isChiefGuest: false, selfRegistered: false, familyId: null,
+      invitationCode: null, invitationSent: false, invitationSentAt: null,
+    };
     if (isLocal) {
-      const g = addLocalGuest(projectId, {
-        firstName: "", lastName: null, title: null, side, relation, email: null,
-        phone: null, dietary: null, rsvpStatus: "PENDING", tableNumber: null, notes: null,
-        hasPlusOne: false, plusOneName: null, plusOneMeal: null,
-        isChiefGuest: false, selfRegistered: false, familyId: null,
-        invitationCode: null, invitationSent: false, invitationSentAt: null,
-      }) as Guest;
+      const g = addLocalGuest(projectId, emptyData) as Guest;
       setGuests((p) => [...p, g]);
       return;
     }
-    try {
-      const res = await fetch(`/api/planner/projects/${projectId}/guests`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ firstName: "", side, relation }),
-      });
-      if (res.ok) { const data = await res.json(); setGuests((p) => [...p, data.guest]); }
-    } catch {}
+    // DB mode: add temp guest locally; POST to API only when user enters a name
+    const tempGuest: Guest = {
+      id: `temp-${Date.now()}`,
+      projectId,
+      ...emptyData,
+      rsvpToken: null,
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
+    };
+    setGuests((p) => [...p, tempGuest]);
   }
 
   async function handleUpdate(guestId: string, data: Partial<Guest>) {
@@ -987,6 +1004,44 @@ export default function GuestListPage() {
     }
 
     if (isLocal) { updateLocalGuest(projectId, guestId, data); return; }
+
+    // Temp guest (not yet in DB): POST to API only when firstName is provided
+    if (guestId.startsWith("temp-")) {
+      if (!data.firstName?.trim()) return;
+      const currentGuest = guests.find(g => g.id === guestId);
+      if (!currentGuest) return;
+      const merged = { ...currentGuest, ...data };
+      try {
+        const res = await fetch(`/api/planner/projects/${projectId}/guests`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            firstName: merged.firstName,
+            lastName: merged.lastName,
+            title: merged.title,
+            side: merged.side,
+            relation: merged.relation,
+            email: merged.email,
+            phone: merged.phone,
+            dietary: merged.dietary,
+            rsvpStatus: merged.rsvpStatus,
+            tableNumber: merged.tableNumber,
+            notes: merged.notes,
+            hasPlusOne: merged.hasPlusOne,
+            plusOneName: merged.plusOneName,
+            plusOneMeal: merged.plusOneMeal,
+            isChiefGuest: merged.isChiefGuest,
+            familyId: merged.familyId,
+          }),
+        });
+        if (res.ok) {
+          const { guest } = await res.json();
+          setGuests((p) => p.map((g) => g.id === guestId ? guest : g));
+        }
+      } catch {}
+      return;
+    }
+
     try {
       await fetch(`/api/planner/projects/${projectId}/guests/${guestId}`, {
         method: "PUT",
@@ -999,6 +1054,7 @@ export default function GuestListPage() {
   async function handleDelete(guestId: string) {
     setGuests((p) => p.filter((g) => g.id !== guestId));
     if (isLocal) { deleteLocalGuest(projectId, guestId); return; }
+    if (guestId.startsWith("temp-")) return; // Not yet in DB, just remove from state
     try {
       await fetch(`/api/planner/projects/${projectId}/guests/${guestId}`, { method: "DELETE" });
     } catch {}
@@ -1016,6 +1072,10 @@ export default function GuestListPage() {
         token = data.token;
         // Cache in local state
         setGuests((p) => p.map((g) => g.id === guest.id ? { ...g, rsvpToken: token as string } : g));
+      }
+      // Normalize: if DB stored the full URL instead of just the token, extract the hash
+      if (token && token.includes("/rsvp/")) {
+        token = token.split("/rsvp/").pop() ?? token;
       }
       const guestName = [guest.title, guest.firstName, guest.lastName].filter(Boolean).join(" ");
       const url = `${window.location.origin}/rsvp/${token}`;
@@ -1057,6 +1117,14 @@ export default function GuestListPage() {
       } catch {}
     }
     setEditingFamily(null);
+  }
+
+  function toggleFamily(familyId: string) {
+    setExpandedFamilies(prev => {
+      const next = new Set(prev);
+      next.has(familyId) ? next.delete(familyId) : next.add(familyId);
+      return next;
+    });
   }
 
   async function handleDeleteFamily(familyId: string) {
@@ -1300,26 +1368,28 @@ export default function GuestListPage() {
     let failed = 0;
     try {
       const buffer = await file.arrayBuffer();
-      const wb = XLSX.read(buffer, { type: "array" });
+      const wb = XLSX.read(new Uint8Array(buffer), { type: "array" });
       const ws = wb.Sheets[wb.SheetNames[0]];
       const rows = XLSX.utils.sheet_to_json<Record<string, string>>(ws, { defval: "" });
+      const validRows = rows.filter(row => String(row["First Name"] ?? row["first_name"] ?? row["name"] ?? "").trim());
+      setImportProgress({ current: 0, total: validRows.length });
 
       for (const row of rows) {
-        const firstName = (row["First Name"] || row["first_name"] || row["name"] || "").trim();
+        const firstName = String(row["First Name"] ?? row["first_name"] ?? row["name"] ?? "").trim();
         if (!firstName) continue;
-        const side: GuestSide = (row["Side"] || "").toUpperCase() === "GROOM" ? "GROOM" : "BRIDE";
+        const side: GuestSide = String(row["Side"] ?? "").toUpperCase() === "GROOM" ? "GROOM" : "BRIDE";
         const guestData = {
           firstName,
-          lastName: (row["Last Name"] || row["last_name"] || "").trim() || null,
-          title: (row["Title"] || row["title"] || "").trim() || null,
+          lastName: String(row["Last Name"] ?? row["last_name"] ?? "").trim() || null,
+          title: String(row["Title"] ?? row["title"] ?? "").trim() || null,
           side,
           relation: "OTHER" as GuestRelation,
-          email: (row["Email"] || row["email"] || "").trim() || null,
-          phone: (row["Phone"] || row["phone"] || "").trim() || null,
-          dietary: (row["Dietary"] || row["dietary"] || "").trim() || null,
+          email: String(row["Email"] ?? row["email"] ?? "").trim() || null,
+          phone: String(row["Phone"] ?? row["phone"] ?? "").trim() || null,
+          dietary: String(row["Dietary"] ?? row["dietary"] ?? "").trim() || null,
           rsvpStatus: "PENDING" as RsvpStatus,
           tableNumber: null,
-          notes: (row["Notes"] || row["notes"] || "").trim() || null,
+          notes: String(row["Notes"] ?? row["notes"] ?? "").trim() || null,
           hasPlusOne: false,
           plusOneName: null,
           plusOneMeal: null,
@@ -1335,6 +1405,7 @@ export default function GuestListPage() {
           const g = addLocalGuest(projectId, guestData) as Guest;
           setGuests((p) => [...p, g]);
           imported++;
+          setImportProgress(p => p ? { ...p, current: imported } : null);
         } else {
           try {
             const res = await fetch(`/api/planner/projects/${projectId}/guests`, {
@@ -1353,6 +1424,7 @@ export default function GuestListPage() {
             console.error("Guest import network error:", err);
             failed++;
           }
+          setImportProgress(p => p ? { ...p, current: imported + failed } : null);
         }
       }
     } catch (err) {
@@ -1360,6 +1432,7 @@ export default function GuestListPage() {
       alert("Import failed. Please check the file format and try again.");
     }
     setImporting(false);
+    setImportProgress(null);
     if (importRef.current) importRef.current.value = "";
 
     // Refresh guest list from server after import
@@ -1624,7 +1697,7 @@ export default function GuestListPage() {
                   </div>
                   <h2 className="text-sm font-semibold text-foreground/80">{t("guests.brideGuests")}</h2>
                 </div>
-                <div>
+                <div className="max-h-[60vh] overflow-y-auto">
                   {brideGuests.map((g) => (
                     <GuestRow key={g.id} guest={g} onUpdate={handleUpdate} onDelete={handleDelete} onShareRsvp={isLocal ? undefined : handleShareRsvp} />
                   ))}
@@ -1640,7 +1713,7 @@ export default function GuestListPage() {
                   </div>
                   <h2 className="text-sm font-semibold text-foreground/80">{t("guests.groomGuests")}</h2>
                 </div>
-                <div>
+                <div className="max-h-[60vh] overflow-y-auto">
                   {groomGuests.map((g) => (
                     <GuestRow key={g.id} guest={g} onUpdate={handleUpdate} onDelete={handleDelete} onShareRsvp={isLocal ? undefined : handleShareRsvp} />
                   ))}
@@ -1653,26 +1726,20 @@ export default function GuestListPage() {
           {/* ── ALPHABETIC ── */}
           {viewMode === "alphabetic" && (
             <div>
-              {/* Bride + Groom fixed rows at top */}
-              {[...brideGuests.filter(g => g.relation === "BRIDE"), ...groomGuests.filter(g => g.relation === "GROOM")].map((g) => (
-                <GuestRow key={g.id} guest={g} onUpdate={handleUpdate} onDelete={handleDelete} onShareRsvp={isLocal ? undefined : handleShareRsvp} />
-              ))}
+              {/* All guests sorted A–Z (Bride/Groom relation pinned first) */}
+              <div className="max-h-[60vh] overflow-y-auto">
+                {[
+                  ...brideGuests.filter(g => g.relation === "BRIDE"),
+                  ...groomGuests.filter(g => g.relation === "GROOM"),
+                  ...sortedAll.filter(g => g.relation !== "BRIDE" && g.relation !== "GROOM"),
+                ].map((g) => (
+                  <GuestRow key={g.id} guest={g} onUpdate={handleUpdate} onDelete={handleDelete} onShareRsvp={isLocal ? undefined : handleShareRsvp} showSide />
+                ))}
 
-              {/* Letter groups */}
-              {Object.keys(alphaGroups).sort().map((letter) => (
-                <div key={letter} className="mt-4">
-                  <p className="mb-1 text-lg font-bold text-foreground/80">{letter}</p>
-                  {alphaGroups[letter]
-                    .filter(g => g.relation !== "BRIDE" && g.relation !== "GROOM")
-                    .map((g) => (
-                      <GuestRow key={g.id} guest={g} onUpdate={handleUpdate} onDelete={handleDelete} onShareRsvp={isLocal ? undefined : handleShareRsvp} />
-                    ))}
-                </div>
-              ))}
-
-              {guests.length === 0 && (
-                <p className="py-8 text-center text-sm text-muted-foreground">{t("guests.noGuestsAlpha")}</p>
-              )}
+                {guests.length === 0 && (
+                  <p className="py-8 text-center text-sm text-muted-foreground">{t("guests.noGuestsAlpha")}</p>
+                )}
+              </div>
 
               {/* Add guest (both sides) */}
               <div className="mt-4">
@@ -1687,8 +1754,9 @@ export default function GuestListPage() {
               {guests.length === 0 ? (
                 <p className="p-10 text-center text-sm text-muted-foreground">{t("guests.noGuests")}</p>
               ) : (
+                <div className="max-h-[60vh] overflow-y-auto">
                 <table className="w-full text-sm">
-                  <thead>
+                  <thead className="sticky top-0 z-10">
                     <tr className="border-b border-border bg-muted text-left text-xs font-semibold uppercase tracking-wider text-muted-foreground">
                       <th className="px-3 py-3">
                         <button onClick={toggleSelectAll} className="text-muted-foreground hover:text-primary transition-colors">
@@ -1784,6 +1852,7 @@ export default function GuestListPage() {
                     ))}
                   </tbody>
                 </table>
+                </div>
               )}
             </div>
           )}
@@ -1802,7 +1871,83 @@ export default function GuestListPage() {
                 </button>
               </div>
 
-              {/* Unassigned guests */}
+              <div className="max-h-[60vh] overflow-y-auto pr-1">
+              {/* Family groups — shown first */}
+              {families.length === 0 ? (
+                <div className="rounded-xl border border-dashed border-border py-12 text-center">
+                  <Users className="mx-auto mb-2 h-8 w-8 text-muted-foreground/50" />
+                  <p className="text-sm text-muted-foreground">No families yet.</p>
+                  <button onClick={() => setFamilyModalOpen(true)} className="mt-2 text-xs text-primary hover:underline">Create your first family group</button>
+                </div>
+              ) : (
+                families.map((family) => {
+                  const members = filteredGuests.filter((g) => g.familyId === family.id);
+                  const isExpanded = expandedFamilies.has(family.id);
+                  return (
+                    <div key={family.id} className="mb-3">
+                      <div
+                        className="flex items-center justify-between rounded-lg border border-border bg-card px-3 py-2 cursor-pointer hover:bg-muted/40 transition-colors"
+                        onClick={() => toggleFamily(family.id)}
+                      >
+                        <div className="flex items-center gap-2">
+                          <ChevronDown className={cn("h-4 w-4 text-muted-foreground transition-transform duration-200", !isExpanded && "-rotate-90")} />
+                          <Users className="h-4 w-4 text-primary/60" />
+                          {editingFamily?.id === family.id ? (
+                            <input
+                              autoFocus
+                              defaultValue={family.name}
+                              onClick={(e) => e.stopPropagation()}
+                              onBlur={(e) => handleRenameFamily(family.id, e.target.value)}
+                              onKeyDown={(e) => { if (e.key === "Enter") handleRenameFamily(family.id, (e.target as HTMLInputElement).value); if (e.key === "Escape") setEditingFamily(null); }}
+                              className="text-sm font-semibold text-foreground border-b border-primary/30 outline-none bg-transparent"
+                            />
+                          ) : (
+                            <button
+                              onClick={(e) => { e.stopPropagation(); setEditingFamily(family); }}
+                              className="text-sm font-semibold text-foreground hover:text-primary transition-colors"
+                            >
+                              {family.name}
+                            </button>
+                          )}
+                          <span className="text-xs text-muted-foreground">({members.length})</span>
+                        </div>
+                        <button
+                          onClick={(e) => { e.stopPropagation(); handleDeleteFamily(family.id); }}
+                          className="text-muted-foreground/50 hover:text-[var(--color-error-text)] transition-colors"
+                        >
+                          <Trash2 className="h-3.5 w-3.5" />
+                        </button>
+                      </div>
+                      {isExpanded && (
+                        <div className="mt-1 rounded-lg border border-border bg-card p-3">
+                          {members.length === 0 ? (
+                            <p className="text-xs text-muted-foreground italic">No members yet. Assign guests from the unassigned list below.</p>
+                          ) : (
+                            members.map((g) => (
+                              <div key={g.id} className="flex items-center justify-between py-1.5 group">
+                                <span className="text-sm text-foreground/80 flex items-center gap-1.5">
+                                  {g.isChiefGuest && <Star className="h-3 w-3 fill-[var(--color-warning-text)] text-[var(--color-warning-text)]" />}
+                                  {displayFullName(g)}
+                                  {g.hasPlusOne && <span className="text-[10px] text-primary/60">+1</span>}
+                                </span>
+                                <button
+                                  onClick={() => handleUpdate(g.id, { familyId: null })}
+                                  className="text-muted-foreground/50 hover:text-[var(--color-error-text)] opacity-0 group-hover:opacity-100 transition-all"
+                                  title="Remove from family"
+                                >
+                                  <X className="h-3.5 w-3.5" />
+                                </button>
+                              </div>
+                            ))
+                          )}
+                        </div>
+                      )}
+                    </div>
+                  );
+                })
+              )}
+
+              {/* Unassigned guests — shown below families */}
               {(() => {
                 const unassigned = filteredGuests.filter((g) => !g.familyId);
                 return unassigned.length > 0 ? (
@@ -1811,7 +1956,17 @@ export default function GuestListPage() {
                     <div className="rounded-lg border border-dashed border-border bg-muted/30 p-3">
                       {unassigned.map((g) => (
                         <div key={g.id} className="flex items-center justify-between py-1.5 group">
-                          <span className="text-sm text-foreground/80">{displayFullName(g) || <span className="italic text-muted-foreground/50">—</span>}</span>
+                          <span className="flex items-center gap-1.5 text-sm text-foreground/80">
+                            {displayFullName(g) || <span className="italic text-muted-foreground/50">—</span>}
+                            <span className={cn(
+                              "inline-flex items-center rounded-full px-1.5 py-0.5 text-[9px] font-semibold",
+                              g.side === "BRIDE"
+                                ? "bg-accent/10 text-accent"
+                                : "bg-primary/5 text-primary"
+                            )}>
+                              {g.side === "BRIDE" ? "Bride side" : "Groom side"}
+                            </span>
+                          </span>
                           <select
                             value=""
                             onChange={(e) => { if (e.target.value) handleUpdate(g.id, { familyId: e.target.value }); }}
@@ -1826,67 +1981,7 @@ export default function GuestListPage() {
                   </div>
                 ) : null;
               })()}
-
-              {/* Family groups */}
-              {families.length === 0 ? (
-                <div className="rounded-xl border border-dashed border-border py-12 text-center">
-                  <Users className="mx-auto mb-2 h-8 w-8 text-muted-foreground/50" />
-                  <p className="text-sm text-muted-foreground">No families yet.</p>
-                  <button onClick={() => setFamilyModalOpen(true)} className="mt-2 text-xs text-primary hover:underline">Create your first family group</button>
-                </div>
-              ) : (
-                families.map((family) => {
-                  const members = filteredGuests.filter((g) => g.familyId === family.id);
-                  return (
-                    <div key={family.id} className="mb-5">
-                      <div className="mb-2 flex items-center justify-between">
-                        <div className="flex items-center gap-2">
-                          <Users className="h-4 w-4 text-primary/60" />
-                          {editingFamily?.id === family.id ? (
-                            <input
-                              autoFocus
-                              defaultValue={family.name}
-                              onBlur={(e) => handleRenameFamily(family.id, e.target.value)}
-                              onKeyDown={(e) => { if (e.key === "Enter") handleRenameFamily(family.id, (e.target as HTMLInputElement).value); if (e.key === "Escape") setEditingFamily(null); }}
-                              className="text-sm font-semibold text-foreground border-b border-primary/30 outline-none bg-transparent"
-                            />
-                          ) : (
-                            <button onClick={() => setEditingFamily(family)} className="text-sm font-semibold text-foreground hover:text-primary transition-colors">
-                              {family.name}
-                            </button>
-                          )}
-                          <span className="text-xs text-muted-foreground">({members.length})</span>
-                        </div>
-                        <button onClick={() => handleDeleteFamily(family.id)} className="text-muted-foreground/50 hover:text-[var(--color-error-text)] transition-colors">
-                          <Trash2 className="h-3.5 w-3.5" />
-                        </button>
-                      </div>
-                      <div className="rounded-lg border border-border bg-card p-3">
-                        {members.length === 0 ? (
-                          <p className="text-xs text-muted-foreground italic">No members yet. Assign guests from above.</p>
-                        ) : (
-                          members.map((g) => (
-                            <div key={g.id} className="flex items-center justify-between py-1.5 group">
-                              <span className="text-sm text-foreground/80 flex items-center gap-1.5">
-                                {g.isChiefGuest && <Star className="h-3 w-3 fill-[var(--color-warning-text)] text-[var(--color-warning-text)]" />}
-                                {displayFullName(g)}
-                                {g.hasPlusOne && <span className="text-[10px] text-primary/60">+1</span>}
-                              </span>
-                              <button
-                                onClick={() => handleUpdate(g.id, { familyId: null })}
-                                className="text-muted-foreground/50 hover:text-[var(--color-error-text)] opacity-0 group-hover:opacity-100 transition-all"
-                                title="Remove from family"
-                              >
-                                <X className="h-3.5 w-3.5" />
-                              </button>
-                            </div>
-                          ))
-                        )}
-                      </div>
-                    </div>
-                  );
-                })
-              )}
+              </div>
             </div>
           )}
         </>
@@ -2055,6 +2150,27 @@ export default function GuestListPage() {
           )}
           {importing ? t("guests.importing") : t("guests.import")}
         </button>
+
+        {/* Import progress bar */}
+        {importing && importProgress && importProgress.total > 0 && (
+          <div className="w-full max-w-xs space-y-1.5">
+            <div className="flex items-center justify-between text-xs text-muted-foreground">
+              <span>Importing guests…</span>
+              <span className="font-medium tabular-nums">
+                {importProgress.current} / {importProgress.total}
+              </span>
+            </div>
+            <div className="h-1.5 w-full overflow-hidden rounded-full bg-muted">
+              <div
+                className="h-full rounded-full bg-primary transition-all duration-150"
+                style={{ width: `${Math.round((importProgress.current / importProgress.total) * 100)}%` }}
+              />
+            </div>
+            <p className="text-right text-[11px] text-muted-foreground">
+              {Math.round((importProgress.current / importProgress.total) * 100)}%
+            </p>
+          </div>
+        )}
 
         {/* Download buttons — stacked on mobile, row on sm+ */}
         <div className="flex w-full max-w-xs flex-col gap-2 sm:flex-row">

@@ -55,13 +55,14 @@ export async function PUT(
     return NextResponse.json({ error: "Project not found" }, { status: 404 });
   }
 
-  const { title, eventDate, status, coverImage, settings, brideName, groomName } = body;
+  const { title, eventType, eventDate, status, coverImage, settings, brideName, groomName } = body;
 
   try {
     const project = await prisma.weddingProject.update({
       where: { id },
       data: {
         ...(title !== undefined && { title }),
+        ...(eventType !== undefined && { eventType }),
         ...(eventDate !== undefined && { eventDate: eventDate ? new Date(eventDate) : null }),
         ...(status !== undefined && { status }),
         ...(coverImage !== undefined && { coverImage }),

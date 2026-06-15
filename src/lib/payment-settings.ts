@@ -80,6 +80,9 @@ export const STRIPE_SETTINGS = {
   LIVE_PUBLISHABLE_KEY: "payment.stripe.live.publishableKey",
   LIVE_SECRET_KEY: "payment.stripe.live.secretKey",
   LIVE_WEBHOOK_SECRET: "payment.stripe.live.webhookSecret",
+  PRICE_PREMIUM: "payment.stripe.price.premium",
+  PRICE_ELITE: "payment.stripe.price.elite",
+  PRICE_VENDOR: "payment.stripe.price.vendor",
 };
 
 /**
@@ -105,6 +108,9 @@ export async function getStripeConfig(): Promise<{
   publishableKey: string;
   secretKey: string;
   webhookSecret: string;
+  pricePremium: string;
+  priceElite: string;
+  priceVendor: string;
 } | null> {
   const settings = await getSettingsByPrefix("payment.stripe.");
 
@@ -137,12 +143,23 @@ export async function getStripeConfig(): Promise<{
     return null;
   }
 
+  // Price IDs: DB setting takes priority, fall back to env vars
+  const pricePremium =
+    settings[STRIPE_SETTINGS.PRICE_PREMIUM] || process.env.STRIPE_PRICE_PREMIUM || "";
+  const priceElite =
+    settings[STRIPE_SETTINGS.PRICE_ELITE] || process.env.STRIPE_PRICE_ELITE || "";
+  const priceVendor =
+    settings[STRIPE_SETTINGS.PRICE_VENDOR] || process.env.STRIPE_PRICE_VENDOR || "";
+
   return {
     enabled,
     mode,
     publishableKey,
     secretKey,
     webhookSecret,
+    pricePremium,
+    priceElite,
+    priceVendor,
   };
 }
 
