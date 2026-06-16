@@ -626,6 +626,7 @@ export interface LocalVenueDetails {
   description: string | null;
   notes: string | null;
   layoutNotes: string | null;
+  photos: string[];
   updatedAt: string;
 }
 
@@ -639,6 +640,7 @@ function emptyVenue(projectId: string, type: "CEREMONY" | "RECEPTION"): LocalVen
     venueName: null, address: null, city: null, country: null,
     date: null, time: null, capacity: null,
     description: null, notes: null, layoutNotes: null,
+    photos: [],
     updatedAt: new Date().toISOString(),
   };
 }
