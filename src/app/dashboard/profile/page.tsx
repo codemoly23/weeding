@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect, useRef } from "react";
-import { User, Mail, Phone, Globe, Lock, Save, Loader2, AlertTriangle, Upload } from "lucide-react";
+import { User, Mail, Phone, Globe, Lock, Save, Loader2, AlertTriangle, Upload, Eye, EyeOff } from "lucide-react";
 import { signOut, useSession } from "next-auth/react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -46,6 +46,12 @@ interface UserProfile {
   phone: string | null;
   country: string | null;
   image: string | null;
+  twoFactorEnabled: boolean;
+  notifOrderUpdates: boolean;
+  notifDocumentReady: boolean;
+  notifSupportReplies: boolean;
+  notifComplianceReminders: boolean;
+  notifMarketingEmails: boolean;
 }
 
 const countries = [
@@ -84,6 +90,21 @@ export default function ProfilePage() {
     confirmPassword: ""
   });
 
+  const [showPasswords, setShowPasswords] = useState({
+    current: false,
+    new: false,
+    confirm: false,
+  });
+  const [twoFactorEnabled, setTwoFactorEnabled] = useState(false);
+  const [isTogglingTwoFactor, setIsTogglingTwoFactor] = useState(false);
+  const [notifications, setNotifications] = useState({
+    notifOrderUpdates: true,
+    notifDocumentReady: true,
+    notifSupportReplies: true,
+    notifComplianceReminders: true,
+    notifMarketingEmails: false,
+  });
+
   // Delete account state
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [deletePassword, setDeletePassword] = useState("");
@@ -100,6 +121,14 @@ export default function ProfilePage() {
       if (!response.ok) throw new Error("Failed to fetch profile");
       const data = await response.json();
       setUser(data.user);
+      setTwoFactorEnabled(data.user.twoFactorEnabled ?? false);
+      setNotifications({
+        notifOrderUpdates: data.user.notifOrderUpdates ?? true,
+        notifDocumentReady: data.user.notifDocumentReady ?? true,
+        notifSupportReplies: data.user.notifSupportReplies ?? true,
+        notifComplianceReminders: data.user.notifComplianceReminders ?? true,
+        notifMarketingEmails: data.user.notifMarketingEmails ?? false,
+      });
       setFormData({
         name: data.user.name || "",
         email: data.user.email || "",
@@ -212,6 +241,40 @@ export default function ProfilePage() {
       toast.error(error instanceof Error ? error.message : "Failed to delete account");
     } finally {
       setIsDeletingAccount(false);
+    }
+  };
+
+  const handleToggleTwoFactor = async (enabled: boolean) => {
+    setIsTogglingTwoFactor(true);
+    try {
+      const res = await fetch("/api/customer/profile/2fa", {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ enabled }),
+      });
+      if (!res.ok) throw new Error("Failed to update 2FA");
+      setTwoFactorEnabled(enabled);
+      toast.success(enabled ? "Two-factor authentication enabled" : "Two-factor authentication disabled");
+    } catch {
+      toast.error("Failed to update two-factor authentication");
+    } finally {
+      setIsTogglingTwoFactor(false);
+    }
+  };
+
+  const handleToggleNotification = async (key: keyof typeof notifications, value: boolean) => {
+    const prev = notifications[key];
+    setNotifications(n => ({ ...n, [key]: value }));
+    try {
+      const res = await fetch("/api/customer/profile/notifications", {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ [key]: value }),
+      });
+      if (!res.ok) throw new Error();
+    } catch {
+      setNotifications(n => ({ ...n, [key]: prev }));
+      toast.error("Failed to update notification preference");
     }
   };
 
@@ -467,11 +530,19 @@ export default function ProfilePage() {
                   <Lock className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
                   <Input
                     id="currentPassword"
-                    type="password"
+                    type={showPasswords.current ? "text" : "password"}
                     value={passwordData.currentPassword}
                     onChange={(e) => setPasswordData(prev => ({ ...prev, currentPassword: e.target.value }))}
-                    className="pl-9"
+                    className="pl-9 pr-10"
                   />
+                  <button
+                    type="button"
+                    onClick={() => setShowPasswords(prev => ({ ...prev, current: !prev.current }))}
+                    className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
+                    tabIndex={-1}
+                  >
+                    {showPasswords.current ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                  </button>
                 </div>
               </div>
               <div className="grid gap-4 sm:grid-cols-2">
@@ -481,11 +552,19 @@ export default function ProfilePage() {
                     <Lock className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
                     <Input
                       id="newPassword"
-                      type="password"
+                      type={showPasswords.new ? "text" : "password"}
                       value={passwordData.newPassword}
                       onChange={(e) => setPasswordData(prev => ({ ...prev, newPassword: e.target.value }))}
-                      className="pl-9"
+                      className="pl-9 pr-10"
                     />
+                    <button
+                      type="button"
+                      onClick={() => setShowPasswords(prev => ({ ...prev, new: !prev.new }))}
+                      className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
+                      tabIndex={-1}
+                    >
+                      {showPasswords.new ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                    </button>
                   </div>
                 </div>
                 <div className="space-y-2">
@@ -494,11 +573,19 @@ export default function ProfilePage() {
                     <Lock className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
                     <Input
                       id="confirmPassword"
-                      type="password"
+                      type={showPasswords.confirm ? "text" : "password"}
                       value={passwordData.confirmPassword}
                       onChange={(e) => setPasswordData(prev => ({ ...prev, confirmPassword: e.target.value }))}
-                      className="pl-9"
+                      className="pl-9 pr-10"
                     />
+                    <button
+                      type="button"
+                      onClick={() => setShowPasswords(prev => ({ ...prev, confirm: !prev.confirm }))}
+                      className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
+                      tabIndex={-1}
+                    >
+                      {showPasswords.confirm ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                    </button>
                   </div>
                 </div>
               </div>
@@ -532,7 +619,11 @@ export default function ProfilePage() {
                     Require a verification code when signing in
                   </p>
                 </div>
-                <Switch />
+                <Switch
+                  checked={twoFactorEnabled}
+                  onCheckedChange={handleToggleTwoFactor}
+                  disabled={isTogglingTwoFactor}
+                />
               </div>
             </CardContent>
           </Card>
@@ -630,34 +721,34 @@ export default function ProfilePage() {
               </CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
-              {[
+              {([
                 {
+                  key: "notifOrderUpdates" as const,
                   title: "Order Updates",
                   description: "Get notified when your order status changes",
-                  defaultChecked: true,
                 },
                 {
+                  key: "notifDocumentReady" as const,
                   title: "Document Ready",
                   description: "Get notified when documents are ready to download",
-                  defaultChecked: true,
                 },
                 {
+                  key: "notifSupportReplies" as const,
                   title: "Support Replies",
                   description: "Get notified when support replies to your tickets",
-                  defaultChecked: true,
                 },
                 {
+                  key: "notifComplianceReminders" as const,
                   title: "Compliance Reminders",
                   description: "Get reminded about annual reports and renewals",
-                  defaultChecked: true,
                 },
                 {
+                  key: "notifMarketingEmails" as const,
                   title: "Marketing Emails",
                   description: "Receive promotions and special offers",
-                  defaultChecked: false,
                 },
-              ].map((item, index) => (
-                <div key={index}>
+              ]).map((item, index, arr) => (
+                <div key={item.key}>
                   <div className="flex items-center justify-between py-2">
                     <div className="space-y-0.5">
                       <p className="font-medium">{item.title}</p>
@@ -665,9 +756,12 @@ export default function ProfilePage() {
                         {item.description}
                       </p>
                     </div>
-                    <Switch defaultChecked={item.defaultChecked} />
+                    <Switch
+                      checked={notifications[item.key]}
+                      onCheckedChange={(val) => handleToggleNotification(item.key, val)}
+                    />
                   </div>
-                  {index < 4 && <Separator />}
+                  {index < arr.length - 1 && <Separator />}
                 </div>
               ))}
             </CardContent>

@@ -25,7 +25,7 @@ const pool = new Pool({
   port: parseInt(process.env.DATABASE_PORT || "5432"),
   user: process.env.DATABASE_USER || "postgres",
   password: process.env.DATABASE_PASSWORD,
-  database: process.env.DATABASE_NAME || "llcpad",
+  database: process.env.DATABASE_NAME || "weeding",
   max: 5,
   idleTimeoutMillis: 30000,
   connectionTimeoutMillis: 5000,
@@ -67,7 +67,7 @@ async function start() {
 │                                          │
 │   > Socket:  ws://localhost:${CHAT_PORT}        │
 │   > Health:  http://localhost:${CHAT_PORT}/health│
-│   > DB:      ${process.env.DATABASE_NAME || "llcpad"}                       │
+│   > DB:      ${process.env.DATABASE_NAME || "weeding-ceremony"}                       │
 │                                          │
 └──────────────────────────────────────────┘
     `);

@@ -77,7 +77,7 @@ function buildTableCards(elements: LayoutElement[], guests: Guest[]): TableCard[
 function SeatingCard({ table, font }: { table: TableCard; font: string }) {
   return (
     <div
-      className="rounded-2xl bg-white shadow-2xl"
+      className="rounded-2xl bg-card shadow-2xl"
       style={{ width: 310, border: "2px dashed #ddd6fe", fontFamily: `${font}, serif` }}
     >
       {/* Top: script "Table" */}
@@ -89,7 +89,7 @@ function SeatingCard({ table, font }: { table: TableCard; font: string }) {
         </span>
       </div>
       {/* Dashed divider */}
-      <div className="mx-8 border-t border-dashed border-gray-300" />
+      <div className="mx-8 border-t border-dashed border-border" />
       {/* Table name */}
       <div className="py-3 text-center">
         <span style={{ fontFamily: "sans-serif", fontSize: 20, fontWeight: 700, color: "#1a1a2e" }}>
@@ -97,7 +97,7 @@ function SeatingCard({ table, font }: { table: TableCard; font: string }) {
         </span>
       </div>
       {/* Dashed divider */}
-      <div className="mx-8 border-t border-dashed border-gray-300" />
+      <div className="mx-8 border-t border-dashed border-border" />
       {/* Guest names */}
       <div className="flex flex-col items-center gap-1 px-6 pb-8 pt-3">
         {table.guestNames.map((name, i) => (
@@ -125,7 +125,7 @@ function LayoutCanvas({
   const scaleY = canvasH / PAPER_H;
 
   return (
-    <div className="relative bg-white shadow-2xl" style={{ width: canvasW, height: canvasH }}>
+    <div className="relative bg-card shadow-2xl" style={{ width: canvasW, height: canvasH }}>
       <svg width={canvasW} height={canvasH} viewBox={`0 0 ${canvasW} ${canvasH}`}>
         {tables.map((t, i) => {
           const cx = t.x * scaleX;
@@ -232,11 +232,11 @@ export default function CardsEditPage() {
         style={{ backgroundColor: "#ddd0ee", backgroundImage: "radial-gradient(#c8b8d8 1px, transparent 1px)", backgroundSize: "24px 24px" }}
       >
         {/* Header */}
-        <div className="flex flex-shrink-0 items-center justify-between border-b border-gray-200 bg-white px-4 py-2.5">
-          <button onClick={close} className="flex items-center gap-1.5 text-sm text-gray-600 transition-colors hover:text-gray-900">
+        <div className="flex flex-shrink-0 items-center justify-between border-b border-border bg-card px-4 py-2.5">
+          <button onClick={close} className="flex items-center gap-1.5 text-sm text-foreground/80 transition-colors hover:text-foreground">
             <X className="h-3.5 w-3.5" /> Close
           </button>
-          <button className="flex items-center gap-1.5 rounded-lg border border-purple-500 bg-purple-600 px-3 py-1.5 text-sm font-medium text-white transition-colors hover:bg-purple-700">
+          <button className="flex items-center gap-1.5 rounded-lg border border-primary bg-primary px-3 py-1.5 text-sm font-medium text-white transition-colors hover:bg-primary/90">
             <FileText className="h-3.5 w-3.5" /> File
           </button>
         </div>
@@ -248,9 +248,9 @@ export default function CardsEditPage() {
             <button
               onClick={() => setSelectedIndex(i => Math.max(0, i - 1))}
               disabled={selectedIndex === 0}
-              className="rounded-full bg-white/80 p-3 shadow-md transition-all hover:bg-white disabled:opacity-20"
+              className="rounded-full bg-background/80 p-3 shadow-md transition-all hover:bg-background disabled:opacity-20"
             >
-              <ChevronLeft className="h-5 w-5 text-gray-600" />
+              <ChevronLeft className="h-5 w-5 text-foreground/80" />
             </button>
           </div>
 
@@ -264,47 +264,47 @@ export default function CardsEditPage() {
             <button
               onClick={() => setSelectedIndex(i => Math.min(tables.length - 1, i + 1))}
               disabled={selectedIndex === tables.length - 1}
-              className="rounded-full bg-white/80 p-3 shadow-md transition-all hover:bg-white disabled:opacity-20"
+              className="rounded-full bg-background/80 p-3 shadow-md transition-all hover:bg-background disabled:opacity-20"
             >
-              <ChevronRight className="h-5 w-5 text-gray-600" />
+              <ChevronRight className="h-5 w-5 text-foreground/80" />
             </button>
           </div>
 
           {/* Right panel */}
-          <div className="w-64 flex-shrink-0 overflow-y-auto border-l border-gray-200 bg-white p-5">
-            <p className="mb-0.5 text-sm font-semibold text-gray-800">
+          <div className="w-64 flex-shrink-0 overflow-y-auto border-l border-border bg-card p-5">
+            <p className="mb-0.5 text-sm font-semibold text-foreground">
               Table ID: {selectedTable.name}
             </p>
-            <p className="mb-5 text-[11px] leading-relaxed text-gray-400">
+            <p className="mb-5 text-[11px] leading-relaxed text-muted-foreground">
               You can edit table ID on the reception layout
             </p>
 
             {/* Font selector */}
             <div className="mb-4">
-              <p className="mb-1.5 text-[11px] uppercase tracking-wide text-gray-400">Font</p>
-              <div className="flex items-center gap-2 rounded-lg border border-gray-200 px-3 py-2">
+              <p className="mb-1.5 text-[11px] uppercase tracking-wide text-muted-foreground">Font</p>
+              <div className="flex items-center gap-2 rounded-lg border border-border px-3 py-2">
                 <button
                   onClick={() => saveSettings({ ...settings, font: FONTS[Math.max(0, fontIndex - 1)] })}
                   disabled={fontIndex === 0}
-                  className="text-sm text-gray-400 transition-colors hover:text-gray-700 disabled:opacity-30"
+                  className="text-sm text-muted-foreground transition-colors hover:text-foreground disabled:opacity-30"
                 >◄</button>
-                <span className="flex-1 text-center text-sm text-gray-700">{settings.font}</span>
+                <span className="flex-1 text-center text-sm text-foreground/80">{settings.font}</span>
                 <button
                   onClick={() => saveSettings({ ...settings, font: FONTS[Math.min(FONTS.length - 1, fontIndex + 1)] })}
                   disabled={fontIndex === FONTS.length - 1}
-                  className="text-sm text-gray-400 transition-colors hover:text-gray-700 disabled:opacity-30"
+                  className="text-sm text-muted-foreground transition-colors hover:text-foreground disabled:opacity-30"
                 >►</button>
               </div>
             </div>
 
             {/* Font size */}
             <div className="mb-4">
-              <p className="mb-1.5 text-[11px] uppercase tracking-wide text-gray-400">Font size</p>
+              <p className="mb-1.5 text-[11px] uppercase tracking-wide text-muted-foreground">Font size</p>
               <input
                 type="number"
                 value={settings.fontSize}
                 onChange={e => saveSettings({ ...settings, fontSize: Number(e.target.value) })}
-                className="w-full rounded-lg border border-gray-200 px-3 py-2 text-sm focus:border-purple-300 focus:outline-none"
+                className="w-full rounded-lg border border-border px-3 py-2 text-sm focus:border-primary focus:outline-none"
               />
             </div>
 
@@ -318,7 +318,7 @@ export default function CardsEditPage() {
                     title={t.name}
                     className={cn(
                       "h-2.5 w-2.5 rounded-full transition-colors",
-                      i === selectedIndex ? "bg-purple-500" : "bg-gray-300 hover:bg-gray-400"
+                      i === selectedIndex ? "bg-primary" : "bg-border hover:text-muted-foreground/50"
                     )}
                   />
                 ))}
@@ -328,7 +328,7 @@ export default function CardsEditPage() {
             {/* Back to layout */}
             <button
               onClick={() => setMode("layout")}
-              className="mt-6 w-full rounded-lg border border-gray-200 py-2 text-xs text-gray-500 transition-colors hover:bg-gray-50"
+              className="mt-6 w-full rounded-lg border border-border py-2 text-xs text-muted-foreground transition-colors hover:bg-muted/30"
             >
               ← Back to layout
             </button>
@@ -344,16 +344,16 @@ export default function CardsEditPage() {
     <div className="fixed inset-0 z-50 flex flex-col bg-[#e8e4ec]">
       {/* Header */}
       <div className="flex flex-shrink-0 items-center justify-between bg-[#1c1b2e] px-4 py-2.5">
-        <button onClick={close} className="flex items-center gap-1.5 text-sm text-gray-400 transition-colors hover:text-white">
+        <button onClick={close} className="flex items-center gap-1.5 text-sm text-muted-foreground transition-colors hover:text-white">
           <X className="h-3.5 w-3.5" /> Close
         </button>
         <div className="flex items-center gap-2">
-          <button className="flex items-center gap-1.5 rounded-lg border border-white/20 px-3 py-1.5 text-sm text-gray-300 transition-colors hover:bg-white/10">
+          <button className="flex items-center gap-1.5 rounded-lg border border-white/20 px-3 py-1.5 text-sm text-white/70 transition-colors hover:bg-white/10">
             <FileText className="h-3.5 w-3.5" /> File
           </button>
           <button
             onClick={() => { if (tables.length > 0) { setSelectedIndex(0); setMode("card"); } }}
-            className="flex items-center gap-1.5 rounded-lg bg-purple-600 px-3 py-1.5 text-sm font-medium text-white transition-colors hover:bg-purple-700"
+            className="flex items-center gap-1.5 rounded-lg bg-primary px-3 py-1.5 text-sm font-medium text-white transition-colors hover:bg-primary/90"
           >
             <Plus className="h-3.5 w-3.5" /> Add element
           </button>
@@ -366,13 +366,13 @@ export default function CardsEditPage() {
         <div className="flex flex-1 items-start justify-center overflow-auto p-10">
           {tables.length === 0 ? (
             <div className="mt-20 text-center">
-              <p className="mb-1 font-medium text-gray-700">No tables found</p>
-              <p className="mb-3 text-xs text-gray-400">
+              <p className="mb-1 font-medium text-foreground/80">No tables found</p>
+              <p className="mb-3 text-xs text-muted-foreground">
                 Edit the reception layout to add tables first.
               </p>
               <button
                 onClick={() => router.push(`/planner/${projectId}/seating/reception-layout-edit`)}
-                className="rounded-lg bg-purple-600 px-4 py-2 text-sm text-white transition-colors hover:bg-purple-700"
+                className="rounded-lg bg-primary px-4 py-2 text-sm text-white transition-colors hover:bg-primary/90"
               >
                 Open reception layout
               </button>
@@ -386,8 +386,8 @@ export default function CardsEditPage() {
         </div>
 
         {/* Right panel */}
-        <div className="w-64 flex-shrink-0 overflow-y-auto border-l border-gray-200 bg-white p-4">
-          <p className="mb-3 text-[11px] font-semibold uppercase tracking-wide text-orange-500">
+        <div className="w-64 flex-shrink-0 overflow-y-auto border-l border-border bg-card p-4">
+          <p className="mb-3 text-[11px] font-semibold uppercase tracking-wide text-[var(--color-warning-text)]">
             How to display guests&apos; names
           </p>
 
@@ -404,8 +404,8 @@ export default function CardsEditPage() {
                 className={cn(
                   "flex h-10 w-10 items-center justify-center rounded-lg border-2 text-base transition-colors",
                   settings.nameDisplay === val
-                    ? "border-purple-500 bg-purple-50"
-                    : "border-gray-200 hover:border-gray-300"
+                    ? "border-primary bg-primary/5"
+                    : "border-border hover:border-foreground/40"
                 )}
               >
                 {icon}
@@ -413,27 +413,27 @@ export default function CardsEditPage() {
             ))}
           </div>
 
-          <p className="mb-3 text-xs text-gray-500">
+          <p className="mb-3 text-xs text-muted-foreground">
             Display names as —{" "}
-            <span className="font-medium text-gray-700">Full name</span>
+            <span className="font-medium text-foreground">Full name</span>
           </p>
 
           <div className="mb-4 space-y-2">
-            <label className="flex cursor-pointer items-center gap-2 text-xs text-gray-600">
+            <label className="flex cursor-pointer items-center gap-2 text-xs text-foreground/80">
               <input
                 type="radio" name="iconMode"
                 checked={settings.nameDisplay !== "generic"}
                 onChange={() => saveSettings({ ...settings, nameDisplay: "colored" })}
-                className="accent-purple-600"
+                className="accent-primary"
               />
               Person icons are colored
             </label>
-            <label className="flex cursor-pointer items-center gap-2 text-xs text-gray-600">
+            <label className="flex cursor-pointer items-center gap-2 text-xs text-foreground/80">
               <input
                 type="radio" name="iconMode"
                 checked={settings.nameDisplay === "generic"}
                 onChange={() => saveSettings({ ...settings, nameDisplay: "generic" })}
-                className="accent-purple-600"
+                className="accent-primary"
               />
               Person icons are generic
             </label>
@@ -444,17 +444,17 @@ export default function CardsEditPage() {
             <button
               key={section}
               onClick={() => setOpenSection(openSection === section ? null : section)}
-              className="flex w-full items-center justify-between border-t border-gray-100 py-3 text-xs text-gray-600 transition-colors hover:text-gray-800"
+              className="flex w-full items-center justify-between border-t border-border/50 py-3 text-xs text-foreground/80 transition-colors hover:text-foreground"
             >
               {section}
-              <ChevronDown className={cn("h-3.5 w-3.5 text-gray-400 transition-transform", openSection === section && "rotate-180")} />
+              <ChevronDown className={cn("h-3.5 w-3.5 text-muted-foreground/70 transition-transform", openSection === section && "rotate-180")} />
             </button>
           ))}
 
           {/* Tables list */}
           {tables.length > 0 && (
-            <div className="mt-2 border-t border-gray-100 pt-4">
-              <p className="mb-2 text-[10px] font-semibold uppercase tracking-widest text-gray-400">
+            <div className="mt-2 border-t border-border/50 pt-4">
+              <p className="mb-2 text-[10px] font-semibold uppercase tracking-widest text-muted-foreground/70">
                 Tables ({tables.length})
               </p>
               <div className="space-y-0.5">
@@ -462,9 +462,9 @@ export default function CardsEditPage() {
                   <button
                     key={t.id}
                     onClick={() => { setSelectedIndex(i); setMode("card"); }}
-                    className="flex w-full items-center gap-2 rounded-lg px-2 py-1.5 text-left text-xs text-gray-600 transition-colors hover:bg-gray-50"
+                    className="flex w-full items-center gap-2 rounded-lg px-2 py-1.5 text-left text-xs text-foreground/80 transition-colors hover:bg-muted/30"
                   >
-                    <span className="h-1.5 w-1.5 flex-shrink-0 rounded-full bg-purple-300" />
+                    <span className="h-1.5 w-1.5 flex-shrink-0 rounded-full bg-primary/30" />
                     {t.name}
                   </button>
                 ))}

@@ -117,7 +117,7 @@ function AnimatedValue({
 export function StatsSection({
   items,
   className,
-  valueColor = "text-orange-500",
+  valueColor = "text-[var(--color-warning-text)]",
   labelColor = "text-slate-400",
   dividerColor = "border-slate-700/50",
   forceMobileLayout = false,

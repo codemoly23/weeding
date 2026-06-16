@@ -316,7 +316,7 @@ export default function TestimonialsPage() {
                   </div>
                   <div className="flex gap-1">
                     {testimonial.type === "VIDEO" && (
-                      <Badge variant="outline" className="text-blue-600 border-blue-600">
+                      <Badge variant="outline" className="text-[var(--ast-info-icon)] border-[var(--ast-info-icon)]">
                         <Video className="mr-1 h-3 w-3" />
                         Video
                       </Badge>
@@ -334,8 +334,8 @@ export default function TestimonialsPage() {
                       key={star}
                       className={`h-4 w-4 ${
                         star <= testimonial.rating
-                          ? "fill-yellow-400 text-yellow-400"
-                          : "text-gray-200"
+                          ? "fill-[var(--admin-star)] text-[var(--admin-star)]"
+                          : "text-[var(--ast-neutral-border)]"
                       }`}
                     />
                   ))}
@@ -524,8 +524,8 @@ export default function TestimonialsPage() {
                       <Star
                         className={`h-6 w-6 transition-colors ${
                           star <= formData.rating
-                            ? "fill-yellow-400 text-yellow-400"
-                            : "text-gray-200 hover:text-yellow-200"
+                            ? "fill-[var(--admin-star)] text-[var(--admin-star)]"
+                            : "text-[var(--ast-neutral-border)] hover:text-[var(--admin-star)]"
                         }`}
                       />
                     </button>

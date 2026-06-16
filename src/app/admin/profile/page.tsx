@@ -134,8 +134,8 @@ export default function AdminProfilePage() {
       return;
     }
 
-    if (passwordData.newPassword.length < 6) {
-      toast.error("Password must be at least 6 characters");
+    if (passwordData.newPassword.length < 8) {
+      toast.error("Password must be at least 8 characters");
       return;
     }
 
@@ -424,7 +424,7 @@ export default function AdminProfilePage() {
                 </Button>
               </div>
               <p className="text-xs text-muted-foreground">
-                Password must be at least 6 characters long
+                Minimum 8 characters
               </p>
             </div>
 

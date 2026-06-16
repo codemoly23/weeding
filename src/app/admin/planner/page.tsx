@@ -38,21 +38,21 @@ export default function AdminPlannerPage() {
   }, []);
 
   const statusColor: Record<string, string> = {
-    ACTIVE: "bg-green-100 text-green-700",
-    ARCHIVED: "bg-gray-100 text-gray-600",
-    COMPLETED: "bg-blue-100 text-blue-700",
+    ACTIVE:    "admin-status-success",
+    ARCHIVED:  "admin-status-neutral",
+    COMPLETED: "admin-status-info",
   };
 
   const tierColor: Record<PlannerTier, string> = {
-    elite: "bg-purple-100 text-purple-700",
-    premium: "bg-blue-100 text-blue-700",
-    basic: "bg-gray-100 text-gray-600",
+    elite:   "admin-status-hold",
+    premium: "admin-status-info",
+    basic:   "admin-status-neutral",
   };
 
   return (
     <div className="space-y-6">
       <div className="flex items-center gap-3">
-        <Heart className="h-6 w-6 text-blue-600" />
+        <Heart className="h-6 w-6 text-[var(--ast-info-icon)]" />
         <div>
           <h1 className="text-2xl font-bold">Event Planner Projects</h1>
           <p className="text-sm text-muted-foreground">All projects created by users</p>

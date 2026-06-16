@@ -211,7 +211,7 @@ export default function VendorProfilePage() {
   if (loading) {
     return (
       <div className="flex items-center justify-center h-64">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-purple-600" />
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary" />
       </div>
     );
   }
@@ -219,8 +219,8 @@ export default function VendorProfilePage() {
   return (
     <div className="max-w-3xl mx-auto">
       <div className="mb-6">
-        <h1 className="text-2xl font-bold text-gray-900">My Profile</h1>
-        <p className="text-sm text-gray-500 mt-0.5">
+        <h1 className="text-2xl font-bold text-foreground">My Profile</h1>
+        <p className="text-sm text-muted-foreground mt-0.5">
           Keep your business information up to date to attract more clients
         </p>
       </div>
@@ -257,7 +257,7 @@ export default function VendorProfilePage() {
           </Field>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">Category</label>
+            <label className="block text-sm font-medium text-foreground mb-2">Category</label>
             <div className="grid grid-cols-3 sm:grid-cols-4 gap-2">
               {CATEGORIES.map((cat) => (
                 <button
@@ -266,8 +266,8 @@ export default function VendorProfilePage() {
                   onClick={() => set("category", cat.value)}
                   className={`flex flex-col items-center gap-1 p-2.5 rounded-lg border text-xs font-medium transition-all
                     ${profile.category === cat.value
-                      ? "border-purple-500 bg-purple-50 text-purple-700"
-                      : "border-gray-200 text-gray-600 hover:border-gray-300"
+                      ? "border-primary bg-primary/5 text-primary"
+                      : "border-border text-foreground/80 hover:border-border"
                     }`}
                 >
                   <span className="text-lg">{cat.emoji}</span>
@@ -322,9 +322,9 @@ export default function VendorProfilePage() {
               />
             </Field>
           </div>
-          <p className="text-xs text-gray-400 mt-1">
+          <p className="text-xs text-muted-foreground/70 mt-1">
             Latitude &amp; Longitude are used to show your business on the map view. Find yours at{" "}
-            <a href="https://maps.google.com" target="_blank" rel="noopener noreferrer" className="text-purple-500 hover:underline">maps.google.com</a>
+            <a href="https://maps.google.com" target="_blank" rel="noopener noreferrer" className="text-primary hover:underline">maps.google.com</a>
             {" "}— right-click any location and copy the coordinates.
           </p>
         </Section>
@@ -397,8 +397,8 @@ export default function VendorProfilePage() {
                   )}
                   className={`px-3 py-1.5 rounded-full text-sm font-medium border transition-colors ${
                     selected
-                      ? "bg-purple-600 text-white border-purple-600"
-                      : "bg-white text-gray-700 border-gray-300 hover:border-purple-400"
+                      ? "bg-primary text-white border-primary"
+                      : "bg-card text-foreground border-border hover:border-primary/60"
                   }`}
                 >
                   {lang}
@@ -467,33 +467,33 @@ export default function VendorProfilePage() {
               type="checkbox"
               checked={profile.isAvailable}
               onChange={(e) => set("isAvailable", e.target.checked)}
-              className="w-4 h-4 rounded border-gray-300 text-purple-600 focus:ring-purple-500"
+              className="w-4 h-4 rounded border-border text-primary focus:ring-primary"
             />
             <div>
-              <span className="text-sm font-medium text-gray-700">Currently accepting bookings</span>
-              <p className="text-xs text-gray-500">Uncheck to hide your profile from search results</p>
+              <span className="text-sm font-medium text-foreground">Currently accepting bookings</span>
+              <p className="text-xs text-muted-foreground">Uncheck to hide your profile from search results</p>
             </div>
           </label>
         </Section>
 
         {/* Calendar availability */}
-        <div className="bg-white rounded-xl border border-gray-200 p-5">
-          <h2 className="text-sm font-semibold text-gray-900 mb-1">Calendar Availability</h2>
-          <p className="text-xs text-gray-500 mb-4">Click a date to cycle: blank → Available → Booked → Tentative → blank</p>
+        <div className="bg-card rounded-xl border border-border p-5">
+          <h2 className="text-sm font-semibold text-foreground mb-1">Calendar Availability</h2>
+          <p className="text-xs text-muted-foreground mb-4">Click a date to cycle: blank → Available → Booked → Tentative → blank</p>
           <div className="flex items-center justify-between mb-3">
-            <button type="button" onClick={() => setCalMonth(new Date(calMonth.getFullYear(), calMonth.getMonth() - 1, 1))} className="p-1.5 rounded-lg hover:bg-gray-100 text-gray-500">
+            <button type="button" onClick={() => setCalMonth(new Date(calMonth.getFullYear(), calMonth.getMonth() - 1, 1))} className="p-1.5 rounded-lg hover:bg-muted text-muted-foreground">
               <ChevronLeft className="w-4 h-4" />
             </button>
-            <span className="text-sm font-medium text-gray-700">
+            <span className="text-sm font-medium text-foreground">
               {calMonth.toLocaleDateString("en-US", { month: "long", year: "numeric" })}
             </span>
-            <button type="button" onClick={() => setCalMonth(new Date(calMonth.getFullYear(), calMonth.getMonth() + 1, 1))} className="p-1.5 rounded-lg hover:bg-gray-100 text-gray-500">
+            <button type="button" onClick={() => setCalMonth(new Date(calMonth.getFullYear(), calMonth.getMonth() + 1, 1))} className="p-1.5 rounded-lg hover:bg-muted text-muted-foreground">
               <ChevronRight className="w-4 h-4" />
             </button>
           </div>
           <div className="grid grid-cols-7 gap-1 text-center mb-1">
             {["Su","Mo","Tu","We","Th","Fr","Sa"].map(d => (
-              <div key={d} className="text-xs text-gray-400 font-medium py-1">{d}</div>
+              <div key={d} className="text-xs text-muted-foreground/70 font-medium py-1">{d}</div>
             ))}
           </div>
           <div className="grid grid-cols-7 gap-1">
@@ -504,9 +504,9 @@ export default function VendorProfilePage() {
               const daysInMonth = new Date(year, month + 1, 0).getDate();
               const cells = [...Array(firstDay).fill(null), ...Array.from({ length: daysInMonth }, (_, i) => i + 1)];
               const statusColor: Record<string, string> = {
-                AVAILABLE: "bg-emerald-100 text-emerald-800",
-                BOOKED: "bg-red-100 text-red-700",
-                TENTATIVE: "bg-amber-100 text-amber-800",
+                AVAILABLE: "bg-[var(--color-success-bg)] text-[var(--color-success-text)]",
+                BOOKED: "bg-[var(--color-error-bg)] text-[var(--color-error-text)]",
+                TENTATIVE: "bg-[var(--color-warning-bg)] text-[var(--color-warning-text)]",
               };
               return cells.map((day, idx) => {
                 if (!day) return <div key={idx} />;
@@ -521,7 +521,7 @@ export default function VendorProfilePage() {
                     disabled={isSaving}
                     title={entry?.status ?? "Click to mark"}
                     className={`rounded-lg py-1.5 text-xs text-center transition-all cursor-pointer select-none ${
-                      entry ? statusColor[entry.status] : "text-gray-600 hover:bg-gray-100"
+                      entry ? statusColor[entry.status] : "text-foreground/80 hover:bg-muted"
                     } ${isSaving ? "opacity-50" : ""}`}
                   >
                     {day}
@@ -530,20 +530,20 @@ export default function VendorProfilePage() {
               });
             })()}
           </div>
-          <div className="flex items-center gap-4 mt-4 text-xs text-gray-500">
-            <span className="flex items-center gap-1.5"><span className="w-3 h-3 rounded bg-emerald-100 inline-block" />Available</span>
-            <span className="flex items-center gap-1.5"><span className="w-3 h-3 rounded bg-red-100 inline-block" />Booked</span>
-            <span className="flex items-center gap-1.5"><span className="w-3 h-3 rounded bg-amber-100 inline-block" />Tentative</span>
+          <div className="flex items-center gap-4 mt-4 text-xs text-muted-foreground">
+            <span className="flex items-center gap-1.5"><span className="w-3 h-3 rounded bg-[var(--color-success-bg)] inline-block" />Available</span>
+            <span className="flex items-center gap-1.5"><span className="w-3 h-3 rounded bg-[var(--color-error-bg)] inline-block" />Booked</span>
+            <span className="flex items-center gap-1.5"><span className="w-3 h-3 rounded bg-[var(--color-warning-bg)] inline-block" />Tentative</span>
           </div>
         </div>
 
         {/* FAQ Editor */}
-        <div className="bg-white rounded-xl border border-gray-200 p-5">
-          <h2 className="text-sm font-semibold text-gray-900 mb-1">FAQ</h2>
-          <p className="text-xs text-gray-500 mb-4">Add frequently asked questions shown on your public profile.</p>
+        <div className="bg-card rounded-xl border border-border p-5">
+          <h2 className="text-sm font-semibold text-foreground mb-1">FAQ</h2>
+          <p className="text-xs text-muted-foreground mb-4">Add frequently asked questions shown on your public profile.</p>
           <div className="space-y-3">
             {profile.faqItems.map((item, idx) => (
-              <div key={idx} className="border border-gray-100 rounded-xl p-3 space-y-2 bg-gray-50">
+              <div key={idx} className="border border-border/50 rounded-xl p-3 space-y-2 bg-muted">
                 <div className="flex items-start gap-2">
                   <input
                     type="text"
@@ -559,7 +559,7 @@ export default function VendorProfilePage() {
                   <button
                     type="button"
                     onClick={() => set("faqItems", profile.faqItems.filter((_, j) => j !== idx))}
-                    className="mt-0.5 text-red-400 hover:text-red-600 transition-colors"
+                    className="mt-0.5 text-[var(--color-error-text)] hover:text-[var(--color-error-text)] transition-colors"
                   >
                     <Trash2 className="w-4 h-4" />
                   </button>
@@ -580,7 +580,7 @@ export default function VendorProfilePage() {
             <button
               type="button"
               onClick={() => set("faqItems", [...profile.faqItems, { question: "", answer: "" }])}
-              className="flex items-center gap-1.5 text-sm text-purple-600 hover:text-purple-800 font-medium"
+              className="flex items-center gap-1.5 text-sm text-primary hover:text-primary font-medium"
             >
               <Plus className="w-4 h-4" /> Add FAQ item
             </button>
@@ -589,7 +589,7 @@ export default function VendorProfilePage() {
 
         {/* Photos */}
         <Section title="Photos">
-          <p className="text-xs text-gray-500 -mt-2">The first photo will be your cover image in the vendor directory and planner page.</p>
+          <p className="text-xs text-muted-foreground -mt-2">The first photo will be your cover image in the vendor directory and planner page.</p>
           <div className="space-y-3">
             {profile.photos.map((url, i) => (
               <div key={i} className="space-y-1.5">
@@ -610,8 +610,8 @@ export default function VendorProfilePage() {
                       }}
                     />
                     <div className="flex items-center gap-2">
-                      <span className="text-xs text-gray-400">or</span>
-                      <label className="cursor-pointer text-xs text-purple-600 border border-purple-300 rounded px-3 py-1 hover:bg-purple-50 transition">
+                      <span className="text-xs text-muted-foreground/70">or</span>
+                      <label className="cursor-pointer text-xs text-primary border border-primary/30 rounded px-3 py-1 hover:bg-primary/5 transition">
                         Upload from device
                         <input type="file" accept="image/*" className="hidden"
                           onChange={(e) => {
@@ -630,18 +630,18 @@ export default function VendorProfilePage() {
                       <button
                         type="button"
                         onClick={() => set("photos", profile.photos.filter((_, j) => j !== i))}
-                        className="text-xs text-red-400 hover:text-red-600"
+                        className="text-xs text-[var(--color-error-text)] hover:text-[var(--color-error-text)]"
                       >Remove</button>
                     </div>
                   </div>
                 </div>
-                {i === 0 && <p className="text-[10px] text-purple-500 font-medium">★ Cover image</p>}
+                {i === 0 && <p className="text-[10px] text-primary font-medium">★ Cover image</p>}
               </div>
             ))}
             <button
               type="button"
               onClick={() => set("photos", [...profile.photos, ""])}
-              className="text-sm text-purple-600 hover:text-purple-800 font-medium"
+              className="text-sm text-primary hover:text-primary font-medium"
             >
               + Add photo
             </button>
@@ -649,7 +649,7 @@ export default function VendorProfilePage() {
         </Section>
 
         {error && (
-          <p className="text-sm text-red-600 bg-red-50 border border-red-200 rounded-lg px-4 py-3">
+          <p className="text-sm text-[var(--color-error-text)] bg-[var(--color-error-bg)] border border-[var(--color-error-bg)] rounded-lg px-4 py-3">
             {error}
           </p>
         )}
@@ -658,7 +658,7 @@ export default function VendorProfilePage() {
           <button
             type="submit"
             disabled={saving}
-            className="flex items-center gap-2 px-5 py-2.5 bg-purple-600 text-white rounded-lg text-sm font-medium hover:bg-purple-700 disabled:opacity-60 transition-colors"
+            className="flex items-center gap-2 px-5 py-2.5 bg-primary text-white rounded-lg text-sm font-medium hover:bg-primary/90 disabled:opacity-60 transition-colors"
           >
             {saving ? (
               <Loader2 className="w-4 h-4 animate-spin" />
@@ -670,7 +670,7 @@ export default function VendorProfilePage() {
             {saving ? "Saving..." : saved ? "Saved!" : "Save Changes"}
           </button>
           {saved && (
-            <span className="text-sm text-green-600 flex items-center gap-1">
+            <span className="text-sm text-[var(--color-success-text)] flex items-center gap-1">
               <CheckCircle className="w-4 h-4" /> Changes saved
             </span>
           )}
@@ -680,17 +680,17 @@ export default function VendorProfilePage() {
       <style jsx>{`
         .input {
           width: 100%;
-          border: 1px solid #e5e7eb;
+          border: 1px solid var(--border);
           border-radius: 0.5rem;
           padding: 0.5rem 0.75rem;
           font-size: 0.875rem;
           outline: none;
           transition: border-color 0.15s;
-          background: white;
+          background: var(--card);
         }
         .input:focus {
-          border-color: #a855f7;
-          box-shadow: 0 0 0 3px rgb(168 85 247 / 0.1);
+          border-color: var(--color-primary);
+          box-shadow: 0 0 0 3px rgb(from var(--color-primary) r g b / 0.1);
         }
       `}</style>
     </div>
@@ -699,8 +699,8 @@ export default function VendorProfilePage() {
 
 function Section({ title, children }: { title: string; children: React.ReactNode }) {
   return (
-    <div className="bg-white rounded-xl border border-gray-200 p-5">
-      <h2 className="text-sm font-semibold text-gray-900 mb-4">{title}</h2>
+    <div className="bg-card rounded-xl border border-border p-5">
+      <h2 className="text-sm font-semibold text-foreground mb-4">{title}</h2>
       <div className="space-y-4">{children}</div>
     </div>
   );
@@ -717,9 +717,9 @@ function Field({
 }) {
   return (
     <div>
-      <label className="block text-sm font-medium text-gray-700 mb-1.5">
+      <label className="block text-sm font-medium text-foreground mb-1.5">
         {label}
-        {required && <span className="text-red-500 ml-0.5">*</span>}
+        {required && <span className="text-[var(--color-error-text)] ml-0.5">*</span>}
       </label>
       {children}
     </div>

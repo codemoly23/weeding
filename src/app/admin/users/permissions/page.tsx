@@ -183,26 +183,26 @@ export default function PermissionsPage() {
 
       {/* Info Cards */}
       <div className="grid gap-4 sm:grid-cols-2">
-        <Card className="border-blue-200 bg-blue-50">
+        <Card className="border-[var(--ast-info-border)] bg-[var(--ast-info-bg)]">
           <CardContent className="pt-6">
             <div className="flex items-start gap-3">
-              <Shield className="h-5 w-5 text-blue-600 mt-0.5" />
+              <Shield className="h-5 w-5 text-[var(--ast-info-icon)] mt-0.5" />
               <div>
-                <p className="font-medium text-blue-900">Admin Role</p>
-                <p className="text-sm text-blue-700">
+                <p className="font-medium text-[var(--ast-info-text)]">Admin Role</p>
+                <p className="text-sm text-[var(--ast-info-text)]">
                   Admins always have full access to all features. Their permissions cannot be modified.
                 </p>
               </div>
             </div>
           </CardContent>
         </Card>
-        <Card className="border-gray-200 bg-gray-50">
+        <Card className="border-[var(--ast-neutral-border)] bg-[var(--ast-neutral-bg)]">
           <CardContent className="pt-6">
             <div className="flex items-start gap-3">
-              <Shield className="h-5 w-5 text-gray-600 mt-0.5" />
+              <Shield className="h-5 w-5 text-[var(--ast-neutral-icon)] mt-0.5" />
               <div>
-                <p className="font-medium text-gray-900">Customer Role</p>
-                <p className="text-sm text-gray-700">
+                <p className="font-medium text-[var(--ast-neutral-text)]">Customer Role</p>
+                <p className="text-sm text-[var(--ast-neutral-text)]">
                   Customers have no admin permissions. They can only access their own data.
                 </p>
               </div>
@@ -226,7 +226,7 @@ export default function PermissionsPage() {
                 <TabsTrigger key={role} value={role} className="relative">
                   {data.roleLabels[role]}
                   {hasChanges[role] && (
-                    <span className="absolute -top-1 -right-1 h-2 w-2 rounded-full bg-orange-500" />
+                    <span className="absolute -top-1 -right-1 h-2 w-2 rounded-full bg-[var(--ast-processing-icon)]" />
                   )}
                 </TabsTrigger>
               ))}
@@ -241,7 +241,7 @@ export default function PermissionsPage() {
                       {(editedPermissions[role] || []).length} permissions
                     </Badge>
                     {hasChanges[role] && (
-                      <Badge variant="outline" className="text-orange-600 border-orange-300">
+                      <Badge variant="outline" className="text-[var(--ast-processing-icon)] border-[var(--ast-processing-border)]">
                         Unsaved changes
                       </Badge>
                     )}
@@ -317,7 +317,7 @@ export default function PermissionsPage() {
                                 >
                                   {perm.label}
                                   {isChecked && (
-                                    <Check className="h-3 w-3 text-green-600" />
+                                    <Check className="h-3 w-3 text-[var(--ast-success-icon)]" />
                                   )}
                                 </label>
                               </div>

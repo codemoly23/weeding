@@ -5,8 +5,8 @@ import { z } from "zod";
 
 const updateProfileSchema = z.object({
   name: z.string().min(1).max(100).optional(),
-  phone: z.string().max(20).optional(),
-  country: z.string().max(10).optional(),
+  phone: z.string().max(20).nullable().optional(),
+  country: z.string().max(10).nullable().optional(),
   image: z.string().max(500).nullable().optional(),
 });
 
@@ -28,6 +28,12 @@ export async function GET() {
         phone: true,
         country: true,
         image: true,
+        twoFactorEnabled: true,
+        notifOrderUpdates: true,
+        notifDocumentReady: true,
+        notifSupportReplies: true,
+        notifComplianceReminders: true,
+        notifMarketingEmails: true,
         createdAt: true,
       },
     });

@@ -277,8 +277,8 @@ export default function BusinessSettingsPage() {
       <Card>
         <CardHeader>
           <div className="flex items-center gap-3">
-            <div className="p-2 bg-blue-100 rounded-lg">
-              <Building2 className="h-6 w-6 text-blue-600" />
+            <div className="p-2 bg-[var(--ast-info-bg)] rounded-lg">
+              <Building2 className="h-6 w-6 text-[var(--ast-info-icon)]" />
             </div>
             <div>
               <CardTitle>General Information</CardTitle>
@@ -363,7 +363,7 @@ export default function BusinessSettingsPage() {
             </div>
             {settings["business.display.logo"] === "false" &&
               settings["business.display.name"] === "false" && (
-                <p className="text-sm text-amber-600">
+                <p className="text-sm text-[var(--ast-warning-icon)]">
                   ⚠️ Warning: Both logo and name are disabled. At least one should be visible in the header.
                 </p>
               )}
@@ -563,8 +563,8 @@ export default function BusinessSettingsPage() {
       <Card>
         <CardHeader>
           <div className="flex items-center gap-3">
-            <div className="p-2 bg-green-100 rounded-lg">
-              <Phone className="h-6 w-6 text-green-600" />
+            <div className="p-2 bg-[var(--ast-success-bg)] rounded-lg">
+              <Phone className="h-6 w-6 text-[var(--ast-success-icon)]" />
             </div>
             <div>
               <CardTitle>Contact Information</CardTitle>
@@ -619,8 +619,8 @@ export default function BusinessSettingsPage() {
       <Card>
         <CardHeader>
           <div className="flex items-center gap-3">
-            <div className="p-2 bg-orange-100 rounded-lg">
-              <MapPin className="h-6 w-6 text-orange-600" />
+            <div className="p-2 bg-[var(--ast-processing-bg)] rounded-lg">
+              <MapPin className="h-6 w-6 text-[var(--ast-processing-icon)]" />
             </div>
             <div>
               <CardTitle>Business Address</CardTitle>
@@ -688,8 +688,8 @@ export default function BusinessSettingsPage() {
       <Card>
         <CardHeader>
           <div className="flex items-center gap-3">
-            <div className="p-2 bg-emerald-100 rounded-lg">
-              <DollarSign className="h-6 w-6 text-emerald-600" />
+            <div className="p-2 bg-[var(--ast-success-bg)] rounded-lg">
+              <DollarSign className="h-6 w-6 text-[var(--ast-success-icon)]" />
             </div>
             <div>
               <CardTitle>Currency</CardTitle>
@@ -718,8 +718,8 @@ export default function BusinessSettingsPage() {
       <Card>
         <CardHeader>
           <div className="flex items-center gap-3">
-            <div className="p-2 bg-purple-100 rounded-lg">
-              <Globe className="h-6 w-6 text-purple-600" />
+            <div className="p-2 bg-[var(--ast-hold-bg)] rounded-lg">
+              <Globe className="h-6 w-6 text-[var(--ast-hold-icon)]" />
             </div>
             <div>
               <CardTitle>Social Media Links</CardTitle>
@@ -802,17 +802,17 @@ export default function BusinessSettingsPage() {
       </Card>
 
       {/* Info Card */}
-      <Card className="bg-blue-50 border-blue-200">
+      <Card className="bg-[var(--ast-info-bg)] border-[var(--ast-info-border)]">
         <CardContent className="pt-6">
           <div className="flex gap-4">
-            <div className="p-2 bg-blue-100 rounded-lg h-fit">
-              <Building2 className="h-5 w-5 text-blue-600" />
+            <div className="p-2 bg-[var(--ast-info-bg)] rounded-lg h-fit">
+              <Building2 className="h-5 w-5 text-[var(--ast-info-icon)]" />
             </div>
             <div className="space-y-1">
-              <p className="font-medium text-blue-900">
+              <p className="font-medium text-[var(--ast-info-text)]">
                 Changes Apply Site-Wide
               </p>
-              <p className="text-sm text-blue-700">
+              <p className="text-sm text-[var(--ast-info-text)]">
                 The information you enter here will automatically update the
                 header, footer, and all pages across your website. Logo and
                 business name will also appear in the admin dashboard.

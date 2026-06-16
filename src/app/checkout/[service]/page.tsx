@@ -1275,7 +1275,7 @@ function ServiceCheckoutForm() {
               <p className="text-sm text-destructive">{uploadState.error}</p>
             )}
             {uploadedUrl && !uploadState?.progress && (
-              <div className="flex items-center gap-2 text-sm text-green-600">
+              <div className="flex items-center gap-2 text-sm text-[var(--color-success-text)]">
                 <Check className="h-4 w-4" />
                 {uploadState?.fileName || "File"} uploaded
               </div>
@@ -1468,14 +1468,14 @@ function ServiceCheckoutForm() {
           <div className="container mx-auto px-4">
             {/* Logged-in User Banner - shown below header for context */}
             {loggedInUser && (
-              <div className="mb-6 rounded-lg bg-green-50 border border-green-200 p-4">
+              <div className="mb-6 rounded-lg bg-[var(--color-success-bg)] border border-[var(--color-success-text)]/20 p-4">
                 <div className="flex items-center gap-3">
-                  <div className="flex h-10 w-10 items-center justify-center rounded-full bg-green-100">
-                    <User className="h-5 w-5 text-green-600" />
+                  <div className="flex h-10 w-10 items-center justify-center rounded-full bg-[var(--color-success-text)]/15">
+                    <User className="h-5 w-5 text-[var(--color-success-text)]" />
                   </div>
                   <div>
-                    <p className="font-medium text-green-800">Welcome back, {loggedInUser.name}!</p>
-                    <p className="text-sm text-green-600">You&apos;re logged in as {loggedInUser.email}</p>
+                    <p className="font-medium text-[var(--color-success-text)]">Welcome back, {loggedInUser.name}!</p>
+                    <p className="text-sm text-[var(--color-success-text)]/80">You&apos;re logged in as {loggedInUser.email}</p>
                   </div>
                 </div>
               </div>
@@ -1541,14 +1541,14 @@ function ServiceCheckoutForm() {
                   <CardContent className="space-y-6">
                     {/* Login Prompt for Existing Users - with inline login form */}
                     {(showLoginPrompt || showInlineLogin) && (
-                      <div className="rounded-lg border-2 border-amber-200 bg-amber-50 p-4">
+                      <div className="rounded-lg border-2 border-[var(--color-warning-text)]/30 bg-[var(--color-warning-bg)] p-4">
                         <div className="flex items-start gap-3 mb-4">
-                          <LogIn className="h-5 w-5 text-amber-600 mt-0.5" />
+                          <LogIn className="h-5 w-5 text-[var(--color-warning-text)] mt-0.5" />
                           <div>
-                            <h4 className="font-medium text-amber-800">
+                            <h4 className="font-medium text-[var(--color-warning-text)]">
                               {showLoginPrompt ? "Account Already Exists" : "Login to Your Account"}
                             </h4>
-                            <p className="text-sm text-amber-700">
+                            <p className="text-sm text-[var(--color-warning-text)]/80">
                               {existingUserName ? (
                                 <span>Welcome back, <strong>{existingUserName}</strong>! </span>
                               ) : showLoginPrompt ? (
@@ -1560,7 +1560,7 @@ function ServiceCheckoutForm() {
                         </div>
 
                         {/* Inline Login Form */}
-                        <form onSubmit={handleInlineLogin} className="space-y-4 bg-white rounded-lg p-4 border">
+                        <form onSubmit={handleInlineLogin} className="space-y-4 bg-card rounded-lg p-4 border border-border">
                           {loginError && (
                             <div className="rounded-lg bg-destructive/10 p-3 text-sm text-destructive">
                               {loginError}
@@ -1652,22 +1652,22 @@ function ServiceCheckoutForm() {
                           onChange={(e) => handleAccountChange("email", e.target.value)}
                           className={cn(
                             errors.account_email ? "border-destructive" : "",
-                            emailCheckStatus === "available" ? "border-green-500 pr-10" : "",
-                            emailCheckStatus === "exists" ? "border-amber-500 pr-10" : ""
+                            emailCheckStatus === "available" ? "border-[var(--color-success-text)] pr-10" : "",
+                            emailCheckStatus === "exists" ? "border-[var(--color-warning-text)] pr-10" : ""
                           )}
                         />
                         {emailCheckStatus === "checking" && (
                           <Loader2 className="absolute right-3 top-1/2 -translate-y-1/2 h-4 w-4 animate-spin text-muted-foreground" />
                         )}
                         {emailCheckStatus === "available" && (
-                          <Check className="absolute right-3 top-1/2 -translate-y-1/2 h-4 w-4 text-green-500" />
+                          <Check className="absolute right-3 top-1/2 -translate-y-1/2 h-4 w-4 text-[var(--color-success-text)]" />
                         )}
                       </div>
                       {errors.account_email && (
                         <p className="text-sm text-destructive">{errors.account_email}</p>
                       )}
                       {emailCheckStatus === "available" && (
-                        <p className="text-sm text-green-600">Email is available</p>
+                        <p className="text-sm text-[var(--color-success-text)]">Email is available</p>
                       )}
                     </div>
 
@@ -1882,7 +1882,7 @@ function ServiceCheckoutForm() {
                         <p className="text-sm text-destructive">{errors.understandDisclaimer}</p>
                       )}
 
-                      <div className="flex items-center gap-2 rounded-lg bg-green-50 p-3 text-sm text-green-700">
+                      <div className="flex items-center gap-2 rounded-lg bg-[var(--color-success-bg)] p-3 text-sm text-[var(--color-success-text)]">
                         <Shield className="h-4 w-4" />
                         <span>Your information is encrypted and securely stored.</span>
                       </div>

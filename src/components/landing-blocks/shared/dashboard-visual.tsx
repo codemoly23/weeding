@@ -36,8 +36,8 @@ const presetSVGs: Record<string, React.ReactNode> = {
         <rect width="110" height="60" rx="8" fill="#2d2d44" />
         <text x="12" y="25" fill="#9ca3af" fontSize="10">Growth</text>
         <text x="12" y="45" fill="#fff" fontSize="16" fontWeight="bold">+23%</text>
-        <rect x="70" y="30" width="30" height="20" rx="4" fill="#f97316" opacity="0.2" />
-        <text x="78" y="44" fill="#f97316" fontSize="10">↑</text>
+        <rect x="70" y="30" width="30" height="20" rx="4" fill="#8A6F3E" opacity="0.2" />
+        <text x="78" y="44" fill="#8A6F3E" fontSize="10">↑</text>
       </g>
 
       {/* Chart area */}
@@ -60,12 +60,12 @@ const presetSVGs: Record<string, React.ReactNode> = {
       <path
         d="M 40 200 L 80 180 L 120 190 L 160 160 L 200 170 L 240 140 L 280 150 L 320 120 L 360 130"
         fill="none"
-        stroke="#f97316"
+        stroke="#8A6F3E"
         strokeWidth="2"
       />
 
       {/* Data points */}
-      <g fill="#f97316">
+      <g fill="#8A6F3E">
         <circle cx="40" cy="200" r="4" />
         <circle cx="80" cy="180" r="4" />
         <circle cx="120" cy="190" r="4" />
@@ -80,8 +80,8 @@ const presetSVGs: Record<string, React.ReactNode> = {
       {/* Gradient definition */}
       <defs>
         <linearGradient id="chartGradient" x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0%" stopColor="#f97316" stopOpacity="0.3" />
-          <stop offset="100%" stopColor="#f97316" stopOpacity="0" />
+          <stop offset="0%" stopColor="#8A6F3E" stopOpacity="0.3" />
+          <stop offset="100%" stopColor="#8A6F3E" stopOpacity="0" />
         </linearGradient>
       </defs>
 
@@ -99,7 +99,7 @@ const presetSVGs: Record<string, React.ReactNode> = {
       <rect x="20" y="260" width="360" height="30" rx="8" fill="#2d2d44" />
       <circle cx="45" cy="275" r="6" fill="#10b981" />
       <text x="58" y="279" fill="#9ca3af" fontSize="10">Active Users: 1,234</text>
-      <circle cx="180" cy="275" r="6" fill="#f97316" />
+      <circle cx="180" cy="275" r="6" fill="#8A6F3E" />
       <text x="193" y="279" fill="#9ca3af" fontSize="10">Sessions: 5,678</text>
     </svg>
   ),
@@ -111,7 +111,7 @@ const presetSVGs: Record<string, React.ReactNode> = {
       {/* Header */}
       <rect x="20" y="20" width="360" height="40" rx="8" fill="#2d2d44" />
       <text x="35" y="45" fill="#fff" fontSize="14" fontWeight="bold">Orders Dashboard</text>
-      <rect x="300" y="30" width="60" height="20" rx="4" fill="#f97316" />
+      <rect x="300" y="30" width="60" height="20" rx="4" fill="#8A6F3E" />
       <text x="315" y="44" fill="#fff" fontSize="10">Export</text>
 
       {/* Product grid */}
@@ -162,7 +162,7 @@ const presetSVGs: Record<string, React.ReactNode> = {
 
       {/* Top bar */}
       <rect x="20" y="20" width="360" height="50" rx="8" fill="#2d2d44" />
-      <circle cx="50" cy="45" r="15" fill="#f97316" />
+      <circle cx="50" cy="45" r="15" fill="#8A6F3E" />
       <text x="75" y="42" fill="#fff" fontSize="12" fontWeight="bold">SaaS Platform</text>
       <text x="75" y="55" fill="#9ca3af" fontSize="9">Dashboard</text>
 
@@ -171,7 +171,7 @@ const presetSVGs: Record<string, React.ReactNode> = {
       <text x="35" y="115" fill="#9ca3af" fontSize="10">API Usage</text>
       <text x="35" y="140" fill="#fff" fontSize="18" fontWeight="bold">2,451 / 5,000</text>
       <rect x="35" y="155" width="140" height="8" rx="4" fill="#3d3d5c" />
-      <rect x="35" y="155" width="69" height="8" rx="4" fill="#f97316" />
+      <rect x="35" y="155" width="69" height="8" rx="4" fill="#8A6F3E" />
       <text x="35" y="172" fill="#9ca3af" fontSize="9">49% used</text>
 
       {/* Subscription */}
@@ -187,13 +187,13 @@ const presetSVGs: Record<string, React.ReactNode> = {
 
       {/* Bar chart */}
       <g transform="translate(35, 235)">
-        <rect x="0" y="20" width="30" height="25" rx="2" fill="#f97316" opacity="0.6" />
-        <rect x="50" y="10" width="30" height="35" rx="2" fill="#f97316" opacity="0.8" />
-        <rect x="100" y="5" width="30" height="40" rx="2" fill="#f97316" />
-        <rect x="150" y="15" width="30" height="30" rx="2" fill="#f97316" opacity="0.7" />
-        <rect x="200" y="0" width="30" height="45" rx="2" fill="#f97316" />
-        <rect x="250" y="12" width="30" height="33" rx="2" fill="#f97316" opacity="0.8" />
-        <rect x="300" y="8" width="30" height="37" rx="2" fill="#f97316" opacity="0.9" />
+        <rect x="0" y="20" width="30" height="25" rx="2" fill="#8A6F3E" opacity="0.6" />
+        <rect x="50" y="10" width="30" height="35" rx="2" fill="#8A6F3E" opacity="0.8" />
+        <rect x="100" y="5" width="30" height="40" rx="2" fill="#8A6F3E" />
+        <rect x="150" y="15" width="30" height="30" rx="2" fill="#8A6F3E" opacity="0.7" />
+        <rect x="200" y="0" width="30" height="45" rx="2" fill="#8A6F3E" />
+        <rect x="250" y="12" width="30" height="33" rx="2" fill="#8A6F3E" opacity="0.8" />
+        <rect x="300" y="8" width="30" height="37" rx="2" fill="#8A6F3E" opacity="0.9" />
       </g>
     </svg>
   ),
@@ -221,8 +221,8 @@ const presetSVGs: Record<string, React.ReactNode> = {
         <rect width="85" height="120" rx="8" fill="#2d2d44" />
         <text x="15" y="25" fill="#9ca3af" fontSize="9">Qualified</text>
         <text x="15" y="45" fill="#fff" fontSize="14" fontWeight="bold">18</text>
-        <rect x="15" y="60" width="55" height="6" rx="3" fill="#8b5cf6" />
-        <text x="15" y="80" fill="#8b5cf6" fontSize="10">$67K</text>
+        <rect x="15" y="60" width="55" height="6" rx="3" fill="#8A6F3E" />
+        <text x="15" y="80" fill="#8A6F3E" fontSize="10">$67K</text>
         <rect x="10" y="90" width="65" height="20" rx="4" fill="#3d3d5c" />
       </g>
 
@@ -230,8 +230,8 @@ const presetSVGs: Record<string, React.ReactNode> = {
         <rect width="85" height="120" rx="8" fill="#2d2d44" />
         <text x="15" y="25" fill="#9ca3af" fontSize="9">Proposal</text>
         <text x="15" y="45" fill="#fff" fontSize="14" fontWeight="bold">12</text>
-        <rect x="15" y="60" width="55" height="6" rx="3" fill="#f97316" />
-        <text x="15" y="80" fill="#f97316" fontSize="10">$89K</text>
+        <rect x="15" y="60" width="55" height="6" rx="3" fill="#8A6F3E" />
+        <text x="15" y="80" fill="#8A6F3E" fontSize="10">$89K</text>
         <rect x="10" y="90" width="65" height="20" rx="4" fill="#3d3d5c" />
       </g>
 
@@ -259,7 +259,7 @@ const presetSVGs: Record<string, React.ReactNode> = {
 
       <g transform="translate(300, 220)">
         <text fill="#9ca3af" fontSize="10">Avg Deal</text>
-        <text y="25" fill="#f97316" fontSize="20" fontWeight="bold">$15.6K</text>
+        <text y="25" fill="#8A6F3E" fontSize="20" fontWeight="bold">$15.6K</text>
       </g>
     </svg>
   ),

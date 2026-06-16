@@ -155,7 +155,7 @@ function toggleAmPm(t: string): string {
 function IconSvg({ iconId, size = 40 }: { iconId: string | null; size?: number }) {
   const icon = ICONS.find(i => i.id === iconId) ?? ICONS.find(i => i.id === "clock")!;
   return (
-    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" className="text-[#5a5880]">
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" className="text-foreground/80">
       {icon.svg}
     </svg>
   );
@@ -382,10 +382,10 @@ export default function ItineraryPage() {
       {/* Icon picker modal */}
       {iconPickerFor && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/30" onClick={() => setIconPickerFor(null)}>
-          <div className="rounded-2xl bg-white shadow-2xl w-80 p-4" onClick={e => e.stopPropagation()}>
+          <div className="rounded-2xl bg-card shadow-2xl w-80 p-4" onClick={e => e.stopPropagation()}>
             <div className="mb-3 flex items-center justify-between">
-              <h3 className="font-semibold text-gray-800 text-sm">Choose icon</h3>
-              <button onClick={() => setIconPickerFor(null)} className="text-gray-400 hover:text-gray-600">
+              <h3 className="font-semibold text-foreground text-sm">Choose icon</h3>
+              <button onClick={() => setIconPickerFor(null)} className="text-muted-foreground hover:text-foreground/80">
                 <X className="h-4 w-4" />
               </button>
             </div>
@@ -398,9 +398,9 @@ export default function ItineraryPage() {
                     key={icon.id}
                     onClick={() => { const ev = events.find(e => e.id === iconPickerFor); if (ev) pickIcon(ev, icon.id); }}
                     title={icon.label}
-                    className={`flex items-center justify-center rounded-lg p-1.5 transition-colors ${selected ? "bg-indigo-100 ring-2 ring-indigo-400" : "hover:bg-gray-100"}`}
+                    className={`flex items-center justify-center rounded-lg p-1.5 transition-colors ${selected ? "bg-primary/10 ring-2 ring-primary/40" : "hover:bg-muted"}`}
                   >
-                    <svg width="28" height="28" viewBox="0 0 24 24" fill="none" className="text-[#5a5880]">
+                    <svg width="28" height="28" viewBox="0 0 24 24" fill="none" className="text-foreground/80">
                       {icon.svg}
                     </svg>
                   </button>
@@ -412,23 +412,23 @@ export default function ItineraryPage() {
       )}
 
       {/* Main page */}
-      <div className="no-print min-h-screen bg-[#ebe8f1]">
+      <div className="no-print min-h-screen bg-muted">
         <div className="mx-auto max-w-xl px-4 py-8">
 
           {/* Heading */}
           <div className="mb-5 text-center">
-            <h1 className="text-2xl font-semibold text-[#2d2b4a] tracking-tight">{t("itinerary.heading")}</h1>
-            <p className="mt-2 text-sm text-[#6b6890] leading-relaxed max-w-sm mx-auto">
+            <h1 className="text-2xl font-semibold text-foreground tracking-tight">{t("itinerary.heading")}</h1>
+            <p className="mt-2 text-sm text-muted-foreground leading-relaxed max-w-sm mx-auto">
               Make and{" "}
-              <button onClick={() => { if (!isPremiumOrElite(tier)) { setShowUpgrade(true); return; } window.print(); }} className="text-[#4f46bd] hover:underline">print</button>
+              <button onClick={() => { if (!isPremiumOrElite(tier)) { setShowUpgrade(true); return; } window.print(); }} className="text-primary hover:underline">print</button>
               {" "}a schedule for the big day. From wake-up to{" "}
-              <span className="text-[#4f46bd]">I dos</span>
+              <span className="text-primary">I dos</span>
               , create a complete itinerary that walks you through the day.
             </p>
             {formattedDate && (
-              <p className="mt-3 text-sm text-[#6b6890]">
+              <p className="mt-3 text-sm text-muted-foreground">
                 Wedding Date:{" "}
-                <span className="text-[#4f46bd] underline decoration-dotted cursor-default">{formattedDate}</span>
+                <span className="text-primary underline decoration-dotted cursor-default">{formattedDate}</span>
               </p>
             )}
           </div>
@@ -439,14 +439,14 @@ export default function ItineraryPage() {
               <button
                 role="switch" aria-checked={use24h}
                 onClick={() => setUse24h(v => !v)}
-                className={`relative inline-flex h-5 w-9 flex-shrink-0 rounded-full border-2 border-transparent transition-colors ${use24h ? "bg-[#4f46bd]" : "bg-gray-300"}`}
+                className={`relative inline-flex h-5 w-9 flex-shrink-0 rounded-full border-2 border-transparent transition-colors ${use24h ? "bg-primary" : "bg-muted-foreground/50"}`}
               >
-                <span className={`inline-block h-4 w-4 transform rounded-full bg-white shadow transition-transform ${use24h ? "translate-x-4" : "translate-x-0"}`} />
+                <span className={`inline-block h-4 w-4 transform rounded-full bg-background shadow transition-transform ${use24h ? "translate-x-4" : "translate-x-0"}`} />
               </button>
-              <span className="text-xs text-[#6b6890]">24-Hour Clock</span>
+              <span className="text-xs text-muted-foreground">24-Hour Clock</span>
             </label>
             {events.length > 0 && (
-              <button onClick={resetAll} className="flex items-center gap-1 text-xs text-[#4f46bd] hover:text-indigo-800">
+              <button onClick={resetAll} className="flex items-center gap-1 text-xs text-primary hover:text-primary/90">
                 <RotateCcw className="h-3 w-3" /> Reset entire itinerary
               </button>
             )}
@@ -455,14 +455,14 @@ export default function ItineraryPage() {
           {/* Loading */}
           {loading || (!loading && events.length === 0) ? (
             <div className="flex justify-center py-16">
-              <div className="h-6 w-6 animate-spin rounded-full border-2 border-[#4f46bd]/30 border-t-[#4f46bd]" />
+              <div className="h-6 w-6 animate-spin rounded-full border-2 border-primary/30 border-t-primary" />
             </div>
           ) : (
             <>
               {/* Section heading */}
               <div className="mb-4 text-center">
-                <h2 className="text-xl font-semibold text-[#2d2b4a]">The Big Day</h2>
-                <div className="mx-auto mt-1 h-0.5 w-8 rounded bg-[#4f46bd]/40" />
+                <h2 className="text-xl font-semibold text-foreground">The Big Day</h2>
+                <div className="mx-auto mt-1 h-0.5 w-8 rounded bg-primary/40" />
               </div>
 
               {/* Timeline */}
@@ -473,14 +473,14 @@ export default function ItineraryPage() {
                   const highlighted = idx % 3 === 0;
 
                   return (
-                    <div key={ev.id} className={`group flex items-stretch relative ${highlighted ? "bg-white/60 rounded-xl" : ""}`} style={{ minHeight: 72 }}>
+                    <div key={ev.id} className={`group flex items-stretch relative ${highlighted ? "bg-card/60 rounded-xl" : ""}`} style={{ minHeight: 72 }}>
 
                       {/* LEFT: icon + time + duration */}
                       <div className="flex w-[45%] flex-shrink-0 items-center gap-2 px-3 py-3">
                         {/* Clickable icon */}
                         <button
                           onClick={() => setIconPickerFor(ev.id)}
-                          className="flex-shrink-0 rounded-lg p-1 hover:bg-white/60 transition-colors"
+                          className="flex-shrink-0 rounded-lg p-1 hover:bg-card/60 transition-colors"
                           title="Change icon"
                         >
                           <IconSvg iconId={ev.category} size={38} />
@@ -496,20 +496,20 @@ export default function ItineraryPage() {
                               onChange={e => setTempTime(e.target.value)}
                               onBlur={() => saveTime(ev)}
                               onKeyDown={e => { if (e.key === "Enter") saveTime(ev); if (e.key === "Escape") setEditingTimeId(null); }}
-                              className="rounded-lg border border-indigo-300 bg-white px-2 py-1 text-sm focus:outline-none w-28"
+                              className="rounded-lg border border-primary/30 bg-card px-2 py-1 text-sm focus:outline-none w-28"
                             />
                           ) : (
                             <div className="flex items-baseline gap-0.5">
                               <button
                                 onClick={() => openTime(ev)}
-                                className="text-[1.9rem] font-bold leading-none tracking-tight text-[#2d2b4a] hover:text-[#4f46bd] transition-colors tabular-nums"
+                                className="text-[1.9rem] font-bold leading-none tracking-tight text-foreground hover:text-primary transition-colors tabular-nums"
                               >
                                 {hm}
                               </button>
                               {ampm && (
                                 <button
                                   onClick={() => flipAmPm(ev)}
-                                  className="ml-1 text-sm font-medium text-[#2d2b4a]/70 hover:text-[#4f46bd] transition-colors"
+                                  className="ml-1 text-sm font-medium text-foreground/70 hover:text-primary transition-colors"
                                   title="Toggle am/pm"
                                 >
                                   {ampm}
@@ -529,17 +529,17 @@ export default function ItineraryPage() {
                                 onChange={e => setTempDuration(e.target.value)}
                                 onBlur={() => saveDuration(ev)}
                                 onKeyDown={e => { if (e.key === "Enter") saveDuration(ev); if (e.key === "Escape") setEditingDurationId(null); }}
-                                className="w-16 rounded border border-indigo-300 bg-white px-1.5 py-0.5 text-xs focus:outline-none tabular-nums"
+                                className="w-16 rounded border border-primary/30 bg-card px-1.5 py-0.5 text-xs focus:outline-none tabular-nums"
                               />
-                              <span className="text-[11px] text-[#9995b8]">min</span>
-                              <button onClick={() => saveDuration(ev)} className="text-indigo-500 hover:text-indigo-700">
+                              <span className="text-[11px] text-muted-foreground/70">min</span>
+                              <button onClick={() => saveDuration(ev)} className="text-primary hover:text-primary/80">
                                 <Check className="h-3 w-3" />
                               </button>
                             </div>
                           ) : (
                             <button
                               onClick={() => openDuration(ev)}
-                              className="mt-0.5 block text-[11px] text-[#9995b8] hover:text-[#4f46bd] transition-colors"
+                              className="mt-0.5 block text-[11px] text-muted-foreground/70 hover:text-primary transition-colors"
                             >
                               Duration {dur} min
                             </button>
@@ -549,8 +549,8 @@ export default function ItineraryPage() {
 
                       {/* CENTER: dotted vertical line */}
                       <div className="relative flex w-4 flex-shrink-0 flex-col items-center">
-                        <div className="absolute inset-y-0 left-1/2 -translate-x-1/2 w-px border-l border-dashed border-[#b0acd0]" />
-                        <div className="relative z-10 mt-7 h-2 w-2 rounded-full border border-[#b0acd0] bg-[#ebe8f1]" />
+                        <div className="absolute inset-y-0 left-1/2 -translate-x-1/2 w-px border-l border-dashed border-muted-foreground/30" />
+                        <div className="relative z-10 mt-7 h-2 w-2 rounded-full border border-muted-foreground/30 bg-muted" />
                       </div>
 
                       {/* RIGHT: title + menu */}
@@ -563,32 +563,32 @@ export default function ItineraryPage() {
                               onChange={e => setTempTitle(e.target.value)}
                               onBlur={() => saveTitle(ev)}
                               onKeyDown={e => { if (e.key === "Enter") saveTitle(ev); if (e.key === "Escape") setEditingTitleId(null); }}
-                              className="w-full rounded-lg border border-indigo-300 bg-white px-2 py-1 text-sm text-[#4f46bd] focus:outline-none"
+                              className="w-full rounded-lg border border-primary/30 bg-card px-2 py-1 text-sm text-primary focus:outline-none"
                             />
                           ) : (
                             <button
                               onClick={() => openTitle(ev)}
-                              className="block w-full text-left text-sm font-medium text-[#4f46bd] hover:text-indigo-900 transition-colors truncate"
+                              className="block w-full text-left text-sm font-medium text-primary hover:text-primary/90 transition-colors truncate"
                             >
                               {ev.title}
                             </button>
                           )}
-                          <div className="mt-0.5 h-px w-full bg-[#d6d3e8]" />
+                          <div className="mt-0.5 h-px w-full bg-border" />
                         </div>
 
                         {/* ⋮ three-dot menu */}
                         <div className="relative opacity-0 group-hover:opacity-100 transition-opacity flex-shrink-0" ref={menuFor === ev.id ? menuRef : undefined}>
                           <button
                             onClick={() => setMenuFor(menuFor === ev.id ? null : ev.id)}
-                            className="rounded p-0.5 text-[#b0acd0] hover:text-[#4f46bd] hover:bg-white/60"
+                            className="rounded p-0.5 text-muted-foreground/50 hover:text-primary hover:bg-card/60"
                           >
                             <MoreVertical className="h-4 w-4" />
                           </button>
                           {menuFor === ev.id && (
-                            <div className="absolute right-0 top-6 z-20 w-32 rounded-xl border border-gray-100 bg-white shadow-lg py-1">
+                            <div className="absolute right-0 top-6 z-20 w-32 rounded-xl border border-border bg-card shadow-lg py-1">
                               <button
                                 onClick={() => deleteEvent(ev.id)}
-                                className="w-full px-3 py-1.5 text-left text-xs text-red-500 hover:bg-red-50 transition-colors"
+                                className="w-full px-3 py-1.5 text-left text-xs text-[var(--color-error-text)] hover:bg-[var(--color-error-bg)] transition-colors"
                               >
                                 Delete event
                               </button>
@@ -602,34 +602,34 @@ export default function ItineraryPage() {
 
                 {/* Add event form */}
                 {addingNew && (
-                  <div className="mt-3 rounded-xl border border-indigo-200 bg-white/80 p-3 space-y-2 shadow-sm">
+                  <div className="mt-3 rounded-xl border border-primary/20 bg-card/80 p-3 space-y-2 shadow-sm">
                     <input
                       autoFocus
                       value={newForm.title}
                       onChange={e => setNewForm(f => ({ ...f, title: e.target.value }))}
                       onKeyDown={e => { if (e.key === "Enter") saveNewEvent(); if (e.key === "Escape") setAddingNew(false); }}
                       placeholder="Event title"
-                      className="w-full rounded-lg border border-gray-200 bg-white px-3 py-1.5 text-sm focus:border-indigo-400 focus:outline-none"
+                      className="w-full rounded-lg border border-border bg-card px-3 py-1.5 text-sm focus:border-primary/40 focus:outline-none"
                     />
                     <div className="flex gap-2 flex-wrap">
                       <div>
-                        <label className="block text-[10px] text-gray-400 mb-0.5">Start time</label>
+                        <label className="block text-[10px] text-muted-foreground mb-0.5">Start time</label>
                         <input type="time" value={newForm.startTime} onChange={e => setNewForm(f => ({ ...f, startTime: e.target.value }))}
-                          className="rounded-lg border border-gray-200 bg-white px-2 py-1.5 text-sm focus:border-indigo-400 focus:outline-none" />
+                          className="rounded-lg border border-border bg-card px-2 py-1.5 text-sm focus:border-primary/40 focus:outline-none" />
                       </div>
                       <div>
-                        <label className="block text-[10px] text-gray-400 mb-0.5">Duration (min)</label>
+                        <label className="block text-[10px] text-muted-foreground mb-0.5">Duration (min)</label>
                         <input type="number" min="0" value={newForm.duration} onChange={e => setNewForm(f => ({ ...f, duration: e.target.value }))}
-                          className="w-20 rounded-lg border border-gray-200 bg-white px-2 py-1.5 text-sm focus:border-indigo-400 focus:outline-none" />
+                          className="w-20 rounded-lg border border-border bg-card px-2 py-1.5 text-sm focus:border-primary/40 focus:outline-none" />
                       </div>
                     </div>
                     <div className="flex gap-2 pt-1">
                       <button onClick={saveNewEvent} disabled={savingNew || !newForm.title.trim()}
-                        className="flex items-center gap-1 rounded-lg bg-[#4f46bd] px-3 py-1.5 text-xs font-medium text-white hover:bg-indigo-700 disabled:opacity-50">
+                        className="flex items-center gap-1 rounded-lg bg-primary px-3 py-1.5 text-xs font-medium text-primary-foreground hover:bg-primary/90 disabled:opacity-50">
                         <Check className="h-3 w-3" /> Save
                       </button>
                       <button onClick={() => setAddingNew(false)}
-                        className="flex items-center gap-1 rounded-lg border border-gray-200 bg-white px-3 py-1.5 text-xs text-gray-500 hover:bg-gray-50">
+                        className="flex items-center gap-1 rounded-lg border border-border bg-card px-3 py-1.5 text-xs text-muted-foreground hover:bg-muted/30">
                         <X className="h-3 w-3" /> Cancel
                       </button>
                     </div>
@@ -639,7 +639,7 @@ export default function ItineraryPage() {
                 {/* + Add event */}
                 {!addingNew && (
                   <div className="mt-4 text-center">
-                    <button onClick={() => setAddingNew(true)} className="text-sm text-[#4f46bd] hover:text-indigo-900 transition-colors">
+                    <button onClick={() => setAddingNew(true)} className="text-sm text-primary hover:text-primary/90 transition-colors">
                       <Plus className="inline h-4 w-4 -mt-0.5 mr-0.5" />
                       Add event
                     </button>
@@ -651,9 +651,9 @@ export default function ItineraryPage() {
               <div className="mt-8 flex flex-wrap justify-center gap-3">
                 <button
                   onClick={() => { if (!isPremiumOrElite(tier)) { setShowUpgrade(true); return; } window.print(); }}
-                  className="flex items-center gap-2 rounded-xl border border-[#c5c2db] bg-white/70 px-6 py-2.5 text-sm text-[#6b6890] shadow-sm hover:bg-white transition-colors"
+                  className="flex items-center gap-2 rounded-xl border border-border bg-card/70 px-6 py-2.5 text-sm text-muted-foreground shadow-sm hover:bg-card transition-colors"
                 >
-                  <FileText className="h-4 w-4 text-red-400" />
+                  <FileText className="h-4 w-4 text-[var(--color-error-text)]" />
                   Download PDF file
                 </button>
                 <button
@@ -678,9 +678,9 @@ export default function ItineraryPage() {
                       XLSX.writeFile(wb, filename);
                     });
                   }}
-                  className="flex items-center gap-2 rounded-xl border border-[#c5c2db] bg-white/70 px-6 py-2.5 text-sm text-[#6b6890] shadow-sm hover:bg-white transition-colors"
+                  className="flex items-center gap-2 rounded-xl border border-border bg-card/70 px-6 py-2.5 text-sm text-muted-foreground shadow-sm hover:bg-card transition-colors"
                 >
-                  <Table2 className="h-4 w-4 text-emerald-500" />
+                  <Table2 className="h-4 w-4 text-[var(--color-success-text)]" />
                   Download XLS file
                 </button>
               </div>

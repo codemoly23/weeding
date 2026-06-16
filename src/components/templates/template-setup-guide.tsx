@@ -301,7 +301,7 @@ export function TemplateSetupGuide({ pageType }: TemplateSetupGuideProps) {
                     </p>
 
                     {step.tip && (
-                      <div className="flex items-start gap-2 text-sm bg-amber-500/10 text-amber-700 dark:text-amber-400 rounded-lg p-3 mt-2">
+                      <div className="flex items-start gap-2 text-sm bg-[var(--color-warning-bg)] text-[var(--color-warning-text)] rounded-lg p-3 mt-2">
                         <Lightbulb className="w-4 h-4 flex-shrink-0 mt-0.5" />
                         <span>{step.tip}</span>
                       </div>

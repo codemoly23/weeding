@@ -1,5 +1,5 @@
 # DEVELOPMENT-PLAN.md
-# LLCPad — Full Project Development Tracker
+# Weeding Ceremony — Full Project Development Tracker
 
 **Project:** US LLC Formation & Amazon Seller Services Website
 **Stack:** Next.js 16 + TypeScript 5.9 + Tailwind 4.1 + PostgreSQL 18 + Prisma 7

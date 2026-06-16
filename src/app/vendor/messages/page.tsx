@@ -222,12 +222,12 @@ export default function VendorMessagesPage() {
     <div className="max-w-6xl mx-auto h-[calc(100vh-8rem)] flex flex-col">
       <div className="mb-4 flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900">Messages</h1>
-          <p className="text-sm text-gray-500 mt-0.5">Conversations with potential clients</p>
+          <h1 className="text-2xl font-bold text-foreground">Messages</h1>
+          <p className="text-sm text-muted-foreground mt-0.5">Conversations with potential clients</p>
         </div>
         <button
           onClick={() => setShowQRManager(true)}
-          className="flex items-center gap-1.5 px-3 py-1.5 text-sm text-purple-600 border border-purple-200 rounded-lg hover:bg-purple-50 transition-colors"
+          className="flex items-center gap-1.5 px-3 py-1.5 text-sm text-primary border border-primary/20 rounded-lg hover:bg-primary/5 transition-colors"
         >
           <Zap className="w-3.5 h-3.5" /> Quick Replies
         </button>
@@ -235,17 +235,17 @@ export default function VendorMessagesPage() {
 
       <div className="flex flex-1 gap-4 min-h-0">
         {/* Conversation list */}
-        <div className={`flex flex-col bg-white rounded-xl border border-gray-200 ${selectedId ? "hidden lg:flex lg:w-80" : "w-full lg:w-80"}`}>
+        <div className={`flex flex-col bg-card rounded-xl border border-border ${selectedId ? "hidden lg:flex lg:w-80" : "w-full lg:w-80"}`}>
           {/* Filter tabs */}
-          <div className="flex border-b border-gray-100 px-3 py-2 gap-1">
+          <div className="flex border-b border-border px-3 py-2 gap-1">
             {FILTERS.map((f) => (
               <button
                 key={f.value}
                 onClick={() => { setStatusFilter(f.value); setSelectedId(null); }}
                 className={`px-3 py-1 rounded-full text-xs font-medium transition-colors ${
                   statusFilter === f.value
-                    ? "bg-purple-600 text-white"
-                    : "text-gray-500 hover:text-gray-700 hover:bg-gray-100"
+                    ? "bg-primary text-primary-foreground"
+                    : "text-muted-foreground hover:text-foreground hover:bg-muted"
                 }`}
               >
                 {f.label}
@@ -254,16 +254,16 @@ export default function VendorMessagesPage() {
           </div>
 
           {/* List */}
-          <div className="flex-1 overflow-y-auto divide-y divide-gray-50">
+          <div className="flex-1 overflow-y-auto divide-y divide-border">
             {loadingList ? (
               <div className="flex items-center justify-center py-12">
-                <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-purple-600" />
+                <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-primary" />
               </div>
             ) : conversations.length === 0 ? (
               <div className="flex flex-col items-center justify-center py-12 px-4 text-center">
-                <MessageSquare className="w-8 h-8 text-gray-200 mb-2" />
-                <p className="text-sm text-gray-500">No conversations yet</p>
-                <p className="text-xs text-gray-400 mt-1">
+                <MessageSquare className="w-8 h-8 text-muted-foreground/70 mb-2" />
+                <p className="text-sm text-muted-foreground">No conversations yet</p>
+                <p className="text-xs text-muted-foreground/70 mt-1">
                   Conversations are created automatically when guests submit inquiries
                 </p>
               </div>
@@ -272,32 +272,32 @@ export default function VendorMessagesPage() {
                 <button
                   key={conv.id}
                   onClick={() => setSelectedId(conv.id)}
-                  className={`w-full text-left px-4 py-3 hover:bg-gray-50 transition-colors ${
-                    selectedId === conv.id ? "bg-purple-50 border-l-2 border-purple-500" : ""
+                  className={`w-full text-left px-4 py-3 hover:bg-muted/30 transition-colors ${
+                    selectedId === conv.id ? "bg-primary/5 border-l-2 border-primary" : ""
                   }`}
                 >
                   <div className="flex items-start justify-between gap-2">
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center gap-2">
-                        <div className="w-7 h-7 rounded-full bg-purple-100 flex items-center justify-center shrink-0">
-                          <span className="text-xs font-bold text-purple-600">
+                        <div className="w-7 h-7 rounded-full bg-primary/10 flex items-center justify-center shrink-0">
+                          <span className="text-xs font-bold text-primary">
                             {conv.guestName.charAt(0).toUpperCase()}
                           </span>
                         </div>
-                        <span className="text-sm font-medium text-gray-900 truncate">
+                        <span className="text-sm font-medium text-foreground truncate">
                           {conv.guestName}
                         </span>
                         {conv.unreadCount > 0 && (
-                          <span className="ml-auto shrink-0 bg-purple-600 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center font-bold">
+                          <span className="ml-auto shrink-0 bg-primary text-primary-foreground text-xs rounded-full w-5 h-5 flex items-center justify-center font-bold">
                             {conv.unreadCount}
                           </span>
                         )}
                       </div>
                       {conv.inquiry && (
-                        <p className="text-xs text-gray-400 mt-0.5 ml-9">{conv.inquiry.eventType}</p>
+                        <p className="text-xs text-muted-foreground/70 mt-0.5 ml-9">{conv.inquiry.eventType}</p>
                       )}
                     </div>
-                    <span className="text-xs text-gray-400 shrink-0">{formatTime(conv.lastMessageAt)}</span>
+                    <span className="text-xs text-muted-foreground/70 shrink-0">{formatTime(conv.lastMessageAt)}</span>
                   </div>
                 </button>
               ))
@@ -307,35 +307,35 @@ export default function VendorMessagesPage() {
 
         {/* Thread panel */}
         {selectedId ? (
-          <div className="flex-1 flex flex-col bg-white rounded-xl border border-gray-200 min-w-0">
+          <div className="flex-1 flex flex-col bg-card rounded-xl border border-border min-w-0">
             {loadingThread && !thread ? (
               <div className="flex items-center justify-center flex-1">
-                <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-purple-600" />
+                <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-primary" />
               </div>
             ) : thread ? (
               <>
                 {/* Thread header */}
-                <div className="flex items-center gap-3 px-4 py-3 border-b border-gray-100">
+                <div className="flex items-center gap-3 px-4 py-3 border-b border-border">
                   <button
                     onClick={() => setSelectedId(null)}
-                    className="lg:hidden p-1 rounded text-gray-400 hover:text-gray-600"
+                    className="lg:hidden p-1 rounded text-muted-foreground/70 hover:text-foreground/80"
                   >
                     <ChevronLeft className="w-4 h-4" />
                   </button>
-                  <div className="w-8 h-8 rounded-full bg-purple-100 flex items-center justify-center">
-                    <span className="text-sm font-bold text-purple-600">
+                  <div className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center">
+                    <span className="text-sm font-bold text-primary">
                       {thread.guestName.charAt(0).toUpperCase()}
                     </span>
                   </div>
                   <div className="flex-1 min-w-0">
-                    <p className="text-sm font-semibold text-gray-900">{thread.guestName}</p>
-                    <p className="text-xs text-gray-500">{thread.guestEmail}</p>
+                    <p className="text-sm font-semibold text-foreground">{thread.guestName}</p>
+                    <p className="text-xs text-muted-foreground">{thread.guestEmail}</p>
                   </div>
                   <div className="flex items-center gap-1">
                     {thread.status === "ACTIVE" && (
                       <button
                         onClick={() => updateStatus(thread.id, "ARCHIVED")}
-                        className="p-1.5 rounded text-gray-400 hover:text-gray-600 hover:bg-gray-100 transition-colors"
+                        className="p-1.5 rounded text-muted-foreground/70 hover:text-foreground/80 hover:bg-muted transition-colors"
                         title="Archive"
                       >
                         <Archive className="w-4 h-4" />
@@ -344,14 +344,14 @@ export default function VendorMessagesPage() {
                     {thread.status === "ARCHIVED" && (
                       <button
                         onClick={() => updateStatus(thread.id, "ACTIVE")}
-                        className="px-2 py-1 text-xs text-purple-600 border border-purple-200 rounded hover:bg-purple-50"
+                        className="px-2 py-1 text-xs text-primary border border-primary/20 rounded hover:bg-primary/5"
                       >
                         Restore
                       </button>
                     )}
                     <button
                       onClick={() => updateStatus(thread.id, "SPAM")}
-                      className="p-1.5 rounded text-gray-400 hover:text-red-500 hover:bg-red-50 transition-colors"
+                      className="p-1.5 rounded text-muted-foreground/70 hover:text-[var(--color-error-text)] hover:bg-[var(--color-error-bg)] transition-colors"
                       title="Mark as spam"
                     >
                       <AlertCircle className="w-4 h-4" />
@@ -370,9 +370,9 @@ export default function VendorMessagesPage() {
                         ? `${p.brideName} & ${p.groomName}`
                         : p.brideName || p.groomName || "Couple";
                     return (
-                      <div className="mx-4 mt-3 mb-1 bg-purple-50 border border-purple-100 rounded-lg px-4 py-2.5">
-                        <p className="text-xs font-semibold text-purple-700 mb-1.5">{coupleName}&apos;s Event</p>
-                        <div className="flex flex-wrap gap-x-4 gap-y-1 text-xs text-purple-800">
+                      <div className="mx-4 mt-3 mb-1 bg-primary/5 border border-primary/10 rounded-lg px-4 py-2.5">
+                        <p className="text-xs font-semibold text-primary mb-1.5">{coupleName}&apos;s Event</p>
+                        <div className="flex flex-wrap gap-x-4 gap-y-1 text-xs text-primary">
                           {p.eventDate && (
                             <span className="flex items-center gap-1">
                               <Calendar className="w-3 h-3 shrink-0" />
@@ -408,9 +408,9 @@ export default function VendorMessagesPage() {
                     );
                   }
                   return thread.inquiry ? (
-                    <div className="mx-4 mt-3 mb-1 bg-blue-50 border border-blue-100 rounded-lg px-4 py-2.5">
-                      <p className="text-xs font-medium text-blue-600 mb-1">Inquiry Details</p>
-                      <div className="flex flex-wrap gap-x-4 gap-y-1 text-xs text-blue-800">
+                    <div className="mx-4 mt-3 mb-1 bg-[var(--color-info-bg)] border border-[var(--color-info-bg)] rounded-lg px-4 py-2.5">
+                      <p className="text-xs font-medium text-[var(--color-info-text)] mb-1">Inquiry Details</p>
+                      <div className="flex flex-wrap gap-x-4 gap-y-1 text-xs text-[var(--color-info-text)]">
                         <span>Event: <strong>{thread.inquiry.eventType}</strong></span>
                         {thread.inquiry.eventDate && (
                           <span className="flex items-center gap-1">
@@ -436,12 +436,12 @@ export default function VendorMessagesPage() {
                       <div
                         className={`max-w-[75%] rounded-2xl px-4 py-2.5 text-sm leading-relaxed ${
                           msg.senderRole === "VENDOR"
-                            ? "bg-purple-600 text-white rounded-br-sm"
-                            : "bg-gray-100 text-gray-800 rounded-bl-sm"
+                            ? "bg-primary text-primary-foreground rounded-br-sm"
+                            : "bg-muted text-foreground rounded-bl-sm"
                         }`}
                       >
                         <p className="whitespace-pre-wrap">{msg.content}</p>
-                        <p className={`text-[10px] mt-1 text-right ${msg.senderRole === "VENDOR" ? "text-purple-200" : "text-gray-400"}`}>
+                        <p className={`text-[10px] mt-1 text-right ${msg.senderRole === "VENDOR" ? "text-primary-foreground/60" : "text-muted-foreground/70"}`}>
                           {formatTime(msg.createdAt)}
                         </p>
                       </div>
@@ -452,13 +452,13 @@ export default function VendorMessagesPage() {
 
                 {/* Compose */}
                 {thread.status !== "SPAM" && (
-                  <div className="border-t border-gray-100 px-4 py-3">
+                  <div className="border-t border-border px-4 py-3">
                     {/* Quick replies toggle */}
                     {quickReplies.length > 0 && (
                       <div className="mb-2">
                         <button
                           onClick={() => setShowQuickReplies(!showQuickReplies)}
-                          className="flex items-center gap-1 text-xs text-purple-600 hover:text-purple-700"
+                          className="flex items-center gap-1 text-xs text-primary hover:text-primary"
                         >
                           <Zap className="w-3 h-3" />
                           Quick replies
@@ -469,7 +469,7 @@ export default function VendorMessagesPage() {
                               <button
                                 key={qr.id}
                                 onClick={() => applyQuickReply(qr.content)}
-                                className="px-2.5 py-1 bg-purple-50 border border-purple-200 rounded-full text-xs text-purple-700 hover:bg-purple-100 transition-colors"
+                                className="px-2.5 py-1 bg-primary/5 border border-primary/20 rounded-full text-xs text-primary hover:bg-primary/10 transition-colors"
                               >
                                 {qr.title}
                               </button>
@@ -490,12 +490,12 @@ export default function VendorMessagesPage() {
                         }}
                         rows={2}
                         placeholder="Type a message… (Enter to send, Shift+Enter for new line)"
-                        className="flex-1 resize-none border border-gray-200 rounded-xl px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-purple-400"
+                        className="flex-1 resize-none border border-border rounded-xl px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary/60"
                       />
                       <button
                         onClick={sendMessage}
                         disabled={sending || !messageText.trim()}
-                        className="p-2.5 bg-purple-600 text-white rounded-xl hover:bg-purple-700 disabled:opacity-50 transition-colors shrink-0"
+                        className="p-2.5 bg-primary text-primary-foreground rounded-xl hover:bg-primary/90 disabled:opacity-50 transition-colors shrink-0"
                       >
                         <Send className="w-4 h-4" />
                       </button>
@@ -503,9 +503,9 @@ export default function VendorMessagesPage() {
                   </div>
                 )}
                 {thread.status === "SPAM" && (
-                  <div className="border-t border-gray-100 px-4 py-3 text-center text-xs text-gray-400">
+                  <div className="border-t border-border px-4 py-3 text-center text-xs text-muted-foreground/70">
                     This conversation has been marked as spam.
-                    <button onClick={() => updateStatus(thread.id, "ACTIVE")} className="ml-1 text-purple-600 underline">
+                    <button onClick={() => updateStatus(thread.id, "ACTIVE")} className="ml-1 text-primary underline">
                       Restore
                     </button>
                   </div>
@@ -514,10 +514,10 @@ export default function VendorMessagesPage() {
             ) : null}
           </div>
         ) : (
-          <div className="flex-1 hidden lg:flex items-center justify-center bg-white rounded-xl border border-gray-200 border-dashed">
+          <div className="flex-1 hidden lg:flex items-center justify-center bg-card rounded-xl border border-border border-dashed">
             <div className="text-center">
-              <MessageSquare className="w-10 h-10 text-gray-200 mx-auto mb-3" />
-              <p className="text-sm text-gray-500">Select a conversation</p>
+              <MessageSquare className="w-10 h-10 text-muted-foreground/70 mx-auto mb-3" />
+              <p className="text-sm text-muted-foreground">Select a conversation</p>
             </div>
           </div>
         )}
@@ -530,12 +530,12 @@ export default function VendorMessagesPage() {
           onClick={() => setShowQRManager(false)}
         >
           <div
-            className="bg-white rounded-2xl shadow-xl w-full max-w-lg p-6 max-h-[80vh] overflow-y-auto"
+            className="bg-card rounded-2xl shadow-xl w-full max-w-lg p-6 max-h-[80vh] overflow-y-auto"
             onClick={(e) => e.stopPropagation()}
           >
             <div className="flex items-center justify-between mb-4">
-              <h2 className="text-base font-bold text-gray-900">Quick Replies</h2>
-              <button onClick={() => setShowQRManager(false)} className="text-gray-400 hover:text-gray-600">
+              <h2 className="text-base font-bold text-foreground">Quick Replies</h2>
+              <button onClick={() => setShowQRManager(false)} className="text-muted-foreground/70 hover:text-foreground/80">
                 <X className="w-5 h-5" />
               </button>
             </div>
@@ -544,14 +544,14 @@ export default function VendorMessagesPage() {
             {quickReplies.length > 0 && (
               <div className="space-y-2 mb-4">
                 {quickReplies.map((qr) => (
-                  <div key={qr.id} className="flex items-start gap-2 p-3 bg-gray-50 rounded-lg">
+                  <div key={qr.id} className="flex items-start gap-2 p-3 bg-muted/30 rounded-lg">
                     <div className="flex-1 min-w-0">
-                      <p className="text-xs font-semibold text-gray-700">{qr.title}</p>
-                      <p className="text-xs text-gray-500 mt-0.5 line-clamp-2">{qr.content}</p>
+                      <p className="text-xs font-semibold text-foreground">{qr.title}</p>
+                      <p className="text-xs text-muted-foreground mt-0.5 line-clamp-2">{qr.content}</p>
                     </div>
                     <button
                       onClick={() => deleteQuickReply(qr.id)}
-                      className="p-1 text-gray-300 hover:text-red-400 transition-colors shrink-0"
+                      className="p-1 text-muted-foreground/70 hover:text-[var(--color-error-text)] transition-colors shrink-0"
                     >
                       <Trash2 className="w-3.5 h-3.5" />
                     </button>
@@ -561,25 +561,25 @@ export default function VendorMessagesPage() {
             )}
 
             {/* Add new */}
-            <div className="border-t border-gray-100 pt-4 space-y-3">
-              <p className="text-xs font-medium text-gray-700">Add new quick reply</p>
+            <div className="border-t border-border pt-4 space-y-3">
+              <p className="text-xs font-medium text-foreground">Add new quick reply</p>
               <input
                 value={newQRTitle}
                 onChange={(e) => setNewQRTitle(e.target.value)}
                 placeholder="Title (e.g. Pricing Info)"
-                className="w-full border rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-purple-400"
+                className="w-full border rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary/60"
               />
               <textarea
                 value={newQRContent}
                 onChange={(e) => setNewQRContent(e.target.value)}
                 rows={3}
                 placeholder="Message content…"
-                className="w-full border rounded-lg px-3 py-2 text-sm resize-none focus:outline-none focus:ring-2 focus:ring-purple-400"
+                className="w-full border rounded-lg px-3 py-2 text-sm resize-none focus:outline-none focus:ring-2 focus:ring-primary/60"
               />
               <button
                 onClick={saveQuickReply}
                 disabled={savingQR || !newQRTitle.trim() || !newQRContent.trim()}
-                className="flex items-center gap-1.5 px-3 py-2 bg-purple-600 text-white text-sm rounded-lg hover:bg-purple-700 disabled:opacity-50 transition-colors"
+                className="flex items-center gap-1.5 px-3 py-2 bg-primary text-primary-foreground text-sm rounded-lg hover:bg-primary/90 disabled:opacity-50 transition-colors"
               >
                 <Plus className="w-3.5 h-3.5" />
                 {savingQR ? "Saving…" : "Add Reply"}

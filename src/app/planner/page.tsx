@@ -72,44 +72,23 @@ function RingsIcon() {
 }
 
 // Card gradient by event type
-function cardGradient(eventType: string, isLocal: boolean) {
-  if (isLocal) return "from-amber-50 via-orange-50 to-amber-50";
-  switch (eventType) {
-    case "WEDDING":    return "from-rose-50 via-pink-50 to-violet-50";
-    case "BAPTISM":    return "from-sky-50 via-blue-50 to-indigo-50";
-    case "PARTY":      return "from-fuchsia-50 via-purple-50 to-pink-50";
-    case "CORPORATE":  return "from-slate-50 via-gray-50 to-blue-50";
-    default:           return "from-violet-50 via-purple-50 to-pink-50";
-  }
+function cardGradient(_eventType: string, _isLocal: boolean) {
+  return "from-background to-muted/30";
 }
 
-function cardIconColor(eventType: string, isLocal: boolean) {
-  if (isLocal) return "text-amber-400";
-  switch (eventType) {
-    case "WEDDING":   return "text-rose-400";
-    case "BAPTISM":   return "text-sky-400";
-    case "PARTY":     return "text-fuchsia-400";
-    case "CORPORATE": return "text-slate-400";
-    default:          return "text-violet-400";
-  }
+function cardIconColor(_eventType: string, _isLocal: boolean) {
+  return "text-accent";
 }
 
-function tabColor(eventType: string, isLocal: boolean) {
-  if (isLocal) return "bg-amber-50";
-  switch (eventType) {
-    case "WEDDING":   return "bg-rose-50";
-    case "BAPTISM":   return "bg-sky-50";
-    case "PARTY":     return "bg-fuchsia-50";
-    case "CORPORATE": return "bg-slate-50";
-    default:          return "bg-violet-50";
-  }
+function tabColor(_eventType: string, _isLocal: boolean) {
+  return "bg-accent/10";
 }
 
 const STATUS_PILL: Record<string, string> = {
-  ACTIVE:    "bg-emerald-100 text-emerald-700",
-  DRAFT:     "bg-amber-100 text-amber-700",
-  ARCHIVED:  "bg-gray-100 text-gray-500",
-  COMPLETED: "bg-blue-100 text-blue-700",
+  ACTIVE:    "bg-[var(--color-success-bg)] text-[var(--color-success-text)]",
+  DRAFT:     "bg-[var(--color-warning-bg)] text-[var(--color-warning-text)]",
+  ARCHIVED:  "bg-muted text-muted-foreground",
+  COMPLETED: "bg-primary/10 text-primary",
 };
 
 // Beautiful folder-style project card
@@ -128,14 +107,14 @@ const ProjectCard = memo(function ProjectCard({ project, onClick, onDelete }: {
       onClick={onClick}
     >
       {/* Card */}
-      <div className="relative rounded-2xl overflow-hidden shadow-sm border border-gray-100/80 bg-white transition-all duration-200 group-hover:shadow-lg group-hover:-translate-y-0.5">
+      <div className="relative rounded-2xl overflow-hidden shadow-sm border border-border/80 bg-card transition-all duration-200 group-hover:shadow-lg group-hover:-translate-y-0.5">
 
         {/* Top gradient area */}
         <div className={`h-32 bg-gradient-to-br ${grad} flex flex-col items-center justify-center gap-2`}>
           {project.isLocal ? (
             <div className="flex flex-col items-center gap-1.5">
-              <CloudOff className="h-7 w-7 text-amber-300" />
-              <span className="text-[10px] font-semibold tracking-wide uppercase text-amber-400">
+              <CloudOff className="h-7 w-7 text-[var(--color-warning-text)]" />
+              <span className="text-[10px] font-semibold tracking-wide uppercase text-[var(--color-warning-text)]">
                 Not saved
               </span>
             </div>
@@ -148,7 +127,7 @@ const ProjectCard = memo(function ProjectCard({ project, onClick, onDelete }: {
           {/* Status badge top-right */}
           {!project.isLocal && (
             <div className="absolute top-2.5 right-2.5">
-              <span className={`rounded-full px-2 py-0.5 text-[10px] font-semibold tracking-wide uppercase ${STATUS_PILL[project.status] ?? "bg-gray-100 text-gray-500"}`}>
+              <span className={`rounded-full px-2 py-0.5 text-[10px] font-semibold tracking-wide uppercase ${STATUS_PILL[project.status] ?? "bg-muted text-muted-foreground"}`}>
                 {project.status.toLowerCase()}
               </span>
             </div>
@@ -156,28 +135,28 @@ const ProjectCard = memo(function ProjectCard({ project, onClick, onDelete }: {
         </div>
 
         {/* Subtle divider */}
-        <div className="h-px bg-gradient-to-r from-transparent via-gray-200 to-transparent" />
+        <div className="h-px bg-gradient-to-r from-transparent via-border to-transparent" />
 
         {/* Card footer */}
         <div className="px-3.5 py-3 flex items-start justify-between gap-1.5">
           <div className="min-w-0 flex-1">
-            <h3 className="font-semibold text-[14px] leading-snug text-gray-800 truncate group-hover:text-violet-600 transition-colors">
+            <h3 className="font-semibold text-[14px] leading-snug text-foreground truncate group-hover:text-primary transition-colors">
               {project.title}
             </h3>
-            <p className="mt-0.5 text-[11px] text-gray-400 capitalize">{project.eventType.toLowerCase()}</p>
+            <p className="mt-0.5 text-[11px] text-muted-foreground capitalize">{project.eventType.toLowerCase()}</p>
             {project.eventDate ? (
-              <p className="mt-1 flex items-center gap-1 text-[11px] font-medium text-rose-500">
+              <p className="mt-1 flex items-center gap-1 text-[11px] font-medium text-[var(--color-error-text)]">
                 <Calendar className="h-3 w-3 shrink-0" />
                 {format(new Date(project.eventDate), "d MMM yyyy")}
               </p>
             ) : (
-              <p className="mt-1 text-[11px] text-gray-300">No date set</p>
+              <p className="mt-1 text-[11px] text-muted-foreground/50">No date set</p>
             )}
           </div>
 
           <DropdownMenu>
             <DropdownMenuTrigger asChild onClick={(e) => e.stopPropagation()}>
-              <button className="shrink-0 mt-0.5 rounded-full p-1 text-gray-300 hover:bg-gray-100 hover:text-gray-600 opacity-0 group-hover:opacity-100 transition-all">
+              <button className="shrink-0 mt-0.5 rounded-full p-1 text-muted-foreground/50 hover:bg-muted hover:text-foreground opacity-0 group-hover:opacity-100 transition-all">
                 <MoreVertical className="h-3.5 w-3.5" />
               </button>
             </DropdownMenuTrigger>
@@ -198,11 +177,11 @@ const ProjectCard = memo(function ProjectCard({ project, onClick, onDelete }: {
 function CreateNewCard() {
   return (
     <Link href="/planner/create" className="block">
-      <div className="group relative cursor-pointer rounded-2xl border-2 border-dashed border-gray-200 bg-white/60 hover:border-violet-300 hover:bg-violet-50/40 transition-all duration-200 flex flex-col items-center justify-center min-h-[185px] gap-3 px-4 py-8 hover:shadow-md hover:-translate-y-0.5">
-        <div className="h-11 w-11 rounded-full border-2 border-dashed border-gray-300 group-hover:border-violet-400 group-hover:bg-violet-50 flex items-center justify-center transition-all duration-200">
-          <Plus className="h-5 w-5 text-gray-400 group-hover:text-violet-500 transition-colors" />
+      <div className="group relative cursor-pointer rounded-2xl border-2 border-dashed border-border bg-card/60 hover:border-primary/30 hover:bg-primary/5 transition-all duration-200 flex flex-col items-center justify-center min-h-[185px] gap-3 px-4 py-8 hover:shadow-md hover:-translate-y-0.5">
+        <div className="h-11 w-11 rounded-full border-2 border-dashed border-border group-hover:border-primary group-hover:bg-primary/5 flex items-center justify-center transition-all duration-200">
+          <Plus className="h-5 w-5 text-muted-foreground group-hover:text-primary transition-colors" />
         </div>
-        <p className="text-center text-[13px] font-semibold text-gray-400 group-hover:text-violet-500 transition-colors leading-snug">
+        <p className="text-center text-[13px] font-semibold text-muted-foreground group-hover:text-primary transition-colors leading-snug">
           Create new<br />wedding project
         </p>
       </div>
@@ -267,18 +246,18 @@ export default function MyProjectsPage() {
         <div className="text-center pt-14 pb-10 px-4">
           {/* Decorative top */}
           <div className="flex items-center justify-center gap-3 mb-5">
-            <div className="h-px w-16 bg-gradient-to-r from-transparent to-rose-300" />
-            <svg viewBox="0 0 32 20" fill="none" className="w-8 h-5 text-rose-400" xmlns="http://www.w3.org/2000/svg">
+            <div className="h-px w-16 bg-gradient-to-r from-transparent to-border" />
+            <svg viewBox="0 0 32 20" fill="none" className="w-8 h-5 text-accent" xmlns="http://www.w3.org/2000/svg">
               <circle cx="10" cy="10" r="8" stroke="currentColor" strokeWidth="2"/>
               <circle cx="22" cy="10" r="8" stroke="currentColor" strokeWidth="2"/>
             </svg>
-            <div className="h-px w-16 bg-gradient-to-l from-transparent to-violet-300" />
+            <div className="h-px w-16 bg-gradient-to-l from-transparent to-border" />
           </div>
 
-          <h1 className="text-3xl font-bold text-gray-700 tracking-tight">
+          <h1 className="text-3xl font-bold text-foreground tracking-tight">
             Wedding Projects
           </h1>
-          <p className="mt-2 text-sm text-gray-400 font-medium">
+          <p className="mt-2 text-sm text-muted-foreground font-medium">
             {session?.user?.name ? `Welcome back, ${session.user.name}` : "Keep up to date with your wedding planning"}
           </p>
         </div>
@@ -291,7 +270,7 @@ export default function MyProjectsPage() {
                 role="status"
                 aria-label="Loading projects"
                 aria-busy={true}
-                className="h-9 w-9 animate-spin rounded-full border-4 border-violet-200 border-t-violet-500"
+                className="h-9 w-9 animate-spin rounded-full border-4 border-muted border-t-primary"
               />
               <p className="text-sm text-muted-foreground">Loading your projects...</p>
             </div>
@@ -313,7 +292,7 @@ export default function MyProjectsPage() {
 
           {!loading && projects.length === 0 && (
             <div className="text-center py-6">
-              <p className="text-sm text-gray-400">No projects yet — create your first one!</p>
+              <p className="text-sm text-muted-foreground">No projects yet — create your first one!</p>
             </div>
           )}
         </div>

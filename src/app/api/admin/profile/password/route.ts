@@ -22,10 +22,9 @@ export async function PUT(request: NextRequest) {
       );
     }
 
-    const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^a-zA-Z\d]).{12,}$/;
-    if (!passwordRegex.test(newPassword)) {
+    if (newPassword.length < 8) {
       return NextResponse.json(
-        { error: "New password must be at least 12 characters and include uppercase, lowercase, number, and special character" },
+        { error: "New password must be at least 8 characters" },
         { status: 400 }
       );
     }

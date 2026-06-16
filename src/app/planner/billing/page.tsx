@@ -18,9 +18,9 @@ const PLANS = [
     name: "Basic",
     price: "Free",
     priceNote: "Forever free",
-    icon: <Zap className="w-5 h-5 text-gray-500" />,
-    color: "border-gray-200",
-    headerColor: "bg-gray-50",
+    icon: <Zap className="w-5 h-5 text-muted-foreground" />,
+    color: "border-border",
+    headerColor: "bg-muted",
     features: [
       "Event website (free subdomain)",
       "Basic RSVP form",
@@ -42,9 +42,9 @@ const PLANS = [
     name: "Premium",
     price: "299 SEK",
     priceNote: "per month",
-    icon: <Crown className="w-5 h-5 text-rose-500" />,
-    color: "border-rose-300",
-    headerColor: "bg-rose-50",
+    icon: <Crown className="w-5 h-5 text-accent" />,
+    color: "border-accent/40",
+    headerColor: "bg-accent/10",
     badge: "Most Popular",
     features: [
       "Everything in Basic",
@@ -68,9 +68,9 @@ const PLANS = [
     name: "Elite",
     price: "499 SEK",
     priceNote: "per month",
-    icon: <Star className="w-5 h-5 text-purple-500" />,
-    color: "border-purple-300",
-    headerColor: "bg-purple-50",
+    icon: <Star className="w-5 h-5 text-primary" />,
+    color: "border-primary/20",
+    headerColor: "bg-primary/5",
     features: [
       "Everything in Premium",
       "Printable stationery: place cards, menus, table cards",
@@ -90,6 +90,7 @@ function PlannerBillingPage() {
   const router = useRouter();
 
   const isSuccess = searchParams.get("success") === "1";
+  const isUpgraded = searchParams.get("upgraded") === "1";
   const isCancelled = searchParams.get("cancelled") === "1";
   const sessionId = searchParams.get("session_id");
   const returnTo = searchParams.get("returnTo");
@@ -113,19 +114,28 @@ function PlannerBillingPage() {
         .then((d) => {
           if (d.tier) {
             setVerifiedTier(d.tier);
-            // Clear the module-level tier cache so feature gates re-check
             clearTierCache();
           }
         })
         .catch(() => {})
         .finally(() => {
-          // Also refresh sub info from DB
           fetch("/api/billing/subscription")
             .then((r) => r.json())
             .then((d) => setSub(d))
             .catch(() => {})
             .finally(() => setLoading(false));
         });
+    } else if (isUpgraded) {
+      // Inline upgrade already applied to DB — just clear cache and refresh
+      clearTierCache();
+      fetch("/api/billing/subscription")
+        .then((r) => r.json())
+        .then((d) => {
+          setSub(d);
+          setVerifiedTier(d.tier ?? null);
+        })
+        .catch(() => {})
+        .finally(() => setLoading(false));
     } else {
       fetch("/api/billing/subscription")
         .then((r) => r.json())
@@ -133,7 +143,7 @@ function PlannerBillingPage() {
         .catch(() => {})
         .finally(() => setLoading(false));
     }
-  }, [isSuccess, sessionId]);
+  }, [isSuccess, isUpgraded, sessionId]);
 
   async function handleUpgrade(tier: PlanId) {
     if (tier === "basic") return;
@@ -184,22 +194,22 @@ function PlannerBillingPage() {
     <div className="max-w-5xl mx-auto px-4 py-8 space-y-8">
       {/* Header */}
       <div>
-        <h1 className="text-2xl font-bold text-gray-900">Plans & Billing</h1>
-        <p className="text-sm text-gray-500 mt-1">
+        <h1 className="text-2xl font-bold text-foreground">Plans & Billing</h1>
+        <p className="text-sm text-muted-foreground mt-1">
           Choose the plan that fits your wedding planning needs
         </p>
       </div>
 
       {/* Success banner */}
-      {isSuccess && (
-        <div className="flex flex-col gap-3 rounded-2xl bg-green-50 border border-green-200 px-5 py-4">
+      {(isSuccess || isUpgraded) && (
+        <div className="flex flex-col gap-3 rounded-2xl bg-[var(--color-success-bg)] border border-[var(--color-success-text)]/20 px-5 py-4">
           <div className="flex items-center gap-3">
-            <PartyPopper className="w-5 h-5 text-green-600 shrink-0" />
+            <PartyPopper className="w-5 h-5 text-[var(--color-success-text)] shrink-0" />
             <div>
-              <p className="text-sm font-semibold text-green-800">
-                Payment successful! Welcome to {successTierName}.
+              <p className="text-sm font-semibold text-[var(--color-success-text)]">
+                {isUpgraded ? "Plan upgraded!" : "Payment successful!"} Welcome to {successTierName}.
               </p>
-              <p className="text-xs text-green-600">
+              <p className="text-xs text-[var(--color-success-text)]">
                 Your plan has been upgraded. All {successTierName} features are now unlocked.
               </p>
             </div>
@@ -207,7 +217,7 @@ function PlannerBillingPage() {
           {returnTo && (
             <button
               onClick={() => router.push(returnTo)}
-              className="self-start flex items-center gap-1.5 text-sm font-medium text-green-700 hover:text-green-900 transition-colors"
+              className="self-start flex items-center gap-1.5 text-sm font-medium text-[var(--color-success-text)] hover:text-[var(--color-success-text)]/80 transition-colors"
             >
               <ArrowLeft className="w-4 h-4" />
               Go back and try it now
@@ -218,25 +228,34 @@ function PlannerBillingPage() {
 
       {/* Cancelled banner */}
       {isCancelled && (
-        <div className="flex items-center gap-3 rounded-2xl bg-amber-50 border border-amber-200 px-5 py-4">
-          <p className="text-sm text-amber-700">Checkout was cancelled. Your plan was not changed.</p>
+        <div className="flex flex-col gap-2 rounded-2xl bg-[var(--color-warning-bg)] border border-[var(--color-warning-text)]/30 px-5 py-4">
+          <p className="text-sm text-[var(--color-warning-text)]">Checkout was cancelled. Your plan was not changed.</p>
+          {returnTo && (
+            <button
+              onClick={() => router.push(returnTo)}
+              className="self-start flex items-center gap-1.5 text-sm font-medium text-[var(--color-warning-text)] hover:opacity-80 transition-opacity"
+            >
+              <ArrowLeft className="w-4 h-4" />
+              Go back
+            </button>
+          )}
         </div>
       )}
 
       {/* Current plan banner */}
       {!loading && sub && (
-        <div className="flex items-center justify-between rounded-2xl bg-gray-50 border border-gray-200 px-5 py-4">
+        <div className="flex items-center justify-between rounded-2xl bg-muted border border-border px-5 py-4">
           <div className="flex items-center gap-3">
-            <CreditCard className="w-5 h-5 text-gray-500" />
+            <CreditCard className="w-5 h-5 text-muted-foreground" />
             <div>
-              <p className="text-sm font-semibold text-gray-800 capitalize">
+              <p className="text-sm font-semibold text-foreground capitalize">
                 {currentTier} Plan
                 {sub.status === "past_due" && (
-                  <span className="ml-2 text-xs font-normal text-red-600">· Payment past due</span>
+                  <span className="ml-2 text-xs font-normal text-[var(--color-error-text)]">· Payment past due</span>
                 )}
               </p>
               {periodEnd && (
-                <p className="text-xs text-gray-500">Renews {periodEnd}</p>
+                <p className="text-xs text-muted-foreground">Renews {periodEnd}</p>
               )}
             </div>
           </div>
@@ -244,7 +263,7 @@ function PlannerBillingPage() {
             <button
               onClick={handleManagePortal}
               disabled={managingPortal}
-              className="flex items-center gap-1.5 text-sm text-gray-600 hover:text-gray-900 transition-colors disabled:opacity-60"
+              className="flex items-center gap-1.5 text-sm text-muted-foreground hover:text-foreground transition-colors disabled:opacity-60"
             >
               {managingPortal ? (
                 <><Loader2 className="w-4 h-4 animate-spin" /> Opening…</>
@@ -258,7 +277,7 @@ function PlannerBillingPage() {
 
       {/* Error */}
       {errorMsg && (
-        <div className="rounded-xl bg-red-50 border border-red-200 px-4 py-3 text-sm text-red-700">
+        <div className="rounded-xl bg-[var(--color-error-bg)] border border-[var(--color-error-text)]/20 px-4 py-3 text-sm text-[var(--color-error-text)]">
           {errorMsg}
         </div>
       )}
@@ -274,14 +293,14 @@ function PlannerBillingPage() {
           return (
             <div
               key={plan.id}
-              className={`relative rounded-2xl border-2 bg-white flex flex-col ${
-                isCurrent ? "border-rose-400 shadow-md" : plan.color
+              className={`relative rounded-2xl border-2 bg-card flex flex-col ${
+                isCurrent ? "border-accent shadow-md" : plan.color
               }`}
             >
               {/* Badge */}
               {"badge" in plan && plan.badge && (
                 <div className="absolute -top-3 left-1/2 -translate-x-1/2">
-                  <span className="rounded-full bg-rose-500 px-3 py-1 text-xs font-semibold text-white shadow">
+                  <span className="rounded-full bg-accent px-3 py-1 text-xs font-semibold text-primary-foreground shadow">
                     {plan.badge}
                   </span>
                 </div>
@@ -291,21 +310,21 @@ function PlannerBillingPage() {
               <div className={`rounded-t-2xl px-5 py-5 ${plan.headerColor}`}>
                 <div className="flex items-center gap-2 mb-2">
                   {plan.icon}
-                  <h2 className="font-bold text-gray-900">{plan.name}</h2>
+                  <h2 className="font-bold text-foreground">{plan.name}</h2>
                   {isCurrent && (
-                    <span className="ml-auto text-xs font-semibold text-rose-600 bg-rose-100 px-2 py-0.5 rounded-full">
+                    <span className="ml-auto text-xs font-semibold text-accent bg-accent/10 px-2 py-0.5 rounded-full">
                       Current
                     </span>
                   )}
                 </div>
-                <p className="text-2xl font-bold text-gray-900">
+                <p className="text-2xl font-bold text-foreground">
                   {plan.price}
                   {plan.id !== "basic" && (
-                    <span className="text-sm font-normal text-gray-500 ml-1">{plan.priceNote}</span>
+                    <span className="text-sm font-normal text-muted-foreground ml-1">{plan.priceNote}</span>
                   )}
                 </p>
                 {plan.id === "basic" && (
-                  <p className="text-sm text-gray-500">{plan.priceNote}</p>
+                  <p className="text-sm text-muted-foreground">{plan.priceNote}</p>
                 )}
               </div>
 
@@ -313,14 +332,14 @@ function PlannerBillingPage() {
               <div className="flex-1 px-5 py-5">
                 <ul className="space-y-2.5">
                   {plan.features.map((f) => (
-                    <li key={f} className="flex items-start gap-2 text-sm text-gray-700">
-                      <Check className="w-4 h-4 text-green-500 mt-0.5 shrink-0" />
+                    <li key={f} className="flex items-start gap-2 text-sm text-foreground">
+                      <Check className="w-4 h-4 text-[var(--color-success-text)] mt-0.5 shrink-0" />
                       {f}
                     </li>
                   ))}
                   {plan.missing.map((f) => (
-                    <li key={f} className="flex items-start gap-2 text-sm text-gray-400 line-through">
-                      <span className="w-4 h-4 mt-0.5 shrink-0 text-center text-gray-300">–</span>
+                    <li key={f} className="flex items-start gap-2 text-sm text-muted-foreground line-through">
+                      <span className="w-4 h-4 mt-0.5 shrink-0 text-center text-muted-foreground">–</span>
                       {f}
                     </li>
                   ))}
@@ -330,18 +349,18 @@ function PlannerBillingPage() {
               {/* CTA */}
               <div className="px-5 pb-5">
                 {isCurrent ? (
-                  <div className="w-full py-2.5 rounded-xl bg-rose-100 text-rose-700 text-sm font-semibold text-center">
+                  <div className="w-full py-2.5 rounded-xl bg-accent/10 text-accent text-sm font-semibold text-center">
                     Your current plan
                   </div>
                 ) : plan.id === "basic" ? (
-                  <div className="w-full py-2.5 rounded-xl bg-gray-100 text-gray-500 text-sm font-semibold text-center">
+                  <div className="w-full py-2.5 rounded-xl bg-muted text-muted-foreground text-sm font-semibold text-center">
                     Free forever
                   </div>
                 ) : (
                   <button
                     onClick={() => handleUpgrade(plan.id as PlanId)}
                     disabled={!!upgrading || loading}
-                    className="w-full py-2.5 rounded-xl bg-rose-500 text-white text-sm font-semibold hover:bg-rose-600 transition-colors disabled:opacity-60 flex items-center justify-center gap-2"
+                    className="w-full py-2.5 rounded-xl bg-accent text-primary-foreground text-sm font-semibold hover:bg-accent/90 transition-colors disabled:opacity-60 flex items-center justify-center gap-2"
                   >
                     {upgrading === plan.id ? (
                       <><Loader2 className="w-4 h-4 animate-spin" /> Redirecting…</>
@@ -358,7 +377,7 @@ function PlannerBillingPage() {
         })}
       </div>
 
-      <p className="text-center text-xs text-gray-400">
+      <p className="text-center text-xs text-muted-foreground">
         Prices include VAT · Secure payment via Stripe · Cancel anytime
       </p>
     </div>
@@ -370,7 +389,7 @@ export default function PlannerBillingPageWrapper() {
     <Suspense
       fallback={
         <div className="flex min-h-[400px] items-center justify-center">
-          <Loader2 className="w-6 h-6 animate-spin text-gray-400" />
+          <Loader2 className="w-6 h-6 animate-spin text-muted-foreground" />
         </div>
       }
     >

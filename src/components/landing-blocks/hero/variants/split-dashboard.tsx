@@ -1,12 +1,9 @@
 "use client";
 
-import Link from "next/link";
-import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import {
   CheckCircle,
-  ArrowRight,
   Star,
 } from "lucide-react";
 import * as LucideIcons from "lucide-react";
@@ -21,6 +18,8 @@ import { StyledCTAButton } from "@/components/landing-blocks/hero/styled-cta-but
 
 interface HeroSplitDashboardProps {
   settings: HeroSettings;
+  isPreview?: boolean;
+  device?: "desktop" | "mobile";
 }
 
 // Get Lucide icon component by name
@@ -41,7 +40,8 @@ function normalizeFeatureItems(items: unknown): FeatureItem[] {
   });
 }
 
-export function HeroSplitDashboard({ settings }: HeroSplitDashboardProps) {
+export function HeroSplitDashboard({ settings, isPreview = false, device }: HeroSplitDashboardProps) {
+  const forceMobileLayout = device === "mobile";
   // Normalize features for backward compatibility
   const normalizedFeatures = normalizeFeatureItems(settings.features.items);
 
@@ -60,12 +60,15 @@ export function HeroSplitDashboard({ settings }: HeroSplitDashboardProps) {
     <HeroBackground settings={settings.background}>
       <div className="container mx-auto px-4 py-16 lg:py-24">
         {/* Main Split Grid */}
-        <div className="grid gap-12 lg:grid-cols-2 lg:gap-16 items-center">
+        <div className={cn(
+          "grid gap-12 items-center",
+          forceMobileLayout ? "grid-cols-1" : "lg:grid-cols-2 lg:gap-16"
+        )}>
           {/* Content Section */}
           <div className="flex flex-col justify-center">
             {/* Badge */}
             {settings.badge.enabled && (
-              <Badge className="mb-6 w-fit border-orange-500/50 bg-orange-500/20 px-4 py-2 text-sm font-medium text-orange-400 hover:bg-orange-500/30">
+              <Badge className="mb-6 w-fit border-[var(--color-warning-text)]/50 bg-[var(--color-warning-bg)] px-4 py-2 text-sm font-medium text-[var(--color-warning-text)] hover:bg-[var(--color-warning-bg)]/70">
                 {settings.badge.emoji && `${settings.badge.emoji} `}
                 {settings.badge.text}
               </Badge>
@@ -74,7 +77,7 @@ export function HeroSplitDashboard({ settings }: HeroSplitDashboardProps) {
             {/* Headline with Animated Words */}
             <h1
               className={cn(
-                "font-bold tracking-tight text-white",
+                "font-bold tracking-tight text-primary-foreground",
                 getHeadlineSize()
               )}
             >
@@ -112,9 +115,9 @@ export function HeroSplitDashboard({ settings }: HeroSplitDashboardProps) {
                     : cn(
                         "grid gap-3",
                         (settings.features.columns ?? 1) === 1 && "grid-cols-1",
-                        (settings.features.columns ?? 1) === 2 && "grid-cols-2",
-                        (settings.features.columns ?? 1) === 3 && "grid-cols-3",
-                        (settings.features.columns ?? 1) === 4 && "grid-cols-4"
+                        (settings.features.columns ?? 1) === 2 && "grid-cols-1 sm:grid-cols-2",
+                        (settings.features.columns ?? 1) === 3 && "grid-cols-1 sm:grid-cols-2 lg:grid-cols-3",
+                        (settings.features.columns ?? 1) === 4 && "grid-cols-1 sm:grid-cols-2 lg:grid-cols-4"
                       )
                 )}
               >
@@ -141,24 +144,17 @@ export function HeroSplitDashboard({ settings }: HeroSplitDashboardProps) {
 
             {/* CTA Buttons */}
             <div className="mt-8 flex flex-col gap-4 sm:flex-row">
-              <Button
-                size="lg"
-                className={cn(
-                  "group",
-                  settings.primaryCTA.variant === "solid" &&
-                    "bg-orange-500 text-white hover:bg-orange-600",
-                  settings.primaryCTA.variant === "outline" &&
-                    "border-white/20 bg-transparent text-white hover:bg-white/10",
-                  settings.primaryCTA.variant === "secondary" &&
-                    "bg-white text-slate-900 hover:bg-slate-100"
-                )}
-                asChild
-              >
-                <Link href={settings.primaryCTA.link}>
-                  {settings.primaryCTA.text}
-                  <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
-                </Link>
-              </Button>
+              <StyledCTAButton
+                href={settings.primaryCTA.link}
+                text={settings.primaryCTA.text}
+                style={settings.primaryCTA.style}
+                showPrice={settings.primaryCTA.showPrice}
+                priceText={settings.primaryCTA.priceText}
+                showArrow={true}
+                variant={settings.primaryCTA.variant}
+                isPreview={isPreview}
+                openInNewTab={settings.primaryCTA.openInNewTab}
+              />
 
               {settings.secondaryCTA.enabled && (
                 <StyledCTAButton
@@ -169,6 +165,7 @@ export function HeroSplitDashboard({ settings }: HeroSplitDashboardProps) {
                   priceText={settings.secondaryCTA.priceText}
                   showArrow={false}
                   variant={settings.secondaryCTA.variant || "outline"}
+                  isPreview={isPreview}
                   openInNewTab={settings.secondaryCTA.openInNewTab}
                 />
               )}
@@ -185,7 +182,7 @@ export function HeroSplitDashboard({ settings }: HeroSplitDashboardProps) {
                         key={i}
                         className="h-10 w-10 border-2 border-midnight ring-2 ring-midnight"
                       >
-                        <AvatarFallback className="bg-gradient-to-br from-orange-400 to-orange-600 text-xs text-white">
+                        <AvatarFallback className="bg-[var(--color-warning-text)] text-xs text-primary-foreground">
                           {initials}
                         </AvatarFallback>
                       </Avatar>
@@ -213,7 +210,7 @@ export function HeroSplitDashboard({ settings }: HeroSplitDashboardProps) {
                           className={cn(
                             "h-4 w-4",
                             i < Math.floor(settings.trustText.rating)
-                              ? "fill-amber-400 text-amber-400"
+                              ? "fill-[var(--color-star)] text-[var(--color-star)]"
                               : "fill-slate-600 text-slate-600"
                           )}
                         />
@@ -247,7 +244,7 @@ export function HeroSplitDashboard({ settings }: HeroSplitDashboardProps) {
             </p>
             <div
               className={cn(
-                "flex items-center justify-center gap-12",
+                "flex flex-wrap items-center justify-center gap-6 sm:gap-12",
                 settings.logoBar.grayscale && "grayscale opacity-60 hover:grayscale-0 hover:opacity-100 transition-all"
               )}
             >

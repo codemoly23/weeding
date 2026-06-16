@@ -97,18 +97,18 @@ const recentTickets = [
 ];
 
 const statusColors: Record<string, string> = {
-  pending: "bg-gray-100 text-gray-700",
-  processing: "bg-blue-100 text-blue-700",
-  in_progress: "bg-amber-100 text-amber-700",
-  completed: "bg-green-100 text-green-700",
-  open: "bg-blue-100 text-blue-700",
-  waiting: "bg-amber-100 text-amber-700",
+  pending:    "admin-status-neutral",
+  processing: "admin-status-info",
+  in_progress: "admin-status-warning",
+  completed:  "admin-status-success",
+  open:       "admin-status-info",
+  waiting:    "admin-status-warning",
 };
 
 const priorityColors: Record<string, string> = {
-  low: "bg-gray-100 text-gray-700",
-  medium: "bg-blue-100 text-blue-700",
-  high: "bg-red-100 text-red-700",
+  low:    "admin-status-neutral",
+  medium: "admin-status-info",
+  high:   "admin-status-error",
 };
 
 export default async function AdminDashboardPage() {
@@ -119,12 +119,12 @@ export default async function AdminDashboardPage() {
       {/* Page Header */}
       <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div>
-          <h1 className="text-2xl font-bold">Dashboard</h1>
+          <h1 className="text-xl sm:text-2xl font-bold">Dashboard</h1>
           <p className="text-muted-foreground">
             Welcome back! Here's what's happening today.
           </p>
         </div>
-        <Button asChild className="bg-purple-600 hover:bg-purple-700 text-white border-0">
+        <Button asChild className="bg-[var(--admin-primary)] hover:bg-[var(--admin-primary-hover)] text-[var(--admin-primary-fg)] border-0">
           <Link href="/admin/orders/new">
             <Package className="mr-2 h-4 w-4" />
             New Order
@@ -140,7 +140,7 @@ export default async function AdminDashboardPage() {
           change={stats.revenue.change}
           changeLabel="vs last month"
           icon={<DollarSign className="h-6 w-6" />}
-          iconBg="bg-green-100 text-green-600"
+          iconBg="bg-[var(--ast-success-bg)] text-[var(--ast-success-icon)]"
         />
         <StatCard
           title="Orders"
@@ -156,7 +156,7 @@ export default async function AdminDashboardPage() {
           change={stats.customers.change}
           changeLabel="vs last month"
           icon={<Users className="h-6 w-6" />}
-          iconBg="bg-purple-100 text-purple-600"
+          iconBg="bg-[var(--ast-hold-bg)] text-[var(--admin-primary)]"
         />
         <StatCard
           title="Open Tickets"
@@ -164,7 +164,7 @@ export default async function AdminDashboardPage() {
           change={stats.tickets.change}
           changeLabel="vs last month"
           icon={<MessageSquare className="h-6 w-6" />}
-          iconBg="bg-amber-100 text-amber-600"
+          iconBg="bg-[var(--ast-warning-bg)] text-[var(--ast-warning-icon)]"
         />
       </div>
 
@@ -175,18 +175,18 @@ export default async function AdminDashboardPage() {
         </CardHeader>
         <CardContent>
           <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-            <Button variant="outline" className="h-auto flex-col gap-2 py-4 bg-gradient-to-br from-white to-blue-50 border-blue-100 hover:border-blue-200 hover:shadow-sm transition-all" asChild>
+            <Button variant="outline" className="h-auto flex-col gap-2 py-4 bg-gradient-to-br from-white to-[var(--ast-info-bg)] border-[var(--ast-info-border)] hover:border-[var(--ast-info-border)] hover:shadow-sm transition-all" asChild>
               <Link href="/admin/orders?status=pending">
                 <Clock className="h-5 w-5" />
                 <span>Pending Orders</span>
-                <Badge className="bg-blue-100 text-blue-700 border-0">3</Badge>
+                <Badge className="admin-status-info border-0">3</Badge>
               </Link>
             </Button>
-            <Button variant="outline" className="h-auto flex-col gap-2 py-4 bg-gradient-to-br from-white to-blue-50 border-blue-100 hover:border-blue-200 hover:shadow-sm transition-all" asChild>
+            <Button variant="outline" className="h-auto flex-col gap-2 py-4 bg-gradient-to-br from-white to-[var(--ast-info-bg)] border-[var(--ast-info-border)] hover:border-[var(--ast-info-border)] hover:shadow-sm transition-all" asChild>
               <Link href="/admin/tickets?status=open">
                 <MessageSquare className="h-5 w-5" />
                 <span>Open Tickets</span>
-                <Badge className="bg-blue-100 text-blue-700 border-0">5</Badge>
+                <Badge className="admin-status-info border-0">5</Badge>
               </Link>
             </Button>
           </div>
@@ -213,16 +213,11 @@ export default async function AdminDashboardPage() {
               {recentOrders.map((order) => (
                 <div
                   key={order.id}
-                  className="flex items-center justify-between rounded-lg border p-4"
+                  className="flex flex-col gap-2 rounded-lg border p-4 sm:flex-row sm:items-center sm:justify-between"
                 >
                   <div className="space-y-1">
                     <div className="flex items-center gap-2">
-                      <Link
-                        href={`/admin/orders/${order.id}`}
-                        className="font-medium hover:underline"
-                      >
-                        {order.id}
-                      </Link>
+                      <span className="font-medium">{order.id}</span>
                       <Badge
                         variant="secondary"
                         className={statusColors[order.status]}
@@ -263,16 +258,11 @@ export default async function AdminDashboardPage() {
               {recentTickets.map((ticket) => (
                 <div
                   key={ticket.id}
-                  className="flex items-center justify-between rounded-lg border p-4"
+                  className="flex flex-col gap-2 rounded-lg border p-4 sm:flex-row sm:items-center sm:justify-between"
                 >
                   <div className="space-y-1">
                     <div className="flex items-center gap-2">
-                      <Link
-                        href={`/admin/tickets/${ticket.id}`}
-                        className="font-medium hover:underline"
-                      >
-                        {ticket.subject}
-                      </Link>
+                      <span className="font-medium">{ticket.subject}</span>
                     </div>
                     <p className="text-sm text-muted-foreground">
                       {ticket.id} - {ticket.customer}
@@ -310,31 +300,31 @@ export default async function AdminDashboardPage() {
             {[
               {
                 icon: CheckCircle,
-                iconColor: "text-green-500",
+                iconColor: "text-[var(--ast-success-icon)]",
                 title: "Order LLC-2024-ABC123 marked as completed",
                 time: "5 minutes ago",
               },
               {
                 icon: Package,
-                iconColor: "text-blue-500",
+                iconColor: "text-[var(--ast-info-icon)]",
                 title: "New order received from John Doe",
                 time: "1 hour ago",
               },
               {
                 icon: FileText,
-                iconColor: "text-amber-500",
+                iconColor: "text-[var(--ast-warning-icon)]",
                 title: "Document uploaded by Jane Smith",
                 time: "2 hours ago",
               },
               {
                 icon: MessageSquare,
-                iconColor: "text-purple-500",
+                iconColor: "text-[var(--admin-primary)]",
                 title: "New support ticket from Bob Wilson",
                 time: "3 hours ago",
               },
               {
                 icon: Users,
-                iconColor: "text-indigo-500",
+                iconColor: "text-[var(--ast-hold-text)]",
                 title: "New customer registration: Alice Brown",
                 time: "5 hours ago",
               },

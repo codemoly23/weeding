@@ -122,27 +122,27 @@ export default function GuestPhotoUpload({ websiteId, primaryColor, accentColor,
         <h2 className="text-3xl font-light text-center mb-2" style={{ color: primaryColor }}>
           Share Your Photos
         </h2>
-        <p className="text-gray-500 text-center text-sm mb-8">Upload your favorite moments from our celebration</p>
+        <p className="text-muted-foreground text-center text-sm mb-8">Upload your favorite moments from our celebration</p>
 
         {/* Upload area */}
-        <div className="bg-white rounded-2xl p-6 shadow-sm max-w-lg mx-auto mb-10">
+        <div className="bg-card rounded-2xl p-6 shadow-sm max-w-lg mx-auto mb-10">
           {!preview ? (
-            <label className="flex flex-col items-center gap-3 py-8 border-2 border-dashed rounded-xl cursor-pointer hover:bg-gray-50 transition-colors"
+            <label className="flex flex-col items-center gap-3 py-8 border-2 border-dashed rounded-xl cursor-pointer hover:bg-muted/50 transition-colors"
               style={{ borderColor: primaryColor + "40" }}>
               <div className="w-12 h-12 rounded-full flex items-center justify-center"
                 style={{ background: accentColor }}>
                 <Camera className="w-6 h-6" style={{ color: primaryColor }} />
               </div>
               <div className="text-center">
-                <p className="text-sm font-medium text-gray-700">Click to select a photo</p>
-                <p className="text-xs text-gray-400 mt-0.5">JPG, PNG, WEBP — max 5MB (auto-resized)</p>
+                <p className="text-sm font-medium text-foreground/80">Click to select a photo</p>
+                <p className="text-xs text-muted-foreground mt-0.5">JPG, PNG, WEBP — max 5MB (auto-resized)</p>
               </div>
               <input ref={fileRef} type="file" accept="image/*" className="hidden" onChange={onFileChange} />
             </label>
           ) : (
             <div className="space-y-3">
               {/* Preview */}
-              <div className="relative rounded-xl overflow-hidden bg-gray-100 aspect-video">
+              <div className="relative rounded-xl overflow-hidden bg-muted aspect-video">
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img src={preview} alt="Preview" className="w-full h-full object-cover" />
                 <button
@@ -159,7 +159,7 @@ export default function GuestPhotoUpload({ websiteId, primaryColor, accentColor,
                 onChange={e => setUploaderName(e.target.value)}
                 placeholder="Your name (optional)"
                 maxLength={100}
-                className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2"
+                className="w-full border border-border rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2"
               />
 
               {/* Caption */}
@@ -168,15 +168,15 @@ export default function GuestPhotoUpload({ websiteId, primaryColor, accentColor,
                 onChange={e => setCaption(e.target.value)}
                 placeholder="Add a caption… (optional)"
                 maxLength={200}
-                className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2"
+                className="w-full border border-border rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2"
               />
 
-              {error && <p className="text-xs text-red-500">{error}</p>}
+              {error && <p className="text-xs text-[var(--color-error-text)]">{error}</p>}
 
               <div className="flex gap-2">
                 <button
                   onClick={clearPreview}
-                  className="flex-1 py-2 text-sm text-gray-600 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors"
+                  className="flex-1 py-2 text-sm text-foreground/80 border border-border rounded-lg hover:bg-muted/50 transition-colors"
                 >
                   Cancel
                 </button>
@@ -202,7 +202,7 @@ export default function GuestPhotoUpload({ websiteId, primaryColor, accentColor,
               {successMsg}
             </p>
           )}
-          {!preview && error && <p className="text-xs text-red-500 text-center mt-2">{error}</p>}
+          {!preview && error && <p className="text-xs text-[var(--color-error-text)] text-center mt-2">{error}</p>}
         </div>
 
         {/* Photo grid */}
@@ -211,16 +211,16 @@ export default function GuestPhotoUpload({ websiteId, primaryColor, accentColor,
             {photos.map(photo => (
               <div
                 key={photo.id}
-                className="rounded-xl overflow-hidden bg-white shadow-sm cursor-pointer hover:shadow-md transition-shadow group"
+                className="rounded-xl overflow-hidden bg-card shadow-sm cursor-pointer hover:shadow-md transition-shadow group"
                 onClick={() => setLightboxSrc(photo.photoData)}
               >
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img src={photo.photoData} alt={photo.caption || "Guest photo"} className="w-full aspect-square object-cover" />
                 {(photo.uploaderName || photo.caption) && (
                   <div className="px-2.5 py-2">
-                    {photo.uploaderName && <p className="text-xs font-semibold text-gray-700 truncate">{photo.uploaderName}</p>}
-                    {photo.caption && <p className="text-xs text-gray-400 truncate">{photo.caption}</p>}
-                    <p className="text-[10px] text-gray-300 mt-0.5">{formatDate(photo.createdAt)}</p>
+                    {photo.uploaderName && <p className="text-xs font-semibold text-foreground/80 truncate">{photo.uploaderName}</p>}
+                    {photo.caption && <p className="text-xs text-muted-foreground truncate">{photo.caption}</p>}
+                    <p className="text-[10px] text-muted-foreground/50 mt-0.5">{formatDate(photo.createdAt)}</p>
                   </div>
                 )}
               </div>

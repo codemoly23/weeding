@@ -22,7 +22,7 @@ function hexToRgba(hex: string, opacity: number): string {
 
 function getGlowBoxShadow(glow?: { enabled: boolean; color: string; blur: number; spread: number; opacity: number }): string | undefined {
   if (!glow?.enabled) return undefined;
-  const color = hexToRgba(glow.color || "#8b5cf6", glow.opacity ?? 0.4);
+  const color = hexToRgba(glow.color || "#8A6F3E", glow.opacity ?? 0.4);
   return `0 0 ${glow.blur ?? 20}px ${glow.spread ?? 5}px ${color}`;
 }
 
@@ -280,7 +280,7 @@ export function TextBlockWidget({
         settings.blockquote.backgroundColor || "transparent",
       "--text-block-blockquote-font-style": settings.blockquote.fontStyle,
       "--text-block-blockquote-padding": `${settings.blockquote.padding}px`,
-      "--drop-cap-color": settings.dropCap?.color || "#f97316",
+      "--drop-cap-color": settings.dropCap?.color || "#8A6F3E",
       "--drop-cap-font-family": settings.dropCap?.fontFamily || "inherit",
       "--drop-cap-size": dropCapFontSize,
       "--entrance-duration": `${settings.animation?.entrance?.duration || 600}ms`,

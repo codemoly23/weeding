@@ -45,6 +45,9 @@ interface PaymentSettings {
   "payment.stripe.live.publishableKey": string;
   "payment.stripe.live.secretKey": string;
   "payment.stripe.live.webhookSecret": string;
+  "payment.stripe.price.premium": string;
+  "payment.stripe.price.elite": string;
+  "payment.stripe.price.vendor": string;
   // PayPal
   "payment.paypal.enabled": boolean;
   "payment.paypal.mode": "sandbox" | "live";
@@ -65,6 +68,9 @@ const defaultSettings: PaymentSettings = {
   "payment.stripe.live.publishableKey": "",
   "payment.stripe.live.secretKey": "",
   "payment.stripe.live.webhookSecret": "",
+  "payment.stripe.price.premium": "",
+  "payment.stripe.price.elite": "",
+  "payment.stripe.price.vendor": "",
   "payment.paypal.enabled": false,
   "payment.paypal.mode": "sandbox",
   "payment.paypal.sandbox.clientId": "",
@@ -286,15 +292,15 @@ export default function PaymentSettingsPage() {
       </div>
 
       {/* Security Notice */}
-      <Card className="border-yellow-200 bg-yellow-50">
+      <Card className="border-[var(--ast-warning-border)] bg-[var(--ast-warning-bg)]">
         <CardContent className="pt-6">
           <div className="flex gap-4">
-            <AlertTriangle className="h-5 w-5 text-yellow-600 shrink-0 mt-0.5" />
+            <AlertTriangle className="h-5 w-5 text-[var(--ast-warning-icon)] shrink-0 mt-0.5" />
             <div className="space-y-1">
-              <p className="font-medium text-yellow-900">Security Notice</p>
-              <p className="text-sm text-yellow-700">
+              <p className="font-medium text-[var(--ast-warning-text)]">Security Notice</p>
+              <p className="text-sm text-[var(--ast-warning-text)]">
                 API keys are encrypted before storing in the database. Make sure you have set
-                the <code className="bg-yellow-100 px-1 rounded">ENCRYPTION_KEY</code> environment
+                the <code className="bg-[var(--ast-warning-bg)] px-1 rounded">ENCRYPTION_KEY</code> environment
                 variable for secure key storage.
               </p>
             </div>
@@ -314,7 +320,7 @@ export default function PaymentSettingsPage() {
                 <CardTitle className="flex items-center gap-2">
                   Stripe
                   {settings["payment.stripe.enabled"] && (
-                    <Badge variant="secondary" className="bg-green-100 text-green-700">
+                    <Badge variant="secondary" className="admin-status-success">
                       Active
                     </Badge>
                   )}
@@ -368,7 +374,7 @@ export default function PaymentSettingsPage() {
                 {stripeConnected === null ? (
                   <Badge variant="outline">Not Tested</Badge>
                 ) : stripeConnected ? (
-                  <Badge className="bg-green-100 text-green-700">
+                  <Badge className="admin-status-success">
                     <CheckCircle className="h-3 w-3 mr-1" />
                     Connected
                   </Badge>
@@ -459,6 +465,45 @@ export default function PaymentSettingsPage() {
             </p>
           </div>
 
+          {/* Subscription Price IDs */}
+          <div className="space-y-3 pt-2 border-t border-border">
+            <div>
+              <p className="text-sm font-medium">Subscription Price IDs</p>
+              <p className="text-xs text-muted-foreground mt-0.5">
+                Create recurring prices in Stripe Dashboard → Products, then paste the Price IDs here.
+              </p>
+            </div>
+            <div className="grid gap-3 sm:grid-cols-3">
+              <div className="space-y-2">
+                <Label>Premium Plan (299 SEK/mo)</Label>
+                <Input
+                  value={settings["payment.stripe.price.premium"]}
+                  onChange={(e) => updateSetting("payment.stripe.price.premium", e.target.value)}
+                  placeholder="price_..."
+                  className="font-mono text-sm"
+                />
+              </div>
+              <div className="space-y-2">
+                <Label>Elite Plan (499 SEK/mo)</Label>
+                <Input
+                  value={settings["payment.stripe.price.elite"]}
+                  onChange={(e) => updateSetting("payment.stripe.price.elite", e.target.value)}
+                  placeholder="price_..."
+                  className="font-mono text-sm"
+                />
+              </div>
+              <div className="space-y-2">
+                <Label>Vendor Plan ($19/mo)</Label>
+                <Input
+                  value={settings["payment.stripe.price.vendor"]}
+                  onChange={(e) => updateSetting("payment.stripe.price.vendor", e.target.value)}
+                  placeholder="price_..."
+                  className="font-mono text-sm"
+                />
+              </div>
+            </div>
+          </div>
+
           <div className="flex items-center gap-2 text-sm">
             <a
               href="https://dashboard.stripe.com/apikeys"
@@ -491,7 +536,7 @@ export default function PaymentSettingsPage() {
                 <CardTitle className="flex items-center gap-2">
                   PayPal
                   {settings["payment.paypal.enabled"] && (
-                    <Badge variant="secondary" className="bg-green-100 text-green-700">
+                    <Badge variant="secondary" className="admin-status-success">
                       Active
                     </Badge>
                   )}
@@ -545,7 +590,7 @@ export default function PaymentSettingsPage() {
                 {paypalConnected === null ? (
                   <Badge variant="outline">Not Tested</Badge>
                 ) : paypalConnected ? (
-                  <Badge className="bg-green-100 text-green-700">
+                  <Badge className="admin-status-success">
                     <CheckCircle className="h-3 w-3 mr-1" />
                     Connected
                   </Badge>
@@ -650,17 +695,17 @@ export default function PaymentSettingsPage() {
       </Card>
 
       {/* Info Card */}
-      <Card className="bg-blue-50 border-blue-200">
+      <Card className="bg-[var(--ast-info-bg)] border-[var(--ast-info-border)]">
         <CardContent className="pt-6">
           <div className="flex gap-4">
-            <div className="p-2 bg-blue-100 rounded-lg h-fit">
-              <CreditCard className="h-5 w-5 text-blue-600" />
+            <div className="p-2 bg-[var(--ast-info-bg)] rounded-lg h-fit">
+              <CreditCard className="h-5 w-5 text-[var(--ast-info-icon)]" />
             </div>
             <div className="space-y-1">
-              <p className="font-medium text-blue-900">
+              <p className="font-medium text-[var(--ast-info-text)]">
                 Multiple Gateways Enabled
               </p>
-              <p className="text-sm text-blue-700">
+              <p className="text-sm text-[var(--ast-info-text)]">
                 When both Stripe and PayPal are enabled, customers can choose
                 their preferred payment method at checkout. This increases
                 conversion rates by offering more payment options.

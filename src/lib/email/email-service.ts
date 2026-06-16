@@ -39,7 +39,7 @@ export const emailService = {
 </head>
 <body style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background-color: #f6f9fc; margin: 0; padding: 20px;">
   <div style="max-width: 560px; margin: 0 auto; background: #ffffff; border-radius: 8px; overflow: hidden; box-shadow: 0 1px 3px rgba(0,0,0,0.1);">
-    <div style="background: linear-gradient(135deg, #f97316 0%, #ea580c 100%); padding: 24px; text-align: center;">
+    <div style="background: linear-gradient(135deg, #8A6F3E 0%, #6B5530 100%); padding: 24px; text-align: center;">
       <h1 style="color: #ffffff; margin: 0; font-size: 24px;">Support Ticket Created</h1>
     </div>
     <div style="padding: 32px;">
@@ -66,7 +66,7 @@ export const emailService = {
       ` : ""}
 
       <div style="text-align: center; margin: 32px 0;">
-        <a href="${ticketUrl}" style="display: inline-block; background: #f97316; color: #ffffff; font-size: 16px; font-weight: 600; padding: 12px 32px; border-radius: 8px; text-decoration: none;">View Ticket Status</a>
+        <a href="${ticketUrl}" style="display: inline-block; background: #8A6F3E; color: #ffffff; font-size: 16px; font-weight: 600; padding: 12px 32px; border-radius: 8px; text-decoration: none;">View Ticket Status</a>
       </div>
 
       <p style="color: #9ca3af; font-size: 12px; margin-top: 32px; border-top: 1px solid #e5e7eb; padding-top: 16px;">
@@ -205,7 +205,7 @@ export const emailService = {
     const messagesHtml = data.messages
       .map((msg) => {
         const isCustomer = msg.senderType === "CUSTOMER";
-        const bgColor = isCustomer ? "#f97316" : "#e5e7eb";
+        const bgColor = isCustomer ? "#8A6F3E" : "#e5e7eb";
         const textColor = isCustomer ? "#ffffff" : "#1a1a1a";
         const align = isCustomer ? "right" : "left";
         const time = new Date(msg.createdAt).toLocaleTimeString("en-US", {

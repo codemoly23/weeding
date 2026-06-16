@@ -1,0 +1,130 @@
+/* ============================================
+   Admin Design Tokens
+   Scoped to .admin-layout — zero effect on public pages
+   ============================================ */
+
+.admin-layout {
+
+  /* --- Layout --- */
+  --admin-bg:              #f5f3ff;
+
+  /* --- Primary Action (purple) --- */
+  --admin-primary:         #7c3aed;
+  --admin-primary-hover:   #6d28d9;
+  --admin-primary-fg:      #ffffff;
+
+  /* --- Star Rating --- */
+  --admin-star:            #e4a93b;
+
+  /* --- Status: Success (green) --- */
+  --ast-success-bg:        #f0fdf4;
+  --ast-success-border:    #86efac;
+  --ast-success-text:      #166534;
+  --ast-success-icon:      #22c55e;
+
+  /* --- Status: Warning (amber) --- */
+  --ast-warning-bg:        #fffbeb;
+  --ast-warning-border:    #fcd34d;
+  --ast-warning-text:      #92400e;
+  --ast-warning-icon:      #f59e0b;
+
+  /* --- Status: Error (red) --- */
+  --ast-error-bg:          #fef2f2;
+  --ast-error-border:      #fca5a5;
+  --ast-error-text:        #991b1b;
+  --ast-error-icon:        #ef4444;
+
+  /* --- Status: Info (blue) --- */
+  --ast-info-bg:           #eff6ff;
+  --ast-info-border:       #93c5fd;
+  --ast-info-text:         #1e40af;
+  --ast-info-icon:         #3b82f6;
+
+  /* --- Status: Neutral (gray) --- */
+  --ast-neutral-bg:        #f1f5f9;
+  --ast-neutral-border:    #e2e8f0;
+  --ast-neutral-text:      #475569;
+  --ast-neutral-icon:      #94a3b8;
+
+  /* --- Status: Processing (orange) --- */
+  --ast-processing-bg:     #fff7ed;
+  --ast-processing-border: #fed7aa;
+  --ast-processing-text:   #c2410c;
+  --ast-processing-icon:   #f97316;
+
+  /* --- Status: Hold / Waiting (purple) --- */
+  --ast-hold-bg:           #f5f3ff;
+  --ast-hold-border:       #c4b5fd;
+  --ast-hold-text:         #5b21b6;
+  --ast-hold-icon:         #7c3aed;
+
+  /* --- Lead Pipeline Solid Status Colors (dots, funnel circles, filled badges) --- */
+  --ast-lead-contacted:    #a855f7;  /* purple-500 */
+  --ast-lead-qualified:    #10b981;  /* emerald-500 */
+  --ast-lead-unqualified:  #6b7280;  /* gray-500 */
+
+  /* --- Dark Canvas (landing page builder) --- */
+  --admin-canvas-bg:       #1e293b;
+  --admin-canvas-surface:  #0f172a;
+  --admin-canvas-text:     #94a3b8;
+  --admin-canvas-muted:    #64748b;
+  --admin-canvas-border:   #334155;
+}
+
+/* ============================================
+   Status Badge Utility Classes
+   Usage: className="admin-status-success"
+   Only activates inside .admin-layout
+   ============================================ */
+
+@layer utilities {
+
+  .admin-status-success {
+    background-color: var(--ast-success-bg);
+    color:            var(--ast-success-text);
+    border:           1px solid var(--ast-success-border);
+  }
+
+  .admin-status-warning {
+    background-color: var(--ast-warning-bg);
+    color:            var(--ast-warning-text);
+    border:           1px solid var(--ast-warning-border);
+  }
+
+  .admin-status-error {
+    background-color: var(--ast-error-bg);
+    color:            var(--ast-error-text);
+    border:           1px solid var(--ast-error-border);
+  }
+
+  .admin-status-info {
+    background-color: var(--ast-info-bg);
+    color:            var(--ast-info-text);
+    border:           1px solid var(--ast-info-border);
+  }
+
+  .admin-status-neutral {
+    background-color: var(--ast-neutral-bg);
+    color:            var(--ast-neutral-text);
+    border:           1px solid var(--ast-neutral-border);
+  }
+
+  .admin-status-processing {
+    background-color: var(--ast-processing-bg);
+    color:            var(--ast-processing-text);
+    border:           1px solid var(--ast-processing-border);
+  }
+
+  .admin-status-hold {
+    background-color: var(--ast-hold-bg);
+    color:            var(--ast-hold-text);
+    border:           1px solid var(--ast-hold-border);
+  }
+
+  .admin-status-urgent {
+    background-color: var(--ast-error-icon);
+    color:            var(--admin-primary-fg);
+    border:           1px solid var(--ast-error-text);
+  }
+
+}

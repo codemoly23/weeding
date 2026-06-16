@@ -108,7 +108,7 @@ function CardIcon({ type }: { type: "visa" | "mastercard" | "amex" | "discover" 
 
   return (
     <div
-      className="h-6 w-9 rounded border bg-white flex items-center justify-center text-[8px] font-bold"
+      className="h-6 w-9 rounded border bg-card flex items-center justify-center text-[8px] font-bold"
       style={{ color: colors[type] }}
     >
       {type.toUpperCase().slice(0, 4)}

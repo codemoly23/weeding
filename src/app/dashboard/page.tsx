@@ -33,10 +33,10 @@ interface DbProject {
 }
 
 const statusColors: Record<string, string> = {
-  ACTIVE: "bg-green-100 text-green-700",
-  DRAFT: "bg-yellow-100 text-yellow-700",
-  ARCHIVED: "bg-gray-100 text-gray-600",
-  COMPLETED: "bg-blue-100 text-blue-700",
+  ACTIVE: "bg-[var(--color-success-bg)] text-[var(--color-success-text)]",
+  DRAFT: "bg-[var(--color-warning-bg)] text-[var(--color-warning-text)]",
+  ARCHIVED: "bg-muted text-muted-foreground",
+  COMPLETED: "bg-[var(--color-info-bg)] text-[var(--color-info-text)]",
 };
 
 const eventTypeLabel: Record<string, string> = {
@@ -96,15 +96,15 @@ export default function DashboardPage() {
         title: "Completed",
         value: completedProjects,
         icon: CheckCircle,
-        color: "text-green-600",
-        bgColor: "bg-green-100",
+        color: "text-[var(--color-success-text)]",
+        bgColor: "bg-[var(--color-success-bg)]",
       },
       {
         title: "In Progress",
         value: activeProjects,
         icon: Clock,
-        color: "text-amber-600",
-        bgColor: "bg-amber-100",
+        color: "text-[var(--color-warning-text)]",
+        bgColor: "bg-[var(--color-warning-bg)]",
       },
     ],
     [totalProjects, completedProjects, activeProjects]
@@ -179,7 +179,7 @@ export default function DashboardPage() {
                   className="flex items-center justify-between rounded-lg border p-4 transition-colors hover:bg-muted/50"
                 >
                   <div className="flex items-center gap-4 min-w-0">
-                    <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-gradient-to-br from-blue-500 to-blue-700 text-white text-sm font-bold">
+                    <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-primary text-primary-foreground text-sm font-bold">
                       {project.title.charAt(0).toUpperCase()}
                     </div>
                     <div className="min-w-0">
@@ -236,7 +236,7 @@ export default function DashboardPage() {
           <CardTitle>Quick Actions</CardTitle>
         </CardHeader>
         <CardContent>
-          <div className="flex flex-wrap gap-3">
+          <div className="grid grid-cols-2 gap-3 sm:flex sm:flex-wrap">
             <Button asChild>
               <Link href="/planner/create">
                 <Plus className="mr-2 h-4 w-4" />

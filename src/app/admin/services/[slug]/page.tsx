@@ -948,7 +948,7 @@ export default function ServiceEditorPage() {
             )}
             Save Changes
             {pendingMappingChanges.size > 0 && (
-              <Badge variant="secondary" className="ml-2 bg-orange-100 text-orange-700">
+              <Badge variant="outline" className="ml-2 admin-status-processing">
                 {pendingMappingChanges.size}
               </Badge>
             )}
@@ -968,7 +968,7 @@ export default function ServiceEditorPage() {
           <TabsTrigger value="packages" className="relative">
             Packages ({service.packages.length})
             {pendingMappingChanges.size > 0 && (
-              <span className="ml-1 inline-flex h-2 w-2 rounded-full bg-orange-500" title="Unsaved changes" />
+              <span className="ml-1 inline-flex h-2 w-2 rounded-full bg-[var(--ast-processing-icon)]" title="Unsaved changes" />
             )}
           </TabsTrigger>
           <TabsTrigger value="faqs">FAQs ({service.faqs.length})</TabsTrigger>
@@ -1407,14 +1407,14 @@ export default function ServiceEditorPage() {
                                 const getCellColors = () => {
                                   switch (valueType) {
                                     case "ADDON":
-                                      return "bg-amber-500 text-white hover:bg-amber-600";
+                                      return "bg-[var(--ast-warning-icon)] text-white hover:bg-[var(--ast-warning-text)]";
                                     case "TEXT":
-                                      return "bg-blue-500 text-white hover:bg-blue-600";
+                                      return "bg-[var(--ast-info-icon)] text-white hover:bg-[var(--ast-info-text)]";
                                     case "DASH":
                                       return "bg-gray-400 text-white hover:bg-gray-500";
                                     default:
                                       return isIncluded
-                                        ? "bg-emerald-500 text-white hover:bg-emerald-600"
+                                        ? "bg-[var(--ast-success-icon)] text-white hover:bg-[var(--ast-success-text)]"
                                         : "bg-slate-300 text-slate-600 hover:bg-slate-400";
                                   }
                                 };
@@ -1673,10 +1673,10 @@ export default function ServiceEditorPage() {
                   Search Engine Preview
                 </p>
                 <div className="space-y-1">
-                  <p className="text-lg text-blue-600 hover:underline">
+                  <p className="text-lg text-[var(--ast-info-icon)] hover:underline">
                     {service.metaTitle || service.name || "Service Title"}
                   </p>
-                  <p className="text-sm text-green-700">
+                  <p className="text-sm text-[var(--ast-success-text)]">
                     ceremoney.com/services/{service.slug || "service-slug"}
                   </p>
                   <p className="text-sm text-muted-foreground">
@@ -2023,11 +2023,11 @@ export default function ServiceEditorPage() {
 // ============ Sortable Feature Row Component ============
 
 const TAG_COLORS: Record<string, string> = {
-  included: "bg-emerald-100 text-emerald-700",
-  free: "bg-amber-100 text-amber-700",
-  addon: "bg-orange-100 text-orange-700",
-  premium: "bg-purple-100 text-purple-700",
-  custom: "bg-gray-100 text-gray-700",
+  included: "admin-status-success",
+  free:     "admin-status-warning",
+  addon:    "admin-status-processing",
+  premium:  "admin-status-hold",
+  custom:   "admin-status-neutral",
 };
 
 function SortableFeatureRow({

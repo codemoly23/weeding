@@ -98,11 +98,11 @@ interface ServiceSearchResult {
 }
 
 const paymentStatusColors: Record<string, string> = {
-  PENDING: "bg-yellow-100 text-yellow-800",
-  PAID: "bg-green-100 text-green-700",
-  FAILED: "bg-red-100 text-red-700",
-  REFUNDED: "bg-gray-100 text-gray-700",
-  PARTIALLY_REFUNDED: "bg-orange-100 text-orange-700",
+  PENDING:            "admin-status-warning",
+  PAID:               "admin-status-success",
+  FAILED:             "admin-status-error",
+  REFUNDED:           "admin-status-neutral",
+  PARTIALLY_REFUNDED: "admin-status-processing",
 };
 
 const paymentStatusLabels: Record<string, string> = {
@@ -620,18 +620,18 @@ export default function AdminInvoicesPage() {
                       <TableCell className="text-right font-medium">
                         {currencySymbol}{total.toFixed(2)}
                       </TableCell>
-                      <TableCell className="text-right font-medium text-green-600">
+                      <TableCell className="text-right font-medium text-[var(--ast-success-icon)]">
                         {currencySymbol}{paid.toFixed(2)}
                       </TableCell>
                       <TableCell className="text-right font-medium">
                         {due > 0 ? (
-                          <span className="text-red-600">{currencySymbol}{due.toFixed(2)}</span>
+                          <span className="text-[var(--ast-error-icon)]">{currencySymbol}{due.toFixed(2)}</span>
                         ) : (
                           <span className="text-muted-foreground">{currencySymbol}0.00</span>
                         )}
                       </TableCell>
                       <TableCell>
-                        <Badge className={paymentStatusColors[paymentStatus] || "bg-gray-100 text-gray-700"} variant="secondary">
+                        <Badge className={paymentStatusColors[paymentStatus] || "admin-status-neutral"} variant="secondary">
                           {paymentStatusLabels[paymentStatus] || paymentStatus}
                         </Badge>
                       </TableCell>

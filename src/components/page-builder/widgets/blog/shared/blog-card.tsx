@@ -267,7 +267,7 @@ export function BlogCard({ post, cardSettings, className }: BlogCardProps) {
                 className="relative z-[1] font-display font-bold select-none"
                 style={{
                   fontSize: emblem?.fontSize || 64,
-                  color: emblem?.color || "#f97316",
+                  color: emblem?.color || "#8A6F3E",
                   opacity: emblem?.opacity ?? 0.45,
                   letterSpacing: emblem?.letterSpacing || "-0.04em",
                   lineHeight: 1,
@@ -356,7 +356,7 @@ export function BlogCard({ post, cardSettings, className }: BlogCardProps) {
               style={{
                 width: 3,
                 height: 3,
-                background: metaSettings.dotColor || "#f97316",
+                background: metaSettings.dotColor || "#8A6F3E",
               }}
             />
             <span>{formatReadingTime(post)}</span>
@@ -464,7 +464,7 @@ export function BlogCard({ post, cardSettings, className }: BlogCardProps) {
                 <span
                   className="flex h-8 w-8 items-center justify-center rounded-full font-display font-bold text-white text-[13px]"
                   style={{
-                    background: `linear-gradient(135deg, ${footerSettings.author.avatarBgFrom || "#f97316"}, ${footerSettings.author.avatarBgTo || "#e84c1e"})`,
+                    background: `linear-gradient(135deg, ${footerSettings.author.avatarBgFrom || "#8A6F3E"}, ${footerSettings.author.avatarBgTo || "#1A1A1A"})`,
                   }}
                 >
                   {authorInitials}

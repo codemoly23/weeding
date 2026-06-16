@@ -1,6 +1,6 @@
 # Service Details Page Redesign Plan
 
-## LLCPad - Dynamic Template System for Service Pages
+## Weeding Ceremony - Dynamic Template System for Service Pages
 
 ---
 
@@ -545,9 +545,9 @@ Home → Services → LLC Formation
   "@context": "https://schema.org",
   "@type": "BreadcrumbList",
   "itemListElement": [
-    { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://llcpad.com" },
-    { "@type": "ListItem", "position": 2, "name": "Services", "item": "https://llcpad.com/services" },
-    { "@type": "ListItem", "position": 3, "name": "LLC Formation", "item": "https://llcpad.com/services/llc-formation" }
+    { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://weeding-ceremony.com" },
+    { "@type": "ListItem", "position": 2, "name": "Services", "item": "https://weeding-ceremony.com/services" },
+    { "@type": "ListItem", "position": 3, "name": "LLC Formation", "item": "https://weeding-ceremony.com/services/llc-formation" }
   ]
 }
 ```
@@ -606,7 +606,7 @@ Description inside a bordered card with optional accent left border.
 - Title: `text-xl font-semibold mb-4`
 - Prose: `prose prose-sm dark:prose-invert max-w-none`
 
-#### Variant 3: Two-Column with Sidebar Highlights (Recommended for LLCPad)
+#### Variant 3: Two-Column with Sidebar Highlights (Recommended for Weeding Ceremony)
 
 Description on the left, key highlights on the right sidebar.
 
@@ -946,11 +946,11 @@ This is generated via `createDefaultServiceDetailsTemplate()` in `src/lib/page-b
   "@type": "Service",
   "name": "LLC Formation",
   "description": "Professional LLC formation service...",
-  "url": "https://llcpad.com/services/llc-formation",
+  "url": "https://weeding-ceremony.com/services/llc-formation",
   "provider": {
     "@type": "Organization",
-    "name": "LLCPad",
-    "url": "https://llcpad.com"
+    "name": "Weeding Ceremony",
+    "url": "https://weeding-ceremony.com"
   },
   "offers": {
     "@type": "AggregateOffer",
@@ -972,8 +972,8 @@ This is generated via `createDefaultServiceDetailsTemplate()` in `src/lib/page-b
   "@context": "https://schema.org",
   "@type": "BreadcrumbList",
   "itemListElement": [
-    { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://llcpad.com" },
-    { "@type": "ListItem", "position": 2, "name": "Services", "item": "https://llcpad.com/services" },
+    { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://weeding-ceremony.com" },
+    { "@type": "ListItem", "position": 2, "name": "Services", "item": "https://weeding-ceremony.com/services" },
     { "@type": "ListItem", "position": 3, "name": "LLC Formation" }
   ]
 }
@@ -1069,7 +1069,7 @@ export async function generateMetadata({ params }) {
 
 export default async function ServicePage({ params }) {
   const service = await getService(params.slug);
-  const schemas = generateServiceSchema(service, "https://llcpad.com");
+  const schemas = generateServiceSchema(service, "https://weeding-ceremony.com");
 
   return (
     <>
@@ -1381,7 +1381,7 @@ The new architecture reuses existing tables:
 
 ## Summary
 
-This redesign transforms LLCPad's service pages into a dynamic template system by extending the existing Page Builder:
+This redesign transforms Weeding Ceremony's service pages into a dynamic template system by extending the existing Page Builder:
 
 - **Zero new DB models** -- reuses `LandingPage` + `LandingPageBlock`
 - **4 new service widgets** -- service-features (4 variants), service-description (3 variants), service-breadcrumb (3 variants), related-services (4 variants)

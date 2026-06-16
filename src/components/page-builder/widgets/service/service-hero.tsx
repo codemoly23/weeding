@@ -172,7 +172,7 @@ export function ServiceHeroWidget({
                     left: 0,
                     right: 0,
                     height: "5px",
-                    background: "var(--sh-coral, #e84c1e)",
+                    background: "var(--sh-coral, #EF4444)",
                     borderRadius: "3px",
                     opacity: 0.6,
                   }}
@@ -193,7 +193,7 @@ export function ServiceHeroWidget({
           position: "relative",
           overflow: "hidden",
           "--sh-forest": "#1b3a2d",
-          "--sh-coral": "#e84c1e",
+          "--sh-coral": "#EF4444",
           "--sh-bg": "#faf8f4",
           "--sh-cream": "#faf8f4",
         } as React.CSSProperties}
@@ -221,7 +221,7 @@ export function ServiceHeroWidget({
                 width: "8px",
                 height: "8px",
                 borderRadius: "50%",
-                background: "#059669",
+                background: "#22C55E",
                 animation: "pulse 2s ease-in-out infinite",
                 flexShrink: 0,
               }}
@@ -236,7 +236,7 @@ export function ServiceHeroWidget({
                   letterSpacing: "0.8px",
                   padding: "2px 8px",
                   borderRadius: "999px",
-                  background: "#e84c1e",
+                  background: "#EF4444",
                   color: "#fff",
                   marginLeft: "4px",
                 }}
@@ -422,10 +422,10 @@ function ServiceHeroPlaceholder({ settings }: { settings: ServiceHeroWidgetSetti
             marginBottom: "24px",
           }}
         >
-          <span style={{ width: "8px", height: "8px", borderRadius: "50%", background: "#059669", flexShrink: 0 }} />
+          <span style={{ width: "8px", height: "8px", borderRadius: "50%", background: "#22C55E", flexShrink: 0 }} />
           {settings.categoryBadgeText || "Formation & Legal"}
           {settings.categoryBadgeTag && (
-            <span style={{ fontSize: "10px", fontWeight: 700, padding: "2px 8px", borderRadius: "999px", background: "#e84c1e", color: "#fff", marginLeft: "4px" }}>
+            <span style={{ fontSize: "10px", fontWeight: 700, padding: "2px 8px", borderRadius: "999px", background: "#EF4444", color: "#fff", marginLeft: "4px" }}>
               {settings.categoryBadgeTag}
             </span>
           )}

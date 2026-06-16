@@ -13,7 +13,7 @@ interface WrapOptions {
 export async function wrapCampaignEmail(options: WrapOptions): Promise<string> {
   const { body, unsubscribeUrl, recipientId, previewText } = options;
   const config = await getEmailConfig();
-  const companyName = config.fromName || "LLCPad";
+  const companyName = config.fromName || "Weeding Ceremony";
   const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000";
 
   // Tracking pixel (only if recipientId is provided)

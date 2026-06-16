@@ -93,7 +93,7 @@ const EMPTY_FORM: FormState = {
 };
 
 const INPUT_CLASS =
-  "w-full rounded-lg border border-gray-200 bg-gray-50 px-4 py-2.5 text-sm text-gray-900 placeholder:text-gray-400 transition-colors focus:border-orange-500 focus:bg-white focus:outline-none focus:ring-2 focus:ring-orange-500/20";
+  "w-full rounded-lg border border-border bg-muted/30 px-4 py-2.5 text-sm text-foreground placeholder:text-muted-foreground transition-colors focus:border-primary focus:bg-card focus:outline-none focus:ring-2 focus:ring-primary/20";
 
 // ─── Component ────────────────────────────────────────────────────
 export function ContactPageContent() {
@@ -151,7 +151,7 @@ export function ContactPageContent() {
   }
 
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen bg-background">
 
       {/* ══════════════════════════════════════
           HERO — Ken Burns zoom + fade-in text
@@ -191,7 +191,7 @@ export function ContactPageContent() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.7, delay: 0.3, ease: [0.22, 1, 0.36, 1] }}
           >
-            <Link href="/" className="transition-colors hover:text-white">
+            <Link href="/" className="transition-colors hover:text-primary-foreground">
               Home
             </Link>
             <ChevronRight className="h-4 w-4 shrink-0 text-white/50" />
@@ -200,7 +200,7 @@ export function ContactPageContent() {
 
           {/* Big title */}
           <motion.h1
-            className="font-heading px-4 text-center text-4xl font-bold text-white sm:text-5xl md:text-6xl lg:text-7xl"
+            className="font-heading px-4 text-center text-4xl font-bold text-primary-foreground sm:text-5xl md:text-6xl lg:text-7xl"
             initial={{ opacity: 0, y: 25 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.9, delay: 0.5, ease: [0.22, 1, 0.36, 1] }}
@@ -213,14 +213,14 @@ export function ContactPageContent() {
       {/* ══════════════════════════════════════
           INFO CARDS — stagger slide-up
       ══════════════════════════════════════ */}
-      <section className="bg-white py-12">
+      <section className="bg-background py-12">
         <div className="container mx-auto px-4 xl:px-6">
           <motion.div
             ref={cardsSection.ref}
             variants={staggerContainer}
             initial="hidden"
             animate={cardsSection.inView ? "visible" : "hidden"}
-            className="mx-auto grid max-w-5xl grid-cols-1 divide-y divide-gray-100 md:grid-cols-3 md:divide-x md:divide-y-0"
+            className="mx-auto grid max-w-5xl grid-cols-1 divide-y divide-border md:grid-cols-3 md:divide-x md:divide-y-0"
           >
             {INFO_CARDS.map((card) => {
               const Icon = card.icon;
@@ -240,13 +240,13 @@ export function ContactPageContent() {
                   </motion.div>
 
                   <div className="flex flex-col items-start gap-2">
-                    <h3 className="text-base font-bold text-gray-900">{card.title}</h3>
+                    <h3 className="text-base font-bold text-foreground">{card.title}</h3>
                     <p className="text-sm leading-relaxed text-slate-500">
                       {card.description}
                     </p>
                     <motion.a
                       href={card.href}
-                      className="mt-2 inline-block rounded-md bg-primary px-6 py-2.5 text-sm font-semibold text-white"
+                      className="mt-2 inline-block rounded-md bg-primary px-6 py-2.5 text-sm font-semibold text-primary-foreground"
                       whileHover={{ scale: 1.05, opacity: 0.9 }}
                       whileTap={{ scale: 0.97 }}
                       transition={{ type: "spring", stiffness: 400, damping: 17 }}
@@ -264,7 +264,7 @@ export function ContactPageContent() {
       {/* ══════════════════════════════════════
           LOCATIONS + FORM — slide in from sides
       ══════════════════════════════════════ */}
-      <section className="bg-gray-50/60 py-10 md:py-14">
+      <section className="bg-muted/30 py-10 md:py-14">
         <div className="container mx-auto px-4 xl:px-6">
           <div className="mx-auto grid max-w-6xl grid-cols-1 gap-8 lg:grid-cols-2 lg:gap-10">
 
@@ -304,10 +304,10 @@ export function ContactPageContent() {
 
                     className="space-y-0.5"
                   >
-                    <p className="text-sm font-bold tracking-wide text-gray-900">{office.city}</p>
-                    <p className="text-xs font-medium uppercase tracking-wider text-gray-400">{office.country}</p>
-                    <p className="pt-1 text-sm text-gray-600">{office.name}</p>
-                    <p className="text-sm text-gray-600">{office.address}</p>
+                    <p className="text-sm font-bold tracking-wide text-foreground">{office.city}</p>
+                    <p className="text-xs font-medium uppercase tracking-wider text-muted-foreground">{office.country}</p>
+                    <p className="pt-1 text-sm text-foreground/80">{office.name}</p>
+                    <p className="text-sm text-foreground/80">{office.address}</p>
                     <a
                       href={`tel:${office.phone.replace(/\s/g, "")}`}
                       className="block pt-0.5 text-sm font-semibold text-primary transition-opacity hover:opacity-80"
@@ -325,7 +325,7 @@ export function ContactPageContent() {
               variants={slideRight}
               initial="hidden"
               animate={rightSection.inView ? "visible" : "hidden"}
-              className="rounded-2xl border border-gray-100 bg-white p-4 shadow-sm sm:p-6 md:p-8"
+              className="rounded-2xl border border-border bg-card p-4 shadow-sm sm:p-6 md:p-8"
             >
               {submitted ? (
                 <motion.div
@@ -339,10 +339,10 @@ export function ContactPageContent() {
                     animate={{ scale: 1, rotate: 0 }}
                     transition={{ type: "spring", stiffness: 260, damping: 18, delay: 0.1 }}
                   >
-                    <CheckCircle2 className="mb-4 h-14 w-14 text-green-500" />
+                    <CheckCircle2 className="mb-4 h-14 w-14 text-[var(--color-success-text)]" />
                   </motion.div>
-                  <h3 className="mb-2 text-xl font-bold text-gray-900">Message Sent!</h3>
-                  <p className="max-w-xs text-sm text-gray-500">
+                  <h3 className="mb-2 text-xl font-bold text-foreground">Message Sent!</h3>
+                  <p className="max-w-xs text-sm text-muted-foreground">
                     Thank you for reaching out. We&apos;ll get back to you within 24 hours.
                   </p>
                   <button
@@ -385,12 +385,12 @@ export function ContactPageContent() {
                     {/* Row 1 */}
                     <motion.div variants={cardVariant} className="grid grid-cols-1 gap-4 sm:grid-cols-2">
                       <div className="flex flex-col gap-1.5">
-                        <label className="text-xs font-semibold text-gray-600">Full Name</label>
+                        <label className="text-xs font-semibold text-foreground/80">Full Name</label>
                         <input type="text" name="fullName" value={form.fullName} onChange={handleChange}
                           placeholder="Full Name" required className={INPUT_CLASS} />
                       </div>
                       <div className="flex flex-col gap-1.5">
-                        <label className="text-xs font-semibold text-gray-600">Subject</label>
+                        <label className="text-xs font-semibold text-foreground/80">Subject</label>
                         <input type="text" name="subject" value={form.subject} onChange={handleChange}
                           placeholder="Subject" className={INPUT_CLASS} />
                       </div>
@@ -399,12 +399,12 @@ export function ContactPageContent() {
                     {/* Row 2 */}
                     <motion.div variants={cardVariant} className="grid grid-cols-1 gap-4 sm:grid-cols-2">
                       <div className="flex flex-col gap-1.5">
-                        <label className="text-xs font-semibold text-gray-600">Phone Number</label>
+                        <label className="text-xs font-semibold text-foreground/80">Phone Number</label>
                         <input type="tel" name="phoneNumber" value={form.phoneNumber} onChange={handleChange}
                           placeholder="Phone Number" className={INPUT_CLASS} />
                       </div>
                       <div className="flex flex-col gap-1.5">
-                        <label className="text-xs font-semibold text-gray-600">Email Address</label>
+                        <label className="text-xs font-semibold text-foreground/80">Email Address</label>
                         <input type="email" name="email" value={form.email} onChange={handleChange}
                           placeholder="Email Address" required className={INPUT_CLASS} />
                       </div>
@@ -412,7 +412,7 @@ export function ContactPageContent() {
 
                     {/* Row 3 */}
                     <motion.div variants={cardVariant} className="flex flex-col gap-1.5">
-                      <label className="text-xs font-semibold text-gray-600">Your Message</label>
+                      <label className="text-xs font-semibold text-foreground/80">Your Message</label>
                       <textarea name="message" value={form.message} onChange={handleChange}
                         placeholder="Type your message..." required rows={4}
                         className={`${INPUT_CLASS} resize-none`} />
@@ -421,7 +421,7 @@ export function ContactPageContent() {
                     {/* Error */}
                     {error && (
                       <motion.p
-                        className="rounded-lg bg-red-50 px-4 py-2.5 text-sm text-red-600"
+                        className="rounded-lg bg-[var(--color-error-bg)] px-4 py-2.5 text-sm text-[var(--color-error-text)]"
                         initial={{ opacity: 0, y: -8 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ duration: 0.3 }}
@@ -435,7 +435,7 @@ export function ContactPageContent() {
                       <motion.button
                         type="submit"
                         disabled={submitting}
-                        className="inline-flex items-center gap-2 rounded-lg bg-primary px-8 py-3 text-sm font-semibold text-white disabled:cursor-not-allowed disabled:opacity-60 hover:bg-orange-600"
+                        className="inline-flex items-center gap-2 rounded-lg bg-primary px-8 py-3 text-sm font-semibold text-primary-foreground disabled:cursor-not-allowed disabled:opacity-60 hover:bg-[#2A2A2A]"
                         whileHover={{ scale: 1.04, opacity: 0.93 }}
                         whileTap={{ scale: 0.97 }}
                         transition={{ type: "spring", stiffness: 400, damping: 17 }}

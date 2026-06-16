@@ -1,6 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
 import prisma from "@/lib/db";
-import { requirePluginAccess } from "@/lib/plugin-guard";
 import { z } from "zod";
 
 // GET - Get single ticket with messages
@@ -9,9 +8,6 @@ export async function GET(
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    // Plugin access check
-    await requirePluginAccess("livesupport-pro");
-
     const { id } = await params;
 
     const ticket = await prisma.supportTicket.findUnique({
@@ -79,9 +75,6 @@ export async function PUT(
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    // Plugin access check
-    await requirePluginAccess("livesupport-pro");
-
     const { id } = await params;
     const body = await request.json();
     const data = updateTicketSchema.parse(body);
@@ -169,9 +162,6 @@ export async function DELETE(
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    // Plugin access check
-    await requirePluginAccess("livesupport-pro");
-
     const { id } = await params;
 
     // Check if ticket exists

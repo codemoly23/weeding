@@ -23,17 +23,17 @@ const isLocal = (id: string) => id.startsWith("local-");
 
 const DEFAULT_CATEGORIES = [
   { name: "Venue", color: "#6366f1" },
-  { name: "Catering & Food", color: "#8b5cf6" },
-  { name: "Photography & Video", color: "#ec4899" },
+  { name: "Catering & Food", color: "#8A6F3E" },
+  { name: "Photography & Video", color: "#E4A93B" },
   { name: "Music & Entertainment", color: "#f43f5e" },
-  { name: "Flowers & Decorations", color: "#f97316" },
+  { name: "Flowers & Decorations", color: "#8A6F3E" },
   { name: "Dress & Attire", color: "#eab308" },
   { name: "Beauty & Hair", color: "#22c55e" },
   { name: "Transportation", color: "#14b8a6" },
   { name: "Cake & Sweets", color: "#3b82f6" },
   { name: "Rings & Jewelry", color: "#06b6d4" },
   { name: "Stationery & Invites", color: "#6366f1" },
-  { name: "Miscellaneous", color: "#8b5cf6" },
+  { name: "Miscellaneous", color: "#8A6F3E" },
 ];
 
 async function apiFetch(url: string, options?: RequestInit) {
@@ -65,6 +65,7 @@ export default function BudgetPage() {
   const [newItemPlanned, setNewItemPlanned] = useState("");
   const [newItemActual, setNewItemActual] = useState("");
   const newItemDescRef = useRef<HTMLInputElement>(null);
+  const committingRef = useRef(false);
 
   // New category state
   const [showNewCat, setShowNewCat] = useState(false);
@@ -313,19 +314,43 @@ export default function BudgetPage() {
     await loadBudget();
   }
 
-  async function commitNewItem(catId: string) {
+  async function commitNewItem(catId: string, keepOpen = false) {
+    if (committingRef.current) return;
     if (!newItemDesc.trim()) { setAddingItemCatId(null); setNewItemDesc(""); setNewItemPlanned(""); setNewItemActual(""); return; }
-    try {
-      const data = { description: newItemDesc.trim(), planned: parseFloat(newItemPlanned) || 0, actual: 0, paid: 0, status: "UNPAID" as const, notes: null };
-      if (local) { addLocalBudgetItem(id, catId, data); }
-      else {
-        await apiFetch(`/api/planner/projects/${id}/budget/${catId}/items`, {
-          method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(data),
-        });
-      }
-      setNewItemDesc(""); setNewItemPlanned(""); setNewItemActual(""); setAddingItemCatId(null);
-      await loadBudget();
-    } catch (e) { setError(e instanceof Error ? e.message : "Failed to add item"); }
+    committingRef.current = true;
+
+    const data = { description: newItemDesc.trim(), planned: parseFloat(newItemPlanned) || 0, actual: 0, paid: 0, status: "UNPAID" as const, notes: null };
+
+    if (keepOpen) {
+      // Clear form + re-focus IMMEDIATELY — no waiting on network
+      setNewItemDesc(""); setNewItemPlanned(""); setNewItemActual("");
+      requestAnimationFrame(() => { newItemDescRef.current?.focus(); committingRef.current = false; });
+      // Save + refresh in background (won't block the user)
+      try {
+        if (local) {
+          addLocalBudgetItem(id, catId, data);
+          setCategories(getLocalBudget(id));
+        } else {
+          await apiFetch(`/api/planner/projects/${id}/budget/${catId}/items`, {
+            method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(data),
+          });
+          loadBudget();
+        }
+      } catch (e) { setError(e instanceof Error ? e.message : "Failed to add item"); }
+    } else {
+      try {
+        if (local) { addLocalBudgetItem(id, catId, data); }
+        else {
+          await apiFetch(`/api/planner/projects/${id}/budget/${catId}/items`, {
+            method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(data),
+          });
+        }
+        setNewItemDesc(""); setNewItemPlanned(""); setNewItemActual("");
+        setAddingItemCatId(null);
+        await loadBudget();
+      } catch (e) { setError(e instanceof Error ? e.message : "Failed to add item"); }
+      finally { committingRef.current = false; }
+    }
   }
 
   // ── PDF export ────────────────────────────────────────────────────────────
@@ -422,18 +447,18 @@ export default function BudgetPage() {
     <div className="mx-auto max-w-3xl px-4 py-8">
       {/* Page header */}
       <div className="mb-6 flex items-center justify-between">
-        <h1 className="text-2xl font-bold text-gray-900">{t("budget.heading")}</h1>
+        <h1 className="text-2xl font-bold text-foreground">{t("budget.heading")}</h1>
         <div className="flex items-center gap-2">
           <button
             onClick={exportBudgetPDF}
-            className="flex items-center gap-1.5 rounded-xl border border-gray-200 bg-white px-3 py-2 text-sm text-gray-600 hover:bg-gray-50 transition-colors shadow-sm"
+            className="flex items-center gap-1.5 rounded-xl border border-border bg-card px-3 py-2 text-sm text-muted-foreground hover:bg-muted transition-colors shadow-sm"
           >
             <Download className="h-4 w-4" />
             PDF
           </button>
           <button
             onClick={() => setShowNewCat(true)}
-            className="flex items-center gap-1.5 rounded-xl bg-indigo-600 px-4 py-2 text-sm font-medium text-white hover:bg-indigo-700 transition-colors"
+            className="flex items-center gap-1.5 rounded-xl bg-primary px-4 py-2 text-sm font-medium text-white hover:bg-primary/90 transition-colors"
           >
             <PlusCircle className="h-4 w-4" />
             {t("budget.addCategory")}
@@ -449,10 +474,10 @@ export default function BudgetPage() {
           <div className="mb-6 grid grid-cols-2 gap-3 sm:grid-cols-4">
             {/* Total Budget — editable */}
             <div
-              className="rounded-2xl border border-indigo-100 bg-indigo-50 px-4 py-4 text-center shadow-sm cursor-pointer group"
+              className="rounded-2xl border border-primary/10 bg-primary/5 px-4 py-4 text-center shadow-sm cursor-pointer group"
               onClick={() => { if (!editingBudgetGoal) { setBudgetGoalInput(budgetGoal > 0 ? budgetGoal.toString() : ""); setEditingBudgetGoal(true); } }}
             >
-              <p className="text-[10px] font-semibold uppercase tracking-widest text-gray-400">{t("budget.totalBudget")}</p>
+              <p className="text-[10px] font-semibold uppercase tracking-widest text-muted-foreground">{t("budget.totalBudget")}</p>
               {editingBudgetGoal ? (
                 <input
                   autoFocus
@@ -476,37 +501,37 @@ export default function BudgetPage() {
                     setEditingBudgetGoal(false);
                   }}
                   onKeyDown={e => { if (e.key === "Enter" || e.key === "Escape") (e.target as HTMLInputElement).blur(); }}
-                  className="mt-1 w-full bg-transparent text-xl font-bold text-indigo-600 text-center focus:outline-none border-b-2 border-indigo-400"
+                  className="mt-1 w-full bg-transparent text-xl font-bold text-primary text-center focus:outline-none border-b-2 focus:border-primary"
                   placeholder="0"
                 />
               ) : (
-                <p className="mt-1 text-xl font-bold text-indigo-600">
+                <p className="mt-1 text-xl font-bold text-primary">
                   ${budgetGoal.toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 0 })}
-                  <span className="ml-1 text-[10px] font-normal text-indigo-300 group-hover:text-indigo-400">✎</span>
+                  <span className="ml-1 text-[10px] font-normal text-primary/40 group-hover:text-primary/60">✎</span>
                 </p>
               )}
             </div>
 
             {/* Total Spent */}
-            <div className="rounded-2xl border border-gray-100 bg-gray-50 px-4 py-4 text-center shadow-sm">
-              <p className="text-[10px] font-semibold uppercase tracking-widest text-gray-400">{t("budget.totalSpent")}</p>
-              <p className="mt-1 text-xl font-bold text-gray-800">
+            <div className="rounded-2xl border border-border bg-muted/30 px-4 py-4 text-center shadow-sm">
+              <p className="text-[10px] font-semibold uppercase tracking-widest text-muted-foreground">{t("budget.totalSpent")}</p>
+              <p className="mt-1 text-xl font-bold text-foreground">
                 ${totalPlanned.toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 0 })}
               </p>
             </div>
 
             {/* Total Paid */}
-            <div className="rounded-2xl border border-gray-100 bg-emerald-50 px-4 py-4 text-center shadow-sm">
-              <p className="text-[10px] font-semibold uppercase tracking-widest text-gray-400">{t("budget.totalPaid")}</p>
-              <p className="mt-1 text-xl font-bold text-emerald-600">
+            <div className="rounded-2xl border border-border bg-[var(--color-success-bg)] px-4 py-4 text-center shadow-sm">
+              <p className="text-[10px] font-semibold uppercase tracking-widest text-muted-foreground">{t("budget.totalPaid")}</p>
+              <p className="mt-1 text-xl font-bold text-[var(--color-success-text)]">
                 ${totalPaid.toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 0 })}
               </p>
             </div>
 
             {/* Remaining */}
-            <div className={`rounded-2xl border border-gray-100 px-4 py-4 text-center shadow-sm ${overBudget ? "bg-red-50" : "bg-amber-50"}`}>
-              <p className="text-[10px] font-semibold uppercase tracking-widest text-gray-400">{t("budget.remaining")}</p>
-              <p className={`mt-1 text-xl font-bold ${overBudget ? "text-red-500" : "text-amber-600"}`}>
+            <div className={`rounded-2xl border border-border px-4 py-4 text-center shadow-sm ${overBudget ? "bg-[var(--color-error-bg)]" : "bg-[var(--color-warning-bg)]"}`}>
+              <p className="text-[10px] font-semibold uppercase tracking-widest text-muted-foreground">{t("budget.remaining")}</p>
+              <p className={`mt-1 text-xl font-bold ${overBudget ? "text-[var(--color-error-text)]" : "text-[var(--color-warning-text)]"}`}>
                 {overBudget ? "-$" : "$"}{Math.abs(remaining).toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 0 })}
               </p>
             </div>
@@ -516,26 +541,26 @@ export default function BudgetPage() {
 
       {/* Error */}
       {error && (
-        <div className="mb-4 flex items-center justify-between rounded-xl bg-red-50 px-4 py-2.5 text-sm text-red-700 border border-red-100">
+        <div className="mb-4 flex items-center justify-between rounded-xl bg-[var(--color-error-bg)] px-4 py-2.5 text-sm text-[var(--color-error-text)] border border-[var(--color-error-text)]/20">
           <span>{error}</span>
-          <button onClick={() => setError(null)} className="ml-3 text-red-400 hover:text-red-600">✕</button>
+          <button onClick={() => setError(null)} className="ml-3 text-[var(--color-error-text)] hover:text-[var(--color-error-text)]">✕</button>
         </div>
       )}
 
       {/* Filter */}
       <div className="mb-4 relative">
-        <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
+        <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
         <input
           value={filter}
           onChange={e => setFilter(e.target.value)}
           placeholder="Filter"
-          className="w-full rounded-xl border border-gray-200 bg-white py-2.5 pl-9 pr-4 text-sm focus:border-indigo-400 focus:outline-none shadow-sm"
+          className="w-full rounded-xl border border-border bg-card py-2.5 pl-9 pr-4 text-sm focus:border-primary focus:outline-none shadow-sm"
         />
       </div>
 
       {/* New category input */}
       {showNewCat && (
-        <div className="mb-3 flex items-center gap-2 rounded-xl border border-indigo-200 bg-indigo-50/40 px-4 py-3">
+        <div className="mb-3 flex items-center gap-2 rounded-xl border border-primary/20 bg-primary/5 px-4 py-3">
           <span className="h-2.5 w-2.5 rounded-full flex-shrink-0" style={{ backgroundColor: DEFAULT_COLOR }} />
           <input
             ref={newCatRef}
@@ -544,7 +569,7 @@ export default function BudgetPage() {
             onBlur={addNewCategory}
             onKeyDown={e => { if (e.key === "Enter") addNewCategory(); if (e.key === "Escape") { setShowNewCat(false); setNewCatName(""); } }}
             placeholder="Category name…"
-            className="flex-1 bg-transparent text-sm font-semibold text-gray-800 placeholder:text-gray-400 focus:outline-none"
+            className="flex-1 bg-transparent text-sm font-semibold text-foreground placeholder:text-muted-foreground/50 focus:outline-none"
           />
         </div>
       )}
@@ -552,7 +577,7 @@ export default function BudgetPage() {
       {/* Loading */}
       {loading ? (
         <div className="flex justify-center py-16">
-          <div className="h-6 w-6 animate-spin rounded-full border-2 border-indigo-300 border-t-indigo-600" />
+          <div className="h-6 w-6 animate-spin rounded-full border-2 border-muted border-t-primary" />
         </div>
       ) : (
         <div className="space-y-4">
@@ -561,12 +586,12 @@ export default function BudgetPage() {
             const isExpanded = expanded[cat.id] ?? true;
 
             return (
-              <div key={cat.id} className="rounded-2xl border border-gray-200 bg-white shadow-sm overflow-hidden">
+              <div key={cat.id} className="rounded-2xl border border-border bg-card shadow-sm overflow-hidden">
                 {/* Category header */}
                 <div className="flex items-center gap-2 px-4 py-3">
                   <button
                     onClick={() => setExpanded(e => ({ ...e, [cat.id]: !isExpanded }))}
-                    className="flex-shrink-0 text-gray-400 hover:text-gray-600 transition-colors"
+                    className="flex-shrink-0 text-muted-foreground hover:text-foreground/80 transition-colors"
                   >
                     {isExpanded ? <ChevronDown className="h-4 w-4" /> : <ChevronRight className="h-4 w-4" />}
                   </button>
@@ -576,22 +601,22 @@ export default function BudgetPage() {
                     onChange={e => setInlineCatNames(prev => ({ ...prev, [cat.id]: e.target.value }))}
                     onBlur={e => saveCatName(cat.id, e.target.value)}
                     onKeyDown={e => { if (e.key === "Enter") (e.target as HTMLInputElement).blur(); }}
-                    className="flex-1 bg-transparent font-semibold text-gray-800 text-sm focus:outline-none focus:border-b focus:border-indigo-300"
+                    className="flex-1 bg-transparent font-semibold text-foreground text-sm focus:outline-none focus:border-b focus:border-primary/30"
                   />
                   <button
                     onClick={() => deleteCat(cat.id)}
-                    className="flex-shrink-0 rounded-lg p-1.5 text-gray-300 hover:text-red-500 hover:bg-red-50 transition-colors"
+                    className="flex-shrink-0 rounded-lg p-1.5 text-muted-foreground/50 hover:text-[var(--color-error-text)] hover:bg-[var(--color-error-bg)] transition-colors"
                   >
                     <Trash2 className="h-3.5 w-3.5" />
                   </button>
                 </div>
 
                 {isExpanded && (
-                  <div className="border-t border-gray-100">
+                  <div className="border-t border-border">
                     {/* Column headers */}
-                    <div className="flex items-center px-4 py-2 bg-gray-50">
-                      <span className="flex-1 text-[11px] font-semibold uppercase tracking-wider text-gray-400">Title</span>
-                      <span className="w-40 text-right text-[11px] font-semibold uppercase tracking-wider text-gray-400">Cost</span>
+                    <div className="flex items-center px-4 py-2 bg-muted/30">
+                      <span className="flex-1 text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">Title</span>
+                      <span className="w-40 text-right text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">Cost</span>
                     </div>
 
                     {/* Item rows */}
@@ -600,7 +625,7 @@ export default function BudgetPage() {
                       const isZero = costVal === 0;
                       const isPaid = item.paid > 0;
                       return (
-                        <div key={item.id} className={`group flex items-center px-4 py-2.5 border-t border-gray-100 hover:bg-gray-50/50 transition-colors ${isPaid ? "bg-emerald-50/30" : ""}`}>
+                        <div key={item.id} className={`group flex items-center px-4 py-2.5 border-t border-border hover:bg-muted/30 transition-colors ${isPaid ? "bg-[var(--color-success-bg)]/30" : ""}`}>
                           {/* Paid checkbox */}
                           <input
                             type="checkbox"
@@ -619,7 +644,7 @@ export default function BudgetPage() {
                                 await loadBudget();
                               } catch (e) { setError(e instanceof Error ? e.message : "Failed to save"); }
                             }}
-                            className="mr-2 flex-shrink-0 h-3.5 w-3.5 accent-emerald-500 cursor-pointer"
+                            className="mr-2 flex-shrink-0 h-3.5 w-3.5 accent-[color:var(--color-success-text)] cursor-pointer"
                           />
                           {/* Description */}
                           <input
@@ -627,25 +652,25 @@ export default function BudgetPage() {
                             onChange={e => setInlineDescs(prev => ({ ...prev, [item.id]: e.target.value }))}
                             onBlur={e => saveInlineDesc(cat.id, item, e.target.value)}
                             onKeyDown={e => { if (e.key === "Enter") (e.target as HTMLInputElement).blur(); }}
-                            className={`flex-1 min-w-0 bg-transparent text-sm font-medium focus:outline-none focus:border-b focus:border-indigo-300 truncate ${isPaid ? "text-gray-400 line-through" : "text-indigo-600"}`}
+                            className={`flex-1 min-w-0 bg-transparent text-sm font-medium focus:outline-none focus:border-b focus:border-primary/30 truncate ${isPaid ? "text-muted-foreground line-through" : "text-primary"}`}
                           />
                           {/* Delete (hover) */}
                           <button
                             onClick={() => deleteItem(cat.id, item.id)}
-                            className="mx-2 flex-shrink-0 opacity-0 group-hover:opacity-100 transition-opacity rounded p-0.5 text-gray-300 hover:text-red-500"
+                            className="mx-2 flex-shrink-0 opacity-0 group-hover:opacity-100 transition-opacity rounded p-0.5 text-muted-foreground/50 hover:text-[var(--color-error-text)]"
                           >
                             <Trash2 className="h-3.5 w-3.5" />
                           </button>
                           {/* Cost (planned → feeds Total Budget) */}
                           <div className="flex items-center gap-1 w-40 justify-end flex-shrink-0">
-                            <span className={`text-sm ${isZero ? "text-gray-300" : "text-gray-500"}`}>$</span>
+                            <span className={`text-sm ${isZero ? "text-muted-foreground/50" : "text-muted-foreground"}`}>$</span>
                             <input
                               type="number"
                               value={inlinePlanned[item.id] ?? item.planned.toString()}
                               onChange={e => setInlinePlanned(prev => ({ ...prev, [item.id]: e.target.value }))}
                               onBlur={e => saveInlinePlanned(cat.id, item, e.target.value)}
                               onKeyDown={e => { if (e.key === "Enter") (e.target as HTMLInputElement).blur(); }}
-                              className={`w-28 bg-transparent text-sm tabular-nums text-right focus:outline-none focus:bg-white focus:border focus:border-indigo-300 focus:rounded-lg px-1 py-0.5 transition-colors ${isZero ? "text-gray-300" : "font-medium text-gray-700"}`}
+                              className={`w-28 bg-transparent text-sm tabular-nums text-right focus:outline-none focus:bg-card focus:border focus:border-primary/30 focus:rounded-lg px-1 py-0.5 transition-colors ${isZero ? "text-muted-foreground/50" : "font-medium text-foreground/80"}`}
                             />
                           </div>
                         </div>
@@ -654,7 +679,7 @@ export default function BudgetPage() {
 
                     {/* New item inline row */}
                     {addingItemCatId === cat.id && (
-                      <div className="flex items-center px-4 py-2.5 border-t border-indigo-100 bg-indigo-50/20 gap-2">
+                      <div className="flex items-center px-4 py-2.5 border-t border-primary/10 bg-primary/5 gap-2">
                         <input
                           ref={newItemDescRef}
                           value={newItemDesc}
@@ -664,39 +689,39 @@ export default function BudgetPage() {
                             if (e.key === "Escape") { setAddingItemCatId(null); setNewItemDesc(""); setNewItemPlanned(""); }
                           }}
                           placeholder="Item description…"
-                          className="flex-1 min-w-0 bg-transparent text-sm text-gray-700 placeholder:text-gray-400 focus:outline-none border-b border-indigo-300"
+                          className="flex-1 min-w-0 bg-transparent text-sm text-foreground/80 placeholder:text-muted-foreground focus:outline-none border-b border-primary/30"
                         />
                         <div className="flex items-center gap-1 w-40 justify-end flex-shrink-0">
-                          <span className="text-sm text-gray-400">$</span>
+                          <span className="text-sm text-muted-foreground">$</span>
                           <input
                             type="number"
                             value={newItemPlanned}
                             onChange={e => setNewItemPlanned(e.target.value)}
-                            onBlur={() => commitNewItem(cat.id)}
+                            onBlur={() => commitNewItem(cat.id, false)}
                             onKeyDown={e => {
-                              if (e.key === "Enter") commitNewItem(cat.id);
+                              if (e.key === "Enter") commitNewItem(cat.id, true);
                               if (e.key === "Escape") { setAddingItemCatId(null); setNewItemDesc(""); setNewItemPlanned(""); }
                             }}
                             placeholder="0"
-                            className="w-28 bg-transparent text-sm tabular-nums text-right focus:outline-none border-b border-indigo-300 px-1"
+                            className="w-28 bg-transparent text-sm tabular-nums text-right focus:outline-none border-b border-primary/30 px-1"
                           />
                         </div>
                       </div>
                     )}
 
                     {/* Category footer */}
-                    <div className="flex items-center justify-between px-4 py-2.5 border-t border-gray-100">
+                    <div className="flex items-center justify-between px-4 py-2.5 border-t border-border">
                       <button
                         onClick={() => {
                           setAddingItemCatId(cat.id);
                           setNewItemDesc(""); setNewItemPlanned(""); setNewItemActual("");
                         }}
-                        className="flex items-center gap-1.5 text-sm text-indigo-500 hover:text-indigo-700 transition-colors"
+                        className="flex items-center gap-1.5 text-sm text-primary hover:text-primary transition-colors"
                       >
                         <PlusCircle className="h-4 w-4" />
                         Add new item
                       </button>
-                      <span className={`text-sm font-semibold tabular-nums ${catActualTotal === 0 ? "text-gray-300" : "text-gray-700"}`}>
+                      <span className={`text-sm font-semibold tabular-nums ${catActualTotal === 0 ? "text-muted-foreground/50" : "text-foreground/80"}`}>
                         $ {fmt(catActualTotal)}
                       </span>
                     </div>
@@ -713,36 +738,36 @@ export default function BudgetPage() {
         const remaining = budgetGoal - totalPlanned;
         const overBudget = remaining < 0;
         return (
-          <div className="mt-6 rounded-2xl border border-gray-100 bg-white shadow-sm overflow-hidden">
-            <div className="divide-y divide-gray-50">
+          <div className="mt-6 rounded-2xl border border-border bg-card shadow-sm overflow-hidden">
+            <div className="divide-y divide-border">
               <div className="flex items-center justify-between px-5 py-3">
-                <span className="text-sm text-gray-500">{t("budget.totalBudget")}</span>
-                <span className="text-sm font-semibold text-indigo-600">${budgetGoal.toLocaleString(undefined, { minimumFractionDigits: 0 })}</span>
+                <span className="text-sm text-muted-foreground">{t("budget.totalBudget")}</span>
+                <span className="text-sm font-semibold text-primary">${budgetGoal.toLocaleString(undefined, { minimumFractionDigits: 0 })}</span>
               </div>
               <div className="flex items-center justify-between px-5 py-3">
-                <span className="text-sm text-gray-500">{t("budget.totalSpent")}</span>
-                <span className="text-sm font-semibold text-gray-800">${totalPlanned.toLocaleString(undefined, { minimumFractionDigits: 0 })}</span>
+                <span className="text-sm text-muted-foreground">{t("budget.totalSpent")}</span>
+                <span className="text-sm font-semibold text-foreground">${totalPlanned.toLocaleString(undefined, { minimumFractionDigits: 0 })}</span>
               </div>
               <div className="flex items-center justify-between px-5 py-3">
-                <span className="text-sm text-gray-500">{t("budget.totalPaid")}</span>
-                <span className="text-sm font-semibold text-emerald-600">${totalPaid.toLocaleString(undefined, { minimumFractionDigits: 0 })}</span>
+                <span className="text-sm text-muted-foreground">{t("budget.totalPaid")}</span>
+                <span className="text-sm font-semibold text-[var(--color-success-text)]">${totalPaid.toLocaleString(undefined, { minimumFractionDigits: 0 })}</span>
               </div>
-              <div className="flex items-center justify-between px-5 py-3 bg-gray-50/60">
-                <span className="text-sm font-semibold text-gray-700">{t("budget.remaining")}</span>
-                <span className={`text-sm font-bold ${overBudget ? "text-red-500" : "text-amber-600"}`}>
+              <div className="flex items-center justify-between px-5 py-3 bg-muted/30">
+                <span className="text-sm font-semibold text-foreground/80">{t("budget.remaining")}</span>
+                <span className={`text-sm font-bold ${overBudget ? "text-[var(--color-error-text)]" : "text-[var(--color-warning-text)]"}`}>
                   {overBudget ? "-$" : "$"}{Math.abs(remaining).toLocaleString(undefined, { minimumFractionDigits: 0 })}
                 </span>
               </div>
             </div>
-            <div className="border-t border-gray-100 px-5 py-3 flex items-center justify-between">
-              <p className="text-xs text-gray-400">
+            <div className="border-t border-border px-5 py-3 flex items-center justify-between">
+              <p className="text-xs text-muted-foreground">
                 {categories.length} {categories.length === 1 ? "category" : "categories"} · {categories.reduce((s, c) => s + c.items.length, 0)} items
               </p>
               <button
                 onClick={exportBudgetPDF}
-                className="flex items-center gap-2 rounded-xl border border-gray-200 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors shadow-sm"
+                className="flex items-center gap-2 rounded-xl border border-border bg-card px-4 py-2 text-sm font-medium text-foreground/80 hover:bg-muted transition-colors shadow-sm"
               >
-                <Download className="h-4 w-4 text-gray-500" />
+                <Download className="h-4 w-4 text-muted-foreground" />
                 Download PDF
               </button>
             </div>

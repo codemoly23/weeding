@@ -140,11 +140,11 @@ const categories = [
 ];
 
 const categoryColors: Record<string, string> = {
-  greetings: "bg-green-100 text-green-700",
-  general: "bg-blue-100 text-blue-700",
-  technical: "bg-purple-100 text-purple-700",
-  billing: "bg-amber-100 text-amber-700",
-  closing: "bg-gray-100 text-gray-700",
+  greetings: "admin-status-success",
+  general:   "admin-status-info",
+  technical: "admin-status-hold",
+  billing:   "admin-status-warning",
+  closing:   "admin-status-neutral",
 };
 
 export function CannedResponsesClient({
@@ -411,7 +411,7 @@ export function CannedResponsesClient({
                           Copy
                         </DropdownMenuItem>
                         <DropdownMenuItem
-                          className="text-red-600"
+                          className="text-[var(--ast-error-text)]"
                           onClick={() => handleDelete(response)}
                         >
                           <Trash2 className="h-4 w-4 mr-2" />
@@ -523,7 +523,7 @@ export function CannedResponsesClient({
           </AlertDialogHeader>
           <AlertDialogFooter>
             <AlertDialogCancel>Cancel</AlertDialogCancel>
-            <AlertDialogAction onClick={confirmDelete} className="bg-red-600 hover:bg-red-700">
+            <AlertDialogAction onClick={confirmDelete} className="bg-[var(--ast-error-icon)] hover:bg-[var(--ast-error-text)]">
               Delete
             </AlertDialogAction>
           </AlertDialogFooter>

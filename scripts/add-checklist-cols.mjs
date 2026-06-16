@@ -1,7 +1,7 @@
 import pg from "pg";
 import { readFileSync } from "fs";
 
-const env = readFileSync("d:/projects/llcpad/.env", "utf8");
+const env = readFileSync("n:/codemoly/weeding/.env", "utf8");
 const dbUrl = env.match(/DATABASE_URL="([^"]+)"/)?.[1];
 
 const client = new pg.Client({ connectionString: dbUrl });

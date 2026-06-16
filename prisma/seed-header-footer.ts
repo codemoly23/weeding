@@ -25,7 +25,7 @@ async function seedHeaderFooter() {
       isActive: true,
       layout: "DEFAULT",
       sticky: true,
-      transparent: false,
+      transparent: true,
       topBarEnabled: false,
       logoPosition: "LEFT",
       logoMaxHeight: 48,
@@ -40,12 +40,12 @@ async function seedHeaderFooter() {
       mobileBreakpoint: 1024,
       height: 72,
       textColor: "#1e293b",
-      hoverColor: "#9810fa",
+      hoverColor: "#8A6F3E",
       ctaButtons: JSON.stringify([
         {
           text: "Start Planning Free",
           url: "/register",
-          style: { bgColor: "#BE6B8B", textColor: "#ffffff", borderWidth: 0, hoverEffect: "darken", borderRadius: 8 },
+          style: { bgColor: "#1A1A1A", textColor: "#ffffff", borderWidth: 0, hoverEffect: "darken", borderRadius: 8 },
         },
       ]),
     },

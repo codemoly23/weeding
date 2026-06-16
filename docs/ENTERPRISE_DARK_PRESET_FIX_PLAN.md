@@ -183,7 +183,7 @@ npm run dev
 
 ### Step 3: Verify Admin Preview
 After applying preset, check Live Preview:
-- [ ] Column 1: Brand widget visible (logo + LLCPad + tagline)
+- [ ] Column 1: Brand widget visible (logo + Weeding Ceremony + tagline)
 - [ ] Column 1: Newsletter widget with email input + Subscribe button
 - [ ] Column 2: "COMPANY" heading with 4 links
 - [ ] Column 3: "SERVICES" heading with 4 links

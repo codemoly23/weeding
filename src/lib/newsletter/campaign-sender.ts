@@ -95,7 +95,7 @@ export async function processNextBatch(campaignId: string): Promise<number> {
         email: recipient.email,
         unsubscribeUrl,
         siteUrl: baseUrl,
-        companyName: "LLCPad",
+        companyName: "Weeding Ceremony",
       };
 
       // Render body with variables

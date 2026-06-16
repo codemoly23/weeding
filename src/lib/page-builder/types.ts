@@ -4110,6 +4110,8 @@ export interface PlanigateHeroWidgetSettings {
   // Search module
   searchHeading: string; // "Vad planerar du?"
   eventPills: PlanigateEventTypePill[];
+  placeInputLabel: string; // "Plats"
+  placeInputPlaceholder: string; // "Ex. Inomhus, Utomhus..."
   serviceInputLabel: string; // "Vad behöver du?"
   serviceInputPlaceholder: string; // "Ex. Lokal, Fotograf..."
   locationInputLabel: string; // "Var?"

@@ -1,11 +1,11 @@
-# LLCPad Brand Design System
+# Weeding Ceremony Brand Design System
 ## "Midnight Orange" - Bizee-Inspired Clean Design
 
 ---
 
 ## Executive Summary
 
-LLCPad adopts a **clean, minimal, high-contrast** design inspired by Bizee - using only **3 core colors** for maximum clarity and professional appeal.
+Weeding Ceremony adopts a **clean, minimal, high-contrast** design inspired by Bizee - using only **3 core colors** for maximum clarity and professional appeal.
 
 ---
 

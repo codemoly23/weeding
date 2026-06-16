@@ -74,7 +74,7 @@ export const DEFAULT_WIDGET_CONTAINER: WidgetContainerStyle = {
   borderRadius: 0,
   gradientBorder: {
     enabled: false,
-    colors: ["#ec4899", "#8b5cf6"],
+    colors: ["#E4A93B", "#8A6F3E"],
     angle: 135,
   },
   borderWidth: 2,
@@ -166,7 +166,7 @@ export const DEFAULT_COLUMN_SETTINGS: ColumnSettings = {
 // ============================================
 
 export const DEFAULT_GLOBAL_SETTINGS: GlobalSettings = {
-  primaryColor: "#f97316",
+  primaryColor: "#8A6F3E",
   secondaryColor: "#1e293b",
   fontFamily: "Inter, sans-serif",
   backgroundColor: "#0f172a",
@@ -183,14 +183,14 @@ export const DEFAULT_HERO_CONTENT_SETTINGS: HeroContentWidgetSettings = {
     icon: "Flag",
     text: "💍 Trusted by 5,000+ Couples & Wedding Planners",
     style: "pill",
-    bgColor: "#f9731633",
+    bgColor: "#8A6F3E33",
     textColor: "#fb923c",
-    borderColor: "#f9731680",
+    borderColor: "#8A6F3E80",
   },
   headline: {
     text: "Plan Your Perfect Wedding with Ease",
     highlightWords: "Wedding",
-    highlightColor: "#f97316",
+    highlightColor: "#8A6F3E",
     size: "xl",
     color: "#000000",
   },
@@ -234,7 +234,7 @@ export const DEFAULT_HERO_CONTENT_SETTINGS: HeroContentWidgetSettings = {
   avatarGroup: {
     show: false,
     avatars: [
-      { id: "av_1", initials: "RM", color: "#059669" },
+      { id: "av_1", initials: "RM", color: "#22C55E" },
       { id: "av_2", initials: "PS", color: "#7c3aed" },
       { id: "av_3", initials: "AK", color: "#dc2626" },
       { id: "av_4", initials: "FH", color: "#d97706" },
@@ -266,7 +266,7 @@ export const DEFAULT_IMAGE_SETTINGS: ImageWidgetSettings = {
   // Styling
   borderRadius: 8,
   shadow: "lg",
-  shadowColor: "#f97316",
+  shadowColor: "#8A6F3E",
   border: {
     width: 0,
     color: "#e2e8f0",
@@ -350,7 +350,7 @@ export const DEFAULT_TRUST_BADGES_SETTINGS: TrustBadgesWidgetSettings = {
   style: {
     backgroundColor: "#1e293b80",
     borderColor: "#33415580",
-    iconColor: "#f97316",
+    iconColor: "#8A6F3E",
     textColor: "#ffffff",
     borderRadius: 12,
   },
@@ -658,7 +658,7 @@ export const DEFAULT_TESTIMONIALS_SETTINGS: TestimonialsWidgetSettings = {
     },
     gradientBorder: {
       enabled: false,
-      colors: ["#ec4899", "#8b5cf6"],
+      colors: ["#E4A93B", "#8A6F3E"],
       angle: 135,
     },
   },
@@ -669,8 +669,8 @@ export const DEFAULT_TESTIMONIALS_SETTINGS: TestimonialsWidgetSettings = {
     shape: "circle",
     size: "md",
     borderWidth: 0,
-    borderColor: "#ec4899",
-    backgroundColor: "#ec4899",
+    borderColor: "#E4A93B",
+    backgroundColor: "#E4A93B",
     textColor: "#ffffff",
   },
 
@@ -772,7 +772,7 @@ export const DEFAULT_HEADING_SETTINGS: HeadingWidgetSettings = {
         type: "linear",
         angle: 90,
         colors: [
-          { color: "#f97316", position: 0 },
+          { color: "#8A6F3E", position: 0 },
           { color: "#ef4444", position: 100 },
         ],
       },
@@ -791,10 +791,10 @@ export const DEFAULT_HEADING_SETTINGS: HeadingWidgetSettings = {
       ],
     },
     highlightStyle: {
-      color: "#f97316",
+      color: "#8A6F3E",
       backgroundColor: "#f9731933",
       backgroundType: "solid",
-      gradientColors: ["#f97316", "#ef4444"],
+      gradientColors: ["#8A6F3E", "#ef4444"],
       padding: "0 4px",
       borderRadius: 4,
     },
@@ -824,7 +824,7 @@ export const DEFAULT_HEADING_SETTINGS: HeadingWidgetSettings = {
       enabled: false,
       type: "none",
       duration: 3000,
-      gradientColors: ["#f97316", "#ef4444", "#f97316"],
+      gradientColors: ["#8A6F3E", "#ef4444", "#8A6F3E"],
       gradientAngle: 90,
     },
     hoverAnimation: {
@@ -922,14 +922,14 @@ export const DEFAULT_TEXT_BLOCK_SETTINGS: TextBlockWidgetSettings = {
   // Lists
   lists: {
     bulletStyle: "disc",
-    bulletColor: "#f97316",
+    bulletColor: "#8A6F3E",
     numberStyle: "decimal",
     indentation: 24,
   },
 
   // Blockquote
   blockquote: {
-    borderColor: "#f97316",
+    borderColor: "#8A6F3E",
     borderWidth: 4,
     backgroundColor: "#1e293b",
     fontStyle: "italic",
@@ -940,7 +940,7 @@ export const DEFAULT_TEXT_BLOCK_SETTINGS: TextBlockWidgetSettings = {
   dropCap: {
     enabled: false,
     size: 3,
-    color: "#f97316",
+    color: "#8A6F3E",
     fontFamily: undefined,
   },
 
@@ -1031,7 +1031,7 @@ export const DEFAULT_SERVICE_CARD_SETTINGS: ServiceCardWidgetSettings = {
     heading: {
       text: "Everything You Need to Start Your US Business",
       highlightWords: "US Business",
-      highlightColor: "#f97316",
+      highlightColor: "#8A6F3E",
       size: "xl",
       color: "#ffffff",
     },
@@ -1140,7 +1140,7 @@ export const DEFAULT_SERVICE_LIST_SETTINGS: ServiceListWidgetSettings = {
     heading: {
       text: "All Services",
       highlightWords: "",
-      highlightColor: "#f97316",
+      highlightColor: "#8A6F3E",
       size: "lg", // Smaller, cleaner heading
       color: "#0f172a", // Dark text for light theme
     },
@@ -1176,7 +1176,7 @@ export const DEFAULT_SERVICE_LIST_SETTINGS: ServiceListWidgetSettings = {
     iconStyle: "rounded",
     iconSize: "sm", // Smaller icons
     iconBgColor: "#fff7ed", // Light orange background
-    iconColor: "#f97316", // Primary orange
+    iconColor: "#8A6F3E", // Primary orange
     showTagline: true,
     titleSize: "md", // Medium title
     borderRadius: 12,
@@ -1209,7 +1209,7 @@ export const DEFAULT_SERVICE_LIST_SETTINGS: ServiceListWidgetSettings = {
       link: "/services",
       openInNewTab: false,
       style: {
-        bgColor: "#f97316",
+        bgColor: "#8A6F3E",
         textColor: "#ffffff",
         borderRadius: 6,
         hoverEffect: "darken",
@@ -1260,7 +1260,7 @@ export const DEFAULT_PROCESS_STEPS_SETTINGS: ProcessStepsWidgetSettings = {
     heading: {
       text: "Plan Your Perfect Event in 4 Simple Steps",
       highlightWords: "",
-      highlightColor: "#f97316",
+      highlightColor: "#8A6F3E",
       size: "xl",
       color: "#0f172a", // Dark text for light theme
     },
@@ -1315,9 +1315,9 @@ export const DEFAULT_PROCESS_STEPS_SETTINGS: ProcessStepsWidgetSettings = {
     show: false,
     style: "circle",
     size: "sm",
-    bgColor: "#9333ea",
+    bgColor: "#8A6F3E",
     textColor: "#ffffff",
-    borderColor: "#9333ea",
+    borderColor: "#8A6F3E",
     position: "top-right",
   },
 
@@ -1326,7 +1326,7 @@ export const DEFAULT_PROCESS_STEPS_SETTINGS: ProcessStepsWidgetSettings = {
     show: true,
     style: "rounded",
     size: "md",
-    bgColor: "#9333ea",
+    bgColor: "#8A6F3E",
     iconColor: "#ffffff",
     borderColor: "transparent",
     hoverAnimation: "none",
@@ -1356,11 +1356,11 @@ export const DEFAULT_PROCESS_STEPS_SETTINGS: ProcessStepsWidgetSettings = {
     animation: "none",
     thickness: 2,
     color: "#e5e7eb",
-    secondaryColor: "#9333ea",
+    secondaryColor: "#8A6F3E",
     animationSpeed: "medium",
     animationDirection: "forward",
     dotSize: 8,
-    dotColor: "#9333ea",
+    dotColor: "#8A6F3E",
   },
 
   // Container Style
@@ -1440,7 +1440,7 @@ export const DEFAULT_PRICING_TABLE_SETTINGS: PricingTableWidgetSettings = {
     heading: {
       text: "Choose Your Package",
       highlightWords: "Package",
-      highlightColor: "#f97316",
+      highlightColor: "#8A6F3E",
       size: "xl",
       color: "#0f172a",
     },
@@ -1486,9 +1486,9 @@ export const DEFAULT_PRICING_TABLE_SETTINGS: PricingTableWidgetSettings = {
     ctaButton: {
       text: "Proceed to Checkout",
       style: "solid",
-      bgColor: "#f97316",
+      bgColor: "#8A6F3E",
       textColor: "#ffffff",
-      hoverBgColor: "#ea580c",
+      hoverBgColor: "#6B5530",
     },
     mobileStyle: "sticky-bar",
   },
@@ -1510,7 +1510,7 @@ export const DEFAULT_PRICING_TABLE_SETTINGS: PricingTableWidgetSettings = {
     showPackagePrices: true,
     showPopularBadge: true,
     popularBadgeText: "Most Popular",
-    popularBadgeColor: "#f97316",
+    popularBadgeColor: "#8A6F3E",
     stickyHeader: true,
     highlightColumn: 1, // Highlight second package (0-indexed)
     highlightColor: "#fff7ed",
@@ -1533,7 +1533,7 @@ export const DEFAULT_PRICING_TABLE_SETTINGS: PricingTableWidgetSettings = {
       showPrice: true,
       priceFormat: "inline",
       toggleStyle: "switch",
-      selectedColor: "#f97316",
+      selectedColor: "#8A6F3E",
     },
   },
 
@@ -1545,7 +1545,7 @@ export const DEFAULT_PRICING_TABLE_SETTINGS: PricingTableWidgetSettings = {
     buttonStyle: "solid",
     buttonSize: "lg",
     usePackageColors: false,
-    defaultBgColor: "#f97316",
+    defaultBgColor: "#8A6F3E",
     defaultTextColor: "#ffffff",
     hoverAnimation: "lift",
   },
@@ -1646,7 +1646,7 @@ export const DEFAULT_IMAGE_SLIDER_SETTINGS: ImageSliderWidgetSettings = {
           size: "2xl",
           color: "#ffffff",
           highlightWords: "Service",
-          highlightColor: "#f97316",
+          highlightColor: "#8A6F3E",
           animation: {
             in: { type: "slide-up", duration: 600, delay: 0, easing: "ease-out" },
           },
@@ -1752,7 +1752,7 @@ export const DEFAULT_IMAGE_SLIDER_SETTINGS: ImageSliderWidgetSettings = {
       type: "dots",
       position: "bottom",
       clickable: true,
-      activeColor: "#f97316",
+      activeColor: "#8A6F3E",
       inactiveColor: "rgba(255,255,255,0.5)",
     },
     thumbnails: {
@@ -1906,7 +1906,7 @@ export const DEFAULT_SERVICE_CHECKLIST_CARD_SETTINGS: import("./types").ServiceC
     { value: "4.9★", label: "Rating" },
   ],
   backgroundColor: "#1b3a2d",
-  accentColor: "#e84c1e",
+  accentColor: "#8A6F3E",
   borderRadius: 20,
   shadow: "0 24px 64px rgba(27,58,45,0.22)",
   container: DEFAULT_WIDGET_CONTAINER,
@@ -1966,7 +1966,7 @@ export const DEFAULT_SERVICE_FEATURES_SETTINGS: ServiceFeaturesWidgetSettings = 
     description: "Everything you need to legally form your US LLC",
     alignment: "left",
     eyebrow: "WHAT'S INCLUDED",
-    eyebrowColor: "#e84c1e",
+    eyebrowColor: "#8A6F3E",
   },
   variant: "detailed-cards",
   columns: 3,
@@ -2446,13 +2446,13 @@ export const DEFAULT_EVENT_GALLERY_GRID_SETTINGS: EventGalleryGridWidgetSettings
   sectionBg: "linear-gradient(135deg, #fdf4ff 0%, #fce7f3 40%, #ffffff 100%)",
   items: DEFAULT_EVENT_GALLERY_ITEMS,
   columns: 3,
-  cardBadgeFrom: "#9333ea",
-  cardBadgeTo: "#ec4899",
+  cardBadgeFrom: "#8A6F3E",
+  cardBadgeTo: "#E4A93B",
   showCta: true,
   ctaLabel: "View More Events",
   ctaHref: "/vendors",
-  ctaGradientFrom: "#9333ea",
-  ctaGradientTo: "#ec4899",
+  ctaGradientFrom: "#8A6F3E",
+  ctaGradientTo: "#E4A93B",
   container: DEFAULT_WIDGET_CONTAINER,
 };
 
@@ -2472,8 +2472,8 @@ export const DEFAULT_VENDOR_LISTING_SETTINGS = {
   columns: 3 as const,
   cardStyle: "overlay" as const,
   sectionBg: "linear-gradient(to bottom, #f9fafb, #ffffff)",
-  badgeFrom: "#9333ea",
-  badgeTo: "#ec4899",
+  badgeFrom: "#8A6F3E",
+  badgeTo: "#E4A93B",
   container: DEFAULT_WIDGET_CONTAINER,
 };
 
@@ -2620,8 +2620,8 @@ export const DEFAULT_CTA_BANNER_SETTINGS: CtaBannerWidgetSettings = {
   sectionBgFrom: "#ffffff",
   sectionBgTo: "#faf5ff",
 
-  cardGradientFrom: "#9333ea",
-  cardGradientTo: "#ec4899",
+  cardGradientFrom: "#8A6F3E",
+  cardGradientTo: "#E4A93B",
   cardGradientAngle: 135,
   cardBorderRadius: 24,
   cardPaddingV: 64,
@@ -2654,8 +2654,8 @@ export const DEFAULT_CTA_BANNER_SETTINGS: CtaBannerWidgetSettings = {
 };
 
 export const DEFAULT_TOP_UTILITY_BAR_SETTINGS: TopUtilityBarWidgetSettings = {
-  gradientFrom: "#9333ea",
-  gradientTo: "#ec4899",
+  gradientFrom: "#8A6F3E",
+  gradientTo: "#E4A93B",
   gradientAngle: 90,
   borderBottomColor: "#7e22ce",
   showBorderBottom: true,
@@ -2701,7 +2701,7 @@ export const DEFAULT_TICKER_MARQUEE_SETTINGS: TickerMarqueeWidgetSettings = {
   separator: "·",
   textColor: "rgba(250,248,244,0.5)",
   boldColor: "rgba(250,248,244,0.85)",
-  separatorColor: "#e84c1e",
+  separatorColor: "#8A6F3E",
   pauseOnHover: true,
   colors: { useTheme: false },
   container: DEFAULT_WIDGET_CONTAINER,
@@ -2756,8 +2756,8 @@ export const DEFAULT_BREADCRUMB_SETTINGS: BreadcrumbWidgetSettings = {
   homeUrl: "/",
   showCurrent: true,
   color: "var(--color-muted-foreground, #94a3b8)",
-  hoverColor: "var(--color-primary, #f97316)",
-  currentColor: "var(--color-primary, #f97316)",
+  hoverColor: "var(--color-primary, #1A1A1A)",
+  currentColor: "var(--color-primary, #1A1A1A)",
   separatorColor: "var(--color-muted-foreground, #64748b)",
   fontSize: 13,
   uppercase: false,
@@ -2774,7 +2774,7 @@ export const DEFAULT_BLOG_POST_HERO_SETTINGS: BlogPostHeroWidgetSettings = {
   categoryPill: {
     show: true,
     bgColor: "rgba(249,115,22,0.15)",
-    textColor: "var(--color-primary, #f97316)",
+    textColor: "var(--color-primary, #1A1A1A)",
     borderColor: "rgba(249,115,22,0.3)",
     uppercase: true,
     letterSpacing: "0.08em",
@@ -2782,7 +2782,7 @@ export const DEFAULT_BLOG_POST_HERO_SETTINGS: BlogPostHeroWidgetSettings = {
   title: {
     customFontSize: "clamp(36px, 5vw, 64px)",
     color: "#ffffff",
-    accentColor: "var(--color-primary, #f97316)",
+    accentColor: "var(--color-primary, #1A1A1A)",
     accentWords: "",
     fontWeight: 800,
     lineHeight: 1.1,
@@ -2800,13 +2800,13 @@ export const DEFAULT_BLOG_POST_HERO_SETTINGS: BlogPostHeroWidgetSettings = {
     showDate: true,
     showReadingTime: true,
     showViews: true,
-    avatarBgFrom: "var(--color-primary, #f97316)",
-    avatarBgTo: "#e84c1e",
+    avatarBgFrom: "var(--color-primary, #1A1A1A)",
+    avatarBgTo: "#8A6F3E",
     nameColor: "#ffffff",
     roleColor: "rgba(255,255,255,0.7)",
     statColor: "#ffffff",
     statLabelColor: "rgba(255,255,255,0.6)",
-    iconColor: "var(--color-primary, #f97316)",
+    iconColor: "var(--color-primary, #1A1A1A)",
     dividerColor: "rgba(255,255,255,0.15)",
   },
   alignment: "center",
@@ -2824,8 +2824,8 @@ export const DEFAULT_BLOG_POST_CONTENT_SETTINGS: BlogPostContentWidgetSettings =
     size: "lg",
     theme: "light",
     maxWidth: 720,
-    linkColor: "var(--color-primary, #e84c1e)",
-    linkHoverColor: "var(--color-primary, #f97316)",
+    linkColor: "var(--color-primary, #1A1A1A)",
+    linkHoverColor: "var(--color-primary, #1A1A1A)",
     headingColor: "var(--color-card-foreground, #0f172a)",
     bodyColor: "#475569",
     quoteColor: "#1b3a2d",
@@ -2844,7 +2844,7 @@ export const DEFAULT_BLOG_POST_TOC_SETTINGS: BlogPostTocWidgetSettings = {
   titleColor: "var(--color-muted-foreground, #64748b)",
   itemColor: "var(--color-muted-foreground, #64748b)",
   itemHoverColor: "var(--color-card-foreground, #0f172a)",
-  activeColor: "var(--color-primary, #e84c1e)",
+  activeColor: "var(--color-primary, #1A1A1A)",
   activeBgColor: "rgba(249,115,22,0.08)",
   borderColor: "var(--color-border, #e2e8f0)",
   fontSize: 14,
@@ -2863,7 +2863,7 @@ export const DEFAULT_SOCIAL_SHARE_RAIL_SETTINGS: SocialShareRailWidgetSettings =
   buttonBgColor: "var(--color-card, #ffffff)",
   buttonTextColor: "var(--color-muted-foreground, #64748b)",
   buttonBorderColor: "var(--color-border, #e2e8f0)",
-  buttonHoverBgColor: "var(--color-primary, #f97316)",
+  buttonHoverBgColor: "var(--color-primary, #1A1A1A)",
   buttonHoverTextColor: "#ffffff",
   showCounter: true,
   counterValue: "1.2K",
@@ -2876,8 +2876,8 @@ export const DEFAULT_SOCIAL_SHARE_RAIL_SETTINGS: SocialShareRailWidgetSettings =
 export const DEFAULT_BLOG_POST_AUTHOR_CARD_SETTINGS: BlogPostAuthorCardWidgetSettings = {
   showAvatar: true,
   avatarSize: 80,
-  avatarBgFrom: "var(--color-primary, #f97316)",
-  avatarBgTo: "#e84c1e",
+  avatarBgFrom: "var(--color-primary, #1A1A1A)",
+  avatarBgTo: "#8A6F3E",
   showRole: true,
   showBio: true,
   showSocial: true,
@@ -2889,7 +2889,7 @@ export const DEFAULT_BLOG_POST_AUTHOR_CARD_SETTINGS: BlogPostAuthorCardWidgetSet
   roleColor: "var(--color-muted-foreground, #64748b)",
   bioColor: "#475569",
   socialIconColor: "var(--color-muted-foreground, #64748b)",
-  socialHoverColor: "var(--color-primary, #f97316)",
+  socialHoverColor: "var(--color-primary, #1A1A1A)",
   layout: "horizontal",
   container: DEFAULT_WIDGET_CONTAINER,
 };
@@ -2900,7 +2900,7 @@ export const DEFAULT_BLOG_POST_TAGS_SETTINGS: BlogPostTagsWidgetSettings = {
   tagBgColor: "var(--color-card, #ffffff)",
   tagTextColor: "var(--color-muted-foreground, #64748b)",
   tagBorderColor: "var(--color-border, #e2e8f0)",
-  tagHoverBgColor: "var(--color-primary, #f97316)",
+  tagHoverBgColor: "var(--color-primary, #1A1A1A)",
   tagHoverTextColor: "#ffffff",
   pillStyle: "rounded",
   uppercase: false,
@@ -2922,7 +2922,7 @@ export const DEFAULT_NEWSLETTER_CTA_SETTINGS: NewsletterCtaWidgetSettings = {
   title: {
     line1: "Get expert tips",
     line2: "in your inbox",
-    line2Color: "#f97316",
+    line2Color: "#8A6F3E",
     color: "#ffffff",
     size: "2xl",
     fontWeight: 700,
@@ -2936,7 +2936,7 @@ export const DEFAULT_NEWSLETTER_CTA_SETTINGS: NewsletterCtaWidgetSettings = {
   form: {
     placeholder: "Enter your email",
     buttonText: "Subscribe",
-    buttonBgColor: "#f97316",
+    buttonBgColor: "#8A6F3E",
     buttonTextColor: "#ffffff",
     inputBgColor: "#ffffff",
     inputTextColor: "#0f172a",
@@ -3000,6 +3000,8 @@ export const DEFAULT_PLANIGATE_HERO_SETTINGS: PlanigateHeroWidgetSettings = {
     { id: "p7", label: "Dop", icon: "Droplet", value: "baptism" },
     { id: "p8", label: "Fler", icon: "MoreHorizontal", value: "more" },
   ],
+  placeInputLabel: "Plats",
+  placeInputPlaceholder: "Ex. Inomhus, Utomhus, Strand...",
   serviceInputLabel: "Vad behöver du?",
   serviceInputPlaceholder: "Ex. Lokal, Fotograf, Catering...",
   locationInputLabel: "Var?",

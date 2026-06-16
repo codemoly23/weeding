@@ -357,16 +357,17 @@ export default function ChecklistPage() {
   async function toggleTask(task: LocalChecklistTask) {
     const completed = !task.completed;
     const completedAt = completed ? new Date().toISOString() : null;
-    const updated = { ...task, completed, completedAt };
+    const subtasks = (task.subtasks as SubTask[]).map(s => ({ ...s, completed }));
+    const updated = { ...task, completed, completedAt, subtasks };
     setTasks(prev => prev.map(t => t.id === task.id ? updated : t));
     try {
       if (local) {
-        updateLocalChecklistTask(id, task.id, { completed, completedAt });
+        updateLocalChecklistTask(id, task.id, { completed, completedAt, subtasks });
       } else {
         await apiFetch(`/api/planner/projects/${id}/checklist/${task.id}`, {
           method: "PUT",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ completed, completedAt }),
+          body: JSON.stringify({ completed, completedAt, subtasks }),
         });
       }
     } catch {
@@ -515,7 +516,8 @@ export default function ChecklistPage() {
 
   const totalDone = tasks.reduce((s, t) => {
     const subs = t.subtasks as SubTask[];
-    return s + (subs.length > 0 ? subs.filter(s => s.completed).length : (t.completed ? 1 : 0));
+    if (t.completed) return s + (subs.length > 0 ? subs.length : 1);
+    return s + (subs.length > 0 ? subs.filter(st => st.completed).length : 0);
   }, 0);
   const totalItems = tasks.reduce((s, t) => {
     const subs = t.subtasks as SubTask[];
@@ -610,28 +612,28 @@ export default function ChecklistPage() {
         <button
           onClick={() => handleSeed(true)}
           disabled={seeding || tasks.length === 0}
-          className="text-xs text-gray-400 hover:text-indigo-500 disabled:opacity-0 transition-colors whitespace-nowrap"
+          className="text-xs text-muted-foreground hover:text-primary disabled:opacity-0 transition-colors whitespace-nowrap"
           title="Reset to 3-month default tasks"
         >
           ↺ Reset defaults
         </button>
         <div className="flex-1 text-center">
-          <h1 className="text-2xl font-bold text-gray-900">{t("checklist.heading")}</h1>
+          <h1 className="text-2xl font-bold text-foreground">{t("checklist.heading")}</h1>
         </div>
         <Link
           href={`/planner/${id}/settings`}
-          className="flex items-center gap-1 text-xs text-gray-400 hover:text-gray-600 transition-colors"
+          className="flex items-center gap-1 text-xs text-muted-foreground hover:text-foreground/80 transition-colors"
         >
           <Settings className="h-4 w-4" /> Settings
         </Link>
       </div>
-      <p className="mb-3 text-center text-sm text-gray-500">
+      <p className="mb-3 text-center text-sm text-muted-foreground">
         This is your personal to-do list. Add, remove, or complete any task and keep on top of your deadlines. Any changes? Just click to edit.
       </p>
       {eventDate && (
-        <p className="mb-5 text-center text-sm text-gray-600">
+        <p className="mb-5 text-center text-sm text-foreground/80">
           Wedding Date:{" "}
-          <span className="text-indigo-600 underline decoration-dotted cursor-default">
+          <span className="text-[var(--color-error-text)] underline decoration-dotted cursor-default">
             {new Date(eventDate).toLocaleDateString("en-GB", { weekday: "long", day: "numeric", month: "short", year: "numeric" })}
           </span>
         </p>
@@ -640,27 +642,27 @@ export default function ChecklistPage() {
       {/* Progress bar */}
       {totalItems > 0 && (
         <div className="mb-6">
-          <div className="mb-1 flex items-center justify-between text-xs text-gray-400">
+          <div className="mb-1 flex items-center justify-between text-xs text-muted-foreground">
             <span>{t("checklist.completed").replace("{done}", String(totalDone)).replace("{total}", String(totalItems))}</span>
-            <span className="font-semibold text-indigo-600">{pct}%</span>
+            <span className="font-semibold text-primary">{pct}%</span>
           </div>
-          <div className="h-2 rounded-full bg-gray-100">
-            <div className="h-2 rounded-full bg-indigo-500 transition-all" style={{ width: `${pct}%` }} />
+          <div className="h-2 rounded-full bg-muted">
+            <div className="h-2 rounded-full bg-primary transition-all" style={{ width: `${pct}%` }} />
           </div>
         </div>
       )}
 
       {error && (
-        <div className="mb-4 rounded-xl bg-red-50 px-4 py-2 text-sm text-red-600">{error}</div>
+        <div className="mb-4 rounded-xl bg-[var(--color-error-bg)] px-4 py-2 text-sm text-[var(--color-error-text)]">{error}</div>
       )}
 
       {loading ? (
         <div className="flex justify-center py-16">
-          <div className="h-6 w-6 animate-spin rounded-full border-2 border-indigo-300 border-t-indigo-600" />
+          <div className="h-6 w-6 animate-spin rounded-full border-2 border-muted border-t-primary" />
         </div>
       ) : tasks.length === 0 ? (
         <div className="flex justify-center py-16">
-          <div className="h-6 w-6 animate-spin rounded-full border-2 border-indigo-300 border-t-indigo-600" />
+          <div className="h-6 w-6 animate-spin rounded-full border-2 border-muted border-t-primary" />
         </div>
       ) : (
         <div className="space-y-6">
@@ -684,23 +686,23 @@ export default function ChecklistPage() {
                     onClick={() => setCollapsedGroups(prev => ({ ...prev, [groupKey]: !isGroupCollapsed }))}
                   >
                     {isGroupCollapsed
-                      ? <ChevronRight className="h-4 w-4 text-gray-400 flex-shrink-0" />
-                      : <ChevronDown className="h-4 w-4 text-gray-400 flex-shrink-0" />}
+                      ? <ChevronRight className="h-4 w-4 text-muted-foreground flex-shrink-0" />
+                      : <ChevronDown className="h-4 w-4 text-muted-foreground flex-shrink-0" />}
                     <div>
                       <div className="flex items-center gap-2">
-                        <h2 className="text-base font-semibold text-gray-800">{label.primary}</h2>
+                        <h2 className="text-base font-semibold text-foreground/80">{label.primary}</h2>
                         {isOverdue && (
-                          <span className="rounded-full bg-red-50 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wider text-red-500">
+                          <span className="rounded-full bg-[var(--color-error-bg)] px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wider text-[var(--color-error-text)]">
                             Overdue
                           </span>
                         )}
                       </div>
-                      {label.secondary && <p className="text-xs text-gray-400">{label.secondary}</p>}
+                      {label.secondary && <p className="text-xs text-muted-foreground">{label.secondary}</p>}
                     </div>
                   </button>
                   <button
                     onClick={() => { setAddingGroup(groupKey); setNewTitle(""); }}
-                    className="flex items-center gap-1 text-xs text-indigo-500 hover:text-indigo-700"
+                    className="flex items-center gap-1 text-xs text-primary hover:text-primary/90"
                   >
                     <Plus className="h-3.5 w-3.5" /> {t("checklist.addTask")}
                   </button>
@@ -717,21 +719,21 @@ export default function ChecklistPage() {
                       onChange={e => setNewTitle(e.target.value)}
                       onKeyDown={e => { if (e.key === "Enter") addTask(groupKey); if (e.key === "Escape") setAddingGroup(null); }}
                       placeholder={t("checklist.addTaskPlaceholder")}
-                      className="flex-1 rounded-xl border border-indigo-200 bg-white px-3 py-2 text-sm focus:border-indigo-400 focus:outline-none"
+                      className="flex-1 rounded-xl border border-primary/20 bg-card px-3 py-2 text-sm focus:border-primary focus:outline-none"
                     />
                     <button onClick={() => addTask(groupKey)} disabled={saving || !newTitle.trim()}
-                      className="rounded-xl bg-indigo-600 px-4 py-2 text-sm font-medium text-white hover:bg-indigo-700 disabled:opacity-50">
+                      className="rounded-xl bg-primary px-4 py-2 text-sm font-medium text-primary-foreground hover:bg-primary/90 disabled:opacity-50">
                       {saving ? "..." : t("budget.save")}
                     </button>
                     <button onClick={() => setAddingGroup(null)}
-                      className="rounded-xl border border-gray-200 px-3 py-2 text-sm text-gray-500 hover:bg-gray-50">
+                      className="rounded-xl border border-border px-3 py-2 text-sm text-muted-foreground hover:bg-muted">
                       ✕
                     </button>
                   </div>
                 )}
 
                 {/* Tasks */}
-                <div className="divide-y divide-gray-100 rounded-2xl border border-gray-100 bg-white shadow-sm overflow-hidden">
+                <div className="divide-y divide-border/50 rounded-2xl border border-border bg-card shadow-sm overflow-hidden">
                   {groupTasks.map(task => {
                     const subs = task.subtasks as SubTask[];
                     const subDone = subs.filter(s => s.completed).length;
@@ -742,14 +744,14 @@ export default function ChecklistPage() {
                     return (
                       <div key={task.id} className="group">
                         {/* Task row */}
-                        <div className="flex items-center gap-3 px-4 py-3 hover:bg-gray-50/60 transition-colors">
+                        <div className="flex items-center gap-3 px-4 py-3 hover:bg-muted/30 transition-colors">
                           {/* Checkbox */}
                           <button
                             onClick={() => toggleTask(task)}
                             className={`flex h-5 w-5 flex-shrink-0 items-center justify-center rounded border-2 transition-all ${
                               task.completed
-                                ? "border-indigo-500 bg-indigo-500 text-white"
-                                : "border-gray-300 hover:border-indigo-400"
+                                ? "border-primary bg-primary text-primary-foreground"
+                                : "border-border hover:border-primary"
                             }`}
                           >
                             {task.completed && (
@@ -762,7 +764,7 @@ export default function ChecklistPage() {
                           {/* Title */}
                           <span
                             className={`flex-1 cursor-pointer text-sm font-medium transition-colors ${
-                              task.completed ? "text-gray-400 line-through" : "text-gray-700 hover:text-indigo-600"
+                              task.completed ? "text-muted-foreground line-through" : "text-foreground/80 hover:text-primary"
                             }`}
                             onClick={() => setExpanded(e => ({ ...e, [task.id]: !isExpanded }))}
                           >
@@ -772,17 +774,17 @@ export default function ChecklistPage() {
                           {/* Subtask count + expand */}
                           <div className="flex items-center gap-2">
                             {taskProgress && (
-                              <span className="text-xs text-gray-400">{taskProgress}</span>
+                              <span className="text-xs text-muted-foreground">{taskProgress}</span>
                             )}
                             <button
                               onClick={() => deleteTask(task.id)}
-                              className="opacity-0 group-hover:opacity-100 text-gray-300 hover:text-red-400 transition-all"
+                              className="opacity-0 group-hover:opacity-100 text-muted-foreground/50 hover:text-[var(--color-error-text)] transition-all"
                             >
                               <Trash2 className="h-3.5 w-3.5" />
                             </button>
                             <button
                               onClick={() => setExpanded(e => ({ ...e, [task.id]: !isExpanded }))}
-                              className="text-gray-400 hover:text-gray-600"
+                              className="text-muted-foreground hover:text-foreground/80"
                             >
                               {isExpanded
                                 ? <ChevronDown className="h-4 w-4" />
@@ -794,14 +796,14 @@ export default function ChecklistPage() {
 
                         {/* Expanded content */}
                         {isExpanded && (
-                          <div className="border-t border-gray-50 bg-gray-50/40 px-4 pb-3 pt-2">
+                          <div className="border-t border-border/30 bg-muted/30 px-4 pb-3 pt-2">
                             {task.description && (
-                              <p className="mb-3 text-xs leading-relaxed text-gray-500">{task.description}</p>
+                              <p className="mb-3 text-xs leading-relaxed text-muted-foreground">{task.description}</p>
                             )}
 
                             {subTotal > 0 && (
                               <div className="mb-2">
-                                <p className="mb-1.5 text-[10px] font-semibold uppercase tracking-widest text-gray-400">Subtasks</p>
+                                <p className="mb-1.5 text-[10px] font-semibold uppercase tracking-widest text-muted-foreground">Subtasks</p>
                                 <div className="space-y-1">
                                   {subs.map(sub => (
                                     <div key={sub.id} className="group/sub flex items-start gap-2">
@@ -809,8 +811,8 @@ export default function ChecklistPage() {
                                         onClick={() => toggleSubtask(task, sub.id)}
                                         className={`mt-0.5 flex h-4 w-4 flex-shrink-0 items-center justify-center rounded border-2 transition-all ${
                                           sub.completed
-                                            ? "border-indigo-400 bg-indigo-400 text-white"
-                                            : "border-gray-300 hover:border-indigo-400"
+                                            ? "border-primary bg-primary text-primary-foreground"
+                                            : "border-border hover:border-primary"
                                         }`}
                                       >
                                         {sub.completed && (
@@ -819,12 +821,12 @@ export default function ChecklistPage() {
                                           </svg>
                                         )}
                                       </button>
-                                      <span className={`flex-1 text-xs leading-relaxed ${sub.completed ? "text-gray-400 line-through" : "text-gray-600"}`}>
+                                      <span className={`flex-1 text-xs leading-relaxed ${sub.completed ? "text-muted-foreground line-through" : "text-foreground/80"}`}>
                                         {sub.title}
                                       </span>
                                       <button
                                         onClick={() => deleteSubtask(task, sub.id)}
-                                        className="mt-0.5 opacity-0 group-hover/sub:opacity-100 text-gray-300 hover:text-red-400 transition-all"
+                                        className="mt-0.5 opacity-0 group-hover/sub:opacity-100 text-muted-foreground/50 hover:text-[var(--color-error-text)] transition-all"
                                       >
                                         <Trash2 className="h-3 w-3" />
                                       </button>
@@ -843,21 +845,21 @@ export default function ChecklistPage() {
                                   onChange={e => setNewSubtask(e.target.value)}
                                   onKeyDown={e => { if (e.key === "Enter") addSubtask(task); if (e.key === "Escape") { setAddingSubtaskFor(null); setNewSubtask(""); } }}
                                   placeholder="Subtask description..."
-                                  className="flex-1 rounded-lg border border-indigo-200 bg-white px-2.5 py-1.5 text-xs focus:border-indigo-400 focus:outline-none"
+                                  className="flex-1 rounded-lg border border-primary/20 bg-card px-2.5 py-1.5 text-xs focus:border-primary focus:outline-none"
                                 />
                                 <button onClick={() => addSubtask(task)} disabled={!newSubtask.trim()}
-                                  className="rounded-lg bg-indigo-600 px-3 py-1.5 text-xs font-medium text-white hover:bg-indigo-700 disabled:opacity-50">
+                                  className="rounded-lg bg-primary px-3 py-1.5 text-xs font-medium text-primary-foreground hover:bg-primary/90 disabled:opacity-50">
                                   Add
                                 </button>
                                 <button onClick={() => { setAddingSubtaskFor(null); setNewSubtask(""); }}
-                                  className="rounded-lg border border-gray-200 px-2 py-1.5 text-xs text-gray-400 hover:bg-gray-100">
+                                  className="rounded-lg border border-border px-2 py-1.5 text-xs text-muted-foreground hover:bg-muted">
                                   ✕
                                 </button>
                               </div>
                             ) : (
                               <button
                                 onClick={() => { setAddingSubtaskFor(task.id); setNewSubtask(""); }}
-                                className="mt-1 flex items-center gap-1 text-xs text-indigo-400 hover:text-indigo-600"
+                                className="mt-1 flex items-center gap-1 text-xs text-muted-foreground hover:text-primary disabled:opacity-0"
                               >
                                 <Plus className="h-3 w-3" /> Add sub-task
                               </button>
@@ -878,7 +880,7 @@ export default function ChecklistPage() {
           <div className="text-center">
             <button
               onClick={() => { setAddingGroup("custom"); setNewTitle(""); }}
-              className="text-sm text-indigo-500 hover:text-indigo-700"
+              className="text-sm text-primary hover:text-primary/90"
             >
               <Plus className="inline h-4 w-4" /> {t("checklist.addTask")}
             </button>
@@ -890,13 +892,13 @@ export default function ChecklistPage() {
                   onChange={e => setNewTitle(e.target.value)}
                   onKeyDown={e => { if (e.key === "Enter") addTask("custom"); if (e.key === "Escape") setAddingGroup(null); }}
                   placeholder={t("checklist.addTaskPlaceholder")}
-                  className="flex-1 rounded-xl border border-indigo-200 bg-white px-3 py-2 text-sm focus:border-indigo-400 focus:outline-none"
+                  className="flex-1 rounded-xl border border-primary/20 bg-card px-3 py-2 text-sm focus:border-primary focus:outline-none"
                 />
                 <button onClick={() => addTask("custom")} disabled={saving || !newTitle.trim()}
-                  className="rounded-xl bg-indigo-600 px-4 py-2 text-sm font-medium text-white hover:bg-indigo-700 disabled:opacity-50">
+                  className="rounded-xl bg-primary px-4 py-2 text-sm font-medium text-primary-foreground hover:bg-primary/90 disabled:opacity-50">
                   {saving ? "..." : t("budget.save")}
                 </button>
-                <button onClick={() => setAddingGroup(null)} className="rounded-xl border border-gray-200 px-3 py-2 text-sm text-gray-500">✕</button>
+                <button onClick={() => setAddingGroup(null)} className="rounded-xl border border-border px-3 py-2 text-sm text-muted-foreground">✕</button>
               </div>
             )}
           </div>
@@ -905,9 +907,9 @@ export default function ChecklistPage() {
           <div className="no-print flex justify-center pt-4">
             <button
               onClick={handleDownloadPdf}
-              className="flex items-center gap-2 rounded-xl border border-gray-200 bg-white px-5 py-2.5 text-sm text-gray-600 shadow-sm hover:bg-gray-50 transition-colors"
+              className="flex items-center gap-2 rounded-xl border border-border bg-card px-5 py-2.5 text-sm text-foreground/80 shadow-sm hover:bg-muted transition-colors"
             >
-              <FileText className="h-4 w-4 text-red-400" />
+              <FileText className="h-4 w-4 text-[var(--color-error-text)]" />
               Download PDF file
             </button>
           </div>

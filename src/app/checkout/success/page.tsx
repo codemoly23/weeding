@@ -225,8 +225,8 @@ function SuccessContent() {
       <div className="mb-8 text-center">
         {isPaid && (
           <>
-            <div className="mx-auto mb-4 flex h-20 w-20 items-center justify-center rounded-full bg-green-100">
-              <CheckCircle className="h-10 w-10 text-green-600" />
+            <div className="mx-auto mb-4 flex h-20 w-20 items-center justify-center rounded-full bg-[var(--color-success-bg)]">
+              <CheckCircle className="h-10 w-10 text-[var(--color-success-text)]" />
             </div>
             <h1 className="text-3xl font-bold text-foreground">
               Order Confirmed!
@@ -239,8 +239,8 @@ function SuccessContent() {
 
         {isPending && (
           <>
-            <div className="mx-auto mb-4 flex h-20 w-20 items-center justify-center rounded-full bg-yellow-100">
-              <Clock className="h-10 w-10 text-yellow-600" />
+            <div className="mx-auto mb-4 flex h-20 w-20 items-center justify-center rounded-full bg-[var(--color-warning-bg)]">
+              <Clock className="h-10 w-10 text-[var(--color-warning-text)]" />
             </div>
             <h1 className="text-3xl font-bold text-foreground">
               Order Received — Payment Pending
@@ -253,8 +253,8 @@ function SuccessContent() {
 
         {isFailed && (
           <>
-            <div className="mx-auto mb-4 flex h-20 w-20 items-center justify-center rounded-full bg-red-100">
-              <AlertCircle className="h-10 w-10 text-red-600" />
+            <div className="mx-auto mb-4 flex h-20 w-20 items-center justify-center rounded-full bg-[var(--color-error-bg)]">
+              <AlertCircle className="h-10 w-10 text-[var(--color-error-text)]" />
             </div>
             <h1 className="text-3xl font-bold text-foreground">
               Payment Failed
@@ -268,11 +268,11 @@ function SuccessContent() {
 
       {/* Pay Now Banner for pending/failed */}
       {(isPending || isFailed) && (
-        <Card className="mb-6 border-2 border-yellow-300">
+        <Card className="mb-6 border-2 border-[var(--color-warning-text)]/40">
           <CardContent className="pt-6">
             <div className="flex flex-col items-center gap-4 sm:flex-row sm:justify-between">
               <div className="flex items-center gap-3">
-                <CreditCard className="h-6 w-6 text-yellow-600" />
+                <CreditCard className="h-6 w-6 text-[var(--color-warning-text)]" />
                 <div>
                   <p className="font-medium">
                     {isFailed ? "Try payment again" : "Complete your payment"}

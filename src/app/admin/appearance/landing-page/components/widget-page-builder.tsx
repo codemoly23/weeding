@@ -303,7 +303,7 @@ export function WidgetPageBuilder({
                   e.stopPropagation();
                   onDeleteSection?.(section.id);
                 }}
-                className="p-1 text-slate-400 hover:text-red-400 rounded transition-colors"
+                className="p-1 text-slate-400 hover:text-[var(--ast-error-icon)] rounded transition-colors"
                 title="Delete Section"
               >
                 <Trash2 className="h-3 w-3" />
@@ -325,7 +325,7 @@ export function WidgetPageBuilder({
                 "relative w-full transition-all duration-200",
                 !settings.customCSS && "overflow-hidden",
                 customCSSClass,
-                isSelected && !isPreviewMode && !hasGradientBorder && "ring-2 ring-orange-500 ring-offset-2 ring-offset-slate-900"
+                isSelected && !isPreviewMode && !hasGradientBorder && "ring-2 ring-[var(--ast-processing-icon)] ring-offset-2 ring-offset-slate-900"
               )}
               style={{
                 ...(settings.fullWidth ? backgroundStyles : {}),
@@ -416,7 +416,7 @@ export function WidgetPageBuilder({
                           column.settings?.verticalAlign === "center" && "justify-center",
                           column.settings?.verticalAlign === "bottom" && "justify-end",
                           !isPreviewMode && "group/column",
-                          isColumnSelected && !isPreviewMode && "ring-2 ring-blue-500 ring-offset-1 ring-offset-slate-900 rounded-md",
+                          isColumnSelected && !isPreviewMode && "ring-2 ring-[var(--ast-info-icon)] ring-offset-1 ring-offset-slate-900 rounded-md",
                           columnSpan
                         )}
                         style={{
@@ -489,7 +489,7 @@ export function WidgetPageBuilder({
             return (
               <div
                 className={cn(
-                  isSelected && !isPreviewMode && "ring-2 ring-orange-500 ring-offset-2 ring-offset-slate-900"
+                  isSelected && !isPreviewMode && "ring-2 ring-[var(--ast-processing-icon)] ring-offset-2 ring-offset-slate-900"
                 )}
                 style={{
                   padding: `${width || 2}px`,
@@ -522,7 +522,7 @@ export function WidgetPageBuilder({
         className={cn(
           "relative z-10 flex items-center gap-2 px-4 py-2 rounded-lg",
           "bg-slate-800 border border-slate-700",
-          "text-slate-400 hover:text-white hover:border-orange-500 hover:bg-slate-700",
+          "text-slate-400 hover:text-white hover:border-[var(--ast-processing-icon)] hover:bg-slate-700",
           "transition-all duration-200"
         )}
       >
@@ -560,8 +560,8 @@ export function WidgetPageBuilder({
             onClick={() => openLayoutSelector()}
             className={cn(
               "flex items-center gap-2 px-6 py-3 rounded-lg",
-              "bg-orange-500 text-white font-medium",
-              "hover:bg-orange-600 transition-colors"
+              "bg-[#1A1A1A] text-white font-medium",
+              "hover:bg-[#2A2A2A] transition-colors"
             )}
           >
             <Plus className="h-5 w-5" />

@@ -399,16 +399,16 @@ export function LeadFormWidget({
   const inputClasses = hasCustomInput
     ? "border focus:border-primary focus:ring-primary"
     : lightBg
-      ? "bg-gray-50/50 border-gray-200 placeholder:text-gray-400 focus:border-primary focus:ring-primary"
+      ? "bg-muted/30 border-border placeholder:text-muted-foreground focus:border-primary focus:ring-primary"
       : "bg-slate-800/50 border-slate-700 placeholder:text-slate-500 focus:border-primary focus:ring-primary";
   const selectTriggerClasses = hasCustomInput
     ? "border"
     : lightBg
-      ? "bg-gray-50/50 border-gray-200"
+      ? "bg-muted/30 border-border"
       : "bg-slate-800/50 border-slate-700";
   const radioCheckboxBorder = hasCustomInput
     ? ""
-    : lightBg ? "border-gray-300" : "border-slate-600";
+    : lightBg ? "border-border" : "border-slate-600";
 
   // Shared inline styles for all input/select/textarea elements
   const inputInlineStyle: React.CSSProperties = useMemo(() => ({
@@ -779,7 +779,7 @@ export function LeadFormWidget({
         style={labelStyle}
       >
         {field.label}
-        {field.required && <span className="text-red-500 ml-1">*</span>}
+        {field.required && <span className="text-[var(--color-error-text)] ml-1">*</span>}
       </Label>
       {renderFieldInput(field)}
     </div>
@@ -805,7 +805,7 @@ export function LeadFormWidget({
         }}
       >
         <div className="text-center py-8">
-          <CheckCircle className="h-16 w-16 text-green-500 mx-auto mb-4" />
+          <CheckCircle className="h-16 w-16 text-[var(--color-success-text)] mx-auto mb-4" />
           <h3
             className="text-xl font-semibold mb-2"
             style={{ color: titleColor || "#ffffff" }}
@@ -823,7 +823,7 @@ export function LeadFormWidget({
             variant="link"
             onClick={() => setIsSubmitted(false)}
             className="mt-4"
-            style={{ color: submitButton.style?.bgColor || "#f97316" }}
+            style={{ color: submitButton.style?.bgColor || "#8A6F3E" }}
           >
             Submit another response
           </Button>
@@ -878,7 +878,7 @@ export function LeadFormWidget({
 
       {/* Error Message */}
       {error && (
-        <div className="mb-4 p-3 bg-red-100 border border-red-300 text-red-700 rounded-md text-sm">
+        <div className="mb-4 p-3 bg-[var(--color-error-bg)] border border-[var(--color-error-text)]/30 text-[var(--color-error-text)] rounded-md text-sm">
           {error}
         </div>
       )}

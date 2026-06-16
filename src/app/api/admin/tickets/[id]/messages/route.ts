@@ -1,6 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
 import prisma from "@/lib/db";
-import { requirePluginAccess } from "@/lib/plugin-guard";
 import { z } from "zod";
 
 // GET - List messages for a ticket
@@ -9,9 +8,6 @@ export async function GET(
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    // Plugin access check
-    await requirePluginAccess("livesupport-pro");
-
     const { id: ticketId } = await params;
 
     // Check if ticket exists
@@ -77,9 +73,6 @@ export async function POST(
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    // Plugin access check
-    await requirePluginAccess("livesupport-pro");
-
     const { id: ticketId } = await params;
     const body = await request.json();
     const data = createMessageSchema.parse(body);

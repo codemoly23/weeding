@@ -2,7 +2,7 @@
 
 ## Overview
 
-This document outlines the plan to enhance the LLCPad footer builder with new features, layouts, and preset designs inspired by BrightHub and modern footer design trends.
+This document outlines the plan to enhance the Weeding Ceremony footer builder with new features, layouts, and preset designs inspired by BrightHub and modern footer design trends.
 
 ---
 

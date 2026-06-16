@@ -205,7 +205,7 @@ export default function ThemeGalleryPage() {
               className={cn(
                 "group relative overflow-hidden transition-all duration-200",
                 "hover:shadow-lg hover:scale-[1.02]",
-                theme.isActive && "ring-2 ring-green-500 shadow-green-100"
+                theme.isActive && "ring-2 ring-[var(--ast-success-icon)] shadow-[var(--ast-success-bg)]"
               )}
             >
               {/* Thumbnail Placeholder */}
@@ -224,7 +224,7 @@ export default function ThemeGalleryPage() {
 
                 {/* Active Badge Overlay */}
                 {theme.isActive && (
-                  <Badge className="absolute top-3 right-3 bg-green-500 hover:bg-green-600 text-white">
+                  <Badge className="absolute top-3 right-3 bg-[var(--ast-success-icon)] hover:bg-[var(--ast-success-text)] text-white">
                     <Check className="h-3 w-3 mr-1" />
                     Active
                   </Badge>
@@ -269,7 +269,7 @@ export default function ThemeGalleryPage() {
                         </Button>
                         <Badge
                           variant="secondary"
-                          className="flex items-center gap-1 text-green-600 border-green-200 px-3"
+                          className="flex items-center gap-1 text-[var(--ast-success-icon)] border-[var(--ast-success-border)] px-3"
                         >
                           <Check className="h-3 w-3" />
                           Active
@@ -329,9 +329,9 @@ export default function ThemeGalleryPage() {
             </DialogTitle>
             <DialogDescription asChild>
               <div className="space-y-3 pt-2">
-                <div className="flex items-start gap-2 rounded-lg border border-amber-200 bg-amber-50 p-3">
-                  <AlertTriangle className="h-5 w-5 text-amber-600 mt-0.5 shrink-0" />
-                  <p className="text-sm text-amber-800">
+                <div className="flex items-start gap-2 rounded-lg border border-[var(--ast-warning-border)] bg-[var(--ast-warning-bg)] p-3">
+                  <AlertTriangle className="h-5 w-5 text-[var(--ast-warning-icon)] mt-0.5 shrink-0" />
+                  <p className="text-sm text-[var(--ast-warning-text)]">
                     This will replace all content data including services, pages,
                     blogs, FAQs, and settings. User accounts, orders, and leads
                     will be preserved.

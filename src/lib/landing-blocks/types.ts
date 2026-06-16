@@ -111,7 +111,7 @@ export interface HeroBackgroundSettings {
     opacity: number;
   };
   pattern?: {
-    type: "grid" | "dots" | "lines";
+    type: "dots" | "grid" | "grid-fine" | "diagonal" | "waves" | "circuit" | "geometric" | "confetti";
     color: string;
     opacity: number;
   };

@@ -84,7 +84,7 @@ function getBadgeStyles(style: BadgeStyle, colors: { bgColor?: string; textColor
       return {
         className: cn(baseClasses, "rounded-md border-0"),
         style: {
-          backgroundColor: colors.bgColor || "#f97316",
+          backgroundColor: colors.bgColor || "#8A6F3E",
           color: colors.textColor || "#ffffff",
         },
       };
@@ -146,7 +146,7 @@ function renderHighlightedText(
       return (
         <span
           key={index}
-          style={{ color: highlightColor || "#f97316" }}
+          style={{ color: highlightColor || "#8A6F3E" }}
         >
           {renderWithLineBreaks(part, `hl-${index}-`)}
         </span>
@@ -278,7 +278,7 @@ function ForgeSplitHeader({ settings }: { settings: ServiceCardWidgetSettings })
           <span
             className="text-xs font-bold uppercase"
             style={{
-              color: badge.textColor || "#e84c1e",
+              color: badge.textColor || "#8A6F3E",
               letterSpacing: "1.5px",
             }}
           >
@@ -358,7 +358,7 @@ function getIconStyleClasses(style: string): string {
     case "square":
       return "rounded-none";
     case "gradient-bg":
-      return "rounded-lg bg-gradient-to-br from-primary/20 to-purple-500/20";
+      return "rounded-lg bg-gradient-to-br from-primary/20 to-[#8A6F3E]/20";
     case "outline":
       return "rounded-lg border-2 bg-transparent";
     case "none":
@@ -490,7 +490,7 @@ function MinimalCard({
       >
         <Icon
           className={cn(iconSize.icon, "transition-all duration-200", iconAnimation)}
-          style={{ color: settings.icon.iconColor || "#f97316" }}
+          style={{ color: settings.icon.iconColor || "#8A6F3E" }}
         />
       </div>
     );
@@ -603,7 +603,7 @@ function ElevatedCard({
       >
         <Icon
           className={cn(iconSize.icon, "transition-all duration-200", iconAnimation)}
-          style={{ color: settings.icon.iconColor || "#f97316" }}
+          style={{ color: settings.icon.iconColor || "#8A6F3E" }}
         />
       </div>
     );
@@ -844,7 +844,7 @@ function GradientBorderCard({
           "flex items-center justify-center shrink-0 transition-all duration-200",
           iconSize.container,
           iconStyle,
-          showBg ? "bg-gradient-to-br from-primary/20 to-purple-500/20" : "bg-transparent",
+          showBg ? "bg-gradient-to-br from-primary/20 to-[#8A6F3E]/20" : "bg-transparent",
           iconHoverEffect
         )}
       >
@@ -856,16 +856,16 @@ function GradientBorderCard({
   // Custom price classes for gradient border style
   const getPriceClasses = () => {
     if (priceDisplay.isTopRight) {
-      return cn("absolute top-3 right-4 text-sm font-semibold bg-gradient-to-r from-primary to-purple-500 bg-clip-text text-transparent bg-card/80 px-2 py-1 rounded-md", hasBadge && settings.content.badgePosition === "top-right" && "top-10");
+      return cn("absolute top-3 right-4 text-sm font-semibold bg-gradient-to-r from-primary to-[#8A6F3E] bg-clip-text text-transparent bg-card/80 px-2 py-1 rounded-md", hasBadge && settings.content.badgePosition === "top-right" && "top-10");
     }
     if (priceDisplay.isBadge) {
-      return "inline-flex items-center px-3 py-1 rounded-full text-sm font-semibold bg-gradient-to-r from-primary to-purple-500 text-white";
+      return "inline-flex items-center px-3 py-1 rounded-full text-sm font-semibold bg-gradient-to-r from-primary to-[#8A6F3E] text-white";
     }
-    return "font-semibold bg-gradient-to-r from-primary to-purple-500 bg-clip-text text-transparent";
+    return "font-semibold bg-gradient-to-r from-primary to-[#8A6F3E] bg-clip-text text-transparent";
   };
 
   return (
-    <div className="relative p-[2px] rounded-xl bg-gradient-to-br from-primary via-purple-500 to-pink-500 group-hover:from-primary group-hover:via-orange-400 group-hover:to-yellow-400 transition-all">
+    <div className="relative p-[2px] rounded-xl bg-gradient-to-br from-primary via-[#8A6F3E] to-[#E4A93B] group-hover:from-primary group-hover:via-[#8A6F3E] group-hover:to-[#E4A93B] transition-all">
       <div
         className="relative bg-card rounded-xl h-full"
         style={{ borderRadius: `${Math.max(0, settings.borderRadius - 2)}px` }}
@@ -875,7 +875,7 @@ function GradientBorderCard({
           <Badge
             className={cn(
               "absolute top-3 z-10 border-0",
-              !service.badgeColor && "bg-linear-to-r from-primary to-purple-500 text-white",
+              !service.badgeColor && "bg-linear-to-r from-primary to-[#8A6F3E] text-white",
               settings.content.badgePosition === "top-left" ? "left-4" : "right-4"
             )}
             style={service.badgeColor ? { backgroundColor: service.badgeColor, color: "#ffffff" } : undefined}
@@ -987,7 +987,7 @@ function SpotlightCard({
       >
         <Icon
           className={cn(iconSize.icon, "transition-all duration-200", iconAnimation)}
-          style={{ color: settings.icon.iconColor || "#f97316" }}
+          style={{ color: settings.icon.iconColor || "#8A6F3E" }}
         />
       </div>
     );
@@ -1086,7 +1086,7 @@ function NeonGlowCard({
   const Icon = getLucideIcon(service.icon);
   const iconSize = getIconSizeClasses(settings.icon.size);
   const iconStyle = getIconStyleClasses(settings.icon.style);
-  const glowColor = settings.hover.glowColor || "#f97316";
+  const glowColor = settings.hover.glowColor || "#8A6F3E";
   const hasBadge = settings.content.showBadge && (service.isPopular || !!service.badgeText);
   const isInline = settings.icon.position === "inline";
   const isCentered = settings.icon.position === "top-center";

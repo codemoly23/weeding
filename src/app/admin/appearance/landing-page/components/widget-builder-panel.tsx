@@ -107,7 +107,7 @@ class SettingsErrorBoundary extends React.Component<
             {this.state.error?.message}
           </p>
           <button
-            className="mt-2 text-xs text-blue-400 hover:underline"
+            className="mt-2 text-xs text-[var(--ast-info-icon)] hover:underline"
             onClick={() => this.setState({ hasError: false, error: null })}
           >
             Try Again

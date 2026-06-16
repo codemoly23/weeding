@@ -194,7 +194,7 @@ function CtaButton({ text }: { text: string }) {
 // ── Badge color map ────────────────────────────────────────────────────────────
 
 const BADGE_STYLES: Record<string, { bg: string; text: string }> = {
-  purple: { bg: "#9333ea", text: "#ffffff" },
+  purple: { bg: "#8A6F3E", text: "#ffffff" },
   orange: { bg: "#f59e0b", text: "#ffffff" },
   green: { bg: "#10b981", text: "#ffffff" },
   none: { bg: "transparent", text: "transparent" },
@@ -322,8 +322,8 @@ function VenueCard({ venue, isPreview }: VenueCardProps) {
         >
           <Heart
             size={16}
-            fill={hearted ? "#ec4899" : "none"}
-            color={hearted ? "#ec4899" : "#6b7280"}
+            fill={hearted ? "#E4A93B" : "none"}
+            color={hearted ? "#E4A93B" : "#6b7280"}
             strokeWidth={2}
           />
         </button>

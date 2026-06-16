@@ -173,7 +173,7 @@ export function PackageComparisonTable({
     const mapping = feature.packageMappings.find((m) => m.packageId === pkg.id);
     if (!mapping) {
       return (
-        <Minus className={cn("h-5 w-5", isSelectedColumn ? "text-gray-400" : "text-gray-300")} />
+        <Minus className={cn("h-5 w-5", isSelectedColumn ? "text-muted-foreground" : "text-muted-foreground/50")} />
       );
     }
 
@@ -190,10 +190,10 @@ export function PackageComparisonTable({
               className={cn(
                 "h-8 px-3 text-sm font-medium transition-all",
                 isSelected
-                  ? "bg-orange-500 text-white border-orange-500 hover:bg-orange-600 hover:border-orange-600"
+                  ? "bg-[#1A1A1A] text-white border-[#1A1A1A] hover:bg-[#2A2A2A] hover:border-[#2A2A2A]"
                   : isSelectedColumn
-                  ? "border-orange-300 hover:border-orange-500 hover:bg-orange-50"
-                  : "border-gray-300 hover:border-gray-400"
+                  ? "border-[var(--color-warning-text)]/30 hover:border-[var(--color-warning-text)] hover:bg-[var(--color-warning-bg)]"
+                  : "border-border hover:border-border"
               )}
               onClick={() =>
                 toggleAddon(feature.id, feature.text, pkg.id, addonPriceUSD)
@@ -208,16 +208,16 @@ export function PackageComparisonTable({
             </Button>
           );
         }
-        return <Minus className="h-5 w-5 text-gray-300" />;
+        return <Minus className="h-5 w-5 text-muted-foreground/50" />;
 
       case "DASH":
         return (
-          <Minus className={cn("h-5 w-5", isSelectedColumn ? "text-gray-400" : "text-gray-300")} />
+          <Minus className={cn("h-5 w-5", isSelectedColumn ? "text-muted-foreground" : "text-muted-foreground/50")} />
         );
 
       case "TEXT":
         return (
-          <span className={cn("text-sm font-medium", isSelectedColumn && "text-orange-700")}>
+          <span className={cn("text-sm font-medium", isSelectedColumn && "text-[var(--color-warning-text)]")}>
             {customValue}
           </span>
         );
@@ -230,8 +230,8 @@ export function PackageComparisonTable({
               className={cn(
                 "inline-flex h-6 w-6 items-center justify-center rounded-full",
                 isSelectedColumn
-                  ? "bg-orange-500 text-white"
-                  : "bg-gray-400 text-white"
+                  ? "bg-[#1A1A1A] text-white"
+                  : "bg-muted-foreground text-primary-foreground"
               )}
             >
               <Check className="h-4 w-4 stroke-[3]" />
@@ -243,8 +243,8 @@ export function PackageComparisonTable({
             className={cn(
               "inline-flex h-6 w-6 items-center justify-center rounded-full",
               isSelectedColumn
-                ? "bg-gray-300 text-gray-500"
-                : "bg-gray-200 text-gray-400"
+                ? "bg-muted text-muted-foreground"
+                : "bg-muted/70 text-muted-foreground"
             )}
           >
             <X className="h-4 w-4 stroke-[3]" />
@@ -275,17 +275,17 @@ export function PackageComparisonTable({
       <div className="flex gap-6">
         {/* Main Comparison Table */}
         <div className="flex-1 overflow-x-auto">
-          <div className="rounded-xl border border-gray-200 bg-white shadow-sm">
+          <div className="rounded-xl border border-border bg-card shadow-sm">
             <table className="w-full border-collapse">
               {/* Header */}
               <thead>
                 {/* Badge Row - separate row for badges */}
                 <tr>
-                  <th className="sticky left-0 z-20 bg-white h-6"></th>
+                  <th className="sticky left-0 z-20 bg-card h-6"></th>
                   {packages.map((pkg) => (
                     <th
                       key={`badge-${pkg.id}`}
-                      className="relative h-6 bg-white cursor-pointer"
+                      className="relative h-6 bg-card cursor-pointer"
                       onClick={() => handlePackageSelect(pkg.id)}
                     >
                       {pkg.badgeText && (
@@ -293,10 +293,10 @@ export function PackageComparisonTable({
                           className={cn(
                             "absolute bottom-0 left-1/2 -translate-x-1/2 translate-y-1/2 px-3 py-1 text-xs font-semibold text-white rounded-full whitespace-nowrap z-10 shadow-sm",
                             pkg.badgeColor === "orange"
-                              ? "bg-orange-500"
+                              ? "bg-[var(--color-warning-text)]"
                               : pkg.badgeColor === "green"
-                              ? "bg-emerald-500"
-                              : "bg-emerald-500"
+                              ? "bg-[var(--color-success-text)]"
+                              : "bg-[var(--color-success-text)]"
                           )}
                         >
                           {pkg.badgeText}
@@ -306,8 +306,8 @@ export function PackageComparisonTable({
                   ))}
                 </tr>
                 <tr>
-                  <th className="sticky left-0 z-20 min-w-64 bg-white px-6 py-4 text-left">
-                    <span className="text-base font-semibold text-gray-900">
+                  <th className="sticky left-0 z-20 min-w-64 bg-card px-6 py-4 text-left">
+                    <span className="text-base font-semibold text-foreground">
                       Business Formation
                       <br />
                       Packages
@@ -321,8 +321,8 @@ export function PackageComparisonTable({
                         className={cn(
                           "relative min-w-36 cursor-pointer px-4 pt-5 pb-4 text-center transition-all",
                           isSelected
-                            ? "bg-orange-50"
-                            : "bg-white hover:bg-gray-50"
+                            ? "bg-[var(--color-warning-bg)]"
+                            : "bg-card hover:bg-muted/50"
                         )}
                         onClick={() => handlePackageSelect(pkg.id)}
                       >
@@ -331,39 +331,39 @@ export function PackageComparisonTable({
                           className={cn(
                             "mb-2 rounded-lg border-2 px-4 py-1 transition-all",
                             isSelected
-                              ? "border-orange-500 bg-white"
-                              : "border-gray-200 bg-gray-50"
+                              ? "border-[var(--color-warning-text)] bg-card"
+                              : "border-border bg-muted/30"
                           )}
                         >
-                          <span className="text-sm font-semibold text-gray-900">
+                          <span className="text-sm font-semibold text-foreground">
                             {pkg.name}
                           </span>
                         </div>
 
                         {/* Price */}
-                        <div className="text-2xl font-bold text-gray-900">
+                        <div className="text-2xl font-bold text-foreground">
                           {currencySymbol}{pkg.price}
                         </div>
 
                         {/* Location Fee Note */}
                         {locationFee > 0 && (
-                          <div className="text-xs text-gray-500 mt-1">
+                          <div className="text-xs text-muted-foreground mt-1">
                             + {currencySymbol}{locationFee} {locationFeeLabel?.toLowerCase() || "location fee"}
                           </div>
                         )}
 
                         {/* Processing Time */}
                         {pkg.processingTime && (
-                          <div className="flex items-center justify-center gap-1 mt-2 text-xs text-gray-500">
+                          <div className="flex items-center justify-center gap-1 mt-2 text-xs text-muted-foreground">
                             {pkg.processingIcon === "zap" ? (
-                              <Zap className="h-3 w-3 text-orange-500" />
+                              <Zap className="h-3 w-3 text-[var(--color-warning-text)]" />
                             ) : (
                               <Clock className="h-3 w-3" />
                             )}
                             <span
                               className={cn(
                                 pkg.processingIcon === "zap" &&
-                                  "text-orange-600 font-medium"
+                                  "text-[var(--color-warning-text)] font-medium"
                               )}
                             >
                               {pkg.processingTime}
@@ -382,22 +382,22 @@ export function PackageComparisonTable({
                   <tr
                     key={feature.id}
                     className={cn(
-                      "border-t border-gray-100 transition-colors",
-                      index % 2 === 0 ? "bg-white" : "bg-gray-50/50"
+                      "border-t border-border transition-colors",
+                      index % 2 === 0 ? "bg-card" : "bg-muted/30"
                     )}
                   >
                     {/* Feature Name */}
                     <td className="sticky left-0 z-10 bg-inherit px-6 py-4">
                       <div className="flex flex-col">
                         <div className="flex items-center gap-2">
-                          <span className="text-sm font-medium text-gray-900">
+                          <span className="text-sm font-medium text-foreground">
                             {feature.text}
                           </span>
                           {feature.tooltip && (
                             <TooltipProvider>
                               <Tooltip>
                                 <TooltipTrigger asChild>
-                                  <button className="text-gray-400 hover:text-gray-600">
+                                  <button className="text-muted-foreground hover:text-foreground/80">
                                     <Info className="h-4 w-4" />
                                   </button>
                                 </TooltipTrigger>
@@ -420,7 +420,7 @@ export function PackageComparisonTable({
                               setExpandedFeature(open ? feature.id : null)
                             }
                           >
-                            <CollapsibleTrigger className="flex items-center gap-1 text-xs text-gray-500 hover:text-gray-700 mt-1">
+                            <CollapsibleTrigger className="flex items-center gap-1 text-xs text-muted-foreground hover:text-foreground/80 mt-1">
                               See what&apos;s included
                               <ChevronDown
                                 className={cn(
@@ -429,7 +429,7 @@ export function PackageComparisonTable({
                                 )}
                               />
                             </CollapsibleTrigger>
-                            <CollapsibleContent className="mt-2 text-xs text-gray-600">
+                            <CollapsibleContent className="mt-2 text-xs text-foreground/80">
                               {feature.description}
                             </CollapsibleContent>
                           </Collapsible>
@@ -446,10 +446,10 @@ export function PackageComparisonTable({
                           className={cn(
                             "px-4 py-4 text-center transition-all cursor-pointer",
                             isSelected
-                              ? "bg-orange-50/70"
+                              ? "bg-[var(--color-warning-bg)]/70"
                               : index % 2 === 0
-                              ? "bg-white hover:bg-orange-50/30"
-                              : "bg-gray-50/50 hover:bg-orange-50/30"
+                              ? "bg-card hover:bg-[var(--color-warning-bg)]/30"
+                              : "bg-muted/30 hover:bg-[var(--color-warning-bg)]/30"
                           )}
                           onClick={() => handlePackageSelect(pkg.id)}
                         >
@@ -466,7 +466,7 @@ export function PackageComparisonTable({
 
         {/* Order Summary Sidebar */}
         <div className="hidden lg:block w-80 shrink-0">
-          <Card className="sticky top-24 shadow-lg border-gray-200">
+          <Card className="sticky top-24 shadow-lg border-border">
             <CardHeader className="pb-4">
               <CardTitle className="text-lg">Order Summary</CardTitle>
             </CardHeader>
@@ -474,7 +474,7 @@ export function PackageComparisonTable({
               {/* Package */}
               {selectedPackage && (
                 <div className="flex justify-between text-sm">
-                  <span className="text-gray-600">
+                  <span className="text-foreground/80">
                     {selectedPackage.name} Package:
                   </span>
                   <span className="font-medium">{currencySymbol}{selectedPackage.price}</span>
@@ -484,7 +484,7 @@ export function PackageComparisonTable({
               {/* Location Fee */}
               {selectedLocation && locationFee > 0 && (
                 <div className="flex justify-between text-sm">
-                  <span className="text-gray-600">
+                  <span className="text-foreground/80">
                     {selectedLocation.name} {locationFeeLabel || "Fee"}:
                   </span>
                   <span className="font-medium">{currencySymbol}{locationFee}</span>
@@ -497,7 +497,7 @@ export function PackageComparisonTable({
                   key={`${addon.featureId}-${addon.packageId}`}
                   className="flex justify-between text-sm"
                 >
-                  <span className="text-gray-600 truncate max-w-40">
+                  <span className="text-foreground/80 truncate max-w-40">
                     {addon.featureText}:
                   </span>
                   <span className="font-medium">{currencySymbol}{addon.price}</span>
@@ -509,14 +509,14 @@ export function PackageComparisonTable({
               {/* Total */}
               <div className="flex justify-between items-center">
                 <span className="text-base font-semibold">Total:</span>
-                <span className="text-2xl font-bold text-gray-900">
+                <span className="text-2xl font-bold text-foreground">
                   {currencySymbol}{grandTotal}
                 </span>
               </div>
             </CardContent>
             <CardFooter className="flex-col gap-3">
               <Button
-                className="w-full bg-orange-500 hover:bg-orange-600 text-white font-semibold py-6"
+                className="w-full bg-[#1A1A1A] hover:bg-[#2A2A2A] text-white font-semibold py-6"
                 asChild
               >
                 <Link
@@ -533,13 +533,13 @@ export function PackageComparisonTable({
                 </Link>
               </Button>
               {checkoutBadgeText && (
-                <div className="flex items-center justify-center gap-2 text-xs text-gray-500">
+                <div className="flex items-center justify-center gap-2 text-xs text-muted-foreground">
                   <RefreshCw className="h-3 w-3" />
                   <span>{checkoutBadgeText}</span>
                 </div>
               )}
               {checkoutBadgeDescription && (
-                <p className="text-xs text-center text-gray-500">
+                <p className="text-xs text-muted-foreground text-center">
                   {checkoutBadgeDescription}
                 </p>
               )}
@@ -584,7 +584,7 @@ export function PackageComparisonTable({
             </div>
           </CardContent>
           <CardFooter>
-            <Button className="w-full bg-orange-500 hover:bg-orange-600" asChild>
+            <Button className="w-full bg-[#1A1A1A] hover:bg-[#2A2A2A]" asChild>
               <Link
                 href={`/checkout/${serviceSlug}?package=${getPackageSlug(selectedPackage)}${selectedLocation?.code ? `&location=${selectedLocation.code}` : ""}${selectedAddons.length > 0 ? `&addons=${selectedAddons.map((a) => a.featureId).join(",")}` : ""}`}
                 onClick={() => {
@@ -602,7 +602,7 @@ export function PackageComparisonTable({
         </Card>
 
         {/* Mobile Package Cards */}
-        <div className="text-center text-sm text-gray-500 mb-4">
+        <div className="text-center text-sm text-muted-foreground mb-4">
           Tap a package to select it
         </div>
         <div className="flex snap-x snap-mandatory gap-4 overflow-x-auto pb-4">
@@ -614,8 +614,8 @@ export function PackageComparisonTable({
                 className={cn(
                   "min-w-72 max-w-80 shrink-0 snap-center rounded-xl border-2 p-5 cursor-pointer transition-all",
                   isSelected
-                    ? "border-orange-500 bg-orange-50 shadow-lg"
-                    : "border-gray-200 bg-white"
+                    ? "border-[var(--color-warning-text)] bg-[var(--color-warning-bg)] shadow-lg"
+                    : "border-border bg-card"
                 )}
                 onClick={() => handlePackageSelect(pkg.id)}
               >
@@ -625,10 +625,10 @@ export function PackageComparisonTable({
                     className={cn(
                       "mb-3",
                       pkg.badgeColor === "orange"
-                        ? "bg-orange-500"
+                        ? "bg-[var(--color-warning-text)]"
                         : pkg.badgeColor === "green"
-                        ? "bg-emerald-500"
-                        : "bg-emerald-500"
+                        ? "bg-[var(--color-success-text)]"
+                        : "bg-[var(--color-success-text)]"
                     )}
                   >
                     {pkg.badgeText}
@@ -640,12 +640,12 @@ export function PackageComparisonTable({
                   <h3 className="text-xl font-semibold">{pkg.name}</h3>
                   <p className="text-3xl font-bold mt-1">{currencySymbol}{pkg.price}</p>
                   {locationFee > 0 && (
-                    <p className="text-xs text-gray-500">+ {currencySymbol}{locationFee} {locationFeeLabel?.toLowerCase() || "location fee"}</p>
+                    <p className="text-xs text-muted-foreground">+ {currencySymbol}{locationFee} {locationFeeLabel?.toLowerCase() || "location fee"}</p>
                   )}
                   {pkg.processingTime && (
-                    <div className="flex items-center justify-center gap-1 mt-2 text-xs text-gray-500">
+                    <div className="flex items-center justify-center gap-1 mt-2 text-xs text-muted-foreground">
                       {pkg.processingIcon === "zap" ? (
-                        <Zap className="h-3 w-3 text-orange-500" />
+                        <Zap className="h-3 w-3 text-[var(--color-warning-text)]" />
                       ) : (
                         <Clock className="h-3 w-3" />
                       )}
@@ -670,25 +670,25 @@ export function PackageComparisonTable({
                         key={feature.id}
                         className={cn(
                           "flex items-start gap-2 text-sm",
-                          !isIncluded && "text-gray-400"
+                          !isIncluded && "text-muted-foreground"
                         )}
                       >
                         {isIncluded ? (
                           <Check
                             className={cn(
                               "mt-0.5 h-4 w-4 shrink-0",
-                              isSelected ? "text-orange-500" : "text-gray-500"
+                              isSelected ? "text-[var(--color-warning-text)]" : "text-muted-foreground"
                             )}
                           />
                         ) : (
-                          <X className="mt-0.5 h-4 w-4 shrink-0 text-gray-300" />
+                          <X className="mt-0.5 h-4 w-4 shrink-0 text-muted-foreground/50" />
                         )}
                         <span>{feature.text}</span>
                       </div>
                     );
                   })}
                   {features.length > 8 && (
-                    <p className="text-xs text-gray-500 text-center">
+                    <p className="text-xs text-muted-foreground text-center">
                       +{features.length - 8} more features
                     </p>
                   )}

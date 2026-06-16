@@ -188,6 +188,16 @@ export function PlanigateHeroSettingsPanel({
               placeholder="Vad planerar du?"
             />
             <TextInput
+              label="Place input label"
+              value={settings.placeInputLabel}
+              onChange={(v) => update("placeInputLabel", v)}
+            />
+            <TextInput
+              label="Place input placeholder"
+              value={settings.placeInputPlaceholder}
+              onChange={(v) => update("placeInputPlaceholder", v)}
+            />
+            <TextInput
               label="Service input label"
               value={settings.serviceInputLabel}
               onChange={(v) => update("serviceInputLabel", v)}

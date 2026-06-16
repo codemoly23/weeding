@@ -94,20 +94,20 @@ const statusOptions: { value: OrderStatus; label: string }[] = [
 ];
 
 const statusColors: Record<string, string> = {
-  PENDING: "bg-gray-100 text-gray-700 border-gray-200",
-  PROCESSING: "bg-blue-100 text-blue-700 border-blue-200",
-  IN_PROGRESS: "bg-amber-100 text-amber-700 border-amber-200",
-  WAITING_FOR_INFO: "bg-purple-100 text-purple-700 border-purple-200",
-  COMPLETED: "bg-green-100 text-green-700 border-green-200",
-  CANCELLED: "bg-red-100 text-red-700 border-red-200",
-  REFUNDED: "bg-gray-100 text-gray-700 border-gray-200",
+  PENDING:          "admin-status-neutral",
+  PROCESSING:       "admin-status-info",
+  IN_PROGRESS:      "admin-status-warning",
+  WAITING_FOR_INFO: "admin-status-hold",
+  COMPLETED:        "admin-status-success",
+  CANCELLED:        "admin-status-error",
+  REFUNDED:         "admin-status-neutral",
 };
 
 const paymentColors: Record<string, string> = {
-  PENDING: "bg-amber-100 text-amber-700",
-  PAID: "bg-green-100 text-green-700",
-  FAILED: "bg-red-100 text-red-700",
-  REFUNDED: "bg-gray-100 text-gray-700",
+  PENDING:  "admin-status-warning",
+  PAID:     "admin-status-success",
+  FAILED:   "admin-status-error",
+  REFUNDED: "admin-status-neutral",
 };
 
 const PER_PAGE_OPTIONS = [10, 20, 50, 100];

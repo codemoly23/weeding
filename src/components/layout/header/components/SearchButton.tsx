@@ -60,13 +60,13 @@ function getResultIcon(type: SearchResult["type"]) {
     case "service":
       return <Star className="h-4 w-4 text-primary" />;
     case "blog":
-      return <Newspaper className="h-4 w-4 text-blue-500" />;
+      return <Newspaper className="h-4 w-4 text-[var(--color-info-text)]" />;
     case "faq":
-      return <HelpCircle className="h-4 w-4 text-green-500" />;
+      return <HelpCircle className="h-4 w-4 text-[var(--color-success-text)]" />;
     case "legal":
-      return <Scale className="h-4 w-4 text-purple-500" />;
+      return <Scale className="h-4 w-4 text-primary" />;
     case "page":
-      return <FileText className="h-4 w-4 text-gray-500" />;
+      return <FileText className="h-4 w-4 text-muted-foreground" />;
     default:
       return <ArrowRight className="h-4 w-4 text-muted-foreground" />;
   }
@@ -352,7 +352,7 @@ export function SearchButton({ enabled, serviceCategories = [], navigation = [] 
                         >
                           <span className="mt-0.5 shrink-0">
                             {result.popular ? (
-                              <Star className="h-4 w-4 text-yellow-500 fill-yellow-500" />
+                              <Star className="h-4 w-4 text-[var(--color-star)] fill-[var(--color-star)]" />
                             ) : (
                               getResultIcon(result.type)
                             )}
@@ -425,7 +425,7 @@ export function SearchButton({ enabled, serviceCategories = [], navigation = [] 
                   >
                     <div className="flex items-center gap-3">
                       {action.popular ? (
-                        <Star className="h-4 w-4 text-yellow-500 fill-yellow-500" />
+                        <Star className="h-4 w-4 text-[var(--color-star)] fill-[var(--color-star)]" />
                       ) : (
                         <ArrowRight className="h-4 w-4 text-muted-foreground" />
                       )}

@@ -82,8 +82,8 @@ export function VendorListingWidget({ settings, isPreview = false }: VendorListi
     columns,
     container,
     cardStyle = "overlay",
-    badgeFrom = "#9333ea",
-    badgeTo = "#ec4899",
+    badgeFrom = "#8A6F3E",
+    badgeTo = "#E4A93B",
     headingFontSize,
   } = settings;
 
@@ -154,11 +154,11 @@ export function VendorListingWidget({ settings, isPreview = false }: VendorListi
       {loading ? (
         <div className={cn("grid gap-6", colClass)}>
           {Array.from({ length: limit }).map((_, i) => (
-            <div key={i} className="h-80 animate-pulse rounded-2xl bg-gray-100" />
+            <div key={i} className="h-80 animate-pulse rounded-2xl bg-muted" />
           ))}
         </div>
       ) : vendors.length === 0 ? (
-        <div className="flex items-center justify-center rounded-2xl border border-dashed border-gray-300 py-16 text-sm text-gray-400">
+        <div className="flex items-center justify-center rounded-2xl border border-dashed border-border py-16 text-sm text-muted-foreground">
           No vendors found
         </div>
       ) : (
@@ -316,7 +316,7 @@ function OverlayVendorCard({
             boxShadow: "0 2px 6px rgba(0,0,0,0.18)",
           }}
         >
-          <Heart size={14} fill={hearted ? "#ec4899" : "none"} color={hearted ? "#ec4899" : "#6b7280"} strokeWidth={2} />
+          <Heart size={14} fill={hearted ? "#E4A93B" : "none"} color={hearted ? "#E4A93B" : "#6b7280"} strokeWidth={2} />
         </button>
 
         {/* Card content at bottom */}
@@ -423,9 +423,9 @@ function StandardVendorCard({ vendor, isPreview }: { vendor: VendorItem; isPrevi
   const { Icon } = meta;
 
   const card = (
-    <div className="group flex flex-col overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-sm transition-all duration-200 hover:shadow-md hover:-translate-y-0.5">
+    <div className="group flex flex-col overflow-hidden rounded-2xl border border-border bg-card shadow-sm transition-all duration-200 hover:shadow-md hover:-translate-y-0.5">
       {/* Cover photo */}
-      <div className="relative h-48 w-full bg-purple-50">
+      <div className="relative h-48 w-full bg-primary/5">
         {vendor.coverPhoto ? (
           // eslint-disable-next-line @next/next/no-img-element
           <img
@@ -435,18 +435,18 @@ function StandardVendorCard({ vendor, isPreview }: { vendor: VendorItem; isPrevi
           />
         ) : (
           <div className="flex h-full items-center justify-center">
-            <Icon className="h-12 w-12 text-purple-200" />
+            <Icon className="h-12 w-12 text-primary/20" />
           </div>
         )}
         {vendor.isFeatured && (
-          <span className="absolute left-3 top-3 rounded-full bg-yellow-400 px-2.5 py-0.5 text-xs font-semibold text-yellow-900">
+          <span className="absolute left-3 top-3 rounded-full bg-[var(--color-star)] px-2.5 py-0.5 text-xs font-semibold text-foreground">
             Featured
           </span>
         )}
         {vendor.isVerified && (
-          <div className="absolute right-3 top-3 flex items-center gap-1 rounded-full bg-white px-2.5 py-0.5">
-            <BadgeCheck className="h-3.5 w-3.5 text-purple-600" />
-            <span className="text-xs font-semibold text-purple-600">Verified</span>
+          <div className="absolute right-3 top-3 flex items-center gap-1 rounded-full bg-card px-2.5 py-0.5">
+            <BadgeCheck className="h-3.5 w-3.5 text-primary" />
+            <span className="text-xs font-semibold text-primary">Verified</span>
           </div>
         )}
       </div>
@@ -454,41 +454,41 @@ function StandardVendorCard({ vendor, isPreview }: { vendor: VendorItem; isPrevi
       {/* Info */}
       <div className="flex flex-1 flex-col p-4">
         <div className="mb-1 flex items-center gap-1.5">
-          <span className="rounded-full bg-purple-100 px-2 py-0.5 text-xs font-medium text-purple-700">
+          <span className="rounded-full bg-primary/10 px-2 py-0.5 text-xs font-medium text-primary">
             {meta.label}
           </span>
         </div>
 
-        <h3 className="font-semibold text-gray-900 group-hover:text-purple-700 transition-colors line-clamp-1">
+        <h3 className="font-semibold text-foreground group-hover:text-primary transition-colors line-clamp-1">
           {vendor.businessName}
         </h3>
 
         {vendor.tagline && (
-          <p className="mt-0.5 text-xs text-gray-500 line-clamp-2">{vendor.tagline}</p>
+          <p className="mt-0.5 text-xs text-muted-foreground line-clamp-2">{vendor.tagline}</p>
         )}
 
         <div className="mt-auto pt-3 flex items-center justify-between">
           {vendor.avgRating !== null ? (
-            <div className="flex items-center gap-1 text-xs text-gray-600">
-              <Star className="h-3.5 w-3.5 fill-yellow-400 text-yellow-400" />
+            <div className="flex items-center gap-1 text-xs text-foreground/80">
+              <Star className="h-3.5 w-3.5 fill-[var(--color-star)] text-[var(--color-star)]" />
               <span className="font-medium">{vendor.avgRating.toFixed(1)}</span>
-              <span className="text-gray-400">({vendor.reviewCount})</span>
+              <span className="text-muted-foreground">({vendor.reviewCount})</span>
             </div>
           ) : (
-            <span className="text-xs text-gray-400">No reviews yet</span>
+            <span className="text-xs text-muted-foreground">No reviews yet</span>
           )}
 
           {vendor.city && (
-            <div className="flex items-center gap-1 text-xs text-gray-400">
+            <div className="flex items-center gap-1 text-xs text-muted-foreground">
               {vendor.city}
             </div>
           )}
         </div>
 
         {vendor.startingPrice !== null && (
-          <p className="mt-2 text-xs text-gray-500">
+          <p className="mt-2 text-xs text-muted-foreground">
             From{" "}
-            <span className="font-semibold text-gray-800">
+            <span className="font-semibold text-foreground">
               {vendor.currency ?? "SEK"} {vendor.startingPrice.toLocaleString()}
             </span>
           </p>

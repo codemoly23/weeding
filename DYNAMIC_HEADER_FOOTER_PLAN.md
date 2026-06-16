@@ -2,7 +2,7 @@
 
 ## Executive Summary
 
-এই plan অনুযায়ী LLCPad CMS-এ industry-standard, fully dynamic Header ও Footer Builder implement করা হবে। CodeCanyon-এ release করার জন্য এটি WordPress Elementor, Webflow, এবং Squarespace-এর মতো professional CMS গুলোর feature-set follow করবে।
+এই plan অনুযায়ী Weeding Ceremony CMS-এ industry-standard, fully dynamic Header ও Footer Builder implement করা হবে। CodeCanyon-এ release করার জন্য এটি WordPress Elementor, Webflow, এবং Squarespace-এর মতো professional CMS গুলোর feature-set follow করবে।
 
 ---
 
@@ -408,7 +408,7 @@ enum FooterWidgetType {
 │  │  │ Social │ Amazon │ Contact│Refund  │                      │   │
 │  │  └────────┴────────┴────────┴────────┘                      │   │
 │  │  ─────────────────────────────────────                      │   │
-│  │  © 2025 LLCPad           Disclaimer...                      │   │
+│  │  © 2025 Weeding Ceremony           Disclaimer...                      │   │
 │  └─────────────────────────────────────────────────────────────┘   │
 │                                                                     │
 │  Widget Areas:                                                      │
@@ -1281,7 +1281,7 @@ src/
   },
   "bottomBar": {
     "enabled": true,
-    "copyrightText": "© 2025 LLCPad. All rights reserved.",
+    "copyrightText": "© 2025 Weeding Ceremony. All rights reserved.",
     "showDisclaimer": true,
     "links": [
       { "label": "Privacy Policy", "url": "/privacy" },

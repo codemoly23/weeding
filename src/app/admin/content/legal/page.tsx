@@ -104,10 +104,10 @@ export default function LegalPagesAdmin() {
 
       {/* Missing Pages Alert */}
       {missingPages.length > 0 && (
-        <Card className="border-amber-200 bg-amber-50">
+        <Card className="border-[var(--ast-warning-border)] bg-[var(--ast-warning-bg)]">
           <CardHeader className="pb-3">
-            <CardTitle className="text-lg text-amber-800">Recommended Pages</CardTitle>
-            <CardDescription className="text-amber-700">
+            <CardTitle className="text-lg text-[var(--ast-warning-text)]">Recommended Pages</CardTitle>
+            <CardDescription className="text-[var(--ast-warning-text)]">
               The following recommended pages haven&apos;t been created yet:
             </CardDescription>
           </CardHeader>
@@ -115,7 +115,7 @@ export default function LegalPagesAdmin() {
             <div className="flex flex-wrap gap-2">
               {missingPages.map((page) => (
                 <Link key={page.slug} href={`/admin/content/legal/new?slug=${page.slug}`}>
-                  <Button variant="outline" size="sm" className="border-amber-300 hover:bg-amber-100">
+                  <Button variant="outline" size="sm" className="border-[var(--ast-warning-border)] hover:bg-[var(--ast-warning-bg)]">
                     <Plus className="mr-1 h-3 w-3" />
                     Create {page.title}
                   </Button>

@@ -528,7 +528,7 @@ Created: Dec 10, 2024
 ### Sidebar Navigation
 ```
 ┌──────────────────────┐
-│ 🏢 LLCPad            │
+│ 🏢 Weeding Ceremony            │
 ├──────────────────────┤
 │ 📊 Overview          │ ← Active indicator
 │ 📦 My Orders         │
@@ -546,7 +546,7 @@ Created: Dec 10, 2024
 ### Top Header (Mobile & Desktop)
 ```
 ┌─────────────────────────────────────────────────────┐
-│ ☰ (mobile)  LLCPad         🔔 Notifications  👤 John │
+│ ☰ (mobile)  Weeding Ceremony         🔔 Notifications  👤 John │
 └─────────────────────────────────────────────────────┘
 ```
 

@@ -92,9 +92,9 @@ const TEAM = [
     featured: false,
     initials: "EL",
     ringFrom: "#fed7aa",
-    ringTo:   "#f97316",
-    avatarBg: "bg-orange-50",
-    avatarText: "text-orange-600",
+    ringTo:   "#8A6F3E",
+    avatarBg: "bg-[var(--color-warning-bg)]",
+    avatarText: "text-[var(--color-warning-text)]",
   },
   {
     id: 2,
@@ -104,9 +104,9 @@ const TEAM = [
     featured: true,
     initials: "MO",
     ringFrom: "#e9d5ff",
-    ringTo:   "#9333ea",
-    avatarBg: "bg-purple-50",
-    avatarText: "text-purple-600",
+    ringTo:   "#8A6F3E",
+    avatarBg: "bg-primary/10",
+    avatarText: "text-primary",
   },
   {
     id: 3,
@@ -116,9 +116,9 @@ const TEAM = [
     featured: true,
     initials: "SB",
     ringFrom: "#fce7f3",
-    ringTo:   "#ec4899",
-    avatarBg: "bg-pink-50",
-    avatarText: "text-pink-600",
+    ringTo:   "#E4A93B",
+    avatarBg: "bg-accent/10",
+    avatarText: "text-accent",
   },
   {
     id: 4,
@@ -129,8 +129,8 @@ const TEAM = [
     initials: "DP",
     ringFrom: "#dbeafe",
     ringTo:   "#2563eb",
-    avatarBg: "bg-blue-50",
-    avatarText: "text-blue-600",
+    avatarBg: "bg-[var(--color-info-bg)]",
+    avatarText: "text-[var(--color-info-text)]",
   },
   {
     id: 5,
@@ -141,8 +141,8 @@ const TEAM = [
     initials: "AN",
     ringFrom: "#ccfbf1",
     ringTo:   "#0d9488",
-    avatarBg: "bg-teal-50",
-    avatarText: "text-teal-600",
+    avatarBg: "bg-[var(--color-success-bg)]",
+    avatarText: "text-[var(--color-success-text)]",
   },
 ];
 
@@ -174,14 +174,14 @@ function StatItem({
         transition={{ type: "spring", stiffness: 260, damping: 20, delay: index * 0.12 }}
         className="w-16 h-16 rounded-full border border-white/20 bg-white/5 flex items-center justify-center"
       >
-        <Icon className="w-7 h-7 text-white" strokeWidth={1.25} />
+        <Icon className="w-7 h-7 text-primary-foreground" strokeWidth={1.25} />
       </motion.div>
 
       <motion.p
         initial={{ opacity: 0, y: 20 }}
         animate={inView ? { opacity: 1, y: 0 } : {}}
         transition={{ duration: 0.5, delay: index * 0.12 + 0.2, ease }}
-        className="text-3xl md:text-4xl font-bold text-white font-heading tracking-tight"
+        className="text-3xl md:text-4xl font-bold text-primary-foreground font-heading tracking-tight"
       >
         {count}{suffix}
       </motion.p>
@@ -266,20 +266,20 @@ export function AboutPageContent() {
             transition={{ duration: 0.6, delay: 0.3, ease }}
             className="flex items-center gap-1.5 text-sm text-white/60 mb-6"
           >
-            <Link href="/" className="hover:text-white transition-colors">
+            <Link href="/" className="hover:text-primary-foreground transition-colors">
               <Home className="w-4 h-4" />
             </Link>
             <ChevronRight className="w-3 h-3 text-white/30" />
             <span className="text-white/40">Pages</span>
             <ChevronRight className="w-3 h-3 text-white/30" />
-            <span className="text-white font-medium">About Us</span>
+            <span className="text-primary-foreground font-medium">About Us</span>
           </motion.nav>
 
           <motion.h1
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.75, delay: 0.5, ease }}
-            className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold text-white font-heading tracking-tight leading-tight"
+            className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold text-primary-foreground font-heading tracking-tight leading-tight"
           >
             About Us
           </motion.h1>
@@ -287,7 +287,7 @@ export function AboutPageContent() {
       </section>
 
       {/* ─── 2. About Intro ───────────────────────────────────────── */}
-      <section className="py-20 bg-white" ref={introRef}>
+      <section className="py-20 bg-background" ref={introRef}>
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 xl:gap-20 items-center">
 
@@ -354,7 +354,7 @@ export function AboutPageContent() {
               <motion.div variants={fadeRight} className="pt-2">
                 <Link
                   href="/services"
-                  className="inline-flex items-center gap-2 px-7 py-3 rounded-lg bg-primary text-white text-sm font-semibold hover:bg-orange-600 transition-colors shadow-md shadow-primary/25"
+                  className="inline-flex items-center gap-2 px-7 py-3 rounded-lg bg-primary text-primary-foreground text-sm font-semibold hover:bg-[#2A2A2A] transition-colors shadow-md shadow-primary/25"
                 >
                   Explore Our Services
                   <ChevronRight className="w-4 h-4" />
@@ -393,7 +393,7 @@ export function AboutPageContent() {
       </section>
 
       {/* ─── 4. Team Section ──────────────────────────────────────── */}
-      <section className="py-20 bg-white" ref={teamRef}>
+      <section className="py-20 bg-background" ref={teamRef}>
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
 
           {/* Header */}
@@ -417,7 +417,7 @@ export function AboutPageContent() {
                 onClick={() => paginate(-1)}
                 disabled={!canPrev}
                 aria-label="Previous team members"
-                className="w-11 h-11 rounded-lg border-2 border-primary flex items-center justify-center text-primary hover:bg-primary hover:text-white transition-colors disabled:opacity-30 disabled:cursor-not-allowed"
+                className="w-11 h-11 rounded-lg border-2 border-primary flex items-center justify-center text-primary hover:bg-primary hover:text-primary-foreground transition-colors disabled:opacity-30 disabled:cursor-not-allowed"
               >
                 <ChevronLeft className="w-5 h-5" />
               </button>
@@ -425,7 +425,7 @@ export function AboutPageContent() {
                 onClick={() => paginate(1)}
                 disabled={!canNext}
                 aria-label="Next team members"
-                className="w-11 h-11 rounded-lg bg-primary flex items-center justify-center text-white hover:bg-orange-600 transition-colors disabled:opacity-30 disabled:cursor-not-allowed"
+                className="w-11 h-11 rounded-lg bg-primary flex items-center justify-center text-primary-foreground hover:bg-[#2A2A2A] transition-colors disabled:opacity-30 disabled:cursor-not-allowed"
               >
                 <ChevronRight className="w-5 h-5" />
               </button>
@@ -444,7 +444,7 @@ export function AboutPageContent() {
                   animate="center"
                   exit="exit"
                   whileHover={{ y: -8, transition: { type: "spring", stiffness: 300, damping: 22 } }}
-                  className="relative flex flex-col items-center text-center bg-white rounded-2xl border border-slate-100 shadow-sm hover:shadow-xl hover:shadow-slate-200/70 transition-shadow duration-300 px-8 pt-10 pb-8 cursor-default"
+                  className="relative flex flex-col items-center text-center bg-card rounded-2xl border border-slate-100 shadow-sm hover:shadow-xl hover:shadow-slate-200/70 transition-shadow duration-300 px-8 pt-10 pb-8 cursor-default"
                 >
                   {/* Featured star badge — top left */}
                   {member.featured && (
@@ -452,9 +452,9 @@ export function AboutPageContent() {
                       initial={{ scale: 0, rotate: -20 }}
                       animate={{ scale: 1, rotate: 0 }}
                       transition={{ type: "spring", stiffness: 300, damping: 15, delay: 0.15 + i * 0.1 }}
-                      className="absolute top-4 left-4 w-8 h-8 rounded-lg bg-amber-400 flex items-center justify-center shadow-md"
+                      className="absolute top-4 left-4 w-8 h-8 rounded-lg bg-[var(--color-star)] flex items-center justify-center shadow-md"
                     >
-                      <Star className="w-4 h-4 text-white fill-white" />
+                      <Star className="w-4 h-4 text-primary-foreground fill-primary-foreground" />
                     </motion.div>
                   )}
 
@@ -497,7 +497,7 @@ export function AboutPageContent() {
                     whileHover={{ scale: 1.05 }}
                     whileTap={{ scale: 0.96 }}
                     transition={{ type: "spring", stiffness: 300, damping: 18 }}
-                    className="group/btn px-8 py-2.5 rounded-full bg-primary text-white text-sm font-semibold hover:bg-orange-600 transition-colors duration-200 shadow-md shadow-primary/25 flex items-center gap-2"
+                    className="group/btn px-8 py-2.5 rounded-full bg-primary text-primary-foreground text-sm font-semibold hover:bg-[#2A2A2A] transition-colors duration-200 shadow-md shadow-primary/25 flex items-center gap-2"
                   >
                     View Profile
                     <ArrowRight className="w-4 h-4 transition-transform duration-200 group-hover/btn:translate-x-1" />
@@ -574,9 +574,9 @@ export function AboutPageContent() {
               whileHover={{ scale: 1.12 }}
               whileTap={{ scale: 0.95 }}
               transition={{ type: "spring", stiffness: 300, damping: 15 }}
-              className="relative inline-flex items-center justify-center w-16 h-16 rounded-full bg-primary text-white shadow-xl shadow-primary/30"
+              className="relative inline-flex items-center justify-center w-16 h-16 rounded-full bg-primary text-primary-foreground shadow-xl shadow-primary/30"
             >
-              <Play className="w-6 h-6 fill-white ml-0.5" />
+              <Play className="w-6 h-6 fill-primary-foreground ml-0.5" />
             </motion.button>
           </motion.div>
         </motion.div>

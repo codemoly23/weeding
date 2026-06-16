@@ -1,6 +1,6 @@
 # Landing Page (Homepage) Redesign Plan
 
-## LLCPad - Fully Customizable CMS-Style Landing Page Builder
+## Weeding Ceremony - Fully Customizable CMS-Style Landing Page Builder
 
 ---
 
@@ -271,7 +271,7 @@ Page
         └── Widgets/Components (actual content)
 ```
 
-### LLCPad Landing Page Architecture
+### Weeding Ceremony Landing Page Architecture
 
 ```
 ┌─────────────────────────────────────────────────────────────┐
@@ -2657,7 +2657,7 @@ interface SocialIconStyling {
 ├─────────────────────────────────────────────────────────────┤
 │░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░│
 │░░░░                                                    ░░░░│
-│░░░░         Stay Updated with LLCPad                   ░░░░│
+│░░░░         Stay Updated with Weeding Ceremony                   ░░░░│
 │░░░░         ════════════════════════                   ░░░░│
 │░░░░   Get the latest tips on LLC formation, Amazon     ░░░░│
 │░░░░   selling, and international business.             ░░░░│
@@ -2738,7 +2738,7 @@ src/lib/
 
 ## Summary
 
-This redesign transforms LLCPad's homepage into a fully customizable, block-based landing page builder with:
+This redesign transforms Weeding Ceremony's homepage into a fully customizable, block-based landing page builder with:
 
 ### Key Features
 

@@ -127,7 +127,7 @@ export function HeroContentWidget({ settings: rawSettings, isPreview = false }: 
   const underlineWords = settings.headline.underlineWords
     ? settings.headline.underlineWords.split(",").map((w) => w.trim()).filter(Boolean)
     : [];
-  const underlineColor = settings.headline.underlineColor || "#e84c1e";
+  const underlineColor = settings.headline.underlineColor || "#8A6F3E";
 
   // Parse headline with highlight words and underline words (supports comma-separated)
   const renderHeadline = () => {
@@ -411,8 +411,8 @@ export function HeroContentWidget({ settings: rawSettings, isPreview = false }: 
       <Button
         size="lg"
         className={cn(
-          "group/btn w-full sm:w-auto bg-orange-500",
-          !isPreview && "hover:bg-orange-600"
+          "group/btn w-full sm:w-auto bg-[#1A1A1A]",
+          !isPreview && "hover:bg-[#2A2A2A]"
         )}
         asChild
       >
@@ -656,7 +656,7 @@ export function HeroContentWidget({ settings: rawSettings, isPreview = false }: 
               style={{
                 width: 8,
                 height: 8,
-                background: settings.badge.dot.color || "#e84c1e",
+                background: settings.badge.dot.color || "#8A6F3E",
                 animation: "pulse 2s ease-in-out infinite",
               }}
             />
@@ -731,7 +731,7 @@ export function HeroContentWidget({ settings: rawSettings, isPreview = false }: 
             maxWidth: settings.search.maxWidth ? `${settings.search.maxWidth}px` : "560px",
             background: settings.search.bgColor || "#ffffff",
             borderColor: searchFocused
-              ? (accentColor || "#f97316")
+              ? (accentColor || "#8A6F3E")
               : (settings.search.borderColor || "#e2e8f0"),
             transition: "border-color 250ms ease",
             padding: "6px",
@@ -757,7 +757,7 @@ export function HeroContentWidget({ settings: rawSettings, isPreview = false }: 
             type="submit"
             className="font-display font-semibold text-sm px-5 py-2 transition-opacity hover:opacity-90"
             style={{
-              background: settings.search.buttonBgColor || "#f97316",
+              background: settings.search.buttonBgColor || "#8A6F3E",
               color: settings.search.buttonTextColor || "#ffffff",
               borderRadius:
                 settings.search.variant === "pill" ? "9999px" :

@@ -2,7 +2,7 @@ import pg from "pg";
 
 const { Client } = pg;
 const client = new Client({
-  connectionString: "postgresql://postgres:postgres@localhost:5432/llcpad?schema=public",
+  connectionString: "postgresql://postgres:postgres@localhost:5432/weeding?schema=public",
 });
 
 await client.connect();

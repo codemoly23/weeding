@@ -57,6 +57,20 @@
     }
   }
 
+  /* Animated Words - Typewriter */
+  --animate-typewriter: typewriter-word 0.5s steps(1) forwards;
+
+  @keyframes typewriter-word {
+    0% {
+      opacity: 0;
+      clip-path: inset(0 100% 0 0);
+    }
+    100% {
+      opacity: 1;
+      clip-path: inset(0 0% 0 0);
+    }
+  }
+
   /* Animated Words - Flip */
   --animate-flip: flip 0.5s ease-out;
 
@@ -227,14 +241,14 @@
   --color-info-bg: #EFF6FF;
   --color-info-border: #93C5FD;
   --color-info-text: #1E40AF;
-  --color-star: #FBBF24;
+  --color-star: #E4A93B;
 
-  /* Theme Colors - Midnight Orange System */
-  --color-primary: #F97316;
+  /* Theme Colors - Charcoal Gold System */
+  --color-primary: #1A1A1A;
   --color-primary-foreground: #ffffff;
   --color-secondary: #0A0F1E;
   --color-secondary-foreground: #ffffff;
-  --color-accent: #F97316;
+  --color-accent: #8A6F3E;
   --color-accent-foreground: #ffffff;
   --color-destructive: #EF4444;
   --color-destructive-foreground: #ffffff;
@@ -246,7 +260,7 @@
   --color-popover-foreground: #0f172a;
   --color-border: #E2E8F0;
   --color-input: #E2E8F0;
-  --color-ring: #F97316;
+  --color-ring: #8A6F3E;
   --color-background: #ffffff;
   --color-foreground: #0f172a;
 
@@ -258,8 +272,8 @@
 
   /* Font */
   --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
-  --font-heading: "Inter", ui-sans-serif, system-ui, sans-serif;
-  --font-accent: "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-heading: var(--font-serif), "Cormorant Garamond", Georgia, serif;
+  --font-accent: var(--font-serif), "Cormorant Garamond", Georgia, serif;
 
   /* ============================================
      Planigate Homepage Palette

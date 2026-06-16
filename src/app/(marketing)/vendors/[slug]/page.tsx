@@ -55,19 +55,19 @@ type VendorCategory =
   | "OTHER";
 
 const CATEGORY_META: Record<VendorCategory, { label: string; icon: React.ReactNode; color: string; bg: string }> = {
-  VENUE: { label: "Venues", icon: <Building2 className="w-5 h-5" />, color: "text-purple-700", bg: "bg-purple-50" },
-  PHOTOGRAPHY: { label: "Photography", icon: <Camera className="w-5 h-5" />, color: "text-pink-700", bg: "bg-pink-50" },
-  VIDEOGRAPHY: { label: "Videography", icon: <Video className="w-5 h-5" />, color: "text-red-700", bg: "bg-red-50" },
-  CATERING: { label: "Catering", icon: <UtensilsCrossed className="w-5 h-5" />, color: "text-orange-700", bg: "bg-orange-50" },
-  MUSIC_DJ: { label: "Music & DJ", icon: <Music className="w-5 h-5" />, color: "text-yellow-700", bg: "bg-yellow-50" },
-  FLOWERS: { label: "Flowers", icon: <Flower2 className="w-5 h-5" />, color: "text-green-700", bg: "bg-green-50" },
-  DRESS_ATTIRE: { label: "Dress & Attire", icon: <Shirt className="w-5 h-5" />, color: "text-teal-700", bg: "bg-teal-50" },
-  RINGS: { label: "Rings & Jewelry", icon: <Gem className="w-5 h-5" />, color: "text-cyan-700", bg: "bg-cyan-50" },
-  DECORATIONS: { label: "Decorations", icon: <Sparkles className="w-5 h-5" />, color: "text-indigo-700", bg: "bg-indigo-50" },
-  TRANSPORTATION: { label: "Transportation", icon: <Car className="w-5 h-5" />, color: "text-blue-700", bg: "bg-blue-50" },
-  HAIR_MAKEUP: { label: "Hair & Makeup", icon: <Scissors className="w-5 h-5" />, color: "text-rose-700", bg: "bg-rose-50" },
-  WEDDING_PLANNER: { label: "Wedding Planner", icon: <CalendarHeart className="w-5 h-5" />, color: "text-violet-700", bg: "bg-violet-50" },
-  OTHER: { label: "Other", icon: <Package className="w-5 h-5" />, color: "text-gray-700", bg: "bg-gray-100" },
+  VENUE:          { label: "Venues",          icon: <Building2 className="w-5 h-5" />,      color: "text-accent",           bg: "bg-accent/10" },
+  PHOTOGRAPHY:    { label: "Photography",     icon: <Camera className="w-5 h-5" />,          color: "text-accent",           bg: "bg-accent/10" },
+  VIDEOGRAPHY:    { label: "Videography",     icon: <Video className="w-5 h-5" />,           color: "text-foreground/70",    bg: "bg-muted" },
+  CATERING:       { label: "Catering",        icon: <UtensilsCrossed className="w-5 h-5" />, color: "text-foreground/70",    bg: "bg-muted" },
+  MUSIC_DJ:       { label: "Music & DJ",      icon: <Music className="w-5 h-5" />,           color: "text-accent",           bg: "bg-accent/10" },
+  FLOWERS:        { label: "Flowers",         icon: <Flower2 className="w-5 h-5" />,         color: "text-foreground/70",    bg: "bg-muted" },
+  DRESS_ATTIRE:   { label: "Dress & Attire",  icon: <Shirt className="w-5 h-5" />,           color: "text-accent",           bg: "bg-accent/10" },
+  RINGS:          { label: "Rings & Jewelry", icon: <Gem className="w-5 h-5" />,             color: "text-accent",           bg: "bg-accent/10" },
+  DECORATIONS:    { label: "Decorations",     icon: <Sparkles className="w-5 h-5" />,        color: "text-foreground/70",    bg: "bg-muted" },
+  TRANSPORTATION: { label: "Transportation",  icon: <Car className="w-5 h-5" />,             color: "text-foreground/70",    bg: "bg-muted" },
+  HAIR_MAKEUP:    { label: "Hair & Makeup",   icon: <Scissors className="w-5 h-5" />,        color: "text-accent",           bg: "bg-accent/10" },
+  WEDDING_PLANNER:{ label: "Wedding Planner", icon: <CalendarHeart className="w-5 h-5" />,   color: "text-primary",          bg: "bg-primary/5" },
+  OTHER:          { label: "Other",           icon: <Package className="w-5 h-5" />,         color: "text-muted-foreground", bg: "bg-muted" },
 };
 
 interface Review {
@@ -328,18 +328,18 @@ export default function VendorProfilePage({
 
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-purple-600" />
+      <div className="min-h-screen bg-muted/30 flex items-center justify-center">
+        <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-primary" />
       </div>
     );
   }
 
   if (notFound || !vendor) {
     return (
-      <div className="min-h-screen bg-gray-50 flex flex-col items-center justify-center gap-4">
+      <div className="min-h-screen bg-muted/30 flex flex-col items-center justify-center gap-4">
         <div className="text-6xl">😔</div>
-        <h1 className="text-2xl font-bold text-gray-800">Vendor not found</h1>
-        <Link href="/vendors" className="text-purple-600 hover:underline flex items-center gap-1">
+        <h1 className="text-2xl font-bold text-foreground">Vendor not found</h1>
+        <Link href="/vendors" className="text-primary hover:underline flex items-center gap-1">
           <ArrowLeft className="w-4 h-4" /> Back to directory
         </Link>
       </div>
@@ -350,13 +350,13 @@ export default function VendorProfilePage({
   const photos = vendor.photos.length > 0 ? vendor.photos : [];
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-muted/30">
       {/* Back nav */}
-      <div className="bg-white border-b border-gray-200">
+      <div className="bg-card border-b border-border">
         <div className="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between">
           <Link
             href="/vendors"
-            className="flex items-center gap-1.5 text-sm text-gray-600 hover:text-purple-600 transition-colors"
+            className="flex items-center gap-1.5 text-sm text-muted-foreground hover:text-primary transition-colors"
           >
             <ArrowLeft className="w-4 h-4" /> Back to Vendors
           </Link>
@@ -366,11 +366,11 @@ export default function VendorProfilePage({
             title={isSaved ? "Unsave" : "Save vendor"}
             className={`flex items-center gap-1.5 text-sm font-medium px-3 py-1.5 rounded-lg border transition-colors disabled:opacity-60 ${
               isSaved
-                ? "bg-rose-50 border-rose-200 text-rose-600 hover:bg-rose-100"
-                : "bg-white border-gray-200 text-gray-600 hover:bg-gray-50"
+                ? "bg-accent/10 border-accent/30 text-accent hover:bg-accent/20"
+                : "bg-card border-border text-muted-foreground hover:bg-muted/30"
             }`}
           >
-            <Heart className={`w-4 h-4 ${isSaved ? "fill-rose-500 text-rose-500" : ""}`} />
+            <Heart className={`w-4 h-4 ${isSaved ? "fill-accent text-accent" : ""}`} />
             {isSaved ? "Saved" : "Save"}
           </button>
         </div>
@@ -381,10 +381,10 @@ export default function VendorProfilePage({
           {/* Main content */}
           <div className="lg:col-span-2 space-y-6">
             {/* Header card */}
-            <div className="bg-white rounded-2xl overflow-hidden shadow-sm border border-gray-100">
+            <div className="bg-card rounded-2xl overflow-hidden shadow-sm border border-border">
               {/* Photo gallery */}
               {photos.length > 0 ? (
-                <div className="relative h-72 sm:h-96 bg-gray-900">
+                <div className="relative h-72 sm:h-96 bg-foreground">
                   {/* eslint-disable-next-line @next/next/no-img-element */}
                   <img
                     src={photos[photoIdx]}
@@ -411,7 +411,7 @@ export default function VendorProfilePage({
                             key={i}
                             onClick={() => setPhotoIdx(i)}
                             className={`w-2 h-2 rounded-full transition-colors ${
-                              i === photoIdx ? "bg-white" : "bg-white/50"
+                              i === photoIdx ? "bg-card" : "bg-card/50"
                             }`}
                           />
                         ))}
@@ -454,34 +454,34 @@ export default function VendorProfilePage({
                         {meta.label}
                       </span>
                       {vendor.isFeatured && (
-                        <span className="bg-yellow-100 text-yellow-700 text-xs font-medium px-2 py-0.5 rounded-full">
+                        <span className="bg-[var(--color-warning-bg)] text-[var(--color-warning-text)] text-xs font-medium px-2 py-0.5 rounded-full">
                           Featured
                         </span>
                       )}
                       {vendor.isVerified && (
-                        <span className="flex items-center gap-1 bg-purple-100 text-purple-700 text-xs font-semibold px-2 py-0.5 rounded-full">
+                        <span className="flex items-center gap-1 bg-primary/10 text-primary text-xs font-semibold px-2 py-0.5 rounded-full">
                           <BadgeCheck className="w-3 h-3" /> Verified
                         </span>
                       )}
                     </div>
-                    <h1 className="text-2xl font-bold text-gray-900">{vendor.businessName}</h1>
+                    <h1 className="text-2xl font-bold text-foreground">{vendor.businessName}</h1>
                     {vendor.tagline && (
-                      <p className="text-gray-600 mt-1">{vendor.tagline}</p>
+                      <p className="text-muted-foreground mt-1">{vendor.tagline}</p>
                     )}
                   </div>
                   {vendor.avgRating !== null && (
                     <div className="text-right shrink-0">
-                      <div className="flex items-center gap-1 text-yellow-500">
+                      <div className="flex items-center gap-1 text-[var(--color-star)]">
                         {Array.from({ length: 5 }).map((_, i) => (
                           <Star
                             key={i}
                             className={`w-5 h-5 ${
-                              i < Math.round(vendor.avgRating!) ? "fill-yellow-400" : "fill-gray-200 text-gray-200"
+                              i < Math.round(vendor.avgRating!) ? "fill-[var(--color-star)]" : "fill-border text-border"
                             }`}
                           />
                         ))}
                       </div>
-                      <p className="text-sm text-gray-500 mt-0.5">
+                      <p className="text-sm text-muted-foreground mt-0.5">
                         {vendor.avgRating.toFixed(1)} ({vendor.reviews.length} review{vendor.reviews.length !== 1 ? "s" : ""})
                       </p>
                     </div>
@@ -489,27 +489,27 @@ export default function VendorProfilePage({
                 </div>
 
                 {/* Quick info row */}
-                <div className="flex flex-wrap gap-4 mt-4 text-sm text-gray-600">
+                <div className="flex flex-wrap gap-4 mt-4 text-sm text-muted-foreground">
                   {(vendor.city || vendor.country) && (
                     <span className="flex items-center gap-1">
-                      <MapPin className="w-4 h-4 text-gray-400" />
+                      <MapPin className="w-4 h-4 text-muted-foreground/60" />
                       {[vendor.city, vendor.country].filter(Boolean).join(", ")}
                     </span>
                   )}
                   {vendor.yearsInBusiness && (
                     <span className="flex items-center gap-1">
-                      <Calendar className="w-4 h-4 text-gray-400" />
+                      <Calendar className="w-4 h-4 text-muted-foreground/60" />
                       {vendor.yearsInBusiness} years in business
                     </span>
                   )}
                   {vendor.slaHours && (
-                    <span className="flex items-center gap-1 text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-full text-xs font-medium">
+                    <span className="flex items-center gap-1 text-[var(--color-success-text)] bg-[var(--color-success-bg)] px-2 py-0.5 rounded-full text-xs font-medium">
                       <Clock className="w-3.5 h-3.5" />
                       Responds within {vendor.slaHours}h
                     </span>
                   )}
                   {vendor.startingPrice && (
-                    <span className="font-semibold text-purple-700">
+                    <span className="font-semibold text-primary">
                       {vendor.currency} {vendor.startingPrice.toLocaleString()}
                       {vendor.maxPrice ? ` – ${vendor.maxPrice.toLocaleString()}` : "+"}
                     </span>
@@ -521,7 +521,7 @@ export default function VendorProfilePage({
                   {vendor.phone && (
                     <a
                       href={`tel:${vendor.phone}`}
-                      className="flex items-center gap-1.5 text-sm text-gray-700 hover:text-purple-600 transition-colors"
+                      className="flex items-center gap-1.5 text-sm text-foreground/80 hover:text-primary transition-colors"
                     >
                       <Phone className="w-4 h-4" /> {vendor.phone}
                     </a>
@@ -529,7 +529,7 @@ export default function VendorProfilePage({
                   {vendor.email && (
                     <a
                       href={`mailto:${vendor.email}`}
-                      className="flex items-center gap-1.5 text-sm text-gray-700 hover:text-purple-600 transition-colors"
+                      className="flex items-center gap-1.5 text-sm text-foreground/80 hover:text-primary transition-colors"
                     >
                       <Mail className="w-4 h-4" /> {vendor.email}
                     </a>
@@ -539,7 +539,7 @@ export default function VendorProfilePage({
                       href={vendor.website}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="flex items-center gap-1.5 text-sm text-gray-700 hover:text-purple-600 transition-colors"
+                      className="flex items-center gap-1.5 text-sm text-foreground/80 hover:text-primary transition-colors"
                     >
                       <Globe className="w-4 h-4" /> Website
                     </a>
@@ -549,7 +549,7 @@ export default function VendorProfilePage({
                       href={`https://instagram.com/${vendor.instagram.replace(/^@/, "")}`}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="flex items-center gap-1.5 text-sm text-gray-700 hover:text-pink-600 transition-colors"
+                      className="flex items-center gap-1.5 text-sm text-foreground/80 hover:text-accent transition-colors"
                     >
                       <Instagram className="w-4 h-4" /> Instagram
                     </a>
@@ -559,7 +559,7 @@ export default function VendorProfilePage({
                       href={vendor.facebook.startsWith("http") ? vendor.facebook : `https://facebook.com/${vendor.facebook}`}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="flex items-center gap-1.5 text-sm text-gray-700 hover:text-blue-600 transition-colors"
+                      className="flex items-center gap-1.5 text-sm text-foreground/80 hover:text-accent transition-colors"
                     >
                       <Facebook className="w-4 h-4" /> Facebook
                     </a>
@@ -569,7 +569,7 @@ export default function VendorProfilePage({
                       href={vendor.pinterest.startsWith("http") ? vendor.pinterest : `https://pinterest.com/${vendor.pinterest}`}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="flex items-center gap-1.5 text-sm text-gray-700 hover:text-red-600 transition-colors"
+                      className="flex items-center gap-1.5 text-sm text-foreground/80 hover:text-accent transition-colors"
                     >
                       <svg className="w-4 h-4" viewBox="0 0 24 24" fill="currentColor">
                         <path d="M12 0C5.373 0 0 5.373 0 12c0 5.084 3.163 9.426 7.627 11.174-.105-.949-.2-2.405.042-3.441.218-.937 1.407-5.965 1.407-5.965s-.359-.719-.359-1.782c0-1.668.967-2.914 2.171-2.914 1.023 0 1.518.769 1.518 1.69 0 1.029-.655 2.568-.994 3.995-.283 1.194.599 2.169 1.777 2.169 2.133 0 3.772-2.249 3.772-5.495 0-2.873-2.064-4.882-5.012-4.882-3.414 0-5.418 2.561-5.418 5.207 0 1.031.397 2.138.893 2.738a.36.36 0 01.083.345l-.333 1.36c-.053.22-.174.267-.402.161-1.499-.698-2.436-2.889-2.436-4.649 0-3.785 2.75-7.262 7.929-7.262 4.163 0 7.398 2.967 7.398 6.931 0 4.136-2.607 7.464-6.227 7.464-1.216 0-2.359-.632-2.75-1.378l-.748 2.853c-.271 1.043-1.002 2.35-1.492 3.146C9.57 23.812 10.763 24 12 24c6.627 0 12-5.373 12-12S18.627 0 12 0z"/>
@@ -583,19 +583,19 @@ export default function VendorProfilePage({
 
             {/* About */}
             {vendor.description && (
-              <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100">
-                <h2 className="text-lg font-semibold text-gray-900 mb-3">About</h2>
-                <p className="text-gray-700 leading-relaxed whitespace-pre-wrap">{vendor.description}</p>
+              <div className="bg-card rounded-2xl p-6 shadow-sm border border-border">
+                <h2 className="text-lg font-semibold text-foreground mb-3">About</h2>
+                <p className="text-foreground/80 leading-relaxed whitespace-pre-wrap">{vendor.description}</p>
               </div>
             )}
 
             {/* Languages */}
             {vendor.languages.length > 0 && (
-              <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100">
-                <h2 className="text-lg font-semibold text-gray-900 mb-3">Languages Spoken</h2>
+              <div className="bg-card rounded-2xl p-6 shadow-sm border border-border">
+                <h2 className="text-lg font-semibold text-foreground mb-3">Languages Spoken</h2>
                 <div className="flex flex-wrap gap-2">
                   {vendor.languages.map((lang) => (
-                    <span key={lang} className="bg-gray-100 text-gray-700 px-3 py-1 rounded-full text-sm">
+                    <span key={lang} className="bg-muted text-foreground/80 px-3 py-1 rounded-full text-sm">
                       {lang}
                     </span>
                   ))}
@@ -618,27 +618,27 @@ export default function VendorProfilePage({
                 ...Array.from({ length: daysInMonth }, (_, i) => i + 1),
               ];
               const statusColor = {
-                AVAILABLE: "bg-emerald-100 text-emerald-800 font-semibold",
-                BOOKED: "bg-red-100 text-red-700 line-through opacity-60",
-                TENTATIVE: "bg-amber-100 text-amber-800",
+                AVAILABLE: "bg-[var(--color-success-bg)] text-[var(--color-success-text)] font-semibold",
+                BOOKED: "bg-[var(--color-error-bg)] text-[var(--color-error-text)] line-through opacity-60",
+                TENTATIVE: "bg-[var(--color-warning-bg)] text-[var(--color-warning-text)]",
               };
               return (
-                <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100">
+                <div className="bg-card rounded-2xl p-6 shadow-sm border border-border">
                   <div className="flex items-center justify-between mb-4">
-                    <h2 className="text-lg font-semibold text-gray-900">Availability</h2>
+                    <h2 className="text-lg font-semibold text-foreground">Availability</h2>
                     <div className="flex items-center gap-2">
                       <button
                         onClick={() => setCalMonth(new Date(year, month - 1, 1))}
-                        className="p-1.5 rounded-lg hover:bg-gray-100 text-gray-500"
+                        className="p-1.5 rounded-lg hover:bg-muted text-muted-foreground"
                       >
                         <ChevronLeft className="w-4 h-4" />
                       </button>
-                      <span className="text-sm font-medium text-gray-700 min-w-[100px] text-center">
+                      <span className="text-sm font-medium text-foreground/80 min-w-[100px] text-center">
                         {calMonth.toLocaleDateString("en-US", { month: "long", year: "numeric" })}
                       </span>
                       <button
                         onClick={() => setCalMonth(new Date(year, month + 1, 1))}
-                        className="p-1.5 rounded-lg hover:bg-gray-100 text-gray-500"
+                        className="p-1.5 rounded-lg hover:bg-muted text-muted-foreground"
                       >
                         <ChevronRight className="w-4 h-4" />
                       </button>
@@ -646,7 +646,7 @@ export default function VendorProfilePage({
                   </div>
                   <div className="grid grid-cols-7 gap-1 text-center mb-1">
                     {["Su","Mo","Tu","We","Th","Fr","Sa"].map(d => (
-                      <div key={d} className="text-xs text-gray-400 font-medium py-1">{d}</div>
+                      <div key={d} className="text-xs text-muted-foreground/60 font-medium py-1">{d}</div>
                     ))}
                   </div>
                   <div className="grid grid-cols-7 gap-1">
@@ -662,18 +662,18 @@ export default function VendorProfilePage({
                           className={`rounded-lg py-1.5 text-xs text-center transition-colors ${
                             entry
                               ? statusColor[entry.status]
-                              : "text-gray-600 hover:bg-gray-50"
-                          } ${isToday ? "ring-2 ring-purple-400" : ""}`}
+                              : "text-muted-foreground hover:bg-muted/30"
+                          } ${isToday ? "ring-2 ring-ring" : ""}`}
                         >
                           {day}
                         </div>
                       );
                     })}
                   </div>
-                  <div className="flex items-center gap-4 mt-4 text-xs text-gray-500">
-                    <span className="flex items-center gap-1.5"><span className="w-3 h-3 rounded bg-emerald-100 inline-block" />Available</span>
-                    <span className="flex items-center gap-1.5"><span className="w-3 h-3 rounded bg-amber-100 inline-block" />Tentative</span>
-                    <span className="flex items-center gap-1.5"><span className="w-3 h-3 rounded bg-red-100 inline-block" />Booked</span>
+                  <div className="flex items-center gap-4 mt-4 text-xs text-muted-foreground">
+                    <span className="flex items-center gap-1.5"><span className="w-3 h-3 rounded bg-[var(--color-success-bg)] inline-block" />Available</span>
+                    <span className="flex items-center gap-1.5"><span className="w-3 h-3 rounded bg-[var(--color-warning-bg)] inline-block" />Tentative</span>
+                    <span className="flex items-center gap-1.5"><span className="w-3 h-3 rounded bg-[var(--color-error-bg)] inline-block" />Booked</span>
                   </div>
                 </div>
               );
@@ -681,20 +681,20 @@ export default function VendorProfilePage({
 
             {/* FAQ */}
             {vendor.faqItems && vendor.faqItems.length > 0 && (
-              <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100">
-                <h2 className="text-lg font-semibold text-gray-900 mb-4">Frequently Asked Questions</h2>
+              <div className="bg-card rounded-2xl p-6 shadow-sm border border-border">
+                <h2 className="text-lg font-semibold text-foreground mb-4">Frequently Asked Questions</h2>
                 <div className="space-y-2">
                   {vendor.faqItems.map((item, idx) => (
-                    <div key={idx} className="border border-gray-100 rounded-xl overflow-hidden">
+                    <div key={idx} className="border border-border rounded-xl overflow-hidden">
                       <button
                         onClick={() => setOpenFaqIdx(openFaqIdx === idx ? null : idx)}
-                        className="w-full flex items-center justify-between px-4 py-3 text-left text-sm font-medium text-gray-800 hover:bg-gray-50 transition-colors"
+                        className="w-full flex items-center justify-between px-4 py-3 text-left text-sm font-medium text-foreground hover:bg-muted/30 transition-colors"
                       >
                         <span>{item.question}</span>
-                        <ChevronDown className={`w-4 h-4 text-gray-400 shrink-0 transition-transform ${openFaqIdx === idx ? "rotate-180" : ""}`} />
+                        <ChevronDown className={`w-4 h-4 text-muted-foreground/60 shrink-0 transition-transform ${openFaqIdx === idx ? "rotate-180" : ""}`} />
                       </button>
                       {openFaqIdx === idx && (
-                        <div className="px-4 pb-4 pt-1 text-sm text-gray-600 leading-relaxed border-t border-gray-100 bg-gray-50">
+                        <div className="px-4 pb-4 pt-1 text-sm text-muted-foreground leading-relaxed border-t border-border bg-muted/30">
                           {item.answer}
                         </div>
                       )}
@@ -705,21 +705,21 @@ export default function VendorProfilePage({
             )}
 
             {/* Reviews */}
-            <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100">
+            <div className="bg-card rounded-2xl p-6 shadow-sm border border-border">
               {/* Header */}
               <div className="flex items-center justify-between mb-4">
-                <h2 className="text-lg font-semibold text-gray-900">
+                <h2 className="text-lg font-semibold text-foreground">
                   Reviews{vendor.reviews.length > 0 ? ` (${vendor.reviews.length})` : ""}
                 </h2>
                 {!reviewSubmitted ? (
                   <button
                     onClick={() => setShowReviewForm((v) => !v)}
-                    className="text-sm font-medium text-purple-600 border border-purple-200 px-3 py-1.5 rounded-lg hover:bg-purple-50 transition-colors"
+                    className="text-sm font-medium text-primary border border-primary/20 px-3 py-1.5 rounded-lg hover:bg-primary/5 transition-colors"
                   >
                     {showReviewForm ? "Cancel" : "Write a Review"}
                   </button>
                 ) : (
-                  <span className="text-sm text-green-600 font-medium">✓ Review submitted!</span>
+                  <span className="text-sm text-[var(--color-success-text)] font-medium">✓ Review submitted!</span>
                 )}
               </div>
 
@@ -734,21 +734,21 @@ export default function VendorProfilePage({
                   (vendor.reviews.filter((r) => r.rating >= 4).length / vendor.reviews.length) * 100
                 );
                 return (
-                  <div className="flex flex-col sm:flex-row gap-6 mb-6 pb-6 border-b border-gray-100">
+                  <div className="flex flex-col sm:flex-row gap-6 mb-6 pb-6 border-b border-border">
                     {/* Score */}
                     <div className="text-center shrink-0">
-                      <div className="text-5xl font-bold text-gray-900">{vendor.avgRating.toFixed(1)}</div>
+                      <div className="text-5xl font-bold text-foreground">{vendor.avgRating.toFixed(1)}</div>
                       <div className="flex items-center justify-center gap-0.5 mt-1">
                         {Array.from({ length: 5 }).map((_, i) => (
                           <Star
                             key={i}
                             className={`w-4 h-4 ${
-                              i < Math.round(vendor.avgRating!) ? "fill-yellow-400 text-yellow-400" : "fill-gray-200 text-gray-200"
+                              i < Math.round(vendor.avgRating!) ? "fill-[var(--color-star)] text-[var(--color-star)]" : "fill-border text-border"
                             }`}
                           />
                         ))}
                       </div>
-                      <p className="text-xs text-gray-500 mt-1">
+                      <p className="text-xs text-muted-foreground mt-1">
                         Recommended by {recommended}% of couples
                       </p>
                     </div>
@@ -756,14 +756,14 @@ export default function VendorProfilePage({
                     <div className="flex-1 space-y-1.5">
                       {breakdown.map(({ star, count }) => (
                         <div key={star} className="flex items-center gap-2 text-xs">
-                          <span className="w-6 text-right text-gray-600 shrink-0">{star}★</span>
-                          <div className="flex-1 bg-gray-100 rounded-full h-2 overflow-hidden">
+                          <span className="w-6 text-right text-muted-foreground shrink-0">{star}★</span>
+                          <div className="flex-1 bg-muted rounded-full h-2 overflow-hidden">
                             <div
-                              className="h-2 bg-yellow-400 rounded-full transition-all"
+                              className="h-2 bg-[var(--color-star)] rounded-full transition-all"
                               style={{ width: `${(count / maxCount) * 100}%` }}
                             />
                           </div>
-                          <span className="w-4 text-gray-500 shrink-0">{count}</span>
+                          <span className="w-4 text-muted-foreground shrink-0">{count}</span>
                         </div>
                       ))}
                     </div>
@@ -773,16 +773,16 @@ export default function VendorProfilePage({
 
               {/* Write a Review form */}
               {showReviewForm && (
-                <form onSubmit={submitReview} className="mb-6 p-4 bg-gray-50 rounded-xl border border-gray-200 space-y-3">
-                  <p className="text-sm font-medium text-gray-800">Share your experience</p>
+                <form onSubmit={submitReview} className="mb-6 p-4 bg-muted/30 rounded-xl border border-border space-y-3">
+                  <p className="text-sm font-medium text-foreground">Share your experience</p>
                   {reviewError && (
-                    <div className="text-sm text-red-600 bg-red-50 border border-red-200 rounded-lg px-3 py-2">
+                    <div className="text-sm text-[var(--color-error-text)] bg-[var(--color-error-bg)] border border-[var(--color-error-text)]/20 rounded-lg px-3 py-2">
                       {reviewError}
                     </div>
                   )}
                   {/* Star rating picker */}
                   <div>
-                    <label className="block text-xs font-medium text-gray-700 mb-1">Your Rating *</label>
+                    <label className="block text-xs font-medium text-foreground/80 mb-1">Your Rating *</label>
                     <div className="flex items-center gap-1">
                       {[1, 2, 3, 4, 5].map((star) => (
                         <button
@@ -794,8 +794,8 @@ export default function VendorProfilePage({
                           <Star
                             className={`w-7 h-7 transition-colors ${
                               star <= reviewForm.rating
-                                ? "fill-yellow-400 text-yellow-400"
-                                : "fill-gray-200 text-gray-200 hover:fill-yellow-200 hover:text-yellow-300"
+                                ? "fill-[var(--color-star)] text-[var(--color-star)]"
+                                : "fill-border text-border hover:fill-[var(--color-star)]/30 hover:text-[var(--color-star)]/50"
                             }`}
                           />
                         </button>
@@ -803,67 +803,67 @@ export default function VendorProfilePage({
                     </div>
                   </div>
                   <div>
-                    <label className="block text-xs font-medium text-gray-700 mb-1">Your Name *</label>
+                    <label className="block text-xs font-medium text-foreground/80 mb-1">Your Name *</label>
                     <input
                       type="text"
                       required
                       value={reviewForm.authorName}
                       onChange={(e) => setReviewForm((f) => ({ ...f, authorName: e.target.value }))}
-                      className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-purple-400"
+                      className="w-full border border-border rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-ring"
                       placeholder="Full name"
                     />
                   </div>
                   <div>
-                    <label className="block text-xs font-medium text-gray-700 mb-1">Review</label>
+                    <label className="block text-xs font-medium text-foreground/80 mb-1">Review</label>
                     <textarea
                       rows={3}
                       value={reviewForm.comment}
                       onChange={(e) => setReviewForm((f) => ({ ...f, comment: e.target.value }))}
-                      className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-purple-400 resize-none"
+                      className="w-full border border-border rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-ring resize-none"
                       placeholder="Tell others about your experience..."
                     />
                   </div>
                   <button
                     type="submit"
                     disabled={reviewSubmitting}
-                    className="w-full bg-purple-600 hover:bg-purple-700 disabled:opacity-60 text-white text-sm font-semibold py-2.5 rounded-lg transition-colors"
+                    className="w-full bg-primary hover:bg-primary/90 disabled:opacity-60 text-white text-sm font-semibold py-2.5 rounded-lg transition-colors"
                   >
                     {reviewSubmitting ? "Submitting..." : "Submit Review"}
                   </button>
-                  <p className="text-xs text-gray-400 text-center">Your review will appear after admin approval.</p>
+                  <p className="text-xs text-muted-foreground/60 text-center">Your review will appear after admin approval.</p>
                 </form>
               )}
 
               {/* Review list */}
               {vendor.reviews.length === 0 ? (
-                <p className="text-sm text-gray-500 text-center py-4">No reviews yet. Be the first to review!</p>
+                <p className="text-sm text-muted-foreground text-center py-4">No reviews yet. Be the first to review!</p>
               ) : (
                 <div className="space-y-4">
                   {vendor.reviews.map((review) => (
-                    <div key={review.id} className="border-b border-gray-100 last:border-0 pb-4 last:pb-0">
+                    <div key={review.id} className="border-b border-border last:border-0 pb-4 last:pb-0">
                       <div className="flex items-center justify-between mb-1">
-                        <span className="font-medium text-gray-800">{review.authorName}</span>
+                        <span className="font-medium text-foreground">{review.authorName}</span>
                         <div className="flex items-center gap-0.5">
                           {Array.from({ length: 5 }).map((_, i) => (
                             <Star
                               key={i}
                               className={`w-3.5 h-3.5 ${
-                                i < review.rating ? "fill-yellow-400 text-yellow-400" : "fill-gray-200 text-gray-200"
+                                i < review.rating ? "fill-[var(--color-star)] text-[var(--color-star)]" : "fill-border text-border"
                               }`}
                             />
                           ))}
                         </div>
                       </div>
                       {review.comment && (
-                        <p className="text-gray-600 text-sm">{review.comment}</p>
+                        <p className="text-muted-foreground text-sm">{review.comment}</p>
                       )}
                       {review.reply && (
-                        <div className="mt-2 pl-3 border-l-2 border-purple-200">
-                          <p className="text-xs text-gray-500 mb-0.5">Vendor reply:</p>
-                          <p className="text-gray-600 text-sm">{review.reply}</p>
+                        <div className="mt-2 pl-3 border-l-2 border-primary/20">
+                          <p className="text-xs text-muted-foreground mb-0.5">Vendor reply:</p>
+                          <p className="text-muted-foreground text-sm">{review.reply}</p>
                         </div>
                       )}
-                      <p className="text-xs text-gray-400 mt-1">
+                      <p className="text-xs text-muted-foreground/60 mt-1">
                         {new Date(review.createdAt).toLocaleDateString("en-US", {
                           year: "numeric",
                           month: "long",
@@ -878,8 +878,8 @@ export default function VendorProfilePage({
 
             {/* Map */}
             {vendor.lat && vendor.lng && (
-              <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100">
-                <h2 className="text-lg font-semibold text-gray-900 mb-4">Map</h2>
+              <div className="bg-card rounded-2xl p-6 shadow-sm border border-border">
+                <h2 className="text-lg font-semibold text-foreground mb-4">Map</h2>
                 <VendorSingleMap
                   lat={vendor.lat}
                   lng={vendor.lng}
@@ -888,14 +888,14 @@ export default function VendorProfilePage({
                   country={vendor.country}
                   phone={vendor.phone}
                 />
-                <div className="mt-3 flex items-start gap-1.5 text-sm text-gray-600">
-                  <MapPin className="w-4 h-4 text-gray-400 mt-0.5 shrink-0" />
+                <div className="mt-3 flex items-start gap-1.5 text-sm text-muted-foreground">
+                  <MapPin className="w-4 h-4 text-muted-foreground/60 mt-0.5 shrink-0" />
                   <div>
                     <p className="font-medium">Location</p>
                     {vendor.city && (
-                      <p className="text-gray-500">{[vendor.city, vendor.country].filter(Boolean).join(", ")}</p>
+                      <p className="text-muted-foreground">{[vendor.city, vendor.country].filter(Boolean).join(", ")}</p>
                     )}
-                    {vendor.phone && <p className="text-gray-500">{vendor.phone}</p>}
+                    {vendor.phone && <p className="text-muted-foreground">{vendor.phone}</p>}
                   </div>
                 </div>
               </div>
@@ -905,18 +905,18 @@ export default function VendorProfilePage({
           {/* Inquiry form sidebar */}
           <div className="lg:col-span-1">
             <div className="sticky top-6">
-              <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100">
+              <div className="bg-card rounded-2xl p-6 shadow-sm border border-border">
                 {inquirySubmitted ? (
                   <div className="text-center py-6">
-                    <CheckCircle2 className="w-12 h-12 text-green-500 mx-auto mb-3" />
-                    <h3 className="text-lg font-semibold text-gray-900 mb-1">Message Sent!</h3>
-                    <p className="text-gray-600 text-sm">
+                    <CheckCircle2 className="w-12 h-12 text-[var(--color-success-text)] mx-auto mb-3" />
+                    <h3 className="text-lg font-semibold text-foreground mb-1">Message Sent!</h3>
+                    <p className="text-muted-foreground text-sm">
                       {vendor.businessName} will get back to you shortly.
                     </p>
                     {linkedProjectId && (
                       <Link
                         href={`/planner/${linkedProjectId}/vendors`}
-                        className="inline-flex items-center gap-1.5 mt-3 px-4 py-2 bg-purple-600 text-white text-sm font-medium rounded-lg hover:bg-purple-700 transition-colors"
+                        className="inline-flex items-center gap-1.5 mt-3 px-4 py-2 bg-primary text-white text-sm font-medium rounded-lg hover:bg-primary/90 transition-colors"
                       >
                         <Send className="w-3.5 h-3.5" /> View in your planner
                       </Link>
@@ -924,7 +924,7 @@ export default function VendorProfilePage({
                     {conversationId && !linkedProjectId && (
                       <Link
                         href={`/conversation/${conversationId}`}
-                        className="inline-flex items-center gap-1.5 mt-3 px-4 py-2 bg-purple-600 text-white text-sm font-medium rounded-lg hover:bg-purple-700 transition-colors"
+                        className="inline-flex items-center gap-1.5 mt-3 px-4 py-2 bg-primary text-white text-sm font-medium rounded-lg hover:bg-primary/90 transition-colors"
                       >
                         <Send className="w-3.5 h-3.5" /> View Conversation
                       </Link>
@@ -939,28 +939,28 @@ export default function VendorProfilePage({
                           phone: "", eventType: "Wedding", eventDate: "", message: "", budget: "",
                         });
                       }}
-                      className="mt-3 block text-purple-600 text-sm hover:underline"
+                      className="mt-3 block text-primary text-sm hover:underline"
                     >
                       Send another inquiry
                     </button>
                   </div>
                 ) : (
                   <>
-                    <h2 className="text-lg font-semibold text-gray-900 mb-1">Request Pricing</h2>
-                    <p className="text-gray-500 text-sm mb-4">
+                    <h2 className="text-lg font-semibold text-foreground mb-1">Request Pricing</h2>
+                    <p className="text-muted-foreground text-sm mb-4">
                       Get a personalized quote from {vendor.businessName}
                     </p>
 
                     {/* Project link — for logged-in couples */}
                     {projects.length > 0 && (
-                      <div className="mb-4 p-3 bg-purple-50 border border-purple-100 rounded-lg">
-                        <label className="block text-xs font-medium text-purple-700 mb-1.5">
+                      <div className="mb-4 p-3 bg-primary/5 border border-primary/10 rounded-lg">
+                        <label className="block text-xs font-medium text-primary mb-1.5">
                           Link to your wedding project (optional)
                         </label>
                         <select
                           value={selectedProjectId}
                           onChange={e => setSelectedProjectId(e.target.value)}
-                          className="w-full border border-purple-200 rounded-lg px-3 py-2 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-purple-400"
+                          className="w-full border border-primary/20 rounded-lg px-3 py-2 text-sm bg-card focus:outline-none focus:ring-2 focus:ring-ring"
                         >
                           <option value="">— Send as anonymous inquiry —</option>
                           {projects.map(p => (
@@ -968,7 +968,7 @@ export default function VendorProfilePage({
                           ))}
                         </select>
                         {selectedProjectId && (
-                          <p className="text-[11px] text-purple-600 mt-1.5">
+                          <p className="text-[11px] text-primary mt-1.5">
                             Message will appear in your planner&apos;s Vendor Messages tab
                           </p>
                         )}
@@ -976,14 +976,14 @@ export default function VendorProfilePage({
                     )}
 
                     {inquiryError && (
-                      <div className="mb-4 p-3 bg-red-50 border border-red-200 text-red-700 text-sm rounded-lg">
+                      <div className="mb-4 p-3 bg-[var(--color-error-bg)] border border-[var(--color-error-text)]/20 text-[var(--color-error-text)] text-sm rounded-lg">
                         {inquiryError}
                       </div>
                     )}
 
                     <form onSubmit={submitInquiry} className="space-y-3">
                       <div>
-                        <label className="block text-xs font-medium text-gray-700 mb-1">
+                        <label className="block text-xs font-medium text-foreground/80 mb-1">
                           Your Name *
                         </label>
                         <input
@@ -991,12 +991,12 @@ export default function VendorProfilePage({
                           required
                           value={form.name}
                           onChange={(e) => updateForm("name", e.target.value)}
-                          className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-purple-400"
+                          className="w-full border border-border rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-ring"
                           placeholder="Full name"
                         />
                       </div>
                       <div>
-                        <label className="block text-xs font-medium text-gray-700 mb-1">
+                        <label className="block text-xs font-medium text-foreground/80 mb-1">
                           Email *
                         </label>
                         <input
@@ -1004,31 +1004,31 @@ export default function VendorProfilePage({
                           required
                           value={form.email}
                           onChange={(e) => updateForm("email", e.target.value)}
-                          className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-purple-400"
+                          className="w-full border border-border rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-ring"
                           placeholder="your@email.com"
                         />
                       </div>
                       <div>
-                        <label className="block text-xs font-medium text-gray-700 mb-1">
+                        <label className="block text-xs font-medium text-foreground/80 mb-1">
                           Phone
                         </label>
                         <input
                           type="tel"
                           value={form.phone}
                           onChange={(e) => updateForm("phone", e.target.value)}
-                          className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-purple-400"
+                          className="w-full border border-border rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-ring"
                           placeholder="+1 234 567 8900"
                         />
                       </div>
                       <div>
-                        <label className="block text-xs font-medium text-gray-700 mb-1">
+                        <label className="block text-xs font-medium text-foreground/80 mb-1">
                           Event Type *
                         </label>
                         <select
                           required
                           value={form.eventType}
                           onChange={(e) => updateForm("eventType", e.target.value)}
-                          className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-purple-400"
+                          className="w-full border border-border rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-ring"
                         >
                           {EVENT_TYPES.map((t) => (
                             <option key={t} value={t}>{t}</option>
@@ -1036,30 +1036,30 @@ export default function VendorProfilePage({
                         </select>
                       </div>
                       <div>
-                        <label className="block text-xs font-medium text-gray-700 mb-1">
+                        <label className="block text-xs font-medium text-foreground/80 mb-1">
                           Event Date
                         </label>
                         <input
                           type="date"
                           value={form.eventDate}
                           onChange={(e) => updateForm("eventDate", e.target.value)}
-                          className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-purple-400"
+                          className="w-full border border-border rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-ring"
                         />
                       </div>
                       <div>
-                        <label className="block text-xs font-medium text-gray-700 mb-1">
+                        <label className="block text-xs font-medium text-foreground/80 mb-1">
                           Budget (optional)
                         </label>
                         <input
                           type="text"
                           value={form.budget}
                           onChange={(e) => updateForm("budget", e.target.value)}
-                          className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-purple-400"
+                          className="w-full border border-border rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-ring"
                           placeholder="e.g. SEK 5,000–10,000"
                         />
                       </div>
                       <div>
-                        <label className="block text-xs font-medium text-gray-700 mb-1">
+                        <label className="block text-xs font-medium text-foreground/80 mb-1">
                           Message *
                         </label>
                         <textarea
@@ -1067,14 +1067,14 @@ export default function VendorProfilePage({
                           rows={4}
                           value={form.message}
                           onChange={(e) => updateForm("message", e.target.value)}
-                          className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-purple-400 resize-none"
+                          className="w-full border border-border rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-ring resize-none"
                           placeholder="Tell them about your event and what you're looking for..."
                         />
                       </div>
                       <button
                         type="submit"
                         disabled={submitting}
-                        className="w-full bg-purple-600 hover:bg-purple-700 disabled:opacity-60 text-white font-semibold py-2.5 rounded-xl transition-colors flex items-center justify-center gap-2 text-sm"
+                        className="w-full bg-primary hover:bg-primary/90 disabled:opacity-60 text-white font-semibold py-2.5 rounded-xl transition-colors flex items-center justify-center gap-2 text-sm"
                       >
                         {submitting ? (
                           <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white" />

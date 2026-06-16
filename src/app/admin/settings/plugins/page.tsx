@@ -85,22 +85,22 @@ interface Plugin {
 const statusConfig = {
   ACTIVE: {
     label: "Active",
-    color: "bg-green-100 text-green-800 border-green-200",
+    color: "admin-status-success",
     icon: CheckCircle2,
   },
   INSTALLED: {
-    label: "Requires License",
-    color: "bg-amber-100 text-amber-800 border-amber-200",
-    icon: Key,
+    label: "Installed",
+    color: "admin-status-warning",
+    icon: Package,
   },
   DISABLED: {
     label: "Disabled",
-    color: "bg-gray-100 text-gray-800 border-gray-200",
+    color: "admin-status-neutral",
     icon: PowerOff,
   },
   ERROR: {
     label: "Error",
-    color: "bg-red-100 text-red-800 border-red-200",
+    color: "admin-status-error",
     icon: XCircle,
   },
 };
@@ -233,7 +233,7 @@ export default function PluginsPage() {
             Plugins
           </h1>
           <p className="text-muted-foreground">
-            Manage and activate premium plugins
+            Manage installed plugins
           </p>
         </div>
         <Button variant="outline" onClick={fetchPlugins}>
@@ -244,135 +244,6 @@ export default function PluginsPage() {
 
       <Separator />
 
-      {/* License Activation Dialog */}
-      <Dialog open={licenseDialogOpen} onOpenChange={(open) => {
-        setLicenseDialogOpen(open);
-        if (!open) {
-          setSelectedPlugin(null);
-          setLicenseKey("");
-          setAgreedToTerms(false);
-          setActivationError(null);
-        }
-      }}>
-        <DialogContent className="max-w-md">
-          <DialogHeader>
-            <DialogTitle className="flex items-center gap-2">
-              <Key className="h-5 w-5" />
-              Activate License
-            </DialogTitle>
-            <DialogDescription>
-              Enter your license key to activate {selectedPlugin?.name}
-            </DialogDescription>
-          </DialogHeader>
-
-          <div className="space-y-4 py-4">
-            {/* Plugin Info */}
-            {selectedPlugin && (
-              <Card className="bg-muted/50">
-                <CardContent className="p-4">
-                  <div className="flex items-center gap-3">
-                    <div className="h-12 w-12 rounded-lg bg-gradient-to-br from-primary/20 to-primary/10 flex items-center justify-center shrink-0">
-                      {(() => {
-                        const IconComponent = selectedPlugin.icon && iconMap[selectedPlugin.icon];
-                        if (IconComponent) {
-                          return <IconComponent className="h-6 w-6 text-primary" />;
-                        }
-                        if (selectedPlugin.icon && !/^[a-zA-Z]+$/.test(selectedPlugin.icon)) {
-                          return <span className="text-xl">{selectedPlugin.icon}</span>;
-                        }
-                        return <Puzzle className="h-6 w-6 text-primary" />;
-                      })()}
-                    </div>
-                    <div className="min-w-0 flex-1">
-                      <p className="font-semibold text-base truncate">{selectedPlugin.name}</p>
-                      <p className="text-sm text-muted-foreground truncate">
-                        v{selectedPlugin.version}
-                        {selectedPlugin.author && ` by ${selectedPlugin.author}`}
-                      </p>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-            )}
-
-            {/* License Key Input */}
-            <div className="space-y-2">
-              <Label htmlFor="licenseKey">License Key</Label>
-              <Input
-                id="licenseKey"
-                value={licenseKey}
-                onChange={(e) => setLicenseKey(e.target.value.toUpperCase())}
-                placeholder="XXXXX-XXXXX-XXXXX-XXXXX"
-                className="font-mono"
-              />
-              <p className="text-xs text-muted-foreground">
-                Enter the license key from your purchase confirmation email
-              </p>
-            </div>
-
-            {/* Domain Info */}
-            <div className="flex items-center gap-2 text-sm text-muted-foreground bg-muted/50 p-3 rounded-lg">
-              <Globe className="h-4 w-4" />
-              <span>
-                License will be bound to: <strong>{typeof window !== 'undefined' ? window.location.hostname : 'your domain'}</strong>
-              </span>
-            </div>
-
-            {/* Terms Agreement */}
-            <div className="flex items-start gap-2">
-              <Checkbox
-                id="terms"
-                checked={agreedToTerms}
-                onCheckedChange={(checked) => setAgreedToTerms(checked === true)}
-              />
-              <label htmlFor="terms" className="text-sm text-muted-foreground cursor-pointer">
-                I agree to the{" "}
-                <a href="/terms" className="text-primary hover:underline" target="_blank">
-                  terms and conditions
-                </a>{" "}
-                and understand that this license is for a single domain.
-              </label>
-            </div>
-
-            {/* Error Message */}
-            {activationError && (
-              <div className="bg-red-50 border border-red-200 rounded-lg p-3">
-                <p className="text-sm text-red-700 flex items-center gap-2">
-                  <XCircle className="h-4 w-4" />
-                  {activationError}
-                </p>
-              </div>
-            )}
-          </div>
-
-          <DialogFooter>
-            <Button
-              variant="outline"
-              onClick={() => {
-                setLicenseDialogOpen(false);
-                setSelectedPlugin(null);
-                setLicenseKey("");
-                setAgreedToTerms(false);
-                setActivationError(null);
-              }}
-            >
-              Cancel
-            </Button>
-            <Button
-              onClick={activateWithLicense}
-              disabled={activating || !licenseKey.trim() || !agreedToTerms}
-            >
-              {activating ? (
-                <Loader2 className="h-4 w-4 animate-spin mr-2" />
-              ) : (
-                <Shield className="h-4 w-4 mr-2" />
-              )}
-              Activate
-            </Button>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
-
       {/* No plugins message */}
       {plugins.length === 0 && (
         <Card>
@@ -380,7 +251,7 @@ export default function PluginsPage() {
             <Package className="h-12 w-12 text-muted-foreground mb-4" />
             <h3 className="text-lg font-semibold mb-2">No plugins available</h3>
             <p className="text-muted-foreground text-center max-w-md">
-              Premium plugins will appear here. Contact support if you purchased a plugin but don&apos;t see it listed.
+              Installed plugins will appear here after upload or installation.
             </p>
           </CardContent>
         </Card>
@@ -399,12 +270,12 @@ export default function PluginsPage() {
               <div
                 className={`absolute top-0 left-0 right-0 h-1 ${
                   plugin.status === "ACTIVE"
-                    ? "bg-green-500"
+                    ? "bg-[var(--ast-success-icon)]"
                     : plugin.status === "ERROR"
-                    ? "bg-red-500"
+                    ? "bg-[var(--ast-error-icon)]"
                     : plugin.status === "DISABLED"
-                    ? "bg-gray-400"
-                    : "bg-amber-500"
+                    ? "bg-[var(--ast-neutral-icon)]"
+                    : "bg-[var(--ast-warning-icon)]"
                 }`}
               />
 
@@ -488,8 +359,8 @@ export default function PluginsPage() {
 
                 {/* Error message */}
                 {plugin.status === "ERROR" && plugin.lastError && (
-                  <div className="bg-red-50 border border-red-200 rounded-md p-2">
-                    <p className="text-xs text-red-700 flex items-start gap-1">
+                  <div className="bg-[var(--ast-error-bg)] border border-[var(--ast-error-border)] rounded-md p-2">
+                    <p className="text-xs text-[var(--ast-error-text)] flex items-start gap-1">
                       <AlertCircle className="h-3 w-3 mt-0.5 flex-shrink-0" />
                       <span className="line-clamp-2">{plugin.lastError}</span>
                     </p>
@@ -501,15 +372,20 @@ export default function PluginsPage() {
                 {/* Actions */}
                 <div className="flex items-center gap-2">
                   {needsActivation ? (
-                    // Show "Activate with License" button for INSTALLED status
                     <Button
                       size="sm"
                       className="flex-1"
                       disabled={isLoading}
-                      onClick={() => openLicenseDialog(plugin)}
+                      onClick={() => togglePlugin(plugin.slug, plugin.status)}
                     >
-                      <Key className="h-4 w-4 mr-1" />
-                      Activate with License
+                      {isLoading ? (
+                        <Loader2 className="h-4 w-4 animate-spin" />
+                      ) : (
+                        <>
+                          <Power className="h-4 w-4 mr-1" />
+                          Activate
+                        </>
+                      )}
                     </Button>
                   ) : (
                     // Show Enable/Disable button for ACTIVE or DISABLED status
@@ -561,15 +437,15 @@ export default function PluginsPage() {
         <CardContent className="space-y-4">
           <div className="grid gap-4 md:grid-cols-3">
             <div className="space-y-2">
-              <h4 className="font-medium text-sm">1. Purchase License</h4>
+              <h4 className="font-medium text-sm">1. Install Plugin</h4>
               <p className="text-sm text-muted-foreground">
-                Buy a license key from CodeCanyon or our website. You&apos;ll receive the key via email.
+                Upload or install a compatible plugin package.
               </p>
             </div>
             <div className="space-y-2">
-              <h4 className="font-medium text-sm">2. Enter License Key</h4>
+              <h4 className="font-medium text-sm">2. Activate</h4>
               <p className="text-sm text-muted-foreground">
-                Click &quot;Activate with License&quot; on the plugin and enter your license key.
+                Click &quot;Activate&quot; to enable the plugin locally.
               </p>
             </div>
             <div className="space-y-2">

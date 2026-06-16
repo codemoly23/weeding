@@ -227,7 +227,7 @@ function SlideContent({
         const regex = new RegExp(`(${word})`, "gi");
         result = result.replace(
           regex,
-          `<span style="color: ${highlightColor || '#f97316'}">$1</span>`
+          `<span style="color: ${highlightColor || '#8A6F3E'}">$1</span>`
         );
       }
     });
@@ -250,9 +250,9 @@ function SlideContent({
             <div
               className={cn(
                 "inline-flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium mb-4",
-                content.badge.style === "pill" && "bg-orange-500/20 text-orange-400 border border-orange-500/30",
+                content.badge.style === "pill" && "bg-[var(--color-warning-bg)] text-[var(--color-warning-text)] border border-[var(--color-warning-text)]/30",
                 content.badge.style === "outline" && "bg-transparent border border-white/30 text-white",
-                content.badge.style === "solid" && "bg-orange-500 text-white"
+                content.badge.style === "solid" && "bg-[var(--color-warning-text)] text-primary-foreground"
               )}
             >
               {content.badge.text}
@@ -322,7 +322,7 @@ function SlideContent({
                   rel={button.openInNewTab ? "noopener noreferrer" : undefined}
                   className={cn(
                     "px-6 py-3 rounded-lg font-semibold transition-all",
-                    button.style === "primary" && "bg-orange-500 text-white hover:bg-orange-600",
+                    button.style === "primary" && "bg-[#1A1A1A] text-white hover:bg-[#2A2A2A]",
                     button.style === "secondary" && "bg-slate-700 text-white hover:bg-slate-600",
                     button.style === "outline" && "border-2 border-white text-white hover:bg-white/10",
                     button.style === "ghost" && "text-white hover:bg-white/10"
@@ -732,7 +732,7 @@ export function ImageSliderWidget({ settings, isPreview = false }: ImageSliderWi
               settings.navigation.arrows.style === "square" && "w-10 h-10 rounded-md",
               settings.navigation.arrows.style === "floating" && "w-12 h-12 rounded-full shadow-lg",
               settings.navigation.arrows.hoverEffect === "scale" && "hover:scale-110",
-              settings.navigation.arrows.hoverEffect === "glow" && "hover:shadow-lg hover:shadow-orange-500/30"
+              settings.navigation.arrows.hoverEffect === "glow" && "hover:shadow-lg hover:shadow-[#8A6F3E]/30"
             )}
             style={{
               color: settings.navigation.arrows.color || "#ffffff",
@@ -766,7 +766,7 @@ export function ImageSliderWidget({ settings, isPreview = false }: ImageSliderWi
               settings.navigation.arrows.style === "square" && "w-10 h-10 rounded-md",
               settings.navigation.arrows.style === "floating" && "w-12 h-12 rounded-full shadow-lg",
               settings.navigation.arrows.hoverEffect === "scale" && "hover:scale-110",
-              settings.navigation.arrows.hoverEffect === "glow" && "hover:shadow-lg hover:shadow-orange-500/30"
+              settings.navigation.arrows.hoverEffect === "glow" && "hover:shadow-lg hover:shadow-[#8A6F3E]/30"
             )}
             style={{
               color: settings.navigation.arrows.color || "#ffffff",
@@ -828,7 +828,7 @@ export function ImageSliderWidget({ settings, isPreview = false }: ImageSliderWi
                   settings.navigation.thumbnails.activeStyle === "scale" &&
                     (index === activeIndex ? "scale-100" : "scale-90"),
                   settings.navigation.thumbnails.activeStyle === "border" &&
-                    index === activeIndex && "ring-2 ring-orange-500"
+                    index === activeIndex && "ring-2 ring-[#8A6F3E]"
                 )}
                 style={{
                   width: settings.navigation.thumbnails.size,
@@ -869,7 +869,7 @@ export function ImageSliderWidget({ settings, isPreview = false }: ImageSliderWi
           margin: 0 4px !important;
         }
         .image-slider-widget .swiper-pagination-bullet-active {
-          background-color: ${settings.navigation.pagination.activeColor || "#f97316"};
+          background-color: ${settings.navigation.pagination.activeColor || "#8A6F3E"};
         }
 
         /* Dynamic Bullets */
@@ -894,7 +894,7 @@ export function ImageSliderWidget({ settings, isPreview = false }: ImageSliderWi
           height: 4px;
         }
         .image-slider-widget .swiper-pagination-progressbar-fill {
-          background-color: ${settings.navigation.pagination.activeColor || "#f97316"};
+          background-color: ${settings.navigation.pagination.activeColor || "#8A6F3E"};
         }
 
         /* Fraction */

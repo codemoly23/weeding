@@ -114,17 +114,17 @@ const documents = [
 const statusConfig: Record<string, { label: string; color: string; icon: typeof FileCheck }> = {
   approved: {
     label: "Approved",
-    color: "bg-green-100 text-green-700",
+    color: "bg-[var(--color-success-bg)] text-[var(--color-success-text)]",
     icon: FileCheck,
   },
   pending: {
     label: "Pending Review",
-    color: "bg-amber-100 text-amber-700",
+    color: "bg-[var(--color-warning-bg)] text-[var(--color-warning-text)]",
     icon: FileClock,
   },
   rejected: {
     label: "Rejected",
-    color: "bg-red-100 text-red-700",
+    color: "bg-[var(--color-error-bg)] text-[var(--color-error-text)]",
     icon: FileX,
   },
 };
@@ -201,7 +201,7 @@ export default function DocumentsPage() {
       <div className="grid gap-4 sm:grid-cols-3">
         <Card>
           <CardContent className="flex items-center gap-4 p-4">
-            <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-green-100 text-green-600">
+            <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-[var(--color-success-bg)] text-[var(--color-success-text)]">
               <FileCheck className="h-5 w-5" />
             </div>
             <div>
@@ -214,7 +214,7 @@ export default function DocumentsPage() {
         </Card>
         <Card>
           <CardContent className="flex items-center gap-4 p-4">
-            <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-amber-100 text-amber-600">
+            <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-[var(--color-warning-bg)] text-[var(--color-warning-text)]">
               <FileClock className="h-5 w-5" />
             </div>
             <div>
@@ -227,7 +227,7 @@ export default function DocumentsPage() {
         </Card>
         <Card>
           <CardContent className="flex items-center gap-4 p-4">
-            <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-red-100 text-red-600">
+            <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-[var(--color-error-bg)] text-[var(--color-error-text)]">
               <FileX className="h-5 w-5" />
             </div>
             <div>
@@ -302,9 +302,9 @@ export default function DocumentsPage() {
                       <div className="flex items-center gap-3">
                         <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-muted">
                           {doc.fileType === "pdf" ? (
-                            <FileText className="h-5 w-5 text-red-500" />
+                            <FileText className="h-5 w-5 text-[var(--color-error-text)]" />
                           ) : (
-                            <Image className="h-5 w-5 text-blue-500" />
+                            <Image className="h-5 w-5 text-[var(--color-info-text)]" />
                           )}
                         </div>
                         <div>

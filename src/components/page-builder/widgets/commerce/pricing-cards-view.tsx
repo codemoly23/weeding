@@ -93,7 +93,7 @@ export function PricingCardsView({
 }: PricingCardsViewProps) {
   const { cardStyle, ctaButtons, colors } = settings;
   const useTheme = settings.colors?.useTheme !== false;
-  const accentColor = useTheme ? "var(--color-primary)" : (ctaButtons.defaultBgColor || "#f97316");
+  const accentColor = useTheme ? "var(--color-primary)" : (ctaButtons.defaultBgColor || "#8A6F3E");
 
   const getPackageSlug = (pkg: Package) => {
     return pkg.name.toLowerCase().replace(/\s+/g, "-");
@@ -133,9 +133,9 @@ export function PricingCardsView({
       case "elevated":
         return "shadow-2xl scale-[1.02] z-10";
       case "gradient-border":
-        return "border-2 border-transparent bg-gradient-to-r from-orange-500 via-amber-500 to-orange-500 bg-origin-border";
+        return "border-2 border-transparent bg-gradient-to-r from-[#8A6F3E] via-[#E4A93B] to-[#8A6F3E] bg-origin-border";
       case "glow":
-        return "shadow-[0_0_30px_rgba(249,115,22,0.3)] border-primary";
+        return "shadow-[0_0_30px_rgba(138,111,62,0.3)] border-primary";
       default:
         return "ring-2 ring-primary border-primary";
     }
@@ -281,7 +281,7 @@ export function PricingCardsView({
                     className="flex items-start gap-3"
                   >
                     {feature.included ? (
-                      <Check className="h-5 w-5 shrink-0 text-green-600 mt-0.5" />
+                      <Check className="h-5 w-5 shrink-0 text-[var(--color-success-text)] mt-0.5" />
                     ) : (
                       <X className="h-5 w-5 shrink-0 text-muted-foreground/40 mt-0.5" />
                     )}

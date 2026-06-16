@@ -1,4 +1,4 @@
-# LLCPad Demo Credentials & Local Setup Guide
+# Ceremoney Demo Credentials & Local Setup Guide
 
 ## Local Setup (PostgreSQL - No Docker)
 
@@ -46,13 +46,13 @@ psql -U postgres
 SQL commands:
 ```sql
 -- User তৈরি করুন
-CREATE USER llcpad WITH PASSWORD 'llcpad123';
+CREATE USER ceremoney WITH PASSWORD 'ceremoney123';
 
 -- Database তৈরি করুন
-CREATE DATABASE llcpad OWNER llcpad;
+CREATE DATABASE ceremoney OWNER ceremoney;
 
 -- Privileges দিন
-GRANT ALL PRIVILEGES ON DATABASE llcpad TO llcpad;
+GRANT ALL PRIVILEGES ON DATABASE ceremoney TO ceremoney;
 
 -- Exit
 \q
@@ -62,8 +62,8 @@ GRANT ALL PRIVILEGES ON DATABASE llcpad TO llcpad;
 
 ```bash
 # Clone the repository
-git clone https://github.com/sajeebce/llcpad.git
-cd llcpad
+git clone https://github.com/codemoly23/weeding.git
+cd weeding
 
 # Install dependencies
 npm install
@@ -79,7 +79,7 @@ cp .env.example .env
 
 `.env` ফাইলে DATABASE_URL update করুন:
 ```env
-DATABASE_URL="postgresql://llcpad:llcpad123@localhost:5432/llcpad?schema=public"
+DATABASE_URL="postgresql://ceremoney:ceremoney123@localhost:5432/ceremoney?schema=public"
 AUTH_SECRET="your-secret-key-here-generate-with-openssl"
 ```
 
@@ -120,15 +120,15 @@ All demo users have the same password: `Demo@123`
 
 | Role | Email | Password | Login URL |
 |------|-------|----------|-----------|
-| **Admin** | admin@llcpad.com | Demo@123 | /login → /admin |
-| **Customer** | customer@llcpad.com | Demo@123 | /login → /dashboard |
-| **Content Manager** | content@llcpad.com | Demo@123 | /login → /admin |
-| **Sales Agent** | sales@llcpad.com | Demo@123 | /login → /admin |
-| **Support Agent** | support@llcpad.com | Demo@123 | /login → /admin |
+| **Admin** | admin@ceremoney.com | Demo@123 | /login → /admin |
+| **Customer** | customer@ceremoney.com | Demo@123 | /login → /dashboard |
+| **Content Manager** | content@ceremoney.com | Demo@123 | /login → /admin |
+| **Sales Agent** | sales@ceremoney.com | Demo@123 | /login → /admin |
+| **Support Agent** | support@ceremoney.com | Demo@123 | /login → /admin |
 
 ## Role Permissions
 
-### Admin (admin@llcpad.com)
+### Admin (admin@ceremoney.com)
 - Full dashboard access
 - User management (create, edit, delete users)
 - All order management
@@ -137,7 +137,7 @@ All demo users have the same password: `Demo@123`
 - Financial reports
 - Content management
 
-### Customer (customer@llcpad.com)
+### Customer (customer@ceremoney.com)
 - Browse services
 - Place orders
 - Track order status
@@ -145,20 +145,20 @@ All demo users have the same password: `Demo@123`
 - Create support tickets
 - Manage profile
 
-### Content Manager (content@llcpad.com)
+### Content Manager (content@ceremoney.com)
 - Blog post management
 - FAQ management
 - Testimonial management
 - Service descriptions
 - SEO settings
 
-### Sales Agent (sales@llcpad.com)
+### Sales Agent (sales@ceremoney.com)
 - View and manage orders
 - Customer communication
 - Lead tracking
 - Sales reports
 
-### Support Agent (support@llcpad.com)
+### Support Agent (support@ceremoney.com)
 - Support ticket management
 - Customer communication
 - Order status updates
@@ -169,12 +169,12 @@ All demo users have the same password: `Demo@123`
 ```
 Host: localhost
 Port: 5432
-Database: llcpad
-User: llcpad
-Password: llcpad123
+Database: ceremoney
+User: ceremoney
+Password: ceremoney123
 
 # Full Connection URL:
-DATABASE_URL="postgresql://llcpad:llcpad123@localhost:5432/llcpad?schema=public"
+DATABASE_URL="postgresql://ceremoney:ceremoney123@localhost:5432/ceremoney?schema=public"
 ```
 
 ## Useful Commands
@@ -214,8 +214,8 @@ pg_isready -h localhost -p 5432
 ### Permission Denied Errors
 ```sql
 -- PostgreSQL shell এ যান এবং run করুন:
-GRANT ALL ON SCHEMA public TO llcpad;
-ALTER DATABASE llcpad OWNER TO llcpad;
+GRANT ALL ON SCHEMA public TO ceremoney;
+ALTER DATABASE ceremoney OWNER TO ceremoney;
 ```
 
 ### Port Already in Use

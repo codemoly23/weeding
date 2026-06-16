@@ -1,6 +1,7 @@
 "use client";
 
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect, useRef } from "react";
+import { createPortal } from "react-dom";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -8,7 +9,12 @@ import { motion } from "framer-motion";
 import {
   Heart, Cake, Briefcase, GraduationCap, TreePine, PartyPopper,
   Droplet, MoreHorizontal, Search, MapPin, ArrowRight, Star,
-  Mail, Users, LayoutGrid, Store, Sparkles, Globe,
+  Mail, Users, LayoutGrid, Store, Sparkles, Globe, Building2,
+  ChevronDown, Home, Hotel, UtensilsCrossed, Sailboat, Waves,
+  Warehouse, Flag, Landmark, Leaf, Building, Church, Flower2,
+  Ship, Anchor, Music, Camera, Utensils, Coffee, Mountain, Sun,
+  Gift, Car, Shirt, ClipboardList, Video, Gem, Plane, Lightbulb,
+  Disc3, Package, User,
 } from "lucide-react";
 import type { PlanigateHeroWidgetSettings, PlanigateEventTypePill } from "@/lib/page-builder/types";
 import { DEFAULT_PLANIGATE_HERO_SETTINGS } from "@/lib/page-builder/defaults";
@@ -21,10 +27,27 @@ import {
   EASE_OUT,
 } from "./motion-variants";
 
-const ICON_MAP: Record<string, React.ComponentType<{ className?: string; size?: number; strokeWidth?: number }>> = {
+const ICON_MAP: Record<string, React.ComponentType<{ className?: string; size?: number; strokeWidth?: number; style?: React.CSSProperties }>> = {
   Heart, Cake, Briefcase, GraduationCap, TreePine, PartyPopper,
   Droplet, MoreHorizontal, Mail, Users, LayoutGrid, Store, Sparkles, Globe,
+  Building2, Home, Hotel, UtensilsCrossed, Sailboat, Waves, Warehouse,
+  Flag, Landmark, Leaf, Building, Church, Flower2, Ship, Anchor, Music,
+  Camera, Utensils, Coffee, Mountain, Sun, Gift, Car, Shirt, ClipboardList,
+  Video, Gem, Plane, Lightbulb, Disc3, Package, User, MapPin, Search,
 };
+
+interface SearchOption {
+  id: string;
+  name: string;
+  type: string;
+  icon?: string | null;
+  group?: string | null;
+}
+
+function getOptionIcon(name?: string | null) {
+  if (!name) return null;
+  return ICON_MAP[name] ?? null;
+}
 
 function PillIcon({ name, className }: { name: string; className?: string }) {
   const Comp = ICON_MAP[name] ?? Heart;
@@ -44,29 +67,67 @@ export function PlanigateHeroWidget({ settings: raw }: Props) {
     avatars: raw?.avatars?.length ? raw.avatars : DEFAULT_PLANIGATE_HERO_SETTINGS.avatars,
   }), [raw]);
 
+  const bgImages = useMemo(() => {
+    const c = settings.collageImages;
+    return [c.couple, c.dinner, c.toasting, c.laptop].filter(Boolean) as string[];
+  }, [settings.collageImages]);
+
+  const [bgIndex, setBgIndex] = useState(0);
   const [activePill, setActivePill] = useState<string>("");
+  const [placeQuery, setPlaceQuery] = useState("");
   const [serviceQuery, setServiceQuery] = useState("");
   const [locationQuery, setLocationQuery] = useState("");
 
+  useEffect(() => {
+    if (bgImages.length <= 1) return;
+    const id = setInterval(() => setBgIndex((i) => (i + 1) % bgImages.length), 5500);
+    return () => clearInterval(id);
+  }, [bgImages.length]);
+
   return (
     <section
-      className="relative overflow-hidden"
+      className="relative z-[50]"
       style={{
         background:
           "linear-gradient(180deg, var(--color-planigate-bg-hero-from) 0%, var(--color-planigate-bg-hero-via) 60%, var(--color-planigate-bg-hero-to) 100%)",
       }}
     >
-      {/* Subtle decorative wash */}
-      <div
-        aria-hidden
-        className="pointer-events-none absolute inset-0"
-        style={{
-          background:
-            "radial-gradient(60% 50% at 20% 20%, rgba(255,255,255,0.55) 0%, transparent 70%), radial-gradient(50% 40% at 85% 15%, rgba(232,213,180,0.45) 0%, transparent 70%)",
-        }}
-      />
+      {/* Background layer — overflow-hidden kept here so collage doesn't bleed */}
+      <div className="absolute inset-0 overflow-hidden">
+        {/* Background image slideshow */}
+        {bgImages.map((src, i) => (
+          <div
+            key={i}
+            aria-hidden
+            className="pointer-events-none absolute inset-0"
+            style={{
+              opacity: i === bgIndex ? 1 : 0,
+              transition: "opacity 1.4s ease-in-out",
+            }}
+          >
+            <Image src={src} alt="" fill sizes="100vw" className="object-cover" priority={i === 0} />
+          </div>
+        ))}
 
-      <div className="relative mx-auto max-w-[1240px] px-4 sm:px-6 lg:px-8 pt-8 lg:pt-12 pb-6 lg:pb-8">
+        {/* Dark overlay — keeps text readable */}
+        <div
+          aria-hidden
+          className="pointer-events-none absolute inset-0"
+          style={{ background: "rgba(0, 0, 0, 0.62)" }}
+        />
+
+        {/* Subtle decorative wash */}
+        <div
+          aria-hidden
+          className="pointer-events-none absolute inset-0"
+          style={{
+            background:
+              "radial-gradient(60% 50% at 20% 20%, rgba(255,255,255,0.55) 0%, transparent 70%), radial-gradient(50% 40% at 85% 15%, rgba(232,213,180,0.45) 0%, transparent 70%)",
+          }}
+        />
+      </div>
+
+      <div className="relative z-10 mx-auto max-w-[1240px] px-4 sm:px-6 lg:px-8 pt-8 lg:pt-12 pb-10 lg:pb-14">
         {/* Top: two-column hero text + collage */}
         <div className="grid grid-cols-1 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.05fr)] gap-10 lg:gap-12 items-end">
           {/* LEFT: copy */}
@@ -79,12 +140,12 @@ export function PlanigateHeroWidget({ settings: raw }: Props) {
             <motion.h1
               variants={fadeUp}
               style={{
-                color: "var(--color-planigate-fg)",
+                color: "#ffffff",
                 fontFamily:
                   "var(--font-serif), 'Cormorant Garamond', 'Playfair Display', Georgia, serif",
                 fontWeight: 500,
-                fontSize: "clamp(3rem, 5.5vw, 4.5rem)",
-                lineHeight: 1.0,
+                fontSize: "clamp(2.75rem, 5.5vw, 4.25rem)",
+                lineHeight: 1.02,
                 letterSpacing: "-0.01em",
               }}
             >
@@ -95,7 +156,7 @@ export function PlanigateHeroWidget({ settings: raw }: Props) {
               <span
                 style={{
                   fontStyle: "italic",
-                  color: "var(--color-planigate-accent)",
+                  color: "#E8C97A",
                 }}
               >
                 {settings.headingPart2}
@@ -105,7 +166,7 @@ export function PlanigateHeroWidget({ settings: raw }: Props) {
             <motion.p
               variants={fadeUp}
               className="mt-5 max-w-[360px] text-[14px] sm:text-[15px] leading-relaxed"
-              style={{ color: "var(--color-planigate-fg-muted)" }}
+              style={{ color: "rgba(255,255,255,0.82)" }}
             >
               {settings.subtitle}
             </motion.p>
@@ -157,7 +218,7 @@ export function PlanigateHeroWidget({ settings: raw }: Props) {
               {/* Count */}
               <span
                 className="text-[13px] font-medium"
-                style={{ color: "var(--color-planigate-fg)" }}
+                style={{ color: "#ffffff" }}
               >
                 {settings.ratingCountText}
               </span>
@@ -170,7 +231,7 @@ export function PlanigateHeroWidget({ settings: raw }: Props) {
               />
               <span
                 className="text-[13px] max-w-[200px] leading-tight"
-                style={{ color: "var(--color-planigate-fg-muted)" }}
+                style={{ color: "rgba(255,255,255,0.70)" }}
               >
                 {settings.ratingDividerText}
               </span>
@@ -178,7 +239,7 @@ export function PlanigateHeroWidget({ settings: raw }: Props) {
           </motion.div>
 
           {/* RIGHT: image collage */}
-          <div className="relative h-[360px] sm:h-[440px] md:h-[510px] lg:h-[530px] mx-auto w-full max-w-[540px] lg:max-w-none">
+          <div className="relative h-[320px] sm:h-[400px] md:h-[460px] lg:h-[440px] mx-auto w-full max-w-[520px] lg:max-w-none">
             <Collage images={settings.collageImages} />
           </div>
         </div>
@@ -194,6 +255,8 @@ export function PlanigateHeroWidget({ settings: raw }: Props) {
             settings={settings}
             activePill={activePill}
             onPillChange={setActivePill}
+            placeQuery={placeQuery}
+            onPlaceChange={setPlaceQuery}
             serviceQuery={serviceQuery}
             onServiceChange={setServiceQuery}
             locationQuery={locationQuery}
@@ -221,49 +284,49 @@ function Collage({ images }: { images: PlanigateHeroWidgetSettings["collageImage
         show: { transition: { staggerChildren: 0.12, delayChildren: 0.2 } },
       }}
     >
-      {/* couple — left, tall portrait fills most of height */}
+      {/* couple — top left, vertical portrait */}
       <motion.div
         variants={collagePiece(-1)}
         whileHover={{ scale: 1.03, rotate: 0, transition: { duration: 0.4 } }}
-        className="absolute left-0 top-0 w-[44%] h-[85%] rounded-[22px] overflow-hidden shadow-xl ring-1 ring-black/5"
+        className="absolute left-0 top-0 w-[42%] h-[72%] rounded-[22px] overflow-hidden shadow-xl ring-1 ring-black/5"
       >
-        <Image src={images.couple} alt="" fill sizes="(max-width: 1024px) 50vw, 340px" className="object-cover object-top" priority />
+        <Image src={images.couple} alt="" fill sizes="(max-width: 1024px) 50vw, 320px" className="object-cover" priority />
       </motion.div>
 
-      {/* dinner — top right, wide horizontal */}
+      {/* dinner — top right, BIG horizontal */}
       <motion.div
         variants={collagePiece(1)}
         whileHover={{ scale: 1.03, rotate: 0, transition: { duration: 0.4 } }}
-        className="absolute right-0 top-0 w-[54%] h-[46%] rounded-[22px] overflow-hidden shadow-xl ring-1 ring-black/5"
+        className="absolute right-0 top-0 w-[56%] h-[44%] rounded-[22px] overflow-hidden shadow-xl ring-1 ring-black/5"
       >
         <Image src={images.dinner} alt="" fill sizes="(max-width: 1024px) 50vw, 420px" className="object-cover" />
       </motion.div>
 
-      {/* toasting — right, bottom half, flush with right edge */}
+      {/* toasting — right middle, large */}
       <motion.div
         variants={collagePiece(-1)}
         whileHover={{ scale: 1.03, rotate: 0, transition: { duration: 0.4 } }}
-        className="absolute right-0 top-[48%] w-[54%] h-[44%] rounded-[22px] overflow-hidden shadow-2xl ring-1 ring-black/5"
+        className="absolute right-[8%] top-[46%] w-[48%] h-[44%] rounded-[22px] overflow-hidden shadow-2xl ring-1 ring-black/5"
       >
-        <Image src={images.toasting} alt="" fill sizes="(max-width: 1024px) 60vw, 400px" className="object-cover" />
+        <Image src={images.toasting} alt="" fill sizes="(max-width: 1024px) 60vw, 380px" className="object-cover" />
       </motion.div>
 
-      {/* laptop — floating overlay, center-bottom */}
+      {/* laptop — overlay, center-bottom, larger */}
       <motion.div
         variants={collagePiece(-2)}
         whileHover={{ scale: 1.05, rotate: 0, y: -4, transition: { duration: 0.4 } }}
         animate={{ y: [0, -3, 0], transition: { duration: 5, repeat: Infinity, ease: "easeInOut" } }}
-        className="absolute left-[6%] bottom-[3%] w-[48%] h-[33%] rounded-2xl overflow-hidden shadow-2xl ring-1 ring-black/10 bg-white"
+        className="absolute left-[10%] bottom-[8%] w-[46%] h-[30%] rounded-2xl overflow-hidden shadow-2xl ring-1 ring-black/10 bg-card"
       >
-        <Image src={images.laptop} alt="" fill sizes="(max-width: 1024px) 40vw, 370px" className="object-cover" />
+        <Image src={images.laptop} alt="" fill sizes="(max-width: 1024px) 40vw, 360px" className="object-cover" />
       </motion.div>
 
-      {/* phone — far right overlay */}
+      {/* phone — overlay, far right edge */}
       <motion.div
         variants={collagePiece(8)}
         whileHover={{ scale: 1.08, rotate: 4, transition: { duration: 0.4 } }}
         animate={{ y: [0, 4, 0], transition: { duration: 4, repeat: Infinity, ease: "easeInOut", delay: 1 } }}
-        className="absolute right-[-2%] bottom-[3%] w-[18%] h-[44%] rounded-[26px] overflow-hidden shadow-2xl ring-[3px] ring-white"
+        className="absolute right-[-2%] bottom-[8%] w-[19%] h-[38%] rounded-[26px] overflow-hidden shadow-2xl ring-[3px] ring-white"
       >
         <Image src={images.phone} alt="" fill sizes="(max-width: 1024px) 20vw, 150px" className="object-cover" />
       </motion.div>
@@ -279,6 +342,8 @@ interface SearchModuleProps {
   settings: PlanigateHeroWidgetSettings;
   activePill: string;
   onPillChange: (value: string) => void;
+  placeQuery: string;
+  onPlaceChange: (value: string) => void;
   serviceQuery: string;
   onServiceChange: (value: string) => void;
   locationQuery: string;
@@ -289,6 +354,8 @@ function SearchModule({
   settings,
   activePill,
   onPillChange,
+  placeQuery,
+  onPlaceChange,
   serviceQuery,
   onServiceChange,
   locationQuery,
@@ -296,9 +363,26 @@ function SearchModule({
 }: SearchModuleProps) {
   const router = useRouter();
 
+  const [placeOptions, setPlaceOptions] = useState<SearchOption[]>([]);
+  const [serviceOptions, setServiceOptions] = useState<SearchOption[]>([]);
+  const [locationOptions, setLocationOptions] = useState<SearchOption[]>([]);
+
+  useEffect(() => {
+    Promise.all([
+      fetch("/api/search-options?type=PLACE").then((r) => r.json()),
+      fetch("/api/search-options?type=SERVICE").then((r) => r.json()),
+      fetch("/api/search-options?type=LOCATION").then((r) => r.json()),
+    ]).then(([places, services, locations]) => {
+      if (Array.isArray(places)) setPlaceOptions(places);
+      if (Array.isArray(services)) setServiceOptions(services);
+      if (Array.isArray(locations)) setLocationOptions(locations);
+    }).catch(() => {});
+  }, []);
+
   const handleStart = () => {
     const params = new URLSearchParams();
     if (activePill) params.set("type", activePill);
+    if (placeQuery) params.set("place", placeQuery);
     if (serviceQuery) params.set("service", serviceQuery);
     if (locationQuery) params.set("location", locationQuery);
     const qs = params.toString();
@@ -308,14 +392,18 @@ function SearchModule({
 
   return (
     <div
-      className="w-full rounded-[28px] shadow-[0_30px_60px_-20px_rgba(80,60,30,0.18)] ring-1 ring-black/[0.04] px-5 sm:px-8 pt-6 sm:pt-7 pb-5 sm:pb-6"
-      style={{ background: "var(--color-planigate-surface)" }}
+      className="w-full rounded-[28px] shadow-[0_30px_60px_-20px_rgba(0,0,0,0.35)] px-5 sm:px-8 pt-6 sm:pt-7 pb-5 sm:pb-6"
+      style={{
+        background: "rgba(255,255,255,0.15)",
+        backdropFilter: "blur(20px)",
+        WebkitBackdropFilter: "blur(20px)",
+      }}
     >
       {/* "Vad planerar du?" + pills */}
       <div>
         <div
           className="text-[13px] font-medium"
-          style={{ color: "var(--color-planigate-fg)" }}
+          style={{ color: "#ffffff" }}
         >
           {settings.searchHeading}
         </div>
@@ -332,63 +420,47 @@ function SearchModule({
       </div>
 
       {/* Inputs row */}
-      <div className="mt-5 grid grid-cols-1 md:grid-cols-[1fr_1fr_auto] gap-3">
-        {/* Service input */}
+      <div className="mt-5 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-[1fr_1fr_1fr_auto] gap-3">
+        {/* Place dropdown */}
         <div>
-          <label
-            className="block text-xs font-medium mb-1.5"
-            style={{ color: "var(--color-planigate-fg-muted)" }}
-          >
-            {settings.serviceInputLabel}
+          <label className="block text-xs font-medium mb-1.5" style={{ color: "rgba(255,255,255,0.75)" }}>
+            {settings.placeInputLabel}
           </label>
-          <div className="relative">
-            <Search
-              className="absolute left-3.5 top-1/2 -translate-y-1/2"
-              size={16}
-              style={{ color: "var(--color-planigate-fg-placeholder)" }}
-            />
-            <input
-              type="text"
-              value={serviceQuery}
-              onChange={(e) => onServiceChange(e.target.value)}
-              placeholder={settings.serviceInputPlaceholder}
-              className="planigate-input w-full h-[50px] rounded-[14px] border pl-10 pr-4 text-sm focus:outline-none transition"
-              style={{
-                borderColor: "var(--color-planigate-border)",
-                backgroundColor: "var(--color-planigate-bg-input)",
-                color: "var(--color-planigate-fg)",
-              }}
-            />
-          </div>
+          <PlanigateDropdown
+            options={placeOptions}
+            value={placeQuery}
+            onChange={onPlaceChange}
+            placeholder={settings.placeInputPlaceholder}
+            icon={<Building2 size={16} style={{ color: "rgba(255,255,255,0.5)", flexShrink: 0 }} />}
+          />
         </div>
 
-        {/* Location input */}
+        {/* Service dropdown */}
         <div>
-          <label
-            className="block text-xs font-medium mb-1.5"
-            style={{ color: "var(--color-planigate-fg-muted)" }}
-          >
+          <label className="block text-xs font-medium mb-1.5" style={{ color: "rgba(255,255,255,0.75)" }}>
+            {settings.serviceInputLabel}
+          </label>
+          <PlanigateDropdown
+            options={serviceOptions}
+            value={serviceQuery}
+            onChange={onServiceChange}
+            placeholder={settings.serviceInputPlaceholder}
+            icon={<Briefcase size={16} style={{ color: "rgba(255,255,255,0.5)", flexShrink: 0 }} />}
+          />
+        </div>
+
+        {/* Location grouped dropdown */}
+        <div>
+          <label className="block text-xs font-medium mb-1.5" style={{ color: "rgba(255,255,255,0.75)" }}>
             {settings.locationInputLabel}
           </label>
-          <div className="relative">
-            <MapPin
-              className="absolute left-3.5 top-1/2 -translate-y-1/2"
-              size={16}
-              style={{ color: "var(--color-planigate-fg-placeholder)" }}
-            />
-            <input
-              type="text"
-              value={locationQuery}
-              onChange={(e) => onLocationChange(e.target.value)}
-              placeholder={settings.locationInputPlaceholder}
-              className="planigate-input w-full h-[50px] rounded-[14px] border pl-10 pr-4 text-sm focus:outline-none transition"
-              style={{
-                borderColor: "var(--color-planigate-border)",
-                backgroundColor: "var(--color-planigate-bg-input)",
-                color: "var(--color-planigate-fg)",
-              }}
-            />
-          </div>
+          <PlanigateGroupedDropdown
+            options={locationOptions}
+            value={locationQuery}
+            onChange={onLocationChange}
+            placeholder={settings.locationInputPlaceholder}
+            icon={<MapPin size={16} style={{ color: "rgba(255,255,255,0.5)", flexShrink: 0 }} />}
+          />
         </div>
 
         {/* CTA button */}
@@ -402,7 +474,6 @@ function SearchModule({
             className="group relative inline-flex items-center justify-center gap-2 h-[50px] rounded-[14px] px-6 text-sm font-medium text-white w-full md:w-auto whitespace-nowrap overflow-hidden"
             style={{ backgroundColor: "var(--color-planigate-fg)" }}
           >
-            {/* shimmer */}
             <span className="absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/15 to-transparent transition-transform duration-700 group-hover:translate-x-full" />
             <span className="relative">{settings.ctaText}</span>
             <ArrowRight size={16} className="relative transition-transform duration-300 group-hover:translate-x-1" />
@@ -415,18 +486,282 @@ function SearchModule({
         <Link
           href={settings.exploreLinkHref}
           className="group inline-flex items-center gap-1.5 text-sm font-medium transition-colors"
-          style={{ color: "var(--color-planigate-fg-strong)" }}
+          style={{ color: "rgba(255,255,255,0.90)" }}
         >
           <span className="relative">
             {settings.exploreLinkText}
             <span
               className="absolute left-0 -bottom-0.5 h-px w-0 transition-all duration-300 group-hover:w-full"
-              style={{ backgroundColor: "var(--color-planigate-fg)" }}
+              style={{ backgroundColor: "#ffffff" }}
             />
           </span>
           <ArrowRight size={14} className="transition-transform duration-300 group-hover:translate-x-0.5" />
         </Link>
       </div>
+    </div>
+  );
+}
+
+// ─────────────────────────────────────────────
+// Shared glass dropdown styles
+// ─────────────────────────────────────────────
+
+const GLASS_DROPDOWN: React.CSSProperties = {
+  background: "rgba(20,20,20,0.88)",
+  backdropFilter: "blur(24px)",
+  WebkitBackdropFilter: "blur(24px)",
+  border: "1px solid rgba(255,255,255,0.12)",
+  boxShadow: "0 20px 48px rgba(0,0,0,0.5)",
+  borderRadius: "16px",
+};
+
+interface PlanigateDropdownProps {
+  options: SearchOption[];
+  value: string;
+  onChange: (val: string) => void;
+  placeholder: string;
+  icon: React.ReactNode;
+}
+
+// ─────────────────────────────────────────────
+// Planigate-styled dropdown (Place & Service)
+// ─────────────────────────────────────────────
+
+function PlanigateDropdown({ options, value, onChange, placeholder, icon }: PlanigateDropdownProps) {
+  const [open, setOpen] = useState(false);
+  const [pos, setPos] = useState({ top: 0, left: 0, width: 0 });
+  const wrapRef = useRef<HTMLDivElement>(null);
+  const btnRef = useRef<HTMLButtonElement>(null);
+  const selected = options.find((o) => o.name === value);
+
+  function handleOpen() {
+    if (btnRef.current) {
+      const r = btnRef.current.getBoundingClientRect();
+      setPos({ top: r.bottom + 6, left: r.left, width: r.width });
+    }
+    setOpen((p) => !p);
+  }
+
+  useEffect(() => {
+    function onOutside(e: MouseEvent) {
+      if (wrapRef.current && !wrapRef.current.contains(e.target as Node)) setOpen(false);
+    }
+    function onClose() { setOpen(false); }
+    document.addEventListener("mousedown", onOutside);
+    window.addEventListener("scroll", onClose, true);
+    window.addEventListener("resize", onClose);
+    return () => {
+      document.removeEventListener("mousedown", onOutside);
+      window.removeEventListener("scroll", onClose, true);
+      window.removeEventListener("resize", onClose);
+    };
+  }, []);
+
+  return (
+    <div ref={wrapRef} className="relative">
+      <button
+        ref={btnRef}
+        type="button"
+        onClick={handleOpen}
+        className="w-full h-[50px] rounded-[14px] border flex items-center gap-2.5 px-3.5 text-sm transition-colors text-left"
+        style={{
+          backgroundColor: "rgba(255,255,255,0.12)",
+          borderColor: open ? "#E8C97A" : "rgba(255,255,255,0.25)",
+          color: selected ? "#ffffff" : "rgba(255,255,255,0.5)",
+        }}
+      >
+        {icon}
+        <span className="flex-1 truncate">{selected ? selected.name : placeholder}</span>
+        <ChevronDown
+          size={14}
+          style={{
+            color: "rgba(255,255,255,0.4)",
+            flexShrink: 0,
+            transform: open ? "rotate(180deg)" : "rotate(0deg)",
+            transition: "transform 0.2s",
+          }}
+        />
+      </button>
+
+      {open && typeof document !== "undefined" && createPortal(
+        <div
+          style={{
+            ...GLASS_DROPDOWN,
+            position: "fixed",
+            top: pos.top,
+            left: pos.left,
+            width: pos.width,
+            zIndex: 9999,
+            maxHeight: "260px",
+            overflowY: "auto",
+          }}
+        >
+          {options.length === 0 ? (
+            <p className="py-4 text-center text-xs" style={{ color: "rgba(255,255,255,0.4)" }}>No options</p>
+          ) : (
+            <div className="p-1.5">
+              {options.map((opt) => {
+                const IconComp = getOptionIcon(opt.icon);
+                const isSelected = opt.name === value;
+                return (
+                  <button
+                    key={opt.id}
+                    type="button"
+                    onMouseDown={(e) => { e.preventDefault(); onChange(opt.name); setOpen(false); }}
+                    className="w-full flex items-center gap-2.5 px-3 py-2 rounded-xl text-sm text-left transition-colors"
+                    style={{
+                      color: isSelected ? "#E8C97A" : "rgba(255,255,255,0.85)",
+                      backgroundColor: isSelected ? "rgba(232,201,122,0.15)" : "transparent",
+                    }}
+                    onMouseEnter={(e) => { if (!isSelected) e.currentTarget.style.backgroundColor = "rgba(255,255,255,0.08)"; }}
+                    onMouseLeave={(e) => { if (!isSelected) e.currentTarget.style.backgroundColor = "transparent"; }}
+                  >
+                    {IconComp
+                      ? <IconComp size={15} style={{ color: "#E8C97A", flexShrink: 0 }} strokeWidth={1.75} />
+                      : <span className="w-[15px] shrink-0" />
+                    }
+                    {opt.name}
+                  </button>
+                );
+              })}
+            </div>
+          )}
+        </div>,
+        document.body
+      )}
+    </div>
+  );
+}
+
+// ─────────────────────────────────────────────
+// Planigate-styled grouped dropdown (Location)
+// ─────────────────────────────────────────────
+
+function PlanigateGroupedDropdown({ options, value, onChange, placeholder, icon }: PlanigateDropdownProps) {
+  const [open, setOpen] = useState(false);
+  const [activeTab, setActiveTab] = useState<"Sweden" | "International">("Sweden");
+  const [pos, setPos] = useState({ top: 0, left: 0, width: 0 });
+  const wrapRef = useRef<HTMLDivElement>(null);
+  const btnRef = useRef<HTMLButtonElement>(null);
+  const selected = options.find((o) => o.name === value);
+  const tabOptions = options.filter((o) => o.group === activeTab);
+
+  function handleOpen() {
+    if (btnRef.current) {
+      const r = btnRef.current.getBoundingClientRect();
+      setPos({ top: r.bottom + 6, left: r.left, width: r.width });
+    }
+    setOpen((p) => !p);
+  }
+
+  useEffect(() => {
+    function onOutside(e: MouseEvent) {
+      if (wrapRef.current && !wrapRef.current.contains(e.target as Node)) setOpen(false);
+    }
+    function onClose() { setOpen(false); }
+    document.addEventListener("mousedown", onOutside);
+    window.addEventListener("scroll", onClose, true);
+    window.addEventListener("resize", onClose);
+    return () => {
+      document.removeEventListener("mousedown", onOutside);
+      window.removeEventListener("scroll", onClose, true);
+      window.removeEventListener("resize", onClose);
+    };
+  }, []);
+
+  return (
+    <div ref={wrapRef} className="relative">
+      <button
+        ref={btnRef}
+        type="button"
+        onClick={handleOpen}
+        className="w-full h-[50px] rounded-[14px] border flex items-center gap-2.5 px-3.5 text-sm transition-colors text-left"
+        style={{
+          backgroundColor: "rgba(255,255,255,0.12)",
+          borderColor: open ? "#E8C97A" : "rgba(255,255,255,0.25)",
+          color: selected ? "#ffffff" : "rgba(255,255,255,0.5)",
+        }}
+      >
+        {icon}
+        <span className="flex-1 truncate">{selected ? selected.name : placeholder}</span>
+        <ChevronDown
+          size={14}
+          style={{
+            color: "rgba(255,255,255,0.4)",
+            flexShrink: 0,
+            transform: open ? "rotate(180deg)" : "rotate(0deg)",
+            transition: "transform 0.2s",
+          }}
+        />
+      </button>
+
+      {open && typeof document !== "undefined" && createPortal(
+        <div
+          style={{
+            ...GLASS_DROPDOWN,
+            position: "fixed",
+            top: pos.top,
+            left: pos.left,
+            width: pos.width,
+            zIndex: 9999,
+          }}
+        >
+          {/* Tabs */}
+          <div className="flex" style={{ borderBottom: "1px solid rgba(255,255,255,0.1)" }}>
+            {(["Sweden", "International"] as const).map((tab) => (
+              <button
+                key={tab}
+                type="button"
+                onMouseDown={(e) => { e.preventDefault(); setActiveTab(tab); }}
+                className="flex-1 flex items-center justify-center gap-1 py-2.5 text-xs font-semibold transition-colors"
+                style={{
+                  color: activeTab === tab ? "#E8C97A" : "rgba(255,255,255,0.45)",
+                  borderBottom: activeTab === tab ? "2px solid #E8C97A" : "2px solid transparent",
+                  background: "none",
+                }}
+              >
+                {tab === "Sweden" ? <MapPin size={11} /> : <Globe size={11} />}
+                {tab}
+              </button>
+            ))}
+          </div>
+
+          {/* Options */}
+          <div style={{ maxHeight: "220px", overflowY: "auto" }}>
+            {tabOptions.length === 0 ? (
+              <p className="py-4 text-center text-xs" style={{ color: "rgba(255,255,255,0.4)" }}>No options</p>
+            ) : (
+              <div className="p-1.5">
+                {tabOptions.map((opt) => {
+                  const IconComp = getOptionIcon(opt.icon);
+                  const isSelected = opt.name === value;
+                  return (
+                    <button
+                      key={opt.id}
+                      type="button"
+                      onMouseDown={(e) => { e.preventDefault(); onChange(opt.name); setOpen(false); }}
+                      className="w-full flex items-center gap-2.5 px-3 py-2 rounded-xl text-sm text-left transition-colors"
+                      style={{
+                        color: isSelected ? "#E8C97A" : "rgba(255,255,255,0.85)",
+                        backgroundColor: isSelected ? "rgba(232,201,122,0.15)" : "transparent",
+                      }}
+                      onMouseEnter={(e) => { if (!isSelected) e.currentTarget.style.backgroundColor = "rgba(255,255,255,0.08)"; }}
+                      onMouseLeave={(e) => { if (!isSelected) e.currentTarget.style.backgroundColor = "transparent"; }}
+                    >
+                      {IconComp
+                        ? <IconComp size={15} style={{ color: "#E8C97A", flexShrink: 0 }} strokeWidth={1.75} />
+                        : <span className="w-[15px] shrink-0" />
+                      }
+                      {opt.name}
+                    </button>
+                  );
+                })}
+              </div>
+            )}
+          </div>
+        </div>,
+        document.body
+      )}
     </div>
   );
 }
@@ -444,19 +779,15 @@ function Pill({
     <motion.button
       type="button"
       onClick={onClick}
-      whileHover={{ scale: 1.04, y: -2 }}
+      whileHover={{ scale: 1.04, y: -2, color: "#E8C97A", borderColor: "#E8C97A" }}
       whileTap={{ scale: 0.96 }}
       transition={{ duration: 0.15 }}
-      className="group flex flex-col items-center justify-center gap-1.5 h-[68px] rounded-[14px] text-[12px] font-medium transition-colors border hover:shadow-sm"
+      className="group flex flex-col items-center justify-center gap-1.5 h-[68px] rounded-[14px] text-[12px] font-medium border hover:shadow-sm"
       style={{
-        backgroundColor: "var(--color-planigate-surface)",
-        borderColor: active
-          ? "var(--color-planigate-fg)"
-          : "var(--color-planigate-border)",
-        color: active
-          ? "var(--color-planigate-fg)"
-          : "var(--color-planigate-fg-strong)",
-        boxShadow: active ? "0 1px 2px 0 rgba(0,0,0,0.05)" : undefined,
+        backgroundColor: active ? "rgba(232,201,122,0.15)" : "rgba(255,255,255,0.10)",
+        borderColor: active ? "#E8C97A" : "rgba(255,255,255,0.25)",
+        color: active ? "#E8C97A" : "#ffffff",
+        boxShadow: active ? "0 0 0 1px rgba(232,201,122,0.3)" : undefined,
       }}
     >
       <PillIcon

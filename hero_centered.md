@@ -26,7 +26,7 @@ STYLE TAB:
 └── Title Section
 ├── Title Color (color picker)
 └── Typography
-Current LLCPad Structure vs Recommended:
+Current Weeding Ceremony Structure vs Recommended:
 Current (Style Tab এ আছে):
 
 STYLE TAB > Trust Indicators:

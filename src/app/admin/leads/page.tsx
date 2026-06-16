@@ -144,21 +144,21 @@ const DEFAULT_COLUMNS: ColumnConfig = {
 };
 
 const statusColors: Record<string, string> = {
-  NEW: "bg-blue-100 text-blue-700",
-  CONTACTED: "bg-purple-100 text-purple-700",
-  QUALIFIED: "bg-emerald-100 text-emerald-700",
-  PROPOSAL: "bg-amber-100 text-amber-700",
-  NEGOTIATION: "bg-orange-100 text-orange-700",
-  WON: "bg-green-100 text-green-700",
-  LOST: "bg-red-100 text-red-700",
-  UNQUALIFIED: "bg-gray-100 text-gray-700",
+  NEW:         "admin-status-info",
+  CONTACTED:   "admin-status-hold",
+  QUALIFIED:   "admin-status-success",
+  PROPOSAL:    "admin-status-warning",
+  NEGOTIATION: "admin-status-processing",
+  WON:         "admin-status-success",
+  LOST:        "admin-status-error",
+  UNQUALIFIED: "admin-status-neutral",
 };
 
 const priorityColors: Record<string, string> = {
-  LOW: "bg-gray-100 text-gray-700",
-  MEDIUM: "bg-blue-100 text-blue-700",
-  HIGH: "bg-orange-100 text-orange-700",
-  URGENT: "bg-red-500 text-white",
+  LOW:    "admin-status-neutral",
+  MEDIUM: "admin-status-info",
+  HIGH:   "admin-status-processing",
+  URGENT: "admin-status-urgent",
 };
 
 const sourceLabels: Record<string, string> = {
@@ -174,9 +174,9 @@ const sourceLabels: Record<string, string> = {
 };
 
 function getScoreIcon(score: number) {
-  if (score >= 70) return <Flame className="h-4 w-4 text-red-500" />;
-  if (score >= 40) return <Thermometer className="h-4 w-4 text-orange-500" />;
-  return <Snowflake className="h-4 w-4 text-blue-500" />;
+  if (score >= 70) return <Flame className="h-4 w-4 text-[var(--ast-error-icon)]" />;
+  if (score >= 40) return <Thermometer className="h-4 w-4 text-[var(--ast-processing-icon)]" />;
+  return <Snowflake className="h-4 w-4 text-[var(--ast-info-icon)]" />;
 }
 
 function getScoreLabel(score: number) {
@@ -698,7 +698,7 @@ export default function LeadsPage() {
             <CardHeader className="pb-2">
               <CardDescription>Hot Leads</CardDescription>
               <CardTitle className="text-3xl flex items-center gap-2">
-                <Flame className="h-6 w-6 text-red-500" />
+                <Flame className="h-6 w-6 text-[var(--ast-error-icon)]" />
                 {stats.overview.hotLeads}
               </CardTitle>
             </CardHeader>
@@ -1052,7 +1052,7 @@ export default function LeadsPage() {
             <AlertDialogAction
               onClick={handleDeleteLead}
               disabled={deleting}
-              className="bg-red-600 hover:bg-red-700"
+              className="bg-[var(--ast-error-icon)] hover:bg-[var(--ast-error-text)]"
             >
               {deleting && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
               Delete
@@ -1076,7 +1076,7 @@ export default function LeadsPage() {
             <AlertDialogAction
               onClick={() => handleBulkAction("delete")}
               disabled={bulkActioning}
-              className="bg-red-600 hover:bg-red-700"
+              className="bg-[var(--ast-error-icon)] hover:bg-[var(--ast-error-text)]"
             >
               {bulkActioning && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
               Delete All
@@ -1363,7 +1363,7 @@ export default function LeadsPage() {
                             </DropdownMenuItem>
                             <DropdownMenuSeparator />
                             <DropdownMenuItem
-                              className="text-red-600"
+                              className="text-[var(--ast-error-text)]"
                               onClick={() => openDeleteDialog(lead)}
                             >
                               <Trash2 className="mr-2 h-4 w-4" />

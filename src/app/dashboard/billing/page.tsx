@@ -73,10 +73,10 @@ interface BillingHistoryItem {
 }
 
 const cardBrands: Record<string, { name: string; color: string }> = {
-  visa: { name: "Visa", color: "bg-blue-600" },
-  mastercard: { name: "Mastercard", color: "bg-red-500" },
-  amex: { name: "American Express", color: "bg-blue-400" },
-  discover: { name: "Discover", color: "bg-orange-500" },
+  visa: { name: "Visa", color: "bg-primary" },
+  mastercard: { name: "Mastercard", color: "bg-[var(--color-error-text)]" },
+  amex: { name: "American Express", color: "bg-primary/70" },
+  discover: { name: "Discover", color: "bg-[var(--color-warning-text)]" },
 };
 
 export default function BillingPage() {
@@ -358,7 +358,7 @@ export default function BillingPage() {
                         setAsDefault: e.target.checked,
                       }))
                     }
-                    className="h-4 w-4 rounded border-gray-300"
+                    className="h-4 w-4 rounded border-border"
                   />
                   <Label htmlFor="setAsDefault" className="text-sm font-normal">
                     Set as default payment method
@@ -396,7 +396,7 @@ export default function BillingPage() {
               {paymentMethods.map((method) => {
                 const brandInfo = cardBrands[method.brand || ""] || {
                   name: "Card",
-                  color: "bg-gray-600",
+                  color: "bg-foreground/60",
                 };
                 return (
                   <div
@@ -405,7 +405,7 @@ export default function BillingPage() {
                   >
                     <div className="flex items-center gap-4">
                       <div
-                        className={`flex h-10 w-16 items-center justify-center rounded ${brandInfo.color} text-white text-xs font-bold`}
+                        className={`flex h-10 w-16 items-center justify-center rounded ${brandInfo.color} text-primary-foreground text-xs font-bold`}
                       >
                         {brandInfo.name}
                       </div>
@@ -495,7 +495,7 @@ export default function BillingPage() {
                   className="flex items-center justify-between rounded-lg border p-4"
                 >
                   <div className="flex items-center gap-4">
-                    <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-green-100 text-green-600">
+                    <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-[var(--color-success-bg)] text-[var(--color-success-text)]">
                       <Receipt className="h-5 w-5" />
                     </div>
                     <div>

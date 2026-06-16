@@ -657,7 +657,7 @@ A lightweight client-side language system has been implemented as a stepping sto
 | `src/app/layout.tsx` | Wrapped with `<LanguageProvider>` |
 
 **How it works now:**
-- Language stored in `localStorage` key `llcpad_lang`
+- Language stored in `localStorage` key `weeding_ceremony_lang`
 - `document.documentElement.lang` and `dir` updated on switch (RTL for Arabic)
 - `useLanguage()` exposes `t(key, vars?)` translation function
 - Footer shows modal overlay with flag grid (matching design reference)
@@ -898,10 +898,10 @@ SENTRY_DSN=""
 
 ## 15. Development Phases — Implementation Tracker
 
-> **Platform:** Ceremoney — rebranded from LLCPad (Next.js 15, App Router, Prisma 7, NextAuth v5). Repo: https://github.com/sajeebce/weeding.git
+> **Platform:** Ceremoney — rebranded from Weeding Ceremony (Next.js 15, App Router, Prisma 7, NextAuth v5). Repo: https://github.com/sajeebce/weeding.git
 > **Approach:** Each phase follows — Codebase Analysis → Fullstack Implementation (DB + API + UI) → Checklist Verification → Cleanup
 > **Theme Binding:** Landing page content bound to active theme (reset-safe). App routes use theme colors via CSS variables.
-> **DB:** PostgreSQL database `llcpad` (local dev) → will rename to `ceremoney` in production. Old LMS tables (Course, Certificate, Enrollment, etc.) dropped via `db push --accept-data-loss` on 2026-04-07.
+> **DB:** PostgreSQL database `weeding-ceremony` (local dev) → will rename to `ceremoney` in production. Old LMS tables (Course, Certificate, Enrollment, etc.) dropped via `db push --accept-data-loss` on 2026-04-07.
 
 ---
 
@@ -2814,7 +2814,7 @@ Implemented full internationalization coverage across all previously untranslate
 
 **Session log (2026-04-07, session 4 — Ceremoney Rebranding + DB Fix + Dashboard):**
 
-- **Full Ceremoney rebranding:** Removed all LLCPad references across 80+ files. Updated: `package.json` (name/description/repo), `next.config.ts` (image domains → ceremoney.com, AWS), `.env.example` (added Swish, Klarna, 46elks, AWS S3/CloudFront, Redis), `src/lib/business-settings.ts` (default fallbacks), `src/lib/seo.ts`, `src/lib/email*.ts`, `src/lib/encryption.ts` (salt), `src/lib/i18n/language-context.tsx` (storage key), `src/lib/paypal.ts`, `src/app/layout.tsx` (metadata), `src/app/robots.ts`, `src/app/sitemap.ts`, `CLAUDE.md` (full rewrite), all marketing pages, admin files, seed files, data files.
+- **Full Ceremoney rebranding:** Removed all Weeding Ceremony references across 80+ files. Updated: `package.json` (name/description/repo), `next.config.ts` (image domains → ceremoney.com, AWS), `.env.example` (added Swish, Klarna, 46elks, AWS S3/CloudFront, Redis), `src/lib/business-settings.ts` (default fallbacks), `src/lib/seo.ts`, `src/lib/email*.ts`, `src/lib/encryption.ts` (salt), `src/lib/i18n/language-context.tsx` (storage key), `src/lib/paypal.ts`, `src/app/layout.tsx` (metadata), `src/app/robots.ts`, `src/app/sitemap.ts`, `CLAUDE.md` (full rewrite), all marketing pages, admin files, seed files, data files.
 - **Deleted:** `src/app/(marketing)/llc/` directory (all LLC state pages — not needed for Ceremoney).
 - **Logo created:** `public/logo.svg` (interlocked wedding rings + sparkle + "Ceremoney" wordmark), `public/logo-icon.svg` (icon only). DB updated: `business.logo.url = /logo.svg`, `business.favicon.url = /logo-icon.svg`.
 - **DB seeded with Ceremoney content:** Re-ran `npx tsx prisma/seed-header-footer.ts` → header nav (Home/Features/Vendors/Pricing/Blog/Contact), footer (5 widgets: Brand/Features/Event Types/Company/Legal), mega menu with 4 categories. Business settings updated: name=Ceremoney, currency=SEK, country=Sweden, etc.

@@ -109,19 +109,19 @@ export function ScrollToTop() {
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
-        background: "linear-gradient(135deg, #a855f7, #ec4899)",
-        boxShadow: "0 4px 20px rgba(168,85,247,0.45)",
+        background: "linear-gradient(135deg, #8A6F3E, #E4A93B)",
+        boxShadow: "0 4px 20px rgba(138,111,62,0.45)",
         transition: "transform 0.3s ease, opacity 0.3s ease, box-shadow 0.2s ease",
         transform: isVisible ? "translateY(0)" : "translateY(64px)",
         opacity: isVisible ? 1 : 0,
         pointerEvents: isVisible ? "auto" : "none",
       }}
       onMouseEnter={(e) => {
-        (e.currentTarget as HTMLButtonElement).style.boxShadow = "0 6px 28px rgba(168,85,247,0.6)";
+        (e.currentTarget as HTMLButtonElement).style.boxShadow = "0 6px 28px rgba(138,111,62,0.6)";
         (e.currentTarget as HTMLButtonElement).style.transform = isVisible ? "translateY(-2px)" : "translateY(64px)";
       }}
       onMouseLeave={(e) => {
-        (e.currentTarget as HTMLButtonElement).style.boxShadow = "0 4px 20px rgba(168,85,247,0.45)";
+        (e.currentTarget as HTMLButtonElement).style.boxShadow = "0 4px 20px rgba(138,111,62,0.45)";
         (e.currentTarget as HTMLButtonElement).style.transform = isVisible ? "translateY(0)" : "translateY(64px)";
       }}
       aria-label="Scroll to top"

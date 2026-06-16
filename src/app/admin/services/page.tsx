@@ -369,7 +369,7 @@ export default function AdminServicesPage() {
                               {service.name}
                             </Link>
                             {service.isPopular && (
-                              <Star className="h-4 w-4 fill-yellow-400 text-yellow-400" />
+                              <Star className="h-4 w-4 fill-[var(--admin-star)] text-[var(--admin-star)]" />
                             )}
                           </div>
                           <p className="max-w-xs truncate text-xs text-muted-foreground">
@@ -405,12 +405,8 @@ export default function AdminServicesPage() {
                     </TableCell>
                     <TableCell>
                       <Badge
-                        variant={service.isActive ? "default" : "secondary"}
-                        className={
-                          service.isActive
-                            ? "bg-green-100 text-green-700"
-                            : "bg-gray-100 text-gray-700"
-                        }
+                        variant="outline"
+                        className={service.isActive ? "admin-status-success" : "admin-status-neutral"}
                       >
                         {service.isActive ? "Active" : "Inactive"}
                       </Badge>

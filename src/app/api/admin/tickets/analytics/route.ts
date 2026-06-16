@@ -1,21 +1,9 @@
 import { NextRequest, NextResponse } from "next/server";
 import prisma from "@/lib/db";
-import { requirePluginAccess, hasPluginFeature } from "@/lib/plugin-guard";
 
 // GET - Get ticket analytics
 export async function GET(request: NextRequest) {
   try {
-    // Plugin access check
-    const access = await requirePluginAccess("livesupport-pro");
-
-    // Check if analytics feature is available
-    if (!access.features.includes("analytics")) {
-      return NextResponse.json(
-        { error: "Analytics feature not available in your license tier" },
-        { status: 403 }
-      );
-    }
-
     const { searchParams } = new URL(request.url);
     const range = searchParams.get("range") || "7d";
 

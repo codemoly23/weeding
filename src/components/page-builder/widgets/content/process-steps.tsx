@@ -47,7 +47,7 @@ function getBadgeStyles(
       return {
         className: cn(baseClasses, "rounded-md border-0"),
         style: {
-          backgroundColor: colors.bgColor || "#f97316",
+          backgroundColor: colors.bgColor || "#8A6F3E",
           color: colors.textColor || "#ffffff",
         },
       };
@@ -80,7 +80,7 @@ function renderHighlightedText(
   return parts.map((part, index) => {
     if (part.toLowerCase() === highlightWords.toLowerCase()) {
       return (
-        <span key={index} style={{ color: highlightColor || "#f97316" }}>
+        <span key={index} style={{ color: highlightColor || "#8A6F3E" }}>
           {part}
         </span>
       );
@@ -209,7 +209,7 @@ function HorizontalConnectorLine({ settings, accentColor }: { settings: ProcessS
 
   const animationDuration = speedMap[connector.animationSpeed] || "4s";
   const color = connector.color || "#fde8d7";
-  const secondaryColor = accentColor || connector.secondaryColor || "#f97316";
+  const secondaryColor = accentColor || connector.secondaryColor || "#8A6F3E";
   const direction = "to right";
 
   // Get background styles based on line style
@@ -340,7 +340,7 @@ function HorizontalConnectorLine({ settings, accentColor }: { settings: ProcessS
           style={{
             width: `${connector.dotSize || 8}px`,
             height: `${connector.dotSize || 8}px`,
-            backgroundColor: accentColor || connector.dotColor || "#f97316",
+            backgroundColor: accentColor || connector.dotColor || "#8A6F3E",
             top: "50%",
             marginTop: `-${(connector.dotSize || 8) / 2}px`,
             animation: `dot-travel-h ${animationDuration} linear infinite`,
@@ -374,7 +374,7 @@ function VerticalConnectorLine({
 
   const animationDuration = speedMap[connector.animationSpeed] || "4s";
   const color = connector.color || "#fde8d7";
-  const secondaryColor = accentColor || connector.secondaryColor || "#f97316";
+  const secondaryColor = accentColor || connector.secondaryColor || "#8A6F3E";
   const direction = "to bottom";
 
   // Get background styles based on line style
@@ -503,7 +503,7 @@ function VerticalConnectorLine({
           style={{
             width: `${connector.dotSize || 8}px`,
             height: `${connector.dotSize || 8}px`,
-            backgroundColor: accentColor || connector.dotColor || "#f97316",
+            backgroundColor: accentColor || connector.dotColor || "#8A6F3E",
             left: "50%",
             marginLeft: `-${(connector.dotSize || 8) / 2}px`,
             animation: `dot-travel-v ${animationDuration} linear infinite`,
@@ -727,7 +727,7 @@ function StepItem({
           >
             <Icon
               className={iconSizeClasses[stepIcon.size].icon}
-              style={{ color: stepIcon.iconColor || accentColor || "#f97316" }}
+              style={{ color: stepIcon.iconColor || accentColor || "#8A6F3E" }}
             />
           </div>
 
@@ -739,18 +739,18 @@ function StepItem({
                 numberSizeClasses[stepNumber.size],
                 numberPositionClasses[stepNumber.position],
                 stepNumber.style === "circle" && "rounded-full",
-                stepNumber.style === "circle-outline" && "rounded-full border-2 bg-white",
+                stepNumber.style === "circle-outline" && "rounded-full border-2 bg-card",
                 stepNumber.style === "rounded-square" && "rounded-md",
                 stepNumber.style === "badge" && "rounded-full px-2"
               )}
               style={{
                 backgroundColor: stepNumber.style !== "circle-outline"
-                  ? (accentColor || stepNumber.bgColor || "#f97316")
+                  ? (accentColor || stepNumber.bgColor || "#8A6F3E")
                   : "white",
                 color: stepNumber.style !== "circle-outline"
                   ? (stepNumber.textColor || "#ffffff")
-                  : (accentColor || stepNumber.bgColor || "#f97316"),
-                borderColor: stepNumber.borderColor || accentColor || stepNumber.bgColor || "#f97316",
+                  : (accentColor || stepNumber.bgColor || "#8A6F3E"),
+                borderColor: stepNumber.borderColor || accentColor || stepNumber.bgColor || "#8A6F3E",
               }}
             >
               {step.number ?? index + 1}

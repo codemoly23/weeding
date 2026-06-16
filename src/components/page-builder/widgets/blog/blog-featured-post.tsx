@@ -258,8 +258,8 @@ export function BlogFeaturedPostWidget({
   if (error) {
     return (
       <WidgetContainer container={s.container}>
-      <div className="rounded-lg border border-red-200 bg-red-50 p-6 text-center dark:border-red-900/50 dark:bg-red-900/10">
-        <p className="text-sm text-red-600 dark:text-red-400">{error}</p>
+      <div className="rounded-lg border border-[var(--color-error-text)]/20 bg-[var(--color-error-bg)] p-6 text-center">
+        <p className="text-sm text-[var(--color-error-text)]">{error}</p>
       </div>
       </WidgetContainer>
     );
@@ -307,9 +307,9 @@ export function BlogFeaturedPostWidget({
   const titleColor = s.content.title.color || (isOverlay ? "#ffffff" : "#0f172a");
   const excerptColor = s.content.excerpt.color || (isOverlay ? "rgba(255,255,255,0.8)" : "#64748b");
   const metaTextColor = s.content.meta.textColor || (isOverlay ? "rgba(255,255,255,0.6)" : "#64748b");
-  const metaCategoryColor = s.content.meta.categoryColor || "#e84c1e";
-  const metaDotColor = s.content.meta.dotColor || "#f97316";
-  const readMoreColor = s.content.readMore.color || (isOverlay ? "#ffffff" : "#e84c1e");
+  const metaCategoryColor = s.content.meta.categoryColor || "#8A6F3E";
+  const metaDotColor = s.content.meta.dotColor || "#8A6F3E";
+  const readMoreColor = s.content.readMore.color || (isOverlay ? "#ffffff" : "#8A6F3E");
 
   const contentBlock = (
     <div
@@ -324,8 +324,8 @@ export function BlogFeaturedPostWidget({
           className={cn(
             "inline-block w-fit text-xs font-medium",
             s.content.categoryBadge.style === "pill"
-              ? "rounded-full bg-blue-500/90 px-3 py-1 text-white"
-              : "rounded bg-blue-500/90 px-2 py-0.5 text-white"
+              ? "rounded-full bg-[var(--color-info-text)]/90 px-3 py-1 text-primary-foreground"
+              : "rounded bg-[var(--color-info-text)]/90 px-2 py-0.5 text-primary-foreground"
           )}
         >
           {primaryCategory.name}
@@ -439,7 +439,7 @@ export function BlogFeaturedPostWidget({
             <div
               className="flex h-12 w-12 items-center justify-center rounded-full font-display font-bold text-white text-[18px]"
               style={{
-                background: `linear-gradient(135deg, ${authorSettings.avatarBgFrom || "#f97316"}, ${authorSettings.avatarBgTo || "#e84c1e"})`,
+                background: `linear-gradient(135deg, ${authorSettings.avatarBgFrom || "#8A6F3E"}, ${authorSettings.avatarBgTo || "#1A1A1A"})`,
               }}
             >
               {authorInitials || "•"}
@@ -539,14 +539,14 @@ export function BlogFeaturedPostWidget({
         top: 24,
         left: s.featuredTag.position === "top-right" ? undefined : 24,
         right: s.featuredTag.position === "top-right" ? 24 : undefined,
-        background: s.featuredTag.bgColor || "#e84c1e",
+        background: s.featuredTag.bgColor || "#8A6F3E",
         color: s.featuredTag.textColor || "#ffffff",
         padding: "8px 16px",
         borderRadius: 9999,
         fontSize: 11,
         letterSpacing: s.featuredTag.letterSpacing || "0.08em",
         textTransform: s.featuredTag.uppercase ? "uppercase" : "none",
-        boxShadow: s.featuredTag.shadow || "0 4px 14px rgba(232,76,30,0.4)",
+        boxShadow: s.featuredTag.shadow || "0 4px 14px rgba(138,111,62,0.4)",
       }}
     >
       {s.featuredTag.text}
@@ -592,7 +592,7 @@ export function BlogFeaturedPostWidget({
             className="relative z-[1] font-display font-bold select-none"
             style={{
               fontSize: emblem?.fontSize || 120,
-              color: emblem?.color || "#f97316",
+              color: emblem?.color || "#8A6F3E",
               opacity: emblem?.opacity ?? 0.4,
               letterSpacing: emblem?.letterSpacing || "-0.05em",
               lineHeight: 1,

@@ -107,7 +107,7 @@ export function TestimonialsMarqueeView({
             </p>
 
             {/* Divider */}
-            <div style={{ height: "2px", width: "44px", borderRadius: "999px", background: "linear-gradient(to right, #a855f7, #ec4899)", margin: "18px 0 14px" }} />
+            <div style={{ height: "2px", width: "44px", borderRadius: "999px", background: "linear-gradient(to right, #8A6F3E, #E4A93B)", margin: "18px 0 14px" }} />
 
             {/* Author */}
             <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
@@ -115,7 +115,7 @@ export function TestimonialsMarqueeView({
                 // eslint-disable-next-line @next/next/no-img-element
                 <img src={t.avatar} alt={t.name} style={{ width: 40, height: 40, borderRadius: "9999px", objectFit: "cover", flexShrink: 0 }} />
               ) : (
-                <div style={{ width: 40, height: 40, borderRadius: "9999px", background: "#ec4899", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
+                <div style={{ width: 40, height: 40, borderRadius: "9999px", background: "#E4A93B", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
                   <span style={{ fontSize: "13px", fontWeight: 700, color: "#fff" }}>{getInitials(t.name)}</span>
                 </div>
               )}

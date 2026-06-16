@@ -15,10 +15,10 @@
  * import { verifyPluginAccess } from "@/lib/plugin-guard";
  * import { notFound } from "next/navigation";
  *
- * export default async function TicketsPage() {
- *   const access = await verifyPluginAccess("livesupport-pro");
+ * export default async function PluginPage() {
+ *   const access = await verifyPluginAccess("plugin-slug");
  *   if (!access.allowed) notFound();
- *   return <TicketsContent features={access.features} />;
+ *   return <PluginContent features={access.features} />;
  * }
  * ```
  */
@@ -55,7 +55,7 @@ export interface PluginAccessResult {
  * - Layer 3: Domain lock validation
  * - Layer 4: License expiry check
  *
- * @param pluginSlug - The plugin slug (e.g., "livesupport-pro")
+ * @param pluginSlug - The plugin slug
  * @returns Access result with features if allowed
  */
 export const verifyPluginAccess = cache(

@@ -115,37 +115,48 @@ export async function POST(
 
   const data = parsed.data;
 
-  const guest = await prisma.$transaction(async (tx) => {
-    const created = await tx.weddingGuest.create({
-      data: {
-        projectId: id,
-        firstName: data.firstName,
-        lastName: data.lastName || null,
-        title: data.title || null,
-        side: data.side,
-        relation: data.relation,
-        email: data.email || null,
-        phone: data.phone || null,
-        dietary: data.dietary || null,
-        notes: data.notes || null,
-        hasPlusOne: data.hasPlusOne,
-        plusOneName: data.hasPlusOne ? data.plusOneName || null : null,
-        plusOneMeal: data.hasPlusOne ? data.plusOneMeal || null : null,
-        isChiefGuest: data.isChiefGuest,
-        familyId: data.familyId || null,
-        invitationCode: data.invitationCode || null,
-        invitationSent: data.invitationSent,
-        invitationSentAt: data.invitationSentAt || null,
-      },
+  const guestFields = {
+    firstName: data.firstName,
+    lastName: data.lastName || null,
+    title: data.title || null,
+    side: data.side,
+    relation: data.relation,
+    phone: data.phone || null,
+    dietary: data.dietary || null,
+    notes: data.notes || null,
+    hasPlusOne: data.hasPlusOne,
+    plusOneName: data.hasPlusOne ? data.plusOneName || null : null,
+    plusOneMeal: data.hasPlusOne ? data.plusOneMeal || null : null,
+    isChiefGuest: data.isChiefGuest,
+    familyId: data.familyId || null,
+    invitationCode: data.invitationCode || null,
+    invitationSent: data.invitationSent,
+    invitationSentAt: data.invitationSentAt || null,
+  };
+
+  let guest;
+  try {
+    guest = await prisma.$transaction(async (tx) => {
+      const upserted = data.email
+        ? await tx.weddingGuest.upsert({
+            where: { projectId_email: { projectId: id, email: data.email } },
+            create: { projectId: id, email: data.email, ...guestFields },
+            update: guestFields,
+          })
+        : await tx.weddingGuest.create({
+            data: { projectId: id, email: null, ...guestFields },
+          });
+
+      if (data.tableNumber) {
+        await assignGuestsToTableNumber(tx, id, [upserted.id], data.tableNumber);
+        return tx.weddingGuest.findUniqueOrThrow({ where: { id: upserted.id } });
+      }
+
+      return upserted;
     });
-
-    if (data.tableNumber) {
-      await assignGuestsToTableNumber(tx, id, [created.id], data.tableNumber);
-      return tx.weddingGuest.findUniqueOrThrow({ where: { id: created.id } });
-    }
-
-    return created;
-  });
+  } catch (err: unknown) {
+    return NextResponse.json({ error: "Failed to create guest" }, { status: 500 });
+  }
 
   return NextResponse.json({ guest }, { status: 201 });
 }

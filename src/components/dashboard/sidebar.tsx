@@ -10,11 +10,9 @@ import {
   ChevronLeft,
   ChevronDown,
   ChevronRight,
-  Menu,
   CalendarHeart,
   Plus,
 } from "lucide-react";
-import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { useLanguage } from "@/lib/i18n/language-context";
 import { useBusinessConfig } from "@/hooks/use-business-config";
@@ -87,41 +85,41 @@ export function DashboardSidebar({
   return (
     <aside
       className={cn(
-        "flex h-full flex-col border-r bg-card transition-all duration-300",
+        "relative flex h-full flex-col border-r bg-card transition-all duration-300",
         collapsed ? "w-16" : "w-64",
         mobile && "w-64"
       )}
     >
+      {/* Floating collapse toggle — sits on sidebar right edge, always visible, desktop only */}
+      {!mobile && onToggle && (
+        <button
+          onClick={onToggle}
+          className="absolute -right-3 top-[22px] z-20 hidden h-6 w-6 items-center justify-center rounded-full border bg-card shadow-md transition-colors hover:bg-muted lg:flex"
+          title={collapsed ? "Expand sidebar" : "Collapse sidebar"}
+        >
+          {collapsed ? (
+            <ChevronRight className="h-3 w-3" />
+          ) : (
+            <ChevronLeft className="h-3 w-3" />
+          )}
+        </button>
+      )}
+
       {/* Header */}
-      <div className="flex h-16 items-center justify-between border-b px-4">
-        {!collapsed && (
-          <Link href="/" className="flex items-center space-x-2">
-            <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary">
-              <span className="font-bold text-primary-foreground">{firstLetter}</span>
-            </div>
-            <span className="font-bold">{config.name}</span>
-          </Link>
-        )}
-        {collapsed && (
+      <div className="flex h-16 items-center border-b px-3">
+        {collapsed ? (
           <Link href="/" className="mx-auto">
             <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary">
               <span className="font-bold text-primary-foreground">{firstLetter}</span>
             </div>
           </Link>
-        )}
-        {!mobile && onToggle && (
-          <Button
-            variant="ghost"
-            size="icon"
-            onClick={onToggle}
-            className={cn("shrink-0", collapsed && "mx-auto")}
-          >
-            {collapsed ? (
-              <Menu className="h-4 w-4" />
-            ) : (
-              <ChevronLeft className="h-4 w-4" />
-            )}
-          </Button>
+        ) : (
+          <Link href="/" className="flex items-center space-x-2 overflow-hidden pr-4">
+            <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-primary">
+              <span className="font-bold text-primary-foreground">{firstLetter}</span>
+            </div>
+            <span className="truncate font-bold">{config.name}</span>
+          </Link>
         )}
       </div>
 
@@ -201,7 +199,7 @@ export function DashboardSidebar({
                       >
                         <span className="truncate">{project.title}</span>
                         {project.isLocal && (
-                          <span className="ml-auto shrink-0 rounded text-[10px] text-amber-500">●</span>
+                          <span className="ml-auto shrink-0 rounded text-[10px] text-[var(--color-warning-text)]">●</span>
                         )}
                       </Link>
                     );

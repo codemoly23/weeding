@@ -3,10 +3,11 @@
 import { useMemo } from "react";
 import { useLanguage } from "@/lib/i18n/language-context";
 import type { Section, Widget, SectionBackground, SectionWatermark } from "@/lib/page-builder/types";
-import { DEFAULT_SECTION_BACKGROUND } from "@/lib/page-builder/defaults";
+import { DEFAULT_SECTION_BACKGROUND, WIDGET_DEFAULTS } from "@/lib/page-builder/defaults";
 import { cn } from "@/lib/utils";
 import { getLayoutGridClass, getColumnSpanClasses, getMaxWidthClass } from "@/lib/page-builder/section-layouts";
 import { getPatternCSS, getPatternBackgroundSize } from "@/lib/page-builder/pattern-utils";
+import { DecorativeGlows } from "@/components/page-builder/shared/decorative-glows";
 import {
   HeroContentWidget,
   ImageWidget,
@@ -241,6 +242,12 @@ function SectionRenderer({ section }: SectionRendererProps) {
         />
       )}
 
+      {/* Decorative Glows */}
+      <DecorativeGlows
+        glows={settings.decorativeGlows}
+        borderRadius={innerBorderRadius ? `${innerBorderRadius}px` : undefined}
+      />
+
       {/* Pattern Overlay */}
       {patternOverlay && patternOverlay.opacity > 0 && (
         <div
@@ -397,11 +404,12 @@ interface WidgetRendererProps {
 function WidgetRenderer({ widget }: WidgetRendererProps) {
   const { lang } = useLanguage();
 
-  // Resolve per-widget translations from settings._translations[lang]
-  const resolvedSettings = useMemo(
-    () => resolveWidgetTranslations(widget.settings, lang),
-    [widget.settings, lang]
-  );
+  // Merge stored settings on top of defaults so missing keys never crash widgets
+  const resolvedSettings = useMemo(() => {
+    const defaults = (WIDGET_DEFAULTS[widget.type] as Record<string, unknown>) ?? {};
+    const merged = { ...defaults, ...(widget.settings as Record<string, unknown>) };
+    return resolveWidgetTranslations(merged, lang);
+  }, [widget.settings, widget.type, lang]);
 
   // Get widget spacing styles
   const spacingStyles: React.CSSProperties = {

@@ -714,7 +714,7 @@ export function LiveChatDashboardClient({
             <MessageCircle className="h-16 w-16 text-muted-foreground/30 mb-4" />
             <h3 className="text-lg font-semibold mb-2">Upgrade Required</h3>
             <p className="text-muted-foreground text-center max-w-md mb-4">
-              Upgrade your LiveSupport Pro license to access real-time chat
+              Enable chat access to use real-time support
               features.
             </p>
             <Button asChild>
@@ -753,8 +753,8 @@ export function LiveChatDashboardClient({
             <Circle
               className={`h-2 w-2 ${
                 isConnected && isAuthenticated
-                  ? "fill-green-500"
-                  : "fill-red-500"
+                  ? "fill-[var(--ast-success-icon)]"
+                  : "fill-[var(--ast-error-icon)]"
               }`}
             />
             {isConnected && isAuthenticated
@@ -852,10 +852,10 @@ export function LiveChatDashboardClient({
                           </AvatarFallback>
                         </Avatar>
                         {session.status === "ACTIVE" && (
-                          <span className="absolute bottom-0 right-0 h-3 w-3 rounded-full bg-green-500 border-2 border-background" />
+                          <span className="absolute bottom-0 right-0 h-3 w-3 rounded-full bg-[var(--ast-success-icon)] border-2 border-background" />
                         )}
                         {session.status === "WAITING" && (
-                          <span className="absolute bottom-0 right-0 h-3 w-3 rounded-full bg-amber-500 border-2 border-background animate-pulse" />
+                          <span className="absolute bottom-0 right-0 h-3 w-3 rounded-full bg-[var(--ast-warning-icon)] border-2 border-background animate-pulse" />
                         )}
                       </div>
                       <div className="flex-1 min-w-0">
@@ -884,10 +884,10 @@ export function LiveChatDashboardClient({
                             variant="secondary"
                             className={`text-xs ${
                               session.status === "ACTIVE"
-                                ? "bg-green-100 text-green-700"
+                                ? "admin-status-success"
                                 : session.status === "WAITING"
-                                ? "bg-amber-100 text-amber-700"
-                                : "bg-gray-100 text-gray-700"
+                                ? "admin-status-warning"
+                                : "admin-status-neutral"
                             }`}
                           >
                             {session.status === "WAITING"
@@ -952,7 +952,7 @@ export function LiveChatDashboardClient({
                           </span>
                         )}
                         {selectedSession.status === "ACTIVE" && (
-                          <span className="ml-2 text-green-600">
+                          <span className="ml-2 text-[var(--ast-success-icon)]">
                             · Live
                           </span>
                         )}
@@ -968,7 +968,7 @@ export function LiveChatDashboardClient({
                         disabled={!!selectedSession.infoCollected}
                         className={
                           selectedSession.infoCollected
-                            ? "text-green-600 border-green-200 hover:bg-green-50"
+                            ? "text-[var(--ast-success-icon)] border-[var(--ast-success-border)] hover:bg-[var(--ast-success-bg)]"
                             : ""
                         }
                       >
@@ -1006,7 +1006,7 @@ export function LiveChatDashboardClient({
                         )}
                         {selectedSession.status === "ACTIVE" && (
                           <DropdownMenuItem
-                            className="text-red-600"
+                            className="text-[var(--ast-error-text)]"
                             onClick={handleEndChat}
                           >
                             End Chat
@@ -1140,8 +1140,8 @@ export function LiveChatDashboardClient({
               )}
 
               {selectedSession.status === "WAITING" && (
-                <div className="p-4 border-t bg-amber-50 text-center">
-                  <p className="text-sm text-amber-700 mb-2">
+                <div className="p-4 border-t bg-[var(--ast-warning-bg)] text-center">
+                  <p className="text-sm text-[var(--ast-warning-text)] mb-2">
                     This visitor is waiting for an agent
                   </p>
                   <Button

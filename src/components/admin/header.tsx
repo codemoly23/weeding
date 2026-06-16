@@ -119,7 +119,7 @@ export function AdminHeader() {
         </SheetTrigger>
         <SheetContent side="left" className="w-64 p-0">
           <SheetTitle className="sr-only">Navigation Menu</SheetTitle>
-          <AdminSidebar />
+          <AdminSidebar mobile />
         </SheetContent>
       </Sheet>
 
@@ -158,7 +158,7 @@ export function AdminHeader() {
               )}
             </Button>
           </DropdownMenuTrigger>
-          <DropdownMenuContent align="end" className="w-80">
+          <DropdownMenuContent align="end" className="w-80 max-w-[calc(100vw-2rem)]">
             <DropdownMenuLabel className="flex items-center justify-between">
               Notifications
               {unreadCount > 0 && (

@@ -37,7 +37,7 @@ export async function POST(
       email,
       unsubscribeUrl: "#",
       siteUrl: baseUrl,
-      companyName: "LLCPad",
+      companyName: "Weeding Ceremony",
     };
 
     const renderedBody = renderTemplate(campaign.body, variables);

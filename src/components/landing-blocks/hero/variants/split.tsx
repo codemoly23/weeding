@@ -55,7 +55,7 @@ export function HeroSplit({ settings, isPreview = false, device }: HeroSplitProp
       return settings.headline.text;
     }
 
-    const highlightColor = settings.headline.highlightColor || "#f97316";
+    const highlightColor = settings.headline.highlightColor || "#8A6F3E";
 
     // Split highlight words by comma and trim whitespace
     const highlightWords = settings.headline.highlightWord
@@ -165,9 +165,9 @@ export function HeroSplit({ settings, isPreview = false, device }: HeroSplitProp
               : cn(
                   "grid gap-3",
                   (settings.features.columns ?? 1) === 1 && "grid-cols-1",
-                  (settings.features.columns ?? 1) === 2 && "grid-cols-2",
-                  (settings.features.columns ?? 1) === 3 && "grid-cols-3",
-                  (settings.features.columns ?? 1) === 4 && "grid-cols-4"
+                  (settings.features.columns ?? 1) === 2 && "grid-cols-1 sm:grid-cols-2",
+                  (settings.features.columns ?? 1) === 3 && "grid-cols-1 sm:grid-cols-2 lg:grid-cols-3",
+                  (settings.features.columns ?? 1) === 4 && "grid-cols-1 sm:grid-cols-2 lg:grid-cols-4"
                 )
           )}
         >
