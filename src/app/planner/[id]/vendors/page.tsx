@@ -582,9 +582,26 @@ export default function VendorsPage() {
     XLSX.writeFile(wb, `vendors-template.${fmt}`);
   }
 
-  function handleCopyInvite() {
-    const url = `${window.location.origin}/invite/vendor?project=${id}`;
-    navigator.clipboard.writeText(url).then(() => alert("Invite link copied!"));
+  const [inviteCopying, setInviteCopying] = useState(false);
+
+  async function handleCopyInvite() {
+    if (local) {
+      alert("Save your project to the cloud first to generate an invite link.");
+      return;
+    }
+    setInviteCopying(true);
+    try {
+      const res = await fetch(`/api/planner/projects/${id}/vendors/invite`, { method: "POST" });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || "Failed to generate link");
+      const url = `${window.location.origin}/invite/vendor?token=${data.invite.token}`;
+      await navigator.clipboard.writeText(url);
+      alert("Invite link copied! Valid for 30 days.");
+    } catch (err) {
+      alert(err instanceof Error ? err.message : "Could not generate invite link.");
+    } finally {
+      setInviteCopying(false);
+    }
   }
 
   async function handleDownloadPDF() {
@@ -664,24 +681,27 @@ export default function VendorsPage() {
           </button>
         </div>
 
-        <button
-          onClick={handleCopyInvite}
-          className="flex items-center gap-2 bg-card border border-border text-foreground/80 px-4 py-2 rounded-lg text-sm font-medium hover:bg-muted transition-colors ml-auto"
-        >
-          <Link2 className="w-4 h-4" />
-          Copy invite link for supplier
-        </button>
-
-        {!local && (
+        <div className="flex flex-wrap gap-2 sm:ml-auto">
           <button
-            onClick={handleOpenBrief}
-            disabled={briefGenerating}
-            className="flex items-center gap-2 bg-primary/5 border border-primary/20 text-primary px-4 py-2 rounded-lg text-sm font-medium hover:bg-primary/10 transition-colors disabled:opacity-50"
+            onClick={handleCopyInvite}
+            disabled={inviteCopying}
+            className="flex items-center gap-2 bg-card border border-border text-foreground/80 px-4 py-2 rounded-lg text-sm font-medium hover:bg-muted transition-colors disabled:opacity-60"
           >
-            <FileText className="w-4 h-4" />
-            {briefGenerating ? "Generating…" : "Share Event Brief"}
+            <Link2 className="w-4 h-4" />
+            {inviteCopying ? "Generating…" : "Copy invite link for supplier"}
           </button>
-        )}
+
+          {!local && (
+            <button
+              onClick={handleOpenBrief}
+              disabled={briefGenerating}
+              className="flex items-center gap-2 bg-primary/5 border border-primary/20 text-primary px-4 py-2 rounded-lg text-sm font-medium hover:bg-primary/10 transition-colors disabled:opacity-50"
+            >
+              <FileText className="w-4 h-4" />
+              {briefGenerating ? "Generating…" : "Share Event Brief"}
+            </button>
+          )}
+        </div>
       </div>
 
       {/* Error */}
@@ -749,7 +769,7 @@ export default function VendorsPage() {
               Search and Add Vendors
             </span>
           </Link>
-          <div className="flex-shrink-0 w-1" />
+          <div className="flex-shrink-0 w-4 sm:w-6" />
         </div>
       )}
 
@@ -919,10 +939,11 @@ export default function VendorsPage() {
           </p>
           <button
             onClick={handleCopyInvite}
-            className="mt-3 flex items-center gap-1.5 text-sm text-foreground/80 hover:text-primary transition-colors"
+            disabled={inviteCopying}
+            className="mt-3 flex items-center gap-1.5 text-sm text-foreground/80 hover:text-primary transition-colors disabled:opacity-60"
           >
             <Link2 className="w-3.5 h-3.5" />
-            Copy invite link for supplier
+            {inviteCopying ? "Generating…" : "Copy invite link for supplier"}
           </button>
         </div>
 

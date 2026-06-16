@@ -43,6 +43,7 @@ export async function POST(req: NextRequest) {
   const country = typeof body.country === "string" ? body.country : "";
   const description = typeof body.description === "string" ? body.description : "";
   const tagline = typeof body.tagline === "string" ? body.tagline : "";
+  const inviteToken = typeof body.inviteToken === "string" ? body.inviteToken.trim() : null;
 
   if (!name || !email || !password || !businessName || !category) {
     return NextResponse.json(
@@ -64,6 +65,20 @@ export async function POST(req: NextRequest) {
   const existing = await prisma.user.findUnique({ where: { email } });
   if (existing) {
     return NextResponse.json({ error: "An account with this email already exists" }, { status: 409 });
+  }
+
+  // Validate invite token if provided
+  let inviteRecord: { id: string } | null = null;
+  if (inviteToken) {
+    inviteRecord = await prisma.vendorInviteToken.findFirst({
+      where: {
+        token: inviteToken,
+        revokedAt: null,
+        usedAt: null,
+        expiresAt: { gt: new Date() },
+      },
+      select: { id: true },
+    });
   }
 
   const hashedPassword = await bcrypt.hash(password, 12);
@@ -103,6 +118,13 @@ export async function POST(req: NextRequest) {
         trialEndsAt,
       },
     });
+
+    if (inviteRecord) {
+      await tx.vendorInviteToken.update({
+        where: { id: inviteRecord.id },
+        data: { usedAt: new Date() },
+      });
+    }
 
     return { user, profile };
   });

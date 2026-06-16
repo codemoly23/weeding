@@ -112,12 +112,9 @@ export async function uploadToR2(
         publicUrl = `https://${publicUrl}`;
       }
       url = `${publicUrl}/${key}`;
-    } else if (config.accountId) {
-      // R2.dev URL (needs to be enabled in bucket settings)
-      url = `https://${config.bucketName}.${config.accountId}.r2.dev/${key}`;
     } else {
-      // Fallback - this won't work publicly without configuration
-      url = `/${key}`;
+      // Proxy through Next.js server — keeps bucket private, no public access needed
+      url = `/api/media/${key}`;
     }
 
     return { success: true, url };

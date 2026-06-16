@@ -81,12 +81,12 @@ export async function POST(
   const content = String(message ?? "").trim();
   if (!content) return NextResponse.json({ error: "message is required" }, { status: 400 });
 
-  // Verify vendor exists
+  // Verify vendor exists and is approved
   const vendor = await prisma.vendorProfile.findUnique({
     where: { id: vendorId },
-    select: { id: true, status: true },
+    select: { id: true, isApproved: true },
   });
-  if (!vendor || vendor.status !== "APPROVED") {
+  if (!vendor || !vendor.isApproved) {
     return NextResponse.json({ error: "Vendor not found" }, { status: 404 });
   }
 

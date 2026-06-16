@@ -1,8 +1,8 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, Suspense } from "react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import {
   Check, ChevronRight, Store, Camera, MapPin,
   User, Mail, Lock, Phone, Building2,
@@ -51,8 +51,10 @@ const STEPS = [
   { label: "Done", icon: <Check className="w-4 h-4" /> },
 ];
 
-export default function VendorRegisterPage() {
+function VendorRegisterContent() {
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const inviteToken = searchParams.get("token") ?? undefined;
   const [step, setStep] = useState(1);
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState("");
@@ -139,6 +141,7 @@ export default function VendorRegisterPage() {
           description: form.description || null,
           city: form.city || null,
           country: form.country,
+          inviteToken: inviteToken ?? null,
         }),
       });
       const data = await res.json();
@@ -166,6 +169,11 @@ export default function VendorRegisterPage() {
           Already have an account? Sign in
         </Link>
       </div>
+      {inviteToken && step < 3 && (
+        <div className="bg-primary/5 border-b border-primary/10 px-6 py-2 text-center text-xs text-primary">
+          You were invited via a couple&apos;s wedding planner. Complete registration to connect with them.
+        </div>
+      )}
 
       <div className="flex-1 flex items-center justify-center px-4 py-12">
         <div className="w-full max-w-lg">
@@ -417,5 +425,19 @@ export default function VendorRegisterPage() {
         </div>
       </div>
     </div>
+  );
+}
+
+export default function VendorRegisterPage() {
+  return (
+    <Suspense
+      fallback={
+        <div className="min-h-screen flex items-center justify-center bg-background">
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary" />
+        </div>
+      }
+    >
+      <VendorRegisterContent />
+    </Suspense>
   );
 }
