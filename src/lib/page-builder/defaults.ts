@@ -2979,15 +2979,15 @@ export const DEFAULT_PLANIGATE_HERO_SETTINGS: PlanigateHeroWidgetSettings = {
   ratingDividerText: "Sveriges nya plattform för eventplanering",
   collageImages: {
     couple:
-      "https://images.unsplash.com/photo-1519741497674-611481863552?w=600&h=800&fit=crop&q=80",
+      "https://images.unsplash.com/photo-1537633552985-df8429e8048b?w=700&h=1000&fit=crop&crop=top&q=85",
     dinner:
-      "https://images.unsplash.com/photo-1464366400600-7168b8af9bc3?w=800&h=500&fit=crop&q=80",
+      "https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=900&h=560&fit=crop&q=85",
     toasting:
-      "https://images.unsplash.com/photo-1530023367847-a683933f4172?w=700&h=600&fit=crop&q=80",
+      "https://images.unsplash.com/photo-1541614101331-1a5a3a194e92?w=800&h=600&fit=crop&q=85",
     laptop:
-      "https://images.unsplash.com/photo-1593642632559-0c6d3fc62b89?w=700&h=400&fit=crop&q=80",
+      "https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?w=750&h=440&fit=crop&q=85",
     phone:
-      "https://images.unsplash.com/photo-1556656793-08538906a9f8?w=300&h=600&fit=crop&q=80",
+      "https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c?w=320&h=660&fit=crop&q=85",
   },
   searchHeading: "Vad planerar du?",
   eventPills: [
@@ -3017,7 +3017,7 @@ export const DEFAULT_PLANIGATE_FEATURES_SETTINGS: PlanigateFeaturesWidgetSetting
     {
       id: "f1",
       icon: "Mail",
-      iconBgColor: "#E8E2D7",
+      iconBgColor: "#D6E8D2",
       title: "Digitala inbjudningar",
       description: "Skapa vackra inbjudningar på några minuter.",
       linkText: "Läs mer",
@@ -3026,7 +3026,7 @@ export const DEFAULT_PLANIGATE_FEATURES_SETTINGS: PlanigateFeaturesWidgetSetting
     {
       id: "f2",
       icon: "Users",
-      iconBgColor: "#F5E6D8",
+      iconBgColor: "#EDE0D0",
       title: "Gästlista & RSVP",
       description: "Hantera svar, allergier och plus-ones enkelt.",
       linkText: "Läs mer",
@@ -3035,7 +3035,7 @@ export const DEFAULT_PLANIGATE_FEATURES_SETTINGS: PlanigateFeaturesWidgetSetting
     {
       id: "f3",
       icon: "LayoutGrid",
-      iconBgColor: "#E5EAE3",
+      iconBgColor: "#D5DFE9",
       title: "Seating chart",
       description: "Dra och släpp gäster till bord visuellt.",
       linkText: "Läs mer",
@@ -3044,7 +3044,7 @@ export const DEFAULT_PLANIGATE_FEATURES_SETTINGS: PlanigateFeaturesWidgetSetting
     {
       id: "f4",
       icon: "Store",
-      iconBgColor: "#EFE4D2",
+      iconBgColor: "#E5DCCF",
       title: "Hitta leverantörer",
       description: "Jämför och boka lokaler, leverantörer och tjänster.",
       linkText: "Läs mer",

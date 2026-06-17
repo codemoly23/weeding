@@ -162,7 +162,7 @@ export default function VendorBillingPage() {
           <button
             onClick={handleUpgrade}
             disabled={upgrading}
-            className="w-full py-3 bg-card text-primary font-semibold rounded-xl text-sm hover:bg-primary/5 transition-colors disabled:opacity-70 flex items-center justify-center gap-2"
+            className="w-full py-3 bg-white text-primary font-semibold rounded-xl text-sm hover:bg-white/90 transition-colors disabled:opacity-70 flex items-center justify-center gap-2"
           >
             {upgrading ? (
               <><Loader2 className="w-4 h-4 animate-spin" /> Redirecting to checkout…</>

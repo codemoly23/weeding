@@ -66,7 +66,7 @@ export function PlanigateEventTypesWidget({ settings: raw }: Props) {
       className="relative"
       style={{ background: "var(--color-planigate-bg-section)" }}
     >
-      <div className="mx-auto max-w-[1240px] px-4 sm:px-6 lg:px-8 pt-16 pb-10">
+      <div className="mx-auto max-w-[1240px] px-4 sm:px-6 lg:px-8 pt-8 pb-10">
         <motion.h2
           initial="hidden"
           whileInView="show"

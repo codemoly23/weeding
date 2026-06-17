@@ -44,25 +44,25 @@ async function main() {
   // 2. Venues (3 cols)
   const vn = await top("Venues", "/venues", 1, 3);
   const wv = await cat(vn.id, "Wedding Venues", 0);
-  await svc(wv.id, "All Wedding Venues", "/venues/wedding", "Heart", 0);
-  await svc(wv.id, "Banquet Halls", "/venues/banquet-halls", "Building2", 1);
-  await svc(wv.id, "Wineries", "/venues/wineries", "Wine", 2);
-  await svc(wv.id, "Gardens", "/venues/gardens", "Flower2", 3);
-  await svc(wv.id, "Beach Venues", "/venues/beach", "Waves", 4);
-  await svc(wv.id, "Mansions", "/venues/mansions", "Home", 5);
+  await svc(wv.id, "All Wedding Venues", "/vendors?category=VENUE", "Heart", 0);
+  await svc(wv.id, "Banquet Halls", "/vendors?category=VENUE", "Building2", 1);
+  await svc(wv.id, "Wineries", "/vendors?category=VENUE", "Wine", 2);
+  await svc(wv.id, "Gardens", "/vendors?category=VENUE", "Flower2", 3);
+  await svc(wv.id, "Beach Venues", "/vendors?category=VENUE", "Waves", 4);
+  await svc(wv.id, "Mansions", "/vendors?category=VENUE", "Home", 5);
   const pv = await cat(vn.id, "Party & Event Venues", 1);
-  await svc(pv.id, "Party Halls", "/venues/party-halls", "PartyPopper", 0);
-  await svc(pv.id, "Conference Centers", "/venues/conference-centers", "Briefcase", 1);
-  await svc(pv.id, "Hotels", "/venues/hotels", "Hotel", 2);
-  await svc(pv.id, "Historic Venues", "/venues/historic", "Landmark", 3);
-  await svc(pv.id, "Yachts & Boats", "/venues/yachts", "Ship", 4);
-  await svc(pv.id, "Outdoor Venues", "/venues/outdoor", "TreePine", 5);
+  await svc(pv.id, "Party Halls", "/vendors?category=VENUE", "PartyPopper", 0);
+  await svc(pv.id, "Conference Centers", "/vendors?category=VENUE", "Briefcase", 1);
+  await svc(pv.id, "Hotels", "/vendors?category=VENUE", "Hotel", 2);
+  await svc(pv.id, "Historic Venues", "/vendors?category=VENUE", "Landmark", 3);
+  await svc(pv.id, "Yachts & Boats", "/vendors?category=VENUE", "Ship", 4);
+  await svc(pv.id, "Outdoor Venues", "/vendors?category=VENUE", "TreePine", 5);
   const sv = await cat(vn.id, "Specialty Venues", 2);
-  await svc(sv.id, "Religious Venues", "/venues/religious", "Church", 0);
-  await svc(sv.id, "Luxury Estates", "/venues/luxury", "Diamond", 1);
-  await svc(sv.id, "Destination Venues", "/venues/destination", "Plane", 2);
-  await svc(sv.id, "Unique Spaces", "/venues/unique", "Sparkles", 3);
-  await svc(sv.id, "Find Near Me", "/venues/near-me", "MapPin", 4);
+  await svc(sv.id, "Religious Venues", "/vendors?category=VENUE", "Church", 0);
+  await svc(sv.id, "Luxury Estates", "/vendors?category=VENUE", "Diamond", 1);
+  await svc(sv.id, "Destination Venues", "/vendors?category=VENUE", "Plane", 2);
+  await svc(sv.id, "Unique Spaces", "/vendors?category=VENUE", "Sparkles", 3);
+  await svc(sv.id, "Find Near Me", "/vendors?category=VENUE", "MapPin", 4);
 
   // 3. Vendors (2 cols)
   const vd = await top("Vendors", "/vendors", 2, 2);
@@ -113,15 +113,15 @@ async function main() {
   // 6. Ideas (2 cols)
   const idm = await top("Ideas", "/ideas", 5, 2);
   const dco = await cat(idm.id, "Decor", 0);
-  await svc(dco.id, "Wedding Themes", "/ideas/themes", "Palette", 0);
-  await svc(dco.id, "Floral Arrangements", "/ideas/flowers", "Flower2", 1);
-  await svc(dco.id, "Table Settings", "/ideas/tables", "LayoutDashboard", 2);
-  await svc(dco.id, "Ceremony Decor", "/ideas/ceremony", "Star", 3);
+  await svc(dco.id, "Wedding Themes", "/vendors?category=DECORATIONS", "Palette", 0);
+  await svc(dco.id, "Floral Arrangements", "/vendors?category=FLOWERS", "Flower2", 1);
+  await svc(dco.id, "Table Settings", "/vendors?category=DECORATIONS", "LayoutDashboard", 2);
+  await svc(dco.id, "Ceremony Decor", "/vendors?category=DECORATIONS", "Star", 3);
   const cel = await cat(idm.id, "Celebration", 1);
-  await svc(cel.id, "Reception Ideas", "/ideas/reception", "PartyPopper", 0);
-  await svc(cel.id, "Wedding Favors", "/ideas/favors", "Gift", 1);
-  await svc(cel.id, "Photo Ideas", "/ideas/photos", "Camera", 2);
-  await svc(cel.id, "Honeymoon Ideas", "/ideas/honeymoon", "Plane", 3);
+  await svc(cel.id, "Reception Ideas", "/vendors?category=DECORATIONS", "PartyPopper", 0);
+  await svc(cel.id, "Wedding Favors", "/vendors", "Gift", 1);
+  await svc(cel.id, "Photo Ideas", "/vendors?category=PHOTOGRAPHY", "Camera", 2);
+  await svc(cel.id, "Honeymoon Ideas", "/vendors", "Plane", 3);
 
   // 7. Registry (2 cols)
   const rg = await top("Registry", "/registry", 6, 2);

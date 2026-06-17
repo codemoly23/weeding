@@ -19,9 +19,9 @@ export function AnonymousBanner({ projectId }: AnonymousBannerProps) {
   const { data: session } = useSession();
   const router = useRouter();
 
-  if (!projectId.startsWith("local-") || dismissed) return null;
-
   const isLoggedIn = !!session?.user?.id;
+
+  if (!projectId.startsWith("local-") || dismissed || isLoggedIn) return null;
 
   // If already logged in, sync directly without going through login page
   async function handleSaveNow() {
