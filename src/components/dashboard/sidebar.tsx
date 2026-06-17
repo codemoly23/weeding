@@ -12,6 +12,8 @@ import {
   ChevronRight,
   CalendarHeart,
   Plus,
+  HelpCircle,
+  MessageCircle,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useLanguage } from "@/lib/i18n/language-context";
@@ -80,6 +82,8 @@ export function DashboardSidebar({
   const topNav = [
     { name: t("dash.overview"), href: "/dashboard", icon: LayoutDashboard },
     { name: t("common.profile"), href: "/dashboard/profile", icon: User },
+    { name: "Support", href: "/dashboard/support", icon: MessageCircle },
+    { name: "Help Center", href: "/dashboard/help", icon: HelpCircle },
   ];
 
   return (
