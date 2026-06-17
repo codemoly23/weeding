@@ -7,7 +7,7 @@
     "dev": "cross-env NODE_OPTIONS=--max-old-space-size=4096 next dev --turbopack --port 3000",
     "dev:chat": "tsx watch chat-server.ts",
     "dev:socket": "tsx watch server.ts",
-    "build": "prisma migrate deploy && prisma generate && cross-env NODE_ENV=production next build",
+    "build": "prisma generate && cross-env NODE_ENV=production next build",
     "start": "next start",
     "start:socket": "cross-env NODE_ENV=production node dist/server.js",
     "build:server": "npx tsc server.ts --outDir dist --esModuleInterop --module commonjs --target ES2020",
