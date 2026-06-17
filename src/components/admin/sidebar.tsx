@@ -47,7 +47,7 @@ interface NavItem {
   href?: string;
   icon: React.ComponentType<{ className?: string }>;
   badge?: number;
-  children?: { title: string; href: string }[];
+  children?: { title: string; href: string; external?: boolean }[];
 }
 
 const navItems: NavItem[] = [
@@ -100,7 +100,7 @@ const navItems: NavItem[] = [
       { title: "All Projects", href: "/admin/planner" },
       { title: "Manage Vendors", href: "/admin/vendors" },
       { title: "Vendor Reviews", href: "/admin/vendors/reviews" },
-      { title: "View All Vendors", href: "/vendors" },
+      { title: "View All Vendors", href: "/vendors", external: true },
     ],
   },
   {
@@ -349,6 +349,8 @@ export function AdminSidebar({ mobile = false }: { mobile?: boolean }) {
                         <Link
                           key={child.href}
                           href={child.href}
+                          target={child.external ? "_blank" : undefined}
+                          rel={child.external ? "noopener noreferrer" : undefined}
                           className={cn(
                             "text-sm hover:text-purple-600",
                             isActive(child.href) && "text-purple-600"
@@ -393,6 +395,8 @@ export function AdminSidebar({ mobile = false }: { mobile?: boolean }) {
                       <Link
                         key={child.href}
                         href={child.href}
+                        target={child.external ? "_blank" : undefined}
+                        rel={child.external ? "noopener noreferrer" : undefined}
                         className={cn(
                           "block rounded-md px-3 py-2 text-sm hover:bg-purple-50",
                           isActive(child.href) &&

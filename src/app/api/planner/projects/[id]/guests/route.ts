@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import prisma from "@/lib/db";
 import { auth } from "@/lib/auth";
+import { plannerProjectWhere } from "@/lib/planner-access";
 import { z } from "zod";
 import { assignGuestsToTableNumber } from "@/lib/seating-sync";
 
@@ -70,7 +71,7 @@ export async function GET(
   const { id } = await params;
 
   const project = await prisma.weddingProject.findFirst({
-    where: { id, userId: session.user.id },
+    where: plannerProjectWhere(id, session.user.id, session.user.role as string),
   });
   if (!project) return NextResponse.json({ error: "Not found" }, { status: 404 });
 

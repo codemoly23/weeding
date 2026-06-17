@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import prisma from "@/lib/db";
 import { auth } from "@/lib/auth";
+import { plannerProjectWhere } from "@/lib/planner-access";
 import { z } from "zod";
 
 const budgetGoalSchema = z.object({
@@ -22,7 +23,7 @@ export async function GET(
   if (!session?.user?.id) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   const { id } = await params;
 
-  const project = await prisma.weddingProject.findFirst({ where: { id, userId: session.user.id } });
+  const project = await prisma.weddingProject.findFirst({ where: plannerProjectWhere(id, session.user.id, session.user.role as string) });
   if (!project) return NextResponse.json({ error: "Not found" }, { status: 404 });
 
   const categories = await prisma.budgetCategory.findMany({

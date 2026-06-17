@@ -5,6 +5,16 @@ import Link from "next/link";
 import { Star, Check, X, Trash2, ChevronLeft, ChevronRight, ExternalLink } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
 
 interface Review {
   id: string;
@@ -40,6 +50,8 @@ export default function AdminVendorReviewsPage() {
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const [actionLoading, setActionLoading] = useState<string | null>(null);
+  const [deleteTarget, setDeleteTarget] = useState<Review | null>(null);
+  const [deleting, setDeleting] = useState(false);
 
   const load = useCallback(async () => {
     setLoading(true);
@@ -80,11 +92,14 @@ export default function AdminVendorReviewsPage() {
     load();
   }
 
-  async function remove(id: string) {
-    if (!confirm("Delete this review permanently?")) return;
-    setActionLoading(id + "_delete");
-    await fetch(`/api/admin/vendors/reviews/${id}`, { method: "DELETE" });
+  async function confirmDelete() {
+    if (!deleteTarget) return;
+    setDeleting(true);
+    setActionLoading(deleteTarget.id + "_delete");
+    await fetch(`/api/admin/vendors/reviews/${deleteTarget.id}`, { method: "DELETE" });
+    setDeleting(false);
     setActionLoading(null);
+    setDeleteTarget(null);
     load();
   }
 
@@ -202,7 +217,7 @@ export default function AdminVendorReviewsPage() {
                     </button>
                   )}
                   <button
-                    onClick={() => remove(r.id)}
+                    onClick={() => setDeleteTarget(r)}
                     disabled={!!actionLoading}
                     className="flex items-center gap-1 px-3 py-1.5 bg-[var(--ast-error-bg)] hover:bg-[var(--ast-error-bg)] disabled:opacity-60 text-[var(--ast-error-icon)] text-xs font-medium rounded-lg transition-colors"
                   >
@@ -236,6 +251,28 @@ export default function AdminVendorReviewsPage() {
           </button>
         </div>
       )}
+
+      <AlertDialog open={!!deleteTarget} onOpenChange={(open) => { if (!open) setDeleteTarget(null); }}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Delete Review</AlertDialogTitle>
+            <AlertDialogDescription>
+              Delete the review by <strong>{deleteTarget?.authorName}</strong> for{" "}
+              <strong>{deleteTarget?.vendor.businessName}</strong>? This cannot be undone.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel disabled={deleting}>Cancel</AlertDialogCancel>
+            <AlertDialogAction
+              onClick={confirmDelete}
+              disabled={deleting}
+              className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+            >
+              {deleting ? "Deleting..." : "Delete"}
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   );
 }

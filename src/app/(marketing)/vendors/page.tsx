@@ -156,7 +156,7 @@ function VendorsPage() {
   const [minRating, setMinRating] = useState("");
   const [featuredOnly, setFeaturedOnly] = useState(false);
 
-  // Pre-fill filters from homepage search params (runs once on mount)
+  // Pre-fill location/date/type from homepage search params (runs once on mount)
   useEffect(() => {
     const location = searchParams.get("location");
     const date = searchParams.get("date");
@@ -165,14 +165,18 @@ function VendorsPage() {
       setCityInput(location);
       setCityFilter(location);
     }
-    if (date) {
-      setDateFilter(date);
-    }
-    if (type) {
-      setEventTypeLabel(type);
-    }
+    if (date) setDateFilter(date);
+    if (type) setEventTypeLabel(type);
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  // Sync category filter whenever URL category param changes (nav links do soft navigation)
+  useEffect(() => {
+    const category = searchParams.get("category");
+    setCategoryFilter(
+      category && category in CATEGORY_CONFIG ? (category as VendorCategory) : ""
+    );
+  }, [searchParams]);
 
   const fetchVendors = useCallback(async () => {
     setIsLoading(true);

@@ -1,20 +1,35 @@
 import { NextRequest, NextResponse } from "next/server";
 import prisma from "@/lib/db";
 
-// GET /api/venues?category=wedding|party|specialty&featured=true
+export const revalidate = 60;
+
 export async function GET(request: NextRequest) {
   const category = request.nextUrl.searchParams.get("category");
-  const featured = request.nextUrl.searchParams.get("featured");
 
   const venues = await prisma.venue.findMany({
     where: {
       isActive: true,
-      ...(category && { category }),
-      ...(featured === "true" && { isFeatured: true }),
+      ...(category ? { category } : {}),
     },
-    orderBy: [{ sortOrder: "asc" }, { name: "asc" }],
-    take: 100,
+    orderBy: [{ isFeatured: "desc" }, { sortOrder: "asc" }, { name: "asc" }],
+    select: {
+      id: true,
+      name: true,
+      slug: true,
+      category: true,
+      type: true,
+      location: true,
+      price: true,
+      priceUnit: true,
+      badge: true,
+      badgeColor: true,
+      tags: true,
+      image: true,
+      rating: true,
+      reviewCount: true,
+      isFeatured: true,
+    },
   });
 
-  return NextResponse.json(venues);
+  return NextResponse.json({ venues });
 }

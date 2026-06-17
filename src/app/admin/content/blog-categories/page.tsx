@@ -21,6 +21,16 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
 import { toast } from "sonner";
 import { Badge } from "@/components/ui/badge";
 
@@ -48,6 +58,8 @@ export default function BlogCategoriesPage() {
     parentId: "",
   });
   const [saving, setSaving] = useState(false);
+  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
+  const [categoryToDelete, setCategoryToDelete] = useState<BlogCategory | null>(null);
 
   useEffect(() => {
     fetchCategories();
@@ -122,19 +134,20 @@ export default function BlogCategoriesPage() {
     }
   }
 
-  async function handleDelete(category: BlogCategory) {
-    // Check if it's a service category (from ServiceCategory table)
+  function openDeleteDialog(category: BlogCategory) {
     if (category.slug === "uncategorized") {
       toast.error("Cannot delete Uncategorized category");
       return;
     }
+    setCategoryToDelete(category);
+    setDeleteDialogOpen(true);
+  }
 
-    if (!confirm(`Delete "${category.name}"? This action cannot be undone.`)) {
-      return;
-    }
+  async function handleDelete() {
+    if (!categoryToDelete) return;
 
     try {
-      const res = await fetch(`/api/admin/blog-categories/${category.id}`, {
+      const res = await fetch(`/api/admin/blog-categories/${categoryToDelete.id}`, {
         method: "DELETE",
       });
 
@@ -144,6 +157,8 @@ export default function BlogCategoriesPage() {
       }
 
       toast.success("Category deleted");
+      setDeleteDialogOpen(false);
+      setCategoryToDelete(null);
       fetchCategories();
     } catch (error: any) {
       toast.error(error.message || "Failed to delete category");
@@ -197,7 +212,7 @@ export default function BlogCategoriesPage() {
                   <Button
                     variant="ghost"
                     size="icon"
-                    onClick={() => handleDelete(category)}
+                    onClick={() => openDeleteDialog(category)}
                   >
                     <Trash2 className="h-4 w-4" />
                   </Button>
@@ -331,6 +346,26 @@ export default function BlogCategoriesPage() {
           buildCategoryTree(categories)
         )}
       </div>
+
+      <AlertDialog open={deleteDialogOpen} onOpenChange={setDeleteDialogOpen}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Delete Category?</AlertDialogTitle>
+            <AlertDialogDescription>
+              Are you sure you want to delete <strong>&quot;{categoryToDelete?.name}&quot;</strong>? This action cannot be undone.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Cancel</AlertDialogCancel>
+            <AlertDialogAction
+              onClick={handleDelete}
+              className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+            >
+              Delete
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   );
 }

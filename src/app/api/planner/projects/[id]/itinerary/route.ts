@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import prisma from "@/lib/db";
 import { auth } from "@/lib/auth";
+import { plannerProjectWhere } from "@/lib/planner-access";
 
 // GET /api/planner/projects/[id]/itinerary
 export async function GET(
@@ -11,7 +12,7 @@ export async function GET(
   if (!session?.user?.id) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   const { id } = await params;
 
-  const project = await prisma.weddingProject.findFirst({ where: { id, userId: session.user.id } });
+  const project = await prisma.weddingProject.findFirst({ where: plannerProjectWhere(id, session.user.id, session.user.role as string) });
   if (!project) return NextResponse.json({ error: "Not found" }, { status: 404 });
 
   const events = await prisma.itineraryEvent.findMany({
@@ -32,7 +33,7 @@ export async function POST(
   if (!session?.user?.id) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   const { id } = await params;
 
-  const project = await prisma.weddingProject.findFirst({ where: { id, userId: session.user.id } });
+  const project = await prisma.weddingProject.findFirst({ where: plannerProjectWhere(id, session.user.id, session.user.role as string) });
   if (!project) return NextResponse.json({ error: "Not found" }, { status: 404 });
 
   const body = await req.json();
