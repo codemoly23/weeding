@@ -104,6 +104,11 @@ const navItems: NavItem[] = [
     ],
   },
   {
+    title: "Tickets",
+    href: "/admin/tickets",
+    icon: MessageSquare,
+  },
+  {
     title: "Appearance",
     icon: Palette,
     children: [

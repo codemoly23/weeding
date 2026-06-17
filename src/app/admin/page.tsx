@@ -96,17 +96,17 @@ export default async function AdminDashboardPage() {
     recentTickets,
     recentNotifications,
   ] = await Promise.all([
-    // Revenue this month (paid orders)
+    // Revenue this month (paid orders) — use createdAt since paidAt may be null
     prisma.order.aggregate({
       _sum: { totalUSD: true },
-      where: { paymentStatus: "PAID", paidAt: { gte: startOfThisMonth } },
+      where: { paymentStatus: "PAID", createdAt: { gte: startOfThisMonth } },
     }),
     // Revenue last month
     prisma.order.aggregate({
       _sum: { totalUSD: true },
       where: {
         paymentStatus: "PAID",
-        paidAt: { gte: startOfLastMonth, lt: startOfThisMonth },
+        createdAt: { gte: startOfLastMonth, lt: startOfThisMonth },
       },
     }),
     // Orders this month
