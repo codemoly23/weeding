@@ -172,7 +172,14 @@ export async function getOrCreateStripeCustomer({
   const stripe = await getStripe();
 
   if (existingCustomerId) {
-    return existingCustomerId;
+    try {
+      const customer = await stripe.customers.retrieve(existingCustomerId);
+      if (!customer.deleted) {
+        return existingCustomerId;
+      }
+    } catch {
+      // Customer not found in current Stripe account — create a new one
+    }
   }
 
   const customer = await stripe.customers.create({

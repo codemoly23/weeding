@@ -113,7 +113,8 @@ function RowOfChairs({ seats, spacing, guestIds, selectedSeat, onSeatClick, gues
         const label = g ? nameDisplay === "initials" ? `${g.firstName[0]}${g.lastName?.[0] ?? ""}`.toUpperCase() : nameDisplay === "first" ? g.firstName.slice(0, 3) : `${i + 1}` : `${i + 1}`;
         const isSel = selectedSeat === i;
         return (
-          <g key={i} onClick={e => { e.stopPropagation(); onSeatClick(i); }} style={{ cursor: "pointer" }}>
+          <g key={i} data-seat="true" onClick={e => { e.stopPropagation(); onSeatClick(i); }} style={{ cursor: "pointer" }}>
+            <circle cx={cx} cy={cy} r={CHAIR_R + 8} fill="transparent" />
             <circle cx={cx} cy={cy} r={CHAIR_R} fill="white" stroke={isSel ? "#7c3aed" : "#d1d5db"} strokeWidth={isSel ? 2 : 1.2} />
             <text x={cx} y={cy + 4} textAnchor="middle" fontSize="9" fill={gid ? "#6d28d9" : "#aaa"}>{label}</text>
           </g>
@@ -180,11 +181,17 @@ function TableCanvasElement({ el, isSelected, seatSelIdx, onMouseDown, onSeatCli
   const svgW = w + pad * 2;
   const svgH = h + pad * 2;
 
+  const filledCount = hasSeat ? (el.guestIds?.filter(g => g !== null).length ?? 0) : 0;
+  const availableCount = hasSeat ? seats - filledCount : 0;
+  const isFull = hasSeat && availableCount === 0 && seats > 0;
+  const cx = pad + w / 2;
+  const cy = pad + h / 2;
+
   const tableBody = () => {
     if (el.kind === "table-round" || el.kind === "buffet-round")
-      return <circle cx={pad + w / 2} cy={pad + h / 2} r={w / 2} fill="#f5efe6" stroke="#8b7355" strokeWidth="1.5" />;
+      return <circle cx={cx} cy={cy} r={w / 2} fill="#f5efe6" stroke="#8b7355" strokeWidth="1.5" />;
     if (el.kind === "table-ellipse" || el.kind === "buffet-ellipse")
-      return <ellipse cx={pad + w / 2} cy={pad + h / 2} rx={w / 2} ry={h / 2} fill="#f5efe6" stroke="#8b7355" strokeWidth="1.5" />;
+      return <ellipse cx={cx} cy={cy} rx={w / 2} ry={h / 2} fill="#f5efe6" stroke="#8b7355" strokeWidth="1.5" />;
     if (el.kind === "table-halfround")
       return <path d={`M ${pad} ${pad + h / 2} A ${w / 2} ${w / 2} 0 0 1 ${pad + w} ${pad + h / 2} Z`} fill="#f5efe6" stroke="#8b7355" strokeWidth="1.5" />;
     return <rect x={pad} y={pad} width={w} height={h} rx="3" fill="#f5efe6" stroke="#8b7355" strokeWidth="1.5" />;
@@ -192,18 +199,29 @@ function TableCanvasElement({ el, isSelected, seatSelIdx, onMouseDown, onSeatCli
 
   return (
     <div
-      style={{ position: "absolute", left: el.x - pad, top: el.y - pad, width: svgW, height: svgH, transform: `rotate(${el.angle}deg)`, transformOrigin: `${pad + w / 2}px ${pad + h / 2}px`, cursor: "grab", outline: isSelected ? "2px dashed #7c3aed" : "none", outlineOffset: 4 }}
-      onMouseDown={onMouseDown}
+      style={{ position: "absolute", left: el.x - pad, top: el.y - pad, width: svgW, height: svgH, transform: `rotate(${el.angle}deg)`, transformOrigin: `${cx}px ${cy}px`, cursor: "grab", outline: isSelected ? "2px dashed #7c3aed" : "none", outlineOffset: 4 }}
+      onMouseDown={e => { if ((e.target as Element).closest("[data-seat]")) return; onMouseDown(e); }}
     >
       <svg width={svgW} height={svgH} style={{ overflow: "visible" }}>
         {tableBody()}
+        {hasSeat && (
+          <>
+            <text x={cx} y={cy - 4} textAnchor="middle" fontSize="9" fontWeight="700" fill={isFull ? "#dc2626" : "#16a34a"}>
+              {isFull ? "Full" : `${availableCount} left`}
+            </text>
+            <text x={cx} y={cy + 7} textAnchor="middle" fontSize="7.5" fill="#9ca3af">
+              {filledCount}/{seats}
+            </text>
+          </>
+        )}
         {seatPositions.map((pos, i) => {
           const gid = el.guestIds?.[i] ?? null;
           const g = guests.find(x => x.id === gid);
           const label = g ? nameDisplay === "initials" ? `${g.firstName[0]}${g.lastName?.[0] ?? ""}`.toUpperCase() : nameDisplay === "first" ? g.firstName.slice(0, 3) : `${i + 1}` : `${i + 1}`;
           const isSel = seatSelIdx === i;
           return (
-            <g key={i} onClick={e => { e.stopPropagation(); onSeatClick(i); }} style={{ cursor: "pointer" }}>
+            <g key={i} data-seat="true" onClick={e => { e.stopPropagation(); onSeatClick(i); }} style={{ cursor: "pointer" }}>
+              <circle cx={pad + pos.cx} cy={pad + pos.cy} r={SEAT_R + 9} fill="transparent" />
               <circle cx={pad + pos.cx} cy={pad + pos.cy} r={SEAT_R} fill="white" stroke={isSel ? "#7c3aed" : "#d1d5db"} strokeWidth={isSel ? 2 : 1.2} />
               <text x={pad + pos.cx} y={pad + pos.cy + 3.5} textAnchor="middle" fontSize="7.5" fill={gid ? "#6d28d9" : "#aaa"}>{label}</text>
             </g>
@@ -957,7 +975,7 @@ export default function ReceptionLayoutEditPage() {
           <div className="flex flex-col items-center gap-2 px-4 py-3">
             <button className="flex w-full items-center justify-center gap-1.5 rounded-lg bg-primary px-3 py-2 text-xs font-medium text-white hover:bg-primary/90"><Plus className="h-3 w-3" /> Add a guest quickly</button>
             <span className="text-[11px] text-muted-foreground/70">or</span>
-            <button className="text-xs text-primary underline underline-offset-2 hover:text-primary/80">Open guest list</button>
+            <button onClick={() => router.push(`/planner/${projectId}/guests`)} className="text-xs text-primary underline underline-offset-2 hover:text-primary/80">Open guest list</button>
           </div>
         </div>
       );
@@ -1196,7 +1214,7 @@ export default function ReceptionLayoutEditPage() {
                 const totalW = (seats - 1) * spacingToPx(spacing) + CHAIR_R * 2;
                 const totalH = CHAIR_R * 2 + 8;
                 return (
-                  <div key={el.id} style={{ position: "absolute", left: el.x, top: el.y, width: totalW, height: totalH, transform: `rotate(${el.angle}deg)`, transformOrigin: "center center", cursor: "grab", outline: isElSel ? "2px dashed #7c3aed" : "none", outlineOffset: 4 }} onMouseDown={e => onElementMouseDown(e, el.id)}>
+                  <div key={el.id} style={{ position: "absolute", left: el.x, top: el.y, width: totalW, height: totalH, transform: `rotate(${el.angle}deg)`, transformOrigin: "center center", cursor: "grab", outline: isElSel ? "2px dashed #7c3aed" : "none", outlineOffset: 4 }} onMouseDown={e => { if ((e.target as Element).closest("[data-seat]")) return; onElementMouseDown(e, el.id); }}>
                     <RowOfChairs seats={seats} spacing={spacing} guestIds={el.guestIds ?? Array(seats).fill(null)} selectedSeat={seatSelIdx} onSeatClick={i => setSelection({ kind: "seat", elementId: el.id, seatIndex: i })} guests={guests} nameDisplay={nameDisplay} />
                     {isElSel && <>
                       <div style={{ position: "absolute", top: -18, left: "50%", transform: "translateX(-50%)", width: 12, height: 12, borderRadius: "50%", background: "white", border: "2px solid #7c3aed", cursor: "crosshair" }} />
