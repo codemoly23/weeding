@@ -506,15 +506,98 @@ function ClipboardHanger() {
 }
 
 function SeatingCardsPanel({
-  tables, currentIndex, onPrev, onNext, onEdit,
+  tables, currentIndex, onPrev, onNext, onEdit, loading,
 }: {
   tables: { name: string; guestNames: string[] }[];
   currentIndex: number;
   onPrev: () => void;
   onNext: () => void;
   onEdit: () => void;
+  loading?: boolean;
 }) {
-  const fallback = { name: "Table 1", guestNames: Array.from({ length: 6 }, (_, j) => `Guest name ${j + 1}`) };
+  function handleDownloadPDF() {
+    if (tables.length === 0) return;
+    const allCards = tables.map((t) => {
+      const numDisplay = /^Table\s+\S+$/i.test(t.name)
+        ? t.name.replace(/^Table\s+/i, "")
+        : t.name;
+      const guestRows =
+        t.guestNames.length === 0
+          ? `<div style="font-family:Georgia,serif;font-size:11px;color:#d1d5db;text-align:center;">No guests assigned</div>`
+          : t.guestNames
+              .map((name) => `<div style="font-family:Georgia,serif;font-size:12px;color:#6b7280;margin-bottom:2px;">${name}</div>`)
+              .join("");
+      return `
+        <div class="card-inner">
+          <div style="width:2px;height:18px;background:#d1d5db;margin:0 auto 4px;border-radius:1px;"></div>
+          <div style="width:18px;height:18px;border-radius:50%;border:2px solid #d1d5db;margin:0 auto 12px;font-size:9px;color:#9ca3af;display:flex;align-items:center;justify-content:center;">⊗</div>
+          <div style="font-family:Georgia,serif;font-size:10px;letter-spacing:2px;color:#9ca3af;text-transform:uppercase;margin-bottom:4px;">Table</div>
+          <div style="font-family:Georgia,serif;font-size:40px;font-weight:300;color:#1f2937;line-height:1;margin-bottom:12px;">${numDisplay}</div>
+          <div style="width:75%;border-top:1px solid #e5e7eb;margin:0 auto 10px;"></div>
+          <div style="width:100%;text-align:center;">${guestRows}</div>
+        </div>`;
+    });
+
+    const pages: string[] = [];
+    for (let i = 0; i < allCards.length; i += 6) {
+      const chunk = allCards.slice(i, i + 6);
+      pages.push(`<div class="card-page">${chunk.join("")}</div>`);
+    }
+    const pagesHtml = pages.join("");
+
+    const html = `<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8"/>
+  <title>Seating Cards</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { background: #f9fafb; }
+    .card-page {
+      width: 100%;
+      min-height: 100vh;
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      grid-template-rows: 1fr 1fr;
+      gap: 14px;
+      padding: 20px;
+      page-break-after: always;
+      break-after: page;
+    }
+    .card-inner {
+      border: 1px solid #e5e7eb;
+      border-radius: 10px;
+      background: #fff;
+      padding: 16px 14px 14px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      overflow: hidden;
+    }
+    @media print {
+      body { background: #fff; }
+      .card-page {
+        width: 100%;
+        height: 100vh;
+        padding: 10px;
+        gap: 8px;
+      }
+      @page { margin: 6mm; size: A4 portrait; }
+    }
+  </style>
+</head>
+<body>${pagesHtml}</body>
+</html>`;
+
+    const win = window.open("", "_blank");
+    if (!win) return;
+    win.document.write(html);
+    win.document.close();
+    win.onload = () => { win.print(); };
+  }
+
+  const fallback = { name: "Table 1", guestNames: [] };
   const table = tables[currentIndex] ?? fallback;
   const total = tables.length;
   const numDisplay = /^Table\s+\S+$/i.test(table.name)
@@ -587,11 +670,22 @@ function SeatingCardsPanel({
 
             {/* Guest names */}
             <div className="space-y-1">
-              {table.guestNames.map((name, i) => (
-                <div key={i} style={{ fontFamily: "Georgia, serif", fontSize: 13, color: "#6b7280" }}>
-                  {name}
+              {loading ? (
+                <div className="flex flex-col items-center gap-2 py-4">
+                  <div className="h-5 w-5 animate-spin rounded-full border-2 border-primary border-t-transparent" />
+                  <span style={{ fontSize: 11, color: "#9ca3af" }}>Loading guests...</span>
                 </div>
-              ))}
+              ) : table.guestNames.length === 0 ? (
+                <div style={{ fontFamily: "Georgia, serif", fontSize: 12, color: "#d1d5db", textAlign: "center" }}>
+                  No guests assigned yet
+                </div>
+              ) : (
+                table.guestNames.map((name, i) => (
+                  <div key={i} style={{ fontFamily: "Georgia, serif", fontSize: 13, color: "#6b7280" }}>
+                    {name}
+                  </div>
+                ))
+              )}
             </div>
           </div>
         </div>
@@ -628,7 +722,11 @@ function SeatingCardsPanel({
           <Eye className="h-4 w-4" /> Preview Result
         </button>
         <div className="flex items-center gap-3">
-          <button className="flex items-center gap-2 rounded-lg border border-border bg-card px-5 py-2 text-sm text-foreground/80 transition-colors hover:bg-muted/30">
+          <button
+            onClick={handleDownloadPDF}
+            disabled={tables.length === 0}
+            className="flex items-center gap-2 rounded-lg border border-border bg-card px-5 py-2 text-sm text-foreground/80 transition-colors hover:bg-muted/30 disabled:opacity-40"
+          >
             <Download className="h-4 w-4 text-primary" /> Download PDF file
           </button>
           <span className="text-xs text-muted-foreground/70">←</span>
@@ -742,6 +840,7 @@ function NameCardsPanel({ guests, layouts, projectId }: { guests: Guest[]; layou
     try { return JSON.parse(localStorage.getItem(STORAGE_KEY) ?? "{}").printEmpty ?? false; } catch { return false; }
   });
   const [cardIndex, setCardIndex] = useState(0);
+  const [canvasTableMap, setCanvasTableMap] = useState<Map<string, string>>(new Map());
 
   useEffect(() => {
     try {
@@ -749,7 +848,23 @@ function NameCardsPanel({ guests, layouts, projectId }: { guests: Guest[]; layou
     } catch {}
   }, [STORAGE_KEY, template, showHonorific, showTableNumber, showCourseIcon, confirmedOnly, printEmpty]);
 
-  const tableMap = buildGuestTableMap(layouts);
+  useEffect(() => {
+    try {
+      const raw = localStorage.getItem(`reception-layout-${projectId}`);
+      if (!raw) return;
+      const TABLE_KINDS = ["table-long","table-square","table-round","table-ellipse","table-halfround"];
+      const map = new Map<string, string>();
+      (JSON.parse(raw) as PreviewElement[])
+        .filter(el => TABLE_KINDS.includes(el.kind))
+        .forEach((el, i) => {
+          const name = el.name || `Table ${i + 1}`;
+          (el.guestIds ?? []).forEach(gid => { if (gid) map.set(gid, name); });
+        });
+      setCanvasTableMap(map);
+    } catch {}
+  }, [projectId]);
+
+  const tableMap = canvasTableMap.size > 0 ? canvasTableMap : buildGuestTableMap(layouts);
 
   const displayGuests = confirmedOnly
     ? guests.filter(g => g.rsvpStatus === "ATTENDING")
@@ -1538,13 +1653,33 @@ function AlphabeticalAtlasPanel({
   layouts,
   settings,
   onEditLayout,
+  projectId,
 }: {
   guests: Guest[];
   layouts: Layout[];
   settings: AtlasSettings;
   onEditLayout: () => void;
+  projectId: string;
 }) {
-  const tableMap = buildGuestTableMap(layouts);
+  const [canvasTableMap, setCanvasTableMap] = useState<Map<string, string>>(new Map());
+
+  useEffect(() => {
+    try {
+      const raw = localStorage.getItem(`reception-layout-${projectId}`);
+      if (!raw) return;
+      const TABLE_KINDS = ["table-long","table-square","table-round","table-ellipse","table-halfround"];
+      const map = new Map<string, string>();
+      (JSON.parse(raw) as PreviewElement[])
+        .filter(el => TABLE_KINDS.includes(el.kind))
+        .forEach((el, i) => {
+          const name = el.name || `Table ${i + 1}`;
+          (el.guestIds ?? []).forEach(gid => { if (gid) map.set(gid, name); });
+        });
+      setCanvasTableMap(map);
+    } catch {}
+  }, [projectId]);
+
+  const tableMap = canvasTableMap.size > 0 ? canvasTableMap : buildGuestTableMap(layouts);
   const seatedCount = guests.filter(g => tableMap.has(g.id)).length;
   const [activePhoto, setActivePhoto] = useState(0);
   const scrollRef = useRef<HTMLDivElement>(null);
@@ -2166,14 +2301,23 @@ export default function SeatingPage() {
       const TABLE_KINDS = ["table-long", "table-square", "table-round", "table-ellipse", "table-halfround"];
       const tables = elements
         .filter(el => TABLE_KINDS.includes(el.kind))
-        .map((el, i) => ({
-          name: el.name || `Table ${i + 1}`,
-          guestNames: Array.from({ length: el.seats ?? 6 }, (_, j) => `Guest name ${j + 1}`),
-        }));
+        .map((el, i) => {
+          const guestNames = (el.guestIds ?? [])
+            .map(gid => {
+              if (!gid) return null;
+              const g = guests.find(x => x.id === gid);
+              return g ? `${g.firstName}${g.lastName ? " " + g.lastName : ""}` : null;
+            })
+            .filter((n): n is string => n !== null);
+          return {
+            name: el.name || `Table ${i + 1}`,
+            guestNames,
+          };
+        });
       setCardsTables(tables);
       setCardsIndex(0);
     } catch {}
-  }, [projectId, activeTab]);
+  }, [projectId, activeTab, guests]);
 
   // Sync tab with URL ?tab= param (read on mount, write on change)
   useEffect(() => {
@@ -2444,12 +2588,14 @@ export default function SeatingPage() {
             layouts={layouts}
             settings={atlasSettings}
             onEditLayout={() => setAtlasEditMode(true)}
+            projectId={projectId}
           />
         )}
         {activeTab === "cards" && (
           <SeatingCardsPanel
             tables={cardsTables}
             currentIndex={cardsIndex}
+            loading={loading}
             onPrev={() => setCardsIndex(i => Math.max(0, i - 1))}
             onNext={() => setCardsIndex(i => Math.min(Math.max(cardsTables.length - 1, 0), i + 1))}
             onEdit={() => isPremiumOrElite(tier) ? router.push(`/planner/${projectId}/seating/cards-edit`) : openUpgrade("premium")}

@@ -82,10 +82,14 @@ export async function POST(req: NextRequest) {
       existingCustomerId: user.stripeCustomerId,
     });
 
-    if (!user.stripeCustomerId) {
+    if (customerId !== user.stripeCustomerId) {
+      // New customer was created (first time or old one was stale/deleted in Stripe)
       await prisma.user.update({
         where: { id: session.user.id },
-        data: { stripeCustomerId: customerId },
+        data: {
+          stripeCustomerId: customerId,
+          stripeSubscriptionId: null, // old subscription belongs to the stale customer
+        },
       });
     }
 
