@@ -1696,6 +1696,7 @@ model WeddingProject {
   vendors               WeddingVendor[]
   vendorConversations   VendorConversation[]
   briefTokens           EventBriefToken[]
+  vendorInviteTokens    VendorInviteToken[]
   guestFamilies         GuestFamily[]
   rsvpQuestions         RsvpQuestion[]
   @@index([userId])
@@ -2067,6 +2068,7 @@ model EventVenue {
   description String?
   notes       String?
   layoutNotes String?
+  photos      String[]  @default([])
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt
 
@@ -2339,6 +2341,22 @@ model EventBriefToken {
   project WeddingProject @relation(fields: [projectId], references: [id], onDelete: Cascade)
 
   @@index([projectId])
+}
+
+model VendorInviteToken {
+  id        String    @id @default(cuid())
+  projectId String
+  token     String    @unique
+  expiresAt DateTime
+  revokedAt DateTime?
+  usedAt    DateTime?
+
+  createdAt DateTime  @default(now())
+
+  project WeddingProject @relation(fields: [projectId], references: [id], onDelete: Cascade)
+
+  @@index([projectId])
+  @@index([token])
 }
 
 enum VendorConvStatus {

@@ -2,13 +2,19 @@
 
 import { useState, useEffect, useCallback, useRef } from "react";
 import { useParams, useRouter } from "next/navigation";
-import { Calendar, MapPin, LayoutTemplate, Download, CloudUpload } from "lucide-react";
+import { Calendar, MapPin, LayoutTemplate, Download, CloudUpload, X } from "lucide-react";
 import { getLocalVenue, updateLocalVenue, updateLocalProject, LocalVenueDetails } from "@/lib/planner-storage";
 import { useLanguage } from "@/lib/i18n/language-context";
 import { usePlannerTier, isPremiumOrElite } from "@/hooks/use-planner-tier";
 import { UpgradeModal } from "@/components/planner/upgrade-modal";
 
 const isLocal = (id: string) => id.startsWith("local-");
+
+// Convert old R2.dev URLs to internal proxy so bucket stays private
+function normalizePhotoUrl(url: string): string {
+  const m = url.match(/^https?:\/\/[^/]+\.r2\.dev\/(.+)$/);
+  return m ? `/api/media/${m[1]}` : url;
+}
 
 type VenueForm = {
   venueName: string | null;
@@ -91,16 +97,26 @@ export default function CeremonyPage() {
   const [locPopupOpen, setLocPopupOpen] = useState(false);
   const descSaveTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
+  // Photo state
+  const [photos, setPhotos] = useState<string[]>([]);
+  const [uploading, setUploading] = useState(false);
+  const [uploadError, setUploadError] = useState<string | null>(null);
+  const [dragOver, setDragOver] = useState(false);
+  const fileInputRef = useRef<HTMLInputElement>(null);
+
   const loadVenue = useCallback(async () => {
     setLoading(true);
     try {
       if (local) {
-        setForm(venueToForm(getLocalVenue(id, "CEREMONY")));
+        const v = getLocalVenue(id, "CEREMONY");
+        setForm(venueToForm(v));
+        setPhotos(v.photos ?? []);
       } else {
         const res = await fetch(`/api/planner/projects/${id}/ceremony`);
         if (res.ok) {
           const data = await res.json();
           setForm(venueToForm(data.venue));
+          setPhotos(data.venue?.photos ?? []);
         }
       }
     } finally {
@@ -134,6 +150,119 @@ export default function CeremonyPage() {
     setLocPopupOpen(false);
     await saveField(updated);
   }
+
+  // ── Photo upload ─────────────────────────────────────────────────────────────
+
+  async function uploadFiles(files: FileList | File[]) {
+    const fileArray = Array.from(files);
+    if (fileArray.length === 0) return;
+
+    const imageFiles = fileArray.filter(f => f.type.startsWith("image/"));
+    if (imageFiles.length === 0) {
+      setUploadError(t("ceremony.onlyImages"));
+      return;
+    }
+
+    const remaining = 30 - photos.length;
+    if (remaining <= 0) {
+      setUploadError(t("ceremony.maxPhotos"));
+      return;
+    }
+
+    const toUpload = imageFiles.slice(0, remaining);
+    setUploading(true);
+    setUploadError(null);
+
+    const newUrls: string[] = [];
+
+    for (const file of toUpload) {
+      if (file.size > 20 * 1024 * 1024) {
+        setUploadError(t("ceremony.fileTooLarge"));
+        continue;
+      }
+
+      const formData = new FormData();
+      formData.append("file", file);
+      formData.append("folder", "uploads");
+
+      try {
+        const res = await fetch("/api/upload", { method: "POST", body: formData });
+        if (!res.ok) {
+          const err = await res.json().catch(() => ({}));
+          setUploadError((err as { error?: string }).error ?? t("ceremony.uploadFailed"));
+          continue;
+        }
+        const { url } = await res.json() as { url: string };
+        newUrls.push(url);
+      } catch {
+        setUploadError(t("ceremony.uploadFailed"));
+      }
+    }
+
+    if (newUrls.length > 0) {
+      if (local) {
+        const current = getLocalVenue(id, "CEREMONY");
+        const merged = [...(current.photos ?? []), ...newUrls];
+        updateLocalVenue(id, "CEREMONY", { photos: merged });
+        setPhotos(merged);
+      } else {
+        const saved: string[] = [];
+        for (const url of newUrls) {
+          const res = await fetch(`/api/planner/projects/${id}/ceremony/photos`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ url }),
+          });
+          if (res.ok) saved.push(url);
+        }
+        if (saved.length > 0) setPhotos(prev => [...prev, ...saved]);
+      }
+    }
+
+    setUploading(false);
+  }
+
+  async function deletePhoto(url: string) {
+    const prev = photos;
+    setPhotos(p => p.filter(x => x !== url));
+
+    if (local) {
+      const current = getLocalVenue(id, "CEREMONY");
+      updateLocalVenue(id, "CEREMONY", { photos: (current.photos ?? []).filter(x => x !== url) });
+    } else {
+      const res = await fetch(`/api/planner/projects/${id}/ceremony/photos`, {
+        method: "DELETE",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ url }),
+      });
+      if (!res.ok) setPhotos(prev);
+    }
+  }
+
+  function handleDragOver(e: React.DragEvent) {
+    e.preventDefault();
+    setDragOver(true);
+  }
+
+  function handleDragLeave(e: React.DragEvent) {
+    e.preventDefault();
+    setDragOver(false);
+  }
+
+  function handleDrop(e: React.DragEvent) {
+    e.preventDefault();
+    setDragOver(false);
+    uploadFiles(e.dataTransfer.files);
+  }
+
+  function handleFileInputChange(e: React.ChangeEvent<HTMLInputElement>) {
+    if (e.target.files && e.target.files.length > 0) {
+      uploadFiles(e.target.files);
+      e.target.value = "";
+    }
+  }
+
+  // ── PDF download ─────────────────────────────────────────────────────────────
 
   async function handleDownloadPDF() {
     if (!isPremiumOrElite(tier)) { setShowUpgrade(true); return; }
@@ -213,7 +342,6 @@ export default function CeremonyPage() {
             <p className={`text-sm font-medium ${form.date ? "text-primary" : "text-primary/60"}`}>
               {formatDate(form.date, t("ceremony.setDate"))}
             </p>
-            {/* Calendar icon — click to open date picker */}
             <div className="absolute bottom-2 right-2" onClick={e => e.stopPropagation()}>
               <Calendar
                 className="h-12 w-12 text-primary/20 cursor-pointer hover:text-primary/60 transition-colors"
@@ -250,7 +378,6 @@ export default function CeremonyPage() {
                 {formatLocation(form.city, form.country, form.address, t("ceremony.setLocation"))}
               </p>
             )}
-            {/* MapPin icon — click to open location popup */}
             <div className="absolute bottom-2 right-2" onClick={e => e.stopPropagation()}>
               <MapPin
                 className="h-12 w-12 text-primary/20 cursor-pointer hover:text-primary/60 transition-colors"
@@ -292,20 +419,80 @@ export default function CeremonyPage() {
         </div>
 
         {/* Photo upload area */}
-        <div className="mb-6 rounded-xl border-2 border-dashed border-primary/20 bg-card/60 px-6 py-10 text-center">
-          <CloudUpload className="mx-auto mb-3 h-12 w-12 text-muted-foreground" />
+        <div
+          className={`mb-4 rounded-xl border-2 border-dashed px-6 py-10 text-center transition-colors ${
+            dragOver
+              ? "border-primary bg-primary/5"
+              : "border-primary/20 bg-card/60"
+          }`}
+          onDragOver={handleDragOver}
+          onDragLeave={handleDragLeave}
+          onDrop={handleDrop}
+        >
+          <input
+            ref={fileInputRef}
+            type="file"
+            accept="image/*"
+            multiple
+            className="hidden"
+            onChange={handleFileInputChange}
+          />
+
+          <CloudUpload className={`mx-auto mb-3 h-12 w-12 transition-colors ${dragOver ? "text-primary" : "text-muted-foreground"}`} />
           <p className="mb-1 text-sm font-semibold text-foreground/80">{t("ceremony.uploadPhotos")}</p>
           <p className="mb-1 text-xs text-muted-foreground">{t("ceremony.dropPhotos")}</p>
           <p className="mb-4 text-xs font-semibold text-muted-foreground">
             {t("ceremony.photoLimit")} <span className="text-primary">{t("ceremony.photoSize")}</span>
           </p>
+
+          {uploadError && (
+            <p className="mb-3 rounded-lg bg-red-50 px-3 py-2 text-xs text-red-600">{uploadError}</p>
+          )}
+
           <button
-            onClick={() => alert(t("ceremony.photoDeferred"))}
-            className="rounded-lg bg-primary px-6 py-2 text-sm font-medium text-white hover:bg-primary/90 transition-colors"
+            onClick={() => {
+              if (photos.length >= 30) { setUploadError(t("ceremony.maxPhotos")); return; }
+              setUploadError(null);
+              fileInputRef.current?.click();
+            }}
+            disabled={uploading}
+            className="inline-flex items-center gap-2 rounded-lg bg-primary px-6 py-2 text-sm font-medium text-white hover:bg-primary/90 transition-colors disabled:opacity-60 disabled:cursor-not-allowed"
           >
-            {t("ceremony.upload")}
+            {uploading ? (
+              <>
+                <span className="h-3.5 w-3.5 animate-spin rounded-full border-2 border-white/30 border-t-white" />
+                {t("ceremony.uploading")}
+              </>
+            ) : t("ceremony.upload")}
           </button>
+
+          {photos.length >= 30 && (
+            <p className="mt-2 text-xs text-muted-foreground">{t("ceremony.maxPhotos")}</p>
+          )}
         </div>
+
+        {/* Photo grid */}
+        {photos.length > 0 && (
+          <div className="mb-6 grid grid-cols-3 gap-2 sm:grid-cols-4">
+            {photos.map((url, i) => (
+              <div key={`${url}-${i}`} className="group relative aspect-square overflow-hidden rounded-lg bg-muted">
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
+                  src={normalizePhotoUrl(url)}
+                  alt=""
+                  className="h-full w-full object-cover"
+                />
+                <button
+                  onClick={() => deletePhoto(url)}
+                  className="absolute right-1 top-1 flex h-6 w-6 items-center justify-center rounded-full bg-black/60 text-white opacity-0 transition-opacity group-hover:opacity-100 hover:bg-black/80"
+                  aria-label="Delete photo"
+                >
+                  <X className="h-3.5 w-3.5" />
+                </button>
+              </div>
+            ))}
+          </div>
+        )}
 
         {/* Download PDF */}
         <div className="flex justify-center">
