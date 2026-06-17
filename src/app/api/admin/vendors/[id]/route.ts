@@ -46,11 +46,23 @@ export async function PUT(
     planTier,
   } = body;
 
+  // Set trialEndsAt when approving a vendor that doesn't have one yet
+  const existingVendor = await prisma.vendorProfile.findUnique({
+    where: { id },
+    select: { trialEndsAt: true, isApproved: true },
+  });
+  const settingApproved = isApproved === true && !existingVendor?.isApproved;
+  const needsTrial = settingApproved && !existingVendor?.trialEndsAt;
+  const newTrialEndsAt = needsTrial
+    ? new Date(Date.now() + 30 * 24 * 60 * 60 * 1000)
+    : undefined;
+
   const vendor = await prisma.vendorProfile.update({
     where: { id },
     data: {
       ...(status !== undefined && { status }),
       ...(planTier !== undefined && { planTier }),
+      ...(newTrialEndsAt && { trialEndsAt: newTrialEndsAt }),
       ...(businessName !== undefined && { businessName: String(businessName).trim() }),
       ...(category !== undefined && { category }),
       ...(description !== undefined && { description: description ? String(description).trim() : null }),
