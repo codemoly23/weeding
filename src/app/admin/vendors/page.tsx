@@ -4,8 +4,12 @@ import { useState, useEffect, useCallback } from "react";
 import Link from "next/link";
 import {
   Store, Plus, Check, X, Pencil, Trash2, ExternalLink,
-  Search, Star, ChevronLeft, ChevronRight, KeyRound, BadgeCheck,
+  Search, Star, ChevronLeft, ChevronRight, KeyRound, BadgeCheck, Loader2,
 } from "lucide-react";
+import {
+  AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent,
+  AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
 import {
@@ -107,6 +111,9 @@ export default function AdminVendorsPage() {
   const [saving, setSaving] = useState(false);
   const [formError, setFormError] = useState("");
 
+  const [deleteTarget, setDeleteTarget] = useState<{ id: string; name: string } | null>(null);
+  const [deleting, setDeleting] = useState(false);
+
   const [createLoginVendor, setCreateLoginVendor] = useState<{ id: string; name: string; email: string } | null>(null);
   const [createLoginPassword, setCreateLoginPassword] = useState("");
   const [createLoginSaving, setCreateLoginSaving] = useState(false);
@@ -145,9 +152,12 @@ export default function AdminVendorsPage() {
     fetchVendors();
   }
 
-  async function handleDelete(id: string, name: string) {
-    if (!confirm(`Delete "${name}"? This cannot be undone.`)) return;
-    await fetch(`/api/admin/vendors/${id}`, { method: "DELETE" });
+  async function confirmDelete() {
+    if (!deleteTarget) return;
+    setDeleting(true);
+    await fetch(`/api/admin/vendors/${deleteTarget.id}`, { method: "DELETE" });
+    setDeleting(false);
+    setDeleteTarget(null);
     fetchVendors();
   }
 
@@ -429,7 +439,7 @@ export default function AdminVendorsPage() {
                         <Pencil className="h-4 w-4" />
                       </button>
                       <button
-                        onClick={() => handleDelete(v.id, v.businessName)}
+                        onClick={() => setDeleteTarget({ id: v.id, name: v.businessName })}
                         className="p-1.5 rounded text-gray-400 hover:text-[var(--ast-error-icon)] hover:bg-[var(--ast-error-bg)] transition-colors"
                         title="Delete"
                       >
@@ -461,6 +471,29 @@ export default function AdminVendorsPage() {
           </div>
         </div>
       )}
+
+      {/* Delete confirmation */}
+      <AlertDialog open={!!deleteTarget} onOpenChange={(open) => { if (!open) setDeleteTarget(null); }}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Delete Vendor?</AlertDialogTitle>
+            <AlertDialogDescription>
+              <strong>{deleteTarget?.name}</strong> will be permanently deleted. This cannot be undone.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel disabled={deleting}>Cancel</AlertDialogCancel>
+            <AlertDialogAction
+              onClick={confirmDelete}
+              disabled={deleting}
+              className="bg-destructive hover:bg-destructive/90"
+            >
+              {deleting ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : null}
+              Delete
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
 
       {/* Create Login Account Modal */}
       {createLoginVendor && (

@@ -12,7 +12,7 @@ function isOrderAdmin(role: string) {
 const uploadDocumentSchema = z.object({
   name: z.string().min(1, "Document name is required"),
   fileName: z.string().min(1, "File name is required"),
-  fileUrl: z.string().url("Valid file URL is required"),
+  fileUrl: z.string().min(1, "File URL is required"),
   fileSize: z.number().positive("File size must be positive"),
   mimeType: z.string().min(1, "MIME type is required"),
   type: z.enum([

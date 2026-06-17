@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
-import { Prisma, OrderStatus } from "@prisma/client";
+import { Prisma, OrderStatus, PaymentStatus } from "@prisma/client";
 import { prisma } from "@/lib/db";
 import { auth } from "@/lib/auth";
 import { generateOrderNumber } from "@/lib/order-utils";
@@ -305,11 +305,14 @@ export async function GET(request: NextRequest) {
 
     const searchParams = request.nextUrl.searchParams;
     const status = searchParams.get("status");
+    const paymentStatus = searchParams.get("paymentStatus");
     const page = parsePositiveInt(searchParams.get("page"), 1);
     const limit = parsePositiveInt(searchParams.get("limit"), 10, 100);
     const search = searchParams.get("search") || "";
 
     const skip = (page - 1) * limit;
+
+    const VALID_PAYMENT_STATUSES = new Set<PaymentStatus>(["PENDING", "PAID", "FAILED", "REFUNDED"]);
 
     // Build where clause
     const where: Prisma.OrderWhereInput = {};
@@ -320,6 +323,14 @@ export async function GET(request: NextRequest) {
         return NextResponse.json({ error: "Invalid status value" }, { status: 400 });
       }
       where.status = upperStatus as OrderStatus;
+    }
+
+    if (paymentStatus && paymentStatus !== "all") {
+      const upperPayment = paymentStatus.toUpperCase();
+      if (!VALID_PAYMENT_STATUSES.has(upperPayment as PaymentStatus)) {
+        return NextResponse.json({ error: "Invalid payment status value" }, { status: 400 });
+      }
+      where.paymentStatus = upperPayment as PaymentStatus;
     }
 
     if (search) {

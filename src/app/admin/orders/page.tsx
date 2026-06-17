@@ -14,6 +14,7 @@ import {
   ChevronRight,
   Loader2,
   RefreshCw,
+  Send,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -48,6 +49,16 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
 import { Checkbox } from "@/components/ui/checkbox";
 import { toast } from "sonner";
 import { getCurrencySymbol } from "@/components/ui/currency-selector";
@@ -126,6 +137,10 @@ export default function AdminOrdersPage() {
   const [isBulkUpdating, setIsBulkUpdating] = useState(false);
   const [isExporting, setIsExporting] = useState(false);
   const [currencySymbol, setCurrencySymbol] = useState("$");
+  const [emailModal, setEmailModal] = useState<{ open: boolean; order: Order | null }>({ open: false, order: null });
+  const [emailSubject, setEmailSubject] = useState("");
+  const [emailMessage, setEmailMessage] = useState("");
+  const [isSendingEmail, setIsSendingEmail] = useState(false);
   const [stats, setStats] = useState({
     pending: 0,
     processing: 0,
@@ -145,6 +160,10 @@ export default function AdminOrdersPage() {
 
       if (statusFilter !== "all") {
         params.append("status", statusFilter);
+      }
+
+      if (paymentFilter !== "all") {
+        params.append("paymentStatus", paymentFilter);
       }
 
       const response = await fetch(`/api/orders?${params}`);
@@ -170,7 +189,7 @@ export default function AdminOrdersPage() {
     } finally {
       setIsLoading(false);
     }
-  }, [currentPage, perPage, searchQuery, statusFilter]);
+  }, [currentPage, perPage, searchQuery, statusFilter, paymentFilter]);
 
   useEffect(() => {
     fetchOrders();
@@ -313,6 +332,50 @@ export default function AdminOrdersPage() {
       toast.error("Failed to delete orders");
     } finally {
       setIsBulkUpdating(false);
+    }
+  };
+
+  const openEmailModal = (order: Order) => {
+    setEmailModal({ open: true, order });
+    setEmailSubject(`Regarding your order ${order.orderNumber}`);
+    setEmailMessage("");
+  };
+
+  const closeEmailModal = () => {
+    setEmailModal({ open: false, order: null });
+    setEmailSubject("");
+    setEmailMessage("");
+  };
+
+  const handleSendEmail = async () => {
+    if (!emailModal.order) return;
+    if (!emailSubject.trim() || !emailMessage.trim()) {
+      toast.error("Please fill in both subject and message");
+      return;
+    }
+
+    setIsSendingEmail(true);
+    try {
+      const response = await fetch(
+        `/api/admin/orders/${emailModal.order.orderNumber}/email`,
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ subject: emailSubject, message: emailMessage }),
+        }
+      );
+
+      const data = await response.json();
+      if (response.ok) {
+        toast.success(`Email sent to ${emailModal.order.customerEmail}`);
+        closeEmailModal();
+      } else {
+        toast.error(data.error || "Failed to send email");
+      }
+    } catch {
+      toast.error("Failed to send email");
+    } finally {
+      setIsSendingEmail(false);
     }
   };
 
@@ -649,7 +712,7 @@ export default function AdminOrdersPage() {
                                 Edit Order
                               </Link>
                             </DropdownMenuItem>
-                            <DropdownMenuItem>
+                            <DropdownMenuItem onClick={() => openEmailModal(order)}>
                               <Mail className="mr-2 h-4 w-4" />
                               Send Email
                             </DropdownMenuItem>
@@ -722,6 +785,61 @@ export default function AdminOrdersPage() {
           )}
         </CardContent>
       </Card>
+      {/* Send Email Modal */}
+      <Dialog open={emailModal.open} onOpenChange={(open) => !open && closeEmailModal()}>
+        <DialogContent className="sm:max-w-lg">
+          <DialogHeader>
+            <DialogTitle>Send Email to Customer</DialogTitle>
+            <DialogDescription>
+              {emailModal.order && (
+                <>
+                  To: <strong>{emailModal.order.customerName}</strong> &lt;{emailModal.order.customerEmail}&gt;
+                  <span className="ml-2 text-xs text-muted-foreground">
+                    ({emailModal.order.orderNumber})
+                  </span>
+                </>
+              )}
+            </DialogDescription>
+          </DialogHeader>
+
+          <div className="space-y-4 py-2">
+            <div className="space-y-1.5">
+              <Label htmlFor="email-subject">Subject</Label>
+              <Input
+                id="email-subject"
+                value={emailSubject}
+                onChange={(e) => setEmailSubject(e.target.value)}
+                placeholder="Email subject..."
+              />
+            </div>
+            <div className="space-y-1.5">
+              <Label htmlFor="email-message">Message</Label>
+              <Textarea
+                id="email-message"
+                value={emailMessage}
+                onChange={(e) => setEmailMessage(e.target.value)}
+                placeholder="Write your message here..."
+                rows={8}
+                className="resize-none"
+              />
+            </div>
+          </div>
+
+          <DialogFooter>
+            <Button variant="outline" onClick={closeEmailModal} disabled={isSendingEmail}>
+              Cancel
+            </Button>
+            <Button onClick={handleSendEmail} disabled={isSendingEmail}>
+              {isSendingEmail ? (
+                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+              ) : (
+                <Send className="mr-2 h-4 w-4" />
+              )}
+              Send Email
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }

@@ -283,6 +283,11 @@ export default function AdminOrderDetailPage({ params }: PageProps) {
   const [emailSubject, setEmailSubject] = useState("");
   const [emailBody, setEmailBody] = useState("");
   const [isEmailDialogOpen, setIsEmailDialogOpen] = useState(false);
+  const [isUploadDialogOpen, setIsUploadDialogOpen] = useState(false);
+  const [uploadFile, setUploadFile] = useState<File | null>(null);
+  const [uploadDocName, setUploadDocName] = useState("");
+  const [uploadDocType, setUploadDocType] = useState("OTHER");
+  const [isUploading, setIsUploading] = useState(false);
   const [currencySymbol, setCurrencySymbol] = useState("$");
 
   // Resolve params
@@ -472,6 +477,59 @@ export default function AdminOrderDetailPage({ params }: PageProps) {
     } catch (error) {
       console.error("Error sending email:", error);
       toast.error("Failed to send email");
+    }
+  };
+
+  // Upload document
+  const handleUploadDocument = async () => {
+    if (!order || !uploadFile || !uploadDocName.trim()) return;
+
+    setIsUploading(true);
+    try {
+      // Step 1: upload file to storage
+      const formData = new FormData();
+      formData.append("file", uploadFile);
+      formData.append("fieldName", "orderDocument");
+
+      const uploadRes = await fetch("/api/checkout/upload", {
+        method: "POST",
+        body: formData,
+      });
+      const uploadData = await uploadRes.json();
+      if (!uploadRes.ok) {
+        toast.error(uploadData.error || "File upload failed");
+        return;
+      }
+
+      // Step 2: register document with order
+      const docRes = await fetch(`/api/orders/${order.orderNumber}/documents`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          name: uploadDocName.trim(),
+          fileName: uploadFile.name,
+          fileUrl: uploadData.url,
+          fileSize: uploadFile.size,
+          mimeType: uploadData.mimeType,
+          type: uploadDocType,
+        }),
+      });
+      const docData = await docRes.json();
+      if (!docRes.ok) {
+        toast.error(docData.error || "Failed to register document");
+        return;
+      }
+
+      toast.success("Document uploaded successfully");
+      setIsUploadDialogOpen(false);
+      setUploadFile(null);
+      setUploadDocName("");
+      setUploadDocType("OTHER");
+      fetchOrder();
+    } catch {
+      toast.error("Failed to upload document");
+    } finally {
+      setIsUploading(false);
     }
   };
 
@@ -825,7 +883,7 @@ export default function AdminOrderDetailPage({ params }: PageProps) {
                 <CardTitle>Documents</CardTitle>
                 <CardDescription>Order-related documents</CardDescription>
               </div>
-              <Button variant="outline" size="sm">
+              <Button variant="outline" size="sm" onClick={() => setIsUploadDialogOpen(true)}>
                 <Upload className="mr-2 h-4 w-4" />
                 Upload
               </Button>
@@ -1182,6 +1240,79 @@ export default function AdminOrderDetailPage({ params }: PageProps) {
           </Card>
         </div>
       </div>
+      {/* Upload Document Dialog */}
+      <Dialog open={isUploadDialogOpen} onOpenChange={(open) => {
+        if (!open) { setUploadFile(null); setUploadDocName(""); setUploadDocType("OTHER"); }
+        setIsUploadDialogOpen(open);
+      }}>
+        <DialogContent className="sm:max-w-md">
+          <DialogHeader>
+            <DialogTitle>Upload Document</DialogTitle>
+            <DialogDescription>
+              Upload a document for order {order?.orderNumber}
+            </DialogDescription>
+          </DialogHeader>
+          <div className="space-y-4 py-2">
+            <div className="space-y-1.5">
+              <Label htmlFor="doc-name">Document Name</Label>
+              <Input
+                id="doc-name"
+                value={uploadDocName}
+                onChange={(e) => setUploadDocName(e.target.value)}
+                placeholder="e.g. Articles of Organization"
+              />
+            </div>
+            <div className="space-y-1.5">
+              <Label htmlFor="doc-type">Document Type</Label>
+              <Select value={uploadDocType} onValueChange={setUploadDocType}>
+                <SelectTrigger id="doc-type">
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="ARTICLES_OF_ORG">Articles of Organization</SelectItem>
+                  <SelectItem value="EIN_LETTER">EIN Letter</SelectItem>
+                  <SelectItem value="OPERATING_AGREEMENT">Operating Agreement</SelectItem>
+                  <SelectItem value="PASSPORT">Passport</SelectItem>
+                  <SelectItem value="ID_CARD">ID Card</SelectItem>
+                  <SelectItem value="ADDRESS_PROOF">Address Proof</SelectItem>
+                  <SelectItem value="BANK_STATEMENT">Bank Statement</SelectItem>
+                  <SelectItem value="OTHER">Other</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+            <div className="space-y-1.5">
+              <Label htmlFor="doc-file">File</Label>
+              <Input
+                id="doc-file"
+                type="file"
+                accept=".pdf,.doc,.docx,.xls,.xlsx,.txt,.csv,.jpg,.jpeg,.png"
+                onChange={(e) => setUploadFile(e.target.files?.[0] ?? null)}
+              />
+              {uploadFile && (
+                <p className="text-xs text-muted-foreground">
+                  {uploadFile.name} ({(uploadFile.size / 1024).toFixed(1)} KB)
+                </p>
+              )}
+            </div>
+          </div>
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setIsUploadDialogOpen(false)} disabled={isUploading}>
+              Cancel
+            </Button>
+            <Button
+              onClick={handleUploadDocument}
+              disabled={isUploading || !uploadFile || !uploadDocName.trim()}
+            >
+              {isUploading ? (
+                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+              ) : (
+                <Upload className="mr-2 h-4 w-4" />
+              )}
+              Upload
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }

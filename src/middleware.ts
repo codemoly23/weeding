@@ -91,7 +91,7 @@ export async function middleware(request: NextRequest) {
     }
 
     if (pathname.startsWith("/api/planner/")) {
-      return hasRole(token, customerRoles)
+      return hasRole(token, [...customerRoles, ...adminRoles])
         ? NextResponse.next()
         : jsonError("Forbidden", 403);
     }
@@ -144,13 +144,11 @@ export async function middleware(request: NextRequest) {
     }
   }
 
-  // If trying to access planner routes while authenticated, redirect staff/vendor away.
+  // If trying to access planner routes while authenticated, redirect vendors away.
+  // Admins are allowed to view /planner routes (e.g. to preview customer projects).
   // Anonymous users (no token) and customers can use /planner freely (localStorage mode).
   if (pathname.startsWith("/planner") && token) {
     const userRole = token.role as string;
-    if (adminRoles.includes(userRole)) {
-      return NextResponse.redirect(new URL("/admin", request.url));
-    }
     if (userRole === "VENDOR") {
       return NextResponse.redirect(new URL("/vendor/dashboard", request.url));
     }

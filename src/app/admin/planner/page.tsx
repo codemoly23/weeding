@@ -2,16 +2,12 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
-import { Calendar, Users, ExternalLink, Heart } from "lucide-react";
+import { Calendar, Users, ExternalLink, Heart, Loader2 } from "lucide-react";
 import type { PlannerTier } from "@/hooks/use-planner-tier";
 import { Card, CardContent } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
 import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
+  Table, TableBody, TableCell, TableHead, TableHeader, TableRow,
 } from "@/components/ui/table";
 
 interface Project {
@@ -26,16 +22,31 @@ interface Project {
   _count: { guests: number };
 }
 
+interface Stats {
+  total: number;
+  active: number;
+  completed: number;
+  archived: number;
+}
+
 export default function AdminPlannerPage() {
   const [projects, setProjects] = useState<Project[]>([]);
+  const [stats, setStats] = useState<Stats>({ total: 0, active: 0, completed: 0, archived: 0 });
   const [loading, setLoading] = useState(true);
+  const [page, setPage] = useState(1);
+  const [pages, setPages] = useState(1);
 
   useEffect(() => {
-    fetch("/api/admin/planner")
+    setLoading(true);
+    fetch(`/api/admin/planner?page=${page}`)
       .then((r) => r.json())
-      .then((d) => setProjects(d.projects || []))
+      .then((d) => {
+        setProjects(d.projects || []);
+        if (d.stats) setStats(d.stats);
+        if (d.pages) setPages(d.pages);
+      })
       .finally(() => setLoading(false));
-  }, []);
+  }, [page]);
 
   const statusColor: Record<string, string> = {
     ACTIVE:    "admin-status-success",
@@ -59,13 +70,13 @@ export default function AdminPlannerPage() {
         </div>
       </div>
 
-      {/* Stats */}
+      {/* Stats — from server */}
       <div className="grid grid-cols-2 gap-4 sm:grid-cols-4">
         {[
-          { label: "Total", value: projects.length },
-          { label: "Active", value: projects.filter((p) => p.status === "ACTIVE").length },
-          { label: "Completed", value: projects.filter((p) => p.status === "COMPLETED").length },
-          { label: "Archived", value: projects.filter((p) => p.status === "ARCHIVED").length },
+          { label: "Total",     value: stats.total },
+          { label: "Active",    value: stats.active },
+          { label: "Completed", value: stats.completed },
+          { label: "Archived",  value: stats.archived },
         ].map((stat) => (
           <Card key={stat.label}>
             <CardContent className="p-4">
@@ -80,7 +91,9 @@ export default function AdminPlannerPage() {
       <Card>
         <CardContent className="p-0">
           {loading ? (
-            <div className="p-8 text-center text-muted-foreground">Loading...</div>
+            <div className="flex justify-center p-8">
+              <Loader2 className="h-6 w-6 animate-spin text-muted-foreground" />
+            </div>
           ) : projects.length === 0 ? (
             <div className="p-8 text-center text-muted-foreground">No projects yet.</div>
           ) : (
@@ -129,11 +142,7 @@ export default function AdminPlannerPage() {
                       )}
                     </TableCell>
                     <TableCell>
-                      <span
-                        className={`rounded-full px-2 py-0.5 text-xs font-medium ${
-                          statusColor[project.status] || "bg-gray-100 text-gray-600"
-                        }`}
-                      >
+                      <span className={`rounded-full px-2 py-0.5 text-xs font-medium ${statusColor[project.status] || "bg-gray-100 text-gray-600"}`}>
                         {project.status}
                       </span>
                     </TableCell>
@@ -153,6 +162,21 @@ export default function AdminPlannerPage() {
                 ))}
               </TableBody>
             </Table>
+          )}
+
+          {/* Pagination */}
+          {pages > 1 && (
+            <div className="flex items-center justify-between border-t px-4 py-3 text-sm text-muted-foreground">
+              <span>Page {page} of {pages}</span>
+              <div className="flex gap-2">
+                <Button variant="outline" size="sm" disabled={page <= 1 || loading} onClick={() => setPage((p) => p - 1)}>
+                  Previous
+                </Button>
+                <Button variant="outline" size="sm" disabled={page >= pages || loading} onClick={() => setPage((p) => p + 1)}>
+                  Next
+                </Button>
+              </div>
+            </div>
           )}
         </CardContent>
       </Card>

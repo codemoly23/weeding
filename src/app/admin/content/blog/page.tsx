@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
-import { Plus, Pencil, Trash2, FileText, Eye, Clock, CheckCircle, Archive } from "lucide-react";
+import { Plus, Pencil, Trash2, FileText, Eye, Clock, CheckCircle, Archive, MoreHorizontal } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -16,6 +16,14 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import {
   Select,
   SelectContent,
@@ -194,12 +202,20 @@ export default function BlogPage() {
         </Card>
       ) : (
         <Card>
-          <Table>
+          <Table className="table-fixed w-full">
+            <colgroup>
+              <col className="w-[20%]" />
+              <col className="w-[20%]" />
+              <col className="w-[20%]" />
+              <col className="w-[20%]" />
+              <col className="w-[20%]" />
+            </colgroup>
             <TableHeader>
               <TableRow>
-                <TableHead className="w-[50%]">Title</TableHead>
+                <TableHead>Title</TableHead>
                 <TableHead>Status</TableHead>
                 <TableHead>Date</TableHead>
+                <TableHead>Change Status</TableHead>
                 <TableHead className="text-right">Actions</TableHead>
               </TableRow>
             </TableHeader>
@@ -222,58 +238,79 @@ export default function BlogPage() {
                       {post.publishedAt ? (
                         <span>
                           Published{" "}
-                          {formatDistanceToNow(new Date(post.publishedAt), {
-                            addSuffix: true,
-                          })}
+                          {formatDistanceToNow(new Date(post.publishedAt), { addSuffix: true })}
                         </span>
                       ) : (
                         <span className="text-muted-foreground">
                           Created{" "}
-                          {formatDistanceToNow(new Date(post.createdAt), {
-                            addSuffix: true,
-                          })}
+                          {formatDistanceToNow(new Date(post.createdAt), { addSuffix: true })}
                         </span>
                       )}
                     </div>
                   </TableCell>
                   <TableCell>
-                    <div className="flex justify-end gap-2">
-                      {post.status === "PUBLISHED" && (
-                        <Button variant="ghost" size="sm" asChild>
-                          <Link href={`/blog/${post.slug}`} target="_blank">
-                            <Eye className="h-4 w-4" />
-                          </Link>
+                    <Select
+                      value={post.status}
+                      onValueChange={(value) =>
+                        updateStatus(post, value as "DRAFT" | "PUBLISHED" | "ARCHIVED")
+                      }
+                    >
+                      <SelectTrigger className="h-8 w-[150px]">
+                        <SelectValue />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="DRAFT">
+                          <span className="flex items-center gap-2">
+                            <Clock className="h-3.5 w-3.5" /> Draft
+                          </span>
+                        </SelectItem>
+                        <SelectItem value="PUBLISHED">
+                          <span className="flex items-center gap-2">
+                            <CheckCircle className="h-3.5 w-3.5" /> Published
+                          </span>
+                        </SelectItem>
+                        <SelectItem value="ARCHIVED">
+                          <span className="flex items-center gap-2">
+                            <Archive className="h-3.5 w-3.5" /> Archived
+                          </span>
+                        </SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </TableCell>
+                  <TableCell className="text-right">
+                    <DropdownMenu>
+                      <DropdownMenuTrigger asChild>
+                        <Button variant="ghost" size="icon">
+                          <MoreHorizontal className="h-4 w-4" />
                         </Button>
-                      )}
-                      <Button variant="ghost" size="sm" asChild>
-                        <Link href={`/admin/content/blog/${post.id}`}>
-                          <Pencil className="h-4 w-4" />
-                        </Link>
-                      </Button>
-                      <Select
-                        value={post.status}
-                        onValueChange={(value) =>
-                          updateStatus(post, value as "DRAFT" | "PUBLISHED" | "ARCHIVED")
-                        }
-                      >
-                        <SelectTrigger className="h-8 w-[110px]">
-                          <SelectValue />
-                        </SelectTrigger>
-                        <SelectContent>
-                          <SelectItem value="DRAFT">Draft</SelectItem>
-                          <SelectItem value="PUBLISHED">Publish</SelectItem>
-                          <SelectItem value="ARCHIVED">Archive</SelectItem>
-                        </SelectContent>
-                      </Select>
-                      <Button
-                        variant="ghost"
-                        size="sm"
-                        className="text-destructive"
-                        onClick={() => openDeleteDialog(post)}
-                      >
-                        <Trash2 className="h-4 w-4" />
-                      </Button>
-                    </div>
+                      </DropdownMenuTrigger>
+                      <DropdownMenuContent align="end">
+                        <DropdownMenuLabel>Actions</DropdownMenuLabel>
+                        <DropdownMenuSeparator />
+                        {post.status === "PUBLISHED" && (
+                          <DropdownMenuItem asChild>
+                            <Link href={`/blog/${post.slug}`} target="_blank">
+                              <Eye className="mr-2 h-4 w-4" />
+                              View Post
+                            </Link>
+                          </DropdownMenuItem>
+                        )}
+                        <DropdownMenuItem asChild>
+                          <Link href={`/admin/content/blog/${post.id}`}>
+                            <Pencil className="mr-2 h-4 w-4" />
+                            Edit
+                          </Link>
+                        </DropdownMenuItem>
+                        <DropdownMenuSeparator />
+                        <DropdownMenuItem
+                          className="text-destructive focus:text-destructive"
+                          onClick={() => openDeleteDialog(post)}
+                        >
+                          <Trash2 className="mr-2 h-4 w-4" />
+                          Delete
+                        </DropdownMenuItem>
+                      </DropdownMenuContent>
+                    </DropdownMenu>
                   </TableCell>
                 </TableRow>
               ))}

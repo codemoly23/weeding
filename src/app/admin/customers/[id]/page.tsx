@@ -1,138 +1,153 @@
+"use client";
+
+import { useState, useEffect } from "react";
+import { useParams } from "next/navigation";
 import Link from "next/link";
 import {
-  ArrowLeft,
-  Mail,
-  Phone,
-  MapPin,
-  Calendar,
-  Package,
-  FileText,
-  MessageSquare,
-  Edit,
-  Ban,
-  Key,
-  Download,
+  ArrowLeft, Mail, Phone, MapPin, Calendar,
+  Package, MessageSquare, Ban, Key, Loader2, CheckCircle,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
+  Card, CardContent, CardDescription, CardHeader, CardTitle,
 } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { getBusinessConfig } from "@/lib/business-settings";
-import { getCurrencySymbol } from "@/lib/currencies";
+import {
+  AlertDialog, AlertDialogAction, AlertDialogCancel,
+  AlertDialogContent, AlertDialogDescription, AlertDialogFooter,
+  AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
+import { toast } from "sonner";
 
-interface PageProps {
-  params: Promise<{ id: string }>;
+interface Order {
+  id: string;
+  orderNumber: string;
+  service: string;
+  status: string;
+  paymentStatus: string;
+  amount: number;
+  date: string;
 }
 
-// Mock customer data
-const getCustomer = (id: string) => ({
-  id,
-  name: "John Doe",
-  email: "john@example.com",
-  phone: "+880 1712 345678",
-  country: "Bangladesh",
-  countryCode: "BD",
-  status: "active",
-  joinedAt: "2024-11-15",
-  lastLogin: "2024-12-10 10:30 AM",
-  stats: {
-    totalOrders: 3,
-    totalSpent: 747,
-    avgOrderValue: 249,
-  },
-  orders: [
-    {
-      id: "CRM-2025-ABC123",
-      service: "Premium Plan",
-      amount: 3499,
-      status: "processing",
-      date: "2025-03-10",
-    },
-    {
-      id: "CRM-2025-DEF456",
-      service: "Elite Plan",
-      amount: 6999,
-      status: "completed",
-      date: "2025-02-25",
-    },
-    {
-      id: "CRM-2025-GHI789",
-      service: "Premium Plan",
-      amount: 3499,
-      status: "completed",
-      date: "2025-01-15",
-    },
-  ],
-  documents: [
-    {
-      name: "Venue Contract",
-      type: "Vendor Document",
-      status: "approved",
-      uploadedAt: "2025-02-15",
-    },
-    {
-      name: "Catering Quote",
-      type: "Vendor Document",
-      status: "approved",
-      uploadedAt: "2025-02-15",
-    },
-    {
-      name: "Guest List Export",
-      type: "Event Document",
-      status: "ready",
-      uploadedAt: "2025-03-10",
-    },
-  ],
-  tickets: [
-    {
-      id: "TKT-001",
-      subject: "Question about seating chart PDF export",
-      status: "resolved",
-      date: "2025-02-28",
-    },
-    {
-      id: "TKT-002",
-      subject: "Need help with custom domain setup",
-      status: "open",
-      date: "2025-03-09",
-    },
-  ],
-  activity: [
-    { action: "Logged in", date: "2024-12-10 10:30 AM" },
-    { action: "Viewed order LLC-2024-ABC123", date: "2024-12-10 10:32 AM" },
-    { action: "Downloaded Operating Agreement", date: "2024-12-09 03:15 PM" },
-    { action: "Created support ticket", date: "2024-12-09 02:45 PM" },
-    { action: "Placed order LLC-2024-ABC123", date: "2024-12-08 11:00 AM" },
-  ],
-});
+interface Ticket {
+  id: string;
+  ticketNumber: string;
+  subject: string;
+  status: string;
+  date: string;
+}
 
-const statusColors: Record<string, string> = {
-  processing: "admin-status-info",
-  completed:  "admin-status-success",
-  pending:    "admin-status-warning",
-  open:       "admin-status-info",
-  resolved:   "admin-status-success",
-  approved:   "admin-status-success",
-  ready:      "admin-status-success",
+interface Customer {
+  id: string;
+  name: string;
+  email: string;
+  phone: string | null;
+  country: string | null;
+  joinedAt: string;
+  isActive: boolean;
+  stats: { totalOrders: number; totalSpent: number; avgOrderValue: number };
+  orders: Order[];
+  tickets: Ticket[];
+}
+
+const orderStatusColors: Record<string, string> = {
+  PENDING:          "admin-status-warning",
+  PROCESSING:       "admin-status-info",
+  IN_PROGRESS:      "admin-status-info",
+  WAITING_FOR_INFO: "admin-status-warning",
+  COMPLETED:        "admin-status-success",
+  CANCELLED:        "admin-status-neutral",
+  REFUNDED:         "admin-status-neutral",
 };
 
-export default async function AdminCustomerDetailPage({ params }: PageProps) {
-  const { id } = await params;
-  const customer = getCustomer(id);
-  const businessConfig = await getBusinessConfig();
-  const currencySymbol = getCurrencySymbol(businessConfig.currency);
+const ticketStatusColors: Record<string, string> = {
+  OPEN:                 "admin-status-info",
+  IN_PROGRESS:          "admin-status-info",
+  WAITING_FOR_CUSTOMER: "admin-status-warning",
+  WAITING_FOR_AGENT:    "admin-status-warning",
+  RESOLVED:             "admin-status-success",
+  CLOSED:               "admin-status-neutral",
+};
+
+function initials(name: string) {
+  return name.split(" ").map((n) => n[0]).join("").toUpperCase().slice(0, 2);
+}
+
+export default function AdminCustomerDetailPage() {
+  const { id } = useParams<{ id: string }>();
+  const [customer, setCustomer] = useState<Customer | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [resetting, setResetting] = useState(false);
+  const [disabling, setDisabling] = useState(false);
+
+  useEffect(() => {
+    fetch(`/api/admin/customers/${id}`)
+      .then((r) => r.json())
+      .then((d) => { if (d.customer) setCustomer(d.customer); })
+      .finally(() => setLoading(false));
+  }, [id]);
+
+  async function handleResetPassword() {
+    setResetting(true);
+    try {
+      const res = await fetch(`/api/admin/customers/${id}/reset-password`, { method: "POST" });
+      const data = await res.json();
+      if (res.ok) {
+        toast.success(data.message || "Password reset email sent");
+      } else if (res.status === 207) {
+        toast.warning(data.error);
+      } else {
+        toast.error(data.error || "Failed to reset password");
+      }
+    } catch {
+      toast.error("Network error");
+    } finally {
+      setResetting(false);
+    }
+  }
+
+  async function handleToggleDisable() {
+    setDisabling(true);
+    try {
+      const res = await fetch(`/api/admin/customers/${id}/disable`, { method: "PATCH" });
+      const data = await res.json();
+      if (res.ok) {
+        setCustomer((prev) => prev ? { ...prev, isActive: data.isActive } : prev);
+        toast.success(data.isActive ? "Account re-enabled" : "Account disabled");
+      } else {
+        toast.error(data.error || "Failed to update account");
+      }
+    } catch {
+      toast.error("Network error");
+    } finally {
+      setDisabling(false);
+    }
+  }
+
+  if (loading) {
+    return (
+      <div className="flex h-64 items-center justify-center">
+        <Loader2 className="h-6 w-6 animate-spin text-muted-foreground" />
+      </div>
+    );
+  }
+
+  if (!customer) {
+    return (
+      <div className="py-12 text-center text-muted-foreground">
+        Customer not found.{" "}
+        <Link href="/admin/customers" className="underline">Back to list</Link>
+      </div>
+    );
+  }
+
+  const currencySymbol = "$";
 
   return (
     <div className="space-y-6">
-      {/* Back Button */}
       <Link
         href="/admin/customers"
         className="inline-flex items-center text-sm text-muted-foreground hover:text-foreground"
@@ -141,15 +156,12 @@ export default async function AdminCustomerDetailPage({ params }: PageProps) {
         Back to Customers
       </Link>
 
-      {/* Customer Header */}
+      {/* Header */}
       <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
         <div className="flex items-center gap-4">
           <Avatar className="h-16 w-16">
-            <AvatarFallback className="bg-primary text-2xl text-primary-foreground">
-              {customer.name
-                .split(" ")
-                .map((n) => n[0])
-                .join("")}
+            <AvatarFallback className="bg-primary text-xl text-primary-foreground">
+              {initials(customer.name)}
             </AvatarFallback>
           </Avatar>
           <div>
@@ -157,42 +169,33 @@ export default async function AdminCustomerDetailPage({ params }: PageProps) {
               <h1 className="text-2xl font-bold">{customer.name}</h1>
               <Badge
                 variant="secondary"
-                className={
-                  customer.status === "active"
-                    ? "admin-status-success"
-                    : "admin-status-neutral"
-                }
+                className={customer.isActive ? "admin-status-success" : "admin-status-neutral"}
               >
-                {customer.status}
+                {customer.isActive ? "Active" : "Disabled"}
               </Badge>
             </div>
             <p className="text-muted-foreground">{customer.email}</p>
           </div>
         </div>
-        <div className="flex gap-2">
-          <Button variant="outline" size="sm">
-            <Mail className="mr-2 h-4 w-4" />
-            Send Email
-          </Button>
-          <Button size="sm">
-            <Edit className="mr-2 h-4 w-4" />
-            Edit Profile
-          </Button>
-        </div>
+        <Button
+          variant="outline"
+          size="sm"
+          onClick={() => window.open(`mailto:${customer.email}`, "_blank")}
+        >
+          <Mail className="mr-2 h-4 w-4" />
+          Send Email
+        </Button>
       </div>
 
       <div className="grid gap-6 lg:grid-cols-3">
-        {/* Main Content */}
+        {/* Main content */}
         <div className="space-y-6 lg:col-span-2">
           <Tabs defaultValue="orders">
             <TabsList>
               <TabsTrigger value="orders">Orders ({customer.orders.length})</TabsTrigger>
-              <TabsTrigger value="documents">Documents ({customer.documents.length})</TabsTrigger>
               <TabsTrigger value="tickets">Tickets ({customer.tickets.length})</TabsTrigger>
-              <TabsTrigger value="activity">Activity</TabsTrigger>
             </TabsList>
 
-            {/* Orders Tab */}
             <TabsContent value="orders" className="mt-4">
               <Card>
                 <CardHeader>
@@ -200,83 +203,43 @@ export default async function AdminCustomerDetailPage({ params }: PageProps) {
                   <CardDescription>All orders placed by this customer</CardDescription>
                 </CardHeader>
                 <CardContent>
-                  <div className="space-y-4">
-                    {customer.orders.map((order) => (
-                      <div
-                        key={order.id}
-                        className="flex items-center justify-between rounded-lg border p-4"
-                      >
-                        <div>
-                          <Link
-                            href={`/admin/orders/${order.id}`}
-                            className="font-medium hover:underline"
-                          >
-                            {order.id}
-                          </Link>
-                          <p className="text-sm text-muted-foreground">
-                            {order.service} • {order.date}
-                          </p>
-                        </div>
-                        <div className="flex items-center gap-3">
-                          <Badge
-                            variant="secondary"
-                            className={statusColors[order.status]}
-                          >
-                            {order.status}
-                          </Badge>
-                          <span className="font-medium">{currencySymbol}{order.amount}</span>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                </CardContent>
-              </Card>
-            </TabsContent>
-
-            {/* Documents Tab */}
-            <TabsContent value="documents" className="mt-4">
-              <Card>
-                <CardHeader>
-                  <CardTitle>Documents</CardTitle>
-                  <CardDescription>Uploaded and generated documents</CardDescription>
-                </CardHeader>
-                <CardContent>
-                  <div className="space-y-4">
-                    {customer.documents.map((doc, index) => (
-                      <div
-                        key={index}
-                        className="flex items-center justify-between rounded-lg border p-4"
-                      >
-                        <div className="flex items-center gap-3">
-                          <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary/10 text-primary">
-                            <FileText className="h-5 w-5" />
-                          </div>
+                  {customer.orders.length === 0 ? (
+                    <p className="py-6 text-center text-sm text-muted-foreground">No orders yet.</p>
+                  ) : (
+                    <div className="space-y-3">
+                      {customer.orders.map((order) => (
+                        <div
+                          key={order.id}
+                          className="flex items-center justify-between rounded-lg border p-4"
+                        >
                           <div>
-                            <p className="font-medium">{doc.name}</p>
+                            <Link
+                              href={`/admin/orders/${order.id}`}
+                              className="font-medium hover:underline"
+                            >
+                              {order.orderNumber}
+                            </Link>
                             <p className="text-sm text-muted-foreground">
-                              {doc.type} • {doc.uploadedAt}
+                              {order.service} &bull;{" "}
+                              {new Date(order.date).toLocaleDateString()}
                             </p>
                           </div>
+                          <div className="flex items-center gap-3">
+                            <Badge variant="secondary" className={orderStatusColors[order.status] ?? "admin-status-neutral"}>
+                              {order.status.replace(/_/g, " ")}
+                            </Badge>
+                            <span className="font-medium whitespace-nowrap">
+                              {currencySymbol}{order.amount.toLocaleString()}
+                            </span>
+                          </div>
                         </div>
-                        <div className="flex items-center gap-2">
-                          <Badge
-                            variant="secondary"
-                            className={statusColors[doc.status]}
-                          >
-                            {doc.status}
-                          </Badge>
-                          <Button variant="ghost" size="icon">
-                            <Download className="h-4 w-4" />
-                          </Button>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
+                      ))}
+                    </div>
+                  )}
                 </CardContent>
               </Card>
             </TabsContent>
 
-            {/* Tickets Tab */}
             <TabsContent value="tickets" className="mt-4">
               <Card>
                 <CardHeader>
@@ -284,57 +247,34 @@ export default async function AdminCustomerDetailPage({ params }: PageProps) {
                   <CardDescription>Customer support history</CardDescription>
                 </CardHeader>
                 <CardContent>
-                  <div className="space-y-4">
-                    {customer.tickets.map((ticket) => (
-                      <div
-                        key={ticket.id}
-                        className="flex items-center justify-between rounded-lg border p-4"
-                      >
-                        <div>
-                          <Link
-                            href={`/admin/tickets/${ticket.id}`}
-                            className="font-medium hover:underline"
-                          >
-                            {ticket.subject}
-                          </Link>
-                          <p className="text-sm text-muted-foreground">
-                            {ticket.id} • {ticket.date}
-                          </p>
-                        </div>
-                        <Badge
-                          variant="secondary"
-                          className={statusColors[ticket.status]}
+                  {customer.tickets.length === 0 ? (
+                    <p className="py-6 text-center text-sm text-muted-foreground">No tickets yet.</p>
+                  ) : (
+                    <div className="space-y-3">
+                      {customer.tickets.map((ticket) => (
+                        <div
+                          key={ticket.id}
+                          className="flex items-center justify-between rounded-lg border p-4"
                         >
-                          {ticket.status}
-                        </Badge>
-                      </div>
-                    ))}
-                  </div>
-                </CardContent>
-              </Card>
-            </TabsContent>
-
-            {/* Activity Tab */}
-            <TabsContent value="activity" className="mt-4">
-              <Card>
-                <CardHeader>
-                  <CardTitle>Activity Log</CardTitle>
-                  <CardDescription>Recent customer activity</CardDescription>
-                </CardHeader>
-                <CardContent>
-                  <div className="space-y-4">
-                    {customer.activity.map((item, index) => (
-                      <div key={index} className="flex items-start gap-4">
-                        <div className="mt-1.5 h-2 w-2 rounded-full bg-primary" />
-                        <div className="flex-1">
-                          <p className="text-sm">{item.action}</p>
-                          <p className="text-xs text-muted-foreground">
-                            {item.date}
-                          </p>
+                          <div>
+                            <Link
+                              href={`/admin/tickets/${ticket.id}`}
+                              className="font-medium hover:underline"
+                            >
+                              {ticket.subject}
+                            </Link>
+                            <p className="text-sm text-muted-foreground">
+                              {ticket.ticketNumber} &bull;{" "}
+                              {new Date(ticket.date).toLocaleDateString()}
+                            </p>
+                          </div>
+                          <Badge variant="secondary" className={ticketStatusColors[ticket.status] ?? "admin-status-neutral"}>
+                            {ticket.status.replace(/_/g, " ")}
+                          </Badge>
                         </div>
-                      </div>
-                    ))}
-                  </div>
+                      ))}
+                    </div>
+                  )}
                 </CardContent>
               </Card>
             </TabsContent>
@@ -343,38 +283,37 @@ export default async function AdminCustomerDetailPage({ params }: PageProps) {
 
         {/* Sidebar */}
         <div className="space-y-6">
-          {/* Customer Info */}
           <Card>
             <CardHeader>
               <CardTitle>Contact Information</CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
               <div className="flex items-center gap-3">
-                <Mail className="h-4 w-4 text-muted-foreground" />
-                <span className="text-sm">{customer.email}</span>
+                <Mail className="h-4 w-4 shrink-0 text-muted-foreground" />
+                <span className="text-sm break-all">{customer.email}</span>
               </div>
-              <div className="flex items-center gap-3">
-                <Phone className="h-4 w-4 text-muted-foreground" />
-                <span className="text-sm">{customer.phone}</span>
-              </div>
-              <div className="flex items-center gap-3">
-                <MapPin className="h-4 w-4 text-muted-foreground" />
-                <span className="text-sm">{customer.country}</span>
-              </div>
+              {customer.phone && (
+                <div className="flex items-center gap-3">
+                  <Phone className="h-4 w-4 shrink-0 text-muted-foreground" />
+                  <span className="text-sm">{customer.phone}</span>
+                </div>
+              )}
+              {customer.country && (
+                <div className="flex items-center gap-3">
+                  <MapPin className="h-4 w-4 shrink-0 text-muted-foreground" />
+                  <span className="text-sm">{customer.country}</span>
+                </div>
+              )}
               <Separator />
               <div className="flex items-center gap-3">
-                <Calendar className="h-4 w-4 text-muted-foreground" />
-                <div>
-                  <p className="text-sm">Joined {customer.joinedAt}</p>
-                  <p className="text-xs text-muted-foreground">
-                    Last login: {customer.lastLogin}
-                  </p>
-                </div>
+                <Calendar className="h-4 w-4 shrink-0 text-muted-foreground" />
+                <p className="text-sm">
+                  Joined {new Date(customer.joinedAt).toLocaleDateString()}
+                </p>
               </div>
             </CardContent>
           </Card>
 
-          {/* Stats */}
           <Card>
             <CardHeader>
               <CardTitle>Statistics</CardTitle>
@@ -389,41 +328,111 @@ export default async function AdminCustomerDetailPage({ params }: PageProps) {
               </div>
               <div className="flex items-center justify-between">
                 <span className="text-sm">Total Spent</span>
-                <span className="font-medium">{currencySymbol}{customer.stats.totalSpent}</span>
+                <span className="font-medium">{currencySymbol}{customer.stats.totalSpent.toLocaleString()}</span>
               </div>
               <div className="flex items-center justify-between">
                 <span className="text-sm">Avg. Order Value</span>
-                <span className="font-medium">{currencySymbol}{customer.stats.avgOrderValue}</span>
+                <span className="font-medium">{currencySymbol}{customer.stats.avgOrderValue.toLocaleString()}</span>
+              </div>
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-2">
+                  <MessageSquare className="h-4 w-4 text-muted-foreground" />
+                  <span className="text-sm">Support Tickets</span>
+                </div>
+                <span className="font-medium">{customer.tickets.length}</span>
               </div>
             </CardContent>
           </Card>
 
-          {/* Quick Actions */}
           <Card>
             <CardHeader>
               <CardTitle>Quick Actions</CardTitle>
             </CardHeader>
             <CardContent className="space-y-2">
-              <Button variant="outline" className="w-full justify-start">
+              <Button
+                variant="outline"
+                className="w-full justify-start"
+                onClick={() => window.open(`mailto:${customer.email}`, "_blank")}
+              >
                 <Mail className="mr-2 h-4 w-4" />
                 Send Email
               </Button>
-              <Button variant="outline" className="w-full justify-start">
-                <Key className="mr-2 h-4 w-4" />
-                Reset Password
+
+              <AlertDialog>
+                <AlertDialogTrigger asChild>
+                  <Button variant="outline" className="w-full justify-start" disabled={resetting}>
+                    {resetting ? (
+                      <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                    ) : (
+                      <Key className="mr-2 h-4 w-4" />
+                    )}
+                    Reset Password
+                  </Button>
+                </AlertDialogTrigger>
+                <AlertDialogContent>
+                  <AlertDialogHeader>
+                    <AlertDialogTitle>Reset Password?</AlertDialogTitle>
+                    <AlertDialogDescription>
+                      A temporary password will be generated and sent to{" "}
+                      <strong>{customer.email}</strong>. The customer must change it after login.
+                    </AlertDialogDescription>
+                  </AlertDialogHeader>
+                  <AlertDialogFooter>
+                    <AlertDialogCancel>Cancel</AlertDialogCancel>
+                    <AlertDialogAction onClick={handleResetPassword}>
+                      <CheckCircle className="mr-2 h-4 w-4" />
+                      Send Reset Email
+                    </AlertDialogAction>
+                  </AlertDialogFooter>
+                </AlertDialogContent>
+              </AlertDialog>
+
+              <Button asChild variant="outline" className="w-full justify-start">
+                <Link href={`/admin/tickets?customerId=${customer.id}`}>
+                  <MessageSquare className="mr-2 h-4 w-4" />
+                  View Tickets
+                </Link>
               </Button>
-              <Button variant="outline" className="w-full justify-start">
-                <MessageSquare className="mr-2 h-4 w-4" />
-                Create Ticket
-              </Button>
+
               <Separator />
-              <Button
-                variant="outline"
-                className="w-full justify-start text-destructive hover:text-destructive"
-              >
-                <Ban className="mr-2 h-4 w-4" />
-                Disable Account
-              </Button>
+
+              <AlertDialog>
+                <AlertDialogTrigger asChild>
+                  <Button
+                    variant="outline"
+                    className="w-full justify-start text-destructive hover:text-destructive"
+                    disabled={disabling}
+                  >
+                    {disabling ? (
+                      <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                    ) : (
+                      <Ban className="mr-2 h-4 w-4" />
+                    )}
+                    {customer.isActive ? "Disable Account" : "Re-enable Account"}
+                  </Button>
+                </AlertDialogTrigger>
+                <AlertDialogContent>
+                  <AlertDialogHeader>
+                    <AlertDialogTitle>
+                      {customer.isActive ? "Disable Account?" : "Re-enable Account?"}
+                    </AlertDialogTitle>
+                    <AlertDialogDescription>
+                      {customer.isActive
+                        ? `${customer.name} will be immediately logged out and unable to log in until re-enabled.`
+                        : `${customer.name} will be able to log in again.`}
+                    </AlertDialogDescription>
+                  </AlertDialogHeader>
+                  <AlertDialogFooter>
+                    <AlertDialogCancel>Cancel</AlertDialogCancel>
+                    <AlertDialogAction
+                      onClick={handleToggleDisable}
+                      className={customer.isActive ? "bg-destructive hover:bg-destructive/90" : ""}
+                    >
+                      {customer.isActive ? "Disable" : "Re-enable"}
+                    </AlertDialogAction>
+                  </AlertDialogFooter>
+                </AlertDialogContent>
+              </AlertDialog>
             </CardContent>
           </Card>
         </div>
