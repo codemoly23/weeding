@@ -1,8 +1,8 @@
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useRef } from "react";
 import { useParams } from "next/navigation";
-import { Plus, Trash2, Download } from "lucide-react";
+import { Plus, Trash2, Download, Check } from "lucide-react";
 import { useLanguage } from "@/lib/i18n/language-context";
 import {
   getLocalNotes,
@@ -11,6 +11,14 @@ import {
   deleteLocalNote,
   LocalNote,
 } from "@/lib/planner-storage";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription,
+  DialogFooter,
+} from "@/components/ui/dialog";
 
 const isLocal = (id: string) => id.startsWith("local-");
 
@@ -28,7 +36,10 @@ export default function NotesPage() {
   const [notes, setNotes] = useState<LocalNote[]>([]);
   const [loading, setLoading] = useState(true);
   const [activeId, setActiveId] = useState<string | null>(null);
-  const [saving, setSaving] = useState(false);
+  const [saveState, setSaveState] = useState<"idle" | "saving" | "saved">("idle");
+  const [deleteTargetId, setDeleteTargetId] = useState<string | null>(null);
+  const saveTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const savedTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const loadNotes = useCallback(async () => {
     setLoading(true);
@@ -71,24 +82,36 @@ export default function NotesPage() {
 
   async function updateField(noteId: string, field: "title" | "content", value: string) {
     setNotes(prev => prev.map(n => n.id === noteId ? { ...n, [field]: value } : n));
-    setSaving(true);
-    try {
-      if (local) { updateLocalNote(id, noteId, { [field]: value }); }
-      else {
-        await apiFetch(`/api/planner/projects/${id}/notes/${noteId}`, {
-          method: "PUT", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ [field]: value }),
-        });
-      }
-    } catch {/* ignore */} finally { setSaving(false); }
+    setSaveState("saving");
+    if (saveTimerRef.current) clearTimeout(saveTimerRef.current);
+    if (savedTimerRef.current) clearTimeout(savedTimerRef.current);
+    saveTimerRef.current = setTimeout(async () => {
+      try {
+        if (local) { updateLocalNote(id, noteId, { [field]: value }); }
+        else {
+          await apiFetch(`/api/planner/projects/${id}/notes/${noteId}`, {
+            method: "PUT", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ [field]: value }),
+          });
+        }
+        setSaveState("saved");
+        savedTimerRef.current = setTimeout(() => setSaveState("idle"), 2000);
+      } catch { setSaveState("idle"); }
+    }, 500);
   }
 
-  async function deleteNote(noteId: string) {
-    if (!confirm(t("notes.deleteConfirm"))) return;
-    if (local) { deleteLocalNote(id, noteId); }
-    else { await apiFetch(`/api/planner/projects/${id}/notes/${noteId}`, { method: "DELETE" }); }
-    const remaining = notes.filter(n => n.id !== noteId);
-    setNotes(remaining);
-    setActiveId(remaining.length > 0 ? remaining[0].id : null);
+  async function confirmDelete() {
+    if (!deleteTargetId) return;
+    try {
+      if (local) { deleteLocalNote(id, deleteTargetId); }
+      else { await apiFetch(`/api/planner/projects/${id}/notes/${deleteTargetId}`, { method: "DELETE" }); }
+      const remaining = notes.filter(n => n.id !== deleteTargetId);
+      setNotes(remaining);
+      setActiveId(remaining.length > 0 ? remaining[0].id : null);
+    } catch {
+      alert(t("notes.deleteError"));
+    } finally {
+      setDeleteTargetId(null);
+    }
   }
 
   async function downloadPDF() {
@@ -130,10 +153,10 @@ export default function NotesPage() {
   function timeAgo(iso: string) {
     const diff = Date.now() - new Date(iso).getTime();
     const mins = Math.floor(diff / 60000);
-    if (mins < 1) return "just now";
-    if (mins < 60) return `${mins}m ago`;
+    if (mins < 1) return t("notes.justNow");
+    if (mins < 60) return `${mins}${t("notes.mAgo")}`;
     const hrs = Math.floor(mins / 60);
-    if (hrs < 24) return `${hrs}h ago`;
+    if (hrs < 24) return `${hrs}${t("notes.hAgo")}`;
     return new Date(iso).toLocaleDateString();
   }
 
@@ -194,7 +217,14 @@ export default function NotesPage() {
                 className="flex-1 bg-transparent text-lg font-semibold text-foreground placeholder-muted-foreground/50 focus:outline-none"
               />
               <div className="flex items-center gap-2">
-                {saving && <span className="text-xs text-muted-foreground">Saving...</span>}
+                {saveState === "saving" && (
+                  <span className="text-xs text-muted-foreground">Saving...</span>
+                )}
+                {saveState === "saved" && (
+                  <span className="flex items-center gap-1 text-xs text-green-600">
+                    <Check className="h-3 w-3" /> Saved
+                  </span>
+                )}
                 <button
                   onClick={downloadPDF}
                   className="rounded-lg p-1.5 text-muted-foreground hover:text-primary hover:bg-primary/10 transition-colors"
@@ -202,7 +232,7 @@ export default function NotesPage() {
                 >
                   <Download className="h-4 w-4" />
                 </button>
-                <button onClick={() => deleteNote(activeNote.id)} className="rounded-lg p-1.5 text-muted-foreground hover:text-[var(--color-error-text)] hover:bg-[var(--color-error-bg)] transition-colors">
+                <button onClick={() => setDeleteTargetId(activeNote.id)} className="rounded-lg p-1.5 text-muted-foreground hover:text-[var(--color-error-text)] hover:bg-[var(--color-error-bg)] transition-colors">
                   <Trash2 className="h-4 w-4" />
                 </button>
               </div>
@@ -218,6 +248,29 @@ export default function NotesPage() {
           </>
         )}
       </div>
+      {/* Delete confirmation dialog */}
+      <Dialog open={!!deleteTargetId} onOpenChange={open => { if (!open) setDeleteTargetId(null); }}>
+        <DialogContent showCloseButton={false} className="max-w-sm">
+          <DialogHeader>
+            <DialogTitle>{t("notes.deleteConfirm")}</DialogTitle>
+            <DialogDescription>{t("notes.deleteConfirmDesc")}</DialogDescription>
+          </DialogHeader>
+          <DialogFooter>
+            <button
+              onClick={() => setDeleteTargetId(null)}
+              className="rounded-lg border border-border px-4 py-2 text-sm text-foreground hover:bg-muted transition-colors"
+            >
+              {t("notes.cancel")}
+            </button>
+            <button
+              onClick={confirmDelete}
+              className="rounded-lg bg-red-600 px-4 py-2 text-sm font-medium text-white hover:bg-red-700 transition-colors"
+            >
+              {t("notes.delete")}
+            </button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }

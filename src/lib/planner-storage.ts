@@ -203,6 +203,7 @@ export function pruneOldProjects(maxAgeDays = 90): number {
       localStorage.removeItem(`planner_venue_${id}_ceremony`);
       localStorage.removeItem(`planner_venue_${id}_reception`);
       localStorage.removeItem(`planner-${id}-budget-goal`);
+      localStorage.removeItem(`planner_notes_${id}`);
       pruned++;
     } else {
       remaining.push(id);
@@ -506,7 +507,7 @@ export function addLocalNote(projectId: string, data: Pick<LocalNote, "title" | 
   const notes = getLocalNotes(projectId);
   const now = new Date().toISOString();
   const note: LocalNote = { id: `ln-${crypto.randomUUID()}`, projectId, order: notes.length, createdAt: now, updatedAt: now, ...data };
-  saveNotes(projectId, [...notes, note]);
+  saveNotes(projectId, [note, ...notes]);
   return note;
 }
 

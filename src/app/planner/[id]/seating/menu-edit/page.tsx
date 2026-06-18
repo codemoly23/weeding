@@ -21,6 +21,12 @@ const HEADING_FONTS  = ["Overlock", "Playfair Display", "Dancing Script", "Georg
 const PARA_FONTS     = ["Georgia", "Overlock", "Playfair Display", "Lato", "sans-serif", "serif"];
 const TEMPLATES      = ["Basic", "Elegant", "Minimal"];
 
+const TEMPLATE_PRESETS: Record<string, Partial<MenuSettings>> = {
+  Basic:   { mainHeadingFont: "Overlock",         mainHeadingSize: 73, secondHeadingFont: "Overlock",         secondHeadingSize: 30, paragraphFont: "Georgia",    paragraphSize: 20 },
+  Elegant: { mainHeadingFont: "Playfair Display",  mainHeadingSize: 65, secondHeadingFont: "Playfair Display",  secondHeadingSize: 28, paragraphFont: "Georgia",    paragraphSize: 18 },
+  Minimal: { mainHeadingFont: "Lato",              mainHeadingSize: 55, secondHeadingFont: "Lato",              secondHeadingSize: 24, paragraphFont: "sans-serif", paragraphSize: 16 },
+};
+
 const SECTION_LABELS: Record<SectionType, string> = {
   "main-heading":   "Main heading",
   "second-heading": "Second heading",
@@ -368,7 +374,7 @@ export default function MenuEditPage() {
                     <div className="fixed inset-0 z-10" onClick={() => setTplOpen(false)} />
                     <div className="absolute left-0 right-0 top-full z-20 mt-1 overflow-hidden rounded-xl border border-border bg-card shadow-lg">
                       {TEMPLATES.map(t => (
-                        <button key={t} onClick={() => { set("template", t); setTplOpen(false); }}
+                        <button key={t} onClick={() => { setSettings(s => ({ ...s, template: t, ...(TEMPLATE_PRESETS[t] ?? {}) })); setTplOpen(false); }}
                           className={cn("flex w-full items-center px-4 py-2.5 text-left text-sm transition-colors",
                             t === settings.template ? "bg-primary text-primary-foreground font-medium" : "text-foreground hover:bg-muted/50")}>
                           Template — {t}

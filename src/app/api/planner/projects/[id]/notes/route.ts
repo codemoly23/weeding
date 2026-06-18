@@ -16,7 +16,7 @@ export async function GET(
 
   const notes = await prisma.projectNote.findMany({
     where: { projectId: id },
-    orderBy: { order: "asc" },
+    orderBy: { createdAt: "desc" },
     take: 100,
   });
 

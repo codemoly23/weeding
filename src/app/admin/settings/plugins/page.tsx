@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useRef } from "react";
 import {
   Puzzle,
   Loader2,
@@ -18,6 +18,7 @@ import {
   Globe,
   MessageSquare,
   Sparkles,
+  Upload,
   type LucideIcon,
 } from "lucide-react";
 
@@ -109,6 +110,8 @@ export default function PluginsPage() {
   const [plugins, setPlugins] = useState<Plugin[]>([]);
   const [loading, setLoading] = useState(true);
   const [actionLoading, setActionLoading] = useState<string | null>(null);
+  const [uploading, setUploading] = useState(false);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   // License activation states
   const [licenseDialogOpen, setLicenseDialogOpen] = useState(false);
@@ -129,11 +132,41 @@ export default function PluginsPage() {
       if (data.plugins) {
         setPlugins(data.plugins);
       }
-    } catch (error) {
-      console.error("Error fetching plugins:", error);
+    } catch {
       toast.error("Failed to load plugins");
     } finally {
       setLoading(false);
+    }
+  }
+
+  async function handleFileUpload(e: React.ChangeEvent<HTMLInputElement>) {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    setUploading(true);
+    try {
+      const formData = new FormData();
+      formData.append("file", file);
+
+      const res = await fetch("/api/admin/plugins/upload", {
+        method: "POST",
+        body: formData,
+      });
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        toast.error(data.error || "Upload failed");
+        return;
+      }
+
+      toast.success(data.message || "Plugin uploaded successfully");
+      fetchPlugins();
+    } catch {
+      toast.error("Failed to upload plugin");
+    } finally {
+      setUploading(false);
+      if (fileInputRef.current) fileInputRef.current.value = "";
     }
   }
 
@@ -152,15 +185,13 @@ export default function PluginsPage() {
       const data = await res.json();
       toast.success(data.message);
       fetchPlugins();
-    } catch (error) {
-      console.error("Error toggling plugin:", error);
+    } catch {
       toast.error("Failed to update plugin status");
     } finally {
       setActionLoading(null);
     }
   }
 
-  // Open license activation dialog
   function openLicenseDialog(plugin: Plugin) {
     setSelectedPlugin(plugin);
     setLicenseKey("");
@@ -169,7 +200,6 @@ export default function PluginsPage() {
     setLicenseDialogOpen(true);
   }
 
-  // Activate plugin with license
   async function activateWithLicense() {
     if (!selectedPlugin || !licenseKey.trim()) return;
 
@@ -199,8 +229,7 @@ export default function PluginsPage() {
       setLicenseKey("");
       setAgreedToTerms(false);
       fetchPlugins();
-    } catch (error) {
-      console.error("Activation error:", error);
+    } catch {
       setActivationError("Failed to activate plugin. Please try again.");
     } finally {
       setActivating(false);
@@ -236,10 +265,27 @@ export default function PluginsPage() {
             Manage installed plugins
           </p>
         </div>
-        <Button variant="outline" onClick={fetchPlugins}>
-          <RefreshCw className="h-4 w-4 mr-2" />
-          Refresh
-        </Button>
+        <div className="flex items-center gap-2">
+          <input
+            ref={fileInputRef}
+            type="file"
+            accept=".zip"
+            className="hidden"
+            onChange={handleFileUpload}
+          />
+          <Button onClick={() => fileInputRef.current?.click()} disabled={uploading}>
+            {uploading ? (
+              <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+            ) : (
+              <Upload className="h-4 w-4 mr-2" />
+            )}
+            {uploading ? "Uploading..." : "Upload Plugin"}
+          </Button>
+          <Button variant="outline" onClick={fetchPlugins}>
+            <RefreshCw className="h-4 w-4 mr-2" />
+            Refresh
+          </Button>
+        </div>
       </div>
 
       <Separator />
@@ -251,7 +297,7 @@ export default function PluginsPage() {
             <Package className="h-12 w-12 text-muted-foreground mb-4" />
             <h3 className="text-lg font-semibold mb-2">No plugins available</h3>
             <p className="text-muted-foreground text-center max-w-md">
-              Installed plugins will appear here after upload or installation.
+              Upload a ZIP plugin package to get started.
             </p>
           </CardContent>
         </Card>
@@ -376,7 +422,7 @@ export default function PluginsPage() {
                       size="sm"
                       className="flex-1"
                       disabled={isLoading}
-                      onClick={() => togglePlugin(plugin.slug, plugin.status)}
+                      onClick={() => openLicenseDialog(plugin)}
                     >
                       {isLoading ? (
                         <Loader2 className="h-4 w-4 animate-spin" />
@@ -388,7 +434,6 @@ export default function PluginsPage() {
                       )}
                     </Button>
                   ) : (
-                    // Show Enable/Disable button for ACTIVE or DISABLED status
                     <Button
                       variant={plugin.status === "ACTIVE" ? "outline" : "default"}
                       size="sm"
@@ -439,13 +484,13 @@ export default function PluginsPage() {
             <div className="space-y-2">
               <h4 className="font-medium text-sm">1. Install Plugin</h4>
               <p className="text-sm text-muted-foreground">
-                Upload or install a compatible plugin package.
+                Upload a compatible plugin ZIP package using the Upload Plugin button.
               </p>
             </div>
             <div className="space-y-2">
               <h4 className="font-medium text-sm">2. Activate</h4>
               <p className="text-sm text-muted-foreground">
-                Click &quot;Activate&quot; to enable the plugin locally.
+                Click &quot;Activate&quot; and enter your license key to enable the plugin.
               </p>
             </div>
             <div className="space-y-2">
@@ -457,6 +502,72 @@ export default function PluginsPage() {
           </div>
         </CardContent>
       </Card>
+
+      {/* License Activation Dialog */}
+      <Dialog open={licenseDialogOpen} onOpenChange={setLicenseDialogOpen}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Activate {selectedPlugin?.name}</DialogTitle>
+            <DialogDescription>
+              Enter your license key to activate this plugin.
+            </DialogDescription>
+          </DialogHeader>
+          <div className="space-y-4">
+            <div className="space-y-2">
+              <Label htmlFor="license-key">License Key</Label>
+              <Input
+                id="license-key"
+                placeholder="XXXX-XXXX-XXXX-XXXX"
+                value={licenseKey}
+                onChange={(e) => setLicenseKey(e.target.value)}
+              />
+            </div>
+            <div className="flex items-center gap-2">
+              <Checkbox
+                id="agree-terms"
+                checked={agreedToTerms}
+                onCheckedChange={(checked) => setAgreedToTerms(checked === true)}
+              />
+              <Label htmlFor="agree-terms" className="text-sm font-normal cursor-pointer">
+                I agree to the plugin terms and conditions
+              </Label>
+            </div>
+            {activationError && (
+              <div className="bg-[var(--ast-error-bg)] border border-[var(--ast-error-border)] rounded-md p-3">
+                <p className="text-sm text-[var(--ast-error-text)] flex items-center gap-2">
+                  <AlertCircle className="h-4 w-4 flex-shrink-0" />
+                  {activationError}
+                </p>
+              </div>
+            )}
+          </div>
+          <DialogFooter>
+            <Button
+              variant="outline"
+              onClick={() => setLicenseDialogOpen(false)}
+              disabled={activating}
+            >
+              Cancel
+            </Button>
+            <Button
+              onClick={activateWithLicense}
+              disabled={activating || !licenseKey.trim() || !agreedToTerms}
+            >
+              {activating ? (
+                <>
+                  <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+                  Activating...
+                </>
+              ) : (
+                <>
+                  <Key className="h-4 w-4 mr-2" />
+                  Activate Plugin
+                </>
+              )}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }

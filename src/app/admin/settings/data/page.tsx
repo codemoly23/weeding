@@ -62,6 +62,7 @@ export default function DataManagementPage() {
   const [resetting, setResetting] = useState(false);
   const [resetDialogOpen, setResetDialogOpen] = useState(false);
   const [resetConfirmation, setResetConfirmation] = useState("");
+  const [resetAdminEmail, setResetAdminEmail] = useState("");
 
   // ---- Export ----
   async function handleExport() {
@@ -200,7 +201,7 @@ export default function DataManagementPage() {
 
   // ---- Reset ----
   async function handleReset() {
-    if (resetConfirmation !== "RESET") return;
+    if (resetConfirmation !== "RESET" || !resetAdminEmail.trim()) return;
 
     setResetting(true);
     setResetDialogOpen(false);
@@ -208,7 +209,7 @@ export default function DataManagementPage() {
       const res = await fetch("/api/admin/data/reset", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ confirmation: "RESET" }),
+        body: JSON.stringify({ confirmation: "RESET", adminEmail: resetAdminEmail.trim() }),
       });
 
       if (!res.ok) {
@@ -221,6 +222,7 @@ export default function DataManagementPage() {
       });
 
       setResetConfirmation("");
+      setResetAdminEmail("");
     } catch (error) {
       console.error("Reset error:", error);
       toast.error("Failed to reset data", {
@@ -414,6 +416,7 @@ export default function DataManagementPage() {
           <Button
             onClick={() => {
               setResetConfirmation("");
+              setResetAdminEmail("");
               setResetDialogOpen(true);
             }}
             disabled={resetting}
@@ -460,7 +463,7 @@ export default function DataManagementPage() {
             <Button
               onClick={handleImport}
               disabled={importConfirmation !== "CONFIRM"}
-              className="bg-[var(--ast-success-icon)] hover:bg-[var(--ast-success-text)] text-white"
+              className="bg-green-600 hover:bg-green-700 text-white disabled:opacity-50"
             >
               <Upload className="h-4 w-4 mr-2" />
               Import Data
@@ -484,15 +487,28 @@ export default function DataManagementPage() {
               <span className="font-mono font-bold">RESET</span> to proceed.
             </DialogDescription>
           </DialogHeader>
-          <div className="space-y-2 py-4">
-            <Label htmlFor="reset-confirm-input">Confirmation</Label>
-            <Input
-              id="reset-confirm-input"
-              value={resetConfirmation}
-              onChange={(e) => setResetConfirmation(e.target.value)}
-              placeholder="Type RESET to proceed"
-              autoComplete="off"
-            />
+          <div className="space-y-3 py-4">
+            <div className="space-y-2">
+              <Label htmlFor="reset-email-input">Your Admin Email</Label>
+              <Input
+                id="reset-email-input"
+                type="email"
+                value={resetAdminEmail}
+                onChange={(e) => setResetAdminEmail(e.target.value)}
+                placeholder="Enter your admin email"
+                autoComplete="off"
+              />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="reset-confirm-input">Confirmation</Label>
+              <Input
+                id="reset-confirm-input"
+                value={resetConfirmation}
+                onChange={(e) => setResetConfirmation(e.target.value)}
+                placeholder="Type RESET to proceed"
+                autoComplete="off"
+              />
+            </div>
           </div>
           <DialogFooter>
             <Button
@@ -503,8 +519,8 @@ export default function DataManagementPage() {
             </Button>
             <Button
               onClick={handleReset}
-              disabled={resetConfirmation !== "RESET"}
-              className="bg-[var(--ast-error-icon)] hover:bg-[var(--ast-error-text)] text-white disabled:bg-[var(--ast-error-border)]"
+              disabled={resetConfirmation !== "RESET" || !resetAdminEmail.trim()}
+              className="bg-red-600 hover:bg-red-700 text-white disabled:opacity-50"
             >
               <Trash2 className="h-4 w-4 mr-2" />
               Reset All Data

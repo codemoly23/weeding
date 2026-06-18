@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { checkAdminOnly, authError } from "@/lib/admin-auth";
-import fs from "fs/promises";
 import path from "path";
+import fs from "fs/promises";
 import prisma from "@/lib/db";
 import { revalidatePath } from "next/cache";
 import { Prisma } from "@prisma/client";
@@ -10,7 +10,7 @@ import { Prisma } from "@prisma/client";
  * POST /api/admin/themes/save-pages
  * Body: { themeId: string }
  *
- * Saves the current active DB landing pages into the theme's data.json file.
+ * Saves the current active DB landing pages into ThemeSavedDesign (database).
  * This permanently binds the current page designs to the theme — even after a
  * full data reset, re-activating the theme will restore them exactly as saved.
  */
@@ -26,16 +26,13 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: "themeId is required" }, { status: 400 });
     }
 
-    const dataPath = path.join(process.cwd(), "public", "themes", themeId, "data.json");
-
-    // Read existing data.json
-    let themeData: Record<string, unknown>;
+    // Verify theme exists (meta.json must be present)
+    const metaPath = path.join(process.cwd(), "public", "themes", themeId, "meta.json");
     try {
-      const content = await fs.readFile(dataPath, "utf-8");
-      themeData = JSON.parse(content);
+      await fs.access(metaPath);
     } catch {
       return NextResponse.json(
-        { error: `Theme "${themeId}" not found or data.json missing` },
+        { error: `Theme "${themeId}" not found` },
         { status: 404 }
       );
     }
@@ -111,30 +108,29 @@ export async function POST(request: NextRequest) {
       ...(item.children?.length ? { children: item.children.map(serializeMenuItem) } : {}),
     });
 
-    if (headerRaw) {
-      themeData.headerConfig = {
-        name: headerRaw.name,
-        layout: headerRaw.layout,
-        sticky: headerRaw.sticky,
-        transparent: headerRaw.transparent,
-        topBarEnabled: headerRaw.topBarEnabled,
-        logoPosition: headerRaw.logoPosition,
-        logoMaxHeight: headerRaw.logoMaxHeight,
-        showAuthButtons: headerRaw.showAuthButtons,
-        loginText: headerRaw.loginText,
-        registerText: headerRaw.registerText,
-        registerUrl: headerRaw.registerUrl,
-        searchEnabled: headerRaw.searchEnabled,
-        mobileBreakpoint: headerRaw.mobileBreakpoint,
-        height: headerRaw.height,
-        ...(headerRaw.ctaButtons ? { ctaButtons: safeJson(headerRaw.ctaButtons) } : {}),
-        ...(headerRaw.bgColor ? { bgColor: headerRaw.bgColor } : {}),
-        ...(headerRaw.textColor ? { textColor: headerRaw.textColor } : {}),
-        ...(headerRaw.hoverColor ? { hoverColor: headerRaw.hoverColor } : {}),
-        ...(headerRaw.accentColor ? { accentColor: headerRaw.accentColor } : {}),
-      };
-      themeData.menuItems = headerRaw.menuItems.map(serializeMenuItem);
-    }
+    const headerConfig = headerRaw ? {
+      name: headerRaw.name,
+      layout: headerRaw.layout,
+      sticky: headerRaw.sticky,
+      transparent: headerRaw.transparent,
+      topBarEnabled: headerRaw.topBarEnabled,
+      logoPosition: headerRaw.logoPosition,
+      logoMaxHeight: headerRaw.logoMaxHeight,
+      showAuthButtons: headerRaw.showAuthButtons,
+      loginText: headerRaw.loginText,
+      registerText: headerRaw.registerText,
+      registerUrl: headerRaw.registerUrl,
+      searchEnabled: headerRaw.searchEnabled,
+      mobileBreakpoint: headerRaw.mobileBreakpoint,
+      height: headerRaw.height,
+      ...(headerRaw.ctaButtons ? { ctaButtons: safeJson(headerRaw.ctaButtons) } : {}),
+      ...(headerRaw.bgColor ? { bgColor: headerRaw.bgColor } : {}),
+      ...(headerRaw.textColor ? { textColor: headerRaw.textColor } : {}),
+      ...(headerRaw.hoverColor ? { hoverColor: headerRaw.hoverColor } : {}),
+      ...(headerRaw.accentColor ? { accentColor: headerRaw.accentColor } : {}),
+    } : undefined;
+
+    const menuItems = headerRaw ? headerRaw.menuItems.map(serializeMenuItem) : undefined;
 
     // Read active footer config + widgets
     const footerRaw = await prisma.footerConfig.findFirst({
@@ -149,90 +145,87 @@ export async function POST(request: NextRequest) {
       },
     });
 
-    if (footerRaw) {
-      themeData.footerConfig = {
-        layout:           footerRaw.layout,
-        columns:          footerRaw.columns,
-        // Background
-        bgType:           footerRaw.bgType,
-        bgColor:          footerRaw.bgColor ?? undefined,
-        bgGradient:       safeJson(footerRaw.bgGradient),
-        bgPattern:        footerRaw.bgPattern ?? undefined,
-        bgPatternColor:   footerRaw.bgPatternColor ?? undefined,
-        bgPatternOpacity: footerRaw.bgPatternOpacity ?? undefined,
-        bgImage:          footerRaw.bgImage ?? undefined,
-        bgImageOverlay:   footerRaw.bgImageOverlay ?? undefined,
-        // Colors
-        textColor:        footerRaw.textColor ?? undefined,
-        headingColor:     footerRaw.headingColor ?? undefined,
-        linkColor:        footerRaw.linkColor ?? undefined,
-        linkHoverColor:   footerRaw.linkHoverColor ?? undefined,
-        accentColor:      footerRaw.accentColor ?? undefined,
-        borderColor:      footerRaw.borderColor ?? undefined,
-        dividerColor:     footerRaw.dividerColor ?? undefined,
-        dividerStyle:     footerRaw.dividerStyle,
-        // Typography
-        headingSize:      footerRaw.headingSize,
-        headingWeight:    footerRaw.headingWeight,
-        headingStyle:     footerRaw.headingStyle,
-        // Social
-        showSocialLinks:  footerRaw.showSocialLinks,
-        socialPosition:   footerRaw.socialPosition,
-        socialShape:      footerRaw.socialShape,
-        socialSize:       footerRaw.socialSize,
-        socialColorMode:  footerRaw.socialColorMode,
-        socialHoverEffect: footerRaw.socialHoverEffect,
-        socialBgStyle:    footerRaw.socialBgStyle,
-        // Links
-        linkPrefix:       footerRaw.linkPrefix,
-        linkHoverEffect:  footerRaw.linkHoverEffect,
-        // Trust badges
-        showTrustBadges:  footerRaw.showTrustBadges,
-        trustBadges:      safeJson(footerRaw.trustBadges),
-        // Bottom bar
-        bottomBarEnabled: footerRaw.bottomBarEnabled,
-        bottomBarLayout:  footerRaw.bottomBarLayout,
-        copyrightText:    footerRaw.copyrightText ?? undefined,
-        showDisclaimer:   footerRaw.showDisclaimer,
-        disclaimerText:   footerRaw.disclaimerText ?? undefined,
-        bottomLinks:      safeJson(footerRaw.bottomLinks),
-        // Border & effects
-        topBorderStyle:   footerRaw.topBorderStyle,
-        topBorderHeight:  footerRaw.topBorderHeight,
-        topBorderColor:   footerRaw.topBorderColor ?? undefined,
-        shadow:           footerRaw.shadow,
-        // Spacing & container
-        paddingTop:       footerRaw.paddingTop,
-        paddingBottom:    footerRaw.paddingBottom,
-        containerWidth:   footerRaw.containerWidth,
-      };
+    const footerConfig = footerRaw ? {
+      layout:           footerRaw.layout,
+      columns:          footerRaw.columns,
+      bgType:           footerRaw.bgType,
+      bgColor:          footerRaw.bgColor ?? undefined,
+      bgGradient:       safeJson(footerRaw.bgGradient),
+      bgPattern:        footerRaw.bgPattern ?? undefined,
+      bgPatternColor:   footerRaw.bgPatternColor ?? undefined,
+      bgPatternOpacity: footerRaw.bgPatternOpacity ?? undefined,
+      bgImage:          footerRaw.bgImage ?? undefined,
+      bgImageOverlay:   footerRaw.bgImageOverlay ?? undefined,
+      textColor:        footerRaw.textColor ?? undefined,
+      headingColor:     footerRaw.headingColor ?? undefined,
+      linkColor:        footerRaw.linkColor ?? undefined,
+      linkHoverColor:   footerRaw.linkHoverColor ?? undefined,
+      accentColor:      footerRaw.accentColor ?? undefined,
+      borderColor:      footerRaw.borderColor ?? undefined,
+      dividerColor:     footerRaw.dividerColor ?? undefined,
+      dividerStyle:     footerRaw.dividerStyle,
+      headingSize:      footerRaw.headingSize,
+      headingWeight:    footerRaw.headingWeight,
+      headingStyle:     footerRaw.headingStyle,
+      showSocialLinks:  footerRaw.showSocialLinks,
+      socialPosition:   footerRaw.socialPosition,
+      socialShape:      footerRaw.socialShape,
+      socialSize:       footerRaw.socialSize,
+      socialColorMode:  footerRaw.socialColorMode,
+      socialHoverEffect: footerRaw.socialHoverEffect,
+      socialBgStyle:    footerRaw.socialBgStyle,
+      linkPrefix:       footerRaw.linkPrefix,
+      linkHoverEffect:  footerRaw.linkHoverEffect,
+      showTrustBadges:  footerRaw.showTrustBadges,
+      trustBadges:      safeJson(footerRaw.trustBadges),
+      bottomBarEnabled: footerRaw.bottomBarEnabled,
+      bottomBarLayout:  footerRaw.bottomBarLayout,
+      copyrightText:    footerRaw.copyrightText ?? undefined,
+      showDisclaimer:   footerRaw.showDisclaimer,
+      disclaimerText:   footerRaw.disclaimerText ?? undefined,
+      bottomLinks:      safeJson(footerRaw.bottomLinks),
+      topBorderStyle:   footerRaw.topBorderStyle,
+      topBorderHeight:  footerRaw.topBorderHeight,
+      topBorderColor:   footerRaw.topBorderColor ?? undefined,
+      shadow:           footerRaw.shadow,
+      paddingTop:       footerRaw.paddingTop,
+      paddingBottom:    footerRaw.paddingBottom,
+      containerWidth:   footerRaw.containerWidth,
+    } : undefined;
 
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      themeData.footerWidgets = footerRaw.widgets.map((w: any) => ({
-        type:        w.type,
-        title:       w.title ?? undefined,
-        showTitle:   w.showTitle,
-        headingIcon: w.headingIcon ?? undefined,
-        column:      w.column,
-        sortOrder:   w.sortOrder,
-        content:     safeJson(w.content) ?? undefined,
-        links: w.menuItems.map((mi: { label: string; url: string | null; sortOrder: number }) => ({
-          label:     mi.label,
-          url:       mi.url ?? "",
-          sortOrder: mi.sortOrder,
-        })),
-      }));
-    }
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const footerWidgets = footerRaw ? footerRaw.widgets.map((w: any) => ({
+      type:        w.type,
+      title:       w.title ?? undefined,
+      showTitle:   w.showTitle,
+      headingIcon: w.headingIcon ?? undefined,
+      column:      w.column,
+      sortOrder:   w.sortOrder,
+      content:     safeJson(w.content) ?? undefined,
+      links: w.menuItems.map((mi: { label: string; url: string | null; sortOrder: number }) => ({
+        label:     mi.label,
+        url:       mi.url ?? "",
+        sortOrder: mi.sortOrder,
+      })),
+    })) : undefined;
 
-    // Update pages in data.json (replace entirely)
-    themeData.pages = pages;
-    themeData.exportedAt = new Date().toISOString();
+    // Save design to database (works in all environments including Vercel)
+    const savedData = {
+      pages,
+      exportedAt: new Date().toISOString(),
+      ...(headerConfig ? { headerConfig } : {}),
+      ...(menuItems ? { menuItems } : {}),
+      ...(footerConfig ? { footerConfig } : {}),
+      ...(footerWidgets ? { footerWidgets } : {}),
+    };
 
-    // Write back to disk
-    await fs.writeFile(dataPath, JSON.stringify(themeData, null, 2), "utf-8");
+    await prisma.themeSavedDesign.upsert({
+      where: { themeId },
+      update: { savedData: savedData as Prisma.InputJsonValue },
+      create: { themeId, savedData: savedData as Prisma.InputJsonValue },
+    });
 
-    // Also sync ActiveTheme.widgetDefaults from the current page sections
-    // so layout reads (e.g. top-utility-bar) always reflect the latest design
+    // Sync ActiveTheme.widgetDefaults from the current page sections
     const widgetDefaults: Record<string, unknown> = {};
     for (const page of pagesRaw) {
       for (const block of page.blocks) {
@@ -256,7 +249,6 @@ export async function POST(request: NextRequest) {
       data: { widgetDefaults: widgetDefaults as Prisma.InputJsonValue },
     });
 
-    // Revalidate public site so changes are immediately visible
     revalidatePath("/", "layout");
     revalidatePath("/");
 
@@ -273,7 +265,6 @@ export async function POST(request: NextRequest) {
       })),
     });
   } catch (error) {
-    console.error("[POST /api/admin/themes/save-pages]", error);
     return NextResponse.json(
       { error: "Failed to save pages to theme", details: String(error) },
       { status: 500 }

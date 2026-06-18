@@ -58,11 +58,11 @@ const GALLERY: Record<string, string[]> = {
     "https://images.unsplash.com/photo-1511795409834-ef04bbd61622?w=192&h=256&fit=crop&q=80",
   ],
   "name-cards": [
-    "https://images.unsplash.com/photo-1549417229-aa67d3263c09?w=192&h=256&fit=crop&q=80",
-    "https://images.unsplash.com/photo-1606800052052-a08af7148866?w=192&h=256&fit=crop&q=80",
-    "https://images.unsplash.com/photo-1532712938310-34cb3982ef74?w=192&h=256&fit=crop&q=80",
-    "https://images.unsplash.com/photo-1524824267900-2b3a7db14ee5?w=192&h=256&fit=crop&q=80",
     "https://images.unsplash.com/photo-1606216794074-735e91aa2c92?w=192&h=256&fit=crop&q=80",
+    "https://images.unsplash.com/photo-1524824267900-2b3a7db14ee5?w=192&h=256&fit=crop&q=80",
+    "https://images.unsplash.com/photo-1519225421980-715cb0215aed?w=192&h=256&fit=crop&q=80",
+    "https://images.unsplash.com/photo-1511795409834-ef04bbd61622?w=192&h=256&fit=crop&q=80",
+    "https://images.unsplash.com/photo-1527529482837-4698179dc6ce?w=192&h=256&fit=crop&q=80",
   ],
   "table-numbers": [
     "https://images.unsplash.com/photo-1527529482837-4698179dc6ce?w=192&h=256&fit=crop&q=80",
@@ -756,9 +756,12 @@ const NAME_CARD_TEMPLATES: { id: NameCardTemplate; label: string }[] = [
   { id: "simple",           label: "Template — Simple card" },
 ];
 
-function NameCardSvg({ name, template, showTable, tableLabel }: {
+function NameCardSvg({ name, template, showTable, tableLabel, showCourseIcon, dietaryLabel }: {
   name: string; template: NameCardTemplate; showTable: boolean; tableLabel: string;
+  showCourseIcon: boolean; dietaryLabel: string;
 }) {
+  const badgeColor = dietaryLabel === "Vegan" ? "#16a34a" : dietaryLabel === "Vegetarian" ? "#65a30d" : dietaryLabel === "Gluten-free" ? "#d97706" : null;
+  const badgeText = dietaryLabel === "Gluten-free" ? "GF" : dietaryLabel === "Vegetarian" ? "Veg" : dietaryLabel;
   if (template === "classic-triangle") {
     return (
       <svg viewBox="0 0 280 300" className="w-full h-auto">
@@ -776,6 +779,8 @@ function NameCardSvg({ name, template, showTable, tableLabel }: {
         {/* Name */}
         <text x="140" y="218" textAnchor="middle" fontSize="26" fill="#374151" fontFamily="Georgia,serif" fontStyle="italic">{name || "Guest Name"}</text>
         {showTable && <text x="140" y="248" textAnchor="middle" fontSize="12" fill="#9ca3af">{tableLabel}</text>}
+        {showCourseIcon && badgeColor && <rect x={215} y={262} width={36} height={14} rx={3} fill={badgeColor} />}
+        {showCourseIcon && badgeColor && <text x={233} y={272} textAnchor="middle" fontSize={8} fill="white" fontWeight="bold">{badgeText}</text>}
       </svg>
     );
   }
@@ -790,6 +795,8 @@ function NameCardSvg({ name, template, showTable, tableLabel }: {
         <line x1="31" y1="110" x2="249" y2="110" stroke="#e9d5f5" strokeWidth="0.8" strokeDasharray="5 4" />
         <text x="140" y="158" textAnchor="middle" fontSize="22" fill="#374151" fontFamily="Georgia,serif" fontStyle="italic">{name || "Guest Name"}</text>
         {showTable && <text x="140" y="182" textAnchor="middle" fontSize="12" fill="#9ca3af">{tableLabel}</text>}
+        {showCourseIcon && badgeColor && <rect x={215} y={187} width={36} height={14} rx={3} fill={badgeColor} />}
+        {showCourseIcon && badgeColor && <text x={233} y={197} textAnchor="middle" fontSize={8} fill="white" fontWeight="bold">{badgeText}</text>}
       </svg>
     );
   }
@@ -800,6 +807,8 @@ function NameCardSvg({ name, template, showTable, tableLabel }: {
         <rect x="25" y="15" width="230" height="130" rx="4" fill="white" stroke="#e5e7eb" strokeWidth="1" />
         <text x="140" y="90" textAnchor="middle" fontSize="24" fill="#374151" fontFamily="Georgia,serif" fontStyle="italic">{name || "Guest Name"}</text>
         {showTable && <text x="140" y="118" textAnchor="middle" fontSize="12" fill="#9ca3af">{tableLabel}</text>}
+        {showCourseIcon && badgeColor && <rect x={215} y={127} width={36} height={14} rx={3} fill={badgeColor} />}
+        {showCourseIcon && badgeColor && <text x={233} y={137} textAnchor="middle" fontSize={8} fill="white" fontWeight="bold">{badgeText}</text>}
       </svg>
     );
   }
@@ -813,6 +822,8 @@ function NameCardSvg({ name, template, showTable, tableLabel }: {
       <line x1="31" y1="100" x2="249" y2="100" stroke="#e9d5f5" strokeWidth="0.8" strokeDasharray="5 4" />
       <text x="140" y="150" textAnchor="middle" fontSize="22" fill="#374151" fontFamily="Georgia,serif" fontStyle="italic">{name || "Guest Name"}</text>
       {showTable && <text x="140" y="174" textAnchor="middle" fontSize="12" fill="#9ca3af">{tableLabel}</text>}
+      {showCourseIcon && badgeColor && <rect x={215} y={167} width={36} height={14} rx={3} fill={badgeColor} />}
+      {showCourseIcon && badgeColor && <text x={233} y={177} textAnchor="middle" fontSize={8} fill="white" fontWeight="bold">{badgeText}</text>}
     </svg>
   );
 }
@@ -841,6 +852,7 @@ function NameCardsPanel({ guests, layouts, projectId }: { guests: Guest[]; layou
   });
   const [cardIndex, setCardIndex] = useState(0);
   const [canvasTableMap, setCanvasTableMap] = useState<Map<string, string>>(new Map());
+  const [pdfBlocked, setPdfBlocked] = useState(false);
 
   useEffect(() => {
     try {
@@ -874,41 +886,46 @@ function NameCardsPanel({ guests, layouts, projectId }: { guests: Guest[]; layou
   const safeIndex = displayGuests.length > 0 ? Math.min(cardIndex, displayGuests.length - 1) : 0;
   const current = displayGuests[safeIndex] ?? null;
 
-  const displayName = current
+  const displayName = (!printEmpty && current)
     ? [showHonorific ? current.title : null, current.firstName, current.lastName]
         .filter(Boolean).join(" ")
-    : printEmpty ? "" : "";
+    : "";
 
-  const tableLabel = current
+  const tableLabel = (!printEmpty && current)
     ? (tableMap.get(current.id) ?? (current.tableNumber != null ? `Table ${current.tableNumber}` : "—"))
-    : "—";
+    : "";
 
   function handleDownloadPDF() {
     const guestCards = printEmpty
-      ? Array.from({ length: Math.max(displayGuests.length, 1) }, () => ({ name: "", tl: "" }))
+      ? Array.from({ length: Math.max(displayGuests.length, 1) }, () => ({ name: "", tl: "", dietary: "Standard" }))
       : displayGuests.map(g => ({
           name: [showHonorific ? g.title : null, g.firstName, g.lastName].filter(Boolean).join(" "),
           tl: tableMap.get(g.id) ?? (g.tableNumber != null ? `Table ${g.tableNumber}` : "—"),
+          dietary: parseDietary(g.dietary),
         }));
 
     if (guestCards.length === 0) return;
 
-    function buildSvg(name: string, tl: string): string {
+    function buildSvg(name: string, tl: string, dietary: string): string {
       const tRow = showTableNumber ? `<text x="140" y="${template === "classic-triangle" ? 248 : template === "classic-circle" ? 182 : template === "simple" ? 118 : 174}" text-anchor="middle" font-size="12" fill="#9ca3af">${tl}</text>` : "";
+      const bc = dietary === "Vegan" ? "#16a34a" : dietary === "Vegetarian" ? "#65a30d" : dietary === "Gluten-free" ? "#d97706" : null;
+      const bt = dietary === "Gluten-free" ? "GF" : dietary === "Vegetarian" ? "Veg" : dietary;
+      const bY = template === "classic-triangle" ? 262 : template === "classic-circle" ? 187 : template === "simple" ? 127 : 167;
+      const badge = (showCourseIcon && bc) ? `<rect x="215" y="${bY}" width="36" height="14" rx="3" fill="${bc}"/><text x="233" y="${bY + 10}" text-anchor="middle" font-size="8" fill="white" font-weight="bold">${bt}</text>` : "";
       if (template === "classic-triangle") {
-        return `<svg viewBox="0 0 280 300" style="width:100%;height:auto;display:block;"><rect width="280" height="300" fill="#f9f8fb"/><rect x="30" y="20" width="220" height="260" rx="3" fill="white" stroke="#e5e7eb" stroke-width="1"/><path d="M 30 145 L 140 35 L 250 145" fill="none" stroke="#d1d5db" stroke-width="1" stroke-dasharray="5 4"/><text x="46" y="60" font-size="13" fill="#d1d5db">✂</text><text x="220" y="60" font-size="11" fill="#d1d5db">↻</text><line x1="30" y1="145" x2="250" y2="145" stroke="#e9d5f5" stroke-width="1" stroke-dasharray="6 4"/><text x="140" y="218" text-anchor="middle" font-size="26" fill="#374151" font-family="Georgia,serif" font-style="italic">${name}</text>${tRow}</svg>`;
+        return `<svg viewBox="0 0 280 300" style="width:100%;height:auto;display:block;"><rect width="280" height="300" fill="#f9f8fb"/><rect x="30" y="20" width="220" height="260" rx="3" fill="white" stroke="#e5e7eb" stroke-width="1"/><path d="M 30 145 L 140 35 L 250 145" fill="none" stroke="#d1d5db" stroke-width="1" stroke-dasharray="5 4"/><text x="46" y="60" font-size="13" fill="#d1d5db">✂</text><text x="220" y="60" font-size="11" fill="#d1d5db">↻</text><line x1="30" y1="145" x2="250" y2="145" stroke="#e9d5f5" stroke-width="1" stroke-dasharray="6 4"/><text x="140" y="218" text-anchor="middle" font-size="26" fill="#374151" font-family="Georgia,serif" font-style="italic">${name}</text>${tRow}${badge}</svg>`;
       }
       if (template === "classic-circle") {
-        return `<svg viewBox="0 0 280 220" style="width:100%;height:auto;display:block;"><rect width="280" height="220" fill="#f9f8fb"/><rect x="25" y="15" width="230" height="190" rx="4" fill="white" stroke="#e5e7eb" stroke-width="1"/><circle cx="140" cy="68" r="32" fill="none" stroke="#e9d5f5" stroke-width="1.5"/><circle cx="140" cy="68" r="22" fill="none" stroke="#f3e8ff" stroke-width="1"/><text x="140" y="73" text-anchor="middle" font-size="10" fill="#c4b5d0" font-style="italic">✦</text><line x1="31" y1="110" x2="249" y2="110" stroke="#e9d5f5" stroke-width="0.8" stroke-dasharray="5 4"/><text x="140" y="158" text-anchor="middle" font-size="22" fill="#374151" font-family="Georgia,serif" font-style="italic">${name}</text>${tRow}</svg>`;
+        return `<svg viewBox="0 0 280 220" style="width:100%;height:auto;display:block;"><rect width="280" height="220" fill="#f9f8fb"/><rect x="25" y="15" width="230" height="190" rx="4" fill="white" stroke="#e5e7eb" stroke-width="1"/><circle cx="140" cy="68" r="32" fill="none" stroke="#e9d5f5" stroke-width="1.5"/><circle cx="140" cy="68" r="22" fill="none" stroke="#f3e8ff" stroke-width="1"/><text x="140" y="73" text-anchor="middle" font-size="10" fill="#c4b5d0" font-style="italic">✦</text><line x1="31" y1="110" x2="249" y2="110" stroke="#e9d5f5" stroke-width="0.8" stroke-dasharray="5 4"/><text x="140" y="158" text-anchor="middle" font-size="22" fill="#374151" font-family="Georgia,serif" font-style="italic">${name}</text>${tRow}${badge}</svg>`;
       }
       if (template === "simple") {
-        return `<svg viewBox="0 0 280 160" style="width:100%;height:auto;display:block;"><rect width="280" height="160" fill="#f9f8fb"/><rect x="25" y="15" width="230" height="130" rx="4" fill="white" stroke="#e5e7eb" stroke-width="1"/><text x="140" y="90" text-anchor="middle" font-size="24" fill="#374151" font-family="Georgia,serif" font-style="italic">${name}</text>${tRow}</svg>`;
+        return `<svg viewBox="0 0 280 160" style="width:100%;height:auto;display:block;"><rect width="280" height="160" fill="#f9f8fb"/><rect x="25" y="15" width="230" height="130" rx="4" fill="white" stroke="#e5e7eb" stroke-width="1"/><text x="140" y="90" text-anchor="middle" font-size="24" fill="#374151" font-family="Georgia,serif" font-style="italic">${name}</text>${tRow}${badge}</svg>`;
       }
-      return `<svg viewBox="0 0 280 200" style="width:100%;height:auto;display:block;"><rect width="280" height="200" fill="#f9f8fb"/><rect x="25" y="15" width="230" height="170" rx="4" fill="white" stroke="#e5e7eb" stroke-width="1"/><line x1="45" y1="36" x2="235" y2="36" stroke="#e9d5f5" stroke-width="0.8"/><line x1="45" y1="42" x2="235" y2="42" stroke="#f3e8ff" stroke-width="0.5"/><line x1="31" y1="100" x2="249" y2="100" stroke="#e9d5f5" stroke-width="0.8" stroke-dasharray="5 4"/><text x="140" y="150" text-anchor="middle" font-size="22" fill="#374151" font-family="Georgia,serif" font-style="italic">${name}</text>${tRow}</svg>`;
+      return `<svg viewBox="0 0 280 200" style="width:100%;height:auto;display:block;"><rect width="280" height="200" fill="#f9f8fb"/><rect x="25" y="15" width="230" height="170" rx="4" fill="white" stroke="#e5e7eb" stroke-width="1"/><line x1="45" y1="36" x2="235" y2="36" stroke="#e9d5f5" stroke-width="0.8"/><line x1="45" y1="42" x2="235" y2="42" stroke="#f3e8ff" stroke-width="0.5"/><line x1="31" y1="100" x2="249" y2="100" stroke="#e9d5f5" stroke-width="0.8" stroke-dasharray="5 4"/><text x="140" y="150" text-anchor="middle" font-size="22" fill="#374151" font-family="Georgia,serif" font-style="italic">${name}</text>${tRow}${badge}</svg>`;
     }
 
     const PER_PAGE = 9;
-    const cardItems = guestCards.map(c => `<div class="card">${buildSvg(c.name, c.tl)}</div>`);
+    const cardItems = guestCards.map(c => `<div class="card">${buildSvg(c.name, c.tl, c.dietary)}</div>`);
     const pages: string[] = [];
     for (let i = 0; i < cardItems.length; i += PER_PAGE) {
       pages.push(`<div class="page">${cardItems.slice(i, i + PER_PAGE).join("")}</div>`);
@@ -917,7 +934,12 @@ function NameCardsPanel({ guests, layouts, projectId }: { guests: Guest[]; layou
     const html = `<!DOCTYPE html><html><head><meta charset="utf-8"/><title>Name Cards</title><style>*{box-sizing:border-box;margin:0;padding:0;}body{background:#f9fafb;}.page{width:100%;min-height:100vh;display:grid;grid-template-columns:1fr 1fr 1fr;grid-template-rows:1fr 1fr 1fr;gap:10px;padding:16px;page-break-after:always;break-after:page;}.card{display:flex;align-items:center;justify-content:center;border:1px solid #e5e7eb;border-radius:10px;background:#fff;overflow:hidden;padding:6px;}@media print{body{background:#fff;}.page{width:100%;height:100vh;padding:10px;gap:8px;}@page{margin:6mm;size:A4 portrait;}}</style></head><body>${pages.join("")}<script>window.onload=function(){window.print();};<\/script></body></html>`;
 
     const win = window.open("", "_blank");
-    if (!win) return;
+    if (!win) {
+      setPdfBlocked(true);
+      setTimeout(() => setPdfBlocked(false), 6000);
+      return;
+    }
+    setPdfBlocked(false);
     win.document.write(html);
     win.document.close();
   }
@@ -946,6 +968,8 @@ function NameCardsPanel({ guests, layouts, projectId }: { guests: Guest[]; layou
             template={template}
             showTable={showTableNumber}
             tableLabel={tableLabel}
+            showCourseIcon={showCourseIcon}
+            dietaryLabel={printEmpty ? "Standard" : parseDietary(current?.dietary)}
           />
         </div>
 
@@ -1045,7 +1069,9 @@ function NameCardsPanel({ guests, layouts, projectId }: { guests: Guest[]; layou
             <Download className="h-4 w-4 text-primary" />
             Download PDF file
           </button>
-          <span className="text-xs text-muted-foreground/70">←</span>
+          {pdfBlocked
+            ? <span className="text-xs text-destructive">Popup blocked — allow popups for this site and try again.</span>
+            : <span className="text-xs text-muted-foreground/70">←</span>}
         </div>
       </div>
 
@@ -1058,21 +1084,6 @@ function NameCardsPanel({ guests, layouts, projectId }: { guests: Guest[]; layou
         </p>
       </div>
 
-      {/* Gallery */}
-      <div className="mt-6">
-        <h3 className="mb-3 text-center text-sm font-medium text-foreground/80">
-          Elegant name card inspiration
-        </h3>
-        <div className="flex gap-3 overflow-x-auto pb-2" style={{ scrollbarWidth: "none" }}>
-          {GALLERY["name-cards"].map((src, i) => (
-            <div key={i} className="relative h-44 w-32 flex-shrink-0 overflow-hidden rounded-xl opacity-85 hover:opacity-100 transition-all">
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src={src} alt={`Name card inspiration ${i + 1}`} className="h-full w-full object-cover" loading="lazy"
-                onError={e => { (e.currentTarget as HTMLImageElement).style.display = "none"; }} />
-            </div>
-          ))}
-        </div>
-      </div>
     </div>
   );
 }
@@ -1108,7 +1119,7 @@ function TableNumberCardSvg({ tableLabel, template, topText, bottomText, numberF
   // Card dimensions per template
   const cw = template === "wide" ? 260 : template === "tall" ? 170 : 210;
   const ch = template === "wide" ? 230 : template === "tall" ? 300 : 250;
-  const rx = template === "wide" ? Math.min(cw, ch) / 2 : Math.min(cornerRadius, Math.min(cw, ch) / 2);
+  const rx = Math.min(cornerRadius, Math.min(cw, ch) / 2);
   const cx = cw / 2;
   const standTop = ch + 2;
   const totalH = ch + 90;
@@ -1161,6 +1172,7 @@ function TableNumbersPanel({ projectId }: { projectId: string }) {
   const [cornerRadius,  setCornerRadius]  = useState<number>(() => load("cornerRadius", 20));
   const [cardIndex,     setCardIndex]     = useState(0);
   const [tables,        setTables]        = useState<string[]>([]);
+  const [popupBlocked,  setPopupBlocked]  = useState(false);
 
   // Load table names from reception layout localStorage
   useEffect(() => {
@@ -1195,7 +1207,7 @@ function TableNumbersPanel({ projectId }: { projectId: string }) {
     const allTables = tables.length > 0 ? tables : ["Table 1","Table 2","Table 3","Table 4","Table 5"];
     const cw = template === "wide" ? 260 : template === "tall" ? 170 : 210;
     const ch = template === "wide" ? 230 : template === "tall" ? 300 : 250;
-    const rx = template === "wide" ? Math.min(cw, ch) / 2 : Math.min(cornerRadius, Math.min(cw, ch) / 2);
+    const rx = Math.min(cornerRadius, Math.min(cw, ch) / 2);
     const cx = cw / 2;
     const standTop = ch + 2;
     const totalH = ch + 90;
@@ -1221,11 +1233,18 @@ function TableNumbersPanel({ projectId }: { projectId: string }) {
     }).join("") };
   }
 
+  const GFONTS = `<link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;700&family=Playfair+Display:wght@400;700&family=Cormorant+Garamond:wght@400;700&family=Fira+Sans:wght@400;700&display=swap" rel="stylesheet">`;
+
   function handlePreviewResult() {
     const { allTables, cards } = buildCardsHtml();
     const win = window.open("", "_blank");
-    if (!win) return;
-    win.document.write(`<!DOCTYPE html><html><head><title>Table Numbers Preview</title>
+    if (!win) {
+      setPopupBlocked(true);
+      setTimeout(() => setPopupBlocked(false), 6000);
+      return;
+    }
+    setPopupBlocked(false);
+    win.document.write(`<!DOCTYPE html><html><head><title>Table Numbers Preview</title>${GFONTS}
       <style>body{margin:24px;background:#f5f3fa;font-family:sans-serif;text-align:center;}
       h2{color:#6b21a8;margin-bottom:8px;}p{color:#6b7280;margin-bottom:24px;}</style></head>
       <body><h2>Table Numbers — ${templateLabel} Template</h2>
@@ -1237,8 +1256,13 @@ function TableNumbersPanel({ projectId }: { projectId: string }) {
   function handleDownloadPDF() {
     const { allTables, cards } = buildCardsHtml();
     const win = window.open("", "_blank");
-    if (!win) return;
-    win.document.write(`<!DOCTYPE html><html><head><title>Table Numbers PDF</title>
+    if (!win) {
+      setPopupBlocked(true);
+      setTimeout(() => setPopupBlocked(false), 6000);
+      return;
+    }
+    setPopupBlocked(false);
+    win.document.write(`<!DOCTYPE html><html><head><title>Table Numbers PDF</title>${GFONTS}
       <style>body{margin:0;background:white;text-align:center;}
       @media print{@page{margin:10mm;size:A4;}}</style></head>
       <body><div style="padding:16px">${cards}</div>
@@ -1396,7 +1420,9 @@ function TableNumbersPanel({ projectId }: { projectId: string }) {
             <Download size={15} />
             Download PDF file
           </button>
-          <span className="text-muted-foreground/70 text-sm">←</span>
+          {popupBlocked
+            ? <span className="text-xs text-destructive">Popup blocked — allow popups for this site and try again.</span>
+            : <span className="text-muted-foreground/70 text-sm">←</span>}
         </div>
       </div>
 
@@ -1495,6 +1521,7 @@ function ReceptionMenuPanel({ projectId, onEdit }: { projectId: string; onEdit: 
 
   const [secs, setSecs] = useState<Sec[]>(DEF_SECS);
   const [cfg,  setCfg]  = useState<Cfg>(DEF_CFG);
+  const [popupBlocked, setPopupBlocked] = useState(false);
 
   useEffect(() => {
     try {
@@ -1508,6 +1535,61 @@ function ReceptionMenuPanel({ projectId, onEdit }: { projectId: string; onEdit: 
   const mainPx   = Math.round(cfg.mainHeadingSize  * 0.60);
   const secondPx = Math.round(cfg.secondHeadingSize * 0.50);
   const paraPx   = Math.round(cfg.paragraphSize    * 0.70);
+
+  function buildMenuHtml(secsData: Sec[], cfgData: Cfg): string {
+    const mPx = Math.round(cfgData.mainHeadingSize  * 0.60);
+    const sPx = Math.round(cfgData.secondHeadingSize * 0.50);
+    const pPx = Math.round(cfgData.paragraphSize    * 0.70);
+
+    const secsHtml = secsData.map(sec => {
+      if (sec.type === "flourish") {
+        return `<div style="font-size:12px;color:#ddd6e8;letter-spacing:6px;margin:16px 0">✦ ✦ ✦</div>`;
+      }
+      if (sec.type === "main-heading") {
+        return `<div style="margin-top:18px"><span style="font-family:${cfgData.mainHeadingFont},serif;font-size:${Math.round(mPx * 0.6)}px;font-weight:700;color:#374151">${sec.text}</span></div>`;
+      }
+      if (sec.type === "second-heading") {
+        return `<div style="margin-top:20px"><p style="font-size:10px;letter-spacing:4px;color:#9ca3af;font-family:sans-serif">${sec.text.toUpperCase()}</p></div>`;
+      }
+      if (sec.type === "paragraph") {
+        const lines = sec.text.split("\n").map(line => {
+          const color   = line === "OR" ? "#9ca3af" : "#7c6f8a";
+          const fStyle  = /^(with |and |topped|seasonal|stuffed)/.test(line) ? "italic" : "normal";
+          return `<p style="font-family:${cfgData.paragraphFont},serif;font-size:${pPx}px;color:${color};font-style:${fStyle};line-height:1.6;margin:0">${line || "&nbsp;"}</p>`;
+        });
+        return `<div style="margin-top:6px;margin-bottom:4px">${lines.join("")}</div>`;
+      }
+      return "";
+    }).join("");
+
+    return `<!DOCTYPE html><html><head><meta charset="utf-8"><title>Reception Menu</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Overlock:ital,wght@0,400;0,700;1,400&family=Playfair+Display:ital@0;1&family=Dancing+Script&family=Lato&display=swap">
+<style>body{margin:0;background:white;text-align:center;}@media print{@page{margin:15mm;size:A4 portrait;}}</style>
+</head><body>
+<div style="display:inline-block;margin-top:32px;width:480px;background:#fff;border:1px solid #e9d5f5;border-radius:16px;padding:48px 64px;text-align:center;position:relative">
+  <div style="position:absolute;inset:12px;border:1px solid #f3e8ff;border-radius:10px;pointer-events:none"></div>
+  <p style="font-size:11px;letter-spacing:5px;color:#c4b5d0;font-family:sans-serif">RECEPTION</p>
+  <p style="font-family:${cfgData.mainHeadingFont},serif;font-style:italic;font-size:${mPx}px;color:#7c6f8a;line-height:1.05;margin-top:4px">Menu</p>
+  <p style="font-size:13px;color:#c4b5d0;letter-spacing:6px;margin-top:6px">✦ ✦ ✦</p>
+  ${secsHtml}
+  <div style="margin-top:20px;font-size:12px;color:#ddd6e8;letter-spacing:6px">✦ ✦ ✦</div>
+</div>
+<script>window.onload=function(){window.print();};<\/script>
+</body></html>`;
+  }
+
+  function handleDownloadPDF() {
+    const html = buildMenuHtml(secs, cfg);
+    const win = window.open("", "_blank");
+    if (!win) {
+      setPopupBlocked(true);
+      setTimeout(() => setPopupBlocked(false), 6000);
+      return;
+    }
+    setPopupBlocked(false);
+    win.document.write(html);
+    win.document.close();
+  }
 
   return (
     <div className="mx-auto max-w-xl">
@@ -1588,15 +1670,20 @@ function ReceptionMenuPanel({ projectId, onEdit }: { projectId: string; onEdit: 
       </div>
 
       {/* Download + arrow */}
-      <div className="mt-3 flex items-center justify-center gap-3">
-        <button
-          onClick={() => window.print()}
-          className="flex items-center gap-2 rounded-lg border border-border bg-card px-5 py-2 text-sm text-foreground/80 hover:bg-muted/30 transition-colors"
-        >
-          <Download className="h-4 w-4 text-primary" />
-          Download PDF file
-        </button>
-        <span className="text-xs text-muted-foreground/70">←</span>
+      <div className="mt-3 flex flex-col items-center gap-2">
+        <div className="flex items-center justify-center gap-3">
+          <button
+            onClick={handleDownloadPDF}
+            className="flex items-center gap-2 rounded-lg border border-border bg-card px-5 py-2 text-sm text-foreground/80 hover:bg-muted/30 transition-colors"
+          >
+            <Download className="h-4 w-4 text-primary" />
+            Download PDF file
+          </button>
+          <span className="text-xs text-muted-foreground/70">←</span>
+        </div>
+        {popupBlocked && (
+          <span className="text-xs text-destructive">Popup blocked — allow popups for this site and try again.</span>
+        )}
       </div>
 
       {/* Recommendation */}
@@ -2275,7 +2362,7 @@ export default function SeatingPage() {
   const router = useRouter();
   const local = isLocal(projectId);
 
-  const { tier } = usePlannerTier(projectId);
+  const { tier, loading: tierLoading } = usePlannerTier(projectId);
   const [showUpgrade, setShowUpgrade] = useState(false);
   const [upgradeTab, setUpgradeTab] = useState<"premium" | "elite">("premium");
 
@@ -2290,6 +2377,8 @@ export default function SeatingPage() {
   const [guests, setGuests] = useState<Guest[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const pendingEliteTab = useRef<string | null>(null);
+  const [origin, setOrigin] = useState("");
   const [ceremonyElements, setCeremonyElements] = useState<PreviewElement[] | null>(null);
   const [ceremonyVenueBg, setCeremonyVenueBg] = useState<string | null>(null);
   const [receptionVenueBg, setReceptionVenueBg] = useState<string | null>(null);
@@ -2307,6 +2396,8 @@ export default function SeatingPage() {
   const [cardsTables, setCardsTables] = useState<{ name: string; guestNames: string[] }[]>([]);
 
   const activeLayout = layouts.find(l => l.id === activeLayoutId) ?? null;
+
+  useEffect(() => { setOrigin(window.location.origin); }, []);
 
   // Load saved ceremony layout + venue bg from localStorage for preview
   useEffect(() => {
@@ -2358,12 +2449,32 @@ export default function SeatingPage() {
     } catch {}
   }, [projectId, activeTab, guests]);
 
-  // Sync tab with URL ?tab= param (read on mount, write on change)
+  // Read tab from URL on mount — non-elite tabs apply immediately, elite tabs wait for tier
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
     const tab = params.get("tab");
-    if (tab && TABS.some(t => t.id === tab)) setActiveTab(tab);
+    if (!tab || !TABS.some(t => t.id === tab)) return;
+    if (ELITE_TABS.includes(tab)) {
+      pendingEliteTab.current = tab;
+    } else {
+      setActiveTab(tab);
+    }
   }, []);
+
+  // Apply elite tab from URL once tier is confirmed
+  useEffect(() => {
+    if (tierLoading || !pendingEliteTab.current) return;
+    const tab = pendingEliteTab.current;
+    pendingEliteTab.current = null;
+    if (isElite(tier)) {
+      setActiveTab(tab);
+    } else {
+      const params = new URLSearchParams(window.location.search);
+      params.delete("tab");
+      const newUrl = window.location.pathname + (params.toString() ? `?${params.toString()}` : "");
+      window.history.replaceState(null, "", newUrl);
+    }
+  }, [tierLoading, tier]);
 
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
@@ -2596,12 +2707,12 @@ export default function SeatingPage() {
               <p className="mb-3 text-xs text-muted-foreground/70">Share this link with venue staff to look up guests on arrival.</p>
               <div className="flex items-start gap-4">
                 <div className="flex-1 rounded-lg border-2 border-dashed border-border bg-muted/30 px-4 py-3">
-                  <p className="break-all font-mono text-xs text-foreground/80">{`${typeof window !== "undefined" ? window.location.origin : ""}/seat-finder/${projectId}`}</p>
+                  <p className="break-all font-mono text-xs text-foreground/80">{`${origin}/seat-finder/${projectId}`}</p>
                 </div>
                 <div className="flex flex-col gap-2">
                   <button
                     onClick={() => {
-                      const url = `${window.location.origin}/seat-finder/${projectId}`;
+                      const url = `${origin}/seat-finder/${projectId}`;
                       navigator.clipboard.writeText(url).catch(() => {});
                     }}
                     className="rounded-lg border border-border bg-card px-3 py-1.5 text-xs text-foreground/80 hover:bg-muted/30 transition-colors"
