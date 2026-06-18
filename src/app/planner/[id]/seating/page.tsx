@@ -883,6 +883,45 @@ function NameCardsPanel({ guests, layouts, projectId }: { guests: Guest[]; layou
     ? (tableMap.get(current.id) ?? (current.tableNumber != null ? `Table ${current.tableNumber}` : "—"))
     : "—";
 
+  function handleDownloadPDF() {
+    const guestCards = printEmpty
+      ? Array.from({ length: Math.max(displayGuests.length, 1) }, () => ({ name: "", tl: "" }))
+      : displayGuests.map(g => ({
+          name: [showHonorific ? g.title : null, g.firstName, g.lastName].filter(Boolean).join(" "),
+          tl: tableMap.get(g.id) ?? (g.tableNumber != null ? `Table ${g.tableNumber}` : "—"),
+        }));
+
+    if (guestCards.length === 0) return;
+
+    function buildSvg(name: string, tl: string): string {
+      const tRow = showTableNumber ? `<text x="140" y="${template === "classic-triangle" ? 248 : template === "classic-circle" ? 182 : template === "simple" ? 118 : 174}" text-anchor="middle" font-size="12" fill="#9ca3af">${tl}</text>` : "";
+      if (template === "classic-triangle") {
+        return `<svg viewBox="0 0 280 300" style="width:100%;height:auto;display:block;"><rect width="280" height="300" fill="#f9f8fb"/><rect x="30" y="20" width="220" height="260" rx="3" fill="white" stroke="#e5e7eb" stroke-width="1"/><path d="M 30 145 L 140 35 L 250 145" fill="none" stroke="#d1d5db" stroke-width="1" stroke-dasharray="5 4"/><text x="46" y="60" font-size="13" fill="#d1d5db">✂</text><text x="220" y="60" font-size="11" fill="#d1d5db">↻</text><line x1="30" y1="145" x2="250" y2="145" stroke="#e9d5f5" stroke-width="1" stroke-dasharray="6 4"/><text x="140" y="218" text-anchor="middle" font-size="26" fill="#374151" font-family="Georgia,serif" font-style="italic">${name}</text>${tRow}</svg>`;
+      }
+      if (template === "classic-circle") {
+        return `<svg viewBox="0 0 280 220" style="width:100%;height:auto;display:block;"><rect width="280" height="220" fill="#f9f8fb"/><rect x="25" y="15" width="230" height="190" rx="4" fill="white" stroke="#e5e7eb" stroke-width="1"/><circle cx="140" cy="68" r="32" fill="none" stroke="#e9d5f5" stroke-width="1.5"/><circle cx="140" cy="68" r="22" fill="none" stroke="#f3e8ff" stroke-width="1"/><text x="140" y="73" text-anchor="middle" font-size="10" fill="#c4b5d0" font-style="italic">✦</text><line x1="31" y1="110" x2="249" y2="110" stroke="#e9d5f5" stroke-width="0.8" stroke-dasharray="5 4"/><text x="140" y="158" text-anchor="middle" font-size="22" fill="#374151" font-family="Georgia,serif" font-style="italic">${name}</text>${tRow}</svg>`;
+      }
+      if (template === "simple") {
+        return `<svg viewBox="0 0 280 160" style="width:100%;height:auto;display:block;"><rect width="280" height="160" fill="#f9f8fb"/><rect x="25" y="15" width="230" height="130" rx="4" fill="white" stroke="#e5e7eb" stroke-width="1"/><text x="140" y="90" text-anchor="middle" font-size="24" fill="#374151" font-family="Georgia,serif" font-style="italic">${name}</text>${tRow}</svg>`;
+      }
+      return `<svg viewBox="0 0 280 200" style="width:100%;height:auto;display:block;"><rect width="280" height="200" fill="#f9f8fb"/><rect x="25" y="15" width="230" height="170" rx="4" fill="white" stroke="#e5e7eb" stroke-width="1"/><line x1="45" y1="36" x2="235" y2="36" stroke="#e9d5f5" stroke-width="0.8"/><line x1="45" y1="42" x2="235" y2="42" stroke="#f3e8ff" stroke-width="0.5"/><line x1="31" y1="100" x2="249" y2="100" stroke="#e9d5f5" stroke-width="0.8" stroke-dasharray="5 4"/><text x="140" y="150" text-anchor="middle" font-size="22" fill="#374151" font-family="Georgia,serif" font-style="italic">${name}</text>${tRow}</svg>`;
+    }
+
+    const PER_PAGE = 9;
+    const cardItems = guestCards.map(c => `<div class="card">${buildSvg(c.name, c.tl)}</div>`);
+    const pages: string[] = [];
+    for (let i = 0; i < cardItems.length; i += PER_PAGE) {
+      pages.push(`<div class="page">${cardItems.slice(i, i + PER_PAGE).join("")}</div>`);
+    }
+
+    const html = `<!DOCTYPE html><html><head><meta charset="utf-8"/><title>Name Cards</title><style>*{box-sizing:border-box;margin:0;padding:0;}body{background:#f9fafb;}.page{width:100%;min-height:100vh;display:grid;grid-template-columns:1fr 1fr 1fr;grid-template-rows:1fr 1fr 1fr;gap:10px;padding:16px;page-break-after:always;break-after:page;}.card{display:flex;align-items:center;justify-content:center;border:1px solid #e5e7eb;border-radius:10px;background:#fff;overflow:hidden;padding:6px;}@media print{body{background:#fff;}.page{width:100%;height:100vh;padding:10px;gap:8px;}@page{margin:6mm;size:A4 portrait;}}</style></head><body>${pages.join("")}<script>window.onload=function(){window.print();};<\/script></body></html>`;
+
+    const win = window.open("", "_blank");
+    if (!win) return;
+    win.document.write(html);
+    win.document.close();
+  }
+
   return (
     <div className="mx-auto max-w-xl">
       {/* Title */}
@@ -1000,7 +1039,7 @@ function NameCardsPanel({ guests, layouts, projectId }: { guests: Guest[]; layou
         {/* Download */}
         <div className="flex items-center gap-3 px-4 py-3">
           <button
-            onClick={() => window.print()}
+            onClick={handleDownloadPDF}
             className="flex items-center gap-2 rounded-lg border border-border bg-card px-5 py-2 text-sm text-foreground/80 hover:bg-muted/30 transition-colors"
           >
             <Download className="h-4 w-4 text-primary" />
