@@ -119,7 +119,7 @@ export default function PageEditorPage({ params }: { params: Promise<{ slug: str
   const [pageSlug, setPageSlug] = useState("");
   const [metaTitle, setMetaTitle] = useState("");
   const [metaDescription, setMetaDescription] = useState("");
-  const [selectedTemplateType, setSelectedTemplateType] = useState<string>("");
+  const [selectedTemplateType, setSelectedTemplateType] = useState<string>("none");
 
   // Scroll detection for auto-hide scrollbar
   const scrollContainerRef = useRef<HTMLDivElement>(null);
@@ -196,7 +196,7 @@ export default function PageEditorPage({ params }: { params: Promise<{ slug: str
         setPageSlug(pageData.slug);
         setMetaTitle(pageData.metaTitle || "");
         setMetaDescription(pageData.metaDescription || "");
-        setSelectedTemplateType(pageData.templateType || "");
+        setSelectedTemplateType(pageData.templateType || "none");
 
         if (templatesRes.ok) {
           const templatesData = await templatesRes.json();
@@ -575,12 +575,12 @@ export default function PageEditorPage({ params }: { params: Promise<{ slug: str
       }
 
       // Save template assignment if changed
-      if (page && selectedTemplateType !== (page.templateType || "")) {
+      if (page && selectedTemplateType !== (page.templateType || "none")) {
         const templateRes = await fetch(`/api/admin/pages/${pageId}/template`, {
           method: "PUT",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
-            templateType: selectedTemplateType || null,
+            templateType: selectedTemplateType === "none" ? null : selectedTemplateType,
           }),
         });
 
@@ -712,7 +712,7 @@ export default function PageEditorPage({ params }: { params: Promise<{ slug: str
                         <SelectValue placeholder="Select page type..." />
                       </SelectTrigger>
                       <SelectContent>
-                        <SelectItem value="">None (Custom Page)</SelectItem>
+                        <SelectItem value="none">None (Custom Page)</SelectItem>
                         {Object.entries(TEMPLATE_LABELS).map(([value, label]) => {
                           const template = templates.find((t) => t.type === value);
                           const isOtherAssigned =
@@ -726,7 +726,7 @@ export default function PageEditorPage({ params }: { params: Promise<{ slug: str
                         })}
                       </SelectContent>
                     </Select>
-                    {selectedTemplateType && (
+                    {selectedTemplateType && selectedTemplateType !== "none" && (
                       <p className="text-xs text-muted-foreground">
                         {templates.find((t) => t.type === selectedTemplateType)?.description}
                       </p>

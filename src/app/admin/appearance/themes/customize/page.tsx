@@ -440,8 +440,7 @@ export default function ThemeCustomizePage() {
         );
         setFontConfig(fonts);
         setInitialState({ colorPalette: palette, fontConfig: fonts });
-      } catch (error) {
-        console.error("Error fetching theme data:", error);
+      } catch {
         toast.error("Failed to load theme customization");
       } finally {
         setLoading(false);
@@ -479,7 +478,6 @@ export default function ThemeCustomizePage() {
       setInitialState({ colorPalette, fontConfig });
       toast.success("Theme customization saved! Refresh the site to see changes.");
     } catch (error) {
-      console.error("Error saving:", error);
       toast.error(
         error instanceof Error ? error.message : "Failed to save customization"
       );

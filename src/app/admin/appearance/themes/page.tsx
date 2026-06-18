@@ -79,8 +79,7 @@ export default function ThemeGalleryPage() {
       if (!response.ok) throw new Error("Failed to fetch themes");
       const data = await response.json();
       setThemes(data.themes || []);
-    } catch (error) {
-      console.error("Error fetching themes:", error);
+    } catch {
       toast.error("Failed to load themes");
     } finally {
       setLoading(false);
@@ -134,7 +133,6 @@ export default function ThemeGalleryPage() {
       // Refresh theme list to update active state
       await fetchThemes();
     } catch (error) {
-      console.error("Error importing theme:", error);
       toast.error(
         error instanceof Error ? error.message : "Failed to import theme"
       );

@@ -262,6 +262,13 @@ const translations: Record<LangCode, Record<string, string>> = {
     "notes.placeholder":            "Start writing...",
     "notes.titlePlaceholder":       "Note title",
     "notes.deleteConfirm":          "Delete this note?",
+    "notes.deleteConfirmDesc":      "This action cannot be undone.",
+    "notes.delete":                 "Delete",
+    "notes.cancel":                 "Cancel",
+    "notes.deleteError":            "Failed to delete note. Please try again.",
+    "notes.justNow":                "just now",
+    "notes.mAgo":                   "m ago",
+    "notes.hAgo":                   "h ago",
 
     // Ceremony page
     "ceremony.title":               "Ceremony Details",
@@ -682,6 +689,13 @@ const translations: Record<LangCode, Record<string, string>> = {
     "notes.placeholder":            "Börja skriva...",
     "notes.titlePlaceholder":       "Anteckningsrubrik",
     "notes.deleteConfirm":          "Ta bort den här anteckningen?",
+    "notes.deleteConfirmDesc":      "Denna åtgärd kan inte ångras.",
+    "notes.delete":                 "Ta bort",
+    "notes.cancel":                 "Avbryt",
+    "notes.deleteError":            "Det gick inte att ta bort anteckningen. Försök igen.",
+    "notes.justNow":                "nyss",
+    "notes.mAgo":                   "m sedan",
+    "notes.hAgo":                   "h sedan",
 
     // Ceremony page
     "ceremony.title":               "Ceremoidetaljer",
@@ -1102,6 +1116,13 @@ const translations: Record<LangCode, Record<string, string>> = {
     "notes.placeholder":            "ابدأ الكتابة...",
     "notes.titlePlaceholder":       "عنوان الملاحظة",
     "notes.deleteConfirm":          "هل تريد حذف هذه الملاحظة؟",
+    "notes.deleteConfirmDesc":      "لا يمكن التراجع عن هذا الإجراء.",
+    "notes.delete":                 "حذف",
+    "notes.cancel":                 "إلغاء",
+    "notes.deleteError":            "فشل حذف الملاحظة. حاول مرة أخرى.",
+    "notes.justNow":                "الآن",
+    "notes.mAgo":                   "د",
+    "notes.hAgo":                   "س",
 
     // Ceremony page
     "ceremony.title":               "تفاصيل مراسم الزفاف",
@@ -1522,6 +1543,13 @@ const translations: Record<LangCode, Record<string, string>> = {
     "notes.placeholder":            "লেখা শুরু করুন...",
     "notes.titlePlaceholder":       "নোটের শিরোনাম",
     "notes.deleteConfirm":          "এই নোটটি মুছে ফেলবেন?",
+    "notes.deleteConfirmDesc":      "এই কাজটি পূর্বাবস্থায় ফেরানো যাবে না।",
+    "notes.delete":                 "মুছুন",
+    "notes.cancel":                 "বাতিল",
+    "notes.deleteError":            "নোট মুছতে ব্যর্থ হয়েছে। আবার চেষ্টা করুন।",
+    "notes.justNow":                "এইমাত্র",
+    "notes.mAgo":                   "মি আগে",
+    "notes.hAgo":                   "ঘ আগে",
 
     // Ceremony page
     "ceremony.title":               "অনুষ্ঠানের বিস্তারিত",

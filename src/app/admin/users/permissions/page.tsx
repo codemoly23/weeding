@@ -55,9 +55,7 @@ export default function PermissionsPage() {
         const permData = await res.json();
         setData(permData);
         setEditedPermissions(permData.permissionsByRole);
-        if (!selectedRole && permData.editableRoles.length > 0) {
-          setSelectedRole(permData.editableRoles[0]);
-        }
+        setSelectedRole((prev) => prev || permData.editableRoles[0] || "");
       } else {
         toast.error("Failed to fetch permissions");
       }
@@ -65,7 +63,7 @@ export default function PermissionsPage() {
       console.error("Error fetching permissions:", error);
       toast.error("Failed to fetch permissions");
     }
-  }, [selectedRole]);
+  }, []);
 
   useEffect(() => {
     const loadData = async () => {

@@ -1384,6 +1384,12 @@ model ActiveTheme {
   @@index([themeId])
 }
 
+model ThemeSavedDesign {
+  themeId   String   @id
+  savedData Json
+  updatedAt DateTime @updatedAt
+}
+
 enum UserRole {
   CUSTOMER
   ADMIN

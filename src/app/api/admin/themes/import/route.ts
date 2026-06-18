@@ -54,17 +54,34 @@ export async function POST(request: NextRequest) {
       );
     }
 
+    // Check if there is a saved design in the database for this theme.
+    // If found, override pages/header/footer with the saved version so that
+    // "Save Current Design to Theme" survives re-activations (works on Vercel
+    // where the filesystem is read-only and data.json cannot be written).
+    const { prisma } = await import("@/lib/db");
+    const savedDesign = await prisma.themeSavedDesign.findUnique({
+      where: { themeId },
+    });
+
+    if (savedDesign?.savedData) {
+      const sd = savedDesign.savedData as Record<string, unknown>;
+      if (sd.pages)         (data as unknown as Record<string, unknown>).pages         = sd.pages;
+      if (sd.headerConfig)  (data as unknown as Record<string, unknown>).headerConfig  = sd.headerConfig;
+      if (sd.menuItems)     (data as unknown as Record<string, unknown>).menuItems     = sd.menuItems;
+      if (sd.footerConfig)  (data as unknown as Record<string, unknown>).footerConfig  = sd.footerConfig;
+      if (sd.footerWidgets) (data as unknown as Record<string, unknown>).footerWidgets = sd.footerWidgets;
+    }
+
     if (!includeContent) {
       // Colors-only mode: only update the active theme and color palette
-      const { prisma } = await import("@/lib/db");
       await prisma.activeTheme.deleteMany({});
       await prisma.activeTheme.create({
         data: {
           themeId,
           themeName: meta.name,
-          colorPalette: data.colorPalette as any,
-          originalColorPalette: data.colorPalette as any,
-          fontConfig: (data as any).fontConfig ?? undefined,
+          colorPalette: data.colorPalette as never,
+          originalColorPalette: data.colorPalette as never,
+          fontConfig: (data as unknown as Record<string, unknown>).fontConfig as never ?? undefined,
         },
       });
 
@@ -87,7 +104,6 @@ export async function POST(request: NextRequest) {
       message: `Theme "${meta.name}" activated successfully`,
     });
   } catch (error) {
-    console.error("[POST /api/admin/themes/import]", error);
     const errorMessage = error instanceof Error ? error.message : String(error);
     return NextResponse.json(
       { error: "Failed to import theme", details: errorMessage },
