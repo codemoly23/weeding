@@ -6,7 +6,7 @@ import Link from "next/link";
 import {
   BookOpen, Camera, Heart, Users, Download,
   ChevronRight, Image as ImageIcon, MessageSquare,
-  ExternalLink,
+  ExternalLink, Globe,
 } from "lucide-react";
 
 const isLocal = (id: string) => id.startsWith("local-");
@@ -207,14 +207,24 @@ export default function PostWeddingPage() {
                   {website.published ? "Published and accessible to guests" : "Not yet published"}
                 </p>
               </div>
-              <Link
-                href={`/wedding/${website.slug}`}
-                target="_blank"
-                className="flex items-center gap-1.5 px-4 py-2 bg-primary text-primary-foreground text-sm font-medium rounded-lg hover:bg-primary/90 transition-colors shrink-0"
-              >
-                <ExternalLink className="w-3.5 h-3.5" />
-                Visit site
-              </Link>
+              {website.published ? (
+                <Link
+                  href={`/wedding/${website.slug}`}
+                  target="_blank"
+                  className="flex items-center gap-1.5 px-4 py-2 bg-primary text-primary-foreground text-sm font-medium rounded-lg hover:bg-primary/90 transition-colors shrink-0"
+                >
+                  <ExternalLink className="w-3.5 h-3.5" />
+                  Visit site
+                </Link>
+              ) : (
+                <Link
+                  href={`/planner/${id}/website`}
+                  className="flex items-center gap-1.5 px-4 py-2 bg-muted text-foreground/80 text-sm font-medium rounded-lg hover:bg-muted/80 transition-colors shrink-0 border border-border"
+                >
+                  <Globe className="w-3.5 h-3.5" />
+                  Edit & Publish
+                </Link>
+              )}
             </div>
           )}
 
