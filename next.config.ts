@@ -51,13 +51,7 @@ const nextConfig: NextConfig = {
   },
 
   async redirects() {
-    return [
-      {
-        source: "/tools/:path*",
-        destination: "/planner",
-        permanent: false,
-      },
-    ];
+    return [];
   },
 
   // Security headers

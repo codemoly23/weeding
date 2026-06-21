@@ -557,8 +557,10 @@ function WebsitePreview({
   }
 
   function daysLeft(target: string) {
-    try { return Math.max(0, Math.ceil((new Date(target).getTime() - Date.now()) / 86400000)); }
-    catch { return null; }
+    if (!target) return null;
+    const time = new Date(target).getTime();
+    if (!Number.isFinite(time)) return null;
+    return Math.max(0, Math.ceil((time - Date.now()) / 86400000));
   }
 
   function renderBlockContent(block: WeddingBlock): React.ReactNode {

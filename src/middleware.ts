@@ -8,6 +8,14 @@ const protectedRoutes = ["/admin", "/dashboard", "/account"];
 // Routes that should redirect to dashboard if already authenticated
 const authRoutes = ["/login", "/register"];
 
+// Marketing /tools/* slugs that map directly to a planner tool route
+const TOOL_TO_PLANNER: Record<string, string> = {
+  checklist: "checklist",
+  seating:   "seating",
+  guests:    "guests",
+  budget:    "budget",
+};
+
 // Admin allowed roles
 const adminRoles = ["ADMIN", "SUPPORT_AGENT", "SALES_AGENT", "CONTENT_MANAGER"];
 const customerRoles = ["CUSTOMER"];
@@ -49,6 +57,46 @@ function isSensitiveApiRoute(pathname: string) {
 
 export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
+
+  // Smart redirect for marketing /tools/* links to the matching planner tool.
+  // Anonymous users get a fresh local project (cookied for reuse). Authenticated
+  // users are sent to /planner to pick from their existing projects.
+  if (pathname.startsWith("/tools/")) {
+    const slug = pathname.split("/")[2] ?? "";
+    const tool = TOOL_TO_PLANNER[slug];
+    if (!tool) {
+      return NextResponse.redirect(new URL("/planner", request.url));
+    }
+
+    const authToken = await getToken({
+      req: request,
+      secret: process.env.AUTH_SECRET,
+      cookieName: process.env.NODE_ENV === "production"
+        ? "__Secure-authjs.session-token"
+        : "authjs.session-token",
+    });
+
+    if (authToken) {
+      return NextResponse.redirect(new URL("/planner", request.url));
+    }
+
+    const cookieId = request.cookies.get("active_project_id")?.value;
+    const projectId = cookieId && cookieId.startsWith("local-")
+      ? cookieId
+      : `local-${crypto.randomUUID()}`;
+
+    const response = NextResponse.redirect(
+      new URL(`/planner/${projectId}/${tool}`, request.url)
+    );
+    if (!cookieId) {
+      response.cookies.set("active_project_id", projectId, {
+        maxAge: 60 * 60 * 24 * 365,
+        sameSite: "lax",
+        path: "/",
+      });
+    }
+    return response;
+  }
 
   // Check if the route requires protection
   const isProtectedRoute = protectedRoutes.some(
@@ -183,6 +231,7 @@ export const config = {
     "/account/:path*",
     "/vendor/:path*",
     "/planner/:path*",
+    "/tools/:path*",
     "/api/admin/:path*",
     "/api/vendor/:path*",
     "/api/customer/:path*",
