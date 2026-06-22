@@ -87,14 +87,14 @@ export default function LegalPagesAdmin() {
   return (
     <div className="space-y-6">
       {/* Header */}
-      <div className="flex items-center justify-between">
+      <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <div>
           <h1 className="text-2xl font-bold">Legal Pages</h1>
           <p className="text-muted-foreground">
             Manage legal & policy pages (Terms, Privacy, Refund)
           </p>
         </div>
-        <Link href="/admin/content/legal/new">
+        <Link href="/admin/content/legal/new" className="self-start sm:self-auto">
           <Button>
             <Plus className="mr-2 h-4 w-4" />
             Add Legal Page

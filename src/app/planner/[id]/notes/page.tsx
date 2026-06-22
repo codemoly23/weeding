@@ -163,8 +163,8 @@ export default function NotesPage() {
   return (
     <div className="flex h-[calc(100vh-8rem)] overflow-hidden">
       {/* Sidebar */}
-      <div className="flex w-56 flex-shrink-0 flex-col border-r border-border bg-muted/30">
-        <div className="flex items-center justify-between px-4 py-3 border-b border-border">
+      <div className="flex w-28 sm:w-56 flex-shrink-0 flex-col border-r border-border bg-muted/30">
+        <div className="flex items-center justify-between px-3 py-3 border-b border-border">
           <span className="text-sm font-semibold text-foreground/80">{t("notes.heading")}</span>
           <button onClick={createNote} className="rounded-lg p-1 text-muted-foreground hover:text-primary hover:bg-primary/10 transition-colors">
             <Plus className="h-4 w-4" />
@@ -182,7 +182,7 @@ export default function NotesPage() {
               <button
                 key={note.id}
                 onClick={() => setActiveId(note.id)}
-                className={`group w-full px-4 py-2.5 text-left transition-colors ${
+                className={`group w-full px-3 py-2.5 text-left transition-colors ${
                   activeId === note.id ? "bg-card border-r-2 border-primary" : "hover:bg-card"
                 }`}
               >

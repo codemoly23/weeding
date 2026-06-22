@@ -224,9 +224,9 @@ export default function BlogEditorPage({
 
   return (
     <div className="space-y-6">
-      <div className="flex items-center justify-between">
+      <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <div className="flex items-center gap-4">
-          <Button variant="ghost" size="icon" asChild>
+          <Button variant="ghost" size="icon" asChild className="flex-shrink-0">
             <Link href="/admin/content/blog">
               <ArrowLeft className="h-4 w-4" />
             </Link>
@@ -240,7 +240,7 @@ export default function BlogEditorPage({
             </p>
           </div>
         </div>
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-2 flex-wrap pl-12 sm:pl-0">
           {!isNew && formData.status === "PUBLISHED" && (
             <Button variant="outline" asChild>
               <Link href={`/blog/${formData.slug}`} target="_blank">

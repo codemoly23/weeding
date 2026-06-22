@@ -197,13 +197,25 @@ export function AdminHeader() {
     }
   };
 
+  useEffect(() => {
+    const savedTheme = localStorage.getItem("admin-theme");
+    const shouldUseDark = savedTheme
+      ? savedTheme === "dark"
+      : document.documentElement.classList.contains("dark");
+
+    document.documentElement.classList.toggle("dark", shouldUseDark);
+    setIsDark(shouldUseDark);
+  }, []);
+
   const toggleTheme = () => {
-    setIsDark(!isDark);
-    document.documentElement.classList.toggle("dark");
+    const nextIsDark = !isDark;
+    setIsDark(nextIsDark);
+    document.documentElement.classList.toggle("dark", nextIsDark);
+    localStorage.setItem("admin-theme", nextIsDark ? "dark" : "light");
   };
 
   return (
-    <header className="sticky top-0 z-50 flex h-16 items-center justify-between border-b border-purple-100 bg-white px-4 backdrop-blur lg:px-6">
+    <header className="sticky top-0 z-50 flex h-16 items-center justify-between border-b bg-[var(--admin-surface)] px-4 text-[var(--admin-text)] backdrop-blur lg:px-6" style={{ borderColor: "var(--admin-border)" }}>
       {/* Mobile Menu */}
       <Sheet>
         <SheetTrigger asChild>
@@ -234,7 +246,7 @@ export function AdminHeader() {
 
           {/* Results Dropdown */}
           {showResults && (
-            <div className="absolute top-full left-0 right-0 mt-1 z-50 rounded-md border bg-white shadow-lg overflow-hidden">
+            <div className="absolute top-full left-0 right-0 mt-1 z-50 rounded-md border bg-[var(--admin-surface)] text-[var(--admin-text)] shadow-lg overflow-hidden" style={{ borderColor: "var(--admin-border)" }}>
               {searchResults.length === 0 && !isSearching ? (
                 <div className="px-4 py-3 text-sm text-muted-foreground text-center">
                   No results found
@@ -242,7 +254,7 @@ export function AdminHeader() {
               ) : (
                 <div className="max-h-80 overflow-y-auto">
                   {searchResults.some((r) => r.type === "order") && (
-                    <div className="px-3 py-1.5 text-xs font-semibold text-muted-foreground bg-muted/50 uppercase tracking-wider">
+                    <div className="px-3 py-1.5 text-xs font-semibold uppercase tracking-wider text-[var(--admin-muted)] bg-[var(--admin-surface-muted)]">
                       Orders
                     </div>
                   )}
@@ -251,7 +263,7 @@ export function AdminHeader() {
                     .map((r) => (
                       <button
                         key={r.id}
-                        className="w-full flex items-center gap-3 px-4 py-2.5 text-left hover:bg-muted/50 transition-colors"
+                        className="w-full flex items-center gap-3 px-4 py-2.5 text-left transition-colors hover:bg-[var(--admin-hover)]"
                         onClick={() => handleResultClick(r.href)}
                       >
                         <ShoppingCart className="h-4 w-4 text-muted-foreground shrink-0" />
@@ -263,7 +275,7 @@ export function AdminHeader() {
                     ))}
 
                   {searchResults.some((r) => r.type === "customer") && (
-                    <div className="px-3 py-1.5 text-xs font-semibold text-muted-foreground bg-muted/50 uppercase tracking-wider">
+                    <div className="px-3 py-1.5 text-xs font-semibold uppercase tracking-wider text-[var(--admin-muted)] bg-[var(--admin-surface-muted)]">
                       Customers
                     </div>
                   )}
@@ -272,7 +284,7 @@ export function AdminHeader() {
                     .map((r) => (
                       <button
                         key={r.id}
-                        className="w-full flex items-center gap-3 px-4 py-2.5 text-left hover:bg-muted/50 transition-colors"
+                        className="w-full flex items-center gap-3 px-4 py-2.5 text-left transition-colors hover:bg-[var(--admin-hover)]"
                         onClick={() => handleResultClick(r.href)}
                       >
                         <User className="h-4 w-4 text-muted-foreground shrink-0" />

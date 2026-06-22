@@ -190,14 +190,14 @@ export default function FAQPage() {
 
   return (
     <div className="space-y-6">
-      <div className="flex items-center justify-between">
+      <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <div>
           <h1 className="text-2xl font-bold">FAQs</h1>
           <p className="text-muted-foreground">
             Manage frequently asked questions displayed on the homepage and FAQ page
           </p>
         </div>
-        <Button onClick={openCreateDialog}>
+        <Button onClick={openCreateDialog} className="self-start sm:self-auto">
           <Plus className="mr-2 h-4 w-4" />
           Add FAQ
         </Button>
@@ -265,7 +265,7 @@ export default function FAQPage() {
                       !faq.isActive ? "opacity-60 bg-muted/50" : ""
                     }`}
                   >
-                    <div className="flex items-start justify-between gap-4">
+                    <div className="flex flex-col gap-2 sm:flex-row sm:items-start sm:justify-between sm:gap-4">
                       <div className="min-w-0 flex-1 space-y-1">
                         <p className="font-medium">{faq.question}</p>
                         <div
@@ -273,7 +273,7 @@ export default function FAQPage() {
                           dangerouslySetInnerHTML={{ __html: faq.answer }}
                         />
                       </div>
-                      <div className="flex items-center gap-2">
+                      <div className="flex items-center gap-2 flex-shrink-0">
                         <Badge variant={faq.isActive ? "default" : "secondary"}>
                           {faq.isActive ? "Active" : "Hidden"}
                         </Badge>

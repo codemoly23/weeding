@@ -250,14 +250,14 @@ export default function TestimonialsPage() {
 
   return (
     <div className="space-y-6">
-      <div className="flex items-center justify-between">
+      <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <div>
           <h1 className="text-2xl font-bold">Testimonials</h1>
           <p className="text-muted-foreground">
             Manage customer testimonials displayed on the homepage
           </p>
         </div>
-        <div className="flex gap-2">
+        <div className="flex flex-wrap gap-2 self-start sm:self-auto">
           <Button variant="outline" onClick={() => setTagsDialogOpen(true)}>
             <Tag className="mr-2 h-4 w-4" />
             Manage Tags

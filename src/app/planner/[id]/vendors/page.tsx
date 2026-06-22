@@ -657,19 +657,21 @@ export default function VendorsPage() {
 
       {/* Action bar */}
       <div className="flex flex-wrap gap-2 mb-6">
-        <button
-          onClick={() => { setShowAdd(true); setAddForm(emptyForm()); setAddError(null); }}
-          className="flex items-center gap-2 bg-primary text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-primary/90 transition-colors"
-        >
-          <PlusCircle className="w-4 h-4" />
-          Add custom vendor
-        </button>
+        <div className="flex gap-2">
+          <button
+            onClick={() => { setShowAdd(true); setAddForm(emptyForm()); setAddError(null); }}
+            className="flex items-center gap-2 bg-primary text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-primary/90 transition-colors"
+          >
+            <PlusCircle className="w-4 h-4" />
+            Add custom vendor
+          </button>
 
-        <label className="flex items-center gap-2 bg-card border border-border text-foreground/80 px-4 py-2 rounded-lg text-sm font-medium hover:bg-muted transition-colors cursor-pointer">
-          <Upload className="w-4 h-4" />
-          {importing ? "Importing…" : "Import from file"}
-          <input ref={fileRef} type="file" accept=".csv,.xls,.xlsx" className="hidden" onChange={handleImport} />
-        </label>
+          <label className="flex items-center gap-2 bg-card border border-border text-foreground/80 px-4 py-2 rounded-lg text-sm font-medium hover:bg-muted transition-colors cursor-pointer">
+            <Upload className="w-4 h-4" />
+            {importing ? "Importing…" : "Import from file"}
+            <input ref={fileRef} type="file" accept=".csv,.xls,.xlsx" className="hidden" onChange={handleImport} />
+          </label>
+        </div>
 
         <div className="flex items-center gap-1 text-xs">
           <button onClick={() => handleDownloadTemplate("xlsx")} className="text-primary hover:underline px-2 py-2">
@@ -681,7 +683,7 @@ export default function VendorsPage() {
           </button>
         </div>
 
-        <div className="flex flex-wrap gap-2 sm:ml-auto">
+        <div className="flex gap-2 sm:ml-auto">
           <button
             onClick={handleCopyInvite}
             disabled={inviteCopying}

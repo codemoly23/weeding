@@ -203,7 +203,7 @@ export default function StateFeesPage() {
   return (
     <div className="space-y-6">
       {/* Header */}
-      <div className="flex items-center justify-between">
+      <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <div className="flex items-center gap-4">
           <Button variant="ghost" size="icon" asChild>
             <Link href="/admin/settings">
@@ -217,7 +217,7 @@ export default function StateFeesPage() {
             </p>
           </div>
         </div>
-        <Button onClick={() => openDialog()}>
+        <Button className="self-start sm:self-auto" onClick={() => openDialog()}>
           <Plus className="mr-2 h-4 w-4" />
           Add State
         </Button>

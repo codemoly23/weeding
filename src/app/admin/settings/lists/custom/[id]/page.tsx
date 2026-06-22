@@ -259,7 +259,7 @@ export default function CustomListEditorPage() {
   return (
     <div className="space-y-6">
       {/* Header */}
-      <div className="flex items-center justify-between">
+      <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <div className="flex items-center gap-4">
           <Button variant="ghost" size="icon" asChild>
             <Link href="/admin/settings/lists">
@@ -273,7 +273,7 @@ export default function CustomListEditorPage() {
             </p>
           </div>
         </div>
-        <div className="flex gap-2">
+        <div className="flex gap-2 self-start sm:self-auto">
           <Button variant="outline" onClick={() => setEditListDialogOpen(true)}>
             Edit List
           </Button>

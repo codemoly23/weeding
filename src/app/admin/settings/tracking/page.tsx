@@ -114,7 +114,7 @@ export default function TrackingSettingsPage() {
 
   return (
     <div className="space-y-6">
-      <div className="flex items-center justify-between">
+      <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <div className="flex items-center gap-4">
           <Button variant="ghost" size="icon" asChild>
             <Link href="/admin/settings">
@@ -128,7 +128,7 @@ export default function TrackingSettingsPage() {
             </p>
           </div>
         </div>
-        <Button onClick={handleSave} disabled={saving}>
+        <Button className="self-start sm:self-auto" onClick={handleSave} disabled={saving}>
           {saving ? (
             <Loader2 className="mr-2 h-4 w-4 animate-spin" />
           ) : (

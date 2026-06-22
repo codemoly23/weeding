@@ -112,8 +112,8 @@ export default function AdminVendorReviewsPage() {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-2xl font-bold text-gray-900">Vendor Reviews</h1>
-        <p className="text-sm text-gray-500 mt-0.5">Approve or reject customer reviews before they go public</p>
+        <h1 className="text-2xl font-bold text-[var(--admin-text)]">Vendor Reviews</h1>
+        <p className="text-sm text-[var(--admin-muted)] mt-0.5">Approve or reject customer reviews before they go public</p>
       </div>
 
       {/* Stats */}
@@ -121,7 +121,7 @@ export default function AdminVendorReviewsPage() {
         {statCards.map((s) => (
           <Card key={s.label}>
             <CardContent className="p-4">
-              <p className="text-sm text-gray-500">{s.label}</p>
+              <p className="text-sm text-[var(--admin-muted)]">{s.label}</p>
               <p className={`text-2xl font-bold mt-0.5 ${s.color}`}>{s.value}</p>
             </CardContent>
           </Card>
@@ -137,8 +137,9 @@ export default function AdminVendorReviewsPage() {
             className={`px-4 py-1.5 rounded-lg text-sm font-medium capitalize transition-colors ${
               status === f
                 ? "bg-[var(--admin-primary)] text-[var(--admin-primary-fg)]"
-                : "bg-white border border-gray-200 text-gray-600 hover:bg-gray-50"
+                : "border bg-[var(--admin-surface)] text-[var(--admin-muted)] hover:bg-[var(--admin-hover)] hover:text-[var(--admin-text)]"
             }`}
+            style={status === f ? undefined : { borderColor: "var(--admin-border)" }}
           >
             {f === "pending" ? `Pending (${stats.pending})` : f === "approved" ? `Approved (${stats.approved})` : "All"}
           </button>
@@ -151,19 +152,19 @@ export default function AdminVendorReviewsPage() {
           <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[var(--admin-primary)]" />
         </div>
       ) : reviews.length === 0 ? (
-        <div className="bg-white rounded-xl border border-gray-200 px-6 py-14 text-center">
-          <Star className="w-10 h-10 text-gray-200 mx-auto mb-3" />
-          <p className="text-sm text-gray-500">No {status !== "all" ? status : ""} reviews found</p>
+        <div className="rounded-xl border bg-[var(--admin-surface)] px-6 py-14 text-center" style={{ borderColor: "var(--admin-border)" }}>
+          <Star className="w-10 h-10 text-[var(--admin-muted)] opacity-35 mx-auto mb-3" />
+          <p className="text-sm text-[var(--admin-muted)]">No {status !== "all" ? status : ""} reviews found</p>
         </div>
       ) : (
         <div className="space-y-3">
           {reviews.map((r) => (
-            <div key={r.id} className="bg-white rounded-xl border border-gray-200 p-5">
+            <div key={r.id} className="rounded-xl border bg-[var(--admin-surface)] p-5" style={{ borderColor: "var(--admin-border)" }}>
               <div className="flex items-start gap-4 flex-wrap">
                 {/* Author + rating */}
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center gap-3 flex-wrap mb-1">
-                    <span className="font-semibold text-gray-900">{r.authorName}</span>
+                    <span className="font-semibold text-[var(--admin-text)]">{r.authorName}</span>
                     <Stars rating={r.rating} />
                     <Badge variant="outline" className={r.isApproved ? "admin-status-success" : "admin-status-warning"}>
                       {r.isApproved ? "Approved" : "Pending"}
@@ -171,7 +172,7 @@ export default function AdminVendorReviewsPage() {
                   </div>
                   {/* Vendor */}
                   <div className="flex items-center gap-1.5 mb-2">
-                    <span className="text-xs text-gray-400">for</span>
+                    <span className="text-xs text-[var(--admin-muted)]">for</span>
                     <Link
                       href={`/vendors/${r.vendor.slug}`}
                       target="_blank"
@@ -179,17 +180,17 @@ export default function AdminVendorReviewsPage() {
                     >
                       {r.vendor.businessName} <ExternalLink className="w-3 h-3" />
                     </Link>
-                    <span className="text-xs text-gray-400">
+                    <span className="text-xs text-[var(--admin-muted)]">
                       · {new Date(r.createdAt).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" })}
                     </span>
                   </div>
                   {r.comment && (
-                    <p className="text-sm text-gray-700 leading-relaxed">{r.comment}</p>
+                    <p className="text-sm text-[var(--admin-text)] leading-relaxed">{r.comment}</p>
                   )}
                   {r.reply && (
                     <div className="mt-2 pl-3 border-l-2 border-[var(--ast-hold-border)]">
-                      <p className="text-xs text-gray-400 mb-0.5">Vendor reply:</p>
-                      <p className="text-sm text-gray-600">{r.reply}</p>
+                      <p className="text-xs text-[var(--admin-muted)] mb-0.5">Vendor reply:</p>
+                      <p className="text-sm text-[var(--admin-muted)]">{r.reply}</p>
                     </div>
                   )}
                 </div>
@@ -237,15 +238,17 @@ export default function AdminVendorReviewsPage() {
           <button
             onClick={() => setPage((p) => Math.max(1, p - 1))}
             disabled={page === 1}
-            className="p-2 rounded-lg border border-gray-200 hover:bg-gray-50 disabled:opacity-40 disabled:cursor-not-allowed"
+            className="p-2 rounded-lg border text-[var(--admin-text)] hover:bg-[var(--admin-hover)] disabled:opacity-40 disabled:cursor-not-allowed"
+            style={{ borderColor: "var(--admin-border)" }}
           >
             <ChevronLeft className="w-4 h-4" />
           </button>
-          <span className="text-sm text-gray-600">Page {page} of {totalPages}</span>
+          <span className="text-sm text-[var(--admin-muted)]">Page {page} of {totalPages}</span>
           <button
             onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
             disabled={page === totalPages}
-            className="p-2 rounded-lg border border-gray-200 hover:bg-gray-50 disabled:opacity-40 disabled:cursor-not-allowed"
+            className="p-2 rounded-lg border text-[var(--admin-text)] hover:bg-[var(--admin-hover)] disabled:opacity-40 disabled:cursor-not-allowed"
+            style={{ borderColor: "var(--admin-border)" }}
           >
             <ChevronRight className="w-4 h-4" />
           </button>

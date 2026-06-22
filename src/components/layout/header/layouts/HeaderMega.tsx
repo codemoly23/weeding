@@ -27,6 +27,8 @@ import { MobileMenu } from "../components/MobileMenu";
 import { SearchButton } from "../components/SearchButton";
 import { cn } from "@/lib/utils";
 import type { HeaderLayoutProps, ServiceCategory } from "../types";
+import { useLanguage } from "@/lib/i18n/language-context";
+import { getNavLabel } from "../utils/nav-labels";
 
 // Icon mapping
 const iconMap: Record<string, LucideIcon> = {
@@ -70,6 +72,8 @@ interface FullWidthMegaMenuProps {
 }
 
 function FullWidthMegaMenu({ categories, isOpen }: FullWidthMegaMenuProps) {
+  const { t, lang } = useLanguage();
+
   if (!isOpen) return null;
 
   return (
@@ -85,7 +89,7 @@ function FullWidthMegaMenu({ categories, isOpen }: FullWidthMegaMenuProps) {
                     <CategoryIcon className="h-5 w-5 text-primary" />
                   </div>
                   <div>
-                    <h4 className="font-semibold text-foreground">{category.name}</h4>
+                    <h4 className="font-semibold text-foreground">{getNavLabel(category.name, t, lang)}</h4>
                     <p className="text-xs text-muted-foreground">{category.description}</p>
                   </div>
                 </div>
@@ -96,10 +100,10 @@ function FullWidthMegaMenu({ categories, isOpen }: FullWidthMegaMenuProps) {
                         href={service.href}
                         className="group flex items-center gap-2 rounded-md px-3 py-2 text-sm text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
                       >
-                        <span className="flex-1">{service.name}</span>
+                        <span className="flex-1">{getNavLabel(service.name, t, lang)}</span>
                         {service.popular && (
                           <span className="rounded bg-primary px-2 py-0.5 text-[10px] font-medium text-primary-foreground">
-                            Popular
+                            {getNavLabel("Popular", t, lang)}
                           </span>
                         )}
                       </Link>
@@ -114,22 +118,22 @@ function FullWidthMegaMenu({ categories, isOpen }: FullWidthMegaMenuProps) {
         {/* Bottom CTA row */}
         <div className="mt-8 flex items-center justify-between border-t pt-6">
           <div className="flex items-center gap-4">
-            <span className="text-sm font-medium text-foreground">Popular:</span>
+            <span className="text-sm font-medium text-foreground">{getNavLabel("Popular", t, lang)}:</span>
             <Link
               href="/register"
               className="rounded-full bg-primary px-4 py-2 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/90"
             >
-              Start Planning Free
+              {getNavLabel("Start Planning Free", t, lang)}
             </Link>
             <Link
               href="/features/seating-chart"
               className="rounded-full bg-secondary px-4 py-2 text-sm font-medium text-secondary-foreground transition-colors hover:bg-secondary/80"
             >
-              Seating Chart Editor
+              {getNavLabel("Seating Chart Editor", t, lang)}
             </Link>
           </div>
           <Link href="/contact" className="text-sm font-medium text-primary hover:underline">
-            Need help? Get free consultation
+            {getNavLabel("Need help? Get free consultation", t, lang)}
           </Link>
         </div>
       </div>
@@ -155,6 +159,7 @@ export function HeaderMega({
   onLogout,
   styling,
 }: HeaderLayoutProps) {
+  const { t, lang } = useLanguage();
   const [hoveredItem, setHoveredItem] = useState<string | null>(null);
   const [mounted, setMounted] = useState(false);
 
@@ -250,7 +255,7 @@ export function HeaderMega({
                     className="flex items-center gap-1 rounded-md px-4 py-2 font-sans text-sm font-medium transition-colors"
                     style={{ color: isHovered ? navHoverColor : navColor }}
                   >
-                    {item.name}
+                    {getNavLabel(item.name, t, lang)}
                     {item.hasDropdown && (
                       <ChevronDown
                         className={cn(
