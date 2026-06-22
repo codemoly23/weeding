@@ -2565,7 +2565,7 @@ export default function SeatingPage() {
         </div>
 
         {/* Tab cards */}
-        <div className="grid grid-cols-7 gap-2">
+        <div className="flex gap-2 overflow-x-auto pb-1 sm:grid sm:grid-cols-7 sm:overflow-visible sm:pb-0">
           {TABS.map((tab, i) => {
             const isEliteTab = ELITE_TABS.includes(tab.id);
             const locked = isEliteTab && !isElite(tier);
@@ -2577,7 +2577,8 @@ export default function SeatingPage() {
                   setActiveTab(tab.id);
                 }}
                 className={cn(
-                  "relative rounded-xl border px-2 py-3 text-center text-xs leading-snug transition-colors",
+                  "relative flex-shrink-0 rounded-xl border px-2 py-3 text-center text-xs leading-snug transition-colors sm:flex-shrink",
+                  "min-w-[72px] sm:min-w-0",
                   activeTab === tab.id
                     ? "border-foreground/70 bg-card font-semibold text-foreground shadow-sm"
                     : "border-border bg-card/70 text-muted-foreground hover:bg-card hover:text-foreground"
@@ -2705,11 +2706,11 @@ export default function SeatingPage() {
             <div className="mx-auto mt-6 max-w-3xl rounded-xl border border-border bg-card px-5 py-4 shadow-sm">
               <p className="mb-2 text-sm font-semibold text-foreground">QR Entrance Mode</p>
               <p className="mb-3 text-xs text-muted-foreground/70">Share this link with venue staff to look up guests on arrival.</p>
-              <div className="flex items-start gap-4">
-                <div className="flex-1 rounded-lg border-2 border-dashed border-border bg-muted/30 px-4 py-3">
-                  <p className="break-all font-mono text-xs text-foreground/80">{`${origin}/seat-finder/${projectId}`}</p>
+              <div className="flex flex-col gap-2">
+                <div className="rounded-lg border-2 border-dashed border-border bg-muted/30 px-4 py-3 min-w-0">
+                  <p className="truncate font-mono text-xs text-foreground/80">{`${origin}/seat-finder/${projectId}`}</p>
                 </div>
-                <div className="flex flex-col gap-2">
+                <div className="flex gap-2">
                   <button
                     onClick={() => {
                       const url = `${origin}/seat-finder/${projectId}`;
@@ -2723,7 +2724,7 @@ export default function SeatingPage() {
                     href={`/seat-finder/${projectId}`}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="flex items-center justify-center gap-1.5 rounded-lg bg-primary px-3 py-1.5 text-xs font-medium text-white hover:bg-primary/90 transition-colors"
+                    className="flex flex-1 items-center justify-center gap-1.5 rounded-lg bg-primary px-3 py-1.5 text-xs font-medium text-white hover:bg-primary/90 transition-colors"
                   >
                     Open Entrance Scanner
                   </a>

@@ -303,12 +303,12 @@ function LocationSection({ options, onAdd, onDelete, onUpdateIcon, loading }: {
             onChange={(e) => setInput(e.target.value)}
             onKeyDown={(e) => { if (e.key === "Enter") { e.preventDefault(); handleAdd(); } }}
             placeholder={activeTab === "Sweden" ? "e.g. Stockholm" : "e.g. London, UK"}
-            className="flex-1 rounded-lg border border-input bg-background px-3 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-ring"
+            className="flex-1 min-w-0 rounded-lg border border-input bg-background px-3 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-ring"
           />
           <button
             onClick={handleAdd}
             disabled={!input.trim() || saving}
-            className="flex items-center gap-1.5 rounded-lg bg-primary px-3 py-1.5 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/90 disabled:opacity-40"
+            className="flex flex-shrink-0 items-center gap-1.5 rounded-lg bg-primary px-3 py-1.5 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/90 disabled:opacity-40 whitespace-nowrap"
           >
             {saving ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <Plus className="h-3.5 w-3.5" />}
             Add to {activeTab}

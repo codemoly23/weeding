@@ -255,7 +255,7 @@ export default function PluginsPage() {
   return (
     <div className="space-y-6">
       {/* Header */}
-      <div className="flex items-center justify-between">
+      <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <div>
           <h1 className="text-2xl font-bold tracking-tight flex items-center gap-2">
             <Puzzle className="h-6 w-6" />
@@ -265,7 +265,7 @@ export default function PluginsPage() {
             Manage installed plugins
           </p>
         </div>
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-2 self-start sm:self-auto">
           <input
             ref={fileInputRef}
             type="file"

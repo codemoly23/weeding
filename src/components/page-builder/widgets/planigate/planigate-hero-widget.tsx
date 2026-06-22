@@ -18,6 +18,7 @@ import {
 } from "lucide-react";
 import type { PlanigateHeroWidgetSettings, PlanigateEventTypePill } from "@/lib/page-builder/types";
 import { DEFAULT_PLANIGATE_HERO_SETTINGS } from "@/lib/page-builder/defaults";
+import { useLanguage } from "@/lib/i18n/language-context";
 import {
   fadeUp,
   fadeIn,
@@ -58,6 +59,16 @@ interface Props {
   settings: PlanigateHeroWidgetSettings;
 }
 
+function planigateUiText(key: "sweden" | "international" | "noOptions", lang: string): string {
+  const labels = {
+    sweden: { en: "Sweden", sv: "Sverige" },
+    international: { en: "International", sv: "Internationellt" },
+    noOptions: { en: "No options", sv: "Inga alternativ" },
+  };
+
+  return labels[key][lang === "sv" ? "sv" : "en"];
+}
+
 export function PlanigateHeroWidget({ settings: raw }: Props) {
   const settings = useMemo<PlanigateHeroWidgetSettings>(() => ({
     ...DEFAULT_PLANIGATE_HERO_SETTINGS,
@@ -69,7 +80,13 @@ export function PlanigateHeroWidget({ settings: raw }: Props) {
 
   const bgImages = useMemo(() => {
     const c = settings.collageImages;
-    return [c.couple, c.dinner, c.toasting, c.laptop].filter(Boolean) as string[];
+    const fallback = DEFAULT_PLANIGATE_HERO_SETTINGS.collageImages;
+    return [
+      { src: c.couple, fallbackSrc: fallback.couple },
+      { src: c.dinner, fallbackSrc: fallback.dinner },
+      { src: c.toasting, fallbackSrc: fallback.toasting },
+      { src: c.laptop, fallbackSrc: fallback.laptop },
+    ].filter((image) => Boolean(image.src));
   }, [settings.collageImages]);
 
   const [bgIndex, setBgIndex] = useState(0);
@@ -95,7 +112,7 @@ export function PlanigateHeroWidget({ settings: raw }: Props) {
       {/* Background layer — overflow-hidden kept here so collage doesn't bleed */}
       <div className="absolute inset-0 overflow-hidden">
         {/* Background image slideshow */}
-        {bgImages.map((src, i) => (
+        {bgImages.map((image, i) => (
           <div
             key={i}
             aria-hidden
@@ -105,7 +122,15 @@ export function PlanigateHeroWidget({ settings: raw }: Props) {
               transition: "opacity 1.4s ease-in-out",
             }}
           >
-            <Image src={src} alt="" fill sizes="100vw" className="object-cover" priority={i === 0} />
+            <FallbackImage
+              src={image.src}
+              fallbackSrc={image.fallbackSrc}
+              alt=""
+              fill
+              sizes="100vw"
+              className="object-cover"
+              priority={i === 0}
+            />
           </div>
         ))}
 
@@ -186,7 +211,14 @@ export function PlanigateHeroWidget({ settings: raw }: Props) {
                     transition={{ delay: 0.4 + i * 0.08, duration: 0.4, ease: EASE_OUT }}
                     className="relative h-8 w-8 rounded-full overflow-hidden ring-2 ring-white shadow-sm"
                   >
-                    <Image src={src} alt="" fill sizes="32px" className="object-cover" />
+                    <FallbackImage
+                      src={src}
+                      fallbackSrc={DEFAULT_PLANIGATE_HERO_SETTINGS.avatars[i] ?? DEFAULT_PLANIGATE_HERO_SETTINGS.avatars[0]}
+                      alt=""
+                      fill
+                      sizes="32px"
+                      className="object-cover"
+                    />
                   </motion.div>
                 ))}
               </div>
@@ -272,6 +304,32 @@ export function PlanigateHeroWidget({ settings: raw }: Props) {
 // Image collage on the right side
 // ─────────────────────────────────────────────
 
+function FallbackImage({
+  src,
+  fallbackSrc,
+  onError,
+  ...props
+}: Omit<React.ComponentProps<typeof Image>, "src"> & { src: string; fallbackSrc: string }) {
+  const [currentSrc, setCurrentSrc] = useState(src);
+
+  useEffect(() => {
+    setCurrentSrc(src);
+  }, [src]);
+
+  return (
+    <Image
+      {...props}
+      src={currentSrc}
+      onError={(event) => {
+        if (currentSrc !== fallbackSrc) {
+          setCurrentSrc(fallbackSrc);
+        }
+        onError?.(event);
+      }}
+    />
+  );
+}
+
 function Collage({ images }: { images: PlanigateHeroWidgetSettings["collageImages"] }) {
   // Slow gentle float — different phases per piece
   return (
@@ -290,7 +348,7 @@ function Collage({ images }: { images: PlanigateHeroWidgetSettings["collageImage
         whileHover={{ scale: 1.03, rotate: 0, transition: { duration: 0.4 } }}
         className="absolute left-0 top-0 w-[42%] h-[72%] rounded-[22px] overflow-hidden shadow-xl ring-1 ring-black/5"
       >
-        <Image src={images.couple} alt="" fill sizes="(max-width: 1024px) 50vw, 320px" className="object-cover" priority />
+        <FallbackImage src={images.couple} fallbackSrc={DEFAULT_PLANIGATE_HERO_SETTINGS.collageImages.couple} alt="" fill sizes="(max-width: 1024px) 50vw, 320px" className="object-cover" priority />
       </motion.div>
 
       {/* dinner — top right, BIG horizontal */}
@@ -299,7 +357,7 @@ function Collage({ images }: { images: PlanigateHeroWidgetSettings["collageImage
         whileHover={{ scale: 1.03, rotate: 0, transition: { duration: 0.4 } }}
         className="absolute right-0 top-0 w-[56%] h-[44%] rounded-[22px] overflow-hidden shadow-xl ring-1 ring-black/5"
       >
-        <Image src={images.dinner} alt="" fill sizes="(max-width: 1024px) 50vw, 420px" className="object-cover" />
+        <FallbackImage src={images.dinner} fallbackSrc={DEFAULT_PLANIGATE_HERO_SETTINGS.collageImages.dinner} alt="" fill sizes="(max-width: 1024px) 50vw, 420px" className="object-cover" />
       </motion.div>
 
       {/* toasting — right middle, large */}
@@ -308,7 +366,7 @@ function Collage({ images }: { images: PlanigateHeroWidgetSettings["collageImage
         whileHover={{ scale: 1.03, rotate: 0, transition: { duration: 0.4 } }}
         className="absolute right-[8%] top-[46%] w-[48%] h-[44%] rounded-[22px] overflow-hidden shadow-2xl ring-1 ring-black/5"
       >
-        <Image src={images.toasting} alt="" fill sizes="(max-width: 1024px) 60vw, 380px" className="object-cover" />
+        <FallbackImage src={images.toasting} fallbackSrc={DEFAULT_PLANIGATE_HERO_SETTINGS.collageImages.toasting} alt="" fill sizes="(max-width: 1024px) 60vw, 380px" className="object-cover" />
       </motion.div>
 
       {/* laptop — overlay, center-bottom, larger */}
@@ -318,7 +376,7 @@ function Collage({ images }: { images: PlanigateHeroWidgetSettings["collageImage
         animate={{ y: [0, -3, 0], transition: { duration: 5, repeat: Infinity, ease: "easeInOut" } }}
         className="absolute left-[10%] bottom-[8%] w-[46%] h-[30%] rounded-2xl overflow-hidden shadow-2xl ring-1 ring-black/10 bg-card"
       >
-        <Image src={images.laptop} alt="" fill sizes="(max-width: 1024px) 40vw, 360px" className="object-cover" />
+        <FallbackImage src={images.laptop} fallbackSrc={DEFAULT_PLANIGATE_HERO_SETTINGS.collageImages.laptop} alt="" fill sizes="(max-width: 1024px) 40vw, 360px" className="object-cover" />
       </motion.div>
 
       {/* phone — overlay, far right edge */}
@@ -328,7 +386,7 @@ function Collage({ images }: { images: PlanigateHeroWidgetSettings["collageImage
         animate={{ y: [0, 4, 0], transition: { duration: 4, repeat: Infinity, ease: "easeInOut", delay: 1 } }}
         className="absolute right-[-2%] bottom-[8%] w-[19%] h-[38%] rounded-[26px] overflow-hidden shadow-2xl ring-[3px] ring-white"
       >
-        <Image src={images.phone} alt="" fill sizes="(max-width: 1024px) 20vw, 150px" className="object-cover" />
+        <FallbackImage src={images.phone} fallbackSrc={DEFAULT_PLANIGATE_HERO_SETTINGS.collageImages.phone} alt="" fill sizes="(max-width: 1024px) 20vw, 150px" className="object-cover" />
       </motion.div>
     </motion.div>
   );
@@ -528,6 +586,7 @@ interface PlanigateDropdownProps {
 // ─────────────────────────────────────────────
 
 function PlanigateDropdown({ options, value, onChange, placeholder, icon }: PlanigateDropdownProps) {
+  const { lang } = useLanguage();
   const [open, setOpen] = useState(false);
   const [pos, setPos] = useState({ top: 0, left: 0, width: 0 });
   const wrapRef = useRef<HTMLDivElement>(null);
@@ -597,7 +656,9 @@ function PlanigateDropdown({ options, value, onChange, placeholder, icon }: Plan
           }}
         >
           {options.length === 0 ? (
-            <p className="py-4 text-center text-xs" style={{ color: "rgba(255,255,255,0.4)" }}>No options</p>
+            <p className="py-4 text-center text-xs" style={{ color: "rgba(255,255,255,0.4)" }}>
+              {planigateUiText("noOptions", lang)}
+            </p>
           ) : (
             <div className="p-1.5">
               {options.map((opt) => {
@@ -638,6 +699,7 @@ function PlanigateDropdown({ options, value, onChange, placeholder, icon }: Plan
 // ─────────────────────────────────────────────
 
 function PlanigateGroupedDropdown({ options, value, onChange, placeholder, icon }: PlanigateDropdownProps) {
+  const { lang } = useLanguage();
   const [open, setOpen] = useState(false);
   const [activeTab, setActiveTab] = useState<"Sweden" | "International">("Sweden");
   const [pos, setPos] = useState({ top: 0, left: 0, width: 0 });
@@ -721,7 +783,7 @@ function PlanigateGroupedDropdown({ options, value, onChange, placeholder, icon 
                 }}
               >
                 {tab === "Sweden" ? <MapPin size={11} /> : <Globe size={11} />}
-                {tab}
+                {planigateUiText(tab === "Sweden" ? "sweden" : "international", lang)}
               </button>
             ))}
           </div>
@@ -729,7 +791,9 @@ function PlanigateGroupedDropdown({ options, value, onChange, placeholder, icon 
           {/* Options */}
           <div style={{ maxHeight: "220px", overflowY: "auto" }}>
             {tabOptions.length === 0 ? (
-              <p className="py-4 text-center text-xs" style={{ color: "rgba(255,255,255,0.4)" }}>No options</p>
+              <p className="py-4 text-center text-xs" style={{ color: "rgba(255,255,255,0.4)" }}>
+                {planigateUiText("noOptions", lang)}
+              </p>
             ) : (
               <div className="p-1.5">
                 {tabOptions.map((opt) => {

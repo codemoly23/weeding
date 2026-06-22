@@ -616,7 +616,7 @@ export default function BudgetPage() {
                     {/* Column headers */}
                     <div className="flex items-center px-4 py-2 bg-muted/30">
                       <span className="flex-1 text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">Title</span>
-                      <span className="w-40 text-right text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">Cost</span>
+                      <span className="w-28 text-left text-[11px] font-semibold uppercase tracking-wider text-muted-foreground flex-shrink-0">Cost</span>
                     </div>
 
                     {/* Item rows */}
@@ -662,15 +662,15 @@ export default function BudgetPage() {
                             <Trash2 className="h-3.5 w-3.5" />
                           </button>
                           {/* Cost (planned → feeds Total Budget) */}
-                          <div className="flex items-center gap-1 w-40 justify-end flex-shrink-0">
-                            <span className={`text-sm ${isZero ? "text-muted-foreground/50" : "text-muted-foreground"}`}>$</span>
+                          <div className="flex items-center gap-0.5 w-28 flex-shrink-0">
+                            <span className={`text-sm flex-shrink-0 ${isZero ? "text-muted-foreground/50" : "text-muted-foreground"}`}>$</span>
                             <input
                               type="number"
                               value={inlinePlanned[item.id] ?? item.planned.toString()}
                               onChange={e => setInlinePlanned(prev => ({ ...prev, [item.id]: e.target.value }))}
                               onBlur={e => saveInlinePlanned(cat.id, item, e.target.value)}
                               onKeyDown={e => { if (e.key === "Enter") (e.target as HTMLInputElement).blur(); }}
-                              className={`w-28 bg-transparent text-sm tabular-nums text-right focus:outline-none focus:bg-card focus:border focus:border-primary/30 focus:rounded-lg px-1 py-0.5 transition-colors ${isZero ? "text-muted-foreground/50" : "font-medium text-foreground/80"}`}
+                              className={`flex-1 min-w-0 bg-transparent text-sm tabular-nums text-left focus:outline-none focus:bg-card focus:border focus:border-primary/30 focus:rounded-lg px-1 py-0.5 transition-colors ${isZero ? "text-muted-foreground/50" : "font-medium text-foreground/80"}`}
                             />
                           </div>
                         </div>
@@ -691,8 +691,8 @@ export default function BudgetPage() {
                           placeholder="Item description…"
                           className="flex-1 min-w-0 bg-transparent text-sm text-foreground/80 placeholder:text-muted-foreground focus:outline-none border-b border-primary/30"
                         />
-                        <div className="flex items-center gap-1 w-40 justify-end flex-shrink-0">
-                          <span className="text-sm text-muted-foreground">$</span>
+                        <div className="flex items-center gap-0.5 w-28 flex-shrink-0">
+                          <span className="text-sm text-muted-foreground flex-shrink-0">$</span>
                           <input
                             type="number"
                             value={newItemPlanned}
@@ -703,7 +703,7 @@ export default function BudgetPage() {
                               if (e.key === "Escape") { setAddingItemCatId(null); setNewItemDesc(""); setNewItemPlanned(""); }
                             }}
                             placeholder="0"
-                            className="w-28 bg-transparent text-sm tabular-nums text-right focus:outline-none border-b border-primary/30 px-1"
+                            className="flex-1 min-w-0 bg-transparent text-sm tabular-nums text-left focus:outline-none border-b border-primary/30 px-1"
                           />
                         </div>
                       </div>

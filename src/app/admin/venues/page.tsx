@@ -17,10 +17,10 @@ import {
 type VenueCategory = "wedding" | "party" | "specialty";
 type BadgeColor = "purple" | "orange" | "green" | "";
 
-const CATEGORY_TABS: { value: VenueCategory; label: string; color: string }[] = [
-  { value: "wedding", label: "Wedding Venues", color: "text-violet-600 bg-violet-50 border-violet-200" },
-  { value: "party", label: "Party & Event Venues", color: "text-pink-600 bg-pink-50 border-pink-200" },
-  { value: "specialty", label: "Specialty Venues", color: "text-amber-600 bg-amber-50 border-amber-200" },
+const CATEGORY_TABS: { value: VenueCategory; label: string; shortLabel: string; color: string }[] = [
+  { value: "wedding", label: "Wedding Venues", shortLabel: "Wedding", color: "text-violet-600 bg-violet-50 border-violet-200" },
+  { value: "party", label: "Party & Event Venues", shortLabel: "Party", color: "text-pink-600 bg-pink-50 border-pink-200" },
+  { value: "specialty", label: "Specialty Venues", shortLabel: "Specialty", color: "text-amber-600 bg-amber-50 border-amber-200" },
 ];
 
 const VENUE_TYPES: Record<VenueCategory, string[]> = {
@@ -223,57 +223,75 @@ function AddVenueForm({
           onChange={(e) => setName(e.target.value)}
           onKeyDown={(e) => { if (e.key === "Enter") { e.preventDefault(); handleAdd(); } }}
           placeholder="Venue name (e.g. Grand Ballroom)"
-          className="flex-1 rounded-lg border border-input bg-background px-3 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-ring"
+          className="flex-1 min-w-0 rounded-lg border border-input bg-background px-3 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-ring"
         />
         <button
           onClick={handleAdd}
           disabled={!name.trim() || saving}
-          className="flex items-center gap-1.5 rounded-lg bg-primary px-3 py-1.5 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/90 disabled:opacity-40"
+          className="flex shrink-0 items-center gap-1.5 rounded-lg bg-primary px-3 py-1.5 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/90 disabled:opacity-40"
         >
           {saving ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <Plus className="h-3.5 w-3.5" />}
           Add
         </button>
       </div>
       <div className="grid grid-cols-2 gap-2">
-        <select
-          value={type}
-          onChange={(e) => setType(e.target.value)}
-          className="rounded-lg border border-input bg-background px-3 py-1.5 text-xs focus:outline-none focus:ring-2 focus:ring-ring"
-        >
-          {VENUE_TYPES[category].map((t) => <option key={t} value={t}>{t}</option>)}
-        </select>
-        <input
-          value={location}
-          onChange={(e) => setLocation(e.target.value)}
-          placeholder="Location (e.g. Stockholm, SE)"
-          className="rounded-lg border border-input bg-background px-3 py-1.5 text-xs focus:outline-none focus:ring-2 focus:ring-ring"
-        />
-        <input
-          value={price}
-          onChange={(e) => setPrice(e.target.value)}
-          placeholder="Price (e.g. 15000)"
-          type="number"
-          className="rounded-lg border border-input bg-background px-3 py-1.5 text-xs focus:outline-none focus:ring-2 focus:ring-ring"
-        />
-        <input
-          value={badge}
-          onChange={(e) => setBadge(e.target.value)}
-          placeholder="Badge text (e.g. Popular)"
-          className="rounded-lg border border-input bg-background px-3 py-1.5 text-xs focus:outline-none focus:ring-2 focus:ring-ring"
-        />
-        <select
-          value={badgeColor}
-          onChange={(e) => setBadgeColor(e.target.value as BadgeColor)}
-          className="rounded-lg border border-input bg-background px-3 py-1.5 text-xs focus:outline-none focus:ring-2 focus:ring-ring"
-        >
-          {BADGE_COLOR_OPTIONS.map((o) => <option key={o.value} value={o.value}>{o.label}</option>)}
-        </select>
-        <input
-          value={tags}
-          onChange={(e) => setTags(e.target.value)}
-          placeholder="Tags: Up to 300, Indoor, etc."
-          className="rounded-lg border border-input bg-background px-3 py-1.5 text-xs focus:outline-none focus:ring-2 focus:ring-ring"
-        />
+        <div className="space-y-0.5">
+          <label className="text-[10px] text-muted-foreground px-1">Type</label>
+          <select
+            value={type}
+            onChange={(e) => setType(e.target.value)}
+            className="w-full rounded-lg border border-input bg-background px-3 py-1.5 text-xs focus:outline-none focus:ring-2 focus:ring-ring"
+          >
+            {VENUE_TYPES[category].map((t) => <option key={t} value={t}>{t}</option>)}
+          </select>
+        </div>
+        <div className="space-y-0.5">
+          <label className="text-[10px] text-muted-foreground px-1">Location</label>
+          <input
+            value={location}
+            onChange={(e) => setLocation(e.target.value)}
+            placeholder="e.g. Stockholm, SE"
+            className="w-full rounded-lg border border-input bg-background px-3 py-1.5 text-xs focus:outline-none focus:ring-2 focus:ring-ring"
+          />
+        </div>
+        <div className="space-y-0.5">
+          <label className="text-[10px] text-muted-foreground px-1">Price</label>
+          <input
+            value={price}
+            onChange={(e) => setPrice(e.target.value)}
+            placeholder="e.g. 15000"
+            type="number"
+            className="w-full rounded-lg border border-input bg-background px-3 py-1.5 text-xs focus:outline-none focus:ring-2 focus:ring-ring"
+          />
+        </div>
+        <div className="space-y-0.5">
+          <label className="text-[10px] text-muted-foreground px-1">Badge text</label>
+          <input
+            value={badge}
+            onChange={(e) => setBadge(e.target.value)}
+            placeholder="e.g. Popular"
+            className="w-full rounded-lg border border-input bg-background px-3 py-1.5 text-xs focus:outline-none focus:ring-2 focus:ring-ring"
+          />
+        </div>
+        <div className="space-y-0.5">
+          <label className="text-[10px] text-muted-foreground px-1">Badge color</label>
+          <select
+            value={badgeColor}
+            onChange={(e) => setBadgeColor(e.target.value as BadgeColor)}
+            className="w-full rounded-lg border border-input bg-background px-3 py-1.5 text-xs focus:outline-none focus:ring-2 focus:ring-ring"
+          >
+            {BADGE_COLOR_OPTIONS.map((o) => <option key={o.value} value={o.value}>{o.label}</option>)}
+          </select>
+        </div>
+        <div className="space-y-0.5">
+          <label className="text-[10px] text-muted-foreground px-1">Tags</label>
+          <input
+            value={tags}
+            onChange={(e) => setTags(e.target.value)}
+            placeholder="Up to 300, Indoor…"
+            className="w-full rounded-lg border border-input bg-background px-3 py-1.5 text-xs focus:outline-none focus:ring-2 focus:ring-ring"
+          />
+        </div>
       </div>
     </div>
   );
@@ -368,17 +386,26 @@ function VenueCard({
         </div>
       </div>
 
-      {/* Editable fields row */}
-      <div className="mt-2 pt-2 border-t border-border/50 flex flex-wrap gap-x-3 gap-y-1 items-center">
-        <InlineEdit venue={venue} field="type" onUpdate={onUpdate} />
-        <InlineEdit venue={venue} field="location" onUpdate={onUpdate} />
-        <InlineEdit venue={venue} field="price" onUpdate={onUpdate} />
-        <InlineEdit venue={venue} field="badge" onUpdate={onUpdate} />
-        <InlineEdit venue={venue} field="badgeColor" onUpdate={onUpdate} />
-        <InlineEdit venue={venue} field="tags" onUpdate={onUpdate} />
-        <InlineEdit venue={venue} field="rating" onUpdate={onUpdate} />
-        <InlineEdit venue={venue} field="image" onUpdate={onUpdate} />
-        <div className="ml-auto flex items-center gap-2">
+      {/* Editable fields */}
+      <div className="mt-2 pt-2 border-t border-border/50 space-y-1.5">
+        <div className="grid grid-cols-2 gap-x-2 gap-y-1">
+          {([
+            { field: "type" as EditableField, label: "Type" },
+            { field: "location" as EditableField, label: "Location" },
+            { field: "price" as EditableField, label: "Price" },
+            { field: "badge" as EditableField, label: "Badge" },
+            { field: "badgeColor" as EditableField, label: "Color" },
+            { field: "rating" as EditableField, label: "Rating" },
+            { field: "tags" as EditableField, label: "Tags" },
+            { field: "image" as EditableField, label: "Image" },
+          ]).map(({ field, label }) => (
+            <div key={field} className="flex items-center gap-1 min-w-0">
+              <span className="text-[10px] text-muted-foreground/60 w-10 shrink-0">{label}</span>
+              <InlineEdit venue={venue} field={field} onUpdate={onUpdate} />
+            </div>
+          ))}
+        </div>
+        <div className="flex items-center justify-end gap-2 pt-0.5">
           <button
             onClick={() => onToggleFeatured(venue.id, !venue.isFeatured)}
             className={`rounded-full px-2 py-0.5 text-[10px] font-medium transition-colors ${venue.isFeatured ? "bg-[var(--ast-warning-bg)] text-[var(--ast-warning-text)] hover:bg-[var(--ast-warning-border)]" : "bg-muted text-muted-foreground hover:bg-muted/80"}`}
@@ -462,20 +489,20 @@ export default function VenuesPage() {
       {/* Header */}
       <div className="rounded-2xl bg-white border border-border p-6">
         <div className="flex items-start justify-between gap-4">
-          <div className="flex items-center gap-4">
-            <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-[var(--ast-hold-bg)] border border-[var(--ast-hold-border)]">
-              <Building2 className="h-6 w-6 text-[var(--admin-primary)]" />
+          <div className="flex items-center gap-3 min-w-0">
+            <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-[var(--ast-hold-bg)] border border-[var(--ast-hold-border)]">
+              <Building2 className="h-5 w-5 text-[var(--admin-primary)]" />
             </div>
-            <div>
-              <h1 className="text-2xl font-bold text-gray-900">Venues</h1>
-              <p className="mt-0.5 text-sm text-muted-foreground">
-                Manage wedding, party, and specialty venues shown across the platform
+            <div className="min-w-0">
+              <h1 className="text-xl font-bold text-gray-900">Venues</h1>
+              <p className="mt-0.5 text-xs text-muted-foreground">
+                Manage wedding, party, and specialty venues
               </p>
             </div>
           </div>
           {!loading && (
-            <div className="shrink-0 rounded-xl bg-[var(--ast-hold-bg)] border border-[var(--ast-hold-border)] px-4 py-2 text-center">
-              <p className="text-2xl font-bold text-[var(--ast-hold-text)]">{venues.length}</p>
+            <div className="shrink-0 rounded-xl bg-[var(--ast-hold-bg)] border border-[var(--ast-hold-border)] px-3 py-2 text-center">
+              <p className="text-xl font-bold text-[var(--ast-hold-text)]">{venues.length}</p>
               <p className="text-xs text-muted-foreground">Total venues</p>
             </div>
           )}
@@ -483,18 +510,19 @@ export default function VenuesPage() {
       </div>
 
       {/* Category tabs */}
-      <div className="flex gap-2 border-b border-border">
+      <div className="flex border-b border-border">
         {CATEGORY_TABS.map((tab) => (
           <button
             key={tab.value}
             onClick={() => { setActiveCategory(tab.value); setSearch(""); }}
-            className={`flex items-center gap-2 px-4 py-2.5 text-sm font-medium border-b-2 transition-colors -mb-px ${
+            className={`flex flex-1 sm:flex-none items-center justify-center sm:justify-start gap-2 px-3 sm:px-4 py-2.5 text-sm font-medium border-b-2 transition-colors -mb-px ${
               activeCategory === tab.value
                 ? "border-primary text-primary"
                 : "border-transparent text-muted-foreground hover:text-foreground"
             }`}
           >
-            {tab.label}
+            <span className="sm:hidden">{tab.shortLabel}</span>
+            <span className="hidden sm:inline">{tab.label}</span>
             <span className={`rounded-full px-1.5 py-0.5 text-[10px] font-semibold ${activeCategory === tab.value ? "bg-primary/10 text-primary" : "bg-muted text-muted-foreground"}`}>
               {countByCategory(tab.value)}
             </span>

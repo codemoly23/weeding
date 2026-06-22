@@ -260,23 +260,23 @@ export default function AdminVendorsPage() {
   return (
     <div className="space-y-6">
       {/* Header */}
-      <div className="flex items-center justify-between">
+      <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <div className="flex items-center gap-3">
-          <Store className="h-6 w-6 text-[var(--admin-primary)]" />
+          <Store className="h-6 w-6 shrink-0 text-[var(--admin-primary)]" />
           <div>
             <h1 className="text-2xl font-bold">Vendor Marketplace</h1>
             <p className="text-sm text-muted-foreground">Manage business listings in the vendor directory</p>
           </div>
         </div>
-        <div className="flex gap-2">
+        <div className="flex flex-wrap gap-2 self-start sm:self-auto">
           <Link href="/vendors" target="_blank">
-            <button className="flex items-center gap-2 px-3 py-2 text-sm border rounded-lg hover:bg-gray-50 transition-colors">
+            <button className="flex items-center gap-2 px-3 py-2 text-sm border rounded-lg hover:bg-gray-50 transition-colors whitespace-nowrap">
               <ExternalLink className="h-4 w-4" /> View All Vendors
             </button>
           </Link>
           <button
             onClick={openAdd}
-            className="flex items-center gap-2 px-4 py-2 text-sm bg-[var(--admin-primary)] text-[var(--admin-primary-fg)] rounded-lg hover:bg-[var(--admin-primary-hover)] transition-colors"
+            className="flex items-center gap-2 px-4 py-2 text-sm bg-[var(--admin-primary)] text-[var(--admin-primary-fg)] rounded-lg hover:bg-[var(--admin-primary-hover)] transition-colors whitespace-nowrap"
           >
             <Plus className="h-4 w-4" /> Add Vendor
           </button>

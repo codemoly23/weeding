@@ -335,16 +335,16 @@ export default function CeremonyPage() {
 
           {/* Date card */}
           <div
-            className="relative cursor-pointer rounded-xl border border-border bg-card/80 px-4 py-4 hover:bg-card transition-colors"
+            className="flex flex-col cursor-pointer rounded-xl border border-border bg-card/80 px-3 py-3 hover:bg-card transition-colors text-center"
             onClick={() => { setDatePickerOpen(v => !v); setLocPopupOpen(false); setEditingLocation(false); }}
           >
             <p className="mb-1 text-xs text-muted-foreground">{t("ceremony.date")}</p>
             <p className={`text-sm font-medium ${form.date ? "text-primary" : "text-primary/60"}`}>
               {formatDate(form.date, t("ceremony.setDate"))}
             </p>
-            <div className="absolute bottom-2 right-2" onClick={e => e.stopPropagation()}>
+            <div className="relative flex justify-center mt-3" onClick={e => e.stopPropagation()}>
               <Calendar
-                className="h-12 w-12 text-primary/20 cursor-pointer hover:text-primary/60 transition-colors"
+                className="h-8 w-8 text-primary/20 cursor-pointer hover:text-primary/60 transition-colors"
                 onClick={() => { setDatePickerOpen(v => !v); setLocPopupOpen(false); setEditingLocation(false); }}
               />
               {datePickerOpen && (
@@ -360,7 +360,7 @@ export default function CeremonyPage() {
 
           {/* Location card */}
           <div
-            className="relative cursor-pointer rounded-xl border border-border bg-card/80 px-4 py-4 hover:bg-card transition-colors"
+            className="flex flex-col cursor-pointer rounded-xl border border-border bg-card/80 px-3 py-3 hover:bg-card transition-colors text-center"
             onClick={() => { setEditingLocation(true); setDatePickerOpen(false); setLocPopupOpen(false); }}
           >
             <p className="mb-1 text-xs text-muted-foreground">{t("ceremony.location")}</p>
@@ -378,9 +378,9 @@ export default function CeremonyPage() {
                 {formatLocation(form.city, form.country, form.address, t("ceremony.setLocation"))}
               </p>
             )}
-            <div className="absolute bottom-2 right-2" onClick={e => e.stopPropagation()}>
+            <div className="relative flex justify-center mt-3" onClick={e => e.stopPropagation()}>
               <MapPin
-                className="h-12 w-12 text-primary/20 cursor-pointer hover:text-primary/60 transition-colors"
+                className="h-8 w-8 text-primary/20 cursor-pointer hover:text-primary/60 transition-colors"
                 onClick={() => { setLocPopupOpen(v => !v); setDatePickerOpen(false); setEditingLocation(false); }}
               />
               {locPopupOpen && (
@@ -398,12 +398,14 @@ export default function CeremonyPage() {
 
           {/* Layout card */}
           <div
-            className="relative cursor-pointer rounded-xl border border-border bg-card/80 px-4 py-4 hover:bg-card transition-colors"
+            className="flex flex-col cursor-pointer rounded-xl border border-border bg-card/80 px-3 py-3 hover:bg-card transition-colors text-center"
             onClick={() => router.push(`/planner/${id}/seating?tab=ceremony&src=ceremony`)}
           >
             <p className="mb-1 text-xs text-muted-foreground">{t("ceremony.layout")}</p>
             <p className="text-sm font-medium text-primary">{t("ceremony.planLayout")}</p>
-            <LayoutTemplate className="absolute bottom-2 right-2 h-12 w-12 text-primary/20" />
+            <div className="flex justify-center mt-3">
+              <LayoutTemplate className="h-8 w-8 text-primary/20" />
+            </div>
           </div>
         </div>
 

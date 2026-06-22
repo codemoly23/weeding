@@ -502,14 +502,14 @@ export default function ItineraryPage() {
                             <div className="flex items-baseline gap-0.5">
                               <button
                                 onClick={() => openTime(ev)}
-                                className="text-[1.9rem] font-bold leading-none tracking-tight text-foreground hover:text-primary transition-colors tabular-nums"
+                                className="text-[1.4rem] sm:text-[1.9rem] font-bold leading-none tracking-tight text-foreground hover:text-primary transition-colors tabular-nums"
                               >
                                 {hm}
                               </button>
                               {ampm && (
                                 <button
                                   onClick={() => flipAmPm(ev)}
-                                  className="ml-1 text-sm font-medium text-foreground/70 hover:text-primary transition-colors"
+                                  className="ml-0.5 text-[10px] sm:text-sm font-medium text-foreground/70 hover:text-primary transition-colors"
                                   title="Toggle am/pm"
                                 >
                                   {ampm}

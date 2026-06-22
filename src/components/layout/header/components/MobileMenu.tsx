@@ -34,6 +34,7 @@ import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { cn } from "@/lib/utils";
 import type { MobileMenuProps } from "../types";
 import { useLanguage } from "@/lib/i18n/language-context";
+import { getNavLabel } from "../utils/nav-labels";
 
 // Icon mapping for dynamic icons from database
 const iconMap: Record<string, LucideIcon> = {
@@ -92,7 +93,16 @@ const NAV_LABEL_MAP: Record<string, string> = {
   "Blog": "nav.blog",
   "Contact": "nav.contact",
   "Features": "nav.features",
+  "Planning Tools": "nav.planningTools",
+  "Planeringsverktyg": "nav.planningTools",
+  "Venues": "nav.venues",
+  "Lokaler": "nav.venues",
   "Vendors": "nav.vendors",
+  "Leverantörer": "nav.vendors",
+  "Wedding Website": "nav.weddingWebsite",
+  "Bröllopswebbplats": "nav.weddingWebsite",
+  "Company": "nav.company",
+  "Företag": "nav.company",
 };
 
 export function MobileMenu({
@@ -106,7 +116,7 @@ export function MobileMenu({
   onLogout,
   alwaysVisible = false,
 }: MobileMenuProps) {
-  const { t } = useLanguage();
+  const { t, lang } = useLanguage();
   const [openItem, setOpenItem] = useState<string | null>(null);
   const isLoggedIn = !!(user || session?.user);
 
@@ -150,7 +160,7 @@ export function MobileMenu({
           {/* Navigation */}
           <div className="mt-6 flex flex-col gap-1">
             {navigation.map((item) => {
-              const label = NAV_LABEL_MAP[item.name] ? t(NAV_LABEL_MAP[item.name]) : item.name;
+              const label = getNavLabel(item.name, t, lang);
               const isOpen = openItem === item.name;
 
               // Simple dropdown (e.g. Company)
@@ -174,7 +184,7 @@ export function MobileMenu({
                               href={link.href}
                               className="block rounded-md px-2 py-2 text-sm text-muted-foreground hover:bg-muted hover:text-foreground"
                             >
-                              {link.name}
+                              {getNavLabel(link.name, t, lang)}
                             </Link>
                           </SheetClose>
                         ))}
@@ -206,7 +216,7 @@ export function MobileMenu({
                               <div className="mb-2 flex items-center gap-2">
                                 <CategoryIcon className="h-4 w-4 text-primary" />
                                 <span className="text-sm font-semibold text-foreground">
-                                  {category.name}
+                                  {getNavLabel(category.name, t, lang)}
                                 </span>
                               </div>
                               <ul className="space-y-1">
@@ -217,7 +227,7 @@ export function MobileMenu({
                                         href={service.href}
                                         className="block rounded-md px-2 py-1.5 text-sm text-muted-foreground hover:bg-muted hover:text-foreground"
                                       >
-                                        {service.name}
+                                        {getNavLabel(service.name, t, lang)}
                                       </Link>
                                     </SheetClose>
                                   </li>

@@ -1653,15 +1653,15 @@ export default function GuestListPage() {
       )}
 
       {/* Controls */}
-      <div className="mb-6 flex items-center justify-between gap-3">
+      <div className="mb-6 flex flex-wrap items-center justify-between gap-2">
         {/* View toggle */}
-        <div className="flex items-center rounded-md border border-border bg-card overflow-hidden text-sm">
+        <div className="flex items-stretch rounded-md border border-border bg-card overflow-hidden text-sm">
           {viewModes.map((m) => (
             <button
               key={m.id}
               onClick={() => setViewMode(m.id)}
               className={cn(
-                "px-3.5 py-1.5 font-medium transition-colors border-r border-border last:border-0",
+                "px-3 py-1.5 font-medium transition-colors border-r border-border last:border-0 whitespace-nowrap leading-tight",
                 viewMode === m.id ? "bg-primary text-primary-foreground" : "text-muted-foreground hover:text-foreground hover:bg-muted"
               )}
             >

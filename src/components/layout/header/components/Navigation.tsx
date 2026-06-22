@@ -6,6 +6,7 @@ import { ChevronDown, Folder, type LucideIcon } from "lucide-react";
 import { useLanguage } from "@/lib/i18n/language-context";
 import { cn } from "@/lib/utils";
 import type { NavigationProps, ServiceCategory } from "../types";
+import { getNavLabel } from "../utils/nav-labels";
 
 // Convert kebab-case or snake_case icon name to PascalCase (Lucide's export format)
 function toPascalCase(name: string): string {
@@ -29,6 +30,8 @@ interface MegaMenuProps {
 }
 
 function MegaMenuDropdown({ categories, columns, richContent }: MegaMenuProps) {
+  const { t, lang } = useLanguage();
+
   // Forums grid layout
   if (richContent && typeof richContent === "object" && (richContent as Record<string, unknown>).type === "forums-grid") {
     const content = richContent as {
@@ -42,7 +45,7 @@ function MegaMenuDropdown({ categories, columns, richContent }: MegaMenuProps) {
       <div className="absolute left-1/2 top-full -translate-x-1/2 pt-2">
         <div className="rounded-xl border bg-card p-6 shadow-xl w-[900px]">
           {content.header && (
-            <h4 className="mb-4 font-sans text-base font-bold leading-6 text-foreground">{content.header}</h4>
+            <h4 className="mb-4 font-sans text-base font-bold leading-6 text-foreground">{getNavLabel(content.header, t, lang)}</h4>
           )}
           <div className="flex gap-6">
             {/* Groups */}
@@ -51,7 +54,7 @@ function MegaMenuDropdown({ categories, columns, richContent }: MegaMenuProps) {
                 <div key={gi}>
                   {group.title && (
                     <p className="mb-2 font-sans text-base font-bold leading-6 text-foreground">
-                      {group.title}
+                      {getNavLabel(group.title, t, lang)}
                     </p>
                   )}
                   <div className="grid grid-cols-3 gap-1">
@@ -66,7 +69,7 @@ function MegaMenuDropdown({ categories, columns, richContent }: MegaMenuProps) {
                           <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-muted">
                             <ItemIcon className="h-4 w-4 text-foreground" />
                           </span>
-                          <span>{item.name}</span>
+                          <span>{getNavLabel(item.name, t, lang)}</span>
                         </Link>
                       );
                     })}
@@ -78,7 +81,7 @@ function MegaMenuDropdown({ categories, columns, richContent }: MegaMenuProps) {
             {hasSidebar && (
               <div className="w-52 shrink-0 border-l border-border pl-6">
                 <p className="mb-3 font-sans text-base font-bold leading-6 text-foreground">
-                  {content.sidebar!.title}
+                  {getNavLabel(content.sidebar!.title, t, lang)}
                 </p>
                 <ul className="space-y-1">
                   {content.sidebar!.items.map((item) => {
@@ -92,7 +95,7 @@ function MegaMenuDropdown({ categories, columns, richContent }: MegaMenuProps) {
                           <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-muted">
                             <ItemIcon className="h-3.5 w-3.5 text-foreground" />
                           </span>
-                          <span>{item.name}</span>
+                          <span>{getNavLabel(item.name, t, lang)}</span>
                         </Link>
                       </li>
                     );
@@ -119,14 +122,14 @@ function MegaMenuDropdown({ categories, columns, richContent }: MegaMenuProps) {
       <div className="absolute left-1/2 top-full -translate-x-1/2 pt-2">
         <div className="rounded-xl border bg-card p-6 shadow-xl w-[520px]">
           {content.header && (
-            <h4 className="mb-4 font-sans text-base font-bold leading-6 text-foreground">{content.header}</h4>
+            <h4 className="mb-4 font-sans text-base font-bold leading-6 text-foreground">{getNavLabel(content.header, t, lang)}</h4>
           )}
           <div className="grid grid-cols-2 gap-8">
             {content.columns?.map((col, ci) => (
               <div key={ci}>
                 {col.title && (
                   <p className="mb-3 font-sans text-base font-bold leading-6 text-foreground">
-                    {col.title}
+                    {getNavLabel(col.title, t, lang)}
                   </p>
                 )}
                 <ul className="space-y-0.5">
@@ -140,14 +143,14 @@ function MegaMenuDropdown({ categories, columns, richContent }: MegaMenuProps) {
                           <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-md border border-border bg-background">
                             {(() => { const I = getIcon(item.icon); return <I className="h-4 w-4 text-foreground/70" />; })()}
                           </span>
-                          <span>{item.name}</span>
+                          <span>{getNavLabel(item.name, t, lang)}</span>
                         </Link>
                       ) : (
                         <Link
                           href={item.href}
                           className="block rounded-lg px-2 py-1.5 text-sm text-muted-foreground transition-colors hover:text-foreground"
                         >
-                          {item.name}
+                          {getNavLabel(item.name, t, lang)}
                         </Link>
                       )}
                     </li>
@@ -180,7 +183,7 @@ function MegaMenuDropdown({ categories, columns, richContent }: MegaMenuProps) {
         <div className="rounded-xl border bg-card p-6 shadow-xl" style={{ width: "clamp(380px, 50vw, 900px)" }}>
           {content.sectionHeader && (
             <h4 className="mb-4 font-sans text-base font-bold leading-6 text-foreground">
-              {content.sectionHeader}
+              {getNavLabel(content.sectionHeader, t, lang)}
             </h4>
           )}
           {content.topLinks && content.topLinks.length > 0 && (
@@ -197,7 +200,7 @@ function MegaMenuDropdown({ categories, columns, richContent }: MegaMenuProps) {
                       <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-muted">
                         <LinkIcon className="h-4 w-4 text-foreground" />
                       </span>
-                      <span>{link.name}</span>
+                      <span>{getNavLabel(link.name, t, lang)}</span>
                     </Link>
                   );
                 }
@@ -207,7 +210,7 @@ function MegaMenuDropdown({ categories, columns, richContent }: MegaMenuProps) {
                     href={link.href}
                     className="block rounded-lg px-2 py-1.5 text-sm text-muted-foreground transition-colors hover:text-foreground"
                   >
-                    {link.name}
+                    {getNavLabel(link.name, t, lang)}
                   </Link>
                 );
               })}
@@ -216,7 +219,7 @@ function MegaMenuDropdown({ categories, columns, richContent }: MegaMenuProps) {
           {content.featuredLink && (
             <div className="mb-4">
               <Link href={content.featuredLink.href} className="text-sm font-medium transition-colors text-[#C2A86A] hover:text-[#8A6F3E]">
-                {content.featuredLink.text}
+                {getNavLabel(content.featuredLink.text, t, lang)}
               </Link>
             </div>
           )}
@@ -224,7 +227,7 @@ function MegaMenuDropdown({ categories, columns, richContent }: MegaMenuProps) {
             <div>
               {content.gallery.title && (
                 <p className="mb-3 text-xs font-bold uppercase tracking-wider text-muted-foreground">
-                  {content.gallery.title}
+                  {getNavLabel(content.gallery.title, t, lang)}
                 </p>
               )}
               {(() => {
@@ -248,12 +251,12 @@ function MegaMenuDropdown({ categories, columns, richContent }: MegaMenuProps) {
                             />
                           ) : (
                             <div className="h-full w-full flex items-center justify-center p-2 text-center text-xs font-semibold text-foreground/60 leading-tight">
-                              {item.name}
+                              {getNavLabel(item.name, t, lang)}
                             </div>
                           )}
                         </div>
                         <span className="text-xs text-center text-muted-foreground group-hover:text-foreground transition-colors">
-                          {item.name}
+                          {getNavLabel(item.name, t, lang)}
                         </span>
                       </Link>
                     ))}
@@ -265,7 +268,7 @@ function MegaMenuDropdown({ categories, columns, richContent }: MegaMenuProps) {
           {content.footerLink && (
             <div className="mt-4 pt-3 border-t border-border">
               <Link href={content.footerLink.href} className="text-sm font-medium transition-colors text-[#C2A86A] hover:text-[#8A6F3E]">
-                {content.footerLink.text}
+                {getNavLabel(content.footerLink.text, t, lang)}
               </Link>
             </div>
           )}
@@ -287,7 +290,7 @@ function MegaMenuDropdown({ categories, columns, richContent }: MegaMenuProps) {
             <div key={category.name}>
               {category.name && (
                 <h4 className="mb-4 font-sans text-base font-bold leading-6 text-foreground">
-                  {category.name}
+                  {getNavLabel(category.name, t, lang)}
                 </h4>
               )}
               <div className="grid grid-cols-3 gap-2 mb-2">
@@ -302,7 +305,7 @@ function MegaMenuDropdown({ categories, columns, richContent }: MegaMenuProps) {
                       <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-muted">
                         <ServiceIcon className="h-4 w-4 text-foreground" />
                       </span>
-                      <span>{service.name}</span>
+                      <span>{getNavLabel(service.name, t, lang)}</span>
                     </Link>
                   );
                 })}
@@ -314,7 +317,7 @@ function MegaMenuDropdown({ categories, columns, richContent }: MegaMenuProps) {
               <hr className="my-4 border-border" />
               {category.name && (
                 <p className="mb-3 text-xs font-bold uppercase tracking-wider text-muted-foreground">
-                  {category.name}
+                  {getNavLabel(category.name, t, lang)}
                 </p>
               )}
               <div className="flex flex-wrap gap-x-5 gap-y-2">
@@ -327,7 +330,7 @@ function MegaMenuDropdown({ categories, columns, richContent }: MegaMenuProps) {
                       service.popular && "font-bold text-foreground"
                     )}
                   >
-                    {service.name}
+                    {getNavLabel(service.name, t, lang)}
                   </Link>
                 ))}
               </div>
@@ -352,7 +355,7 @@ function MegaMenuDropdown({ categories, columns, richContent }: MegaMenuProps) {
     <div className="absolute left-1/2 top-full -translate-x-1/2 pt-2">
       <div className={`rounded-xl border bg-card p-6 shadow-xl ${width}`}>
         {sectionHeader && (
-          <h4 className="mb-4 font-sans text-base font-bold leading-6 text-foreground">{sectionHeader}</h4>
+          <h4 className="mb-4 font-sans text-base font-bold leading-6 text-foreground">{getNavLabel(sectionHeader, t, lang)}</h4>
         )}
         <div className={`grid gap-8 ${gridCols}`}>
           {categories.map((category, idx) => {
@@ -365,11 +368,11 @@ function MegaMenuDropdown({ categories, columns, richContent }: MegaMenuProps) {
                 {!sectionHeader && category.name && (
                   isSidebarCol ? (
                     <p className="mb-3 font-sans text-base font-bold leading-6 text-foreground">
-                      {category.name}
+                      {getNavLabel(category.name, t, lang)}
                     </p>
                   ) : (
                     <h4 className="mb-3 font-sans text-base font-bold leading-6 text-foreground">
-                      {category.name}
+                      {getNavLabel(category.name, t, lang)}
                     </h4>
                   )
                 )}
@@ -388,7 +391,7 @@ function MegaMenuDropdown({ categories, columns, richContent }: MegaMenuProps) {
                               <ServiceIcon className="h-4 w-4 text-foreground" />
                             </span>
                           )}
-                          <span>{service.name}</span>
+                          <span>{getNavLabel(service.name, t, lang)}</span>
                         </Link>
                       </li>
                     );
@@ -404,6 +407,8 @@ function MegaMenuDropdown({ categories, columns, richContent }: MegaMenuProps) {
 }
 
 function SimpleDropdown({ links }: { links: { name: string; href: string; icon?: string }[] }) {
+  const { t, lang } = useLanguage();
+
   return (
     <div className="absolute left-0 top-full pt-2 z-50">
       <div className="rounded-xl border bg-card py-2 shadow-xl min-w-[220px]">
@@ -421,7 +426,7 @@ function SimpleDropdown({ links }: { links: { name: string; href: string; icon?:
                   <Icon className="h-3.5 w-3.5 text-foreground/70" />
                 </span>
               )}
-              {link.name}
+              {getNavLabel(link.name, t, lang)}
             </Link>
           );
         })}
@@ -441,8 +446,16 @@ const NAV_LABEL_MAP: Record<string, string> = {
   "Contact": "nav.contact",
   "Contact Us": "nav.contact",
   "Features": "nav.features",
+  "Planning Tools": "nav.planningTools",
+  "Planeringsverktyg": "nav.planningTools",
+  "Venues": "nav.venues",
+  "Lokaler": "nav.venues",
   "Vendors": "nav.vendors",
+  "Leverantörer": "nav.vendors",
+  "Wedding Website": "nav.weddingWebsite",
+  "Bröllopswebbplats": "nav.weddingWebsite",
   "Company": "nav.company",
+  "Företag": "nav.company",
 };
 
 export function Navigation({
@@ -454,7 +467,7 @@ export function Navigation({
   split = "all",
   styling,
 }: NavigationProps) {
-  const { t } = useLanguage();
+  const { t, lang } = useLanguage();
 
   // Split navigation items if needed
   let displayItems = items;
@@ -472,7 +485,7 @@ export function Navigation({
     <div className="flex items-center gap-x-3 xl:gap-x-5">
       {displayItems.map((item) => {
         const isHovered = hoveredItem === item.name;
-        const label = NAV_LABEL_MAP[item.name] ? t(NAV_LABEL_MAP[item.name]) : item.name;
+        const label = getNavLabel(item.name, t, lang);
 
         return (
           <div

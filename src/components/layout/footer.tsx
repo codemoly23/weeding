@@ -421,6 +421,8 @@ function NewsletterWidget({ widget, headingClasses }: { widget: FooterWidget; he
   const [email, setEmail] = useState("");
   const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
   const [message, setMessage] = useState("");
+  const { lang } = useLanguage();
+  const tr = (value: string | null | undefined) => translateFooterText(value, lang);
 
   const nlContent = widget.content as {
     text?: string;
@@ -457,14 +459,14 @@ function NewsletterWidget({ widget, headingClasses }: { widget: FooterWidget; he
   return (
     <div>
       {widget.showTitle && widget.title && (
-        <h3 className={headingClasses}>{widget.title}</h3>
+        <h3 className={headingClasses}>{tr(widget.title)}</h3>
       )}
       <div className={widget.showTitle && widget.title ? "mt-4" : ""}>
         <p className="text-sm opacity-60 mb-3">
-          {nlContent?.text || "Get LLC tips & US business insights"}
+          {tr(nlContent?.text || "Get LLC tips & US business insights")}
         </p>
         {status === "success" ? (
-          <p className="text-sm text-[var(--color-success-text)]">{message}</p>
+          <p className="text-sm text-[var(--color-success-text)]">{tr(message)}</p>
         ) : (
           <>
             <form onSubmit={handleSubmit} className="flex gap-0 newsletter-form">
@@ -472,7 +474,7 @@ function NewsletterWidget({ widget, headingClasses }: { widget: FooterWidget; he
                 type="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                placeholder={nlContent?.placeholder || "your@email.com"}
+                placeholder={tr(nlContent?.placeholder || "your@email.com")}
                 className="flex-1 rounded-l-lg border border-white/15 bg-white/5 px-4 py-2.5 text-sm text-inherit placeholder:opacity-40 focus:outline-none focus:ring-1 focus:ring-white/30"
                 aria-label="Email address"
                 required
@@ -483,17 +485,119 @@ function NewsletterWidget({ widget, headingClasses }: { widget: FooterWidget; he
                 disabled={status === "loading"}
                 className="rounded-r-lg bg-(--footer-accent-color,#8A6F3E) px-5 py-2.5 text-sm font-semibold text-white transition-colors hover:opacity-90 disabled:opacity-50"
               >
-                {status === "loading" ? "..." : nlContent?.buttonText || "Subscribe"}
+                {status === "loading" ? "..." : tr(nlContent?.buttonText || "Subscribe")}
               </button>
             </form>
             {status === "error" && (
-              <p className="text-sm text-[var(--color-error-text)] mt-2">{message}</p>
+              <p className="text-sm text-[var(--color-error-text)] mt-2">{tr(message)}</p>
             )}
           </>
         )}
       </div>
     </div>
   );
+}
+
+type FooterTextTranslation = {
+  en: string;
+  sv: string;
+  aliases?: string[];
+};
+
+const FOOTER_TEXT_TRANSLATIONS: FooterTextTranslation[] = [
+  {
+    en: "The all-in-one platform for stress-free event planning. Plan, manage, and celebrate life's special moments with confidence.",
+    sv: "Allt-i-ett-plattformen för stressfri eventplanering. Planera, hantera och fira livets speciella stunder med trygghet.",
+  },
+  { en: "For Planners", sv: "För planerare", aliases: ["For planerare"] },
+  { en: "For Vendors", sv: "För leverantörer", aliases: ["For leverantorer"] },
+  { en: "Event Types", sv: "Eventtyper" },
+  { en: "Support", sv: "Support" },
+  { en: "Event Dashboard", sv: "Eventpanel" },
+  { en: "Guest Management", sv: "Gästhantering", aliases: ["Gasthantering"] },
+  { en: "Budget Tracker", sv: "Budgetverktyg" },
+  { en: "Checklist", sv: "Checklista" },
+  { en: "Invitations", sv: "Inbjudningar" },
+  { en: "List Business", sv: "Lista företag", aliases: ["Lista foretag"] },
+  { en: "Dashboard", sv: "Kontrollpanel" },
+  { en: "Pricing", sv: "Priser" },
+  { en: "Success Stories", sv: "Framgångshistorier", aliases: ["Framgangshistorier"] },
+  { en: "Resources", sv: "Resurser" },
+  { en: "Weddings", sv: "Bröllop", aliases: ["Brollop"] },
+  { en: "Birthdays", sv: "Födelsedagar", aliases: ["Fodelsedagar"] },
+  { en: "Corporate", sv: "Företagsevent", aliases: ["Foretagsevent"] },
+  { en: "Baby Showers", sv: "Babyshowers" },
+  { en: "Conferences", sv: "Konferenser" },
+  { en: "Help Center", sv: "Hjälpcenter", aliases: ["Hjalpcenter"] },
+  { en: "Contact Us", sv: "Kontakta oss" },
+  { en: "FAQs", sv: "Vanliga frågor", aliases: ["Vanliga fragor"] },
+  { en: "Blog", sv: "Blogg" },
+  { en: "Community", sv: "Community" },
+  { en: "Privacy Policy", sv: "Integritetspolicy" },
+  { en: "Terms of Service", sv: "Användarvillkor", aliases: ["Anvandarvillkor"] },
+  { en: "Cookie Policy", sv: "Cookiepolicy" },
+  { en: "Accessibility", sv: "Tillgänglighet", aliases: ["Tillganglighet"] },
+  { en: "Top Rated", sv: "Topprankad" },
+  { en: "Secure", sv: "Säker", aliases: ["Saker"] },
+  { en: "Fast", sv: "Snabb" },
+  { en: "Disclaimer", sv: "Ansvarsfriskrivning" },
+  { en: "Click Here", sv: "Klicka här", aliases: ["Klicka har"] },
+  { en: "Subscribe", sv: "Prenumerera" },
+  { en: "Get LLC tips & US business insights", sv: "Få tips och insikter för eventplanering" },
+  { en: "Successfully subscribed!", sv: "Prenumerationen lyckades!" },
+  { en: "Something went wrong", sv: "Något gick fel" },
+  { en: "Something went wrong. Please try again.", sv: "Något gick fel. Försök igen." },
+  { en: "Visit our", sv: "Besök vår" },
+  { en: "blog", sv: "blogg" },
+  { en: "for the latest articles.", sv: "för de senaste artiklarna." },
+  { en: "Services", sv: "Tjänster", aliases: ["Tjanster"] },
+  { en: "Company", sv: "Företag", aliases: ["Foretag"] },
+  { en: "Legal", sv: "Juridiskt" },
+  { en: "Popular states", sv: "Populära områden", aliases: ["Populara omraden"] },
+];
+
+function normalizeFooterText(value: string): string {
+  return value.replace(/\s+/g, " ").trim().toLowerCase();
+}
+
+function translateFooterText(value: string | null | undefined, lang: string): string {
+  if (!value || (lang !== "en" && lang !== "sv")) return value || "";
+
+  const normalized = normalizeFooterText(value);
+  const entry = FOOTER_TEXT_TRANSLATIONS.find((item) => {
+    const values = [item.en, item.sv, ...(item.aliases || [])];
+    return values.some((candidate) => normalizeFooterText(candidate) === normalized);
+  });
+
+  if (!entry) return value;
+
+  return lang === "sv" ? entry.sv : entry.en;
+}
+
+function translateFooterCopyright(
+  value: string | null | undefined,
+  lang: string,
+  fallback: string
+): string {
+  if (!value) return fallback;
+
+  const normalized = normalizeFooterText(value);
+  const isKnownFooterCopyright =
+    normalized.includes("all rights reserved") &&
+    (normalized.includes("event planners worldwide") || normalized.includes("made with"));
+
+  if (!isKnownFooterCopyright || (lang !== "en" && lang !== "sv")) {
+    return value;
+  }
+
+  if (lang === "en") {
+    return value;
+  }
+
+  const year = value.match(/\b20\d{2}\b/)?.[0] || String(new Date().getFullYear());
+  const name = value.match(/EventPlanner Pro|Events Planner|Ceremoney/)?.[0] || "EventPlanner Pro";
+
+  return `© ${year} ${name}. Alla rättigheter förbehållna. Skapad med kärlek för eventplanerare världen över.`;
 }
 
 // Widget renderer component
@@ -514,7 +618,9 @@ function FooterWidgetRenderer({
   linkClasses?: string;
   logoUrl?: string;
 }) {
+  const { lang } = useLanguage();
   const links = getWidgetLinks(widget);
+  const tr = (value: string | null | undefined) => translateFooterText(value, lang);
 
   // Extract content from widget for BRAND type
   const brandContent = widget.content as {
@@ -583,14 +689,14 @@ function FooterWidgetRenderer({
           {/* Tagline / Description */}
           {tagline && (
             <p className="max-w-xs text-sm opacity-80">
-              {tagline}
+              {tr(tagline)}
             </p>
           )}
 
           {/* Subtitle (for hero-style footers) */}
           {subtitle && (
             <p className="max-w-md text-xs opacity-60">
-              {subtitle}
+              {tr(subtitle)}
             </p>
           )}
 
@@ -620,14 +726,14 @@ function FooterWidgetRenderer({
                 className="inline-flex items-center gap-2 rounded-lg bg-primary px-4 py-2 text-sm font-medium text-primary-foreground hover:bg-primary/90 transition-colors"
               >
                 {brandContent.ctaIcon === "sparkles" && <Sparkles className="h-4 w-4" />}
-                {brandContent.ctaText}
+                {tr(brandContent.ctaText)}
               </Link>
               {brandContent.secondaryCTA && brandContent.secondaryCtaText && (
                 <Link
                   href={brandContent.secondaryCtaUrl || "#"}
                   className="inline-flex items-center gap-2 rounded-lg border border-current px-4 py-2 text-sm font-medium hover:bg-muted transition-colors"
                 >
-                  {brandContent.secondaryCtaText}
+                  {tr(brandContent.secondaryCtaText)}
                   <ArrowRight className="h-4 w-4" />
                 </Link>
               )}
@@ -671,11 +777,11 @@ function FooterWidgetRenderer({
       const linkPrefix = footerConfig?.styling?.linkPrefix || "none";
       const HeadingIcon = widget.headingIcon ? HEADING_ICONS[widget.headingIcon] : null;
       return (
-        <nav aria-label={widget.title || "Footer links"}>
+        <nav aria-label={tr(widget.title) || "Footer links"}>
           {widget.showTitle && widget.title && (
             <h3 className={cn(headingClasses, "flex items-center gap-2")}>
               {HeadingIcon && <HeadingIcon className="h-[18px] w-[18px] shrink-0" style={{ color: "var(--footer-accent-color)" }} aria-hidden="true" />}
-              {widget.title}
+              {tr(widget.title)}
             </h3>
           )}
           <ul className={widget.showTitle && widget.title ? "mt-4 space-y-3" : "space-y-3"}>
@@ -688,7 +794,7 @@ function FooterWidgetRenderer({
                   {linkPrefix === "chevron" && <ChevronRight className="h-3 w-3 shrink-0 opacity-50" aria-hidden="true" />}
                   {linkPrefix === "arrow" && <ArrowRight className="h-3 w-3 shrink-0 opacity-50" aria-hidden="true" />}
                   {linkPrefix === "dash" && <span className="opacity-50 leading-none">–</span>}
-                  {link.label}
+                  {tr(link.label)}
                 </Link>
               </li>
             ))}
@@ -701,7 +807,7 @@ function FooterWidgetRenderer({
       return (
         <div>
           {widget.showTitle && widget.title && (
-            <h3 className={headingClasses}>{widget.title}</h3>
+            <h3 className={headingClasses}>{tr(widget.title)}</h3>
           )}
           <address className={cn("not-italic", widget.showTitle && widget.title ? "mt-4 space-y-3" : "space-y-3")}>
             {businessConfig.contact.supportEmail && (
@@ -736,7 +842,7 @@ function FooterWidgetRenderer({
       return (
         <div>
           {widget.showTitle && widget.title && (
-            <h3 className={headingClasses}>{widget.title}</h3>
+            <h3 className={headingClasses}>{tr(widget.title)}</h3>
           )}
           <div className={widget.showTitle && widget.title ? "mt-4" : ""}>
             <EnhancedSocialLinks
@@ -756,11 +862,11 @@ function FooterWidgetRenderer({
       return (
         <div>
           {widget.showTitle && widget.title && (
-            <h3 className={headingClasses}>{widget.title}</h3>
+            <h3 className={headingClasses}>{tr(widget.title)}</h3>
           )}
           <div className={widget.showTitle && widget.title ? "mt-4" : ""}>
             <p className="text-sm opacity-80">
-              {(widget.content as { text?: string })?.text || ""}
+              {tr((widget.content as { text?: string })?.text || "")}
             </p>
           </div>
         </div>
@@ -770,7 +876,7 @@ function FooterWidgetRenderer({
       return (
         <nav aria-label="Services">
           {widget.showTitle && widget.title && (
-            <h3 className={headingClasses}>{widget.title}</h3>
+            <h3 className={headingClasses}>{tr(widget.title)}</h3>
           )}
           <ul className={widget.showTitle && widget.title ? "mt-4 space-y-3" : "space-y-3"}>
             {fallbackLinks.services.map((link) => (
@@ -779,7 +885,7 @@ function FooterWidgetRenderer({
                   href={link.href}
                   className={cn("text-sm", linkClasses)}
                 >
-                  {link.name}
+                  {tr(link.name)}
                 </Link>
               </li>
             ))}
@@ -791,7 +897,7 @@ function FooterWidgetRenderer({
       return (
         <nav aria-label="Popular states">
           {widget.showTitle && widget.title && (
-            <h3 className={headingClasses}>{widget.title}</h3>
+            <h3 className={headingClasses}>{tr(widget.title)}</h3>
           )}
           <ul className={widget.showTitle && widget.title ? "mt-4 space-y-3" : "space-y-3"}>
             {fallbackLinks.states.map((link) => (
@@ -800,7 +906,7 @@ function FooterWidgetRenderer({
                   href={link.href}
                   className={cn("text-sm", linkClasses)}
                 >
-                  {link.name}
+                  {tr(link.name)}
                 </Link>
               </li>
             ))}
@@ -812,11 +918,11 @@ function FooterWidgetRenderer({
       return (
         <div>
           {widget.showTitle && widget.title && (
-            <h3 className={headingClasses}>{widget.title}</h3>
+            <h3 className={headingClasses}>{tr(widget.title)}</h3>
           )}
           <div className={widget.showTitle && widget.title ? "mt-4 space-y-3" : "space-y-3"}>
             <p className="text-sm opacity-80">
-              Visit our <Link href="/blog" className={linkClasses}>blog</Link> for the latest articles.
+              {tr("Visit our")} <Link href="/blog" className={linkClasses}>{tr("blog")}</Link> {tr("for the latest articles.")}
             </p>
           </div>
         </div>
@@ -827,7 +933,7 @@ function FooterWidgetRenderer({
       return (
         <div>
           {widget.showTitle && widget.title && (
-            <h3 className={headingClasses}>{widget.title}</h3>
+            <h3 className={headingClasses}>{tr(widget.title)}</h3>
           )}
           <div
             className={widget.showTitle && widget.title ? "mt-4 prose prose-sm" : "prose prose-sm"}
@@ -845,7 +951,7 @@ function FooterWidgetRenderer({
         style?: ButtonCustomStyle;
       } | null;
 
-      const buttonText = buttonContent?.text || "Click Here";
+      const buttonText = tr(buttonContent?.text || "Click Here");
       const buttonUrl = buttonContent?.url || "#";
       const buttonOpenInNewTab = buttonContent?.openInNewTab ?? buttonContent?.target === "_blank";
       const buttonStyle = buttonContent?.style || {};
@@ -853,7 +959,7 @@ function FooterWidgetRenderer({
       return (
         <div>
           {widget.showTitle && widget.title && (
-            <h3 className={headingClasses}>{widget.title}</h3>
+            <h3 className={headingClasses}>{tr(widget.title)}</h3>
           )}
           <div className={widget.showTitle && widget.title ? "mt-4" : ""}>
             <FooterButton
@@ -869,6 +975,18 @@ function FooterWidgetRenderer({
     case "NEWSLETTER":
       return <NewsletterWidget widget={widget} headingClasses={headingClasses} />;
 
+    case "LANGUAGE_SELECT":
+      return (
+        <div>
+          {widget.showTitle && widget.title && (
+            <h3 className={headingClasses}>{tr(widget.title)}</h3>
+          )}
+          <div className={widget.showTitle && widget.title ? "mt-4" : ""}>
+            <FooterLanguageSwitcher />
+          </div>
+        </div>
+      );
+
     default:
       return null;
   }
@@ -877,7 +995,7 @@ function FooterWidgetRenderer({
 export function Footer() {
   const { config: businessConfig } = useBusinessConfig();
   const { config: footerConfig, isLoading: isConfigLoading } = useFooterConfig();
-  const { t } = useLanguage();
+  const { t, lang } = useLanguage();
   const footerRef = useRef<HTMLElement>(null);
   const [isVisible, setIsVisible] = useState(false);
   const [hasAnimated, setHasAnimated] = useState(false);
@@ -1092,6 +1210,13 @@ export function Footer() {
     "--footer-accent-color": styling?.accentColor || ORANGE_PRIMARY,
     "--footer-divider-color": styling?.dividerColor || styling?.borderColor || "#e5e7eb",
   };
+  const defaultCopyright = t("footer.copyright", {
+    year: String(new Date().getFullYear()),
+    name: businessConfig.name,
+  });
+  const tr = (value: string | null | undefined) => translateFooterText(value, lang);
+  const trCopyright = (value: string | null | undefined) =>
+    translateFooterCopyright(value, lang, defaultCopyright);
 
   // Container class for boxed mode
   const containerClass = isBoxed ? "max-w-7xl mx-auto" : "";
@@ -1191,14 +1316,13 @@ export function Footer() {
         {isSplit ? (
           <div className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
             <p className="text-sm opacity-80">
-              {footerConfig?.bottomBar?.copyrightText ||
-                t("footer.copyright", { year: String(new Date().getFullYear()), name: businessConfig.name })}
+              {trCopyright(footerConfig?.bottomBar?.copyrightText)}
             </p>
             {footerConfig?.bottomBar?.links && footerConfig.bottomBar.links.length > 0 && (
               <nav className="flex flex-wrap gap-4" aria-label="Legal links">
                 {footerConfig.bottomBar.links.map((link, index) => (
                   <Link key={index} href={link.url} className={cn("text-xs", linkClasses)}>
-                    {link.label}
+                    {tr(link.label)}
                   </Link>
                 ))}
               </nav>
@@ -1208,12 +1332,11 @@ export function Footer() {
           <>
             <div className={cn("flex gap-4", isCentered && "flex-col items-center text-center")}>
               <p className="text-sm opacity-80">
-                {footerConfig?.bottomBar?.copyrightText ||
-                  t("footer.copyright", { year: String(new Date().getFullYear()), name: businessConfig.name })}
+                {trCopyright(footerConfig?.bottomBar?.copyrightText)}
               </p>
               {footerConfig?.bottomBar?.showDisclaimer && (
                 <p className="max-w-xl text-xs opacity-60">
-                  <strong>Disclaimer:</strong>{" "}
+                  <strong>{tr("Disclaimer")}:</strong>{" "}
                   {footerConfig?.bottomBar?.disclaimerText ||
                     t("footer.disclaimer", { name: businessConfig.name })}
                 </p>
@@ -1223,7 +1346,7 @@ export function Footer() {
               <nav className={cn("mt-4 flex flex-wrap gap-4", isCentered ? "justify-center" : "justify-start")} aria-label="Legal links">
                 {footerConfig.bottomBar.links.map((link, index) => (
                   <Link key={index} href={link.url} className={cn("text-xs", linkClasses)}>
-                    {link.label}
+                    {tr(link.label)}
                   </Link>
                 ))}
               </nav>
@@ -1299,7 +1422,7 @@ export function Footer() {
                 {businessConfig.name}
               </span>
             </Link>
-            <p className="mt-4 max-w-md opacity-80">{businessConfig.description}</p>
+            <p className="mt-4 max-w-md opacity-80">{tr(businessConfig.description)}</p>
           </div>
 
           <Divider />
@@ -1393,7 +1516,7 @@ export function Footer() {
                     href={link.url}
                     className={cn("text-sm", linkClasses)}
                   >
-                    {link.label}
+                    {tr(link.label)}
                   </Link>
                 ))}
               </nav>
@@ -1416,8 +1539,7 @@ export function Footer() {
           {/* Copyright */}
           <div className="mt-6 border-t pt-6 text-center" style={{ borderColor: styling?.borderColor }}>
             <p className="text-sm opacity-80">
-              {footerConfig?.bottomBar?.copyrightText ||
-                t("footer.copyright", { year: String(new Date().getFullYear()), name: businessConfig.name })}
+              {trCopyright(footerConfig?.bottomBar?.copyrightText)}
             </p>
           </div>
         </div>
@@ -1478,7 +1600,7 @@ export function Footer() {
               </span>
             </Link>
             <p className="mt-4 max-w-md text-sm opacity-80">
-              {businessConfig.description}
+              {tr(businessConfig.description)}
             </p>
 
             {/* Social Links */}
@@ -1503,9 +1625,9 @@ export function Footer() {
               {linkWidgets.map((widget) => {
                 const widgetLinks = getWidgetLinks(widget);
                 return (
-                  <nav key={widget.id} className="text-center" aria-label={widget.title || "Links"}>
+                  <nav key={widget.id} className="text-center" aria-label={tr(widget.title) || "Links"}>
                     {widget.showTitle && widget.title && (
-                      <h3 className={headingClasses}>{widget.title}</h3>
+                      <h3 className={headingClasses}>{tr(widget.title)}</h3>
                     )}
                     <ul className="mt-3 space-y-2">
                       {widgetLinks.map((link) => (
@@ -1514,7 +1636,7 @@ export function Footer() {
                             href={link.url}
                             className={cn("text-sm", linkClasses)}
                           >
-                            {link.label}
+                            {tr(link.label)}
                           </Link>
                         </li>
                       ))}
@@ -1611,7 +1733,7 @@ export function Footer() {
               </Link>
 
               <p className="max-w-lg text-sm opacity-80">
-                {businessConfig.description}
+                {tr(businessConfig.description)}
               </p>
 
               {/* Social Links */}
@@ -1646,24 +1768,24 @@ export function Footer() {
               ) : (
                 <>
                   <nav aria-label="Company">
-                    <h3 className={headingClasses}>Company</h3>
+                    <h3 className={headingClasses}>{tr("Company")}</h3>
                     <ul className="mt-4 space-y-3">
                       {fallbackLinks.company.map((link) => (
                         <li key={link.name}>
                           <Link href={link.href} className={cn("text-sm", linkClasses)}>
-                            {link.name}
+                            {tr(link.name)}
                           </Link>
                         </li>
                       ))}
                     </ul>
                   </nav>
                   <nav aria-label="Legal">
-                    <h3 className={headingClasses}>Legal</h3>
+                    <h3 className={headingClasses}>{tr("Legal")}</h3>
                     <ul className="mt-4 space-y-3">
                       {fallbackLinks.legal.map((link) => (
                         <li key={link.name}>
                           <Link href={link.href} className={cn("text-sm", linkClasses)}>
-                            {link.name}
+                            {tr(link.name)}
                           </Link>
                         </li>
                       ))}
@@ -1723,7 +1845,7 @@ export function Footer() {
                 </span>
               </Link>
 
-              <p className="text-sm opacity-80">{businessConfig.description}</p>
+              <p className="text-sm opacity-80">{tr(businessConfig.description)}</p>
 
               {/* Social Links */}
               {socialLinks.length > 0 && (
@@ -1766,36 +1888,36 @@ export function Footer() {
               ) : (
                 <div className="grid grid-cols-2 gap-8 md:grid-cols-3">
                   <nav aria-label="Services">
-                    <h3 className={headingClasses}>Services</h3>
+                    <h3 className={headingClasses}>{tr("Services")}</h3>
                     <ul className="mt-4 space-y-3">
                       {fallbackLinks.services.map((link) => (
                         <li key={link.name}>
                           <Link href={link.href} className={cn("text-sm", linkClasses)}>
-                            {link.name}
+                            {tr(link.name)}
                           </Link>
                         </li>
                       ))}
                     </ul>
                   </nav>
                   <nav aria-label="Company">
-                    <h3 className={headingClasses}>Company</h3>
+                    <h3 className={headingClasses}>{tr("Company")}</h3>
                     <ul className="mt-4 space-y-3">
                       {fallbackLinks.company.map((link) => (
                         <li key={link.name}>
                           <Link href={link.href} className={cn("text-sm", linkClasses)}>
-                            {link.name}
+                            {tr(link.name)}
                           </Link>
                         </li>
                       ))}
                     </ul>
                   </nav>
                   <nav aria-label="Legal">
-                    <h3 className={headingClasses}>Legal</h3>
+                    <h3 className={headingClasses}>{tr("Legal")}</h3>
                     <ul className="mt-4 space-y-3">
                       {fallbackLinks.legal.map((link) => (
                         <li key={link.name}>
                           <Link href={link.href} className={cn("text-sm", linkClasses)}>
-                            {link.name}
+                            {tr(link.name)}
                           </Link>
                         </li>
                       ))}
@@ -1853,7 +1975,7 @@ export function Footer() {
                 <span className="text-xl font-bold" style={{ color: styling?.headingColor }}>
                   {businessConfig.name}
                 </span>
-                <p className="text-sm opacity-80">{businessConfig.description}</p>
+                <p className="text-sm opacity-80">{tr(businessConfig.description)}</p>
               </div>
             </div>
 
@@ -1896,55 +2018,55 @@ export function Footer() {
               <>
                 {/* Fallback columns */}
                 <nav aria-label="Services">
-                  <h3 className={cn(headingClasses, "uppercase tracking-wider")}>Services</h3>
+                  <h3 className={cn(headingClasses, "uppercase tracking-wider")}>{tr("Services")}</h3>
                   <ul className="mt-4 space-y-3">
                     {fallbackLinks.services.map((link) => (
                       <li key={link.name}>
                         <Link href={link.href} className={cn("text-sm", linkClasses)}>
-                          {link.name}
+                          {tr(link.name)}
                         </Link>
                       </li>
                     ))}
                   </ul>
                 </nav>
                 <nav aria-label="Company">
-                  <h3 className={cn(headingClasses, "uppercase tracking-wider")}>Company</h3>
+                  <h3 className={cn(headingClasses, "uppercase tracking-wider")}>{tr("Company")}</h3>
                   <ul className="mt-4 space-y-3">
                     {fallbackLinks.company.map((link) => (
                       <li key={link.name}>
                         <Link href={link.href} className={cn("text-sm", linkClasses)}>
-                          {link.name}
+                          {tr(link.name)}
                         </Link>
                       </li>
                     ))}
                   </ul>
                 </nav>
                 <nav aria-label="Popular states">
-                  <h3 className={cn(headingClasses, "uppercase tracking-wider")}>Popular States</h3>
+                  <h3 className={cn(headingClasses, "uppercase tracking-wider")}>{tr("Popular states")}</h3>
                   <ul className="mt-4 space-y-3">
                     {fallbackLinks.states.map((link) => (
                       <li key={link.name}>
                         <Link href={link.href} className={cn("text-sm", linkClasses)}>
-                          {link.name}
+                          {tr(link.name)}
                         </Link>
                       </li>
                     ))}
                   </ul>
                 </nav>
                 <nav aria-label="Legal">
-                  <h3 className={cn(headingClasses, "uppercase tracking-wider")}>Legal</h3>
+                  <h3 className={cn(headingClasses, "uppercase tracking-wider")}>{tr("Legal")}</h3>
                   <ul className="mt-4 space-y-3">
                     {fallbackLinks.legal.map((link) => (
                       <li key={link.name}>
                         <Link href={link.href} className={cn("text-sm", linkClasses)}>
-                          {link.name}
+                          {tr(link.name)}
                         </Link>
                       </li>
                     ))}
                   </ul>
                 </nav>
                 <address className="col-span-2 not-italic">
-                  <h3 className={cn(headingClasses, "uppercase tracking-wider")}>Contact Us</h3>
+                  <h3 className={cn(headingClasses, "uppercase tracking-wider")}>{tr("Contact Us")}</h3>
                   <div className="mt-4 space-y-3">
                     {businessConfig.contact.supportEmail && (
                       <a href={`mailto:${businessConfig.contact.supportEmail}`} className={cn("flex items-center gap-2 text-sm", linkClasses)}>
@@ -2087,7 +2209,7 @@ export function Footer() {
                 )}
               </Link>
               <p className="max-w-xs text-sm opacity-80">
-                {businessConfig.description}
+                {tr(businessConfig.description)}
               </p>
 
               <address className="mt-6 space-y-3 not-italic">
@@ -2132,12 +2254,12 @@ export function Footer() {
 
             {/* Fallback columns */}
             <nav aria-label="Services">
-              <h3 className={headingClasses}>Services</h3>
+              <h3 className={headingClasses}>{tr("Services")}</h3>
               <ul className="mt-4 space-y-3">
                 {fallbackLinks.services.map((link) => (
                   <li key={link.name}>
                     <Link href={link.href} className={cn("text-sm", linkClasses)}>
-                      {link.name}
+                      {tr(link.name)}
                     </Link>
                   </li>
                 ))}
@@ -2145,12 +2267,12 @@ export function Footer() {
             </nav>
 
             <nav aria-label="Company">
-              <h3 className={headingClasses}>Company</h3>
+              <h3 className={headingClasses}>{tr("Company")}</h3>
               <ul className="mt-4 space-y-3">
                 {fallbackLinks.company.map((link) => (
                   <li key={link.name}>
                     <Link href={link.href} className={cn("text-sm", linkClasses)}>
-                      {link.name}
+                      {tr(link.name)}
                     </Link>
                   </li>
                 ))}
@@ -2158,12 +2280,12 @@ export function Footer() {
             </nav>
 
             <nav aria-label="Popular states">
-              <h3 className={headingClasses}>Popular States</h3>
+              <h3 className={headingClasses}>{tr("Popular states")}</h3>
               <ul className="mt-4 space-y-3">
                 {fallbackLinks.states.map((link) => (
                   <li key={link.name}>
                     <Link href={link.href} className={cn("text-sm", linkClasses)}>
-                      {link.name}
+                      {tr(link.name)}
                     </Link>
                   </li>
                 ))}
@@ -2171,12 +2293,12 @@ export function Footer() {
             </nav>
 
             <nav aria-label="Legal">
-              <h3 className={headingClasses}>Legal</h3>
+              <h3 className={headingClasses}>{tr("Legal")}</h3>
               <ul className="mt-4 space-y-3">
                 {fallbackLinks.legal.map((link) => (
                   <li key={link.name}>
                     <Link href={link.href} className={cn("text-sm", linkClasses)}>
-                      {link.name}
+                      {tr(link.name)}
                     </Link>
                   </li>
                 ))}

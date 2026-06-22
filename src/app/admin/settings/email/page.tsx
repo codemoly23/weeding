@@ -251,14 +251,14 @@ export default function EmailSettingsPage() {
 
   return (
     <div className="space-y-6">
-      <div className="flex items-center justify-between">
+      <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <div>
           <h1 className="text-2xl font-bold">Email Settings</h1>
           <p className="text-muted-foreground">
             Configure SMTP email settings for notifications
           </p>
         </div>
-        <Button onClick={saveSettings} disabled={saving}>
+        <Button className="self-start sm:self-auto" onClick={saveSettings} disabled={saving}>
           {saving ? (
             <Loader2 className="h-4 w-4 animate-spin mr-2" />
           ) : (

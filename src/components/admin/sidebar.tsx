@@ -284,13 +284,14 @@ export function AdminSidebar({ mobile = false }: { mobile?: boolean }) {
     <TooltipProvider delayDuration={0}>
       <aside
         className={cn(
-          "flex h-screen flex-col border-r border-purple-100 bg-white",
+          "flex h-screen flex-col border-r bg-[var(--admin-surface)] text-[var(--admin-text)]",
           mounted && "transition-all duration-300", // Only animate after initial load
           collapsed ? "w-16" : "w-64"
         )}
+        style={{ borderColor: "var(--admin-border)" }}
       >
         {/* Logo */}
-        <div className="flex h-16 items-center justify-between border-b border-purple-100 px-4">
+        <div className="flex h-16 items-center justify-between border-b px-4" style={{ borderColor: "var(--admin-border)" }}>
           {!collapsed && (
             <Link href="/admin" className="flex items-center gap-2">
               {config.logo.url && (
@@ -336,8 +337,8 @@ export function AdminSidebar({ mobile = false }: { mobile?: boolean }) {
                       <Button
                         variant="ghost"
                         className={cn(
-                          "w-full justify-center text-gray-600 hover:bg-gray-50 hover:text-gray-900",
-                          isChildActive(item.children) && "bg-purple-50 text-purple-700"
+                          "w-full justify-center text-[var(--admin-muted)] hover:bg-[var(--admin-hover)] hover:text-[var(--admin-text)]",
+                          isChildActive(item.children) && "bg-[var(--admin-active-bg)] text-[var(--admin-active-text)]"
                         )}
                       >
                         <Icon className="h-5 w-5" />
@@ -352,8 +353,8 @@ export function AdminSidebar({ mobile = false }: { mobile?: boolean }) {
                           target={child.external ? "_blank" : undefined}
                           rel={child.external ? "noopener noreferrer" : undefined}
                           className={cn(
-                            "text-sm hover:text-purple-600",
-                            isActive(child.href) && "text-purple-600"
+                            "text-sm hover:text-[var(--admin-active-text)]",
+                            isActive(child.href) && "text-[var(--admin-active-text)]"
                           )}
                         >
                           {child.title}
@@ -374,8 +375,8 @@ export function AdminSidebar({ mobile = false }: { mobile?: boolean }) {
                     <Button
                       variant="ghost"
                       className={cn(
-                        "w-full justify-between text-gray-600 hover:bg-gray-50 hover:text-gray-900",
-                        isChildActive(item.children) && "bg-purple-50 text-purple-700"
+                        "w-full justify-between text-[var(--admin-muted)] hover:bg-[var(--admin-hover)] hover:text-[var(--admin-text)]",
+                        isChildActive(item.children) && "bg-[var(--admin-active-bg)] text-[var(--admin-active-text)]"
                       )}
                     >
                       <span className="flex items-center gap-3">
@@ -398,9 +399,9 @@ export function AdminSidebar({ mobile = false }: { mobile?: boolean }) {
                         target={child.external ? "_blank" : undefined}
                         rel={child.external ? "noopener noreferrer" : undefined}
                         className={cn(
-                          "block rounded-md px-3 py-2 text-sm hover:bg-purple-50",
+                          "block rounded-md px-3 py-2 text-sm text-[var(--admin-muted)] hover:bg-[var(--admin-hover)] hover:text-[var(--admin-text)]",
                           isActive(child.href) &&
-                            "bg-purple-50 font-medium text-purple-700"
+                            "bg-[var(--admin-active-bg)] font-medium text-[var(--admin-active-text)]"
                         )}
                       >
                         {child.title}
@@ -419,8 +420,8 @@ export function AdminSidebar({ mobile = false }: { mobile?: boolean }) {
                       <Button
                         variant="ghost"
                         className={cn(
-                          "relative w-full justify-center text-gray-600 hover:bg-gray-50 hover:text-gray-900",
-                          isActive(item.href!) && "bg-purple-50 text-purple-700"
+                          "relative w-full justify-center text-[var(--admin-muted)] hover:bg-[var(--admin-hover)] hover:text-[var(--admin-text)]",
+                          isActive(item.href!) && "bg-[var(--admin-active-bg)] text-[var(--admin-active-text)]"
                         )}
                       >
                         <Icon className="h-5 w-5" />
@@ -442,8 +443,8 @@ export function AdminSidebar({ mobile = false }: { mobile?: boolean }) {
                 <Button
                   variant="ghost"
                   className={cn(
-                    "w-full justify-start gap-3 text-gray-600 hover:bg-gray-50 hover:text-gray-900",
-                    isActive(item.href!) && "bg-purple-50 text-purple-700"
+                    "w-full justify-start gap-3 text-[var(--admin-muted)] hover:bg-[var(--admin-hover)] hover:text-[var(--admin-text)]",
+                    isActive(item.href!) && "bg-[var(--admin-active-bg)] text-[var(--admin-active-text)]"
                   )}
                 >
                   <Icon className="h-5 w-5" />
@@ -459,8 +460,8 @@ export function AdminSidebar({ mobile = false }: { mobile?: boolean }) {
 
         {/* Footer */}
         {!collapsed && (
-          <div className="border-t border-purple-100 p-4">
-            <p className="text-xs text-muted-foreground">
+          <div className="border-t p-4" style={{ borderColor: "var(--admin-border)" }}>
+            <p className="text-xs text-[var(--admin-muted)]">
               {config.name} Admin v1.0
             </p>
           </div>

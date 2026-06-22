@@ -25,6 +25,11 @@ yarn-debug.log*
 yarn-error.log*
 .pnpm-debug.log*
 dev-server.log
+dev-*.log
+dev-*.err.log
+
+# Plugin temp
+.plugin-temp/
 
 # Local env files
 .env

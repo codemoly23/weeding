@@ -256,14 +256,14 @@ export default function BusinessSettingsPage() {
 
   return (
     <div className="space-y-6">
-      <div className="flex items-center justify-between">
+      <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <div>
           <h1 className="text-2xl font-bold">Business Settings</h1>
           <p className="text-muted-foreground">
             Configure your business information displayed across the website
           </p>
         </div>
-        <Button onClick={saveSettings} disabled={saving}>
+        <Button onClick={saveSettings} disabled={saving} className="self-start sm:self-auto">
           {saving ? (
             <Loader2 className="h-4 w-4 animate-spin mr-2" />
           ) : (
