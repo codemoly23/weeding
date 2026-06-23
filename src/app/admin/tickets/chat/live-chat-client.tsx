@@ -41,6 +41,7 @@ import {
   AlertTitle,
 } from "@/components/ui/alert";
 import { toast } from "sonner";
+import { useLanguage } from "@/lib/i18n/language-context";
 
 // Socket event constants (must match server)
 const CHAT_EVENTS = {
@@ -109,6 +110,7 @@ export function LiveChatDashboardClient({
   hasChatFeature,
   currentUser,
 }: LiveChatDashboardClientProps) {
+  const { t, lang } = useLanguage();
   const socketRef = useRef<Socket | null>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
@@ -647,14 +649,14 @@ export function LiveChatDashboardClient({
     const now = new Date();
     const diff = now.getTime() - date.getTime();
 
-    if (diff < 60000) return "Just now";
-    if (diff < 3600000) return `${Math.floor(diff / 60000)}m ago`;
+    if (diff < 60000) return t("common.time.justNow");
+    if (diff < 3600000) return t("common.time.minutesAgo", { count: String(Math.floor(diff / 60000)) });
     if (diff < 86400000)
-      return date.toLocaleTimeString("en-US", {
+      return date.toLocaleTimeString(lang === "sv" ? "sv-SE" : "en-US", {
         hour: "numeric",
         minute: "2-digit",
       });
-    return date.toLocaleDateString("en-US", {
+    return date.toLocaleDateString(lang === "sv" ? "sv-SE" : "en-US", {
       month: "short",
       day: "numeric",
     });

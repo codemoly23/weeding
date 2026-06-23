@@ -34,6 +34,7 @@ import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
 import { toast } from "sonner";
 import { FaqRichEditor } from "@/components/admin/ui/faq-rich-editor";
+import { useLanguage } from "@/lib/i18n/language-context";
 
 interface FAQ {
   id: string;
@@ -46,10 +47,10 @@ interface FAQ {
 }
 
 const categories = [
-  { value: "general", label: "General" },
-  { value: "pricing", label: "Pricing & Payments" },
-  { value: "international", label: "International" },
-  { value: "account", label: "Account & Support" },
+  { value: "general", labelKey: "admin.faq.cat.general" },
+  { value: "pricing", labelKey: "admin.faq.cat.pricing" },
+  { value: "international", labelKey: "admin.faq.cat.international" },
+  { value: "account", labelKey: "admin.faq.cat.account" },
 ];
 
 const defaultFormData = {
@@ -61,6 +62,7 @@ const defaultFormData = {
 };
 
 export default function FAQPage() {
+  const { t } = useLanguage();
   const [faqs, setFaqs] = useState<FAQ[]>([]);
   const [loading, setLoading] = useState(true);
   const [dialogOpen, setDialogOpen] = useState(false);
@@ -82,7 +84,7 @@ export default function FAQPage() {
       const data = await res.json();
       setFaqs(data);
     } catch (error) {
-      toast.error("Failed to load FAQs");
+      toast.error(t("admin.faq.loadFailed"));
     } finally {
       setLoading(false);
     }
@@ -115,7 +117,7 @@ export default function FAQPage() {
 
   async function handleSave() {
     if (!formData.question || !formData.answer) {
-      toast.error("Question and answer are required");
+      toast.error(t("admin.faq.questionRequired"));
       return;
     }
 
@@ -134,11 +136,11 @@ export default function FAQPage() {
 
       if (!res.ok) throw new Error("Failed to save");
 
-      toast.success(selectedFaq ? "FAQ updated" : "FAQ created");
+      toast.success(selectedFaq ? t("admin.faq.updated") : t("admin.faq.created"));
       setDialogOpen(false);
       fetchFaqs();
     } catch (error) {
-      toast.error("Failed to save FAQ");
+      toast.error(t("admin.faq.saveFailed"));
     } finally {
       setSaving(false);
     }
@@ -154,11 +156,11 @@ export default function FAQPage() {
 
       if (!res.ok) throw new Error("Failed to delete");
 
-      toast.success("FAQ deleted");
+      toast.success(t("admin.faq.deleted"));
       setDeleteDialogOpen(false);
       fetchFaqs();
     } catch (error) {
-      toast.error("Failed to delete FAQ");
+      toast.error(t("admin.faq.deleteFailed"));
     }
   }
 
@@ -173,7 +175,7 @@ export default function FAQPage() {
       if (!res.ok) throw new Error("Failed to update");
       fetchFaqs();
     } catch (error) {
-      toast.error("Failed to update FAQ");
+      toast.error(t("admin.faq.updateFailed"));
     }
   }
 
@@ -192,14 +194,14 @@ export default function FAQPage() {
     <div className="space-y-6">
       <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <div>
-          <h1 className="text-2xl font-bold">FAQs</h1>
+          <h1 className="text-2xl font-bold">{t("admin.faq.title")}</h1>
           <p className="text-muted-foreground">
-            Manage frequently asked questions displayed on the homepage and FAQ page
+            {t("admin.faq.subtitle")}
           </p>
         </div>
         <Button onClick={openCreateDialog} className="self-start sm:self-auto">
           <Plus className="mr-2 h-4 w-4" />
-          Add FAQ
+          {t("admin.faq.add")}
         </Button>
       </div>
 
@@ -208,19 +210,19 @@ export default function FAQPage() {
           <Filter className="h-4 w-4 text-muted-foreground" />
           <Select value={filterCategory} onValueChange={setFilterCategory}>
             <SelectTrigger className="w-[180px]">
-              <SelectValue placeholder="Filter by category" />
+              <SelectValue placeholder={t("admin.faq.filterByCategory")} />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="all">All Categories</SelectItem>
+              <SelectItem value="all">{t("admin.faq.allCategories")}</SelectItem>
               {categories.map((cat) => (
                 <SelectItem key={cat.value} value={cat.value}>
-                  {cat.label}
+                  {t(cat.labelKey)}
                 </SelectItem>
               ))}
             </SelectContent>
           </Select>
         </div>
-        <Badge variant="outline">{filteredFaqs.length} FAQs</Badge>
+        <Badge variant="outline">{t("admin.faq.count", { count: String(filteredFaqs.length) })}</Badge>
       </div>
 
       {loading ? (
@@ -237,13 +239,13 @@ export default function FAQPage() {
         <Card>
           <CardContent className="flex flex-col items-center justify-center py-12">
             <HelpCircle className="h-12 w-12 text-muted-foreground mb-4" />
-            <h3 className="font-semibold mb-2">No FAQs yet</h3>
+            <h3 className="font-semibold mb-2">{t("admin.faq.noFaqs")}</h3>
             <p className="text-muted-foreground text-sm mb-4">
-              Add your first frequently asked question
+              {t("admin.faq.noFaqsDesc")}
             </p>
             <Button onClick={openCreateDialog}>
               <Plus className="mr-2 h-4 w-4" />
-              Add FAQ
+              {t("admin.faq.add")}
             </Button>
           </CardContent>
         </Card>
@@ -253,7 +255,7 @@ export default function FAQPage() {
             <Card key={category}>
               <CardHeader>
                 <CardTitle className="text-lg flex items-center gap-2">
-                  {categories.find((c) => c.value === category)?.label || category}
+                  {t(categories.find((c) => c.value === category)?.labelKey || category)}
                   <Badge variant="secondary">{categoryFaqs.length}</Badge>
                 </CardTitle>
               </CardHeader>
@@ -275,7 +277,7 @@ export default function FAQPage() {
                       </div>
                       <div className="flex items-center gap-2 flex-shrink-0">
                         <Badge variant={faq.isActive ? "default" : "secondary"}>
-                          {faq.isActive ? "Active" : "Hidden"}
+                          {faq.isActive ? t("common.active") : t("common.hidden")}
                         </Badge>
                         <Button
                           variant="ghost"
@@ -321,7 +323,7 @@ export default function FAQPage() {
         <DialogContent className="sm:max-w-2xl">
           <DialogHeader>
             <div className="flex items-center justify-between">
-              <DialogTitle>{selectedFaq ? "Edit FAQ" : "Add FAQ"}</DialogTitle>
+              <DialogTitle>{selectedFaq ? t("admin.faq.edit") : t("admin.faq.add")}</DialogTitle>
               {formData.answer && (
                 <Button
                   variant="ghost"
@@ -332,12 +334,12 @@ export default function FAQPage() {
                   {previewMode ? (
                     <>
                       <EyeOff className="h-4 w-4" />
-                      Edit
+                      {t("common.edit")}
                     </>
                   ) : (
                     <>
                       <Eye className="h-4 w-4" />
-                      Preview
+                      {t("admin.faq.preview")}
                     </>
                   )}
                 </Button>
@@ -346,7 +348,7 @@ export default function FAQPage() {
           </DialogHeader>
           <div className="space-y-4">
             <div className="space-y-2">
-              <Label htmlFor="category">Category</Label>
+              <Label htmlFor="category">{t("admin.faq.category")}</Label>
               <Select
                 value={formData.category}
                 onValueChange={(value) => setFormData({ ...formData, category: value })}
@@ -357,14 +359,14 @@ export default function FAQPage() {
                 <SelectContent>
                   {categories.map((cat) => (
                     <SelectItem key={cat.value} value={cat.value}>
-                      {cat.label}
+                      {t(cat.labelKey)}
                     </SelectItem>
                   ))}
                 </SelectContent>
               </Select>
             </div>
             <div className="space-y-2">
-              <Label htmlFor="question">Question *</Label>
+              <Label htmlFor="question">{t("admin.faq.question")}</Label>
               <Input
                 id="question"
                 value={formData.question}
@@ -373,7 +375,7 @@ export default function FAQPage() {
               />
             </div>
             <div className="space-y-2">
-              <Label>Answer *</Label>
+              <Label>{t("admin.faq.answer")}</Label>
               {previewMode ? (
                 <div
                   className="prose prose-sm max-w-none rounded-lg border bg-muted/30 p-4 min-h-50"
@@ -383,14 +385,14 @@ export default function FAQPage() {
                 <FaqRichEditor
                   content={formData.answer}
                   onChange={(html) => setFormData({ ...formData, answer: html })}
-                  placeholder="Write your FAQ answer with rich formatting..."
+                  placeholder={t("admin.faq.writeAnswer")}
                   minHeight={200}
                 />
               )}
             </div>
             <div className="grid grid-cols-2 gap-4">
               <div className="space-y-2">
-                <Label htmlFor="sortOrder">Sort Order</Label>
+                <Label htmlFor="sortOrder">{t("admin.faq.sortOrder")}</Label>
                 <Input
                   id="sortOrder"
                   type="number"
@@ -408,7 +410,7 @@ export default function FAQPage() {
                     setFormData({ ...formData, isActive: checked })
                   }
                 />
-                <Label htmlFor="isActive">Active</Label>
+                <Label htmlFor="isActive">{t("common.active")}</Label>
               </div>
             </div>
           </div>
@@ -417,10 +419,10 @@ export default function FAQPage() {
               setDialogOpen(false);
               setPreviewMode(false);
             }}>
-              Cancel
+              {t("common.cancel")}
             </Button>
             <Button onClick={handleSave} disabled={saving}>
-              {saving ? "Saving..." : "Save"}
+              {saving ? t("common.saving") : t("common.save")}
             </Button>
           </DialogFooter>
         </DialogContent>
@@ -430,18 +432,18 @@ export default function FAQPage() {
       <AlertDialog open={deleteDialogOpen} onOpenChange={setDeleteDialogOpen}>
         <AlertDialogContent>
           <AlertDialogHeader>
-            <AlertDialogTitle>Delete FAQ?</AlertDialogTitle>
+            <AlertDialogTitle>{t("admin.faq.deleteQuestion")}</AlertDialogTitle>
             <AlertDialogDescription>
-              This will permanently delete this FAQ. This action cannot be undone.
+              {t("admin.faq.deleteDesc")}
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
-            <AlertDialogCancel>Cancel</AlertDialogCancel>
+            <AlertDialogCancel>{t("common.cancel")}</AlertDialogCancel>
             <AlertDialogAction
               onClick={handleDelete}
               className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
             >
-              Delete
+              {t("common.delete")}
             </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>

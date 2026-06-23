@@ -29,6 +29,7 @@ import { Switch } from "@/components/ui/switch";
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
 import { ImageUpload } from "@/app/admin/appearance/landing-page/components/ui/image-upload";
+import { useLanguage } from "@/lib/i18n/language-context";
 
 interface TestimonialTag {
   value: string;
@@ -68,6 +69,7 @@ const defaultFormData = {
 };
 
 export default function TestimonialsPage() {
+  const { t } = useLanguage();
   const [testimonials, setTestimonials] = useState<Testimonial[]>([]);
   const [loading, setLoading] = useState(true);
   const [dialogOpen, setDialogOpen] = useState(false);
@@ -94,7 +96,7 @@ export default function TestimonialsPage() {
       const data = await res.json();
       setTestimonials(data);
     } catch (error) {
-      toast.error("Failed to load testimonials");
+      toast.error(t("admin.testimonials.loadFailed"));
     } finally {
       setLoading(false);
     }
@@ -124,15 +126,15 @@ export default function TestimonialsPage() {
 
       if (!res.ok) {
         const data = await res.json();
-        throw new Error(data.error || "Failed to add tag");
+        throw new Error(data.error || t("admin.testimonials.addTagFailed"));
       }
 
       const data = await res.json();
       setAvailableTags(data.tags);
       setNewTagLabel("");
-      toast.success("Tag added");
+      toast.success(t("admin.testimonials.tagAdded"));
     } catch (error) {
-      toast.error(error instanceof Error ? error.message : "Failed to add tag");
+      toast.error(error instanceof Error ? error.message : t("admin.testimonials.addTagFailed"));
     } finally {
       setAddingTag(false);
     }
@@ -148,9 +150,9 @@ export default function TestimonialsPage() {
 
       const data = await res.json();
       setAvailableTags(data.tags);
-      toast.success("Tag removed");
+      toast.success(t("admin.testimonials.tagRemoved"));
     } catch (error) {
-      toast.error("Failed to remove tag");
+      toast.error(t("admin.testimonials.removeTagFailed"));
     }
   }
 
@@ -186,7 +188,7 @@ export default function TestimonialsPage() {
 
   async function handleSave() {
     if (!formData.name || !formData.content) {
-      toast.error("Name and content are required");
+      toast.error(t("admin.testimonials.nameRequired"));
       return;
     }
 
@@ -205,11 +207,11 @@ export default function TestimonialsPage() {
 
       if (!res.ok) throw new Error("Failed to save");
 
-      toast.success(selectedTestimonial ? "Testimonial updated" : "Testimonial created");
+      toast.success(selectedTestimonial ? t("admin.testimonials.updated") : t("admin.testimonials.created"));
       setDialogOpen(false);
       fetchTestimonials();
     } catch (error) {
-      toast.error("Failed to save testimonial");
+      toast.error(t("admin.testimonials.saveFailed"));
     } finally {
       setSaving(false);
     }
@@ -225,11 +227,11 @@ export default function TestimonialsPage() {
 
       if (!res.ok) throw new Error("Failed to delete");
 
-      toast.success("Testimonial deleted");
+      toast.success(t("admin.testimonials.deleted"));
       setDeleteDialogOpen(false);
       fetchTestimonials();
     } catch (error) {
-      toast.error("Failed to delete testimonial");
+      toast.error(t("admin.testimonials.deleteFailed"));
     }
   }
 
@@ -244,7 +246,7 @@ export default function TestimonialsPage() {
       if (!res.ok) throw new Error("Failed to update");
       fetchTestimonials();
     } catch (error) {
-      toast.error("Failed to update testimonial");
+      toast.error(t("admin.testimonials.updateFailed"));
     }
   }
 
@@ -252,19 +254,19 @@ export default function TestimonialsPage() {
     <div className="space-y-6">
       <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <div>
-          <h1 className="text-2xl font-bold">Testimonials</h1>
+          <h1 className="text-2xl font-bold">{t("admin.testimonials.title")}</h1>
           <p className="text-muted-foreground">
-            Manage customer testimonials displayed on the homepage
+            {t("admin.testimonials.subtitle")}
           </p>
         </div>
         <div className="flex flex-wrap gap-2 self-start sm:self-auto">
           <Button variant="outline" onClick={() => setTagsDialogOpen(true)}>
             <Tag className="mr-2 h-4 w-4" />
-            Manage Tags
+            {t("admin.testimonials.manageTags")}
           </Button>
           <Button onClick={openCreateDialog}>
             <Plus className="mr-2 h-4 w-4" />
-            Add Testimonial
+            {t("admin.testimonials.add")}
           </Button>
         </div>
       </div>
@@ -283,13 +285,13 @@ export default function TestimonialsPage() {
         <Card>
           <CardContent className="flex flex-col items-center justify-center py-12">
             <Star className="h-12 w-12 text-muted-foreground mb-4" />
-            <h3 className="font-semibold mb-2">No testimonials yet</h3>
+            <h3 className="font-semibold mb-2">{t("admin.testimonials.noItems")}</h3>
             <p className="text-muted-foreground text-sm mb-4">
-              Add your first customer testimonial
+              {t("admin.testimonials.noItemsDesc")}
             </p>
             <Button onClick={openCreateDialog}>
               <Plus className="mr-2 h-4 w-4" />
-              Add Testimonial
+              {t("admin.testimonials.add")}
             </Button>
           </CardContent>
         </Card>
@@ -318,11 +320,11 @@ export default function TestimonialsPage() {
                     {testimonial.type === "VIDEO" && (
                       <Badge variant="outline" className="text-[var(--ast-info-icon)] border-[var(--ast-info-icon)]">
                         <Video className="mr-1 h-3 w-3" />
-                        Video
+                        {t("admin.testimonials.video")}
                       </Badge>
                     )}
                     <Badge variant={testimonial.isActive ? "default" : "secondary"}>
-                      {testimonial.isActive ? "Active" : "Hidden"}
+                      {testimonial.isActive ? t("common.active") : t("common.hidden")}
                     </Badge>
                   </div>
                 </div>
@@ -366,7 +368,7 @@ export default function TestimonialsPage() {
                     ) : (
                       <Eye className="mr-1 h-3 w-3" />
                     )}
-                    {testimonial.isActive ? "Hide" : "Show"}
+                    {testimonial.isActive ? t("common.hide") : t("common.show")}
                   </Button>
                   <Button
                     variant="outline"
@@ -374,7 +376,7 @@ export default function TestimonialsPage() {
                     onClick={() => openEditDialog(testimonial)}
                   >
                     <Pencil className="mr-1 h-3 w-3" />
-                    Edit
+                    {t("common.edit")}
                   </Button>
                   <Button
                     variant="outline"
@@ -397,7 +399,7 @@ export default function TestimonialsPage() {
           <DialogHeader>
             <DialogTitle className="flex items-center gap-2">
               <Settings2 className="h-5 w-5" />
-              Manage Testimonial Tags
+              {t("admin.testimonials.manageTagsTitle")}
             </DialogTitle>
           </DialogHeader>
           <div className="space-y-4">
@@ -405,18 +407,18 @@ export default function TestimonialsPage() {
               <Input
                 value={newTagLabel}
                 onChange={(e) => setNewTagLabel(e.target.value)}
-                placeholder="Enter new tag name..."
+                placeholder={t("admin.testimonials.tagPlaceholder")}
                 onKeyDown={(e) => e.key === "Enter" && handleAddTag()}
               />
               <Button onClick={handleAddTag} disabled={addingTag || !newTagLabel.trim()}>
-                {addingTag ? "Adding..." : "Add"}
+                {addingTag ? t("admin.testimonials.adding") : t("common.add")}
               </Button>
             </div>
 
             <div className="border rounded-lg divide-y max-h-[300px] overflow-y-auto">
               {availableTags.length === 0 ? (
                 <p className="text-sm text-muted-foreground text-center py-8">
-                  No tags yet. Add your first tag above.
+                  {t("admin.testimonials.noTags")}
                 </p>
               ) : (
                 availableTags.map((tag) => (
@@ -439,7 +441,7 @@ export default function TestimonialsPage() {
             </div>
 
             <p className="text-xs text-muted-foreground">
-              Tags are used to filter testimonials on different pages. Removing a tag won't affect existing testimonials.
+              {t("admin.testimonials.tagsHelp")}
             </p>
           </div>
         </DialogContent>
@@ -450,13 +452,13 @@ export default function TestimonialsPage() {
         <DialogContent className="max-w-lg max-h-[90vh] overflow-hidden flex flex-col">
           <DialogHeader className="flex-shrink-0">
             <DialogTitle>
-              {selectedTestimonial ? "Edit Testimonial" : "Add Testimonial"}
+              {selectedTestimonial ? t("admin.testimonials.edit") : t("admin.testimonials.add")}
             </DialogTitle>
           </DialogHeader>
           <div className="space-y-4 overflow-y-auto pr-2 flex-1">
             {/* Type Toggle */}
             <div className="space-y-2">
-              <Label>Type</Label>
+              <Label>{t("admin.testimonials.type")}</Label>
               <div className="flex gap-2">
                 <Button
                   type="button"
@@ -466,7 +468,7 @@ export default function TestimonialsPage() {
                   className="flex-1"
                 >
                   <ImageIcon className="mr-2 h-4 w-4" />
-                  Photo Testimonial
+                  {t("admin.testimonials.photo")}
                 </Button>
                 <Button
                   type="button"
@@ -476,14 +478,14 @@ export default function TestimonialsPage() {
                   className="flex-1"
                 >
                   <Video className="mr-2 h-4 w-4" />
-                  Video Testimonial
+                  {t("admin.testimonials.video")}
                 </Button>
               </div>
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div className="space-y-2">
-                <Label htmlFor="name">Name *</Label>
+                <Label htmlFor="name">{t("admin.testimonials.name")}</Label>
                 <Input
                   id="name"
                   value={formData.name}
@@ -492,7 +494,7 @@ export default function TestimonialsPage() {
                 />
               </div>
               <div className="space-y-2">
-                <Label htmlFor="company">Company</Label>
+                <Label htmlFor="company">{t("admin.testimonials.company")}</Label>
                 <Input
                   id="company"
                   value={formData.company}
@@ -503,7 +505,7 @@ export default function TestimonialsPage() {
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div className="space-y-2">
-                <Label htmlFor="country">Country</Label>
+                <Label htmlFor="country">{t("admin.testimonials.country")}</Label>
                 <Input
                   id="country"
                   value={formData.country}
@@ -512,7 +514,7 @@ export default function TestimonialsPage() {
                 />
               </div>
               <div className="space-y-2">
-                <Label htmlFor="rating">Rating</Label>
+                <Label htmlFor="rating">{t("admin.testimonials.rating")}</Label>
                 <div className="flex gap-1 pt-2">
                   {[1, 2, 3, 4, 5].map((star) => (
                     <button
@@ -569,12 +571,12 @@ export default function TestimonialsPage() {
             )}
 
             <div className="space-y-2">
-              <Label htmlFor="content">Testimonial *</Label>
+              <Label htmlFor="content">{t("admin.testimonials.content")}</Label>
               <Textarea
                 id="content"
                 value={formData.content}
                 onChange={(e) => setFormData({ ...formData, content: e.target.value })}
-                placeholder="Share their experience..."
+                placeholder={t("admin.testimonials.contentPlaceholder")}
                 rows={4}
               />
             </div>
@@ -582,7 +584,7 @@ export default function TestimonialsPage() {
             {/* Tags Multi-select */}
             <div className="space-y-2">
               <div className="flex items-center justify-between">
-                <Label>Tags (for filtering)</Label>
+                <Label>{t("admin.testimonials.tags")}</Label>
                 <Button
                   type="button"
                   variant="ghost"
@@ -590,7 +592,7 @@ export default function TestimonialsPage() {
                   className="h-auto p-0 text-xs"
                   onClick={() => setTagsDialogOpen(true)}
                 >
-                  Manage Tags
+                  {t("admin.testimonials.manageTags")}
                 </Button>
               </div>
               <div className="flex flex-wrap gap-2">
@@ -615,10 +617,10 @@ export default function TestimonialsPage() {
                   </button>
                 ))}
                 {availableTags.length === 0 && (
-                  <p className="text-sm text-muted-foreground">No tags available. Click "Manage Tags" to add some.</p>
+                  <p className="text-sm text-muted-foreground">{t("admin.testimonials.noTagsAvailable")}</p>
                 )}
               </div>
-              <p className="text-xs text-muted-foreground">Select tags to filter testimonials on specific pages</p>
+              <p className="text-xs text-muted-foreground">{t("admin.testimonials.selectTagsHelp")}</p>
             </div>
 
             <div className="flex items-center gap-2">
@@ -629,15 +631,15 @@ export default function TestimonialsPage() {
                   setFormData({ ...formData, isActive: checked })
                 }
               />
-              <Label htmlFor="isActive">Active (show in widgets)</Label>
+              <Label htmlFor="isActive">{t("admin.testimonials.activeWidgets")}</Label>
             </div>
           </div>
           <DialogFooter className="flex-shrink-0">
             <Button variant="outline" onClick={() => setDialogOpen(false)}>
-              Cancel
+              {t("common.cancel")}
             </Button>
             <Button onClick={handleSave} disabled={saving}>
-              {saving ? "Saving..." : "Save"}
+              {saving ? t("common.saving") : t("common.save")}
             </Button>
           </DialogFooter>
         </DialogContent>
@@ -647,19 +649,18 @@ export default function TestimonialsPage() {
       <AlertDialog open={deleteDialogOpen} onOpenChange={setDeleteDialogOpen}>
         <AlertDialogContent>
           <AlertDialogHeader>
-            <AlertDialogTitle>Delete Testimonial?</AlertDialogTitle>
+            <AlertDialogTitle>{t("admin.testimonials.deleteQuestion")}</AlertDialogTitle>
             <AlertDialogDescription>
-              This will permanently delete the testimonial from "{selectedTestimonial?.name}".
-              This action cannot be undone.
+              {t("admin.testimonials.deleteDesc", { name: selectedTestimonial?.name || "" })}
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
-            <AlertDialogCancel>Cancel</AlertDialogCancel>
+            <AlertDialogCancel>{t("common.cancel")}</AlertDialogCancel>
             <AlertDialogAction
               onClick={handleDelete}
               className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
             >
-              Delete
+              {t("common.delete")}
             </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>

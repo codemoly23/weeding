@@ -62,6 +62,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Checkbox } from "@/components/ui/checkbox";
 import { toast } from "sonner";
 import { getCurrencySymbol } from "@/components/ui/currency-selector";
+import { useLanguage } from "@/lib/i18n/language-context";
 
 type OrderStatus = "PENDING" | "PROCESSING" | "IN_PROGRESS" | "WAITING_FOR_INFO" | "COMPLETED" | "CANCELLED" | "REFUNDED";
 type PaymentStatus = "PENDING" | "PAID" | "FAILED" | "REFUNDED";
@@ -94,14 +95,14 @@ interface Order {
   };
 }
 
-const statusOptions: { value: OrderStatus; label: string }[] = [
-  { value: "PENDING", label: "Pending" },
-  { value: "PROCESSING", label: "Processing" },
-  { value: "IN_PROGRESS", label: "In Progress" },
-  { value: "WAITING_FOR_INFO", label: "Waiting for Info" },
-  { value: "COMPLETED", label: "Completed" },
-  { value: "CANCELLED", label: "Cancelled" },
-  { value: "REFUNDED", label: "Refunded" },
+const statusOptions: { value: OrderStatus; labelKey: string }[] = [
+  { value: "PENDING", labelKey: "admin.status.PENDING" },
+  { value: "PROCESSING", labelKey: "admin.status.PROCESSING" },
+  { value: "IN_PROGRESS", labelKey: "admin.status.IN_PROGRESS" },
+  { value: "WAITING_FOR_INFO", labelKey: "admin.status.WAITING_FOR_INFO" },
+  { value: "COMPLETED", labelKey: "admin.status.COMPLETED" },
+  { value: "CANCELLED", labelKey: "admin.status.CANCELLED" },
+  { value: "REFUNDED", labelKey: "admin.status.REFUNDED" },
 ];
 
 const statusColors: Record<string, string> = {
@@ -124,6 +125,7 @@ const paymentColors: Record<string, string> = {
 const PER_PAGE_OPTIONS = [10, 20, 50, 100];
 
 export default function AdminOrdersPage() {
+  const { t, lang } = useLanguage();
   const [orders, setOrders] = useState<Order[]>([]);
   const [selectedOrders, setSelectedOrders] = useState<string[]>([]);
   const [statusFilter, setStatusFilter] = useState("all");
@@ -181,15 +183,15 @@ export default function AdminOrdersPage() {
         const completed = data.orders.filter((o: Order) => o.status === "COMPLETED").length;
         setStats({ pending, processing, inProgress, completed });
       } else {
-        toast.error("Failed to fetch orders");
+        toast.error(t("admin.orders.fetchFailed"));
       }
     } catch (error) {
       console.error("Error fetching orders:", error);
-      toast.error("Failed to fetch orders");
+      toast.error(t("admin.orders.fetchFailed"));
     } finally {
       setIsLoading(false);
     }
-  }, [currentPage, perPage, searchQuery, statusFilter, paymentFilter]);
+  }, [currentPage, perPage, searchQuery, statusFilter, paymentFilter, t]);
 
   useEffect(() => {
     fetchOrders();
@@ -257,7 +259,7 @@ export default function AdminOrdersPage() {
   };
 
   const formatDate = (dateString: string) => {
-    return new Date(dateString).toLocaleDateString("en-US", {
+    return new Date(dateString).toLocaleDateString(lang === "sv" ? "sv-SE" : "en-US", {
       year: "numeric",
       month: "short",
       day: "numeric",
@@ -290,11 +292,11 @@ export default function AdminOrdersPage() {
         setSelectedOrders([]);
         fetchOrders();
       } else {
-        toast.error("Failed to update orders");
+        toast.error(t("admin.orders.updateFailed"));
       }
     } catch (error) {
       console.error("Error bulk updating:", error);
-      toast.error("Failed to update orders");
+      toast.error(t("admin.orders.updateFailed"));
     } finally {
       setIsBulkUpdating(false);
     }
@@ -304,7 +306,7 @@ export default function AdminOrdersPage() {
   const handleBulkDelete = async () => {
     if (selectedOrders.length === 0) return;
 
-    if (!confirm(`Are you sure you want to delete ${selectedOrders.length} order(s)? This action cannot be undone.`)) {
+    if (!confirm(t("admin.orders.deleteConfirm", { count: String(selectedOrders.length) }))) {
       return;
     }
 
@@ -325,11 +327,11 @@ export default function AdminOrdersPage() {
         setSelectedOrders([]);
         fetchOrders();
       } else {
-        toast.error("Failed to delete orders");
+        toast.error(t("admin.orders.deleteFailed"));
       }
     } catch (error) {
       console.error("Error bulk deleting:", error);
-      toast.error("Failed to delete orders");
+      toast.error(t("admin.orders.deleteFailed"));
     } finally {
       setIsBulkUpdating(false);
     }
@@ -337,7 +339,7 @@ export default function AdminOrdersPage() {
 
   const openEmailModal = (order: Order) => {
     setEmailModal({ open: true, order });
-    setEmailSubject(`Regarding your order ${order.orderNumber}`);
+    setEmailSubject(t("admin.orders.emailDefaultSubject", { orderNumber: order.orderNumber }));
     setEmailMessage("");
   };
 
@@ -350,7 +352,7 @@ export default function AdminOrdersPage() {
   const handleSendEmail = async () => {
     if (!emailModal.order) return;
     if (!emailSubject.trim() || !emailMessage.trim()) {
-      toast.error("Please fill in both subject and message");
+      toast.error(t("admin.orders.emailRequired"));
       return;
     }
 
@@ -367,13 +369,13 @@ export default function AdminOrdersPage() {
 
       const data = await response.json();
       if (response.ok) {
-        toast.success(`Email sent to ${emailModal.order.customerEmail}`);
+        toast.success(t("admin.orders.emailSent", { email: emailModal.order.customerEmail }));
         closeEmailModal();
       } else {
-        toast.error(data.error || "Failed to send email");
+        toast.error(data.error || t("admin.orders.emailFailed"));
       }
     } catch {
-      toast.error("Failed to send email");
+      toast.error(t("admin.orders.emailFailed"));
     } finally {
       setIsSendingEmail(false);
     }
@@ -399,13 +401,13 @@ export default function AdminOrdersPage() {
         a.click();
         window.URL.revokeObjectURL(url);
         document.body.removeChild(a);
-        toast.success("Orders exported successfully");
+        toast.success(t("admin.orders.exportSuccess"));
       } else {
-        toast.error("Failed to export orders");
+        toast.error(t("admin.orders.exportFailed"));
       }
     } catch (error) {
       console.error("Error exporting:", error);
-      toast.error("Failed to export orders");
+      toast.error(t("admin.orders.exportFailed"));
     } finally {
       setIsExporting(false);
     }
@@ -416,15 +418,15 @@ export default function AdminOrdersPage() {
       {/* Page Header */}
       <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div>
-          <h1 className="text-2xl font-bold">Orders</h1>
+          <h1 className="text-2xl font-bold">{t("admin.nav.orders")}</h1>
           <p className="text-muted-foreground">
-            Manage and track all customer orders
+            {t("admin.orders.subtitle")}
           </p>
         </div>
         <div className="flex gap-2">
           <Button variant="outline" onClick={fetchOrders} disabled={isLoading}>
             <RefreshCw className={`mr-2 h-4 w-4 ${isLoading ? "animate-spin" : ""}`} />
-            Refresh
+            {t("common.refresh")}
           </Button>
           <Button variant="outline" onClick={handleExport} disabled={isExporting}>
             {isExporting ? (
@@ -432,7 +434,7 @@ export default function AdminOrdersPage() {
             ) : (
               <Download className="mr-2 h-4 w-4" />
             )}
-            Export
+            {t("common.export")}
           </Button>
         </div>
       </div>
@@ -442,25 +444,25 @@ export default function AdminOrdersPage() {
         <Card>
           <CardContent className="pt-6">
             <div className="text-2xl font-bold">{stats.pending}</div>
-            <p className="text-sm text-muted-foreground">Pending</p>
+            <p className="text-sm text-muted-foreground">{t("admin.status.PENDING")}</p>
           </CardContent>
         </Card>
         <Card>
           <CardContent className="pt-6">
             <div className="text-2xl font-bold">{stats.processing}</div>
-            <p className="text-sm text-muted-foreground">Processing</p>
+            <p className="text-sm text-muted-foreground">{t("admin.status.PROCESSING")}</p>
           </CardContent>
         </Card>
         <Card>
           <CardContent className="pt-6">
             <div className="text-2xl font-bold">{stats.inProgress}</div>
-            <p className="text-sm text-muted-foreground">In Progress</p>
+            <p className="text-sm text-muted-foreground">{t("admin.status.IN_PROGRESS")}</p>
           </CardContent>
         </Card>
         <Card>
           <CardContent className="pt-6">
             <div className="text-2xl font-bold">{stats.completed}</div>
-            <p className="text-sm text-muted-foreground">Completed</p>
+            <p className="text-sm text-muted-foreground">{t("admin.status.COMPLETED")}</p>
           </CardContent>
         </Card>
       </div>
@@ -472,7 +474,7 @@ export default function AdminOrdersPage() {
             <div className="relative flex-1">
               <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
               <Input
-                placeholder="Search orders..."
+                placeholder={t("admin.orders.searchPlaceholder")}
                 className="pl-9"
                 value={searchQuery}
                 onChange={(e) => handleFilterChange("search", e.target.value)}
@@ -480,27 +482,27 @@ export default function AdminOrdersPage() {
             </div>
             <Select value={statusFilter} onValueChange={(v) => handleFilterChange("status", v)}>
               <SelectTrigger className="w-full sm:w-40">
-                <SelectValue placeholder="Status" />
+                <SelectValue placeholder={t("admin.orders.status")} />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="all">All Status</SelectItem>
-                <SelectItem value="PENDING">Pending</SelectItem>
-                <SelectItem value="PROCESSING">Processing</SelectItem>
-                <SelectItem value="IN_PROGRESS">In Progress</SelectItem>
-                <SelectItem value="COMPLETED">Completed</SelectItem>
-                <SelectItem value="CANCELLED">Cancelled</SelectItem>
+                <SelectItem value="all">{t("admin.orders.allStatus")}</SelectItem>
+                <SelectItem value="PENDING">{t("admin.status.PENDING")}</SelectItem>
+                <SelectItem value="PROCESSING">{t("admin.status.PROCESSING")}</SelectItem>
+                <SelectItem value="IN_PROGRESS">{t("admin.status.IN_PROGRESS")}</SelectItem>
+                <SelectItem value="COMPLETED">{t("admin.status.COMPLETED")}</SelectItem>
+                <SelectItem value="CANCELLED">{t("admin.status.CANCELLED")}</SelectItem>
               </SelectContent>
             </Select>
             <Select value={paymentFilter} onValueChange={(v) => handleFilterChange("payment", v)}>
               <SelectTrigger className="w-full sm:w-40">
-                <SelectValue placeholder="Payment" />
+                <SelectValue placeholder={t("admin.orders.payment")} />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="all">All Payments</SelectItem>
-                <SelectItem value="PENDING">Pending</SelectItem>
-                <SelectItem value="PAID">Paid</SelectItem>
-                <SelectItem value="FAILED">Failed</SelectItem>
-                <SelectItem value="REFUNDED">Refunded</SelectItem>
+                <SelectItem value="all">{t("admin.orders.allPayments")}</SelectItem>
+                <SelectItem value="PENDING">{t("admin.payment.PENDING")}</SelectItem>
+                <SelectItem value="PAID">{t("admin.payment.PAID")}</SelectItem>
+                <SelectItem value="FAILED">{t("admin.payment.FAILED")}</SelectItem>
+                <SelectItem value="REFUNDED">{t("admin.payment.REFUNDED")}</SelectItem>
               </SelectContent>
             </Select>
           </div>
@@ -512,7 +514,7 @@ export default function AdminOrdersPage() {
         <Card>
           <CardContent className="flex items-center justify-between py-3">
             <span className="text-sm text-muted-foreground">
-              {selectedOrders.length} order(s) selected
+              {t("admin.orders.selectedCount", { count: String(selectedOrders.length) })}
             </span>
             <div className="flex gap-2">
               <Button
@@ -521,7 +523,7 @@ export default function AdminOrdersPage() {
                 onClick={() => handleBulkStatusUpdate("PROCESSING")}
                 disabled={isBulkUpdating}
               >
-                Mark as Processing
+                {t("admin.orders.markProcessing")}
               </Button>
               <Button
                 variant="outline"
@@ -529,7 +531,7 @@ export default function AdminOrdersPage() {
                 onClick={() => handleBulkStatusUpdate("COMPLETED")}
                 disabled={isBulkUpdating}
               >
-                Mark as Completed
+                {t("admin.orders.markCompleted")}
               </Button>
               <Button
                 variant="outline"
@@ -537,7 +539,7 @@ export default function AdminOrdersPage() {
                 onClick={() => handleBulkStatusUpdate("CANCELLED")}
                 disabled={isBulkUpdating}
               >
-                Mark as Cancelled
+                {t("admin.orders.markCancelled")}
               </Button>
               <Button
                 variant="destructive"
@@ -548,7 +550,7 @@ export default function AdminOrdersPage() {
                 {isBulkUpdating ? (
                   <Loader2 className="mr-2 h-4 w-4 animate-spin" />
                 ) : null}
-                Delete Selected
+                {t("admin.orders.deleteSelected")}
               </Button>
             </div>
           </CardContent>
@@ -560,13 +562,13 @@ export default function AdminOrdersPage() {
         <CardHeader>
           <div className="flex items-center justify-between">
             <div>
-              <CardTitle>All Orders</CardTitle>
+              <CardTitle>{t("admin.orders.allOrders")}</CardTitle>
               <CardDescription>
-                {totalOrders} orders total
+                {t("admin.orders.totalCount", { count: String(totalOrders) })}
               </CardDescription>
             </div>
             <div className="flex items-center gap-2">
-              <span className="text-sm text-muted-foreground">Per page:</span>
+              <span className="text-sm text-muted-foreground">{t("admin.orders.perPage")}</span>
               <Select value={perPage.toString()} onValueChange={handlePerPageChange}>
                 <SelectTrigger className="w-20">
                   <SelectValue />
@@ -590,11 +592,11 @@ export default function AdminOrdersPage() {
           ) : orders.length === 0 ? (
             <div className="flex h-64 flex-col items-center justify-center text-center">
               <Package className="h-12 w-12 text-muted-foreground/50" />
-              <h3 className="mt-4 text-lg font-semibold">No orders found</h3>
+              <h3 className="mt-4 text-lg font-semibold">{t("admin.orders.noOrdersFound")}</h3>
               <p className="text-sm text-muted-foreground">
                 {searchQuery
-                  ? "Try adjusting your search or filters"
-                  : "Orders will appear here when customers submit applications"}
+                  ? t("admin.orders.adjustSearch")
+                  : t("admin.orders.empty")}
               </p>
             </div>
           ) : (
@@ -611,13 +613,13 @@ export default function AdminOrdersPage() {
                         onCheckedChange={toggleAll}
                       />
                     </TableHead>
-                    <TableHead>Order</TableHead>
-                    <TableHead>Customer</TableHead>
-                    <TableHead className="hidden md:table-cell">Service</TableHead>
-                    <TableHead>Amount</TableHead>
-                    <TableHead>Status</TableHead>
-                    <TableHead className="hidden sm:table-cell">Payment</TableHead>
-                    <TableHead className="text-right">Actions</TableHead>
+                    <TableHead>{t("admin.orders.order")}</TableHead>
+                    <TableHead>{t("admin.orders.customer")}</TableHead>
+                    <TableHead className="hidden md:table-cell">{t("admin.orders.service")}</TableHead>
+                    <TableHead>{t("admin.orders.amount")}</TableHead>
+                    <TableHead>{t("admin.orders.status")}</TableHead>
+                    <TableHead className="hidden sm:table-cell">{t("admin.orders.payment")}</TableHead>
+                    <TableHead className="text-right">{t("admin.orders.actions")}</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
@@ -652,7 +654,7 @@ export default function AdminOrdersPage() {
                       </TableCell>
                       <TableCell className="hidden md:table-cell">
                         <div>
-                          <p className="font-medium">{order.items[0]?.service?.name || order.items[0]?.name.split(" - ")[0] || "N/A"}</p>
+                          <p className="font-medium">{order.items[0]?.service?.name || order.items[0]?.name.split(" - ")[0] || t("common.notAvailable")}</p>
                           {order.items[0]?.package && (
                             <p className="text-xs text-muted-foreground">
                               {order.items[0].package.name}
@@ -676,7 +678,7 @@ export default function AdminOrdersPage() {
                           <SelectContent>
                             {statusOptions.map((option) => (
                               <SelectItem key={option.value} value={option.value}>
-                                {option.label}
+                                {t(option.labelKey)}
                               </SelectItem>
                             ))}
                           </SelectContent>
@@ -687,7 +689,7 @@ export default function AdminOrdersPage() {
                           variant="secondary"
                           className={paymentColors[order.paymentStatus]}
                         >
-                          {order.paymentStatus.toLowerCase()}
+                          {t(`admin.payment.${order.paymentStatus}`)}
                         </Badge>
                       </TableCell>
                       <TableCell className="text-right">
@@ -698,23 +700,23 @@ export default function AdminOrdersPage() {
                             </Button>
                           </DropdownMenuTrigger>
                           <DropdownMenuContent align="end">
-                            <DropdownMenuLabel>Actions</DropdownMenuLabel>
+                            <DropdownMenuLabel>{t("admin.orders.actions")}</DropdownMenuLabel>
                             <DropdownMenuSeparator />
                             <DropdownMenuItem asChild>
                               <Link href={`/admin/orders/${order.orderNumber}`}>
                                 <Eye className="mr-2 h-4 w-4" />
-                                View Details
+                                {t("admin.orders.viewDetails")}
                               </Link>
                             </DropdownMenuItem>
                             <DropdownMenuItem asChild>
                               <Link href={`/admin/orders/${order.orderNumber}/edit`}>
                                 <Edit className="mr-2 h-4 w-4" />
-                                Edit Order
+                                {t("admin.orders.editOrder")}
                               </Link>
                             </DropdownMenuItem>
                             <DropdownMenuItem onClick={() => openEmailModal(order)}>
                               <Mail className="mr-2 h-4 w-4" />
-                              Send Email
+                              {t("admin.orders.sendEmail")}
                             </DropdownMenuItem>
                           </DropdownMenuContent>
                         </DropdownMenu>
@@ -728,8 +730,11 @@ export default function AdminOrdersPage() {
               {totalPages > 1 && (
                 <div className="flex items-center justify-between border-t pt-4 mt-4">
                   <p className="text-sm text-muted-foreground">
-                    Showing {(currentPage - 1) * perPage + 1} to{" "}
-                    {Math.min(currentPage * perPage, totalOrders)} of {totalOrders} orders
+                    {t("admin.orders.showing", {
+                      start: String((currentPage - 1) * perPage + 1),
+                      end: String(Math.min(currentPage * perPage, totalOrders)),
+                      total: String(totalOrders),
+                    })}
                   </p>
                   <div className="flex items-center gap-2">
                     <Button
@@ -739,7 +744,7 @@ export default function AdminOrdersPage() {
                       disabled={currentPage === 1}
                     >
                       <ChevronLeft className="h-4 w-4" />
-                      Previous
+                      {t("common.previous")}
                     </Button>
                     <div className="flex items-center gap-1">
                       {Array.from({ length: totalPages }, (_, i) => i + 1)
@@ -775,7 +780,7 @@ export default function AdminOrdersPage() {
                       onClick={() => setCurrentPage((p) => Math.min(totalPages, p + 1))}
                       disabled={currentPage === totalPages}
                     >
-                      Next
+                      {t("common.next")}
                       <ChevronRight className="h-4 w-4" />
                     </Button>
                   </div>
@@ -789,11 +794,11 @@ export default function AdminOrdersPage() {
       <Dialog open={emailModal.open} onOpenChange={(open) => !open && closeEmailModal()}>
         <DialogContent className="sm:max-w-lg">
           <DialogHeader>
-            <DialogTitle>Send Email to Customer</DialogTitle>
+            <DialogTitle>{t("admin.orders.sendEmailToCustomer")}</DialogTitle>
             <DialogDescription>
               {emailModal.order && (
                 <>
-                  To: <strong>{emailModal.order.customerName}</strong> &lt;{emailModal.order.customerEmail}&gt;
+                  {t("admin.orders.to")} <strong>{emailModal.order.customerName}</strong> &lt;{emailModal.order.customerEmail}&gt;
                   <span className="ml-2 text-xs text-muted-foreground">
                     ({emailModal.order.orderNumber})
                   </span>
@@ -804,21 +809,21 @@ export default function AdminOrdersPage() {
 
           <div className="space-y-4 py-2">
             <div className="space-y-1.5">
-              <Label htmlFor="email-subject">Subject</Label>
+              <Label htmlFor="email-subject">{t("admin.orders.subject")}</Label>
               <Input
                 id="email-subject"
                 value={emailSubject}
                 onChange={(e) => setEmailSubject(e.target.value)}
-                placeholder="Email subject..."
+                placeholder={t("admin.orders.emailSubjectPlaceholder")}
               />
             </div>
             <div className="space-y-1.5">
-              <Label htmlFor="email-message">Message</Label>
+              <Label htmlFor="email-message">{t("admin.orders.message")}</Label>
               <Textarea
                 id="email-message"
                 value={emailMessage}
                 onChange={(e) => setEmailMessage(e.target.value)}
-                placeholder="Write your message here..."
+                placeholder={t("admin.orders.emailMessagePlaceholder")}
                 rows={8}
                 className="resize-none"
               />
@@ -827,7 +832,7 @@ export default function AdminOrdersPage() {
 
           <DialogFooter>
             <Button variant="outline" onClick={closeEmailModal} disabled={isSendingEmail}>
-              Cancel
+              {t("common.cancel")}
             </Button>
             <Button onClick={handleSendEmail} disabled={isSendingEmail}>
               {isSendingEmail ? (
@@ -835,7 +840,7 @@ export default function AdminOrdersPage() {
               ) : (
                 <Send className="mr-2 h-4 w-4" />
               )}
-              Send Email
+              {t("admin.orders.sendEmail")}
             </Button>
           </DialogFooter>
         </DialogContent>

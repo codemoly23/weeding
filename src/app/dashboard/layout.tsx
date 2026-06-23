@@ -34,7 +34,9 @@ export default function DashboardLayout({
       {/* Main Content */}
       <div className="flex flex-1 flex-col overflow-hidden">
         <DashboardHeader onMenuClick={() => setMobileMenuOpen(true)} />
-        <main className="flex-1 overflow-y-auto p-4 lg:p-6">{children}</main>
+        <main id="main-content" className="flex-1 overflow-y-auto p-4 lg:p-6">
+          {children}
+        </main>
       </div>
     </div>
   );

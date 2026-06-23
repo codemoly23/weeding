@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useState, useEffect } from "react";
 import {
@@ -49,6 +49,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { toast } from "sonner";
+import { useLanguage } from "@/lib/i18n/language-context";
 
 interface PaymentMethod {
   id: string;
@@ -80,6 +81,7 @@ const cardBrands: Record<string, { name: string; color: string }> = {
 };
 
 export default function BillingPage() {
+  const { t } = useLanguage();
   const [loading, setLoading] = useState(true);
   const [paymentMethods, setPaymentMethods] = useState<PaymentMethod[]>([]);
   const [billingHistory, setBillingHistory] = useState<BillingHistoryItem[]>([]);
@@ -101,12 +103,12 @@ export default function BillingPage() {
     try {
       setLoading(true);
       const response = await fetch("/api/customer/billing");
-      if (!response.ok) throw new Error("Failed to fetch billing data");
+      if (!response.ok) throw new Error(t("dashboard.billing.fetchFailed"));
       const data = await response.json();
       setPaymentMethods(data.paymentMethods);
       setBillingHistory(data.billingHistory);
     } catch {
-      toast.error("Failed to load billing data");
+      toast.error(t("dashboard.billing.loadFailed"));
     } finally {
       setLoading(false);
     }
@@ -135,11 +137,11 @@ export default function BillingPage() {
   const handleAddCard = async () => {
     const cardNum = newCard.cardNumber.replace(/\s/g, "");
     if (cardNum.length < 13) {
-      toast.error("Please enter a valid card number");
+      toast.error(t("dashboard.billing.invalidCard"));
       return;
     }
     if (!newCard.expiryMonth || !newCard.expiryYear) {
-      toast.error("Please enter card expiry date");
+      toast.error(t("dashboard.billing.expiryRequired"));
       return;
     }
 
@@ -161,10 +163,10 @@ export default function BillingPage() {
 
       if (!response.ok) {
         const error = await response.json();
-        throw new Error(error.error || "Failed to add card");
+        throw new Error(error.error || t("dashboard.billing.addCardFailed"));
       }
 
-      toast.success("Card added successfully");
+      toast.success(t("dashboard.billing.cardAdded"));
       setAddDialogOpen(false);
       setNewCard({
         cardNumber: "",
@@ -175,7 +177,7 @@ export default function BillingPage() {
       });
       fetchBillingData();
     } catch (error) {
-      toast.error(error instanceof Error ? error.message : "Failed to add card");
+      toast.error(error instanceof Error ? error.message : t("dashboard.billing.addCardFailed"));
     } finally {
       setIsAddingCard(false);
     }
@@ -189,13 +191,13 @@ export default function BillingPage() {
 
       if (!response.ok) {
         const error = await response.json();
-        throw new Error(error.error || "Failed to delete card");
+        throw new Error(error.error || t("dashboard.billing.deleteCardFailed"));
       }
 
-      toast.success("Card removed successfully");
+      toast.success(t("dashboard.billing.cardRemoved"));
       fetchBillingData();
     } catch (error) {
-      toast.error(error instanceof Error ? error.message : "Failed to delete card");
+      toast.error(error instanceof Error ? error.message : t("dashboard.billing.deleteCardFailed"));
     }
   };
 
@@ -207,13 +209,13 @@ export default function BillingPage() {
 
       if (!response.ok) {
         const error = await response.json();
-        throw new Error(error.error || "Failed to set default");
+        throw new Error(error.error || t("dashboard.billing.setDefaultFailed"));
       }
 
-      toast.success("Default payment method updated");
+      toast.success(t("dashboard.billing.defaultUpdated"));
       fetchBillingData();
     } catch (error) {
-      toast.error(error instanceof Error ? error.message : "Failed to set default");
+      toast.error(error instanceof Error ? error.message : t("dashboard.billing.setDefaultFailed"));
     }
   };
 
@@ -225,9 +227,9 @@ export default function BillingPage() {
     return (
       <div className="space-y-6">
         <div>
-          <h1 className="text-2xl font-bold text-foreground">Billing</h1>
+          <h1 className="text-2xl font-bold text-foreground">{t("dashboard.header.billing")}</h1>
           <p className="text-muted-foreground">
-            Manage your payment methods and view billing history
+            {t("dashboard.billing.subtitle")}
           </p>
         </div>
         <div className="flex items-center justify-center py-20">
@@ -242,9 +244,9 @@ export default function BillingPage() {
       {/* Page Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold text-foreground">Billing</h1>
+          <h1 className="text-2xl font-bold text-foreground">{t("dashboard.header.billing")}</h1>
           <p className="text-muted-foreground">
-            Manage your payment methods and view billing history
+            {t("dashboard.billing.subtitle")}
           </p>
         </div>
         <Button variant="outline" size="icon" onClick={fetchBillingData}>
@@ -256,28 +258,28 @@ export default function BillingPage() {
       <Card>
         <CardHeader className="flex flex-row items-center justify-between">
           <div>
-            <CardTitle>Payment Methods</CardTitle>
+            <CardTitle>{t("dashboard.billing.paymentMethods")}</CardTitle>
             <CardDescription>
-              Your saved cards for faster checkout
+              {t("dashboard.billing.paymentMethodsDesc")}
             </CardDescription>
           </div>
           <Dialog open={addDialogOpen} onOpenChange={setAddDialogOpen}>
             <DialogTrigger asChild>
               <Button>
                 <Plus className="mr-2 h-4 w-4" />
-                Add Card
+                {t("dashboard.billing.addCard")}
               </Button>
             </DialogTrigger>
             <DialogContent>
               <DialogHeader>
-                <DialogTitle>Add Payment Method</DialogTitle>
+                <DialogTitle>{t("dashboard.billing.addPaymentMethod")}</DialogTitle>
                 <DialogDescription>
-                  Add a new card for future payments
+                  {t("dashboard.billing.addPaymentMethodDesc")}
                 </DialogDescription>
               </DialogHeader>
               <div className="space-y-4 py-4">
                 <div className="space-y-2">
-                  <Label htmlFor="cardNumber">Card Number</Label>
+                  <Label htmlFor="cardNumber">{t("dashboard.billing.cardNumber")}</Label>
                   <Input
                     id="cardNumber"
                     placeholder="4242 4242 4242 4242"
@@ -293,7 +295,7 @@ export default function BillingPage() {
                 </div>
                 <div className="grid grid-cols-2 gap-4">
                   <div className="space-y-2">
-                    <Label>Expiry Month</Label>
+                    <Label>{t("dashboard.billing.expiryMonth")}</Label>
                     <Select
                       value={newCard.expiryMonth}
                       onValueChange={(value) =>
@@ -301,7 +303,7 @@ export default function BillingPage() {
                       }
                     >
                       <SelectTrigger>
-                        <SelectValue placeholder="Month" />
+                        <SelectValue placeholder={t("dashboard.billing.month")} />
                       </SelectTrigger>
                       <SelectContent>
                         {months.map((month) => (
@@ -313,7 +315,7 @@ export default function BillingPage() {
                     </Select>
                   </div>
                   <div className="space-y-2">
-                    <Label>Expiry Year</Label>
+                    <Label>{t("dashboard.billing.expiryYear")}</Label>
                     <Select
                       value={newCard.expiryYear}
                       onValueChange={(value) =>
@@ -321,7 +323,7 @@ export default function BillingPage() {
                       }
                     >
                       <SelectTrigger>
-                        <SelectValue placeholder="Year" />
+                        <SelectValue placeholder={t("dashboard.billing.year")} />
                       </SelectTrigger>
                       <SelectContent>
                         {years.map((year) => (
@@ -334,7 +336,7 @@ export default function BillingPage() {
                   </div>
                 </div>
                 <div className="space-y-2">
-                  <Label htmlFor="cardholderName">Cardholder Name</Label>
+                  <Label htmlFor="cardholderName">{t("dashboard.billing.cardholderName")}</Label>
                   <Input
                     id="cardholderName"
                     placeholder="John Doe"
@@ -361,7 +363,7 @@ export default function BillingPage() {
                     className="h-4 w-4 rounded border-border"
                   />
                   <Label htmlFor="setAsDefault" className="text-sm font-normal">
-                    Set as default payment method
+                    {t("dashboard.billing.setAsDefault")}
                   </Label>
                 </div>
                 <Button
@@ -372,10 +374,10 @@ export default function BillingPage() {
                   {isAddingCard ? (
                     <>
                       <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                      Adding...
+                      {t("dashboard.billing.adding")}
                     </>
                   ) : (
-                    "Add Card"
+                    t("dashboard.billing.addCard")
                   )}
                 </Button>
               </div>
@@ -386,9 +388,9 @@ export default function BillingPage() {
           {paymentMethods.length === 0 ? (
             <div className="py-8 text-center">
               <CreditCard className="mx-auto h-12 w-12 text-muted-foreground" />
-              <h3 className="mt-4 text-lg font-semibold">No payment methods</h3>
+              <h3 className="mt-4 text-lg font-semibold">{t("dashboard.billing.noPaymentMethods")}</h3>
               <p className="mt-2 text-sm text-muted-foreground">
-                Add a card to make checkout faster
+                {t("dashboard.billing.noPaymentMethodsDesc")}
               </p>
             </div>
           ) : (
@@ -412,16 +414,16 @@ export default function BillingPage() {
                       <div>
                         <div className="flex items-center gap-2">
                           <p className="font-medium">
-                            •••• •••• •••• {method.last4}
+                            â€¢â€¢â€¢â€¢ â€¢â€¢â€¢â€¢ â€¢â€¢â€¢â€¢ {method.last4}
                           </p>
                           {method.isDefault && (
                             <Badge variant="secondary" className="text-xs">
-                              Default
+                              {t("dashboard.billing.default")}
                             </Badge>
                           )}
                         </div>
                         <p className="text-sm text-muted-foreground">
-                          {method.cardholderName || "Card"} • Expires{" "}
+                          {method.cardholderName || t("dashboard.billing.card")} · {t("dashboard.billing.expires")}{" "}
                           {method.expiryMonth?.toString().padStart(2, "0")}/
                           {method.expiryYear}
                         </p>
@@ -435,7 +437,7 @@ export default function BillingPage() {
                           onClick={() => handleSetDefault(method.id)}
                         >
                           <Star className="mr-1 h-4 w-4" />
-                          Set Default
+                          {t("dashboard.billing.setDefault")}
                         </Button>
                       )}
                       <AlertDialog>
@@ -446,19 +448,18 @@ export default function BillingPage() {
                         </AlertDialogTrigger>
                         <AlertDialogContent>
                           <AlertDialogHeader>
-                            <AlertDialogTitle>Remove Card</AlertDialogTitle>
+                            <AlertDialogTitle>{t("dashboard.billing.removeCard")}</AlertDialogTitle>
                             <AlertDialogDescription>
-                              Are you sure you want to remove this card? This
-                              action cannot be undone.
+                              {t("dashboard.billing.removeCardConfirm")}
                             </AlertDialogDescription>
                           </AlertDialogHeader>
                           <AlertDialogFooter>
-                            <AlertDialogCancel>Cancel</AlertDialogCancel>
+                            <AlertDialogCancel>{t("common.cancel")}</AlertDialogCancel>
                             <AlertDialogAction
                               onClick={() => handleDeleteCard(method.id)}
                               className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
                             >
-                              Remove
+                              {t("common.remove")}
                             </AlertDialogAction>
                           </AlertDialogFooter>
                         </AlertDialogContent>
@@ -475,16 +476,16 @@ export default function BillingPage() {
       {/* Billing History */}
       <Card>
         <CardHeader>
-          <CardTitle>Billing History</CardTitle>
-          <CardDescription>Your recent payments and invoices</CardDescription>
+          <CardTitle>{t("dashboard.billing.history")}</CardTitle>
+          <CardDescription>{t("dashboard.billing.historyDesc")}</CardDescription>
         </CardHeader>
         <CardContent>
           {billingHistory.length === 0 ? (
             <div className="py-8 text-center">
               <Receipt className="mx-auto h-12 w-12 text-muted-foreground" />
-              <h3 className="mt-4 text-lg font-semibold">No billing history</h3>
+              <h3 className="mt-4 text-lg font-semibold">{t("dashboard.billing.noHistory")}</h3>
               <p className="mt-2 text-sm text-muted-foreground">
-                Your payment history will appear here
+                {t("dashboard.billing.noHistoryDesc")}
               </p>
             </div>
           ) : (
@@ -501,7 +502,7 @@ export default function BillingPage() {
                     <div>
                       <p className="font-medium">{item.description}</p>
                       <p className="text-sm text-muted-foreground">
-                        {item.orderNumber} • {item.date}
+                        {item.orderNumber} · {item.date}
                       </p>
                     </div>
                   </div>
@@ -509,7 +510,7 @@ export default function BillingPage() {
                     <div className="text-right">
                       <p className="font-medium">{item.amount}</p>
                       <p className="text-sm text-muted-foreground">
-                        {item.paymentMethod || "Card"}
+                        {item.paymentMethod || t("dashboard.billing.card")}
                       </p>
                     </div>
                     <Button variant="ghost" size="icon">

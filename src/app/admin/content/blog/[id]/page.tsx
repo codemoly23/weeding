@@ -3,7 +3,7 @@
 import { useState, useEffect, use } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import { ArrowLeft, Save, Eye, Loader2 } from "lucide-react";
+import { ArrowLeft, Save, Eye, Loader2, ImagePlus } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -19,6 +19,7 @@ import {
 } from "@/components/ui/select";
 import { toast } from "sonner";
 import { SunEditorWrapper } from "@/components/editor/sun-editor";
+import { useLanguage } from "@/lib/i18n/language-context";
 
 interface BlogCategory {
   id: string;
@@ -62,6 +63,7 @@ export default function BlogEditorPage({
 }: {
   params: Promise<{ id: string }>;
 }) {
+  const { t } = useLanguage();
   const resolvedParams = use(params);
   const router = useRouter();
   const isNew = resolvedParams.id === "new";
@@ -112,7 +114,7 @@ export default function BlogEditorPage({
       setTagsInput(data.tags?.join(", ") || "");
       setSelectedCategoryId(data.categories?.[0]?.id || "");
     } catch (error) {
-      toast.error("Failed to load blog post");
+      toast.error(t("admin.blog.loadFailed"));
       router.push("/admin/content/blog");
     } finally {
       setLoading(false);
@@ -160,9 +162,9 @@ export default function BlogEditorPage({
       if (!res.ok) throw new Error("Upload failed");
       const data = await res.json();
       setFormData({ ...formData, coverImage: data.url });
-      toast.success("Image uploaded");
+      toast.success(t("admin.blog.imageUploaded"));
     } catch (error) {
-      toast.error("Failed to upload image");
+      toast.error(t("admin.blog.imageUploadFailed"));
     } finally {
       setUploadingImage(false);
     }
@@ -175,7 +177,7 @@ export default function BlogEditorPage({
 
   async function handleSave(publish = false) {
     if (!formData.title || !formData.content) {
-      toast.error("Title and content are required");
+      toast.error(t("admin.blog.required"));
       return;
     }
 
@@ -201,14 +203,14 @@ export default function BlogEditorPage({
 
       toast.success(
         isNew
-          ? "Blog post created"
+          ? t("admin.blog.createdToast")
           : publish
-          ? "Blog post published"
-          : "Blog post saved"
+          ? t("admin.blog.publishedToast")
+          : t("admin.blog.savedToast")
       );
       router.push("/admin/content/blog");
     } catch (error) {
-      toast.error("Failed to save blog post");
+      toast.error(t("admin.blog.saveFailed"));
     } finally {
       setSaving(false);
     }
@@ -233,10 +235,10 @@ export default function BlogEditorPage({
           </Button>
           <div>
             <h1 className="text-2xl font-bold">
-              {isNew ? "New Blog Post" : "Edit Blog Post"}
+              {isNew ? t("admin.blog.newTitle") : t("admin.blog.editTitle")}
             </h1>
             <p className="text-muted-foreground">
-              {isNew ? "Create a new blog post" : "Update your blog post"}
+              {isNew ? t("admin.blog.newSubtitle") : t("admin.blog.editSubtitle")}
             </p>
           </div>
         </div>
@@ -245,13 +247,13 @@ export default function BlogEditorPage({
             <Button variant="outline" asChild>
               <Link href={`/blog/${formData.slug}`} target="_blank">
                 <Eye className="mr-2 h-4 w-4" />
-                View
+                {t("admin.blog.view")}
               </Link>
             </Button>
           )}
           <Button variant="outline" onClick={() => handleSave(false)} disabled={saving}>
             <Save className="mr-2 h-4 w-4" />
-            Save Draft
+            {t("admin.blog.saveDraft")}
           </Button>
           <Button onClick={() => handleSave(true)} disabled={saving}>
             {saving ? (
@@ -259,7 +261,7 @@ export default function BlogEditorPage({
             ) : (
               <Save className="mr-2 h-4 w-4" />
             )}
-            Publish
+            {t("admin.blog.publish")}
           </Button>
         </div>
       </div>
@@ -269,21 +271,21 @@ export default function BlogEditorPage({
         <div className="lg:col-span-2 space-y-6">
           <Card>
             <CardHeader>
-              <CardTitle>Content</CardTitle>
+              <CardTitle>{t("admin.blog.content")}</CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
               <div className="space-y-2">
-                <Label htmlFor="title">Title *</Label>
+                <Label htmlFor="title">{t("admin.blog.titleLabel")}</Label>
                 <Input
                   id="title"
                   value={formData.title}
                   onChange={(e) => handleTitleChange(e.target.value)}
-                  placeholder="Enter blog post title"
+                  placeholder={t("admin.blog.titlePlaceholder")}
                   className="text-lg"
                 />
               </div>
               <div className="space-y-2">
-                <Label htmlFor="slug">Slug</Label>
+                <Label htmlFor="slug">{t("admin.blog.slug")}</Label>
                 <Input
                   id="slug"
                   value={formData.slug}
@@ -294,25 +296,25 @@ export default function BlogEditorPage({
                 />
               </div>
               <div className="space-y-2">
-                <Label htmlFor="excerpt">Excerpt</Label>
+                <Label htmlFor="excerpt">{t("admin.blog.excerpt")}</Label>
                 <Textarea
                   id="excerpt"
                   value={formData.excerpt}
                   onChange={(e) =>
                     setFormData({ ...formData, excerpt: e.target.value })
                   }
-                  placeholder="Brief summary of the post..."
+                  placeholder={t("admin.blog.excerptPlaceholder")}
                   rows={3}
                 />
               </div>
               <div className="space-y-2">
-                <Label htmlFor="content">Content *</Label>
+                <Label htmlFor="content">{t("admin.blog.contentLabel")}</Label>
                 <SunEditorWrapper
                   value={formData.content}
                   onChange={(content) =>
                     setFormData({ ...formData, content })
                   }
-                  placeholder="Write your blog post content here..."
+                  placeholder={t("admin.blog.contentPlaceholder")}
                 />
               </div>
             </CardContent>
@@ -323,7 +325,7 @@ export default function BlogEditorPage({
         <div className="space-y-6">
           <Card>
             <CardHeader>
-              <CardTitle>Status</CardTitle>
+              <CardTitle>{t("common.status")}</CardTitle>
             </CardHeader>
             <CardContent>
               <Select
@@ -339,9 +341,9 @@ export default function BlogEditorPage({
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="DRAFT">Draft</SelectItem>
-                  <SelectItem value="PUBLISHED">Published</SelectItem>
-                  <SelectItem value="ARCHIVED">Archived</SelectItem>
+                  <SelectItem value="DRAFT">{t("admin.blog.draft")}</SelectItem>
+                  <SelectItem value="PUBLISHED">{t("admin.blog.published")}</SelectItem>
+                  <SelectItem value="ARCHIVED">{t("admin.blog.archived")}</SelectItem>
                 </SelectContent>
               </Select>
             </CardContent>
@@ -349,7 +351,7 @@ export default function BlogEditorPage({
 
           <Card>
             <CardHeader>
-              <CardTitle>Category</CardTitle>
+              <CardTitle>{t("admin.blog.category")}</CardTitle>
             </CardHeader>
             <CardContent className="space-y-3">
               <Select
@@ -357,7 +359,7 @@ export default function BlogEditorPage({
                 onValueChange={setSelectedCategoryId}
               >
                 <SelectTrigger>
-                  <SelectValue placeholder="Select a category" />
+                  <SelectValue placeholder={t("admin.blog.selectCategory")} />
                 </SelectTrigger>
                 <SelectContent>
                   {categories.map((cat) => (
@@ -369,7 +371,7 @@ export default function BlogEditorPage({
               </Select>
               <p className="text-xs text-muted-foreground">
                 {!selectedCategoryId
-                  ? "No category selected. Post will be assigned to Uncategorized"
+                  ? t("admin.blog.noCategory")
                   : ""}
               </p>
               <Button
@@ -379,7 +381,7 @@ export default function BlogEditorPage({
                 asChild
               >
                 <Link href="/admin/content/blog-categories" target="_blank">
-                  Manage Categories
+                  {t("admin.blog.manageCategories")}
                 </Link>
               </Button>
             </CardContent>
@@ -387,19 +389,35 @@ export default function BlogEditorPage({
 
           <Card>
             <CardHeader>
-              <CardTitle>Cover Image</CardTitle>
+              <CardTitle>{t("admin.blog.coverImage")}</CardTitle>
             </CardHeader>
             <CardContent className="space-y-3">
               <Input
+                id="cover-image-upload"
                 type="file"
                 accept="image/*"
                 onChange={handleCoverImageUpload}
                 disabled={uploadingImage}
+                className="sr-only"
               />
+              <Button
+                type="button"
+                variant="outline"
+                className="w-full justify-center"
+                disabled={uploadingImage}
+                asChild
+              >
+                <Label htmlFor="cover-image-upload" className="cursor-pointer">
+                  <ImagePlus className="mr-2 h-4 w-4" />
+                  {formData.coverImage
+                    ? t("admin.blog.changeCoverImage")
+                    : t("admin.blog.chooseCoverImage")}
+                </Label>
+              </Button>
               {uploadingImage && (
                 <div className="flex items-center gap-2 text-sm text-muted-foreground">
                   <Loader2 className="h-4 w-4 animate-spin" />
-                  Uploading...
+                  {t("admin.blog.uploading")}
                 </div>
               )}
               {formData.coverImage && (
@@ -416,7 +434,7 @@ export default function BlogEditorPage({
 
           <Card>
             <CardHeader>
-              <CardTitle>Tags</CardTitle>
+              <CardTitle>{t("admin.blog.tags")}</CardTitle>
             </CardHeader>
             <CardContent>
               <Input
@@ -425,7 +443,7 @@ export default function BlogEditorPage({
                 placeholder="LLC, Business, Tips"
               />
               <p className="text-xs text-muted-foreground mt-2">
-                Separate tags with commas
+                {t("admin.blog.tagsHelp")}
               </p>
               {formData.tags.length > 0 && (
                 <div className="flex flex-wrap gap-1 mt-3">
@@ -441,29 +459,29 @@ export default function BlogEditorPage({
 
           <Card>
             <CardHeader>
-              <CardTitle>SEO</CardTitle>
+              <CardTitle>{t("admin.blog.seo")}</CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
               <div className="space-y-2">
-                <Label htmlFor="metaTitle">Meta Title</Label>
+                <Label htmlFor="metaTitle">{t("admin.blog.metaTitle")}</Label>
                 <Input
                   id="metaTitle"
                   value={formData.metaTitle}
                   onChange={(e) =>
                     setFormData({ ...formData, metaTitle: e.target.value })
                   }
-                  placeholder="SEO title (optional)"
+                  placeholder={t("admin.blog.metaTitlePlaceholder")}
                 />
               </div>
               <div className="space-y-2">
-                <Label htmlFor="metaDescription">Meta Description</Label>
+                <Label htmlFor="metaDescription">{t("admin.blog.metaDescription")}</Label>
                 <Textarea
                   id="metaDescription"
                   value={formData.metaDescription}
                   onChange={(e) =>
                     setFormData({ ...formData, metaDescription: e.target.value })
                   }
-                  placeholder="SEO description (optional)"
+                  placeholder={t("admin.blog.metaDescriptionPlaceholder")}
                   rows={3}
                 />
               </div>

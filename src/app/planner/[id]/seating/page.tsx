@@ -11,6 +11,7 @@ import {
   getLocalSeatingLayouts, LocalSeatingLayout, LocalSeatingTable,
   getLocalGuests,
 } from "@/lib/planner-storage";
+import { useLanguage } from "@/lib/i18n/language-context";
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -340,6 +341,7 @@ function LayoutPanel({
   title: string; subtitle: string; diagram: React.ReactNode; onEdit: () => void;
   photos?: string[]; wide?: boolean; pdfSvgId?: string;
 }) {
+  const { t } = useLanguage();
   const [activePhoto, setActivePhoto] = useState(0);
   const scrollRef = useRef<HTMLDivElement>(null);
 
@@ -368,9 +370,9 @@ function LayoutPanel({
           onClick={onEdit}
           className="text-sm font-medium text-primary underline underline-offset-2 hover:text-primary/80 transition-colors"
         >
-          Click here to edit layout
+          {t("seating.editLayout")}
         </button>
-        <p className="mt-1 text-xs text-muted-foreground/70">A1 portrait 23.4 inch × 33.1 inch</p>
+        <p className="mt-1 text-xs text-muted-foreground/70">{t("seating.a1Portrait")}</p>
       </div>
 
       {/* Download + arrow hint */}
@@ -380,17 +382,16 @@ function LayoutPanel({
           className="flex items-center gap-2 rounded-lg border border-border bg-card px-5 py-2 text-sm text-foreground/80 hover:bg-muted/30 transition-colors"
         >
           <Download className="h-4 w-4 text-primary" />
-          Download PDF file
+          {t("seating.downloadPdf")}
         </button>
         <span className="text-xs text-muted-foreground/70">←</span>
       </div>
 
       {/* Recommendation */}
       <div className="mt-6 rounded-xl border border-border bg-card px-5 py-4 shadow-sm">
-        <p className="mb-1.5 text-sm font-semibold text-foreground">Recommendation</p>
+        <p className="mb-1.5 text-sm font-semibold text-foreground">{t("seating.recommendation")}</p>
         <p className="text-xs leading-relaxed text-muted-foreground">
-          For printing, opt for thick paper! You&apos;re welcome to select any variety of{" "}
-          <span className="text-primary">subtly colored, textured card stock or paper.</span>
+          {t("seating.recommendationText")}
         </p>
       </div>
 
@@ -398,7 +399,7 @@ function LayoutPanel({
       {photos.length > 0 && (
         <div className="mt-6">
           <h3 className="mb-3 text-center text-sm font-medium text-foreground/80">
-            Elegant {title.toLowerCase()} seating chart
+            {title}
           </h3>
           <div ref={scrollRef} className="flex gap-3 overflow-x-auto pb-2" style={{ scrollbarWidth: "none" }}>
             {photos.map((src, i) => (
@@ -515,6 +516,7 @@ function SeatingCardsPanel({
   onEdit: () => void;
   loading?: boolean;
 }) {
+  const { t } = useLanguage();
   function handleDownloadPDF() {
     if (tables.length === 0) return;
     const allCards = tables.map((t) => {
@@ -608,10 +610,9 @@ function SeatingCardsPanel({
     <div className="mx-auto max-w-sm">
       {/* Title */}
       <div className="mb-5 text-center">
-        <h2 className="text-lg font-light text-foreground">Seating Cards by Table</h2>
+        <h2 className="text-lg font-light text-foreground">{t("seating.cards.title")}</h2>
         <p className="mx-auto mt-1.5 max-w-xs text-xs leading-relaxed text-muted-foreground/70">
-          Create and print table cards using the seating plan, then place them on the
-          seating board to help guests quickly find where they&apos;re seated.
+          {t("seating.cards.desc")}
         </p>
       </div>
 
@@ -673,11 +674,11 @@ function SeatingCardsPanel({
               {loading ? (
                 <div className="flex flex-col items-center gap-2 py-4">
                   <div className="h-5 w-5 animate-spin rounded-full border-2 border-primary border-t-transparent" />
-                  <span style={{ fontSize: 11, color: "#9ca3af" }}>Loading guests...</span>
+                  <span style={{ fontSize: 11, color: "#9ca3af" }}>{t("seating.cards.loadingGuests")}</span>
                 </div>
               ) : table.guestNames.length === 0 ? (
                 <div style={{ fontFamily: "Georgia, serif", fontSize: 12, color: "#d1d5db", textAlign: "center" }}>
-                  No guests assigned yet
+                  {t("seating.cards.noGuests")}
                 </div>
               ) : (
                 table.guestNames.map((name, i) => (
@@ -705,11 +706,11 @@ function SeatingCardsPanel({
           onClick={onEdit}
           className="text-sm font-medium text-primary underline underline-offset-2 transition-colors hover:text-primary/80"
         >
-          Click here to edit layout
+          {t("seating.editLayout")}
         </button>
-        <p className="mt-1 text-xs text-muted-foreground/70">Format 4.33 inch × 7.87 inch</p>
+        <p className="mt-1 text-xs text-muted-foreground/70">{t("seating.cards.format")}</p>
         {total > 0 && (
-          <p className="mt-0.5 text-xs text-muted-foreground/70">Total {total} table card{total !== 1 ? "s" : ""}</p>
+          <p className="mt-0.5 text-xs text-muted-foreground/70">{t(total !== 1 ? "seating.cards.totalCardsPlural" : "seating.cards.totalCards", { n: String(total) })}</p>
         )}
       </div>
 
@@ -719,7 +720,7 @@ function SeatingCardsPanel({
           onClick={onEdit}
           className="flex items-center gap-2 rounded-lg border border-primary/20 bg-primary/5 px-5 py-2 text-sm font-medium text-primary transition-colors hover:bg-primary/10"
         >
-          <Eye className="h-4 w-4" /> Preview Result
+          <Eye className="h-4 w-4" /> {t("seating.cards.previewResult")}
         </button>
         <div className="flex items-center gap-3">
           <button
@@ -727,7 +728,7 @@ function SeatingCardsPanel({
             disabled={tables.length === 0}
             className="flex items-center gap-2 rounded-lg border border-border bg-card px-5 py-2 text-sm text-foreground/80 transition-colors hover:bg-muted/30 disabled:opacity-40"
           >
-            <Download className="h-4 w-4 text-primary" /> Download PDF file
+            <Download className="h-4 w-4 text-primary" /> {t("seating.downloadPdf")}
           </button>
           <span className="text-xs text-muted-foreground/70">←</span>
         </div>
@@ -735,10 +736,9 @@ function SeatingCardsPanel({
 
       {/* Recommendation */}
       <div className="mt-6 rounded-xl border border-border bg-card px-5 py-4 shadow-sm">
-        <p className="mb-1.5 text-sm font-semibold text-foreground">Recommendation</p>
+        <p className="mb-1.5 text-sm font-semibold text-foreground">{t("seating.recommendation")}</p>
         <p className="text-xs leading-relaxed text-muted-foreground">
-          For printing, opt for thick paper! You&apos;re welcome to select any variety of{" "}
-          <span className="text-primary">subtly colored, textured card stock or paper.</span>
+          {t("seating.recommendationText")}
         </p>
       </div>
     </div>
@@ -829,6 +829,7 @@ function NameCardSvg({ name, template, showTable, tableLabel, showCourseIcon, di
 }
 
 function NameCardsPanel({ guests, layouts, projectId }: { guests: Guest[]; layouts: Layout[]; projectId: string }) {
+  const { t } = useLanguage();
   const STORAGE_KEY = `name-cards-settings-${projectId}`;
 
   const [template, setTemplate] = useState<NameCardTemplate>(() => {
@@ -948,8 +949,8 @@ function NameCardsPanel({ guests, layouts, projectId }: { guests: Guest[]; layou
     <div className="mx-auto max-w-xl">
       {/* Title */}
       <div className="mb-5 text-center">
-        <h2 className="text-lg font-light text-foreground">Classic Name Cards</h2>
-        <p className="text-sm text-muted-foreground/70">Create and print name cards for every guest so they can easily find their seat.</p>
+        <h2 className="text-lg font-light text-foreground">{t("seating.nameCards.title")}</h2>
+        <p className="text-sm text-muted-foreground/70">{t("seating.nameCards.desc")}</p>
       </div>
 
       {/* Card preview with navigation */}
@@ -990,7 +991,7 @@ function NameCardsPanel({ guests, layouts, projectId }: { guests: Guest[]; layou
             onClick={() => setTemplateOpen(v => !v)}
             className="flex w-full items-center justify-between px-4 py-3 text-sm text-foreground hover:bg-muted/30 transition-colors"
           >
-            <span className="text-muted-foreground text-xs">This style applies to all name cards</span>
+            <span className="text-muted-foreground text-xs">{t("seating.nameCards.styleNote")}</span>
             <div className="flex items-center gap-2">
               <span className="text-sm font-medium text-foreground">{NAME_CARD_TEMPLATES.find(t => t.id === template)?.label}</span>
               <ChevronDown className={cn("h-4 w-4 text-muted-foreground/70 transition-transform", templateOpen && "rotate-180")} />
@@ -1020,9 +1021,9 @@ function NameCardsPanel({ guests, layouts, projectId }: { guests: Guest[]; layou
         {/* Checkboxes */}
         <div className="space-y-2.5 border-b border-border/50 px-4 py-3">
           {([
-            { key: "honorific", label: "Add honorific (Mr., Mrs., Ms.)",  val: showHonorific,  fn: () => setShowHonorific((v: boolean) => !v) },
-            { key: "table",     label: "Display table number",             val: showTableNumber, fn: () => setShowTableNumber((v: boolean) => !v) },
-            { key: "course",    label: "Display the main course icon",     val: showCourseIcon,  fn: () => setShowCourseIcon((v: boolean) => !v) },
+            { key: "honorific", label: t("seating.nameCards.addHonorific"),  val: showHonorific,  fn: () => setShowHonorific((v: boolean) => !v) },
+            { key: "table",     label: t("seating.nameCards.showTable"),      val: showTableNumber, fn: () => setShowTableNumber((v: boolean) => !v) },
+            { key: "course",    label: t("seating.nameCards.showCourse"),     val: showCourseIcon,  fn: () => setShowCourseIcon((v: boolean) => !v) },
           ]).map(({ key, label, val, fn }) => (
             <label key={key} className="flex cursor-pointer items-center gap-2.5" onClick={fn}>
               <div className={cn(
@@ -1038,9 +1039,9 @@ function NameCardsPanel({ guests, layouts, projectId }: { guests: Guest[]; layou
 
         {/* Count */}
         <div className="border-b border-border/50 px-4 py-3">
-          <p className="text-sm font-medium text-foreground">Total {total} place cards</p>
+          <p className="text-sm font-medium text-foreground">{t("seating.nameCards.totalCards", { n: String(total) })}</p>
           {displayGuests.length === 0 && (
-            <p className="mt-1 text-xs text-primary underline cursor-pointer">Let&apos;s add more guests to the list</p>
+            <p className="mt-1 text-xs text-primary underline cursor-pointer">{t("seating.nameCards.addGuests")}</p>
           )}
         </div>
 
@@ -1050,13 +1051,13 @@ function NameCardsPanel({ guests, layouts, projectId }: { guests: Guest[]; layou
             <div className={cn("flex h-4 w-4 flex-shrink-0 items-center justify-center rounded-full border-2 transition-colors", confirmedOnly ? "border-primary" : "border-border")}>
               {confirmedOnly && <div className="h-2 w-2 rounded-full bg-primary" />}
             </div>
-            <span className="text-sm text-foreground/80">Include only guests who confirmed attendance</span>
+            <span className="text-sm text-foreground/80">{t("seating.nameCards.confirmedOnly")}</span>
           </label>
           <label className="flex cursor-pointer items-start gap-2.5" onClick={() => { setPrintEmpty((v: boolean) => !v); setConfirmedOnly(false); }}>
             <div className={cn("mt-0.5 flex h-4 w-4 flex-shrink-0 items-center justify-center rounded-full border-2 transition-colors", printEmpty ? "border-primary" : "border-border")}>
               {printEmpty && <div className="h-2 w-2 rounded-full bg-primary" />}
             </div>
-            <span className="text-sm text-foreground/80">Print empty cards<br /><span className="text-xs text-muted-foreground/70">(in case of filling in names by hand)</span></span>
+            <span className="text-sm text-foreground/80">{t("seating.nameCards.printEmpty")}<br /><span className="text-xs text-muted-foreground/70">{t("seating.nameCards.printEmptyNote")}</span></span>
           </label>
         </div>
 
@@ -1067,20 +1068,19 @@ function NameCardsPanel({ guests, layouts, projectId }: { guests: Guest[]; layou
             className="flex items-center gap-2 rounded-lg border border-border bg-card px-5 py-2 text-sm text-foreground/80 hover:bg-muted/30 transition-colors"
           >
             <Download className="h-4 w-4 text-primary" />
-            Download PDF file
+            {t("seating.downloadPdf")}
           </button>
           {pdfBlocked
-            ? <span className="text-xs text-destructive">Popup blocked — allow popups for this site and try again.</span>
+            ? <span className="text-xs text-destructive">{t("seating.popupBlocked")}</span>
             : <span className="text-xs text-muted-foreground/70">←</span>}
         </div>
       </div>
 
       {/* Recommendation */}
       <div className="mt-4 rounded-xl border border-border bg-card px-5 py-4 shadow-sm">
-        <p className="mb-1 text-sm font-semibold text-foreground">Recommendation</p>
+        <p className="mb-1 text-sm font-semibold text-foreground">{t("seating.recommendation")}</p>
         <p className="text-xs leading-relaxed text-muted-foreground">
-          For printing, opt for thick paper! You&apos;re welcome to select any variety of{" "}
-          <span className="text-primary">subtly colored, textured card stock or paper.</span>
+          {t("seating.recommendationText")}
         </p>
       </div>
 
@@ -1158,6 +1158,7 @@ function TableNumberCardSvg({ tableLabel, template, topText, bottomText, numberF
 }
 
 function TableNumbersPanel({ projectId }: { projectId: string }) {
+  const { t } = useLanguage();
   const STORAGE_KEY = `table-numbers-settings-${projectId}`;
   const load = <T,>(key: string, def: T): T => {
     try { const v = JSON.parse(localStorage.getItem(STORAGE_KEY) ?? "{}")[key]; return v !== undefined ? v : def; } catch { return def; }
@@ -1282,8 +1283,8 @@ function TableNumbersPanel({ projectId }: { projectId: string }) {
 
       {/* Title */}
       <div className="text-center">
-        <h2 className="text-xl font-semibold text-foreground">Table Numbers</h2>
-        <p className="text-sm text-muted-foreground mt-1">Design and print table number cards for each table based on the seating plan.</p>
+        <h2 className="text-xl font-semibold text-foreground">{t("seating.tableNumbers.title")}</h2>
+        <p className="text-sm text-muted-foreground mt-1">{t("seating.tableNumbers.desc")}</p>
       </div>
 
       {/* Navigation + Card */}
@@ -1324,9 +1325,9 @@ function TableNumbersPanel({ projectId }: { projectId: string }) {
           onClick={() => setTemplateOpen(v => !v)}
           className="w-full flex items-center justify-between px-4 py-3 text-sm text-muted-foreground hover:bg-muted/30 rounded-xl"
         >
-          <span>This style applies to all cards</span>
+          <span>{t("seating.tableNumbers.styleNote")}</span>
           <div className="flex items-center gap-2">
-            <span className="text-foreground font-medium">Template — {templateLabel}</span>
+            <span className="text-foreground font-medium">{t("seating.tableNumbers.template", { label: templateLabel })}</span>
             <ChevronDown size={15} className={`transition-transform ${templateOpen ? "rotate-180" : ""}`} />
           </div>
         </button>
@@ -1334,13 +1335,13 @@ function TableNumbersPanel({ projectId }: { projectId: string }) {
         {/* Template dropdown */}
         {templateOpen && (
           <div className="border-t border-border/50">
-            {(["standard", "wide", "tall"] as TableNumTemplate[]).map(t => (
+            {(["standard", "wide", "tall"] as TableNumTemplate[]).map(tpl => (
               <button
-                key={t}
-                onClick={() => { setTemplate(t); setTemplateOpen(false); }}
-                className={`w-full text-left px-4 py-2.5 text-sm ${template === t ? "bg-primary text-primary-foreground" : "text-foreground hover:bg-muted/30"}`}
+                key={tpl}
+                onClick={() => { setTemplate(tpl); setTemplateOpen(false); }}
+                className={`w-full text-left px-4 py-2.5 text-sm ${template === tpl ? "bg-primary text-primary-foreground" : "text-foreground hover:bg-muted/30"}`}
               >
-                Template — {t.charAt(0).toUpperCase() + t.slice(1)}
+                {t("seating.tableNumbers.template", { label: tpl.charAt(0).toUpperCase() + tpl.slice(1) })}
               </button>
             ))}
           </div>
@@ -1384,7 +1385,7 @@ function TableNumbersPanel({ projectId }: { projectId: string }) {
             {/* Rounded corners */}
             <div className="py-2">
               <div className="flex items-center justify-between mb-1">
-                <span className="text-sm text-foreground/80">Rounded corners</span>
+                <span className="text-sm text-foreground/80">{t("seating.tableNumbers.roundedCorners")}</span>
               </div>
               <div className="flex items-center gap-2">
                 <span className="text-xs text-muted-foreground/70">0</span>
@@ -1401,7 +1402,7 @@ function TableNumbersPanel({ projectId }: { projectId: string }) {
       </div>
 
       {/* Total */}
-      <p className="text-lg font-medium text-foreground">Total {total} table cards</p>
+      <p className="text-lg font-medium text-foreground">{t("seating.tableNumbers.totalCards", { n: String(total) })}</p>
 
       {/* Buttons */}
       <div className="flex flex-col items-center gap-3 w-full max-w-xs">
@@ -1410,7 +1411,7 @@ function TableNumbersPanel({ projectId }: { projectId: string }) {
           className="w-full flex items-center justify-center gap-2 bg-primary/10 hover:bg-primary/20 text-primary rounded-full py-2.5 text-sm font-medium transition-colors"
         >
           <Eye size={16} />
-          Preview Result
+          {t("seating.tableNumbers.previewResult")}
         </button>
         <div className="flex items-center gap-3">
           <button
@@ -1418,26 +1419,25 @@ function TableNumbersPanel({ projectId }: { projectId: string }) {
             className="flex items-center gap-2 border border-border bg-card hover:bg-muted/30 text-foreground rounded-lg px-4 py-2 text-sm transition-colors"
           >
             <Download size={15} />
-            Download PDF file
+            {t("seating.downloadPdf")}
           </button>
           {popupBlocked
-            ? <span className="text-xs text-destructive">Popup blocked — allow popups for this site and try again.</span>
+            ? <span className="text-xs text-destructive">{t("seating.popupBlocked")}</span>
             : <span className="text-muted-foreground/70 text-sm">←</span>}
         </div>
       </div>
 
       {/* Recommendation */}
       <div className="w-full max-w-sm bg-card border border-border rounded-xl p-4">
-        <p className="text-sm font-semibold text-foreground mb-1">Recommendation</p>
+        <p className="text-sm font-semibold text-foreground mb-1">{t("seating.recommendation")}</p>
         <p className="text-xs text-muted-foreground">
-          For printing, opt for thick paper! You&apos;re welcome to select any variety of subtly colored,
-          slightly textured paper for an elevated aesthetic.
+          {t("seating.recommendationText")}
         </p>
       </div>
 
       {/* Gallery */}
       <div className="w-full max-w-2xl">
-        <h3 className="text-sm font-semibold text-foreground/80 mb-3">Gallery</h3>
+        <h3 className="text-sm font-semibold text-foreground/80 mb-3">{t("seating.tableNumbers.gallery")}</h3>
         <div className="flex gap-3 overflow-x-auto pb-2" style={{ scrollbarWidth: "none" }}>
           {GALLERY["table-numbers"].map((src, i) => (
             <div key={i} className="relative h-44 w-32 flex-shrink-0 overflow-hidden rounded-xl opacity-85 hover:opacity-100 transition-all">
@@ -1495,6 +1495,7 @@ function ReceptionMenuDiagram() {
 // ─── Reception Menu Panel ─────────────────────────────────────────────────────
 
 function ReceptionMenuPanel({ projectId, onEdit }: { projectId: string; onEdit: () => void }) {
+  const { t } = useLanguage();
   interface Sec { id: string; type: string; text: string; }
   interface Cfg {
     mainHeadingFont: string; mainHeadingSize: number;
@@ -1597,8 +1598,8 @@ function ReceptionMenuPanel({ projectId, onEdit }: { projectId: string; onEdit: 
 
       {/* Title */}
       <div className="mb-5 text-center">
-        <h2 className="text-lg font-light text-foreground">Reception Menu</h2>
-        <p className="text-sm text-muted-foreground/70">Print a beautiful menu card for each guest at the reception.</p>
+        <h2 className="text-lg font-light text-foreground">{t("seating.menu.title")}</h2>
+        <p className="text-sm text-muted-foreground/70">{t("seating.menu.desc")}</p>
       </div>
 
       {/* Menu card — renders actual saved content */}
@@ -1664,9 +1665,9 @@ function ReceptionMenuPanel({ projectId, onEdit }: { projectId: string; onEdit: 
           onClick={onEdit}
           className="text-sm font-medium text-primary underline underline-offset-2 hover:text-primary/80 transition-colors"
         >
-          Click here to edit layout
+          {t("seating.editLayout")}
         </button>
-        <p className="mt-1 text-xs text-muted-foreground/70">A1 portrait 23.4 inch × 33.1 inch</p>
+        <p className="mt-1 text-xs text-muted-foreground/70">{t("seating.a1Portrait")}</p>
       </div>
 
       {/* Download + arrow */}
@@ -1677,28 +1678,27 @@ function ReceptionMenuPanel({ projectId, onEdit }: { projectId: string; onEdit: 
             className="flex items-center gap-2 rounded-lg border border-border bg-card px-5 py-2 text-sm text-foreground/80 hover:bg-muted/30 transition-colors"
           >
             <Download className="h-4 w-4 text-primary" />
-            Download PDF file
+            {t("seating.downloadPdf")}
           </button>
           <span className="text-xs text-muted-foreground/70">←</span>
         </div>
         {popupBlocked && (
-          <span className="text-xs text-destructive">Popup blocked — allow popups for this site and try again.</span>
+          <span className="text-xs text-destructive">{t("seating.popupBlocked")}</span>
         )}
       </div>
 
       {/* Recommendation */}
       <div className="mt-6 rounded-xl border border-border bg-card px-5 py-4 shadow-sm">
-        <p className="mb-1.5 text-sm font-semibold text-foreground">Recommendation</p>
+        <p className="mb-1.5 text-sm font-semibold text-foreground">{t("seating.recommendation")}</p>
         <p className="text-xs leading-relaxed text-muted-foreground">
-          For printing, opt for thick paper! You&apos;re welcome to select any variety of{" "}
-          <span className="text-primary">subtly colored, textured card stock or paper.</span>
+          {t("seating.recommendationText")}
         </p>
       </div>
 
       {/* Gallery */}
       <div className="mt-6">
         <h3 className="mb-3 text-center text-sm font-medium text-foreground/80">
-          Design your reception menu
+          {t("seating.menu.gallery")}
         </h3>
         <div className="flex gap-3 overflow-x-auto pb-2" style={{ scrollbarWidth: "none" }}>
           {GALLERY.menu.map((src, i) => (
@@ -1787,6 +1787,7 @@ function AlphabeticalAtlasPanel({
   onEditLayout: () => void;
   projectId: string;
 }) {
+  const { t } = useLanguage();
   const [canvasTableMap, setCanvasTableMap] = useState<Map<string, string>>(new Map());
 
   useEffect(() => {
@@ -1821,8 +1822,8 @@ function AlphabeticalAtlasPanel({
     <div className="mx-auto max-w-2xl">
       {/* Page subtitle */}
       <div className="mb-5 text-center">
-        <h2 className="text-lg font-light text-foreground">Alphabetical Guest Atlas</h2>
-        <p className="text-sm text-muted-foreground/70">This layout is automatically generated from the reception layout.</p>
+        <h2 className="text-lg font-light text-foreground">{t("seating.atlas.title")}</h2>
+        <p className="text-sm text-muted-foreground/70">{t("seating.atlas.desc")}</p>
       </div>
 
       {/* Printable document card */}
@@ -1836,21 +1837,21 @@ function AlphabeticalAtlasPanel({
           onClick={onEditLayout}
           className="text-sm font-medium text-primary underline underline-offset-2 hover:text-primary/80 transition-colors"
         >
-          Click here to edit layout
+          {t("seating.editLayout")}
         </button>
-        <p className="mt-1 text-xs text-muted-foreground/70">A1 landscape 33.1 inch × 23.4 inch</p>
+        <p className="mt-1 text-xs text-muted-foreground/70">{t("seating.a1Landscape")}</p>
       </div>
 
       {/* Stats */}
       <div className="mt-2 text-center text-sm text-foreground/80">
-        <p>Total {guests.length} guests</p>
-        <p className="mt-0.5">Seated {seatedCount} guests</p>
+        <p>{t("seating.atlas.totalGuests", { n: String(guests.length) })}</p>
+        <p className="mt-0.5">{t("seating.atlas.seatedGuests", { n: String(seatedCount) })}</p>
         {seatedCount < guests.length && (
           <button
             onClick={onEditLayout}
             className="mt-1 text-xs text-primary underline underline-offset-1 hover:text-primary/80"
           >
-            Let&apos;s seat more guests on the layout
+            {t("seating.atlas.seatMore")}
           </button>
         )}
       </div>
@@ -1859,24 +1860,23 @@ function AlphabeticalAtlasPanel({
       <div className="mt-3 flex items-center justify-center gap-3">
         <button className="flex items-center gap-2 rounded-lg border border-border bg-card px-5 py-2 text-sm text-foreground/80 hover:bg-muted/30 transition-colors">
           <Download className="h-4 w-4 text-primary" />
-          Download PDF file
+          {t("seating.downloadPdf")}
         </button>
         <span className="text-xs text-muted-foreground/70">←</span>
       </div>
 
       {/* Recommendation */}
       <div className="mt-6 rounded-xl border border-border bg-card px-5 py-4 shadow-sm">
-        <p className="mb-1.5 text-sm font-semibold text-foreground">Recommendation</p>
+        <p className="mb-1.5 text-sm font-semibold text-foreground">{t("seating.recommendation")}</p>
         <p className="text-xs leading-relaxed text-muted-foreground">
-          For printing, opt for thick paper! You&apos;re welcome to select any variety of{" "}
-          <span className="text-primary">subtly colored, textured card stock or paper.</span>
+          {t("seating.recommendationText")}
         </p>
       </div>
 
       {/* Gallery */}
       <div className="mt-6">
         <h3 className="mb-3 text-center text-sm font-medium text-foreground/80">
-          Elegant alphabetical guest atlas seating chart
+          {t("seating.atlas.gallery")}
         </h3>
         <div ref={scrollRef} className="flex gap-3 overflow-x-auto pb-2" style={{ scrollbarWidth: "none" }}>
           {photos.map((src, i) => (
@@ -1926,6 +1926,7 @@ function AtlasPreviewDoc({
   layouts: Layout[];
   settings: AtlasSettings;
 }) {
+  const { t } = useLanguage();
   const tableMap = buildGuestTableMap(layouts);
 
   // Build grouped sections based on displayMode
@@ -1999,7 +2000,7 @@ function AtlasPreviewDoc({
 
       {guests.length === 0 ? (
         <div style={{ textAlign: "center", padding: "48px 0", color: "#aaa", fontSize: "13px" }}>
-          No guests yet. Add guests from the Guest List page.
+          {t("seating.atlas.noGuests")}
         </div>
       ) : (
         <div
@@ -2075,6 +2076,7 @@ function AtlasLayoutEditor({
   onClose: () => void;
   onSettingsChange: (s: AtlasSettings) => void;
 }) {
+  const { t } = useLanguage();
   function set<K extends keyof AtlasSettings>(key: K, value: AtlasSettings[K]) {
     onSettingsChange({ ...settings, [key]: value });
   }
@@ -2102,7 +2104,7 @@ function AtlasLayoutEditor({
           onClick={onClose}
           className="flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-sm text-foreground/80 hover:bg-muted transition-colors border border-border"
         >
-          <X className="h-3.5 w-3.5" /> Close
+          <X className="h-3.5 w-3.5" /> {t("seating.atlasEditor.close")}
         </button>
         <div className="flex items-center gap-2">
           <button
@@ -2116,10 +2118,10 @@ function AtlasLayoutEditor({
             }}
             className="flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-sm text-foreground/80 hover:bg-muted border border-border"
           >
-            <Download className="h-3.5 w-3.5 text-primary" /> File
+            <Download className="h-3.5 w-3.5 text-primary" /> {t("seating.atlasEditor.file")}
           </button>
           <button className="flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-sm text-white bg-primary hover:bg-primary/90">
-            <Plus className="h-3.5 w-3.5" /> Add element
+            <Plus className="h-3.5 w-3.5" /> {t("seating.atlasEditor.addEl")}
           </button>
         </div>
       </div>
@@ -2135,64 +2137,64 @@ function AtlasLayoutEditor({
 
         {/* Settings sidebar */}
         <div className="w-56 flex-shrink-0 overflow-y-auto bg-card border-l border-border p-4 space-y-4">
-          <h3 className="text-sm font-semibold text-foreground">Guest list</h3>
+          <h3 className="text-sm font-semibold text-foreground">{t("seating.atlasEditor.guestList")}</h3>
 
           {/* Display mode */}
           <div>
-            <p className="text-xs text-muted-foreground/70 mb-1">Display mode</p>
+            <p className="text-xs text-muted-foreground/70 mb-1">{t("seating.atlasEditor.displayMode")}</p>
             <select
               value={settings.displayMode}
               onChange={e => set("displayMode", e.target.value as AtlasSettings["displayMode"])}
               className="w-full rounded-lg border border-border px-2 py-1.5 text-sm text-foreground focus:outline-none"
             >
-              <option value="alphabetical">Alphabetical</option>
-              <option value="table">By table</option>
+              <option value="alphabetical">{t("seating.atlasEditor.alphabetical")}</option>
+              <option value="table">{t("seating.atlasEditor.byTable")}</option>
             </select>
           </div>
 
           {/* Group by */}
           <div>
-            <p className="text-xs text-muted-foreground/70 mb-1">Group by</p>
+            <p className="text-xs text-muted-foreground/70 mb-1">{t("seating.atlasEditor.groupBy")}</p>
             <select
               value={settings.groupBy}
               onChange={e => set("groupBy", e.target.value as AtlasSettings["groupBy"])}
               className="w-full rounded-lg border border-border px-2 py-1.5 text-sm text-foreground focus:outline-none"
             >
-              <option value="first">First name</option>
-              <option value="last">Last name</option>
+              <option value="first">{t("seating.atlasEditor.firstName")}</option>
+              <option value="last">{t("seating.atlasEditor.lastName")}</option>
             </select>
           </div>
 
           {/* Name format */}
           <div>
-            <p className="text-xs text-muted-foreground/70 mb-1">Name format</p>
+            <p className="text-xs text-muted-foreground/70 mb-1">{t("seating.atlasEditor.nameFormat")}</p>
             <select
               value={settings.nameFormat}
               onChange={e => set("nameFormat", e.target.value as AtlasSettings["nameFormat"])}
               className="w-full rounded-lg border border-border px-2 py-1.5 text-sm text-foreground focus:outline-none"
             >
-              <option value="first-only">First name only</option>
-              <option value="full">Full name</option>
-              <option value="last-first">Last name, First</option>
+              <option value="first-only">{t("seating.atlasEditor.firstOnly")}</option>
+              <option value="full">{t("seating.atlasEditor.fullName")}</option>
+              <option value="last-first">{t("seating.atlasEditor.lastFirst")}</option>
             </select>
           </div>
 
           {/* Sort within group */}
           <div>
-            <p className="text-xs text-muted-foreground/70 mb-1">Sort within group</p>
+            <p className="text-xs text-muted-foreground/70 mb-1">{t("seating.atlasEditor.sortWithin")}</p>
             <select
               value={settings.sortWithin}
               onChange={e => set("sortWithin", e.target.value as AtlasSettings["sortWithin"])}
               className="w-full rounded-lg border border-border px-2 py-1.5 text-sm text-foreground focus:outline-none"
             >
-              <option value="first">By first name</option>
-              <option value="last">By last name</option>
+              <option value="first">{t("seating.atlasEditor.byFirst")}</option>
+              <option value="last">{t("seating.atlasEditor.byLast")}</option>
             </select>
           </div>
 
           {/* Alphabet font */}
           <div>
-            <p className="text-xs text-muted-foreground/70 mb-1">Alphabet font</p>
+            <p className="text-xs text-muted-foreground/70 mb-1">{t("seating.atlasEditor.alphabetFont")}</p>
             <div className="flex items-center gap-1 rounded-lg border border-border px-1 py-1">
               <button
                 onClick={() => set("alphabetFont", cycleFont(ALPHABET_FONTS, settings.alphabetFont, -1))}
@@ -2208,7 +2210,7 @@ function AtlasLayoutEditor({
 
           {/* Names font */}
           <div>
-            <p className="text-xs text-muted-foreground/70 mb-1">Names font</p>
+            <p className="text-xs text-muted-foreground/70 mb-1">{t("seating.atlasEditor.namesFont")}</p>
             <div className="flex items-center gap-1 rounded-lg border border-border px-1 py-1">
               <button
                 onClick={() => set("namesFont", cycleFont(NAMES_FONTS, settings.namesFont, -1))}
@@ -2225,8 +2227,8 @@ function AtlasLayoutEditor({
           {/* Toggles */}
           <div className="space-y-2.5">
             {([
-              { key: "autoColumns",    label: "Auto columns"    },
-              { key: "underlineNames", label: "Underline names" },
+              { key: "autoColumns",    label: t("seating.atlasEditor.autoColumns")    },
+              { key: "underlineNames", label: t("seating.atlasEditor.underlineNames") },
             ] as { key: keyof AtlasSettings; label: string }[]).map(({ key, label }) => (
               <label key={key} className="flex items-center justify-between cursor-pointer">
                 <span className="text-xs text-foreground/80">{label}</span>
@@ -2361,6 +2363,7 @@ export default function SeatingPage() {
   const { id: projectId } = useParams<{ id: string }>();
   const router = useRouter();
   const local = isLocal(projectId);
+  const { t } = useLanguage();
 
   const { tier, loading: tierLoading } = usePlannerTier(projectId);
   const [showUpgrade, setShowUpgrade] = useState(false);
@@ -2536,6 +2539,17 @@ export default function SeatingPage() {
 
   const activeTabIndex = TABS.findIndex(t => t.id === activeTab);
 
+  // TAB_LABELS maps tab id → [line1, line2] translated strings
+  const TAB_LABELS: Record<string, [string, string]> = {
+    ceremony:        [t("seating.tab.ceremony"),     t("seating.tab.ceremonyLayout")],
+    reception:       [t("seating.tab.reception"),    t("seating.tab.receptionLayout")],
+    atlas:           [t("seating.tab.atlas"),         t("seating.tab.atlasLabel")],
+    cards:           [t("seating.tab.cards"),         t("seating.tab.cardsLabel")],
+    "name-cards":    [t("seating.tab.nameCards"),     t("seating.tab.nameCardsLabel")],
+    "table-numbers": [t("seating.tab.tableNumbers"),  t("seating.tab.tableNumbersLabel")],
+    menu:            [t("seating.tab.menu"),           t("seating.tab.menuLabel")],
+  };
+
   return (
     <>
     <div className="min-h-full bg-[#ede9f0] px-4 py-10">
@@ -2543,10 +2557,9 @@ export default function SeatingPage() {
 
         {/* Title */}
         <div className="mb-6 text-center">
-          <h1 className="text-2xl font-semibold text-foreground">Seating Chart &amp; Supplies</h1>
+          <h1 className="text-2xl font-semibold text-foreground">{t("seating.heading")}</h1>
           <p className="mx-auto mt-1.5 max-w-lg text-sm text-muted-foreground">
-            These tools make it easy to design your seating chart and all the related details.
-            Everything is connected through your guest list, so changes update automatically.
+            {t("seating.headingDesc")}
           </p>
           <div className="mt-3 flex items-center justify-center">
             <button
@@ -2559,7 +2572,7 @@ export default function SeatingPage() {
               className="flex items-center gap-2 rounded-lg border border-border bg-card px-4 py-1.5 text-sm text-foreground/80 hover:bg-muted/30 transition-colors"
             >
               <Download className="h-4 w-4 text-primary" />
-              Export Guest List CSV
+              {t("seating.exportCsvBtn")}
             </button>
           </div>
         </div>
@@ -2569,6 +2582,7 @@ export default function SeatingPage() {
           {TABS.map((tab, i) => {
             const isEliteTab = ELITE_TABS.includes(tab.id);
             const locked = isEliteTab && !isElite(tier);
+            const tabLines = TAB_LABELS[tab.id] ?? tab.lines;
             return (
               <button
                 key={tab.id}
@@ -2584,7 +2598,7 @@ export default function SeatingPage() {
                     : "border-border bg-card/70 text-muted-foreground hover:bg-card hover:text-foreground"
                 )}
               >
-                {tab.lines.map((line, li) => <div key={li}>{line}</div>)}
+                {tabLines.map((line, li) => <div key={li}>{line}</div>)}
                 {locked && (
                   <span className="absolute -top-1 -right-1 flex h-4 w-4 items-center justify-center rounded-full bg-primary">
                     <Lock className="h-2.5 w-2.5 text-white" />
@@ -2601,8 +2615,8 @@ export default function SeatingPage() {
         {/* Tab content */}
         {activeTab === "ceremony" && (
           <LayoutPanel
-            title="Ceremony Layout"
-            subtitle="Prepare and print your ceremony layout."
+            title={t("seating.ceremony.gallery")}
+            subtitle={t("seating.ceremony.subtitle")}
             diagram={
               ceremonyElements && ceremonyElements.length > 0
                 ? <CeremonyLayoutPreview elements={ceremonyElements} guests={guests} venueImage={ceremonyVenueBg} />
@@ -2617,8 +2631,8 @@ export default function SeatingPage() {
         {activeTab === "reception" && (
           <div>
             <LayoutPanel
-              title="Reception Layout"
-              subtitle="Prepare and print your reception layout."
+              title={t("seating.reception.gallery")}
+              subtitle={t("seating.reception.subtitle")}
               diagram={
                 receptionElements && receptionElements.length > 0
                   ? <CeremonyLayoutPreview elements={receptionElements} guests={guests} svgId="reception-layout-svg" venueImage={receptionVenueBg} />
@@ -2640,7 +2654,7 @@ export default function SeatingPage() {
                 className="flex items-center gap-2 rounded-lg border border-border bg-card px-5 py-2 text-sm text-foreground/80 hover:bg-muted/30 transition-colors disabled:opacity-40"
               >
                 <Download className="h-4 w-4 text-primary" />
-                Export Guest CSV
+                {t("seating.reception.exportCsv")}
               </button>
             </div>
 
@@ -2649,7 +2663,7 @@ export default function SeatingPage() {
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2">
                   <UtensilsCrossed className="h-4 w-4 text-primary" />
-                  <span className="text-sm font-semibold text-foreground">Catering Mode</span>
+                  <span className="text-sm font-semibold text-foreground">{t("seating.cateringMode")}</span>
                 </div>
                 <button
                   onClick={() => setCateringMode(m => !m)}
@@ -2664,23 +2678,23 @@ export default function SeatingPage() {
                   )} />
                 </button>
               </div>
-              <p className="mt-1 text-xs text-muted-foreground/70">Show a dietary breakdown per table for catering staff.</p>
+              <p className="mt-1 text-xs text-muted-foreground/70">{t("seating.cateringModeDesc")}</p>
 
               {cateringMode && receptionElements && (
                 <div className="mt-4 overflow-x-auto">
                   {(() => {
                     const summary = buildCateringSummary(receptionElements, guests);
-                    if (summary.length === 0) return <p className="text-xs text-muted-foreground/70">No tables found in the reception layout.</p>;
+                    if (summary.length === 0) return <p className="text-xs text-muted-foreground/70">{t("seating.noTablesFound")}</p>;
                     return (
                       <table className="w-full text-xs border-collapse">
                         <thead>
                           <tr className="border-b border-border text-muted-foreground">
-                            <th className="py-1.5 text-start font-medium">Table</th>
-                            <th className="py-1.5 text-center font-medium">Total</th>
-                            <th className="py-1.5 text-center font-medium">Vegan</th>
-                            <th className="py-1.5 text-center font-medium">Gluten-free</th>
-                            <th className="py-1.5 text-center font-medium">Vegetarian</th>
-                            <th className="py-1.5 text-center font-medium">Standard</th>
+                            <th className="py-1.5 text-start font-medium">{t("seating.colTable")}</th>
+                            <th className="py-1.5 text-center font-medium">{t("seating.colTotal")}</th>
+                            <th className="py-1.5 text-center font-medium">{t("seating.colVegan")}</th>
+                            <th className="py-1.5 text-center font-medium">{t("seating.colGlutenFree")}</th>
+                            <th className="py-1.5 text-center font-medium">{t("seating.colVegetarian")}</th>
+                            <th className="py-1.5 text-center font-medium">{t("seating.colStandard")}</th>
                           </tr>
                         </thead>
                         <tbody>
@@ -2704,8 +2718,8 @@ export default function SeatingPage() {
 
             {/* QR Entrance Mode */}
             <div className="mx-auto mt-6 max-w-3xl rounded-xl border border-border bg-card px-5 py-4 shadow-sm">
-              <p className="mb-2 text-sm font-semibold text-foreground">QR Entrance Mode</p>
-              <p className="mb-3 text-xs text-muted-foreground/70">Share this link with venue staff to look up guests on arrival.</p>
+              <p className="mb-2 text-sm font-semibold text-foreground">{t("seating.qrMode")}</p>
+              <p className="mb-3 text-xs text-muted-foreground/70">{t("seating.qrModeDesc")}</p>
               <div className="flex flex-col gap-2">
                 <div className="rounded-lg border-2 border-dashed border-border bg-muted/30 px-4 py-3 min-w-0">
                   <p className="truncate font-mono text-xs text-foreground/80">{`${origin}/seat-finder/${projectId}`}</p>
@@ -2718,7 +2732,7 @@ export default function SeatingPage() {
                     }}
                     className="rounded-lg border border-border bg-card px-3 py-1.5 text-xs text-foreground/80 hover:bg-muted/30 transition-colors"
                   >
-                    Copy link
+                    {t("seating.copyLink")}
                   </button>
                   <a
                     href={`/seat-finder/${projectId}`}
@@ -2726,7 +2740,7 @@ export default function SeatingPage() {
                     rel="noopener noreferrer"
                     className="flex flex-1 items-center justify-center gap-1.5 rounded-lg bg-primary px-3 py-1.5 text-xs font-medium text-white hover:bg-primary/90 transition-colors"
                   >
-                    Open Entrance Scanner
+                    {t("seating.openScanner")}
                   </a>
                 </div>
               </div>

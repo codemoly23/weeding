@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useCallback, useRef } from "react";
 import { Plus, X, MapPin, Briefcase, Building2, Loader2, Search, Pencil, Check, Globe } from "lucide-react";
+import { useLanguage } from "@/lib/i18n/language-context";
 
 type OptionType = "PLACE" | "SERVICE" | "LOCATION";
 type LocationGroup = "Sweden" | "International";
@@ -9,9 +10,9 @@ type Option = { id: string; name: string; type: OptionType; icon?: string | null
 
 interface SectionConfig {
   type: OptionType;
-  title: string;
-  description: string;
-  placeholder: string;
+  titleKey: string;
+  descriptionKey: string;
+  placeholderKey: string;
   icon: React.ReactNode;
   color: string;
 }
@@ -19,23 +20,24 @@ interface SectionConfig {
 const SECTIONS: SectionConfig[] = [
   {
     type: "PLACE",
-    title: "Place",
-    description: "Venue types and places (e.g. Garden, Ballroom, Beach)",
-    placeholder: "e.g. Outdoor Garden",
+    titleKey: "admin.serviceLocations.place",
+    descriptionKey: "admin.serviceLocations.placeDesc",
+    placeholderKey: "admin.serviceLocations.placePlaceholder",
     icon: <Building2 className="h-5 w-5" />,
     color: "text-[var(--admin-primary)] bg-[var(--ast-hold-bg)] border-[var(--ast-hold-border)]",
   },
   {
     type: "SERVICE",
-    title: "Service",
-    description: "Service categories (e.g. Photography, Catering, DJ)",
-    placeholder: "e.g. Photography",
+    titleKey: "admin.serviceLocations.service",
+    descriptionKey: "admin.serviceLocations.serviceDesc",
+    placeholderKey: "admin.serviceLocations.servicePlaceholder",
     icon: <Briefcase className="h-5 w-5" />,
     color: "text-[var(--ast-processing-icon)] bg-[var(--ast-processing-bg)] border-[var(--ast-processing-border)]",
   },
 ];
 
 function IconEditCell({ opt, onUpdate }: { opt: Option; onUpdate: (id: string, icon: string) => Promise<void> }) {
+  const { t } = useLanguage();
   const [editing, setEditing] = useState(false);
   const [val, setVal] = useState(opt.icon ?? "");
   const [saving, setSaving] = useState(false);
@@ -63,7 +65,7 @@ function IconEditCell({ opt, onUpdate }: { opt: Option; onUpdate: (id: string, i
           value={val}
           onChange={(e) => setVal(e.target.value)}
           onKeyDown={(e) => { if (e.key === "Enter") handleSave(); if (e.key === "Escape") setEditing(false); }}
-          placeholder="icon name"
+          placeholder={t("admin.serviceLocations.iconName")}
           className="w-28 rounded border border-primary/40 bg-background px-1.5 py-0.5 text-xs focus:outline-none focus:ring-1 focus:ring-ring"
         />
         <button
@@ -83,13 +85,13 @@ function IconEditCell({ opt, onUpdate }: { opt: Option; onUpdate: (id: string, i
   return (
     <button
       onClick={() => { setVal(opt.icon ?? ""); setEditing(true); }}
-      title="Edit icon"
+      title={t("admin.serviceLocations.editIcon")}
       className="flex items-center gap-1 shrink-0 rounded px-1.5 py-0.5 text-xs font-mono text-muted-foreground hover:bg-muted hover:text-foreground transition-colors"
     >
       {opt.icon ? (
         <span className="text-[var(--admin-primary)]">{opt.icon}</span>
       ) : (
-        <span className="text-muted-foreground/50 italic">icon</span>
+        <span className="text-muted-foreground/50 italic">{t("admin.serviceLocations.icon")}</span>
       )}
       <Pencil className="h-2.5 w-2.5 opacity-50" />
     </button>
@@ -104,6 +106,7 @@ function Section({ config, options, onAdd, onDelete, onUpdateIcon, loading }: {
   onUpdateIcon: (id: string, icon: string) => Promise<void>;
   loading: boolean;
 }) {
+  const { t } = useLanguage();
   const [input, setInput] = useState("");
   const [iconInput, setIconInput] = useState("");
   const [saving, setSaving] = useState(false);
@@ -133,8 +136,8 @@ function Section({ config, options, onAdd, onDelete, onUpdateIcon, loading }: {
           {config.icon}
         </span>
         <div className="flex-1 min-w-0">
-          <h2 className="text-sm font-semibold text-foreground">{config.title}</h2>
-          <p className="text-xs text-muted-foreground truncate">{config.description}</p>
+          <h2 className="text-sm font-semibold text-foreground">{t(config.titleKey)}</h2>
+          <p className="text-xs text-muted-foreground truncate">{t(config.descriptionKey)}</p>
         </div>
         <span className="shrink-0 rounded-full bg-muted px-2.5 py-0.5 text-xs font-medium text-muted-foreground">
           {options.length}
@@ -147,7 +150,7 @@ function Section({ config, options, onAdd, onDelete, onUpdateIcon, loading }: {
             value={input}
             onChange={(e) => setInput(e.target.value)}
             onKeyDown={(e) => { if (e.key === "Enter") { e.preventDefault(); handleAdd(); } }}
-            placeholder={config.placeholder}
+            placeholder={t(config.placeholderKey)}
             className="flex-1 rounded-lg border border-input bg-background px-3 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-ring"
           />
           <button
@@ -156,13 +159,13 @@ function Section({ config, options, onAdd, onDelete, onUpdateIcon, loading }: {
             className="flex items-center gap-1.5 rounded-lg bg-primary px-3 py-1.5 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/90 disabled:opacity-40"
           >
             {saving ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <Plus className="h-3.5 w-3.5" />}
-            Add
+            {t("common.add")}
           </button>
         </div>
         <input
           value={iconInput}
           onChange={(e) => setIconInput(e.target.value)}
-          placeholder="Icon name (optional, e.g. Heart, Home, Hotel)"
+          placeholder={t("admin.serviceLocations.iconPlaceholder")}
           className="w-full rounded-lg border border-input bg-background px-3 py-1.5 text-xs text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring"
         />
       </div>
@@ -174,7 +177,7 @@ function Section({ config, options, onAdd, onDelete, onUpdateIcon, loading }: {
             <input
               value={search}
               onChange={(e) => setSearch(e.target.value)}
-              placeholder="Search..."
+              placeholder={t("common.search")}
               className="w-full rounded-md border border-input bg-background pl-8 pr-3 py-1.5 text-xs focus:outline-none focus:ring-1 focus:ring-ring"
             />
           </div>
@@ -189,7 +192,7 @@ function Section({ config, options, onAdd, onDelete, onUpdateIcon, loading }: {
         ) : filtered.length === 0 ? (
           <div className="flex flex-col items-center justify-center py-10 text-center">
             <p className="text-xs text-muted-foreground">
-              {search ? "No matches found" : `No ${config.title.toLowerCase()} options yet`}
+              {search ? t("common.noMatches") : t("admin.serviceLocations.noOptions", { type: t(config.titleKey).toLowerCase() })}
             </p>
           </div>
         ) : (
@@ -223,6 +226,7 @@ function LocationSection({ options, onAdd, onDelete, onUpdateIcon, loading }: {
   onUpdateIcon: (id: string, icon: string) => Promise<void>;
   loading: boolean;
 }) {
+  const { t } = useLanguage();
   const [activeTab, setActiveTab] = useState<LocationGroup>("Sweden");
   const [input, setInput] = useState("");
   const [iconInput, setIconInput] = useState("");
@@ -258,8 +262,8 @@ function LocationSection({ options, onAdd, onDelete, onUpdateIcon, loading }: {
           <MapPin className="h-5 w-5" />
         </span>
         <div className="flex-1 min-w-0">
-          <h2 className="text-sm font-semibold text-foreground">Location</h2>
-          <p className="text-xs text-muted-foreground truncate">Cities and regions grouped by Sweden &amp; International</p>
+          <h2 className="text-sm font-semibold text-foreground">{t("admin.serviceLocations.location")}</h2>
+          <p className="text-xs text-muted-foreground truncate">{t("admin.serviceLocations.locationDesc")}</p>
         </div>
         <span className="shrink-0 rounded-full bg-muted px-2.5 py-0.5 text-xs font-medium text-muted-foreground">
           {options.length}
@@ -286,7 +290,7 @@ function LocationSection({ options, onAdd, onDelete, onUpdateIcon, loading }: {
               ) : (
                 <Globe className="h-3.5 w-3.5" />
               )}
-              {tab}
+              {t(`admin.serviceLocations.group.${tab}`)}
               <span className={`rounded-full px-1.5 py-0.5 text-[10px] font-semibold ${isActive ? "bg-primary/10 text-primary" : "bg-muted text-muted-foreground"}`}>
                 {count}
               </span>
@@ -302,7 +306,7 @@ function LocationSection({ options, onAdd, onDelete, onUpdateIcon, loading }: {
             value={input}
             onChange={(e) => setInput(e.target.value)}
             onKeyDown={(e) => { if (e.key === "Enter") { e.preventDefault(); handleAdd(); } }}
-            placeholder={activeTab === "Sweden" ? "e.g. Stockholm" : "e.g. London, UK"}
+            placeholder={activeTab === "Sweden" ? t("admin.serviceLocations.swedenPlaceholder") : t("admin.serviceLocations.internationalPlaceholder")}
             className="flex-1 min-w-0 rounded-lg border border-input bg-background px-3 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-ring"
           />
           <button
@@ -311,13 +315,13 @@ function LocationSection({ options, onAdd, onDelete, onUpdateIcon, loading }: {
             className="flex flex-shrink-0 items-center gap-1.5 rounded-lg bg-primary px-3 py-1.5 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/90 disabled:opacity-40 whitespace-nowrap"
           >
             {saving ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <Plus className="h-3.5 w-3.5" />}
-            Add to {activeTab}
+            {t("admin.serviceLocations.addToGroup", { group: t(`admin.serviceLocations.group.${activeTab}`) })}
           </button>
         </div>
         <input
           value={iconInput}
           onChange={(e) => setIconInput(e.target.value)}
-          placeholder={`Icon name (optional, e.g. ${activeTab === "Sweden" ? "MapPin" : "Globe"})`}
+          placeholder={t("admin.serviceLocations.iconPlaceholderGroup", { icon: activeTab === "Sweden" ? "MapPin" : "Globe" })}
           className="w-full rounded-lg border border-input bg-background px-3 py-1.5 text-xs text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring"
         />
       </div>
@@ -330,7 +334,7 @@ function LocationSection({ options, onAdd, onDelete, onUpdateIcon, loading }: {
             <input
               value={search}
               onChange={(e) => setSearch(e.target.value)}
-              placeholder="Search..."
+              placeholder={t("common.search")}
               className="w-full rounded-md border border-input bg-background pl-8 pr-3 py-1.5 text-xs focus:outline-none focus:ring-1 focus:ring-ring"
             />
           </div>
@@ -346,7 +350,7 @@ function LocationSection({ options, onAdd, onDelete, onUpdateIcon, loading }: {
         ) : filtered.length === 0 ? (
           <div className="flex flex-col items-center justify-center py-10 text-center">
             <p className="text-xs text-muted-foreground">
-              {search ? "No matches found" : `No ${activeTab} locations yet`}
+              {search ? t("common.noMatches") : t("admin.serviceLocations.noLocations", { group: t(`admin.serviceLocations.group.${activeTab}`) })}
             </p>
           </div>
         ) : (
@@ -374,6 +378,7 @@ function LocationSection({ options, onAdd, onDelete, onUpdateIcon, loading }: {
 }
 
 export default function ServiceLocationsPage() {
+  const { t } = useLanguage();
   const [options, setOptions] = useState<Option[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -422,23 +427,23 @@ export default function ServiceLocationsPage() {
   return (
     <div className="space-y-6">
       {/* Header */}
-      <div className="rounded-2xl bg-white border border-border p-6">
+      <div className="rounded-2xl bg-card border border-border p-6">
         <div className="flex items-start justify-between gap-4">
           <div className="flex items-center gap-4">
             <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-[var(--ast-hold-bg)] border border-[var(--ast-hold-border)]">
               <MapPin className="h-6 w-6 text-[var(--admin-primary)]" />
             </div>
             <div>
-              <h1 className="text-2xl font-bold text-gray-900">Search Options</h1>
+              <h1 className="text-2xl font-bold text-foreground">{t("admin.serviceLocations.title")}</h1>
               <p className="mt-0.5 text-sm text-muted-foreground">
-                Manage Place, Service, and Location options shown in the homepage search bar
+                {t("admin.serviceLocations.subtitle")}
               </p>
             </div>
           </div>
           {!loading && (
             <div className="shrink-0 rounded-xl bg-[var(--ast-hold-bg)] border border-[var(--ast-hold-border)] px-4 py-2 text-center">
               <p className="text-2xl font-bold text-[var(--ast-hold-text)]">{total}</p>
-              <p className="text-xs text-muted-foreground">Total options</p>
+              <p className="text-xs text-muted-foreground">{t("admin.serviceLocations.totalOptions")}</p>
             </div>
           )}
         </div>

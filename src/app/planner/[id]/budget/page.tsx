@@ -553,7 +553,7 @@ export default function BudgetPage() {
         <input
           value={filter}
           onChange={e => setFilter(e.target.value)}
-          placeholder="Filter"
+          placeholder={t("budget.filter")}
           className="w-full rounded-xl border border-border bg-card py-2.5 pl-9 pr-4 text-sm focus:border-primary focus:outline-none shadow-sm"
         />
       </div>
@@ -568,7 +568,7 @@ export default function BudgetPage() {
             onChange={e => setNewCatName(e.target.value)}
             onBlur={addNewCategory}
             onKeyDown={e => { if (e.key === "Enter") addNewCategory(); if (e.key === "Escape") { setShowNewCat(false); setNewCatName(""); } }}
-            placeholder="Category name…"
+            placeholder={t("budget.catNamePlaceholder")}
             className="flex-1 bg-transparent text-sm font-semibold text-foreground placeholder:text-muted-foreground/50 focus:outline-none"
           />
         </div>
@@ -615,8 +615,8 @@ export default function BudgetPage() {
                   <div className="border-t border-border">
                     {/* Column headers */}
                     <div className="flex items-center px-4 py-2 bg-muted/30">
-                      <span className="flex-1 text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">Title</span>
-                      <span className="w-28 text-left text-[11px] font-semibold uppercase tracking-wider text-muted-foreground flex-shrink-0">Cost</span>
+                      <span className="flex-1 text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">{t("budget.colTitle")}</span>
+                      <span className="w-28 text-left text-[11px] font-semibold uppercase tracking-wider text-muted-foreground flex-shrink-0">{t("budget.colCost")}</span>
                     </div>
 
                     {/* Item rows */}
@@ -630,7 +630,7 @@ export default function BudgetPage() {
                           <input
                             type="checkbox"
                             checked={isPaid}
-                            title="Mark as paid"
+                            title={t("budget.markAsPaid")}
                             onChange={async e => {
                               const newPaid = e.target.checked ? (parseFloat(inlinePlanned[item.id] ?? "") || item.planned) : 0;
                               const data = { description: item.description, planned: item.planned, actual: item.actual, paid: newPaid, status: e.target.checked ? "PAID" as const : "UNPAID" as const, notes: item.notes ?? null };
@@ -688,7 +688,7 @@ export default function BudgetPage() {
                             if (e.key === "Enter") (e.currentTarget.nextElementSibling?.querySelector("input") as HTMLInputElement | null)?.focus();
                             if (e.key === "Escape") { setAddingItemCatId(null); setNewItemDesc(""); setNewItemPlanned(""); }
                           }}
-                          placeholder="Item description…"
+                          placeholder={t("budget.itemDescPlaceholder")}
                           className="flex-1 min-w-0 bg-transparent text-sm text-foreground/80 placeholder:text-muted-foreground focus:outline-none border-b border-primary/30"
                         />
                         <div className="flex items-center gap-0.5 w-28 flex-shrink-0">
@@ -719,7 +719,7 @@ export default function BudgetPage() {
                         className="flex items-center gap-1.5 text-sm text-primary hover:text-primary transition-colors"
                       >
                         <PlusCircle className="h-4 w-4" />
-                        Add new item
+                        {t("budget.addNewItem")}
                       </button>
                       <span className={`text-sm font-semibold tabular-nums ${catActualTotal === 0 ? "text-muted-foreground/50" : "text-foreground/80"}`}>
                         $ {fmt(catActualTotal)}
@@ -761,14 +761,14 @@ export default function BudgetPage() {
             </div>
             <div className="border-t border-border px-5 py-3 flex items-center justify-between">
               <p className="text-xs text-muted-foreground">
-                {categories.length} {categories.length === 1 ? "category" : "categories"} · {categories.reduce((s, c) => s + c.items.length, 0)} items
+                {categories.length} {categories.length === 1 ? t("budget.categorySingular") : t("budget.categoriesPlural")} · {categories.reduce((s, c) => s + c.items.length, 0)} {t("budget.itemsLabel")}
               </p>
               <button
                 onClick={exportBudgetPDF}
                 className="flex items-center gap-2 rounded-xl border border-border bg-card px-4 py-2 text-sm font-medium text-foreground/80 hover:bg-muted transition-colors shadow-sm"
               >
                 <Download className="h-4 w-4 text-muted-foreground" />
-                Download PDF
+                {t("budget.downloadPdf")}
               </button>
             </div>
           </div>

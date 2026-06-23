@@ -16,6 +16,7 @@ import {
 } from "@/components/ui/table";
 import { toast } from "sonner";
 import { formatDate } from "@/lib/utils";
+import { useLanguage } from "@/lib/i18n/language-context";
 
 interface LegalPage {
   id: string;
@@ -35,6 +36,7 @@ const defaultPages = [
 ];
 
 export default function LegalPagesAdmin() {
+  const { t } = useLanguage();
   const [pages, setPages] = useState<LegalPage[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -49,7 +51,7 @@ export default function LegalPagesAdmin() {
       const data = await res.json();
       setPages(data);
     } catch (error) {
-      toast.error("Failed to load legal pages");
+      toast.error(t("admin.legal.loadFailed"));
     } finally {
       setLoading(false);
     }
@@ -65,10 +67,10 @@ export default function LegalPagesAdmin() {
 
       if (!res.ok) throw new Error("Failed to update");
 
-      toast.success(`Page ${page.isActive ? "hidden" : "published"}`);
+      toast.success(page.isActive ? t("admin.legal.hiddenToast") : t("admin.legal.publishedToast"));
       fetchPages();
     } catch (error) {
-      toast.error("Failed to update page status");
+      toast.error(t("admin.legal.updateFailed"));
     }
   }
 
@@ -89,15 +91,15 @@ export default function LegalPagesAdmin() {
       {/* Header */}
       <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <div>
-          <h1 className="text-2xl font-bold">Legal Pages</h1>
+          <h1 className="text-2xl font-bold">{t("admin.legal.title")}</h1>
           <p className="text-muted-foreground">
-            Manage legal & policy pages (Terms, Privacy, Refund)
+            {t("admin.legal.subtitle")}
           </p>
         </div>
         <Link href="/admin/content/legal/new" className="self-start sm:self-auto">
           <Button>
             <Plus className="mr-2 h-4 w-4" />
-            Add Legal Page
+            {t("admin.legal.add")}
           </Button>
         </Link>
       </div>
@@ -106,9 +108,9 @@ export default function LegalPagesAdmin() {
       {missingPages.length > 0 && (
         <Card className="border-[var(--ast-warning-border)] bg-[var(--ast-warning-bg)]">
           <CardHeader className="pb-3">
-            <CardTitle className="text-lg text-[var(--ast-warning-text)]">Recommended Pages</CardTitle>
+            <CardTitle className="text-lg text-[var(--ast-warning-text)]">{t("admin.legal.recommended")}</CardTitle>
             <CardDescription className="text-[var(--ast-warning-text)]">
-              The following recommended pages haven&apos;t been created yet:
+              {t("admin.legal.recommendedDesc")}
             </CardDescription>
           </CardHeader>
           <CardContent>
@@ -117,7 +119,7 @@ export default function LegalPagesAdmin() {
                 <Link key={page.slug} href={`/admin/content/legal/new?slug=${page.slug}`}>
                   <Button variant="outline" size="sm" className="border-[var(--ast-warning-border)] hover:bg-[var(--ast-warning-bg)]">
                     <Plus className="mr-1 h-3 w-3" />
-                    Create {page.title}
+                    {t("admin.legal.createNamed", { title: page.title })}
                   </Button>
                 </Link>
               ))}
@@ -129,20 +131,20 @@ export default function LegalPagesAdmin() {
       {/* Pages Table */}
       <Card>
         <CardHeader>
-          <CardTitle>All Legal Pages</CardTitle>
+          <CardTitle>{t("admin.legal.allPages")}</CardTitle>
         </CardHeader>
         <CardContent>
           {pages.length === 0 ? (
             <div className="flex flex-col items-center justify-center py-12 text-center">
               <FileText className="h-12 w-12 text-muted-foreground/50" />
-              <h3 className="mt-4 text-lg font-medium">No legal pages yet</h3>
+              <h3 className="mt-4 text-lg font-medium">{t("admin.legal.noPages")}</h3>
               <p className="mt-2 text-sm text-muted-foreground">
-                Create your first legal page to get started
+                {t("admin.legal.noPagesDesc")}
               </p>
               <Link href="/admin/content/legal/new" className="mt-4">
                 <Button>
                   <Plus className="mr-2 h-4 w-4" />
-                  Create Legal Page
+                  {t("admin.legal.create")}
                 </Button>
               </Link>
             </div>
@@ -150,12 +152,12 @@ export default function LegalPagesAdmin() {
             <Table>
               <TableHeader>
                 <TableRow>
-                  <TableHead>Title</TableHead>
-                  <TableHead>URL</TableHead>
-                  <TableHead>Status</TableHead>
-                  <TableHead>Version</TableHead>
-                  <TableHead>Last Updated</TableHead>
-                  <TableHead className="text-right">Actions</TableHead>
+                  <TableHead>{t("common.title")}</TableHead>
+                  <TableHead>{t("common.url")}</TableHead>
+                  <TableHead>{t("common.status")}</TableHead>
+                  <TableHead>{t("common.version")}</TableHead>
+                  <TableHead>{t("admin.legal.lastUpdated")}</TableHead>
+                  <TableHead className="text-right">{t("common.actions")}</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
@@ -169,7 +171,7 @@ export default function LegalPagesAdmin() {
                     </TableCell>
                     <TableCell>
                       <Badge variant={page.isActive ? "default" : "secondary"}>
-                        {page.isActive ? "Active" : "Hidden"}
+                        {page.isActive ? t("common.active") : t("common.hidden")}
                       </Badge>
                     </TableCell>
                     <TableCell>v{page.version}</TableCell>
@@ -180,7 +182,7 @@ export default function LegalPagesAdmin() {
                           variant="ghost"
                           size="icon"
                           onClick={() => toggleStatus(page)}
-                          title={page.isActive ? "Hide page" : "Show page"}
+                          title={page.isActive ? t("admin.legal.hidePage") : t("admin.legal.showPage")}
                         >
                           {page.isActive ? (
                             <EyeOff className="h-4 w-4" />

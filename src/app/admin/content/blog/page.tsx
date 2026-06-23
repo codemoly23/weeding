@@ -41,6 +41,7 @@ import {
 } from "@/components/ui/table";
 import { toast } from "sonner";
 import { formatDistanceToNow } from "date-fns";
+import { useLanguage } from "@/lib/i18n/language-context";
 
 interface BlogPost {
   id: string;
@@ -54,6 +55,7 @@ interface BlogPost {
 }
 
 export default function BlogPage() {
+  const { t } = useLanguage();
   const [posts, setPosts] = useState<BlogPost[]>([]);
   const [loading, setLoading] = useState(true);
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
@@ -71,7 +73,7 @@ export default function BlogPage() {
       const data = await res.json();
       setPosts(data);
     } catch (error) {
-      toast.error("Failed to load blog posts");
+      toast.error(t("admin.blog.loadFailed"));
     } finally {
       setLoading(false);
     }
@@ -92,11 +94,11 @@ export default function BlogPage() {
 
       if (!res.ok) throw new Error("Failed to delete");
 
-      toast.success("Blog post deleted");
+      toast.success(t("admin.blog.deleted"));
       setDeleteDialogOpen(false);
       fetchPosts();
     } catch (error) {
-      toast.error("Failed to delete blog post");
+      toast.error(t("admin.blog.deleteFailed"));
     }
   }
 
@@ -109,10 +111,10 @@ export default function BlogPage() {
       });
 
       if (!res.ok) throw new Error("Failed to update");
-      toast.success(`Post ${status.toLowerCase()}`);
+      toast.success(t(`admin.blog.${status.toLowerCase() === "published" ? "published" : status.toLowerCase()}`));
       fetchPosts();
     } catch (error) {
-      toast.error("Failed to update post");
+      toast.error(t("admin.blog.updateFailed"));
     }
   }
 
@@ -136,11 +138,11 @@ export default function BlogPage() {
   const statusBadge = (status: string) => {
     switch (status) {
       case "PUBLISHED":
-        return <Badge className="admin-status-success">Published</Badge>;
+        return <Badge className="admin-status-success">{t("admin.blog.published")}</Badge>;
       case "DRAFT":
-        return <Badge variant="secondary">Draft</Badge>;
+        return <Badge variant="secondary">{t("admin.blog.draft")}</Badge>;
       case "ARCHIVED":
-        return <Badge variant="outline">Archived</Badge>;
+        return <Badge variant="outline">{t("admin.blog.archived")}</Badge>;
       default:
         return null;
     }
@@ -150,15 +152,15 @@ export default function BlogPage() {
     <div className="space-y-6">
       <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <div>
-          <h1 className="text-2xl font-bold">Blog Posts</h1>
+          <h1 className="text-2xl font-bold">{t("admin.blog.title")}</h1>
           <p className="text-muted-foreground">
-            Manage blog posts displayed on your website
+            {t("admin.blog.subtitle")}
           </p>
         </div>
         <Button asChild className="self-start sm:self-auto">
           <Link href="/admin/content/blog/new">
             <Plus className="mr-2 h-4 w-4" />
-            New Post
+            {t("admin.blog.newPost")}
           </Link>
         </Button>
       </div>
@@ -166,16 +168,16 @@ export default function BlogPage() {
       <div className="flex items-center gap-4">
         <Select value={statusFilter} onValueChange={setStatusFilter}>
           <SelectTrigger className="w-[150px]">
-            <SelectValue placeholder="Filter by status" />
+            <SelectValue placeholder={t("admin.blog.filterByStatus")} />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value="all">All Posts</SelectItem>
-            <SelectItem value="PUBLISHED">Published</SelectItem>
-            <SelectItem value="DRAFT">Drafts</SelectItem>
-            <SelectItem value="ARCHIVED">Archived</SelectItem>
+            <SelectItem value="all">{t("admin.blog.allPosts")}</SelectItem>
+            <SelectItem value="PUBLISHED">{t("admin.blog.published")}</SelectItem>
+            <SelectItem value="DRAFT">{t("admin.blog.drafts")}</SelectItem>
+            <SelectItem value="ARCHIVED">{t("admin.blog.archived")}</SelectItem>
           </SelectContent>
         </Select>
-        <Badge variant="outline">{filteredPosts.length} posts</Badge>
+        <Badge variant="outline">{t("admin.blog.postCount", { count: String(filteredPosts.length) })}</Badge>
       </div>
 
       {loading ? (
@@ -188,14 +190,14 @@ export default function BlogPage() {
         <Card>
           <CardContent className="flex flex-col items-center justify-center py-12">
             <FileText className="h-12 w-12 text-muted-foreground mb-4" />
-            <h3 className="font-semibold mb-2">No blog posts yet</h3>
+            <h3 className="font-semibold mb-2">{t("admin.blog.noPosts")}</h3>
             <p className="text-muted-foreground text-sm mb-4">
-              Create your first blog post to share with your audience
+              {t("admin.blog.noPostsDesc")}
             </p>
             <Button asChild>
               <Link href="/admin/content/blog/new">
                 <Plus className="mr-2 h-4 w-4" />
-                New Post
+                {t("admin.blog.newPost")}
               </Link>
             </Button>
           </CardContent>
@@ -212,11 +214,11 @@ export default function BlogPage() {
             </colgroup>
             <TableHeader>
               <TableRow>
-                <TableHead>Title</TableHead>
-                <TableHead>Status</TableHead>
-                <TableHead>Date</TableHead>
-                <TableHead>Change Status</TableHead>
-                <TableHead className="text-right">Actions</TableHead>
+                <TableHead>{t("common.title")}</TableHead>
+                <TableHead>{t("common.status")}</TableHead>
+                <TableHead>{t("common.date")}</TableHead>
+                <TableHead>{t("admin.blog.changeStatus")}</TableHead>
+                <TableHead className="text-right">{t("common.actions")}</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
@@ -237,12 +239,12 @@ export default function BlogPage() {
                     <div className="text-sm">
                       {post.publishedAt ? (
                         <span>
-                          Published{" "}
+                          {t("admin.blog.published")}{" "}
                           {formatDistanceToNow(new Date(post.publishedAt), { addSuffix: true })}
                         </span>
                       ) : (
                         <span className="text-muted-foreground">
-                          Created{" "}
+                          {t("admin.blog.created")}{" "}
                           {formatDistanceToNow(new Date(post.createdAt), { addSuffix: true })}
                         </span>
                       )}
@@ -261,17 +263,17 @@ export default function BlogPage() {
                       <SelectContent>
                         <SelectItem value="DRAFT">
                           <span className="flex items-center gap-2">
-                            <Clock className="h-3.5 w-3.5" /> Draft
+                            <Clock className="h-3.5 w-3.5" /> {t("admin.blog.draft")}
                           </span>
                         </SelectItem>
                         <SelectItem value="PUBLISHED">
                           <span className="flex items-center gap-2">
-                            <CheckCircle className="h-3.5 w-3.5" /> Published
+                            <CheckCircle className="h-3.5 w-3.5" /> {t("admin.blog.published")}
                           </span>
                         </SelectItem>
                         <SelectItem value="ARCHIVED">
                           <span className="flex items-center gap-2">
-                            <Archive className="h-3.5 w-3.5" /> Archived
+                            <Archive className="h-3.5 w-3.5" /> {t("admin.blog.archived")}
                           </span>
                         </SelectItem>
                       </SelectContent>
@@ -285,20 +287,20 @@ export default function BlogPage() {
                         </Button>
                       </DropdownMenuTrigger>
                       <DropdownMenuContent align="end">
-                        <DropdownMenuLabel>Actions</DropdownMenuLabel>
+                        <DropdownMenuLabel>{t("common.actions")}</DropdownMenuLabel>
                         <DropdownMenuSeparator />
                         {post.status === "PUBLISHED" && (
                           <DropdownMenuItem asChild>
                             <Link href={`/blog/${post.slug}`} target="_blank">
                               <Eye className="mr-2 h-4 w-4" />
-                              View Post
+                              {t("admin.blog.viewPost")}
                             </Link>
                           </DropdownMenuItem>
                         )}
                         <DropdownMenuItem asChild>
                           <Link href={`/admin/content/blog/${post.id}`}>
                             <Pencil className="mr-2 h-4 w-4" />
-                            Edit
+                            {t("common.edit")}
                           </Link>
                         </DropdownMenuItem>
                         <DropdownMenuSeparator />
@@ -307,7 +309,7 @@ export default function BlogPage() {
                           onClick={() => openDeleteDialog(post)}
                         >
                           <Trash2 className="mr-2 h-4 w-4" />
-                          Delete
+                          {t("common.delete")}
                         </DropdownMenuItem>
                       </DropdownMenuContent>
                     </DropdownMenu>
@@ -323,19 +325,18 @@ export default function BlogPage() {
       <AlertDialog open={deleteDialogOpen} onOpenChange={setDeleteDialogOpen}>
         <AlertDialogContent>
           <AlertDialogHeader>
-            <AlertDialogTitle>Delete Blog Post?</AlertDialogTitle>
+            <AlertDialogTitle>{t("admin.blog.deleteQuestion")}</AlertDialogTitle>
             <AlertDialogDescription>
-              This will permanently delete "{selectedPost?.title}". This action cannot be
-              undone.
+              {t("admin.blog.deleteDesc", { title: selectedPost?.title || "" })}
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
-            <AlertDialogCancel>Cancel</AlertDialogCancel>
+            <AlertDialogCancel>{t("common.cancel")}</AlertDialogCancel>
             <AlertDialogAction
               onClick={handleDelete}
               className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
             >
-              Delete
+              {t("common.delete")}
             </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>

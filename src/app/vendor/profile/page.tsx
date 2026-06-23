@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { Save, Loader2, CheckCircle, Plus, Trash2, ChevronLeft, ChevronRight } from "lucide-react";
+import { useLanguage } from "@/lib/i18n/language-context";
 
 const CATEGORIES = [
   { value: "VENUE", label: "Venue", emoji: "🏛️" },
@@ -81,6 +82,7 @@ const COMMON_LANGUAGES = [
 ];
 
 export default function VendorProfilePage() {
+  const { t, lang } = useLanguage();
   const [profile, setProfile] = useState<ProfileData>(defaultProfile);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
@@ -196,13 +198,13 @@ export default function VendorProfilePage() {
       });
       if (!res.ok) {
         const d = await res.json();
-        setError(d.error || "Failed to save");
+        setError(d.error || t("vendor.profile.saveFailed"));
       } else {
         setSaved(true);
         setTimeout(() => setSaved(false), 3000);
       }
     } catch {
-      setError("Network error");
+      setError(t("common.networkError"));
     } finally {
       setSaving(false);
     }
@@ -219,45 +221,45 @@ export default function VendorProfilePage() {
   return (
     <div className="max-w-3xl mx-auto">
       <div className="mb-6">
-        <h1 className="text-2xl font-bold text-foreground">My Profile</h1>
+        <h1 className="text-2xl font-bold text-foreground">{t("vendor.nav.myProfile")}</h1>
         <p className="text-sm text-muted-foreground mt-0.5">
-          Keep your business information up to date to attract more clients
+          {t("vendor.profile.subtitle")}
         </p>
       </div>
 
       <form onSubmit={handleSave} className="space-y-6">
         {/* Basic info */}
-        <Section title="Business Information">
-          <Field label="Business Name" required>
+        <Section title={t("vendor.profile.businessInfo")}>
+          <Field label={t("vendor.profile.businessName")} required>
             <input
               type="text"
               value={profile.businessName}
               onChange={(e) => set("businessName", e.target.value)}
               className="input"
               required
-              placeholder="Your Wedding Business"
+              placeholder={t("vendor.profile.businessNamePlaceholder")}
             />
           </Field>
-          <Field label="Tagline">
+          <Field label={t("vendor.profile.tagline")}>
             <input
               type="text"
               value={profile.tagline}
               onChange={(e) => set("tagline", e.target.value)}
               className="input"
-              placeholder="A short catchy phrase about your business"
+              placeholder={t("vendor.profile.taglinePlaceholder")}
             />
           </Field>
-          <Field label="Description">
+          <Field label={t("vendor.profile.description")}>
             <textarea
               value={profile.description}
               onChange={(e) => set("description", e.target.value)}
               className="input min-h-[100px] resize-none"
-              placeholder="Tell couples what makes your business special..."
+              placeholder={t("vendor.profile.descriptionPlaceholder")}
             />
           </Field>
 
           <div>
-            <label className="block text-sm font-medium text-foreground mb-2">Category</label>
+            <label className="block text-sm font-medium text-foreground mb-2">{t("vendor.profile.category")}</label>
             <div className="grid grid-cols-3 sm:grid-cols-4 gap-2">
               {CATEGORIES.map((cat) => (
                 <button
@@ -271,7 +273,7 @@ export default function VendorProfilePage() {
                     }`}
                 >
                   <span className="text-lg">{cat.emoji}</span>
-                  {cat.label}
+                  {t(`vendor.category.${cat.value}`)}
                 </button>
               ))}
             </div>
@@ -279,9 +281,9 @@ export default function VendorProfilePage() {
         </Section>
 
         {/* Location */}
-        <Section title="Location">
+        <Section title={t("vendor.profile.location")}>
           <div className="grid sm:grid-cols-2 gap-4">
-            <Field label="City" required>
+            <Field label={t("vendor.profile.city")} required>
               <input
                 type="text"
                 value={profile.city}
@@ -291,7 +293,7 @@ export default function VendorProfilePage() {
                 placeholder="Dhaka"
               />
             </Field>
-            <Field label="Country" required>
+            <Field label={t("vendor.profile.country")} required>
               <input
                 type="text"
                 value={profile.country}
@@ -301,7 +303,7 @@ export default function VendorProfilePage() {
                 placeholder="Bangladesh"
               />
             </Field>
-            <Field label="Latitude">
+            <Field label={t("vendor.profile.latitude")}>
               <input
                 type="number"
                 step="any"
@@ -311,7 +313,7 @@ export default function VendorProfilePage() {
                 placeholder="23.8103"
               />
             </Field>
-            <Field label="Longitude">
+            <Field label={t("vendor.profile.longitude")}>
               <input
                 type="number"
                 step="any"
@@ -323,16 +325,16 @@ export default function VendorProfilePage() {
             </Field>
           </div>
           <p className="text-xs text-muted-foreground/70 mt-1">
-            Latitude &amp; Longitude are used to show your business on the map view. Find yours at{" "}
+            {t("vendor.profile.coordinatesHelp")}{" "}
             <a href="https://maps.google.com" target="_blank" rel="noopener noreferrer" className="text-primary hover:underline">maps.google.com</a>
-            {" "}— right-click any location and copy the coordinates.
+            {" "}{t("vendor.profile.coordinatesHelpSuffix")}
           </p>
         </Section>
 
         {/* Contact */}
-        <Section title="Contact & Social">
+        <Section title={t("vendor.profile.contactSocial")}>
           <div className="grid sm:grid-cols-2 gap-4">
-            <Field label="Phone">
+            <Field label={t("vendor.profile.phone")}>
               <input
                 type="tel"
                 value={profile.phone ?? ""}
@@ -341,7 +343,7 @@ export default function VendorProfilePage() {
                 placeholder="+1 555 000 0000"
               />
             </Field>
-            <Field label="Website">
+            <Field label={t("vendor.profile.website")}>
               <input
                 type="url"
                 value={profile.website ?? ""}
@@ -381,7 +383,7 @@ export default function VendorProfilePage() {
         </Section>
 
         {/* Languages */}
-        <Section title="Languages Spoken">
+        <Section title={t("vendor.profile.languagesSpoken")}>
           <div className="flex flex-wrap gap-2">
             {COMMON_LANGUAGES.map((lang) => {
               const selected = profile.languages.includes(lang);
@@ -401,7 +403,7 @@ export default function VendorProfilePage() {
                       : "bg-card text-foreground border-border hover:border-primary/60"
                   }`}
                 >
-                  {lang}
+                  {t(`vendor.language.${lang.toLowerCase()}`)}
                 </button>
               );
             })}
@@ -409,9 +411,9 @@ export default function VendorProfilePage() {
         </Section>
 
         {/* Pricing & Response Time */}
-        <Section title="Pricing & Response Time">
+        <Section title={t("vendor.profile.pricingResponse")}>
           <div className="grid sm:grid-cols-4 gap-4">
-            <Field label="Response Time (hours)">
+            <Field label={t("vendor.profile.responseTime")}>
               <input
                 type="number"
                 value={profile.slaHours}
@@ -422,7 +424,7 @@ export default function VendorProfilePage() {
                 max="168"
               />
             </Field>
-            <Field label="Minimum Price">
+            <Field label={t("vendor.profile.minimumPrice")}>
               <input
                 type="number"
                 value={profile.priceMin}
@@ -432,7 +434,7 @@ export default function VendorProfilePage() {
                 min="0"
               />
             </Field>
-            <Field label="Maximum Price">
+            <Field label={t("vendor.profile.maximumPrice")}>
               <input
                 type="number"
                 value={profile.priceMax}
@@ -442,7 +444,7 @@ export default function VendorProfilePage() {
                 min="0"
               />
             </Field>
-            <Field label="Currency">
+            <Field label={t("vendor.profile.currency")}>
               <select
                 value={profile.currency}
                 onChange={(e) => set("currency", e.target.value)}
@@ -461,7 +463,7 @@ export default function VendorProfilePage() {
         </Section>
 
         {/* Availability */}
-        <Section title="Availability">
+        <Section title={t("vendor.profile.availability")}>
           <label className="flex items-center gap-3 cursor-pointer">
             <input
               type="checkbox"
@@ -470,30 +472,30 @@ export default function VendorProfilePage() {
               className="w-4 h-4 rounded border-border text-primary focus:ring-primary"
             />
             <div>
-              <span className="text-sm font-medium text-foreground">Currently accepting bookings</span>
-              <p className="text-xs text-muted-foreground">Uncheck to hide your profile from search results</p>
+              <span className="text-sm font-medium text-foreground">{t("vendor.profile.acceptingBookings")}</span>
+              <p className="text-xs text-muted-foreground">{t("vendor.profile.acceptingBookingsDesc")}</p>
             </div>
           </label>
         </Section>
 
         {/* Calendar availability */}
         <div className="bg-card rounded-xl border border-border p-5">
-          <h2 className="text-sm font-semibold text-foreground mb-1">Calendar Availability</h2>
-          <p className="text-xs text-muted-foreground mb-4">Click a date to cycle: blank → Available → Booked → Tentative → blank</p>
+          <h2 className="text-sm font-semibold text-foreground mb-1">{t("vendor.profile.calendarAvailability")}</h2>
+          <p className="text-xs text-muted-foreground mb-4">{t("vendor.profile.calendarHelp")}</p>
           <div className="flex items-center justify-between mb-3">
             <button type="button" onClick={() => setCalMonth(new Date(calMonth.getFullYear(), calMonth.getMonth() - 1, 1))} className="p-1.5 rounded-lg hover:bg-muted text-muted-foreground">
               <ChevronLeft className="w-4 h-4" />
             </button>
             <span className="text-sm font-medium text-foreground">
-              {calMonth.toLocaleDateString("en-US", { month: "long", year: "numeric" })}
+              {calMonth.toLocaleDateString(lang === "sv" ? "sv-SE" : "en-US", { month: "long", year: "numeric" })}
             </span>
             <button type="button" onClick={() => setCalMonth(new Date(calMonth.getFullYear(), calMonth.getMonth() + 1, 1))} className="p-1.5 rounded-lg hover:bg-muted text-muted-foreground">
               <ChevronRight className="w-4 h-4" />
             </button>
           </div>
           <div className="grid grid-cols-7 gap-1 text-center mb-1">
-            {["Su","Mo","Tu","We","Th","Fr","Sa"].map(d => (
-              <div key={d} className="text-xs text-muted-foreground/70 font-medium py-1">{d}</div>
+            {["sun","mon","tue","wed","thu","fri","sat"].map(d => (
+              <div key={d} className="text-xs text-muted-foreground/70 font-medium py-1">{t(`common.day.${d}`)}</div>
             ))}
           </div>
           <div className="grid grid-cols-7 gap-1">
@@ -519,7 +521,7 @@ export default function VendorProfilePage() {
                     key={idx}
                     onClick={() => handleCalendarClick(dateStr)}
                     disabled={isSaving}
-                    title={entry?.status ?? "Click to mark"}
+                    title={entry?.status ? t(`vendor.availability.${entry.status}`) : t("vendor.profile.clickToMark")}
                     className={`rounded-lg py-1.5 text-xs text-center transition-all cursor-pointer select-none ${
                       entry ? statusColor[entry.status] : "text-foreground/80 hover:bg-muted"
                     } ${isSaving ? "opacity-50" : ""}`}
@@ -531,16 +533,16 @@ export default function VendorProfilePage() {
             })()}
           </div>
           <div className="flex items-center gap-4 mt-4 text-xs text-muted-foreground">
-            <span className="flex items-center gap-1.5"><span className="w-3 h-3 rounded bg-[var(--color-success-bg)] inline-block" />Available</span>
-            <span className="flex items-center gap-1.5"><span className="w-3 h-3 rounded bg-[var(--color-error-bg)] inline-block" />Booked</span>
-            <span className="flex items-center gap-1.5"><span className="w-3 h-3 rounded bg-[var(--color-warning-bg)] inline-block" />Tentative</span>
+            <span className="flex items-center gap-1.5"><span className="w-3 h-3 rounded bg-[var(--color-success-bg)] inline-block" />{t("vendor.availability.AVAILABLE")}</span>
+            <span className="flex items-center gap-1.5"><span className="w-3 h-3 rounded bg-[var(--color-error-bg)] inline-block" />{t("vendor.availability.BOOKED")}</span>
+            <span className="flex items-center gap-1.5"><span className="w-3 h-3 rounded bg-[var(--color-warning-bg)] inline-block" />{t("vendor.availability.TENTATIVE")}</span>
           </div>
         </div>
 
         {/* FAQ Editor */}
         <div className="bg-card rounded-xl border border-border p-5">
-          <h2 className="text-sm font-semibold text-foreground mb-1">FAQ</h2>
-          <p className="text-xs text-muted-foreground mb-4">Add frequently asked questions shown on your public profile.</p>
+          <h2 className="text-sm font-semibold text-foreground mb-1">{t("vendor.profile.faq")}</h2>
+          <p className="text-xs text-muted-foreground mb-4">{t("vendor.profile.faqDesc")}</p>
           <div className="space-y-3">
             {profile.faqItems.map((item, idx) => (
               <div key={idx} className="border border-border/50 rounded-xl p-3 space-y-2 bg-muted">
@@ -553,7 +555,7 @@ export default function VendorProfilePage() {
                       updated[idx] = { ...item, question: e.target.value };
                       set("faqItems", updated);
                     }}
-                    placeholder="Question"
+                    placeholder={t("vendor.profile.question")}
                     className="input flex-1 text-sm"
                   />
                   <button
@@ -571,7 +573,7 @@ export default function VendorProfilePage() {
                     updated[idx] = { ...item, answer: e.target.value };
                     set("faqItems", updated);
                   }}
-                  placeholder="Answer"
+                  placeholder={t("vendor.profile.answer")}
                   rows={2}
                   className="input text-sm resize-none"
                 />
@@ -582,14 +584,14 @@ export default function VendorProfilePage() {
               onClick={() => set("faqItems", [...profile.faqItems, { question: "", answer: "" }])}
               className="flex items-center gap-1.5 text-sm text-primary hover:text-primary font-medium"
             >
-              <Plus className="w-4 h-4" /> Add FAQ item
+              <Plus className="w-4 h-4" /> {t("vendor.profile.addFaqItem")}
             </button>
           </div>
         </div>
 
         {/* Photos */}
-        <Section title="Photos">
-          <p className="text-xs text-muted-foreground -mt-2">The first photo will be your cover image in the vendor directory and planner page.</p>
+        <Section title={t("vendor.profile.photos")}>
+          <p className="text-xs text-muted-foreground -mt-2">{t("vendor.profile.photosDesc")}</p>
           <div className="space-y-3">
             {profile.photos.map((url, i) => (
               <div key={i} className="space-y-1.5">
@@ -610,9 +612,9 @@ export default function VendorProfilePage() {
                       }}
                     />
                     <div className="flex items-center gap-2">
-                      <span className="text-xs text-muted-foreground/70">or</span>
+                      <span className="text-xs text-muted-foreground/70">{t("common.or")}</span>
                       <label className="cursor-pointer text-xs text-primary border border-primary/30 rounded px-3 py-1 hover:bg-primary/5 transition">
-                        Upload from device
+                        {t("vendor.profile.uploadFromDevice")}
                         <input type="file" accept="image/*" className="hidden"
                           onChange={(e) => {
                             const file = e.target.files?.[0];
@@ -631,11 +633,11 @@ export default function VendorProfilePage() {
                         type="button"
                         onClick={() => set("photos", profile.photos.filter((_, j) => j !== i))}
                         className="text-xs text-[var(--color-error-text)] hover:text-[var(--color-error-text)]"
-                      >Remove</button>
+                      >{t("common.remove")}</button>
                     </div>
                   </div>
                 </div>
-                {i === 0 && <p className="text-[10px] text-primary font-medium">★ Cover image</p>}
+                {i === 0 && <p className="text-[10px] text-primary font-medium">{t("vendor.profile.coverImage")}</p>}
               </div>
             ))}
             <button
@@ -643,7 +645,7 @@ export default function VendorProfilePage() {
               onClick={() => set("photos", [...profile.photos, ""])}
               className="text-sm text-primary hover:text-primary font-medium"
             >
-              + Add photo
+              {t("vendor.profile.addPhoto")}
             </button>
           </div>
         </Section>
@@ -667,11 +669,11 @@ export default function VendorProfilePage() {
             ) : (
               <Save className="w-4 h-4" />
             )}
-            {saving ? "Saving..." : saved ? "Saved!" : "Save Changes"}
+            {saving ? t("common.saving") : saved ? t("common.saved") : t("common.saveChanges")}
           </button>
           {saved && (
             <span className="text-sm text-[var(--color-success-text)] flex items-center gap-1">
-              <CheckCircle className="w-4 h-4" /> Changes saved
+              <CheckCircle className="w-4 h-4" /> {t("common.changesSaved")}
             </span>
           )}
         </div>
@@ -697,7 +699,7 @@ export default function VendorProfilePage() {
   );
 }
 
-function Section({ title, children }: { title: string; children: React.ReactNode }) {
+function Section({ title, children }: { title: React.ReactNode; children: React.ReactNode }) {
   return (
     <div className="bg-card rounded-xl border border-border p-5">
       <h2 className="text-sm font-semibold text-foreground mb-4">{title}</h2>
@@ -711,7 +713,7 @@ function Field({
   required,
   children,
 }: {
-  label: string;
+  label: React.ReactNode;
   required?: boolean;
   children: React.ReactNode;
 }) {

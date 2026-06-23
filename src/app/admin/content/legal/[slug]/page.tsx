@@ -14,6 +14,7 @@ import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
 import { toast } from "sonner";
 import { SunEditorWrapper } from "@/components/editor/sun-editor";
+import { useLanguage } from "@/lib/i18n/language-context";
 
 // Default content templates for legal pages
 const pageTemplates: Record<string, { title: string; content: string; metaDescription: string }> = {
@@ -217,6 +218,7 @@ export default function LegalPageEditor({
 }: {
   params: Promise<{ slug: string }>;
 }) {
+  const { t } = useLanguage();
   const resolvedParams = use(params);
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -346,7 +348,7 @@ export default function LegalPageEditor({
           </Link>
           <div>
             <h1 className="text-2xl font-bold">
-              {isNew ? "Create Legal Page" : "Edit Legal Page"}
+              {isNew ? t("admin.legal.create") : t("admin.legal.edit")}
             </h1>
             <p className="text-muted-foreground">
               {isNew

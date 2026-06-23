@@ -19,6 +19,7 @@ import { format } from "date-fns";
 import { toast } from "sonner";
 import { useSession } from "next-auth/react";
 import { getAllLocalProjects } from "@/lib/planner-storage";
+import { useLanguage } from "@/lib/i18n/language-context";
 
 interface DbProject {
   id: string;
@@ -48,6 +49,7 @@ const eventTypeLabel: Record<string, string> = {
 
 export default function DashboardPage() {
   const { data: session } = useSession();
+  const { t } = useLanguage();
   const [projects, setProjects] = useState<DbProject[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -60,11 +62,11 @@ export default function DashboardPage() {
           const data = await res.json();
           setProjects(data.projects ?? []);
         } else {
-          toast.error("Failed to load projects");
+          toast.error(t("dashboard.projects.loadFailed"));
         }
       }
     } catch {
-      toast.error("Failed to load projects");
+      toast.error(t("dashboard.projects.loadFailed"));
     } finally {
       setLoading(false);
     }
@@ -86,37 +88,37 @@ export default function DashboardPage() {
   const stats = useMemo(
     () => [
       {
-        title: "Active Projects",
+        title: t("dashboard.stats.activeProjects"),
         value: totalProjects,
         icon: CalendarHeart,
         color: "text-primary",
         bgColor: "bg-primary/10",
       },
       {
-        title: "Completed",
+        title: t("dashboard.stats.completed"),
         value: completedProjects,
         icon: CheckCircle,
         color: "text-[var(--color-success-text)]",
         bgColor: "bg-[var(--color-success-bg)]",
       },
       {
-        title: "In Progress",
+        title: t("dashboard.stats.inProgress"),
         value: activeProjects,
         icon: Clock,
         color: "text-[var(--color-warning-text)]",
         bgColor: "bg-[var(--color-warning-bg)]",
       },
     ],
-    [totalProjects, completedProjects, activeProjects]
+    [t, totalProjects, completedProjects, activeProjects]
   );
 
   if (loading) {
     return (
       <div className="space-y-6">
         <div>
-          <h1 className="text-2xl font-bold text-foreground">Dashboard</h1>
+          <h1 className="text-2xl font-bold text-foreground">{t("common.dashboard")}</h1>
           <p className="text-muted-foreground">
-            Welcome back! Here&apos;s an overview of your account.
+            {t("dashboard.welcome")}
           </p>
         </div>
         <div className="flex items-center justify-center py-20">
@@ -131,9 +133,9 @@ export default function DashboardPage() {
       {/* Page Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold text-foreground">Dashboard</h1>
+          <h1 className="text-2xl font-bold text-foreground">{t("common.dashboard")}</h1>
           <p className="text-muted-foreground">
-            Welcome back! Here&apos;s an overview of your account.
+            {t("dashboard.welcome")}
           </p>
         </div>
         <Button variant="outline" size="icon" onClick={fetchProjects}>
@@ -161,10 +163,10 @@ export default function DashboardPage() {
       {/* Recent Projects - full width */}
       <Card>
         <CardHeader className="flex flex-row items-center justify-between">
-          <CardTitle>Recent Projects</CardTitle>
+          <CardTitle>{t("dashboard.recentProjects")}</CardTitle>
           <Button variant="ghost" size="sm" asChild>
             <Link href="/planner">
-              View All
+              {t("common.viewAll")}
               <ArrowRight className="ml-1 h-4 w-4" />
             </Link>
           </Button>
@@ -185,7 +187,7 @@ export default function DashboardPage() {
                     <div className="min-w-0">
                       <p className="font-medium truncate">{project.title}</p>
                       <p className="text-sm text-muted-foreground">
-                        {eventTypeLabel[project.eventType] ?? project.eventType}
+                        {t(`eventType.${project.eventType.toLowerCase()}`) !== `eventType.${project.eventType.toLowerCase()}` ? t(`eventType.${project.eventType.toLowerCase()}`) : eventTypeLabel[project.eventType] ?? project.eventType}
                         {project.eventDate && (
                           <>
                             {" · "}
@@ -215,14 +217,14 @@ export default function DashboardPage() {
           ) : (
             <div className="py-8 text-center">
               <CalendarHeart className="mx-auto h-12 w-12 text-muted-foreground" />
-              <h3 className="mt-4 text-lg font-semibold">No projects yet</h3>
+              <h3 className="mt-4 text-lg font-semibold">{t("projects.noProjects")}</h3>
               <p className="mt-2 text-sm text-muted-foreground">
-                Create your first wedding or event project to get started
+                {t("dashboard.noProjectsDesc")}
               </p>
               <Button className="mt-4" asChild>
                 <Link href="/planner/create">
                   <Plus className="mr-2 h-4 w-4" />
-                  New Project
+                  {t("projects.newProject")}
                 </Link>
               </Button>
             </div>
@@ -233,24 +235,24 @@ export default function DashboardPage() {
       {/* Quick Actions */}
       <Card>
         <CardHeader>
-          <CardTitle>Quick Actions</CardTitle>
+          <CardTitle>{t("overview.quickActions")}</CardTitle>
         </CardHeader>
         <CardContent>
           <div className="grid grid-cols-2 gap-3 sm:flex sm:flex-wrap">
             <Button asChild>
               <Link href="/planner/create">
                 <Plus className="mr-2 h-4 w-4" />
-                New Project
+                {t("projects.newProject")}
               </Link>
             </Button>
             <Button variant="outline" asChild>
-              <Link href="/planner">My Projects</Link>
+              <Link href="/planner">{t("planner.header.myProjects")}</Link>
             </Button>
             <Button variant="outline" asChild>
-              <Link href="/vendors">Find Vendors</Link>
+              <Link href="/vendors">{t("dashboard.findVendors")}</Link>
             </Button>
             <Button variant="outline" asChild>
-              <Link href="/dashboard/help">Contact Support</Link>
+              <Link href="/dashboard/help">{t("dashboard.contactSupport")}</Link>
             </Button>
           </div>
         </CardContent>

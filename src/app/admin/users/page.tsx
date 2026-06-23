@@ -55,6 +55,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { formatDistanceToNow } from "date-fns";
 import { toast } from "sonner";
 import { useSession } from "next-auth/react";
+import { useLanguage } from "@/lib/i18n/language-context";
 
 interface User {
   id: string;
@@ -86,12 +87,12 @@ const roleColors: Record<string, string> = {
   CUSTOMER: "admin-status-neutral",
 };
 
-const roleLabels: Record<string, string> = {
-  ADMIN: "Admin",
-  CONTENT_MANAGER: "Content Manager",
-  SALES_AGENT: "Sales Agent",
-  SUPPORT_AGENT: "Support Agent",
-  CUSTOMER: "Customer",
+const roleLabelKeys: Record<string, string> = {
+  ADMIN: "admin.users.role.admin",
+  CONTENT_MANAGER: "admin.users.role.contentManager",
+  SALES_AGENT: "admin.users.role.salesAgent",
+  SUPPORT_AGENT: "admin.users.role.supportAgent",
+  CUSTOMER: "admin.users.role.customer",
 };
 
 const roleIcons: Record<string, React.ReactNode> = {
@@ -104,6 +105,7 @@ const roleIcons: Record<string, React.ReactNode> = {
 
 export default function AdminUsersPage() {
   const { data: session } = useSession();
+  const { t } = useLanguage();
   const [users, setUsers] = useState<User[]>([]);
   const [stats, setStats] = useState<Stats>({
     total: 0,
@@ -129,11 +131,11 @@ export default function AdminUsersPage() {
         setUsers(data.users);
         setStats(data.stats);
       } else {
-        toast.error("Failed to fetch users");
+        toast.error(t("admin.users.fetchFailed"));
       }
     } catch (error) {
       console.error("Failed to fetch users:", error);
-      toast.error("Failed to fetch users");
+      toast.error(t("admin.users.fetchFailed"));
     }
   }, [roleFilter, statusFilter, search]);
 
@@ -162,15 +164,15 @@ export default function AdminUsersPage() {
         body: JSON.stringify({ role }),
       });
       if (res.ok) {
-        toast.success("Role updated successfully");
+        toast.success(t("admin.users.roleUpdated"));
         fetchUsers();
       } else {
         const data = await res.json();
-        toast.error(data.error || "Failed to update role");
+        toast.error(data.error || t("admin.users.roleUpdateFailed"));
       }
     } catch (error) {
       console.error("Failed to update role:", error);
-      toast.error("Failed to update role");
+      toast.error(t("admin.users.roleUpdateFailed"));
     }
   };
 
@@ -182,15 +184,15 @@ export default function AdminUsersPage() {
         body: JSON.stringify({ isActive: !isActive }),
       });
       if (res.ok) {
-        toast.success(isActive ? "User disabled" : "User enabled");
+        toast.success(isActive ? t("admin.users.userDisabled") : t("admin.users.userEnabled"));
         fetchUsers();
       } else {
         const data = await res.json();
-        toast.error(data.error || "Failed to update user status");
+        toast.error(data.error || t("admin.users.statusUpdateFailed"));
       }
     } catch (error) {
       console.error("Failed to toggle user status:", error);
-      toast.error("Failed to update user status");
+      toast.error(t("admin.users.statusUpdateFailed"));
     }
   };
 
@@ -201,21 +203,21 @@ export default function AdminUsersPage() {
       {/* Page Header */}
       <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div>
-          <h1 className="text-2xl font-bold">User Management</h1>
+          <h1 className="text-2xl font-bold">{t("admin.users.title")}</h1>
           <p className="text-muted-foreground">
-            Manage users, roles, and permissions
+            {t("admin.users.subtitle")}
           </p>
         </div>
         <div className="flex gap-2">
           <Link href="/admin/users/permissions">
             <Button variant="outline">
               <Settings className="mr-2 h-4 w-4" />
-              Role Permissions
+              {t("admin.users.rolePermissions")}
             </Button>
           </Link>
           <Button variant="outline" onClick={() => fetchUsers()}>
             <RefreshCw className="mr-2 h-4 w-4" />
-            Refresh
+            {t("common.refresh")}
           </Button>
         </div>
       </div>
@@ -228,7 +230,7 @@ export default function AdminUsersPage() {
               <Users className="h-5 w-5 text-muted-foreground" />
               <div>
                 <div className="text-2xl font-bold">{stats.total}</div>
-                <p className="text-sm text-muted-foreground">Total Users</p>
+                <p className="text-sm text-muted-foreground">{t("admin.users.totalUsers")}</p>
               </div>
             </div>
           </CardContent>
@@ -239,7 +241,7 @@ export default function AdminUsersPage() {
               <UserCheck className="h-5 w-5 text-[var(--ast-success-icon)]" />
               <div>
                 <div className="text-2xl font-bold">{stats.active}</div>
-                <p className="text-sm text-muted-foreground">Active</p>
+                <p className="text-sm text-muted-foreground">{t("common.active")}</p>
               </div>
             </div>
           </CardContent>
@@ -250,7 +252,7 @@ export default function AdminUsersPage() {
               <UserX className="h-5 w-5 text-[var(--ast-error-icon)]" />
               <div>
                 <div className="text-2xl font-bold">{stats.inactive}</div>
-                <p className="text-sm text-muted-foreground">Inactive</p>
+                <p className="text-sm text-muted-foreground">{t("common.inactive")}</p>
               </div>
             </div>
           </CardContent>
@@ -261,7 +263,7 @@ export default function AdminUsersPage() {
               <ShieldCheck className="h-5 w-5 text-[var(--ast-error-icon)]" />
               <div>
                 <div className="text-2xl font-bold">{stats.byRole?.ADMIN || 0}</div>
-                <p className="text-sm text-muted-foreground">Admins</p>
+                <p className="text-sm text-muted-foreground">{t("admin.users.admins")}</p>
               </div>
             </div>
           </CardContent>
@@ -275,7 +277,7 @@ export default function AdminUsersPage() {
             <div className="relative flex-1">
               <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
               <Input
-                placeholder="Search by name or email..."
+                placeholder={t("admin.customers.searchPlaceholder")}
                 className="pl-9"
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
@@ -283,25 +285,25 @@ export default function AdminUsersPage() {
             </div>
             <Select value={roleFilter} onValueChange={setRoleFilter}>
               <SelectTrigger className="w-full sm:w-40">
-                <SelectValue placeholder="Role" />
+                <SelectValue placeholder={t("admin.users.role")} />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="all">All Roles</SelectItem>
-                <SelectItem value="ADMIN">Admin</SelectItem>
-                <SelectItem value="CONTENT_MANAGER">Content Manager</SelectItem>
-                <SelectItem value="SALES_AGENT">Sales Agent</SelectItem>
-                <SelectItem value="SUPPORT_AGENT">Support Agent</SelectItem>
-                <SelectItem value="CUSTOMER">Customer</SelectItem>
+                <SelectItem value="all">{t("admin.users.allRoles")}</SelectItem>
+                <SelectItem value="ADMIN">{t("admin.users.role.admin")}</SelectItem>
+                <SelectItem value="CONTENT_MANAGER">{t("admin.users.role.contentManager")}</SelectItem>
+                <SelectItem value="SALES_AGENT">{t("admin.users.role.salesAgent")}</SelectItem>
+                <SelectItem value="SUPPORT_AGENT">{t("admin.users.role.supportAgent")}</SelectItem>
+                <SelectItem value="CUSTOMER">{t("admin.users.role.customer")}</SelectItem>
               </SelectContent>
             </Select>
             <Select value={statusFilter} onValueChange={setStatusFilter}>
               <SelectTrigger className="w-full sm:w-40">
-                <SelectValue placeholder="Status" />
+                <SelectValue placeholder={t("admin.orders.status")} />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="all">All Status</SelectItem>
-                <SelectItem value="active">Active</SelectItem>
-                <SelectItem value="inactive">Inactive</SelectItem>
+                <SelectItem value="all">{t("admin.orders.allStatus")}</SelectItem>
+                <SelectItem value="active">{t("common.active")}</SelectItem>
+                <SelectItem value="inactive">{t("common.inactive")}</SelectItem>
               </SelectContent>
             </Select>
           </div>
@@ -311,9 +313,9 @@ export default function AdminUsersPage() {
       {/* Users Table */}
       <Card>
         <CardHeader>
-          <CardTitle>All Users</CardTitle>
+          <CardTitle>{t("admin.users.allUsers")}</CardTitle>
           <CardDescription>
-            {isLoading ? "Loading..." : `${users.length} users`}
+            {isLoading ? t("common.loading") : t("admin.users.userCount", { count: String(users.length) })}
           </CardDescription>
         </CardHeader>
         <CardContent>
@@ -323,18 +325,18 @@ export default function AdminUsersPage() {
             </div>
           ) : users.length === 0 ? (
             <div className="py-8 text-center text-muted-foreground">
-              No users found
+              {t("admin.users.noUsers")}
             </div>
           ) : (
             <Table>
               <TableHeader>
                 <TableRow>
-                  <TableHead>User</TableHead>
-                  <TableHead>Role</TableHead>
-                  <TableHead className="hidden sm:table-cell">Status</TableHead>
-                  <TableHead className="hidden md:table-cell">Orders</TableHead>
-                  <TableHead className="hidden lg:table-cell">Joined</TableHead>
-                  <TableHead className="text-right">Actions</TableHead>
+                  <TableHead>{t("admin.users.user")}</TableHead>
+                  <TableHead>{t("admin.users.role")}</TableHead>
+                  <TableHead className="hidden sm:table-cell">{t("admin.orders.status")}</TableHead>
+                  <TableHead className="hidden md:table-cell">{t("admin.nav.orders")}</TableHead>
+                  <TableHead className="hidden lg:table-cell">{t("admin.customers.joined")}</TableHead>
+                  <TableHead className="text-right">{t("admin.orders.actions")}</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
@@ -358,9 +360,9 @@ export default function AdminUsersPage() {
                           </Avatar>
                           <div>
                             <p className="font-medium">
-                              {user.name || "No name"}
+                              {user.name || t("admin.users.noName")}
                               {isCurrentUser && (
-                                <span className="ml-2 text-xs text-muted-foreground">(You)</span>
+                                <span className="ml-2 text-xs text-muted-foreground">({t("admin.users.you")})</span>
                               )}
                             </p>
                             <p className="text-sm text-muted-foreground">{user.email}</p>
@@ -373,7 +375,7 @@ export default function AdminUsersPage() {
                           className={`${roleColors[user.role] || ""} flex w-fit items-center gap-1`}
                         >
                           {roleIcons[user.role]}
-                          {roleLabels[user.role] || user.role}
+                          {roleLabelKeys[user.role] ? t(roleLabelKeys[user.role]) : user.role}
                         </Badge>
                       </TableCell>
                       <TableCell className="hidden sm:table-cell">
@@ -381,7 +383,7 @@ export default function AdminUsersPage() {
                           variant="outline"
                           className={user.isActive ? "admin-status-success" : "admin-status-error"}
                         >
-                          {user.isActive ? "Active" : "Inactive"}
+                          {user.isActive ? t("common.active") : t("common.inactive")}
                         </Badge>
                       </TableCell>
                       <TableCell className="hidden md:table-cell">
@@ -400,26 +402,26 @@ export default function AdminUsersPage() {
                             </Button>
                           </DropdownMenuTrigger>
                           <DropdownMenuContent align="end">
-                            <DropdownMenuLabel>Actions</DropdownMenuLabel>
+                            <DropdownMenuLabel>{t("admin.orders.actions")}</DropdownMenuLabel>
                             <DropdownMenuSeparator />
 
                             {/* Change Role Submenu */}
                             <DropdownMenuSub>
                               <DropdownMenuSubTrigger disabled={isCurrentUser}>
                                 <Shield className="mr-2 h-4 w-4" />
-                                Change Role
+                                {t("admin.users.changeRole")}
                               </DropdownMenuSubTrigger>
                               <DropdownMenuSubContent>
-                                {Object.entries(roleLabels).map(([role, label]) => (
+                                {Object.keys(roleLabelKeys).map((role) => (
                                   <DropdownMenuItem
                                     key={role}
                                     onClick={() => handleRoleChange(user.id, role)}
                                     disabled={user.role === role}
                                   >
                                     {roleIcons[role]}
-                                    <span className="ml-2">{label}</span>
+                                    <span className="ml-2">{t(roleLabelKeys[role])}</span>
                                     {user.role === role && (
-                                      <span className="ml-auto text-xs text-muted-foreground">Current</span>
+                                      <span className="ml-auto text-xs text-muted-foreground">{t("admin.users.current")}</span>
                                     )}
                                   </DropdownMenuItem>
                                 ))}
@@ -437,12 +439,12 @@ export default function AdminUsersPage() {
                               {user.isActive ? (
                                 <>
                                   <ShieldX className="mr-2 h-4 w-4" />
-                                  Disable User
+                                  {t("admin.users.disableUser")}
                                 </>
                               ) : (
                                 <>
                                   <ShieldCheck className="mr-2 h-4 w-4" />
-                                  Enable User
+                                  {t("admin.users.enableUser")}
                                 </>
                               )}
                             </DropdownMenuItem>

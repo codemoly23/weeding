@@ -15,6 +15,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import {
   Table, TableBody, TableCell, TableHead, TableHeader, TableRow,
 } from "@/components/ui/table";
+import { useLanguage } from "@/lib/i18n/language-context";
 
 type VendorCategory =
   | "VENUE" | "PHOTOGRAPHY" | "VIDEOGRAPHY" | "CATERING" | "MUSIC_DJ"
@@ -33,6 +34,22 @@ const CATEGORY_LABELS: Record<VendorCategory, string> = {
 };
 
 const CATEGORIES = Object.keys(CATEGORY_LABELS) as VendorCategory[];
+
+const CATEGORY_LABEL_KEYS: Record<VendorCategory, string> = {
+  VENUE: "vendors.cat.venue",
+  PHOTOGRAPHY: "vendors.cat.photography",
+  VIDEOGRAPHY: "vendors.cat.videography",
+  CATERING: "vendors.cat.catering",
+  MUSIC_DJ: "vendors.cat.music",
+  FLOWERS: "vendors.cat.flowers",
+  DRESS_ATTIRE: "vendors.cat.dress",
+  RINGS: "vendors.cat.rings",
+  DECORATIONS: "vendors.cat.decorations",
+  TRANSPORTATION: "vendors.cat.transport",
+  HAIR_MAKEUP: "vendors.cat.hair",
+  WEDDING_PLANNER: "vendors.cat.planner",
+  OTHER: "vendors.cat.other",
+};
 
 interface Vendor {
   id: string;
@@ -96,6 +113,7 @@ const STATUS_COLORS: Record<VendorStatus, string> = {
 };
 
 export default function AdminVendorsPage() {
+  const { t } = useLanguage();
   const [vendors, setVendors] = useState<Vendor[]>([]);
   const [total, setTotal] = useState(0);
   const [totalPages, setTotalPages] = useState(1);
@@ -250,12 +268,13 @@ export default function AdminVendorsPage() {
   }
 
   const statCards = [
-    { label: "Total Vendors", value: stats.total, color: "text-foreground" },
-    { label: "Approved", value: stats.approved, color: "text-[var(--ast-success-text)]" },
-    { label: "Pending", value: stats.pending, color: "text-[var(--ast-warning-text)]" },
-    { label: "Featured", value: stats.featured, color: "text-[var(--ast-warning-icon)]" },
-    { label: "Verified", value: stats.verified, color: "text-[var(--ast-hold-text)]" },
+    { label: t("admin.vendors.totalVendors"), value: stats.total, color: "text-foreground" },
+    { label: t("admin.vendors.approved"), value: stats.approved, color: "text-[var(--ast-success-text)]" },
+    { label: t("admin.vendors.pending"), value: stats.pending, color: "text-[var(--ast-warning-text)]" },
+    { label: t("admin.vendors.featured"), value: stats.featured, color: "text-[var(--ast-warning-icon)]" },
+    { label: t("admin.vendors.verified"), value: stats.verified, color: "text-[var(--ast-hold-text)]" },
   ];
+  const categoryLabel = (category: VendorCategory) => t(CATEGORY_LABEL_KEYS[category]);
 
   return (
     <div className="space-y-6">
@@ -264,21 +283,21 @@ export default function AdminVendorsPage() {
         <div className="flex items-center gap-3">
           <Store className="h-6 w-6 shrink-0 text-[var(--admin-primary)]" />
           <div>
-            <h1 className="text-2xl font-bold">Vendor Marketplace</h1>
-            <p className="text-sm text-muted-foreground">Manage business listings in the vendor directory</p>
+            <h1 className="text-2xl font-bold">{t("admin.vendors.title")}</h1>
+            <p className="text-sm text-muted-foreground">{t("admin.vendors.subtitle")}</p>
           </div>
         </div>
         <div className="flex flex-wrap gap-2 self-start sm:self-auto">
           <Link href="/vendors" target="_blank">
             <button className="flex items-center gap-2 px-3 py-2 text-sm border rounded-lg hover:bg-gray-50 transition-colors whitespace-nowrap">
-              <ExternalLink className="h-4 w-4" /> View All Vendors
+              <ExternalLink className="h-4 w-4" /> {t("admin.nav.viewAllVendors")}
             </button>
           </Link>
           <button
             onClick={openAdd}
             className="flex items-center gap-2 px-4 py-2 text-sm bg-[var(--admin-primary)] text-[var(--admin-primary-fg)] rounded-lg hover:bg-[var(--admin-primary-hover)] transition-colors whitespace-nowrap"
           >
-            <Plus className="h-4 w-4" /> Add Vendor
+            <Plus className="h-4 w-4" /> {t("admin.vendors.addVendor")}
           </button>
         </div>
       </div>
@@ -305,47 +324,47 @@ export default function AdminVendorsPage() {
           <input
             value={searchInput}
             onChange={(e) => setSearchInput(e.target.value)}
-            placeholder="Search vendors..."
-            className="w-full pl-9 pr-3 py-2 text-sm border rounded-lg focus:outline-none focus:ring-2 focus:ring-[var(--admin-primary)]"
+            placeholder={t("admin.vendors.searchPlaceholder")}
+            className="w-full pl-9 pr-3 py-2 text-sm border border-border bg-background text-foreground rounded-lg focus:outline-none focus:ring-2 focus:ring-[var(--admin-primary)]"
           />
         </div>
-        <button type="submit" className="px-4 py-2 text-sm bg-gray-100 hover:bg-gray-200 rounded-lg transition-colors">
-          Search
+        <button type="submit" className="px-4 py-2 text-sm bg-muted hover:bg-muted/70 text-foreground rounded-lg transition-colors">
+          {t("common.search")}
         </button>
         {search && (
           <button type="button" onClick={() => { setSearch(""); setSearchInput(""); setPage(1); }}
-            className="px-3 py-2 text-sm text-gray-500 hover:text-gray-700">
-            Clear
+            className="px-3 py-2 text-sm text-muted-foreground hover:text-foreground">
+            {t("common.clear")}
           </button>
         )}
       </form>
 
       {/* Table */}
-      <div className="rounded-lg border overflow-hidden bg-white">
+      <div className="rounded-lg border overflow-hidden bg-card">
         <Table>
           <TableHeader>
             <TableRow>
-              <TableHead>Business</TableHead>
-              <TableHead>Category</TableHead>
-              <TableHead>Location</TableHead>
-              <TableHead>Status</TableHead>
-              <TableHead>Plan</TableHead>
-              <TableHead className="text-center">Inquiries</TableHead>
-              <TableHead className="text-center">Reviews</TableHead>
-              <TableHead className="text-right">Actions</TableHead>
+              <TableHead>{t("admin.vendors.business")}</TableHead>
+              <TableHead>{t("admin.vendors.category")}</TableHead>
+              <TableHead>{t("admin.vendors.location")}</TableHead>
+              <TableHead>{t("common.status")}</TableHead>
+              <TableHead>{t("admin.vendors.plan")}</TableHead>
+              <TableHead className="text-center">{t("admin.vendors.inquiries")}</TableHead>
+              <TableHead className="text-center">{t("admin.vendors.reviews")}</TableHead>
+              <TableHead className="text-right">{t("common.actions")}</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
             {loading ? (
               <TableRow>
                 <TableCell colSpan={8} className="text-center py-10 text-muted-foreground text-sm">
-                  Loading vendors…
+                  {t("admin.vendors.loading")}
                 </TableCell>
               </TableRow>
             ) : vendors.length === 0 ? (
               <TableRow>
                 <TableCell colSpan={8} className="text-center py-10 text-muted-foreground text-sm">
-                  No vendors found
+                  {t("admin.vendors.noneFound")}
                 </TableCell>
               </TableRow>
             ) : (
@@ -359,19 +378,19 @@ export default function AdminVendorsPage() {
                     <div className="flex items-center gap-2 mt-0.5">
                       {v.isFeatured && (
                         <span className="inline-flex items-center gap-1 text-xs text-[var(--ast-warning-icon)]">
-                          <Star className="h-3 w-3 fill-[var(--admin-star)] text-[var(--admin-star)]" /> Featured
+                          <Star className="h-3 w-3 fill-[var(--admin-star)] text-[var(--admin-star)]" /> {t("admin.vendors.featured")}
                         </span>
                       )}
                       {v.isVerified && (
                         <span className="inline-flex items-center gap-1 text-xs text-[var(--admin-primary)]">
-                          <BadgeCheck className="h-3 w-3" /> Verified
+                          <BadgeCheck className="h-3 w-3" /> {t("admin.vendors.verified")}
                         </span>
                       )}
                     </div>
                   </TableCell>
                   <TableCell>
                     <Badge variant="outline" className="text-xs">
-                      {CATEGORY_LABELS[v.category]}
+                      {categoryLabel(v.category)}
                     </Badge>
                   </TableCell>
                   <TableCell className="text-sm text-muted-foreground">
@@ -379,7 +398,7 @@ export default function AdminVendorsPage() {
                   </TableCell>
                   <TableCell>
                     <span className={`text-xs font-medium px-2 py-0.5 rounded-full ${STATUS_COLORS[v.status as VendorStatus] || "admin-status-neutral"}`}>
-                      {v.status ?? (v.isApproved ? "APPROVED" : "PENDING")}
+                      {t(`admin.status.${v.status ?? (v.isApproved ? "APPROVED" : "PENDING")}`)}
                     </span>
                   </TableCell>
                   <TableCell>
@@ -457,13 +476,13 @@ export default function AdminVendorsPage() {
       {/* Pagination */}
       {totalPages > 1 && (
         <div className="flex items-center justify-between text-sm text-muted-foreground">
-          <span>{total} vendors total</span>
+          <span>{t("admin.vendors.totalCount", { count: String(total) })}</span>
           <div className="flex items-center gap-1">
             <button disabled={page === 1} onClick={() => setPage((p) => p - 1)}
               className="p-1.5 rounded border disabled:opacity-40 hover:bg-gray-100">
               <ChevronLeft className="h-4 w-4" />
             </button>
-            <span className="px-3">Page {page} of {totalPages}</span>
+            <span className="px-3">{t("common.pageOf", { page: String(page), total: String(totalPages) })}</span>
             <button disabled={page === totalPages} onClick={() => setPage((p) => p + 1)}
               className="p-1.5 rounded border disabled:opacity-40 hover:bg-gray-100">
               <ChevronRight className="h-4 w-4" />
@@ -476,20 +495,20 @@ export default function AdminVendorsPage() {
       <AlertDialog open={!!deleteTarget} onOpenChange={(open) => { if (!open) setDeleteTarget(null); }}>
         <AlertDialogContent>
           <AlertDialogHeader>
-            <AlertDialogTitle>Delete Vendor?</AlertDialogTitle>
+            <AlertDialogTitle>{t("admin.vendors.deleteQuestion")}</AlertDialogTitle>
             <AlertDialogDescription>
-              <strong>{deleteTarget?.name}</strong> will be permanently deleted. This cannot be undone.
+              {t("admin.vendors.deleteDesc", { name: deleteTarget?.name || "" })}
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
-            <AlertDialogCancel disabled={deleting}>Cancel</AlertDialogCancel>
+            <AlertDialogCancel disabled={deleting}>{t("common.cancel")}</AlertDialogCancel>
             <AlertDialogAction
               onClick={confirmDelete}
               disabled={deleting}
               className="bg-destructive hover:bg-destructive/90"
             >
               {deleting ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : null}
-              Delete
+              {t("common.delete")}
             </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>
@@ -498,10 +517,10 @@ export default function AdminVendorsPage() {
       {/* Create Login Account Modal */}
       {createLoginVendor && (
         <div className="fixed inset-0 bg-black/40 z-50 flex items-center justify-center p-4" onClick={() => setCreateLoginVendor(null)}>
-          <div className="bg-white rounded-2xl shadow-xl w-full max-w-sm p-6" onClick={(e) => e.stopPropagation()}>
+          <div className="bg-card rounded-2xl shadow-xl w-full max-w-sm p-6" onClick={(e) => e.stopPropagation()}>
             <div className="flex items-center justify-between mb-4">
               <h2 className="text-base font-bold">Create Login Account</h2>
-              <button onClick={() => setCreateLoginVendor(null)} className="text-gray-400 hover:text-gray-600">
+              <button onClick={() => setCreateLoginVendor(null)} className="text-muted-foreground hover:text-foreground">
                 <X className="h-5 w-5" />
               </button>
             </div>
@@ -549,10 +568,10 @@ export default function AdminVendorsPage() {
       {/* Add/Edit Modal */}
       {showForm && (
         <div className="fixed inset-0 bg-black/40 z-50 flex items-center justify-center p-4" onClick={() => setShowForm(false)}>
-          <div className="bg-white rounded-2xl shadow-xl w-full max-w-2xl p-6 max-h-[90vh] overflow-y-auto" onClick={(e) => e.stopPropagation()}>
+          <div className="bg-card rounded-2xl shadow-xl w-full max-w-2xl p-6 max-h-[90vh] overflow-y-auto" onClick={(e) => e.stopPropagation()}>
             <div className="flex items-center justify-between mb-5">
               <h2 className="text-lg font-bold">{editId ? "Edit Vendor" : "Add New Vendor"}</h2>
-              <button onClick={() => setShowForm(false)} className="text-gray-400 hover:text-gray-600">
+              <button onClick={() => setShowForm(false)} className="text-muted-foreground hover:text-foreground">
                 <X className="h-5 w-5" />
               </button>
             </div>
@@ -568,7 +587,7 @@ export default function AdminVendorsPage() {
                 <label className="block text-xs font-medium text-gray-700 mb-1">Category *</label>
                 <select value={form.category} onChange={(e) => setForm({ ...form, category: e.target.value as VendorCategory })}
                   className="w-full border rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[var(--admin-primary)]">
-                  {CATEGORIES.map((c) => <option key={c} value={c}>{CATEGORY_LABELS[c]}</option>)}
+                  {CATEGORIES.map((c) => <option key={c} value={c}>{categoryLabel(c)}</option>)}
                 </select>
               </div>
               <div>

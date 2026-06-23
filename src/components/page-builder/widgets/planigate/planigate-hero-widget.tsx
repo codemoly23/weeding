@@ -384,7 +384,7 @@ function Collage({ images }: { images: PlanigateHeroWidgetSettings["collageImage
         variants={collagePiece(8)}
         whileHover={{ scale: 1.08, rotate: 4, transition: { duration: 0.4 } }}
         animate={{ y: [0, 4, 0], transition: { duration: 4, repeat: Infinity, ease: "easeInOut", delay: 1 } }}
-        className="absolute right-[-2%] bottom-[8%] w-[19%] h-[38%] rounded-[26px] overflow-hidden shadow-2xl ring-[3px] ring-white"
+        className="absolute right-[1%] bottom-[8%] w-[19%] h-[38%] rounded-[26px] overflow-hidden shadow-2xl ring-[3px] ring-white z-10"
       >
         <FallbackImage src={images.phone} fallbackSrc={DEFAULT_PLANIGATE_HERO_SETTINGS.collageImages.phone} alt="" fill sizes="(max-width: 1024px) 20vw, 150px" className="object-cover" />
       </motion.div>

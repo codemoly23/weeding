@@ -63,6 +63,7 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Checkbox } from "@/components/ui/checkbox";
 import { toast } from "sonner";
+import { useLanguage } from "@/lib/i18n/language-context";
 
 type TicketStatus = "OPEN" | "IN_PROGRESS" | "WAITING_FOR_CUSTOMER" | "WAITING_FOR_AGENT" | "RESOLVED" | "CLOSED";
 type TicketPriority = "LOW" | "MEDIUM" | "HIGH" | "URGENT";
@@ -137,20 +138,20 @@ interface TicketsPageClientProps {
   needsRefresh?: boolean;
 }
 
-const statusConfig: Record<TicketStatus, { label: string; color: string; icon: typeof AlertCircle }> = {
-  OPEN:                 { label: "Open",              color: "admin-status-info",       icon: AlertCircle },
-  IN_PROGRESS:          { label: "In Progress",       color: "admin-status-hold",       icon: Clock },
-  WAITING_FOR_CUSTOMER: { label: "Awaiting Customer", color: "admin-status-warning",    icon: Clock },
-  WAITING_FOR_AGENT:    { label: "Awaiting Agent",    color: "admin-status-processing", icon: Clock },
-  RESOLVED:             { label: "Resolved",          color: "admin-status-success",    icon: CheckCircle },
-  CLOSED:               { label: "Closed",            color: "admin-status-neutral",    icon: CheckCircle },
+const statusConfig: Record<TicketStatus, { labelKey: string; color: string; icon: typeof AlertCircle }> = {
+  OPEN:                 { labelKey: "admin.status.OPEN", color: "admin-status-info",       icon: AlertCircle },
+  IN_PROGRESS:          { labelKey: "admin.status.IN_PROGRESS", color: "admin-status-hold",       icon: Clock },
+  WAITING_FOR_CUSTOMER: { labelKey: "admin.status.WAITING_FOR_CUSTOMER", color: "admin-status-warning",    icon: Clock },
+  WAITING_FOR_AGENT:    { labelKey: "admin.status.WAITING_FOR_AGENT", color: "admin-status-processing", icon: Clock },
+  RESOLVED:             { labelKey: "admin.status.RESOLVED", color: "admin-status-success",    icon: CheckCircle },
+  CLOSED:               { labelKey: "admin.status.CLOSED", color: "admin-status-neutral",    icon: CheckCircle },
 };
 
-const priorityConfig: Record<TicketPriority, { label: string; color: string }> = {
-  LOW:    { label: "Low",    color: "admin-status-neutral"    },
-  MEDIUM: { label: "Medium", color: "admin-status-info"       },
-  HIGH:   { label: "High",   color: "admin-status-processing" },
-  URGENT: { label: "Urgent", color: "admin-status-error"      },
+const priorityConfig: Record<TicketPriority, { labelKey: string; color: string }> = {
+  LOW:    { labelKey: "admin.priority.LOW",    color: "admin-status-neutral"    },
+  MEDIUM: { labelKey: "admin.priority.MEDIUM", color: "admin-status-info"       },
+  HIGH:   { labelKey: "admin.priority.HIGH",   color: "admin-status-processing" },
+  URGENT: { labelKey: "admin.priority.URGENT", color: "admin-status-error"      },
 };
 
 const PER_PAGE_OPTIONS = [10, 20, 50, 100];
@@ -161,6 +162,7 @@ export function TicketsPageClient({
   features,
   needsRefresh,
 }: TicketsPageClientProps) {
+  const { t, lang } = useLanguage();
   const [tickets, setTickets] = useState<Ticket[]>([]);
   const [selectedTickets, setSelectedTickets] = useState<string[]>([]);
   const [stats, setStats] = useState<TicketStats | null>(null);
@@ -442,7 +444,7 @@ export function TicketsPageClient({
   };
 
   const formatDate = (dateString: string) => {
-    return new Date(dateString).toLocaleDateString("en-US", {
+    return new Date(dateString).toLocaleDateString(lang === "sv" ? "sv-SE" : "en-US", {
       month: "short",
       day: "numeric",
       year: "numeric",
@@ -452,7 +454,7 @@ export function TicketsPageClient({
   const getCustomerDisplay = (ticket: Ticket) => {
     if (ticket.customer) {
       return {
-        name: ticket.customer.name || "Customer",
+        name: ticket.customer.name || t("admin.orders.customer"),
         email: ticket.customer.email,
       };
     }
@@ -467,20 +469,20 @@ export function TicketsPageClient({
       {/* Page Header */}
       <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div>
-          <h1 className="text-2xl font-bold">Support Tickets</h1>
+          <h1 className="text-2xl font-bold">{t("admin.tickets.title")}</h1>
           <p className="text-muted-foreground">
-            Manage customer support requests
+            {t("admin.tickets.subtitle")}
             {tier && <Badge variant="outline" className="ml-2">{tier}</Badge>}
           </p>
         </div>
         <div className="flex gap-2">
           <Button variant="outline" onClick={fetchTickets} disabled={isLoading}>
             <RefreshCw className={`mr-2 h-4 w-4 ${isLoading ? "animate-spin" : ""}`} />
-            Refresh
+            {t("common.refresh")}
           </Button>
           <Button onClick={() => setNewTicketOpen(true)}>
             <Plus className="mr-2 h-4 w-4" />
-            New Ticket
+            {t("admin.tickets.newTicket")}
           </Button>
         </div>
       </div>
@@ -497,7 +499,7 @@ export function TicketsPageClient({
                 <p className="text-2xl font-bold">
                   {stats ? stats.open + stats.inProgress + stats.waitingAgent : 0}
                 </p>
-                <p className="text-sm text-muted-foreground">Active Tickets</p>
+                <p className="text-sm text-muted-foreground">{t("admin.tickets.activeTickets")}</p>
               </div>
             </div>
           </CardContent>
@@ -510,7 +512,7 @@ export function TicketsPageClient({
               </div>
               <div>
                 <p className="text-2xl font-bold">{stats?.waitingAgent || 0}</p>
-                <p className="text-sm text-muted-foreground">Awaiting Response</p>
+                <p className="text-sm text-muted-foreground">{t("admin.tickets.awaitingResponse")}</p>
               </div>
             </div>
           </CardContent>
@@ -523,7 +525,7 @@ export function TicketsPageClient({
               </div>
               <div>
                 <p className="text-2xl font-bold">{stats?.waitingCustomer || 0}</p>
-                <p className="text-sm text-muted-foreground">Awaiting Customer</p>
+                <p className="text-sm text-muted-foreground">{t("admin.tickets.awaitingCustomer")}</p>
               </div>
             </div>
           </CardContent>
@@ -538,7 +540,7 @@ export function TicketsPageClient({
                 <p className="text-2xl font-bold">
                   {stats ? stats.resolved + stats.closed : 0}
                 </p>
-                <p className="text-sm text-muted-foreground">Resolved</p>
+                <p className="text-sm text-muted-foreground">{t("admin.status.RESOLVED")}</p>
               </div>
             </div>
           </CardContent>
@@ -552,7 +554,7 @@ export function TicketsPageClient({
             <div className="relative flex-1">
               <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
               <Input
-                placeholder="Search tickets..."
+                placeholder={t("admin.tickets.searchPlaceholder")}
                 className="pl-9"
                 value={searchQuery}
                 onChange={(e) => {
@@ -569,16 +571,16 @@ export function TicketsPageClient({
               }}
             >
               <SelectTrigger className="w-full sm:w-48">
-                <SelectValue placeholder="Status" />
+                <SelectValue placeholder={t("common.status")} />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="all">All Status</SelectItem>
-                <SelectItem value="OPEN">Open</SelectItem>
-                <SelectItem value="IN_PROGRESS">In Progress</SelectItem>
-                <SelectItem value="WAITING_FOR_CUSTOMER">Awaiting Customer</SelectItem>
-                <SelectItem value="WAITING_FOR_AGENT">Awaiting Agent</SelectItem>
-                <SelectItem value="RESOLVED">Resolved</SelectItem>
-                <SelectItem value="CLOSED">Closed</SelectItem>
+                <SelectItem value="all">{t("admin.tickets.allStatus")}</SelectItem>
+                <SelectItem value="OPEN">{t("admin.status.OPEN")}</SelectItem>
+                <SelectItem value="IN_PROGRESS">{t("admin.status.IN_PROGRESS")}</SelectItem>
+                <SelectItem value="WAITING_FOR_CUSTOMER">{t("admin.status.WAITING_FOR_CUSTOMER")}</SelectItem>
+                <SelectItem value="WAITING_FOR_AGENT">{t("admin.status.WAITING_FOR_AGENT")}</SelectItem>
+                <SelectItem value="RESOLVED">{t("admin.status.RESOLVED")}</SelectItem>
+                <SelectItem value="CLOSED">{t("admin.status.CLOSED")}</SelectItem>
               </SelectContent>
             </Select>
             <Select
@@ -589,14 +591,14 @@ export function TicketsPageClient({
               }}
             >
               <SelectTrigger className="w-full sm:w-36">
-                <SelectValue placeholder="Priority" />
+                <SelectValue placeholder={t("common.priority")} />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="all">All Priority</SelectItem>
-                <SelectItem value="URGENT">Urgent</SelectItem>
-                <SelectItem value="HIGH">High</SelectItem>
-                <SelectItem value="MEDIUM">Medium</SelectItem>
-                <SelectItem value="LOW">Low</SelectItem>
+                <SelectItem value="all">{t("admin.tickets.allPriority")}</SelectItem>
+                <SelectItem value="URGENT">{t("admin.priority.URGENT")}</SelectItem>
+                <SelectItem value="HIGH">{t("admin.priority.HIGH")}</SelectItem>
+                <SelectItem value="MEDIUM">{t("admin.priority.MEDIUM")}</SelectItem>
+                <SelectItem value="LOW">{t("admin.priority.LOW")}</SelectItem>
               </SelectContent>
             </Select>
           </div>
@@ -608,11 +610,11 @@ export function TicketsPageClient({
         <CardHeader>
           <div className="flex items-center justify-between">
             <div>
-              <CardTitle>All Tickets</CardTitle>
-              <CardDescription>{totalTickets} tickets total</CardDescription>
+              <CardTitle>{t("admin.tickets.allTickets")}</CardTitle>
+              <CardDescription>{t("admin.tickets.totalCount", { count: String(totalTickets) })}</CardDescription>
             </div>
             <div className="flex items-center gap-2">
-              <span className="text-sm text-muted-foreground">Per page:</span>
+              <span className="text-sm text-muted-foreground">{t("admin.tickets.perPage")}</span>
               <Select
                 value={perPage.toString()}
                 onValueChange={(v) => {
@@ -642,16 +644,16 @@ export function TicketsPageClient({
           ) : tickets.length === 0 ? (
             <div className="flex h-64 flex-col items-center justify-center text-center">
               <MessageSquare className="h-12 w-12 text-muted-foreground/50" />
-              <h3 className="mt-4 text-lg font-semibold">No tickets found</h3>
+              <h3 className="mt-4 text-lg font-semibold">{t("admin.tickets.noTickets")}</h3>
               <p className="text-sm text-muted-foreground">
                 {searchQuery || statusFilter !== "all"
-                  ? "Try adjusting your filters"
-                  : "Create your first support ticket"}
+                  ? t("admin.tickets.adjustFilters")
+                  : t("admin.tickets.createFirst")}
               </p>
               {!searchQuery && statusFilter === "all" && (
                 <Button className="mt-4" onClick={() => setNewTicketOpen(true)}>
                   <Plus className="mr-2 h-4 w-4" />
-                  Create Ticket
+                  {t("admin.tickets.createTicket")}
                 </Button>
               )}
             </div>
@@ -666,13 +668,13 @@ export function TicketsPageClient({
                         onCheckedChange={toggleAll}
                       />
                     </TableHead>
-                    <TableHead>Ticket</TableHead>
-                    <TableHead>Customer</TableHead>
-                    <TableHead>Status</TableHead>
-                    <TableHead>Priority</TableHead>
-                    <TableHead className="hidden md:table-cell">Messages</TableHead>
-                    <TableHead className="hidden lg:table-cell">Created</TableHead>
-                    <TableHead className="text-right">Actions</TableHead>
+                    <TableHead>{t("admin.tickets.ticket")}</TableHead>
+                    <TableHead>{t("admin.orders.customer")}</TableHead>
+                    <TableHead>{t("common.status")}</TableHead>
+                    <TableHead>{t("common.priority")}</TableHead>
+                    <TableHead className="hidden md:table-cell">{t("admin.tickets.messages")}</TableHead>
+                    <TableHead className="hidden lg:table-cell">{t("common.created")}</TableHead>
+                    <TableHead className="text-right">{t("common.actions")}</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
@@ -728,7 +730,7 @@ export function TicketsPageClient({
                             <SelectContent>
                               {Object.entries(statusConfig).map(([value, config]) => (
                                 <SelectItem key={value} value={value}>
-                                  {config.label}
+                                  {t(config.labelKey)}
                                 </SelectItem>
                               ))}
                             </SelectContent>
@@ -736,7 +738,7 @@ export function TicketsPageClient({
                         </TableCell>
                         <TableCell>
                           <Badge variant="secondary" className={priorityInfo.color}>
-                            {priorityInfo.label}
+                            {t(priorityInfo.labelKey)}
                           </Badge>
                         </TableCell>
                         <TableCell className="hidden md:table-cell">
@@ -756,12 +758,12 @@ export function TicketsPageClient({
                               </Button>
                             </DropdownMenuTrigger>
                             <DropdownMenuContent align="end">
-                              <DropdownMenuLabel>Actions</DropdownMenuLabel>
+                              <DropdownMenuLabel>{t("common.actions")}</DropdownMenuLabel>
                               <DropdownMenuSeparator />
                               <DropdownMenuItem asChild>
                                 <Link href={`/admin/tickets/${ticket.id}`}>
                                   <Eye className="mr-2 h-4 w-4" />
-                                  View Details
+                                  {t("admin.tickets.viewDetails")}
                                 </Link>
                               </DropdownMenuItem>
                               <DropdownMenuItem
@@ -769,7 +771,7 @@ export function TicketsPageClient({
                                 onClick={() => handleDeleteTicket(ticket.id)}
                               >
                                 <Trash2 className="mr-2 h-4 w-4" />
-                                Delete
+                                {t("common.delete")}
                               </DropdownMenuItem>
                             </DropdownMenuContent>
                           </DropdownMenu>
@@ -784,8 +786,12 @@ export function TicketsPageClient({
               {totalPages > 1 && (
                 <div className="flex items-center justify-between border-t pt-4 mt-4">
                   <p className="text-sm text-muted-foreground">
-                    Showing {(currentPage - 1) * perPage + 1} to{" "}
-                    {Math.min(currentPage * perPage, totalTickets)} of {totalTickets} tickets
+                    {t("common.showing", {
+                      start: String((currentPage - 1) * perPage + 1),
+                      end: String(Math.min(currentPage * perPage, totalTickets)),
+                      total: String(totalTickets),
+                      item: t("admin.nav.tickets").toLowerCase(),
+                    })}
                   </p>
                   <div className="flex items-center gap-2">
                     <Button
@@ -795,7 +801,7 @@ export function TicketsPageClient({
                       disabled={currentPage === 1}
                     >
                       <ChevronLeft className="h-4 w-4" />
-                      Previous
+                      {t("common.previous")}
                     </Button>
                     <div className="flex items-center gap-1">
                       {Array.from({ length: totalPages }, (_, i) => i + 1)
@@ -831,7 +837,7 @@ export function TicketsPageClient({
                       onClick={() => setCurrentPage((p) => Math.min(totalPages, p + 1))}
                       disabled={currentPage === totalPages}
                     >
-                      Next
+                      {t("common.next")}
                       <ChevronRight className="h-4 w-4" />
                     </Button>
                   </div>

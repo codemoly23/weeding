@@ -8,6 +8,7 @@ import {
   ChevronRight, Image as ImageIcon, MessageSquare,
   ExternalLink, Globe,
 } from "lucide-react";
+import { useLanguage } from "@/lib/i18n/language-context";
 
 const isLocal = (id: string) => id.startsWith("local-");
 
@@ -50,6 +51,7 @@ function formatDate(iso: string) {
 
 export default function PostWeddingPage() {
   const { id } = useParams<{ id: string }>();
+  const { t } = useLanguage();
   const local = isLocal(id);
   const [data, setData] = useState<PostWeddingData | null>(null);
   const [loading, setLoading] = useState(true);
@@ -76,10 +78,11 @@ export default function PostWeddingPage() {
     return (
       <div className="p-6 max-w-3xl mx-auto text-center py-20">
         <Heart className="w-12 h-12 text-accent/30 mx-auto mb-4" />
-        <h2 className="text-xl font-bold text-foreground mb-2">Post-Wedding</h2>
+        <h2 className="text-xl font-bold text-foreground mb-2">{t("postWedding.heading")}</h2>
         <p className="text-muted-foreground text-sm">
-          Post-wedding memories are available for saved projects.{" "}
-          <Link href="/login" className="text-primary underline">Sign in</Link> to save your project and access this feature.
+          {t("postWedding.localMsg")}{" "}
+          <Link href="/login" className="text-primary underline">{t("postWedding.signIn")}</Link>{" "}
+          {t("postWedding.localSignInSuffix")}
         </p>
       </div>
     );
@@ -99,9 +102,9 @@ export default function PostWeddingPage() {
   const rsvp = data?.rsvpCounts ?? { attending: 0, notAttending: 0, noReply: 0, total: 0 };
 
   const TABS = [
-    { id: "overview" as const, label: "Overview", icon: Heart },
-    { id: "guestbook" as const, label: `Guestbook (${entries.length})`, icon: BookOpen },
-    { id: "photos" as const, label: `Photos (${photos.length})`, icon: Camera },
+    { id: "overview" as const, label: t("postWedding.tabOverview"), icon: Heart },
+    { id: "guestbook" as const, label: `${t("postWedding.tabGuestbook")} (${entries.length})`, icon: BookOpen },
+    { id: "photos" as const, label: `${t("postWedding.tabPhotos")} (${photos.length})`, icon: Camera },
   ];
 
   return (
@@ -110,9 +113,9 @@ export default function PostWeddingPage() {
       <div className="mb-8">
         <div className="flex items-center gap-3 mb-1">
           <Heart className="w-6 h-6 text-accent" />
-          <h1 className="text-2xl font-bold text-foreground">Post-Wedding</h1>
+          <h1 className="text-2xl font-bold text-foreground">{t("postWedding.heading")}</h1>
         </div>
-        <p className="text-sm text-muted-foreground">Relive your special day — guestbook messages, photos, and memories.</p>
+        <p className="text-sm text-muted-foreground">{t("postWedding.subheading")}</p>
       </div>
 
       {/* Tabs */}
@@ -141,20 +144,20 @@ export default function PostWeddingPage() {
         <div className="space-y-6">
           {/* Stats */}
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
-            <StatCard icon={<Users className="w-5 h-5 text-primary" />} label="Attending" value={rsvp.attending} color="primary" />
-            <StatCard icon={<MessageSquare className="w-5 h-5 text-accent" />} label="Guestbook" value={entries.length} color="accent" />
-            <StatCard icon={<Camera className="w-5 h-5 text-accent" />} label="Photos" value={photos.length} color="accent" />
-            <StatCard icon={<Heart className="w-5 h-5 text-[var(--color-error-text)]" />} label="Total RSVPs" value={rsvp.total} color="error" />
+            <StatCard icon={<Users className="w-5 h-5 text-primary" />} label={t("postWedding.statAttending")} value={rsvp.attending} color="primary" />
+            <StatCard icon={<MessageSquare className="w-5 h-5 text-accent" />} label={t("postWedding.statGuestbook")} value={entries.length} color="accent" />
+            <StatCard icon={<Camera className="w-5 h-5 text-accent" />} label={t("postWedding.statPhotos")} value={photos.length} color="accent" />
+            <StatCard icon={<Heart className="w-5 h-5 text-[var(--color-error-text)]" />} label={t("postWedding.statTotalRsvp")} value={rsvp.total} color="error" />
           </div>
 
           {/* RSVP breakdown */}
           {rsvp.total > 0 && (
             <div className="bg-card rounded-2xl border border-border p-5">
-              <h3 className="text-sm font-semibold text-foreground/80 mb-3">RSVP Summary</h3>
+              <h3 className="text-sm font-semibold text-foreground/80 mb-3">{t("postWedding.rsvpSummary")}</h3>
               <div className="space-y-2">
-                <RsvpBar label="Attending" count={rsvp.attending} total={rsvp.total} color="bg-[var(--color-success-bg)]" />
-                <RsvpBar label="Not Attending" count={rsvp.notAttending} total={rsvp.total} color="bg-[var(--color-error-bg)]" />
-                <RsvpBar label="No Reply" count={rsvp.noReply} total={rsvp.total} color="bg-muted" />
+                <RsvpBar label={t("postWedding.rsvpAttending")} count={rsvp.attending} total={rsvp.total} color="bg-[var(--color-success-bg)]" />
+                <RsvpBar label={t("postWedding.rsvpNotAttending")} count={rsvp.notAttending} total={rsvp.total} color="bg-[var(--color-error-bg)]" />
+                <RsvpBar label={t("postWedding.rsvpNoReply")} count={rsvp.noReply} total={rsvp.total} color="bg-muted" />
               </div>
             </div>
           )}
@@ -172,7 +175,7 @@ export default function PostWeddingPage() {
                   </div>
                   <ChevronRight className="w-4 h-4 text-muted-foreground/50 group-hover:text-primary transition-colors" />
                 </div>
-                <p className="text-sm font-semibold text-foreground">Latest Guestbook Message</p>
+                <p className="text-sm font-semibold text-foreground">{t("postWedding.latestGuestbook")}</p>
                 <p className="text-xs text-muted-foreground mt-1 line-clamp-2">&ldquo;{entries[0]?.message}&rdquo;</p>
                 <p className="text-xs text-primary mt-2">— {entries[0]?.authorName}</p>
               </button>
@@ -184,15 +187,15 @@ export default function PostWeddingPage() {
                 className="bg-card rounded-2xl border border-border overflow-hidden text-left hover:border-primary/20 transition-colors group relative"
               >
                 {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img src={photos[0].photoData} alt="Latest photo" className="w-full h-32 object-cover" />
+                <img src={photos[0].photoData} alt={t("postWedding.statPhotos")} className="w-full h-32 object-cover" />
                 <div className="p-4">
                   <div className="flex items-center justify-between">
                     <p className="text-sm font-semibold text-foreground">
-                      {photos.length} Guest Photo{photos.length !== 1 ? "s" : ""}
+                      {photos.length} {photos.length !== 1 ? t("postWedding.guestPhotosPlural") : t("postWedding.guestPhotoSingular")}
                     </p>
                     <ChevronRight className="w-4 h-4 text-muted-foreground/50 group-hover:text-primary transition-colors" />
                   </div>
-                  <p className="text-xs text-muted-foreground mt-0.5">Shared by your guests</p>
+                  <p className="text-xs text-muted-foreground mt-0.5">{t("postWedding.sharedByGuests")}</p>
                 </div>
               </button>
             )}
@@ -202,9 +205,9 @@ export default function PostWeddingPage() {
           {website && (
             <div className="bg-gradient-to-r from-primary/5 to-accent/5 rounded-2xl border border-primary/20 p-5 flex items-center justify-between">
               <div>
-                <p className="text-sm font-semibold text-foreground">Your Wedding Website</p>
+                <p className="text-sm font-semibold text-foreground">{t("postWedding.yourWebsite")}</p>
                 <p className="text-xs text-muted-foreground mt-0.5">
-                  {website.published ? "Published and accessible to guests" : "Not yet published"}
+                  {website.published ? t("postWedding.published") : t("postWedding.notPublished")}
                 </p>
               </div>
               {website.published ? (
@@ -214,7 +217,7 @@ export default function PostWeddingPage() {
                   className="flex items-center gap-1.5 px-4 py-2 bg-primary text-primary-foreground text-sm font-medium rounded-lg hover:bg-primary/90 transition-colors shrink-0"
                 >
                   <ExternalLink className="w-3.5 h-3.5" />
-                  Visit site
+                  {t("postWedding.visitSite")}
                 </Link>
               ) : (
                 <Link
@@ -222,7 +225,7 @@ export default function PostWeddingPage() {
                   className="flex items-center gap-1.5 px-4 py-2 bg-muted text-foreground/80 text-sm font-medium rounded-lg hover:bg-muted/80 transition-colors shrink-0 border border-border"
                 >
                   <Globe className="w-3.5 h-3.5" />
-                  Edit & Publish
+                  {t("postWedding.editPublish")}
                 </Link>
               )}
             </div>
@@ -232,10 +235,8 @@ export default function PostWeddingPage() {
           {entries.length === 0 && photos.length === 0 && rsvp.total === 0 && (
             <div className="text-center py-12 bg-muted/30 rounded-2xl border border-dashed border-border">
               <Heart className="w-10 h-10 text-muted-foreground/30 mx-auto mb-3" />
-              <p className="text-sm text-muted-foreground">Your post-wedding memories will appear here</p>
-              <p className="text-xs text-muted-foreground/70 mt-1">
-                Guestbook messages and guest photos from your wedding site will show up once guests submit them
-              </p>
+              <p className="text-sm text-muted-foreground">{t("postWedding.emptyMemories")}</p>
+              <p className="text-xs text-muted-foreground/70 mt-1">{t("postWedding.emptyMemoriesDesc")}</p>
             </div>
           )}
         </div>
@@ -247,19 +248,21 @@ export default function PostWeddingPage() {
           {entries.length === 0 ? (
             <div className="text-center py-16 bg-muted/30 rounded-2xl border border-dashed border-border">
               <BookOpen className="w-8 h-8 text-muted-foreground/30 mx-auto mb-2" />
-              <p className="text-sm text-muted-foreground">No guestbook messages yet</p>
-              <p className="text-xs text-muted-foreground/70 mt-1">Guests can leave messages on your wedding website</p>
+              <p className="text-sm text-muted-foreground">{t("postWedding.noMessages")}</p>
+              <p className="text-xs text-muted-foreground/70 mt-1">{t("postWedding.noMessagesDesc")}</p>
               {website && (
                 <Link href={`/wedding/${website.slug}`} target="_blank"
                   className="inline-flex items-center gap-1 mt-3 text-xs text-primary hover:underline">
-                  <ExternalLink className="w-3 h-3" /> Visit your wedding site
+                  <ExternalLink className="w-3 h-3" /> {t("postWedding.visitWeddingSite")}
                 </Link>
               )}
             </div>
           ) : (
             <>
               <div className="flex items-center justify-between mb-4">
-                <p className="text-sm text-muted-foreground">{entries.length} message{entries.length !== 1 ? "s" : ""}</p>
+                <p className="text-sm text-muted-foreground">
+                  {entries.length} {entries.length !== 1 ? t("postWedding.messagesPlural") : t("postWedding.messageSingular")}
+                </p>
                 <button
                   onClick={() => {
                     const text = entries.map(e =>
@@ -273,7 +276,7 @@ export default function PostWeddingPage() {
                   }}
                   className="flex items-center gap-1.5 text-xs text-primary hover:text-primary/80"
                 >
-                  <Download className="w-3.5 h-3.5" /> Download all
+                  <Download className="w-3.5 h-3.5" /> {t("postWedding.downloadAll")}
                 </button>
               </div>
               <div className="space-y-3">
@@ -298,18 +301,20 @@ export default function PostWeddingPage() {
           {photos.length === 0 ? (
             <div className="text-center py-16 bg-muted/30 rounded-2xl border border-dashed border-border">
               <ImageIcon className="w-8 h-8 text-muted-foreground/30 mx-auto mb-2" />
-              <p className="text-sm text-muted-foreground">No guest photos yet</p>
-              <p className="text-xs text-muted-foreground/70 mt-1">Guests can upload photos from your wedding website</p>
+              <p className="text-sm text-muted-foreground">{t("postWedding.noPhotos")}</p>
+              <p className="text-xs text-muted-foreground/70 mt-1">{t("postWedding.noPhotosDesc")}</p>
               {website && (
                 <Link href={`/wedding/${website.slug}`} target="_blank"
                   className="inline-flex items-center gap-1 mt-3 text-xs text-primary hover:underline">
-                  <ExternalLink className="w-3 h-3" /> Visit your wedding site
+                  <ExternalLink className="w-3 h-3" /> {t("postWedding.visitWeddingSite")}
                 </Link>
               )}
             </div>
           ) : (
             <>
-              <p className="text-sm text-muted-foreground mb-4">{photos.length} photo{photos.length !== 1 ? "s" : ""} shared by guests</p>
+              <p className="text-sm text-muted-foreground mb-4">
+                {photos.length} {photos.length !== 1 ? t("postWedding.photosPlural") : t("postWedding.photoSingular")} {t("postWedding.photosSharedSuffix")}
+              </p>
               <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3">
                 {photos.map(photo => (
                   <div
@@ -318,7 +323,7 @@ export default function PostWeddingPage() {
                     onClick={() => setLightboxSrc(photo.photoData)}
                   >
                     {/* eslint-disable-next-line @next/next/no-img-element */}
-                    <img src={photo.photoData} alt={photo.caption || "Guest photo"} className="w-full aspect-square object-cover" />
+                    <img src={photo.photoData} alt={photo.caption || t("postWedding.statPhotos")} className="w-full aspect-square object-cover" />
                     {(photo.uploaderName || photo.caption) && (
                       <div className="px-2.5 py-2">
                         {photo.uploaderName && <p className="text-xs font-semibold text-foreground/80 truncate">{photo.uploaderName}</p>}
@@ -349,7 +354,7 @@ export default function PostWeddingPage() {
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
             src={lightboxSrc}
-            alt="Full size"
+            alt={t("postWedding.statPhotos")}
             className="max-w-full max-h-[90vh] object-contain rounded-lg"
             onClick={e => e.stopPropagation()}
           />

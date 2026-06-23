@@ -1,7 +1,8 @@
-"use client";
+﻿"use client";
 
 import { useState, useEffect } from "react";
 import { Star, Clock, MessageSquare, Pencil, X, Check } from "lucide-react";
+import { useLanguage } from "@/lib/i18n/language-context";
 
 interface Review {
   id: string;
@@ -33,6 +34,7 @@ function ReplyBox({
   review: Review;
   onSaved: (id: string, reply: string | null) => void;
 }) {
+  const { t } = useLanguage();
   const [open, setOpen] = useState(false);
   const [text, setText] = useState(review.reply ?? "");
   const [saving, setSaving] = useState(false);
@@ -49,13 +51,13 @@ function ReplyBox({
       });
       const data = await res.json();
       if (!res.ok) {
-        setError(data.error ?? "Failed to save reply");
+        setError(data.error ?? t("vendor.reviews.saveReplyFailed"));
         return;
       }
       onSaved(review.id, data.review.reply);
       setOpen(false);
     } catch {
-      setError("Something went wrong");
+      setError(t("common.somethingWentWrong"));
     } finally {
       setSaving(false);
     }
@@ -72,14 +74,14 @@ function ReplyBox({
       });
       const data = await res.json();
       if (!res.ok) {
-        setError(data.error ?? "Failed to remove reply");
+        setError(data.error ?? t("vendor.reviews.removeReplyFailed"));
         return;
       }
       onSaved(review.id, null);
       setText("");
       setOpen(false);
     } catch {
-      setError("Something went wrong");
+      setError(t("common.somethingWentWrong"));
     } finally {
       setSaving(false);
     }
@@ -96,7 +98,7 @@ function ReplyBox({
       <div className="mt-3">
         {review.reply && (
           <div className="pl-3 border-l-2 border-primary/20 mb-3">
-            <p className="text-xs text-muted-foreground/70 mb-0.5">Your reply:</p>
+            <p className="text-xs text-muted-foreground/70 mb-0.5">{t("vendor.reviews.yourReply")}</p>
             <p className="text-sm text-foreground/80 leading-relaxed">{review.reply}</p>
           </div>
         )}
@@ -106,11 +108,11 @@ function ReplyBox({
         >
           {review.reply ? (
             <>
-              <Pencil className="w-3 h-3" /> Edit reply
+              <Pencil className="w-3 h-3" /> {t("vendor.reviews.editReply")}
             </>
           ) : (
             <>
-              <MessageSquare className="w-3 h-3" /> Reply to review
+              <MessageSquare className="w-3 h-3" /> {t("vendor.reviews.replyToReview")}
             </>
           )}
         </button>
@@ -122,18 +124,18 @@ function ReplyBox({
     <div className="mt-3">
       {review.reply && (
         <div className="pl-3 border-l-2 border-primary/20 mb-3">
-          <p className="text-xs text-muted-foreground/70 mb-0.5">Current reply:</p>
+          <p className="text-xs text-muted-foreground/70 mb-0.5">{t("vendor.reviews.currentReply")}</p>
           <p className="text-sm text-foreground/80 leading-relaxed">{review.reply}</p>
         </div>
       )}
       <div className="bg-muted/40 rounded-lg p-3 border border-border/60">
         <p className="text-xs font-medium text-muted-foreground mb-2">
-          {review.reply ? "Edit your reply" : "Write a reply"}
+          {review.reply ? t("vendor.reviews.editYourReply") : t("vendor.reviews.writeReply")}
         </p>
         <textarea
           value={text}
           onChange={(e) => setText(e.target.value)}
-          placeholder="Thank the customer or address their feedback professionally…"
+          placeholder={t("vendor.reviews.replyPlaceholder")}
           rows={3}
           maxLength={1000}
           className="w-full text-sm bg-background border border-border rounded-md px-3 py-2 text-foreground placeholder:text-muted-foreground/50 resize-none focus:outline-none focus:ring-1 focus:ring-primary/50"
@@ -147,7 +149,7 @@ function ReplyBox({
                 disabled={saving}
                 className="text-xs text-destructive hover:text-destructive/80 disabled:opacity-50 transition-colors"
               >
-                Remove reply
+                {t("vendor.reviews.removeReply")}
               </button>
             )}
             <button
@@ -155,7 +157,7 @@ function ReplyBox({
               disabled={saving}
               className="inline-flex items-center gap-1 text-xs text-muted-foreground hover:text-foreground disabled:opacity-50 transition-colors"
             >
-              <X className="w-3 h-3" /> Cancel
+              <X className="w-3 h-3" /> {t("common.cancel")}
             </button>
             <button
               onClick={handleSave}
@@ -167,7 +169,7 @@ function ReplyBox({
               ) : (
                 <Check className="w-3 h-3" />
               )}
-              {saving ? "Saving…" : "Save reply"}
+              {saving ? t("common.saving") : t("vendor.reviews.saveReply")}
             </button>
           </div>
         </div>
@@ -178,6 +180,7 @@ function ReplyBox({
 }
 
 export default function VendorReviewsPage() {
+  const { t } = useLanguage();
   const [reviews, setReviews] = useState<Review[]>([]);
   const [avgRating, setAvgRating] = useState<number | null>(null);
   const [loading, setLoading] = useState(true);
@@ -213,9 +216,9 @@ export default function VendorReviewsPage() {
   return (
     <div className="max-w-3xl mx-auto space-y-6">
       <div>
-        <h1 className="text-2xl font-bold text-foreground">Reviews</h1>
+        <h1 className="text-2xl font-bold text-foreground">{t("vendor.nav.reviews")}</h1>
         <p className="text-sm text-muted-foreground mt-0.5">
-          {approved.length} approved · {pending.length} pending approval
+          {t("vendor.reviews.summary", { approved: String(approved.length), pending: String(pending.length) })}
         </p>
       </div>
 
@@ -225,7 +228,7 @@ export default function VendorReviewsPage() {
           <div className="text-center shrink-0">
             <p className="text-4xl font-bold text-foreground">{avgRating.toFixed(1)}</p>
             <Stars rating={Math.round(avgRating)} />
-            <p className="text-xs text-muted-foreground mt-1">{approved.length} approved reviews</p>
+            <p className="text-xs text-muted-foreground mt-1">{t("vendor.reviews.approvedCount", { count: String(approved.length) })}</p>
           </div>
           <div className="flex-1 space-y-1.5">
             {[5, 4, 3, 2, 1].map((star) => {
@@ -255,10 +258,10 @@ export default function VendorReviewsPage() {
           <Clock className="w-4 h-4 text-[var(--color-warning-text)] mt-0.5 shrink-0" />
           <div>
             <p className="text-sm font-medium text-[var(--color-warning-text)]">
-              {pending.length} review{pending.length > 1 ? "s" : ""} awaiting admin approval
+              {t("vendor.reviews.awaitingApproval", { count: String(pending.length) })}
             </p>
             <p className="text-xs text-[var(--color-warning-text)] mt-0.5">
-              These will appear publicly once approved.
+              {t("vendor.reviews.publicAfterApproval")}
             </p>
           </div>
         </div>
@@ -268,9 +271,9 @@ export default function VendorReviewsPage() {
       {reviews.length === 0 && (
         <div className="bg-card rounded-xl border border-border px-6 py-14 text-center">
           <Star className="w-10 h-10 text-muted-foreground/50 mx-auto mb-3" />
-          <p className="text-sm font-medium text-muted-foreground">No reviews yet</p>
+          <p className="text-sm font-medium text-muted-foreground">{t("vendor.reviews.noReviews")}</p>
           <p className="text-xs text-muted-foreground/70 mt-1">
-            Reviews from customers will appear here after they&apos;re approved
+            {t("vendor.reviews.noReviewsDesc")}
           </p>
         </div>
       )}
@@ -278,7 +281,7 @@ export default function VendorReviewsPage() {
       {/* Approved reviews */}
       {approved.length > 0 && (
         <div className="space-y-3">
-          <h2 className="text-sm font-semibold text-foreground uppercase tracking-wide">Approved</h2>
+          <h2 className="text-sm font-semibold text-foreground uppercase tracking-wide">{t("vendor.reviews.approved")}</h2>
           {approved.map((r) => (
             <div key={r.id} className="bg-card rounded-xl border border-border p-5">
               <div className="flex items-start justify-between gap-3">
@@ -310,7 +313,7 @@ export default function VendorReviewsPage() {
       {pending.length > 0 && (
         <div className="space-y-3">
           <h2 className="text-sm font-semibold text-foreground uppercase tracking-wide">
-            Pending Approval
+            {t("vendor.reviews.pendingApproval")}
           </h2>
           {pending.map((r) => (
             <div

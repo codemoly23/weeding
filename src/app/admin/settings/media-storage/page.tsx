@@ -24,6 +24,7 @@ import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { toast } from "sonner";
 import { Badge } from "@/components/ui/badge";
+import { useLanguage } from "@/lib/i18n/language-context";
 
 interface R2Settings {
   "storage.r2.accountId": string;
@@ -42,6 +43,7 @@ const defaultSettings: R2Settings = {
 };
 
 export default function MediaStorageSettingsPage() {
+  const { t } = useLanguage();
   const [settings, setSettings] = useState<R2Settings>(defaultSettings);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
@@ -70,7 +72,7 @@ export default function MediaStorageSettingsPage() {
       }
     } catch (error) {
       console.error("Error fetching settings:", error);
-      toast.error("Failed to load storage settings");
+      toast.error(t("admin.mediaStorage.loadFailed"));
     } finally {
       setLoading(false);
     }
@@ -93,11 +95,11 @@ export default function MediaStorageSettingsPage() {
 
       if (!res.ok) throw new Error("Failed to save");
 
-      toast.success("Storage settings saved successfully");
+      toast.success(t("admin.mediaStorage.saved"));
       setConnectionStatus("untested");
     } catch (error) {
       console.error("Error saving settings:", error);
-      toast.error("Failed to save storage settings");
+      toast.error(t("admin.mediaStorage.saveFailed"));
     } finally {
       setSaving(false);
     }
@@ -117,15 +119,15 @@ export default function MediaStorageSettingsPage() {
 
       if (data.success) {
         setConnectionStatus("success");
-        toast.success("R2 connection successful!");
+        toast.success(t("admin.mediaStorage.connectionSuccess"));
       } else {
         setConnectionStatus("error");
-        toast.error(data.error || "Connection failed");
+        toast.error(data.error || t("admin.mediaStorage.connectionFailed"));
       }
     } catch (error) {
       console.error("Error testing connection:", error);
       setConnectionStatus("error");
-      toast.error("Failed to test connection");
+      toast.error(t("admin.mediaStorage.testFailed"));
     } finally {
       setTesting(false);
     }
@@ -152,9 +154,9 @@ export default function MediaStorageSettingsPage() {
     <div className="space-y-6">
       <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <div>
-          <h1 className="text-2xl font-bold">Media Storage</h1>
+          <h1 className="text-2xl font-bold">{t("admin.mediaStorage.title")}</h1>
           <p className="text-muted-foreground">
-            Configure Cloudflare R2 for image and file storage
+            {t("admin.mediaStorage.subtitle")}
           </p>
         </div>
         <Button onClick={saveSettings} disabled={saving} className="self-start sm:self-auto">
@@ -163,7 +165,7 @@ export default function MediaStorageSettingsPage() {
           ) : (
             <Save className="h-4 w-4 mr-2" />
           )}
-          Save Changes
+          {t("common.saveChanges")}
         </Button>
       </div>
 
@@ -176,9 +178,9 @@ export default function MediaStorageSettingsPage() {
                 <Cloud className="h-6 w-6 text-[var(--ast-processing-icon)]" />
               </div>
               <div>
-                <CardTitle>Cloudflare R2 Storage</CardTitle>
+                <CardTitle>{t("admin.mediaStorage.r2Title")}</CardTitle>
                 <CardDescription>
-                  S3-compatible object storage with zero egress fees
+                  {t("admin.mediaStorage.r2Desc")}
                 </CardDescription>
               </div>
             </div>
@@ -186,18 +188,18 @@ export default function MediaStorageSettingsPage() {
               {connectionStatus === "success" && (
                 <Badge variant="default" className="bg-[var(--ast-success-icon)]">
                   <CheckCircle className="h-3 w-3 mr-1" />
-                  Connected
+                  {t("admin.mediaStorage.connected")}
                 </Badge>
               )}
               {connectionStatus === "error" && (
                 <Badge variant="destructive">
                   <XCircle className="h-3 w-3 mr-1" />
-                  Error
+                  {t("admin.mediaStorage.error")}
                 </Badge>
               )}
               {connectionStatus === "untested" && isConfigured && (
                 <Badge variant="secondary">
-                  Not Tested
+                  {t("admin.mediaStorage.notTested")}
                 </Badge>
               )}
             </div>
@@ -206,20 +208,20 @@ export default function MediaStorageSettingsPage() {
         <CardContent className="space-y-6">
           {/* Account ID */}
           <div className="space-y-2">
-            <Label>Account ID</Label>
+            <Label>{t("admin.mediaStorage.accountId")}</Label>
             <Input
               value={settings["storage.r2.accountId"]}
               onChange={(e) => updateSetting("storage.r2.accountId", e.target.value)}
               placeholder="your-cloudflare-account-id"
             />
             <p className="text-xs text-muted-foreground">
-              Find this in Cloudflare Dashboard &gt; R2 &gt; Overview
+              {t("admin.mediaStorage.accountHelp")}
             </p>
           </div>
 
           {/* Access Key ID */}
           <div className="space-y-2">
-            <Label>Access Key ID</Label>
+            <Label>{t("admin.mediaStorage.accessKeyId")}</Label>
             <Input
               value={settings["storage.r2.accessKeyId"]}
               onChange={(e) => updateSetting("storage.r2.accessKeyId", e.target.value)}
@@ -230,7 +232,7 @@ export default function MediaStorageSettingsPage() {
           {/* Secret Access Key */}
           <div className="space-y-2">
             <Label className="flex items-center justify-between">
-              Secret Access Key
+              {t("admin.mediaStorage.secretAccessKey")}
               <Button
                 type="button"
                 variant="ghost"
@@ -251,13 +253,13 @@ export default function MediaStorageSettingsPage() {
               placeholder="your-r2-secret-access-key"
             />
             <p className="text-xs text-muted-foreground">
-              Create API token in R2 &gt; Manage R2 API Tokens
+              {t("admin.mediaStorage.secretHelp")}
             </p>
           </div>
 
           {/* Bucket Name */}
           <div className="space-y-2">
-            <Label>Bucket Name</Label>
+            <Label>{t("admin.mediaStorage.bucketName")}</Label>
             <Input
               value={settings["storage.r2.bucketName"]}
               onChange={(e) => updateSetting("storage.r2.bucketName", e.target.value)}
@@ -267,14 +269,14 @@ export default function MediaStorageSettingsPage() {
 
           {/* Public URL */}
           <div className="space-y-2">
-            <Label>Public URL (Custom Domain)</Label>
+            <Label>{t("admin.mediaStorage.publicUrl")}</Label>
             <Input
               value={settings["storage.r2.publicUrl"]}
               onChange={(e) => updateSetting("storage.r2.publicUrl", e.target.value)}
               placeholder="https://media.yourdomain.com"
             />
             <p className="text-xs text-muted-foreground">
-              Optional: Custom domain for public access. Set up in R2 bucket settings.
+              {t("admin.mediaStorage.publicUrlHelp")}
             </p>
           </div>
 
@@ -290,11 +292,11 @@ export default function MediaStorageSettingsPage() {
               ) : (
                 <RefreshCw className="h-4 w-4 mr-2" />
               )}
-              Test Connection
+              {t("admin.mediaStorage.testConnection")}
             </Button>
             {!isConfigured && (
               <p className="text-sm text-muted-foreground">
-                Fill in all required fields to test connection
+                {t("admin.mediaStorage.fillRequired")}
               </p>
             )}
           </div>

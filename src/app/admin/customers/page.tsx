@@ -22,6 +22,7 @@ import {
 } from "@/components/ui/alert-dialog";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { toast } from "sonner";
+import { useLanguage } from "@/lib/i18n/language-context";
 
 interface Customer {
   id: string;
@@ -36,11 +37,11 @@ interface Customer {
   isActive?: boolean;
 }
 
-function timeAgo(date: string) {
+function timeAgo(date: string, t: (key: string, vars?: Record<string, string>) => string) {
   const diff = Math.floor((Date.now() - new Date(date).getTime()) / 1000);
-  if (diff < 86400) return "Today";
-  if (diff < 604800) return `${Math.floor(diff / 86400)}d ago`;
-  if (diff < 2592000) return `${Math.floor(diff / 604800)}w ago`;
+  if (diff < 86400) return t("common.time.today");
+  if (diff < 604800) return t("common.time.daysAgo", { count: String(Math.floor(diff / 86400)) });
+  if (diff < 2592000) return t("common.time.weeksAgo", { count: String(Math.floor(diff / 604800)) });
   return new Date(date).toLocaleDateString();
 }
 
@@ -49,6 +50,7 @@ function initials(name: string) {
 }
 
 export default function AdminCustomersPage() {
+  const { t } = useLanguage();
   const [search, setSearch] = useState("");
   const [customers, setCustomers] = useState<Customer[]>([]);
   const [total, setTotal] = useState(0);
@@ -97,15 +99,15 @@ export default function AdminCustomersPage() {
       const res = await fetch(`/api/admin/customers/${disableTarget.id}/disable`, { method: "PATCH" });
       const data = await res.json();
       if (res.ok) {
-        toast.success(data.isActive ? "Account re-enabled" : "Account disabled");
+        toast.success(data.isActive ? t("admin.customers.accountReenabled") : t("admin.customers.accountDisabled"));
         setCustomers((prev) =>
           prev.map((c) => c.id === disableTarget.id ? { ...c, isActive: data.isActive } : c)
         );
       } else {
-        toast.error(data.error || "Failed to update account");
+        toast.error(data.error || t("admin.customers.updateAccountFailed"));
       }
     } catch {
-      toast.error("Network error");
+      toast.error(t("common.networkError"));
     } finally {
       setDisabling(false);
       setDisableTarget(null);
@@ -117,8 +119,8 @@ export default function AdminCustomersPage() {
       {/* Header */}
       <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div>
-          <h1 className="text-2xl font-bold">Customers</h1>
-          <p className="text-muted-foreground">Manage your customer database</p>
+          <h1 className="text-2xl font-bold">{t("admin.nav.customers")}</h1>
+          <p className="text-muted-foreground">{t("admin.customers.subtitle")}</p>
         </div>
       </div>
 
@@ -127,7 +129,7 @@ export default function AdminCustomersPage() {
         <Card>
           <CardContent className="pt-6">
             <div className="text-2xl font-bold">{total}</div>
-            <p className="text-sm text-muted-foreground">Total Customers</p>
+            <p className="text-sm text-muted-foreground">{t("admin.customers.totalCustomers")}</p>
           </CardContent>
         </Card>
         <Card>
@@ -135,7 +137,7 @@ export default function AdminCustomersPage() {
             <div className="text-2xl font-bold">
               ${totalRevenue.toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 0 })}
             </div>
-            <p className="text-sm text-muted-foreground">Total Revenue (Paid)</p>
+            <p className="text-sm text-muted-foreground">{t("admin.customers.totalRevenuePaid")}</p>
           </CardContent>
         </Card>
         <Card>
@@ -143,7 +145,7 @@ export default function AdminCustomersPage() {
             <div className="text-2xl font-bold">
               ${total > 0 ? Math.round(totalRevenue / total).toLocaleString() : 0}
             </div>
-            <p className="text-sm text-muted-foreground">Avg. Revenue / Customer</p>
+            <p className="text-sm text-muted-foreground">{t("admin.customers.avgRevenueCustomer")}</p>
           </CardContent>
         </Card>
       </div>
@@ -154,7 +156,7 @@ export default function AdminCustomersPage() {
           <div className="relative">
             <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
             <Input
-              placeholder="Search by name or email..."
+              placeholder={t("admin.customers.searchPlaceholder")}
               className="pl-9"
               value={search}
               onChange={(e) => setSearch(e.target.value)}
@@ -167,9 +169,9 @@ export default function AdminCustomersPage() {
       <Card>
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
-            <Users className="h-4 w-4" /> All Customers
+            <Users className="h-4 w-4" /> {t("admin.customers.allCustomers")}
           </CardTitle>
-          <CardDescription>{total} customers total</CardDescription>
+          <CardDescription>{t("admin.customers.totalCount", { count: String(total) })}</CardDescription>
         </CardHeader>
         <CardContent>
           {loading ? (
@@ -178,18 +180,18 @@ export default function AdminCustomersPage() {
             </div>
           ) : customers.length === 0 ? (
             <div className="py-12 text-center text-sm text-muted-foreground">
-              No customers found.
+              {t("admin.customers.noCustomers")}
             </div>
           ) : (
             <Table>
               <TableHeader>
                 <TableRow>
-                  <TableHead>Customer</TableHead>
-                  <TableHead className="hidden md:table-cell">Country</TableHead>
-                  <TableHead>Orders</TableHead>
-                  <TableHead className="hidden sm:table-cell">Total Spent</TableHead>
-                  <TableHead className="hidden lg:table-cell">Joined</TableHead>
-                  <TableHead className="text-right">Actions</TableHead>
+                  <TableHead>{t("admin.orders.customer")}</TableHead>
+                  <TableHead className="hidden md:table-cell">{t("admin.customers.country")}</TableHead>
+                  <TableHead>{t("admin.nav.orders")}</TableHead>
+                  <TableHead className="hidden sm:table-cell">{t("admin.customers.totalSpent")}</TableHead>
+                  <TableHead className="hidden lg:table-cell">{t("admin.customers.joined")}</TableHead>
+                  <TableHead className="text-right">{t("admin.orders.actions")}</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
@@ -221,7 +223,7 @@ export default function AdminCustomersPage() {
                       ${customer.totalSpent.toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 0 })}
                     </TableCell>
                     <TableCell className="hidden lg:table-cell text-muted-foreground text-sm">
-                      {timeAgo(customer.joinedAt)}
+                      {timeAgo(customer.joinedAt, t)}
                     </TableCell>
                     <TableCell className="text-right">
                       <DropdownMenu>
@@ -231,19 +233,19 @@ export default function AdminCustomersPage() {
                           </Button>
                         </DropdownMenuTrigger>
                         <DropdownMenuContent align="end">
-                          <DropdownMenuLabel>Actions</DropdownMenuLabel>
+                          <DropdownMenuLabel>{t("admin.orders.actions")}</DropdownMenuLabel>
                           <DropdownMenuSeparator />
                           <DropdownMenuItem asChild>
                             <Link href={`/admin/customers/${customer.id}`}>
                               <Eye className="mr-2 h-4 w-4" />
-                              View Profile
+                              {t("admin.customers.viewProfile")}
                             </Link>
                           </DropdownMenuItem>
                           <DropdownMenuItem
                             onClick={() => window.open(`mailto:${customer.email}`, "_blank")}
                           >
                             <Mail className="mr-2 h-4 w-4" />
-                            Send Email
+                            {t("admin.orders.sendEmail")}
                           </DropdownMenuItem>
                           <DropdownMenuSeparator />
                           <DropdownMenuItem
@@ -251,7 +253,7 @@ export default function AdminCustomersPage() {
                             onClick={() => setDisableTarget(customer)}
                           >
                             <Ban className="mr-2 h-4 w-4" />
-                            {customer.isActive === false ? "Re-enable Account" : "Disable Account"}
+                            {customer.isActive === false ? t("admin.customers.reenableAccount") : t("admin.customers.disableAccount")}
                           </DropdownMenuItem>
                         </DropdownMenuContent>
                       </DropdownMenu>
@@ -265,21 +267,21 @@ export default function AdminCustomersPage() {
           {/* Pagination */}
           {pages > 1 && (
             <div className="mt-4 flex items-center justify-between text-sm text-muted-foreground">
-              <span>Page {page} of {pages}</span>
+              <span>{t("admin.customers.pageOf", { page: String(page), total: String(pages) })}</span>
               <div className="flex gap-2">
                 <Button
                   variant="outline" size="sm"
                   disabled={page <= 1 || loading}
                   onClick={() => setPage((p) => p - 1)}
                 >
-                  Previous
+                  {t("common.previous")}
                 </Button>
                 <Button
                   variant="outline" size="sm"
                   disabled={page >= pages || loading}
                   onClick={() => setPage((p) => p + 1)}
                 >
-                  Next
+                  {t("common.next")}
                 </Button>
               </div>
             </div>
@@ -292,16 +294,16 @@ export default function AdminCustomersPage() {
         <AlertDialogContent>
           <AlertDialogHeader>
             <AlertDialogTitle>
-              {disableTarget?.isActive === false ? "Re-enable Account?" : "Disable Account?"}
+              {disableTarget?.isActive === false ? t("admin.customers.reenableAccountQuestion") : t("admin.customers.disableAccountQuestion")}
             </AlertDialogTitle>
             <AlertDialogDescription>
               {disableTarget?.isActive === false
-                ? `${disableTarget?.name} will be able to log in again.`
-                : `${disableTarget?.name} will be immediately unable to log in until re-enabled.`}
+                ? t("admin.customers.reenableAccountDesc", { name: disableTarget?.name ?? "" })
+                : t("admin.customers.disableAccountDesc", { name: disableTarget?.name ?? "" })}
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
-            <AlertDialogCancel disabled={disabling}>Cancel</AlertDialogCancel>
+            <AlertDialogCancel disabled={disabling}>{t("common.cancel")}</AlertDialogCancel>
             <AlertDialogAction
               onClick={handleDisable}
               disabled={disabling}
@@ -312,7 +314,7 @@ export default function AdminCustomersPage() {
               ) : (
                 <CheckCircle className="mr-2 h-4 w-4" />
               )}
-              {disableTarget?.isActive === false ? "Re-enable" : "Disable"}
+              {disableTarget?.isActive === false ? t("admin.customers.reenable") : t("admin.customers.disable")}
             </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>

@@ -55,6 +55,7 @@ import { Color } from "@tiptap/extension-color";
 import TiptapImage from "@tiptap/extension-image";
 import Placeholder from "@tiptap/extension-placeholder";
 import { cn } from "@/lib/utils";
+import { useLanguage } from "@/lib/i18n/language-context";
 
 interface TickerItem {
   id: string;
@@ -388,6 +389,7 @@ function TickerItemEditor({
 // ---- Main Page ----
 
 export default function TickerPage() {
+  const { t } = useLanguage();
   const [tickers, setTickers] = useState<Ticker[]>([]);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState<string | null>(null);
@@ -451,7 +453,7 @@ export default function TickerPage() {
       const ticker = await res.json();
       setTickers((prev) => [ticker, ...prev]);
       setExpandedTickers((prev) => new Set(prev).add(ticker.id));
-      toast.success("Ticker created");
+      toast.success(t("admin.ticker.created"));
     } catch (error: any) {
       toast.error(error.message || "Failed to create ticker");
     }
@@ -477,7 +479,7 @@ export default function TickerPage() {
         throw new Error(err.error || "Failed to save");
       }
 
-      toast.success("Ticker saved");
+      toast.success(t("admin.ticker.saved"));
     } catch (error: any) {
       toast.error(error.message || "Failed to save ticker");
     } finally {
@@ -494,7 +496,7 @@ export default function TickerPage() {
       if (!res.ok) throw new Error("Failed to delete");
 
       setTickers((prev) => prev.filter((t) => t.id !== deleteTarget.id));
-      toast.success("Ticker deleted");
+      toast.success(t("admin.ticker.deleted"));
     } catch {
       toast.error("Failed to delete ticker");
     } finally {
@@ -593,14 +595,14 @@ export default function TickerPage() {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold">Tickers</h1>
+          <h1 className="text-2xl font-bold">{t("admin.ticker.title")}</h1>
           <p className="text-muted-foreground">
-            Create and manage ticker marquee content for your pages
+            {t("admin.ticker.subtitle")}
           </p>
         </div>
         <Button onClick={createTicker}>
           <Plus className="mr-2 h-4 w-4" />
-          Add Ticker
+          {t("admin.ticker.add")}
         </Button>
       </div>
 
@@ -619,13 +621,13 @@ export default function TickerPage() {
         <Card>
           <CardContent className="flex flex-col items-center justify-center py-12">
             <MoveHorizontal className="h-12 w-12 text-muted-foreground mb-4" />
-            <h3 className="font-semibold mb-2">No tickers yet</h3>
+            <h3 className="font-semibold mb-2">{t("admin.ticker.noItems")}</h3>
             <p className="text-muted-foreground text-sm mb-4">
-              Create your first ticker to display scrolling content on your pages
+              {t("admin.ticker.noItemsDesc")}
             </p>
             <Button onClick={createTicker}>
               <Plus className="mr-2 h-4 w-4" />
-              Add Ticker
+              {t("admin.ticker.add")}
             </Button>
           </CardContent>
         </Card>
@@ -656,11 +658,11 @@ export default function TickerPage() {
                       value={ticker.name}
                       onChange={(e) => updateTicker(ticker.id, { name: e.target.value })}
                       className="max-w-60 h-9 font-medium"
-                      placeholder="Ticker name"
+                      placeholder={t("admin.ticker.namePlaceholder")}
                     />
 
                     <Badge variant="outline" className="shrink-0">
-                      {ticker.items.length} items
+                      {t("admin.ticker.itemCount", { count: String(ticker.items.length) })}
                     </Badge>
 
                     <div className="ml-auto flex items-center gap-2">
@@ -734,7 +736,7 @@ export default function TickerPage() {
                                   className="h-7 w-7 text-destructive hover:text-destructive"
                                   onClick={() =>
                                     ticker.items.length <= 1
-                                      ? toast.error("A ticker must have at least one item")
+                                      ? toast.error(t("admin.ticker.minOneItem"))
                                       : setDeleteItemTarget({ tickerId: ticker.id, itemId: item.id })
                                   }
                                 >
@@ -755,7 +757,7 @@ export default function TickerPage() {
                             <div className="space-y-1.5">
                               <Label className="text-xs flex items-center gap-1.5">
                                 <LinkIcon className="h-3 w-3" />
-                                Link
+                                {t("admin.ticker.link")}
                               </Label>
                               <Input
                                 value={item.link || ""}
@@ -779,7 +781,7 @@ export default function TickerPage() {
                                 />
                                 <span className="flex items-center gap-1">
                                   <ExternalLink className="h-3 w-3" />
-                                  Open in new tab
+                                  {t("admin.ticker.openNewTab")}
                                 </span>
                               </label>
                               <label className="flex items-center gap-2 text-xs cursor-pointer">
@@ -791,7 +793,7 @@ export default function TickerPage() {
                                     })
                                   }
                                 />
-                                <span>Add &quot;nofollow&quot; to link</span>
+                                <span>{t("admin.ticker.noFollow")}</span>
                               </label>
                             </div>
                           </div>
@@ -806,7 +808,7 @@ export default function TickerPage() {
                           onClick={() => addItem(ticker.id)}
                         >
                           <Plus className="mr-1.5 h-3.5 w-3.5" />
-                          Add Item
+                          {t("admin.ticker.addItem")}
                         </Button>
                         <Button
                           size="sm"
@@ -816,10 +818,10 @@ export default function TickerPage() {
                           {isSaving ? (
                             <>
                               <Loader2 className="mr-1.5 h-3.5 w-3.5 animate-spin" />
-                              Saving...
+                              {t("common.saving")}
                             </>
                           ) : (
-                            "Save"
+                            t("common.save")
                           )}
                         </Button>
                       </div>
@@ -836,19 +838,18 @@ export default function TickerPage() {
       <AlertDialog open={!!deleteTarget} onOpenChange={() => setDeleteTarget(null)}>
         <AlertDialogContent>
           <AlertDialogHeader>
-            <AlertDialogTitle>Delete Ticker?</AlertDialogTitle>
+            <AlertDialogTitle>{t("admin.ticker.deleteQuestion")}</AlertDialogTitle>
             <AlertDialogDescription>
-              This will permanently delete &quot;{deleteTarget?.name}&quot; and all its items.
-              Any widgets referencing this ticker will fall back to default content.
+              {t("admin.ticker.deleteDesc", { name: deleteTarget?.name || "" })}
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
-            <AlertDialogCancel>Cancel</AlertDialogCancel>
+            <AlertDialogCancel>{t("common.cancel")}</AlertDialogCancel>
             <AlertDialogAction
               onClick={deleteTicker}
               className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
             >
-              Delete
+              {t("common.delete")}
             </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>
@@ -858,13 +859,13 @@ export default function TickerPage() {
       <AlertDialog open={!!deleteItemTarget} onOpenChange={() => setDeleteItemTarget(null)}>
         <AlertDialogContent>
           <AlertDialogHeader>
-            <AlertDialogTitle>Remove Item?</AlertDialogTitle>
+            <AlertDialogTitle>{t("admin.ticker.removeItemQuestion")}</AlertDialogTitle>
             <AlertDialogDescription>
-              This item will be removed from the ticker. Remember to save the ticker to apply changes.
+              {t("admin.ticker.removeItemDesc")}
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
-            <AlertDialogCancel>Cancel</AlertDialogCancel>
+            <AlertDialogCancel>{t("common.cancel")}</AlertDialogCancel>
             <AlertDialogAction
               onClick={() => {
                 if (deleteItemTarget) {
@@ -873,7 +874,7 @@ export default function TickerPage() {
               }}
               className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
             >
-              Remove
+              {t("common.remove")}
             </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>
