@@ -22,6 +22,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { StatCard } from "@/components/admin/stat-card";
+import { T } from "@/components/i18n/text";
 import { getBusinessConfig } from "@/lib/business-settings";
 import { getCurrencySymbol } from "@/lib/currencies";
 import prisma from "@/lib/db";
@@ -186,12 +187,12 @@ export default async function AdminDashboardPage() {
     tickets:   { value: openTickets, change: pctChange(openTickets, openTicketsLastMonth) },
   };
 
-  function timeAgo(date: Date): string {
+  function timeAgo(date: Date) {
     const diff = Math.floor((Date.now() - new Date(date).getTime()) / 1000);
-    if (diff < 60) return `${diff}s ago`;
-    if (diff < 3600) return `${Math.floor(diff / 60)}m ago`;
-    if (diff < 86400) return `${Math.floor(diff / 3600)}h ago`;
-    return `${Math.floor(diff / 86400)}d ago`;
+    if (diff < 60) return <T k="common.time.secondsAgo" vars={{ count: String(diff) }} />;
+    if (diff < 3600) return <T k="common.time.minutesAgo" vars={{ count: String(Math.floor(diff / 60)) }} />;
+    if (diff < 86400) return <T k="common.time.hoursAgo" vars={{ count: String(Math.floor(diff / 3600)) }} />;
+    return <T k="common.time.daysAgo" vars={{ count: String(Math.floor(diff / 86400)) }} />;
   }
 
   return (
@@ -199,15 +200,15 @@ export default async function AdminDashboardPage() {
       {/* Page Header */}
       <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div>
-          <h1 className="text-xl sm:text-2xl font-bold">Dashboard</h1>
+          <h1 className="text-xl sm:text-2xl font-bold"><T k="common.dashboard" /></h1>
           <p className="text-muted-foreground">
-            Welcome back! Here&apos;s what&apos;s happening today.
+            <T k="admin.dashboard.welcome" />
           </p>
         </div>
         <Button asChild className="bg-[var(--admin-primary)] hover:bg-[var(--admin-primary-hover)] text-[var(--admin-primary-fg)] border-0">
           <Link href="/admin/orders/new">
             <Package className="mr-2 h-4 w-4" />
-            New Order
+            <T k="admin.dashboard.newOrder" />
           </Link>
         </Button>
       </div>
@@ -215,34 +216,34 @@ export default async function AdminDashboardPage() {
       {/* Stats Grid */}
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
         <StatCard
-          title="Revenue (This Month)"
+          title={<T k="admin.dashboard.revenueThisMonth" />}
           value={`${currencySymbol}${thisRevenue.toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 0 })}`}
           change={stats.revenue.change}
-          changeLabel="vs last month"
+          changeLabel={<T k="admin.dashboard.vsLastMonth" />}
           icon={<DollarSign className="h-6 w-6" />}
           iconBg="bg-[var(--ast-success-bg)] text-[var(--ast-success-icon)]"
         />
         <StatCard
-          title="Orders (This Month)"
+          title={<T k="admin.dashboard.ordersThisMonth" />}
           value={stats.orders.value}
           change={stats.orders.change}
-          changeLabel="vs last month"
+          changeLabel={<T k="admin.dashboard.vsLastMonth" />}
           icon={<Package className="h-6 w-6" />}
           iconBg="bg-blue-100 text-blue-600"
         />
         <StatCard
-          title="New Customers"
+          title={<T k="admin.dashboard.newCustomers" />}
           value={stats.customers.value}
           change={stats.customers.change}
-          changeLabel="vs last month"
+          changeLabel={<T k="admin.dashboard.vsLastMonth" />}
           icon={<Users className="h-6 w-6" />}
           iconBg="bg-[var(--ast-hold-bg)] text-[var(--admin-primary)]"
         />
         <StatCard
-          title="Open Tickets"
+          title={<T k="admin.dashboard.openTickets" />}
           value={stats.tickets.value}
           change={stats.tickets.change}
-          changeLabel="vs last month"
+          changeLabel={<T k="admin.dashboard.vsLastMonth" />}
           icon={<MessageSquare className="h-6 w-6" />}
           iconBg="bg-[var(--ast-warning-bg)] text-[var(--ast-warning-icon)]"
         />
@@ -251,29 +252,29 @@ export default async function AdminDashboardPage() {
       {/* Quick Actions */}
       <Card>
         <CardHeader>
-          <CardTitle>Quick Actions</CardTitle>
+          <CardTitle><T k="overview.quickActions" /></CardTitle>
         </CardHeader>
         <CardContent>
           <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
             <Button
               variant="outline"
-              className="h-auto flex-col gap-2 py-4 bg-gradient-to-br from-white to-[var(--ast-info-bg)] border-[var(--ast-info-border)] hover:border-[var(--ast-info-border)] hover:shadow-sm transition-all"
+              className="h-auto flex-col gap-2 py-4 bg-gradient-to-br from-card to-[var(--ast-info-bg)] border-[var(--ast-info-border)] hover:border-[var(--ast-info-border)] hover:shadow-sm transition-all"
               asChild
             >
               <Link href="/admin/orders?status=PENDING">
                 <Clock className="h-5 w-5" />
-                <span>Pending Orders</span>
+                <span><T k="admin.dashboard.pendingOrders" /></span>
                 <Badge className="admin-status-info border-0">{pendingOrdersCount}</Badge>
               </Link>
             </Button>
             <Button
               variant="outline"
-              className="h-auto flex-col gap-2 py-4 bg-gradient-to-br from-white to-[var(--ast-info-bg)] border-[var(--ast-info-border)] hover:border-[var(--ast-info-border)] hover:shadow-sm transition-all"
+              className="h-auto flex-col gap-2 py-4 bg-gradient-to-br from-card to-[var(--ast-info-bg)] border-[var(--ast-info-border)] hover:border-[var(--ast-info-border)] hover:shadow-sm transition-all"
               asChild
             >
               <Link href="/admin/tickets?status=OPEN">
                 <MessageSquare className="h-5 w-5" />
-                <span>Open Tickets</span>
+                <span><T k="admin.dashboard.openTickets" /></span>
                 <Badge className="admin-status-info border-0">{openTickets}</Badge>
               </Link>
             </Button>
@@ -286,18 +287,18 @@ export default async function AdminDashboardPage() {
         <Card>
           <CardHeader className="flex flex-row items-center justify-between">
             <div>
-              <CardTitle>Recent Orders</CardTitle>
-              <CardDescription>Latest orders across all services</CardDescription>
+              <CardTitle><T k="admin.dashboard.recentOrders" /></CardTitle>
+              <CardDescription><T k="admin.dashboard.latestOrders" /></CardDescription>
             </div>
             <Button variant="ghost" size="sm" asChild>
               <Link href="/admin/orders">
-                View All <ArrowUpRight className="ml-1 h-4 w-4" />
+                <T k="common.viewAll" /> <ArrowUpRight className="ml-1 h-4 w-4" />
               </Link>
             </Button>
           </CardHeader>
           <CardContent>
             {recentOrders.length === 0 ? (
-              <p className="text-sm text-muted-foreground text-center py-6">No orders yet</p>
+              <p className="text-sm text-muted-foreground text-center py-6"><T k="admin.dashboard.noOrders" /></p>
             ) : (
               <div className="space-y-4">
                 {recentOrders.map((order) => (
@@ -310,7 +311,7 @@ export default async function AdminDashboardPage() {
                       <div className="flex items-center gap-2">
                         <span className="font-medium text-sm">{order.orderNumber}</span>
                         <Badge variant="secondary" className={statusColors[order.status] ?? "admin-status-neutral"}>
-                          {order.status.replace(/_/g, " ")}
+                          <T k={`admin.status.${order.status}`} fallback={order.status.replace(/_/g, " ")} />
                         </Badge>
                       </div>
                       <p className="text-sm text-muted-foreground">
@@ -333,18 +334,18 @@ export default async function AdminDashboardPage() {
         <Card>
           <CardHeader className="flex flex-row items-center justify-between">
             <div>
-              <CardTitle>Recent Tickets</CardTitle>
-              <CardDescription>Latest support tickets</CardDescription>
+              <CardTitle><T k="admin.dashboard.recentTickets" /></CardTitle>
+              <CardDescription><T k="admin.dashboard.latestTickets" /></CardDescription>
             </div>
             <Button variant="ghost" size="sm" asChild>
               <Link href="/admin/tickets">
-                View All <ArrowUpRight className="ml-1 h-4 w-4" />
+                <T k="common.viewAll" /> <ArrowUpRight className="ml-1 h-4 w-4" />
               </Link>
             </Button>
           </CardHeader>
           <CardContent>
             {recentTickets.length === 0 ? (
-              <p className="text-sm text-muted-foreground text-center py-6">No tickets yet</p>
+              <p className="text-sm text-muted-foreground text-center py-6"><T k="admin.dashboard.noTickets" /></p>
             ) : (
               <div className="space-y-4">
                 {recentTickets.map((ticket) => {
@@ -363,10 +364,10 @@ export default async function AdminDashboardPage() {
                       </div>
                       <div className="flex flex-col items-end gap-1 shrink-0">
                         <Badge variant="secondary" className={statusColors[ticket.status] ?? "admin-status-neutral"}>
-                          {ticket.status.replace(/_/g, " ")}
+                          <T k={`admin.status.${ticket.status}`} fallback={ticket.status.replace(/_/g, " ")} />
                         </Badge>
                         <Badge variant="secondary" className={priorityColors[ticket.priority] ?? "admin-status-neutral"}>
-                          {ticket.priority}
+                          <T k={`admin.priority.${ticket.priority}`} fallback={ticket.priority} />
                         </Badge>
                       </div>
                     </Link>
@@ -381,12 +382,12 @@ export default async function AdminDashboardPage() {
       {/* Recent Activity from AdminNotification */}
       <Card>
         <CardHeader>
-          <CardTitle>Recent Activity</CardTitle>
-          <CardDescription>Latest system events</CardDescription>
+          <CardTitle><T k="admin.dashboard.recentActivity" /></CardTitle>
+          <CardDescription><T k="admin.dashboard.latestSystemEvents" /></CardDescription>
         </CardHeader>
         <CardContent>
           {recentNotifications.length === 0 ? (
-            <p className="text-sm text-muted-foreground text-center py-6">No recent activity</p>
+            <p className="text-sm text-muted-foreground text-center py-6"><T k="admin.dashboard.noRecentActivity" /></p>
           ) : (
             <div className="space-y-4">
               {recentNotifications.map((n) => {
@@ -409,7 +410,7 @@ export default async function AdminDashboardPage() {
                         href={n.link}
                         className="text-xs text-primary hover:underline shrink-0"
                       >
-                        View
+                        <T k="admin.dashboard.view" />
                       </Link>
                     )}
                   </div>

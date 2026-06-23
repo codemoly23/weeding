@@ -27,6 +27,7 @@ import {
   Building2,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { useLanguage } from "@/lib/i18n/language-context";
 import { useBusinessConfig } from "@/hooks/use-business-config";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -44,92 +45,104 @@ import {
 
 interface NavItem {
   title: string;
+  labelKey?: string;
   href?: string;
   icon: React.ComponentType<{ className?: string }>;
   badge?: number;
-  children?: { title: string; href: string; external?: boolean }[];
+  children?: { title: string; labelKey?: string; href: string; external?: boolean }[];
 }
 
 const navItems: NavItem[] = [
   {
     title: "Dashboard",
+    labelKey: "admin.nav.dashboard",
     href: "/admin",
     icon: LayoutDashboard,
   },
   {
     title: "Orders",
+    labelKey: "admin.nav.orders",
     href: "/admin/orders",
     icon: Package,
   },
   {
     title: "Customers",
+    labelKey: "admin.nav.customers",
     href: "/admin/customers",
     icon: Users,
   },
   {
     title: "Content",
+    labelKey: "admin.nav.content",
     icon: FileText,
     children: [
-      { title: "Blog", href: "/admin/content/blog" },
-      { title: "Blog Categories", href: "/admin/content/blog-categories" },
-      { title: "Testimonials", href: "/admin/content/testimonials" },
-      { title: "FAQs", href: "/admin/content/faq" },
-      { title: "Ticker", href: "/admin/content/ticker" },
-      { title: "Legal Pages", href: "/admin/content/legal" },
+      { title: "Blog", labelKey: "admin.nav.blog", href: "/admin/content/blog" },
+      { title: "Blog Categories", labelKey: "admin.nav.blogCategories", href: "/admin/content/blog-categories" },
+      { title: "Testimonials", labelKey: "admin.nav.testimonials", href: "/admin/content/testimonials" },
+      { title: "FAQs", labelKey: "admin.nav.faqs", href: "/admin/content/faq" },
+      { title: "Ticker", labelKey: "admin.nav.ticker", href: "/admin/content/ticker" },
+      { title: "Legal Pages", labelKey: "admin.nav.legalPages", href: "/admin/content/legal" },
     ],
   },
   {
     title: "Service Location",
+    labelKey: "admin.nav.serviceLocation",
     href: "/admin/service-locations",
     icon: MapPin,
   },
   {
     title: "Venues",
+    labelKey: "admin.nav.venues",
     href: "/admin/venues",
     icon: Building2,
   },
   {
     title: "Users",
+    labelKey: "admin.nav.users",
     href: "/admin/users",
     icon: UserCog,
   },
   {
     title: "Wedding Projects",
+    labelKey: "admin.nav.weddingProjects",
     icon: CalendarHeart,
     children: [
-      { title: "All Projects", href: "/admin/planner" },
-      { title: "Manage Vendors", href: "/admin/vendors" },
-      { title: "Vendor Reviews", href: "/admin/vendors/reviews" },
-      { title: "View All Vendors", href: "/vendors", external: true },
+      { title: "All Projects", labelKey: "admin.nav.allProjects", href: "/admin/planner" },
+      { title: "Manage Vendors", labelKey: "admin.nav.manageVendors", href: "/admin/vendors" },
+      { title: "Vendor Reviews", labelKey: "admin.nav.vendorReviews", href: "/admin/vendors/reviews" },
+      { title: "View All Vendors", labelKey: "admin.nav.viewAllVendors", href: "/vendors", external: true },
     ],
   },
   {
     title: "Tickets",
+    labelKey: "admin.nav.tickets",
     href: "/admin/tickets",
     icon: MessageSquare,
   },
   {
     title: "Appearance",
+    labelKey: "admin.nav.appearance",
     icon: Palette,
     children: [
-      { title: "Page Builder", href: "/admin/appearance/pages" },
-      { title: "Header Builder", href: "/admin/appearance/header" },
-      { title: "Menu Builder", href: "/admin/appearance/header/menu" },
-      { title: "Footer Builder", href: "/admin/appearance/footer" },
-      { title: "Theme Gallery", href: "/admin/appearance/themes" },
+      { title: "Page Builder", labelKey: "admin.nav.pageBuilder", href: "/admin/appearance/pages" },
+      { title: "Header Builder", labelKey: "admin.nav.headerBuilder", href: "/admin/appearance/header" },
+      { title: "Menu Builder", labelKey: "admin.nav.menuBuilder", href: "/admin/appearance/header/menu" },
+      { title: "Footer Builder", labelKey: "admin.nav.footerBuilder", href: "/admin/appearance/footer" },
+      { title: "Theme Gallery", labelKey: "admin.nav.themeGallery", href: "/admin/appearance/themes" },
     ],
   },
   {
     title: "Settings",
+    labelKey: "admin.nav.settings",
     icon: Settings,
     children: [
-      { title: "General", href: "/admin/settings" },
-      { title: "Media Storage", href: "/admin/settings/media-storage" },
-      { title: "Payments", href: "/admin/settings/payments" },
-      { title: "Email", href: "/admin/settings/email" },
-      { title: "Plugins", href: "/admin/settings/plugins" },
-      { title: "Data Management", href: "/admin/settings/data" },
-      { title: "Profile", href: "/admin/profile" },
+      { title: "General", labelKey: "admin.nav.general", href: "/admin/settings" },
+      { title: "Media Storage", labelKey: "admin.nav.mediaStorage", href: "/admin/settings/media-storage" },
+      { title: "Payments", labelKey: "admin.nav.payments", href: "/admin/settings/payments" },
+      { title: "Email", labelKey: "admin.nav.email", href: "/admin/settings/email" },
+      { title: "Plugins", labelKey: "admin.nav.plugins", href: "/admin/settings/plugins" },
+      { title: "Data Management", labelKey: "admin.nav.dataManagement", href: "/admin/settings/data" },
+      { title: "Profile", labelKey: "admin.nav.profile", href: "/admin/profile" },
     ],
   },
 ];
@@ -177,6 +190,7 @@ const iconMap: Record<string, React.ComponentType<{ className?: string }>> = {
 
 export function AdminSidebar({ mobile = false }: { mobile?: boolean }) {
   const pathname = usePathname();
+  const { t } = useLanguage();
   const { config } = useBusinessConfig();
   const [mounted, setMounted] = useState(false); // Prevent transition flash on initial load
   const [collapsed, setCollapsed] = useState(false); // Expanded by default
@@ -240,6 +254,7 @@ export function AdminSidebar({ mobile = false }: { mobile?: boolean }) {
   // Combine static nav items with plugin menu items
   // Insert plugin items before Appearance and Settings (last 2 items)
   const allNavItems = [...navItems.slice(0, -2), ...pluginMenuItems, ...navItems.slice(-2)];
+  const labelFor = (item: { title: string; labelKey?: string }) => item.labelKey ? t(item.labelKey) : item.title;
 
   const handleCollapsedChange = (value: boolean) => {
     setCollapsed(value);
@@ -345,7 +360,7 @@ export function AdminSidebar({ mobile = false }: { mobile?: boolean }) {
                       </Button>
                     </TooltipTrigger>
                     <TooltipContent side="right" className="flex flex-col gap-1">
-                      <p className="font-medium">{item.title}</p>
+                      <p className="font-medium">{labelFor(item)}</p>
                       {item.children.map((child) => (
                         <Link
                           key={child.href}
@@ -357,7 +372,7 @@ export function AdminSidebar({ mobile = false }: { mobile?: boolean }) {
                             isActive(child.href) && "text-[var(--admin-active-text)]"
                           )}
                         >
-                          {child.title}
+                          {labelFor(child)}
                         </Link>
                       ))}
                     </TooltipContent>
@@ -381,7 +396,7 @@ export function AdminSidebar({ mobile = false }: { mobile?: boolean }) {
                     >
                       <span className="flex items-center gap-3">
                         <Icon className="h-5 w-5" />
-                        {item.title}
+                        {labelFor(item)}
                       </span>
                       <ChevronDown
                         className={cn(
@@ -404,7 +419,7 @@ export function AdminSidebar({ mobile = false }: { mobile?: boolean }) {
                             "bg-[var(--admin-active-bg)] font-medium text-[var(--admin-active-text)]"
                         )}
                       >
-                        {child.title}
+                        {labelFor(child)}
                       </Link>
                     ))}
                   </CollapsibleContent>
@@ -433,7 +448,7 @@ export function AdminSidebar({ mobile = false }: { mobile?: boolean }) {
                       </Button>
                     </Link>
                   </TooltipTrigger>
-                  <TooltipContent side="right">{item.title}</TooltipContent>
+                  <TooltipContent side="right">{labelFor(item)}</TooltipContent>
                 </Tooltip>
               );
             }
@@ -448,7 +463,7 @@ export function AdminSidebar({ mobile = false }: { mobile?: boolean }) {
                   )}
                 >
                   <Icon className="h-5 w-5" />
-                  {item.title}
+                  {labelFor(item)}
                   {item.badge && (
                     <Badge className="ml-auto bg-blue-100 text-blue-700 border-0">{item.badge}</Badge>
                   )}

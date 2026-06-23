@@ -82,8 +82,8 @@ export function DashboardSidebar({
   const topNav = [
     { name: t("dash.overview"), href: "/dashboard", icon: LayoutDashboard },
     { name: t("common.profile"), href: "/dashboard/profile", icon: User },
-    { name: "Support", href: "/dashboard/support", icon: MessageCircle },
-    { name: "Help Center", href: "/dashboard/help", icon: HelpCircle },
+    { name: t("dash.support"), href: "/dashboard/support", icon: MessageCircle },
+    { name: t("dashboard.header.helpCenter"), href: "/dashboard/help", icon: HelpCircle },
   ];
 
   return (

@@ -27,6 +27,7 @@ import {
 import { toast } from "sonner";
 import { getCurrencySymbol } from "@/lib/currencies";
 import { format } from "date-fns";
+import { useLanguage } from "@/lib/i18n/language-context";
 
 interface Invoice {
   id: string;
@@ -53,15 +54,8 @@ const paymentStatusColors: Record<string, string> = {
   PARTIALLY_REFUNDED: "bg-[var(--color-warning-bg)] text-[var(--color-warning-text)]",
 };
 
-const paymentStatusLabels: Record<string, string> = {
-  PENDING: "Pending",
-  PAID: "Paid",
-  FAILED: "Failed",
-  REFUNDED: "Refunded",
-  PARTIALLY_REFUNDED: "Partial Refund",
-};
-
 export default function CustomerInvoicesPage() {
+  const { t } = useLanguage();
   const [invoices, setInvoices] = useState<Invoice[]>([]);
   const [loading, setLoading] = useState(true);
   const [currencySymbol, setCurrencySymbol] = useState("$");
@@ -84,7 +78,7 @@ export default function CustomerInvoicesPage() {
           if (config.currency) setCurrencySymbol(getCurrencySymbol(config.currency));
         }
       } catch {
-        toast.error("Failed to load invoices");
+        toast.error(t("dashboard.invoices.loadFailed"));
       } finally {
         setLoading(false);
       }
@@ -106,38 +100,38 @@ export default function CustomerInvoicesPage() {
       <div>
         <h1 className="text-2xl font-bold flex items-center gap-2">
           <Receipt className="h-6 w-6" />
-          My Invoices
+          {t("dashboard.invoices.title")}
         </h1>
         <p className="text-muted-foreground">
-          View and download your invoices
+          {t("dashboard.invoices.subtitle")}
         </p>
       </div>
 
       <Card>
         <CardHeader>
-          <CardTitle>Invoice History</CardTitle>
+          <CardTitle>{t("dashboard.invoices.history")}</CardTitle>
           <CardDescription>
-            {invoices.length} invoice{invoices.length !== 1 ? "s" : ""}
+            {t("dashboard.invoices.count", { count: String(invoices.length) })}
           </CardDescription>
         </CardHeader>
         <CardContent>
           {invoices.length === 0 ? (
             <div className="flex flex-col items-center justify-center py-12 text-muted-foreground">
               <FileText className="h-12 w-12 mb-3" />
-              <p className="text-lg font-medium">No invoices yet</p>
-              <p className="text-sm">Invoices will appear here when you place orders.</p>
+              <p className="text-lg font-medium">{t("dashboard.invoices.empty")}</p>
+              <p className="text-sm">{t("dashboard.invoices.emptyDesc")}</p>
             </div>
           ) : (
             <Table>
               <TableHeader>
                 <TableRow>
-                  <TableHead>Invoice #</TableHead>
-                  <TableHead>Service</TableHead>
-                  <TableHead className="text-right">Amount</TableHead>
-                  <TableHead className="text-right">Paid</TableHead>
-                  <TableHead className="text-right">Due</TableHead>
-                  <TableHead>Status</TableHead>
-                  <TableHead>Date</TableHead>
+                  <TableHead>{t("dashboard.invoices.invoiceNumber")}</TableHead>
+                  <TableHead>{t("admin.orders.service")}</TableHead>
+                  <TableHead className="text-right">{t("admin.orders.amount")}</TableHead>
+                  <TableHead className="text-right">{t("admin.payment.PAID")}</TableHead>
+                  <TableHead className="text-right">{t("dashboard.invoices.due")}</TableHead>
+                  <TableHead>{t("admin.orders.status")}</TableHead>
+                  <TableHead>{t("admin.orders.date")}</TableHead>
                   <TableHead className="w-[100px]"></TableHead>
                 </TableRow>
               </TableHeader>
@@ -174,7 +168,7 @@ export default function CustomerInvoicesPage() {
                           className={paymentStatusColors[paymentStatus] || "bg-muted text-muted-foreground"}
                           variant="secondary"
                         >
-                          {paymentStatusLabels[paymentStatus] || paymentStatus}
+                          {t(`admin.payment.${paymentStatus}`) || paymentStatus}
                         </Badge>
                       </TableCell>
                       <TableCell className="text-sm text-muted-foreground">

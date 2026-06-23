@@ -3,10 +3,10 @@ import { Card, CardContent } from "@/components/ui/card";
 import { TrendingUp, TrendingDown } from "lucide-react";
 
 interface StatCardProps {
-  title: string;
+  title: React.ReactNode;
   value: string | number;
   change?: number;
-  changeLabel?: string;
+  changeLabel?: React.ReactNode;
   icon: React.ReactNode;
   iconBg?: string;
 }

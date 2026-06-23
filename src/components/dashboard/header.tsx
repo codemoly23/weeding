@@ -16,6 +16,8 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
+import { LanguageSwitcher } from "@/components/layout/header/components/LanguageSwitcher";
+import { useLanguage } from "@/lib/i18n/language-context";
 
 interface DashboardHeaderProps {
   onMenuClick?: () => void;
@@ -23,6 +25,7 @@ interface DashboardHeaderProps {
 
 export function DashboardHeader({ onMenuClick }: DashboardHeaderProps) {
   const { data: session } = useSession();
+  const { t } = useLanguage();
 
   // Get user data from session
   const userName = session?.user?.name || "User";
@@ -57,7 +60,7 @@ export function DashboardHeader({ onMenuClick }: DashboardHeaderProps) {
           <div className="relative">
             <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
             <Input
-              placeholder="Search orders, documents..."
+              placeholder={t("dashboard.header.searchPlaceholder")}
               className="w-64 pl-9"
             />
           </div>
@@ -66,6 +69,8 @@ export function DashboardHeader({ onMenuClick }: DashboardHeaderProps) {
 
       {/* Right side */}
       <div className="flex items-center gap-2">
+        <LanguageSwitcher />
+
         {/* Notifications */}
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
@@ -77,29 +82,29 @@ export function DashboardHeader({ onMenuClick }: DashboardHeaderProps) {
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end" className="w-80">
-            <DropdownMenuLabel>Notifications</DropdownMenuLabel>
+            <DropdownMenuLabel>{t("dashboard.header.notifications")}</DropdownMenuLabel>
             <DropdownMenuSeparator />
             <DropdownMenuItem className="flex flex-col items-start gap-1 py-3">
-              <span className="font-medium">RSVP Update — 5 New Responses</span>
+              <span className="font-medium">{t("dashboard.header.notificationRsvpTitle")}</span>
               <span className="text-xs text-muted-foreground">
-                5 guests have responded to your wedding invitation.
+                {t("dashboard.header.notificationRsvpBody")}
               </span>
             </DropdownMenuItem>
             <DropdownMenuItem className="flex flex-col items-start gap-1 py-3">
-              <span className="font-medium">Document Approved</span>
+              <span className="font-medium">{t("dashboard.header.notificationDocumentTitle")}</span>
               <span className="text-xs text-muted-foreground">
-                Your passport has been verified successfully.
+                {t("dashboard.header.notificationDocumentBody")}
               </span>
             </DropdownMenuItem>
             <DropdownMenuItem className="flex flex-col items-start gap-1 py-3">
-              <span className="font-medium">New Message from Support</span>
+              <span className="font-medium">{t("dashboard.header.notificationSupportTitle")}</span>
               <span className="text-xs text-muted-foreground">
-                Reply to your ticket #1234 received.
+                {t("dashboard.header.notificationSupportBody")}
               </span>
             </DropdownMenuItem>
             <DropdownMenuSeparator />
             <DropdownMenuItem className="justify-center text-primary">
-              View all notifications
+              {t("admin.header.viewAllNotifications")}
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
@@ -132,25 +137,25 @@ export function DashboardHeader({ onMenuClick }: DashboardHeaderProps) {
             <DropdownMenuItem asChild>
               <Link href="/dashboard/profile" className="flex items-center gap-2 cursor-pointer">
                 <User className="h-4 w-4" />
-                Profile Settings
+                {t("planner.header.profileSettings")}
               </Link>
             </DropdownMenuItem>
             <DropdownMenuItem asChild>
               <Link href="/dashboard/billing" className="flex items-center gap-2 cursor-pointer">
                 <CreditCard className="h-4 w-4" />
-                Billing
+                {t("dashboard.header.billing")}
               </Link>
             </DropdownMenuItem>
             <DropdownMenuItem asChild>
               <Link href="/dashboard/help" className="flex items-center gap-2 cursor-pointer">
                 <HelpCircle className="h-4 w-4" />
-                Help Center
+                {t("dashboard.header.helpCenter")}
               </Link>
             </DropdownMenuItem>
             <DropdownMenuSeparator />
             <DropdownMenuItem className="text-destructive" onClick={logout}>
               <LogOut className="mr-2 h-4 w-4" />
-              Sign Out
+              {t("common.signOut")}
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>

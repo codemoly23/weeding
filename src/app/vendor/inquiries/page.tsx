@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useCallback } from "react";
 import { MessageSquare, Calendar, Mail, Phone, ChevronDown, Filter } from "lucide-react";
+import { useLanguage } from "@/lib/i18n/language-context";
 
 interface Inquiry {
   id: string;
@@ -26,21 +27,22 @@ const STATUS_STYLES: Record<string, string> = {
   ARCHIVED: "bg-muted text-muted-foreground/70",
 };
 
-const NEXT_STATUSES: Record<string, { label: string; value: string }[]> = {
+const NEXT_STATUSES: Record<string, { labelKey: string; value: string }[]> = {
   NEW: [
-    { label: "Mark Viewed", value: "VIEWED" },
-    { label: "Mark Responded", value: "RESPONDED" },
-    { label: "Archive", value: "ARCHIVED" },
+    { labelKey: "vendor.inquiries.markViewed", value: "VIEWED" },
+    { labelKey: "vendor.inquiries.markResponded", value: "RESPONDED" },
+    { labelKey: "vendor.inquiries.archive", value: "ARCHIVED" },
   ],
   VIEWED: [
-    { label: "Mark Responded", value: "RESPONDED" },
-    { label: "Archive", value: "ARCHIVED" },
+    { labelKey: "vendor.inquiries.markResponded", value: "RESPONDED" },
+    { labelKey: "vendor.inquiries.archive", value: "ARCHIVED" },
   ],
-  RESPONDED: [{ label: "Archive", value: "ARCHIVED" }],
-  ARCHIVED: [{ label: "Mark New", value: "NEW" }],
+  RESPONDED: [{ labelKey: "vendor.inquiries.archive", value: "ARCHIVED" }],
+  ARCHIVED: [{ labelKey: "vendor.inquiries.markNew", value: "NEW" }],
 };
 
 export default function VendorInquiriesPage() {
+  const { t, lang } = useLanguage();
   const [inquiries, setInquiries] = useState<Inquiry[]>([]);
   const [statusFilter, setStatusFilter] = useState<StatusFilter>("ALL");
   const [page, setPage] = useState(1);
@@ -96,9 +98,9 @@ export default function VendorInquiriesPage() {
   return (
     <div className="max-w-4xl mx-auto">
       <div className="mb-6">
-        <h1 className="text-2xl font-bold text-foreground">Inquiries</h1>
+        <h1 className="text-2xl font-bold text-foreground">{t("vendor.nav.inquiries")}</h1>
         <p className="text-sm text-muted-foreground mt-0.5">
-          {total} total {total === 1 ? "inquiry" : "inquiries"}
+          {t("vendor.inquiries.totalCount", { count: String(total) })}
         </p>
       </div>
 
@@ -115,7 +117,7 @@ export default function VendorInquiriesPage() {
                 : "bg-card border border-border text-foreground/80 hover:border-border"
             }`}
           >
-            {s === "ALL" ? "All" : s.charAt(0) + s.slice(1).toLowerCase()}
+            {t(`vendor.inquiries.status.${s}`)}
           </button>
         ))}
       </div>
@@ -127,11 +129,11 @@ export default function VendorInquiriesPage() {
       ) : inquiries.length === 0 ? (
         <div className="bg-card rounded-xl border border-border px-6 py-14 text-center">
           <MessageSquare className="w-10 h-10 text-muted-foreground/50 mx-auto mb-3" />
-          <p className="text-sm font-medium text-muted-foreground">No inquiries found</p>
+          <p className="text-sm font-medium text-muted-foreground">{t("vendor.inquiries.noneFound")}</p>
           <p className="text-xs text-muted-foreground/70 mt-1">
             {statusFilter !== "ALL"
-              ? `No ${statusFilter.toLowerCase()} inquiries`
-              : "Customer inquiries will appear here"}
+              ? t("vendor.inquiries.noneForStatus", { status: t(`vendor.inquiries.status.${statusFilter}`).toLowerCase() })
+              : t("vendor.inquiries.empty")}
           </p>
         </div>
       ) : (
@@ -159,14 +161,14 @@ export default function VendorInquiriesPage() {
                     <div className="flex items-center gap-2 flex-wrap">
                       <span className="text-sm font-semibold text-foreground">{inq.name}</span>
                       <span className={`text-xs px-1.5 py-0.5 rounded font-medium ${STATUS_STYLES[inq.status]}`}>
-                        {inq.status}
+                        {t(`vendor.inquiries.status.${inq.status}`)}
                       </span>
                     </div>
                     <p className="text-xs text-muted-foreground truncate mt-0.5">{inq.message}</p>
                   </div>
                   <div className="text-right shrink-0">
                     <p className="text-xs text-muted-foreground/70">
-                      {new Date(inq.createdAt).toLocaleDateString()}
+                      {new Date(inq.createdAt).toLocaleDateString(lang === "sv" ? "sv-SE" : "en-US")}
                     </p>
                     <ChevronDown
                       className={`w-4 h-4 text-muted-foreground/70 ml-auto mt-1 transition-transform ${isExpanded ? "rotate-180" : ""}`}
@@ -191,13 +193,13 @@ export default function VendorInquiriesPage() {
                         </div>
                       )}
                       <div className="flex items-center gap-2 text-sm text-foreground/80">
-                        <span className="text-muted-foreground/70 text-xs font-medium uppercase tracking-wide">Event</span>
+                        <span className="text-muted-foreground/70 text-xs font-medium uppercase tracking-wide">{t("vendor.inquiries.event")}</span>
                         {inq.eventType}
                       </div>
                       {inq.eventDate && (
                         <div className="flex items-center gap-2 text-sm text-foreground/80">
                           <Calendar className="w-4 h-4 text-muted-foreground/70 shrink-0" />
-                          {new Date(inq.eventDate).toLocaleDateString("en-US", {
+                          {new Date(inq.eventDate).toLocaleDateString(lang === "sv" ? "sv-SE" : "en-US", {
                             year: "numeric",
                             month: "long",
                             day: "numeric",
@@ -206,14 +208,14 @@ export default function VendorInquiriesPage() {
                       )}
                       {inq.budget && (
                         <div className="flex items-center gap-2 text-sm text-foreground/80">
-                          <span className="text-muted-foreground/70 text-xs font-medium uppercase tracking-wide">Budget</span>
+                          <span className="text-muted-foreground/70 text-xs font-medium uppercase tracking-wide">{t("vendor.inquiries.budget")}</span>
                           {inq.budget}
                         </div>
                       )}
                     </div>
 
                     <div className="bg-muted/30 rounded-lg p-3">
-                      <p className="text-xs font-medium text-muted-foreground mb-1">Message</p>
+                      <p className="text-xs font-medium text-muted-foreground mb-1">{t("vendor.inquiries.message")}</p>
                       <p className="text-sm text-foreground leading-relaxed">{inq.message}</p>
                     </div>
 
@@ -223,7 +225,7 @@ export default function VendorInquiriesPage() {
                         href={`mailto:${inq.email}?subject=Re: Your inquiry`}
                         className="px-3 py-1.5 bg-primary text-white rounded-lg text-xs font-medium hover:bg-primary/90 transition-colors"
                       >
-                        Reply by Email
+                        {t("vendor.inquiries.replyByEmail")}
                       </a>
                       {NEXT_STATUSES[inq.status]?.map((next) => (
                         <button
@@ -232,7 +234,7 @@ export default function VendorInquiriesPage() {
                           disabled={updatingId === inq.id}
                           className="px-3 py-1.5 bg-card border border-border rounded-lg text-xs font-medium text-foreground/80 hover:border-border disabled:opacity-50 transition-colors"
                         >
-                          {updatingId === inq.id ? "Updating..." : next.label}
+                          {updatingId === inq.id ? t("vendor.inquiries.updating") : t(next.labelKey)}
                         </button>
                       ))}
                     </div>
@@ -248,7 +250,7 @@ export default function VendorInquiriesPage() {
       {totalPages > 1 && (
         <div className="flex items-center justify-between mt-6">
           <p className="text-sm text-muted-foreground">
-            Page {page} of {totalPages}
+            {t("dashboard.orders.pageOf", { page: String(page), total: String(totalPages) })}
           </p>
           <div className="flex gap-2">
             <button
@@ -256,14 +258,14 @@ export default function VendorInquiriesPage() {
               disabled={page === 1}
               className="px-3 py-1.5 text-sm border border-border rounded-lg disabled:opacity-50 hover:border-border"
             >
-              Previous
+              {t("common.previous")}
             </button>
             <button
               onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
               disabled={page === totalPages}
               className="px-3 py-1.5 text-sm border border-border rounded-lg disabled:opacity-50 hover:border-border"
             >
-              Next
+              {t("common.next")}
             </button>
           </div>
         </div>

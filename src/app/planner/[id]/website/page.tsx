@@ -18,6 +18,7 @@ import {
   type WebsiteBlockType,
 } from "@/lib/planner-storage";
 import { usePlannerCouple } from "@/lib/planner-context";
+import { useLanguage } from "@/lib/i18n/language-context";
 
 // ── helpers ───────────────────────────────────────────────────────────────────
 
@@ -895,7 +896,16 @@ export default function WebsitePage() {
   const [showTemplates, setShowTemplates] = useState(false);
   const [showLinkCopied, setShowLinkCopied] = useState(false);
 
+  const { t } = useLanguage();
   const { brideName: projectBrideName, groomName: projectGroomName } = usePlannerCouple();
+
+  const BLOCK_KEY_MAP: Record<WebsiteBlockType, string> = {
+    "cover": "cover", "hero": "hero", "our-story": "ourStory",
+    "venue": "venue", "schedule": "schedule", "gallery": "gallery",
+    "rsvp": "rsvp", "registry": "registry", "people": "people",
+    "countdown": "countdown", "guestbook": "guestbook",
+  };
+  const tBlock = (type: WebsiteBlockType) => t(`planner.website.block.${BLOCK_KEY_MAP[type]}`);
   const [projectDate, setProjectDate] = useState("");
   const [projectLocation, setProjectLocation] = useState("");
 
@@ -1129,8 +1139,8 @@ export default function WebsitePage() {
   if (loadError) {
     return (
       <div className="flex flex-col items-center justify-center py-20 gap-3 text-center">
-        <p className="text-[var(--color-error-text)] font-medium">Failed to load website data.</p>
-        <p className="text-sm text-muted-foreground">Please refresh the page. If the problem persists, check your connection.</p>
+        <p className="text-[var(--color-error-text)] font-medium">{t("planner.website.loadError")}</p>
+        <p className="text-sm text-muted-foreground">{t("planner.website.loadErrorDesc")}</p>
       </div>
     );
   }
@@ -1151,12 +1161,12 @@ export default function WebsitePage() {
           {/* Header */}
           <div className="flex items-start justify-between gap-3 flex-wrap">
             <div>
-              <h1 className="text-xl font-bold">Wedding Website</h1>
+              <h1 className="text-xl font-bold">{t("planner.website.heading")}</h1>
               <div className="flex items-center gap-2 mt-1 flex-wrap">
                 <span className={`text-xs px-2 py-0.5 rounded-full font-medium ${
                   site.published ? "bg-[var(--color-success-bg)] text-[var(--color-success-text)]" : "bg-muted text-muted-foreground"
                 }`}>
-                  {site.published ? "Published" : "Draft"}
+                  {site.published ? t("planner.website.published") : t("planner.website.draft")}
                 </span>
                 {!local && site.published && (
                   <a href={`/wedding/${site.slug}`} target="_blank" rel="noopener noreferrer"
@@ -1164,18 +1174,18 @@ export default function WebsitePage() {
                     <ExternalLink className="h-3 w-3"/> /wedding/{site.slug}
                   </a>
                 )}
-                {saving    && <span className="text-xs text-muted-foreground">Saving…</span>}
-                {saved     && <span className="text-xs text-[var(--color-success-text)] flex items-center gap-1"><Check className="h-3 w-3"/>Saved</span>}
-                {saveError && <span className="text-xs text-[var(--color-error-text)]">Save failed</span>}
+                {saving    && <span className="text-xs text-muted-foreground">{t("common.saving")}</span>}
+                {saved     && <span className="text-xs text-[var(--color-success-text)] flex items-center gap-1"><Check className="h-3 w-3"/>{t("common.saved")}</span>}
+                {saveError && <span className="text-xs text-[var(--color-error-text)]">{t("planner.website.saveFailed")}</span>}
               </div>
             </div>
             <div className="flex items-center gap-2 flex-wrap">
               <Button variant="outline" size="sm" onClick={() => setShowTemplates(true)} className="gap-1.5">
-                <LayoutTemplate className="h-3.5 w-3.5"/> Templates
+                <LayoutTemplate className="h-3.5 w-3.5"/> {t("planner.website.templates")}
               </Button>
               <Button variant="outline" size="sm" onClick={copyLink} className="gap-1.5">
                 <Link2 className="h-3.5 w-3.5"/>
-                {showLinkCopied ? "Copied!" : "Copy Link"}
+                {showLinkCopied ? t("planner.website.copied") : t("planner.website.copyLink")}
               </Button>
               <Button
                 size="sm"
@@ -1183,7 +1193,7 @@ export default function WebsitePage() {
                 onClick={() => update({ published: !site.published })}
               >
                 <Globe className="h-3.5 w-3.5"/>
-                {site.published ? "Unpublish" : "Publish"}
+                {site.published ? t("planner.website.unpublish") : t("planner.website.publish")}
               </Button>
             </div>
           </div>
@@ -1196,13 +1206,13 @@ export default function WebsitePage() {
           {/* Blocks */}
           <div className="bg-card rounded-2xl border border-border shadow-sm overflow-hidden">
             <div className="px-5 py-4 border-b border-border flex items-center justify-between">
-              <h2 className="font-semibold text-foreground">Page Blocks</h2>
-              <span className="text-xs text-muted-foreground">{sortedBlocks.length} blocks</span>
+              <h2 className="font-semibold text-foreground">{t("planner.website.pageBlocks")}</h2>
+              <span className="text-xs text-muted-foreground">{t("planner.website.nBlocks").replace("{n}", String(sortedBlocks.length))}</span>
             </div>
 
             {sortedBlocks.length === 0 && (
               <p className="px-5 py-8 text-center text-sm text-muted-foreground">
-                No blocks yet. Choose a template or add blocks below.
+                {t("planner.website.noBlocks")}
               </p>
             )}
 
@@ -1215,7 +1225,7 @@ export default function WebsitePage() {
                     {/* Block row */}
                     <div className={`flex items-center gap-3 px-5 py-3 hover:bg-muted/30 transition-colors ${!block.visible ? "opacity-50" : ""} ${isExpanded ? "bg-primary/5" : ""}`}>
                       <button onClick={() => toggleBlockVisibility(block.id)}
-                        className="text-muted-foreground hover:text-primary transition-colors flex-shrink-0" title={block.visible ? "Hide block" : "Show block"}>
+                        className="text-muted-foreground hover:text-primary transition-colors flex-shrink-0" title={block.visible ? t("planner.website.hideBlock") : t("planner.website.showBlock")}>
                         {block.visible ? <Eye className="h-4 w-4"/> : <EyeOff className="h-4 w-4"/>}
                       </button>
 
@@ -1223,7 +1233,7 @@ export default function WebsitePage() {
                         onClick={() => setExpandedBlock(isExpanded ? null : block.id)}>
                         <span className="text-lg flex-shrink-0">{meta.icon}</span>
                         <div className="min-w-0">
-                          <p className="text-sm font-medium text-foreground truncate">{meta.label}</p>
+                          <p className="text-sm font-medium text-foreground truncate">{tBlock(block.type)}</p>
                           <p className="text-xs text-muted-foreground truncate">{meta.description}</p>
                         </div>
                       </button>
@@ -1268,7 +1278,7 @@ export default function WebsitePage() {
               {showAddBlock ? (
                 <div>
                   <div className="flex items-center justify-between mb-3">
-                    <p className="text-sm font-medium text-foreground/80">Choose a block to add</p>
+                    <p className="text-sm font-medium text-foreground/80">{t("planner.website.chooseBlock")}</p>
                     <button onClick={() => setShowAddBlock(false)} className="text-muted-foreground hover:text-foreground/80">
                       <X className="h-4 w-4"/>
                     </button>
@@ -1281,7 +1291,7 @@ export default function WebsitePage() {
                           className="flex items-center gap-2 p-3 border border-border rounded-xl hover:border-primary/40 hover:bg-primary/5 transition-colors text-left">
                           <span className="text-lg">{meta.icon}</span>
                           <div>
-                            <p className="text-xs font-medium text-foreground/80">{meta.label}</p>
+                            <p className="text-xs font-medium text-foreground/80">{tBlock(type)}</p>
                           </div>
                         </button>
                       );
@@ -1291,7 +1301,7 @@ export default function WebsitePage() {
               ) : (
                 <button onClick={() => setShowAddBlock(true)}
                   className="w-full flex items-center justify-center gap-2 py-2 border-2 border-dashed border-border rounded-xl text-sm text-muted-foreground hover:border-primary/40 hover:text-primary transition-colors">
-                  <Plus className="h-4 w-4"/> Add Block
+                  <Plus className="h-4 w-4"/> {t("planner.website.addBlock")}
                 </button>
               )}
             </div>
@@ -1312,7 +1322,7 @@ export default function WebsitePage() {
           <div className="flex-1 bg-muted rounded-md px-3 py-1 text-xs text-muted-foreground font-mono truncate">
             {local ? "preview" : site.published ? `/wedding/${site.slug}` : "preview (draft)"}
           </div>
-          <span className="text-xs text-muted-foreground">Click a section to edit</span>
+          <span className="text-xs text-muted-foreground">{t("planner.website.clickToEdit")}</span>
         </div>
         {/* Preview content */}
         <div className="flex-1 overflow-y-auto">
@@ -1330,8 +1340,8 @@ export default function WebsitePage() {
           <div className="bg-card rounded-2xl shadow-2xl w-full max-w-3xl max-h-[90vh] flex flex-col">
             <div className="flex items-center justify-between px-6 py-4 border-b border-border">
               <div>
-                <h2 className="text-lg font-bold">Choose a Template</h2>
-                <p className="text-sm text-muted-foreground mt-0.5">Applying a template replaces your current blocks and theme</p>
+                <h2 className="text-lg font-bold">{t("planner.website.chooseTemplate")}</h2>
+                <p className="text-sm text-muted-foreground mt-0.5">{t("planner.website.templateWarning")}</p>
               </div>
               <button onClick={() => setShowTemplates(false)} className="p-2 rounded-lg hover:bg-muted text-muted-foreground">
                 <X className="h-5 w-5"/>
@@ -1355,7 +1365,7 @@ export default function WebsitePage() {
                     <div className="px-3 pb-3">
                       <div className="w-full py-1.5 rounded-lg text-xs font-medium text-center text-white opacity-0 group-hover:opacity-100 transition-opacity"
                         style={{ background: tpl.primaryColor }}>
-                        Apply Template
+                        {t("planner.website.applyTemplate")}
                       </div>
                     </div>
                   </button>
@@ -1378,20 +1388,21 @@ function ThemeSection({
   onUpdate: (patch: Partial<LocalWeddingWebsite>) => void;
 }) {
   const [open, setOpen] = useState(true);
+  const { t } = useLanguage();
 
   return (
     <>
       <button className="w-full flex items-center gap-2 px-5 py-4 text-left hover:bg-muted/30 transition-colors"
         onClick={() => setOpen(o => !o)}>
         {open ? <ChevronDown className="h-4 w-4 text-muted-foreground"/> : <ChevronRight className="h-4 w-4 text-muted-foreground"/>}
-        <span className="font-semibold text-foreground">Theme & Settings</span>
+        <span className="font-semibold text-foreground">{t("planner.website.themeSettings")}</span>
       </button>
 
       {open && (
         <div className="px-5 pb-5 space-y-5 border-t border-border">
           {/* Theme selector */}
           <div>
-            <p className="text-xs font-medium text-muted-foreground mb-2 mt-4">Theme</p>
+            <p className="text-xs font-medium text-muted-foreground mb-2 mt-4">{t("planner.website.themeLabel")}</p>
             <div className="grid grid-cols-2 gap-2">
               {(Object.keys(THEMES) as (keyof typeof THEMES)[]).map(key => {
                 const th = THEMES[key];
@@ -1414,7 +1425,7 @@ function ThemeSection({
           {/* Color customization */}
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <p className="text-xs font-medium text-muted-foreground mb-2">Primary Color</p>
+              <p className="text-xs font-medium text-muted-foreground mb-2">{t("planner.website.primaryColor")}</p>
               <div className="flex items-center gap-2">
                 <input type="color" value={site.primaryColor} onChange={e => onUpdate({ primaryColor: e.target.value })}
                   className="h-9 w-12 cursor-pointer rounded border border-border p-0.5" />
@@ -1423,7 +1434,7 @@ function ThemeSection({
               </div>
             </div>
             <div>
-              <p className="text-xs font-medium text-muted-foreground mb-2">Accent Color</p>
+              <p className="text-xs font-medium text-muted-foreground mb-2">{t("planner.website.accentColor")}</p>
               <div className="flex items-center gap-2">
                 <input type="color" value={site.accentColor} onChange={e => onUpdate({ accentColor: e.target.value })}
                   className="h-9 w-12 cursor-pointer rounded border border-border p-0.5" />
@@ -1435,7 +1446,7 @@ function ThemeSection({
 
           {/* Font selector */}
           <div>
-            <p className="text-xs font-medium text-muted-foreground mb-2">Font Family</p>
+            <p className="text-xs font-medium text-muted-foreground mb-2">{t("planner.website.fontFamily")}</p>
             <select value={site.fontFamily} onChange={e => onUpdate({ fontFamily: e.target.value })}
               className="w-full border border-input rounded-md px-3 py-2 text-sm bg-card focus:outline-none focus:ring-1 focus:ring-primary/40">
               <option value="Inter">Inter (Modern)</option>
@@ -1448,7 +1459,7 @@ function ThemeSection({
           {/* Slug */}
           {!isLocal(site.projectId) && (
             <div>
-              <p className="text-xs font-medium text-muted-foreground mb-2">Public URL Slug</p>
+              <p className="text-xs font-medium text-muted-foreground mb-2">{t("planner.website.publicSlug")}</p>
               <div className="flex items-center gap-2">
                 <span className="text-sm text-muted-foreground whitespace-nowrap">/wedding/</span>
                 <Input value={site.slug} onChange={e => onUpdate({ slug: e.target.value.toLowerCase().replace(/[^a-z0-9-]/g, "-") })}
@@ -1459,9 +1470,9 @@ function ThemeSection({
 
           {/* Password protection */}
           <div>
-            <p className="text-xs font-medium text-muted-foreground mb-2">Password Protection (optional)</p>
+            <p className="text-xs font-medium text-muted-foreground mb-2">{t("planner.website.password")}</p>
             <Input value={site.password ?? ""} onChange={e => onUpdate({ password: e.target.value || null })}
-              type="password" placeholder="Leave empty for no password"
+              type="password" placeholder={t("planner.website.passwordPh")}
               className="h-9 text-sm max-w-sm" />
           </div>
         </div>

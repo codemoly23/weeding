@@ -15,6 +15,7 @@ import {
 } from "@/lib/planner-storage";
 import { usePlannerTier, isPremiumOrElite } from "@/hooks/use-planner-tier";
 import { UpgradeModal } from "@/components/planner/upgrade-modal";
+import { useLanguage } from "@/lib/i18n/language-context";
 
 const isLocal = (id: string) => id.startsWith("local-");
 
@@ -112,23 +113,24 @@ const emptyForm = (): VendorForm => ({
   name: "", category: "OTHER", email: "", phone: "", website: "", notes: "",
 });
 
-function VendorFormFields({ form, setForm }: {
+function VendorFormFields({ form, setForm, t }: {
   form: VendorForm;
   setForm: (f: VendorForm) => void;
+  t: (key: string) => string;
 }) {
   return (
     <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
       <div className="sm:col-span-2">
-        <label className="block text-xs font-medium text-foreground/80 mb-1">Vendor Name *</label>
+        <label className="block text-xs font-medium text-foreground/80 mb-1">{t("planner.vendors.form.name")} *</label>
         <input
           className="w-full border rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary/40"
-          placeholder="e.g. Sakura Photography"
+          placeholder={t("planner.vendors.form.namePh")}
           value={form.name}
           onChange={e => setForm({ ...form, name: e.target.value })}
         />
       </div>
       <div className="sm:col-span-2">
-        <label className="block text-xs font-medium text-foreground/80 mb-1">Category *</label>
+        <label className="block text-xs font-medium text-foreground/80 mb-1">{t("planner.vendors.form.category")} *</label>
         <select
           className="w-full border rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary/40"
           value={form.category}
@@ -140,39 +142,39 @@ function VendorFormFields({ form, setForm }: {
         </select>
       </div>
       <div>
-        <label className="block text-xs font-medium text-foreground/80 mb-1">Phone</label>
+        <label className="block text-xs font-medium text-foreground/80 mb-1">{t("planner.vendors.form.phone")}</label>
         <input
           className="w-full border rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary/40"
-          placeholder="+1 234 567 8900"
+          placeholder={t("planner.vendors.form.phonePh")}
           value={form.phone}
           onChange={e => setForm({ ...form, phone: e.target.value })}
         />
       </div>
       <div>
-        <label className="block text-xs font-medium text-foreground/80 mb-1">Email</label>
+        <label className="block text-xs font-medium text-foreground/80 mb-1">{t("planner.vendors.form.email")}</label>
         <input
           type="email"
           className="w-full border rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary/40"
-          placeholder="vendor@example.com"
+          placeholder={t("planner.vendors.form.emailPh")}
           value={form.email}
           onChange={e => setForm({ ...form, email: e.target.value })}
         />
       </div>
       <div className="sm:col-span-2">
-        <label className="block text-xs font-medium text-foreground/80 mb-1">Website</label>
+        <label className="block text-xs font-medium text-foreground/80 mb-1">{t("planner.vendors.form.website")}</label>
         <input
           className="w-full border rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary/40"
-          placeholder="https://vendor.com"
+          placeholder={t("planner.vendors.form.websitePh")}
           value={form.website}
           onChange={e => setForm({ ...form, website: e.target.value })}
         />
       </div>
       <div className="sm:col-span-2">
-        <label className="block text-xs font-medium text-foreground/80 mb-1">Notes</label>
+        <label className="block text-xs font-medium text-foreground/80 mb-1">{t("planner.vendors.form.notes")}</label>
         <textarea
           rows={2}
           className="w-full border rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary/40 resize-none"
-          placeholder="Any notes about this vendor..."
+          placeholder={t("planner.vendors.form.notesPh")}
           value={form.notes}
           onChange={e => setForm({ ...form, notes: e.target.value })}
         />
@@ -194,6 +196,7 @@ export default function VendorsPage() {
   const { id } = useParams<{ id: string }>();
   const local = isLocal(id);
   const { tier } = usePlannerTier(id);
+  const { t } = useLanguage();
   const [showUpgrade, setShowUpgrade] = useState(false);
 
   const [vendors, setVendors] = useState<LocalVendor[]>([]);
@@ -430,7 +433,7 @@ export default function VendorsPage() {
   }
 
   async function handleAdd() {
-    if (!addForm.name.trim()) { setAddError("Name is required"); return; }
+    if (!addForm.name.trim()) { setAddError(t("planner.vendors.nameRequired")); return; }
     setAddSaving(true);
     setAddError(null);
     try {
@@ -477,7 +480,7 @@ export default function VendorsPage() {
 
   async function handleEdit() {
     if (!editId) return;
-    if (!editForm.name.trim()) { setEditError("Name is required"); return; }
+    if (!editForm.name.trim()) { setEditError(t("planner.vendors.nameRequired")); return; }
     setEditSaving(true);
     setEditError(null);
     try {
@@ -509,7 +512,7 @@ export default function VendorsPage() {
   }
 
   async function handleDelete(vendorId: string) {
-    if (!confirm("Remove this vendor?")) return;
+    if (!confirm(t("planner.vendors.removeConfirm"))) return;
     try {
       if (local) {
         deleteLocalVendor(id, vendorId);
@@ -586,7 +589,7 @@ export default function VendorsPage() {
 
   async function handleCopyInvite() {
     if (local) {
-      alert("Save your project to the cloud first to generate an invite link.");
+      alert(t("planner.vendors.saveToCloud"));
       return;
     }
     setInviteCopying(true);
@@ -596,7 +599,7 @@ export default function VendorsPage() {
       if (!res.ok) throw new Error(data.error || "Failed to generate link");
       const url = `${window.location.origin}/invite/vendor?token=${data.invite.token}`;
       await navigator.clipboard.writeText(url);
-      alert("Invite link copied! Valid for 30 days.");
+      alert(t("planner.vendors.inviteCopied"));
     } catch (err) {
       alert(err instanceof Error ? err.message : "Could not generate invite link.");
     } finally {
@@ -618,7 +621,7 @@ export default function VendorsPage() {
     const doc = (
       <Document>
         <Page size="A4" style={styles.page}>
-          <Text style={styles.title}>All Vendors</Text>
+          <Text style={styles.title}>{t("planner.vendors.heading")}</Text>
           {vendors.map(v => (
             <View key={v.id} style={styles.card}>
               <Text style={styles.cat}>{VENDOR_CATEGORY_LABELS[v.category]}</Text>
@@ -646,12 +649,9 @@ export default function VendorsPage() {
     <div className="p-4 sm:p-6 max-w-5xl mx-auto">
       {/* Header */}
       <div className="mb-6 text-center">
-        <h1 className="text-2xl font-bold text-foreground">All Vendors</h1>
+        <h1 className="text-2xl font-bold text-foreground">{t("planner.vendors.heading")}</h1>
         <p className="text-sm text-muted-foreground mt-1 max-w-2xl mx-auto">
-          Discover the perfect <strong>vendors</strong>, <strong>venues</strong>, and <strong>services</strong> for
-          your wedding day by trying your luck in our extensive database of verified professionals. Additionally,
-          you have the freedom to add a <strong>custom vendor</strong> to your personal list, ensuring that every
-          aspect of your special day is tailored to your unique vision.
+          {t("planner.vendors.desc")}
         </p>
       </div>
 
@@ -663,23 +663,23 @@ export default function VendorsPage() {
             className="flex items-center gap-2 bg-primary text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-primary/90 transition-colors"
           >
             <PlusCircle className="w-4 h-4" />
-            Add custom vendor
+            {t("planner.vendors.addCustom")}
           </button>
 
           <label className="flex items-center gap-2 bg-card border border-border text-foreground/80 px-4 py-2 rounded-lg text-sm font-medium hover:bg-muted transition-colors cursor-pointer">
             <Upload className="w-4 h-4" />
-            {importing ? "Importing…" : "Import from file"}
+            {importing ? t("planner.vendors.importing") : t("planner.vendors.importFile")}
             <input ref={fileRef} type="file" accept=".csv,.xls,.xlsx" className="hidden" onChange={handleImport} />
           </label>
         </div>
 
         <div className="flex items-center gap-1 text-xs">
           <button onClick={() => handleDownloadTemplate("xlsx")} className="text-primary hover:underline px-2 py-2">
-            Template XLS
+            {t("planner.vendors.templateXLS")}
           </button>
           <span className="text-muted-foreground/50">|</span>
           <button onClick={() => handleDownloadTemplate("csv")} className="text-primary hover:underline px-2 py-2">
-            Template CSV
+            {t("planner.vendors.templateCSV")}
           </button>
         </div>
 
@@ -690,7 +690,7 @@ export default function VendorsPage() {
             className="flex items-center gap-2 bg-card border border-border text-foreground/80 px-4 py-2 rounded-lg text-sm font-medium hover:bg-muted transition-colors disabled:opacity-60"
           >
             <Link2 className="w-4 h-4" />
-            {inviteCopying ? "Generating…" : "Copy invite link for supplier"}
+            {inviteCopying ? t("planner.vendors.generating") : t("planner.vendors.copyInvite")}
           </button>
 
           {!local && (
@@ -700,7 +700,7 @@ export default function VendorsPage() {
               className="flex items-center gap-2 bg-primary/5 border border-primary/20 text-primary px-4 py-2 rounded-lg text-sm font-medium hover:bg-primary/10 transition-colors disabled:opacity-50"
             >
               <FileText className="w-4 h-4" />
-              {briefGenerating ? "Generating…" : "Share Event Brief"}
+              {briefGenerating ? t("planner.vendors.generating") : t("planner.vendors.shareEventBrief")}
             </button>
           )}
         </div>
@@ -746,7 +746,7 @@ export default function VendorsPage() {
                       className="flex items-center gap-1 bg-white/20 backdrop-blur-sm hover:bg-white/30 text-white text-[11px] font-medium px-2.5 py-1 rounded-full transition-colors w-full justify-center"
                     >
                       <MessageSquare className="w-3 h-3" />
-                      {existingConv ? "Continue chat" : "Message"}
+                      {existingConv ? t("planner.vendors.continueChat") : t("planner.vendors.message")}
                     </button>
                   )}
                 </div>
@@ -768,7 +768,7 @@ export default function VendorsPage() {
               <Plus className="w-5 h-5 text-primary/60 group-hover:text-primary" />
             </div>
             <span className="text-xs font-medium text-primary/70 group-hover:text-primary transition-colors text-center px-4">
-              Search and Add Vendors
+              {t("planner.vendors.searchAndAdd")}
             </span>
           </Link>
           <div className="flex-shrink-0 w-4 sm:w-6" />
@@ -818,7 +818,7 @@ export default function VendorsPage() {
                   </div>
                 )}
                 {!v.phone && !v.email && !v.website && !v.notes && (
-                  <p className="text-xs text-muted-foreground/50 py-1">No contact info</p>
+                  <p className="text-xs text-muted-foreground/50 py-1">{t("planner.vendors.noContactInfo")}</p>
                 )}
               </div>
             </div>
@@ -829,7 +829,9 @@ export default function VendorsPage() {
       {/* Vendor count */}
       {vendors.length > 0 && (
         <p className="mt-4 text-xs text-muted-foreground">
-          {vendors.length} vendor{vendors.length !== 1 ? "s" : ""} total
+          {vendors.length === 1
+            ? t("planner.vendors.totalOne")
+            : t("planner.vendors.totalMany").replace("{n}", String(vendors.length))}
         </p>
       )}
 
@@ -839,7 +841,7 @@ export default function VendorsPage() {
           <div className="flex items-center justify-between mb-4">
             <div className="flex items-center gap-2">
               <MessageSquare className="w-5 h-5 text-primary" />
-              <h2 className="text-base font-bold text-foreground">Vendor Messages</h2>
+              <h2 className="text-base font-bold text-foreground">{t("planner.vendors.messages")}</h2>
               {totalUnread > 0 && (
                 <span className="bg-primary text-white text-xs font-bold rounded-full px-1.5 py-0.5 min-w-[20px] text-center">
                   {totalUnread}
@@ -855,8 +857,8 @@ export default function VendorsPage() {
           ) : conversations.length === 0 ? (
             <div className="text-center py-8 bg-muted rounded-xl border border-dashed border-border">
               <MessageSquare className="w-8 h-8 text-muted-foreground/50 mx-auto mb-2" />
-              <p className="text-sm text-muted-foreground">No vendor conversations yet</p>
-              <p className="text-xs text-muted-foreground mt-1">Click &quot;Message&quot; on a vendor above to start a conversation</p>
+              <p className="text-sm text-muted-foreground">{t("planner.vendors.noConvs")}</p>
+              <p className="text-xs text-muted-foreground mt-1">{t("planner.vendors.noConvsDesc")}</p>
             </div>
           ) : (
             <div className="space-y-2">
@@ -878,11 +880,13 @@ export default function VendorsPage() {
                     <div className="flex items-center gap-2">
                       <span className="text-sm font-semibold text-foreground truncate">{conv.vendor.businessName}</span>
                       {conv.status === "ARCHIVED" && (
-                        <span className="text-[10px] text-muted-foreground bg-muted px-1.5 py-0.5 rounded">Archived</span>
+                        <span className="text-[10px] text-muted-foreground bg-muted px-1.5 py-0.5 rounded">{t("planner.vendors.archived")}</span>
                       )}
                     </div>
                     <p className="text-xs text-muted-foreground mt-0.5">
-                      {conv.vendor.category.replace(/_/g, " ")} · {conv.totalMessages} message{conv.totalMessages !== 1 ? "s" : ""}
+                      {conv.vendor.category.replace(/_/g, " ")} · {conv.totalMessages === 1
+                        ? t("planner.vendors.nMessagesOne")
+                        : t("planner.vendors.nMessagesMany").replace("{n}", String(conv.totalMessages))}
                     </p>
                   </div>
                   <div className="flex items-center gap-2 shrink-0">
@@ -895,7 +899,7 @@ export default function VendorsPage() {
                     <button
                       onClick={(e) => { e.stopPropagation(); archiveConv(conv.id); }}
                       className="p-1 opacity-0 group-hover:opacity-100 text-muted-foreground/50 hover:text-muted-foreground transition-all"
-                      title="Archive"
+                      title={t("planner.vendors.archive")}
                     >
                       <Archive className="w-3.5 h-3.5" />
                     </button>
@@ -911,10 +915,7 @@ export default function VendorsPage() {
       <div className="mt-10 space-y-6 border-t border-border pt-8">
         <div>
           <p className="text-sm text-foreground/80 leading-relaxed">
-            If you haven&apos;t found the supplier you&apos;re looking for in our existing categories, you can
-            easily <strong>add a custom vendor</strong> to the list. This feature helps you keep all your
-            contacts and essential details organized in one convenient location, ensuring everything remains up
-            to date.
+            {t("planner.vendors.addInfo")}
           </p>
           <div className="mt-3 flex items-center gap-3">
             <button
@@ -922,12 +923,12 @@ export default function VendorsPage() {
               className="flex items-center gap-1.5 text-sm text-foreground/80 hover:text-primary transition-colors"
             >
               <Plus className="w-3.5 h-3.5" />
-              Add custom vendor
+              {t("planner.vendors.addCustom")}
             </button>
-            <span className="text-muted-foreground text-sm">or</span>
+            <span className="text-muted-foreground text-sm">{t("common.or")}</span>
             <label className="flex items-center gap-1.5 text-sm text-foreground/80 hover:text-primary transition-colors cursor-pointer">
               <Download className="w-3.5 h-3.5" />
-              Import from file
+              {t("planner.vendors.importFile")}
               <input ref={fileRef2} type="file" accept=".csv,.xls,.xlsx" className="hidden" onChange={handleImport} />
             </label>
           </div>
@@ -935,9 +936,7 @@ export default function VendorsPage() {
 
         <div>
           <p className="text-sm text-foreground/80 leading-relaxed">
-            If you know a reliable and trustworthy supplier, venue, or wedding professional who would be a
-            valuable addition to our platform, you can use the <strong>invite link below</strong> to recommend
-            our platform.
+            {t("planner.vendors.inviteInfo")}
           </p>
           <button
             onClick={handleCopyInvite}
@@ -945,20 +944,20 @@ export default function VendorsPage() {
             className="mt-3 flex items-center gap-1.5 text-sm text-foreground/80 hover:text-primary transition-colors disabled:opacity-60"
           >
             <Link2 className="w-3.5 h-3.5" />
-            {inviteCopying ? "Generating…" : "Copy invite link for supplier"}
+            {inviteCopying ? t("planner.vendors.generating") : t("planner.vendors.copyInvite")}
           </button>
         </div>
 
         <div>
           <p className="text-sm text-foreground/80 leading-relaxed">
-            We also display <strong>recommended vendors</strong> conveniently located near you or within your area.
+            {t("planner.vendors.suggestedInfo")}
           </p>
           <button
             onClick={() => setHideSuggested(h => !h)}
             className="mt-3 flex items-center gap-1.5 text-sm text-foreground/80 hover:text-primary transition-colors"
           >
             <X className="w-3.5 h-3.5" />
-            {hideSuggested ? "Show suggested vendors" : "Hide suggested vendors"}
+            {hideSuggested ? t("planner.vendors.showSuggested") : t("planner.vendors.hideSuggested")}
           </button>
         </div>
       </div>
@@ -970,7 +969,7 @@ export default function VendorsPage() {
           className="flex items-center gap-2 px-6 py-3 border border-border bg-card hover:bg-muted rounded-xl text-sm text-foreground/80 shadow-sm transition-colors"
         >
           <Download className="w-4 h-4 text-muted-foreground" />
-          Download PDF file
+          {t("planner.vendors.downloadPdf")}
         </button>
       </div>
 
@@ -989,7 +988,7 @@ export default function VendorsPage() {
                 <div className="w-8 h-8 bg-primary/10 rounded-lg flex items-center justify-center">
                   <FileText className="w-4 h-4 text-primary" />
                 </div>
-                <h2 className="text-base font-bold text-foreground">Share Event Brief</h2>
+                <h2 className="text-base font-bold text-foreground">{t("planner.vendors.shareEventBrief")}</h2>
               </div>
               <button onClick={() => setShowBrief(false)} className="text-muted-foreground hover:text-foreground/80">
                 <X className="w-5 h-5" />
@@ -997,11 +996,11 @@ export default function VendorsPage() {
             </div>
 
             <p className="text-sm text-muted-foreground mb-4">
-              Share this link with a vendor so they can see your event details — date, venue, guest count, budget, and confirmed vendors.
+              {t("planner.vendors.briefDesc")}
             </p>
 
             <div className="bg-muted rounded-xl border border-border px-3 py-2.5 mb-4">
-              <p className="text-xs text-muted-foreground mb-1">Brief link</p>
+              <p className="text-xs text-muted-foreground mb-1">{t("planner.vendors.briefLink")}</p>
               <p className="text-sm text-foreground/80 font-mono break-all">
                 {typeof window !== "undefined"
                   ? `${window.location.origin}/brief/${briefToken}`
@@ -1015,7 +1014,7 @@ export default function VendorsPage() {
                 className="flex-1 flex items-center justify-center gap-2 bg-primary text-white px-4 py-2.5 rounded-lg text-sm font-medium hover:bg-primary/90 transition-colors"
               >
                 <Copy className="w-4 h-4" />
-                {briefCopied ? "Copied!" : "Copy Link"}
+                {briefCopied ? t("planner.vendors.copied") : t("planner.vendors.copyLink")}
               </button>
               <a
                 href={briefToken ? `/brief/${briefToken}` : "#"}
@@ -1023,13 +1022,13 @@ export default function VendorsPage() {
                 rel="noopener noreferrer"
                 className="flex items-center justify-center gap-2 bg-muted text-foreground/80 px-4 py-2.5 rounded-lg text-sm font-medium hover:bg-muted/80 transition-colors"
               >
-                Preview
+                {t("planner.vendors.preview")}
               </a>
             </div>
 
             <div className="border-t border-border mt-4 pt-4">
               <p className="text-xs text-muted-foreground mb-2">
-                Anyone with this link can view your event brief. Revoke to disable access.
+                {t("planner.vendors.briefWarning")}
               </p>
               <button
                 onClick={handleRevokeBrief}
@@ -1037,7 +1036,7 @@ export default function VendorsPage() {
                 className="flex items-center gap-1.5 text-xs text-[var(--color-error-text)] hover:text-[var(--color-error-text)]/80 disabled:opacity-50"
               >
                 <Trash className="w-3.5 h-3.5" />
-                {briefRevoking ? "Revoking…" : "Revoke this link"}
+                {briefRevoking ? t("planner.vendors.revoking") : t("planner.vendors.revokeLink")}
               </button>
             </div>
           </div>
@@ -1049,16 +1048,16 @@ export default function VendorsPage() {
         <div className="fixed inset-0 bg-black/40 z-50 flex items-center justify-center p-4" onClick={() => setShowAdd(false)}>
           <div className="bg-card rounded-2xl shadow-xl w-full max-w-lg p-6" onClick={e => e.stopPropagation()}>
             <div className="flex items-center justify-between mb-4">
-              <h2 className="text-lg font-bold text-foreground">Add Custom Vendor</h2>
+              <h2 className="text-lg font-bold text-foreground">{t("planner.vendors.addCustomTitle")}</h2>
               <button onClick={() => setShowAdd(false)} className="text-muted-foreground hover:text-foreground/80">
                 <X className="w-5 h-5" />
               </button>
             </div>
-            <VendorFormFields form={addForm} setForm={setAddForm} />
+            <VendorFormFields form={addForm} setForm={setAddForm} t={t} />
             {addError && <p className="text-[var(--color-error-text)] text-xs mt-3">{addError}</p>}
             <div className="flex gap-3 mt-5 justify-end">
               <button onClick={() => setShowAdd(false)} className="px-4 py-2 text-sm text-foreground/80 border rounded-lg hover:bg-muted">
-                Cancel
+                {t("common.cancel")}
               </button>
               <button
                 onClick={handleAdd}
@@ -1066,7 +1065,7 @@ export default function VendorsPage() {
                 className="flex items-center gap-2 px-4 py-2 text-sm bg-primary text-white rounded-lg hover:bg-primary/90 disabled:opacity-50"
               >
                 <Check className="w-4 h-4" />
-                {addSaving ? "Adding…" : "Add Vendor"}
+                {addSaving ? t("planner.vendors.adding") : t("planner.vendors.addBtn")}
               </button>
             </div>
           </div>
@@ -1078,16 +1077,16 @@ export default function VendorsPage() {
         <div className="fixed inset-0 bg-black/40 z-50 flex items-center justify-center p-4" onClick={() => setEditId(null)}>
           <div className="bg-card rounded-2xl shadow-xl w-full max-w-lg p-6" onClick={e => e.stopPropagation()}>
             <div className="flex items-center justify-between mb-4">
-              <h2 className="text-lg font-bold text-foreground">Edit Vendor</h2>
+              <h2 className="text-lg font-bold text-foreground">{t("planner.vendors.editTitle")}</h2>
               <button onClick={() => setEditId(null)} className="text-muted-foreground hover:text-foreground/80">
                 <X className="w-5 h-5" />
               </button>
             </div>
-            <VendorFormFields form={editForm} setForm={setEditForm} />
+            <VendorFormFields form={editForm} setForm={setEditForm} t={t} />
             {editError && <p className="text-[var(--color-error-text)] text-xs mt-3">{editError}</p>}
             <div className="flex gap-3 mt-5 justify-end">
               <button onClick={() => setEditId(null)} className="px-4 py-2 text-sm text-foreground/80 border rounded-lg hover:bg-muted">
-                Cancel
+                {t("common.cancel")}
               </button>
               <button
                 onClick={handleEdit}
@@ -1095,7 +1094,7 @@ export default function VendorsPage() {
                 className="flex items-center gap-2 px-4 py-2 text-sm bg-primary text-white rounded-lg hover:bg-primary/90 disabled:opacity-50"
               >
                 <Check className="w-4 h-4" />
-                {editSaving ? "Saving…" : "Save Changes"}
+                {editSaving ? t("common.saving") : t("common.saveChanges")}
               </button>
             </div>
           </div>
@@ -1129,7 +1128,11 @@ export default function VendorsPage() {
               <div className="flex-1 min-w-0">
                 <p className="text-sm font-semibold text-foreground truncate">{msgPanelVendorName}</p>
                 <p className="text-xs text-muted-foreground">
-                  {thread ? `${thread.messages.length} messages` : "Start a conversation"}
+                  {thread
+                    ? (thread.messages.length === 1
+                        ? t("planner.vendors.nMessagesOne")
+                        : t("planner.vendors.nMessagesMany").replace("{n}", String(thread.messages.length)))
+                    : t("planner.vendors.startConv")}
                 </p>
               </div>
               {thread && thread.status === "ACTIVE" && (
@@ -1187,7 +1190,7 @@ export default function VendorsPage() {
                           if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); sendReply(); }
                         }}
                         rows={2}
-                        placeholder="Type a message… (Enter to send)"
+                        placeholder={t("planner.vendors.typeMsgPh")}
                         className="flex-1 resize-none border border-border rounded-xl px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary/40"
                       />
                       <button
@@ -1202,11 +1205,11 @@ export default function VendorsPage() {
                   </div>
                 ) : (
                   <div className="border-t border-border px-4 py-3 text-center text-xs text-muted-foreground shrink-0">
-                    This conversation is archived.
+                    {t("planner.vendors.convArchived")}
                     <button
                       onClick={() => { if (thread) { archiveConv(thread.id); setThread(prev => prev ? { ...prev, status: "ACTIVE" } : null); } }}
                       className="ml-1 text-primary underline"
-                    >Restore</button>
+                    >{t("planner.vendors.restore")}</button>
                   </div>
                 )}
               </>
@@ -1218,8 +1221,8 @@ export default function VendorsPage() {
                     <div className="w-14 h-14 rounded-full bg-primary/5 flex items-center justify-center mx-auto mb-3">
                       <MessageSquare className="w-7 h-7 text-primary/60" />
                     </div>
-                    <p className="text-sm font-medium text-foreground/80">Start a conversation</p>
-                    <p className="text-xs text-muted-foreground mt-1">Send your first message to {msgPanelVendorName}</p>
+                    <p className="text-sm font-medium text-foreground/80">{t("planner.vendors.startConv")}</p>
+                    <p className="text-xs text-muted-foreground mt-1">{t("planner.vendors.startConvDesc").replace("{name}", msgPanelVendorName)}</p>
                   </div>
                 </div>
                 <div className="border-t border-border px-4 py-3 shrink-0">
@@ -1231,7 +1234,7 @@ export default function VendorsPage() {
                         if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); sendNewMessage(); }
                       }}
                       rows={3}
-                      placeholder={`Hi ${msgPanelVendorName}, I'm interested in your services for my wedding…`}
+                      placeholder={`${t("planner.vendors.startConv")} ${msgPanelVendorName}…`}
                       className="flex-1 resize-none border border-border rounded-xl px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary/40"
                     />
                     <button
@@ -1244,7 +1247,7 @@ export default function VendorsPage() {
                   </div>
                   {newMsgError && <p className="text-xs text-[var(--color-error-text)] mt-1">{newMsgError}</p>}
                   <p className="text-[11px] text-muted-foreground text-center mt-2">
-                    This message will appear in the vendor&apos;s inbox.
+                    {t("planner.vendors.msgNote")}
                   </p>
                 </div>
               </div>

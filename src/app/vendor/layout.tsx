@@ -19,21 +19,24 @@ import {
   Inbox,
 } from "lucide-react";
 import { signOut } from "next-auth/react";
+import { LanguageSwitcher } from "@/components/layout/header/components/LanguageSwitcher";
+import { useLanguage } from "@/lib/i18n/language-context";
 
 const NAV_ITEMS = [
-  { href: "/vendor/dashboard", label: "Dashboard", icon: LayoutDashboard },
-  { href: "/vendor/profile", label: "My Profile", icon: User },
-  { href: "/vendor/messages", label: "Messages", icon: Inbox, badge: true },
-  { href: "/vendor/inquiries", label: "Inquiries", icon: MessageSquare },
-  { href: "/vendor/reviews", label: "Reviews", icon: Star },
-  { href: "/vendor/billing", label: "Plan & Billing", icon: CreditCard },
-  { href: "/vendor/settings", label: "Settings", icon: Settings },
+  { href: "/vendor/dashboard", labelKey: "common.dashboard", icon: LayoutDashboard },
+  { href: "/vendor/profile", labelKey: "vendor.nav.myProfile", icon: User },
+  { href: "/vendor/messages", labelKey: "vendor.nav.messages", icon: Inbox, badge: true },
+  { href: "/vendor/inquiries", labelKey: "vendor.nav.inquiries", icon: MessageSquare },
+  { href: "/vendor/reviews", labelKey: "vendor.nav.reviews", icon: Star },
+  { href: "/vendor/billing", labelKey: "vendor.nav.planBilling", icon: CreditCard },
+  { href: "/vendor/settings", labelKey: "common.settings", icon: Settings },
 ];
 
 export default function VendorLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
   const router = useRouter();
   const { data: session, status } = useSession();
+  const { t } = useLanguage();
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [unreadCount, setUnreadCount] = useState(0);
   const [businessName, setBusinessName] = useState<string | null>(null);
@@ -99,7 +102,7 @@ export default function VendorLayout({ children }: { children: React.ReactNode }
         {/* Logo */}
         <div className="flex items-center justify-between px-5 py-4 border-b border-primary/10">
           <Link href="/vendor/dashboard" className="flex items-center">
-            <span className="font-semibold text-foreground text-sm">Vendor Portal</span>
+            <span className="font-semibold text-foreground text-sm">{t("vendor.portal")}</span>
           </Link>
           <button
             onClick={() => setSidebarOpen(false)}
@@ -112,7 +115,7 @@ export default function VendorLayout({ children }: { children: React.ReactNode }
         {/* Business name */}
         {(businessName || session?.user?.name) && (
           <div className="px-5 py-3 border-b border-primary/10">
-            <p className="text-xs text-muted-foreground/70 uppercase tracking-wide font-medium">Logged in as</p>
+            <p className="text-xs text-muted-foreground/70 uppercase tracking-wide font-medium">{t("vendor.loggedInAs")}</p>
             <p className="text-sm font-medium text-foreground truncate mt-0.5">
               {businessName || session?.user?.name}
             </p>
@@ -121,7 +124,7 @@ export default function VendorLayout({ children }: { children: React.ReactNode }
 
         {/* Nav */}
         <nav className="flex-1 px-3 py-4 space-y-0.5">
-          {NAV_ITEMS.map(({ href, label, icon: Icon, badge }) => {
+          {NAV_ITEMS.map(({ href, labelKey, icon: Icon, badge }) => {
             const active = pathname === href || pathname.startsWith(href + "/");
             const showBadge = badge && unreadCount > 0 && !active;
             return (
@@ -136,7 +139,7 @@ export default function VendorLayout({ children }: { children: React.ReactNode }
                   }`}
               >
                 <Icon className="w-4 h-4 shrink-0" />
-                {label}
+                {t(labelKey)}
                 {showBadge && (
                   <span className="ml-auto bg-primary text-white text-[10px] font-bold rounded-full min-w-[18px] h-[18px] flex items-center justify-center px-1">
                     {unreadCount > 99 ? "99+" : unreadCount}
@@ -150,20 +153,23 @@ export default function VendorLayout({ children }: { children: React.ReactNode }
 
         {/* Footer */}
         <div className="px-3 py-4 border-t border-primary/10 space-y-0.5">
+          <div className="mb-2 px-3">
+            <LanguageSwitcher className="w-full [&>button]:w-full [&>button]:justify-between" />
+          </div>
           <Link
             href="/vendors"
             target="_blank"
             className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-muted-foreground hover:bg-muted/30 hover:text-foreground transition-colors"
           >
             <Store className="w-4 h-4 shrink-0" />
-            View Public Listing
+            {t("vendor.viewPublicListing")}
           </Link>
           <button
             onClick={() => signOut({ callbackUrl: "/login" })}
             className="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-muted-foreground hover:bg-[var(--color-error-bg)] hover:text-[var(--color-error-text)] transition-colors"
           >
             <LogOut className="w-4 h-4 shrink-0" />
-            Sign Out
+            {t("common.signOut")}
           </button>
         </div>
       </aside>
@@ -178,11 +184,12 @@ export default function VendorLayout({ children }: { children: React.ReactNode }
           >
             <Menu className="w-5 h-5" />
           </button>
-          <span className="font-semibold text-foreground text-sm">Vendor Portal</span>
+          <span className="font-semibold text-foreground text-sm">{t("vendor.portal")}</span>
+          <LanguageSwitcher className="ml-auto" />
           {unreadCount > 0 && (
-            <Link href="/vendor/messages" className="ml-auto">
+            <Link href="/vendor/messages">
               <span className="bg-primary text-white text-xs font-bold rounded-full px-2 py-0.5">
-                {unreadCount} new
+                {t("admin.header.newCount", { count: String(unreadCount) })}
               </span>
             </Link>
           )}

@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
@@ -18,6 +18,7 @@ import {
   Select, SelectContent, SelectItem, SelectTrigger, SelectValue,
 } from "@/components/ui/select";
 import { toast } from "sonner";
+import { useLanguage } from "@/lib/i18n/language-context";
 
 interface TicketItem {
   id: string;
@@ -48,25 +49,26 @@ interface TicketDetail {
   messages: Message[];
 }
 
-const statusConfig: Record<string, { label: string; color: string; icon: React.ElementType }> = {
-  OPEN:                 { label: "Open",             color: "bg-blue-100 text-blue-700",   icon: MessageCircle },
-  IN_PROGRESS:          { label: "In Progress",      color: "bg-yellow-100 text-yellow-700", icon: Clock },
-  WAITING_FOR_CUSTOMER: { label: "Awaiting You",     color: "bg-orange-100 text-orange-700", icon: AlertCircle },
-  WAITING_FOR_AGENT:    { label: "Awaiting Agent",   color: "bg-purple-100 text-purple-700", icon: Clock },
-  RESOLVED:             { label: "Resolved",         color: "bg-green-100 text-green-700",  icon: CheckCircle },
-  CLOSED:               { label: "Closed",           color: "bg-gray-100 text-gray-600",    icon: CheckCircle },
+const statusConfig: Record<string, { labelKey: string; color: string; icon: React.ElementType }> = {
+  OPEN:                 { labelKey: "admin.status.OPEN", color: "bg-blue-100 text-blue-700", icon: MessageCircle },
+  IN_PROGRESS:          { labelKey: "admin.status.IN_PROGRESS", color: "bg-yellow-100 text-yellow-700", icon: Clock },
+  WAITING_FOR_CUSTOMER: { labelKey: "dashboard.support.awaitingYou", color: "bg-orange-100 text-orange-700", icon: AlertCircle },
+  WAITING_FOR_AGENT:    { labelKey: "dashboard.support.awaitingAgent", color: "bg-purple-100 text-purple-700", icon: Clock },
+  RESOLVED:             { labelKey: "admin.status.RESOLVED", color: "bg-green-100 text-green-700", icon: CheckCircle },
+  CLOSED:               { labelKey: "admin.status.CLOSED", color: "bg-gray-100 text-gray-600", icon: CheckCircle },
 };
 
-function timeAgo(date: string) {
+function timeAgo(date: string, t: (key: string, vars?: Record<string, string>) => string) {
   const diff = Math.floor((Date.now() - new Date(date).getTime()) / 1000);
-  if (diff < 60) return `${diff}s ago`;
-  if (diff < 3600) return `${Math.floor(diff / 60)}m ago`;
-  if (diff < 86400) return `${Math.floor(diff / 3600)}h ago`;
+  if (diff < 60) return t("common.time.secondsAgo", { count: String(diff) });
+  if (diff < 3600) return t("common.time.minutesAgo", { count: String(Math.floor(diff / 60)) });
+  if (diff < 86400) return t("common.time.hoursAgo", { count: String(Math.floor(diff / 3600)) });
   return new Date(date).toLocaleDateString();
 }
 
-// ─── New Ticket Form ──────────────────────────────────────────────────────────
+// â”€â”€â”€ New Ticket Form â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 function NewTicketForm({ onCreated }: { onCreated: (id: string) => void }) {
+  const { t } = useLanguage();
   const [subject, setSubject] = useState("");
   const [category, setCategory] = useState("");
   const [priority, setPriority] = useState("MEDIUM");
@@ -83,11 +85,11 @@ function NewTicketForm({ onCreated }: { onCreated: (id: string) => void }) {
         body: JSON.stringify({ subject, category: category || undefined, priority, message }),
       });
       const data = await res.json();
-      if (!res.ok) { toast.error(data.error || "Failed to submit ticket"); return; }
-      toast.success(`Ticket ${data.ticketNumber} submitted!`);
+      if (!res.ok) { toast.error(data.error || t("dashboard.support.submitFailed")); return; }
+      toast.success(t("dashboard.support.submitted", { ticketNumber: data.ticketNumber }));
       onCreated(data.ticketId);
     } catch {
-      toast.error("Network error. Please try again.");
+      toast.error(t("dashboard.support.networkRetry"));
     } finally {
       setSaving(false);
     }
@@ -97,59 +99,59 @@ function NewTicketForm({ onCreated }: { onCreated: (id: string) => void }) {
     <Card>
       <CardHeader>
         <CardTitle className="flex items-center gap-2 text-base">
-          <Plus className="h-4 w-4" /> New Support Ticket
+          <Plus className="h-4 w-4" /> {t("dashboard.support.newTicket")}
         </CardTitle>
-        <CardDescription>Describe your issue and we&apos;ll get back to you shortly</CardDescription>
+        <CardDescription>{t("dashboard.support.newTicketDesc")}</CardDescription>
       </CardHeader>
       <CardContent>
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="space-y-1.5">
-            <Label htmlFor="subject">Subject <span className="text-destructive">*</span></Label>
+            <Label htmlFor="subject">{t("dashboard.support.subject")} <span className="text-destructive">*</span></Label>
             <Input
               id="subject"
               value={subject}
               onChange={(e) => setSubject(e.target.value)}
-              placeholder="Brief description of your issue"
+              placeholder={t("dashboard.support.subjectPlaceholder")}
               required
               minLength={5}
             />
           </div>
           <div className="grid gap-4 sm:grid-cols-2">
             <div className="space-y-1.5">
-              <Label>Category</Label>
+              <Label>{t("dashboard.support.category")}</Label>
               <Select value={category} onValueChange={setCategory}>
                 <SelectTrigger>
-                  <SelectValue placeholder="Select category" />
+                  <SelectValue placeholder={t("dashboard.support.selectCategory")} />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="billing">Billing & Payments</SelectItem>
-                  <SelectItem value="account">Account & Login</SelectItem>
-                  <SelectItem value="planning">Event Planning</SelectItem>
-                  <SelectItem value="vendor">Vendor Issues</SelectItem>
-                  <SelectItem value="technical">Technical Problem</SelectItem>
-                  <SelectItem value="other">Other</SelectItem>
+                  <SelectItem value="billing">{t("dashboard.support.categoryBilling")}</SelectItem>
+                  <SelectItem value="account">{t("dashboard.support.categoryAccount")}</SelectItem>
+                  <SelectItem value="planning">{t("dashboard.support.categoryPlanning")}</SelectItem>
+                  <SelectItem value="vendor">{t("dashboard.support.categoryVendor")}</SelectItem>
+                  <SelectItem value="technical">{t("dashboard.support.categoryTechnical")}</SelectItem>
+                  <SelectItem value="other">{t("dashboard.support.categoryOther")}</SelectItem>
                 </SelectContent>
               </Select>
             </div>
             <div className="space-y-1.5">
-              <Label>Priority</Label>
+              <Label>{t("dashboard.support.priority")}</Label>
               <Select value={priority} onValueChange={setPriority}>
                 <SelectTrigger><SelectValue /></SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="LOW">Low</SelectItem>
-                  <SelectItem value="MEDIUM">Medium</SelectItem>
-                  <SelectItem value="HIGH">High</SelectItem>
+                  <SelectItem value="LOW">{t("admin.priority.LOW")}</SelectItem>
+                  <SelectItem value="MEDIUM">{t("admin.priority.MEDIUM")}</SelectItem>
+                  <SelectItem value="HIGH">{t("admin.priority.HIGH")}</SelectItem>
                 </SelectContent>
               </Select>
             </div>
           </div>
           <div className="space-y-1.5">
-            <Label htmlFor="message">Message <span className="text-destructive">*</span></Label>
+            <Label htmlFor="message">{t("dashboard.support.message")} <span className="text-destructive">*</span></Label>
             <Textarea
               id="message"
               value={message}
               onChange={(e) => setMessage(e.target.value)}
-              placeholder="Describe your issue in detail..."
+              placeholder={t("dashboard.support.messagePlaceholder")}
               rows={5}
               required
               minLength={10}
@@ -157,7 +159,7 @@ function NewTicketForm({ onCreated }: { onCreated: (id: string) => void }) {
           </div>
           <Button type="submit" disabled={saving} className="w-full sm:w-auto">
             {saving ? <Loader2 className="h-4 w-4 mr-2 animate-spin" /> : <Send className="h-4 w-4 mr-2" />}
-            {saving ? "Submitting..." : "Submit Ticket"}
+            {saving ? t("dashboard.support.submitting") : t("dashboard.support.submitTicket")}
           </Button>
         </form>
       </CardContent>
@@ -165,8 +167,9 @@ function NewTicketForm({ onCreated }: { onCreated: (id: string) => void }) {
   );
 }
 
-// ─── Ticket Detail / Chat ─────────────────────────────────────────────────────
+// â”€â”€â”€ Ticket Detail / Chat â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 function TicketDetailView({ ticketId, onBack }: { ticketId: string; onBack: () => void }) {
+  const { t } = useLanguage();
   const [ticket, setTicket] = useState<TicketDetail | null>(null);
   const [loading, setLoading] = useState(true);
   const [reply, setReply] = useState("");
@@ -195,14 +198,14 @@ function TicketDetailView({ ticketId, onBack }: { ticketId: string; onBack: () =
         body: JSON.stringify({ content: reply }),
       });
       const data = await res.json();
-      if (!res.ok) { toast.error(data.error || "Failed to send"); return; }
+      if (!res.ok) { toast.error(data.error || t("dashboard.support.sendFailed")); return; }
       setTicket((prev) => prev ? {
         ...prev,
         messages: [...prev.messages, data.message],
       } : prev);
       setReply("");
     } catch {
-      toast.error("Network error.");
+      toast.error(t("common.networkError"));
     } finally {
       setSending(false);
     }
@@ -215,7 +218,7 @@ function TicketDetailView({ ticketId, onBack }: { ticketId: string; onBack: () =
   );
 
   if (!ticket) return (
-    <div className="text-center py-12 text-muted-foreground">Ticket not found.</div>
+    <div className="text-center py-12 text-muted-foreground">{t("dashboard.support.ticketNotFound")}</div>
   );
 
   const statusConf = statusConfig[ticket.status] ?? statusConfig.OPEN;
@@ -225,7 +228,7 @@ function TicketDetailView({ ticketId, onBack }: { ticketId: string; onBack: () =
   return (
     <div className="space-y-4">
       <button onClick={onBack} className="flex items-center gap-1.5 text-sm text-muted-foreground hover:text-foreground transition-colors">
-        <ArrowLeft className="h-4 w-4" /> Back to tickets
+        <ArrowLeft className="h-4 w-4" /> {t("dashboard.support.backToTickets")}
       </button>
 
       <Card>
@@ -236,7 +239,7 @@ function TicketDetailView({ ticketId, onBack }: { ticketId: string; onBack: () =
               <CardTitle className="text-base">{ticket.subject}</CardTitle>
             </div>
             <Badge className={`${statusConf.color} border-0 flex items-center gap-1`}>
-              <StatusIcon className="h-3 w-3" /> {statusConf.label}
+              <StatusIcon className="h-3 w-3" /> {t(statusConf.labelKey)}
             </Badge>
           </div>
         </CardHeader>
@@ -257,7 +260,7 @@ function TicketDetailView({ ticketId, onBack }: { ticketId: string; onBack: () =
                     )}
                     <p className="text-sm leading-relaxed whitespace-pre-wrap">{msg.content}</p>
                     <p className={`text-xs mt-1 ${isCustomer ? "text-primary-foreground/70 text-right" : "text-muted-foreground"}`}>
-                      {timeAgo(msg.createdAt)}
+                      {timeAgo(msg.createdAt, t)}
                     </p>
                   </div>
                 </div>
@@ -269,14 +272,14 @@ function TicketDetailView({ ticketId, onBack }: { ticketId: string; onBack: () =
           {/* Reply box */}
           {isClosed ? (
             <div className="rounded-lg bg-muted/50 px-4 py-3 text-sm text-muted-foreground text-center">
-              This ticket is {ticket.status.toLowerCase()}. Open a new ticket if you need further help.
+              {t("dashboard.support.closedTicketNotice", { status: t(statusConf.labelKey).toLowerCase() })}
             </div>
           ) : (
             <form onSubmit={sendReply} className="flex gap-2">
               <Input
                 value={reply}
                 onChange={(e) => setReply(e.target.value)}
-                placeholder="Type your reply..."
+                placeholder={t("dashboard.support.replyPlaceholder")}
                 className="flex-1"
                 disabled={sending}
               />
@@ -291,8 +294,9 @@ function TicketDetailView({ ticketId, onBack }: { ticketId: string; onBack: () =
   );
 }
 
-// ─── Main Page ────────────────────────────────────────────────────────────────
+// â”€â”€â”€ Main Page â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 export default function SupportPage() {
+  const { t } = useLanguage();
   const [view, setView] = useState<"list" | "new" | "detail">("list");
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const [tickets, setTickets] = useState<TicketItem[]>([]);
@@ -322,7 +326,7 @@ export default function SupportPage() {
     return (
       <div className="max-w-2xl mx-auto space-y-4">
         <button onClick={() => setView("list")} className="flex items-center gap-1.5 text-sm text-muted-foreground hover:text-foreground transition-colors">
-          <ArrowLeft className="h-4 w-4" /> Back
+          <ArrowLeft className="h-4 w-4" /> {t("common.back")}
         </button>
         <NewTicketForm onCreated={onTicketCreated} />
       </div>
@@ -342,13 +346,13 @@ export default function SupportPage() {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold text-foreground">Support</h1>
+          <h1 className="text-2xl font-bold text-foreground">{t("dash.support")}</h1>
           <p className="text-sm text-muted-foreground mt-0.5">
-            Get help from our team or track your tickets
+            {t("dashboard.support.subtitle")}
           </p>
         </div>
         <Button onClick={() => setView("new")}>
-          <Plus className="h-4 w-4 mr-2" /> New Ticket
+          <Plus className="h-4 w-4 mr-2" /> {t("dashboard.support.newTicketShort")}
         </Button>
       </div>
 
@@ -356,7 +360,7 @@ export default function SupportPage() {
       <Card>
         <CardHeader>
           <CardTitle className="text-base flex items-center gap-2">
-            <Ticket className="h-4 w-4" /> My Tickets
+            <Ticket className="h-4 w-4" /> {t("dashboard.support.myTickets")}
           </CardTitle>
         </CardHeader>
         <CardContent>
@@ -367,31 +371,31 @@ export default function SupportPage() {
           ) : tickets.length === 0 ? (
             <div className="text-center py-10">
               <MessageCircle className="h-10 w-10 text-muted-foreground/30 mx-auto mb-3" />
-              <p className="text-sm font-medium text-muted-foreground">No tickets yet</p>
-              <p className="text-xs text-muted-foreground/70 mt-1">Submit a ticket if you need help</p>
+              <p className="text-sm font-medium text-muted-foreground">{t("dashboard.support.noTickets")}</p>
+              <p className="text-xs text-muted-foreground/70 mt-1">{t("dashboard.support.noTicketsDesc")}</p>
               <Button size="sm" className="mt-4" onClick={() => setView("new")}>
-                <Plus className="h-4 w-4 mr-1" /> Open a Ticket
+                <Plus className="h-4 w-4 mr-1" /> {t("dashboard.support.openTicket")}
               </Button>
             </div>
           ) : (
             <div className="divide-y">
-              {tickets.map((t) => {
-                const conf = statusConfig[t.status] ?? statusConfig.OPEN;
+              {tickets.map((ticket) => {
+                const conf = statusConfig[ticket.status] ?? statusConfig.OPEN;
                 const StatusIcon = conf.icon;
                 return (
                   <button
-                    key={t.id}
-                    onClick={() => openTicket(t.id)}
+                    key={ticket.id}
+                    onClick={() => openTicket(ticket.id)}
                     className="w-full text-left py-3.5 flex items-center gap-4 hover:bg-muted/40 transition-colors rounded-lg px-2 -mx-2"
                   >
                     <div className="flex-1 min-w-0">
-                      <p className="text-sm font-medium text-foreground truncate">{t.subject}</p>
+                      <p className="text-sm font-medium text-foreground truncate">{ticket.subject}</p>
                       <p className="text-xs text-muted-foreground mt-0.5">
-                        {t.ticketNumber} · {t._count.messages} message{t._count.messages !== 1 ? "s" : ""} · {timeAgo(t.updatedAt)}
+                        {ticket.ticketNumber} · {t("dashboard.support.messageCount", { count: String(ticket._count.messages) })} · {timeAgo(ticket.updatedAt, t)}
                       </p>
                     </div>
                     <Badge className={`${conf.color} border-0 shrink-0 flex items-center gap-1`}>
-                      <StatusIcon className="h-3 w-3" /> {conf.label}
+                      <StatusIcon className="h-3 w-3" /> {t(conf.labelKey)}
                     </Badge>
                     <ChevronRight className="h-4 w-4 text-muted-foreground shrink-0" />
                   </button>
@@ -412,8 +416,8 @@ export default function SupportPage() {
             <MessageCircle className="h-4 w-4 text-primary" />
           </div>
           <div>
-            <p className="text-sm font-medium">Help Center</p>
-            <p className="text-xs text-muted-foreground">Browse FAQs and guides</p>
+            <p className="text-sm font-medium">{t("dashboard.header.helpCenter")}</p>
+            <p className="text-xs text-muted-foreground">{t("dashboard.support.helpCenterDesc")}</p>
           </div>
         </div>
         <ChevronRight className="h-4 w-4 text-muted-foreground" />

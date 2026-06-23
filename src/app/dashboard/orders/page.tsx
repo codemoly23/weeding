@@ -30,6 +30,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { toast } from "sonner";
+import { useLanguage } from "@/lib/i18n/language-context";
 
 type OrderStatus = "PENDING" | "PROCESSING" | "IN_PROGRESS" | "WAITING_FOR_INFO" | "COMPLETED" | "CANCELLED" | "REFUNDED";
 
@@ -60,16 +61,6 @@ const statusColors: Record<string, string> = {
   REFUNDED: "bg-muted text-muted-foreground",
 };
 
-const statusLabels: Record<string, string> = {
-  PENDING: "Pending",
-  PROCESSING: "Processing",
-  IN_PROGRESS: "In Progress",
-  WAITING_FOR_INFO: "Waiting for Info",
-  COMPLETED: "Completed",
-  CANCELLED: "Cancelled",
-  REFUNDED: "Refunded",
-};
-
 const paymentStatusColors: Record<string, string> = {
   PENDING: "bg-[var(--color-warning-bg)] text-[var(--color-warning-text)]",
   PAID: "bg-[var(--color-success-bg)] text-[var(--color-success-text)]",
@@ -78,15 +69,8 @@ const paymentStatusColors: Record<string, string> = {
   PARTIALLY_REFUNDED: "bg-[var(--color-warning-bg)] text-[var(--color-warning-text)]",
 };
 
-const paymentStatusLabels: Record<string, string> = {
-  PENDING: "Pending",
-  PAID: "Paid",
-  FAILED: "Failed",
-  REFUNDED: "Refunded",
-  PARTIALLY_REFUNDED: "Partial Refund",
-};
-
 export default function OrdersPage() {
+  const { t, lang } = useLanguage();
   const [orders, setOrders] = useState<Order[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState("");
@@ -128,15 +112,15 @@ export default function OrdersPage() {
         setTotalOrders(data.pagination.total);
         setTotalPages(data.pagination.totalPages);
       } else {
-        toast.error("Failed to fetch orders");
+        toast.error(t("dashboard.orders.fetchFailed"));
       }
     } catch (error) {
       console.error("Error fetching orders:", error);
-      toast.error("Failed to fetch orders");
+      toast.error(t("dashboard.orders.fetchFailed"));
     } finally {
       setIsLoading(false);
     }
-  }, [currentPage, searchQuery, statusFilter]);
+  }, [currentPage, searchQuery, statusFilter, t]);
 
   useEffect(() => {
     fetchOrders();
@@ -149,7 +133,7 @@ export default function OrdersPage() {
   };
 
   const formatDate = (dateString: string) => {
-    return new Date(dateString).toLocaleDateString("en-US", {
+    return new Date(dateString).toLocaleDateString(lang === "sv" ? "sv-SE" : "en-US", {
       year: "numeric",
       month: "short",
       day: "numeric",
@@ -165,7 +149,7 @@ export default function OrdersPage() {
     if (order.items.length > 0) {
       return order.items[0].name.split(" - ")[0];
     }
-    return "N/A";
+    return t("common.notAvailable");
   };
 
   // Get package name from first order item
@@ -178,20 +162,20 @@ export default function OrdersPage() {
       {/* Page Header */}
       <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div>
-          <h1 className="text-2xl font-bold text-foreground">Orders</h1>
+          <h1 className="text-2xl font-bold text-foreground">{t("dash.orders")}</h1>
           <p className="text-muted-foreground">
-            View and manage all your orders
+            {t("dashboard.orders.subtitle")}
           </p>
         </div>
         <div className="flex gap-2">
           <Button variant="outline" onClick={fetchOrders} disabled={isLoading}>
             <RefreshCw className={`mr-2 h-4 w-4 ${isLoading ? "animate-spin" : ""}`} />
-            Refresh
+            {t("common.refresh")}
           </Button>
           <Button asChild>
             <Link href="/services">
               <Plus className="mr-2 h-4 w-4" />
-              New Order
+              {t("admin.dashboard.newOrder")}
             </Link>
           </Button>
         </div>
@@ -204,7 +188,7 @@ export default function OrdersPage() {
             <div className="relative flex-1">
               <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
               <Input
-                placeholder="Search by order ID or service name..."
+                placeholder={t("dashboard.orders.searchPlaceholder")}
                 className="pl-9"
                 value={searchQuery}
                 onChange={(e) => handleFilterChange("search", e.target.value)}
@@ -212,15 +196,15 @@ export default function OrdersPage() {
             </div>
             <Select value={statusFilter} onValueChange={(v) => handleFilterChange("status", v)}>
               <SelectTrigger className="w-full sm:w-40">
-                <SelectValue placeholder="Status" />
+                <SelectValue placeholder={t("admin.orders.status")} />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="all">All Status</SelectItem>
-                <SelectItem value="PENDING">Pending</SelectItem>
-                <SelectItem value="PROCESSING">Processing</SelectItem>
-                <SelectItem value="IN_PROGRESS">In Progress</SelectItem>
-                <SelectItem value="COMPLETED">Completed</SelectItem>
-                <SelectItem value="CANCELLED">Cancelled</SelectItem>
+                <SelectItem value="all">{t("admin.orders.allStatus")}</SelectItem>
+                <SelectItem value="PENDING">{t("admin.status.PENDING")}</SelectItem>
+                <SelectItem value="PROCESSING">{t("admin.status.PROCESSING")}</SelectItem>
+                <SelectItem value="IN_PROGRESS">{t("admin.status.IN_PROGRESS")}</SelectItem>
+                <SelectItem value="COMPLETED">{t("admin.status.COMPLETED")}</SelectItem>
+                <SelectItem value="CANCELLED">{t("admin.status.CANCELLED")}</SelectItem>
               </SelectContent>
             </Select>
           </div>
@@ -230,9 +214,9 @@ export default function OrdersPage() {
       {/* Orders Table */}
       <Card>
         <CardHeader>
-          <CardTitle>All Orders</CardTitle>
+          <CardTitle>{t("admin.orders.allOrders")}</CardTitle>
           <CardDescription>
-            You have {totalOrders} order(s) in total
+            {t("dashboard.orders.totalCount", { count: String(totalOrders) })}
           </CardDescription>
         </CardHeader>
         <CardContent>
@@ -243,14 +227,14 @@ export default function OrdersPage() {
           ) : orders.length === 0 ? (
             <div className="flex h-64 flex-col items-center justify-center text-center">
               <Package className="h-12 w-12 text-muted-foreground/50" />
-              <h3 className="mt-4 text-lg font-semibold">No orders found</h3>
+              <h3 className="mt-4 text-lg font-semibold">{t("admin.orders.noOrdersFound")}</h3>
               <p className="text-sm text-muted-foreground">
                 {searchQuery
-                  ? "Try adjusting your search or filters"
-                  : "Place your first order to get started"}
+                  ? t("admin.orders.adjustSearch")
+                  : t("dashboard.orders.empty")}
               </p>
               <Button asChild className="mt-4">
-                <Link href="/services">Browse Services</Link>
+                <Link href="/services">{t("dashboard.orders.browseServices")}</Link>
               </Button>
             </div>
           ) : (
@@ -258,12 +242,12 @@ export default function OrdersPage() {
               <Table>
                 <TableHeader>
                   <TableRow>
-                    <TableHead>Order ID</TableHead>
-                    <TableHead>Service</TableHead>
-                    <TableHead className="hidden sm:table-cell">Date</TableHead>
-                    <TableHead>Order Status</TableHead>
-                    <TableHead>Payment</TableHead>
-                    <TableHead className="text-right">Total</TableHead>
+                    <TableHead>{t("dashboard.orders.orderId")}</TableHead>
+                    <TableHead>{t("admin.orders.service")}</TableHead>
+                    <TableHead className="hidden sm:table-cell">{t("dashboard.orders.date")}</TableHead>
+                    <TableHead>{t("dashboard.orders.orderStatus")}</TableHead>
+                    <TableHead>{t("admin.orders.payment")}</TableHead>
+                    <TableHead className="text-right">{t("dashboard.orders.total")}</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
@@ -295,7 +279,7 @@ export default function OrdersPage() {
                           variant="secondary"
                           className={statusColors[order.status]}
                         >
-                          {statusLabels[order.status]}
+                          {t(`admin.status.${order.status}`)}
                         </Badge>
                       </TableCell>
                       <TableCell>
@@ -303,7 +287,7 @@ export default function OrdersPage() {
                           variant="secondary"
                           className={paymentStatusColors[order.paymentStatus] || "bg-muted text-muted-foreground"}
                         >
-                          {paymentStatusLabels[order.paymentStatus] || order.paymentStatus}
+                          {t(`admin.payment.${order.paymentStatus}`)}
                         </Badge>
                       </TableCell>
                       <TableCell className="text-right font-medium">
@@ -318,8 +302,11 @@ export default function OrdersPage() {
               {totalPages > 1 && (
                 <div className="flex items-center justify-between border-t pt-4 mt-4">
                   <p className="text-sm text-muted-foreground">
-                    Showing {(currentPage - 1) * 10 + 1} to{" "}
-                    {Math.min(currentPage * 10, totalOrders)} of {totalOrders} orders
+                    {t("admin.orders.showing", {
+                      start: String((currentPage - 1) * 10 + 1),
+                      end: String(Math.min(currentPage * 10, totalOrders)),
+                      total: String(totalOrders),
+                    })}
                   </p>
                   <div className="flex items-center gap-2">
                     <Button
@@ -328,10 +315,10 @@ export default function OrdersPage() {
                       onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
                       disabled={currentPage === 1}
                     >
-                      Previous
+                      {t("common.previous")}
                     </Button>
                     <span className="text-sm text-muted-foreground">
-                      Page {currentPage} of {totalPages}
+                      {t("dashboard.orders.pageOf", { page: String(currentPage), total: String(totalPages) })}
                     </span>
                     <Button
                       variant="outline"
@@ -339,7 +326,7 @@ export default function OrdersPage() {
                       onClick={() => setCurrentPage((p) => Math.min(totalPages, p + 1))}
                       disabled={currentPage === totalPages}
                     >
-                      Next
+                      {t("common.next")}
                     </Button>
                   </div>
                 </div>

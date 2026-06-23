@@ -3,9 +3,11 @@
 import { useState, useEffect } from "react";
 import { Save, Loader2, CheckCircle, Lock, Eye, EyeOff } from "lucide-react";
 import { useSession } from "next-auth/react";
+import { useLanguage } from "@/lib/i18n/language-context";
 
 export default function VendorSettingsPage() {
   const { data: session } = useSession();
+  const { t } = useLanguage();
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [saving, setSaving] = useState(false);
@@ -34,11 +36,11 @@ export default function VendorSettingsPage() {
     e.preventDefault();
     setPwError("");
     if (newPassword.length < 8) {
-      setPwError("New password must be at least 8 characters");
+      setPwError(t("vendor.settings.passwordMinError"));
       return;
     }
     if (newPassword !== confirmPassword) {
-      setPwError("Passwords do not match");
+      setPwError(t("vendor.settings.passwordsDoNotMatch"));
       return;
     }
     setPwSaving(true);
@@ -50,7 +52,7 @@ export default function VendorSettingsPage() {
       });
       const d = await res.json();
       if (!res.ok) {
-        setPwError(d.error || "Failed to update password");
+        setPwError(d.error || t("vendor.settings.passwordUpdateFailed"));
       } else {
         setPwSaved(true);
         setCurrentPassword("");
@@ -59,7 +61,7 @@ export default function VendorSettingsPage() {
         setTimeout(() => setPwSaved(false), 3000);
       }
     } catch {
-      setPwError("Network error");
+      setPwError(t("common.networkError"));
     } finally {
       setPwSaving(false);
     }
@@ -77,13 +79,13 @@ export default function VendorSettingsPage() {
       });
       if (!res.ok) {
         const d = await res.json();
-        setError(d.error || "Failed to save");
+        setError(d.error || t("vendor.settings.saveFailed"));
       } else {
         setSaved(true);
         setTimeout(() => setSaved(false), 3000);
       }
     } catch {
-      setError("Network error");
+      setError(t("common.networkError"));
     } finally {
       setSaving(false);
     }
@@ -92,15 +94,15 @@ export default function VendorSettingsPage() {
   return (
     <div className="max-w-xl mx-auto">
       <div className="mb-6">
-        <h1 className="text-2xl font-bold text-foreground">Settings</h1>
-        <p className="text-sm text-muted-foreground mt-0.5">Manage your account settings</p>
+        <h1 className="text-2xl font-bold text-foreground">{t("common.settings")}</h1>
+        <p className="text-sm text-muted-foreground mt-0.5">{t("vendor.settings.subtitle")}</p>
       </div>
 
       <div className="bg-card rounded-xl border border-border p-5">
-        <h2 className="text-sm font-semibold text-foreground mb-4">Account Information</h2>
+        <h2 className="text-sm font-semibold text-foreground mb-4">{t("vendor.settings.accountInformation")}</h2>
         <form onSubmit={handleSave} className="space-y-4">
           <div>
-            <label className="block text-sm font-medium text-foreground mb-1.5">Full Name</label>
+            <label className="block text-sm font-medium text-foreground mb-1.5">{t("dashboard.profile.fullName")}</label>
             <input
               type="text"
               value={name}
@@ -110,14 +112,14 @@ export default function VendorSettingsPage() {
             />
           </div>
           <div>
-            <label className="block text-sm font-medium text-foreground mb-1.5">Email</label>
+            <label className="block text-sm font-medium text-foreground mb-1.5">{t("vendor.settings.email")}</label>
             <input
               type="email"
               value={email}
               disabled
               className="w-full border border-border/50 rounded-lg px-3 py-2 text-sm bg-muted/30 text-muted-foreground/70 cursor-not-allowed"
             />
-            <p className="text-xs text-muted-foreground/70 mt-1">Email cannot be changed</p>
+            <p className="text-xs text-muted-foreground/70 mt-1">{t("vendor.settings.emailCannotChange")}</p>
           </div>
 
           {error && (
@@ -139,7 +141,7 @@ export default function VendorSettingsPage() {
               ) : (
                 <Save className="w-4 h-4" />
               )}
-              {saving ? "Saving..." : saved ? "Saved!" : "Save Changes"}
+              {saving ? t("common.saving") : saved ? t("common.saved") : t("common.saveChanges")}
             </button>
           </div>
         </form>
@@ -149,17 +151,17 @@ export default function VendorSettingsPage() {
       <div className="bg-card rounded-xl border border-border p-5 mt-4">
         <div className="flex items-center gap-2 mb-4">
           <Lock className="w-4 h-4 text-muted-foreground" />
-          <h2 className="text-sm font-semibold text-foreground">Change Password</h2>
+          <h2 className="text-sm font-semibold text-foreground">{t("dashboard.profile.changePassword")}</h2>
         </div>
         <form onSubmit={handlePasswordChange} className="space-y-4">
           <div>
-            <label className="block text-sm font-medium text-foreground mb-1.5">Current Password</label>
+            <label className="block text-sm font-medium text-foreground mb-1.5">{t("dashboard.profile.currentPassword")}</label>
             <div className="relative">
               <input
                 type={showCurrent ? "text" : "password"}
                 value={currentPassword}
                 onChange={(e) => { setCurrentPassword(e.target.value); setPwError(""); setPwSaved(false); }}
-                placeholder="Enter current password"
+                placeholder={t("vendor.settings.currentPasswordPlaceholder")}
                 className="w-full border border-border rounded-lg px-3 py-2 pr-10 text-sm focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/10"
                 required
               />
@@ -174,13 +176,13 @@ export default function VendorSettingsPage() {
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-foreground mb-1.5">New Password</label>
+            <label className="block text-sm font-medium text-foreground mb-1.5">{t("dashboard.profile.newPassword")}</label>
             <div className="relative">
               <input
                 type={showNew ? "text" : "password"}
                 value={newPassword}
                 onChange={(e) => { setNewPassword(e.target.value); setPwError(""); setPwSaved(false); }}
-                placeholder="Minimum 8 characters"
+                placeholder={t("vendor.settings.newPasswordPlaceholder")}
                 className="w-full border border-border rounded-lg px-3 py-2 pr-10 text-sm focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/10"
                 required
               />
@@ -193,18 +195,18 @@ export default function VendorSettingsPage() {
               </button>
             </div>
             {newPassword.length > 0 && newPassword.length < 8 && (
-              <p className="text-xs text-[var(--color-warning-text)] mt-1">At least 8 characters required</p>
+              <p className="text-xs text-[var(--color-warning-text)] mt-1">{t("vendor.settings.passwordMin")}</p>
             )}
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-foreground mb-1.5">Confirm New Password</label>
+            <label className="block text-sm font-medium text-foreground mb-1.5">{t("vendor.settings.confirmNewPassword")}</label>
             <div className="relative">
               <input
                 type={showConfirm ? "text" : "password"}
                 value={confirmPassword}
                 onChange={(e) => { setConfirmPassword(e.target.value); setPwError(""); setPwSaved(false); }}
-                placeholder="Repeat new password"
+                placeholder={t("vendor.settings.confirmPasswordPlaceholder")}
                 className="w-full border border-border rounded-lg px-3 py-2 pr-10 text-sm focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/10"
                 required
               />
@@ -217,7 +219,7 @@ export default function VendorSettingsPage() {
               </button>
             </div>
             {confirmPassword.length > 0 && newPassword !== confirmPassword && (
-              <p className="text-xs text-[var(--color-error-text)] mt-1">Passwords do not match</p>
+              <p className="text-xs text-[var(--color-error-text)] mt-1">{t("vendor.settings.passwordsDoNotMatch")}</p>
             )}
           </div>
 
@@ -239,21 +241,21 @@ export default function VendorSettingsPage() {
             ) : (
               <Lock className="w-4 h-4" />
             )}
-            {pwSaving ? "Updating..." : pwSaved ? "Password Updated!" : "Update Password"}
+            {pwSaving ? t("vendor.settings.updating") : pwSaved ? t("vendor.settings.passwordUpdated") : t("vendor.settings.updatePassword")}
           </button>
         </form>
       </div>
 
       <div className="bg-card rounded-xl border border-border p-5 mt-4">
-        <h2 className="text-sm font-semibold text-foreground mb-1">Danger Zone</h2>
+        <h2 className="text-sm font-semibold text-foreground mb-1">{t("dashboard.profile.dangerZone")}</h2>
         <p className="text-xs text-muted-foreground mb-4">
-          Contact support if you need to deactivate your vendor account.
+          {t("vendor.settings.deactivateHelp")}
         </p>
         <a
           href="mailto:support@ceremoney.com"
           className="text-sm text-[var(--color-error-text)] hover:text-[var(--color-error-text)] underline"
         >
-          Contact support
+          {t("dashboard.support.contactSupport")}
         </a>
       </div>
     </div>

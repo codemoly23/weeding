@@ -242,7 +242,7 @@ export default function ItineraryPage() {
   }
 
   async function resetAll() {
-    if (!confirm("Delete all events and reload the default itinerary?")) return;
+    if (!confirm(t("itinerary.resetConfirm"))) return;
     for (const ev of events) {
       if (local) deleteLocalItineraryEvent(id, ev.id);
       else { try { await apiFetch(`/api/planner/projects/${id}/itinerary/${ev.id}`, { method: "DELETE" }); } catch { /* skip */ } }
@@ -384,7 +384,7 @@ export default function ItineraryPage() {
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/30" onClick={() => setIconPickerFor(null)}>
           <div className="rounded-2xl bg-card shadow-2xl w-80 p-4" onClick={e => e.stopPropagation()}>
             <div className="mb-3 flex items-center justify-between">
-              <h3 className="font-semibold text-foreground text-sm">Choose icon</h3>
+              <h3 className="font-semibold text-foreground text-sm">{t("itinerary.chooseIcon")}</h3>
               <button onClick={() => setIconPickerFor(null)} className="text-muted-foreground hover:text-foreground/80">
                 <X className="h-4 w-4" />
               </button>
@@ -419,15 +419,15 @@ export default function ItineraryPage() {
           <div className="mb-5 text-center">
             <h1 className="text-2xl font-semibold text-foreground tracking-tight">{t("itinerary.heading")}</h1>
             <p className="mt-2 text-sm text-muted-foreground leading-relaxed max-w-sm mx-auto">
-              Make and{" "}
-              <button onClick={() => { if (!isPremiumOrElite(tier)) { setShowUpgrade(true); return; } window.print(); }} className="text-primary hover:underline">print</button>
-              {" "}a schedule for the big day. From wake-up to{" "}
-              <span className="text-primary">I dos</span>
-              , create a complete itinerary that walks you through the day.
+              {t("itinerary.descBefore")}{" "}
+              <button onClick={() => { if (!isPremiumOrElite(tier)) { setShowUpgrade(true); return; } window.print(); }} className="text-primary hover:underline">{t("itinerary.descPrint")}</button>
+              {" "}{t("itinerary.descMiddle")}{" "}
+              <span className="text-primary">{t("itinerary.descIDos")}</span>
+              {t("itinerary.descAfter")}
             </p>
             {formattedDate && (
               <p className="mt-3 text-sm text-muted-foreground">
-                Wedding Date:{" "}
+                {t("itinerary.weddingDate")}{" "}
                 <span className="text-primary underline decoration-dotted cursor-default">{formattedDate}</span>
               </p>
             )}
@@ -443,11 +443,11 @@ export default function ItineraryPage() {
               >
                 <span className={`inline-block h-4 w-4 transform rounded-full bg-background shadow transition-transform ${use24h ? "translate-x-4" : "translate-x-0"}`} />
               </button>
-              <span className="text-xs text-muted-foreground">24-Hour Clock</span>
+              <span className="text-xs text-muted-foreground">{t("itinerary.clock24h")}</span>
             </label>
             {events.length > 0 && (
               <button onClick={resetAll} className="flex items-center gap-1 text-xs text-primary hover:text-primary/90">
-                <RotateCcw className="h-3 w-3" /> Reset entire itinerary
+                <RotateCcw className="h-3 w-3" /> {t("itinerary.resetAll")}
               </button>
             )}
           </div>
@@ -461,7 +461,7 @@ export default function ItineraryPage() {
             <>
               {/* Section heading */}
               <div className="mb-4 text-center">
-                <h2 className="text-xl font-semibold text-foreground">The Big Day</h2>
+                <h2 className="text-xl font-semibold text-foreground">{t("itinerary.bigDay")}</h2>
                 <div className="mx-auto mt-1 h-0.5 w-8 rounded bg-primary/40" />
               </div>
 
@@ -481,7 +481,7 @@ export default function ItineraryPage() {
                         <button
                           onClick={() => setIconPickerFor(ev.id)}
                           className="flex-shrink-0 rounded-lg p-1 hover:bg-card/60 transition-colors"
-                          title="Change icon"
+                          title={t("itinerary.changeIcon")}
                         >
                           <IconSvg iconId={ev.category} size={38} />
                         </button>
@@ -510,7 +510,7 @@ export default function ItineraryPage() {
                                 <button
                                   onClick={() => flipAmPm(ev)}
                                   className="ml-0.5 text-[10px] sm:text-sm font-medium text-foreground/70 hover:text-primary transition-colors"
-                                  title="Toggle am/pm"
+                                  title={t("itinerary.toggleAmPm")}
                                 >
                                   {ampm}
                                 </button>
@@ -541,7 +541,7 @@ export default function ItineraryPage() {
                               onClick={() => openDuration(ev)}
                               className="mt-0.5 block text-[11px] text-muted-foreground/70 hover:text-primary transition-colors"
                             >
-                              Duration {dur} min
+                              {t("itinerary.durationFmt").replace("{n}", String(dur))}
                             </button>
                           )}
                         </div>
@@ -590,7 +590,7 @@ export default function ItineraryPage() {
                                 onClick={() => deleteEvent(ev.id)}
                                 className="w-full px-3 py-1.5 text-left text-xs text-[var(--color-error-text)] hover:bg-[var(--color-error-bg)] transition-colors"
                               >
-                                Delete event
+                                {t("itinerary.deleteEvent")}
                               </button>
                             </div>
                           )}
@@ -608,17 +608,17 @@ export default function ItineraryPage() {
                       value={newForm.title}
                       onChange={e => setNewForm(f => ({ ...f, title: e.target.value }))}
                       onKeyDown={e => { if (e.key === "Enter") saveNewEvent(); if (e.key === "Escape") setAddingNew(false); }}
-                      placeholder="Event title"
+                      placeholder={t("itinerary.title")}
                       className="w-full rounded-lg border border-border bg-card px-3 py-1.5 text-sm focus:border-primary/40 focus:outline-none"
                     />
                     <div className="flex gap-2 flex-wrap">
                       <div>
-                        <label className="block text-[10px] text-muted-foreground mb-0.5">Start time</label>
+                        <label className="block text-[10px] text-muted-foreground mb-0.5">{t("itinerary.startTime")}</label>
                         <input type="time" value={newForm.startTime} onChange={e => setNewForm(f => ({ ...f, startTime: e.target.value }))}
                           className="rounded-lg border border-border bg-card px-2 py-1.5 text-sm focus:border-primary/40 focus:outline-none" />
                       </div>
                       <div>
-                        <label className="block text-[10px] text-muted-foreground mb-0.5">Duration (min)</label>
+                        <label className="block text-[10px] text-muted-foreground mb-0.5">{t("itinerary.durationLabel")}</label>
                         <input type="number" min="0" value={newForm.duration} onChange={e => setNewForm(f => ({ ...f, duration: e.target.value }))}
                           className="w-20 rounded-lg border border-border bg-card px-2 py-1.5 text-sm focus:border-primary/40 focus:outline-none" />
                       </div>
@@ -641,7 +641,7 @@ export default function ItineraryPage() {
                   <div className="mt-4 text-center">
                     <button onClick={() => setAddingNew(true)} className="text-sm text-primary hover:text-primary/90 transition-colors">
                       <Plus className="inline h-4 w-4 -mt-0.5 mr-0.5" />
-                      Add event
+                      {t("itinerary.addEventBtn")}
                     </button>
                   </div>
                 )}
@@ -654,7 +654,7 @@ export default function ItineraryPage() {
                   className="flex items-center gap-2 rounded-xl border border-border bg-card/70 px-6 py-2.5 text-sm text-muted-foreground shadow-sm hover:bg-card transition-colors"
                 >
                   <FileText className="h-4 w-4 text-[var(--color-error-text)]" />
-                  Download PDF file
+                  {t("itinerary.downloadPdf")}
                 </button>
                 <button
                   onClick={() => {
@@ -681,7 +681,7 @@ export default function ItineraryPage() {
                   className="flex items-center gap-2 rounded-xl border border-border bg-card/70 px-6 py-2.5 text-sm text-muted-foreground shadow-sm hover:bg-card transition-colors"
                 >
                   <Table2 className="h-4 w-4 text-[var(--color-success-text)]" />
-                  Download XLS file
+                  {t("itinerary.downloadXls")}
                 </button>
               </div>
             </>

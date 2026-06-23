@@ -15,6 +15,7 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
+import { useLanguage } from "@/lib/i18n/language-context";
 
 interface Review {
   id: string;
@@ -43,6 +44,7 @@ function Stars({ rating }: { rating: number }) {
 }
 
 export default function AdminVendorReviewsPage() {
+  const { t } = useLanguage();
   const [reviews, setReviews] = useState<Review[]>([]);
   const [loading, setLoading] = useState(true);
   const [stats, setStats] = useState({ pending: 0, approved: 0 });
@@ -104,16 +106,16 @@ export default function AdminVendorReviewsPage() {
   }
 
   const statCards = [
-    { label: "Pending Approval", value: stats.pending, color: "text-[var(--ast-warning-text)]" },
-    { label: "Approved", value: stats.approved, color: "text-[var(--ast-success-text)]" },
-    { label: "Total", value: stats.pending + stats.approved, color: "text-foreground" },
+    { label: t("admin.vendorReviews.pendingApproval"), value: stats.pending, color: "text-[var(--ast-warning-text)]" },
+    { label: t("admin.vendorReviews.approved"), value: stats.approved, color: "text-[var(--ast-success-text)]" },
+    { label: t("admin.vendorReviews.total"), value: stats.pending + stats.approved, color: "text-foreground" },
   ];
 
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-2xl font-bold text-[var(--admin-text)]">Vendor Reviews</h1>
-        <p className="text-sm text-[var(--admin-muted)] mt-0.5">Approve or reject customer reviews before they go public</p>
+        <h1 className="text-2xl font-bold text-[var(--admin-text)]">{t("admin.vendorReviews.title")}</h1>
+        <p className="text-sm text-[var(--admin-muted)] mt-0.5">{t("admin.vendorReviews.subtitle")}</p>
       </div>
 
       {/* Stats */}
@@ -141,7 +143,11 @@ export default function AdminVendorReviewsPage() {
             }`}
             style={status === f ? undefined : { borderColor: "var(--admin-border)" }}
           >
-            {f === "pending" ? `Pending (${stats.pending})` : f === "approved" ? `Approved (${stats.approved})` : "All"}
+            {f === "pending"
+              ? t("admin.vendorReviews.pendingTab", { count: String(stats.pending) })
+              : f === "approved"
+                ? t("admin.vendorReviews.approvedTab", { count: String(stats.approved) })
+                : t("admin.vendorReviews.all")}
           </button>
         ))}
       </div>
@@ -154,7 +160,9 @@ export default function AdminVendorReviewsPage() {
       ) : reviews.length === 0 ? (
         <div className="rounded-xl border bg-[var(--admin-surface)] px-6 py-14 text-center" style={{ borderColor: "var(--admin-border)" }}>
           <Star className="w-10 h-10 text-[var(--admin-muted)] opacity-35 mx-auto mb-3" />
-          <p className="text-sm text-[var(--admin-muted)]">No {status !== "all" ? status : ""} reviews found</p>
+          <p className="text-sm text-[var(--admin-muted)]">
+            {status === "all" ? t("admin.vendorReviews.noReviews") : t("admin.vendorReviews.noStatusReviews", { status: t(`admin.vendorReviews.${status}`) })}
+          </p>
         </div>
       ) : (
         <div className="space-y-3">
@@ -167,12 +175,12 @@ export default function AdminVendorReviewsPage() {
                     <span className="font-semibold text-[var(--admin-text)]">{r.authorName}</span>
                     <Stars rating={r.rating} />
                     <Badge variant="outline" className={r.isApproved ? "admin-status-success" : "admin-status-warning"}>
-                      {r.isApproved ? "Approved" : "Pending"}
+                      {r.isApproved ? t("admin.vendorReviews.approved") : t("admin.vendorReviews.pending")}
                     </Badge>
                   </div>
                   {/* Vendor */}
                   <div className="flex items-center gap-1.5 mb-2">
-                    <span className="text-xs text-[var(--admin-muted)]">for</span>
+                    <span className="text-xs text-[var(--admin-muted)]">{t("admin.vendorReviews.for")}</span>
                     <Link
                       href={`/vendors/${r.vendor.slug}`}
                       target="_blank"
@@ -189,7 +197,7 @@ export default function AdminVendorReviewsPage() {
                   )}
                   {r.reply && (
                     <div className="mt-2 pl-3 border-l-2 border-[var(--ast-hold-border)]">
-                      <p className="text-xs text-[var(--admin-muted)] mb-0.5">Vendor reply:</p>
+                      <p className="text-xs text-[var(--admin-muted)] mb-0.5">{t("admin.vendorReviews.vendorReply")}</p>
                       <p className="text-sm text-[var(--admin-muted)]">{r.reply}</p>
                     </div>
                   )}
@@ -204,7 +212,7 @@ export default function AdminVendorReviewsPage() {
                       className="flex items-center gap-1 px-3 py-1.5 bg-[var(--ast-success-icon)] hover:bg-[var(--ast-success-text)] disabled:opacity-60 text-white text-xs font-medium rounded-lg transition-colors"
                     >
                       <Check className="w-3.5 h-3.5" />
-                      {actionLoading === r.id + "_approve" ? "..." : "Approve"}
+                      {actionLoading === r.id + "_approve" ? "..." : t("admin.vendorReviews.approve")}
                     </button>
                   )}
                   {r.isApproved && (
@@ -214,7 +222,7 @@ export default function AdminVendorReviewsPage() {
                       className="flex items-center gap-1 px-3 py-1.5 bg-[var(--ast-warning-bg)] hover:bg-[var(--ast-warning-border)] disabled:opacity-60 text-[var(--ast-warning-text)] text-xs font-medium rounded-lg transition-colors"
                     >
                       <X className="w-3.5 h-3.5" />
-                      {actionLoading === r.id + "_reject" ? "..." : "Unapprove"}
+                      {actionLoading === r.id + "_reject" ? "..." : t("admin.vendorReviews.unapprove")}
                     </button>
                   )}
                   <button
@@ -223,7 +231,7 @@ export default function AdminVendorReviewsPage() {
                     className="flex items-center gap-1 px-3 py-1.5 bg-[var(--ast-error-bg)] hover:bg-[var(--ast-error-bg)] disabled:opacity-60 text-[var(--ast-error-icon)] text-xs font-medium rounded-lg transition-colors"
                   >
                     <Trash2 className="w-3.5 h-3.5" />
-                    {actionLoading === r.id + "_delete" ? "..." : "Delete"}
+                    {actionLoading === r.id + "_delete" ? "..." : t("common.delete")}
                   </button>
                 </div>
               </div>
@@ -243,7 +251,7 @@ export default function AdminVendorReviewsPage() {
           >
             <ChevronLeft className="w-4 h-4" />
           </button>
-          <span className="text-sm text-[var(--admin-muted)]">Page {page} of {totalPages}</span>
+          <span className="text-sm text-[var(--admin-muted)]">{t("admin.customers.pageOf", { page: String(page), total: String(totalPages) })}</span>
           <button
             onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
             disabled={page === totalPages}
@@ -258,20 +266,21 @@ export default function AdminVendorReviewsPage() {
       <AlertDialog open={!!deleteTarget} onOpenChange={(open) => { if (!open) setDeleteTarget(null); }}>
         <AlertDialogContent>
           <AlertDialogHeader>
-            <AlertDialogTitle>Delete Review</AlertDialogTitle>
+            <AlertDialogTitle>{t("admin.vendorReviews.deleteReview")}</AlertDialogTitle>
             <AlertDialogDescription>
-              Delete the review by <strong>{deleteTarget?.authorName}</strong> for{" "}
-              <strong>{deleteTarget?.vendor.businessName}</strong>? This cannot be undone.
+              {t("admin.vendorReviews.deleteReviewDescPrefix")} <strong>{deleteTarget?.authorName}</strong>{" "}
+              {t("admin.vendorReviews.for")} <strong>{deleteTarget?.vendor.businessName}</strong>?{" "}
+              {t("admin.vendorReviews.cannotBeUndone")}
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
-            <AlertDialogCancel disabled={deleting}>Cancel</AlertDialogCancel>
+            <AlertDialogCancel disabled={deleting}>{t("common.cancel")}</AlertDialogCancel>
             <AlertDialogAction
               onClick={confirmDelete}
               disabled={deleting}
               className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
             >
-              {deleting ? "Deleting..." : "Delete"}
+              {deleting ? t("admin.vendorReviews.deleting") : t("common.delete")}
             </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>

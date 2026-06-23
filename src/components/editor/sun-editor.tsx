@@ -1,8 +1,8 @@
 "use client";
 
-import { useEffect, useRef } from "react";
 import dynamic from "next/dynamic";
 import "suneditor/dist/css/suneditor.min.css";
+import { useLanguage } from "@/lib/i18n/language-context";
 
 const SunEditor = dynamic(() => import("suneditor-react"), {
   ssr: false,
@@ -22,6 +22,9 @@ export function SunEditorWrapper({
   placeholder = "Write your content here...",
   height = "400px",
 }: SunEditorWrapperProps) {
+  const { lang } = useLanguage();
+  const editorLang = lang === "sv" ? "se" : "en";
+
   function handleImageUploadBefore(files: File[], info: any, uploadHandler: any) {
     Promise.all(
       files.map(async (file) => {
@@ -61,6 +64,8 @@ export function SunEditorWrapper({
 
   return (
     <SunEditor
+      key={editorLang}
+      lang={editorLang}
       setContents={value}
       onChange={onChange}
       placeholder={placeholder}

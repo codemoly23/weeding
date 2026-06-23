@@ -36,6 +36,8 @@ import {
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Sheet, SheetContent, SheetTrigger, SheetTitle } from "@/components/ui/sheet";
 import { AdminSidebar } from "./sidebar";
+import { LanguageSwitcher } from "@/components/layout/header/components/LanguageSwitcher";
+import { useLanguage } from "@/lib/i18n/language-context";
 
 interface AdminNotification {
   id: string;
@@ -57,14 +59,14 @@ const NOTIFICATION_ICONS: Record<string, React.ElementType> = {
   NEW_LEAD: Package,
 };
 
-function timeAgo(dateStr: string): string {
+function timeAgo(dateStr: string, t: (key: string, vars?: Record<string, string>) => string): string {
   const diff = Date.now() - new Date(dateStr).getTime();
   const mins = Math.floor(diff / 60000);
-  if (mins < 1) return "Just now";
-  if (mins < 60) return `${mins}m ago`;
+  if (mins < 1) return t("common.time.justNow");
+  if (mins < 60) return t("common.time.minutesAgo", { count: String(mins) });
   const hrs = Math.floor(mins / 60);
-  if (hrs < 24) return `${hrs}h ago`;
-  return `${Math.floor(hrs / 24)}d ago`;
+  if (hrs < 24) return t("common.time.hoursAgo", { count: String(hrs) });
+  return t("common.time.daysAgo", { count: String(Math.floor(hrs / 24)) });
 }
 
 interface SearchResult {
@@ -77,6 +79,7 @@ interface SearchResult {
 
 export function AdminHeader() {
   const router = useRouter();
+  const { t } = useLanguage();
   const [isDark, setIsDark] = useState(false);
   const { logout } = useLogout({ userRole: "ADMIN" });
   const [notifications, setNotifications] = useState<AdminNotification[]>([]);
@@ -224,7 +227,7 @@ export function AdminHeader() {
           </Button>
         </SheetTrigger>
         <SheetContent side="left" className="w-64 p-0">
-          <SheetTitle className="sr-only">Navigation Menu</SheetTitle>
+          <SheetTitle className="sr-only">{t("admin.header.navigationMenu")}</SheetTitle>
           <AdminSidebar mobile />
         </SheetContent>
       </Sheet>
@@ -234,7 +237,7 @@ export function AdminHeader() {
         <div className="relative">
           <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
           <Input
-            placeholder="Search orders, customers..."
+            placeholder={t("admin.header.searchPlaceholder")}
             className="pl-9"
             value={searchQuery}
             onChange={(e) => handleSearchInput(e.target.value)}
@@ -249,13 +252,13 @@ export function AdminHeader() {
             <div className="absolute top-full left-0 right-0 mt-1 z-50 rounded-md border bg-[var(--admin-surface)] text-[var(--admin-text)] shadow-lg overflow-hidden" style={{ borderColor: "var(--admin-border)" }}>
               {searchResults.length === 0 && !isSearching ? (
                 <div className="px-4 py-3 text-sm text-muted-foreground text-center">
-                  No results found
+                  {t("admin.header.noResults")}
                 </div>
               ) : (
                 <div className="max-h-80 overflow-y-auto">
                   {searchResults.some((r) => r.type === "order") && (
                     <div className="px-3 py-1.5 text-xs font-semibold uppercase tracking-wider text-[var(--admin-muted)] bg-[var(--admin-surface-muted)]">
-                      Orders
+                      {t("admin.nav.orders")}
                     </div>
                   )}
                   {searchResults
@@ -276,7 +279,7 @@ export function AdminHeader() {
 
                   {searchResults.some((r) => r.type === "customer") && (
                     <div className="px-3 py-1.5 text-xs font-semibold uppercase tracking-wider text-[var(--admin-muted)] bg-[var(--admin-surface-muted)]">
-                      Customers
+                      {t("admin.nav.customers")}
                     </div>
                   )}
                   {searchResults
@@ -303,11 +306,13 @@ export function AdminHeader() {
 
       {/* Actions */}
       <div className="flex items-center gap-2">
+        <LanguageSwitcher />
+
         {/* View Site */}
         <Button variant="ghost" size="sm" asChild className="hidden sm:flex">
           <Link href="/" target="_blank">
             <ExternalLink className="mr-2 h-4 w-4" />
-            View Site
+            {t("admin.header.viewSite")}
           </Link>
         </Button>
 
@@ -330,15 +335,15 @@ export function AdminHeader() {
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end" className="w-80 max-w-[calc(100vw-2rem)]">
             <DropdownMenuLabel className="flex items-center justify-between">
-              Notifications
+              {t("admin.header.notifications")}
               {unreadCount > 0 && (
-                <Badge variant="secondary">{unreadCount} new</Badge>
+                <Badge variant="secondary">{t("admin.header.newCount", { count: String(unreadCount) })}</Badge>
               )}
             </DropdownMenuLabel>
             <DropdownMenuSeparator />
             {notifications.length === 0 ? (
               <div className="px-3 py-6 text-center text-sm text-muted-foreground">
-                No notifications yet
+                {t("admin.header.noNotifications")}
               </div>
             ) : (
               notifications.map((n) => {
@@ -356,7 +361,7 @@ export function AdminHeader() {
                         {n.message}
                       </p>
                       <p className="text-xs text-muted-foreground mt-1">
-                        {timeAgo(n.createdAt)}
+                        {timeAgo(n.createdAt, t)}
                       </p>
                     </div>
                     {!n.isRead && (
@@ -377,7 +382,7 @@ export function AdminHeader() {
             )}
             <DropdownMenuSeparator />
             <DropdownMenuItem asChild className="justify-center">
-              <Link href="/admin/notifications">View all notifications</Link>
+              <Link href="/admin/notifications">{t("admin.header.viewAllNotifications")}</Link>
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
@@ -405,19 +410,19 @@ export function AdminHeader() {
             <DropdownMenuItem asChild>
               <Link href="/admin/profile">
                 <User className="mr-2 h-4 w-4" />
-                Profile
+                {t("common.profile")}
               </Link>
             </DropdownMenuItem>
             <DropdownMenuItem asChild>
               <Link href="/admin/settings">
                 <Settings className="mr-2 h-4 w-4" />
-                Settings
+                {t("common.settings")}
               </Link>
             </DropdownMenuItem>
             <DropdownMenuSeparator />
             <DropdownMenuItem className="text-destructive" onClick={logout}>
               <LogOut className="mr-2 h-4 w-4" />
-              Log out
+              {t("common.logout")}
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
