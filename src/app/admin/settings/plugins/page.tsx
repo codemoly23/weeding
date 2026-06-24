@@ -55,6 +55,7 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { toast } from "sonner";
+import { useLanguage } from "@/lib/i18n/language-context";
 
 interface Plugin {
   id: string;
@@ -85,28 +86,29 @@ interface Plugin {
 
 const statusConfig = {
   ACTIVE: {
-    label: "Active",
+    labelKey: "admin.plugins.statusActive",
     color: "admin-status-success",
     icon: CheckCircle2,
   },
   INSTALLED: {
-    label: "Installed",
+    labelKey: "admin.plugins.statusInstalled",
     color: "admin-status-warning",
     icon: Package,
   },
   DISABLED: {
-    label: "Disabled",
+    labelKey: "admin.plugins.statusDisabled",
     color: "admin-status-neutral",
     icon: PowerOff,
   },
   ERROR: {
-    label: "Error",
+    labelKey: "admin.plugins.statusError",
     color: "admin-status-error",
     icon: XCircle,
   },
 };
 
 export default function PluginsPage() {
+  const { t } = useLanguage();
   const [plugins, setPlugins] = useState<Plugin[]>([]);
   const [loading, setLoading] = useState(true);
   const [actionLoading, setActionLoading] = useState<string | null>(null);
@@ -133,7 +135,7 @@ export default function PluginsPage() {
         setPlugins(data.plugins);
       }
     } catch {
-      toast.error("Failed to load plugins");
+      toast.error(t("admin.plugins.loadFailed"));
     } finally {
       setLoading(false);
     }
@@ -156,14 +158,14 @@ export default function PluginsPage() {
       const data = await res.json();
 
       if (!res.ok) {
-        toast.error(data.error || "Upload failed");
+        toast.error(data.error || t("admin.plugins.uploadFailed"));
         return;
       }
 
-      toast.success(data.message || "Plugin uploaded successfully");
+      toast.success(data.message || t("admin.plugins.uploadPlugin"));
       fetchPlugins();
     } catch {
-      toast.error("Failed to upload plugin");
+      toast.error(t("admin.plugins.uploadFailed"));
     } finally {
       setUploading(false);
       if (fileInputRef.current) fileInputRef.current.value = "";
@@ -186,7 +188,7 @@ export default function PluginsPage() {
       toast.success(data.message);
       fetchPlugins();
     } catch {
-      toast.error("Failed to update plugin status");
+      toast.error(t("admin.plugins.updateFailed"));
     } finally {
       setActionLoading(null);
     }
@@ -223,14 +225,14 @@ export default function PluginsPage() {
         return;
       }
 
-      toast.success(data.message || `${selectedPlugin.name} activated successfully!`);
+      toast.success(data.message || t("admin.plugins.activate") + ` ${selectedPlugin.name}`);
       setLicenseDialogOpen(false);
       setSelectedPlugin(null);
       setLicenseKey("");
       setAgreedToTerms(false);
       fetchPlugins();
     } catch {
-      setActivationError("Failed to activate plugin. Please try again.");
+      setActivationError(t("admin.plugins.activationFailed"));
     } finally {
       setActivating(false);
     }
@@ -259,10 +261,10 @@ export default function PluginsPage() {
         <div>
           <h1 className="text-2xl font-bold tracking-tight flex items-center gap-2">
             <Puzzle className="h-6 w-6" />
-            Plugins
+            {t("admin.plugins.title")}
           </h1>
           <p className="text-muted-foreground">
-            Manage installed plugins
+            {t("admin.plugins.subtitle")}
           </p>
         </div>
         <div className="flex items-center gap-2 self-start sm:self-auto">
@@ -279,11 +281,11 @@ export default function PluginsPage() {
             ) : (
               <Upload className="h-4 w-4 mr-2" />
             )}
-            {uploading ? "Uploading..." : "Upload Plugin"}
+            {uploading ? t("admin.plugins.uploading") : t("admin.plugins.uploadPlugin")}
           </Button>
           <Button variant="outline" onClick={fetchPlugins}>
             <RefreshCw className="h-4 w-4 mr-2" />
-            Refresh
+            {t("admin.plugins.refresh")}
           </Button>
         </div>
       </div>
@@ -295,9 +297,9 @@ export default function PluginsPage() {
         <Card>
           <CardContent className="flex flex-col items-center justify-center py-12">
             <Package className="h-12 w-12 text-muted-foreground mb-4" />
-            <h3 className="text-lg font-semibold mb-2">No plugins available</h3>
+            <h3 className="text-lg font-semibold mb-2">{t("admin.plugins.noPlugins")}</h3>
             <p className="text-muted-foreground text-center max-w-md">
-              Upload a ZIP plugin package to get started.
+              {t("admin.plugins.noPluginsDesc")}
             </p>
           </CardContent>
         </Card>
@@ -347,7 +349,7 @@ export default function PluginsPage() {
                   </div>
                   <Badge variant="outline" className={statusConfig[plugin.status].color}>
                     <StatusIcon className="h-3 w-3 mr-1" />
-                    {statusConfig[plugin.status].label}
+                    {t(statusConfig[plugin.status].labelKey)}
                   </Badge>
                 </div>
               </CardHeader>
@@ -363,7 +365,7 @@ export default function PluginsPage() {
                 <div className="text-xs text-muted-foreground space-y-1">
                   {plugin.author && (
                     <p className="flex items-center gap-1">
-                      By{" "}
+                      {t("admin.plugins.by")}{" "}
                       {plugin.authorUrl ? (
                         <a
                           href={plugin.authorUrl}
@@ -380,12 +382,12 @@ export default function PluginsPage() {
                     </p>
                   )}
                   {plugin.lastActivatedAt && (
-                    <p>Last activated: {formatDate(plugin.lastActivatedAt)}</p>
+                    <p>{t("admin.plugins.lastActivated")} {formatDate(plugin.lastActivatedAt)}</p>
                   )}
                   {plugin.licenseType && (
                     <p className="flex items-center gap-1">
                       <Key className="h-3 w-3" />
-                      License: {plugin.licenseTier || plugin.licenseType}
+                      {t("admin.plugins.license")} {plugin.licenseTier || plugin.licenseType}
                     </p>
                   )}
                 </div>
@@ -393,13 +395,13 @@ export default function PluginsPage() {
                 {/* Features badges */}
                 <div className="flex flex-wrap gap-1">
                   {plugin.hasAdminPages && (
-                    <Badge variant="secondary" className="text-xs">Admin Pages</Badge>
+                    <Badge variant="secondary" className="text-xs">{t("admin.plugins.adminPages")}</Badge>
                   )}
                   {plugin.hasWidgets && (
-                    <Badge variant="secondary" className="text-xs">Widgets</Badge>
+                    <Badge variant="secondary" className="text-xs">{t("admin.plugins.widgets")}</Badge>
                   )}
                   {plugin.hasApiRoutes && (
-                    <Badge variant="secondary" className="text-xs">API Routes</Badge>
+                    <Badge variant="secondary" className="text-xs">{t("admin.plugins.apiRoutes")}</Badge>
                   )}
                 </div>
 
@@ -429,7 +431,7 @@ export default function PluginsPage() {
                       ) : (
                         <>
                           <Power className="h-4 w-4 mr-1" />
-                          Activate
+                          {t("admin.plugins.activate")}
                         </>
                       )}
                     </Button>
@@ -446,12 +448,12 @@ export default function PluginsPage() {
                       ) : plugin.status === "ACTIVE" ? (
                         <>
                           <PowerOff className="h-4 w-4 mr-1" />
-                          Disable
+                          {t("admin.plugins.disable")}
                         </>
                       ) : (
                         <>
                           <Power className="h-4 w-4 mr-1" />
-                          Enable
+                          {t("admin.plugins.enable")}
                         </>
                       )}
                     </Button>
@@ -476,27 +478,27 @@ export default function PluginsPage() {
         <CardHeader>
           <CardTitle className="text-base flex items-center gap-2">
             <Sparkles className="h-5 w-5" />
-            How Plugin Activation Works
+            {t("admin.plugins.howItWorksTitle")}
           </CardTitle>
         </CardHeader>
         <CardContent className="space-y-4">
           <div className="grid gap-4 md:grid-cols-3">
             <div className="space-y-2">
-              <h4 className="font-medium text-sm">1. Install Plugin</h4>
+              <h4 className="font-medium text-sm">{t("admin.plugins.step1Title")}</h4>
               <p className="text-sm text-muted-foreground">
-                Upload a compatible plugin ZIP package using the Upload Plugin button.
+                {t("admin.plugins.step1Desc")}
               </p>
             </div>
             <div className="space-y-2">
-              <h4 className="font-medium text-sm">2. Activate</h4>
+              <h4 className="font-medium text-sm">{t("admin.plugins.step2Title")}</h4>
               <p className="text-sm text-muted-foreground">
-                Click &quot;Activate&quot; and enter your license key to enable the plugin.
+                {t("admin.plugins.step2Desc")}
               </p>
             </div>
             <div className="space-y-2">
-              <h4 className="font-medium text-sm">3. Start Using</h4>
+              <h4 className="font-medium text-sm">{t("admin.plugins.step3Title")}</h4>
               <p className="text-sm text-muted-foreground">
-                Once activated, the plugin menu appears in the sidebar. Configure settings as needed.
+                {t("admin.plugins.step3Desc")}
               </p>
             </div>
           </div>
@@ -507,14 +509,14 @@ export default function PluginsPage() {
       <Dialog open={licenseDialogOpen} onOpenChange={setLicenseDialogOpen}>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>Activate {selectedPlugin?.name}</DialogTitle>
+            <DialogTitle>{t("admin.plugins.dialogTitle", { name: selectedPlugin?.name ?? "" })}</DialogTitle>
             <DialogDescription>
-              Enter your license key to activate this plugin.
+              {t("admin.plugins.dialogDesc")}
             </DialogDescription>
           </DialogHeader>
           <div className="space-y-4">
             <div className="space-y-2">
-              <Label htmlFor="license-key">License Key</Label>
+              <Label htmlFor="license-key">{t("admin.plugins.licenseKey")}</Label>
               <Input
                 id="license-key"
                 placeholder="XXXX-XXXX-XXXX-XXXX"
@@ -529,7 +531,7 @@ export default function PluginsPage() {
                 onCheckedChange={(checked) => setAgreedToTerms(checked === true)}
               />
               <Label htmlFor="agree-terms" className="text-sm font-normal cursor-pointer">
-                I agree to the plugin terms and conditions
+                {t("admin.plugins.agreeTerms")}
               </Label>
             </div>
             {activationError && (
@@ -547,7 +549,7 @@ export default function PluginsPage() {
               onClick={() => setLicenseDialogOpen(false)}
               disabled={activating}
             >
-              Cancel
+              {t("admin.plugins.cancel")}
             </Button>
             <Button
               onClick={activateWithLicense}
@@ -556,12 +558,12 @@ export default function PluginsPage() {
               {activating ? (
                 <>
                   <Loader2 className="h-4 w-4 mr-2 animate-spin" />
-                  Activating...
+                  {t("admin.plugins.activating")}
                 </>
               ) : (
                 <>
                   <Key className="h-4 w-4 mr-2" />
-                  Activate Plugin
+                  {t("admin.plugins.activatePlugin")}
                 </>
               )}
             </Button>

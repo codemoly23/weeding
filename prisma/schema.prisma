@@ -1776,6 +1776,31 @@ model WeddingWebsite {
   @@index([slug])
 }
 
+model WeddingTemplate {
+  id             String   @id @default(cuid())
+  name           String
+  slug           String   @unique
+  tagline        String
+  description    String
+  primaryColor   String
+  accentColor    String
+  bg             String   @default("#ffffff")
+  font           String   @default("Inter")
+  tags           Json     @default("[]")
+  imageUrl       String
+  features       Json     @default("[]")
+  plannerTheme   String   @default("modern")
+  plannerPrimary String
+  plannerAccent  String
+  plannerFont    String   @default("Inter")
+  active         Boolean  @default(true)
+  sortOrder      Int      @default(0)
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  @@index([active, sortOrder])
+}
+
 model GuestbookEntry {
   id         String   @id @default(cuid())
   websiteId  String

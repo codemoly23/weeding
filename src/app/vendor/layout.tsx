@@ -153,9 +153,6 @@ export default function VendorLayout({ children }: { children: React.ReactNode }
 
         {/* Footer */}
         <div className="px-3 py-4 border-t border-primary/10 space-y-0.5">
-          <div className="mb-2 px-3">
-            <LanguageSwitcher className="w-full [&>button]:w-full [&>button]:justify-between" />
-          </div>
           <Link
             href="/vendors"
             target="_blank"
@@ -176,23 +173,26 @@ export default function VendorLayout({ children }: { children: React.ReactNode }
 
       {/* Main */}
       <div className="flex-1 flex flex-col min-w-0">
-        {/* Top bar (mobile) */}
-        <header className="sticky top-0 z-10 bg-card border-b border-primary/10 px-4 py-3 flex items-center gap-3 lg:hidden">
+        {/* Top bar */}
+        <header className="sticky top-0 z-10 flex h-16 items-center gap-3 bg-card border-b border-primary/10 px-4 lg:px-6">
           <button
             onClick={() => setSidebarOpen(true)}
-            className="p-2 rounded-lg text-muted-foreground hover:bg-muted"
+            className="lg:hidden p-2 rounded-lg text-muted-foreground hover:bg-muted"
           >
             <Menu className="w-5 h-5" />
           </button>
-          <span className="font-semibold text-foreground text-sm">{t("vendor.portal")}</span>
-          <LanguageSwitcher className="ml-auto" />
-          {unreadCount > 0 && (
-            <Link href="/vendor/messages">
-              <span className="bg-primary text-white text-xs font-bold rounded-full px-2 py-0.5">
-                {t("admin.header.newCount", { count: String(unreadCount) })}
-              </span>
-            </Link>
-          )}
+          <span className="font-semibold text-foreground text-sm lg:hidden">{t("vendor.portal")}</span>
+
+          <div className="ml-auto flex items-center gap-3">
+            <LanguageSwitcher />
+            {unreadCount > 0 && (
+              <Link href="/vendor/messages">
+                <span className="bg-primary text-white text-xs font-bold rounded-full px-2 py-0.5">
+                  {t("admin.header.newCount", { count: String(unreadCount) })}
+                </span>
+              </Link>
+            )}
+          </div>
         </header>
 
         <main id="main-content" className="flex-1 p-4 lg:p-8">

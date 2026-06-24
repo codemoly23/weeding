@@ -13,6 +13,7 @@ import {
   DialogFooter,
 } from "@/components/ui/dialog";
 import { toast } from "sonner";
+import { useLanguage } from "@/lib/i18n/language-context";
 import {
   Loader2,
   Paintbrush,
@@ -59,6 +60,7 @@ const categoryBadgeColors: Record<string, string> = {
 };
 
 export default function ThemeGalleryPage() {
+  const { t } = useLanguage();
   const [themes, setThemes] = useState<ThemeListItem[]>([]);
   const [loading, setLoading] = useState(true);
   const [selectedTheme, setSelectedTheme] = useState<ThemeListItem | null>(
@@ -80,7 +82,7 @@ export default function ThemeGalleryPage() {
       const data = await response.json();
       setThemes(data.themes || []);
     } catch {
-      toast.error("Failed to load themes");
+      toast.error(t("admin.themes.loadFailed"));
     } finally {
       setLoading(false);
     }
@@ -96,9 +98,9 @@ export default function ThemeGalleryPage() {
       });
       const data = await response.json();
       if (!response.ok) throw new Error(data.error || "Failed to save");
-      toast.success(`Design saved to theme (${data.pageCount} pages)`);
+      toast.success(t("admin.themes.saveDesignSuccess", { n: String(data.pageCount) }));
     } catch (error) {
-      toast.error(error instanceof Error ? error.message : "Failed to save design to theme");
+      toast.error(error instanceof Error ? error.message : t("admin.themes.saveDesignFailed"));
     } finally {
       setSavingPages(false);
     }
@@ -125,8 +127,8 @@ export default function ThemeGalleryPage() {
 
       toast.success(
         data.summary
-          ? `Theme activated successfully! ${data.summary}`
-          : "Theme activated successfully!"
+          ? `${t("admin.themes.activateSuccess")} ${data.summary}`
+          : t("admin.themes.activateSuccess")
       );
 
       setSelectedTheme(null);
@@ -134,7 +136,7 @@ export default function ThemeGalleryPage() {
       await fetchThemes();
     } catch (error) {
       toast.error(
-        error instanceof Error ? error.message : "Failed to import theme"
+        error instanceof Error ? error.message : t("admin.themes.activateFailed")
       );
     } finally {
       setImporting(false);
@@ -154,9 +156,9 @@ export default function ThemeGalleryPage() {
     return (
       <div className="space-y-6">
         <div>
-          <h1 className="text-2xl font-bold">Theme Gallery</h1>
+          <h1 className="text-2xl font-bold">{t("admin.themes.title")}</h1>
           <p className="text-muted-foreground">
-            Browse and activate themes for your website
+            {t("admin.themes.subtitle")}
           </p>
         </div>
         {/* Loading skeleton grid */}
@@ -186,10 +188,10 @@ export default function ThemeGalleryPage() {
         <div>
           <h1 className="text-2xl font-bold flex items-center gap-2">
             <Palette className="h-6 w-6 text-primary" />
-            Theme Gallery
+            {t("admin.themes.title")}
           </h1>
           <p className="text-muted-foreground">
-            Browse and activate themes for your website
+            {t("admin.themes.subtitle")}
           </p>
         </div>
       </div>
@@ -224,7 +226,7 @@ export default function ThemeGalleryPage() {
                 {theme.isActive && (
                   <Badge className="absolute top-3 right-3 bg-[var(--ast-success-icon)] hover:bg-[var(--ast-success-text)] text-white">
                     <Check className="h-3 w-3 mr-1" />
-                    Active
+                    {t("admin.themes.active")}
                   </Badge>
                 )}
               </div>
@@ -250,7 +252,7 @@ export default function ThemeGalleryPage() {
                   </Badge>
                   <Badge variant="outline" className="text-xs">
                     <Package className="h-3 w-3 mr-1" />
-                    {theme.meta.serviceCount} services
+                    {t("admin.themes.services", { n: String(theme.meta.serviceCount) })}
                   </Badge>
                 </div>
 
@@ -262,7 +264,7 @@ export default function ThemeGalleryPage() {
                         <Button variant="outline" className="flex-1" asChild>
                           <Link href="/admin/appearance/themes/customize">
                             <Palette className="h-4 w-4 mr-2" />
-                            Customize
+                            {t("admin.themes.customize")}
                           </Link>
                         </Button>
                         <Badge
@@ -270,7 +272,7 @@ export default function ThemeGalleryPage() {
                           className="flex items-center gap-1 text-[var(--ast-success-icon)] border-[var(--ast-success-border)] px-3"
                         >
                           <Check className="h-3 w-3" />
-                          Active
+                          {t("admin.themes.active")}
                         </Badge>
                       </div>
                       <Button
@@ -285,7 +287,7 @@ export default function ThemeGalleryPage() {
                         ) : (
                           <Save className="h-3 w-3 mr-2" />
                         )}
-                        Save Current Design to Theme
+                        {t("admin.themes.saveDesign")}
                       </Button>
                     </div>
                   ) : (
@@ -294,7 +296,7 @@ export default function ThemeGalleryPage() {
                       onClick={() => setSelectedTheme(theme)}
                     >
                       <Paintbrush className="h-4 w-4 mr-2" />
-                      Activate
+                      {t("admin.themes.activate")}
                     </Button>
                   )}
                 </div>
@@ -305,9 +307,9 @@ export default function ThemeGalleryPage() {
       ) : (
         <div className="text-center py-16 text-muted-foreground">
           <Palette className="h-12 w-12 mx-auto mb-4 opacity-50" />
-          <p className="text-lg font-medium">No themes available</p>
+          <p className="text-lg font-medium">{t("admin.themes.noThemes")}</p>
           <p className="text-sm mt-1">
-            Check back later or add theme files to the themes directory.
+            {t("admin.themes.noThemesDesc")}
           </p>
         </div>
       )}
@@ -323,16 +325,14 @@ export default function ThemeGalleryPage() {
           <DialogHeader>
             <DialogTitle className="flex items-center gap-2">
               <Paintbrush className="h-5 w-5" />
-              Activate: {selectedTheme?.meta.name}
+              {t("admin.themes.activateDialogTitle", { name: selectedTheme?.meta.name ?? "" })}
             </DialogTitle>
             <DialogDescription asChild>
               <div className="space-y-3 pt-2">
                 <div className="flex items-start gap-2 rounded-lg border border-[var(--ast-warning-border)] bg-[var(--ast-warning-bg)] p-3">
                   <AlertTriangle className="h-5 w-5 text-[var(--ast-warning-icon)] mt-0.5 shrink-0" />
                   <p className="text-sm text-[var(--ast-warning-text)]">
-                    This will replace all content data including services, pages,
-                    blogs, FAQs, and settings. User accounts, orders, and leads
-                    will be preserved.
+                    {t("admin.themes.activateWarning")}
                   </p>
                 </div>
               </div>
@@ -354,9 +354,9 @@ export default function ThemeGalleryPage() {
                 <Package className="h-5 w-5 mr-3 shrink-0" />
               )}
               <div className="text-left">
-                <div className="font-medium">Activate with Demo Content</div>
+                <div className="font-medium">{t("admin.themes.withContent")}</div>
                 <div className="text-xs font-normal opacity-80 mt-0.5">
-                  Import all services, pages, FAQs, and settings
+                  {t("admin.themes.withContentDesc")}
                 </div>
               </div>
             </Button>
@@ -376,9 +376,9 @@ export default function ThemeGalleryPage() {
                 <Palette className="h-5 w-5 mr-3 shrink-0" />
               )}
               <div className="text-left">
-                <div className="font-medium">Apply Colors Only</div>
+                <div className="font-medium">{t("admin.themes.colorsOnly")}</div>
                 <div className="text-xs font-normal text-muted-foreground mt-0.5">
-                  Only update color scheme and branding styles
+                  {t("admin.themes.colorsOnlyDesc")}
                 </div>
               </div>
             </Button>
@@ -390,7 +390,7 @@ export default function ThemeGalleryPage() {
               onClick={() => setSelectedTheme(null)}
               disabled={importing}
             >
-              Cancel
+              {t("admin.themes.cancel")}
             </Button>
           </DialogFooter>
         </DialogContent>

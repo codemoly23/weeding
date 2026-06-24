@@ -334,7 +334,7 @@ export default function ChecklistPage() {
   }, [addingSubtaskFor]);
 
   async function handleSeed(reset = false) {
-    if (reset && !confirm("This will delete all existing tasks and replace them with the default list. Continue?")) return;
+    if (reset && !confirm(t("checklist.resetConfirm"))) return;
     setSeeding(true);
     setError(null);
     try {
@@ -492,26 +492,26 @@ export default function ChecklistPage() {
 
   // Compute actual month label from wedding date
   function groupLabel(key: string): { primary: string; secondary?: string } {
-    if (key === "custom") return { primary: "Custom tasks" };
+    if (key === "custom") return { primary: t("checklist.customGroup") };
     const months = parseFloat(key);
-    if (months === 0) return { primary: "Wedding Day" };
+    if (months === 0) return { primary: t("checklist.weddingDay") };
     if (months === 0.25) {
       if (eventDate) {
         const d = new Date(eventDate);
         d.setDate(d.getDate() - 7);
-        return { primary: d.toLocaleString("default", { month: "long", year: "numeric" }), secondary: "1 week before" };
+        return { primary: d.toLocaleString("default", { month: "long", year: "numeric" }), secondary: t("checklist.weekBefore") };
       }
-      return { primary: "1 week before" };
+      return { primary: t("checklist.weekBefore") };
     }
     if (eventDate) {
       const weddingDate = new Date(eventDate);
       weddingDate.setMonth(weddingDate.getMonth() - months);
       const monthName = weddingDate.toLocaleString("default", { month: "long", year: "numeric" });
-      const secondary = months === 1 ? "1 month before" : `${months} months before`;
+      const secondary = months === 1 ? t("checklist.month", { n: "1" }) : t("checklist.months", { n: String(months) });
       return { primary: monthName, secondary };
     }
-    if (months === 1) return { primary: "1 month before" };
-    return { primary: `${months} months before` };
+    if (months === 1) return { primary: t("checklist.month", { n: "1" }) };
+    return { primary: t("checklist.months", { n: String(months) }) };
   }
 
   const totalDone = tasks.reduce((s, t) => {
@@ -624,15 +624,15 @@ export default function ChecklistPage() {
           href={`/planner/${id}/settings`}
           className="flex items-center gap-1 text-xs text-muted-foreground hover:text-foreground/80 transition-colors"
         >
-          <Settings className="h-4 w-4" /> Settings
+          <Settings className="h-4 w-4" /> {t("checklist.settings")}
         </Link>
       </div>
       <p className="mb-3 text-center text-sm text-muted-foreground">
-        This is your personal to-do list. Add, remove, or complete any task and keep on top of your deadlines. Any changes? Just click to edit.
+        {t("checklist.subtitle")}
       </p>
       {eventDate && (
         <p className="mb-5 text-center text-sm text-foreground/80">
-          Wedding Date:{" "}
+          {t("checklist.weddingDate")}{" "}
           <span className="text-[var(--color-error-text)] underline decoration-dotted cursor-default">
             {new Date(eventDate).toLocaleDateString("en-GB", { weekday: "long", day: "numeric", month: "short", year: "numeric" })}
           </span>
@@ -693,7 +693,7 @@ export default function ChecklistPage() {
                         <h2 className="text-base font-semibold text-foreground/80">{label.primary}</h2>
                         {isOverdue && (
                           <span className="rounded-full bg-[var(--color-error-bg)] px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wider text-[var(--color-error-text)]">
-                            Overdue
+                            {t("checklist.overdue")}
                           </span>
                         )}
                       </div>
@@ -803,7 +803,7 @@ export default function ChecklistPage() {
 
                             {subTotal > 0 && (
                               <div className="mb-2">
-                                <p className="mb-1.5 text-[10px] font-semibold uppercase tracking-widest text-muted-foreground">Subtasks</p>
+                                <p className="mb-1.5 text-[10px] font-semibold uppercase tracking-widest text-muted-foreground">{t("checklist.subtasksLabel")}</p>
                                 <div className="space-y-1">
                                   {subs.map(sub => (
                                     <div key={sub.id} className="group/sub flex items-start gap-2">
@@ -844,12 +844,12 @@ export default function ChecklistPage() {
                                   value={newSubtask}
                                   onChange={e => setNewSubtask(e.target.value)}
                                   onKeyDown={e => { if (e.key === "Enter") addSubtask(task); if (e.key === "Escape") { setAddingSubtaskFor(null); setNewSubtask(""); } }}
-                                  placeholder="Subtask description..."
+                                  placeholder={t("checklist.subtaskPlaceholder")}
                                   className="flex-1 rounded-lg border border-primary/20 bg-card px-2.5 py-1.5 text-xs focus:border-primary focus:outline-none"
                                 />
                                 <button onClick={() => addSubtask(task)} disabled={!newSubtask.trim()}
                                   className="rounded-lg bg-primary px-3 py-1.5 text-xs font-medium text-primary-foreground hover:bg-primary/90 disabled:opacity-50">
-                                  Add
+                                  {t("checklist.addSubtaskBtn")}
                                 </button>
                                 <button onClick={() => { setAddingSubtaskFor(null); setNewSubtask(""); }}
                                   className="rounded-lg border border-border px-2 py-1.5 text-xs text-muted-foreground hover:bg-muted">
@@ -861,7 +861,7 @@ export default function ChecklistPage() {
                                 onClick={() => { setAddingSubtaskFor(task.id); setNewSubtask(""); }}
                                 className="mt-1 flex items-center gap-1 text-xs text-muted-foreground hover:text-primary disabled:opacity-0"
                               >
-                                <Plus className="h-3 w-3" /> Add sub-task
+                                <Plus className="h-3 w-3" /> {t("checklist.addSubtaskLink")}
                               </button>
                             )}
                           </div>
@@ -910,7 +910,7 @@ export default function ChecklistPage() {
               className="flex items-center gap-2 rounded-xl border border-border bg-card px-5 py-2.5 text-sm text-foreground/80 shadow-sm hover:bg-muted transition-colors"
             >
               <FileText className="h-4 w-4 text-[var(--color-error-text)]" />
-              Download PDF file
+              {t("checklist.downloadPdf")}
             </button>
           </div>
         </div>

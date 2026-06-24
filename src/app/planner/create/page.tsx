@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useSession } from "next-auth/react";
 import { Users, User, Briefcase, Ghost } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -9,14 +9,42 @@ import { cn } from "@/lib/utils";
 import Link from "next/link";
 import { createLocalProject } from "@/lib/planner-storage";
 import { useLanguage } from "@/lib/i18n/language-context";
+import { getTemplateBlocks } from "@/lib/website-template-blocks";
 
 export default function CreateProjectPage() {
   const router = useRouter();
+  const searchParams = useSearchParams();
   const { data: session } = useSession();
   const { t } = useLanguage();
   const [selectedRole, setSelectedRole] = useState<string | null>(null);
   const [isCreating, setIsCreating] = useState(false);
   const [error, setError] = useState<string | null>(null);
+
+  const templateSlug = searchParams.get("template") ?? null;
+  const typeParam = searchParams.get("type") ?? null;
+
+  const EVENT_TYPE_MAP: Record<string, string> = {
+    wedding: "WEDDING",
+    birthday: "PARTY",
+    corporate: "CORPORATE",
+    christmas: "PARTY",
+    graduation: "PARTY",
+    baptism: "BAPTISM",
+    party: "PARTY",
+  };
+  const eventType = typeParam ? (EVENT_TYPE_MAP[typeParam.toLowerCase()] ?? "WEDDING") : "WEDDING";
+
+  const [selectedTemplate, setSelectedTemplate] = useState<{
+    plannerTheme: string; plannerPrimary: string; plannerAccent: string; plannerFont: string;
+  } | null>(null);
+
+  useEffect(() => {
+    if (!templateSlug) return;
+    fetch(`/api/wedding-templates?slug=${templateSlug}`)
+      .then((r) => r.ok ? r.json() : null)
+      .then((data) => { if (data?.template) setSelectedTemplate(data.template); })
+      .catch(() => {});
+  }, [templateSlug]);
 
   const roles = [
     { id: "BRIDE", label: t("create.bride"), icon: User },
@@ -40,12 +68,31 @@ export default function CreateProjectPage() {
         const res = await fetch("/api/planner/projects", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ role: selectedRole }),
+          body: JSON.stringify({ role: selectedRole, eventType }),
         });
 
         if (res.ok) {
           const data = await res.json();
-          router.push(`/planner/${data.project.id}`);
+          const projectId = data.project.id;
+
+          // Apply template theme + default blocks if template was selected
+          if (selectedTemplate) {
+            const blocks = getTemplateBlocks(selectedTemplate.plannerTheme);
+            await fetch(`/api/planner/projects/${projectId}/website`, {
+              method: "PUT",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({
+                theme: selectedTemplate.plannerTheme,
+                primaryColor: selectedTemplate.plannerPrimary,
+                accentColor: selectedTemplate.plannerAccent,
+                fontFamily: selectedTemplate.plannerFont,
+                blocks,
+              }),
+            });
+            router.push(`/planner/${projectId}/website`);
+          } else {
+            router.push(`/planner/${projectId}`);
+          }
           return;
         }
 
@@ -61,7 +108,7 @@ export default function CreateProjectPage() {
 
     // Anonymous → save to localStorage
     try {
-      const project = createLocalProject(selectedRole);
+      const project = createLocalProject(selectedRole, eventType);
       router.push(`/planner/${project.id}`);
     } catch {
       setError("Failed to create project. Please try again.");
@@ -80,9 +127,26 @@ export default function CreateProjectPage() {
     );
   }
 
+  const EVENT_LABEL_MAP: Record<string, { label: string; emoji: string }> = {
+    wedding:    { label: "Wedding",          emoji: "💍" },
+    birthday:   { label: "Birthday Party",   emoji: "🎂" },
+    corporate:  { label: "Corporate Event",  emoji: "💼" },
+    christmas:  { label: "Christmas Dinner", emoji: "🎄" },
+    graduation: { label: "Graduation",       emoji: "🎓" },
+    baptism:    { label: "Baptism",          emoji: "✝️" },
+    party:      { label: "Party",            emoji: "🎉" },
+  };
+  const eventLabel = typeParam ? EVENT_LABEL_MAP[typeParam.toLowerCase()] : null;
+
   return (
     <div className="flex min-h-screen items-center justify-center bg-background">
       <div className="mx-auto max-w-2xl text-center px-4">
+        {eventLabel && (
+          <div className="mb-4 inline-flex items-center gap-2 rounded-full bg-primary/10 px-4 py-1.5 text-sm font-medium text-primary">
+            <span>{eventLabel.emoji}</span>
+            <span>Planning a {eventLabel.label}</span>
+          </div>
+        )}
         <h1 className="mb-10 text-3xl font-semibold text-foreground">
           {t("create.whoAreYou")}
         </h1>

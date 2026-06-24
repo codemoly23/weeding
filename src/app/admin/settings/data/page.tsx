@@ -31,6 +31,7 @@ import {
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Separator } from "@/components/ui/separator";
 import { toast } from "sonner";
+import { useLanguage } from "@/lib/i18n/language-context";
 
 interface ImportPreview {
   services: number;
@@ -45,6 +46,7 @@ interface ImportPreview {
 }
 
 export default function DataManagementPage() {
+  const { t } = useLanguage();
   // Export state
   const [exporting, setExporting] = useState(false);
 
@@ -88,12 +90,12 @@ export default function DataManagementPage() {
       window.URL.revokeObjectURL(url);
       document.body.removeChild(a);
 
-      toast.success("Data exported successfully", {
-        description: `Downloaded as ${filename}`,
+      toast.success(t("admin.data.exportSuccess"), {
+        description: t("admin.data.exportSuccessDesc", { filename }),
       });
     } catch (error) {
       console.error("Export error:", error);
-      toast.error("Failed to export data", {
+      toast.error(t("admin.data.exportFailed"), {
         description: error instanceof Error ? error.message : "An unexpected error occurred",
       });
     } finally {
@@ -120,8 +122,8 @@ export default function DataManagementPage() {
       try {
         parsed = JSON.parse(text);
       } catch {
-        toast.error("Invalid JSON file", {
-          description: "The selected file is not a valid JSON file.",
+        toast.error(t("admin.data.invalidJson"), {
+          description: t("admin.data.invalidJsonDesc"),
         });
         setImportFile(null);
         setValidating(false);
@@ -144,12 +146,12 @@ export default function DataManagementPage() {
       setImportPreview(result.counts);
       setImportData(parsed);
 
-      toast.success("File validated successfully", {
-        description: "Review the preview below and click Import when ready.",
+      toast.success(t("admin.data.fileValidated"), {
+        description: t("admin.data.validateSuccessDesc"),
       });
     } catch (error) {
       console.error("Validation error:", error);
-      toast.error("File validation failed", {
+      toast.error(t("admin.data.validateFailed"), {
         description: error instanceof Error ? error.message : "Could not validate the file",
       });
       setImportFile(null);
@@ -177,8 +179,8 @@ export default function DataManagementPage() {
         throw new Error(errorData.error || "Import failed");
       }
 
-      toast.success("Data imported successfully", {
-        description: "All data has been restored from the uploaded file.",
+      toast.success(t("admin.data.importSuccess"), {
+        description: t("admin.data.importSuccessDesc"),
       });
 
       // Reset import state
@@ -191,7 +193,7 @@ export default function DataManagementPage() {
       }
     } catch (error) {
       console.error("Import error:", error);
-      toast.error("Failed to import data", {
+      toast.error(t("admin.data.importFailed"), {
         description: error instanceof Error ? error.message : "An unexpected error occurred",
       });
     } finally {
@@ -217,15 +219,15 @@ export default function DataManagementPage() {
         throw new Error(errorData.error || "Reset failed");
       }
 
-      toast.success("Data reset successfully", {
-        description: "All content data has been deleted. User accounts and orders were preserved.",
+      toast.success(t("admin.data.resetSuccess"), {
+        description: t("admin.data.resetSuccessDesc"),
       });
 
       setResetConfirmation("");
       setResetAdminEmail("");
     } catch (error) {
       console.error("Reset error:", error);
-      toast.error("Failed to reset data", {
+      toast.error(t("admin.data.resetFailed"), {
         description: error instanceof Error ? error.message : "An unexpected error occurred",
       });
     } finally {
@@ -246,9 +248,9 @@ export default function DataManagementPage() {
     <div className="space-y-6">
       {/* Page Header */}
       <div>
-        <h1 className="text-2xl font-bold">Data Management</h1>
+        <h1 className="text-2xl font-bold">{t("admin.data.title")}</h1>
         <p className="text-muted-foreground">
-          Export, import, or reset your website data
+          {t("admin.data.subtitle")}
         </p>
       </div>
 
@@ -260,10 +262,9 @@ export default function DataManagementPage() {
               <Download className="h-6 w-6 text-[var(--ast-info-icon)]" />
             </div>
             <div>
-              <CardTitle>Export Data</CardTitle>
+              <CardTitle>{t("admin.data.exportTitle")}</CardTitle>
               <CardDescription>
-                Download all your website content as a JSON file. This includes
-                services, pages, blogs, FAQs, testimonials, settings, and more.
+                {t("admin.data.exportDesc")}
               </CardDescription>
             </div>
           </div>
@@ -275,7 +276,7 @@ export default function DataManagementPage() {
             ) : (
               <Download className="h-4 w-4 mr-2" />
             )}
-            {exporting ? "Exporting..." : "Export All Data"}
+            {exporting ? t("admin.data.exporting") : t("admin.data.exportAll")}
           </Button>
         </CardContent>
       </Card>
@@ -288,10 +289,9 @@ export default function DataManagementPage() {
               <Upload className="h-6 w-6 text-[var(--ast-success-icon)]" />
             </div>
             <div>
-              <CardTitle>Import Data</CardTitle>
+              <CardTitle>{t("admin.data.importTitle")}</CardTitle>
               <CardDescription>
-                Upload a previously exported JSON file to restore your website
-                content.
+                {t("admin.data.importDesc")}
               </CardDescription>
             </div>
           </div>
@@ -299,7 +299,7 @@ export default function DataManagementPage() {
         <CardContent className="space-y-4">
           {/* File Input */}
           <div className="space-y-2">
-            <Label htmlFor="import-file">Select JSON file</Label>
+            <Label htmlFor="import-file">{t("admin.data.selectJson")}</Label>
             <div className="flex items-center gap-3">
               <Input
                 id="import-file"
@@ -317,7 +317,7 @@ export default function DataManagementPage() {
                   onClick={clearFileSelection}
                   disabled={validating || importing}
                 >
-                  Clear
+                  {t("admin.data.clear")}
                 </Button>
               )}
             </div>
@@ -327,7 +327,7 @@ export default function DataManagementPage() {
           {validating && (
             <div className="flex items-center gap-2 text-muted-foreground">
               <Loader2 className="h-4 w-4 animate-spin" />
-              <span className="text-sm">Validating file...</span>
+              <span className="text-sm">{t("admin.data.validating")}</span>
             </div>
           )}
 
@@ -338,13 +338,13 @@ export default function DataManagementPage() {
               <div className="flex items-center gap-2">
                 <CheckCircle className="h-4 w-4 text-[var(--ast-success-icon)]" />
                 <span className="text-sm font-medium text-[var(--ast-success-text)]">
-                  File validated successfully
+                  {t("admin.data.fileValidated")}
                 </span>
               </div>
               <div className="rounded-lg border bg-muted/50 p-4">
                 <h4 className="text-sm font-medium mb-3 flex items-center gap-2">
                   <FileJson className="h-4 w-4 text-muted-foreground" />
-                  Data Preview
+                  {t("admin.data.dataPreview")}
                 </h4>
                 <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
                   {Object.entries(importPreview).map(([key, count]) => (
@@ -374,7 +374,7 @@ export default function DataManagementPage() {
                 ) : (
                   <Upload className="h-4 w-4 mr-2" />
                 )}
-                {importing ? "Importing..." : "Import Data"}
+                {importing ? t("admin.data.importing") : t("admin.data.importData")}
               </Button>
             </div>
           )}
@@ -383,7 +383,7 @@ export default function DataManagementPage() {
           {importing && !importPreview && (
             <div className="flex items-center gap-2 text-muted-foreground">
               <Loader2 className="h-4 w-4 animate-spin" />
-              <span className="text-sm">Importing data...</span>
+              <span className="text-sm">{t("admin.data.importingData")}</span>
             </div>
           )}
         </CardContent>
@@ -397,9 +397,9 @@ export default function DataManagementPage() {
               <AlertTriangle className="h-6 w-6 text-[var(--ast-error-icon)]" />
             </div>
             <div>
-              <CardTitle className="text-[var(--ast-error-text)]">Reset All Data</CardTitle>
+              <CardTitle className="text-[var(--ast-error-text)]">{t("admin.data.resetTitle")}</CardTitle>
               <CardDescription>
-                Permanently delete all content data from your website
+                {t("admin.data.resetDesc")}
               </CardDescription>
             </div>
           </div>
@@ -408,9 +408,7 @@ export default function DataManagementPage() {
           <Alert variant="destructive">
             <AlertTriangle className="h-4 w-4" />
             <AlertDescription>
-              This will permanently delete all services, pages, blogs, FAQs,
-              testimonials, settings, and design configurations. User accounts,
-              orders, invoices, and leads will be preserved.
+              {t("admin.data.resetWarning")}
             </AlertDescription>
           </Alert>
           <Button
@@ -427,7 +425,7 @@ export default function DataManagementPage() {
             ) : (
               <Trash2 className="h-4 w-4 mr-2" />
             )}
-            {resetting ? "Resetting..." : "Reset All Data"}
+            {resetting ? t("admin.data.resetting") : t("admin.data.resetAll")}
           </Button>
         </CardContent>
       </Card>
@@ -436,20 +434,20 @@ export default function DataManagementPage() {
       <Dialog open={importDialogOpen} onOpenChange={setImportDialogOpen}>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>Confirm Data Import</DialogTitle>
+            <DialogTitle>{t("admin.data.importDialogTitle")}</DialogTitle>
             <DialogDescription>
-              This will import all data from the uploaded file. Existing content
-              may be overwritten. Please type{" "}
-              <span className="font-mono font-bold">CONFIRM</span> to proceed.
+              {t("admin.data.importDialogDescPre")}{" "}
+              <span className="font-mono font-bold">CONFIRM</span>{" "}
+              {t("admin.data.importDialogDescPost")}
             </DialogDescription>
           </DialogHeader>
           <div className="space-y-2 py-4">
-            <Label htmlFor="import-confirm-input">Confirmation</Label>
+            <Label htmlFor="import-confirm-input">{t("admin.data.confirmation")}</Label>
             <Input
               id="import-confirm-input"
               value={importConfirmation}
               onChange={(e) => setImportConfirmation(e.target.value)}
-              placeholder="Type CONFIRM to proceed"
+              placeholder={t("admin.data.typeConfirm")}
               autoComplete="off"
             />
           </div>
@@ -458,7 +456,7 @@ export default function DataManagementPage() {
               variant="outline"
               onClick={() => setImportDialogOpen(false)}
             >
-              Cancel
+              {t("admin.data.cancel")}
             </Button>
             <Button
               onClick={handleImport}
@@ -466,7 +464,7 @@ export default function DataManagementPage() {
               className="bg-green-600 hover:bg-green-700 text-white disabled:opacity-50"
             >
               <Upload className="h-4 w-4 mr-2" />
-              Import Data
+              {t("admin.data.importData")}
             </Button>
           </DialogFooter>
         </DialogContent>
@@ -477,35 +475,33 @@ export default function DataManagementPage() {
         <DialogContent>
           <DialogHeader>
             <DialogTitle className="text-[var(--ast-error-text)]">
-              Confirm Data Reset
+              {t("admin.data.resetDialogTitle")}
             </DialogTitle>
             <DialogDescription>
-              This action is irreversible. All services, pages, blogs, FAQs,
-              testimonials, settings, and design configurations will be
-              permanently deleted. User accounts, orders, invoices, and leads
-              will be preserved. Please type{" "}
-              <span className="font-mono font-bold">RESET</span> to proceed.
+              {t("admin.data.resetDialogDescPre")}{" "}
+              <span className="font-mono font-bold">RESET</span>{" "}
+              {t("admin.data.resetDialogDescPost")}
             </DialogDescription>
           </DialogHeader>
           <div className="space-y-3 py-4">
             <div className="space-y-2">
-              <Label htmlFor="reset-email-input">Your Admin Email</Label>
+              <Label htmlFor="reset-email-input">{t("admin.data.adminEmail")}</Label>
               <Input
                 id="reset-email-input"
                 type="email"
                 value={resetAdminEmail}
                 onChange={(e) => setResetAdminEmail(e.target.value)}
-                placeholder="Enter your admin email"
+                placeholder={t("admin.data.adminEmailPlaceholder")}
                 autoComplete="off"
               />
             </div>
             <div className="space-y-2">
-              <Label htmlFor="reset-confirm-input">Confirmation</Label>
+              <Label htmlFor="reset-confirm-input">{t("admin.data.confirmation")}</Label>
               <Input
                 id="reset-confirm-input"
                 value={resetConfirmation}
                 onChange={(e) => setResetConfirmation(e.target.value)}
-                placeholder="Type RESET to proceed"
+                placeholder={t("admin.data.typeReset")}
                 autoComplete="off"
               />
             </div>
@@ -515,7 +511,7 @@ export default function DataManagementPage() {
               variant="outline"
               onClick={() => setResetDialogOpen(false)}
             >
-              Cancel
+              {t("admin.data.cancel")}
             </Button>
             <Button
               onClick={handleReset}
@@ -523,7 +519,7 @@ export default function DataManagementPage() {
               className="bg-red-600 hover:bg-red-700 text-white disabled:opacity-50"
             >
               <Trash2 className="h-4 w-4 mr-2" />
-              Reset All Data
+              {t("admin.data.resetAll")}
             </Button>
           </DialogFooter>
         </DialogContent>

@@ -16,6 +16,7 @@ import {
   DollarSign,
   MapPin,
 } from "lucide-react";
+import { useLanguage } from "@/lib/i18n/language-context";
 
 interface ConversationSummary {
   id: string;
@@ -69,6 +70,7 @@ interface QuickReply {
 type StatusFilter = "ACTIVE" | "ARCHIVED" | "ALL";
 
 export default function VendorMessagesPage() {
+  const { t } = useLanguage();
   const [conversations, setConversations] = useState<ConversationSummary[]>([]);
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const [thread, setThread] = useState<ConversationDetail | null>(null);
@@ -213,23 +215,23 @@ export default function VendorMessagesPage() {
   };
 
   const FILTERS: { label: string; value: StatusFilter }[] = [
-    { label: "Active", value: "ACTIVE" },
-    { label: "Archived", value: "ARCHIVED" },
-    { label: "All", value: "ALL" },
+    { label: t("vendor.messages.filter.active"), value: "ACTIVE" },
+    { label: t("vendor.messages.filter.archived"), value: "ARCHIVED" },
+    { label: t("vendor.messages.filter.all"), value: "ALL" },
   ];
 
   return (
     <div className="max-w-6xl mx-auto h-[calc(100vh-8rem)] flex flex-col">
       <div className="mb-4 flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold text-foreground">Messages</h1>
-          <p className="text-sm text-muted-foreground mt-0.5">Conversations with potential clients</p>
+          <h1 className="text-2xl font-bold text-foreground">{t("vendor.messages.title")}</h1>
+          <p className="text-sm text-muted-foreground mt-0.5">{t("vendor.messages.subtitle")}</p>
         </div>
         <button
           onClick={() => setShowQRManager(true)}
           className="flex items-center gap-1.5 px-3 py-1.5 text-sm text-primary border border-primary/20 rounded-lg hover:bg-primary/5 transition-colors"
         >
-          <Zap className="w-3.5 h-3.5" /> Quick Replies
+          <Zap className="w-3.5 h-3.5" /> {t("vendor.messages.quickReplies")}
         </button>
       </div>
 
@@ -262,9 +264,9 @@ export default function VendorMessagesPage() {
             ) : conversations.length === 0 ? (
               <div className="flex flex-col items-center justify-center py-12 px-4 text-center">
                 <MessageSquare className="w-8 h-8 text-muted-foreground/70 mb-2" />
-                <p className="text-sm text-muted-foreground">No conversations yet</p>
+                <p className="text-sm text-muted-foreground">{t("vendor.messages.empty")}</p>
                 <p className="text-xs text-muted-foreground/70 mt-1">
-                  Conversations are created automatically when guests submit inquiries
+                  {t("vendor.messages.emptyDesc")}
                 </p>
               </div>
             ) : (
@@ -336,7 +338,7 @@ export default function VendorMessagesPage() {
                       <button
                         onClick={() => updateStatus(thread.id, "ARCHIVED")}
                         className="p-1.5 rounded text-muted-foreground/70 hover:text-foreground/80 hover:bg-muted transition-colors"
-                        title="Archive"
+                        title={t("vendor.messages.archive")}
                       >
                         <Archive className="w-4 h-4" />
                       </button>
@@ -346,13 +348,13 @@ export default function VendorMessagesPage() {
                         onClick={() => updateStatus(thread.id, "ACTIVE")}
                         className="px-2 py-1 text-xs text-primary border border-primary/20 rounded hover:bg-primary/5"
                       >
-                        Restore
+                        {t("vendor.messages.restore")}
                       </button>
                     )}
                     <button
                       onClick={() => updateStatus(thread.id, "SPAM")}
                       className="p-1.5 rounded text-muted-foreground/70 hover:text-[var(--color-error-text)] hover:bg-[var(--color-error-bg)] transition-colors"
-                      title="Mark as spam"
+                      title={t("vendor.messages.markSpam")}
                     >
                       <AlertCircle className="w-4 h-4" />
                     </button>
@@ -368,10 +370,10 @@ export default function VendorMessagesPage() {
                     const coupleName =
                       p.brideName && p.groomName
                         ? `${p.brideName} & ${p.groomName}`
-                        : p.brideName || p.groomName || "Couple";
+                        : p.brideName || p.groomName || t("vendor.messages.couple");
                     return (
                       <div className="mx-4 mt-3 mb-1 bg-primary/5 border border-primary/10 rounded-lg px-4 py-2.5">
-                        <p className="text-xs font-semibold text-primary mb-1.5">{coupleName}&apos;s Event</p>
+                        <p className="text-xs font-semibold text-primary mb-1.5">{t("vendor.messages.coupleEvent", { name: coupleName })}</p>
                         <div className="flex flex-wrap gap-x-4 gap-y-1 text-xs text-primary">
                           {p.eventDate && (
                             <span className="flex items-center gap-1">
@@ -382,13 +384,13 @@ export default function VendorMessagesPage() {
                           {p.guests.length > 0 && (
                             <span className="flex items-center gap-1">
                               <Users className="w-3 h-3 shrink-0" />
-                              ~{p.guests.length} guests
+                              {t("vendor.messages.guestsCount", { count: String(p.guests.length) })}
                             </span>
                           )}
                           {p.budgetGoal > 0 && (
                             <span className="flex items-center gap-1">
                               <DollarSign className="w-3 h-3 shrink-0" />
-                              ${p.budgetGoal.toLocaleString()} budget
+                              {t("vendor.messages.budgetAmount", { amount: p.budgetGoal.toLocaleString() })}
                             </span>
                           )}
                           {ceremony?.venueName && (
@@ -409,9 +411,9 @@ export default function VendorMessagesPage() {
                   }
                   return thread.inquiry ? (
                     <div className="mx-4 mt-3 mb-1 bg-[var(--color-info-bg)] border border-[var(--color-info-bg)] rounded-lg px-4 py-2.5">
-                      <p className="text-xs font-medium text-[var(--color-info-text)] mb-1">Inquiry Details</p>
+                      <p className="text-xs font-medium text-[var(--color-info-text)] mb-1">{t("vendor.messages.inquiryDetails")}</p>
                       <div className="flex flex-wrap gap-x-4 gap-y-1 text-xs text-[var(--color-info-text)]">
-                        <span>Event: <strong>{thread.inquiry.eventType}</strong></span>
+                        <span>{t("vendor.messages.eventLabel")} <strong>{thread.inquiry.eventType}</strong></span>
                         {thread.inquiry.eventDate && (
                           <span className="flex items-center gap-1">
                             <Calendar className="w-3 h-3" />
@@ -419,7 +421,7 @@ export default function VendorMessagesPage() {
                           </span>
                         )}
                         {thread.inquiry.budget && (
-                          <span>Budget: <strong>{thread.inquiry.budget}</strong></span>
+                          <span>{t("vendor.messages.budgetLabel")} <strong>{thread.inquiry.budget}</strong></span>
                         )}
                       </div>
                     </div>
@@ -461,7 +463,7 @@ export default function VendorMessagesPage() {
                           className="flex items-center gap-1 text-xs text-primary hover:text-primary"
                         >
                           <Zap className="w-3 h-3" />
-                          Quick replies
+                          {t("vendor.messages.quickRepliesLabel")}
                         </button>
                         {showQuickReplies && (
                           <div className="mt-1.5 flex flex-wrap gap-1.5">
@@ -489,7 +491,7 @@ export default function VendorMessagesPage() {
                           }
                         }}
                         rows={2}
-                        placeholder="Type a message… (Enter to send, Shift+Enter for new line)"
+                        placeholder={t("vendor.messages.composePlaceholder")}
                         className="flex-1 resize-none border border-border rounded-xl px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary/60"
                       />
                       <button
@@ -504,9 +506,9 @@ export default function VendorMessagesPage() {
                 )}
                 {thread.status === "SPAM" && (
                   <div className="border-t border-border px-4 py-3 text-center text-xs text-muted-foreground/70">
-                    This conversation has been marked as spam.
+                    {t("vendor.messages.spamMarked")}
                     <button onClick={() => updateStatus(thread.id, "ACTIVE")} className="ml-1 text-primary underline">
-                      Restore
+                      {t("vendor.messages.restore")}
                     </button>
                   </div>
                 )}
@@ -517,7 +519,7 @@ export default function VendorMessagesPage() {
           <div className="flex-1 hidden lg:flex items-center justify-center bg-card rounded-xl border border-border border-dashed">
             <div className="text-center">
               <MessageSquare className="w-10 h-10 text-muted-foreground/70 mx-auto mb-3" />
-              <p className="text-sm text-muted-foreground">Select a conversation</p>
+              <p className="text-sm text-muted-foreground">{t("vendor.messages.selectConversation")}</p>
             </div>
           </div>
         )}
@@ -534,7 +536,7 @@ export default function VendorMessagesPage() {
             onClick={(e) => e.stopPropagation()}
           >
             <div className="flex items-center justify-between mb-4">
-              <h2 className="text-base font-bold text-foreground">Quick Replies</h2>
+              <h2 className="text-base font-bold text-foreground">{t("vendor.messages.quickReplies")}</h2>
               <button onClick={() => setShowQRManager(false)} className="text-muted-foreground/70 hover:text-foreground/80">
                 <X className="w-5 h-5" />
               </button>
@@ -562,18 +564,18 @@ export default function VendorMessagesPage() {
 
             {/* Add new */}
             <div className="border-t border-border pt-4 space-y-3">
-              <p className="text-xs font-medium text-foreground">Add new quick reply</p>
+              <p className="text-xs font-medium text-foreground">{t("vendor.messages.addNewQR")}</p>
               <input
                 value={newQRTitle}
                 onChange={(e) => setNewQRTitle(e.target.value)}
-                placeholder="Title (e.g. Pricing Info)"
+                placeholder={t("vendor.messages.qrTitlePlaceholder")}
                 className="w-full border rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary/60"
               />
               <textarea
                 value={newQRContent}
                 onChange={(e) => setNewQRContent(e.target.value)}
                 rows={3}
-                placeholder="Message content…"
+                placeholder={t("vendor.messages.qrContentPlaceholder")}
                 className="w-full border rounded-lg px-3 py-2 text-sm resize-none focus:outline-none focus:ring-2 focus:ring-primary/60"
               />
               <button
@@ -582,7 +584,7 @@ export default function VendorMessagesPage() {
                 className="flex items-center gap-1.5 px-3 py-2 bg-primary text-primary-foreground text-sm rounded-lg hover:bg-primary/90 disabled:opacity-50 transition-colors"
               >
                 <Plus className="w-3.5 h-3.5" />
-                {savingQR ? "Saving…" : "Add Reply"}
+                {savingQR ? t("vendor.messages.saving") : t("vendor.messages.addReply")}
               </button>
             </div>
           </div>

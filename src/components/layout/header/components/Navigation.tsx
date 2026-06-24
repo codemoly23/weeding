@@ -236,9 +236,9 @@ function MegaMenuDropdown({ categories, columns, richContent }: MegaMenuProps) {
                 const aspectClass = content.gallery!.aspectRatio === "square" ? "aspect-square" : "aspect-[3/4]";
                 return (
                   <div className={`grid ${gridCols} gap-4`}>
-                    {content.gallery!.items.map((item) => (
+                    {content.gallery!.items.map((item, itemIdx) => (
                       <Link
-                        key={item.name}
+                        key={`${item.name}-${itemIdx}`}
                         href={item.href}
                         className="group flex flex-col gap-2"
                       >
