@@ -34,6 +34,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { toast } from "sonner";
+import { useLanguage } from "@/lib/i18n/language-context";
 
 interface PaymentSettings {
   // Stripe
@@ -92,6 +93,7 @@ const SECRET_KEYS = [
 ];
 
 export default function PaymentSettingsPage() {
+  const { t } = useLanguage();
   const [settings, setSettings] = useState<PaymentSettings>(defaultSettings);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
@@ -131,7 +133,7 @@ export default function PaymentSettingsPage() {
       }
     } catch (error) {
       console.error("Error fetching settings:", error);
-      toast.error("Failed to load payment settings");
+      toast.error(t("admin.payments.loadFailed"));
     } finally {
       setLoading(false);
     }
@@ -155,10 +157,10 @@ export default function PaymentSettingsPage() {
 
       if (!res.ok) throw new Error("Failed to save");
 
-      toast.success("Payment settings saved successfully");
+      toast.success(t("admin.payments.saveSuccess"));
     } catch (error) {
       console.error("Error saving settings:", error);
-      toast.error("Failed to save payment settings");
+      toast.error(t("admin.payments.saveFailed"));
     } finally {
       setSaving(false);
     }
@@ -173,13 +175,13 @@ export default function PaymentSettingsPage() {
       const data = await res.json();
       setStripeConnected(data.success);
       if (data.success) {
-        toast.success("Stripe connection successful");
+        toast.success(t("admin.payments.stripeSuccess"));
       } else {
-        toast.error(data.message || "Stripe connection failed");
+        toast.error(data.message || t("admin.payments.stripeFailed"));
       }
     } catch {
       setStripeConnected(false);
-      toast.error("Failed to test Stripe connection");
+      toast.error(t("admin.payments.stripeFailed"));
     } finally {
       setTestingStripe(false);
     }
@@ -194,13 +196,13 @@ export default function PaymentSettingsPage() {
       const data = await res.json();
       setPaypalConnected(data.success);
       if (data.success) {
-        toast.success("PayPal connection successful");
+        toast.success(t("admin.payments.paypalSuccess"));
       } else {
-        toast.error(data.message || "PayPal connection failed");
+        toast.error(data.message || t("admin.payments.paypalFailed"));
       }
     } catch {
       setPaypalConnected(false);
-      toast.error("Failed to test PayPal connection");
+      toast.error(t("admin.payments.paypalFailed"));
     } finally {
       setTestingPaypal(false);
     }
@@ -208,7 +210,7 @@ export default function PaymentSettingsPage() {
 
   function copyToClipboard(text: string) {
     navigator.clipboard.writeText(text);
-    toast.success("Copied to clipboard");
+    toast.success(t("admin.payments.copiedClipboard"));
   }
 
   function toggleShowSecret(key: string) {
@@ -276,9 +278,9 @@ export default function PaymentSettingsPage() {
     <div className="space-y-6">
       <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <div>
-          <h1 className="text-2xl font-bold">Payment Settings</h1>
+          <h1 className="text-2xl font-bold">{t("admin.payments.title")}</h1>
           <p className="text-muted-foreground">
-            Configure payment gateways for your store
+            {t("admin.payments.subtitle")}
           </p>
         </div>
         <Button className="self-start sm:self-auto" onClick={saveSettings} disabled={saving}>
@@ -287,7 +289,7 @@ export default function PaymentSettingsPage() {
           ) : (
             <Save className="h-4 w-4 mr-2" />
           )}
-          Save Changes
+          {t("admin.payments.saveChanges")}
         </Button>
       </div>
 
@@ -297,11 +299,11 @@ export default function PaymentSettingsPage() {
           <div className="flex gap-4">
             <AlertTriangle className="h-5 w-5 text-[var(--ast-warning-icon)] shrink-0 mt-0.5" />
             <div className="space-y-1">
-              <p className="font-medium text-[var(--ast-warning-text)]">Security Notice</p>
+              <p className="font-medium text-[var(--ast-warning-text)]">{t("admin.payments.securityNotice")}</p>
               <p className="text-sm text-[var(--ast-warning-text)]">
-                API keys are encrypted before storing in the database. Make sure you have set
-                the <code className="bg-[var(--ast-warning-bg)] px-1 rounded">ENCRYPTION_KEY</code> environment
-                variable for secure key storage.
+                {t("admin.payments.securityDesc").split("ENCRYPTION_KEY")[0]}
+                <code className="bg-[var(--ast-warning-bg)] px-1 rounded">ENCRYPTION_KEY</code>
+                {t("admin.payments.securityDesc").split("ENCRYPTION_KEY")[1]}
               </p>
             </div>
           </div>
@@ -321,18 +323,18 @@ export default function PaymentSettingsPage() {
                   Stripe
                   {settings["payment.stripe.enabled"] && (
                     <Badge variant="secondary" className="admin-status-success">
-                      Active
+                      {t("admin.payments.active")}
                     </Badge>
                   )}
                 </CardTitle>
                 <CardDescription>
-                  Accept credit/debit cards worldwide
+                  {t("admin.payments.stripeDesc")}
                 </CardDescription>
               </div>
             </div>
             <div className="flex items-center gap-2">
               <Label htmlFor="stripe-enabled" className="text-sm">
-                Enable Stripe
+                {t("admin.payments.enableStripe")}
               </Label>
               <Switch
                 id="stripe-enabled"
@@ -347,7 +349,7 @@ export default function PaymentSettingsPage() {
         <CardContent className="space-y-6">
           <div className="grid gap-4 sm:grid-cols-2">
             <div className="space-y-2">
-              <Label>Mode</Label>
+              <Label>{t("admin.payments.mode")}</Label>
               <Select
                 value={settings["payment.stripe.mode"]}
                 onValueChange={(value: "test" | "live") =>
@@ -358,30 +360,30 @@ export default function PaymentSettingsPage() {
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="test">Test Mode</SelectItem>
-                  <SelectItem value="live">Live Mode</SelectItem>
+                  <SelectItem value="test">{t("admin.payments.testMode")}</SelectItem>
+                  <SelectItem value="live">{t("admin.payments.liveMode")}</SelectItem>
                 </SelectContent>
               </Select>
               <p className="text-xs text-muted-foreground">
                 {settings["payment.stripe.mode"] === "test"
-                  ? "Test mode uses test API keys. No real charges."
-                  : "Live mode processes real payments."}
+                  ? t("admin.payments.testModeDesc")
+                  : t("admin.payments.liveModeDesc")}
               </p>
             </div>
             <div className="space-y-2">
-              <Label>Connection Status</Label>
+              <Label>{t("admin.payments.connectionStatus")}</Label>
               <div className="flex items-center gap-2">
                 {stripeConnected === null ? (
-                  <Badge variant="outline">Not Tested</Badge>
+                  <Badge variant="outline">{t("admin.payments.notTested")}</Badge>
                 ) : stripeConnected ? (
                   <Badge className="admin-status-success">
                     <CheckCircle className="h-3 w-3 mr-1" />
-                    Connected
+                    {t("admin.payments.connected")}
                   </Badge>
                 ) : (
                   <Badge variant="destructive">
                     <XCircle className="h-3 w-3 mr-1" />
-                    Not Connected
+                    {t("admin.payments.notConnected")}
                   </Badge>
                 )}
                 <Button
@@ -393,7 +395,7 @@ export default function PaymentSettingsPage() {
                   {testingStripe ? (
                     <Loader2 className="h-3 w-3 animate-spin" />
                   ) : (
-                    "Test Connection"
+                    t("admin.payments.testConnection")
                   )}
                 </Button>
               </div>
@@ -404,24 +406,24 @@ export default function PaymentSettingsPage() {
           <div className="space-y-4 pt-2">
             <div className="flex items-center gap-2">
               <Badge variant="outline" className="text-xs">
-                {settings["payment.stripe.mode"] === "test" ? "Test" : "Live"} Mode Keys
+                {settings["payment.stripe.mode"] === "test" ? t("admin.payments.testModeKeys") : t("admin.payments.liveModeKeys")}
               </Badge>
             </div>
             {settings["payment.stripe.mode"] === "test" ? (
               <>
                 <SecretInput
                   settingKey="payment.stripe.test.publishableKey"
-                  label="Publishable Key"
+                  label={t("admin.payments.publishableKey")}
                   placeholder="pk_test_..."
                 />
                 <SecretInput
                   settingKey="payment.stripe.test.secretKey"
-                  label="Secret Key"
+                  label={t("admin.payments.secretKey")}
                   placeholder="sk_test_..."
                 />
                 <SecretInput
                   settingKey="payment.stripe.test.webhookSecret"
-                  label="Webhook Secret"
+                  label={t("admin.payments.webhookSecret")}
                   placeholder="whsec_..."
                 />
               </>
@@ -429,17 +431,17 @@ export default function PaymentSettingsPage() {
               <>
                 <SecretInput
                   settingKey="payment.stripe.live.publishableKey"
-                  label="Publishable Key"
+                  label={t("admin.payments.publishableKey")}
                   placeholder="pk_live_..."
                 />
                 <SecretInput
                   settingKey="payment.stripe.live.secretKey"
-                  label="Secret Key"
+                  label={t("admin.payments.secretKey")}
                   placeholder="sk_live_..."
                 />
                 <SecretInput
                   settingKey="payment.stripe.live.webhookSecret"
-                  label="Webhook Secret"
+                  label={t("admin.payments.webhookSecret")}
                   placeholder="whsec_..."
                 />
               </>
@@ -447,7 +449,7 @@ export default function PaymentSettingsPage() {
           </div>
 
           <div className="rounded-lg border p-4 bg-muted/50 space-y-3">
-            <p className="text-sm font-medium">Webhook URL</p>
+            <p className="text-sm font-medium">{t("admin.payments.webhookUrl")}</p>
             <div className="flex items-center gap-2">
               <code className="flex-1 text-xs bg-background px-3 py-2 rounded border overflow-x-auto">
                 {appUrl}/api/webhooks/stripe
@@ -461,21 +463,21 @@ export default function PaymentSettingsPage() {
               </Button>
             </div>
             <p className="text-xs text-muted-foreground">
-              Add this URL to your Stripe Dashboard &rarr; Developers &rarr; Webhooks
+              {t("admin.payments.stripeWebhookHelp")}
             </p>
           </div>
 
           {/* Subscription Price IDs */}
           <div className="space-y-3 pt-2 border-t border-border">
             <div>
-              <p className="text-sm font-medium">Subscription Price IDs</p>
+              <p className="text-sm font-medium">{t("admin.payments.subscriptionPrices")}</p>
               <p className="text-xs text-muted-foreground mt-0.5">
-                Create recurring prices in Stripe Dashboard → Products, then paste the Price IDs here.
+                {t("admin.payments.subscriptionPricesDesc")}
               </p>
             </div>
             <div className="grid gap-3 sm:grid-cols-3">
               <div className="space-y-2">
-                <Label>Premium Plan (299 SEK/mo)</Label>
+                <Label>{t("admin.payments.premiumPlan")}</Label>
                 <Input
                   value={settings["payment.stripe.price.premium"]}
                   onChange={(e) => updateSetting("payment.stripe.price.premium", e.target.value)}
@@ -484,7 +486,7 @@ export default function PaymentSettingsPage() {
                 />
               </div>
               <div className="space-y-2">
-                <Label>Elite Plan (499 SEK/mo)</Label>
+                <Label>{t("admin.payments.elitePlan")}</Label>
                 <Input
                   value={settings["payment.stripe.price.elite"]}
                   onChange={(e) => updateSetting("payment.stripe.price.elite", e.target.value)}
@@ -493,7 +495,7 @@ export default function PaymentSettingsPage() {
                 />
               </div>
               <div className="space-y-2">
-                <Label>Vendor Plan ($19/mo)</Label>
+                <Label>{t("admin.payments.vendorPlan")}</Label>
                 <Input
                   value={settings["payment.stripe.price.vendor"]}
                   onChange={(e) => updateSetting("payment.stripe.price.vendor", e.target.value)}
@@ -511,7 +513,7 @@ export default function PaymentSettingsPage() {
               rel="noopener noreferrer"
               className="text-primary hover:underline inline-flex items-center gap-1"
             >
-              Get API Keys from Stripe Dashboard <ExternalLink className="h-3 w-3" />
+              {t("admin.payments.getStripeKeys")} <ExternalLink className="h-3 w-3" />
             </a>
           </div>
         </CardContent>
@@ -537,18 +539,18 @@ export default function PaymentSettingsPage() {
                   PayPal
                   {settings["payment.paypal.enabled"] && (
                     <Badge variant="secondary" className="admin-status-success">
-                      Active
+                      {t("admin.payments.active")}
                     </Badge>
                   )}
                 </CardTitle>
                 <CardDescription>
-                  Accept PayPal and PayPal Credit payments
+                  {t("admin.payments.paypalDesc")}
                 </CardDescription>
               </div>
             </div>
             <div className="flex items-center gap-2">
               <Label htmlFor="paypal-enabled" className="text-sm">
-                Enable PayPal
+                {t("admin.payments.enablePaypal")}
               </Label>
               <Switch
                 id="paypal-enabled"
@@ -563,7 +565,7 @@ export default function PaymentSettingsPage() {
         <CardContent className="space-y-6">
           <div className="grid gap-4 sm:grid-cols-2">
             <div className="space-y-2">
-              <Label>Mode</Label>
+              <Label>{t("admin.payments.mode")}</Label>
               <Select
                 value={settings["payment.paypal.mode"]}
                 onValueChange={(value: "sandbox" | "live") =>
@@ -574,30 +576,30 @@ export default function PaymentSettingsPage() {
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="sandbox">Sandbox Mode</SelectItem>
-                  <SelectItem value="live">Live Mode</SelectItem>
+                  <SelectItem value="sandbox">{t("admin.payments.sandboxMode")}</SelectItem>
+                  <SelectItem value="live">{t("admin.payments.liveMode")}</SelectItem>
                 </SelectContent>
               </Select>
               <p className="text-xs text-muted-foreground">
                 {settings["payment.paypal.mode"] === "sandbox"
-                  ? "Sandbox mode for testing. No real charges."
-                  : "Live mode processes real payments."}
+                  ? t("admin.payments.sandboxModeDesc")
+                  : t("admin.payments.liveModeDesc")}
               </p>
             </div>
             <div className="space-y-2">
-              <Label>Connection Status</Label>
+              <Label>{t("admin.payments.connectionStatus")}</Label>
               <div className="flex items-center gap-2">
                 {paypalConnected === null ? (
-                  <Badge variant="outline">Not Tested</Badge>
+                  <Badge variant="outline">{t("admin.payments.notTested")}</Badge>
                 ) : paypalConnected ? (
                   <Badge className="admin-status-success">
                     <CheckCircle className="h-3 w-3 mr-1" />
-                    Connected
+                    {t("admin.payments.connected")}
                   </Badge>
                 ) : (
                   <Badge variant="destructive">
                     <XCircle className="h-3 w-3 mr-1" />
-                    Not Connected
+                    {t("admin.payments.notConnected")}
                   </Badge>
                 )}
                 <Button
@@ -609,7 +611,7 @@ export default function PaymentSettingsPage() {
                   {testingPaypal ? (
                     <Loader2 className="h-3 w-3 animate-spin" />
                   ) : (
-                    "Test Connection"
+                    t("admin.payments.testConnection")
                   )}
                 </Button>
               </div>
@@ -620,24 +622,24 @@ export default function PaymentSettingsPage() {
           <div className="space-y-4 pt-2">
             <div className="flex items-center gap-2">
               <Badge variant="outline" className="text-xs">
-                {settings["payment.paypal.mode"] === "sandbox" ? "Sandbox" : "Live"} Mode Keys
+                {settings["payment.paypal.mode"] === "sandbox" ? t("admin.payments.sandboxModeKeys") : t("admin.payments.liveModeKeys")}
               </Badge>
             </div>
             {settings["payment.paypal.mode"] === "sandbox" ? (
               <>
                 <SecretInput
                   settingKey="payment.paypal.sandbox.clientId"
-                  label="Client ID"
+                  label={t("admin.payments.clientId")}
                   placeholder="Sandbox Client ID"
                 />
                 <SecretInput
                   settingKey="payment.paypal.sandbox.clientSecret"
-                  label="Client Secret"
+                  label={t("admin.payments.clientSecret")}
                   placeholder="Sandbox Client Secret"
                 />
                 <SecretInput
                   settingKey="payment.paypal.sandbox.webhookId"
-                  label="Webhook ID"
+                  label={t("admin.payments.webhookId")}
                   placeholder="Sandbox Webhook ID (optional)"
                 />
               </>
@@ -645,17 +647,17 @@ export default function PaymentSettingsPage() {
               <>
                 <SecretInput
                   settingKey="payment.paypal.live.clientId"
-                  label="Client ID"
+                  label={t("admin.payments.clientId")}
                   placeholder="Live Client ID"
                 />
                 <SecretInput
                   settingKey="payment.paypal.live.clientSecret"
-                  label="Client Secret"
+                  label={t("admin.payments.clientSecret")}
                   placeholder="Live Client Secret"
                 />
                 <SecretInput
                   settingKey="payment.paypal.live.webhookId"
-                  label="Webhook ID"
+                  label={t("admin.payments.webhookId")}
                   placeholder="Live Webhook ID (optional)"
                 />
               </>
@@ -663,7 +665,7 @@ export default function PaymentSettingsPage() {
           </div>
 
           <div className="rounded-lg border p-4 bg-muted/50 space-y-3">
-            <p className="text-sm font-medium">Webhook URL</p>
+            <p className="text-sm font-medium">{t("admin.payments.webhookUrl")}</p>
             <div className="flex items-center gap-2">
               <code className="flex-1 text-xs bg-background px-3 py-2 rounded border overflow-x-auto">
                 {appUrl}/api/webhooks/paypal
@@ -677,7 +679,7 @@ export default function PaymentSettingsPage() {
               </Button>
             </div>
             <p className="text-xs text-muted-foreground">
-              Add this URL to your PayPal Developer Dashboard &rarr; Webhooks
+              {t("admin.payments.paypalWebhookHelp")}
             </p>
           </div>
 
@@ -688,7 +690,7 @@ export default function PaymentSettingsPage() {
               rel="noopener noreferrer"
               className="text-primary hover:underline inline-flex items-center gap-1"
             >
-              Get API Keys from PayPal Developer Dashboard <ExternalLink className="h-3 w-3" />
+              {t("admin.payments.getPaypalKeys")} <ExternalLink className="h-3 w-3" />
             </a>
           </div>
         </CardContent>
@@ -703,12 +705,10 @@ export default function PaymentSettingsPage() {
             </div>
             <div className="space-y-1">
               <p className="font-medium text-[var(--ast-info-text)]">
-                Multiple Gateways Enabled
+                {t("admin.payments.multiGatewayTitle")}
               </p>
               <p className="text-sm text-[var(--ast-info-text)]">
-                When both Stripe and PayPal are enabled, customers can choose
-                their preferred payment method at checkout. This increases
-                conversion rates by offering more payment options.
+                {t("admin.payments.multiGatewayDesc")}
               </p>
             </div>
           </div>

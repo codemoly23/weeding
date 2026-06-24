@@ -129,6 +129,7 @@ const navItems: NavItem[] = [
       { title: "Menu Builder", labelKey: "admin.nav.menuBuilder", href: "/admin/appearance/header/menu" },
       { title: "Footer Builder", labelKey: "admin.nav.footerBuilder", href: "/admin/appearance/footer" },
       { title: "Theme Gallery", labelKey: "admin.nav.themeGallery", href: "/admin/appearance/themes" },
+      { title: "Website Templates", href: "/admin/appearance/wedding-templates" },
     ],
   },
   {

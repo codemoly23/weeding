@@ -123,14 +123,14 @@ function projectKey(id: string) {
   return `planner_project_${id}`;
 }
 
-export function createLocalProject(role: string): LocalProject {
+export function createLocalProject(role: string, eventType = "WEDDING"): LocalProject {
   const id = `local-${crypto.randomUUID()}`;
   const now = new Date().toISOString();
   const project: LocalProject = {
     id,
     title: "Untitled",
     role,
-    eventType: "WEDDING",
+    eventType,
     eventDate: null,
     status: "ACTIVE",
     schemaVersion: SCHEMA_VERSION,

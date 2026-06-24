@@ -9,6 +9,7 @@ import { Label } from "@/components/ui/label";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { toast } from "sonner";
 import { Separator } from "@/components/ui/separator";
+import { useLanguage } from "@/lib/i18n/language-context";
 import {
   sanitizePhone,
   sanitizeName,
@@ -28,6 +29,7 @@ interface UserProfile {
 }
 
 export default function AdminProfilePage() {
+  const { t } = useLanguage();
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [uploadingImage, setUploadingImage] = useState(false);
@@ -69,7 +71,7 @@ export default function AdminProfilePage() {
         });
       }
     } catch (error) {
-      toast.error("Failed to load profile");
+      toast.error(t("admin.profile.loadFailed"));
     } finally {
       setLoading(false);
     }
@@ -92,9 +94,9 @@ export default function AdminProfilePage() {
       if (!res.ok) throw new Error("Upload failed");
       const data = await res.json();
       setFormData((prev) => ({ ...prev, image: data.url }));
-      toast.success("Profile picture uploaded");
+      toast.success(t("admin.profile.uploadSuccess"));
     } catch (error) {
-      toast.error("Failed to upload image");
+      toast.error(t("admin.profile.uploadFailed"));
     } finally {
       setUploadingImage(false);
     }
@@ -118,9 +120,9 @@ export default function AdminProfilePage() {
 
       const data = await res.json();
       setProfile(data);
-      toast.success("Profile updated successfully");
+      toast.success(t("admin.profile.updateSuccess"));
     } catch (error) {
-      toast.error("Failed to update profile");
+      toast.error(t("admin.profile.updateFailed"));
     } finally {
       setSaving(false);
     }
@@ -130,12 +132,12 @@ export default function AdminProfilePage() {
     e.preventDefault();
 
     if (passwordData.newPassword !== passwordData.confirmPassword) {
-      toast.error("New passwords do not match");
+      toast.error(t("admin.profile.passwordMismatch"));
       return;
     }
 
     if (passwordData.newPassword.length < 8) {
-      toast.error("Password must be at least 8 characters");
+      toast.error(t("admin.profile.passwordTooShort"));
       return;
     }
 
@@ -155,14 +157,14 @@ export default function AdminProfilePage() {
         throw new Error(error.error || "Failed to change password");
       }
 
-      toast.success("Password changed successfully");
+      toast.success(t("admin.profile.passwordChanged"));
       setPasswordData({
         currentPassword: "",
         newPassword: "",
         confirmPassword: "",
       });
     } catch (error: any) {
-      toast.error(error.message || "Failed to change password");
+      toast.error(error.message || t("admin.profile.passwordChangeFailed"));
     } finally {
       setSaving(false);
     }
@@ -189,9 +191,9 @@ export default function AdminProfilePage() {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-2xl font-bold">Profile Settings</h1>
+        <h1 className="text-2xl font-bold">{t("admin.profile.title")}</h1>
         <p className="text-muted-foreground">
-          Manage your account settings and preferences
+          {t("admin.profile.subtitle")}
         </p>
       </div>
 
@@ -199,9 +201,9 @@ export default function AdminProfilePage() {
         {/* Profile Picture */}
         <Card className="lg:col-span-1">
           <CardHeader>
-            <CardTitle>Profile Picture</CardTitle>
+            <CardTitle>{t("admin.profile.pictureTitle")}</CardTitle>
             <CardDescription>
-              Upload a profile picture for your account
+              {t("admin.profile.pictureDesc")}
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
@@ -233,7 +235,7 @@ export default function AdminProfilePage() {
                       <Upload className="h-4 w-4" />
                     )}
                     <span className="text-sm">
-                      {uploadingImage ? "Uploading..." : "Upload Photo"}
+                      {uploadingImage ? t("admin.profile.uploading") : t("admin.profile.uploadPhoto")}
                     </span>
                   </div>
                   <Input
@@ -246,7 +248,7 @@ export default function AdminProfilePage() {
                   />
                 </Label>
                 <p className="text-xs text-muted-foreground">
-                  JPG, PNG or GIF. Max 5MB.
+                  {t("admin.profile.photoHint")}
                 </p>
               </div>
             </div>
@@ -256,28 +258,28 @@ export default function AdminProfilePage() {
         {/* Profile Information */}
         <Card className="lg:col-span-2">
           <CardHeader>
-            <CardTitle>Personal Information</CardTitle>
+            <CardTitle>{t("admin.profile.infoTitle")}</CardTitle>
             <CardDescription>
-              Update your personal details and contact information
+              {t("admin.profile.infoDesc")}
             </CardDescription>
           </CardHeader>
           <CardContent>
             <form onSubmit={handleUpdateProfile} className="space-y-4">
               <div className="grid gap-4 sm:grid-cols-2">
                 <div className="space-y-2">
-                  <Label htmlFor="name">Full Name</Label>
+                  <Label htmlFor="name">{t("admin.profile.fullName")}</Label>
                   <Input
                     id="name"
                     value={formData.name}
                     onChange={(e) =>
                       setFormData({ ...formData, name: sanitizeName(e.target.value, INPUT_LIMITS.name.max) })
                     }
-                    placeholder="Enter your full name"
+                    placeholder={t("admin.profile.fullNamePlaceholder")}
                     maxLength={INPUT_LIMITS.name.max}
                   />
                 </div>
                 <div className="space-y-2">
-                  <Label htmlFor="email">Email</Label>
+                  <Label htmlFor="email">{t("admin.profile.email")}</Label>
                   <Input
                     id="email"
                     type="email"
@@ -294,7 +296,7 @@ export default function AdminProfilePage() {
 
               <div className="grid gap-4 sm:grid-cols-2">
                 <div className="space-y-2">
-                  <Label htmlFor="phone">Phone</Label>
+                  <Label htmlFor="phone">{t("admin.profile.phone")}</Label>
                   <Input
                     id="phone"
                     type="tel"
@@ -307,7 +309,7 @@ export default function AdminProfilePage() {
                   />
                 </div>
                 <div className="space-y-2">
-                  <Label htmlFor="country">Country</Label>
+                  <Label htmlFor="country">{t("admin.profile.country")}</Label>
                   <Input
                     id="country"
                     value={formData.country}
@@ -323,7 +325,7 @@ export default function AdminProfilePage() {
               {profile && (
                 <div className="rounded-lg border bg-muted/50 p-3">
                   <p className="text-sm text-muted-foreground">
-                    <span className="font-medium">Role:</span>{" "}
+                    <span className="font-medium">{t("admin.profile.role")}</span>{" "}
                     <span className="capitalize">{profile.role.toLowerCase()}</span>
                   </p>
                 </div>
@@ -334,12 +336,12 @@ export default function AdminProfilePage() {
                   {saving ? (
                     <>
                       <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                      Saving...
+                      {t("admin.profile.saving")}
                     </>
                   ) : (
                     <>
                       <Save className="mr-2 h-4 w-4" />
-                      Save Changes
+                      {t("common.saveChanges")}
                     </>
                   )}
                 </Button>
@@ -352,15 +354,15 @@ export default function AdminProfilePage() {
       {/* Change Password */}
       <Card>
         <CardHeader>
-          <CardTitle>Change Password</CardTitle>
+          <CardTitle>{t("admin.profile.passwordTitle")}</CardTitle>
           <CardDescription>
-            Update your password to keep your account secure
+            {t("admin.profile.passwordDesc")}
           </CardDescription>
         </CardHeader>
         <CardContent>
           <form onSubmit={handleChangePassword} className="space-y-4 max-w-md">
             <div className="space-y-2">
-              <Label htmlFor="currentPassword">Current Password</Label>
+              <Label htmlFor="currentPassword">{t("admin.profile.currentPassword")}</Label>
               <div className="relative">
                 <Input
                   id="currentPassword"
@@ -372,7 +374,7 @@ export default function AdminProfilePage() {
                       currentPassword: e.target.value,
                     })
                   }
-                  placeholder="Enter current password"
+                  placeholder={t("admin.profile.currentPasswordPlaceholder")}
                   required
                 />
                 <Button
@@ -394,7 +396,7 @@ export default function AdminProfilePage() {
             <Separator />
 
             <div className="space-y-2">
-              <Label htmlFor="newPassword">New Password</Label>
+              <Label htmlFor="newPassword">{t("admin.profile.newPassword")}</Label>
               <div className="relative">
                 <Input
                   id="newPassword"
@@ -406,7 +408,7 @@ export default function AdminProfilePage() {
                       newPassword: e.target.value,
                     })
                   }
-                  placeholder="Enter new password"
+                  placeholder={t("admin.profile.newPasswordPlaceholder")}
                   required
                 />
                 <Button
@@ -424,12 +426,12 @@ export default function AdminProfilePage() {
                 </Button>
               </div>
               <p className="text-xs text-muted-foreground">
-                Minimum 8 characters
+                {t("admin.profile.passwordHint")}
               </p>
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="confirmPassword">Confirm New Password</Label>
+              <Label htmlFor="confirmPassword">{t("admin.profile.confirmPassword")}</Label>
               <div className="relative">
                 <Input
                   id="confirmPassword"
@@ -441,7 +443,7 @@ export default function AdminProfilePage() {
                       confirmPassword: e.target.value,
                     })
                   }
-                  placeholder="Confirm new password"
+                  placeholder={t("admin.profile.confirmPasswordPlaceholder")}
                   required
                 />
                 <Button
@@ -465,12 +467,12 @@ export default function AdminProfilePage() {
                 {saving ? (
                   <>
                     <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                    Changing...
+                    {t("admin.profile.changing")}
                   </>
                 ) : (
                   <>
                     <Lock className="mr-2 h-4 w-4" />
-                    Change Password
+                    {t("admin.profile.changePassword")}
                   </>
                 )}
               </Button>

@@ -312,15 +312,15 @@ export default function MediaStorageSettingsPage() {
             </div>
             <div className="space-y-2">
               <p className="font-medium text-[var(--ast-info-text)]">
-                How to Set Up Cloudflare R2
+                {t("admin.mediaStorage.helpTitle")}
               </p>
               <ol className="text-sm text-[var(--ast-info-text)] space-y-1 list-decimal list-inside">
-                <li>Go to Cloudflare Dashboard and enable R2</li>
-                <li>Create a new bucket (e.g., "ceremoney-media")</li>
-                <li>Go to R2 &gt; Manage R2 API Tokens &gt; Create API Token</li>
-                <li>Select "Object Read & Write" permission for your bucket</li>
-                <li>Copy the Access Key ID and Secret Access Key</li>
-                <li>(Optional) Set up a custom domain for public access</li>
+                <li>{t("admin.mediaStorage.helpStep1")}</li>
+                <li>{t("admin.mediaStorage.helpStep2")}</li>
+                <li>{t("admin.mediaStorage.helpStep3")}</li>
+                <li>{t("admin.mediaStorage.helpStep4")}</li>
+                <li>{t("admin.mediaStorage.helpStep5")}</li>
+                <li>{t("admin.mediaStorage.helpStep6")}</li>
               </ol>
               <a
                 href="https://developers.cloudflare.com/r2/get-started/"
@@ -328,7 +328,7 @@ export default function MediaStorageSettingsPage() {
                 rel="noopener noreferrer"
                 className="inline-flex items-center gap-1 text-sm text-[var(--ast-info-icon)] hover:underline mt-2"
               >
-                View Documentation <ExternalLink className="h-3 w-3" />
+                {t("admin.mediaStorage.viewDocs")} <ExternalLink className="h-3 w-3" />
               </a>
             </div>
           </div>

@@ -32,6 +32,7 @@ import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
 import { cn } from "@/lib/utils";
 import { toast } from "sonner";
+import { useLanguage } from "@/lib/i18n/language-context";
 import type { FooterPreset } from "@/lib/header-footer/types";
 
 interface PresetGalleryProps {
@@ -39,12 +40,12 @@ interface PresetGalleryProps {
   onPresetApplied: () => void;
 }
 
-const categoryLabels: Record<string, string> = {
-  minimal: "Minimal",
-  professional: "Professional",
-  modern: "Modern",
-  creative: "Creative",
-  industry: "Industry",
+const categoryLabelKeys: Record<string, string> = {
+  minimal: "admin.footer.categoryMinimal",
+  professional: "admin.footer.categoryProfessional",
+  modern: "admin.footer.categoryModern",
+  creative: "admin.footer.categoryCreative",
+  industry: "admin.footer.categoryIndustry",
 };
 
 const categoryColors: Record<string, string> = {
@@ -56,6 +57,7 @@ const categoryColors: Record<string, string> = {
 };
 
 export function PresetGallery({ footerId, onPresetApplied }: PresetGalleryProps) {
+  const { t } = useLanguage();
   const [presets, setPresets] = useState<FooterPreset[]>([]);
   const [loading, setLoading] = useState(true);
   const [applying, setApplying] = useState(false);
@@ -63,6 +65,10 @@ export function PresetGallery({ footerId, onPresetApplied }: PresetGalleryProps)
   const [previewPreset, setPreviewPreset] = useState<FooterPreset | null>(null);
   const [categoryFilter, setCategoryFilter] = useState<string>("all");
   const [preserveWidgets, setPreserveWidgets] = useState(false);
+  const getCategoryLabel = (cat: string) => {
+    const key = categoryLabelKeys[cat];
+    return key ? t(key) : cat;
+  };
 
   // Fetch presets
   useEffect(() => {
@@ -78,7 +84,7 @@ export function PresetGallery({ footerId, onPresetApplied }: PresetGalleryProps)
       setPresets(data.presets || []);
     } catch (error) {
       console.error("Error fetching presets:", error);
-      toast.error("Failed to load presets");
+      toast.error(t("admin.footer.presetsLoadFailed"));
     } finally {
       setLoading(false);
     }
@@ -102,12 +108,12 @@ export function PresetGallery({ footerId, onPresetApplied }: PresetGalleryProps)
       if (!response.ok) throw new Error("Failed to apply preset");
 
       const data = await response.json();
-      toast.success(data.message || "Preset applied successfully!");
+      toast.success(data.message || t("admin.footer.presetAppliedSuccess"));
       setSelectedPreset(null);
       onPresetApplied();
     } catch (error) {
       console.error("Error applying preset:", error);
-      toast.error("Failed to apply preset");
+      toast.error(t("admin.footer.presetApplyFailed"));
     } finally {
       setApplying(false);
     }
@@ -135,10 +141,10 @@ export function PresetGallery({ footerId, onPresetApplied }: PresetGalleryProps)
         <div>
           <h3 className="text-lg font-semibold flex items-center gap-2">
             <Sparkles className="h-5 w-5 text-primary" />
-            Footer Presets
+            {t("admin.footer.presetsTitle")}
           </h3>
           <p className="text-sm text-muted-foreground">
-            Choose a preset to quickly style your footer
+            {t("admin.footer.presetsSubtitle")}
           </p>
         </div>
 
@@ -147,12 +153,12 @@ export function PresetGallery({ footerId, onPresetApplied }: PresetGalleryProps)
           <Filter className="h-4 w-4 text-muted-foreground" />
           <Select value={categoryFilter} onValueChange={setCategoryFilter}>
             <SelectTrigger className="w-[150px]">
-              <SelectValue placeholder="Filter" />
+              <SelectValue placeholder={t("admin.footer.filterPlaceholder")} />
             </SelectTrigger>
             <SelectContent>
               {categories.map((cat) => (
                 <SelectItem key={cat} value={cat}>
-                  {cat === "all" ? "All Categories" : categoryLabels[cat] || cat}
+                  {cat === "all" ? t("admin.footer.allCategories") : getCategoryLabel(cat)}
                 </SelectItem>
               ))}
             </SelectContent>
@@ -175,7 +181,7 @@ export function PresetGallery({ footerId, onPresetApplied }: PresetGalleryProps)
       {filteredPresets.length === 0 && (
         <div className="text-center py-12 text-muted-foreground">
           <LayoutGrid className="h-12 w-12 mx-auto mb-4 opacity-50" />
-          <p>No presets found for this category</p>
+          <p>{t("admin.footer.noPresetsFound")}</p>
         </div>
       )}
 
@@ -183,9 +189,9 @@ export function PresetGallery({ footerId, onPresetApplied }: PresetGalleryProps)
       <Dialog open={!!selectedPreset} onOpenChange={() => setSelectedPreset(null)}>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>Apply Preset: {selectedPreset?.name}</DialogTitle>
+            <DialogTitle>{t("admin.footer.applyPresetTitle", { name: selectedPreset?.name ?? "" })}</DialogTitle>
             <DialogDescription>
-              This will update your footer styling with the selected preset configuration.
+              {t("admin.footer.applyPresetDesc")}
             </DialogDescription>
           </DialogHeader>
 
@@ -256,7 +262,7 @@ export function PresetGallery({ footerId, onPresetApplied }: PresetGalleryProps)
             {/* Color Palette */}
             {selectedPreset?.colorPalette && (
               <div className="flex items-center gap-2">
-                <span className="text-sm text-muted-foreground">Colors:</span>
+                <span className="text-sm text-muted-foreground">{t("admin.footer.colorsLabel")}</span>
                 <div className="flex gap-1">
                   {Object.values(selectedPreset.colorPalette).map((color, i) => (
                     <div
@@ -273,9 +279,9 @@ export function PresetGallery({ footerId, onPresetApplied }: PresetGalleryProps)
             {/* Preserve Widgets Option */}
             <div className="flex items-center justify-between rounded-lg border p-3">
               <div className="space-y-0.5">
-                <Label htmlFor="preserve-widgets">Preserve existing widgets</Label>
+                <Label htmlFor="preserve-widgets">{t("admin.footer.preserveWidgets")}</Label>
                 <p className="text-xs text-muted-foreground">
-                  Keep your current widget configuration
+                  {t("admin.footer.preserveWidgetsDesc")}
                 </p>
               </div>
               <Switch
@@ -288,18 +294,18 @@ export function PresetGallery({ footerId, onPresetApplied }: PresetGalleryProps)
 
           <DialogFooter>
             <Button variant="outline" onClick={() => setSelectedPreset(null)}>
-              Cancel
+              {t("admin.footer.cancel")}
             </Button>
             <Button onClick={handleApplyPreset} disabled={applying}>
               {applying ? (
                 <>
                   <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                  Applying...
+                  {t("admin.footer.applying")}
                 </>
               ) : (
                 <>
                   <Check className="mr-2 h-4 w-4" />
-                  Apply Preset
+                  {t("admin.footer.applyPreset")}
                 </>
               )}
             </Button>
@@ -398,13 +404,13 @@ export function PresetGallery({ footerId, onPresetApplied }: PresetGalleryProps)
             {/* Preset Details */}
             <div className="mt-4 grid grid-cols-2 gap-4">
               <div>
-                <h4 className="text-sm font-medium mb-2">Category</h4>
+                <h4 className="text-sm font-medium mb-2">{t("admin.footer.categoryHeading")}</h4>
                 <Badge className={cn(categoryColors[previewPreset?.category || ""])}>
-                  {categoryLabels[previewPreset?.category || ""] || previewPreset?.category}
+                  {getCategoryLabel(previewPreset?.category || "")}
                 </Badge>
               </div>
               <div>
-                <h4 className="text-sm font-medium mb-2">Tags</h4>
+                <h4 className="text-sm font-medium mb-2">{t("admin.footer.tagsHeading")}</h4>
                 <div className="flex flex-wrap gap-1">
                   {previewPreset?.tags?.map((tag) => (
                     <Badge key={tag} variant="outline" className="text-xs">
@@ -419,7 +425,7 @@ export function PresetGallery({ footerId, onPresetApplied }: PresetGalleryProps)
           <DialogFooter>
             <Button variant="outline" onClick={() => setPreviewPreset(null)}>
               <X className="mr-2 h-4 w-4" />
-              Close
+              {t("admin.footer.close")}
             </Button>
             <Button
               onClick={() => {
@@ -428,7 +434,7 @@ export function PresetGallery({ footerId, onPresetApplied }: PresetGalleryProps)
               }}
             >
               <Check className="mr-2 h-4 w-4" />
-              Use This Preset
+              {t("admin.footer.useThisPreset")}
             </Button>
           </DialogFooter>
         </DialogContent>
@@ -447,7 +453,12 @@ function PresetCard({
   onSelect: () => void;
   onPreview: () => void;
 }) {
+  const { t } = useLanguage();
   const [isHovered, setIsHovered] = useState(false);
+  const getCategoryLabel = (cat: string) => {
+    const key = categoryLabelKeys[cat];
+    return key ? t(key) : cat;
+  };
 
   return (
     <Card
@@ -527,11 +538,11 @@ function PresetCard({
             }}
           >
             <Eye className="h-4 w-4 mr-1" />
-            Preview
+            {t("admin.footer.preview")}
           </Button>
           <Button size="sm" onClick={onSelect}>
             <Check className="h-4 w-4 mr-1" />
-            Apply
+            {t("admin.footer.apply")}
           </Button>
         </div>
 
@@ -541,7 +552,7 @@ function PresetCard({
             className="absolute top-2 right-2 bg-primary/90"
             variant="default"
           >
-            Built-in
+            {t("admin.footer.builtIn")}
           </Badge>
         )}
       </div>
@@ -555,7 +566,7 @@ function PresetCard({
               variant="secondary"
               className={cn("mt-1 text-xs", categoryColors[preset.category])}
             >
-              {categoryLabels[preset.category] || preset.category}
+              {getCategoryLabel(preset.category)}
             </Badge>
           </div>
         </div>
