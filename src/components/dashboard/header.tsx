@@ -18,12 +18,19 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { LanguageSwitcher } from "@/components/layout/header/components/LanguageSwitcher";
 import { useLanguage } from "@/lib/i18n/language-context";
+import { DashboardThemeToggle } from "@/components/theme/dashboard-theme-toggle";
 
 interface DashboardHeaderProps {
   onMenuClick?: () => void;
+  isDark?: boolean;
+  onThemeToggle?: () => void;
 }
 
-export function DashboardHeader({ onMenuClick }: DashboardHeaderProps) {
+export function DashboardHeader({
+  onMenuClick,
+  isDark = false,
+  onThemeToggle,
+}: DashboardHeaderProps) {
   const { data: session } = useSession();
   const { t } = useLanguage();
 
@@ -70,6 +77,9 @@ export function DashboardHeader({ onMenuClick }: DashboardHeaderProps) {
       {/* Right side */}
       <div className="flex items-center gap-2">
         <LanguageSwitcher />
+        {onThemeToggle && (
+          <DashboardThemeToggle isDark={isDark} onToggle={onThemeToggle} />
+        )}
 
         {/* Notifications */}
         <DropdownMenu>

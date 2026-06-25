@@ -2572,7 +2572,7 @@ export default function SeatingPage() {
 
   return (
     <>
-    <div className="min-h-full bg-[#ede9f0] px-4 py-10">
+    <div className="dashboard-soft-section min-h-full bg-[#ede9f0] px-4 py-10">
       <div className="mx-auto max-w-4xl">
 
         {/* Title */}

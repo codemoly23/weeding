@@ -4,6 +4,7 @@ import { useState } from "react";
 import { DashboardSidebar } from "@/components/dashboard/sidebar";
 import { DashboardHeader } from "@/components/dashboard/header";
 import { Sheet, SheetContent, SheetTitle } from "@/components/ui/sheet";
+import { useDashboardTheme } from "@/hooks/use-dashboard-theme";
 
 export default function DashboardLayout({
   children,
@@ -12,9 +13,10 @@ export default function DashboardLayout({
 }) {
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const { isDark, toggleTheme } = useDashboardTheme("dashboard-theme");
 
   return (
-    <div className="flex h-screen overflow-hidden bg-muted/30">
+    <div className={`dashboard-layout flex h-screen overflow-hidden bg-muted/30 ${isDark ? "theme-dark" : ""}`}>
       {/* Desktop Sidebar */}
       <div className="hidden lg:block">
         <DashboardSidebar
@@ -33,7 +35,11 @@ export default function DashboardLayout({
 
       {/* Main Content */}
       <div className="flex flex-1 flex-col overflow-hidden">
-        <DashboardHeader onMenuClick={() => setMobileMenuOpen(true)} />
+        <DashboardHeader
+          onMenuClick={() => setMobileMenuOpen(true)}
+          isDark={isDark}
+          onThemeToggle={toggleTheme}
+        />
         <main id="main-content" className="flex-1 overflow-y-auto p-4 lg:p-6">
           {children}
         </main>

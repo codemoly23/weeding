@@ -21,6 +21,7 @@ import {
   AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import { toast } from "sonner";
+import { SendEmailModal } from "@/components/admin/send-email-modal";
 
 interface Order {
   id: string;
@@ -82,6 +83,7 @@ export default function AdminCustomerDetailPage() {
   const [loading, setLoading] = useState(true);
   const [resetting, setResetting] = useState(false);
   const [disabling, setDisabling] = useState(false);
+  const [emailModalOpen, setEmailModalOpen] = useState(false);
 
   useEffect(() => {
     fetch(`/api/admin/customers/${id}`)
@@ -180,7 +182,7 @@ export default function AdminCustomerDetailPage() {
         <Button
           variant="outline"
           size="sm"
-          onClick={() => window.open(`mailto:${customer.email}`, "_blank")}
+          onClick={() => setEmailModalOpen(true)}
         >
           <Mail className="mr-2 h-4 w-4" />
           Send Email
@@ -352,7 +354,7 @@ export default function AdminCustomerDetailPage() {
               <Button
                 variant="outline"
                 className="w-full justify-start"
-                onClick={() => window.open(`mailto:${customer.email}`, "_blank")}
+                onClick={() => setEmailModalOpen(true)}
               >
                 <Mail className="mr-2 h-4 w-4" />
                 Send Email
@@ -437,6 +439,13 @@ export default function AdminCustomerDetailPage() {
           </Card>
         </div>
       </div>
+
+      <SendEmailModal
+        open={emailModalOpen}
+        onOpenChange={setEmailModalOpen}
+        recipientEmail={customer.email}
+        recipientName={customer.name}
+      />
     </div>
   );
 }

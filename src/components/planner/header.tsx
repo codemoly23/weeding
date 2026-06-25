@@ -16,13 +16,21 @@ import {
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { useLanguage } from "@/lib/i18n/language-context";
 import { LanguageSwitcher } from "@/components/layout/header/components/LanguageSwitcher";
+import { DashboardThemeToggle } from "@/components/theme/dashboard-theme-toggle";
 
 interface PlannerHeaderProps {
   onMenuClick?: () => void;
   projectId?: string;
+  isDark?: boolean;
+  onThemeToggle?: () => void;
 }
 
-export function PlannerHeader({ onMenuClick, projectId }: PlannerHeaderProps) {
+export function PlannerHeader({
+  onMenuClick,
+  projectId,
+  isDark = false,
+  onThemeToggle,
+}: PlannerHeaderProps) {
   const { data: session } = useSession();
   const { t } = useLanguage();
   const isLoggedIn = !!session?.user?.id;
@@ -60,6 +68,9 @@ export function PlannerHeader({ onMenuClick, projectId }: PlannerHeaderProps) {
 
       <div className="flex items-center gap-2">
         <LanguageSwitcher />
+        {onThemeToggle && (
+          <DashboardThemeToggle isDark={isDark} onToggle={onThemeToggle} />
+        )}
 
         <Link href="/planner">
           <Button variant="ghost" size="sm" className="gap-2 text-foreground/80 hover:text-foreground hover:bg-muted/50">

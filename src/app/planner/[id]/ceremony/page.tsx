@@ -313,7 +313,7 @@ export default function CeremonyPage() {
 
   if (loading) {
     return (
-      <div className="flex h-full items-center justify-center bg-[#ede9f0]">
+      <div className="dashboard-soft-section flex h-full items-center justify-center bg-[#ede9f0]">
         <div className="h-5 w-5 animate-spin rounded-full border-2 border-muted border-t-primary" />
       </div>
     );
@@ -321,7 +321,7 @@ export default function CeremonyPage() {
 
   return (
     <>
-    <div className="min-h-full bg-[#ede9f0] px-4 py-10">
+    <div className="dashboard-soft-section min-h-full bg-[#ede9f0] px-4 py-10">
       <div className="mx-auto max-w-3xl">
 
         {/* Title */}

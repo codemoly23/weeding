@@ -23,6 +23,7 @@ import {
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { toast } from "sonner";
 import { useLanguage } from "@/lib/i18n/language-context";
+import { SendEmailModal } from "@/components/admin/send-email-modal";
 
 interface Customer {
   id: string;
@@ -60,6 +61,7 @@ export default function AdminCustomersPage() {
   const [loading, setLoading] = useState(true);
   const [disableTarget, setDisableTarget] = useState<Customer | null>(null);
   const [disabling, setDisabling] = useState(false);
+  const [emailTarget, setEmailTarget] = useState<Customer | null>(null);
 
   const fetchCustomers = useCallback(async (q: string, p: number) => {
     setLoading(true);
@@ -196,21 +198,28 @@ export default function AdminCustomersPage() {
               </TableHeader>
               <TableBody>
                 {customers.map((customer) => (
-                  <TableRow key={customer.id}>
+                  <TableRow key={customer.id} className={customer.isActive === false ? "opacity-60 bg-muted/40" : ""}>
                     <TableCell>
                       <div className="flex items-center gap-3">
                         <Avatar>
-                          <AvatarFallback className="bg-primary/10 text-primary text-xs">
+                          <AvatarFallback className={`text-xs ${customer.isActive === false ? "bg-muted text-muted-foreground" : "bg-primary/10 text-primary"}`}>
                             {initials(customer.name)}
                           </AvatarFallback>
                         </Avatar>
                         <div>
-                          <Link
-                            href={`/admin/customers/${customer.id}`}
-                            className="font-medium hover:underline"
-                          >
-                            {customer.name}
-                          </Link>
+                          <div className="flex items-center gap-2">
+                            <Link
+                              href={`/admin/customers/${customer.id}`}
+                              className="font-medium hover:underline"
+                            >
+                              {customer.name}
+                            </Link>
+                            {customer.isActive === false && (
+                              <Badge variant="secondary" className="text-xs px-1.5 py-0 bg-red-100 text-red-600 border-red-200">
+                                Disabled
+                              </Badge>
+                            )}
+                          </div>
                           <p className="text-xs text-muted-foreground">{customer.email}</p>
                         </div>
                       </div>
@@ -242,7 +251,7 @@ export default function AdminCustomersPage() {
                             </Link>
                           </DropdownMenuItem>
                           <DropdownMenuItem
-                            onClick={() => window.open(`mailto:${customer.email}`, "_blank")}
+                            onClick={() => setEmailTarget(customer)}
                           >
                             <Mail className="mr-2 h-4 w-4" />
                             {t("admin.orders.sendEmail")}
@@ -319,6 +328,16 @@ export default function AdminCustomersPage() {
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>
+
+      {/* Send Email Modal */}
+      {emailTarget && (
+        <SendEmailModal
+          open={!!emailTarget}
+          onOpenChange={(open) => { if (!open) setEmailTarget(null); }}
+          recipientEmail={emailTarget.email}
+          recipientName={emailTarget.name}
+        />
+      )}
     </div>
   );
 }

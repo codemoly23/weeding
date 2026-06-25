@@ -324,7 +324,7 @@ const SeatingCanvas = forwardRef<{ downloadImage: () => void }, Props>(function 
       {/* Hint */}
       {layout.tables.length === 0 && (
         <div className="pointer-events-none absolute inset-0 flex items-center justify-center">
-          <div className="rounded-2xl bg-white/80 px-6 py-4 text-center shadow backdrop-blur-sm">
+          <div className="dashboard-glass-surface rounded-2xl bg-white/80 px-6 py-4 text-center shadow backdrop-blur-sm">
             <p className="text-sm font-medium text-foreground">Canvas is empty</p>
             <p className="mt-1 text-xs text-muted-foreground">Click &quot;Add Table&quot; in the toolbar to place tables.</p>
             <p className="mt-1 text-xs text-muted-foreground">Double-click a table to assign guests. Drag to reposition.</p>
