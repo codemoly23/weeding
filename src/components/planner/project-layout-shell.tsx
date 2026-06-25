@@ -7,6 +7,7 @@ import { AnonymousBanner } from "@/components/planner/anonymous-banner";
 import { Sheet, SheetContent, SheetTitle } from "@/components/ui/sheet";
 import { getLocalProject } from "@/lib/planner-storage";
 import { PlannerProvider } from "@/lib/planner-context";
+import { useDashboardTheme } from "@/hooks/use-dashboard-theme";
 
 export function PlannerProjectLayoutShell({
   children,
@@ -23,6 +24,7 @@ export function PlannerProjectLayoutShell({
   const [eventDate, setEventDate] = useState<string | null>(null);
   const [initialBride, setInitialBride] = useState("");
   const [initialGroom, setInitialGroom] = useState("");
+  const { isDark, toggleTheme } = useDashboardTheme("planner-theme");
 
   useEffect(() => {
     if (!projectId) return;
@@ -57,7 +59,7 @@ export function PlannerProjectLayoutShell({
 
   return (
     <PlannerProvider initialBrideName={initialBride} initialGroomName={initialGroom}>
-      <div className="flex h-screen flex-col overflow-hidden bg-background">
+      <div className={`planner-layout flex h-screen flex-col overflow-hidden bg-background ${isDark ? "theme-dark" : ""}`}>
         <AnonymousBanner projectId={projectId} />
 
         <div className="flex flex-1 overflow-hidden">
@@ -85,7 +87,12 @@ export function PlannerProjectLayoutShell({
           </Sheet>
 
           <div className="flex flex-1 min-h-0 flex-col overflow-hidden">
-            <PlannerHeader onMenuClick={() => setMobileMenuOpen(true)} projectId={projectId} />
+            <PlannerHeader
+              onMenuClick={() => setMobileMenuOpen(true)}
+              projectId={projectId}
+              isDark={isDark}
+              onThemeToggle={toggleTheme}
+            />
             <main id="main-content" className="flex-1 min-h-0 overflow-y-auto p-4 lg:p-6">{children}</main>
           </div>
         </div>

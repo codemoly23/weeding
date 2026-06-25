@@ -4,6 +4,7 @@ import { useState, useEffect, useCallback, useMemo } from "react";
 import Link from "next/link";
 import {
   Package,
+  Plus,
   Search,
   Download,
   MoreHorizontal,
@@ -435,6 +436,12 @@ export default function AdminOrdersPage() {
               <Download className="mr-2 h-4 w-4" />
             )}
             {t("common.export")}
+          </Button>
+          <Button asChild className="bg-[var(--admin-primary)] hover:bg-[var(--admin-primary-hover)] text-[var(--admin-primary-fg)] border-0">
+            <Link href="/admin/orders/new">
+              <Plus className="mr-2 h-4 w-4" />
+              {t("admin.dashboard.newOrder")}
+            </Link>
           </Button>
         </div>
       </div>

@@ -4,6 +4,7 @@
 @import "../styles/heading-animations.css";
 @import "../styles/text-block.css";
 @import "../styles/service-prose.css";
+@import "../styles/dashboard-tokens.css";
 
 @theme inline {
   /* Heartbeat Animation */

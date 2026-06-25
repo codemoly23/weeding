@@ -492,7 +492,7 @@ export default function PlannerOverviewPage() {
       </div>
 
       {/* ── Reference sections (lavender bg) ────────────────────────────── */}
-      <div className="-mx-4 lg:-mx-6 mt-10 bg-[#ebe8f1] px-4 lg:px-6 py-10 -mb-4 lg:-mb-6">
+      <div className="dashboard-soft-section -mx-4 lg:-mx-6 mt-10 bg-[#ebe8f1] px-4 lg:px-6 py-10 -mb-4 lg:-mb-6">
         <h2 className="text-center text-2xl font-light text-foreground/80 mb-1 tracking-wide">{t("overview.sectionTitle")}</h2>
         <p className="text-center text-sm text-muted-foreground mb-8">
           {t("overview.sectionSubtitle")}

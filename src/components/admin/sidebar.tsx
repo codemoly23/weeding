@@ -329,7 +329,7 @@ export function AdminSidebar({ mobile = false, onNavigate }: { mobile?: boolean;
                   className="h-8 w-8 rounded-lg object-contain"
                 />
               )}
-              <span className="font-bold">{config.name} Admin</span>
+              <span className="truncate text-sm font-bold">{config.name} Admin</span>
             </Link>
           )}
           {!mobile && (
@@ -349,7 +349,7 @@ export function AdminSidebar({ mobile = false, onNavigate }: { mobile?: boolean;
         </div>
 
         {/* Navigation */}
-        <nav className="flex-1 space-y-1 overflow-y-auto p-2">
+        <nav className="flex-1 space-y-1.5 overflow-y-auto p-3">
           {allNavItems.map((item) => {
             const Icon = item.icon;
 
@@ -363,8 +363,8 @@ export function AdminSidebar({ mobile = false, onNavigate }: { mobile?: boolean;
                       <Button
                         variant="ghost"
                         className={cn(
-                          "w-full justify-center text-[var(--admin-muted)] hover:bg-[var(--admin-hover)] hover:text-[var(--admin-text)]",
-                          isChildActive(item.children) && "bg-[var(--admin-active-bg)] text-[var(--admin-active-text)]"
+                          "h-10 w-full rounded-lg justify-center text-[var(--admin-muted)] hover:bg-[var(--admin-hover)] hover:text-[var(--admin-text)]",
+                          isChildActive(item.children) && "bg-[var(--admin-active-bg)] text-[var(--admin-active-text)] shadow-sm shadow-purple-950/20 hover:bg-[var(--admin-active-bg)] hover:text-[var(--admin-active-text)]"
                         )}
                       >
                         <Icon className="h-5 w-5" />
@@ -401,8 +401,8 @@ export function AdminSidebar({ mobile = false, onNavigate }: { mobile?: boolean;
                     <Button
                       variant="ghost"
                       className={cn(
-                        "w-full justify-between text-[var(--admin-muted)] hover:bg-[var(--admin-hover)] hover:text-[var(--admin-text)]",
-                        isChildActive(item.children) && "bg-[var(--admin-active-bg)] text-[var(--admin-active-text)]"
+                        "h-10 w-full rounded-lg justify-between px-3 text-sm font-semibold text-[var(--admin-muted)] hover:bg-[var(--admin-hover)] hover:text-[var(--admin-text)]",
+                        isChildActive(item.children) && "bg-[var(--admin-active-bg)] text-[var(--admin-active-text)] shadow-sm shadow-purple-950/20 hover:bg-[var(--admin-active-bg)] hover:text-[var(--admin-active-text)]"
                       )}
                     >
                       <span className="flex items-center gap-3">
@@ -417,7 +417,7 @@ export function AdminSidebar({ mobile = false, onNavigate }: { mobile?: boolean;
                       />
                     </Button>
                   </CollapsibleTrigger>
-                  <CollapsibleContent className="space-y-1 pl-9 pt-1">
+                  <CollapsibleContent className="space-y-1 pl-9 pt-1.5">
                     {item.children.map((child) => (
                       <Link
                         key={child.href}
@@ -426,9 +426,9 @@ export function AdminSidebar({ mobile = false, onNavigate }: { mobile?: boolean;
                         rel={child.external ? "noopener noreferrer" : undefined}
                         onClick={() => { if (!child.external) onNavigate?.(); }}
                         className={cn(
-                          "block rounded-md px-3 py-2 text-sm text-[var(--admin-muted)] hover:bg-[var(--admin-hover)] hover:text-[var(--admin-text)]",
+                          "block rounded-lg px-3 py-2 text-sm font-medium text-[var(--admin-muted)] hover:bg-[var(--admin-hover)] hover:text-[var(--admin-text)]",
                           isActive(child.href) &&
-                            "bg-[var(--admin-active-bg)] font-medium text-[var(--admin-active-text)]"
+                            "bg-[var(--admin-active-bg)] text-[var(--admin-active-text)] shadow-sm shadow-purple-950/20 hover:bg-[var(--admin-active-bg)] hover:text-[var(--admin-active-text)]"
                         )}
                       >
                         {labelFor(child)}
@@ -447,8 +447,8 @@ export function AdminSidebar({ mobile = false, onNavigate }: { mobile?: boolean;
                       <Button
                         variant="ghost"
                         className={cn(
-                          "relative w-full justify-center text-[var(--admin-muted)] hover:bg-[var(--admin-hover)] hover:text-[var(--admin-text)]",
-                          isActive(item.href!) && "bg-[var(--admin-active-bg)] text-[var(--admin-active-text)]"
+                          "relative h-10 w-full rounded-lg justify-center text-[var(--admin-muted)] hover:bg-[var(--admin-hover)] hover:text-[var(--admin-text)]",
+                          isActive(item.href!) && "bg-[var(--admin-active-bg)] text-[var(--admin-active-text)] shadow-sm shadow-purple-950/20 hover:bg-[var(--admin-active-bg)] hover:text-[var(--admin-active-text)]"
                         )}
                       >
                         <Icon className="h-5 w-5" />
@@ -470,8 +470,8 @@ export function AdminSidebar({ mobile = false, onNavigate }: { mobile?: boolean;
                 <Button
                   variant="ghost"
                   className={cn(
-                    "w-full justify-start gap-3 text-[var(--admin-muted)] hover:bg-[var(--admin-hover)] hover:text-[var(--admin-text)]",
-                    isActive(item.href!) && "bg-[var(--admin-active-bg)] text-[var(--admin-active-text)]"
+                    "h-10 w-full rounded-lg justify-start gap-3 px-3 text-sm font-semibold text-[var(--admin-muted)] hover:bg-[var(--admin-hover)] hover:text-[var(--admin-text)]",
+                    isActive(item.href!) && "bg-[var(--admin-active-bg)] text-[var(--admin-active-text)] shadow-sm shadow-purple-950/20 hover:bg-[var(--admin-active-bg)] hover:text-[var(--admin-active-text)]"
                   )}
                 >
                   <Icon className="h-5 w-5" />
@@ -487,7 +487,7 @@ export function AdminSidebar({ mobile = false, onNavigate }: { mobile?: boolean;
 
         {/* Footer */}
         {!collapsed && (
-          <div className="border-t p-4" style={{ borderColor: "var(--admin-border)" }}>
+          <div className="border-t px-4 py-3" style={{ borderColor: "var(--admin-border)" }}>
             <p className="text-xs text-[var(--admin-muted)]">
               {config.name} Admin v1.0
             </p>

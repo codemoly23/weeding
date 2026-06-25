@@ -248,15 +248,15 @@ export default function WeddingTemplatesPage() {
   }
 
   return (
-    <div className="p-6 space-y-6">
-      <div className="flex items-center justify-between">
+    <div className="p-4 sm:p-6 space-y-5 sm:space-y-6">
+      <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <div>
-          <h1 className="text-2xl font-bold text-foreground">{t("admin.weddingTemplates.title")}</h1>
+          <h1 className="text-xl sm:text-2xl font-bold text-foreground">{t("admin.weddingTemplates.title")}</h1>
           <p className="text-sm text-muted-foreground mt-1">
             {t("admin.weddingTemplates.subtitle")}
           </p>
         </div>
-        <Button onClick={openCreate}>
+        <Button onClick={openCreate} className="w-full sm:w-auto">
           <Plus className="mr-2 h-4 w-4" /> {t("admin.weddingTemplates.addTemplate")}
         </Button>
       </div>
@@ -274,88 +274,177 @@ export default function WeddingTemplatesPage() {
           {templates.map((tmpl) => (
             <div
               key={tmpl.id}
-              className="flex items-center gap-4 rounded-xl border bg-card p-4 hover:shadow-sm transition-shadow"
+              className="rounded-xl border bg-card p-4 hover:shadow-sm transition-shadow"
             >
-              <GripVertical className="h-4 w-4 text-muted-foreground shrink-0" />
-
-              {/* Color preview */}
-              <div className="flex gap-1 shrink-0">
-                <div
-                  className="w-8 h-8 rounded-lg border border-border"
-                  style={{ backgroundColor: tmpl.primaryColor }}
-                  title={`Primary: ${tmpl.primaryColor}`}
-                />
-                <div
-                  className="w-8 h-8 rounded-lg border border-border"
-                  style={{ backgroundColor: tmpl.accentColor }}
-                  title={`Accent: ${tmpl.accentColor}`}
-                />
-              </div>
-
-              {/* Image preview */}
-              {tmpl.imageUrl && (
-                <div className="w-12 h-12 rounded-lg overflow-hidden border border-border shrink-0 bg-muted">
-                  <img src={tmpl.imageUrl} alt={tmpl.name} className="w-full h-full object-cover" />
-                </div>
-              )}
-
-              {/* Info */}
-              <div className="flex-1 min-w-0">
-                <div className="flex items-center gap-2 flex-wrap">
-                  <span className="font-semibold text-foreground">{tmpl.name}</span>
-                  <code className="text-[11px] px-1.5 py-0.5 bg-muted rounded text-muted-foreground">
-                    {tmpl.slug}
-                  </code>
-                  {tmpl.tags.map((tag) => (
-                    <Badge key={tag} variant="secondary" className="text-[10px] px-1.5 py-0">
-                      {tag}
-                    </Badge>
-                  ))}
-                </div>
-                <p className="text-sm text-muted-foreground truncate mt-0.5">{tmpl.tagline}</p>
-              </div>
-
-              {/* Sort order */}
-              <span className="text-xs text-muted-foreground shrink-0">#{tmpl.sortOrder}</span>
-
-              {/* Active toggle */}
-              <div className="flex items-center gap-1.5 shrink-0">
-                {tmpl.active ? (
-                  <Eye className="h-3.5 w-3.5 text-green-500" />
-                ) : (
-                  <EyeOff className="h-3.5 w-3.5 text-muted-foreground" />
-                )}
-                <Switch
-                  checked={tmpl.active}
-                  onCheckedChange={() => handleToggleActive(tmpl)}
-                />
-              </div>
-
-              {/* Actions */}
-              <div className="flex gap-1 shrink-0">
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  title="Copy URL"
-                  onClick={() => copyUrl(tmpl.slug)}
-                >
-                  {copiedSlug === tmpl.slug ? (
-                    <Check className="h-4 w-4 text-green-500" />
+              {/* Mobile layout (stacked) */}
+              <div className="sm:hidden space-y-3">
+                <div className="flex items-start gap-3">
+                  {tmpl.imageUrl ? (
+                    <div className="w-14 h-14 rounded-lg overflow-hidden border border-border shrink-0 bg-muted">
+                      <img src={tmpl.imageUrl} alt={tmpl.name} className="w-full h-full object-cover" />
+                    </div>
                   ) : (
-                    <Copy className="h-4 w-4" />
+                    <div className="w-14 h-14 rounded-lg border border-dashed border-border shrink-0 bg-muted/50" />
                   )}
-                </Button>
-                <Button variant="ghost" size="icon" onClick={() => openEdit(tmpl)}>
-                  <Pencil className="h-4 w-4" />
-                </Button>
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  className="text-destructive hover:text-destructive"
-                  onClick={() => setDeleteId(tmpl.id)}
-                >
-                  <Trash2 className="h-4 w-4" />
-                </Button>
+                  <div className="flex-1 min-w-0">
+                    <div className="font-semibold text-foreground truncate">{tmpl.name}</div>
+                    <div className="flex items-center gap-2 mt-0.5">
+                      <code className="text-[11px] px-1.5 py-0.5 bg-muted rounded text-muted-foreground truncate">
+                        {tmpl.slug}
+                      </code>
+                      <span className="text-[11px] text-muted-foreground shrink-0">#{tmpl.sortOrder}</span>
+                    </div>
+                    {tmpl.tagline && (
+                      <p className="text-xs text-muted-foreground line-clamp-2 mt-1">{tmpl.tagline}</p>
+                    )}
+                  </div>
+                </div>
+
+                {tmpl.tags.length > 0 && (
+                  <div className="flex flex-wrap gap-1">
+                    {tmpl.tags.map((tag) => (
+                      <Badge key={tag} variant="secondary" className="text-[10px] px-1.5 py-0">
+                        {tag}
+                      </Badge>
+                    ))}
+                  </div>
+                )}
+
+                <div className="flex items-center justify-between gap-3">
+                  <div className="flex gap-1.5 shrink-0">
+                    <div
+                      className="w-7 h-7 rounded-md border border-border"
+                      style={{ backgroundColor: tmpl.primaryColor }}
+                      title={`Primary: ${tmpl.primaryColor}`}
+                    />
+                    <div
+                      className="w-7 h-7 rounded-md border border-border"
+                      style={{ backgroundColor: tmpl.accentColor }}
+                      title={`Accent: ${tmpl.accentColor}`}
+                    />
+                  </div>
+                  <div className="flex items-center gap-1.5">
+                    {tmpl.active ? (
+                      <Eye className="h-3.5 w-3.5 text-green-500" />
+                    ) : (
+                      <EyeOff className="h-3.5 w-3.5 text-muted-foreground" />
+                    )}
+                    <Switch
+                      checked={tmpl.active}
+                      onCheckedChange={() => handleToggleActive(tmpl)}
+                    />
+                  </div>
+                </div>
+
+                <div className="flex gap-1 pt-2 border-t border-border/50">
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    className="flex-1 h-9"
+                    onClick={() => copyUrl(tmpl.slug)}
+                  >
+                    {copiedSlug === tmpl.slug ? (
+                      <Check className="h-4 w-4 text-green-500" />
+                    ) : (
+                      <Copy className="h-4 w-4" />
+                    )}
+                  </Button>
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    className="flex-1 h-9"
+                    onClick={() => openEdit(tmpl)}
+                  >
+                    <Pencil className="h-4 w-4" />
+                  </Button>
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    className="flex-1 h-9 text-destructive hover:text-destructive"
+                    onClick={() => setDeleteId(tmpl.id)}
+                  >
+                    <Trash2 className="h-4 w-4" />
+                  </Button>
+                </div>
+              </div>
+
+              {/* Desktop layout (horizontal) */}
+              <div className="hidden sm:flex items-center gap-4">
+                <GripVertical className="h-4 w-4 text-muted-foreground shrink-0" />
+
+                <div className="flex gap-1 shrink-0">
+                  <div
+                    className="w-8 h-8 rounded-lg border border-border"
+                    style={{ backgroundColor: tmpl.primaryColor }}
+                    title={`Primary: ${tmpl.primaryColor}`}
+                  />
+                  <div
+                    className="w-8 h-8 rounded-lg border border-border"
+                    style={{ backgroundColor: tmpl.accentColor }}
+                    title={`Accent: ${tmpl.accentColor}`}
+                  />
+                </div>
+
+                {tmpl.imageUrl && (
+                  <div className="w-12 h-12 rounded-lg overflow-hidden border border-border shrink-0 bg-muted">
+                    <img src={tmpl.imageUrl} alt={tmpl.name} className="w-full h-full object-cover" />
+                  </div>
+                )}
+
+                <div className="flex-1 min-w-0">
+                  <div className="flex items-center gap-2 flex-wrap">
+                    <span className="font-semibold text-foreground">{tmpl.name}</span>
+                    <code className="text-[11px] px-1.5 py-0.5 bg-muted rounded text-muted-foreground">
+                      {tmpl.slug}
+                    </code>
+                    {tmpl.tags.map((tag) => (
+                      <Badge key={tag} variant="secondary" className="text-[10px] px-1.5 py-0">
+                        {tag}
+                      </Badge>
+                    ))}
+                  </div>
+                  <p className="text-sm text-muted-foreground truncate mt-0.5">{tmpl.tagline}</p>
+                </div>
+
+                <span className="text-xs text-muted-foreground shrink-0">#{tmpl.sortOrder}</span>
+
+                <div className="flex items-center gap-1.5 shrink-0">
+                  {tmpl.active ? (
+                    <Eye className="h-3.5 w-3.5 text-green-500" />
+                  ) : (
+                    <EyeOff className="h-3.5 w-3.5 text-muted-foreground" />
+                  )}
+                  <Switch
+                    checked={tmpl.active}
+                    onCheckedChange={() => handleToggleActive(tmpl)}
+                  />
+                </div>
+
+                <div className="flex gap-1 shrink-0">
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    title="Copy URL"
+                    onClick={() => copyUrl(tmpl.slug)}
+                  >
+                    {copiedSlug === tmpl.slug ? (
+                      <Check className="h-4 w-4 text-green-500" />
+                    ) : (
+                      <Copy className="h-4 w-4" />
+                    )}
+                  </Button>
+                  <Button variant="ghost" size="icon" onClick={() => openEdit(tmpl)}>
+                    <Pencil className="h-4 w-4" />
+                  </Button>
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    className="text-destructive hover:text-destructive"
+                    onClick={() => setDeleteId(tmpl.id)}
+                  >
+                    <Trash2 className="h-4 w-4" />
+                  </Button>
+                </div>
               </div>
             </div>
           ))}

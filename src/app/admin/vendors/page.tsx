@@ -611,7 +611,7 @@ export default function AdminVendorsPage() {
                     className="w-full border rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[var(--admin-primary)]"
                     placeholder="Min 8 characters" />
                   {form.email && !form.password && (
-                    <p className="text-xs text-[var(--ast-warning-icon)] mt-1">Password ছাড়া vendor login করতে পারবে না</p>
+                    <p className="text-xs text-[var(--ast-warning-icon)] mt-1">Without a password the vendor cannot log in</p>
                   )}
                 </div>
               )}

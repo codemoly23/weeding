@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import prisma from "@/lib/db";
+import { auth } from "@/lib/auth";
 import { getVendorPlanStatus } from "@/lib/vendor-plan";
 import { randomUUID } from "crypto";
 import { z } from "zod";
@@ -61,6 +62,10 @@ export async function POST(
 
   const { name, email, phone, eventType, eventDate, message, budget } = parsed.data;
 
+  // Link conversation to authenticated customer if logged in
+  const session = await auth();
+  const coupleUserId = session?.user?.role === "CUSTOMER" ? session.user.id : null;
+
   const inquiryId = randomUUID();
   const convId = randomUUID();
   const msgId = randomUUID();
@@ -88,6 +93,7 @@ export async function POST(
         inquiryId: inquiryId,
         guestName: name,
         guestEmail: email,
+        coupleUserId,
         lastMessageAt: now,
         messages: {
           create: {

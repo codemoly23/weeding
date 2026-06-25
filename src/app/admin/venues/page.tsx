@@ -323,103 +323,131 @@ function VenueCard({
   };
 
   return (
-    <div className={`group rounded-lg border bg-background px-3 py-2.5 transition-colors hover:border-primary/20 hover:bg-primary/5 ${!venue.isActive ? "opacity-60" : ""}`}>
-      <div className="flex items-start gap-2">
-        {/* Left: image thumbnail */}
-        {venue.image ? (
-          <img
-            src={venue.image}
-            alt={venue.name}
-            className="h-10 w-14 shrink-0 rounded object-cover"
-          />
-        ) : (
-          <div className="h-10 w-14 shrink-0 rounded bg-muted flex items-center justify-center">
-            <Building2 className="h-4 w-4 text-muted-foreground" />
-          </div>
-        )}
-
-        {/* Middle: info */}
-        <div className="flex-1 min-w-0 space-y-0.5">
-          <div className="flex items-center gap-1.5 flex-wrap">
-            <span className="text-sm font-medium text-foreground truncate">{venue.name}</span>
-            {venue.badge && (
-              <span className={`rounded-full px-1.5 py-0.5 text-[10px] font-semibold ${venue.badgeColor && badgeColorMap[venue.badgeColor] || "bg-muted text-muted-foreground"}`}>
-                {venue.badge}
-              </span>
-            )}
-            {venue.isFeatured && (
-              <span className="rounded-full bg-[var(--ast-warning-bg)] text-[var(--ast-warning-text)] px-1.5 py-0.5 text-[10px] font-semibold">{t("admin.venues.featured")}</span>
-            )}
-          </div>
-          <div className="flex items-center gap-3 text-xs text-muted-foreground">
-            <span className="flex items-center gap-0.5">
-              <Tag className="h-3 w-3" /> {venue.type}
-            </span>
-            {venue.location && (
-              <span className="flex items-center gap-0.5">
-                <MapPin className="h-3 w-3" /> {venue.location}
-              </span>
-            )}
-            {venue.rating > 0 && (
-              <span className="flex items-center gap-0.5">
-                <Star className="h-3 w-3 fill-[var(--admin-star)] text-[var(--admin-star)]" /> {venue.rating}
-              </span>
-            )}
-            {venue.price && (
-              <span className="font-medium text-[var(--ast-processing-icon)]">{venue.price.toLocaleString()}{venue.priceUnit}</span>
-            )}
-          </div>
-          {venue.tags.length > 0 && (
-            <div className="flex flex-wrap gap-1">
-              {venue.tags.slice(0, 4).map((tag) => (
-                <span key={tag} className="rounded-full bg-muted px-1.5 py-0.5 text-[10px] text-muted-foreground">{tag}</span>
-              ))}
+    <div className={`group rounded-xl border bg-background shadow-sm transition-shadow hover:shadow-md ${!venue.isActive ? "opacity-55" : ""}`}>
+      <div className="flex gap-4 p-4">
+        {/* Image */}
+        <div className="shrink-0">
+          {venue.image ? (
+            <img src={venue.image} alt={venue.name} className="h-20 w-28 rounded-lg object-cover" />
+          ) : (
+            <div className="h-20 w-28 rounded-lg bg-muted flex items-center justify-center border border-border">
+              <Building2 className="h-7 w-7 text-muted-foreground/40" />
             </div>
           )}
         </div>
 
-        {/* Right: actions */}
-        <div className="shrink-0 flex flex-col items-end gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
-          <button
-            onClick={async () => { setDeleting(true); await onDelete(venue.id); }}
-            disabled={deleting}
-            className="rounded p-0.5 text-muted-foreground hover:bg-destructive/10 hover:text-destructive"
-          >
-            {deleting ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <X className="h-3.5 w-3.5" />}
-          </button>
+        {/* Main info */}
+        <div className="flex-1 min-w-0 space-y-2">
+          {/* Name + badges row */}
+          <div className="flex items-start justify-between gap-2">
+            <div className="flex items-center gap-2 flex-wrap">
+              <span className="text-base font-semibold text-foreground">{venue.name}</span>
+              {venue.badge && (
+                <span className={`rounded-full px-2 py-0.5 text-xs font-semibold ${venue.badgeColor && badgeColorMap[venue.badgeColor] || "bg-muted text-muted-foreground"}`}>
+                  {venue.badge}
+                </span>
+              )}
+              {venue.isFeatured && (
+                <span className="flex items-center gap-1 rounded-full bg-[var(--ast-warning-bg)] text-[var(--ast-warning-text)] px-2 py-0.5 text-xs font-semibold">
+                  <Star className="h-3 w-3 fill-current" /> {t("admin.venues.featured")}
+                </span>
+              )}
+              {!venue.isActive && (
+                <span className="rounded-full bg-muted text-muted-foreground px-2 py-0.5 text-xs font-medium">
+                  {t("common.inactive")}
+                </span>
+              )}
+            </div>
+            {/* Delete */}
+            <button
+              onClick={async () => { setDeleting(true); await onDelete(venue.id); }}
+              disabled={deleting}
+              className="shrink-0 rounded-lg p-1.5 text-muted-foreground hover:bg-destructive/10 hover:text-destructive transition-colors opacity-0 group-hover:opacity-100"
+            >
+              {deleting ? <Loader2 className="h-4 w-4 animate-spin" /> : <X className="h-4 w-4" />}
+            </button>
+          </div>
+
+          {/* Key stats */}
+          <div className="flex flex-wrap items-center gap-3 text-sm text-muted-foreground">
+            <span className="flex items-center gap-1.5">
+              <Tag className="h-3.5 w-3.5" />
+              <span>{venue.type}</span>
+            </span>
+            {venue.location && (
+              <span className="flex items-center gap-1.5">
+                <MapPin className="h-3.5 w-3.5" />
+                <span>{venue.location}</span>
+              </span>
+            )}
+            {venue.price && (
+              <span className="flex items-center gap-1.5 font-semibold text-[var(--ast-processing-icon)]">
+                {venue.price.toLocaleString()}<span className="font-normal text-muted-foreground">{venue.priceUnit}</span>
+              </span>
+            )}
+            {venue.rating > 0 && (
+              <span className="flex items-center gap-1">
+                <Star className="h-3.5 w-3.5 fill-[var(--admin-star)] text-[var(--admin-star)]" />
+                <span>{venue.rating}</span>
+              </span>
+            )}
+          </div>
+
+          {/* Tags */}
+          {venue.tags.length > 0 && (
+            <div className="flex flex-wrap gap-1.5">
+              {venue.tags.slice(0, 5).map((tag) => (
+                <span key={tag} className="rounded-md bg-muted px-2 py-0.5 text-xs text-muted-foreground border border-border">
+                  {tag}
+                </span>
+              ))}
+            </div>
+          )}
         </div>
       </div>
 
       {/* Editable fields */}
-      <div className="mt-2 pt-2 border-t border-border/50 space-y-1.5">
-        <div className="grid grid-cols-2 gap-x-2 gap-y-1">
+      <div className="border-t border-border bg-muted/30 px-4 py-3 rounded-b-xl">
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-x-4 gap-y-2">
           {([
             { field: "type" as EditableField, labelKey: "admin.venues.type" },
             { field: "location" as EditableField, labelKey: "admin.venues.location" },
             { field: "price" as EditableField, labelKey: "admin.venues.price" },
+            { field: "rating" as EditableField, labelKey: "admin.venues.rating" },
             { field: "badge" as EditableField, labelKey: "admin.venues.badge" },
             { field: "badgeColor" as EditableField, labelKey: "admin.venues.color" },
-            { field: "rating" as EditableField, labelKey: "admin.venues.rating" },
             { field: "tags" as EditableField, labelKey: "admin.venues.tags" },
             { field: "image" as EditableField, labelKey: "admin.venues.image" },
           ]).map(({ field, labelKey }) => (
-            <div key={field} className="flex items-center gap-1 min-w-0">
-              <span className="text-[10px] text-muted-foreground/60 w-10 shrink-0">{t(labelKey)}</span>
+            <div key={field} className="flex flex-col gap-0.5 min-w-0">
+              <span className="text-[10px] font-medium uppercase tracking-wide text-muted-foreground/60">{t(labelKey)}</span>
               <InlineEdit venue={venue} field={field} onUpdate={onUpdate} />
             </div>
           ))}
         </div>
-        <div className="flex items-center justify-end gap-2 pt-0.5">
+
+        {/* Action buttons */}
+        <div className="flex items-center justify-end gap-2 mt-3 pt-2 border-t border-border/50">
           <button
             onClick={() => onToggleFeatured(venue.id, !venue.isFeatured)}
-            className={`rounded-full px-2 py-0.5 text-[10px] font-medium transition-colors ${venue.isFeatured ? "bg-[var(--ast-warning-bg)] text-[var(--ast-warning-text)] hover:bg-[var(--ast-warning-border)]" : "bg-muted text-muted-foreground hover:bg-muted/80"}`}
+            className={`flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-xs font-medium transition-colors ${
+              venue.isFeatured
+                ? "bg-[var(--ast-warning-bg)] text-[var(--ast-warning-text)] hover:opacity-80"
+                : "bg-muted text-muted-foreground hover:bg-muted/80"
+            }`}
           >
+            <Star className={`h-3.5 w-3.5 ${venue.isFeatured ? "fill-current" : ""}`} />
             {venue.isFeatured ? t("admin.venues.starFeatured") : t("admin.venues.starFeature")}
           </button>
           <button
             onClick={() => onToggleActive(venue.id, !venue.isActive)}
-            className={`rounded-full px-2 py-0.5 text-[10px] font-medium transition-colors ${venue.isActive ? "bg-[var(--ast-success-bg)] text-[var(--ast-success-text)] hover:bg-[var(--ast-success-border)]" : "bg-muted text-muted-foreground hover:bg-muted/80"}`}
+            className={`flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-xs font-medium transition-colors ${
+              venue.isActive
+                ? "bg-[var(--ast-success-bg)] text-[var(--ast-success-text)] hover:opacity-80"
+                : "bg-muted text-muted-foreground hover:bg-muted/80"
+            }`}
           >
+            <Check className="h-3.5 w-3.5" />
             {venue.isActive ? t("common.active") : t("common.inactive")}
           </button>
         </div>
