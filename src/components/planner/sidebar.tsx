@@ -183,7 +183,7 @@ function SidebarInner({
         {!collapsed && (
           <Link href="/planner" className="flex items-center gap-2 min-w-0">
             <div className="min-w-0">
-              <p className="truncate font-semibold text-sm text-slate-700 leading-tight">{projectTitle}</p>
+              <p className="truncate font-semibold text-sm text-foreground leading-tight">{projectTitle}</p>
               {eventDate && (
                 <p className="text-[10px] font-semibold uppercase tracking-widest text-muted-foreground leading-tight mt-0.5">
                   {new Date(eventDate).toLocaleDateString("en-US", { month: "long", day: "numeric", year: "numeric" }).toUpperCase()}

@@ -21,6 +21,17 @@ import {
 import { signOut } from "next-auth/react";
 import { LanguageSwitcher } from "@/components/layout/header/components/LanguageSwitcher";
 import { useLanguage } from "@/lib/i18n/language-context";
+import { DashboardThemeToggle } from "@/components/theme/dashboard-theme-toggle";
+import { useDashboardTheme } from "@/hooks/use-dashboard-theme";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 
 const NAV_ITEMS = [
   { href: "/vendor/dashboard", labelKey: "common.dashboard", icon: LayoutDashboard },
@@ -40,6 +51,7 @@ export default function VendorLayout({ children }: { children: React.ReactNode }
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [unreadCount, setUnreadCount] = useState(0);
   const [businessName, setBusinessName] = useState<string | null>(null);
+  const { isDark, toggleTheme } = useDashboardTheme("vendor-theme");
 
   // Fetch vendor profile (business name) once on mount
   useEffect(() => {
@@ -85,7 +97,7 @@ export default function VendorLayout({ children }: { children: React.ReactNode }
   }
 
   return (
-    <div className="min-h-screen bg-background flex">
+    <div className={`vendor-layout min-h-screen bg-background flex ${isDark ? "theme-dark" : ""}`}>
       {/* Mobile overlay */}
       {sidebarOpen && (
         <div
@@ -185,6 +197,7 @@ export default function VendorLayout({ children }: { children: React.ReactNode }
 
           <div className="ml-auto flex items-center gap-3">
             <LanguageSwitcher />
+            <DashboardThemeToggle isDark={isDark} onToggle={toggleTheme} />
             {unreadCount > 0 && (
               <Link href="/vendor/messages">
                 <span className="bg-primary text-white text-xs font-bold rounded-full px-2 py-0.5">
@@ -192,6 +205,60 @@ export default function VendorLayout({ children }: { children: React.ReactNode }
                 </span>
               </Link>
             )}
+
+            {/* Profile Dropdown */}
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <button className="flex items-center gap-2 rounded-lg px-2 py-1.5 hover:bg-muted/40 transition-colors">
+                  <Avatar className="h-8 w-8">
+                    <AvatarFallback className="bg-primary/10 text-primary text-xs font-semibold">
+                      {(businessName || session?.user?.name || "V")
+                        .split(" ")
+                        .map((n) => n[0])
+                        .join("")
+                        .toUpperCase()
+                        .slice(0, 2)}
+                    </AvatarFallback>
+                  </Avatar>
+                  <span className="hidden sm:block text-sm font-medium text-foreground max-w-[120px] truncate">
+                    {businessName || session?.user?.name || t("vendor.portal")}
+                  </span>
+                </button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end" className="w-56">
+                <DropdownMenuLabel>
+                  <div className="flex flex-col space-y-1">
+                    <p className="text-sm font-medium truncate">
+                      {businessName || session?.user?.name}
+                    </p>
+                    <p className="text-xs text-muted-foreground truncate">
+                      {session?.user?.email}
+                    </p>
+                  </div>
+                </DropdownMenuLabel>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem asChild>
+                  <Link href="/vendor/profile">
+                    <User className="mr-2 h-4 w-4" />
+                    {t("common.profile")}
+                  </Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem asChild>
+                  <Link href="/vendor/settings">
+                    <Settings className="mr-2 h-4 w-4" />
+                    {t("common.settings")}
+                  </Link>
+                </DropdownMenuItem>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem
+                  className="text-destructive focus:text-destructive"
+                  onClick={() => signOut({ callbackUrl: "/login" })}
+                >
+                  <LogOut className="mr-2 h-4 w-4" />
+                  {t("common.signOut")}
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
           </div>
         </header>
 

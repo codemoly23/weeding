@@ -13,8 +13,8 @@
   --admin-text:            #111827;
   --admin-muted:           #6b7280;
   --admin-hover:           #f5f3ff;
-  --admin-active-bg:       #1a1a1a;
-  --admin-active-text:     #ffffff;
+  --admin-active-bg:       #f3e8ff;
+  --admin-active-text:     #6d28d9;
 
   /* --- Primary Action (purple) --- */
   --admin-primary:         #7c3aed;
@@ -80,15 +80,18 @@
 }
 
 .dark .admin-layout {
-  --admin-bg:              #120c14;
-  --admin-surface:         #1c1116;
-  --admin-surface-muted:   #25161c;
-  --admin-border:          #3a222b;
-  --admin-text:            #f8f1f3;
-  --admin-muted:           #c9aeb7;
-  --admin-hover:           #2a1820;
-  --admin-active-bg:       #1a1a1a;
+  --admin-bg:              #0f0a10;
+  --admin-surface:         #171018;
+  --admin-surface-muted:   #211722;
+  --admin-border:          #342436;
+  --admin-text:            #fbf7fb;
+  --admin-muted:           #d2bfce;
+  --admin-hover:           #261a27;
+  --admin-active-bg:       #a855f7;
   --admin-active-text:     #ffffff;
+
+  --admin-primary:         #a855f7;
+  --admin-primary-hover:   #9333ea;
 
   --ast-success-bg:        #092d18;
   --ast-success-border:    #1f7a3f;

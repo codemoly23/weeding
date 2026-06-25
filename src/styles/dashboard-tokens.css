@@ -1,0 +1,77 @@
+/* Scoped dashboard theme tokens.
+   These classes keep customer/planner/vendor theme changes away from public pages. */
+
+.dashboard-layout.theme-dark,
+.planner-layout.theme-dark,
+.vendor-layout.theme-dark {
+  color-scheme: dark;
+
+  --color-background: #100b10;
+  --color-foreground: #f8f1f4;
+  --color-card: #1b1117;
+  --color-card-foreground: #f8f1f4;
+  --color-popover: #1d1219;
+  --color-popover-foreground: #f8f1f4;
+  --color-muted: #271922;
+  --color-muted-foreground: #c9aeb8;
+  --color-border: #3a2530;
+  --color-input: #432b36;
+  --color-ring: #c084fc;
+
+  --color-primary: #a855f7;
+  --color-primary-foreground: #ffffff;
+  --color-secondary: #241720;
+  --color-secondary-foreground: #f8f1f4;
+  --color-accent: #e4a93b;
+  --color-accent-foreground: #160f12;
+  --color-destructive: #ef4444;
+  --color-destructive-foreground: #ffffff;
+
+  --color-success-bg: #092d18;
+  --color-success-border: #1f7a3f;
+  --color-success-text: #bbf7d0;
+  --color-warning-bg: #3a2508;
+  --color-warning-border: #a16207;
+  --color-warning-text: #fde68a;
+  --color-error-bg: #3b0b12;
+  --color-error-border: #991b1b;
+  --color-error-text: #fecdd3;
+  --color-info-bg: #0b2442;
+  --color-info-border: #1d4ed8;
+  --color-info-text: #bfdbfe;
+
+  background: var(--color-background);
+  color: var(--color-foreground);
+}
+
+.dashboard-layout.theme-dark input,
+.dashboard-layout.theme-dark textarea,
+.dashboard-layout.theme-dark select,
+.planner-layout.theme-dark input,
+.planner-layout.theme-dark textarea,
+.planner-layout.theme-dark select,
+.vendor-layout.theme-dark input,
+.vendor-layout.theme-dark textarea,
+.vendor-layout.theme-dark select {
+  background-color: var(--color-background);
+  color: var(--color-foreground);
+}
+
+.dashboard-layout.theme-dark ::placeholder,
+.planner-layout.theme-dark ::placeholder,
+.vendor-layout.theme-dark ::placeholder {
+  color: color-mix(in srgb, var(--color-muted-foreground) 75%, transparent);
+}
+
+.dashboard-layout.theme-dark .dashboard-soft-section,
+.planner-layout.theme-dark .dashboard-soft-section,
+.vendor-layout.theme-dark .dashboard-soft-section {
+  background-color: #171018;
+}
+
+.dashboard-layout.theme-dark .dashboard-glass-surface,
+.planner-layout.theme-dark .dashboard-glass-surface,
+.vendor-layout.theme-dark .dashboard-glass-surface {
+  background-color: color-mix(in srgb, var(--color-card) 85%, transparent);
+  border-color: var(--color-border);
+}
