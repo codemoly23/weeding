@@ -17,6 +17,9 @@ const safeJsonParse = (value: unknown, fallback: unknown = null) => {
   return value; // Already an object
 };
 
+const MENU_ITEM_TARGETS = ["_self", "_blank"] as const;
+type MenuItemTarget = (typeof MENU_ITEM_TARGETS)[number];
+
 // Validation schema for footer widgets
 const widgetSchema = z.object({
   footerId: z.string(),
@@ -65,12 +68,19 @@ type WidgetLinkInput = {
   translations?: Record<string, unknown> | null;
 };
 
+function parseMenuItemTarget(value: unknown): MenuItemTarget {
+  if (typeof value === "string" && MENU_ITEM_TARGETS.includes(value as MenuItemTarget)) {
+    return value as MenuItemTarget;
+  }
+  return "_self";
+}
+
 // Map an incoming link to a Prisma nested-create payload, preserving translations
 function toLinkCreate(item: WidgetLinkInput) {
   return {
     label: item.label,
     url: item.url,
-    target: item.target || "_self",
+    target: parseMenuItemTarget(item.target),
     sortOrder: item.sortOrder,
     isVisible: item.isVisible ?? true,
     ...(item.translations ? { translations: item.translations } : {}),
@@ -110,6 +120,10 @@ export async function GET(request: NextRequest) {
         ...w,
         content: safeJsonParse(w.content, null),
         translations: safeJsonParse(w.translations, null),
+        menuItems: w.menuItems.map((link) => ({
+          ...link,
+          translations: safeJsonParse(link.translations, null),
+        })),
       })),
       total: widgets.length,
     });
@@ -168,6 +182,11 @@ export async function POST(request: NextRequest) {
       {
         ...widget,
         content: safeJsonParse(widget.content, null),
+        translations: safeJsonParse(widget.translations, null),
+        menuItems: widget.menuItems.map((link) => ({
+          ...link,
+          translations: safeJsonParse(link.translations, null),
+        })),
       },
       { status: 201 }
     );
@@ -239,6 +258,11 @@ export async function PUT(request: NextRequest) {
       return NextResponse.json({
         ...widget,
         content: safeJsonParse(widget.content, null),
+        translations: safeJsonParse(widget.translations, null),
+        menuItems: widget.menuItems.map((link) => ({
+          ...link,
+          translations: safeJsonParse(link.translations, null),
+        })),
       });
     }
 
@@ -260,6 +284,11 @@ export async function PUT(request: NextRequest) {
     return NextResponse.json({
       ...widget,
       content: safeJsonParse(widget.content, null),
+      translations: safeJsonParse(widget.translations, null),
+      menuItems: widget.menuItems.map((link) => ({
+        ...link,
+        translations: safeJsonParse(link.translations, null),
+      })),
     });
   } catch (error) {
     if (error instanceof z.ZodError) {

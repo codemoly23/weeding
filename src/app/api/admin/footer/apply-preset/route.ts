@@ -2,28 +2,43 @@ import { NextResponse } from "next/server";
 import prisma from "@/lib/db";
 import { checkAdminAccess, authError } from "@/lib/admin-auth";
 
-// All widget types from Prisma schema
-type FooterWidgetType =
-  | "BRAND"
-  | "LINKS"
-  | "CONTACT"
-  | "SOCIAL"
-  | "TEXT"
-  | "RECENT_POSTS"
-  | "SERVICES"
-  | "STATES"
-  | "CUSTOM_HTML"
-  | "APP_DOWNLOAD"
-  | "PAYMENT_METHODS"
-  | "AWARDS"
-  | "MAP"
-  | "WORKING_HOURS"
-  | "LANGUAGE_SELECT"
-  | "THEME_TOGGLE"
-  | "FEATURED_PRODUCT"
-  | "TESTIMONIAL"
-  | "COUNTDOWN"
-  | "CTA_BANNER";
+const FOOTER_WIDGET_TYPES = [
+  "BRAND",
+  "LINKS",
+  "CONTACT",
+  "SOCIAL",
+  "TEXT",
+  "RECENT_POSTS",
+  "SERVICES",
+  "STATES",
+  "CUSTOM_HTML",
+  "APP_DOWNLOAD",
+  "PAYMENT_METHODS",
+  "AWARDS",
+  "MAP",
+  "WORKING_HOURS",
+  "LANGUAGE_SELECT",
+  "THEME_TOGGLE",
+  "FEATURED_PRODUCT",
+  "TESTIMONIAL",
+  "COUNTDOWN",
+  "CTA_BANNER",
+  "BUTTON",
+  "NEWSLETTER",
+] as const;
+
+const MENU_ITEM_TARGETS = ["_self", "_blank"] as const;
+
+type FooterWidgetType = (typeof FOOTER_WIDGET_TYPES)[number];
+type MenuItemTarget = (typeof MENU_ITEM_TARGETS)[number];
+
+interface PresetMenuItem {
+  label: string;
+  url: string;
+  target: MenuItemTarget;
+  icon?: string;
+  translations?: Record<string, unknown> | null;
+}
 
 interface PresetWidget {
   type: FooterWidgetType;
@@ -32,12 +47,167 @@ interface PresetWidget {
   column: number;
   sortOrder: number;
   content?: Record<string, unknown>;
-  menuItems?: Array<{
-    label: string;
-    url: string;
-    target?: string;
-    icon?: string;
-  }>;
+  menuItems?: PresetMenuItem[];
+  translations?: Record<string, unknown> | null;
+}
+
+const FOOTER_JSON_FIELDS = new Set([
+  "bgGradient",
+  "trustBadges",
+  "bottomLinks",
+  "translations",
+  "responsiveColumns",
+]);
+
+const FOOTER_CONFIG_KEYS = new Set([
+  "name",
+  "isActive",
+  "layout",
+  "columns",
+  "linkPrefix",
+  "showSocialLinks",
+  "socialPosition",
+  "showContactInfo",
+  "contactPosition",
+  "bottomBarEnabled",
+  "bottomBarLayout",
+  "copyrightText",
+  "showDisclaimer",
+  "disclaimerText",
+  "showTrustBadges",
+  "bgColor",
+  "textColor",
+  "accentColor",
+  "borderColor",
+  "paddingTop",
+  "paddingBottom",
+  "bgType",
+  "bgImage",
+  "bgImageOverlay",
+  "bgPattern",
+  "bgPatternColor",
+  "bgPatternOpacity",
+  "bodyFont",
+  "headingColor",
+  "headingFont",
+  "headingSize",
+  "headingWeight",
+  "headingStyle",
+  "linkColor",
+  "linkHoverColor",
+  "linkHoverEffect",
+  "topBorderStyle",
+  "topBorderHeight",
+  "topBorderColor",
+  "topBorderGradientFrom",
+  "topBorderGradientTo",
+  "enableAnimations",
+  "entranceAnimation",
+  "animationDuration",
+  "socialShape",
+  "socialSize",
+  "socialColorMode",
+  "socialHoverEffect",
+  "socialBgStyle",
+  "dividerStyle",
+  "dividerColor",
+  "shadow",
+  "borderRadius",
+  "containerWidth",
+  "containerStyle",
+  "cornerRadiusBL",
+  "cornerRadiusBR",
+  "cornerRadiusTL",
+  "cornerRadiusTR",
+  "sectionOrder",
+  "brandRevealEnabled",
+  "brandRevealText",
+  "brandRevealColor",
+  "brandRevealOpacity",
+  "customCSS",
+  "customJS",
+  "responsiveColumns",
+  "translations",
+]);
+
+function parsePresetJson(value: unknown, fallback: unknown = null): unknown {
+  if (value === null || value === undefined) return fallback;
+  if (typeof value === "string") {
+    try {
+      return JSON.parse(value);
+    } catch {
+      return fallback;
+    }
+  }
+  return value;
+}
+
+function parseFooterWidgetType(value: unknown): FooterWidgetType | null {
+  if (typeof value !== "string") return null;
+  return FOOTER_WIDGET_TYPES.includes(value as FooterWidgetType)
+    ? (value as FooterWidgetType)
+    : null;
+}
+
+function parseMenuItemTarget(value: unknown): MenuItemTarget {
+  if (
+    typeof value === "string" &&
+    MENU_ITEM_TARGETS.includes(value as MenuItemTarget)
+  ) {
+    return value as MenuItemTarget;
+  }
+  return "_self";
+}
+
+function normalizePresetWidget(value: unknown): PresetWidget | null {
+  if (!value || typeof value !== "object") return null;
+  const source = value as Record<string, unknown>;
+  const normalizedType = parseFooterWidgetType(source.type);
+
+  if (!normalizedType) {
+    return null;
+  }
+
+  const rawMenuItems = Array.isArray(source.menuItems) ? source.menuItems : [];
+  const menuItems = rawMenuItems
+    .map((item) => {
+      if (!item || typeof item !== "object") return null;
+      const data = item as Record<string, unknown>;
+      const rawTranslations = parsePresetJson(data.translations);
+      const translations =
+        rawTranslations && typeof rawTranslations === "object"
+          ? (rawTranslations as Record<string, unknown>)
+          : undefined;
+
+      return {
+        label: typeof data.label === "string" ? data.label : "",
+        url: typeof data.url === "string" ? data.url : "/",
+        target: parseMenuItemTarget(data.target),
+        icon: typeof data.icon === "string" ? data.icon : undefined,
+        ...(translations ? { translations } : {}),
+      };
+    })
+    .filter((item): item is PresetMenuItem => item !== null);
+
+  const rawTranslations = parsePresetJson(source.translations);
+  const translations =
+    rawTranslations && typeof rawTranslations === "object"
+      ? (rawTranslations as Record<string, unknown>)
+      : undefined;
+
+  return {
+    type: normalizedType,
+    title: typeof source.title === "string" ? source.title : "",
+    showTitle: source.showTitle !== false,
+    column: typeof source.column === "number" ? source.column : 1,
+    sortOrder: typeof source.sortOrder === "number" ? source.sortOrder : 0,
+    content:
+      source.content && typeof source.content === "object"
+        ? (source.content as Record<string, unknown>)
+        : undefined,
+    ...(translations ? { translations } : {}),
+    ...(menuItems.length > 0 ? { menuItems } : {}),
+  };
 }
 
 // POST - Apply a preset to a footer
@@ -85,21 +255,38 @@ export async function POST(request: Request) {
 
     // Extract config from preset
     const presetConfig = preset.config as Record<string, unknown>;
+
+    const rawPresetWidgets = parsePresetJson(presetConfig.widgets, []);
+    const presetWidgets = Array.isArray(rawPresetWidgets)
+      ? rawPresetWidgets.map(normalizePresetWidget).filter((widget): widget is PresetWidget => widget !== null)
+      : [];
+
+    const presetBottomLinks = parsePresetJson(presetConfig.bottomLinks, null);
+    const presetBgGradient = parsePresetJson(presetConfig.bgGradient, null);
+
     const {
       id: _id,
       createdAt: _createdAt,
       updatedAt: _updatedAt,
-      widgets: presetWidgets,
-      bottomLinks: presetBottomLinks,
-      bgGradient: presetBgGradient,
+      colorPalette: _colorPalette,
+      widgets: _presetWidgets,
       ...configToApply
     } = presetConfig;
 
-    // Prepare data for update - handle JSON fields properly
+    // Prepare data for update - handle JSON fields properly and ignore invalid keys
     const updateData: Record<string, unknown> = {
-      ...configToApply,
       presetId: presetId,
     };
+
+    for (const [key, value] of Object.entries(configToApply)) {
+      if (!FOOTER_CONFIG_KEYS.has(key)) continue;
+      if (value === undefined) continue;
+      if (FOOTER_JSON_FIELDS.has(key)) {
+        updateData[key] = value ? JSON.stringify(value) : value;
+      } else {
+        updateData[key] = value;
+      }
+    }
 
     // Handle JSON fields - stringify if they're objects
     if (presetBottomLinks) {
@@ -116,7 +303,7 @@ export async function POST(request: Request) {
     });
 
     // If not preserving widgets and preset has widgets, replace them
-    if (!preserveWidgets && presetWidgets && Array.isArray(presetWidgets)) {
+    if (!preserveWidgets && presetWidgets.length > 0) {
       // Delete existing widgets and their menu items
       const existingWidgets = await prisma.footerWidget.findMany({
         where: { footerId },
@@ -134,11 +321,9 @@ export async function POST(request: Request) {
       });
 
       // Create new widgets from preset
-      for (const widgetData of presetWidgets as PresetWidget[]) {
-        const { menuItems, content, ...widgetFields } = widgetData;
+      for (const widgetData of presetWidgets) {
+        const { menuItems, content, translations, ...widgetFields } = widgetData;
 
-        // Create the widget
-        // Note: content is a Json type in Prisma, so pass the object directly (no stringify needed)
         const newWidget = await prisma.footerWidget.create({
           data: {
             footerId,
@@ -147,6 +332,9 @@ export async function POST(request: Request) {
             showTitle: widgetFields.showTitle ?? true,
             column: widgetFields.column || 1,
             sortOrder: widgetFields.sortOrder || 0,
+            ...(translations
+              ? { translations: JSON.parse(JSON.stringify(translations)) }
+              : {}),
             content: content ? JSON.parse(JSON.stringify(content)) : undefined,
           },
         });
@@ -160,10 +348,13 @@ export async function POST(request: Request) {
                 footerWidgetId: newWidget.id,
                 label: item.label,
                 url: item.url,
-                target: (item.target as "_self" | "_blank") || "_self",
+                target: parseMenuItemTarget(item.target),
                 icon: item.icon || null,
                 sortOrder: i,
                 isVisible: true,
+                ...(item.translations
+                  ? { translations: JSON.parse(JSON.stringify(item.translations)) }
+                  : {}),
               },
             });
           }
