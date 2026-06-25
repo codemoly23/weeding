@@ -718,7 +718,7 @@ export default function FooterBuilderPage() {
         : [];
     const menuItems = rawLinks
       .filter((item): item is Record<string, unknown> => !!item && typeof item === "object")
-      .map((item, index) => {
+      .map((item, index): FooterWidgetLink => {
         const link = item as Record<string, unknown>;
         const linkTranslations = parseImportedTranslations(link.translations) as Translations | null;
         return {
@@ -2220,18 +2220,20 @@ export default function FooterBuilderPage() {
                             throw new Error("Invalid configuration file");
                           }
                           const normalizedWidgets = Array.isArray(importData.widgets)
-                            ? importData.widgets.map((widget: unknown) => normalizeImportedWidget(widget)).filter((widget): widget is FooterWidget => widget !== null)
+                            ? importData.widgets.map((widget: unknown) => normalizeImportedWidget(widget)).filter((widget: FooterWidget | null): widget is FooterWidget => widget !== null)
                             : [];
                           const normalizedBottomLinks = normalizeImportedBottomLinks(importData.bottomLinks);
                           setFormData(prev => ({
                             ...prev,
                             ...importData,
-                            widgets: normalizedWidgets.length > 0 ? normalizedWidgets : prev.widgets,
                             bottomLinks: Array.isArray(importData.bottomLinks)
                               ? normalizedBottomLinks
                               : prev.bottomLinks,
                             id: prev.id,
                           }));
+                          if (normalizedWidgets.length > 0) {
+                            setFooter(prev => (prev ? { ...prev, widgets: normalizedWidgets } : prev));
+                          }
                           toast.success(t("admin.footer.importSuccess"));
                         } catch (error) {
                           console.error("Import error:", error);

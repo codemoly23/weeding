@@ -170,7 +170,7 @@ function normalizePresetWidget(value: unknown): PresetWidget | null {
 
   const rawMenuItems = Array.isArray(source.menuItems) ? source.menuItems : [];
   const menuItems = rawMenuItems
-    .map((item) => {
+    .map((item): PresetMenuItem | null => {
       if (!item || typeof item !== "object") return null;
       const data = item as Record<string, unknown>;
       const rawTranslations = parsePresetJson(data.translations);
