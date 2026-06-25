@@ -219,9 +219,9 @@ export default function PermissionsPage() {
         </CardHeader>
         <CardContent>
           <Tabs value={selectedRole} onValueChange={setSelectedRole}>
-            <TabsList className="mb-6">
+            <TabsList className="mb-6 w-full sm:w-fit">
               {data.editableRoles.map((role) => (
-                <TabsTrigger key={role} value={role} className="relative">
+                <TabsTrigger key={role} value={role} className="relative px-1.5 text-xs sm:px-2 sm:text-sm">
                   {data.roleLabels[role]}
                   {hasChanges[role] && (
                     <span className="absolute -top-1 -right-1 h-2 w-2 rounded-full bg-[var(--ast-processing-icon)]" />

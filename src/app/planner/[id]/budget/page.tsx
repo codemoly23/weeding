@@ -446,19 +446,19 @@ export default function BudgetPage() {
     <>
     <div className="mx-auto max-w-3xl px-4 py-8">
       {/* Page header */}
-      <div className="mb-6 flex items-center justify-between">
+      <div className="mb-6 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <h1 className="text-2xl font-bold text-foreground">{t("budget.heading")}</h1>
-        <div className="flex items-center gap-2">
+        <div className="flex w-full flex-col gap-2 sm:w-auto sm:flex-row sm:items-center">
           <button
             onClick={exportBudgetPDF}
-            className="flex items-center gap-1.5 rounded-xl border border-border bg-card px-3 py-2 text-sm text-muted-foreground hover:bg-muted transition-colors shadow-sm"
+            className="flex w-full items-center justify-center gap-1.5 whitespace-nowrap rounded-xl border border-border bg-card px-3 py-2.5 text-sm text-muted-foreground hover:bg-muted transition-colors shadow-sm sm:w-auto sm:py-2"
           >
             <Download className="h-4 w-4" />
             PDF
           </button>
           <button
             onClick={() => setShowNewCat(true)}
-            className="flex items-center gap-1.5 rounded-xl bg-primary px-4 py-2 text-sm font-medium text-white hover:bg-primary/90 transition-colors"
+            className="flex w-full items-center justify-center gap-1.5 whitespace-nowrap rounded-xl bg-primary px-4 py-2.5 text-sm font-medium text-white hover:bg-primary/90 transition-colors sm:w-auto sm:py-2"
           >
             <PlusCircle className="h-4 w-4" />
             {t("budget.addCategory")}

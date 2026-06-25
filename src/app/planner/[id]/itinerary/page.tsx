@@ -420,9 +420,9 @@ export default function ItineraryPage() {
             <h1 className="text-2xl font-semibold text-foreground tracking-tight">{t("itinerary.heading")}</h1>
             <p className="mt-2 text-sm text-muted-foreground leading-relaxed max-w-sm mx-auto">
               {t("itinerary.descBefore")}{" "}
-              <button onClick={() => { if (!isPremiumOrElite(tier)) { setShowUpgrade(true); return; } window.print(); }} className="text-primary hover:underline">{t("itinerary.descPrint")}</button>
-              {" "}{t("itinerary.descMiddle")}{" "}
-              <span className="text-primary">{t("itinerary.descIDos")}</span>
+              {t("itinerary.descPrint")}{" "}
+              {t("itinerary.descMiddle")}{" "}
+              {t("itinerary.descIDos")}
               {t("itinerary.descAfter")}
             </p>
             {formattedDate && (

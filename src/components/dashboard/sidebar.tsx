@@ -138,6 +138,9 @@ export function DashboardSidebar({
             <Link
               key={item.href}
               href={item.href}
+              onClick={() => {
+                if (mobile) onToggle?.();
+              }}
               className={cn(
                 "flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-colors",
                 isActive
@@ -158,6 +161,9 @@ export function DashboardSidebar({
           {collapsed ? (
             <Link
               href="/planner"
+              onClick={() => {
+                if (mobile) onToggle?.();
+              }}
               className={cn(
                 "flex items-center justify-center rounded-lg px-2 py-2 text-sm font-medium transition-colors",
                 pathname.startsWith("/planner")
@@ -194,6 +200,9 @@ export function DashboardSidebar({
                       <Link
                         key={project.id}
                         href={href}
+                        onClick={() => {
+                          if (mobile) onToggle?.();
+                        }}
                         className={cn(
                           "flex items-center gap-2 rounded-md px-2 py-1.5 text-xs font-medium transition-colors",
                           isActive
@@ -212,6 +221,9 @@ export function DashboardSidebar({
                   {/* Create new */}
                   <Link
                     href="/planner/create"
+                    onClick={() => {
+                      if (mobile) onToggle?.();
+                    }}
                     className="flex items-center gap-2 rounded-md px-2 py-1.5 text-xs font-medium text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
                   >
                     <Plus className="h-3.5 w-3.5 shrink-0" />

@@ -13,8 +13,8 @@
   --admin-text:            #111827;
   --admin-muted:           #6b7280;
   --admin-hover:           #f5f3ff;
-  --admin-active-bg:       #f3e8ff;
-  --admin-active-text:     #6d28d9;
+  --admin-active-bg:       #1a1a1a;
+  --admin-active-text:     #ffffff;
 
   /* --- Primary Action (purple) --- */
   --admin-primary:         #7c3aed;
@@ -87,8 +87,8 @@
   --admin-text:            #f8f1f3;
   --admin-muted:           #c9aeb7;
   --admin-hover:           #2a1820;
-  --admin-active-bg:       #32183f;
-  --admin-active-text:     #d9b4ff;
+  --admin-active-bg:       #1a1a1a;
+  --admin-active-text:     #ffffff;
 
   --ast-success-bg:        #092d18;
   --ast-success-border:    #1f7a3f;

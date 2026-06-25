@@ -188,7 +188,7 @@ const iconMap: Record<string, React.ComponentType<{ className?: string }>> = {
   Building2,
 };
 
-export function AdminSidebar({ mobile = false }: { mobile?: boolean }) {
+export function AdminSidebar({ mobile = false, onNavigate }: { mobile?: boolean; onNavigate?: () => void }) {
   const pathname = usePathname();
   const { t } = useLanguage();
   const { config } = useBusinessConfig();
@@ -286,13 +286,23 @@ export function AdminSidebar({ mobile = false }: { mobile?: boolean }) {
     }
   };
 
-  const isActive = (href: string) => {
-    // Use exact match for all menu items
-    return pathname === href;
-  };
+  // Determine the single best-matching href across all nav items (top-level + children).
+  // The deepest (longest) href that prefixes the current path wins, so a detail page
+  // like /admin/orders/123 highlights "Orders" without double-highlighting overlapping
+  // siblings (e.g. /admin/vendors vs /admin/vendors/reviews).
+  const allHrefs: string[] = [];
+  allNavItems.forEach((item) => {
+    if (item.href) allHrefs.push(item.href);
+    item.children?.forEach((child) => allHrefs.push(child.href));
+  });
+  const activeHref = allHrefs
+    .filter((href) => pathname === href || pathname.startsWith(href + "/"))
+    .sort((a, b) => b.length - a.length)[0];
+
+  const isActive = (href: string) => href === activeHref;
 
   const isChildActive = (children: { href: string }[]) => {
-    return children.some((child) => pathname.startsWith(child.href));
+    return children.some((child) => isActive(child.href));
   };
 
   return (
@@ -413,6 +423,7 @@ export function AdminSidebar({ mobile = false }: { mobile?: boolean }) {
                         href={child.href}
                         target={child.external ? "_blank" : undefined}
                         rel={child.external ? "noopener noreferrer" : undefined}
+                        onClick={() => { if (!child.external) onNavigate?.(); }}
                         className={cn(
                           "block rounded-md px-3 py-2 text-sm text-[var(--admin-muted)] hover:bg-[var(--admin-hover)] hover:text-[var(--admin-text)]",
                           isActive(child.href) &&
@@ -454,7 +465,7 @@ export function AdminSidebar({ mobile = false }: { mobile?: boolean }) {
             }
 
             return (
-              <Link key={item.title} href={item.href!}>
+              <Link key={item.title} href={item.href!} onClick={() => onNavigate?.()}>
                 <Button
                   variant="ghost"
                   className={cn(

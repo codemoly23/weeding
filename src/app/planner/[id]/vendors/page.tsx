@@ -683,13 +683,13 @@ export default function VendorsPage() {
           </button>
         </div>
 
-        <div className="flex gap-2 sm:ml-auto">
+        <div className="flex flex-col sm:flex-row gap-2 w-full sm:w-auto sm:ml-auto">
           <button
             onClick={handleCopyInvite}
             disabled={inviteCopying}
-            className="flex items-center gap-2 bg-card border border-border text-foreground/80 px-4 py-2 rounded-lg text-sm font-medium hover:bg-muted transition-colors disabled:opacity-60"
+            className="flex items-center justify-center gap-2 whitespace-nowrap bg-card border border-border text-foreground/80 px-4 py-2 rounded-lg text-sm font-medium hover:bg-muted transition-colors disabled:opacity-60"
           >
-            <Link2 className="w-4 h-4" />
+            <Link2 className="w-4 h-4 shrink-0" />
             {inviteCopying ? t("planner.vendors.generating") : t("planner.vendors.copyInvite")}
           </button>
 
@@ -697,9 +697,9 @@ export default function VendorsPage() {
             <button
               onClick={handleOpenBrief}
               disabled={briefGenerating}
-              className="flex items-center gap-2 bg-primary/5 border border-primary/20 text-primary px-4 py-2 rounded-lg text-sm font-medium hover:bg-primary/10 transition-colors disabled:opacity-50"
+              className="flex items-center justify-center gap-2 whitespace-nowrap bg-primary/5 border border-primary/20 text-primary px-4 py-2 rounded-lg text-sm font-medium hover:bg-primary/10 transition-colors disabled:opacity-50"
             >
-              <FileText className="w-4 h-4" />
+              <FileText className="w-4 h-4 shrink-0" />
               {briefGenerating ? t("planner.vendors.generating") : t("planner.vendors.shareEventBrief")}
             </button>
           )}
