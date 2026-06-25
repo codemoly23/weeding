@@ -6,6 +6,7 @@ import Image from "next/image";
 import { motion, useInView, type Variants } from "framer-motion";
 import { useRef } from "react";
 import { Phone, MapPin, MessageCircle, ChevronRight, Send, CheckCircle2 } from "lucide-react";
+import { useLanguage } from "@/lib/i18n/language-context";
 
 // ─── Animation Variants ───────────────────────────────────────────
 const fadeUp: Variants = {
@@ -46,31 +47,11 @@ function useScrollReveal() {
 }
 
 // ─── Data ─────────────────────────────────────────────────────────
+// Text resolved via t() using the contact.card.* keys so it follows the language switcher.
 const INFO_CARDS = [
-  {
-    icon: Phone,
-    title: "Reach Out",
-    description:
-      "Have a question or want to learn more about our services? Give us a call — we're happy to help.",
-    buttonText: "Call Us",
-    href: "tel:+12345678900",
-  },
-  {
-    icon: MapPin,
-    title: "Find Us",
-    description:
-      "Planning to visit? Come find us at our office to discuss your event needs in person.",
-    buttonText: "Get Directions",
-    href: "https://maps.google.com",
-  },
-  {
-    icon: MessageCircle,
-    title: "Get Support",
-    description:
-      "Need help with your account or planning? Our support team is always ready for you.",
-    buttonText: "Start Chat",
-    href: "#chat",
-  },
+  { icon: Phone,          key: "reachOut", href: "tel:+12345678900" },
+  { icon: MapPin,         key: "findUs",   href: "https://maps.google.com" },
+  { icon: MessageCircle,  key: "support",  href: "#chat" },
 ];
 
 const OFFICE_LOCATIONS = [
@@ -97,6 +78,7 @@ const INPUT_CLASS =
 
 // ─── Component ────────────────────────────────────────────────────
 export function ContactPageContent() {
+  const { t } = useLanguage();
   const [form, setForm] = useState<FormState>(EMPTY_FORM);
   const [submitting, setSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
@@ -192,10 +174,10 @@ export function ContactPageContent() {
             transition={{ duration: 0.7, delay: 0.3, ease: [0.22, 1, 0.36, 1] }}
           >
             <Link href="/" className="transition-colors hover:text-primary-foreground">
-              Home
+              {t("nav.home")}
             </Link>
             <ChevronRight className="h-4 w-4 shrink-0 text-white/50" />
-            <span className="text-white/90">Contact Us</span>
+            <span className="text-white/90">{t("contact.title")}</span>
           </motion.nav>
 
           {/* Big title */}
@@ -205,7 +187,7 @@ export function ContactPageContent() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.9, delay: 0.5, ease: [0.22, 1, 0.36, 1] }}
           >
-            Contact Us
+            {t("contact.title")}
           </motion.h1>
         </div>
       </section>
@@ -226,7 +208,7 @@ export function ContactPageContent() {
               const Icon = card.icon;
               return (
                 <motion.div
-                  key={card.title}
+                  key={card.key}
                   variants={cardVariant}
                   className="flex items-start gap-4 px-4 py-8 sm:gap-5 sm:px-6 md:px-8 md:first:pl-0 md:last:pr-0"
                 >
@@ -240,9 +222,9 @@ export function ContactPageContent() {
                   </motion.div>
 
                   <div className="flex flex-col items-start gap-2">
-                    <h3 className="text-base font-bold text-foreground">{card.title}</h3>
+                    <h3 className="text-base font-bold text-foreground">{t(`contact.card.${card.key}.title`)}</h3>
                     <p className="text-sm leading-relaxed text-slate-500">
-                      {card.description}
+                      {t(`contact.card.${card.key}.desc`)}
                     </p>
                     <motion.a
                       href={card.href}
@@ -251,7 +233,7 @@ export function ContactPageContent() {
                       whileTap={{ scale: 0.97 }}
                       transition={{ type: "spring", stiffness: 400, damping: 17 }}
                     >
-                      {card.buttonText}
+                      {t(`contact.card.${card.key}.button`)}
                     </motion.a>
                   </div>
                 </motion.div>
@@ -341,15 +323,15 @@ export function ContactPageContent() {
                   >
                     <CheckCircle2 className="mb-4 h-14 w-14 text-[var(--color-success-text)]" />
                   </motion.div>
-                  <h3 className="mb-2 text-xl font-bold text-foreground">Message Sent!</h3>
+                  <h3 className="mb-2 text-xl font-bold text-foreground">{t("contact.success.title")}</h3>
                   <p className="max-w-xs text-sm text-muted-foreground">
-                    Thank you for reaching out. We&apos;ll get back to you within 24 hours.
+                    {t("contact.success.desc")}
                   </p>
                   <button
                     onClick={() => setSubmitted(false)}
                     className="mt-6 text-sm font-semibold text-primary transition-opacity hover:opacity-80"
                   >
-                    Send another message
+                    {t("contact.success.another")}
                   </button>
                 </motion.div>
               ) : (
@@ -361,7 +343,7 @@ export function ContactPageContent() {
                     initial="hidden"
                     animate={rightSection.inView ? "visible" : "hidden"}
                   >
-                    Contact Us
+                    {t("contact.form.eyebrow")}
                   </motion.p>
 
                   <motion.h2
@@ -371,7 +353,7 @@ export function ContactPageContent() {
                     initial="hidden"
                     animate={rightSection.inView ? "visible" : "hidden"}
                   >
-                    Got Any Questions?
+                    {t("contact.form.heading")}
                   </motion.h2>
 
                   <motion.form
@@ -385,36 +367,36 @@ export function ContactPageContent() {
                     {/* Row 1 */}
                     <motion.div variants={cardVariant} className="grid grid-cols-1 gap-4 sm:grid-cols-2">
                       <div className="flex flex-col gap-1.5">
-                        <label className="text-xs font-semibold text-foreground/80">Full Name</label>
+                        <label className="text-xs font-semibold text-foreground/80">{t("contact.form.fullName")}</label>
                         <input type="text" name="fullName" value={form.fullName} onChange={handleChange}
-                          placeholder="Full Name" required className={INPUT_CLASS} />
+                          placeholder={t("contact.form.fullName")} required className={INPUT_CLASS} />
                       </div>
                       <div className="flex flex-col gap-1.5">
-                        <label className="text-xs font-semibold text-foreground/80">Subject</label>
+                        <label className="text-xs font-semibold text-foreground/80">{t("contact.form.subject")}</label>
                         <input type="text" name="subject" value={form.subject} onChange={handleChange}
-                          placeholder="Subject" className={INPUT_CLASS} />
+                          placeholder={t("contact.form.subject")} className={INPUT_CLASS} />
                       </div>
                     </motion.div>
 
                     {/* Row 2 */}
                     <motion.div variants={cardVariant} className="grid grid-cols-1 gap-4 sm:grid-cols-2">
                       <div className="flex flex-col gap-1.5">
-                        <label className="text-xs font-semibold text-foreground/80">Phone Number</label>
+                        <label className="text-xs font-semibold text-foreground/80">{t("contact.form.phoneNumber")}</label>
                         <input type="tel" name="phoneNumber" value={form.phoneNumber} onChange={handleChange}
-                          placeholder="Phone Number" className={INPUT_CLASS} />
+                          placeholder={t("contact.form.phoneNumber")} className={INPUT_CLASS} />
                       </div>
                       <div className="flex flex-col gap-1.5">
-                        <label className="text-xs font-semibold text-foreground/80">Email Address</label>
+                        <label className="text-xs font-semibold text-foreground/80">{t("contact.form.emailAddress")}</label>
                         <input type="email" name="email" value={form.email} onChange={handleChange}
-                          placeholder="Email Address" required className={INPUT_CLASS} />
+                          placeholder={t("contact.form.emailAddress")} required className={INPUT_CLASS} />
                       </div>
                     </motion.div>
 
                     {/* Row 3 */}
                     <motion.div variants={cardVariant} className="flex flex-col gap-1.5">
-                      <label className="text-xs font-semibold text-foreground/80">Your Message</label>
+                      <label className="text-xs font-semibold text-foreground/80">{t("contact.form.yourMessage")}</label>
                       <textarea name="message" value={form.message} onChange={handleChange}
-                        placeholder="Type your message..." required rows={4}
+                        placeholder={t("contact.form.messagePlaceholder")} required rows={4}
                         className={`${INPUT_CLASS} resize-none`} />
                     </motion.div>
 
@@ -447,11 +429,11 @@ export function ContactPageContent() {
                               animate={{ rotate: 360 }}
                               transition={{ repeat: Infinity, duration: 0.8, ease: "linear" }}
                             />
-                            Sending...
+                            {t("contact.form.sending")}
                           </>
                         ) : (
                           <>
-                            Send Message
+                            {t("contact.form.send")}
                             <motion.span
                               initial={{ x: 0 }}
                               whileHover={{ x: 4 }}

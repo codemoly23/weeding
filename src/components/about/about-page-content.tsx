@@ -22,6 +22,7 @@ import {
   useSpring,
   AnimatePresence,
 } from "framer-motion";
+import { useLanguage } from "@/lib/i18n/language-context";
 
 // ─── Animation Variants ───────────────────────────────────────────────────────
 
@@ -77,18 +78,19 @@ function useCountUp(target: number, inView: boolean, duration = 1.8) {
 // ─── Data ─────────────────────────────────────────────────────────────────────
 
 const STATS = [
-  { icon: CalendarDays, rawValue: 2400,  suffix: "+", label: "Events Planned"  },
-  { icon: Users,        rawValue: 1800,  suffix: "+", label: "Happy Couples"   },
-  { icon: Building2,    rawValue: 350,   suffix: "+", label: "Partner Vendors" },
-  { icon: MapPin,       rawValue: 12,    suffix: "",  label: "Cities Covered"  },
+  { icon: CalendarDays, rawValue: 2400,  suffix: "+", labelKey: "about.stats.eventsPlanned"  },
+  { icon: Users,        rawValue: 1800,  suffix: "+", labelKey: "about.stats.happyCouples"   },
+  { icon: Building2,    rawValue: 350,   suffix: "+", labelKey: "about.stats.partnerVendors" },
+  { icon: MapPin,       rawValue: 12,    suffix: "",  labelKey: "about.stats.citiesCovered"  },
 ];
 
+// Names are proper nouns (unchanged); role/bio resolved via t() using the about.team.* keys.
 const TEAM = [
   {
     id: 1,
     name: "Emma Lindqvist",
-    role: "Lead Wedding Planner",
-    bio: "With over 8 years crafting unforgettable ceremonies, Emma brings warmth and meticulous attention to every detail of your celebration.",
+    roleKey: "about.team.role.lead",
+    bioKey: "about.team.bio.lead",
     featured: false,
     initials: "EL",
     ringFrom: "#fed7aa",
@@ -99,8 +101,8 @@ const TEAM = [
   {
     id: 2,
     name: "Marcus Okafor",
-    role: "Creative Director",
-    bio: "Marcus transforms vision boards into reality, overseeing décor, styling, and the visual story behind every beautiful event.",
+    roleKey: "about.team.role.creative",
+    bioKey: "about.team.bio.creative",
     featured: true,
     initials: "MO",
     ringFrom: "#e9d5ff",
@@ -111,8 +113,8 @@ const TEAM = [
   {
     id: 3,
     name: "Sofia Bergström",
-    role: "Guest Experience Lead",
-    bio: "Sofia ensures every guest feels welcomed and every logistical detail — from RSVP to seating — runs flawlessly.",
+    roleKey: "about.team.role.guest",
+    bioKey: "about.team.bio.guest",
     featured: true,
     initials: "SB",
     ringFrom: "#fce7f3",
@@ -123,8 +125,8 @@ const TEAM = [
   {
     id: 4,
     name: "Daniel Park",
-    role: "Vendor Relations Manager",
-    bio: "Daniel curates and coordinates our trusted vendor network, ensuring top-quality services for every event type.",
+    roleKey: "about.team.role.vendor",
+    bioKey: "about.team.bio.vendor",
     featured: false,
     initials: "DP",
     ringFrom: "#dbeafe",
@@ -135,8 +137,8 @@ const TEAM = [
   {
     id: 5,
     name: "Amara Nwosu",
-    role: "Digital Platform Lead",
-    bio: "Amara keeps Ceremoney running smoothly, turning complex logistics into simple, intuitive digital experiences.",
+    roleKey: "about.team.role.digital",
+    bioKey: "about.team.bio.digital",
     featured: false,
     initials: "AN",
     ringFrom: "#ccfbf1",
@@ -156,7 +158,13 @@ function StatItem({
   suffix,
   label,
   index,
-}: (typeof STATS)[number] & { index: number }) {
+}: {
+  icon: React.ComponentType<{ className?: string; strokeWidth?: number }>;
+  rawValue: number;
+  suffix: string;
+  label: string;
+  index: number;
+}) {
   const ref    = useRef<HTMLDivElement>(null);
   const inView = useInView(ref, { once: true, margin: "-60px" });
   const count  = useCountUp(rawValue, inView);
@@ -201,6 +209,7 @@ function StatItem({
 // ─── Main Component ───────────────────────────────────────────────────────────
 
 export function AboutPageContent() {
+  const { t } = useLanguage();
   const [teamStart, setTeamStart] = useState(0);
   const [direction, setDirection] = useState(0);
 
@@ -270,9 +279,9 @@ export function AboutPageContent() {
               <Home className="w-4 h-4" />
             </Link>
             <ChevronRight className="w-3 h-3 text-white/30" />
-            <span className="text-white/40">Pages</span>
+            <span className="text-white/40">{t("about.breadcrumb.pages")}</span>
             <ChevronRight className="w-3 h-3 text-white/30" />
-            <span className="text-primary-foreground font-medium">About Us</span>
+            <span className="text-primary-foreground font-medium">{t("about.aboutUs")}</span>
           </motion.nav>
 
           <motion.h1
@@ -281,7 +290,7 @@ export function AboutPageContent() {
             transition={{ duration: 0.75, delay: 0.5, ease }}
             className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold text-primary-foreground font-heading tracking-tight leading-tight"
           >
-            About Us
+            {t("about.aboutUs")}
           </motion.h1>
         </div>
       </section>
@@ -334,29 +343,26 @@ export function AboutPageContent() {
                 variants={fadeRight}
                 className="text-xs font-bold text-primary tracking-[0.2em] uppercase font-heading"
               >
-                About Us
+                {t("about.aboutUs")}
               </motion.p>
               <motion.h2
                 variants={fadeRight}
                 className="text-3xl sm:text-4xl md:text-[2.75rem] leading-[1.15] text-slate-900 italic font-accent"
               >
-                We create unforgettable moments for every celebration.
+                {t("about.intro.heading")}
               </motion.h2>
               <motion.p variants={fadeRight} className="text-base text-slate-500 leading-relaxed">
-                Ceremoney is a modern digital platform built for couples, families, and event hosts
-                who want a seamless, stress-free planning experience. From intimate baptisms to grand
-                weddings, we handle every detail with care and precision.
+                {t("about.intro.p1")}
               </motion.p>
               <motion.p variants={fadeRight} className="text-base text-slate-500 leading-relaxed">
-                Our platform brings together smart tools, trusted vendors, and a passionate team —
-                so you can focus on the joy, while we handle the flow.
+                {t("about.intro.p2")}
               </motion.p>
               <motion.div variants={fadeRight} className="pt-2">
                 <Link
                   href="/services"
                   className="inline-flex items-center gap-2 px-7 py-3 rounded-lg bg-primary text-primary-foreground text-sm font-semibold hover:bg-[#2A2A2A] transition-colors shadow-md shadow-primary/25"
                 >
-                  Explore Our Services
+                  {t("about.intro.cta")}
                   <ChevronRight className="w-4 h-4" />
                 </Link>
               </motion.div>
@@ -386,7 +392,14 @@ export function AboutPageContent() {
             viewport={{ once: true, margin: "-60px" }}
           >
             {STATS.map((stat, i) => (
-              <StatItem key={stat.label} {...stat} index={i} />
+              <StatItem
+                key={stat.labelKey}
+                icon={stat.icon}
+                rawValue={stat.rawValue}
+                suffix={stat.suffix}
+                label={t(stat.labelKey)}
+                index={i}
+              />
             ))}
           </motion.div>
         </div>
@@ -405,10 +418,10 @@ export function AboutPageContent() {
           >
             <div>
               <p className="text-xs font-bold text-primary tracking-[0.2em] uppercase font-heading mb-2">
-                Our Backbone
+                {t("about.team.eyebrow")}
               </p>
               <h2 className="text-3xl sm:text-4xl md:text-[2.75rem] text-slate-900 italic font-accent leading-tight">
-                Meet Our Team
+                {t("about.team.heading")}
               </h2>
             </div>
 
@@ -416,7 +429,7 @@ export function AboutPageContent() {
               <button
                 onClick={() => paginate(-1)}
                 disabled={!canPrev}
-                aria-label="Previous team members"
+                aria-label={t("about.team.prev")}
                 className="w-11 h-11 rounded-lg border-2 border-primary flex items-center justify-center text-primary hover:bg-primary hover:text-primary-foreground transition-colors disabled:opacity-30 disabled:cursor-not-allowed"
               >
                 <ChevronLeft className="w-5 h-5" />
@@ -424,7 +437,7 @@ export function AboutPageContent() {
               <button
                 onClick={() => paginate(1)}
                 disabled={!canNext}
-                aria-label="Next team members"
+                aria-label={t("about.team.next")}
                 className="w-11 h-11 rounded-lg bg-primary flex items-center justify-center text-primary-foreground hover:bg-[#2A2A2A] transition-colors disabled:opacity-30 disabled:cursor-not-allowed"
               >
                 <ChevronRight className="w-5 h-5" />
@@ -482,14 +495,14 @@ export function AboutPageContent() {
                   <h3 className="text-base font-bold text-slate-900 font-heading mb-1">
                     {member.name}
                   </h3>
-                  <p className="text-sm text-slate-400">{member.role}</p>
+                  <p className="text-sm text-slate-400">{t(member.roleKey)}</p>
 
                   {/* Divider */}
                   <div className="w-full h-px bg-slate-100 my-5" />
 
                   {/* Bio */}
                   <p className="text-sm text-slate-500 leading-relaxed flex-1 mb-6">
-                    {member.bio}
+                    {t(member.bioKey)}
                   </p>
 
                   {/* Centered pill button */}
@@ -499,7 +512,7 @@ export function AboutPageContent() {
                     transition={{ type: "spring", stiffness: 300, damping: 18 }}
                     className="group/btn px-8 py-2.5 rounded-full bg-primary text-primary-foreground text-sm font-semibold hover:bg-[#2A2A2A] transition-colors duration-200 shadow-md shadow-primary/25 flex items-center gap-2"
                   >
-                    View Profile
+                    {t("about.team.viewProfile")}
                     <ArrowRight className="w-4 h-4 transition-transform duration-200 group-hover/btn:translate-x-1" />
                   </motion.button>
                 </motion.div>
@@ -545,17 +558,16 @@ export function AboutPageContent() {
             variants={fadeUp}
             className="text-xs font-bold text-primary tracking-[0.2em] uppercase font-heading mb-3"
           >
-            Our Approach
+            {t("about.approach.eyebrow")}
           </motion.p>
           <motion.h2
             variants={fadeUp}
             className="text-3xl sm:text-4xl md:text-[2.75rem] text-slate-900 italic font-accent mb-5 leading-tight"
           >
-            See How We Make Magic Happen
+            {t("about.approach.heading")}
           </motion.h2>
           <motion.p variants={fadeUp} className="text-base text-slate-500 leading-relaxed mb-10">
-            From the very first consultation to the final farewell, our team is by your side —
-            guiding, coordinating, and celebrating every milestone of your journey with care.
+            {t("about.approach.desc")}
           </motion.p>
 
           {/* Play button with pulse ring */}
@@ -570,7 +582,7 @@ export function AboutPageContent() {
               transition={{ duration: 1.8, repeat: Infinity, ease: "easeOut" }}
             />
             <motion.button
-              aria-label="Watch our story"
+              aria-label={t("about.approach.watch")}
               whileHover={{ scale: 1.12 }}
               whileTap={{ scale: 0.95 }}
               transition={{ type: "spring", stiffness: 300, damping: 15 }}
