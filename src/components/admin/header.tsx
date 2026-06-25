@@ -85,6 +85,7 @@ export function AdminHeader() {
   const [notifications, setNotifications] = useState<AdminNotification[]>([]);
   const [unreadCount, setUnreadCount] = useState(0);
   const [open, setOpen] = useState(false);
+  const [mobileNavOpen, setMobileNavOpen] = useState(false);
 
   // Global search
   const [searchQuery, setSearchQuery] = useState("");
@@ -220,15 +221,15 @@ export function AdminHeader() {
   return (
     <header className="sticky top-0 z-50 flex h-16 items-center justify-between border-b bg-[var(--admin-surface)] px-4 text-[var(--admin-text)] backdrop-blur lg:px-6" style={{ borderColor: "var(--admin-border)" }}>
       {/* Mobile Menu */}
-      <Sheet>
+      <Sheet open={mobileNavOpen} onOpenChange={setMobileNavOpen}>
         <SheetTrigger asChild>
           <Button variant="ghost" size="icon" className="lg:hidden">
             <Menu className="h-5 w-5" />
           </Button>
         </SheetTrigger>
-        <SheetContent side="left" className="w-64 p-0">
+        <SheetContent side="left" className="admin-layout w-64 p-0">
           <SheetTitle className="sr-only">{t("admin.header.navigationMenu")}</SheetTitle>
-          <AdminSidebar mobile />
+          <AdminSidebar mobile onNavigate={() => setMobileNavOpen(false)} />
         </SheetContent>
       </Sheet>
 

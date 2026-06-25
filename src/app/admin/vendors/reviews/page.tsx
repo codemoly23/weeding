@@ -121,10 +121,10 @@ export default function AdminVendorReviewsPage() {
       {/* Stats */}
       <div className="grid grid-cols-3 gap-4">
         {statCards.map((s) => (
-          <Card key={s.label}>
-            <CardContent className="p-4">
+          <Card key={s.label} className="py-0 sm:py-6">
+            <CardContent className="flex flex-1 flex-col p-4 sm:block sm:flex-none">
               <p className="text-sm text-[var(--admin-muted)]">{s.label}</p>
-              <p className={`text-2xl font-bold mt-0.5 ${s.color}`}>{s.value}</p>
+              <p className={`flex flex-1 items-center text-2xl font-bold sm:mt-0.5 sm:block ${s.color}`}>{s.value}</p>
             </CardContent>
           </Card>
         ))}

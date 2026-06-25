@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useCallback, useRef } from "react";
 import { useParams } from "next/navigation";
-import { Plus, Trash2, Download, Check } from "lucide-react";
+import { Plus, Trash2, Download, Check, ArrowLeft } from "lucide-react";
 import { useLanguage } from "@/lib/i18n/language-context";
 import {
   getLocalNotes,
@@ -36,6 +36,9 @@ export default function NotesPage() {
   const [notes, setNotes] = useState<LocalNote[]>([]);
   const [loading, setLoading] = useState(true);
   const [activeId, setActiveId] = useState<string | null>(null);
+  // Mobile master-detail: on small screens show either the list or the editor,
+  // not both. Desktop (sm+) always shows them side by side.
+  const [mobileShowEditor, setMobileShowEditor] = useState(false);
   const [saveState, setSaveState] = useState<"idle" | "saving" | "saved">("idle");
   const [deleteTargetId, setDeleteTargetId] = useState<string | null>(null);
   const saveTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -78,6 +81,7 @@ export default function NotesPage() {
       setNotes(prev => [res.note, ...prev]);
       setActiveId(res.note.id);
     }
+    setMobileShowEditor(true);
   }
 
   async function updateField(noteId: string, field: "title" | "content", value: string) {
@@ -107,6 +111,7 @@ export default function NotesPage() {
       const remaining = notes.filter(n => n.id !== deleteTargetId);
       setNotes(remaining);
       setActiveId(remaining.length > 0 ? remaining[0].id : null);
+      if (remaining.length === 0) setMobileShowEditor(false);
     } catch {
       alert(t("notes.deleteError"));
     } finally {
@@ -163,7 +168,7 @@ export default function NotesPage() {
   return (
     <div className="flex h-[calc(100vh-8rem)] overflow-hidden">
       {/* Sidebar */}
-      <div className="flex w-28 sm:w-56 flex-shrink-0 flex-col border-r border-border bg-muted/30">
+      <div className={`${mobileShowEditor ? "hidden" : "flex"} sm:flex w-full sm:w-56 flex-shrink-0 flex-col border-r border-border bg-muted/30`}>
         <div className="flex items-center justify-between px-3 py-3 border-b border-border">
           <span className="text-sm font-semibold text-foreground/80">{t("notes.heading")}</span>
           <button onClick={createNote} className="rounded-lg p-1 text-muted-foreground hover:text-primary hover:bg-primary/10 transition-colors">
@@ -181,7 +186,7 @@ export default function NotesPage() {
             notes.map(note => (
               <button
                 key={note.id}
-                onClick={() => setActiveId(note.id)}
+                onClick={() => { setActiveId(note.id); setMobileShowEditor(true); }}
                 className={`group w-full px-3 py-2.5 text-left transition-colors ${
                   activeId === note.id ? "bg-card border-r-2 border-primary" : "hover:bg-card"
                 }`}
@@ -195,7 +200,7 @@ export default function NotesPage() {
       </div>
 
       {/* Editor */}
-      <div className="flex flex-1 flex-col overflow-hidden">
+      <div className={`${mobileShowEditor ? "flex" : "hidden"} sm:flex flex-1 flex-col overflow-hidden`}>
         {!activeNote ? (
           <div className="flex flex-1 items-center justify-center">
             <div className="text-center">
@@ -209,7 +214,14 @@ export default function NotesPage() {
         ) : (
           <>
             {/* Note header */}
-            <div className="flex items-center gap-2 border-b border-border px-6 py-3">
+            <div className="flex items-center gap-2 border-b border-border px-4 sm:px-6 py-3">
+              <button
+                onClick={() => setMobileShowEditor(false)}
+                className="sm:hidden -ml-1 rounded-lg p-1.5 text-muted-foreground hover:text-primary hover:bg-primary/10 transition-colors"
+                aria-label={t("notes.heading")}
+              >
+                <ArrowLeft className="h-4 w-4" />
+              </button>
               <input
                 value={activeNote.title}
                 onChange={e => updateField(activeNote.id, "title", e.target.value)}

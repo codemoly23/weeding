@@ -1812,6 +1812,24 @@ function AlphabeticalAtlasPanel({
   const scrollRef = useRef<HTMLDivElement>(null);
   const photos = GALLERY.cards;
 
+  // Responsive scale: shrink the fixed-width (595px) preview doc to fit narrow
+  // screens so nothing gets clipped on mobile. Desktop keeps the 0.95 zoom.
+  const docFrameRef = useRef<HTMLDivElement>(null);
+  const [docZoom, setDocZoom] = useState(0.95);
+  useEffect(() => {
+    const el = docFrameRef.current;
+    if (!el) return;
+    const update = () => {
+      const available = el.clientWidth;
+      // 8px breathing room; never upscale past the default 0.95
+      setDocZoom(Math.min(0.95, (available - 8) / 595));
+    };
+    update();
+    const ro = new ResizeObserver(update);
+    ro.observe(el);
+    return () => ro.disconnect();
+  }, []);
+
   function scrollToPhoto(i: number) {
     setActivePhoto(i);
     const el = scrollRef.current?.children[i] as HTMLElement | undefined;
@@ -1827,8 +1845,10 @@ function AlphabeticalAtlasPanel({
       </div>
 
       {/* Printable document card */}
-      <div className="mx-auto w-fit overflow-hidden rounded-xl border border-border shadow-sm" style={{ zoom: 0.95 }}>
-        <AtlasPreviewDoc guests={guests} layouts={layouts} settings={settings} />
+      <div ref={docFrameRef} className="w-full">
+        <div className="mx-auto w-fit overflow-y-auto overflow-x-hidden rounded-xl border border-border shadow-sm" style={{ zoom: docZoom, maxHeight: "70vh" }}>
+          <AtlasPreviewDoc guests={guests} layouts={layouts} settings={settings} />
+        </div>
       </div>
 
       {/* Edit link + paper size */}

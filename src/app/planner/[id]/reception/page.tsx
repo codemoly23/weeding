@@ -339,7 +339,7 @@ export default function ReceptionPage() {
             <p className={`text-sm font-medium ${form.date ? "text-primary" : "text-primary/40"}`}>
               {formatDate(form.date, t("reception.setDate"))}
             </p>
-            <div className="relative flex justify-center mt-3" onClick={e => e.stopPropagation()}>
+            <div className="relative flex justify-center mt-auto pt-3 sm:mt-3 sm:pt-0" onClick={e => e.stopPropagation()}>
               <Calendar
                 className="h-8 w-8 text-primary/20 cursor-pointer hover:text-primary/40 transition-colors"
                 onClick={() => { setDatePickerOpen(v => !v); setLocPopupOpen(false); setEditingLocation(false); }}
@@ -375,7 +375,7 @@ export default function ReceptionPage() {
                 {formatLocation(form.city, form.country, form.address, t("reception.setLocation"))}
               </p>
             )}
-            <div className="relative flex justify-center mt-3" onClick={e => e.stopPropagation()}>
+            <div className="relative flex justify-center mt-auto pt-3 sm:mt-3 sm:pt-0" onClick={e => e.stopPropagation()}>
               <MapPin
                 className="h-8 w-8 text-primary/20 cursor-pointer hover:text-primary/40 transition-colors"
                 onClick={() => { setLocPopupOpen(v => !v); setDatePickerOpen(false); setEditingLocation(false); }}
@@ -400,7 +400,7 @@ export default function ReceptionPage() {
           >
             <p className="mb-1 text-xs text-muted-foreground">{t("reception.layout")}</p>
             <p className="text-sm font-medium text-primary">{t("reception.planLayout")}</p>
-            <div className="flex justify-center mt-3">
+            <div className="flex justify-center mt-auto pt-3 sm:mt-3 sm:pt-0">
               <LayoutTemplate className="h-8 w-8 text-primary/20" />
             </div>
           </div>

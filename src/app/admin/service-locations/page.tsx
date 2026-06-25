@@ -427,21 +427,21 @@ export default function ServiceLocationsPage() {
   return (
     <div className="space-y-6">
       {/* Header */}
-      <div className="rounded-2xl bg-card border border-border p-6">
-        <div className="flex items-start justify-between gap-4">
-          <div className="flex items-center gap-4">
-            <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-[var(--ast-hold-bg)] border border-[var(--ast-hold-border)]">
+      <div className="rounded-2xl bg-card border border-border p-4 sm:p-6">
+        <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
+          <div className="flex items-center gap-3 sm:gap-4">
+            <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-[var(--ast-hold-bg)] border border-[var(--ast-hold-border)]">
               <MapPin className="h-6 w-6 text-[var(--admin-primary)]" />
             </div>
             <div>
-              <h1 className="text-2xl font-bold text-foreground">{t("admin.serviceLocations.title")}</h1>
+              <h1 className="text-xl sm:text-2xl font-bold text-foreground">{t("admin.serviceLocations.title")}</h1>
               <p className="mt-0.5 text-sm text-muted-foreground">
                 {t("admin.serviceLocations.subtitle")}
               </p>
             </div>
           </div>
           {!loading && (
-            <div className="shrink-0 rounded-xl bg-[var(--ast-hold-bg)] border border-[var(--ast-hold-border)] px-4 py-2 text-center">
+            <div className="flex shrink-0 items-center justify-between gap-4 rounded-xl bg-[var(--ast-hold-bg)] border border-[var(--ast-hold-border)] px-4 py-2 text-center sm:block">
               <p className="text-2xl font-bold text-[var(--ast-hold-text)]">{total}</p>
               <p className="text-xs text-muted-foreground">{t("admin.serviceLocations.totalOptions")}</p>
             </div>
