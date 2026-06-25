@@ -18,6 +18,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useState } from "react";
+import { useLanguage } from "@/lib/i18n/language-context";
 
 type PageType =
   | "home"
@@ -37,83 +38,28 @@ interface ComingSoonPageProps {
   };
 }
 
-const COMING_SOON_CONFIG: Record<
-  PageType,
-  {
-    title: string;
-    subtitle: string;
-    description: string;
-    icon: React.ComponentType<{ className?: string }>;
-  }
-> = {
-  home: {
-    title: "Coming Soon",
-    subtitle: "We're Building Something Amazing",
-    description:
-      "Our team is working hard to bring you an exceptional experience. Subscribe to get notified when we launch!",
-    icon: Rocket,
-  },
-  service_details: {
-    title: "Service Details",
-    subtitle: "Coming Soon",
-    description:
-      "We're preparing comprehensive information about this service. Subscribe to be notified when it's ready.",
-    icon: Package,
-  },
-  services_list: {
-    title: "Our Services",
-    subtitle: "Coming Soon",
-    description:
-      "We're curating an amazing list of services tailored for you. Stay tuned!",
-    icon: Grid,
-  },
-  blog_post: {
-    title: "Article",
-    subtitle: "Coming Soon",
-    description:
-      "This article is being crafted with care. Subscribe to get notified when it's published.",
-    icon: FileText,
-  },
-  blog_list: {
-    title: "Our Blog",
-    subtitle: "Coming Soon",
-    description:
-      "We're preparing insightful content for you. Subscribe to be the first to read our articles!",
-    icon: Newspaper,
-  },
-  about: {
-    title: "About Us",
-    subtitle: "Coming Soon",
-    description:
-      "We're crafting our story. Check back soon to learn more about who we are!",
-    icon: Users,
-  },
-  contact: {
-    title: "Contact Page",
-    subtitle: "Coming Soon",
-    description:
-      "Our contact page is being set up. Feel free to reach out via email in the meantime.",
-    icon: Mail,
-  },
-  faq: {
-    title: "FAQ",
-    subtitle: "Coming Soon",
-    description:
-      "Our FAQ page is being prepared. Check back soon for answers to common questions!",
-    icon: HelpCircle,
-  },
-  pricing: {
-    title: "Pricing",
-    subtitle: "Coming Soon",
-    description:
-      "Our pricing page is being prepared. Check back soon for transparent pricing information!",
-    icon: Package,
-  },
+// Icon per page type — text (title/subtitle/description) is resolved via t()
+// using the `comingSoonPage.<pageType>.*` keys so it follows the active language.
+const COMING_SOON_ICONS: Record<PageType, React.ComponentType<{ className?: string }>> = {
+  home: Rocket,
+  service_details: Package,
+  services_list: Grid,
+  blog_post: FileText,
+  blog_list: Newspaper,
+  about: Users,
+  contact: Mail,
+  faq: HelpCircle,
+  pricing: Package,
 };
 
 export function ComingSoonPage({ pageType, context }: ComingSoonPageProps) {
-  const config = COMING_SOON_CONFIG[pageType];
-  const Icon = config.icon;
+  const { t } = useLanguage();
+  const Icon = COMING_SOON_ICONS[pageType];
+  const config = {
+    title: t(`comingSoonPage.${pageType}.title`),
+    subtitle: t(`comingSoonPage.${pageType}.subtitle`),
+    description: t(`comingSoonPage.${pageType}.description`),
+  };
   const [email, setEmail] = useState("");
   const [isSubmitted, setIsSubmitted] = useState(false);
 
@@ -150,7 +96,7 @@ export function ComingSoonPage({ pageType, context }: ComingSoonPageProps) {
         <div className="mb-8 animate-fade-in">
           <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 border border-primary/20 text-primary text-sm font-medium">
             <Sparkles className="w-4 h-4" />
-            <span>Launching Soon</span>
+            <span>{t("comingSoonPage.badge")}</span>
           </div>
         </div>
 
@@ -197,13 +143,13 @@ export function ComingSoonPage({ pageType, context }: ComingSoonPageProps) {
                   <div className="flex items-center gap-2 mb-4">
                     <Bell className="w-5 h-5 text-primary" />
                     <span className="font-medium text-slate-700 dark:text-slate-200">
-                      Get Notified
+                      {t("comingSoonPage.getNotified")}
                     </span>
                   </div>
                   <form onSubmit={handleSubmit} className="flex gap-3">
                     <Input
                       type="email"
-                      placeholder="Enter your email..."
+                      placeholder={t("comingSoonPage.emailPlaceholder")}
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
                       className="flex-1 h-12 bg-slate-50 dark:bg-slate-900/50 border-slate-200 dark:border-slate-600 text-slate-900 dark:text-white placeholder:text-slate-400 dark:placeholder:text-slate-500"
@@ -214,12 +160,12 @@ export function ComingSoonPage({ pageType, context }: ComingSoonPageProps) {
                       size="lg"
                       className="h-12 px-6 shadow-lg shadow-primary/25"
                     >
-                      Notify Me
+                      {t("comingSoonPage.notifyMe")}
                       <ArrowRight className="w-4 h-4 ml-2" />
                     </Button>
                   </form>
                   <p className="text-xs text-muted-foreground mt-3 text-center">
-                    We'll only send you one email when we launch. No spam!
+                    {t("comingSoonPage.noSpam")}
                   </p>
                 </>
               ) : (
@@ -229,9 +175,9 @@ export function ComingSoonPage({ pageType, context }: ComingSoonPageProps) {
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                     </svg>
                   </div>
-                  <p className="font-medium text-slate-900 dark:text-white">You're on the list!</p>
+                  <p className="font-medium text-slate-900 dark:text-white">{t("comingSoonPage.onTheList")}</p>
                   <p className="text-sm text-muted-foreground mt-1">
-                    We'll notify you when we launch.
+                    {t("comingSoonPage.willNotify")}
                   </p>
                 </div>
               )}
@@ -244,14 +190,14 @@ export function ComingSoonPage({ pageType, context }: ComingSoonPageProps) {
           <Button variant="outline" size="lg" className="h-12 border-slate-300 dark:border-slate-600 text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800" asChild>
             <Link href="/contact">
               <Mail className="w-4 h-4 mr-2" />
-              Contact Us
+              {t("comingSoonPage.contactUs")}
             </Link>
           </Button>
           {pageType !== "home" && (
             <Button variant="ghost" size="lg" className="h-12" asChild>
               <Link href="/">
                 <Home className="w-4 h-4 mr-2" />
-                Back to Home
+                {t("comingSoonPage.backToHome")}
               </Link>
             </Button>
           )}
@@ -261,7 +207,7 @@ export function ComingSoonPage({ pageType, context }: ComingSoonPageProps) {
         <div className="absolute bottom-8 left-1/2 -translate-x-1/2">
           <div className="flex items-center gap-2 text-sm text-muted-foreground">
             <div className="w-2 h-2 rounded-full bg-[var(--color-success-text)] animate-pulse" />
-            <span>Building in progress</span>
+            <span>{t("comingSoonPage.buildingInProgress")}</span>
           </div>
         </div>
       </div>

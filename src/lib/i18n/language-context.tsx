@@ -23,6 +23,7 @@ const translations: Record<LangCode, Record<string, string>> = {
     // Footer
     "footer.copyright":             "© {year} {name}. All rights reserved.",
     "footer.disclaimer":            "{name} is not a law firm and does not provide legal advice.",
+    "footer.disclaimerLabel":       "Disclaimer",
     "lang.choose":                  "Choose language",
 
     // Main navigation
@@ -2679,12 +2680,52 @@ const translations: Record<LangCode, Record<string, string>> = {
 
     // Coming soon
     "comingSoon":                   "This feature is coming in a future phase.",
+
+    // Coming Soon / No-template fallback page
+    "comingSoonPage.badge":             "Launching Soon",
+    "comingSoonPage.getNotified":       "Get Notified",
+    "comingSoonPage.notifyMe":          "Notify Me",
+    "comingSoonPage.emailPlaceholder":  "Enter your email...",
+    "comingSoonPage.noSpam":            "We'll only send you one email when we launch. No spam!",
+    "comingSoonPage.onTheList":         "You're on the list!",
+    "comingSoonPage.willNotify":        "We'll notify you when we launch.",
+    "comingSoonPage.contactUs":         "Contact Us",
+    "comingSoonPage.backToHome":        "Back to Home",
+    "comingSoonPage.buildingInProgress":"Building in progress",
+    "comingSoonPage.home.title":            "Coming Soon",
+    "comingSoonPage.home.subtitle":         "We're Building Something Amazing",
+    "comingSoonPage.home.description":      "Our team is working hard to bring you an exceptional experience. Subscribe to get notified when we launch!",
+    "comingSoonPage.service_details.title":     "Service Details",
+    "comingSoonPage.service_details.subtitle":  "Coming Soon",
+    "comingSoonPage.service_details.description":"We're preparing comprehensive information about this service. Subscribe to be notified when it's ready.",
+    "comingSoonPage.services_list.title":       "Our Services",
+    "comingSoonPage.services_list.subtitle":    "Coming Soon",
+    "comingSoonPage.services_list.description":  "We're curating an amazing list of services tailored for you. Stay tuned!",
+    "comingSoonPage.blog_post.title":           "Article",
+    "comingSoonPage.blog_post.subtitle":        "Coming Soon",
+    "comingSoonPage.blog_post.description":     "This article is being crafted with care. Subscribe to get notified when it's published.",
+    "comingSoonPage.blog_list.title":           "Our Blog",
+    "comingSoonPage.blog_list.subtitle":        "Coming Soon",
+    "comingSoonPage.blog_list.description":     "We're preparing insightful content for you. Subscribe to be the first to read our articles!",
+    "comingSoonPage.about.title":               "About Us",
+    "comingSoonPage.about.subtitle":            "Coming Soon",
+    "comingSoonPage.about.description":         "We're crafting our story. Check back soon to learn more about who we are!",
+    "comingSoonPage.contact.title":             "Contact Page",
+    "comingSoonPage.contact.subtitle":          "Coming Soon",
+    "comingSoonPage.contact.description":       "Our contact page is being set up. Feel free to reach out via email in the meantime.",
+    "comingSoonPage.faq.title":                 "FAQ",
+    "comingSoonPage.faq.subtitle":              "Coming Soon",
+    "comingSoonPage.faq.description":           "Our FAQ page is being prepared. Check back soon for answers to common questions!",
+    "comingSoonPage.pricing.title":             "Pricing",
+    "comingSoonPage.pricing.subtitle":          "Coming Soon",
+    "comingSoonPage.pricing.description":       "Our pricing page is being prepared. Check back soon for transparent pricing information!",
   },
 
   sv: {
     // Footer
     "footer.copyright":             "© {year} {name}. Alla rättigheter förbehållna.",
     "footer.disclaimer":            "{name} är inte en advokatbyrå och ger inga juridiska råd.",
+    "footer.disclaimerLabel":       "Ansvarsfriskrivning",
     "lang.choose":                  "Välj språk",
 
     // Main navigation
@@ -5341,6 +5382,45 @@ const translations: Record<LangCode, Record<string, string>> = {
 
     // Coming soon
     "comingSoon":                   "Den här funktionen kommer i en framtida fas.",
+
+    // Coming Soon / No-template fallback page
+    "comingSoonPage.badge":             "Lanseras snart",
+    "comingSoonPage.getNotified":       "Få avisering",
+    "comingSoonPage.notifyMe":          "Avisera mig",
+    "comingSoonPage.emailPlaceholder":  "Ange din e-postadress...",
+    "comingSoonPage.noSpam":            "Vi skickar bara ett mejl när vi lanserar. Ingen spam!",
+    "comingSoonPage.onTheList":         "Du är med på listan!",
+    "comingSoonPage.willNotify":        "Vi aviserar dig när vi lanserar.",
+    "comingSoonPage.contactUs":         "Kontakta oss",
+    "comingSoonPage.backToHome":        "Tillbaka till start",
+    "comingSoonPage.buildingInProgress":"Bygget pågår",
+    "comingSoonPage.home.title":            "Kommer snart",
+    "comingSoonPage.home.subtitle":         "Vi bygger något fantastiskt",
+    "comingSoonPage.home.description":      "Vårt team arbetar hårt för att ge dig en exceptionell upplevelse. Prenumerera för att få avisering när vi lanserar!",
+    "comingSoonPage.service_details.title":     "Tjänstedetaljer",
+    "comingSoonPage.service_details.subtitle":  "Kommer snart",
+    "comingSoonPage.service_details.description":"Vi förbereder utförlig information om den här tjänsten. Prenumerera för att få avisering när den är klar.",
+    "comingSoonPage.services_list.title":       "Våra tjänster",
+    "comingSoonPage.services_list.subtitle":    "Kommer snart",
+    "comingSoonPage.services_list.description":  "Vi sammanställer en fantastisk lista med tjänster anpassade för dig. Håll utkik!",
+    "comingSoonPage.blog_post.title":           "Artikel",
+    "comingSoonPage.blog_post.subtitle":        "Kommer snart",
+    "comingSoonPage.blog_post.description":     "Den här artikeln skrivs med omsorg. Prenumerera för att få avisering när den publiceras.",
+    "comingSoonPage.blog_list.title":           "Vår blogg",
+    "comingSoonPage.blog_list.subtitle":        "Kommer snart",
+    "comingSoonPage.blog_list.description":     "Vi förbereder insiktsfullt innehåll åt dig. Prenumerera för att bli först med att läsa våra artiklar!",
+    "comingSoonPage.about.title":               "Om oss",
+    "comingSoonPage.about.subtitle":            "Kommer snart",
+    "comingSoonPage.about.description":         "Vi skapar vår berättelse. Kom tillbaka snart för att lära dig mer om vilka vi är!",
+    "comingSoonPage.contact.title":             "Kontaktsida",
+    "comingSoonPage.contact.subtitle":          "Kommer snart",
+    "comingSoonPage.contact.description":       "Vår kontaktsida håller på att färdigställas. Hör gärna av dig via e-post under tiden.",
+    "comingSoonPage.faq.title":                 "Vanliga frågor",
+    "comingSoonPage.faq.subtitle":              "Kommer snart",
+    "comingSoonPage.faq.description":           "Vår FAQ-sida håller på att förberedas. Kom tillbaka snart för svar på vanliga frågor!",
+    "comingSoonPage.pricing.title":             "Priser",
+    "comingSoonPage.pricing.subtitle":          "Kommer snart",
+    "comingSoonPage.pricing.description":       "Vår prissida håller på att förberedas. Kom tillbaka snart för transparent prisinformation!",
   },
 };
 
