@@ -33,11 +33,8 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Separator } from "@/components/ui/separator";
 import { toast } from "sonner";
-import {
-  sanitizePhone,
-  sanitizeName,
-  INPUT_LIMITS
-} from "@/lib/utils";
+import { sanitizePhone, sanitizeName, INPUT_LIMITS } from "@/lib/utils";
+import { useLanguage } from "@/lib/i18n/language-context";
 
 interface UserProfile {
   id: string;
@@ -72,6 +69,7 @@ const countries = [
 
 export default function ProfilePage() {
   const { update: updateSession } = useSession();
+  const { t } = useLanguage();
   const [loading, setLoading] = useState(true);
   const [isSaving, setIsSaving] = useState(false);
   const [isChangingPassword, setIsChangingPassword] = useState(false);
@@ -82,14 +80,13 @@ export default function ProfilePage() {
     name: "",
     email: "",
     phone: "",
-    country: ""
+    country: "",
   });
   const [passwordData, setPasswordData] = useState({
     currentPassword: "",
     newPassword: "",
-    confirmPassword: ""
+    confirmPassword: "",
   });
-
   const [showPasswords, setShowPasswords] = useState({
     current: false,
     new: false,
@@ -104,8 +101,6 @@ export default function ProfilePage() {
     notifComplianceReminders: true,
     notifMarketingEmails: false,
   });
-
-  // Delete account state
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [deletePassword, setDeletePassword] = useState("");
   const [isDeletingAccount, setIsDeletingAccount] = useState(false);
@@ -133,10 +128,10 @@ export default function ProfilePage() {
         name: data.user.name || "",
         email: data.user.email || "",
         phone: data.user.phone || "",
-        country: data.user.country || ""
+        country: data.user.country || "",
       });
     } catch {
-      toast.error("Failed to load profile");
+      toast.error(t("dashboard.profile.loadFailed"));
     } finally {
       setLoading(false);
     }
@@ -145,7 +140,6 @@ export default function ProfilePage() {
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     let sanitizedValue = value;
-
     switch (name) {
       case "name":
         sanitizedValue = sanitizeName(value, INPUT_LIMITS.name.max);
@@ -154,8 +148,7 @@ export default function ProfilePage() {
         sanitizedValue = sanitizePhone(value);
         break;
     }
-
-    setFormData(prev => ({ ...prev, [name]: sanitizedValue }));
+    setFormData((prev) => ({ ...prev, [name]: sanitizedValue }));
   };
 
   const handleSave = async () => {
@@ -170,18 +163,16 @@ export default function ProfilePage() {
           country: formData.country || null,
         }),
       });
-
       if (!response.ok) {
         const error = await response.json();
         throw new Error(error.error || "Failed to update profile");
       }
-
       const data = await response.json();
       setUser(data.user);
       await updateSession({ name: data.user.name });
-      toast.success("Profile updated successfully");
+      toast.success(t("dashboard.profile.updateSuccess"));
     } catch (error) {
-      toast.error(error instanceof Error ? error.message : "Failed to update profile");
+      toast.error(error instanceof Error ? error.message : t("dashboard.profile.updateFailed"));
     } finally {
       setIsSaving(false);
     }
@@ -189,14 +180,13 @@ export default function ProfilePage() {
 
   const handleChangePassword = async () => {
     if (passwordData.newPassword !== passwordData.confirmPassword) {
-      toast.error("Passwords don't match");
+      toast.error(t("dashboard.profile.passwordMismatch"));
       return;
     }
     if (passwordData.newPassword.length < 8) {
-      toast.error("Password must be at least 8 characters");
+      toast.error(t("dashboard.profile.passwordTooShort"));
       return;
     }
-
     try {
       setIsChangingPassword(true);
       const response = await fetch("/api/customer/profile/password", {
@@ -204,16 +194,14 @@ export default function ProfilePage() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(passwordData),
       });
-
       if (!response.ok) {
         const error = await response.json();
         throw new Error(error.error || "Failed to change password");
       }
-
-      toast.success("Password updated successfully");
+      toast.success(t("dashboard.profile.passwordSuccess"));
       setPasswordData({ currentPassword: "", newPassword: "", confirmPassword: "" });
     } catch (error) {
-      toast.error(error instanceof Error ? error.message : "Failed to change password");
+      toast.error(error instanceof Error ? error.message : t("dashboard.profile.passwordFailed"));
     } finally {
       setIsChangingPassword(false);
     }
@@ -221,7 +209,7 @@ export default function ProfilePage() {
 
   const handleDeleteAccount = async () => {
     if (!deletePassword) {
-      toast.error("Please enter your password");
+      toast.error(t("dashboard.profile.pleaseEnterPassword"));
       return;
     }
     try {
@@ -235,10 +223,10 @@ export default function ProfilePage() {
         const err = await res.json();
         throw new Error(err.error || "Failed to delete account");
       }
-      toast.success("Account deleted. Goodbye!");
+      toast.success(t("dashboard.profile.accountDeleted"));
       await signOut({ callbackUrl: "/" });
     } catch (error) {
-      toast.error(error instanceof Error ? error.message : "Failed to delete account");
+      toast.error(error instanceof Error ? error.message : t("dashboard.profile.accountDeleteFailed"));
     } finally {
       setIsDeletingAccount(false);
     }
@@ -254,9 +242,9 @@ export default function ProfilePage() {
       });
       if (!res.ok) throw new Error("Failed to update 2FA");
       setTwoFactorEnabled(enabled);
-      toast.success(enabled ? "Two-factor authentication enabled" : "Two-factor authentication disabled");
+      toast.success(enabled ? t("dashboard.profile.2faEnabled") : t("dashboard.profile.2faDisabled"));
     } catch {
-      toast.error("Failed to update two-factor authentication");
+      toast.error(t("dashboard.profile.2faFailed"));
     } finally {
       setIsTogglingTwoFactor(false);
     }
@@ -264,7 +252,7 @@ export default function ProfilePage() {
 
   const handleToggleNotification = async (key: keyof typeof notifications, value: boolean) => {
     const prev = notifications[key];
-    setNotifications(n => ({ ...n, [key]: value }));
+    setNotifications((n) => ({ ...n, [key]: value }));
     try {
       const res = await fetch("/api/customer/profile/notifications", {
         method: "PATCH",
@@ -273,62 +261,48 @@ export default function ProfilePage() {
       });
       if (!res.ok) throw new Error();
     } catch {
-      setNotifications(n => ({ ...n, [key]: prev }));
-      toast.error("Failed to update notification preference");
+      setNotifications((n) => ({ ...n, [key]: prev }));
+      toast.error(t("dashboard.profile.notifFailed"));
     }
   };
 
   const getInitials = (name: string | null) => {
     if (!name) return "U";
-    return name
-      .split(" ")
-      .map((n) => n[0])
-      .join("")
-      .toUpperCase()
-      .slice(0, 2);
+    return name.split(" ").map((n) => n[0]).join("").toUpperCase().slice(0, 2);
   };
 
   const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
-
     if (file.size > 2 * 1024 * 1024) {
-      toast.error("Image must be less than 2MB");
+      toast.error(t("dashboard.profile.imageTooLarge"));
       return;
     }
-
     setIsUploadingPhoto(true);
     try {
       const uploadData = new FormData();
       uploadData.append("file", file);
-
-      const uploadRes = await fetch("/api/upload", {
-        method: "POST",
-        body: uploadData,
-      });
-
+      const uploadRes = await fetch("/api/upload", { method: "POST", body: uploadData });
       if (!uploadRes.ok) {
         const err = await uploadRes.json().catch(() => ({}));
-        throw new Error(err.error || "Upload failed");
+        throw new Error(err.error || t("dashboard.profile.uploadFailed"));
       }
       const { url } = await uploadRes.json();
-
       const profileRes = await fetch("/api/customer/profile", {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ image: url }),
       });
-
       if (!profileRes.ok) {
         const err = await profileRes.json().catch(() => ({}));
-        throw new Error(err.error || "Failed to save photo");
+        throw new Error(err.error || t("dashboard.profile.photoSaveFailed"));
       }
       const data = await profileRes.json();
       setUser(data.user);
       await updateSession({ image: url });
-      toast.success("Profile photo updated");
+      toast.success(t("dashboard.profile.photoUpdated"));
     } catch (err) {
-      toast.error(err instanceof Error ? err.message : "Failed to upload photo");
+      toast.error(err instanceof Error ? err.message : t("dashboard.profile.uploadFailed"));
     } finally {
       setIsUploadingPhoto(false);
       if (fileInputRef.current) fileInputRef.current.value = "";
@@ -339,10 +313,8 @@ export default function ProfilePage() {
     return (
       <div className="space-y-6">
         <div>
-          <h1 className="text-2xl font-bold text-foreground">Profile Settings</h1>
-          <p className="text-muted-foreground">
-            Manage your account settings and preferences
-          </p>
+          <h1 className="text-2xl font-bold text-foreground">{t("dashboard.profile.title")}</h1>
+          <p className="text-muted-foreground">{t("dashboard.profile.subtitle")}</p>
         </div>
         <div className="flex items-center justify-center py-20">
           <Loader2 className="h-8 w-8 animate-spin text-muted-foreground" />
@@ -353,30 +325,24 @@ export default function ProfilePage() {
 
   return (
     <div className="space-y-6">
-      {/* Page Header */}
       <div>
-        <h1 className="text-2xl font-bold text-foreground">Profile Settings</h1>
-        <p className="text-muted-foreground">
-          Manage your account settings and preferences
-        </p>
+        <h1 className="text-2xl font-bold text-foreground">{t("dashboard.profile.title")}</h1>
+        <p className="text-muted-foreground">{t("dashboard.profile.subtitle")}</p>
       </div>
 
       <Tabs defaultValue="profile" className="space-y-6">
         <TabsList>
-          <TabsTrigger value="profile">Profile</TabsTrigger>
-          <TabsTrigger value="security">Security</TabsTrigger>
-          <TabsTrigger value="notifications">Notifications</TabsTrigger>
+          <TabsTrigger value="profile">{t("dashboard.profile.tabProfile")}</TabsTrigger>
+          <TabsTrigger value="security">{t("dashboard.profile.tabSecurity")}</TabsTrigger>
+          <TabsTrigger value="notifications">{t("dashboard.profile.tabNotifications")}</TabsTrigger>
         </TabsList>
 
         {/* Profile Tab */}
         <TabsContent value="profile" className="space-y-6">
-          {/* Avatar Card */}
           <Card>
             <CardHeader>
-              <CardTitle>Profile Picture</CardTitle>
-              <CardDescription>
-                Your profile picture will be shown across the platform
-              </CardDescription>
+              <CardTitle>{t("dashboard.profile.profilePicture")}</CardTitle>
+              <CardDescription>{t("dashboard.profile.profilePictureDesc")}</CardDescription>
             </CardHeader>
             <CardContent className="flex items-center gap-6">
               <Avatar className="h-20 w-20">
@@ -402,34 +368,29 @@ export default function ProfilePage() {
                   {isUploadingPhoto ? (
                     <>
                       <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                      Uploading...
+                      {t("dashboard.profile.uploading")}
                     </>
                   ) : (
                     <>
                       <Upload className="mr-2 h-4 w-4" />
-                      Upload Photo
+                      {t("dashboard.profile.uploadPhoto")}
                     </>
                   )}
                 </Button>
-                <p className="text-xs text-muted-foreground">
-                  JPG, PNG or GIF. Max size 2MB.
-                </p>
+                <p className="text-xs text-muted-foreground">{t("dashboard.profile.photoFormats")}</p>
               </div>
             </CardContent>
           </Card>
 
-          {/* Personal Info Card */}
           <Card>
             <CardHeader>
-              <CardTitle>Personal Information</CardTitle>
-              <CardDescription>
-                Update your personal details here
-              </CardDescription>
+              <CardTitle>{t("dashboard.profile.personalInfo")}</CardTitle>
+              <CardDescription>{t("dashboard.profile.personalInfoDesc")}</CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
               <div className="grid gap-4 sm:grid-cols-2">
                 <div className="space-y-2">
-                  <Label htmlFor="name">Full Name</Label>
+                  <Label htmlFor="name">{t("dashboard.profile.fullName")}</Label>
                   <div className="relative">
                     <User className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
                     <Input
@@ -443,7 +404,7 @@ export default function ProfilePage() {
                   </div>
                 </div>
                 <div className="space-y-2">
-                  <Label htmlFor="email">Email</Label>
+                  <Label htmlFor="email">{t("dashboard.profile.email")}</Label>
                   <div className="relative">
                     <Mail className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
                     <Input
@@ -455,12 +416,10 @@ export default function ProfilePage() {
                       className="pl-9 bg-muted"
                     />
                   </div>
-                  <p className="text-xs text-muted-foreground">
-                    Email cannot be changed
-                  </p>
+                  <p className="text-xs text-muted-foreground">{t("dashboard.profile.emailCannotChange")}</p>
                 </div>
                 <div className="space-y-2">
-                  <Label htmlFor="phone">Phone Number</Label>
+                  <Label htmlFor="phone">{t("dashboard.profile.phoneNumber")}</Label>
                   <div className="relative">
                     <Phone className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
                     <Input
@@ -476,14 +435,14 @@ export default function ProfilePage() {
                   </div>
                 </div>
                 <div className="space-y-2">
-                  <Label htmlFor="country">Country</Label>
+                  <Label htmlFor="country">{t("dashboard.profile.country")}</Label>
                   <Select
                     value={formData.country}
-                    onValueChange={(value) => setFormData(prev => ({ ...prev, country: value }))}
+                    onValueChange={(value) => setFormData((prev) => ({ ...prev, country: value }))}
                   >
                     <SelectTrigger>
                       <Globe className="mr-2 h-4 w-4 text-muted-foreground" />
-                      <SelectValue placeholder="Select country" />
+                      <SelectValue placeholder={t("dashboard.profile.selectCountry")} />
                     </SelectTrigger>
                     <SelectContent>
                       {countries.map((country) => (
@@ -500,12 +459,12 @@ export default function ProfilePage() {
                   {isSaving ? (
                     <>
                       <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                      Saving...
+                      {t("dashboard.profile.saving")}
                     </>
                   ) : (
                     <>
                       <Save className="mr-2 h-4 w-4" />
-                      Save Changes
+                      {t("common.saveChanges")}
                     </>
                   )}
                 </Button>
@@ -518,26 +477,24 @@ export default function ProfilePage() {
         <TabsContent value="security" className="space-y-6">
           <Card>
             <CardHeader>
-              <CardTitle>Change Password</CardTitle>
-              <CardDescription>
-                Update your password to keep your account secure
-              </CardDescription>
+              <CardTitle>{t("dashboard.profile.changePassword")}</CardTitle>
+              <CardDescription>{t("dashboard.profile.changePasswordDesc")}</CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
               <div className="space-y-2">
-                <Label htmlFor="currentPassword">Current Password</Label>
+                <Label htmlFor="currentPassword">{t("dashboard.profile.currentPassword")}</Label>
                 <div className="relative">
                   <Lock className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
                   <Input
                     id="currentPassword"
                     type={showPasswords.current ? "text" : "password"}
                     value={passwordData.currentPassword}
-                    onChange={(e) => setPasswordData(prev => ({ ...prev, currentPassword: e.target.value }))}
+                    onChange={(e) => setPasswordData((prev) => ({ ...prev, currentPassword: e.target.value }))}
                     className="pl-9 pr-10"
                   />
                   <button
                     type="button"
-                    onClick={() => setShowPasswords(prev => ({ ...prev, current: !prev.current }))}
+                    onClick={() => setShowPasswords((prev) => ({ ...prev, current: !prev.current }))}
                     className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
                     tabIndex={-1}
                   >
@@ -547,19 +504,19 @@ export default function ProfilePage() {
               </div>
               <div className="grid gap-4 sm:grid-cols-2">
                 <div className="space-y-2">
-                  <Label htmlFor="newPassword">New Password</Label>
+                  <Label htmlFor="newPassword">{t("dashboard.profile.newPassword")}</Label>
                   <div className="relative">
                     <Lock className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
                     <Input
                       id="newPassword"
                       type={showPasswords.new ? "text" : "password"}
                       value={passwordData.newPassword}
-                      onChange={(e) => setPasswordData(prev => ({ ...prev, newPassword: e.target.value }))}
+                      onChange={(e) => setPasswordData((prev) => ({ ...prev, newPassword: e.target.value }))}
                       className="pl-9 pr-10"
                     />
                     <button
                       type="button"
-                      onClick={() => setShowPasswords(prev => ({ ...prev, new: !prev.new }))}
+                      onClick={() => setShowPasswords((prev) => ({ ...prev, new: !prev.new }))}
                       className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
                       tabIndex={-1}
                     >
@@ -568,19 +525,19 @@ export default function ProfilePage() {
                   </div>
                 </div>
                 <div className="space-y-2">
-                  <Label htmlFor="confirmPassword">Confirm Password</Label>
+                  <Label htmlFor="confirmPassword">{t("dashboard.profile.confirmPassword")}</Label>
                   <div className="relative">
                     <Lock className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
                     <Input
                       id="confirmPassword"
                       type={showPasswords.confirm ? "text" : "password"}
                       value={passwordData.confirmPassword}
-                      onChange={(e) => setPasswordData(prev => ({ ...prev, confirmPassword: e.target.value }))}
+                      onChange={(e) => setPasswordData((prev) => ({ ...prev, confirmPassword: e.target.value }))}
                       className="pl-9 pr-10"
                     />
                     <button
                       type="button"
-                      onClick={() => setShowPasswords(prev => ({ ...prev, confirm: !prev.confirm }))}
+                      onClick={() => setShowPasswords((prev) => ({ ...prev, confirm: !prev.confirm }))}
                       className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
                       tabIndex={-1}
                     >
@@ -594,10 +551,10 @@ export default function ProfilePage() {
                   {isChangingPassword ? (
                     <>
                       <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                      Updating...
+                      {t("dashboard.profile.updating")}
                     </>
                   ) : (
-                    "Update Password"
+                    t("dashboard.profile.updatePassword")
                   )}
                 </Button>
               </div>
@@ -606,18 +563,14 @@ export default function ProfilePage() {
 
           <Card>
             <CardHeader>
-              <CardTitle>Two-Factor Authentication</CardTitle>
-              <CardDescription>
-                Add an extra layer of security to your account
-              </CardDescription>
+              <CardTitle>{t("dashboard.profile.twoFactor")}</CardTitle>
+              <CardDescription>{t("dashboard.profile.twoFactorDesc")}</CardDescription>
             </CardHeader>
             <CardContent>
               <div className="flex items-center justify-between">
                 <div className="space-y-1">
-                  <p className="font-medium">Enable 2FA</p>
-                  <p className="text-sm text-muted-foreground">
-                    Require a verification code when signing in
-                  </p>
+                  <p className="font-medium">{t("dashboard.profile.enable2fa")}</p>
+                  <p className="text-sm text-muted-foreground">{t("dashboard.profile.enable2faDesc")}</p>
                 </div>
                 <Switch
                   checked={twoFactorEnabled}
@@ -630,52 +583,46 @@ export default function ProfilePage() {
 
           <Card className="border-destructive">
             <CardHeader>
-              <CardTitle className="text-destructive">Danger Zone</CardTitle>
-              <CardDescription>
-                Irreversible and destructive actions
-              </CardDescription>
+              <CardTitle className="text-destructive">{t("dashboard.profile.dangerZone")}</CardTitle>
+              <CardDescription>{t("dashboard.profile.dangerZoneDesc")}</CardDescription>
             </CardHeader>
             <CardContent>
               <div className="flex items-center justify-between">
                 <div className="space-y-1">
-                  <p className="font-medium">Delete Account</p>
-                  <p className="text-sm text-muted-foreground">
-                    Permanently delete your account and all data
-                  </p>
+                  <p className="font-medium">{t("dashboard.profile.deleteAccount")}</p>
+                  <p className="text-sm text-muted-foreground">{t("dashboard.profile.deleteAccountDesc")}</p>
                 </div>
                 <Button
                   variant="destructive"
                   size="sm"
                   onClick={() => { setDeletePassword(""); setDeleteDialogOpen(true); }}
                 >
-                  Delete Account
+                  {t("dashboard.profile.deleteAccount")}
                 </Button>
               </div>
             </CardContent>
           </Card>
 
-          {/* Delete Account Confirmation Dialog */}
           <Dialog open={deleteDialogOpen} onOpenChange={setDeleteDialogOpen}>
             <DialogContent className="sm:max-w-md">
               <DialogHeader>
                 <DialogTitle className="flex items-center gap-2 text-destructive">
                   <AlertTriangle className="h-5 w-5" />
-                  Delete Account
+                  {t("dashboard.profile.deleteAccount")}
                 </DialogTitle>
                 <DialogDescription className="pt-1">
-                  This will permanently delete your account, all wedding projects, guests,
-                  budget, and every other piece of data. <strong>This cannot be undone.</strong>
+                  {t("dashboard.profile.deleteAccountWarn")}{" "}
+                  <strong>{t("dashboard.profile.cannotBeUndone")}</strong>
                 </DialogDescription>
               </DialogHeader>
-
               <div className="space-y-3 py-2">
-                <Label htmlFor="deletePassword">Confirm your password</Label>
+                <Label htmlFor="deletePassword">{t("dashboard.profile.confirmYourPassword")}</Label>
                 <div className="relative">
                   <Lock className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
                   <Input
                     id="deletePassword"
                     type="password"
-                    placeholder="Enter your password"
+                    placeholder={t("dashboard.profile.enterPassword")}
                     value={deletePassword}
                     onChange={(e) => setDeletePassword(e.target.value)}
                     className="pl-9"
@@ -683,14 +630,13 @@ export default function ProfilePage() {
                   />
                 </div>
               </div>
-
               <DialogFooter className="gap-2 sm:gap-0">
                 <Button
                   variant="outline"
                   onClick={() => setDeleteDialogOpen(false)}
                   disabled={isDeletingAccount}
                 >
-                  Cancel
+                  {t("common.cancel")}
                 </Button>
                 <Button
                   variant="destructive"
@@ -700,10 +646,10 @@ export default function ProfilePage() {
                   {isDeletingAccount ? (
                     <>
                       <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                      Deleting...
+                      {t("dashboard.profile.deleting")}
                     </>
                   ) : (
-                    "Yes, delete my account"
+                    t("dashboard.profile.confirmDeleteAccount")
                   )}
                 </Button>
               </DialogFooter>
@@ -715,46 +661,42 @@ export default function ProfilePage() {
         <TabsContent value="notifications" className="space-y-6">
           <Card>
             <CardHeader>
-              <CardTitle>Email Notifications</CardTitle>
-              <CardDescription>
-                Choose what emails you want to receive
-              </CardDescription>
+              <CardTitle>{t("dashboard.profile.emailNotifications")}</CardTitle>
+              <CardDescription>{t("dashboard.profile.emailNotifDesc")}</CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
               {([
                 {
                   key: "notifOrderUpdates" as const,
-                  title: "Order Updates",
-                  description: "Get notified when your order status changes",
+                  titleKey: "dashboard.profile.notifOrderUpdates",
+                  descKey: "dashboard.profile.notifOrderDesc",
                 },
                 {
                   key: "notifDocumentReady" as const,
-                  title: "Document Ready",
-                  description: "Get notified when documents are ready to download",
+                  titleKey: "dashboard.profile.notifDocReady",
+                  descKey: "dashboard.profile.notifDocDesc",
                 },
                 {
                   key: "notifSupportReplies" as const,
-                  title: "Support Replies",
-                  description: "Get notified when support replies to your tickets",
+                  titleKey: "dashboard.profile.notifSupport",
+                  descKey: "dashboard.profile.notifSupportDesc",
                 },
                 {
                   key: "notifComplianceReminders" as const,
-                  title: "Compliance Reminders",
-                  description: "Get reminded about annual reports and renewals",
+                  titleKey: "dashboard.profile.notifCompliance",
+                  descKey: "dashboard.profile.notifComplianceDesc",
                 },
                 {
                   key: "notifMarketingEmails" as const,
-                  title: "Marketing Emails",
-                  description: "Receive promotions and special offers",
+                  titleKey: "dashboard.profile.notifMarketing",
+                  descKey: "dashboard.profile.notifMarketingDesc",
                 },
               ]).map((item, index, arr) => (
                 <div key={item.key}>
                   <div className="flex items-center justify-between py-2">
                     <div className="space-y-0.5">
-                      <p className="font-medium">{item.title}</p>
-                      <p className="text-sm text-muted-foreground">
-                        {item.description}
-                      </p>
+                      <p className="font-medium">{t(item.titleKey)}</p>
+                      <p className="text-sm text-muted-foreground">{t(item.descKey)}</p>
                     </div>
                     <Switch
                       checked={notifications[item.key]}

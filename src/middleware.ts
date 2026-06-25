@@ -59,8 +59,8 @@ export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
   // Smart redirect for marketing /tools/* links to the matching planner tool.
-  // Anonymous users get a fresh local project (cookied for reuse). Authenticated
-  // users are sent to /planner to pick from their existing projects.
+  // Authenticated users → page component does DB lookup → redirect to their project section.
+  // Anonymous users → redirect to login (then return here after login).
   if (pathname.startsWith("/tools/")) {
     const slug = pathname.split("/")[2] ?? "";
     const tool = TOOL_TO_PLANNER[slug];
@@ -77,25 +77,31 @@ export async function middleware(request: NextRequest) {
     });
 
     if (authToken) {
-      return NextResponse.redirect(new URL("/planner", request.url));
+      // Logged in → let the page component handle DB lookup & redirect
+      return NextResponse.next();
     }
 
-    const cookieId = request.cookies.get("active_project_id")?.value;
-    const projectId = cookieId && cookieId.startsWith("local-")
-      ? cookieId
-      : `local-${crypto.randomUUID()}`;
+    // Not logged in → send to login, come back here after
+    const loginUrl = new URL("/login", request.url);
+    loginUrl.searchParams.set("callbackUrl", pathname);
+    return NextResponse.redirect(loginUrl);
+  }
 
-    const response = NextResponse.redirect(
-      new URL(`/planner/${projectId}/${tool}`, request.url)
-    );
-    if (!cookieId) {
-      response.cookies.set("active_project_id", projectId, {
-        maxAge: 60 * 60 * 24 * 365,
-        sameSite: "lax",
-        path: "/",
-      });
+  // /planner/create requires registration — redirect unauthenticated users to /register
+  if (pathname === "/planner/create") {
+    const authToken = await getToken({
+      req: request,
+      secret: process.env.AUTH_SECRET,
+      cookieName: process.env.NODE_ENV === "production"
+        ? "__Secure-authjs.session-token"
+        : "authjs.session-token",
+    });
+
+    if (!authToken) {
+      const registerUrl = new URL("/register", request.url);
+      registerUrl.searchParams.set("callbackUrl", `${pathname}${request.nextUrl.search}`);
+      return NextResponse.redirect(registerUrl);
     }
-    return response;
   }
 
   // Check if the route requires protection

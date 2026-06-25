@@ -4161,6 +4161,7 @@ export interface PlanigateVendorCard {
   category: string; // "Festlokal · Stockholm"
   rating: number;
   reviewCount: number;
+  slug?: string;
 }
 
 export interface PlanigateVendorsWidgetSettings {

@@ -1,8 +1,8 @@
 "use client";
 
-import { useState } from "react";
+import { useState, Suspense } from "react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { signIn } from "next-auth/react";
 import { Eye, EyeOff, Mail, Lock, User, Globe, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -42,8 +42,9 @@ const countries = [
   { code: "OTHER", name: "Other" },
 ];
 
-export default function RegisterPage() {
+function RegisterForm() {
   const router = useRouter();
+  const searchParams = useSearchParams();
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
@@ -107,7 +108,8 @@ export default function RegisterPage() {
       if (result?.error) {
         router.push("/login");
       } else {
-        router.push("/planner");
+        const callbackUrl = searchParams.get("callbackUrl") || "/planner";
+        router.push(callbackUrl);
         router.refresh();
       }
     } catch {
@@ -286,5 +288,19 @@ export default function RegisterPage() {
         </p>
       </CardFooter>
     </Card>
+  );
+}
+
+export default function RegisterPage() {
+  return (
+    <Suspense fallback={
+      <Card>
+        <CardContent className="flex items-center justify-center p-8">
+          <Loader2 className="h-8 w-8 animate-spin" />
+        </CardContent>
+      </Card>
+    }>
+      <RegisterForm />
+    </Suspense>
   );
 }

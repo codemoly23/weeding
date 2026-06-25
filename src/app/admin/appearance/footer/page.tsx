@@ -112,65 +112,66 @@ import { NeuralButton } from "@/components/ui/neural-button";
 import { ArrowUpRight, MousePointerClick } from "lucide-react";
 import { PresetGallery } from "./components/PresetGallery";
 import { BUTTON_STYLE_PRESETS, type ButtonStylePreset } from "@/lib/button-presets";
+import { useLanguage } from "@/lib/i18n/language-context";
 
-const layoutOptions: { value: FooterLayout; label: string; description: string }[] = [
-  { value: "MULTI_COLUMN", label: "Multi-Column", description: "Traditional multi-column layout" },
-  { value: "CENTERED", label: "Centered", description: "Centered stacked layout" },
-  { value: "MINIMAL", label: "Minimal", description: "Just copyright and links" },
-  { value: "MEGA", label: "Mega", description: "Full sitemap style" },
+const layoutOptions: { value: FooterLayout; labelKey: string; descriptionKey: string }[] = [
+  { value: "MULTI_COLUMN", labelKey: "admin.footer.layoutMultiColumn", descriptionKey: "admin.footer.layoutMultiColumnDesc" },
+  { value: "CENTERED", labelKey: "admin.footer.layoutCentered", descriptionKey: "admin.footer.layoutCenteredDesc" },
+  { value: "MINIMAL", labelKey: "admin.footer.layoutMinimal", descriptionKey: "admin.footer.layoutMinimalDesc" },
+  { value: "MEGA", labelKey: "admin.footer.layoutMega", descriptionKey: "admin.footer.layoutMegaDesc" },
   // New layouts (Phase 2)
-  { value: "STACKED", label: "Stacked", description: "Full-width vertical sections" },
-  { value: "ASYMMETRIC", label: "Asymmetric", description: "2:1 ratio split layout" },
-  { value: "MEGA_PLUS", label: "Mega Plus", description: "Mega with featured CTA" },
-  { value: "APP_FOCUSED", label: "App Focused", description: "Prominent app download" },
+  { value: "STACKED", labelKey: "admin.footer.layoutStacked", descriptionKey: "admin.footer.layoutStackedDesc" },
+  { value: "ASYMMETRIC", labelKey: "admin.footer.layoutAsymmetric", descriptionKey: "admin.footer.layoutAsymmetricDesc" },
+  { value: "MEGA_PLUS", labelKey: "admin.footer.layoutMegaPlus", descriptionKey: "admin.footer.layoutMegaPlusDesc" },
+  { value: "APP_FOCUSED", labelKey: "admin.footer.layoutAppFocused", descriptionKey: "admin.footer.layoutAppFocusedDesc" },
 ];
 
-const widgetTypes: { value: FooterWidgetType; label: string; icon: React.ReactNode }[] = [
-  { value: "BRAND", label: "Brand", icon: <Building2 className="h-4 w-4" /> },
-  { value: "LINKS", label: "Links", icon: <LinkIcon className="h-4 w-4" /> },
-  { value: "CONTACT", label: "Contact", icon: <Phone className="h-4 w-4" /> },
-  { value: "SOCIAL", label: "Social", icon: <Share2 className="h-4 w-4" /> },
-  { value: "TEXT", label: "Text", icon: <Type className="h-4 w-4" /> },
-  { value: "RECENT_POSTS", label: "Recent Posts", icon: <FileText className="h-4 w-4" /> },
-  { value: "SERVICES", label: "Services (Auto)", icon: <Columns3 className="h-4 w-4" /> },
-  { value: "STATES", label: "States (Auto)", icon: <MapPin className="h-4 w-4" /> },
-  { value: "CUSTOM_HTML", label: "Custom HTML", icon: <Code className="h-4 w-4" /> },
-  { value: "BUTTON", label: "Button", icon: <MousePointerClick className="h-4 w-4" /> },
-  { value: "NEWSLETTER", label: "Newsletter", icon: <Send className="h-4 w-4" /> },
+const widgetTypes: { value: FooterWidgetType; labelKey: string; icon: React.ReactNode }[] = [
+  { value: "BRAND", labelKey: "admin.footer.widgetBrand", icon: <Building2 className="h-4 w-4" /> },
+  { value: "LINKS", labelKey: "admin.footer.widgetLinks", icon: <LinkIcon className="h-4 w-4" /> },
+  { value: "CONTACT", labelKey: "admin.footer.widgetContact", icon: <Phone className="h-4 w-4" /> },
+  { value: "SOCIAL", labelKey: "admin.footer.widgetSocial", icon: <Share2 className="h-4 w-4" /> },
+  { value: "TEXT", labelKey: "admin.footer.widgetText", icon: <Type className="h-4 w-4" /> },
+  { value: "RECENT_POSTS", labelKey: "admin.footer.widgetRecentPosts", icon: <FileText className="h-4 w-4" /> },
+  { value: "SERVICES", labelKey: "admin.footer.widgetServices", icon: <Columns3 className="h-4 w-4" /> },
+  { value: "STATES", labelKey: "admin.footer.widgetStates", icon: <MapPin className="h-4 w-4" /> },
+  { value: "CUSTOM_HTML", labelKey: "admin.footer.widgetCustomHtml", icon: <Code className="h-4 w-4" /> },
+  { value: "BUTTON", labelKey: "admin.footer.widgetButton", icon: <MousePointerClick className="h-4 w-4" /> },
+  { value: "NEWSLETTER", labelKey: "admin.footer.widgetNewsletter", icon: <Send className="h-4 w-4" /> },
 ];
 
 // Gradient direction options for button styling
-const gradientDirectionOptions: { value: GradientDirection; label: string }[] = [
-  { value: "to-r", label: "Left → Right" },
-  { value: "to-l", label: "Right → Left" },
-  { value: "to-t", label: "Bottom → Top" },
-  { value: "to-b", label: "Top → Bottom" },
-  { value: "to-tr", label: "↗ Diagonal (Top Right)" },
-  { value: "to-tl", label: "↖ Diagonal (Top Left)" },
-  { value: "to-br", label: "↘ Diagonal (Bottom Right)" },
-  { value: "to-bl", label: "↙ Diagonal (Bottom Left)" },
+const gradientDirectionOptions: { value: GradientDirection; labelKey: string }[] = [
+  { value: "to-r", labelKey: "admin.footer.dirToR" },
+  { value: "to-l", labelKey: "admin.footer.dirToL" },
+  { value: "to-t", labelKey: "admin.footer.dirToT" },
+  { value: "to-b", labelKey: "admin.footer.dirToB" },
+  { value: "to-tr", labelKey: "admin.footer.dirToTr" },
+  { value: "to-tl", labelKey: "admin.footer.dirToTl" },
+  { value: "to-br", labelKey: "admin.footer.dirToBr" },
+  { value: "to-bl", labelKey: "admin.footer.dirToBl" },
 ];
 
 // Button hover effects
-const hoverEffectOptions: { value: ButtonHoverEffect; label: string }[] = [
-  { value: "none", label: "None" },
-  { value: "darken", label: "Darken" },
-  { value: "lighten", label: "Lighten" },
-  { value: "shadow-lift", label: "Shadow Lift" },
-  { value: "shadow-press", label: "Shadow Press" },
-  { value: "scale-up", label: "Scale Up" },
-  { value: "scale-down", label: "Scale Down" },
-  { value: "slide-fill", label: "Slide Fill" },
-  { value: "border-fill", label: "Border Fill" },
-  { value: "gradient-shift", label: "Gradient Shift" },
-  { value: "glow-pulse", label: "Glow Pulse" },
-  { value: "ripple", label: "Ripple" },
-  { value: "craft-expand", label: "Craft Expand (Icon Circle)" },
-  { value: "heartbeat", label: "Heartbeat Pulse" },
-  { value: "flow-border", label: "Flow Border (Rotating Gradient)" },
-  { value: "stitches", label: "Stitches (3D Dashed Border)" },
-  { value: "ring-hover", label: "Ring Hover" },
-  { value: "neural", label: "Neural (Animated Border Beam)" },
+const hoverEffectOptions: { value: ButtonHoverEffect; labelKey: string }[] = [
+  { value: "none", labelKey: "admin.footer.hoverNone" },
+  { value: "darken", labelKey: "admin.footer.hoverDarken" },
+  { value: "lighten", labelKey: "admin.footer.hoverLighten" },
+  { value: "shadow-lift", labelKey: "admin.footer.hoverShadowLift" },
+  { value: "shadow-press", labelKey: "admin.footer.hoverShadowPress" },
+  { value: "scale-up", labelKey: "admin.footer.hoverScaleUp" },
+  { value: "scale-down", labelKey: "admin.footer.hoverScaleDown" },
+  { value: "slide-fill", labelKey: "admin.footer.hoverSlideFill" },
+  { value: "border-fill", labelKey: "admin.footer.hoverBorderFill" },
+  { value: "gradient-shift", labelKey: "admin.footer.hoverGradientShift" },
+  { value: "glow-pulse", labelKey: "admin.footer.hoverGlowPulse" },
+  { value: "ripple", labelKey: "admin.footer.hoverRipple" },
+  { value: "craft-expand", labelKey: "admin.footer.hoverCraftExpand" },
+  { value: "heartbeat", labelKey: "admin.footer.hoverHeartbeat" },
+  { value: "flow-border", labelKey: "admin.footer.hoverFlowBorder" },
+  { value: "stitches", labelKey: "admin.footer.hoverStitches" },
+  { value: "ring-hover", labelKey: "admin.footer.hoverRingHover" },
+  { value: "neural", labelKey: "admin.footer.hoverNeural" },
 ];
 
 // Convert gradient direction to CSS
@@ -385,6 +386,7 @@ function SortableWidget({
   onEdit: (widget: FooterWidget) => void;
   onDelete: (widget: FooterWidget) => void;
 }) {
+  const { t } = useLanguage();
   const {
     attributes,
     listeners,
@@ -399,6 +401,8 @@ function SortableWidget({
     transition,
     opacity: isDragging ? 0.5 : 1,
   };
+
+  const widgetTypeEntry = widgetTypes.find((wt) => wt.value === widget.type);
 
   return (
     <div
@@ -418,9 +422,9 @@ function SortableWidget({
       </button>
       <div className="flex-1 min-w-0">
         <div className="flex items-center gap-2">
-          {widgetTypes.find((t) => t.value === widget.type)?.icon}
+          {widgetTypeEntry?.icon}
           <span className="text-sm font-medium truncate">
-            {widget.title || widgetTypes.find((t) => t.value === widget.type)?.label}
+            {widget.title || (widgetTypeEntry ? t(widgetTypeEntry.labelKey) : "")}
           </span>
         </div>
         <span className="text-xs text-muted-foreground">
@@ -463,13 +467,14 @@ function DroppableColumn({
   onEditWidget: (widget: FooterWidget) => void;
   onDeleteWidget: (widget: FooterWidget) => void;
 }) {
+  const { t } = useLanguage();
   const { setNodeRef } = useDroppable({
     id: `column-${column}`,
   });
 
   return (
     <div className="space-y-2">
-      <Label>Column {column}</Label>
+      <Label>{t("admin.footer.columnLabel", { num: String(column) })}</Label>
       <div
         ref={setNodeRef}
         className={cn(
@@ -487,7 +492,7 @@ function DroppableColumn({
               className="flex h-full min-h-45 w-full flex-col items-center justify-center rounded-lg border border-dashed text-muted-foreground hover:bg-muted/50"
             >
               <Plus className="mb-2 h-6 w-6" />
-              <span className="text-sm">Add Widget</span>
+              <span className="text-sm">{t("admin.footer.addWidget")}</span>
             </button>
           ) : (
             <>
@@ -504,7 +509,7 @@ function DroppableColumn({
                 className="flex w-full items-center justify-center gap-2 rounded-lg border border-dashed py-2 text-sm text-muted-foreground hover:bg-muted/50"
               >
                 <Plus className="h-4 w-4" />
-                <span>Add Widget</span>
+                <span>{t("admin.footer.addWidget")}</span>
               </button>
             </>
           )}
@@ -515,6 +520,7 @@ function DroppableColumn({
 }
 
 export default function FooterBuilderPage() {
+  const { t } = useLanguage();
   const { config: businessConfig } = useBusinessConfig();
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
@@ -768,8 +774,8 @@ export default function FooterBuilderPage() {
           customCSS: activeFooter.customCSS || "",
         });
       }
-    } catch (error) {
-      toast.error("Failed to load footer configuration");
+    } catch {
+      toast.error(t("admin.footer.loadFailed"));
     } finally {
       setLoading(false);
     }
@@ -872,11 +878,11 @@ export default function FooterBuilderPage() {
         throw new Error(errorData?.error || "Failed to save");
       }
 
-      toast.success("Footer configuration saved");
+      toast.success(t("admin.footer.saveSuccess"));
       fetchFooter();
     } catch (error) {
       console.error("Footer save failed:", error);
-      toast.error("Failed to save footer configuration");
+      toast.error(t("admin.footer.saveFailed"));
     } finally {
       setSaving(false);
     }
@@ -956,11 +962,11 @@ export default function FooterBuilderPage() {
 
       if (!res.ok) throw new Error("Failed to save");
 
-      toast.success(selectedWidget ? "Widget updated" : "Widget created");
+      toast.success(selectedWidget ? t("admin.footer.widgetUpdated") : t("admin.footer.widgetCreated"));
       setWidgetDialogOpen(false);
       fetchFooter();
-    } catch (error) {
-      toast.error("Failed to save widget");
+    } catch {
+      toast.error(t("admin.footer.widgetSaveFailed"));
     } finally {
       setSaving(false);
     }
@@ -976,11 +982,11 @@ export default function FooterBuilderPage() {
 
       if (!res.ok) throw new Error("Failed to delete");
 
-      toast.success("Widget deleted");
+      toast.success(t("admin.footer.widgetDeleted"));
       setDeleteWidgetDialogOpen(false);
       fetchFooter();
-    } catch (error) {
-      toast.error("Failed to delete widget");
+    } catch {
+      toast.error(t("admin.footer.widgetDeleteFailed"));
     }
   }
 
@@ -988,7 +994,7 @@ export default function FooterBuilderPage() {
   function addBottomLink() {
     setFormData({
       ...formData,
-      bottomLinks: [...formData.bottomLinks, { label: "New Link", url: "/" }],
+      bottomLinks: [...formData.bottomLinks, { label: t("admin.footer.newLink"), url: "/" }],
     });
   }
 
@@ -1010,8 +1016,8 @@ export default function FooterBuilderPage() {
       trustBadges: [
         ...formData.trustBadges,
         style === "pill"
-          ? { style: "pill" as const, image: "", alt: "Trust Badge", text: "", iconName: "shield", url: "" }
-          : { style: "image" as const, image: "", alt: "Trust Badge", url: "" },
+          ? { style: "pill" as const, image: "", alt: t("admin.footer.trustBadgeAlt"), text: "", iconName: "shield", url: "" }
+          : { style: "image" as const, image: "", alt: t("admin.footer.trustBadgeAlt"), url: "" },
       ],
     });
   }
@@ -1031,7 +1037,7 @@ export default function FooterBuilderPage() {
   function addWidgetLink() {
     const newLink: WidgetLink = {
       id: `temp-${Date.now()}`,
-      label: "New Link",
+      label: t("admin.footer.newLink"),
       url: "/",
       target: "_self",
     };
@@ -1096,10 +1102,10 @@ export default function FooterBuilderPage() {
           });
 
           if (!res.ok) throw new Error("Failed to move widget");
-          toast.success(`Widget moved to column ${targetColumn}`);
+          toast.success(t("admin.footer.widgetMovedToColumn", { column: String(targetColumn) }));
           fetchFooter();
         } catch {
-          toast.error("Failed to move widget");
+          toast.error(t("admin.footer.widgetMoveFailed"));
         }
       }
       return;
@@ -1136,10 +1142,10 @@ export default function FooterBuilderPage() {
               })
             )
           );
-          toast.success("Widget order updated");
+          toast.success(t("admin.footer.widgetOrderUpdated"));
           fetchFooter();
         } catch {
-          toast.error("Failed to reorder widgets");
+          toast.error(t("admin.footer.widgetReorderFailed"));
         }
       }
     } else if (activeWidget.column !== overWidget.column) {
@@ -1157,13 +1163,13 @@ export default function FooterBuilderPage() {
         });
 
         if (!res.ok) throw new Error("Failed to move widget");
-        toast.success(`Widget moved to column ${overWidget.column}`);
+        toast.success(t("admin.footer.widgetMovedToColumn", { column: String(overWidget.column) }));
         fetchFooter();
       } catch {
-        toast.error("Failed to move widget");
+        toast.error(t("admin.footer.widgetMoveFailed"));
       }
     }
-  }, [footer]);
+  }, [footer, t]);
 
   // Get the active widget for drag overlay
   const activeWidget = activeId ? footer?.widgets?.find((w) => w.id === activeId) : null;
@@ -1224,16 +1230,16 @@ export default function FooterBuilderPage() {
       {/* Page Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold">Footer Builder</h1>
+          <h1 className="text-2xl font-bold">{t("admin.footer.title")}</h1>
           <p className="text-muted-foreground">
-            Customize your website footer layout and widgets
+            {t("admin.footer.subtitle")}
           </p>
         </div>
         <div className="flex items-center gap-2">
           <Button variant="outline" asChild>
             <Link href="/" target="_blank">
               <Eye className="mr-2 h-4 w-4" />
-              Preview
+              {t("admin.footer.preview")}
               <ExternalLink className="ml-1 h-3 w-3" />
             </Link>
           </Button>
@@ -1243,7 +1249,7 @@ export default function FooterBuilderPage() {
             ) : (
               <Save className="mr-2 h-4 w-4" />
             )}
-            Save Changes
+            {t("admin.footer.saveChanges")}
           </Button>
         </div>
       </div>
@@ -1252,7 +1258,7 @@ export default function FooterBuilderPage() {
       <Card className="shadow-lg">
         <CardHeader className="pb-3">
           <div className="flex items-center justify-between">
-            <CardTitle className="text-base">Live Preview</CardTitle>
+            <CardTitle className="text-base">{t("admin.footer.livePreview")}</CardTitle>
             <div className="flex items-center gap-1 rounded-lg bg-muted p-1">
               <Button
                 variant={previewMode === "desktop" ? "secondary" : "ghost"}
@@ -1363,7 +1369,7 @@ export default function FooterBuilderPage() {
                         <div key={column} className="space-y-2">
                           {widgets.length === 0 ? (
                             <div className="rounded border border-dashed border-gray-300 p-3 text-center">
-                              <span className="text-xs text-muted-foreground">Column {column}</span>
+                              <span className="text-xs text-muted-foreground">{t("admin.footer.columnLabel", { num: String(column) })}</span>
                             </div>
                           ) : (
                             widgets.map((widget) => (
@@ -1416,11 +1422,11 @@ export default function FooterBuilderPage() {
                                     </div>
                                   )}
                                   {widget.type === "SOCIAL" && <SocialIconsPreview size="sm" />}
-                                  {widget.type === "TEXT" && <p>Custom text content...</p>}
-                                  {widget.type === "SERVICES" && <span className="italic">Auto: Services</span>}
-                                  {widget.type === "STATES" && <span className="italic">Auto: States</span>}
-                                  {widget.type === "RECENT_POSTS" && <span className="italic">Recent Posts</span>}
-                                  {widget.type === "CUSTOM_HTML" && <span className="italic">Custom HTML</span>}
+                                  {widget.type === "TEXT" && <p>{t("admin.footer.previewCustomText")}</p>}
+                                  {widget.type === "SERVICES" && <span className="italic">{t("admin.footer.widgetServices")}</span>}
+                                  {widget.type === "STATES" && <span className="italic">{t("admin.footer.widgetStates")}</span>}
+                                  {widget.type === "RECENT_POSTS" && <span className="italic">{t("admin.footer.widgetRecentPosts")}</span>}
+                                  {widget.type === "CUSTOM_HTML" && <span className="italic">{t("admin.footer.widgetCustomHtml")}</span>}
                                   {widget.type === "BUTTON" && (
                                     <div className="mt-1">
                                       <FooterButtonPreview style={(widget.content as { style?: ButtonCustomStyle })?.style || {}} />
@@ -1450,7 +1456,7 @@ export default function FooterBuilderPage() {
                       if (allWidgets.length === 0) {
                         return (
                           <div className="rounded border border-dashed border-gray-300 p-6">
-                            <span className="text-xs text-muted-foreground">No widgets configured</span>
+                            <span className="text-xs text-muted-foreground">{t("admin.footer.noWidgetsConfigured")}</span>
                           </div>
                         );
                       }
@@ -1512,11 +1518,11 @@ export default function FooterBuilderPage() {
                                 <SocialIconsPreview size="md" />
                               </div>
                             )}
-                            {widget.type === "TEXT" && <p>Custom text content...</p>}
-                            {widget.type === "SERVICES" && <span className="italic">Auto: Services</span>}
-                            {widget.type === "STATES" && <span className="italic">Auto: States</span>}
-                            {widget.type === "RECENT_POSTS" && <span className="italic">Recent Posts</span>}
-                            {widget.type === "CUSTOM_HTML" && <span className="italic">Custom HTML</span>}
+                            {widget.type === "TEXT" && <p>{t("admin.footer.previewCustomText")}</p>}
+                            {widget.type === "SERVICES" && <span className="italic">{t("admin.footer.widgetServices")}</span>}
+                            {widget.type === "STATES" && <span className="italic">{t("admin.footer.widgetStates")}</span>}
+                            {widget.type === "RECENT_POSTS" && <span className="italic">{t("admin.footer.widgetRecentPosts")}</span>}
+                            {widget.type === "CUSTOM_HTML" && <span className="italic">{t("admin.footer.widgetCustomHtml")}</span>}
                           </div>
                         </div>
                       ));
@@ -1542,9 +1548,9 @@ export default function FooterBuilderPage() {
                       ))
                     ) : (
                       <>
-                        <span className="preview-link cursor-pointer">Privacy</span>
-                        <span className="preview-link cursor-pointer">Terms</span>
-                        <span className="preview-link cursor-pointer">Contact</span>
+                        <span className="preview-link cursor-pointer">{t("admin.footer.previewPrivacy")}</span>
+                        <span className="preview-link cursor-pointer">{t("admin.footer.previewTerms")}</span>
+                        <span className="preview-link cursor-pointer">{t("admin.footer.previewContact")}</span>
                       </>
                     )}
                   </div>
@@ -1582,7 +1588,7 @@ export default function FooterBuilderPage() {
                       return (
                         <div key={column}>
                           {widgets.length === 0 ? (
-                            <div className="text-xs text-muted-foreground">Col {column}</div>
+                            <div className="text-xs text-muted-foreground">{t("admin.footer.colLabel", { num: String(column) })}</div>
                           ) : (
                             widgets.map((widget) => (
                               <div key={widget.id}>
@@ -1631,7 +1637,7 @@ export default function FooterBuilderPage() {
                         <div key={column} className="space-y-2">
                           {widgets.length === 0 ? (
                             <div className="rounded border border-dashed border-gray-300 p-3 text-center">
-                              <span className="text-xs text-muted-foreground">Column {column}</span>
+                              <span className="text-xs text-muted-foreground">{t("admin.footer.columnLabel", { num: String(column) })}</span>
                             </div>
                           ) : (
                             widgets.map((widget) => (
@@ -1684,10 +1690,10 @@ export default function FooterBuilderPage() {
                         <LogoPreview size="lg" />
                         <span className="text-lg font-bold">{businessConfig.name}</span>
                       </div>
-                      <p className="text-sm text-muted-foreground">Start your business journey today</p>
+                      <p className="text-sm text-muted-foreground">{t("admin.footer.previewBusinessJourney")}</p>
                       <div className="flex gap-2">
-                        <div className="h-8 px-3 rounded bg-black text-white text-xs flex items-center gap-1">App Store</div>
-                        <div className="h-8 px-3 rounded bg-black text-white text-xs flex items-center gap-1">Play Store</div>
+                        <div className="h-8 px-3 rounded bg-black text-white text-xs flex items-center gap-1">{t("admin.footer.previewAppStore")}</div>
+                        <div className="h-8 px-3 rounded bg-black text-white text-xs flex items-center gap-1">{t("admin.footer.previewPlayStore")}</div>
                       </div>
                     </div>
                     {/* Right: Links */}
@@ -1728,7 +1734,7 @@ export default function FooterBuilderPage() {
                         <p className="text-xs text-muted-foreground">{businessConfig.tagline}</p>
                       </div>
                     </div>
-                    <p className="text-sm text-muted-foreground">Beautiful wedding planning tools for couples and professional planners worldwide.</p>
+                    <p className="text-sm text-muted-foreground">{t("admin.footer.previewWeddingTagline")}</p>
                     {formData.showSocialLinks && <SocialIconsPreview size="lg" />}
                   </div>
                   {/* Right section (1/3) - Links */}
@@ -1755,8 +1761,8 @@ export default function FooterBuilderPage() {
                 <div className="space-y-6">
                   {/* Featured CTA Banner */}
                   <div className="rounded-lg p-4 text-center" style={{ backgroundColor: formData.accentColor || "#3b82f6", color: "#fff" }}>
-                    <p className="font-semibold">Start Planning Your Wedding Today - Free!</p>
-                    <p className="text-xs opacity-90">No credit card required to get started</p>
+                    <p className="font-semibold">{t("admin.footer.previewCtaTitle")}</p>
+                    <p className="text-xs opacity-90">{t("admin.footer.previewCtaSubtitle")}</p>
                   </div>
                   {/* Widget Grid */}
                   <div
@@ -1768,7 +1774,7 @@ export default function FooterBuilderPage() {
                       return (
                         <div key={column} className="space-y-2">
                           {widgets.length === 0 ? (
-                            <div className="text-xs text-muted-foreground">Col {column}</div>
+                            <div className="text-xs text-muted-foreground">{t("admin.footer.colLabel", { num: String(column) })}</div>
                           ) : (
                             widgets.map((widget) => (
                               <div key={widget.id}>
@@ -1835,17 +1841,17 @@ export default function FooterBuilderPage() {
       {/* Settings Tabs */}
       <Tabs defaultValue="layout" className="space-y-4">
         <TabsList>
-          <TabsTrigger value="layout">Layout & Widgets</TabsTrigger>
-          <TabsTrigger value="bottombar">Bottom Bar</TabsTrigger>
-          <TabsTrigger value="style">Styling</TabsTrigger>
+          <TabsTrigger value="layout">{t("admin.footer.tabLayout")}</TabsTrigger>
+          <TabsTrigger value="bottombar">{t("admin.footer.tabBottomBar")}</TabsTrigger>
+          <TabsTrigger value="style">{t("admin.footer.tabStyling")}</TabsTrigger>
         </TabsList>
 
         {/* Layout & Widgets Tab */}
         <TabsContent value="layout" className="space-y-4">
           <Card>
             <CardHeader>
-              <CardTitle>Footer Layout</CardTitle>
-              <CardDescription>Choose the overall layout structure for your footer</CardDescription>
+              <CardTitle>{t("admin.footer.layoutTitle")}</CardTitle>
+              <CardDescription>{t("admin.footer.layoutDesc")}</CardDescription>
             </CardHeader>
             <CardContent className="space-y-6">
               {/* Layout Options */}
@@ -1863,9 +1869,9 @@ export default function FooterBuilderPage() {
                     )}
                   >
                     <div className="flex h-12 w-full items-center justify-center rounded bg-muted">
-                      <span className="text-xs font-medium">{option.label}</span>
+                      <span className="text-xs font-medium">{t(option.labelKey)}</span>
                     </div>
-                    <span className="text-xs text-muted-foreground text-center">{option.description}</span>
+                    <span className="text-xs text-muted-foreground text-center">{t(option.descriptionKey)}</span>
                   </button>
                 ))}
               </div>
@@ -1876,9 +1882,9 @@ export default function FooterBuilderPage() {
               <div className="space-y-2">
                 <div className="flex items-center justify-between">
                   <Label className={formData.layout === 'CENTERED' || formData.layout === 'MINIMAL' ? 'text-muted-foreground' : ''}>
-                    Number of Columns
+                    {t("admin.footer.numberOfColumns")}
                   </Label>
-                  <span className="text-sm text-muted-foreground">{formData.columns} columns</span>
+                  <span className="text-sm text-muted-foreground">{t("admin.footer.columnsCount", { count: String(formData.columns) })}</span>
                 </div>
                 <Slider
                   value={[formData.columns]}
@@ -1890,7 +1896,7 @@ export default function FooterBuilderPage() {
                 />
                 {(formData.layout === 'CENTERED' || formData.layout === 'MINIMAL') && (
                   <p className="text-xs text-muted-foreground italic">
-                    Not applicable for {formData.layout.toLowerCase()} layout
+                    {t("admin.footer.notApplicableLayout", { layout: formData.layout.toLowerCase() })}
                   </p>
                 )}
               </div>
@@ -1901,9 +1907,9 @@ export default function FooterBuilderPage() {
           {/* Widget Areas - Same page as layout */}
           <Card>
             <CardHeader>
-              <CardTitle>Widget Areas</CardTitle>
+              <CardTitle>{t("admin.footer.widgetAreas")}</CardTitle>
               <CardDescription>
-                Manage footer widgets in each column. Click + to add widgets.
+                {t("admin.footer.widgetAreasDesc")}
               </CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
@@ -1911,10 +1917,10 @@ export default function FooterBuilderPage() {
               {getOrphanWidgets().length > 0 && (formData.layout === 'MULTI_COLUMN' || formData.layout === 'MEGA') && (
                 <div className="rounded-lg border border-yellow-500/50 bg-yellow-50 p-4 dark:bg-yellow-900/20">
                   <p className="text-sm font-medium text-yellow-800 dark:text-yellow-200">
-                    ⚠️ {getOrphanWidgets().length} widget(s) are in columns beyond the current {formData.columns}-column layout.
+                    ⚠️ {t("admin.footer.orphanWarning", { count: String(getOrphanWidgets().length), columns: String(formData.columns) })}
                   </p>
                   <p className="mt-1 text-xs text-yellow-700 dark:text-yellow-300">
-                    These widgets won&apos;t be visible. Increase columns or reassign them.
+                    {t("admin.footer.orphanHint")}
                   </p>
                 </div>
               )}
@@ -1939,22 +1945,26 @@ export default function FooterBuilderPage() {
                   ))}
                 </div>
                 <DragOverlay>
-                  {activeWidget ? (
-                    <div className="flex items-center gap-2 rounded-lg border bg-card p-3 shadow-lg ring-2 ring-primary">
-                      <GripVertical className="h-4 w-4 text-muted-foreground" />
-                      <div className="flex-1 min-w-0">
-                        <div className="flex items-center gap-2">
-                          {widgetTypes.find((t) => t.value === activeWidget.type)?.icon}
-                          <span className="text-sm font-medium truncate">
-                            {activeWidget.title || widgetTypes.find((t) => t.value === activeWidget.type)?.label}
+                  {activeWidget ? (() => {
+                    const aw = activeWidget;
+                    const wt = widgetTypes.find((wtItem) => wtItem.value === aw.type);
+                    return (
+                      <div className="flex items-center gap-2 rounded-lg border bg-card p-3 shadow-lg ring-2 ring-primary">
+                        <GripVertical className="h-4 w-4 text-muted-foreground" />
+                        <div className="flex-1 min-w-0">
+                          <div className="flex items-center gap-2">
+                            {wt?.icon}
+                            <span className="text-sm font-medium truncate">
+                              {aw.title || (wt ? t(wt.labelKey) : "")}
+                            </span>
+                          </div>
+                          <span className="text-xs text-muted-foreground">
+                            {aw.type}
                           </span>
                         </div>
-                        <span className="text-xs text-muted-foreground">
-                          {activeWidget.type}
-                        </span>
                       </div>
-                    </div>
-                  ) : null}
+                    );
+                  })() : null}
                 </DragOverlay>
               </DndContext>
             </CardContent>
@@ -1965,10 +1975,10 @@ export default function FooterBuilderPage() {
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
                 <Sparkles className="h-5 w-5 text-primary" />
-                Quick Start with Presets
+                {t("admin.footer.quickStart")}
               </CardTitle>
               <CardDescription>
-                Select a preset to instantly apply a professional design, or customize your own above
+                {t("admin.footer.quickStartDesc")}
               </CardDescription>
             </CardHeader>
             <CardContent>
@@ -1979,7 +1989,7 @@ export default function FooterBuilderPage() {
                 />
               ) : (
                 <div className="text-center py-8 text-muted-foreground">
-                  Save the footer first to use presets
+                  {t("admin.footer.saveFirstForPresets")}
                 </div>
               )}
             </CardContent>
@@ -1990,17 +2000,17 @@ export default function FooterBuilderPage() {
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
                 <RefreshCw className="h-5 w-5" />
-                Import / Export
+                {t("admin.footer.importExport")}
               </CardTitle>
-              <CardDescription>Backup or restore your footer configuration</CardDescription>
+              <CardDescription>{t("admin.footer.importExportDesc")}</CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
               <div className="grid gap-4 md:grid-cols-2">
                 {/* Export */}
                 <div className="space-y-3">
-                  <h4 className="font-medium">Export Configuration</h4>
+                  <h4 className="font-medium">{t("admin.footer.exportConfig")}</h4>
                   <p className="text-sm text-muted-foreground">
-                    Download your current footer settings as a JSON file.
+                    {t("admin.footer.exportConfigDesc")}
                   </p>
                   <Button
                     variant="outline"
@@ -2030,19 +2040,19 @@ export default function FooterBuilderPage() {
                       a.click();
                       document.body.removeChild(a);
                       URL.revokeObjectURL(url);
-                      toast.success("Footer configuration exported");
+                      toast.success(t("admin.footer.exportSuccess"));
                     }}
                   >
                     <Download className="h-4 w-4 mr-2" />
-                    Export Configuration
+                    {t("admin.footer.exportConfig")}
                   </Button>
                 </div>
 
                 {/* Import */}
                 <div className="space-y-3">
-                  <h4 className="font-medium">Import Configuration</h4>
+                  <h4 className="font-medium">{t("admin.footer.importConfig")}</h4>
                   <p className="text-sm text-muted-foreground">
-                    Load a previously exported footer configuration.
+                    {t("admin.footer.importConfigDesc")}
                   </p>
                   <div className="relative">
                     <input
@@ -2063,17 +2073,17 @@ export default function FooterBuilderPage() {
                             ...importData,
                             id: prev.id,
                           }));
-                          toast.success("Configuration imported. Click Save to apply changes.");
+                          toast.success(t("admin.footer.importSuccess"));
                         } catch (error) {
                           console.error("Import error:", error);
-                          toast.error("Failed to import configuration.");
+                          toast.error(t("admin.footer.importFailed"));
                         }
                         e.target.value = "";
                       }}
                     />
                     <Button variant="outline" className="w-full">
                       <Upload className="h-4 w-4 mr-2" />
-                      Import Configuration
+                      {t("admin.footer.importConfig")}
                     </Button>
                   </div>
                 </div>
@@ -2084,9 +2094,9 @@ export default function FooterBuilderPage() {
               {/* Seed Presets Button */}
               <div className="flex items-center justify-between">
                 <div>
-                  <h4 className="font-medium">Seed Built-in Presets</h4>
+                  <h4 className="font-medium">{t("admin.footer.seedPresets")}</h4>
                   <p className="text-sm text-muted-foreground">
-                    Initialize the 12 built-in footer presets (only needed once)
+                    {t("admin.footer.seedPresetsDesc")}
                   </p>
                 </div>
                 <Button
@@ -2099,12 +2109,12 @@ export default function FooterBuilderPage() {
                       toast.success(data.message);
                     } catch (error) {
                       console.error("Seed error:", error);
-                      toast.error("Failed to seed presets");
+                      toast.error(t("admin.footer.seedFailed"));
                     }
                   }}
                 >
                   <Sparkles className="h-4 w-4 mr-2" />
-                  Seed Presets
+                  {t("admin.footer.seedPresetsButton")}
                 </Button>
               </div>
             </CardContent>
@@ -2115,15 +2125,15 @@ export default function FooterBuilderPage() {
         <TabsContent value="bottombar" className="space-y-4">
           <Card>
             <CardHeader>
-              <CardTitle>Bottom Bar Settings</CardTitle>
-              <CardDescription>Configure copyright and bottom links</CardDescription>
+              <CardTitle>{t("admin.footer.bottomBarTitle")}</CardTitle>
+              <CardDescription>{t("admin.footer.bottomBarDesc")}</CardDescription>
             </CardHeader>
             <CardContent className="space-y-6">
               <div className="flex items-center justify-between rounded-lg border p-4">
                 <div>
-                  <Label className="text-base">Enable Bottom Bar</Label>
+                  <Label className="text-base">{t("admin.footer.enableBottomBar")}</Label>
                   <p className="text-sm text-muted-foreground">
-                    Show copyright and links section
+                    {t("admin.footer.enableBottomBarDesc")}
                   </p>
                 </div>
                 <Switch
@@ -2135,23 +2145,23 @@ export default function FooterBuilderPage() {
               {formData.bottomBarEnabled && (
                 <>
                   <div className="space-y-2">
-                    <Label htmlFor="copyrightText">Copyright Text</Label>
+                    <Label htmlFor="copyrightText">{t("admin.footer.copyrightText")}</Label>
                     <Input
                       id="copyrightText"
                       value={formData.copyrightText}
                       onChange={(e) => setFormData({ ...formData, copyrightText: e.target.value })}
-                      placeholder="© 2025 Your Company. All rights reserved."
+                      placeholder={t("admin.footer.copyrightPlaceholder")}
                     />
                   </div>
 
                   {formData.showDisclaimer && (
                     <div className="space-y-2">
-                      <Label htmlFor="disclaimerText">Disclaimer Text</Label>
+                      <Label htmlFor="disclaimerText">{t("admin.footer.disclaimerText")}</Label>
                       <Textarea
                         id="disclaimerText"
                         value={formData.disclaimerText}
                         onChange={(e) => setFormData({ ...formData, disclaimerText: e.target.value })}
-                        placeholder="Legal disclaimer text..."
+                        placeholder={t("admin.footer.disclaimerPlaceholder")}
                         rows={3}
                       />
                     </div>
@@ -2162,14 +2172,14 @@ export default function FooterBuilderPage() {
                   {/* Bottom Links */}
                   <div className="space-y-4">
                     <div className="flex items-center justify-between">
-                      <Label>Bottom Links</Label>
+                      <Label>{t("admin.footer.bottomLinks")}</Label>
                       <Button variant="outline" size="sm" onClick={addBottomLink}>
                         <Plus className="mr-1 h-4 w-4" />
-                        Add Link
+                        {t("admin.footer.addLink")}
                       </Button>
                     </div>
                     {formData.bottomLinks.length === 0 ? (
-                      <p className="text-sm text-muted-foreground">No bottom links configured</p>
+                      <p className="text-sm text-muted-foreground">{t("admin.footer.noBottomLinks")}</p>
                     ) : (
                       <div className="space-y-2">
                         {formData.bottomLinks.map((link, index) => (
@@ -2177,13 +2187,13 @@ export default function FooterBuilderPage() {
                             <Input
                               value={link.label}
                               onChange={(e) => updateBottomLink(index, { label: e.target.value })}
-                              placeholder="Link label"
+                              placeholder={t("admin.footer.linkLabel")}
                               className="flex-1"
                             />
                             <Input
                               value={link.url}
                               onChange={(e) => updateBottomLink(index, { url: e.target.value })}
-                              placeholder="URL"
+                              placeholder={t("admin.footer.urlPlaceholder")}
                               className="flex-1"
                             />
                             <Button
@@ -2209,16 +2219,16 @@ export default function FooterBuilderPage() {
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
                 <Shield className="h-5 w-5" />
-                Trust Badges
+                {t("admin.footer.trustBadges")}
               </CardTitle>
-              <CardDescription>Add security and trust badges to your footer</CardDescription>
+              <CardDescription>{t("admin.footer.trustBadgesDesc")}</CardDescription>
             </CardHeader>
             <CardContent className="space-y-6">
               <div className="flex items-center justify-between rounded-lg border p-4">
                 <div>
-                  <Label className="text-base">Show Trust Badges</Label>
+                  <Label className="text-base">{t("admin.footer.showTrustBadges")}</Label>
                   <p className="text-sm text-muted-foreground">
-                    Display trust/security badges in footer
+                    {t("admin.footer.showTrustBadgesDesc")}
                   </p>
                 </div>
                 <Switch
@@ -2230,26 +2240,26 @@ export default function FooterBuilderPage() {
               {formData.showTrustBadges && (
                 <div className="space-y-4">
                   <div className="flex items-center justify-between">
-                    <Label>Trust Badges</Label>
+                    <Label>{t("admin.footer.trustBadges")}</Label>
                     <div className="flex gap-2">
                       <Button variant="outline" size="sm" onClick={() => addTrustBadge("pill")}>
                         <Plus className="mr-1 h-4 w-4" />
-                        Pill Badge
+                        {t("admin.footer.pillBadge")}
                       </Button>
                       <Button variant="outline" size="sm" onClick={() => addTrustBadge("image")}>
                         <Plus className="mr-1 h-4 w-4" />
-                        Image Badge
+                        {t("admin.footer.imageBadge")}
                       </Button>
                     </div>
                   </div>
                   {formData.trustBadges.length === 0 ? (
                     <div className="rounded-lg border-2 border-dashed p-8 text-center">
                       <Shield className="mx-auto h-8 w-8 text-muted-foreground" />
-                      <p className="mt-2 text-sm text-muted-foreground">No trust badges configured</p>
-                      <p className="text-xs text-muted-foreground mt-1">Pill badges show text + icon (e.g. "Top Rated", "Secure"). Image badges show a logo.</p>
+                      <p className="mt-2 text-sm text-muted-foreground">{t("admin.footer.noTrustBadges")}</p>
+                      <p className="text-xs text-muted-foreground mt-1">{t("admin.footer.trustBadgesHint")}</p>
                       <Button variant="outline" size="sm" className="mt-4" onClick={() => addTrustBadge("pill")}>
                         <Plus className="mr-1 h-4 w-4" />
-                        Add Pill Badge
+                        {t("admin.footer.addPillBadge")}
                       </Button>
                     </div>
                   ) : (
@@ -2266,11 +2276,11 @@ export default function FooterBuilderPage() {
                                   <SelectValue />
                                 </SelectTrigger>
                                 <SelectContent>
-                                  <SelectItem value="pill">Pill</SelectItem>
-                                  <SelectItem value="image">Image</SelectItem>
+                                  <SelectItem value="pill">{t("admin.footer.pill")}</SelectItem>
+                                  <SelectItem value="image">{t("admin.footer.image")}</SelectItem>
                                 </SelectContent>
                               </Select>
-                              <span className="text-xs text-muted-foreground">Badge {index + 1}</span>
+                              <span className="text-xs text-muted-foreground">{t("admin.footer.badgeNum", { num: String(index + 1) })}</span>
                             </div>
                             <Button
                               variant="ghost"
@@ -2285,16 +2295,16 @@ export default function FooterBuilderPage() {
                           {(badge.style || "image") === "pill" ? (
                             <div className="grid grid-cols-2 gap-2">
                               <div className="space-y-1">
-                                <Label className="text-xs">Label Text</Label>
+                                <Label className="text-xs">{t("admin.footer.labelText")}</Label>
                                 <Input
                                   value={badge.text || ""}
                                   onChange={(e) => updateTrustBadge(index, { text: e.target.value })}
-                                  placeholder="e.g. Top Rated"
+                                  placeholder={t("admin.footer.labelTextPlaceholder")}
                                   className="h-8 text-sm"
                                 />
                               </div>
                               <div className="space-y-1">
-                                <Label className="text-xs">Icon</Label>
+                                <Label className="text-xs">{t("admin.footer.icon")}</Label>
                                 <Select
                                   value={badge.iconName || "shield"}
                                   onValueChange={(v) => updateTrustBadge(index, { iconName: v })}
@@ -2303,19 +2313,19 @@ export default function FooterBuilderPage() {
                                     <SelectValue />
                                   </SelectTrigger>
                                   <SelectContent>
-                                    <SelectItem value="shield">Shield</SelectItem>
-                                    <SelectItem value="star">Star</SelectItem>
-                                    <SelectItem value="zap">Zap / Fast</SelectItem>
-                                    <SelectItem value="award">Award</SelectItem>
-                                    <SelectItem value="check-circle">Check Circle</SelectItem>
-                                    <SelectItem value="lock">Lock</SelectItem>
-                                    <SelectItem value="trophy">Trophy</SelectItem>
-                                    <SelectItem value="heart">Heart</SelectItem>
+                                    <SelectItem value="shield">{t("admin.footer.iconShield")}</SelectItem>
+                                    <SelectItem value="star">{t("admin.footer.iconStar")}</SelectItem>
+                                    <SelectItem value="zap">{t("admin.footer.iconZap")}</SelectItem>
+                                    <SelectItem value="award">{t("admin.footer.iconAward")}</SelectItem>
+                                    <SelectItem value="check-circle">{t("admin.footer.iconCheckCircle")}</SelectItem>
+                                    <SelectItem value="lock">{t("admin.footer.iconLock")}</SelectItem>
+                                    <SelectItem value="trophy">{t("admin.footer.iconTrophy")}</SelectItem>
+                                    <SelectItem value="heart">{t("admin.footer.iconHeart")}</SelectItem>
                                   </SelectContent>
                                 </Select>
                               </div>
                               <div className="col-span-2 space-y-1">
-                                <Label className="text-xs">Link URL (optional)</Label>
+                                <Label className="text-xs">{t("admin.footer.linkUrlOptional")}</Label>
                                 <Input
                                   value={badge.url || ""}
                                   onChange={(e) => updateTrustBadge(index, { url: e.target.value })}
@@ -2329,20 +2339,20 @@ export default function FooterBuilderPage() {
                               <Input
                                 value={badge.image}
                                 onChange={(e) => updateTrustBadge(index, { image: e.target.value })}
-                                placeholder="Image URL (e.g., /images/badges/ssl.png)"
+                                placeholder={t("admin.footer.imageUrlPlaceholder")}
                                 className="h-8 text-sm"
                               />
                               <div className="flex gap-2">
                                 <Input
                                   value={badge.alt}
                                   onChange={(e) => updateTrustBadge(index, { alt: e.target.value })}
-                                  placeholder="Alt text"
+                                  placeholder={t("admin.footer.altText")}
                                   className="flex-1 h-8 text-sm"
                                 />
                                 <Input
                                   value={badge.url || ""}
                                   onChange={(e) => updateTrustBadge(index, { url: e.target.value })}
-                                  placeholder="Link URL (optional)"
+                                  placeholder={t("admin.footer.linkUrlOptionalPlaceholder")}
                                   className="flex-1 h-8 text-sm"
                                 />
                               </div>
@@ -2365,20 +2375,20 @@ export default function FooterBuilderPage() {
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
                 <Palette className="h-5 w-5" />
-                Background
+                {t("admin.footer.background")}
               </CardTitle>
-              <CardDescription>Configure footer background style</CardDescription>
+              <CardDescription>{t("admin.footer.backgroundDesc")}</CardDescription>
             </CardHeader>
             <CardContent className="space-y-6">
               {/* Background Type */}
               <div className="space-y-2">
-                <Label>Background Type</Label>
+                <Label>{t("admin.footer.backgroundType")}</Label>
                 <div className="grid grid-cols-4 gap-2">
                   {[
-                    { value: "solid", label: "Solid" },
-                    { value: "gradient", label: "Gradient" },
-                    { value: "pattern", label: "Pattern" },
-                    { value: "image", label: "Image" },
+                    { value: "solid", labelKey: "admin.footer.bgSolid" },
+                    { value: "gradient", labelKey: "admin.footer.bgGradient" },
+                    { value: "pattern", labelKey: "admin.footer.bgPattern" },
+                    { value: "image", labelKey: "admin.footer.bgImage" },
                   ].map((type) => (
                     <button
                       key={type.value}
@@ -2391,7 +2401,7 @@ export default function FooterBuilderPage() {
                           : "border-muted hover:border-primary/50"
                       )}
                     >
-                      {type.label}
+                      {t(type.labelKey)}
                     </button>
                   ))}
                 </div>
@@ -2400,7 +2410,7 @@ export default function FooterBuilderPage() {
               {/* Solid Color */}
               {formData.bgType === "solid" && (
                 <div className="space-y-2">
-                  <Label htmlFor="bgColor">Background Color</Label>
+                  <Label htmlFor="bgColor">{t("admin.footer.backgroundColor")}</Label>
                   <div className="flex gap-2">
                     <Input
                       id="bgColor"
@@ -2424,7 +2434,7 @@ export default function FooterBuilderPage() {
                 <div className="space-y-4">
                   <div className="grid gap-4 md:grid-cols-2">
                     <div className="space-y-2">
-                      <Label>Gradient Start</Label>
+                      <Label>{t("admin.footer.gradientStart")}</Label>
                       <div className="flex gap-2">
                         <Input
                           type="color"
@@ -2461,7 +2471,7 @@ export default function FooterBuilderPage() {
                       </div>
                     </div>
                     <div className="space-y-2">
-                      <Label>Gradient End</Label>
+                      <Label>{t("admin.footer.gradientEnd")}</Label>
                       <div className="flex gap-2">
                         <Input
                           type="color"
@@ -2500,7 +2510,7 @@ export default function FooterBuilderPage() {
                   </div>
                   <div className="space-y-2">
                     <div className="flex items-center justify-between">
-                      <Label>Gradient Angle</Label>
+                      <Label>{t("admin.footer.gradientAngle")}</Label>
                       <span className="text-sm text-muted-foreground">{formData.bgGradient?.angle || 135}°</span>
                     </div>
                     <Slider
@@ -2529,7 +2539,7 @@ export default function FooterBuilderPage() {
               {formData.bgType === "pattern" && (
                 <div className="space-y-4">
                   <div className="space-y-2">
-                    <Label>Pattern Style</Label>
+                    <Label>{t("admin.footer.patternStyle")}</Label>
                     <Select
                       value={formData.bgPattern || "dots"}
                       onValueChange={(value) => setFormData({ ...formData, bgPattern: value })}
@@ -2538,17 +2548,17 @@ export default function FooterBuilderPage() {
                         <SelectValue />
                       </SelectTrigger>
                       <SelectContent>
-                        <SelectItem value="dots">Dots</SelectItem>
-                        <SelectItem value="grid">Grid</SelectItem>
-                        <SelectItem value="diagonal">Diagonal Lines</SelectItem>
-                        <SelectItem value="waves">Waves</SelectItem>
-                        <SelectItem value="noise">Noise</SelectItem>
+                        <SelectItem value="dots">{t("admin.footer.patternDots")}</SelectItem>
+                        <SelectItem value="grid">{t("admin.footer.patternGrid")}</SelectItem>
+                        <SelectItem value="diagonal">{t("admin.footer.patternDiagonal")}</SelectItem>
+                        <SelectItem value="waves">{t("admin.footer.patternWaves")}</SelectItem>
+                        <SelectItem value="noise">{t("admin.footer.patternNoise")}</SelectItem>
                       </SelectContent>
                     </Select>
                   </div>
                   <div className="grid gap-4 md:grid-cols-2">
                     <div className="space-y-2">
-                      <Label>Base Color</Label>
+                      <Label>{t("admin.footer.baseColor")}</Label>
                       <div className="flex gap-2">
                         <Input
                           type="color"
@@ -2565,7 +2575,7 @@ export default function FooterBuilderPage() {
                       </div>
                     </div>
                     <div className="space-y-2">
-                      <Label>Pattern Color</Label>
+                      <Label>{t("admin.footer.patternColor")}</Label>
                       <div className="flex gap-2">
                         <Input
                           type="color"
@@ -2584,7 +2594,7 @@ export default function FooterBuilderPage() {
                   </div>
                   <div className="space-y-2">
                     <div className="flex items-center justify-between">
-                      <Label>Pattern Opacity</Label>
+                      <Label>{t("admin.footer.patternOpacity")}</Label>
                       <span className="text-sm text-muted-foreground">{formData.bgPatternOpacity}%</span>
                     </div>
                     <Slider
@@ -2602,35 +2612,35 @@ export default function FooterBuilderPage() {
               {formData.bgType === "image" && (
                 <div className="space-y-4">
                   <div className="space-y-2">
-                    <Label htmlFor="bgImage">Background Image URL</Label>
+                    <Label htmlFor="bgImage">{t("admin.footer.bgImageUrl")}</Label>
                     <Input
                       id="bgImage"
                       value={formData.bgImage}
                       onChange={(e) => setFormData({ ...formData, bgImage: e.target.value })}
                       placeholder="https://example.com/image.jpg"
                     />
-                    <p className="text-xs text-muted-foreground">Enter the URL of the background image</p>
+                    <p className="text-xs text-muted-foreground">{t("admin.footer.bgImageUrlHint")}</p>
                   </div>
                   <div className="space-y-2">
-                    <Label htmlFor="bgImageOverlay">Overlay Color</Label>
+                    <Label htmlFor="bgImageOverlay">{t("admin.footer.overlayColor")}</Label>
                     <Input
                       id="bgImageOverlay"
                       value={formData.bgImageOverlay}
                       onChange={(e) => setFormData({ ...formData, bgImageOverlay: e.target.value })}
                       placeholder="rgba(0,0,0,0.5)"
                     />
-                    <p className="text-xs text-muted-foreground">Dark overlay to improve text readability (e.g., rgba(0,0,0,0.5))</p>
+                    <p className="text-xs text-muted-foreground">{t("admin.footer.overlayColorHint")}</p>
                   </div>
                   {formData.bgImage && (
                     <div className="space-y-2">
-                      <Label>Preview</Label>
+                      <Label>{t("admin.footer.previewLabel")}</Label>
                       <div
                         className="h-32 rounded-lg bg-cover bg-center flex items-center justify-center text-white"
                         style={{
                           backgroundImage: `linear-gradient(${formData.bgImageOverlay}, ${formData.bgImageOverlay}), url(${formData.bgImage})`,
                         }}
                       >
-                        <span className="text-sm font-medium">Sample Text</span>
+                        <span className="text-sm font-medium">{t("admin.footer.sampleText")}</span>
                       </div>
                     </div>
                   )}
@@ -2644,14 +2654,14 @@ export default function FooterBuilderPage() {
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
                 <CircleDot className="h-5 w-5" />
-                Colors
+                {t("admin.footer.colors")}
               </CardTitle>
-              <CardDescription>Text, link, and accent colors</CardDescription>
+              <CardDescription>{t("admin.footer.colorsDesc")}</CardDescription>
             </CardHeader>
             <CardContent className="space-y-6">
               <div className="grid gap-4 md:grid-cols-2">
                 <div className="space-y-2">
-                  <Label htmlFor="textColor">Text Color</Label>
+                  <Label htmlFor="textColor">{t("admin.footer.textColor")}</Label>
                   <div className="flex gap-2">
                     <Input
                       id="textColor"
@@ -2670,7 +2680,7 @@ export default function FooterBuilderPage() {
                 </div>
 
                 <div className="space-y-2">
-                  <Label htmlFor="headingColor">Heading Color</Label>
+                  <Label htmlFor="headingColor">{t("admin.footer.headingColor")}</Label>
                   <div className="flex gap-2">
                     <Input
                       id="headingColor"
@@ -2689,7 +2699,7 @@ export default function FooterBuilderPage() {
                 </div>
 
                 <div className="space-y-2">
-                  <Label htmlFor="linkColor">Link Color</Label>
+                  <Label htmlFor="linkColor">{t("admin.footer.linkColor")}</Label>
                   <div className="flex gap-2">
                     <Input
                       id="linkColor"
@@ -2708,7 +2718,7 @@ export default function FooterBuilderPage() {
                 </div>
 
                 <div className="space-y-2">
-                  <Label htmlFor="linkHoverColor">Link Hover Color</Label>
+                  <Label htmlFor="linkHoverColor">{t("admin.footer.linkHoverColor")}</Label>
                   <div className="flex gap-2">
                     <Input
                       id="linkHoverColor"
@@ -2727,7 +2737,7 @@ export default function FooterBuilderPage() {
                 </div>
 
                 <div className="space-y-2">
-                  <Label htmlFor="accentColor">Accent Color</Label>
+                  <Label htmlFor="accentColor">{t("admin.footer.accentColor")}</Label>
                   <div className="flex gap-2">
                     <Input
                       id="accentColor"
@@ -2746,7 +2756,7 @@ export default function FooterBuilderPage() {
                 </div>
 
                 <div className="space-y-2">
-                  <Label htmlFor="borderColor">Border Color</Label>
+                  <Label htmlFor="borderColor">{t("admin.footer.borderColor")}</Label>
                   <div className="flex gap-2">
                     <Input
                       id="borderColor"
@@ -2765,8 +2775,8 @@ export default function FooterBuilderPage() {
                 </div>
 
                 <div className="space-y-2">
-                  <Label htmlFor="dividerColor">Divider Color</Label>
-                  <p className="text-xs text-muted-foreground">Color for the line between main content and bottom bar</p>
+                  <Label htmlFor="dividerColor">{t("admin.footer.dividerColor")}</Label>
+                  <p className="text-xs text-muted-foreground">{t("admin.footer.dividerColorHint")}</p>
                   <div className="flex gap-2">
                     <Input
                       id="dividerColor"
@@ -2792,14 +2802,14 @@ export default function FooterBuilderPage() {
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
                 <Type className="h-5 w-5" />
-                Typography
+                {t("admin.footer.typography")}
               </CardTitle>
-              <CardDescription>Heading and text styles</CardDescription>
+              <CardDescription>{t("admin.footer.typographyDesc")}</CardDescription>
             </CardHeader>
             <CardContent className="space-y-6">
               <div className="grid gap-4 md:grid-cols-3">
                 <div className="space-y-2">
-                  <Label>Heading Size</Label>
+                  <Label>{t("admin.footer.headingSize")}</Label>
                   <Select
                     value={formData.headingSize}
                     onValueChange={(value) => setFormData({ ...formData, headingSize: value })}
@@ -2808,16 +2818,16 @@ export default function FooterBuilderPage() {
                       <SelectValue />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="sm">Small</SelectItem>
-                      <SelectItem value="base">Base</SelectItem>
-                      <SelectItem value="lg">Large</SelectItem>
-                      <SelectItem value="xl">Extra Large</SelectItem>
+                      <SelectItem value="sm">{t("admin.footer.small")}</SelectItem>
+                      <SelectItem value="base">{t("admin.footer.base")}</SelectItem>
+                      <SelectItem value="lg">{t("admin.footer.large")}</SelectItem>
+                      <SelectItem value="xl">{t("admin.footer.extraLarge")}</SelectItem>
                     </SelectContent>
                   </Select>
                 </div>
 
                 <div className="space-y-2">
-                  <Label>Heading Weight</Label>
+                  <Label>{t("admin.footer.headingWeight")}</Label>
                   <Select
                     value={formData.headingWeight}
                     onValueChange={(value) => setFormData({ ...formData, headingWeight: value })}
@@ -2826,15 +2836,15 @@ export default function FooterBuilderPage() {
                       <SelectValue />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="medium">Medium</SelectItem>
-                      <SelectItem value="semibold">Semibold</SelectItem>
-                      <SelectItem value="bold">Bold</SelectItem>
+                      <SelectItem value="medium">{t("admin.footer.medium")}</SelectItem>
+                      <SelectItem value="semibold">{t("admin.footer.semibold")}</SelectItem>
+                      <SelectItem value="bold">{t("admin.footer.bold")}</SelectItem>
                     </SelectContent>
                   </Select>
                 </div>
 
                 <div className="space-y-2">
-                  <Label>Heading Style</Label>
+                  <Label>{t("admin.footer.headingStyle")}</Label>
                   <Select
                     value={formData.headingStyle}
                     onValueChange={(value) => setFormData({ ...formData, headingStyle: value })}
@@ -2843,9 +2853,9 @@ export default function FooterBuilderPage() {
                       <SelectValue />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="normal">Normal</SelectItem>
-                      <SelectItem value="uppercase">UPPERCASE</SelectItem>
-                      <SelectItem value="capitalize">Capitalize</SelectItem>
+                      <SelectItem value="normal">{t("admin.footer.normal")}</SelectItem>
+                      <SelectItem value="uppercase">{t("admin.footer.uppercase")}</SelectItem>
+                      <SelectItem value="capitalize">{t("admin.footer.capitalize")}</SelectItem>
                     </SelectContent>
                   </Select>
                 </div>
@@ -2853,7 +2863,7 @@ export default function FooterBuilderPage() {
 
               {/* Preview */}
               <div className="rounded-lg border p-4">
-                <p className="text-xs text-muted-foreground mb-2">Preview:</p>
+                <p className="text-xs text-muted-foreground mb-2">{t("admin.footer.previewColon")}</p>
                 <h4
                   className={cn(
                     formData.headingSize === "sm" && "text-sm",
@@ -2868,7 +2878,7 @@ export default function FooterBuilderPage() {
                   )}
                   style={{ color: formData.headingColor || undefined }}
                 >
-                  Sample Heading
+                  {t("admin.footer.sampleHeading")}
                 </h4>
               </div>
             </CardContent>
@@ -2879,14 +2889,14 @@ export default function FooterBuilderPage() {
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
                 <Share2 className="h-5 w-5" />
-                Social Icons
+                {t("admin.footer.socialIcons")}
               </CardTitle>
-              <CardDescription>Style for social media icons</CardDescription>
+              <CardDescription>{t("admin.footer.socialIconsDesc")}</CardDescription>
             </CardHeader>
             <CardContent className="space-y-6">
               <div className="grid gap-4 md:grid-cols-2">
                 <div className="space-y-2">
-                  <Label>Icon Shape</Label>
+                  <Label>{t("admin.footer.iconShape")}</Label>
                   <Select
                     value={formData.socialShape}
                     onValueChange={(value) => setFormData({ ...formData, socialShape: value })}
@@ -2895,16 +2905,16 @@ export default function FooterBuilderPage() {
                       <SelectValue />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="circle">Circle</SelectItem>
-                      <SelectItem value="square">Square</SelectItem>
-                      <SelectItem value="rounded">Rounded</SelectItem>
-                      <SelectItem value="pill">Pill</SelectItem>
+                      <SelectItem value="circle">{t("admin.footer.shapeCircle")}</SelectItem>
+                      <SelectItem value="square">{t("admin.footer.shapeSquare")}</SelectItem>
+                      <SelectItem value="rounded">{t("admin.footer.shapeRounded")}</SelectItem>
+                      <SelectItem value="pill">{t("admin.footer.shapePill")}</SelectItem>
                     </SelectContent>
                   </Select>
                 </div>
 
                 <div className="space-y-2">
-                  <Label>Icon Size</Label>
+                  <Label>{t("admin.footer.iconSize")}</Label>
                   <Select
                     value={formData.socialSize}
                     onValueChange={(value) => setFormData({ ...formData, socialSize: value })}
@@ -2913,16 +2923,16 @@ export default function FooterBuilderPage() {
                       <SelectValue />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="sm">Small</SelectItem>
-                      <SelectItem value="md">Medium</SelectItem>
-                      <SelectItem value="lg">Large</SelectItem>
-                      <SelectItem value="xl">Extra Large</SelectItem>
+                      <SelectItem value="sm">{t("admin.footer.small")}</SelectItem>
+                      <SelectItem value="md">{t("admin.footer.medium")}</SelectItem>
+                      <SelectItem value="lg">{t("admin.footer.large")}</SelectItem>
+                      <SelectItem value="xl">{t("admin.footer.extraLarge")}</SelectItem>
                     </SelectContent>
                   </Select>
                 </div>
 
                 <div className="space-y-2">
-                  <Label>Color Mode</Label>
+                  <Label>{t("admin.footer.colorMode")}</Label>
                   <Select
                     value={formData.socialColorMode}
                     onValueChange={(value) => setFormData({ ...formData, socialColorMode: value })}
@@ -2931,15 +2941,15 @@ export default function FooterBuilderPage() {
                       <SelectValue />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="brand">Brand Colors</SelectItem>
-                      <SelectItem value="monochrome">Monochrome</SelectItem>
-                      <SelectItem value="accent">Accent Color</SelectItem>
+                      <SelectItem value="brand">{t("admin.footer.colorBrand")}</SelectItem>
+                      <SelectItem value="monochrome">{t("admin.footer.colorMonochrome")}</SelectItem>
+                      <SelectItem value="accent">{t("admin.footer.colorAccent")}</SelectItem>
                     </SelectContent>
                   </Select>
                 </div>
 
                 <div className="space-y-2">
-                  <Label>Hover Effect</Label>
+                  <Label>{t("admin.footer.hoverEffect")}</Label>
                   <Select
                     value={formData.socialHoverEffect}
                     onValueChange={(value) => setFormData({ ...formData, socialHoverEffect: value })}
@@ -2948,16 +2958,16 @@ export default function FooterBuilderPage() {
                       <SelectValue />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="scale">Scale Up</SelectItem>
-                      <SelectItem value="lift">Lift</SelectItem>
-                      <SelectItem value="glow">Glow</SelectItem>
-                      <SelectItem value="rotate">Rotate</SelectItem>
+                      <SelectItem value="scale">{t("admin.footer.hoverScale")}</SelectItem>
+                      <SelectItem value="lift">{t("admin.footer.hoverLift")}</SelectItem>
+                      <SelectItem value="glow">{t("admin.footer.hoverGlow")}</SelectItem>
+                      <SelectItem value="rotate">{t("admin.footer.hoverRotate")}</SelectItem>
                     </SelectContent>
                   </Select>
                 </div>
 
                 <div className="space-y-2">
-                  <Label>Background Style</Label>
+                  <Label>{t("admin.footer.bgStyle")}</Label>
                   <Select
                     value={formData.socialBgStyle}
                     onValueChange={(value) => setFormData({ ...formData, socialBgStyle: value })}
@@ -2966,10 +2976,10 @@ export default function FooterBuilderPage() {
                       <SelectValue />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="none">None</SelectItem>
-                      <SelectItem value="subtle">Subtle Glass</SelectItem>
-                      <SelectItem value="solid">Solid</SelectItem>
-                      <SelectItem value="outline">Outline</SelectItem>
+                      <SelectItem value="none">{t("admin.footer.bgNone")}</SelectItem>
+                      <SelectItem value="subtle">{t("admin.footer.bgSubtleGlass")}</SelectItem>
+                      <SelectItem value="solid">{t("admin.footer.bgSolidStyle")}</SelectItem>
+                      <SelectItem value="outline">{t("admin.footer.bgOutline")}</SelectItem>
                     </SelectContent>
                   </Select>
                 </div>
@@ -2977,7 +2987,7 @@ export default function FooterBuilderPage() {
 
               {/* Preview */}
               <div className="rounded-lg border p-4" style={{ backgroundColor: formData.bgColor || '#1a1a2e' }}>
-                <p className="text-xs text-white/60 mb-3">Preview (on dark background):</p>
+                <p className="text-xs text-white/60 mb-3">{t("admin.footer.previewOnDark")}</p>
                 <div className={cn(
                   "flex",
                   formData.socialSize === "sm" && "gap-2",
@@ -3051,17 +3061,17 @@ export default function FooterBuilderPage() {
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
                 <Wand2 className="h-5 w-5" />
-                Effects & Animation
+                {t("admin.footer.effectsAnim")}
               </CardTitle>
-              <CardDescription>Visual effects and animations</CardDescription>
+              <CardDescription>{t("admin.footer.effectsAnimDesc")}</CardDescription>
             </CardHeader>
             <CardContent className="space-y-6">
               {/* Animation Toggle */}
               <div className="flex items-center justify-between rounded-lg border p-4">
                 <div>
-                  <Label className="text-base">Enable Animations</Label>
+                  <Label className="text-base">{t("admin.footer.enableAnimations")}</Label>
                   <p className="text-sm text-muted-foreground">
-                    Add entrance animations and hover effects
+                    {t("admin.footer.enableAnimationsDesc")}
                   </p>
                 </div>
                 <Switch
@@ -3073,7 +3083,7 @@ export default function FooterBuilderPage() {
               {formData.enableAnimations && (
                 <div className="grid gap-4 md:grid-cols-2">
                   <div className="space-y-2">
-                    <Label>Entrance Animation</Label>
+                    <Label>{t("admin.footer.entranceAnimation")}</Label>
                     <Select
                       value={formData.entranceAnimation || "none"}
                       onValueChange={(value) => setFormData({ ...formData, entranceAnimation: value })}
@@ -3082,17 +3092,17 @@ export default function FooterBuilderPage() {
                         <SelectValue />
                       </SelectTrigger>
                       <SelectContent>
-                        <SelectItem value="none">None</SelectItem>
-                        <SelectItem value="fade-in">Fade In</SelectItem>
-                        <SelectItem value="fade-up">Fade Up</SelectItem>
-                        <SelectItem value="slide-up">Slide Up</SelectItem>
+                        <SelectItem value="none">{t("admin.footer.entranceNone")}</SelectItem>
+                        <SelectItem value="fade-in">{t("admin.footer.entranceFadeIn")}</SelectItem>
+                        <SelectItem value="fade-up">{t("admin.footer.entranceFadeUp")}</SelectItem>
+                        <SelectItem value="slide-up">{t("admin.footer.entranceSlideUp")}</SelectItem>
                       </SelectContent>
                     </Select>
                   </div>
 
                   <div className="space-y-2">
                     <div className="flex items-center justify-between">
-                      <Label>Animation Duration</Label>
+                      <Label>{t("admin.footer.animationDuration")}</Label>
                       <span className="text-sm text-muted-foreground">{formData.animationDuration}ms</span>
                     </div>
                     <Slider
@@ -3110,7 +3120,7 @@ export default function FooterBuilderPage() {
 
               {/* Shadow */}
               <div className="space-y-2">
-                <Label>Shadow</Label>
+                <Label>{t("admin.footer.shadow")}</Label>
                 <Select
                   value={formData.shadow}
                   onValueChange={(value) => setFormData({ ...formData, shadow: value })}
@@ -3119,11 +3129,11 @@ export default function FooterBuilderPage() {
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="none">None</SelectItem>
-                    <SelectItem value="sm">Small</SelectItem>
-                    <SelectItem value="md">Medium</SelectItem>
-                    <SelectItem value="lg">Large</SelectItem>
-                    <SelectItem value="xl">Extra Large</SelectItem>
+                    <SelectItem value="none">{t("admin.footer.shadowNone")}</SelectItem>
+                    <SelectItem value="sm">{t("admin.footer.shadowSm")}</SelectItem>
+                    <SelectItem value="md">{t("admin.footer.shadowMd")}</SelectItem>
+                    <SelectItem value="lg">{t("admin.footer.shadowLg")}</SelectItem>
+                    <SelectItem value="xl">{t("admin.footer.shadowXl")}</SelectItem>
                   </SelectContent>
                 </Select>
               </div>
@@ -3133,7 +3143,7 @@ export default function FooterBuilderPage() {
               {/* Divider Style */}
               <div className="grid gap-4 md:grid-cols-2">
                 <div className="space-y-2">
-                  <Label>Divider Style</Label>
+                  <Label>{t("admin.footer.dividerStyle")}</Label>
                   <Select
                     value={formData.dividerStyle}
                     onValueChange={(value) => setFormData({ ...formData, dividerStyle: value })}
@@ -3142,17 +3152,17 @@ export default function FooterBuilderPage() {
                       <SelectValue />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="none">None</SelectItem>
-                      <SelectItem value="solid">Solid</SelectItem>
-                      <SelectItem value="dashed">Dashed</SelectItem>
-                      <SelectItem value="dotted">Dotted</SelectItem>
-                      <SelectItem value="gradient">Gradient</SelectItem>
+                      <SelectItem value="none">{t("admin.footer.dividerNone")}</SelectItem>
+                      <SelectItem value="solid">{t("admin.footer.dividerSolid")}</SelectItem>
+                      <SelectItem value="dashed">{t("admin.footer.dividerDashed")}</SelectItem>
+                      <SelectItem value="dotted">{t("admin.footer.dividerDotted")}</SelectItem>
+                      <SelectItem value="gradient">{t("admin.footer.dividerGradient")}</SelectItem>
                     </SelectContent>
                   </Select>
                 </div>
 
                 <div className="space-y-2">
-                  <Label>Link Prefix Icon</Label>
+                  <Label>{t("admin.footer.linkPrefix")}</Label>
                   <Select
                     value={formData.linkPrefix}
                     onValueChange={(value) => setFormData({ ...formData, linkPrefix: value })}
@@ -3161,17 +3171,17 @@ export default function FooterBuilderPage() {
                       <SelectValue />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="none">None</SelectItem>
-                      <SelectItem value="chevron">Chevron ›</SelectItem>
-                      <SelectItem value="arrow">Arrow →</SelectItem>
-                      <SelectItem value="dash">Dash –</SelectItem>
+                      <SelectItem value="none">{t("admin.footer.linkPrefixNone")}</SelectItem>
+                      <SelectItem value="chevron">{t("admin.footer.linkPrefixChevron")}</SelectItem>
+                      <SelectItem value="arrow">{t("admin.footer.linkPrefixArrow")}</SelectItem>
+                      <SelectItem value="dash">{t("admin.footer.linkPrefixDash")}</SelectItem>
                     </SelectContent>
                   </Select>
-                  <p className="text-xs text-muted-foreground">Icon shown before each footer link</p>
+                  <p className="text-xs text-muted-foreground">{t("admin.footer.linkPrefixHint")}</p>
                 </div>
 
                 <div className="space-y-2">
-                  <Label>Link Hover Effect</Label>
+                  <Label>{t("admin.footer.linkHoverEffectLabel")}</Label>
                   <Select
                     value={formData.linkHoverEffect}
                     onValueChange={(value) => setFormData({ ...formData, linkHoverEffect: value })}
@@ -3180,10 +3190,10 @@ export default function FooterBuilderPage() {
                       <SelectValue />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="color">Color Change</SelectItem>
-                      <SelectItem value="underline">Underline</SelectItem>
-                      <SelectItem value="slide">Slide Underline</SelectItem>
-                      <SelectItem value="highlight">Highlight</SelectItem>
+                      <SelectItem value="color">{t("admin.footer.linkHoverColorChange")}</SelectItem>
+                      <SelectItem value="underline">{t("admin.footer.linkHoverUnderline")}</SelectItem>
+                      <SelectItem value="slide">{t("admin.footer.linkHoverSlide")}</SelectItem>
+                      <SelectItem value="highlight">{t("admin.footer.linkHoverHighlight")}</SelectItem>
                     </SelectContent>
                   </Select>
                 </div>
@@ -3196,14 +3206,14 @@ export default function FooterBuilderPage() {
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
                 <Maximize2 className="h-5 w-5" />
-                Container
+                {t("admin.footer.containerTitle")}
               </CardTitle>
-              <CardDescription>Footer container width and corner style</CardDescription>
+              <CardDescription>{t("admin.footer.containerDesc")}</CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
               <div className="grid gap-4 md:grid-cols-2">
                 <div className="space-y-2">
-                  <Label>Container Width</Label>
+                  <Label>{t("admin.footer.containerWidth")}</Label>
                   <Select
                     value={formData.containerWidth}
                     onValueChange={(value) => setFormData({ ...formData, containerWidth: value })}
@@ -3212,17 +3222,17 @@ export default function FooterBuilderPage() {
                       <SelectValue />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="full">Full Width</SelectItem>
-                      <SelectItem value="boxed">Boxed (Content Width)</SelectItem>
+                      <SelectItem value="full">{t("admin.footer.containerFull")}</SelectItem>
+                      <SelectItem value="boxed">{t("admin.footer.containerBoxed")}</SelectItem>
                     </SelectContent>
                   </Select>
                   <p className="text-xs text-muted-foreground">
-                    Boxed: Aligns footer with main content sections
+                    {t("admin.footer.containerBoxedHint")}
                   </p>
                 </div>
 
                 <div className="space-y-2">
-                  <Label>Corner Style</Label>
+                  <Label>{t("admin.footer.cornerStyle")}</Label>
                   <Select
                     value={formData.containerStyle}
                     onValueChange={(value) => {
@@ -3237,8 +3247,8 @@ export default function FooterBuilderPage() {
                       <SelectValue />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="sharp">Sharp</SelectItem>
-                      <SelectItem value="round">Round</SelectItem>
+                      <SelectItem value="sharp">{t("admin.footer.cornerSharp")}</SelectItem>
+                      <SelectItem value="round">{t("admin.footer.cornerRound")}</SelectItem>
                     </SelectContent>
                   </Select>
                 </div>
@@ -3248,11 +3258,11 @@ export default function FooterBuilderPage() {
                 <>
                   <Separator />
                   <div className="space-y-4">
-                    <Label className="text-sm font-medium">Corner Radius (px)</Label>
+                    <Label className="text-sm font-medium">{t("admin.footer.cornerRadiusPx")}</Label>
                     <div className="grid grid-cols-2 gap-4">
                       <div className="space-y-2">
                         <div className="flex items-center justify-between">
-                          <Label className="text-xs">Top Left</Label>
+                          <Label className="text-xs">{t("admin.footer.cornerTopLeft")}</Label>
                           <span className="text-xs text-muted-foreground">{formData.cornerRadiusTL}px</span>
                         </div>
                         <Slider
@@ -3265,7 +3275,7 @@ export default function FooterBuilderPage() {
                       </div>
                       <div className="space-y-2">
                         <div className="flex items-center justify-between">
-                          <Label className="text-xs">Top Right</Label>
+                          <Label className="text-xs">{t("admin.footer.cornerTopRight")}</Label>
                           <span className="text-xs text-muted-foreground">{formData.cornerRadiusTR}px</span>
                         </div>
                         <Slider
@@ -3278,7 +3288,7 @@ export default function FooterBuilderPage() {
                       </div>
                       <div className="space-y-2">
                         <div className="flex items-center justify-between">
-                          <Label className="text-xs">Bottom Left</Label>
+                          <Label className="text-xs">{t("admin.footer.cornerBottomLeft")}</Label>
                           <span className="text-xs text-muted-foreground">{formData.cornerRadiusBL}px</span>
                         </div>
                         <Slider
@@ -3291,7 +3301,7 @@ export default function FooterBuilderPage() {
                       </div>
                       <div className="space-y-2">
                         <div className="flex items-center justify-between">
-                          <Label className="text-xs">Bottom Right</Label>
+                          <Label className="text-xs">{t("admin.footer.cornerBottomRight")}</Label>
                           <span className="text-xs text-muted-foreground">{formData.cornerRadiusBR}px</span>
                         </div>
                         <Slider
@@ -3314,14 +3324,14 @@ export default function FooterBuilderPage() {
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
                 <SquareStack className="h-5 w-5" />
-                Spacing
+                {t("admin.footer.spacing")}
               </CardTitle>
-              <CardDescription>Padding and margins</CardDescription>
+              <CardDescription>{t("admin.footer.spacingDesc")}</CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
               <div className="space-y-2">
                 <div className="flex items-center justify-between">
-                  <Label>Padding Top</Label>
+                  <Label>{t("admin.footer.paddingTop")}</Label>
                   <span className="text-sm text-muted-foreground">{formData.paddingTop}px</span>
                 </div>
                 <Slider
@@ -3335,7 +3345,7 @@ export default function FooterBuilderPage() {
 
               <div className="space-y-2">
                 <div className="flex items-center justify-between">
-                  <Label>Padding Bottom</Label>
+                  <Label>{t("admin.footer.paddingBottom")}</Label>
                   <span className="text-sm text-muted-foreground">{formData.paddingBottom}px</span>
                 </div>
                 <Slider
@@ -3349,7 +3359,7 @@ export default function FooterBuilderPage() {
 
               <div className="rounded-lg bg-muted/50 p-4">
                 <p className="text-sm text-muted-foreground">
-                  Leave colors empty to use the default theme colors.
+                  {t("admin.footer.colorsEmptyHint")}
                 </p>
               </div>
             </CardContent>
@@ -3360,23 +3370,23 @@ export default function FooterBuilderPage() {
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
                 <Maximize2 className="h-5 w-5" />
-                Top Border
+                {t("admin.footer.topBorder")}
               </CardTitle>
-              <CardDescription>Decorative border at top of footer</CardDescription>
+              <CardDescription>{t("admin.footer.topBorderDesc")}</CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
               <div className="space-y-2">
-                <Label>Border Style</Label>
+                <Label>{t("admin.footer.borderStyle")}</Label>
                 <Select
                   value={formData.topBorderStyle}
                   onValueChange={(value) => setFormData({ ...formData, topBorderStyle: value })}
                 >
                   <SelectTrigger><SelectValue /></SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="none">None</SelectItem>
-                    <SelectItem value="solid">Solid</SelectItem>
-                    <SelectItem value="gradient">Gradient</SelectItem>
-                    <SelectItem value="wave">Wave</SelectItem>
+                    <SelectItem value="none">{t("admin.footer.borderNone")}</SelectItem>
+                    <SelectItem value="solid">{t("admin.footer.borderSolid")}</SelectItem>
+                    <SelectItem value="gradient">{t("admin.footer.borderGradient")}</SelectItem>
+                    <SelectItem value="wave">{t("admin.footer.borderWave")}</SelectItem>
                   </SelectContent>
                 </Select>
               </div>
@@ -3385,7 +3395,7 @@ export default function FooterBuilderPage() {
                 <>
                   <div className="space-y-2">
                     <div className="flex items-center justify-between">
-                      <Label>Height</Label>
+                      <Label>{t("admin.footer.height")}</Label>
                       <span className="text-sm text-muted-foreground">{formData.topBorderHeight}px</span>
                     </div>
                     <Slider
@@ -3399,7 +3409,7 @@ export default function FooterBuilderPage() {
 
                   {formData.topBorderStyle === "solid" && (
                     <div className="space-y-2">
-                      <Label>Color</Label>
+                      <Label>{t("admin.footer.color")}</Label>
                       <div className="flex items-center gap-2">
                         <input
                           type="color"
@@ -3419,7 +3429,7 @@ export default function FooterBuilderPage() {
                   {formData.topBorderStyle === "gradient" && (
                     <div className="grid gap-4 sm:grid-cols-2">
                       <div className="space-y-2">
-                        <Label>Gradient Start</Label>
+                        <Label>{t("admin.footer.gradientStart")}</Label>
                         <div className="flex items-center gap-2">
                           <input
                             type="color"
@@ -3435,7 +3445,7 @@ export default function FooterBuilderPage() {
                         </div>
                       </div>
                       <div className="space-y-2">
-                        <Label>Gradient End</Label>
+                        <Label>{t("admin.footer.gradientEnd")}</Label>
                         <div className="flex items-center gap-2">
                           <input
                             type="color"
@@ -3464,7 +3474,7 @@ export default function FooterBuilderPage() {
 
                   {formData.topBorderStyle === "wave" && (
                     <div className="space-y-2">
-                      <Label>Color</Label>
+                      <Label>{t("admin.footer.color")}</Label>
                       <div className="flex items-center gap-2">
                         <input
                           type="color"
@@ -3490,15 +3500,15 @@ export default function FooterBuilderPage() {
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
                 <Type className="h-5 w-5" />
-                Brand Reveal
+                {t("admin.footer.brandReveal")}
               </CardTitle>
-              <CardDescription>Large brand name text at the bottom of the footer</CardDescription>
+              <CardDescription>{t("admin.footer.brandRevealDesc")}</CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
               <div className="flex items-center justify-between rounded-lg border p-4">
                 <div>
-                  <p className="font-medium">Enable Brand Reveal</p>
-                  <p className="text-sm text-muted-foreground">Show large brand name at footer bottom</p>
+                  <p className="font-medium">{t("admin.footer.enableBrandReveal")}</p>
+                  <p className="text-sm text-muted-foreground">{t("admin.footer.enableBrandRevealDesc")}</p>
                 </div>
                 <Switch
                   checked={formData.brandRevealEnabled}
@@ -3509,15 +3519,15 @@ export default function FooterBuilderPage() {
               {formData.brandRevealEnabled && (
                 <>
                   <div className="space-y-2">
-                    <Label>Custom Text</Label>
+                    <Label>{t("admin.footer.customText")}</Label>
                     <Input
                       value={formData.brandRevealText}
                       onChange={(e) => setFormData({ ...formData, brandRevealText: e.target.value })}
-                      placeholder="Leave empty to use business name"
+                      placeholder={t("admin.footer.customTextPlaceholder")}
                     />
                   </div>
                   <div className="space-y-2">
-                    <Label>Text Color</Label>
+                    <Label>{t("admin.footer.textColor")}</Label>
                     <div className="flex items-center gap-2">
                       <input
                         type="color"
@@ -3534,7 +3544,7 @@ export default function FooterBuilderPage() {
                   </div>
                   <div className="space-y-2">
                     <div className="flex items-center justify-between">
-                      <Label>Opacity</Label>
+                      <Label>{t("admin.footer.opacity")}</Label>
                       <span className="text-sm text-muted-foreground">{(formData.brandRevealOpacity * 100).toFixed(0)}%</span>
                     </div>
                     <Slider
@@ -3547,7 +3557,7 @@ export default function FooterBuilderPage() {
                   </div>
                   {/* Preview */}
                   <div className="relative overflow-hidden rounded-lg border bg-gray-900 p-4 text-center">
-                    <p className="text-xs text-muted-foreground mb-2">Preview:</p>
+                    <p className="text-xs text-muted-foreground mb-2">{t("admin.footer.previewColon")}</p>
                     <span
                       className="text-4xl font-black tracking-tighter uppercase"
                       style={{
@@ -3568,9 +3578,9 @@ export default function FooterBuilderPage() {
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
                 <Code className="h-5 w-5" />
-                Custom CSS
+                {t("admin.footer.customCss")}
               </CardTitle>
-              <CardDescription>Add custom styles scoped to the footer</CardDescription>
+              <CardDescription>{t("admin.footer.customCssDesc")}</CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
               <Textarea
@@ -3581,7 +3591,7 @@ export default function FooterBuilderPage() {
                 className="font-mono text-sm"
               />
               <p className="text-xs text-muted-foreground">
-                Styles are automatically scoped to the footer element. Use <code>.footer-dynamic-styles</code> as the parent selector.
+                {t("admin.footer.customCssHint")} <code>.footer-dynamic-styles</code> {t("admin.footer.customCssHint2")}
               </p>
             </CardContent>
           </Card>
@@ -3596,12 +3606,12 @@ export default function FooterBuilderPage() {
         )}>
           <DialogHeader className="flex-shrink-0">
             <DialogTitle>
-              {selectedWidget ? "Edit Widget" : "Add Widget"}
+              {selectedWidget ? t("admin.footer.editWidget") : t("admin.footer.addWidgetTitle")}
             </DialogTitle>
           </DialogHeader>
           <div className="space-y-4 overflow-y-auto flex-1 pr-1">
             <div className="space-y-2">
-              <Label>Widget Type</Label>
+              <Label>{t("admin.footer.widgetType")}</Label>
               <Select
                 value={widgetFormData.type}
                 onValueChange={(value: FooterWidgetType) =>
@@ -3616,7 +3626,7 @@ export default function FooterBuilderPage() {
                     <SelectItem key={type.value} value={type.value}>
                       <div className="flex items-center gap-2">
                         {type.icon}
-                        <span>{type.label}</span>
+                        <span>{t(type.labelKey)}</span>
                       </div>
                     </SelectItem>
                   ))}
@@ -3625,19 +3635,19 @@ export default function FooterBuilderPage() {
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="widgetTitle">Title</Label>
+              <Label htmlFor="widgetTitle">{t("admin.footer.widgetTitleLabel")}</Label>
               <Input
                 id="widgetTitle"
                 value={widgetFormData.title}
                 onChange={(e) => setWidgetFormData({ ...widgetFormData, title: e.target.value })}
-                placeholder="Widget title"
+                placeholder={t("admin.footer.widgetTitlePlaceholder")}
               />
             </div>
 
             <div className="flex items-center justify-between rounded-lg border p-4">
               <div>
-                <Label>Show Title</Label>
-                <p className="text-xs text-muted-foreground">Display the title above widget</p>
+                <Label>{t("admin.footer.showTitle")}</Label>
+                <p className="text-xs text-muted-foreground">{t("admin.footer.showTitleDesc")}</p>
               </div>
               <Switch
                 checked={widgetFormData.showTitle}
@@ -3646,7 +3656,7 @@ export default function FooterBuilderPage() {
             </div>
 
             <div className="space-y-2">
-              <Label>Column</Label>
+              <Label>{t("admin.footer.column")}</Label>
               <Select
                 value={String(widgetFormData.column)}
                 onValueChange={(value) =>
@@ -3659,7 +3669,7 @@ export default function FooterBuilderPage() {
                 <SelectContent>
                   {Array.from({ length: formData.columns }, (_, i) => i + 1).map((col) => (
                     <SelectItem key={col} value={String(col)}>
-                      Column {col}
+                      {t("admin.footer.columnLabel", { num: String(col) })}
                     </SelectItem>
                   ))}
                 </SelectContent>
@@ -3669,34 +3679,34 @@ export default function FooterBuilderPage() {
             {/* Heading Icon for LINKS widget */}
             {widgetFormData.type === "LINKS" && (
               <div className="space-y-2">
-                <Label htmlFor="headingIcon">Heading Icon (optional)</Label>
+                <Label htmlFor="headingIcon">{t("admin.footer.headingIcon")}</Label>
                 <Select
                   value={widgetFormData.headingIcon || "none"}
                   onValueChange={(v) => setWidgetFormData({ ...widgetFormData, headingIcon: v === "none" ? "" : v })}
                 >
                   <SelectTrigger id="headingIcon">
-                    <SelectValue placeholder="No icon" />
+                    <SelectValue placeholder={t("admin.footer.noIcon")} />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="none">No icon</SelectItem>
-                    <SelectItem value="users">Users</SelectItem>
-                    <SelectItem value="building">Building</SelectItem>
-                    <SelectItem value="building-2">Building 2</SelectItem>
-                    <SelectItem value="party-popper">Party Popper</SelectItem>
-                    <SelectItem value="message-circle">Message Circle</SelectItem>
-                    <SelectItem value="store">Store</SelectItem>
-                    <SelectItem value="shopping-bag">Shopping Bag</SelectItem>
-                    <SelectItem value="globe">Globe</SelectItem>
-                    <SelectItem value="tag">Tag</SelectItem>
-                    <SelectItem value="headphones">Headphones</SelectItem>
-                    <SelectItem value="help-circle">Help Circle</SelectItem>
-                    <SelectItem value="star">Star</SelectItem>
-                    <SelectItem value="heart">Heart</SelectItem>
-                    <SelectItem value="mail">Mail</SelectItem>
-                    <SelectItem value="phone">Phone</SelectItem>
+                    <SelectItem value="none">{t("admin.footer.noIcon")}</SelectItem>
+                    <SelectItem value="users">{t("admin.footer.iconUsers")}</SelectItem>
+                    <SelectItem value="building">{t("admin.footer.iconBuilding")}</SelectItem>
+                    <SelectItem value="building-2">{t("admin.footer.iconBuilding2")}</SelectItem>
+                    <SelectItem value="party-popper">{t("admin.footer.iconPartyPopper")}</SelectItem>
+                    <SelectItem value="message-circle">{t("admin.footer.iconMessageCircle")}</SelectItem>
+                    <SelectItem value="store">{t("admin.footer.iconStore")}</SelectItem>
+                    <SelectItem value="shopping-bag">{t("admin.footer.iconShoppingBag")}</SelectItem>
+                    <SelectItem value="globe">{t("admin.footer.iconGlobe")}</SelectItem>
+                    <SelectItem value="tag">{t("admin.footer.iconTag")}</SelectItem>
+                    <SelectItem value="headphones">{t("admin.footer.iconHeadphones")}</SelectItem>
+                    <SelectItem value="help-circle">{t("admin.footer.iconHelpCircle")}</SelectItem>
+                    <SelectItem value="star">{t("admin.footer.iconStar")}</SelectItem>
+                    <SelectItem value="heart">{t("admin.footer.iconHeart")}</SelectItem>
+                    <SelectItem value="mail">{t("admin.footer.iconMail")}</SelectItem>
+                    <SelectItem value="phone">{t("admin.footer.iconPhone")}</SelectItem>
                   </SelectContent>
                 </Select>
-                <p className="text-xs text-muted-foreground">Icon shown next to the column heading</p>
+                <p className="text-xs text-muted-foreground">{t("admin.footer.headingIconHint")}</p>
               </div>
             )}
 
@@ -3704,18 +3714,18 @@ export default function FooterBuilderPage() {
             {widgetFormData.type === "LINKS" && (
               <div className="space-y-3">
                 <div className="flex items-center justify-between">
-                  <Label>Links</Label>
+                  <Label>{t("admin.footer.links")}</Label>
                   <Button variant="outline" size="sm" onClick={addWidgetLink}>
                     <Plus className="mr-1 h-4 w-4" />
-                    Add Link
+                    {t("admin.footer.addLink")}
                   </Button>
                 </div>
                 {widgetFormData.links.length === 0 ? (
                   <div className="rounded-lg border-2 border-dashed p-4 text-center">
-                    <p className="text-sm text-muted-foreground">No links added yet</p>
+                    <p className="text-sm text-muted-foreground">{t("admin.footer.noLinksYet")}</p>
                     <Button variant="outline" size="sm" className="mt-2" onClick={addWidgetLink}>
                       <Plus className="mr-1 h-4 w-4" />
-                      Add Your First Link
+                      {t("admin.footer.addFirstLink")}
                     </Button>
                   </div>
                 ) : (
@@ -3726,13 +3736,13 @@ export default function FooterBuilderPage() {
                         <Input
                           value={link.label}
                           onChange={(e) => updateWidgetLink(index, { label: e.target.value })}
-                          placeholder="Label"
+                          placeholder={t("admin.footer.linkLabelPlaceholder")}
                           className="flex-1"
                         />
                         <Input
                           value={link.url}
                           onChange={(e) => updateWidgetLink(index, { url: e.target.value })}
-                          placeholder="URL"
+                          placeholder={t("admin.footer.urlPlaceholder")}
                           className="flex-1"
                         />
                         <Select
@@ -3743,8 +3753,8 @@ export default function FooterBuilderPage() {
                             <SelectValue />
                           </SelectTrigger>
                           <SelectContent>
-                            <SelectItem value="_self">Same tab</SelectItem>
-                            <SelectItem value="_blank">New tab</SelectItem>
+                            <SelectItem value="_self">{t("admin.footer.sameTab")}</SelectItem>
+                            <SelectItem value="_blank">{t("admin.footer.newTab")}</SelectItem>
                           </SelectContent>
                         </Select>
                         <Button
@@ -3765,7 +3775,7 @@ export default function FooterBuilderPage() {
             {/* TEXT widget content */}
             {widgetFormData.type === "TEXT" && (
               <div className="space-y-2">
-                <Label htmlFor="textContent">Text Content</Label>
+                <Label htmlFor="textContent">{t("admin.footer.textContent")}</Label>
                 <Textarea
                   id="textContent"
                   value={(widgetFormData.content as { text?: string })?.text || ""}
@@ -3773,7 +3783,7 @@ export default function FooterBuilderPage() {
                     ...widgetFormData,
                     content: { ...widgetFormData.content, text: e.target.value },
                   })}
-                  placeholder="Enter your text content..."
+                  placeholder={t("admin.footer.textContentPlaceholder")}
                   rows={4}
                 />
               </div>
@@ -3782,7 +3792,7 @@ export default function FooterBuilderPage() {
             {/* CUSTOM_HTML widget content */}
             {widgetFormData.type === "CUSTOM_HTML" && (
               <div className="space-y-2">
-                <Label htmlFor="htmlContent">HTML Content</Label>
+                <Label htmlFor="htmlContent">{t("admin.footer.htmlContent")}</Label>
                 <Textarea
                   id="htmlContent"
                   value={(widgetFormData.content as { html?: string })?.html || ""}
@@ -3790,12 +3800,12 @@ export default function FooterBuilderPage() {
                     ...widgetFormData,
                     content: { ...widgetFormData.content, html: e.target.value },
                   })}
-                  placeholder="<div>Your HTML here...</div>"
+                  placeholder={t("admin.footer.htmlContentPlaceholder")}
                   rows={6}
                   className="font-mono text-sm"
                 />
                 <p className="text-xs text-muted-foreground">
-                  Be careful with custom HTML. Ensure it&apos;s valid and doesn&apos;t break the page layout.
+                  {t("admin.footer.htmlContentHint")}
                 </p>
               </div>
             )}
@@ -3804,7 +3814,7 @@ export default function FooterBuilderPage() {
             {widgetFormData.type === "NEWSLETTER" && (
               <div className="space-y-4">
                 <div className="space-y-2">
-                  <Label htmlFor="newsletterText">Description Text</Label>
+                  <Label htmlFor="newsletterText">{t("admin.footer.newsletterDescText")}</Label>
                   <Input
                     id="newsletterText"
                     value={(widgetFormData.content as { text?: string })?.text || ""}
@@ -3812,11 +3822,11 @@ export default function FooterBuilderPage() {
                       ...widgetFormData,
                       content: { ...widgetFormData.content, text: e.target.value },
                     })}
-                    placeholder="Get LLC tips & US business insights"
+                    placeholder={t("admin.footer.newsletterDescPlaceholder")}
                   />
                 </div>
                 <div className="space-y-2">
-                  <Label htmlFor="newsletterPlaceholder">Input Placeholder</Label>
+                  <Label htmlFor="newsletterPlaceholder">{t("admin.footer.newsletterInputPh")}</Label>
                   <Input
                     id="newsletterPlaceholder"
                     value={(widgetFormData.content as { placeholder?: string })?.placeholder || ""}
@@ -3824,11 +3834,11 @@ export default function FooterBuilderPage() {
                       ...widgetFormData,
                       content: { ...widgetFormData.content, placeholder: e.target.value },
                     })}
-                    placeholder="your@email.com"
+                    placeholder={t("admin.footer.newsletterInputPhPh")}
                   />
                 </div>
                 <div className="space-y-2">
-                  <Label htmlFor="newsletterButton">Button Text</Label>
+                  <Label htmlFor="newsletterButton">{t("admin.footer.newsletterButton")}</Label>
                   <Input
                     id="newsletterButton"
                     value={(widgetFormData.content as { buttonText?: string })?.buttonText || ""}
@@ -3836,11 +3846,11 @@ export default function FooterBuilderPage() {
                       ...widgetFormData,
                       content: { ...widgetFormData.content, buttonText: e.target.value },
                     })}
-                    placeholder="Subscribe"
+                    placeholder={t("admin.footer.newsletterButtonPh")}
                   />
                 </div>
                 <p className="text-xs text-muted-foreground">
-                  Newsletter subscription functionality will be configured separately. This sets up the visual form only.
+                  {t("admin.footer.newsletterHint")}
                 </p>
               </div>
             )}
@@ -3849,7 +3859,7 @@ export default function FooterBuilderPage() {
             {widgetFormData.type === "BRAND" && (
               <div className="space-y-4">
                 <div className="space-y-2">
-                  <Label>Logo Version</Label>
+                  <Label>{t("admin.footer.logoVersion")}</Label>
                   <Select
                     value={(widgetFormData.content as { logoMode?: string })?.logoMode || "auto"}
                     onValueChange={(value) => setWidgetFormData({
@@ -3861,13 +3871,13 @@ export default function FooterBuilderPage() {
                       <SelectValue />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="auto">Auto (Dark logo if available)</SelectItem>
-                      <SelectItem value="light">Light Mode Logo</SelectItem>
-                      <SelectItem value="dark">Dark Mode Logo</SelectItem>
+                      <SelectItem value="auto">{t("admin.footer.logoAuto")}</SelectItem>
+                      <SelectItem value="light">{t("admin.footer.logoLight")}</SelectItem>
+                      <SelectItem value="dark">{t("admin.footer.logoDark")}</SelectItem>
                     </SelectContent>
                   </Select>
                   <p className="text-xs text-muted-foreground">
-                    Choose which logo to display. &quot;Auto&quot; uses dark mode logo for dark backgrounds.
+                    {t("admin.footer.logoHint")}
                   </p>
                 </div>
               </div>
@@ -3879,28 +3889,28 @@ export default function FooterBuilderPage() {
                 {/* Button Text and URL */}
                 <div className="grid gap-3 sm:grid-cols-2">
                   <div className="space-y-2">
-                    <Label>Button Text</Label>
+                    <Label>{t("admin.footer.buttonText")}</Label>
                     <Input
                       value={(widgetFormData.content as { text?: string })?.text || ""}
                       onChange={(e) => setWidgetFormData({
                         ...widgetFormData,
                         content: { ...widgetFormData.content, text: e.target.value },
                       })}
-                      placeholder="Click Here"
+                      placeholder={t("admin.footer.buttonTextPlaceholder")}
                     />
                   </div>
                   <div className="space-y-2">
-                    <Label>URL</Label>
+                    <Label>{t("admin.footer.urlLabel")}</Label>
                     <Input
                       value={(widgetFormData.content as { url?: string })?.url || ""}
                       onChange={(e) => setWidgetFormData({
                         ...widgetFormData,
                         content: { ...widgetFormData.content, url: e.target.value },
                       })}
-                      placeholder="/page-url or https://..."
+                      placeholder={t("admin.footer.urlPagePlaceholder")}
                     />
                     <div className="flex items-center justify-between text-xs pt-1">
-                      <span className="text-muted-foreground">Open in new tab</span>
+                      <span className="text-muted-foreground">{t("admin.footer.openInNewTab")}</span>
                       <Switch
                         checked={(widgetFormData.content as { openInNewTab?: boolean })?.openInNewTab ?? false}
                         onCheckedChange={(checked) => setWidgetFormData({
@@ -3915,7 +3925,7 @@ export default function FooterBuilderPage() {
 
                 {/* Live Button Preview */}
                 <div className="rounded-lg border p-3">
-                  <Label className="text-xs text-muted-foreground mb-1 block">Preview (hover/tap to test)</Label>
+                  <Label className="text-xs text-muted-foreground mb-1 block">{t("admin.footer.previewHoverTap")}</Label>
                   <div className="flex items-center justify-center py-1">
                     <FooterButtonPreview style={(widgetFormData.content as { style?: ButtonCustomStyle })?.style || {}} />
                   </div>
@@ -3923,9 +3933,9 @@ export default function FooterBuilderPage() {
 
                 {/* Style Presets */}
                 <div className="space-y-2">
-                  <Label className="text-sm font-medium">Quick Style Presets</Label>
+                  <Label className="text-sm font-medium">{t("admin.footer.quickStylePresets")}</Label>
                   <p className="text-xs text-muted-foreground">
-                    Tap to apply a style preset
+                    {t("admin.footer.quickStylePresetsHint")}
                   </p>
                   <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 gap-1.5">
                     {BUTTON_STYLE_PRESETS.map((preset) => {
@@ -3970,13 +3980,13 @@ export default function FooterBuilderPage() {
                 <Accordion type="multiple" className="w-full">
                   {/* Colors Section */}
                   <AccordionItem value="colors">
-                    <AccordionTrigger className="text-sm">Colors</AccordionTrigger>
+                    <AccordionTrigger className="text-sm">{t("admin.footer.colorsSection")}</AccordionTrigger>
                     <AccordionContent className="space-y-4 pt-2">
                       {/* Gradient Toggle */}
                       <div className="flex items-center justify-between rounded-lg border p-2 sm:p-3 gap-2">
                         <div className="min-w-0">
-                          <Label className="text-xs sm:text-sm">Use Gradient</Label>
-                          <p className="text-[10px] sm:text-xs text-muted-foreground hidden sm:block">Enable gradient instead of solid</p>
+                          <Label className="text-xs sm:text-sm">{t("admin.footer.useGradient")}</Label>
+                          <p className="text-[10px] sm:text-xs text-muted-foreground hidden sm:block">{t("admin.footer.useGradientHint")}</p>
                         </div>
                         <Switch
                           checked={(widgetFormData.content as { style?: ButtonCustomStyle })?.style?.useGradient || false}
@@ -3999,7 +4009,7 @@ export default function FooterBuilderPage() {
                         <div className="rounded-lg border p-2 sm:p-3 space-y-3 bg-muted/30">
                           <div className="grid gap-2 sm:gap-3 grid-cols-1 sm:grid-cols-3">
                             <div className="space-y-2">
-                              <Label className="text-xs">Gradient From</Label>
+                              <Label className="text-xs">{t("admin.footer.gradientFrom")}</Label>
                               <div className="flex gap-2">
                                 <Input
                                   type="color"
@@ -4027,7 +4037,7 @@ export default function FooterBuilderPage() {
                               </div>
                             </div>
                             <div className="space-y-2">
-                              <Label className="text-xs">Gradient To</Label>
+                              <Label className="text-xs">{t("admin.footer.gradientTo")}</Label>
                               <div className="flex gap-2">
                                 <Input
                                   type="color"
@@ -4055,7 +4065,7 @@ export default function FooterBuilderPage() {
                               </div>
                             </div>
                             <div className="space-y-2">
-                              <Label className="text-xs">Direction</Label>
+                              <Label className="text-xs">{t("admin.footer.direction")}</Label>
                               <Select
                                 value={(widgetFormData.content as { style?: ButtonCustomStyle })?.style?.gradientDirection || "to-r"}
                                 onValueChange={(value: GradientDirection) => setWidgetFormData({
@@ -4071,14 +4081,14 @@ export default function FooterBuilderPage() {
                                 </SelectTrigger>
                                 <SelectContent>
                                   {gradientDirectionOptions.map((dir) => (
-                                    <SelectItem key={dir.value} value={dir.value}>{dir.label}</SelectItem>
+                                    <SelectItem key={dir.value} value={dir.value}>{t(dir.labelKey)}</SelectItem>
                                   ))}
                                 </SelectContent>
                               </Select>
                             </div>
                           </div>
                           <div className="space-y-2">
-                            <Label className="text-xs">Text Color</Label>
+                            <Label className="text-xs">{t("admin.footer.textColor")}</Label>
                             <div className="flex gap-2">
                               <Input
                                 type="color"
@@ -4109,7 +4119,7 @@ export default function FooterBuilderPage() {
                       ) : (
                         <div className="grid gap-2 sm:gap-3 grid-cols-1 sm:grid-cols-3">
                           <div className="space-y-2">
-                            <Label className="text-xs">Background Color</Label>
+                            <Label className="text-xs">{t("admin.footer.bgColorLabel")}</Label>
                             <div className="flex gap-2">
                               <Input
                                 type="color"
@@ -4137,7 +4147,7 @@ export default function FooterBuilderPage() {
                             </div>
                           </div>
                           <div className="space-y-2">
-                            <Label className="text-xs">Text Color</Label>
+                            <Label className="text-xs">{t("admin.footer.textColor")}</Label>
                             <div className="flex gap-2">
                               <Input
                                 type="color"
@@ -4165,7 +4175,7 @@ export default function FooterBuilderPage() {
                             </div>
                           </div>
                           <div className="space-y-2">
-                            <Label className="text-xs">Border Color</Label>
+                            <Label className="text-xs">{t("admin.footer.borderColor")}</Label>
                             <div className="flex gap-2">
                               <Input
                                 type="color"
@@ -4199,11 +4209,11 @@ export default function FooterBuilderPage() {
 
                   {/* Border Section */}
                   <AccordionItem value="border">
-                    <AccordionTrigger className="text-sm">Border</AccordionTrigger>
+                    <AccordionTrigger className="text-sm">{t("admin.footer.borderSection")}</AccordionTrigger>
                     <AccordionContent className="space-y-4 pt-2">
                       <div className="space-y-2">
                         <div className="flex items-center justify-between">
-                          <Label className="text-xs">Border Width</Label>
+                          <Label className="text-xs">{t("admin.footer.borderWidth")}</Label>
                           <span className="text-xs text-muted-foreground">
                             {(widgetFormData.content as { style?: ButtonCustomStyle })?.style?.borderWidth ?? 0}px
                           </span>
@@ -4224,7 +4234,7 @@ export default function FooterBuilderPage() {
                       </div>
                       <div className="space-y-2">
                         <div className="flex items-center justify-between">
-                          <Label className="text-xs">Border Radius</Label>
+                          <Label className="text-xs">{t("admin.footer.borderRadius")}</Label>
                           <span className="text-xs text-muted-foreground">
                             {(widgetFormData.content as { style?: ButtonCustomStyle })?.style?.borderRadius ?? 6}px
                           </span>
@@ -4248,10 +4258,10 @@ export default function FooterBuilderPage() {
 
                   {/* Hover Effects Section */}
                   <AccordionItem value="hover">
-                    <AccordionTrigger className="text-sm">Hover Effects</AccordionTrigger>
+                    <AccordionTrigger className="text-sm">{t("admin.footer.hoverEffectsSection")}</AccordionTrigger>
                     <AccordionContent className="space-y-4 pt-2">
                       <div className="space-y-2">
-                        <Label className="text-xs">Hover Effect</Label>
+                        <Label className="text-xs">{t("admin.footer.hoverEffect")}</Label>
                         <Select
                           value={(widgetFormData.content as { style?: ButtonCustomStyle })?.style?.hoverEffect || "none"}
                           onValueChange={(value: ButtonHoverEffect) => setWidgetFormData({
@@ -4268,7 +4278,7 @@ export default function FooterBuilderPage() {
                           <SelectContent>
                             {hoverEffectOptions.map((effect) => (
                               <SelectItem key={effect.value} value={effect.value}>
-                                {effect.label}
+                                {t(effect.labelKey)}
                               </SelectItem>
                             ))}
                           </SelectContent>
@@ -4277,7 +4287,7 @@ export default function FooterBuilderPage() {
 
                       {/* Hover Background Color */}
                       <div className="space-y-2">
-                        <Label className="text-xs">Hover Background Color</Label>
+                        <Label className="text-xs">{t("admin.footer.hoverBgColor")}</Label>
                         <div className="flex gap-2">
                           <Input
                             type="color"
@@ -4308,7 +4318,7 @@ export default function FooterBuilderPage() {
 
                       {/* Hover Text Color */}
                       <div className="space-y-2">
-                        <Label className="text-xs">Hover Text Color</Label>
+                        <Label className="text-xs">{t("admin.footer.hoverTextColor")}</Label>
                         <div className="flex gap-2">
                           <Input
                             type="color"
@@ -4369,7 +4379,7 @@ export default function FooterBuilderPage() {
               ) : (
                 <Save className="mr-2 h-4 w-4" />
               )}
-              {selectedWidget ? "Update" : "Create"}
+              {selectedWidget ? t("admin.footer.update") : t("admin.footer.create")}
             </Button>
           </DialogFooter>
         </DialogContent>
@@ -4379,19 +4389,18 @@ export default function FooterBuilderPage() {
       <AlertDialog open={deleteWidgetDialogOpen} onOpenChange={setDeleteWidgetDialogOpen}>
         <AlertDialogContent>
           <AlertDialogHeader>
-            <AlertDialogTitle>Delete Widget?</AlertDialogTitle>
+            <AlertDialogTitle>{t("admin.footer.deleteWidget")}</AlertDialogTitle>
             <AlertDialogDescription>
-              This will permanently delete this widget and all its content.
-              This action cannot be undone.
+              {t("admin.footer.deleteWidgetDesc")}
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
-            <AlertDialogCancel>Cancel</AlertDialogCancel>
+            <AlertDialogCancel>{t("admin.footer.cancel")}</AlertDialogCancel>
             <AlertDialogAction
               onClick={handleWidgetDelete}
               className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
             >
-              Delete
+              {t("admin.footer.delete")}
             </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>

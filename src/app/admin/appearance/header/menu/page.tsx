@@ -110,6 +110,7 @@ export default function MenuBuilderPage() {
   const [galleryDialogOpen, setGalleryDialogOpen] = useState(false);
   const [galleryItem, setGalleryItem] = useState<MenuItem | null>(null);
   const [gallerySaving, setGallerySaving] = useState(false);
+  const [weddingTemplates, setWeddingTemplates] = useState<{ slug: string; name: string }[]>([]);
 
   // Forums grid editor
   const [forumsDialogOpen, setForumsDialogOpen] = useState(false);
@@ -180,6 +181,10 @@ export default function MenuBuilderPage() {
 
   useEffect(() => {
     fetchData();
+    fetch("/api/admin/wedding-templates")
+      .then((r) => r.ok ? r.json() : { templates: [] })
+      .then((data) => setWeddingTemplates(data.templates || []))
+      .catch(() => {});
   }, []);
 
   async function fetchData() {
@@ -1274,6 +1279,29 @@ export default function MenuBuilderPage() {
                         setGalleryContent({ ...galleryContent, designers: newDesigners });
                       }}
                     />
+                    {galleryItem?.label === "Wedding Website" && weddingTemplates.length > 0 && (
+                      <div className="flex flex-wrap gap-1.5 pt-1">
+                        <span className="text-[11px] text-muted-foreground self-center">Quick pick:</span>
+                        {weddingTemplates.map((theme) => (
+                          <button
+                            key={theme.slug}
+                            type="button"
+                            onClick={() => {
+                              const newDesigners = [...galleryContent.designers];
+                              newDesigners[idx] = {
+                                ...newDesigners[idx],
+                                href: `/wedding-website/themes?style=${theme.slug}`,
+                                name: newDesigners[idx].name || theme.name,
+                              };
+                              setGalleryContent({ ...galleryContent, designers: newDesigners });
+                            }}
+                            className="text-[11px] px-2 py-0.5 rounded-full border border-border bg-muted hover:bg-primary hover:text-primary-foreground hover:border-primary transition-colors"
+                          >
+                            {theme.name}
+                          </button>
+                        ))}
+                      </div>
+                    )}
                     {/* Image upload */}
                     <div className="space-y-1">
                       {designer.imageUrl ? (

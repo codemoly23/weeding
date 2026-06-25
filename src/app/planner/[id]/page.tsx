@@ -493,15 +493,15 @@ export default function PlannerOverviewPage() {
 
       {/* ── Reference sections (lavender bg) ────────────────────────────── */}
       <div className="-mx-4 lg:-mx-6 mt-10 bg-[#ebe8f1] px-4 lg:px-6 py-10 -mb-4 lg:-mb-6">
-        <h2 className="text-center text-2xl font-light text-foreground/80 mb-1 tracking-wide">Overview</h2>
+        <h2 className="text-center text-2xl font-light text-foreground/80 mb-1 tracking-wide">{t("overview.sectionTitle")}</h2>
         <p className="text-center text-sm text-muted-foreground mb-8">
-          Keep up to date with your wedding planning as you go.
+          {t("overview.sectionSubtitle")}
         </p>
 
         <div className="max-w-2xl mx-auto space-y-3">
 
           {/* ── Couple ────────────────────────────────────────────────── */}
-          <Section title="Couple">
+          <Section title={t("overview.couple")}>
             <div className="px-6 pt-4 pb-5">
               <div className="flex justify-center gap-10 mb-2">
                 {/* Bride name */}
@@ -509,7 +509,7 @@ export default function PlannerOverviewPage() {
                   <div className="flex items-center gap-1">
                     <Input value={tempBride} onChange={e => setTempBride(e.target.value)}
                       className="h-7 text-sm w-36 border-primary/30"
-                      autoFocus placeholder="Bride's name"
+                      autoFocus placeholder={t("overview.bridePlaceholder")}
                       onKeyDown={e => { if (e.key === "Enter") saveBrideName(); if (e.key === "Escape") setEditingBride(false); }}
                     />
                     <button onClick={saveBrideName} className="text-primary"><Check className="h-3.5 w-3.5"/></button>
@@ -520,7 +520,7 @@ export default function PlannerOverviewPage() {
                     onClick={() => { setTempBride(brideName); setEditingBride(true); }}
                     className="text-sm text-primary border-b border-dashed border-primary/40 pb-0.5 hover:text-primary/80"
                   >
-                    {brideName || "Set bride's name"}
+                    {brideName || t("overview.setBrideName")}
                   </button>
                 )}
                 {/* Groom name */}
@@ -528,7 +528,7 @@ export default function PlannerOverviewPage() {
                   <div className="flex items-center gap-1">
                     <Input value={tempGroom} onChange={e => setTempGroom(e.target.value)}
                       className="h-7 text-sm w-36 border-primary/30"
-                      autoFocus placeholder="Groom's name"
+                      autoFocus placeholder={t("overview.groomPlaceholder")}
                       onKeyDown={e => { if (e.key === "Enter") saveGroomName(); if (e.key === "Escape") setEditingGroom(false); }}
                     />
                     <button onClick={saveGroomName} className="text-primary"><Check className="h-3.5 w-3.5"/></button>
@@ -539,7 +539,7 @@ export default function PlannerOverviewPage() {
                     onClick={() => { setTempGroom(groomName); setEditingGroom(true); }}
                     className="text-sm text-primary border-b border-dashed border-primary/40 pb-0.5 hover:text-primary/80"
                   >
-                    {groomName || "Set groom's name"}
+                    {groomName || t("overview.setGroomName")}
                   </button>
                 )}
               </div>
@@ -548,25 +548,25 @@ export default function PlannerOverviewPage() {
           </Section>
 
           {/* ── Event information ──────────────────────────────────────── */}
-          <Section title="Event information">
+          <Section title={t("overview.eventInfo")}>
             <div className="px-6 pt-4 pb-5 grid grid-cols-2 gap-4">
               <div>
-                <p className="text-xs text-muted-foreground mb-1">Ceremony Date</p>
+                <p className="text-xs text-muted-foreground mb-1">{t("overview.ceremonyDate")}</p>
                 <button
                   onClick={() => router.push(`/planner/${projectId}/ceremony`)}
                   className="text-sm text-primary border-b border-dashed border-primary/40 pb-0.5 text-left"
                 >
-                  {ceremonyDate || "Set ceremony date"}
+                  {ceremonyDate || t("overview.setCeremonyDate")}
                 </button>
               </div>
               <div className="flex items-start justify-between">
                 <div>
-                  <p className="text-xs text-muted-foreground mb-1">Ceremony Location</p>
+                  <p className="text-xs text-muted-foreground mb-1">{t("overview.ceremonyLocation")}</p>
                   <button
                     onClick={() => router.push(`/planner/${projectId}/ceremony`)}
                     className="text-sm text-primary border-b border-dashed border-primary/40 pb-0.5 text-left"
                   >
-                    {ceremonyLocation || "Set ceremony location"}
+                    {ceremonyLocation || t("overview.setCeremonyLocation")}
                   </button>
                 </div>
                 <MapGridIcon />
@@ -575,12 +575,12 @@ export default function PlannerOverviewPage() {
           </Section>
 
           {/* ── Guests ────────────────────────────────────────────────── */}
-          <Section title="Guests">
+          <Section title={t("overview.guests")}>
             <div className="px-6 pt-4 pb-5">
               <div className="flex gap-6 mb-4">
                 {/* Bride's side */}
                 <div className="flex-1">
-                  <p className="text-xs text-muted-foreground mb-2">Bride&apos;s side</p>
+                  <p className="text-xs text-muted-foreground mb-2">{t("overview.bridesSide")}</p>
                   {brideGuests > 0 ? (
                     <>
                       <div className="flex gap-1 flex-wrap">
@@ -591,20 +591,20 @@ export default function PlannerOverviewPage() {
                           <span className="text-xs text-muted-foreground self-end ml-1">+{brideGuests - 6}</span>
                         )}
                       </div>
-                      <p className="text-xs text-muted-foreground mt-1">{brideGuests} guests</p>
+                      <p className="text-xs text-muted-foreground mt-1">{t("overview.guestCountLabel", { count: String(brideGuests) })}</p>
                     </>
                   ) : (
                     <button
                       onClick={() => router.push(`/planner/${projectId}/guests`)}
                       className="text-sm text-primary border-b border-dashed border-primary/40"
                     >
-                      Add more guests
+                      {t("overview.addMoreGuests")}
                     </button>
                   )}
                 </div>
                 {/* Groom's side */}
                 <div className="flex-1">
-                  <p className="text-xs text-muted-foreground mb-2">Groom&apos;s side</p>
+                  <p className="text-xs text-muted-foreground mb-2">{t("overview.groomsSide")}</p>
                   {groomGuests > 0 ? (
                     <>
                       <div className="flex gap-1 flex-wrap">
@@ -615,30 +615,30 @@ export default function PlannerOverviewPage() {
                           <span className="text-xs text-muted-foreground self-end ml-1">+{groomGuests - 6}</span>
                         )}
                       </div>
-                      <p className="text-xs text-muted-foreground mt-1">{groomGuests} guests</p>
+                      <p className="text-xs text-muted-foreground mt-1">{t("overview.guestCountLabel", { count: String(groomGuests) })}</p>
                     </>
                   ) : (
                     <button
                       onClick={() => router.push(`/planner/${projectId}/guests`)}
                       className="text-sm text-primary border-b border-dashed border-primary/40"
                     >
-                      Add more guests
+                      {t("overview.addMoreGuests")}
                     </button>
                   )}
                 </div>
               </div>
               <div className="flex flex-wrap gap-x-5 gap-y-1 border-t border-border pt-3 text-sm text-muted-foreground">
-                <span>Wedding party: <span className="text-primary font-medium">{guestCount}</span></span>
-                <span>Total guests: <span className="text-primary font-medium">{guestCount}</span></span>
-                <span>Confirmed RSVP : <span className="text-accent font-medium">{confirmedRsvp}</span></span>
+                <span>{t("overview.weddingParty")} <span className="text-primary font-medium">{guestCount}</span></span>
+                <span>{t("overview.totalGuestsLabel")} <span className="text-primary font-medium">{guestCount}</span></span>
+                <span>{t("overview.confirmedRsvp")} <span className="text-accent font-medium">{confirmedRsvp}</span></span>
               </div>
             </div>
           </Section>
 
           {/* ── Checklist ─────────────────────────────────────────────── */}
-          <Section title="Checklist">
+          <Section title={t("overview.checklist")}>
             <div className="px-6 pt-4 pb-5">
-              <p className="text-xs text-muted-foreground mb-2">Progress</p>
+              <p className="text-xs text-muted-foreground mb-2">{t("overview.progress")}</p>
               <div className="w-full bg-muted rounded-full h-2 mb-3 overflow-hidden">
                 <div
                   className="h-2 rounded-full bg-gradient-to-r from-accent/60 to-primary transition-all"
@@ -646,25 +646,25 @@ export default function PlannerOverviewPage() {
                 />
               </div>
               <div className="flex flex-wrap gap-x-5 gap-y-1 text-sm text-muted-foreground">
-                <span>Total tasks: <span className="text-primary font-semibold">{checklistTotal}</span></span>
-                <span>Completed: <span className="text-accent font-semibold">{checklistDone}</span></span>
-                <span>Still on the way: <span className="text-primary font-semibold">{checklistTotal - checklistDone}</span></span>
+                <span>{t("overview.totalTasks")} <span className="text-primary font-semibold">{checklistTotal}</span></span>
+                <span>{t("overview.completed")} <span className="text-accent font-semibold">{checklistDone}</span></span>
+                <span>{t("overview.stillOnWay")} <span className="text-primary font-semibold">{checklistTotal - checklistDone}</span></span>
               </div>
             </div>
           </Section>
 
           {/* ── Budget ────────────────────────────────────────────────── */}
-          <Section title="Budget">
+          <Section title={t("overview.budget")}>
             <div className="px-6 pt-4 pb-5">
               <div className="flex justify-end gap-6 mb-3">
                 <div className="text-right">
-                  <p className="text-xs text-muted-foreground">Budget:</p>
+                  <p className="text-xs text-muted-foreground">{t("overview.budgetLabel")}</p>
                   <p className="text-sm font-medium text-foreground/80">
                     ${budgetTotal.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                   </p>
                 </div>
                 <div className="text-right">
-                  <p className="text-xs text-muted-foreground">Actual cost:</p>
+                  <p className="text-xs text-muted-foreground">{t("overview.actualCost")}</p>
                   <p className="text-sm font-medium text-primary">
                     ${budgetSpent.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                   </p>
@@ -675,13 +675,13 @@ export default function PlannerOverviewPage() {
           </Section>
 
           {/* ── Event Itinerary ───────────────────────────────────────── */}
-          <Section title="Event Itinerary">
+          <Section title={t("overview.eventItinerary")}>
             <div className="px-6 pt-2 pb-5">
               {itineraryEvents.length === 0 ? (
                 <p className="text-sm text-muted-foreground py-3">
                   <button onClick={() => router.push(`/planner/${projectId}/itinerary`)}
                     className="text-primary border-b border-dashed border-primary/40">
-                    Set up your event itinerary
+                    {t("overview.setUpItinerary")}
                   </button>
                 </p>
               ) : (
@@ -703,25 +703,25 @@ export default function PlannerOverviewPage() {
           </Section>
 
           {/* ── Ceremony ──────────────────────────────────────────────── */}
-          <Section title="Ceremony">
+          <Section title={t("overview.ceremony")}>
             <div className="px-6 pt-4 pb-5 grid grid-cols-2 gap-4">
               <div>
-                <p className="text-xs text-muted-foreground mb-1">Ceremony Date</p>
+                <p className="text-xs text-muted-foreground mb-1">{t("overview.ceremonyDate")}</p>
                 <button
                   onClick={() => router.push(`/planner/${projectId}/ceremony`)}
                   className="text-sm text-primary border-b border-dashed border-primary/40 pb-0.5 text-left"
                 >
-                  {ceremonyDate || "Set ceremony date"}
+                  {ceremonyDate || t("overview.setCeremonyDate")}
                 </button>
               </div>
               <div className="flex items-start justify-between">
                 <div>
-                  <p className="text-xs text-muted-foreground mb-1">Ceremony Location</p>
+                  <p className="text-xs text-muted-foreground mb-1">{t("overview.ceremonyLocation")}</p>
                   <button
                     onClick={() => router.push(`/planner/${projectId}/ceremony`)}
                     className="text-sm text-primary border-b border-dashed border-primary/40 pb-0.5 text-left"
                   >
-                    {ceremonyLocation || "Set ceremony location"}
+                    {ceremonyLocation || t("overview.setCeremonyLocation")}
                   </button>
                 </div>
                 <MapPinIcon />
@@ -730,25 +730,25 @@ export default function PlannerOverviewPage() {
           </Section>
 
           {/* ── Reception ─────────────────────────────────────────────── */}
-          <Section title="Reception">
+          <Section title={t("overview.reception")}>
             <div className="px-6 pt-4 pb-5 grid grid-cols-2 gap-4">
               <div>
-                <p className="text-xs text-muted-foreground mb-1">Reception Date</p>
+                <p className="text-xs text-muted-foreground mb-1">{t("overview.receptionDate")}</p>
                 <button
                   onClick={() => router.push(`/planner/${projectId}/reception`)}
                   className="text-sm text-primary border-b border-dashed border-primary/40 pb-0.5 text-left"
                 >
-                  {receptionDate || "Set reception date"}
+                  {receptionDate || t("overview.setReceptionDate")}
                 </button>
               </div>
               <div className="flex items-start justify-between">
                 <div>
-                  <p className="text-xs text-muted-foreground mb-1">Reception Location</p>
+                  <p className="text-xs text-muted-foreground mb-1">{t("overview.receptionLocation")}</p>
                   <button
                     onClick={() => router.push(`/planner/${projectId}/reception`)}
                     className="text-sm text-primary border-b border-dashed border-primary/40 pb-0.5 text-left"
                   >
-                    {receptionLocation || "Set reception location"}
+                    {receptionLocation || t("overview.setReceptionLocation")}
                   </button>
                 </div>
                 <MapPinIcon />
@@ -757,27 +757,27 @@ export default function PlannerOverviewPage() {
           </Section>
 
           {/* ── Post-Wedding ──────────────────────────────────────────── */}
-          <Section title="Post-Wedding">
+          <Section title={t("overview.postWedding")}>
             <div className="px-6 pt-4 pb-5">
               {!isLocal && (pwPhotos > 0 || pwGuestbook > 0 || pwAttending > 0) ? (
                 <>
                   <div className="flex flex-wrap gap-x-5 gap-y-1 text-sm text-muted-foreground mb-3">
-                    <span>Attending: <span className="text-primary font-semibold">{pwAttending}</span></span>
-                    <span>Guestbook: <span className="text-accent font-semibold">{pwGuestbook}</span></span>
-                    <span>Photos: <span className="text-primary font-semibold">{pwPhotos}</span></span>
+                    <span>{t("overview.attending")} <span className="text-primary font-semibold">{pwAttending}</span></span>
+                    <span>{t("overview.guestbook")} <span className="text-accent font-semibold">{pwGuestbook}</span></span>
+                    <span>{t("overview.photos")} <span className="text-primary font-semibold">{pwPhotos}</span></span>
                   </div>
                   <button
                     onClick={() => router.push(`/planner/${projectId}/post-wedding`)}
                     className="text-sm text-primary border-b border-dashed border-primary/40"
                   >
-                    View post-wedding memories →
+                    {t("overview.viewMemories")}
                   </button>
                 </>
               ) : (
                 <p className="text-sm text-muted-foreground text-center py-2">
                   {isLocal
-                    ? "Sign in to save your project and access post-wedding memories."
-                    : "Post-wedding memories will appear here once guests submit them."
+                    ? t("overview.signInForMemories")
+                    : t("overview.memoriesLater")
                   }
                 </p>
               )}

@@ -3,6 +3,7 @@
 import { useState, useEffect, useCallback } from "react";
 import Link from "next/link";
 import { toast } from "sonner";
+import { useLanguage } from "@/lib/i18n/language-context";
 import {
   Loader2,
   Save,
@@ -384,6 +385,7 @@ function FontPreview({ fontFamily }: { fontFamily: string }) {
 // ============================================
 
 export default function ThemeCustomizePage() {
+  const { t } = useLanguage();
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [themeName, setThemeName] = useState("");
@@ -441,7 +443,7 @@ export default function ThemeCustomizePage() {
         setFontConfig(fonts);
         setInitialState({ colorPalette: palette, fontConfig: fonts });
       } catch {
-        toast.error("Failed to load theme customization");
+        toast.error(t("admin.themeCustomizer.loadFailed"));
       } finally {
         setLoading(false);
       }
@@ -476,10 +478,10 @@ export default function ThemeCustomizePage() {
       }
 
       setInitialState({ colorPalette, fontConfig });
-      toast.success("Theme customization saved! Refresh the site to see changes.");
+      toast.success(t("admin.themeCustomizer.saveSuccess"));
     } catch (error) {
       toast.error(
-        error instanceof Error ? error.message : "Failed to save customization"
+        error instanceof Error ? error.message : t("admin.themeCustomizer.saveFailed")
       );
     } finally {
       setSaving(false);
@@ -490,13 +492,13 @@ export default function ThemeCustomizePage() {
   function handleResetColors() {
     if (!originalColorPalette) return;
     setColorPalette(originalColorPalette);
-    toast.info("Colors reset to original theme defaults. Click Save to apply.");
+    toast.info(t("admin.themeCustomizer.resetColorsInfo"));
   }
 
   // Reset fonts to defaults
   function handleResetFonts() {
     setFontConfig(DEFAULT_FONT_CONFIG);
-    toast.info("Fonts reset to defaults. Click Save to apply.");
+    toast.info(t("admin.themeCustomizer.resetFontsInfo"));
   }
 
   // ---- Loading State ----
@@ -504,8 +506,8 @@ export default function ThemeCustomizePage() {
     return (
       <div className="space-y-6">
         <div>
-          <h1 className="text-2xl font-bold">Theme Customizer</h1>
-          <p className="text-muted-foreground">Loading...</p>
+          <h1 className="text-2xl font-bold">{t("admin.themeCustomizer.title")}</h1>
+          <p className="text-muted-foreground">{t("admin.themeCustomizer.loading")}</p>
         </div>
         <div className="flex items-center justify-center py-20">
           <Loader2 className="h-8 w-8 animate-spin text-muted-foreground" />
@@ -519,18 +521,18 @@ export default function ThemeCustomizePage() {
     return (
       <div className="space-y-6">
         <div>
-          <h1 className="text-2xl font-bold">Theme Customizer</h1>
+          <h1 className="text-2xl font-bold">{t("admin.themeCustomizer.title")}</h1>
           <p className="text-muted-foreground">
-            No active theme found. Please activate a theme first.
+            {t("admin.themeCustomizer.noThemeDesc")}
           </p>
         </div>
         <div className="text-center py-16">
           <Palette className="h-12 w-12 mx-auto mb-4 opacity-50 text-muted-foreground" />
           <p className="text-lg font-medium text-muted-foreground mb-4">
-            No Active Theme
+            {t("admin.themeCustomizer.noThemeTitle")}
           </p>
           <Button asChild>
-            <Link href="/admin/appearance/themes">Go to Theme Gallery</Link>
+            <Link href="/admin/appearance/themes">{t("admin.themeCustomizer.goToGallery")}</Link>
           </Button>
         </div>
       </div>
@@ -548,9 +550,9 @@ export default function ThemeCustomizePage() {
             </Link>
           </Button>
           <div>
-            <h1 className="text-2xl font-bold">Theme Customizer</h1>
+            <h1 className="text-2xl font-bold">{t("admin.themeCustomizer.title")}</h1>
             <p className="text-muted-foreground text-sm">
-              Customize colors and fonts for &ldquo;{themeName}&rdquo;
+              {t("admin.themeCustomizer.subtitle", { name: themeName })}
             </p>
           </div>
         </div>
@@ -562,7 +564,7 @@ export default function ThemeCustomizePage() {
             disabled={saving || !originalColorPalette}
           >
             <RotateCcw className="h-4 w-4 mr-2" />
-            Reset Colors
+            {t("admin.themeCustomizer.resetColors")}
           </Button>
           <Button
             size="sm"
@@ -584,11 +586,11 @@ export default function ThemeCustomizePage() {
         <TabsList>
           <TabsTrigger value="colors" className="gap-2">
             <Palette className="h-4 w-4" />
-            Colors
+            {t("admin.themeCustomizer.colors")}
           </TabsTrigger>
           <TabsTrigger value="fonts" className="gap-2">
             <Type className="h-4 w-4" />
-            Fonts
+            {t("admin.themeCustomizer.fonts")}
           </TabsTrigger>
         </TabsList>
 
@@ -599,11 +601,11 @@ export default function ThemeCustomizePage() {
             <TabsList>
               <TabsTrigger value="light" className="gap-2">
                 <Sun className="h-4 w-4" />
-                Light Mode
+                {t("admin.themeCustomizer.lightMode")}
               </TabsTrigger>
               <TabsTrigger value="dark" className="gap-2">
                 <Moon className="h-4 w-4" />
-                Dark Mode
+                {t("admin.themeCustomizer.darkMode")}
               </TabsTrigger>
             </TabsList>
 
@@ -637,18 +639,17 @@ export default function ThemeCustomizePage() {
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
                 <Type className="h-5 w-5" />
-                Typography
+                {t("admin.themeCustomizer.typography")}
               </CardTitle>
               <CardDescription>
-                Choose fonts for headings and body text. Fonts are loaded from
-                Google Fonts.
+                {t("admin.themeCustomizer.typographyDesc")}
               </CardDescription>
             </CardHeader>
             <CardContent className="space-y-6">
               <div className="grid gap-6 sm:grid-cols-2">
                 {/* Heading Font */}
                 <div className="space-y-3">
-                  <Label>Heading Font</Label>
+                  <Label>{t("admin.themeCustomizer.headingFont")}</Label>
                   <Select
                     value={fontConfig.headingFont}
                     onValueChange={(val) =>
@@ -671,7 +672,7 @@ export default function ThemeCustomizePage() {
 
                 {/* Body Font */}
                 <div className="space-y-3">
-                  <Label>Body Font</Label>
+                  <Label>{t("admin.themeCustomizer.bodyFont")}</Label>
                   <Select
                     value={fontConfig.bodyFont}
                     onValueChange={(val) =>
@@ -695,9 +696,9 @@ export default function ThemeCustomizePage() {
 
               {/* Accent / Decorative Font */}
               <div className="space-y-3">
-                <Label>Accent / Decorative Font</Label>
+                <Label>{t("admin.themeCustomizer.accentFont")}</Label>
                 <p className="text-xs text-muted-foreground">
-                  Used for decorative serif elements like pull quotes and info icons.
+                  {t("admin.themeCustomizer.accentFontHint")}
                 </p>
                 <Select
                   value={fontConfig.accentFont || "Inter"}
@@ -727,7 +728,7 @@ export default function ThemeCustomizePage() {
                   disabled={saving}
                 >
                   <RotateCcw className="h-4 w-4 mr-2" />
-                  Reset Fonts to Default
+                  {t("admin.themeCustomizer.resetFonts")}
                 </Button>
               </div>
             </CardContent>

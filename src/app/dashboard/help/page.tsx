@@ -32,7 +32,7 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
-import { toast } from "sonner";
+import { useLanguage } from "@/lib/i18n/language-context";
 
 interface FAQ {
   id: string;
@@ -41,45 +41,46 @@ interface FAQ {
   category: string | null;
 }
 
-const helpCategories = [
-  {
-    title: "Event Planning",
-    description: "Questions about planning your event",
-    icon: Building2,
-    color: "bg-[var(--color-info-bg)] text-[var(--color-info-text)]",
-  },
-  {
-    title: "Payments & Billing",
-    description: "Payment methods, invoices, refunds",
-    icon: CreditCard,
-    color: "bg-[var(--color-success-bg)] text-[var(--color-success-text)]",
-  },
-  {
-    title: "Documents",
-    description: "Uploading and downloading documents",
-    icon: FileCheck,
-    color: "bg-primary/10 text-primary",
-  },
-  {
-    title: "Account Security",
-    description: "Password, 2FA, account access",
-    icon: ShieldCheck,
-    color: "bg-[var(--color-warning-bg)] text-[var(--color-warning-text)]",
-  },
-];
-
-const quickLinks = [
-  { title: "How to plan your event", href: "/blog/how-to-plan-your-event" },
-  { title: "Finding vendors", href: "/blog/finding-vendors" },
-  { title: "Event packages", href: "/services" },
-  { title: "FAQs", href: "/faq" },
-];
-
 export default function HelpCenterPage() {
+  const { t } = useLanguage();
   const [loading, setLoading] = useState(true);
   const [faqs, setFaqs] = useState<FAQ[]>([]);
   const [searchQuery, setSearchQuery] = useState("");
   const [filteredFaqs, setFilteredFaqs] = useState<FAQ[]>([]);
+
+  const helpCategories = [
+    {
+      titleKey: "dashboard.help.catEventPlanning",
+      descKey: "dashboard.help.catEventPlanningDesc",
+      icon: Building2,
+      color: "bg-[var(--color-info-bg)] text-[var(--color-info-text)]",
+    },
+    {
+      titleKey: "dashboard.help.catBilling",
+      descKey: "dashboard.help.catBillingDesc",
+      icon: CreditCard,
+      color: "bg-[var(--color-success-bg)] text-[var(--color-success-text)]",
+    },
+    {
+      titleKey: "dashboard.help.catDocuments",
+      descKey: "dashboard.help.catDocumentsDesc",
+      icon: FileCheck,
+      color: "bg-primary/10 text-primary",
+    },
+    {
+      titleKey: "dashboard.help.catSecurity",
+      descKey: "dashboard.help.catSecurityDesc",
+      icon: ShieldCheck,
+      color: "bg-[var(--color-warning-bg)] text-[var(--color-warning-text)]",
+    },
+  ];
+
+  const quickLinks = [
+    { titleKey: "dashboard.help.linkPlanEvent", href: "/blog/how-to-plan-your-event" },
+    { titleKey: "dashboard.help.linkFindVendors", href: "/blog/finding-vendors" },
+    { titleKey: "dashboard.help.linkPackages", href: "/services" },
+    { titleKey: "dashboard.help.linkFaqs", href: "/faq" },
+  ];
 
   useEffect(() => {
     fetchFAQs();
@@ -87,12 +88,13 @@ export default function HelpCenterPage() {
 
   useEffect(() => {
     if (searchQuery.trim()) {
-      const filtered = faqs.filter(
-        (faq) =>
-          faq.question.toLowerCase().includes(searchQuery.toLowerCase()) ||
-          faq.answer.toLowerCase().includes(searchQuery.toLowerCase())
+      setFilteredFaqs(
+        faqs.filter(
+          (faq) =>
+            faq.question.toLowerCase().includes(searchQuery.toLowerCase()) ||
+            faq.answer.toLowerCase().includes(searchQuery.toLowerCase())
+        )
       );
-      setFilteredFaqs(filtered);
     } else {
       setFilteredFaqs(faqs);
     }
@@ -108,7 +110,7 @@ export default function HelpCenterPage() {
         setFilteredFaqs(data.faqs || []);
       }
     } catch {
-      // FAQs are optional, don't show error
+      // FAQs are optional
     } finally {
       setLoading(false);
     }
@@ -118,17 +120,15 @@ export default function HelpCenterPage() {
     <div className="space-y-6">
       {/* Page Header */}
       <div className="text-center">
-        <h1 className="text-2xl font-bold text-foreground">Help Center</h1>
-        <p className="mt-2 text-muted-foreground">
-          Find answers to your questions or contact our support team
-        </p>
+        <h1 className="text-2xl font-bold text-foreground">{t("dashboard.help.title")}</h1>
+        <p className="mt-2 text-muted-foreground">{t("dashboard.help.subtitle")}</p>
       </div>
 
       {/* Search */}
       <div className="relative mx-auto max-w-xl">
         <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
         <Input
-          placeholder="Search for help..."
+          placeholder={t("dashboard.help.searchPlaceholder")}
           className="pl-9 bg-white"
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
@@ -138,15 +138,13 @@ export default function HelpCenterPage() {
       {/* Help Categories */}
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
         {helpCategories.map((category) => (
-          <Card key={category.title} className="cursor-pointer hover:shadow-md transition-shadow">
+          <Card key={category.titleKey} className="cursor-pointer hover:shadow-md transition-shadow">
             <CardContent className="pt-6">
               <div className={`mb-4 inline-flex h-12 w-12 items-center justify-center rounded-lg ${category.color}`}>
                 <category.icon className="h-6 w-6" />
               </div>
-              <h3 className="font-semibold">{category.title}</h3>
-              <p className="mt-1 text-sm text-muted-foreground">
-                {category.description}
-              </p>
+              <h3 className="font-semibold">{t(category.titleKey)}</h3>
+              <p className="mt-1 text-sm text-muted-foreground">{t(category.descKey)}</p>
             </CardContent>
           </Card>
         ))}
@@ -160,13 +158,11 @@ export default function HelpCenterPage() {
               <MessageCircle className="h-5 w-5" />
             </div>
             <div>
-              <h3 className="font-semibold">Live Chat</h3>
-              <p className="mt-1 text-sm text-muted-foreground">
-                Chat with our support team in real-time
-              </p>
+              <h3 className="font-semibold">{t("dashboard.help.liveChat")}</h3>
+              <p className="mt-1 text-sm text-muted-foreground">{t("dashboard.help.liveChatDesc")}</p>
               <Button variant="link" className="mt-2 h-auto p-0" asChild>
                 <Link href="/dashboard/support">
-                  Start Chat <ChevronRight className="ml-1 h-4 w-4" />
+                  {t("dashboard.help.startChat")} <ChevronRight className="ml-1 h-4 w-4" />
                 </Link>
               </Button>
             </div>
@@ -179,10 +175,8 @@ export default function HelpCenterPage() {
               <Mail className="h-5 w-5" />
             </div>
             <div>
-              <h3 className="font-semibold">Email Support</h3>
-              <p className="mt-1 text-sm text-muted-foreground">
-                Get help via email within 24 hours
-              </p>
+              <h3 className="font-semibold">{t("dashboard.help.emailSupport")}</h3>
+              <p className="mt-1 text-sm text-muted-foreground">{t("dashboard.help.emailSupportDesc")}</p>
               <Button variant="link" className="mt-2 h-auto p-0" asChild>
                 <a href="mailto:support@ceremoney.com">
                   support@ceremoney.com <ExternalLink className="ml-1 h-4 w-4" />
@@ -198,10 +192,8 @@ export default function HelpCenterPage() {
               <Phone className="h-5 w-5" />
             </div>
             <div>
-              <h3 className="font-semibold">Phone Support</h3>
-              <p className="mt-1 text-sm text-muted-foreground">
-                Mon-Fri, 9am-5pm EST
-              </p>
+              <h3 className="font-semibold">{t("dashboard.help.phoneSupport")}</h3>
+              <p className="mt-1 text-sm text-muted-foreground">{t("dashboard.help.phoneHours")}</p>
               <Button variant="link" className="mt-2 h-auto p-0" asChild>
                 <a href="tel:+1-800-123-4567">
                   +1 (800) 123-4567 <ExternalLink className="ml-1 h-4 w-4" />
@@ -217,11 +209,9 @@ export default function HelpCenterPage() {
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
             <HelpCircle className="h-5 w-5" />
-            Frequently Asked Questions
+            {t("dashboard.help.faqTitle")}
           </CardTitle>
-          <CardDescription>
-            Quick answers to common questions
-          </CardDescription>
+          <CardDescription>{t("dashboard.help.faqDesc")}</CardDescription>
         </CardHeader>
         <CardContent>
           {loading ? (
@@ -231,20 +221,18 @@ export default function HelpCenterPage() {
           ) : filteredFaqs.length === 0 ? (
             <div className="py-8 text-center">
               <HelpCircle className="mx-auto h-12 w-12 text-muted-foreground" />
-              <h3 className="mt-4 text-lg font-semibold">No FAQs found</h3>
+              <h3 className="mt-4 text-lg font-semibold">{t("dashboard.help.noFaqs")}</h3>
               <p className="mt-2 text-sm text-muted-foreground">
                 {searchQuery
-                  ? "Try a different search term"
-                  : "Check back later for frequently asked questions"}
+                  ? t("dashboard.help.tryDifferentSearch")
+                  : t("dashboard.help.checkBackLater")}
               </p>
             </div>
           ) : (
             <Accordion type="single" collapsible className="w-full">
               {filteredFaqs.map((faq) => (
                 <AccordionItem key={faq.id} value={faq.id}>
-                  <AccordionTrigger className="text-left">
-                    {faq.question}
-                  </AccordionTrigger>
+                  <AccordionTrigger className="text-left">{faq.question}</AccordionTrigger>
                   <AccordionContent>
                     <div
                       className="prose prose-sm max-w-none text-muted-foreground"
@@ -263,19 +251,19 @@ export default function HelpCenterPage() {
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
             <FileText className="h-5 w-5" />
-            Quick Links
+            {t("dashboard.help.quickLinks")}
           </CardTitle>
-          <CardDescription>Popular resources and guides</CardDescription>
+          <CardDescription>{t("dashboard.help.quickLinksDesc")}</CardDescription>
         </CardHeader>
         <CardContent>
           <div className="grid gap-2 sm:grid-cols-2">
             {quickLinks.map((link) => (
               <Link
-                key={link.title}
+                key={link.titleKey}
                 href={link.href}
                 className="flex items-center justify-between rounded-lg border p-3 hover:bg-muted/50 transition-colors"
               >
-                <span className="font-medium">{link.title}</span>
+                <span className="font-medium">{t(link.titleKey)}</span>
                 <ChevronRight className="h-4 w-4 text-muted-foreground" />
               </Link>
             ))}
@@ -290,13 +278,11 @@ export default function HelpCenterPage() {
             <MessageCircle className="h-6 w-6" />
           </div>
           <div className="flex-1">
-            <h3 className="font-semibold">Still need help?</h3>
-            <p className="mt-1 text-sm text-muted-foreground">
-              Our support team is available to assist you with any questions
-            </p>
+            <h3 className="font-semibold">{t("dashboard.help.stillNeedHelp")}</h3>
+            <p className="mt-1 text-sm text-muted-foreground">{t("dashboard.help.stillNeedHelpDesc")}</p>
           </div>
           <Button asChild>
-            <Link href="/dashboard/support">Contact Support</Link>
+            <Link href="/dashboard/support">{t("dashboard.help.contactSupport")}</Link>
           </Button>
         </CardContent>
       </Card>

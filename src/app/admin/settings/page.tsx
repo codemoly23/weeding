@@ -35,6 +35,7 @@ import { Switch } from "@/components/ui/switch";
 import { toast } from "sonner";
 import { CountrySelector } from "@/components/ui/country-selector";
 import { CurrencySelector } from "@/components/ui/currency-selector";
+import { useLanguage } from "@/lib/i18n/language-context";
 
 interface BusinessSettings {
   // General
@@ -109,6 +110,7 @@ function TikTokIcon({ className }: { className?: string }) {
 }
 
 export default function BusinessSettingsPage() {
+  const { t } = useLanguage();
   const [settings, setSettings] = useState<BusinessSettings>(defaultSettings);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
@@ -152,7 +154,7 @@ export default function BusinessSettingsPage() {
       }
     } catch (error) {
       console.error("Error fetching settings:", error);
-      toast.error("Failed to load business settings");
+      toast.error(t("admin.settings.loadFailed"));
     } finally {
       setLoading(false);
     }
@@ -175,10 +177,10 @@ export default function BusinessSettingsPage() {
 
       if (!res.ok) throw new Error("Failed to save");
 
-      toast.success("Business settings saved successfully");
+      toast.success(t("admin.settings.saveSuccess"));
     } catch (error) {
       console.error("Error saving settings:", error);
-      toast.error("Failed to save business settings");
+      toast.error(t("admin.settings.saveFailed"));
     } finally {
       setSaving(false);
     }
@@ -199,7 +201,7 @@ export default function BusinessSettingsPage() {
         updateSetting("business.logo.url", dataUrl);
       };
       reader.readAsDataURL(file);
-      toast.info("Logo preview updated. Save to apply changes.");
+      toast.info(t("admin.settings.logoPreviewUpdated"));
     }
   }
 
@@ -213,7 +215,7 @@ export default function BusinessSettingsPage() {
         updateSetting("business.logo.darkUrl", dataUrl);
       };
       reader.readAsDataURL(file);
-      toast.info("Dark logo preview updated. Save to apply changes.");
+      toast.info(t("admin.settings.darkLogoPreviewUpdated"));
     }
   }
 
@@ -227,7 +229,7 @@ export default function BusinessSettingsPage() {
         updateSetting("business.favicon.url", dataUrl);
       };
       reader.readAsDataURL(file);
-      toast.info("Favicon preview updated. Save to apply changes.");
+      toast.info(t("admin.settings.faviconPreviewUpdated"));
     }
   }
 
@@ -258,9 +260,9 @@ export default function BusinessSettingsPage() {
     <div className="space-y-6">
       <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <div>
-          <h1 className="text-2xl font-bold">Business Settings</h1>
+          <h1 className="text-2xl font-bold">{t("admin.settings.title")}</h1>
           <p className="text-muted-foreground">
-            Configure your business information displayed across the website
+            {t("admin.settings.subtitle")}
           </p>
         </div>
         <Button onClick={saveSettings} disabled={saving} className="self-start sm:self-auto">
@@ -269,7 +271,7 @@ export default function BusinessSettingsPage() {
           ) : (
             <Save className="h-4 w-4 mr-2" />
           )}
-          Save Changes
+          {t("admin.settings.saveChanges")}
         </Button>
       </div>
 
@@ -281,9 +283,9 @@ export default function BusinessSettingsPage() {
               <Building2 className="h-6 w-6 text-[var(--ast-info-icon)]" />
             </div>
             <div>
-              <CardTitle>General Information</CardTitle>
+              <CardTitle>{t("admin.settings.generalTitle")}</CardTitle>
               <CardDescription>
-                Basic business information and branding
+                {t("admin.settings.generalDesc")}
               </CardDescription>
             </div>
           </div>
@@ -291,7 +293,7 @@ export default function BusinessSettingsPage() {
         <CardContent className="space-y-6">
           <div className="grid gap-4 sm:grid-cols-2">
             <div className="space-y-2">
-              <Label>Business Name</Label>
+              <Label>{t("admin.settings.businessName")}</Label>
               <Input
                 value={settings["business.name"]}
                 onChange={(e) => updateSetting("business.name", e.target.value)}
@@ -299,7 +301,7 @@ export default function BusinessSettingsPage() {
               />
             </div>
             <div className="space-y-2">
-              <Label>Tagline</Label>
+              <Label>{t("admin.settings.tagline")}</Label>
               <Input
                 value={settings["business.tagline"]}
                 onChange={(e) => updateSetting("business.tagline", e.target.value)}
@@ -309,15 +311,15 @@ export default function BusinessSettingsPage() {
           </div>
 
           <div className="space-y-2">
-            <Label>Description</Label>
+            <Label>{t("admin.settings.description")}</Label>
             <Textarea
               value={settings["business.description"]}
               onChange={(e) => updateSetting("business.description", e.target.value)}
-              placeholder="A short description of your business..."
+              placeholder={t("admin.settings.descriptionPlaceholder")}
               rows={3}
             />
             <p className="text-xs text-muted-foreground">
-              This appears in the footer and may be used for SEO meta descriptions.
+              {t("admin.settings.descriptionHelp")}
             </p>
           </div>
 
@@ -325,16 +327,16 @@ export default function BusinessSettingsPage() {
 
           {/* Display Settings */}
           <div className="space-y-4">
-            <h4 className="font-medium">Header Display Settings</h4>
+            <h4 className="font-medium">{t("admin.settings.headerDisplay")}</h4>
             <p className="text-sm text-muted-foreground">
-              Choose what to display in the header. At least one option should be enabled.
+              {t("admin.settings.headerDisplayDesc")}
             </p>
             <div className="grid gap-4 sm:grid-cols-2">
               <div className="flex items-center justify-between rounded-lg border p-4">
                 <div className="space-y-0.5">
-                  <Label htmlFor="display-logo">Show Logo</Label>
+                  <Label htmlFor="display-logo">{t("admin.settings.showLogo")}</Label>
                   <p className="text-xs text-muted-foreground">
-                    Display the logo image or fallback text
+                    {t("admin.settings.showLogoDesc")}
                   </p>
                 </div>
                 <Switch
@@ -347,9 +349,9 @@ export default function BusinessSettingsPage() {
               </div>
               <div className="flex items-center justify-between rounded-lg border p-4">
                 <div className="space-y-0.5">
-                  <Label htmlFor="display-name">Show Business Name</Label>
+                  <Label htmlFor="display-name">{t("admin.settings.showName")}</Label>
                   <p className="text-xs text-muted-foreground">
-                    Display the business name text
+                    {t("admin.settings.showNameDesc")}
                   </p>
                 </div>
                 <Switch
@@ -364,7 +366,7 @@ export default function BusinessSettingsPage() {
             {settings["business.display.logo"] === "false" &&
               settings["business.display.name"] === "false" && (
                 <p className="text-sm text-[var(--ast-warning-icon)]">
-                  ⚠️ Warning: Both logo and name are disabled. At least one should be visible in the header.
+                  {t("admin.settings.bothDisabledWarn")}
                 </p>
               )}
           </div>
@@ -375,9 +377,9 @@ export default function BusinessSettingsPage() {
           <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
             {/* Light Logo Upload */}
             <div className="space-y-4">
-              <Label>Logo (Light Background)</Label>
+              <Label>{t("admin.settings.logoLight")}</Label>
               <p className="text-xs text-muted-foreground -mt-2">
-                Used on light backgrounds and headers
+                {t("admin.settings.logoLightDesc")}
               </p>
               <div className="flex items-start gap-4">
                 <div className="relative h-20 w-20 rounded-lg border-2 border-dashed border-muted-foreground/25 flex items-center justify-center bg-white overflow-hidden">
@@ -420,13 +422,13 @@ export default function BusinessSettingsPage() {
                     onClick={() => logoInputRef.current?.click()}
                   >
                     <Upload className="h-4 w-4 mr-2" />
-                    Upload
+                    {t("admin.settings.upload")}
                   </Button>
                 </div>
               </div>
               {!logoPreview && !darkLogoPreview && (
                 <div className="space-y-2">
-                  <Label className="text-sm">Logo Text (Fallback)</Label>
+                  <Label className="text-sm">{t("admin.settings.logoTextFallback")}</Label>
                   <Input
                     value={settings["business.logo.text"]}
                     onChange={(e) => updateSetting("business.logo.text", e.target.value)}
@@ -440,9 +442,9 @@ export default function BusinessSettingsPage() {
 
             {/* Dark Logo Upload */}
             <div className="space-y-4">
-              <Label>Logo (Dark Background)</Label>
+              <Label>{t("admin.settings.logoDark")}</Label>
               <p className="text-xs text-muted-foreground -mt-2">
-                Used on dark backgrounds like footer
+                {t("admin.settings.logoDarkDesc")}
               </p>
               <div className="flex items-start gap-4">
                 <div className="relative h-20 w-20 rounded-lg border-2 border-dashed border-muted-foreground/25 flex items-center justify-center bg-slate-800 overflow-hidden">
@@ -495,10 +497,10 @@ export default function BusinessSettingsPage() {
                     onClick={() => darkLogoInputRef.current?.click()}
                   >
                     <Upload className="h-4 w-4 mr-2" />
-                    Upload
+                    {t("admin.settings.upload")}
                   </Button>
                   <p className="text-xs text-muted-foreground">
-                    Light colored or white logo
+                    {t("admin.settings.logoDarkNote")}
                   </p>
                 </div>
               </div>
@@ -506,9 +508,9 @@ export default function BusinessSettingsPage() {
 
             {/* Favicon Upload */}
             <div className="space-y-4">
-              <Label>Favicon</Label>
+              <Label>{t("admin.settings.favicon")}</Label>
               <p className="text-xs text-muted-foreground -mt-2">
-                Browser tab icon (32x32px)
+                {t("admin.settings.faviconDesc")}
               </p>
               <div className="flex items-start gap-4">
                 <div className="relative h-16 w-16 rounded-lg border-2 border-dashed border-muted-foreground/25 flex items-center justify-center bg-muted/50 overflow-hidden">
@@ -547,10 +549,10 @@ export default function BusinessSettingsPage() {
                     onClick={() => faviconInputRef.current?.click()}
                   >
                     <Upload className="h-4 w-4 mr-2" />
-                    Upload Favicon
+                    {t("admin.settings.uploadFavicon")}
                   </Button>
                   <p className="text-xs text-muted-foreground">
-                    32x32px, ICO or PNG
+                    {t("admin.settings.faviconFormat")}
                   </p>
                 </div>
               </div>
@@ -567,9 +569,9 @@ export default function BusinessSettingsPage() {
               <Phone className="h-6 w-6 text-[var(--ast-success-icon)]" />
             </div>
             <div>
-              <CardTitle>Contact Information</CardTitle>
+              <CardTitle>{t("admin.settings.contactTitle")}</CardTitle>
               <CardDescription>
-                Contact details displayed on the website
+                {t("admin.settings.contactDesc")}
               </CardDescription>
             </div>
           </div>
@@ -579,7 +581,7 @@ export default function BusinessSettingsPage() {
             <div className="space-y-2">
               <Label className="flex items-center gap-2">
                 <Mail className="h-4 w-4 text-muted-foreground" />
-                Contact Email
+                {t("admin.settings.contactEmail")}
               </Label>
               <Input
                 type="email"
@@ -591,7 +593,7 @@ export default function BusinessSettingsPage() {
             <div className="space-y-2">
               <Label className="flex items-center gap-2">
                 <Mail className="h-4 w-4 text-muted-foreground" />
-                Support Email
+                {t("admin.settings.supportEmail")}
               </Label>
               <Input
                 type="email"
@@ -604,7 +606,7 @@ export default function BusinessSettingsPage() {
           <div className="space-y-2">
             <Label className="flex items-center gap-2">
               <Phone className="h-4 w-4 text-muted-foreground" />
-              Phone Number
+              {t("admin.settings.phoneNumber")}
             </Label>
             <Input
               value={settings["business.contact.phone"]}
@@ -623,16 +625,16 @@ export default function BusinessSettingsPage() {
               <MapPin className="h-6 w-6 text-[var(--ast-processing-icon)]" />
             </div>
             <div>
-              <CardTitle>Business Address</CardTitle>
+              <CardTitle>{t("admin.settings.addressTitle")}</CardTitle>
               <CardDescription>
-                Physical address displayed in the footer
+                {t("admin.settings.addressDesc")}
               </CardDescription>
             </div>
           </div>
         </CardHeader>
         <CardContent className="space-y-4">
           <div className="space-y-2">
-            <Label>Address Line 1</Label>
+            <Label>{t("admin.settings.addressLine1")}</Label>
             <Input
               value={settings["business.address.line1"]}
               onChange={(e) => updateSetting("business.address.line1", e.target.value)}
@@ -640,7 +642,7 @@ export default function BusinessSettingsPage() {
             />
           </div>
           <div className="space-y-2">
-            <Label>Address Line 2 (Optional)</Label>
+            <Label>{t("admin.settings.addressLine2")}</Label>
             <Input
               value={settings["business.address.line2"]}
               onChange={(e) => updateSetting("business.address.line2", e.target.value)}
@@ -649,7 +651,7 @@ export default function BusinessSettingsPage() {
           </div>
           <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
             <div className="space-y-2">
-              <Label>City</Label>
+              <Label>{t("admin.settings.city")}</Label>
               <Input
                 value={settings["business.address.city"]}
                 onChange={(e) => updateSetting("business.address.city", e.target.value)}
@@ -657,7 +659,7 @@ export default function BusinessSettingsPage() {
               />
             </div>
             <div className="space-y-2">
-              <Label>State</Label>
+              <Label>{t("admin.settings.state")}</Label>
               <Input
                 value={settings["business.address.state"]}
                 onChange={(e) => updateSetting("business.address.state", e.target.value)}
@@ -665,7 +667,7 @@ export default function BusinessSettingsPage() {
               />
             </div>
             <div className="space-y-2">
-              <Label>ZIP Code</Label>
+              <Label>{t("admin.settings.zip")}</Label>
               <Input
                 value={settings["business.address.zip"]}
                 onChange={(e) => updateSetting("business.address.zip", e.target.value)}
@@ -673,7 +675,7 @@ export default function BusinessSettingsPage() {
               />
             </div>
             <div className="space-y-2">
-              <Label>Country</Label>
+              <Label>{t("admin.settings.country")}</Label>
               <CountrySelector
                 value={settings["business.address.country"]}
                 onChange={(code) => updateSetting("business.address.country", code)}
@@ -692,23 +694,23 @@ export default function BusinessSettingsPage() {
               <DollarSign className="h-6 w-6 text-[var(--ast-success-icon)]" />
             </div>
             <div>
-              <CardTitle>Currency</CardTitle>
+              <CardTitle>{t("admin.settings.currencyTitle")}</CardTitle>
               <CardDescription>
-                Default currency used for pricing across the website
+                {t("admin.settings.currencyDesc")}
               </CardDescription>
             </div>
           </div>
         </CardHeader>
         <CardContent className="space-y-4">
           <div className="space-y-2">
-            <Label>Default Currency</Label>
+            <Label>{t("admin.settings.defaultCurrency")}</Label>
             <CurrencySelector
               value={settings["business.currency"]}
               onChange={(code) => updateSetting("business.currency", code)}
               placeholder="Select currency..."
             />
             <p className="text-xs text-muted-foreground">
-              This currency will be used for all pricing displays including service packages, location fees, and checkout totals.
+              {t("admin.settings.currencyHelp")}
             </p>
           </div>
         </CardContent>
@@ -722,9 +724,9 @@ export default function BusinessSettingsPage() {
               <Globe className="h-6 w-6 text-[var(--ast-hold-icon)]" />
             </div>
             <div>
-              <CardTitle>Social Media Links</CardTitle>
+              <CardTitle>{t("admin.settings.socialTitle")}</CardTitle>
               <CardDescription>
-                Links to your social media profiles (leave empty to hide)
+                {t("admin.settings.socialDesc")}
               </CardDescription>
             </div>
           </div>
@@ -810,12 +812,10 @@ export default function BusinessSettingsPage() {
             </div>
             <div className="space-y-1">
               <p className="font-medium text-[var(--ast-info-text)]">
-                Changes Apply Site-Wide
+                {t("admin.settings.infoTitle")}
               </p>
               <p className="text-sm text-[var(--ast-info-text)]">
-                The information you enter here will automatically update the
-                header, footer, and all pages across your website. Logo and
-                business name will also appear in the admin dashboard.
+                {t("admin.settings.infoDesc")}
               </p>
             </div>
           </div>

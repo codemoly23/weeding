@@ -37,10 +37,6 @@ const nextConfig: NextConfig = {
       },
       {
         protocol: "https",
-        hostname: "flagcdn.com", // Flag images for language switcher
-      },
-      {
-        protocol: "https",
         hostname: "images.unsplash.com", // Unsplash default images for widgets
       },
       {
@@ -86,7 +82,7 @@ const nextConfig: NextConfig = {
               "script-src 'self' 'unsafe-eval' 'unsafe-inline' js.stripe.com",
               "style-src 'self' 'unsafe-inline' fonts.googleapis.com",
               "font-src 'self' data: fonts.gstatic.com",
-              "img-src 'self' data: blob: lh3.googleusercontent.com images.unsplash.com flagcdn.com cdn.ceremoney.com *.r2.cloudflarestorage.com *.r2.dev *.amazonaws.com",
+              "img-src 'self' data: blob: lh3.googleusercontent.com images.unsplash.com cdn.ceremoney.com *.r2.cloudflarestorage.com *.r2.dev *.amazonaws.com",
               "connect-src 'self' *.stripe.com wss: ws:",
               "frame-src 'self' js.stripe.com *.stripe.com",
               "frame-ancestors 'self'",

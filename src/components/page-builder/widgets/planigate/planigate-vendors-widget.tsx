@@ -42,6 +42,7 @@ function apiToCard(v: ApiVendor): PlanigateVendorCard {
     category: formatCategoryAndCity(v.category, v.city),
     rating: v.avgRating ?? 0,
     reviewCount: v.reviewCount,
+    slug: v.slug,
   };
 }
 
@@ -177,55 +178,57 @@ export function PlanigateVendorsWidget({ settings: raw }: Props) {
 }
 
 function VendorCard({ item }: { item: PlanigateVendorCard }) {
+  const href = item.slug ? `/vendors/${item.slug}` : "/vendors";
   return (
     <motion.div
       variants={staggerItem}
       whileHover={{ y: -4 }}
       transition={{ duration: 0.25 }}
-      className="shrink-0 snap-start w-[210px] sm:w-[230px] group cursor-pointer"
+      className="shrink-0 snap-start w-[210px] sm:w-[230px] group"
     >
-      <div className="relative h-[130px] w-full overflow-hidden rounded-2xl ring-1 ring-black/5 transition-shadow duration-300 group-hover:shadow-lg">
-        <Image
-          src={item.image}
-          alt={item.name}
-          fill
-          sizes="240px"
-          className="object-cover transition-transform duration-700 ease-out group-hover:scale-110"
-        />
-        {/* subtle hover overlay */}
-        <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
-      </div>
-      <div className="mt-3 space-y-1 px-1">
-        <div
-          className="text-[14px] font-semibold leading-tight truncate transition-colors duration-300 group-hover:[color:var(--color-planigate-accent)]"
-          style={{ color: "var(--color-planigate-fg)" }}
-        >
-          {item.name}
-        </div>
-        <div
-          className="text-[12px] truncate"
-          style={{ color: "var(--color-planigate-fg-muted)" }}
-        >
-          {item.category}
-        </div>
-        <div
-          className="flex items-center gap-1 text-[12px]"
-          style={{ color: "var(--color-planigate-fg-strong)" }}
-        >
-          <Star
-            size={12}
-            className="transition-transform duration-300 group-hover:scale-125 group-hover:rotate-12"
-            style={{
-              fill: "var(--color-planigate-star)",
-              color: "var(--color-planigate-star)",
-            }}
+      <Link href={href} className="block cursor-pointer">
+        <div className="relative h-[130px] w-full overflow-hidden rounded-2xl ring-1 ring-black/5 transition-shadow duration-300 group-hover:shadow-lg">
+          <Image
+            src={item.image}
+            alt={item.name}
+            fill
+            sizes="240px"
+            className="object-cover transition-transform duration-700 ease-out group-hover:scale-110"
           />
-          <span className="font-medium">{item.rating.toFixed(1)}</span>
-          <span style={{ color: "var(--color-planigate-fg-faint)" }}>
-            ({item.reviewCount})
-          </span>
+          <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
         </div>
-      </div>
+        <div className="mt-3 space-y-1 px-1">
+          <div
+            className="text-[14px] font-semibold leading-tight truncate transition-colors duration-300 group-hover:[color:var(--color-planigate-accent)]"
+            style={{ color: "var(--color-planigate-fg)" }}
+          >
+            {item.name}
+          </div>
+          <div
+            className="text-[12px] truncate"
+            style={{ color: "var(--color-planigate-fg-muted)" }}
+          >
+            {item.category}
+          </div>
+          <div
+            className="flex items-center gap-1 text-[12px]"
+            style={{ color: "var(--color-planigate-fg-strong)" }}
+          >
+            <Star
+              size={12}
+              className="transition-transform duration-300 group-hover:scale-125 group-hover:rotate-12"
+              style={{
+                fill: "var(--color-planigate-star)",
+                color: "var(--color-planigate-star)",
+              }}
+            />
+            <span className="font-medium">{item.rating.toFixed(1)}</span>
+            <span style={{ color: "var(--color-planigate-fg-faint)" }}>
+              ({item.reviewCount})
+            </span>
+          </div>
+        </div>
+      </Link>
     </motion.div>
   );
 }

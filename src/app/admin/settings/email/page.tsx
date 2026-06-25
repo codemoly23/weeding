@@ -29,6 +29,7 @@ import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Separator } from "@/components/ui/separator";
 import { toast } from "sonner";
+import { useLanguage } from "@/lib/i18n/language-context";
 
 interface EmailSettings {
   // SMTP Settings
@@ -77,6 +78,7 @@ const defaultSettings: EmailSettings = {
 const SECRET_KEYS = ["email.smtp.password"];
 
 export default function EmailSettingsPage() {
+  const { t } = useLanguage();
   const [settings, setSettings] = useState<EmailSettings>(defaultSettings);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
@@ -111,7 +113,7 @@ export default function EmailSettingsPage() {
       }
     } catch (error) {
       console.error("Error fetching settings:", error);
-      toast.error("Failed to load email settings");
+      toast.error(t("admin.email.loadFailed"));
     } finally {
       setLoading(false);
     }
@@ -135,10 +137,10 @@ export default function EmailSettingsPage() {
 
       if (!res.ok) throw new Error("Failed to save");
 
-      toast.success("Email settings saved successfully");
+      toast.success(t("admin.email.saveSuccess"));
     } catch (error) {
       console.error("Error saving settings:", error);
-      toast.error("Failed to save email settings");
+      toast.error(t("admin.email.saveFailed"));
     } finally {
       setSaving(false);
     }
@@ -153,13 +155,13 @@ export default function EmailSettingsPage() {
       const data = await res.json();
       setEmailConnected(data.success);
       if (data.success) {
-        toast.success("Test email sent successfully! Check your inbox.");
+        toast.success(t("admin.email.testSuccess"));
       } else {
-        toast.error(data.message || "Email connection failed");
+        toast.error(data.message || t("admin.email.testEmailFailed"));
       }
     } catch {
       setEmailConnected(false);
-      toast.error("Failed to test email connection");
+      toast.error(t("admin.email.testFailed"));
     } finally {
       setTestingEmail(false);
     }
@@ -253,9 +255,9 @@ export default function EmailSettingsPage() {
     <div className="space-y-6">
       <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <div>
-          <h1 className="text-2xl font-bold">Email Settings</h1>
+          <h1 className="text-2xl font-bold">{t("admin.email.title")}</h1>
           <p className="text-muted-foreground">
-            Configure SMTP email settings for notifications
+            {t("admin.email.subtitle")}
           </p>
         </div>
         <Button className="self-start sm:self-auto" onClick={saveSettings} disabled={saving}>
@@ -264,7 +266,7 @@ export default function EmailSettingsPage() {
           ) : (
             <Save className="h-4 w-4 mr-2" />
           )}
-          Save Changes
+          {t("common.saveChanges")}
         </Button>
       </div>
 
@@ -274,19 +276,18 @@ export default function EmailSettingsPage() {
           <div className="flex gap-4">
             <AlertTriangle className="h-5 w-5 text-[var(--ast-warning-icon)] shrink-0 mt-0.5" />
             <div className="space-y-1">
-              <p className="font-medium text-[var(--ast-warning-text)]">Security Notice</p>
+              <p className="font-medium text-[var(--ast-warning-text)]">{t("admin.email.securityNotice")}</p>
               <p className="text-sm text-[var(--ast-warning-text)]">
-                SMTP password is encrypted before storing in the database. For Gmail,
-                use an{" "}
+                {t("admin.email.securityDescPre")}{" "}
                 <a
                   href="https://myaccount.google.com/apppasswords"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="underline font-medium"
                 >
-                  App Password
+                  {t("admin.email.securityAppPassword")}
                 </a>{" "}
-                instead of your regular password.
+                {t("admin.email.securityDescPost")}
               </p>
             </div>
           </div>
@@ -302,9 +303,9 @@ export default function EmailSettingsPage() {
                 <Server className="h-6 w-6 text-[var(--ast-info-icon)]" />
               </div>
               <div>
-                <CardTitle>SMTP Configuration</CardTitle>
+                <CardTitle>{t("admin.email.smtpTitle")}</CardTitle>
                 <CardDescription>
-                  Configure your SMTP server for sending emails
+                  {t("admin.email.smtpDesc")}
                 </CardDescription>
               </div>
             </div>
@@ -313,7 +314,7 @@ export default function EmailSettingsPage() {
         <CardContent className="space-y-6">
           <div className="grid gap-4 sm:grid-cols-2">
             <div className="space-y-2">
-              <Label>SMTP Host</Label>
+              <Label>{t("admin.email.smtpHost")}</Label>
               <Input
                 value={settings["email.smtp.host"]}
                 onChange={(e) =>
@@ -322,11 +323,11 @@ export default function EmailSettingsPage() {
                 placeholder="smtp.gmail.com"
               />
               <p className="text-xs text-muted-foreground">
-                Gmail: smtp.gmail.com | Outlook: smtp.office365.com
+                {t("admin.email.smtpHostHelp")}
               </p>
             </div>
             <div className="space-y-2">
-              <Label>SMTP Port</Label>
+              <Label>{t("admin.email.smtpPort")}</Label>
               <Input
                 value={settings["email.smtp.port"]}
                 onChange={(e) =>
@@ -335,16 +336,16 @@ export default function EmailSettingsPage() {
                 placeholder="587"
               />
               <p className="text-xs text-muted-foreground">
-                Use 587 for TLS or 465 for SSL
+                {t("admin.email.smtpPortHelp")}
               </p>
             </div>
           </div>
 
           <div className="flex items-center justify-between py-3 px-4 bg-muted/50 rounded-lg">
             <div className="space-y-0.5">
-              <Label className="text-sm font-medium">Use SSL/TLS</Label>
+              <Label className="text-sm font-medium">{t("admin.email.useSslTls")}</Label>
               <p className="text-xs text-muted-foreground">
-                Enable for port 465, disable for port 587 (STARTTLS)
+                {t("admin.email.useSslTlsHelp")}
               </p>
             </div>
             <Switch
@@ -359,7 +360,7 @@ export default function EmailSettingsPage() {
 
           <div className="grid gap-4 sm:grid-cols-2">
             <div className="space-y-2">
-              <Label>SMTP Username</Label>
+              <Label>{t("admin.email.smtpUsername")}</Label>
               <Input
                 value={settings["email.smtp.user"]}
                 onChange={(e) =>
@@ -368,32 +369,32 @@ export default function EmailSettingsPage() {
                 placeholder="your-email@gmail.com"
               />
               <p className="text-xs text-muted-foreground">
-                Your full email address
+                {t("admin.email.smtpUsernameHelp")}
               </p>
             </div>
             <SecretInput
               settingKey="email.smtp.password"
-              label="SMTP Password"
-              placeholder="App password or SMTP password"
+              label={t("admin.email.smtpPassword")}
+              placeholder={t("admin.email.smtpPasswordPlaceholder")}
             />
           </div>
 
           <Separator />
 
           <div className="space-y-2">
-            <Label>Connection Status</Label>
+            <Label>{t("admin.email.connectionStatus")}</Label>
             <div className="flex items-center gap-2">
               {emailConnected === null ? (
-                <Badge variant="outline">Not Tested</Badge>
+                <Badge variant="outline">{t("admin.email.notTested")}</Badge>
               ) : emailConnected ? (
                 <Badge className="admin-status-success">
                   <CheckCircle className="h-3 w-3 mr-1" />
-                  Connected
+                  {t("admin.email.connected")}
                 </Badge>
               ) : (
                 <Badge variant="destructive">
                   <XCircle className="h-3 w-3 mr-1" />
-                  Not Connected
+                  {t("admin.email.notConnected")}
                 </Badge>
               )}
               <Button
@@ -407,7 +408,7 @@ export default function EmailSettingsPage() {
                 ) : (
                   <Send className="h-3 w-3 mr-1" />
                 )}
-                Send Test Email
+                {t("admin.email.sendTestEmail")}
               </Button>
             </div>
           </div>
@@ -422,9 +423,9 @@ export default function EmailSettingsPage() {
               <Mail className="h-6 w-6 text-indigo-600" />
             </div>
             <div>
-              <CardTitle>Sender Information</CardTitle>
+              <CardTitle>{t("admin.email.senderTitle")}</CardTitle>
               <CardDescription>
-                Configure the From address for outgoing emails
+                {t("admin.email.senderDesc")}
               </CardDescription>
             </div>
           </div>
@@ -432,7 +433,7 @@ export default function EmailSettingsPage() {
         <CardContent className="space-y-4">
           <div className="grid gap-4 sm:grid-cols-2">
             <div className="space-y-2">
-              <Label>From Email (Optional)</Label>
+              <Label>{t("admin.email.fromEmail")}</Label>
               <Input
                 type="email"
                 value={settings["email.from.email"]}
@@ -442,11 +443,11 @@ export default function EmailSettingsPage() {
                 placeholder="noreply@yourdomain.com"
               />
               <p className="text-xs text-muted-foreground">
-                Leave empty to use SMTP username
+                {t("admin.email.fromEmailHelp")}
               </p>
             </div>
             <div className="space-y-2">
-              <Label>From Name</Label>
+              <Label>{t("admin.email.fromName")}</Label>
               <Input
                 value={settings["email.from.name"]}
                 onChange={(e) =>
@@ -458,7 +459,7 @@ export default function EmailSettingsPage() {
           </div>
 
           <div className="space-y-2">
-            <Label>Reply-To Email (Optional)</Label>
+            <Label>{t("admin.email.replyTo")}</Label>
             <Input
               type="email"
               value={settings["email.replyTo"]}
@@ -466,7 +467,7 @@ export default function EmailSettingsPage() {
               placeholder="support@yourdomain.com"
             />
             <p className="text-xs text-muted-foreground">
-              Where customer replies will be sent
+              {t("admin.email.replyToHelp")}
             </p>
           </div>
         </CardContent>
@@ -480,16 +481,16 @@ export default function EmailSettingsPage() {
               <Bell className="h-6 w-6 text-[var(--ast-hold-icon)]" />
             </div>
             <div>
-              <CardTitle>Admin Notifications</CardTitle>
+              <CardTitle>{t("admin.email.adminNotifTitle")}</CardTitle>
               <CardDescription>
-                Get notified when new orders are placed
+                {t("admin.email.adminNotifDesc")}
               </CardDescription>
             </div>
           </div>
         </CardHeader>
         <CardContent className="space-y-4">
           <div className="space-y-2">
-            <Label>Admin Email</Label>
+            <Label>{t("admin.email.adminEmail")}</Label>
             <Input
               type="email"
               value={settings["email.admin.email"]}
@@ -499,7 +500,7 @@ export default function EmailSettingsPage() {
               placeholder="admin@yourdomain.com"
             />
             <p className="text-xs text-muted-foreground">
-              This email will receive admin notifications (new orders, etc.)
+              {t("admin.email.adminEmailHelp")}
             </p>
           </div>
 
@@ -507,8 +508,8 @@ export default function EmailSettingsPage() {
 
           <NotificationToggle
             settingKey="email.notify.adminNewOrder"
-            label="New Order Notification"
-            description="Receive an email when a new order is placed"
+            label={t("admin.email.notifNewOrder")}
+            description={t("admin.email.notifNewOrderDesc")}
           />
         </CardContent>
       </Card>
@@ -521,9 +522,9 @@ export default function EmailSettingsPage() {
               <Mail className="h-6 w-6 text-[var(--ast-success-icon)]" />
             </div>
             <div>
-              <CardTitle>Customer Notifications</CardTitle>
+              <CardTitle>{t("admin.email.customerNotifTitle")}</CardTitle>
               <CardDescription>
-                Choose which notifications customers receive
+                {t("admin.email.customerNotifDesc")}
               </CardDescription>
             </div>
           </div>
@@ -532,23 +533,23 @@ export default function EmailSettingsPage() {
           <div className="divide-y">
             <NotificationToggle
               settingKey="email.notify.orderPlaced"
-              label="Order Placed"
-              description="Confirmation email when an order is submitted"
+              label={t("admin.email.notifOrderPlaced")}
+              description={t("admin.email.notifOrderPlacedDesc")}
             />
             <NotificationToggle
               settingKey="email.notify.orderConfirmed"
-              label="Order Confirmed"
-              description="Email when order is confirmed by admin"
+              label={t("admin.email.notifOrderConfirmed")}
+              description={t("admin.email.notifOrderConfirmedDesc")}
             />
             <NotificationToggle
               settingKey="email.notify.orderProcessing"
-              label="Order Processing"
-              description="Updates when order status changes to processing"
+              label={t("admin.email.notifOrderProcessing")}
+              description={t("admin.email.notifOrderProcessingDesc")}
             />
             <NotificationToggle
               settingKey="email.notify.orderCompleted"
-              label="Order Completed"
-              description="Notification when order is completed"
+              label={t("admin.email.notifOrderCompleted")}
+              description={t("admin.email.notifOrderCompletedDesc")}
             />
           </div>
         </CardContent>
@@ -562,9 +563,9 @@ export default function EmailSettingsPage() {
               <Mail className="h-6 w-6 text-[var(--ast-warning-icon)]" />
             </div>
             <div>
-              <CardTitle>Payment Notifications</CardTitle>
+              <CardTitle>{t("admin.email.paymentNotifTitle")}</CardTitle>
               <CardDescription>
-                Payment related email notifications
+                {t("admin.email.paymentNotifDesc")}
               </CardDescription>
             </div>
           </div>
@@ -573,13 +574,13 @@ export default function EmailSettingsPage() {
           <div className="divide-y">
             <NotificationToggle
               settingKey="email.notify.paymentSuccess"
-              label="Payment Successful"
-              description="Confirmation when payment is received"
+              label={t("admin.email.notifPaymentSuccess")}
+              description={t("admin.email.notifPaymentSuccessDesc")}
             />
             <NotificationToggle
               settingKey="email.notify.paymentFailed"
-              label="Payment Failed"
-              description="Alert when payment fails or is declined"
+              label={t("admin.email.notifPaymentFailed")}
+              description={t("admin.email.notifPaymentFailedDesc")}
             />
           </div>
         </CardContent>
@@ -593,22 +594,22 @@ export default function EmailSettingsPage() {
               <Mail className="h-5 w-5 text-[var(--ast-info-icon)]" />
             </div>
             <div className="space-y-2">
-              <p className="font-medium text-[var(--ast-info-text)]">Gmail Setup Guide</p>
+              <p className="font-medium text-[var(--ast-info-text)]">{t("admin.email.gmailGuideTitle")}</p>
               <ol className="text-sm text-[var(--ast-info-text)] list-decimal list-inside space-y-1">
-                <li>Enable 2-Factor Authentication on your Google Account</li>
+                <li>{t("admin.email.gmailStep1")}</li>
                 <li>
-                  Go to{" "}
+                  {t("admin.email.gmailStep2Pre")}{" "}
                   <a
                     href="https://myaccount.google.com/apppasswords"
                     target="_blank"
                     rel="noopener noreferrer"
                     className="underline font-medium"
                   >
-                    App Passwords
+                    {t("admin.email.gmailStep2Link")}
                   </a>
                 </li>
-                <li>Create a new app password for "Mail"</li>
-                <li>Use that password in the SMTP Password field above</li>
+                <li>{t("admin.email.gmailStep3")}</li>
+                <li>{t("admin.email.gmailStep4")}</li>
               </ol>
             </div>
           </div>

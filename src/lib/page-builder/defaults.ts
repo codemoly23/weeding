@@ -2501,7 +2501,7 @@ export const DEFAULT_FEATURES_SHOWCASE_SETTINGS: FeaturesShowcaseWidgetSettings 
       description: "Centralized command center to manage all your event details, timelines, and tasks in one beautiful interface",
       image: "https://images.unsplash.com/photo-1551818255-e6e10975bc17?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&w=800&q=80",
       icon: "LayoutGrid",
-      href: "/features/dashboard",
+      href: "/planner",
     },
     {
       id: "feat_2",
@@ -2509,7 +2509,7 @@ export const DEFAULT_FEATURES_SHOWCASE_SETTINGS: FeaturesShowcaseWidgetSettings 
       description: "Effortlessly manage your guest list, track RSVPs, and handle seating arrangements with smart tools",
       image: "https://images.unsplash.com/photo-1511578314322-379afb476865?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&w=800&q=80",
       icon: "Users",
-      href: "/features/guests",
+      href: "/tools/guests",
     },
     {
       id: "feat_3",
@@ -2517,7 +2517,7 @@ export const DEFAULT_FEATURES_SHOWCASE_SETTINGS: FeaturesShowcaseWidgetSettings 
       description: "Stay on top of every expense with real-time budget tracking and automated cost breakdowns",
       image: "https://images.unsplash.com/photo-1554224155-6726b3ff858f?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&w=800&q=80",
       icon: "DollarSign",
-      href: "/features/budget",
+      href: "/tools/budget",
     },
     {
       id: "feat_4",
@@ -2525,7 +2525,7 @@ export const DEFAULT_FEATURES_SHOWCASE_SETTINGS: FeaturesShowcaseWidgetSettings 
       description: "Discover, compare, and book trusted vendors all in one place — from caterers to photographers",
       image: "https://images.unsplash.com/photo-1555396273-367ea4eb4db5?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&w=800&q=80",
       icon: "Store",
-      href: "/features/vendors",
+      href: "/vendors",
     },
     {
       id: "feat_5",
@@ -2533,7 +2533,7 @@ export const DEFAULT_FEATURES_SHOWCASE_SETTINGS: FeaturesShowcaseWidgetSettings 
       description: "Never miss a detail with AI-powered checklists that adapt to your event type and timeline",
       image: "https://images.unsplash.com/photo-1484480974693-6ca0a78fb36b?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&w=800&q=80",
       icon: "ListChecks",
-      href: "/features/checklist",
+      href: "/tools/checklist",
     },
     {
       id: "feat_6",
@@ -2541,7 +2541,7 @@ export const DEFAULT_FEATURES_SHOWCASE_SETTINGS: FeaturesShowcaseWidgetSettings 
       description: "Design stunning digital invitations and send them instantly to all your guests with one click",
       image: "https://images.unsplash.com/photo-1585776245991-cf89dd7fc73a?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&w=800&q=80",
       icon: "Mail",
-      href: "/features/invitations",
+      href: "/planning-tools",
     },
   ],
 };
@@ -3007,7 +3007,7 @@ export const DEFAULT_PLANIGATE_HERO_SETTINGS: PlanigateHeroWidgetSettings = {
   locationInputLabel: "Var?",
   locationInputPlaceholder: "Ex. Stockholm, Göteborg...",
   ctaText: "Starta ditt event gratis",
-  ctaHref: "/onboarding",
+  ctaHref: "/register",
   exploreLinkText: "Utforska leverantörer",
   exploreLinkHref: "/vendors",
 };
@@ -3021,7 +3021,7 @@ export const DEFAULT_PLANIGATE_FEATURES_SETTINGS: PlanigateFeaturesWidgetSetting
       title: "Digitala inbjudningar",
       description: "Skapa vackra inbjudningar på några minuter.",
       linkText: "Läs mer",
-      href: "/features/invitations",
+      href: "/planning-tools",
     },
     {
       id: "f2",
@@ -3030,7 +3030,7 @@ export const DEFAULT_PLANIGATE_FEATURES_SETTINGS: PlanigateFeaturesWidgetSetting
       title: "Gästlista & RSVP",
       description: "Hantera svar, allergier och plus-ones enkelt.",
       linkText: "Läs mer",
-      href: "/features/guests",
+      href: "/tools/guests",
     },
     {
       id: "f3",
@@ -3039,7 +3039,7 @@ export const DEFAULT_PLANIGATE_FEATURES_SETTINGS: PlanigateFeaturesWidgetSetting
       title: "Seating chart",
       description: "Dra och släpp gäster till bord visuellt.",
       linkText: "Läs mer",
-      href: "/features/seating",
+      href: "/tools/seating",
     },
     {
       id: "f4",
@@ -3062,42 +3062,42 @@ export const DEFAULT_PLANIGATE_EVENT_TYPES_SETTINGS: PlanigateEventTypesWidgetSe
       label: "Bröllop",
       image:
         "https://images.unsplash.com/photo-1519741497674-611481863552?w=500&h=600&fit=crop&q=80",
-      href: "/events/wedding",
+      href: "/planner/create?type=wedding",
     },
     {
       id: "e2",
       label: "Födelsedag",
       image:
         "https://images.unsplash.com/photo-1530103862676-de8c9debad1d?w=500&h=600&fit=crop&q=80",
-      href: "/events/birthday",
+      href: "/planner/create?type=birthday",
     },
     {
       id: "e3",
       label: "Företagsevent",
       image:
         "https://images.unsplash.com/photo-1591115765373-5207764f72e7?w=500&h=600&fit=crop&q=80",
-      href: "/events/corporate",
+      href: "/planner/create?type=corporate",
     },
     {
       id: "e4",
       label: "Julbord",
       image:
         "https://images.unsplash.com/photo-1464366400600-7168b8af9bc3?w=500&h=600&fit=crop&q=80",
-      href: "/events/christmas",
+      href: "/planner/create?type=christmas",
     },
     {
       id: "e5",
       label: "Student",
       image:
         "https://images.unsplash.com/photo-1523050854058-8df90110c9f1?w=500&h=600&fit=crop&q=80",
-      href: "/events/graduation",
+      href: "/planner/create?type=graduation",
     },
     {
       id: "e6",
       label: "Dop",
       image:
         "https://images.unsplash.com/photo-1602631985686-1bb2456a9d48?w=500&h=600&fit=crop&q=80",
-      href: "/events/baptism",
+      href: "/planner/create?type=baptism",
     },
   ],
 };
@@ -3171,7 +3171,7 @@ export const DEFAULT_PLANIGATE_CTA_SETTINGS: PlanigateCtaWidgetSettings = {
   heading: "Redo att skapa ditt nästa oförglömliga event?",
   subtitle: "Kom igång gratis – det tar mindre än en minut.",
   primaryButtonText: "Skapa ditt event gratis",
-  primaryButtonHref: "/onboarding",
+  primaryButtonHref: "/register",
   secondaryButtonText: "Boka demo för företag",
   secondaryButtonHref: "/contact",
   backgroundImage:
