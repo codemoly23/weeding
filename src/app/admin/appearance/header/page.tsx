@@ -2104,9 +2104,12 @@ export default function HeaderBuilderPage() {
                           <div className="grid gap-4 md:grid-cols-2">
                             <div className="space-y-2">
                               <Label>Button Text</Label>
-                              <Input
-                                value={btn.text}
-                                onChange={(e) => updateCTAButton(index, { text: e.target.value })}
+                              <LocalizedInput
+                                value={{ en: btn.text, ...(btn.translations?.text || {}) }}
+                                onChange={(next) => updateCTAButton(index, {
+                                  text: next.en ?? "",
+                                  translations: { ...btn.translations, text: next as Record<string, string> },
+                                })}
                               />
                             </div>
                             <div className="space-y-2">

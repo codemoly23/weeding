@@ -90,6 +90,8 @@ export interface CTAButton {
   openInNewTab?: boolean; // Open link in new tab
   // Phase 5: Optional custom style override (backward compatible)
   style?: ButtonCustomStyle;
+  // Per-locale translations: { text: { en, sv } }
+  translations?: Translations | null;
 }
 
 // Announcement Bar Link
@@ -277,6 +279,7 @@ export type FooterWidgetType =
 export interface BottomLink {
   label: string;
   url: string;
+  translations?: Translations | null;
 }
 
 export interface TrustBadge {

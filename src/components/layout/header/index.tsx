@@ -85,6 +85,10 @@ export function Header() {
     const auth = headerConfig.auth;
     return {
       ...headerConfig,
+      cta: (headerConfig.cta || []).map((b) => ({
+        ...b,
+        text: resolveLocalized(b.text, b.translations, "text", lang),
+      })),
       auth: {
         ...auth,
         loginText: resolveLocalized(auth.loginText, auth.translations, "loginText", lang),

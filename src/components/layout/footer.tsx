@@ -1342,7 +1342,7 @@ export function Footer() {
               <nav className="flex flex-wrap gap-4" aria-label="Legal links">
                 {footerConfig.bottomBar.links.map((link, index) => (
                   <Link key={index} href={link.url} className={cn("text-xs", linkClasses)}>
-                    {tr(link.label)}
+                    {localizeFooterField(link.label, link.translations, "label", lang)}
                   </Link>
                 ))}
               </nav>
@@ -1366,7 +1366,7 @@ export function Footer() {
               <nav className={cn("mt-4 flex flex-wrap gap-4", isCentered ? "justify-center" : "justify-start")} aria-label="Legal links">
                 {footerConfig.bottomBar.links.map((link, index) => (
                   <Link key={index} href={link.url} className={cn("text-xs", linkClasses)}>
-                    {tr(link.label)}
+                    {localizeFooterField(link.label, link.translations, "label", lang)}
                   </Link>
                 ))}
               </nav>
@@ -1536,7 +1536,7 @@ export function Footer() {
                     href={link.url}
                     className={cn("text-sm", linkClasses)}
                   >
-                    {tr(link.label)}
+                    {localizeFooterField(link.label, link.translations, "label", lang)}
                   </Link>
                 ))}
               </nav>

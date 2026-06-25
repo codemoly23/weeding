@@ -2208,23 +2208,27 @@ export default function FooterBuilderPage() {
                     ) : (
                       <div className="space-y-2">
                         {formData.bottomLinks.map((link, index) => (
-                          <div key={index} className="flex items-center gap-2">
-                            <Input
-                              value={link.label}
-                              onChange={(e) => updateBottomLink(index, { label: e.target.value })}
-                              placeholder={t("admin.footer.linkLabel")}
-                              className="flex-1"
-                            />
+                          <div key={index} className="flex items-start gap-2">
+                            <div className="flex-1">
+                              <LocalizedInput
+                                value={{ en: link.label, ...(link.translations?.label || {}) }}
+                                placeholder={t("admin.footer.linkLabel")}
+                                onChange={(next) => updateBottomLink(index, {
+                                  label: next.en ?? "",
+                                  translations: { ...link.translations, label: next as Record<string, string> },
+                                })}
+                              />
+                            </div>
                             <Input
                               value={link.url}
                               onChange={(e) => updateBottomLink(index, { url: e.target.value })}
                               placeholder={t("admin.footer.urlPlaceholder")}
-                              className="flex-1"
+                              className="mt-7 flex-1"
                             />
                             <Button
                               variant="ghost"
                               size="icon"
-                              className="text-destructive"
+                              className="mt-7 text-destructive"
                               onClick={() => removeBottomLink(index)}
                             >
                               <Trash2 className="h-4 w-4" />
@@ -3758,25 +3762,29 @@ export default function FooterBuilderPage() {
                 ) : (
                   <div className="max-h-50 space-y-2 overflow-y-auto">
                     {widgetFormData.links.map((link, index) => (
-                      <div key={link.id} className="flex items-center gap-2 rounded-lg border p-2">
-                        <GripVertical className="h-4 w-4 shrink-0 text-muted-foreground" />
-                        <Input
-                          value={link.label}
-                          onChange={(e) => updateWidgetLink(index, { label: e.target.value })}
-                          placeholder={t("admin.footer.linkLabelPlaceholder")}
-                          className="flex-1"
-                        />
+                      <div key={link.id} className="flex items-start gap-2 rounded-lg border p-2">
+                        <GripVertical className="mt-2 h-4 w-4 shrink-0 text-muted-foreground" />
+                        <div className="flex-1">
+                          <LocalizedInput
+                            value={{ en: link.label, ...(link.translations?.label || {}) }}
+                            placeholder={t("admin.footer.linkLabelPlaceholder")}
+                            onChange={(next) => updateWidgetLink(index, {
+                              label: next.en ?? "",
+                              translations: { ...link.translations, label: next as Record<string, string> },
+                            })}
+                          />
+                        </div>
                         <Input
                           value={link.url}
                           onChange={(e) => updateWidgetLink(index, { url: e.target.value })}
                           placeholder={t("admin.footer.urlPlaceholder")}
-                          className="flex-1"
+                          className="mt-7 flex-1"
                         />
                         <Select
                           value={link.target}
                           onValueChange={(value: "_self" | "_blank") => updateWidgetLink(index, { target: value })}
                         >
-                          <SelectTrigger className="w-24">
+                          <SelectTrigger className="mt-7 w-24">
                             <SelectValue />
                           </SelectTrigger>
                           <SelectContent>
@@ -3787,7 +3795,7 @@ export default function FooterBuilderPage() {
                         <Button
                           variant="ghost"
                           size="icon"
-                          className="h-8 w-8 shrink-0 text-destructive"
+                          className="mt-7 h-8 w-8 shrink-0 text-destructive"
                           onClick={() => removeWidgetLink(index)}
                         >
                           <Trash2 className="h-4 w-4" />
