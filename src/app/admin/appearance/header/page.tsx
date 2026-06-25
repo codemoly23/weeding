@@ -2906,6 +2906,18 @@ export default function HeaderBuilderPage() {
                         </div>
                       </div>
 
+                      <div className="pt-2 border-t">
+                        <Label className="text-sm font-medium mb-3 block">Register Button Text</Label>
+                        <LocalizedInput
+                          value={{ en: formData.registerText, ...(formData.translations?.registerText || {}) }}
+                          onChange={(next) => setFormData({
+                            ...formData,
+                            registerText: next.en ?? "",
+                            translations: { ...formData.translations, registerText: next as Record<string, string> },
+                          })}
+                        />
+                      </div>
+
                       <Accordion type="multiple" defaultValue={["colors"]} className="w-full">
                         {/* Colors Section */}
                         <AccordionItem value="colors">
