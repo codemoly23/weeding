@@ -430,6 +430,24 @@ function NewsletterWidget({ widget, headingClasses }: { widget: FooterWidget; he
     placeholder?: string;
     buttonText?: string;
   } | null;
+  const newsletterText = localizeFooterField(
+    nlContent?.text || "Get LLC tips & US business insights",
+    widget.translations,
+    "text",
+    lang,
+  );
+  const newsletterPlaceholder = localizeFooterField(
+    nlContent?.placeholder || "your@email.com",
+    widget.translations,
+    "placeholder",
+    lang,
+  );
+  const newsletterButtonText = localizeFooterField(
+    nlContent?.buttonText || "Subscribe",
+    widget.translations,
+    "buttonText",
+    lang,
+  );
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -464,7 +482,7 @@ function NewsletterWidget({ widget, headingClasses }: { widget: FooterWidget; he
       )}
       <div className={widget.showTitle && widget.title ? "mt-4" : ""}>
         <p className="text-sm opacity-60 mb-3">
-          {tr(nlContent?.text || "Get LLC tips & US business insights")}
+          {newsletterText}
         </p>
         {status === "success" ? (
           <p className="text-sm text-[var(--color-success-text)]">{tr(message)}</p>
@@ -475,7 +493,7 @@ function NewsletterWidget({ widget, headingClasses }: { widget: FooterWidget; he
                 type="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                placeholder={tr(nlContent?.placeholder || "your@email.com")}
+                placeholder={newsletterPlaceholder}
                 className="flex-1 rounded-l-lg border border-white/15 bg-white/5 px-4 py-2.5 text-sm text-inherit placeholder:opacity-40 focus:outline-none focus:ring-1 focus:ring-white/30"
                 aria-label="Email address"
                 required
@@ -486,7 +504,7 @@ function NewsletterWidget({ widget, headingClasses }: { widget: FooterWidget; he
                 disabled={status === "loading"}
                 className="rounded-r-lg bg-(--footer-accent-color,#8A6F3E) px-5 py-2.5 text-sm font-semibold text-white transition-colors hover:opacity-90 disabled:opacity-50"
               >
-                {status === "loading" ? "..." : tr(nlContent?.buttonText || "Subscribe")}
+                {status === "loading" ? "..." : newsletterButtonText}
               </button>
             </form>
             {status === "error" && (
@@ -575,9 +593,8 @@ function translateFooterText(value: string | null | undefined, lang: string): st
   return lang === "sv" ? entry.sv : entry.en;
 }
 
-// Resolve a dynamic field's value: explicit per-locale translation wins, otherwise
-// fall back to the legacy dictionary (translateFooterText). The dictionary fallback
-// is removed once content is backfilled.
+// Resolve a dynamic field's value: explicit per-locale translation wins, then
+// falls back to the legacy dictionary for content not yet backfilled.
 function localizeFooterField(
   value: string | null | undefined,
   translations: unknown,
@@ -585,7 +602,7 @@ function localizeFooterField(
   lang: string,
 ): string {
   const entry = normalizeTranslations(translations)[field] as Record<string, string> | undefined;
-  const explicit = entry?.[lang];
+  const explicit = entry?.[lang] || entry?.en;
   if (explicit) return explicit;
   return translateFooterText(value, lang);
 }
@@ -673,8 +690,20 @@ function FooterWidgetRenderer({
   switch (widget.type) {
     case "BRAND":
       // Use custom tagline from preset or fallback to business description
-      const tagline = brandContent?.tagline || businessConfig.description;
-      const subtitle = brandContent?.subtitle;
+      const tagline = localizeFooterField(
+        brandContent?.tagline || businessConfig.description,
+        widget.translations,
+        "tagline",
+        lang,
+      );
+      const subtitle = localizeFooterField(brandContent?.subtitle, widget.translations, "subtitle", lang);
+      const ctaText = localizeFooterField(brandContent?.ctaText, widget.translations, "ctaText", lang);
+      const secondaryCtaText = localizeFooterField(
+        brandContent?.secondaryCtaText,
+        widget.translations,
+        "secondaryCtaText",
+        lang,
+      );
       const showContact = brandContent?.showContact !== false; // Default true
       const showSocial = brandContent?.showSocial !== false; // Default true (but controlled by separate SOCIAL widget usually)
       const showCTA = brandContent?.showCTA;
@@ -705,14 +734,14 @@ function FooterWidgetRenderer({
           {/* Tagline / Description */}
           {tagline && (
             <p className="max-w-xs text-sm opacity-80">
-              {tr(tagline)}
+              {tagline}
             </p>
           )}
 
           {/* Subtitle (for hero-style footers) */}
           {subtitle && (
             <p className="max-w-md text-xs opacity-60">
-              {tr(subtitle)}
+              {subtitle}
             </p>
           )}
 
@@ -735,21 +764,21 @@ function FooterWidgetRenderer({
           )}
 
           {/* CTA Buttons (from preset) */}
-          {showCTA && brandContent?.ctaText && (
+          {showCTA && ctaText && (
             <div className="flex flex-wrap gap-2 pt-2">
               <Link
                 href={brandContent.ctaUrl || "#"}
                 className="inline-flex items-center gap-2 rounded-lg bg-primary px-4 py-2 text-sm font-medium text-primary-foreground hover:bg-primary/90 transition-colors"
               >
                 {brandContent.ctaIcon === "sparkles" && <Sparkles className="h-4 w-4" />}
-                {tr(brandContent.ctaText)}
+                {ctaText}
               </Link>
-              {brandContent.secondaryCTA && brandContent.secondaryCtaText && (
+              {brandContent.secondaryCTA && secondaryCtaText && (
                 <Link
                   href={brandContent.secondaryCtaUrl || "#"}
                   className="inline-flex items-center gap-2 rounded-lg border border-current px-4 py-2 text-sm font-medium hover:bg-muted transition-colors"
                 >
-                  {tr(brandContent.secondaryCtaText)}
+                  {secondaryCtaText}
                   <ArrowRight className="h-4 w-4" />
                 </Link>
               )}
@@ -882,7 +911,7 @@ function FooterWidgetRenderer({
           )}
           <div className={widget.showTitle && widget.title ? "mt-4" : ""}>
             <p className="text-sm opacity-80">
-              {tr((widget.content as { text?: string })?.text || "")}
+              {localizeFooterField((widget.content as { text?: string })?.text, widget.translations, "text", lang)}
             </p>
           </div>
         </div>
@@ -967,7 +996,7 @@ function FooterWidgetRenderer({
         style?: ButtonCustomStyle;
       } | null;
 
-      const buttonText = tr(buttonContent?.text || "Click Here");
+      const buttonText = localizeFooterField(buttonContent?.text || "Click Here", widget.translations, "text", lang);
       const buttonUrl = buttonContent?.url || "#";
       const buttonOpenInNewTab = buttonContent?.openInNewTab ?? buttonContent?.target === "_blank";
       const buttonStyle = buttonContent?.style || {};
@@ -1233,7 +1262,7 @@ export function Footer() {
   const tr = (value: string | null | undefined) => translateFooterText(value, lang);
   const trCopyright = (value: string | null | undefined) => {
     const copyrightEntry = normalizeTranslations(footerConfig?.bottomBar?.translations)["copyrightText"] as Record<string, string> | undefined;
-    const explicit = copyrightEntry?.[lang];
+    const explicit = copyrightEntry?.[lang] || copyrightEntry?.en;
     if (explicit) return explicit;
     return translateFooterCopyright(value, lang, defaultCopyright);
   };
@@ -1356,7 +1385,7 @@ export function Footer() {
               </p>
               {footerConfig?.bottomBar?.showDisclaimer && (
                 <p className="max-w-xl text-xs opacity-60">
-                  <strong>{tr("Disclaimer")}:</strong>{" "}
+                  <strong>{t("footer.disclaimerLabel")}:</strong>{" "}
                   {localizeFooterField(footerConfig?.bottomBar?.disclaimerText, footerConfig?.bottomBar?.translations, "disclaimerText", lang) ||
                     t("footer.disclaimer", { name: businessConfig.name })}
                 </p>
