@@ -137,7 +137,7 @@ export function PresetGallery({ footerId, onPresetApplied }: PresetGalleryProps)
   return (
     <div className="space-y-6">
       {/* Header */}
-      <div className="flex items-center justify-between">
+      <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div>
           <h3 className="text-lg font-semibold flex items-center gap-2">
             <Sparkles className="h-5 w-5 text-primary" />
@@ -150,9 +150,9 @@ export function PresetGallery({ footerId, onPresetApplied }: PresetGalleryProps)
 
         {/* Category Filter */}
         <div className="flex items-center gap-2">
-          <Filter className="h-4 w-4 text-muted-foreground" />
+          <Filter className="h-4 w-4 shrink-0 text-muted-foreground" />
           <Select value={categoryFilter} onValueChange={setCategoryFilter}>
-            <SelectTrigger className="w-[150px]">
+            <SelectTrigger className="w-full sm:w-[150px]">
               <SelectValue placeholder={t("admin.footer.filterPlaceholder")} />
             </SelectTrigger>
             <SelectContent>

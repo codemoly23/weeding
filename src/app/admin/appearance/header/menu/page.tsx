@@ -685,28 +685,28 @@ export default function MenuBuilderPage() {
           )}
 
           {/* Label */}
-          <span className="flex-1 font-medium">{item.label}</span>
+          <span className="min-w-0 flex-1 truncate font-medium">{item.label}</span>
 
           {/* URL */}
           {item.url && (
-            <span className="text-xs text-muted-foreground">{item.url}</span>
+            <span className="hidden text-xs text-muted-foreground sm:inline">{item.url}</span>
           )}
 
           {/* Badges */}
           {item.isMegaMenu && (
-            <Badge variant="secondary" className="text-xs">
+            <Badge variant="secondary" className="hidden text-xs sm:inline-flex">
               <LayoutGrid className="mr-1 h-3 w-3" />
               Mega Menu
             </Badge>
           )}
           {item.badge && (
-            <Badge variant="outline" className="text-xs">
+            <Badge variant="outline" className="hidden text-xs sm:inline-flex">
               {item.badge}
             </Badge>
           )}
 
           {/* Actions */}
-          <div className="flex items-center gap-1">
+          <div className="flex shrink-0 items-center gap-1">
             <Button
               variant="ghost"
               size="icon"
@@ -836,7 +836,7 @@ export default function MenuBuilderPage() {
   return (
     <div className="space-y-6">
       {/* Page Header */}
-      <div className="flex items-center justify-between">
+      <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div className="flex items-center gap-4">
           <Button variant="ghost" size="icon" asChild>
             <Link href="/admin/appearance/header">
@@ -850,7 +850,7 @@ export default function MenuBuilderPage() {
             </p>
           </div>
         </div>
-        <div className="flex items-center gap-2">
+        <div className="flex flex-wrap items-center gap-2">
           <Button variant="outline" asChild>
             <Link href="/" target="_blank">
               <Eye className="mr-2 h-4 w-4" />

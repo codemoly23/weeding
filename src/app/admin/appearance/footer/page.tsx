@@ -1228,14 +1228,14 @@ export default function FooterBuilderPage() {
   return (
     <div className="space-y-6">
       {/* Page Header */}
-      <div className="flex items-center justify-between">
+      <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div>
           <h1 className="text-2xl font-bold">{t("admin.footer.title")}</h1>
           <p className="text-muted-foreground">
             {t("admin.footer.subtitle")}
           </p>
         </div>
-        <div className="flex items-center gap-2">
+        <div className="flex flex-wrap items-center gap-2">
           <Button variant="outline" asChild>
             <Link href="/" target="_blank">
               <Eye className="mr-2 h-4 w-4" />
@@ -1261,16 +1261,24 @@ export default function FooterBuilderPage() {
             <CardTitle className="text-base">{t("admin.footer.livePreview")}</CardTitle>
             <div className="flex items-center gap-1 rounded-lg bg-muted p-1">
               <Button
-                variant={previewMode === "desktop" ? "secondary" : "ghost"}
+                variant="ghost"
                 size="sm"
                 onClick={() => setPreviewMode("desktop")}
+                className={cn(
+                  previewMode === "desktop" &&
+                    "bg-background text-foreground shadow-sm hover:bg-background"
+                )}
               >
                 <Monitor className="h-4 w-4" />
               </Button>
               <Button
-                variant={previewMode === "mobile" ? "secondary" : "ghost"}
+                variant="ghost"
                 size="sm"
                 onClick={() => setPreviewMode("mobile")}
+                className={cn(
+                  previewMode === "mobile" &&
+                    "bg-background text-foreground shadow-sm hover:bg-background"
+                )}
               >
                 <Smartphone className="h-4 w-4" />
               </Button>
@@ -1931,18 +1939,20 @@ export default function FooterBuilderPage() {
                 onDragOver={handleDragOver}
                 onDragEnd={handleDragEnd}
               >
-                <div className="grid gap-4" style={{ gridTemplateColumns: `repeat(${formData.columns}, 1fr)` }}>
-                  {Array.from({ length: formData.columns }, (_, i) => i + 1).map((column) => (
-                    <DroppableColumn
-                      key={column}
-                      column={column}
-                      widgets={getWidgetsByColumn(column)}
-                      isOver={overColumn === column}
-                      onAddWidget={openWidgetDialog}
-                      onEditWidget={openEditWidgetDialog}
-                      onDeleteWidget={openDeleteWidgetDialog}
-                    />
-                  ))}
+                <div className="overflow-x-auto pb-2">
+                  <div className="grid gap-4" style={{ gridTemplateColumns: `repeat(${formData.columns}, minmax(200px, 1fr))` }}>
+                    {Array.from({ length: formData.columns }, (_, i) => i + 1).map((column) => (
+                      <DroppableColumn
+                        key={column}
+                        column={column}
+                        widgets={getWidgetsByColumn(column)}
+                        isOver={overColumn === column}
+                        onAddWidget={openWidgetDialog}
+                        onEditWidget={openEditWidgetDialog}
+                        onDeleteWidget={openDeleteWidgetDialog}
+                      />
+                    ))}
+                  </div>
                 </div>
                 <DragOverlay>
                   {activeWidget ? (() => {
