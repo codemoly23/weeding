@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import type { PublicHeaderResponse, MenuItem } from "@/lib/header-footer/types";
+import type { PublicHeaderResponse, MenuItem, Translations } from "@/lib/header-footer/types";
 
 interface UseHeaderConfigResult {
   config: PublicHeaderResponse | null;
@@ -158,7 +158,8 @@ export function getMainNavigation(menu: MenuItem[]): {
   hasDropdown: boolean;
   megaMenuColumns?: number;
   megaMenuContent?: unknown;
-  simpleDropdown?: { name: string; href: string; icon?: string }[];
+  simpleDropdown?: { name: string; href: string; icon?: string; translations?: Translations | null }[];
+  translations?: Translations | null;
 }[] {
   return menu
     .filter((item) => item.isVisible && !item.parentId)
@@ -174,10 +175,11 @@ export function getMainNavigation(menu: MenuItem[]): {
         hasDropdown: item.isMegaMenu,
         megaMenuColumns: item.megaMenuColumns ?? undefined,
         megaMenuContent: item.megaMenuContent ?? undefined,
+        translations: item.translations ?? null,
         simpleDropdown: hasSimpleChildren
           ? item.children!
               .filter((c) => c.isVisible)
-              .map((c) => ({ name: c.label, href: c.url || "#", icon: c.icon ?? undefined }))
+              .map((c) => ({ name: c.label, href: c.url || "#", icon: c.icon ?? undefined, translations: c.translations ?? null }))
           : undefined,
       };
     });

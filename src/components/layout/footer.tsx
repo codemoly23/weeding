@@ -80,6 +80,7 @@ import { CRAFT_BG_DARK, WHITE, ORANGE_PRIMARY } from "@/lib/button-constants";
 import { cn } from "@/lib/utils";
 import { FooterLanguageSwitcher } from "@/components/layout/footer-language-switcher";
 import { useLanguage } from "@/lib/i18n/language-context";
+import { normalizeTranslations } from "@/lib/i18n/localized";
 
 // Shared button utilities
 import {
@@ -429,6 +430,24 @@ function NewsletterWidget({ widget, headingClasses }: { widget: FooterWidget; he
     placeholder?: string;
     buttonText?: string;
   } | null;
+  const newsletterText = localizeFooterField(
+    nlContent?.text || "Get LLC tips & US business insights",
+    widget.translations,
+    "text",
+    lang,
+  );
+  const newsletterPlaceholder = localizeFooterField(
+    nlContent?.placeholder || "your@email.com",
+    widget.translations,
+    "placeholder",
+    lang,
+  );
+  const newsletterButtonText = localizeFooterField(
+    nlContent?.buttonText || "Subscribe",
+    widget.translations,
+    "buttonText",
+    lang,
+  );
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -459,11 +478,11 @@ function NewsletterWidget({ widget, headingClasses }: { widget: FooterWidget; he
   return (
     <div>
       {widget.showTitle && widget.title && (
-        <h3 className={headingClasses}>{tr(widget.title)}</h3>
+        <h3 className={headingClasses}>{localizeFooterField(widget.title, widget.translations, "title", lang)}</h3>
       )}
       <div className={widget.showTitle && widget.title ? "mt-4" : ""}>
         <p className="text-sm opacity-60 mb-3">
-          {tr(nlContent?.text || "Get LLC tips & US business insights")}
+          {newsletterText}
         </p>
         {status === "success" ? (
           <p className="text-sm text-[var(--color-success-text)]">{tr(message)}</p>
@@ -474,7 +493,7 @@ function NewsletterWidget({ widget, headingClasses }: { widget: FooterWidget; he
                 type="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                placeholder={tr(nlContent?.placeholder || "your@email.com")}
+                placeholder={newsletterPlaceholder}
                 className="flex-1 rounded-l-lg border border-white/15 bg-white/5 px-4 py-2.5 text-sm text-inherit placeholder:opacity-40 focus:outline-none focus:ring-1 focus:ring-white/30"
                 aria-label="Email address"
                 required
@@ -485,7 +504,7 @@ function NewsletterWidget({ widget, headingClasses }: { widget: FooterWidget; he
                 disabled={status === "loading"}
                 className="rounded-r-lg bg-(--footer-accent-color,#8A6F3E) px-5 py-2.5 text-sm font-semibold text-white transition-colors hover:opacity-90 disabled:opacity-50"
               >
-                {status === "loading" ? "..." : tr(nlContent?.buttonText || "Subscribe")}
+                {status === "loading" ? "..." : newsletterButtonText}
               </button>
             </form>
             {status === "error" && (
@@ -574,6 +593,20 @@ function translateFooterText(value: string | null | undefined, lang: string): st
   return lang === "sv" ? entry.sv : entry.en;
 }
 
+// Resolve a dynamic field's value: explicit per-locale translation wins, then
+// falls back to the legacy dictionary for content not yet backfilled.
+function localizeFooterField(
+  value: string | null | undefined,
+  translations: unknown,
+  field: string,
+  lang: string,
+): string {
+  const entry = normalizeTranslations(translations)[field] as Record<string, string> | undefined;
+  const explicit = entry?.[lang] || entry?.en;
+  if (explicit) return explicit;
+  return translateFooterText(value, lang);
+}
+
 function translateFooterCopyright(
   value: string | null | undefined,
   lang: string,
@@ -657,8 +690,20 @@ function FooterWidgetRenderer({
   switch (widget.type) {
     case "BRAND":
       // Use custom tagline from preset or fallback to business description
-      const tagline = brandContent?.tagline || businessConfig.description;
-      const subtitle = brandContent?.subtitle;
+      const tagline = localizeFooterField(
+        brandContent?.tagline || businessConfig.description,
+        widget.translations,
+        "tagline",
+        lang,
+      );
+      const subtitle = localizeFooterField(brandContent?.subtitle, widget.translations, "subtitle", lang);
+      const ctaText = localizeFooterField(brandContent?.ctaText, widget.translations, "ctaText", lang);
+      const secondaryCtaText = localizeFooterField(
+        brandContent?.secondaryCtaText,
+        widget.translations,
+        "secondaryCtaText",
+        lang,
+      );
       const showContact = brandContent?.showContact !== false; // Default true
       const showSocial = brandContent?.showSocial !== false; // Default true (but controlled by separate SOCIAL widget usually)
       const showCTA = brandContent?.showCTA;
@@ -689,14 +734,14 @@ function FooterWidgetRenderer({
           {/* Tagline / Description */}
           {tagline && (
             <p className="max-w-xs text-sm opacity-80">
-              {tr(tagline)}
+              {tagline}
             </p>
           )}
 
           {/* Subtitle (for hero-style footers) */}
           {subtitle && (
             <p className="max-w-md text-xs opacity-60">
-              {tr(subtitle)}
+              {subtitle}
             </p>
           )}
 
@@ -719,21 +764,21 @@ function FooterWidgetRenderer({
           )}
 
           {/* CTA Buttons (from preset) */}
-          {showCTA && brandContent?.ctaText && (
+          {showCTA && ctaText && (
             <div className="flex flex-wrap gap-2 pt-2">
               <Link
                 href={brandContent.ctaUrl || "#"}
                 className="inline-flex items-center gap-2 rounded-lg bg-primary px-4 py-2 text-sm font-medium text-primary-foreground hover:bg-primary/90 transition-colors"
               >
                 {brandContent.ctaIcon === "sparkles" && <Sparkles className="h-4 w-4" />}
-                {tr(brandContent.ctaText)}
+                {ctaText}
               </Link>
-              {brandContent.secondaryCTA && brandContent.secondaryCtaText && (
+              {brandContent.secondaryCTA && secondaryCtaText && (
                 <Link
                   href={brandContent.secondaryCtaUrl || "#"}
                   className="inline-flex items-center gap-2 rounded-lg border border-current px-4 py-2 text-sm font-medium hover:bg-muted transition-colors"
                 >
-                  {tr(brandContent.secondaryCtaText)}
+                  {secondaryCtaText}
                   <ArrowRight className="h-4 w-4" />
                 </Link>
               )}
@@ -777,11 +822,11 @@ function FooterWidgetRenderer({
       const linkPrefix = footerConfig?.styling?.linkPrefix || "none";
       const HeadingIcon = widget.headingIcon ? HEADING_ICONS[widget.headingIcon] : null;
       return (
-        <nav aria-label={tr(widget.title) || "Footer links"}>
+        <nav aria-label={localizeFooterField(widget.title, widget.translations, "title", lang) || "Footer links"}>
           {widget.showTitle && widget.title && (
             <h3 className={cn(headingClasses, "flex items-center gap-2")}>
               {HeadingIcon && <HeadingIcon className="h-[18px] w-[18px] shrink-0" style={{ color: "var(--footer-accent-color)" }} aria-hidden="true" />}
-              {tr(widget.title)}
+              {localizeFooterField(widget.title, widget.translations, "title", lang)}
             </h3>
           )}
           <ul className={widget.showTitle && widget.title ? "mt-4 space-y-3" : "space-y-3"}>
@@ -794,7 +839,7 @@ function FooterWidgetRenderer({
                   {linkPrefix === "chevron" && <ChevronRight className="h-3 w-3 shrink-0 opacity-50" aria-hidden="true" />}
                   {linkPrefix === "arrow" && <ArrowRight className="h-3 w-3 shrink-0 opacity-50" aria-hidden="true" />}
                   {linkPrefix === "dash" && <span className="opacity-50 leading-none">–</span>}
-                  {tr(link.label)}
+                  {localizeFooterField(link.label, link.translations, "label", lang)}
                 </Link>
               </li>
             ))}
@@ -807,7 +852,7 @@ function FooterWidgetRenderer({
       return (
         <div>
           {widget.showTitle && widget.title && (
-            <h3 className={headingClasses}>{tr(widget.title)}</h3>
+            <h3 className={headingClasses}>{localizeFooterField(widget.title, widget.translations, "title", lang)}</h3>
           )}
           <address className={cn("not-italic", widget.showTitle && widget.title ? "mt-4 space-y-3" : "space-y-3")}>
             {businessConfig.contact.supportEmail && (
@@ -842,7 +887,7 @@ function FooterWidgetRenderer({
       return (
         <div>
           {widget.showTitle && widget.title && (
-            <h3 className={headingClasses}>{tr(widget.title)}</h3>
+            <h3 className={headingClasses}>{localizeFooterField(widget.title, widget.translations, "title", lang)}</h3>
           )}
           <div className={widget.showTitle && widget.title ? "mt-4" : ""}>
             <EnhancedSocialLinks
@@ -862,11 +907,11 @@ function FooterWidgetRenderer({
       return (
         <div>
           {widget.showTitle && widget.title && (
-            <h3 className={headingClasses}>{tr(widget.title)}</h3>
+            <h3 className={headingClasses}>{localizeFooterField(widget.title, widget.translations, "title", lang)}</h3>
           )}
           <div className={widget.showTitle && widget.title ? "mt-4" : ""}>
             <p className="text-sm opacity-80">
-              {tr((widget.content as { text?: string })?.text || "")}
+              {localizeFooterField((widget.content as { text?: string })?.text, widget.translations, "text", lang)}
             </p>
           </div>
         </div>
@@ -876,7 +921,7 @@ function FooterWidgetRenderer({
       return (
         <nav aria-label="Services">
           {widget.showTitle && widget.title && (
-            <h3 className={headingClasses}>{tr(widget.title)}</h3>
+            <h3 className={headingClasses}>{localizeFooterField(widget.title, widget.translations, "title", lang)}</h3>
           )}
           <ul className={widget.showTitle && widget.title ? "mt-4 space-y-3" : "space-y-3"}>
             {fallbackLinks.services.map((link) => (
@@ -897,7 +942,7 @@ function FooterWidgetRenderer({
       return (
         <nav aria-label="Popular states">
           {widget.showTitle && widget.title && (
-            <h3 className={headingClasses}>{tr(widget.title)}</h3>
+            <h3 className={headingClasses}>{localizeFooterField(widget.title, widget.translations, "title", lang)}</h3>
           )}
           <ul className={widget.showTitle && widget.title ? "mt-4 space-y-3" : "space-y-3"}>
             {fallbackLinks.states.map((link) => (
@@ -918,7 +963,7 @@ function FooterWidgetRenderer({
       return (
         <div>
           {widget.showTitle && widget.title && (
-            <h3 className={headingClasses}>{tr(widget.title)}</h3>
+            <h3 className={headingClasses}>{localizeFooterField(widget.title, widget.translations, "title", lang)}</h3>
           )}
           <div className={widget.showTitle && widget.title ? "mt-4 space-y-3" : "space-y-3"}>
             <p className="text-sm opacity-80">
@@ -933,7 +978,7 @@ function FooterWidgetRenderer({
       return (
         <div>
           {widget.showTitle && widget.title && (
-            <h3 className={headingClasses}>{tr(widget.title)}</h3>
+            <h3 className={headingClasses}>{localizeFooterField(widget.title, widget.translations, "title", lang)}</h3>
           )}
           <div
             className={widget.showTitle && widget.title ? "mt-4 prose prose-sm" : "prose prose-sm"}
@@ -951,7 +996,7 @@ function FooterWidgetRenderer({
         style?: ButtonCustomStyle;
       } | null;
 
-      const buttonText = tr(buttonContent?.text || "Click Here");
+      const buttonText = localizeFooterField(buttonContent?.text || "Click Here", widget.translations, "text", lang);
       const buttonUrl = buttonContent?.url || "#";
       const buttonOpenInNewTab = buttonContent?.openInNewTab ?? buttonContent?.target === "_blank";
       const buttonStyle = buttonContent?.style || {};
@@ -959,7 +1004,7 @@ function FooterWidgetRenderer({
       return (
         <div>
           {widget.showTitle && widget.title && (
-            <h3 className={headingClasses}>{tr(widget.title)}</h3>
+            <h3 className={headingClasses}>{localizeFooterField(widget.title, widget.translations, "title", lang)}</h3>
           )}
           <div className={widget.showTitle && widget.title ? "mt-4" : ""}>
             <FooterButton
@@ -979,7 +1024,7 @@ function FooterWidgetRenderer({
       return (
         <div>
           {widget.showTitle && widget.title && (
-            <h3 className={headingClasses}>{tr(widget.title)}</h3>
+            <h3 className={headingClasses}>{localizeFooterField(widget.title, widget.translations, "title", lang)}</h3>
           )}
           <div className={widget.showTitle && widget.title ? "mt-4" : ""}>
             <FooterLanguageSwitcher />
@@ -1215,8 +1260,12 @@ export function Footer() {
     name: businessConfig.name,
   });
   const tr = (value: string | null | undefined) => translateFooterText(value, lang);
-  const trCopyright = (value: string | null | undefined) =>
-    translateFooterCopyright(value, lang, defaultCopyright);
+  const trCopyright = (value: string | null | undefined) => {
+    const copyrightEntry = normalizeTranslations(footerConfig?.bottomBar?.translations)["copyrightText"] as Record<string, string> | undefined;
+    const explicit = copyrightEntry?.[lang] || copyrightEntry?.en;
+    if (explicit) return explicit;
+    return translateFooterCopyright(value, lang, defaultCopyright);
+  };
 
   // Container class for boxed mode
   const containerClass = isBoxed ? "max-w-7xl mx-auto" : "";
@@ -1322,7 +1371,7 @@ export function Footer() {
               <nav className="flex flex-wrap gap-4" aria-label="Legal links">
                 {footerConfig.bottomBar.links.map((link, index) => (
                   <Link key={index} href={link.url} className={cn("text-xs", linkClasses)}>
-                    {tr(link.label)}
+                    {localizeFooterField(link.label, link.translations, "label", lang)}
                   </Link>
                 ))}
               </nav>
@@ -1336,8 +1385,8 @@ export function Footer() {
               </p>
               {footerConfig?.bottomBar?.showDisclaimer && (
                 <p className="max-w-xl text-xs opacity-60">
-                  <strong>{tr("Disclaimer")}:</strong>{" "}
-                  {footerConfig?.bottomBar?.disclaimerText ||
+                  <strong>{t("footer.disclaimerLabel")}:</strong>{" "}
+                  {localizeFooterField(footerConfig?.bottomBar?.disclaimerText, footerConfig?.bottomBar?.translations, "disclaimerText", lang) ||
                     t("footer.disclaimer", { name: businessConfig.name })}
                 </p>
               )}
@@ -1346,7 +1395,7 @@ export function Footer() {
               <nav className={cn("mt-4 flex flex-wrap gap-4", isCentered ? "justify-center" : "justify-start")} aria-label="Legal links">
                 {footerConfig.bottomBar.links.map((link, index) => (
                   <Link key={index} href={link.url} className={cn("text-xs", linkClasses)}>
-                    {tr(link.label)}
+                    {localizeFooterField(link.label, link.translations, "label", lang)}
                   </Link>
                 ))}
               </nav>
@@ -1516,7 +1565,7 @@ export function Footer() {
                     href={link.url}
                     className={cn("text-sm", linkClasses)}
                   >
-                    {tr(link.label)}
+                    {localizeFooterField(link.label, link.translations, "label", lang)}
                   </Link>
                 ))}
               </nav>
@@ -1625,9 +1674,9 @@ export function Footer() {
               {linkWidgets.map((widget) => {
                 const widgetLinks = getWidgetLinks(widget);
                 return (
-                  <nav key={widget.id} className="text-center" aria-label={tr(widget.title) || "Links"}>
+                  <nav key={widget.id} className="text-center" aria-label={localizeFooterField(widget.title, widget.translations, "title", lang) || "Links"}>
                     {widget.showTitle && widget.title && (
-                      <h3 className={headingClasses}>{tr(widget.title)}</h3>
+                      <h3 className={headingClasses}>{localizeFooterField(widget.title, widget.translations, "title", lang)}</h3>
                     )}
                     <ul className="mt-3 space-y-2">
                       {widgetLinks.map((link) => (
@@ -1636,7 +1685,7 @@ export function Footer() {
                             href={link.url}
                             className={cn("text-sm", linkClasses)}
                           >
-                            {tr(link.label)}
+                            {localizeFooterField(link.label, link.translations, "label", lang)}
                           </Link>
                         </li>
                       ))}

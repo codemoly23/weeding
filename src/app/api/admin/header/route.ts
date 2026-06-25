@@ -30,6 +30,8 @@ const headerConfigSchema = z.object({
   textColor: z.string().optional().nullable(),
   hoverColor: z.string().optional().nullable(),
   height: z.number().default(64),
+  // Per-locale translations: { fieldName: { en, sv } }
+  translations: z.any().nullable().optional(),
 });
 
 // Safely parse a JSON field that may already be an object or a JSON string
@@ -79,6 +81,7 @@ export async function GET() {
         topBarContent: safeJsonParse(h.topBarContent, null),
         loginStyle: safeJsonParse(h.loginStyle, null),
         registerStyle: safeJsonParse(h.registerStyle, null),
+        translations: safeJsonParse(h.translations, null),
         menuItemsCount: h._count.menuItems,
       })),
       total: headers.length,
@@ -102,7 +105,7 @@ export async function POST(request: NextRequest) {
 
     const body = await request.json();
     const validatedData = headerConfigSchema.parse(body);
-    const { ctaButtons, topBarContent, loginStyle, registerStyle, ...headerData } = validatedData;
+    const { ctaButtons, topBarContent, loginStyle, registerStyle, translations, ...headerData } = validatedData;
 
     const header = await prisma.headerConfig.create({
       data: {
@@ -111,6 +114,7 @@ export async function POST(request: NextRequest) {
         topBarContent: topBarContent ? JSON.stringify(topBarContent) : Prisma.DbNull,
         loginStyle: loginStyle ? JSON.stringify(loginStyle) : Prisma.DbNull,
         registerStyle: registerStyle ? JSON.stringify(registerStyle) : Prisma.DbNull,
+        translations: translations ? JSON.stringify(translations) : Prisma.DbNull,
       },
     });
 
@@ -154,7 +158,7 @@ export async function PUT(request: NextRequest) {
 
     const validatedData = headerConfigSchema.partial().parse(data);
     console.log("PUT /api/admin/header - Validated data keys:", Object.keys(validatedData));
-    const { ctaButtons, topBarContent, loginStyle, registerStyle, ...headerData } = validatedData;
+    const { ctaButtons, topBarContent, loginStyle, registerStyle, translations, ...headerData } = validatedData;
     console.log("PUT /api/admin/header - headerData keys:", Object.keys(headerData));
 
     // If setting this header as active, deactivate others
@@ -171,6 +175,7 @@ export async function PUT(request: NextRequest) {
       ...(topBarContent !== undefined && { topBarContent: JSON.stringify(topBarContent) }),
       ...(loginStyle !== undefined && { loginStyle: JSON.stringify(loginStyle) }),
       ...(registerStyle !== undefined && { registerStyle: JSON.stringify(registerStyle) }),
+      ...(translations !== undefined && { translations: translations ? JSON.stringify(translations) : Prisma.DbNull }),
     };
     console.log("PUT /api/admin/header - Update data for Prisma:", JSON.stringify(updateData, null, 2));
 

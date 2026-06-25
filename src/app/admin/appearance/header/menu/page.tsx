@@ -71,7 +71,8 @@ import {
 import { Textarea } from "@/components/ui/textarea";
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
-import type { MenuItem, HeaderConfig } from "@/lib/header-footer/types";
+import type { MenuItem, HeaderConfig, Translations } from "@/lib/header-footer/types";
+import { LocalizedInput } from "@/components/admin/LocalizedInput";
 
 interface MenuItemWithChildren extends MenuItem {
   children: MenuItemWithChildren[];
@@ -91,6 +92,7 @@ const defaultFormData = {
   categoryIcon: "",
   categoryDesc: "",
   parentId: null as string | null,
+  translations: {} as Translations,
 };
 
 export default function MenuBuilderPage() {
@@ -247,6 +249,7 @@ export default function MenuBuilderPage() {
       categoryIcon: item.categoryIcon || "",
       categoryDesc: item.categoryDesc || "",
       parentId: item.parentId || null,
+      translations: item.translations || {},
     });
     setDialogOpen(true);
   }
@@ -932,11 +935,15 @@ export default function MenuBuilderPage() {
             <div className="grid gap-4 md:grid-cols-2">
               <div className="space-y-2">
                 <Label htmlFor="label">Label *</Label>
-                <Input
+                <LocalizedInput
                   id="label"
-                  value={formData.label}
-                  onChange={(e) => setFormData({ ...formData, label: e.target.value })}
                   placeholder="e.g., Services"
+                  value={{ en: formData.label, ...(formData.translations?.label || {}) }}
+                  onChange={(next) => setFormData({
+                    ...formData,
+                    label: next.en ?? "",
+                    translations: { ...formData.translations, label: next as Record<string, string> },
+                  })}
                 />
               </div>
               <div className="space-y-2">
