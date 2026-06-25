@@ -21,6 +21,8 @@ const menuItemSchema = z.object({
   categoryIcon: z.string().optional().nullable(),
   categoryDesc: z.string().optional().nullable(),
   megaMenuContent: z.record(z.string(), z.unknown()).optional().nullable(),
+  // Per-locale translations: { fieldName: { en, sv } }
+  translations: z.record(z.string(), z.unknown()).optional().nullable(),
   sortOrder: z.number().default(0),
 });
 
@@ -94,7 +96,7 @@ export async function POST(request: NextRequest) {
       _max: { sortOrder: true },
     });
 
-    const { megaMenuContent, ...restValidatedData } = validatedData;
+    const { megaMenuContent, translations, ...restValidatedData } = validatedData;
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const createData: any = {
       ...restValidatedData,
@@ -102,6 +104,9 @@ export async function POST(request: NextRequest) {
     };
     if (megaMenuContent !== undefined) {
       createData.megaMenuContent = megaMenuContent === null ? Prisma.JsonNull : megaMenuContent;
+    }
+    if (translations !== undefined) {
+      createData.translations = translations === null ? Prisma.JsonNull : translations;
     }
     const menuItem = await prisma.menuItem.create({ data: createData });
 
@@ -140,7 +145,7 @@ export async function PUT(request: NextRequest) {
     }
 
     const validatedData = menuItemSchema.omit({ sortOrder: true }).partial().parse(data);
-    const { megaMenuContent, ...restValidatedData } = validatedData;
+    const { megaMenuContent, translations, ...restValidatedData } = validatedData;
 
     // Only update fields that were explicitly sent in the request.
     // Zod fills in defaults for absent fields (e.g. isMegaMenu: false), so we
@@ -155,6 +160,9 @@ export async function PUT(request: NextRequest) {
     }
     if (megaMenuContent !== undefined) {
       updateData.megaMenuContent = megaMenuContent === null ? Prisma.JsonNull : megaMenuContent;
+    }
+    if (translations !== undefined) {
+      updateData.translations = translations === null ? Prisma.JsonNull : translations;
     }
     const menuItem = await prisma.menuItem.update({
       where: { id },

@@ -6,6 +6,8 @@ import { cn } from "@/lib/utils";
 import { useBusinessConfig } from "@/hooks/use-business-config";
 import { useHeaderConfig, getMegaMenuCategories, getAllMegaMenuCategories, getMainNavigation } from "@/hooks/use-header-config";
 import { useScrollTransparency } from "./hooks/useScrollTransparency";
+import { useLanguage } from "@/lib/i18n/language-context";
+import { resolveLocalized } from "@/lib/i18n/localized";
 import { TopBar } from "./components/TopBar";
 import { HeaderDefault } from "./layouts/HeaderDefault";
 import { HeaderCentered } from "./layouts/HeaderCentered";
@@ -44,6 +46,7 @@ const fallbackNavigation: NavigationItem[] = [
 export function Header() {
   const { config: businessConfig } = useBusinessConfig();
   const { config: headerConfig, isLoading: headerLoading } = useHeaderConfig();
+  const { lang } = useLanguage();
   const { data: session, status } = useSession();
   const [user, setUser] = useState<LoggedInUser | null>(null);
 
@@ -74,6 +77,21 @@ export function Header() {
     }
     return {};
   }, [headerConfig?.menu]);
+
+  // Resolve auth button text to the active language (dynamic content translation).
+  // Done centrally so every layout / CTAButtons / MobileMenu gets the localized text.
+  const localizedConfig = useMemo(() => {
+    if (!headerConfig) return headerConfig;
+    const auth = headerConfig.auth;
+    return {
+      ...headerConfig,
+      auth: {
+        ...auth,
+        loginText: resolveLocalized(auth.loginText, auth.translations, "loginText", lang),
+        registerText: resolveLocalized(auth.registerText, auth.translations, "registerText", lang),
+      },
+    };
+  }, [headerConfig, lang]);
 
   // Synchronously pre-populate user from localStorage before first paint to avoid flicker
   useIsomorphicLayoutEffect(() => {
@@ -175,7 +193,7 @@ export function Header() {
 
   // Common layout props
   const layoutProps = {
-    config: headerConfig!,
+    config: localizedConfig!,
     navigation,
     serviceCategories,
     allServiceCategories,

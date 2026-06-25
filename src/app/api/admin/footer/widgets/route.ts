@@ -51,7 +51,31 @@ const widgetSchema = z.object({
   column: z.number().min(1).max(6).default(1),
   sortOrder: z.number().default(0),
   customClass: z.string().optional(),
+  // Per-locale translations: { fieldName: { en, sv } } (e.g. widget title)
+  translations: z.any().optional().nullable(),
 });
+
+// A footer-widget link (MenuItem) optionally carrying per-locale label translations
+type WidgetLinkInput = {
+  label: string;
+  url: string;
+  target: string;
+  sortOrder: number;
+  isVisible: boolean;
+  translations?: Record<string, unknown> | null;
+};
+
+// Map an incoming link to a Prisma nested-create payload, preserving translations
+function toLinkCreate(item: WidgetLinkInput) {
+  return {
+    label: item.label,
+    url: item.url,
+    target: item.target || "_self",
+    sortOrder: item.sortOrder,
+    isVisible: item.isVisible ?? true,
+    ...(item.translations ? { translations: item.translations } : {}),
+  };
+}
 
 // GET /api/admin/footer/widgets - Get all widgets for a footer
 export async function GET(request: NextRequest) {
@@ -85,6 +109,7 @@ export async function GET(request: NextRequest) {
       widgets: widgets.map((w) => ({
         ...w,
         content: safeJsonParse(w.content, null),
+        translations: safeJsonParse(w.translations, null),
       })),
       total: widgets.length,
     });
@@ -108,7 +133,7 @@ export async function POST(request: NextRequest) {
     const body = await request.json();
     const { menuItems, ...restBody } = body;
     const validatedData = widgetSchema.parse(restBody);
-    const { content, ...widgetData } = validatedData;
+    const { content, translations, ...widgetData } = validatedData;
 
     // Get the max sortOrder for this column
     const maxSortOrder = await prisma.footerWidget.aggregate({
@@ -123,17 +148,12 @@ export async function POST(request: NextRequest) {
       data: {
         ...widgetData,
         content: content ? JSON.stringify(content) : Prisma.DbNull,
+        translations: translations ? JSON.stringify(translations) : Prisma.DbNull,
         sortOrder: (maxSortOrder._max.sortOrder ?? -1) + 1,
         // Create menu items if provided (for LINKS widget)
         ...(menuItems && menuItems.length > 0 && {
           menuItems: {
-            create: menuItems.map((item: { label: string; url: string; target: string; sortOrder: number; isVisible: boolean }) => ({
-              label: item.label,
-              url: item.url,
-              target: item.target || "_self",
-              sortOrder: item.sortOrder,
-              isVisible: item.isVisible ?? true,
-            })),
+            create: (menuItems as WidgetLinkInput[]).map(toLinkCreate),
           },
         }),
       },
@@ -185,7 +205,7 @@ export async function PUT(request: NextRequest) {
     }
 
     const validatedData = widgetSchema.partial().parse(data);
-    const { content, ...widgetData } = validatedData;
+    const { content, translations, ...widgetData } = validatedData;
 
     // If menuItems are provided, handle them in a transaction
     if (menuItems !== undefined) {
@@ -201,15 +221,10 @@ export async function PUT(request: NextRequest) {
           data: {
             ...widgetData,
             ...(content !== undefined && { content: JSON.stringify(content) }),
+            ...(translations !== undefined && { translations: translations ? JSON.stringify(translations) : Prisma.DbNull }),
             ...(menuItems && menuItems.length > 0 && {
               menuItems: {
-                create: menuItems.map((item: { label: string; url: string; target: string; sortOrder: number; isVisible: boolean }) => ({
-                  label: item.label,
-                  url: item.url,
-                  target: item.target || "_self",
-                  sortOrder: item.sortOrder,
-                  isVisible: item.isVisible ?? true,
-                })),
+                create: (menuItems as WidgetLinkInput[]).map(toLinkCreate),
               },
             }),
           },
@@ -233,6 +248,7 @@ export async function PUT(request: NextRequest) {
       data: {
         ...widgetData,
         ...(content !== undefined && { content: JSON.stringify(content) }),
+        ...(translations !== undefined && { translations: translations ? JSON.stringify(translations) : Prisma.DbNull }),
       },
       include: {
         menuItems: {

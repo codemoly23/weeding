@@ -1,7 +1,7 @@
 "use client";
 
 import type { Session } from "next-auth";
-import type { PublicHeaderResponse, CTAButton, ButtonCustomStyle, TopBarContent } from "@/lib/header-footer/types";
+import type { PublicHeaderResponse, CTAButton, ButtonCustomStyle, TopBarContent, Translations } from "@/lib/header-footer/types";
 
 export interface LoggedInUser {
   id: string;
@@ -16,7 +16,8 @@ export interface NavigationItem {
   hasDropdown: boolean;
   megaMenuColumns?: number;
   megaMenuContent?: unknown;
-  simpleDropdown?: { name: string; href: string; icon?: string }[];
+  simpleDropdown?: { name: string; href: string; icon?: string; translations?: Translations | null }[];
+  translations?: Translations | null;
 }
 
 export interface ServiceCategory {

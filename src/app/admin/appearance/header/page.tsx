@@ -45,7 +45,8 @@ import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
-import type { HeaderConfig, HeaderLayout, CTAButton, ButtonHoverEffect, ButtonCustomStyle, GradientDirection, TopBarContent, AnnouncementBarStyle, AnnouncementBarPreset, AnnouncementItem, AnimationEffect, AnimationMode } from "@/lib/header-footer/types";
+import type { HeaderConfig, HeaderLayout, CTAButton, ButtonHoverEffect, ButtonCustomStyle, GradientDirection, TopBarContent, AnnouncementBarStyle, AnnouncementBarPreset, AnnouncementItem, AnimationEffect, AnimationMode, Translations } from "@/lib/header-footer/types";
+import { LocalizedInput } from "@/components/admin/LocalizedInput";
 import {
   Accordion,
   AccordionContent,
@@ -553,6 +554,7 @@ export default function HeaderBuilderPage() {
     textColor: "",
     hoverColor: "",
     ctaButtons: [] as CTAButton[],
+    translations: {} as Translations,
   });
 
   useEffect(() => {
@@ -612,6 +614,7 @@ export default function HeaderBuilderPage() {
               borderWidth: 1,
             },
           })),
+          translations: activeHeader.translations || {},
         });
       }
     } catch (error) {
@@ -2878,9 +2881,13 @@ export default function HeaderBuilderPage() {
                       <div className="grid gap-4 md:grid-cols-2">
                         <div className="space-y-2">
                           <Label>Button Text</Label>
-                          <Input
-                            value={formData.loginText}
-                            onChange={(e) => setFormData({ ...formData, loginText: e.target.value })}
+                          <LocalizedInput
+                            value={{ en: formData.loginText, ...(formData.translations?.loginText || {}) }}
+                            onChange={(next) => setFormData({
+                              ...formData,
+                              loginText: next.en ?? "",
+                              translations: { ...formData.translations, loginText: next as Record<string, string> },
+                            })}
                           />
                         </div>
                         <div className="space-y-2">

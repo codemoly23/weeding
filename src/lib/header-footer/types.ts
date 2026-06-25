@@ -174,6 +174,13 @@ export interface TopBarContent {
   showSocial?: boolean;
 }
 
+/**
+ * Per-record translations for dynamic content, shaped as
+ * `{ fieldName: { localeCode: value } }`, e.g. `{ label: { en: "Home", sv: "Hem" } }`.
+ * Backs the `translations` JSON column on header/footer models.
+ */
+export type Translations = Record<string, Record<string, string>>;
+
 export interface MenuItem {
   id: string;
   label: string;
@@ -192,6 +199,7 @@ export interface MenuItem {
   sortOrder: number;
   children?: MenuItem[];
   megaMenuContent?: unknown;
+  translations?: Translations | null;
 }
 
 export interface HeaderConfig {
@@ -221,6 +229,7 @@ export interface HeaderConfig {
   height: number;
   menuItems?: MenuItem[];
   menuItemsCount?: number;
+  translations?: Translations | null;
   createdAt: string;
   updatedAt: string;
 }
@@ -289,6 +298,7 @@ export interface FooterWidgetLink {
   icon?: string | null;
   isVisible: boolean;
   sortOrder: number;
+  translations?: Translations | null;
 }
 
 export interface FooterWidget {
@@ -304,6 +314,7 @@ export interface FooterWidget {
   customClass?: string | null;
   menuItems?: FooterWidgetLink[];
   linksCount?: number;
+  translations?: Translations | null;
 }
 
 // Responsive columns configuration
@@ -371,6 +382,9 @@ export interface FooterConfig {
   showDisclaimer: boolean;
   disclaimerText?: string | null;
   bottomLinks?: BottomLink[];
+
+  // Per-locale translations: { fieldName: { en, sv } }
+  translations?: Translations | null;
 
   // Trust Badges
   showTrustBadges: boolean;
@@ -509,6 +523,7 @@ export interface PublicHeaderResponse {
     loginStyle?: ButtonCustomStyle;
     registerText: string;
     registerUrl: string;
+    translations?: Translations | null;
   };
   search: {
     enabled: boolean;
@@ -550,6 +565,7 @@ export interface PublicFooterResponse {
     showDisclaimer: boolean;
     disclaimerText?: string;
     links: BottomLink[];
+    translations?: Translations | null;
   };
   trustBadges: {
     show: boolean;

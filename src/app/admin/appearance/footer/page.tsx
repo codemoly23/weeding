@@ -99,7 +99,8 @@ import {
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
 import { useBusinessConfig } from "@/hooks/use-business-config";
-import type { FooterConfig, FooterWidget, FooterWidgetType, FooterLayout, BottomLink, TrustBadge, FooterWidgetLink, ButtonHoverEffect, ButtonCustomStyle, GradientDirection } from "@/lib/header-footer/types";
+import type { FooterConfig, FooterWidget, FooterWidgetType, FooterLayout, BottomLink, TrustBadge, FooterWidgetLink, ButtonHoverEffect, ButtonCustomStyle, GradientDirection, Translations } from "@/lib/header-footer/types";
+import { LocalizedInput } from "@/components/admin/LocalizedInput";
 import {
   Accordion,
   AccordionContent,
@@ -364,6 +365,7 @@ interface WidgetLink {
   label: string;
   url: string;
   target: "_self" | "_blank";
+  translations?: Translations | null;
 }
 
 const defaultWidgetFormData = {
@@ -374,6 +376,7 @@ const defaultWidgetFormData = {
   column: 1,
   content: {} as Record<string, unknown>,
   links: [] as WidgetLink[],
+  translations: {} as Translations,
 };
 
 // Sortable Widget Component
@@ -617,6 +620,7 @@ export default function FooterBuilderPage() {
     copyrightText: "",
     showDisclaimer: true,
     disclaimerText: "",
+    translations: {} as Translations,
     bottomLinks: [] as BottomLink[],
     showTrustBadges: false,
     trustBadges: [] as TrustBadge[],
@@ -709,6 +713,7 @@ export default function FooterBuilderPage() {
           copyrightText: activeFooter.copyrightText || "",
           showDisclaimer: activeFooter.showDisclaimer,
           disclaimerText: activeFooter.disclaimerText || "",
+          translations: activeFooter.translations || {},
           bottomLinks: activeFooter.bottomLinks || [],
           showTrustBadges: activeFooter.showTrustBadges,
           trustBadges: activeFooter.trustBadges || [],
@@ -805,6 +810,7 @@ export default function FooterBuilderPage() {
           copyrightText: formData.copyrightText || null,
           showDisclaimer: formData.showDisclaimer,
           disclaimerText: formData.disclaimerText || null,
+          translations: formData.translations,
           bottomLinks: formData.bottomLinks,
           // Trust Badges
           showTrustBadges: formData.showTrustBadges,
@@ -903,6 +909,7 @@ export default function FooterBuilderPage() {
       label: item.label,
       url: item.url || "",
       target: item.target,
+      translations: item.translations || null,
     })) || [];
 
     setWidgetFormData({
@@ -913,6 +920,7 @@ export default function FooterBuilderPage() {
       column: widget.column,
       content: widget.content || {},
       links,
+      translations: widget.translations || {},
     });
     setWidgetDialogOpen(true);
   }
@@ -939,6 +947,7 @@ export default function FooterBuilderPage() {
             target: link.target,
             sortOrder: index,
             isVisible: true,
+            ...(link.translations ? { translations: link.translations } : {}),
           }))
         : undefined;
 
@@ -951,6 +960,7 @@ export default function FooterBuilderPage() {
         headingIcon: widgetFormData.headingIcon || null,
         column: widgetFormData.column,
         content: widgetFormData.content,
+        translations: widgetFormData.translations,
         menuItems,
       };
 
@@ -2154,27 +2164,32 @@ export default function FooterBuilderPage() {
 
               {formData.bottomBarEnabled && (
                 <>
-                  <div className="space-y-2">
-                    <Label htmlFor="copyrightText">{t("admin.footer.copyrightText")}</Label>
-                    <Input
-                      id="copyrightText"
-                      value={formData.copyrightText}
-                      onChange={(e) => setFormData({ ...formData, copyrightText: e.target.value })}
-                      placeholder={t("admin.footer.copyrightPlaceholder")}
-                    />
-                  </div>
+                  <LocalizedInput
+                    id="copyrightText"
+                    label={t("admin.footer.copyrightText")}
+                    placeholder={t("admin.footer.copyrightPlaceholder")}
+                    value={{ en: formData.copyrightText, ...(formData.translations?.copyrightText || {}) }}
+                    onChange={(next) => setFormData({
+                      ...formData,
+                      copyrightText: next.en ?? "",
+                      translations: { ...formData.translations, copyrightText: next as Record<string, string> },
+                    })}
+                  />
 
                   {formData.showDisclaimer && (
-                    <div className="space-y-2">
-                      <Label htmlFor="disclaimerText">{t("admin.footer.disclaimerText")}</Label>
-                      <Textarea
-                        id="disclaimerText"
-                        value={formData.disclaimerText}
-                        onChange={(e) => setFormData({ ...formData, disclaimerText: e.target.value })}
-                        placeholder={t("admin.footer.disclaimerPlaceholder")}
-                        rows={3}
-                      />
-                    </div>
+                    <LocalizedInput
+                      id="disclaimerText"
+                      textarea
+                      rows={3}
+                      label={t("admin.footer.disclaimerText")}
+                      placeholder={t("admin.footer.disclaimerPlaceholder")}
+                      value={{ en: formData.disclaimerText, ...(formData.translations?.disclaimerText || {}) }}
+                      onChange={(next) => setFormData({
+                        ...formData,
+                        disclaimerText: next.en ?? "",
+                        translations: { ...formData.translations, disclaimerText: next as Record<string, string> },
+                      })}
+                    />
                   )}
 
                   <Separator />
@@ -3644,15 +3659,17 @@ export default function FooterBuilderPage() {
               </Select>
             </div>
 
-            <div className="space-y-2">
-              <Label htmlFor="widgetTitle">{t("admin.footer.widgetTitleLabel")}</Label>
-              <Input
-                id="widgetTitle"
-                value={widgetFormData.title}
-                onChange={(e) => setWidgetFormData({ ...widgetFormData, title: e.target.value })}
-                placeholder={t("admin.footer.widgetTitlePlaceholder")}
-              />
-            </div>
+            <LocalizedInput
+              id="widgetTitle"
+              label={t("admin.footer.widgetTitleLabel")}
+              placeholder={t("admin.footer.widgetTitlePlaceholder")}
+              value={{ en: widgetFormData.title, ...(widgetFormData.translations?.title || {}) }}
+              onChange={(next) => setWidgetFormData({
+                ...widgetFormData,
+                title: next.en ?? "",
+                translations: { ...widgetFormData.translations, title: next as Record<string, string> },
+              })}
+            />
 
             <div className="flex items-center justify-between rounded-lg border p-4">
               <div>

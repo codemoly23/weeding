@@ -94,6 +94,8 @@ const footerConfigSchema = z.object({
   customJS: z.string().nullable().optional(),
   // Preset reference
   presetId: z.string().nullable().optional(),
+  // Per-locale translations: { fieldName: { en, sv } }
+  translations: z.any().nullable().optional(),
 });
 
 // GET /api/admin/footer - Get all footer configs
@@ -145,6 +147,7 @@ export async function GET() {
         trustBadges: safeJsonParse(f.trustBadges, []),
         bgGradient: safeJsonParse(f.bgGradient, null),
         responsiveColumns: safeJsonParse(f.responsiveColumns, null),
+        translations: safeJsonParse(f.translations, null),
         widgets: f.widgets.map((w) => ({
           ...w,
           content: safeJsonParse(w.content, null),
@@ -176,6 +179,7 @@ export async function POST(request: NextRequest) {
     const { bottomLinks, trustBadges, bgGradient, responsiveColumns, sectionOrder,
       topBorderGradientFrom, topBorderGradientTo,
       brandRevealEnabled, brandRevealText, brandRevealColor, brandRevealOpacity,
+      translations,
       ...footerData } = validatedData;
 
     const footer = await prisma.footerConfig.create({
@@ -185,6 +189,7 @@ export async function POST(request: NextRequest) {
         trustBadges: trustBadges ? JSON.stringify(trustBadges) : Prisma.DbNull,
         bgGradient: bgGradient ? JSON.stringify(bgGradient) : Prisma.DbNull,
         responsiveColumns: responsiveColumns ? JSON.stringify(responsiveColumns) : Prisma.DbNull,
+        translations: translations ? JSON.stringify(translations) : Prisma.DbNull,
         sectionOrder: sectionOrder || [],
       },
     });
@@ -239,6 +244,7 @@ export async function PUT(request: NextRequest) {
     const { bottomLinks, trustBadges, bgGradient, responsiveColumns, sectionOrder,
       topBorderGradientFrom, topBorderGradientTo,
       brandRevealEnabled, brandRevealText, brandRevealColor, brandRevealOpacity,
+      translations,
       ...footerData } = validatedData;
 
     // If setting this footer as active, deactivate others
@@ -257,6 +263,7 @@ export async function PUT(request: NextRequest) {
         ...(trustBadges !== undefined && { trustBadges: JSON.stringify(trustBadges) }),
         ...(bgGradient !== undefined && { bgGradient: bgGradient ? JSON.stringify(bgGradient) : Prisma.DbNull }),
         ...(responsiveColumns !== undefined && { responsiveColumns: responsiveColumns ? JSON.stringify(responsiveColumns) : Prisma.DbNull }),
+        ...(translations !== undefined && { translations: translations ? JSON.stringify(translations) : Prisma.DbNull }),
         ...(sectionOrder !== undefined && { sectionOrder: sectionOrder || [] }),
       },
     });

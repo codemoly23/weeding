@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import type { PublicFooterResponse, FooterWidget } from "@/lib/header-footer/types";
+import type { PublicFooterResponse, FooterWidget, Translations } from "@/lib/header-footer/types";
 
 interface UseFooterConfigResult {
   config: PublicFooterResponse | null;
@@ -93,21 +93,23 @@ export function getWidgetsByColumn(widgets: FooterWidget[], column: number): Foo
 
 // Helper to get all links from a LINKS widget
 // Note: Public API returns 'links', admin API returns 'menuItems'
-export function getWidgetLinks(widget: FooterWidget): { id: string; label: string; url: string }[] {
+export function getWidgetLinks(widget: FooterWidget): { id: string; label: string; url: string; translations?: Translations | null }[] {
   if (widget.type !== "LINKS") {
     return [];
   }
 
   // Check for 'links' first (public API format), then 'menuItems' (admin API format)
-  const items = (widget as unknown as { links?: { id: string; label: string; url: string }[] }).links || widget.menuItems;
+  type LinkItem = { id: string; label: string; url?: string | null; translations?: Translations | null };
+  const items = (widget as unknown as { links?: LinkItem[] }).links || widget.menuItems;
 
   if (!items || items.length === 0) {
     return [];
   }
 
-  return items.map((item) => ({
+  return (items as LinkItem[]).map((item) => ({
     id: item.id,
     label: item.label,
     url: item.url || "#",
+    translations: item.translations ?? null,
   }));
 }

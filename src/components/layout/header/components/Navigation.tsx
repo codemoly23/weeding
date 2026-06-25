@@ -406,7 +406,7 @@ function MegaMenuDropdown({ categories, columns, richContent }: MegaMenuProps) {
   );
 }
 
-function SimpleDropdown({ links }: { links: { name: string; href: string; icon?: string }[] }) {
+function SimpleDropdown({ links }: { links: { name: string; href: string; icon?: string; translations?: unknown }[] }) {
   const { t, lang } = useLanguage();
 
   return (
@@ -426,7 +426,7 @@ function SimpleDropdown({ links }: { links: { name: string; href: string; icon?:
                   <Icon className="h-3.5 w-3.5 text-foreground/70" />
                 </span>
               )}
-              {getNavLabel(link.name, t, lang)}
+              {getNavLabel(link.name, t, lang, link.translations)}
             </Link>
           );
         })}
@@ -485,7 +485,7 @@ export function Navigation({
     <div className="flex items-center gap-x-3 xl:gap-x-5">
       {displayItems.map((item) => {
         const isHovered = hoveredItem === item.name;
-        const label = getNavLabel(item.name, t, lang);
+        const label = getNavLabel(item.name, t, lang, item.translations);
 
         return (
           <div
