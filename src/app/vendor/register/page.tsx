@@ -3,6 +3,7 @@
 import { useState, useEffect, useRef, Suspense } from "react";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
+import { signIn } from "next-auth/react";
 import {
   Check, ChevronRight, Store, Camera, MapPin,
   User, Mail, Lock, Phone, Building2,
@@ -149,7 +150,19 @@ function VendorRegisterContent() {
         setError(data.error || "Registration failed. Please try again.");
         return;
       }
-      setStep(3);
+
+      const loginResult = await signIn("credentials", {
+        email: form.email,
+        password: form.password,
+        redirect: false,
+      });
+
+      if (loginResult?.ok) {
+        router.push("/vendor/dashboard");
+        router.refresh();
+      } else {
+        setStep(3);
+      }
     } catch {
       setError("Network error. Please try again.");
     } finally {
