@@ -153,6 +153,7 @@ export async function GET() {
         enabled: footer.bottomBarEnabled,
         layout: footer.bottomBarLayout || "split",
         copyrightText: footer.copyrightText,
+        copyrightLinkUrl: footer.copyrightLinkUrl || null,
         showDisclaimer: footer.showDisclaimer,
         disclaimerText: footer.disclaimerText,
         links: safeJsonParse(footer.bottomLinks, []),

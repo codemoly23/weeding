@@ -1218,6 +1218,38 @@ export function Footer() {
   const trCopyright = (value: string | null | undefined) =>
     translateFooterCopyright(value, lang, defaultCopyright);
 
+  // Renders copyright text — supports copyrightLinkUrl to auto-link the brand name
+  const renderCopyright = (value: string | null | undefined, linkUrl?: string | null) => {
+    const text = trCopyright(value);
+    const isExternal = (url: string) => url.startsWith("http");
+    const linkClass = "hover:underline hover:underline-offset-2 transition-all";
+
+    // If a brand link URL is set, find the brand name and make it clickable
+    if (linkUrl) {
+      const brandMatch = text.match(/©\s*\d{4}\s+(.+?)[.,]/);
+      const brand = brandMatch?.[1]?.trim();
+      if (brand) {
+        const idx = text.indexOf(brand);
+        if (idx !== -1) {
+          return [
+            text.slice(0, idx),
+            <a
+              key="brand"
+              href={linkUrl}
+              {...(isExternal(linkUrl) ? { target: "_blank", rel: "noopener noreferrer" } : {})}
+              className={linkClass}
+            >
+              {brand}
+            </a>,
+            text.slice(idx + brand.length),
+          ];
+        }
+      }
+    }
+
+    return text;
+  };
+
   // Container class for boxed mode
   const containerClass = isBoxed ? "max-w-7xl mx-auto" : "";
 
@@ -1316,7 +1348,7 @@ export function Footer() {
         {isSplit ? (
           <div className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
             <p className="text-sm opacity-80">
-              {trCopyright(footerConfig?.bottomBar?.copyrightText)}
+              {renderCopyright(footerConfig?.bottomBar?.copyrightText, footerConfig?.bottomBar?.copyrightLinkUrl)}
             </p>
             {footerConfig?.bottomBar?.links && footerConfig.bottomBar.links.length > 0 && (
               <nav className="flex flex-wrap gap-4" aria-label="Legal links">
@@ -1332,7 +1364,7 @@ export function Footer() {
           <>
             <div className={cn("flex gap-4", isCentered && "flex-col items-center text-center")}>
               <p className="text-sm opacity-80">
-                {trCopyright(footerConfig?.bottomBar?.copyrightText)}
+                {renderCopyright(footerConfig?.bottomBar?.copyrightText, footerConfig?.bottomBar?.copyrightLinkUrl)}
               </p>
               {footerConfig?.bottomBar?.showDisclaimer && (
                 <p className="max-w-xl text-xs opacity-60">
@@ -1539,7 +1571,7 @@ export function Footer() {
           {/* Copyright */}
           <div className="mt-6 border-t pt-6 text-center" style={{ borderColor: styling?.borderColor }}>
             <p className="text-sm opacity-80">
-              {trCopyright(footerConfig?.bottomBar?.copyrightText)}
+              {renderCopyright(footerConfig?.bottomBar?.copyrightText, footerConfig?.bottomBar?.copyrightLinkUrl)}
             </p>
           </div>
         </div>

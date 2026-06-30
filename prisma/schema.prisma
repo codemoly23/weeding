@@ -959,6 +959,7 @@ model FooterConfig {
   contactPosition      String         @default("brand")
   bottomBarEnabled     Boolean        @default(true)
   copyrightText        String?
+  copyrightLinkUrl     String?
   showDisclaimer       Boolean        @default(true)
   disclaimerText       String?
   bottomLinks          Json?
