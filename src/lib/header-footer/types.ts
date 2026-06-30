@@ -382,6 +382,7 @@ export interface FooterConfig {
   bottomBarEnabled: boolean;
   bottomBarLayout?: string;
   copyrightText?: string | null;
+  copyrightLinkUrl?: string | null;
   showDisclaimer: boolean;
   disclaimerText?: string | null;
   bottomLinks?: BottomLink[];
@@ -565,6 +566,7 @@ export interface PublicFooterResponse {
     enabled: boolean;
     layout?: string;
     copyrightText?: string;
+    copyrightLinkUrl?: string | null;
     showDisclaimer: boolean;
     disclaimerText?: string;
     links: BottomLink[];

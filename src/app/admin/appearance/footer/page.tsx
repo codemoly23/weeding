@@ -619,6 +619,7 @@ export default function FooterBuilderPage() {
     bottomBarEnabled: true,
     bottomBarLayout: "split",
     copyrightText: "",
+    copyrightLinkUrl: "",
     showDisclaimer: true,
     disclaimerText: "",
     translations: {} as Translations,
@@ -787,6 +788,7 @@ export default function FooterBuilderPage() {
           bottomBarEnabled: activeFooter.bottomBarEnabled,
           bottomBarLayout: activeFooter.bottomBarLayout || "split",
           copyrightText: activeFooter.copyrightText || "",
+          copyrightLinkUrl: activeFooter.copyrightLinkUrl || "",
           showDisclaimer: activeFooter.showDisclaimer,
           disclaimerText: activeFooter.disclaimerText || "",
           translations: activeFooter.translations || {},
@@ -884,6 +886,7 @@ export default function FooterBuilderPage() {
           bottomBarEnabled: formData.bottomBarEnabled,
           bottomBarLayout: formData.bottomBarLayout,
           copyrightText: formData.copyrightText || null,
+          copyrightLinkUrl: formData.copyrightLinkUrl || null,
           showDisclaimer: formData.showDisclaimer,
           disclaimerText: formData.disclaimerText || null,
           translations: formData.translations,
@@ -2316,6 +2319,20 @@ export default function FooterBuilderPage() {
                       translations: { ...formData.translations, copyrightText: next as Record<string, string> },
                     })}
                   />
+
+                  <div className="space-y-2">
+                    <Label htmlFor="copyrightLinkUrl">Brand Link URL</Label>
+                    <Input
+                      id="copyrightLinkUrl"
+                      type="url"
+                      value={formData.copyrightLinkUrl}
+                      onChange={(e) => setFormData({ ...formData, copyrightLinkUrl: e.target.value })}
+                      placeholder="https://example.com"
+                    />
+                    <p className="text-xs text-muted-foreground">
+                      Brand name in copyright text will become clickable
+                    </p>
+                  </div>
 
                   {formData.showDisclaimer && (
                     <LocalizedInput

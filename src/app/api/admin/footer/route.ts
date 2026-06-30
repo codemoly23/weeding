@@ -22,6 +22,7 @@ const footerConfigSchema = z.object({
   bottomBarEnabled: z.boolean().default(true),
   bottomBarLayout: z.string().default("split"),
   copyrightText: z.string().nullable().optional(),
+  copyrightLinkUrl: z.string().nullable().optional(),
   showDisclaimer: z.boolean().default(false),
   disclaimerText: z.string().nullable().optional(),
   bottomLinks: z.any().optional(),
