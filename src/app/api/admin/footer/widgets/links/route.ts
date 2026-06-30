@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import prisma from "@/lib/db";
+import { Prisma } from "@prisma/client";
 import { z } from "zod";
 import { checkAdminAccess, authError } from "@/lib/admin-auth";
 
@@ -12,6 +13,8 @@ const linkSchema = z.object({
   icon: z.string().optional(),
   isVisible: z.boolean().default(true),
   sortOrder: z.number().default(0),
+  // Per-locale label translations: { label: { en, sv } }
+  translations: z.record(z.string(), z.unknown()).optional().nullable(),
 });
 
 // GET /api/admin/footer/widgets/links - Get all links for a widget
@@ -60,6 +63,7 @@ export async function POST(request: NextRequest) {
 
     const body = await request.json();
     const validatedData = linkSchema.parse(body);
+    const { translations, ...linkData } = validatedData;
 
     // Get the max sortOrder for this widget
     const maxSortOrder = await prisma.menuItem.aggregate({
@@ -69,7 +73,8 @@ export async function POST(request: NextRequest) {
 
     const link = await prisma.menuItem.create({
       data: {
-        ...validatedData,
+        ...linkData,
+        ...(translations !== undefined && { translations: translations === null ? Prisma.JsonNull : (translations as Prisma.InputJsonValue) }),
         sortOrder: (maxSortOrder._max.sortOrder ?? -1) + 1,
       },
     });
@@ -109,10 +114,14 @@ export async function PUT(request: NextRequest) {
     }
 
     const validatedData = linkSchema.partial().parse(data);
+    const { translations, ...linkData } = validatedData;
 
     const link = await prisma.menuItem.update({
       where: { id },
-      data: validatedData,
+      data: {
+        ...linkData,
+        ...(translations !== undefined && { translations: translations === null ? Prisma.JsonNull : (translations as Prisma.InputJsonValue) }),
+      },
     });
 
     return NextResponse.json(link);

@@ -62,12 +62,14 @@ export async function GET() {
       sortOrder: widget.sortOrder,
       content: safeJsonParse(widget.content, null), // Parse in case of double-encoding
       customClass: widget.customClass,
+      translations: safeJsonParse(widget.translations, null),
       links: widget.menuItems.map((item) => ({
         id: item.id,
         label: item.label,
         url: item.url,
         target: item.target,
         icon: item.icon,
+        translations: safeJsonParse(item.translations, null),
       })),
     }));
 
@@ -157,6 +159,7 @@ export async function GET() {
         showDisclaimer: footer.showDisclaimer,
         disclaimerText: footer.disclaimerText,
         links: safeJsonParse(footer.bottomLinks, []),
+        translations: safeJsonParse(footer.translations, null),
       },
     };
 

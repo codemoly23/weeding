@@ -23,6 +23,7 @@ const translations: Record<LangCode, Record<string, string>> = {
     // Footer
     "footer.copyright":             "© {year} {name}. All rights reserved.",
     "footer.disclaimer":            "{name} is not a law firm and does not provide legal advice.",
+    "footer.disclaimerLabel":       "Disclaimer",
     "lang.choose":                  "Choose language",
 
     // Main navigation
@@ -2695,6 +2696,7 @@ const translations: Record<LangCode, Record<string, string>> = {
     // Footer
     "footer.copyright":             "© {year} {name}. Alla rättigheter förbehållna.",
     "footer.disclaimer":            "{name} är inte en advokatbyrå och ger inga juridiska råd.",
+    "footer.disclaimerLabel":       "Ansvarsfriskrivning",
     "lang.choose":                  "Välj språk",
 
     // Main navigation

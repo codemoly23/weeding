@@ -8,51 +8,51 @@ datasource db {
 }
 
 model User {
-  id                  String           @id @default(cuid())
-  email               String           @unique
-  emailVerified       DateTime?
-  name                String?
-  phone               String?
-  country             String?
-  image               String?
-  password            String?
-  role                UserRole         @default(CUSTOMER)
-  createdAt           DateTime         @default(now())
-  updatedAt           DateTime         @updatedAt
-  isActive            Boolean          @default(true)
-  twoFactorEnabled          Boolean          @default(false)
-  notifOrderUpdates         Boolean          @default(true)
-  notifDocumentReady        Boolean          @default(true)
-  notifSupportReplies       Boolean          @default(true)
-  notifComplianceReminders  Boolean          @default(true)
-  notifMarketingEmails      Boolean          @default(false)
+  id                       String               @id @default(cuid())
+  email                    String               @unique
+  emailVerified            DateTime?
+  name                     String?
+  phone                    String?
+  country                  String?
+  image                    String?
+  password                 String?
+  role                     UserRole             @default(CUSTOMER)
+  createdAt                DateTime             @default(now())
+  updatedAt                DateTime             @updatedAt
+  isActive                 Boolean              @default(true)
+  twoFactorEnabled         Boolean              @default(false)
+  notifOrderUpdates        Boolean              @default(true)
+  notifDocumentReady       Boolean              @default(true)
+  notifSupportReplies      Boolean              @default(true)
+  notifComplianceReminders Boolean              @default(true)
+  notifMarketingEmails     Boolean              @default(false)
   // Wedding planner subscription
-  plannerTier         String           @default("basic")  // basic | premium | elite
-  plannerStatus       String           @default("active") // active | canceled | past_due
-  plannerPeriodEnd    DateTime?
-  stripeCustomerId    String?          @unique
-  stripeSubscriptionId String?
-  accounts            Account[]
-  cannedResponses     CannedResponse[] @relation("CreatedCannedResponses")
-  documents           Document[]
-  authoredNotes       InternalNote[]   @relation("AuthoredNotes")
-  invoices            Invoice[]
-  assignedLeads       Lead[]           @relation("AssignedLeads")
-  performedActivities LeadActivity[]   @relation("PerformedActivities")
-  authoredLeadNotes   LeadNote[]       @relation("AuthoredLeadNotes")
-  orders              Order[]
-  paymentMethods      PaymentMethod[]
-  sessions            Session[]
-  sentMessages        SupportMessage[] @relation("SentMessages")
-  assignedTickets     SupportTicket[]  @relation("AssignedTickets")
-  customerTickets     SupportTicket[]  @relation("CustomerTickets")
-  weddingProjects       WeddingProject[]
-  projectMemberships    ProjectMember[]
-  vendorProfile         VendorProfile?
-  coupleConversations   VendorConversation[] @relation("CoupleConversations")
-  savedVendors          SavedVendor[]
-  emailCampaigns        EmailCampaign[]      @relation("CampaignCreator")
-  orderNotes            OrderNote[]          @relation("OrderNoteAuthors")
+  plannerTier              String               @default("basic") // basic | premium | elite
+  plannerStatus            String               @default("active") // active | canceled | past_due
+  plannerPeriodEnd         DateTime?
+  stripeCustomerId         String?              @unique
+  stripeSubscriptionId     String?
+  accounts                 Account[]
+  cannedResponses          CannedResponse[]     @relation("CreatedCannedResponses")
+  documents                Document[]
+  authoredNotes            InternalNote[]       @relation("AuthoredNotes")
+  invoices                 Invoice[]
+  assignedLeads            Lead[]               @relation("AssignedLeads")
+  performedActivities      LeadActivity[]       @relation("PerformedActivities")
+  authoredLeadNotes        LeadNote[]           @relation("AuthoredLeadNotes")
+  orders                   Order[]
+  paymentMethods           PaymentMethod[]
+  sessions                 Session[]
+  sentMessages             SupportMessage[]     @relation("SentMessages")
+  assignedTickets          SupportTicket[]      @relation("AssignedTickets")
+  customerTickets          SupportTicket[]      @relation("CustomerTickets")
+  weddingProjects          WeddingProject[]
+  projectMemberships       ProjectMember[]
+  vendorProfile            VendorProfile?
+  coupleConversations      VendorConversation[] @relation("CoupleConversations")
+  savedVendors             SavedVendor[]
+  emailCampaigns           EmailCampaign[]      @relation("CampaignCreator")
+  orderNotes               OrderNote[]          @relation("OrderNoteAuthors")
 
   @@index([email])
   @@index([role])
@@ -123,25 +123,25 @@ model ServiceCategory {
 }
 
 model Service {
-  id                      String               @id @default(cuid())
-  name                    String
-  slug                    String               @unique
-  shortDesc               String
-  description             String
-  icon                    String?
-  image                   String?
-  startingPrice           Decimal              @default(0) @db.Decimal(10, 2)
-  processingTime          String?
-  isPopular               Boolean              @default(false)
-  badgeText               String?
-  badgeColor              String?
-  isActive                Boolean              @default(true)
-  sortOrder               Int                  @default(0)
-  categoryId              String?
+  id                String  @id @default(cuid())
+  name              String
+  slug              String  @unique
+  shortDesc         String
+  description       String
+  icon              String?
+  image             String?
+  startingPrice     Decimal @default(0) @db.Decimal(10, 2)
+  processingTime    String?
+  isPopular         Boolean @default(false)
+  badgeText         String?
+  badgeColor        String?
+  isActive          Boolean @default(true)
+  sortOrder         Int     @default(0)
+  categoryId        String?
   // Hero overrides (per-service custom hero content)
-  heroTitle               String?
-  heroHighlightWord       String?
-  heroUnderlineWord       String?
+  heroTitle         String?
+  heroHighlightWord String?
+  heroUnderlineWord String?
 
   metaTitle               String?
   metaDescription         String?
@@ -488,14 +488,14 @@ model CannedResponse {
 }
 
 model BlogPost {
-  id              String         @id @default(cuid())
+  id              String          @id @default(cuid())
   title           String
-  slug            String         @unique
+  slug            String          @unique
   excerpt         String?
   content         String
   coverImage      String?
   readingMinutes  Int?
-  views           Int            @default(0)
+  views           Int             @default(0)
   authorId        String?
   authorName      String?
   authorRole      String?
@@ -503,14 +503,14 @@ model BlogPost {
   authorAvatarUrl String?
   authorTwitter   String?
   authorLinkedin  String?
-  status          PostStatus     @default(DRAFT)
+  status          PostStatus      @default(DRAFT)
   publishedAt     DateTime?
   tags            String[]
   metaTitle       String?
   metaDescription String?
-  createdAt       DateTime       @default(now())
-  updatedAt       DateTime       @updatedAt
-  categories      BlogCategory[] @relation("BlogCategoryToBlogPost")
+  createdAt       DateTime        @default(now())
+  updatedAt       DateTime        @updatedAt
+  categories      BlogCategory[]  @relation("BlogCategoryToBlogPost")
   emailCampaigns  EmailCampaign[]
 
   @@index([slug])
@@ -878,38 +878,39 @@ model FormSubmissionFile {
 }
 
 model HeaderConfig {
-  id               String       @id @default(cuid())
-  name             String       @default("Default Header")
-  isActive         Boolean      @default(true)
-  layout           HeaderLayout @default(DEFAULT)
-  sticky           Boolean      @default(true)
-  transparent      Boolean      @default(false)
-  topBarEnabled    Boolean      @default(false)
-  topBarContent    Json?
-  topBarBgColor    String?
-  topBarTextColor  String?
-  logoPosition     LogoPosition @default(LEFT)
-  logoMaxHeight    Int          @default(56)
-  ctaButtons       Json?
-  showAuthButtons  Boolean      @default(true)
-  loginText        String       @default("Sign In")
-  registerText     String       @default("Get Started")
-  registerUrl      String       @default("/services/llc-formation")
-  searchEnabled          Boolean      @default(false)
-  showLanguageSwitcher   Boolean      @default(false)
-  mobileBreakpoint       Int          @default(1024)
-  bgColor          String?
-  textColor        String?
-  accentColor      String?
-  borderColor      String?
-  height           Int          @default(64)
-  createdAt        DateTime     @default(now())
-  updatedAt        DateTime     @updatedAt
-  loginStyle       Json?
-  loginUrl         String       @default("/login")
-  registerStyle    Json?
-  hoverColor       String?
-  menuItems        MenuItem[]
+  id                   String       @id @default(cuid())
+  name                 String       @default("Default Header")
+  isActive             Boolean      @default(true)
+  layout               HeaderLayout @default(DEFAULT)
+  sticky               Boolean      @default(true)
+  transparent          Boolean      @default(false)
+  topBarEnabled        Boolean      @default(false)
+  topBarContent        Json?
+  topBarBgColor        String?
+  topBarTextColor      String?
+  logoPosition         LogoPosition @default(LEFT)
+  logoMaxHeight        Int          @default(56)
+  ctaButtons           Json?
+  showAuthButtons      Boolean      @default(true)
+  loginText            String       @default("Sign In")
+  registerText         String       @default("Get Started")
+  registerUrl          String       @default("/services/llc-formation")
+  searchEnabled        Boolean      @default(false)
+  showLanguageSwitcher Boolean      @default(false)
+  mobileBreakpoint     Int          @default(1024)
+  bgColor              String?
+  textColor            String?
+  accentColor          String?
+  borderColor          String?
+  height               Int          @default(64)
+  createdAt            DateTime     @default(now())
+  updatedAt            DateTime     @updatedAt
+  loginStyle           Json?
+  loginUrl             String       @default("/login")
+  registerStyle        Json?
+  hoverColor           String?
+  translations         Json?
+  menuItems            MenuItem[]
 }
 
 model MenuItem {
@@ -933,6 +934,7 @@ model MenuItem {
   sortOrder       Int           @default(0)
   headerId        String?
   footerWidgetId  String?
+  translations    Json?
   createdAt       DateTime      @default(now())
   updatedAt       DateTime      @updatedAt
   footerWidget    FooterWidget? @relation(fields: [footerWidgetId], references: [id], onDelete: Cascade)
@@ -947,83 +949,84 @@ model MenuItem {
 }
 
 model FooterConfig {
-  id                   String         @id @default(cuid())
-  name                 String         @default("Default Footer")
-  isActive             Boolean        @default(true)
-  layout               FooterLayout   @default(MULTI_COLUMN)
-  columns              Int            @default(4)
-  linkPrefix           String         @default("none")
-  showSocialLinks      Boolean        @default(true)
-  socialPosition       String         @default("brand")
-  showContactInfo      Boolean        @default(true)
-  contactPosition      String         @default("brand")
-  bottomBarEnabled     Boolean        @default(true)
-  copyrightText        String?
-  copyrightLinkUrl     String?
-  showDisclaimer       Boolean        @default(true)
-  disclaimerText       String?
-  bottomLinks          Json?
-  showTrustBadges      Boolean        @default(false)
-  trustBadges          Json?
-  bgColor              String?
-  textColor            String?
-  accentColor          String?
-  borderColor          String?
-  paddingTop           Int            @default(48)
-  paddingBottom        Int            @default(32)
-  createdAt            DateTime       @default(now())
-  updatedAt            DateTime       @updatedAt
-  animationDuration    Int            @default(300)
-  bgGradient           Json?
-  bgImage              String?
-  bgImageOverlay       String?
-  bgPattern            String?
-  bgPatternColor       String?
-  bgPatternOpacity     Float?         @default(0.1)
-  bgType               String         @default("solid")
-  bodyFont             String?
-  borderRadius         Int            @default(0)
-  bottomBarLayout      String         @default("split")
-  containerStyle       String         @default("sharp")
-  containerWidth       String         @default("full")
-  cornerRadiusBL       Int            @default(0)
-  cornerRadiusBR       Int            @default(0)
-  cornerRadiusTL       Int            @default(0)
-  cornerRadiusTR       Int            @default(0)
-  customCSS            String?
-  customJS             String?
-  dividerColor         String?
-  dividerStyle         String         @default("solid")
-  enableAnimations     Boolean        @default(false)
-  entranceAnimation    String?
-  headingColor         String?
-  headingFont          String?
-  headingSize          String         @default("sm")
-  headingStyle         String         @default("normal")
-  headingWeight        String         @default("semibold")
-  linkColor            String?
-  linkHoverColor       String?
-  linkHoverEffect      String         @default("color")
-  presetId             String?
-  responsiveColumns    Json?
-  sectionOrder         String[]       @default(["widgets", "trust", "bottom"])
-  shadow               String         @default("none")
-  socialBgStyle        String         @default("subtle")
-  socialColorMode      String         @default("brand")
-  socialHoverEffect    String         @default("scale")
-  socialShape          String         @default("circle")
-  socialSize           String         @default("md")
-  topBorderColor       String?
+  id                    String         @id @default(cuid())
+  name                  String         @default("Default Footer")
+  isActive              Boolean        @default(true)
+  layout                FooterLayout   @default(MULTI_COLUMN)
+  columns               Int            @default(4)
+  linkPrefix            String         @default("none")
+  showSocialLinks       Boolean        @default(true)
+  socialPosition        String         @default("brand")
+  showContactInfo       Boolean        @default(true)
+  contactPosition       String         @default("brand")
+  bottomBarEnabled      Boolean        @default(true)
+  copyrightText         String?
+  copyrightLinkUrl      String?
+  showDisclaimer        Boolean        @default(true)
+  disclaimerText        String?
+  bottomLinks           Json?
+  showTrustBadges       Boolean        @default(false)
+  trustBadges           Json?
+  bgColor               String?
+  textColor             String?
+  accentColor           String?
+  borderColor           String?
+  paddingTop            Int            @default(48)
+  paddingBottom         Int            @default(32)
+  createdAt             DateTime       @default(now())
+  updatedAt             DateTime       @updatedAt
+  animationDuration     Int            @default(300)
+  bgGradient            Json?
+  bgImage               String?
+  bgImageOverlay        String?
+  bgPattern             String?
+  bgPatternColor        String?
+  bgPatternOpacity      Float?         @default(0.1)
+  bgType                String         @default("solid")
+  bodyFont              String?
+  borderRadius          Int            @default(0)
+  bottomBarLayout       String         @default("split")
+  containerStyle        String         @default("sharp")
+  containerWidth        String         @default("full")
+  cornerRadiusBL        Int            @default(0)
+  cornerRadiusBR        Int            @default(0)
+  cornerRadiusTL        Int            @default(0)
+  cornerRadiusTR        Int            @default(0)
+  customCSS             String?
+  customJS              String?
+  dividerColor          String?
+  dividerStyle          String         @default("solid")
+  enableAnimations      Boolean        @default(false)
+  entranceAnimation     String?
+  headingColor          String?
+  headingFont           String?
+  headingSize           String         @default("sm")
+  headingStyle          String         @default("normal")
+  headingWeight         String         @default("semibold")
+  linkColor             String?
+  linkHoverColor        String?
+  linkHoverEffect       String         @default("color")
+  presetId              String?
+  responsiveColumns     Json?
+  sectionOrder          String[]       @default(["widgets", "trust", "bottom"])
+  shadow                String         @default("none")
+  socialBgStyle         String         @default("subtle")
+  socialColorMode       String         @default("brand")
+  socialHoverEffect     String         @default("scale")
+  socialShape           String         @default("circle")
+  socialSize            String         @default("md")
+  topBorderColor        String?
   topBorderGradientFrom String?
-  topBorderGradientTo  String?
-  topBorderHeight      Int            @default(4)
-  topBorderStyle       String         @default("none")
-  brandRevealEnabled   Boolean        @default(false)
-  brandRevealText      String?
-  brandRevealColor     String?
-  brandRevealOpacity   Float?         @default(0.08)
-  preset               FooterPreset?  @relation(fields: [presetId], references: [id])
-  widgets              FooterWidget[]
+  topBorderGradientTo   String?
+  topBorderHeight       Int            @default(4)
+  topBorderStyle        String         @default("none")
+  brandRevealEnabled    Boolean        @default(false)
+  brandRevealText       String?
+  brandRevealColor      String?
+  brandRevealOpacity    Float?         @default(0.08)
+  translations          Json?
+  preset                FooterPreset?  @relation(fields: [presetId], references: [id])
+  widgets               FooterWidget[]
 }
 
 model FooterPreset {
@@ -1048,20 +1051,21 @@ model FooterPreset {
 }
 
 model FooterWidget {
-  id          String           @id @default(cuid())
-  footerId    String
-  type        FooterWidgetType
-  title       String?
-  showTitle   Boolean          @default(true)
-  headingIcon String?
-  content     Json?
-  column      Int              @default(1)
-  sortOrder   Int              @default(0)
-  customClass String?
-  createdAt   DateTime         @default(now())
-  updatedAt   DateTime         @updatedAt
-  footer      FooterConfig     @relation(fields: [footerId], references: [id], onDelete: Cascade)
-  menuItems   MenuItem[]
+  id           String           @id @default(cuid())
+  footerId     String
+  type         FooterWidgetType
+  title        String?
+  showTitle    Boolean          @default(true)
+  headingIcon  String?
+  content      Json?
+  column       Int              @default(1)
+  sortOrder    Int              @default(0)
+  customClass  String?
+  translations Json?
+  createdAt    DateTime         @default(now())
+  updatedAt    DateTime         @updatedAt
+  footer       FooterConfig     @relation(fields: [footerId], references: [id], onDelete: Cascade)
+  menuItems    MenuItem[]
 
   @@index([footerId])
   @@index([column, sortOrder])
@@ -1226,51 +1230,51 @@ model AIResponse {
 }
 
 model Lead {
-  id               String            @id @default(cuid())
-  firstName        String
-  lastName         String?
-  email            String
-  phone            String?
-  company          String?
-  country          String?
-  city             String?
-  status           LeadStatus        @default(NEW)
-  source           LeadSource        @default(WEBSITE)
-  sourceDetail     String?
-  score            Int               @default(0)
+  id                   String                   @id @default(cuid())
+  firstName            String
+  lastName             String?
+  email                String
+  phone                String?
+  company              String?
+  country              String?
+  city                 String?
+  status               LeadStatus               @default(NEW)
+  source               LeadSource               @default(WEBSITE)
+  sourceDetail         String?
+  score                Int                      @default(0)
   /// ScoreHistoryEntry[]: [{ score: number, date: ISO8601, reason: string, delta: number }]
-  scoreHistory     Json?
-  scoreDecayDays   Int               @default(0)
-  priority         LeadPriority      @default(MEDIUM)
-  pageViews        Int               @default(0)
-  lastPageViewed   String?
-  visitCount       Int               @default(1)
-  lastActivityAt   DateTime          @default(now())
-  assignedToId     String?
-  assignedAt       DateTime?
-  interestedIn     String[]
-  budget           String?
-  timeline         String?
-  customFields     Json?
-  utmSource        String?
-  utmMedium        String?
-  utmCampaign      String?
-  utmTerm          String?
-  utmContent       String?
-  convertedAt      DateTime?
-  convertedToId    String?
-  notes            String?
-  ipAddress        String?
-  userAgent        String?
-  createdAt        DateTime          @default(now())
-  updatedAt        DateTime          @updatedAt
-  formTemplateId   String?
-  formTemplateName String?
-  newsletterSubscribed Boolean          @default(false)
-  newsletterToken      String?          @unique
+  scoreHistory         Json?
+  scoreDecayDays       Int                      @default(0)
+  priority             LeadPriority             @default(MEDIUM)
+  pageViews            Int                      @default(0)
+  lastPageViewed       String?
+  visitCount           Int                      @default(1)
+  lastActivityAt       DateTime                 @default(now())
+  assignedToId         String?
+  assignedAt           DateTime?
+  interestedIn         String[]
+  budget               String?
+  timeline             String?
+  customFields         Json?
+  utmSource            String?
+  utmMedium            String?
+  utmCampaign          String?
+  utmTerm              String?
+  utmContent           String?
+  convertedAt          DateTime?
+  convertedToId        String?
+  notes                String?
+  ipAddress            String?
+  userAgent            String?
+  createdAt            DateTime                 @default(now())
+  updatedAt            DateTime                 @updatedAt
+  formTemplateId       String?
+  formTemplateName     String?
+  newsletterSubscribed Boolean                  @default(false)
+  newsletterToken      String?                  @unique
   newsletterUnsubAt    DateTime?
-  assignedTo           User?             @relation("AssignedLeads", fields: [assignedToId], references: [id])
-  formTemplate         LeadFormTemplate? @relation(fields: [formTemplateId], references: [id], onDelete: SetNull)
+  assignedTo           User?                    @relation("AssignedLeads", fields: [assignedToId], references: [id])
+  formTemplate         LeadFormTemplate?        @relation(fields: [formTemplateId], references: [id], onDelete: SetNull)
   activities           LeadActivity[]
   leadNotes            LeadNote[]
   campaignRecipients   EmailCampaignRecipient[]
@@ -1362,7 +1366,7 @@ model Ticker {
   id        String   @id @default(cuid())
   name      String   @unique
   isActive  Boolean  @default(true)
-  items     Json     // Array of { id, boldText, text, link?, openInNewTab?, noFollow? }
+  items     Json // Array of { id, boldText, text, link?, openInNewTab?, noFollow? }
   speed     Int      @default(28)
   separator String   @default("·")
   createdAt DateTime @default(now())
@@ -1380,7 +1384,7 @@ model ActiveTheme {
   colorPalette         Json?
   fontConfig           Json?
   originalColorPalette Json?
-  widgetDefaults       Json?    // Theme-bound widget defaults: { "hero-content": {...}, ... }
+  widgetDefaults       Json? // Theme-bound widget defaults: { "hero-content": {...}, ... }
 
   @@index([themeId])
 }
@@ -1671,58 +1675,59 @@ enum LeadSource {
 // ─── Wedding / Event Planner ─────────────────────────────────────────────────
 
 model WeddingProject {
-  id          String        @id @default(cuid())
-  title       String        @default("Untitled")
-  eventType   EventType     @default(WEDDING)
-  eventDate   DateTime?
-  status      ProjectStatus @default(ACTIVE)
-  coverImage  String?
-  settings    Json?
-  brideName   String?
-  groomName   String?
-  budgetGoal  Float         @default(0)
-  userId       String
+  id            String        @id @default(cuid())
+  title         String        @default("Untitled")
+  eventType     EventType     @default(WEDDING)
+  eventDate     DateTime?
+  status        ProjectStatus @default(ACTIVE)
+  coverImage    String?
+  settings      Json?
+  brideName     String?
+  groomName     String?
+  budgetGoal    Float         @default(0)
+  userId        String
   sourceLocalId String?
-  shareToken   String?  @unique
-  shareEnabled Boolean  @default(false)
-  createdAt   DateTime      @default(now())
-  updatedAt   DateTime      @updatedAt
+  shareToken    String?       @unique
+  shareEnabled  Boolean       @default(false)
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt
 
-  user             User             @relation(fields: [userId], references: [id], onDelete: Cascade)
-  members          ProjectMember[]
-  guests           WeddingGuest[]
-  budgetCategories BudgetCategory[]
-  budgetItems      BudgetItem[]
-  checklistTasks   ChecklistTask[]
-  itineraryEvents  ItineraryEvent[]
-  notes            ProjectNote[]
-  seatingLayouts   SeatingLayout[]
-  seatingTables    SeatingTable[]
-  weddingWebsites  WeddingWebsite[]
-  eventVenues      EventVenue[]
-  vendors               WeddingVendor[]
-  vendorConversations   VendorConversation[]
-  briefTokens           EventBriefToken[]
-  vendorInviteTokens    VendorInviteToken[]
-  guestFamilies         GuestFamily[]
-  rsvpQuestions         RsvpQuestion[]
+  user                User                 @relation(fields: [userId], references: [id], onDelete: Cascade)
+  members             ProjectMember[]
+  guests              WeddingGuest[]
+  budgetCategories    BudgetCategory[]
+  budgetItems         BudgetItem[]
+  checklistTasks      ChecklistTask[]
+  itineraryEvents     ItineraryEvent[]
+  notes               ProjectNote[]
+  seatingLayouts      SeatingLayout[]
+  seatingTables       SeatingTable[]
+  weddingWebsites     WeddingWebsite[]
+  eventVenues         EventVenue[]
+  vendors             WeddingVendor[]
+  vendorConversations VendorConversation[]
+  briefTokens         EventBriefToken[]
+  vendorInviteTokens  VendorInviteToken[]
+  guestFamilies       GuestFamily[]
+  rsvpQuestions       RsvpQuestion[]
+
+  @@unique([userId, sourceLocalId])
   @@index([userId])
   @@index([status])
-  @@unique([userId, sourceLocalId])
 }
 
 // ─── Seating Chart ────────────────────────────────────────────────────────────
 
 model SeatingLayout {
-  id        String         @id @default(cuid())
+  id        String   @id @default(cuid())
   projectId String
-  name      String         @default("Layout")
-  type      String         @default("RECEPTION") // CEREMONY | RECEPTION
-  width     Int            @default(1200)
-  height    Int            @default(800)
-  bgColor   String         @default("#f5f5f0")
-  createdAt DateTime       @default(now())
-  updatedAt DateTime       @updatedAt
+  name      String   @default("Layout")
+  type      String   @default("RECEPTION") // CEREMONY | RECEPTION
+  width     Int      @default(1200)
+  height    Int      @default(800)
+  bgColor   String   @default("#f5f5f0")
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
   project WeddingProject @relation(fields: [projectId], references: [id], onDelete: Cascade)
   tables  SeatingTable[]
@@ -1759,7 +1764,7 @@ model WeddingWebsite {
   projectId    String   @unique
   slug         String   @unique
   published    Boolean  @default(false)
-  theme        String   @default("modern")  // modern | floral | rustic | minimal
+  theme        String   @default("modern") // modern | floral | rustic | minimal
   primaryColor String   @default("#be185d")
   accentColor  String   @default("#f9a8d4")
   fontFamily   String   @default("Inter")
@@ -1820,7 +1825,7 @@ model GuestPhoto {
   websiteId    String
   uploaderName String?
   caption      String?
-  photoData    String   // base64 — resized to max 800px client-side before upload
+  photoData    String // base64 — resized to max 800px client-side before upload
   createdAt    DateTime @default(now())
 
   website WeddingWebsite @relation(fields: [websiteId], references: [id], onDelete: Cascade)
@@ -1832,7 +1837,7 @@ model GuestPhoto {
 // ─── Wedding Vendors ──────────────────────────────────────────────────────────
 
 model WeddingVendor {
-  id        String       @id @default(cuid())
+  id        String         @id @default(cuid())
   projectId String
   name      String
   category  VendorCategory
@@ -1840,8 +1845,8 @@ model WeddingVendor {
   phone     String?
   website   String?
   notes     String?
-  createdAt DateTime     @default(now())
-  updatedAt DateTime     @updatedAt
+  createdAt DateTime       @default(now())
+  updatedAt DateTime       @updatedAt
 
   project WeddingProject @relation(fields: [projectId], references: [id], onDelete: Cascade)
 
@@ -1923,7 +1928,7 @@ model WeddingGuest {
   projectId        String
   firstName        String
   lastName         String?
-  title            String?       // Ms. Mr. Mrs. Dr.
+  title            String? // Ms. Mr. Mrs. Dr.
   side             GuestSide     @default(BRIDE)
   relation         GuestRelation @default(OTHER)
   email            String?
@@ -1954,8 +1959,8 @@ model WeddingGuest {
   createdAt        DateTime      @default(now())
   updatedAt        DateTime      @updatedAt
 
-  project WeddingProject @relation(fields: [projectId], references: [id], onDelete: Cascade)
-  family  GuestFamily?   @relation(fields: [familyId], references: [id])
+  project     WeddingProject @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  family      GuestFamily?   @relation(fields: [familyId], references: [id])
   rsvpAnswers RsvpAnswer[]
 
   @@unique([projectId, email])
@@ -1966,15 +1971,15 @@ model WeddingGuest {
 }
 
 model ProjectMember {
-  id          String      @id @default(cuid())
+  id          String     @id @default(cuid())
   projectId   String
   userId      String
   role        MemberRole
   displayName String?
-  createdAt   DateTime    @default(now())
+  createdAt   DateTime   @default(now())
 
-  project     WeddingProject @relation(fields: [projectId], references: [id], onDelete: Cascade)
-  user        User           @relation(fields: [userId], references: [id], onDelete: Cascade)
+  project WeddingProject @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  user    User           @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@unique([projectId, userId])
   @@index([projectId])
@@ -1994,27 +1999,27 @@ model BudgetCategory {
   createdAt DateTime     @default(now())
   updatedAt DateTime     @updatedAt
 
-  project   WeddingProject @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  project WeddingProject @relation(fields: [projectId], references: [id], onDelete: Cascade)
 
   @@index([projectId])
 }
 
 model BudgetItem {
-  id          String        @id @default(cuid())
+  id          String              @id @default(cuid())
   categoryId  String
   projectId   String
   description String
-  planned     Float         @default(0)
-  actual      Float         @default(0)
-  paid        Float         @default(0)
+  planned     Float               @default(0)
+  actual      Float               @default(0)
+  paid        Float               @default(0)
   status      BudgetPaymentStatus @default(UNPAID)
   notes       String?
   order       Int                 @default(0)
   createdAt   DateTime            @default(now())
   updatedAt   DateTime            @updatedAt
 
-  category    BudgetCategory @relation(fields: [categoryId], references: [id], onDelete: Cascade)
-  project     WeddingProject @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  category BudgetCategory @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+  project  WeddingProject @relation(fields: [projectId], references: [id], onDelete: Cascade)
 
   @@index([categoryId])
   @@index([projectId])
@@ -2028,7 +2033,7 @@ model ChecklistTask {
   title       String
   description String?
   subtasks    Json      @default("[]")
-  dueMonths   Int?      // months before wedding (12 = 12 months before)
+  dueMonths   Int? // months before wedding (12 = 12 months before)
   category    String?
   completed   Boolean   @default(false)
   completedAt DateTime?
@@ -2037,7 +2042,7 @@ model ChecklistTask {
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt
 
-  project     WeddingProject @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  project WeddingProject @relation(fields: [projectId], references: [id], onDelete: Cascade)
 
   @@index([projectId, completed])
 }
@@ -2049,15 +2054,15 @@ model ItineraryEvent {
   projectId   String
   title       String
   description String?
-  startTime   String   // HH:mm
-  endTime     String?  // HH:mm
+  startTime   String // HH:mm
+  endTime     String? // HH:mm
   location    String?
   category    String?
   order       Int      @default(0)
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 
-  project     WeddingProject @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  project WeddingProject @relation(fields: [projectId], references: [id], onDelete: Cascade)
 
   @@index([projectId])
 }
@@ -2073,7 +2078,7 @@ model ProjectNote {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  project   WeddingProject @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  project WeddingProject @relation(fields: [projectId], references: [id], onDelete: Cascade)
 
   @@index([projectId])
 }
@@ -2177,55 +2182,56 @@ enum LeadPriority {
 // ─── Public Vendor Marketplace ────────────────────────────────────────────────
 
 model VendorProfile {
-  id              String         @id @default(cuid())
-  slug            String         @unique
-  userId          String?        @unique
-  status          VendorStatus   @default(PENDING)
-  businessName    String
-  category        VendorCategory
-  description     String?
-  tagline         String?
-  email           String?
-  phone           String?
-  website         String?
-  city            String?
-  country         String         @default("SE")
-  lat             Float?
-  lng             Float?
-  serviceRadiusKm Int?
-  photos          String[]       @default([])
-  videoUrls       String[]       @default([])
-  startingPrice   Int?
-  maxPrice        Int?
-  currency        String         @default("SEK")
-  yearsInBusiness Int?
-  languages       String[]       @default([])
-  isApproved      Boolean        @default(false)
-  isActive        Boolean        @default(true)
-  isFeatured      Boolean        @default(false)
-  isVerified      Boolean        @default(false)
+  id                   String         @id @default(cuid())
+  slug                 String         @unique
+  userId               String?        @unique
+  status               VendorStatus   @default(PENDING)
+  businessName         String
+  category             VendorCategory
+  description          String?
+  tagline              String?
+  email                String?
+  phone                String?
+  website              String?
+  city                 String?
+  country              String         @default("SE")
+  lat                  Float?
+  lng                  Float?
+  serviceRadiusKm      Int?
+  photos               String[]       @default([])
+  videoUrls            String[]       @default([])
+  startingPrice        Int?
+  maxPrice             Int?
+  currency             String         @default("SEK")
+  yearsInBusiness      Int?
+  languages            String[]       @default([])
+  isApproved           Boolean        @default(false)
+  isActive             Boolean        @default(true)
+  isFeatured           Boolean        @default(false)
+  isVerified           Boolean        @default(false)
   trialEndsAt          DateTime?
   planTier             VendorPlanTier @default(TRIAL)
   stripeCustomerId     String?
   stripeSubscriptionId String?
   // Task 11 — Social links
-  instagram       String?
-  facebook        String?
-  pinterest       String?
+  instagram            String?
+  facebook             String?
+  pinterest            String?
   // Task 12 — Response SLA
-  slaHours        Int?
+  slaHours             Int?
   // Task 10 — FAQ items (stored as JSON array of {question, answer})
-  faqItems        Json?          @default("[]")
-  createdAt       DateTime       @default(now())
-  updatedAt       DateTime       @updatedAt
+  faqItems             Json?          @default("[]")
+  createdAt            DateTime       @default(now())
+  updatedAt            DateTime       @updatedAt
 
   /// Restrict prevents user account deletion while a vendor profile exists, preserving vendor review/conversation history
-  user            User?                @relation(fields: [userId], references: [id], onDelete: Restrict)
-  inquiries       VendorInquiry[]
-  reviews         VendorReview[]
-  conversations   VendorConversation[]
-  quickReplies    VendorQuickReply[]
-  availability    VendorAvailability[]
+  user          User?                @relation(fields: [userId], references: [id], onDelete: Restrict)
+  inquiries     VendorInquiry[]
+  reviews       VendorReview[]
+  conversations VendorConversation[]
+  quickReplies  VendorQuickReply[]
+  availability  VendorAvailability[]
+  savedBy       SavedVendor[]
 
   @@index([category])
   @@index([isApproved, isActive])
@@ -2234,7 +2240,6 @@ model VendorProfile {
   @@index([isVerified])
   @@index([userId])
   @@index([status])
-  savedBy SavedVendor[]
 }
 
 model SavedVendor {
@@ -2304,7 +2309,7 @@ model VendorReview {
   createdAt  DateTime @default(now())
   updatedAt  DateTime @updatedAt
 
-  vendor     VendorProfile @relation(fields: [vendorId], references: [id], onDelete: Cascade)
+  vendor VendorProfile @relation(fields: [vendorId], references: [id], onDelete: Cascade)
 
   @@index([vendorId])
   @@index([vendorId, isApproved])
@@ -2325,11 +2330,11 @@ model VendorConversation {
   updatedAt     DateTime         @updatedAt
 
   /// vendor→Cascade: deleting a vendor removes all conversations. inquiry→SetNull: deleting an inquiry preserves conversation history.
-  vendor      VendorProfile   @relation(fields: [vendorId], references: [id], onDelete: Cascade)
-  inquiry     VendorInquiry?  @relation(fields: [inquiryId], references: [id], onDelete: SetNull)
-  project     WeddingProject? @relation(fields: [projectId], references: [id], onDelete: SetNull)
-  coupleUser  User?           @relation("CoupleConversations", fields: [coupleUserId], references: [id], onDelete: SetNull)
-  messages    VendorMessage[]
+  vendor     VendorProfile   @relation(fields: [vendorId], references: [id], onDelete: Cascade)
+  inquiry    VendorInquiry?  @relation(fields: [inquiryId], references: [id], onDelete: SetNull)
+  project    WeddingProject? @relation(fields: [projectId], references: [id], onDelete: SetNull)
+  coupleUser User?           @relation("CoupleConversations", fields: [coupleUserId], references: [id], onDelete: SetNull)
+  messages   VendorMessage[]
 
   @@index([vendorId, lastMessageAt(sort: Desc)])
   @@index([vendorId, status])
@@ -2383,7 +2388,7 @@ model VendorInviteToken {
   revokedAt DateTime?
   usedAt    DateTime?
 
-  createdAt DateTime  @default(now())
+  createdAt DateTime @default(now())
 
   project WeddingProject @relation(fields: [projectId], references: [id], onDelete: Cascade)
 
@@ -2410,9 +2415,9 @@ enum InquiryStatus {
 }
 
 enum VendorPlanTier {
-  TRIAL     // 30-day free trial after admin approval
-  BUSINESS  // Active paid Business plan ($19/mo)
-  EXPIRED   // Trial or plan expired — dashboard access only
+  TRIAL // 30-day free trial after admin approval
+  BUSINESS // Active paid Business plan ($19/mo)
+  EXPIRED // Trial or plan expired — dashboard access only
 }
 
 model VendorCity {
@@ -2443,7 +2448,7 @@ model SearchOption {
   name      String
   type      SearchOptionType
   icon      String?
-  group     String?          // For LOCATION: "Sweden" | "International"
+  group     String? // For LOCATION: "Sweden" | "International"
   sortOrder Int              @default(0)
   isActive  Boolean          @default(true)
   createdAt DateTime         @default(now())
@@ -2457,8 +2462,8 @@ model Venue {
   id          String   @id @default(cuid())
   name        String
   slug        String   @unique
-  category    String   // "wedding" | "party" | "specialty"
-  type        String   // "Banquet Hall" | "Winery" | "Garden" | etc.
+  category    String // "wedding" | "party" | "specialty"
+  type        String // "Banquet Hall" | "Winery" | "Garden" | etc.
   location    String?
   city        String?
   rating      Float    @default(0)
@@ -2467,7 +2472,7 @@ model Venue {
   priceUnit   String   @default("/day")
   image       String?
   badge       String?
-  badgeColor  String?  // "purple" | "orange" | "green" | null
+  badgeColor  String? // "purple" | "orange" | "green" | null
   tags        String[]
   href        String?
   description String?
@@ -2496,28 +2501,28 @@ model EmailTemplate {
 }
 
 model EmailCampaign {
-  id               String    @id @default(cuid())
-  subject          String
-  previewText      String?
-  body             String
-  templateId       String?
-  audienceFilter   Json?
-  status           String    @default("DRAFT") // DRAFT | SCHEDULED | SENDING | SENT | FAILED
-  scheduledAt      DateTime?
-  sentAt           DateTime?
-  totalRecipients  Int       @default(0)
-  sentCount        Int       @default(0)
-  openCount        Int       @default(0)
-  clickCount       Int       @default(0)
-  createdById      String?
-  blogPostId       String?
-  createdAt        DateTime  @default(now())
-  updatedAt        DateTime  @updatedAt
+  id              String    @id @default(cuid())
+  subject         String
+  previewText     String?
+  body            String
+  templateId      String?
+  audienceFilter  Json?
+  status          String    @default("DRAFT") // DRAFT | SCHEDULED | SENDING | SENT | FAILED
+  scheduledAt     DateTime?
+  sentAt          DateTime?
+  totalRecipients Int       @default(0)
+  sentCount       Int       @default(0)
+  openCount       Int       @default(0)
+  clickCount      Int       @default(0)
+  createdById     String?
+  blogPostId      String?
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
 
-  template    EmailTemplate?           @relation(fields: [templateId], references: [id])
-  createdBy   User?                    @relation("CampaignCreator", fields: [createdById], references: [id])
-  blogPost    BlogPost?                @relation(fields: [blogPostId], references: [id])
-  recipients  EmailCampaignRecipient[]
+  template   EmailTemplate?           @relation(fields: [templateId], references: [id])
+  createdBy  User?                    @relation("CampaignCreator", fields: [createdById], references: [id])
+  blogPost   BlogPost?                @relation(fields: [blogPostId], references: [id])
+  recipients EmailCampaignRecipient[]
 
   @@index([status])
   @@index([scheduledAt])
@@ -2548,7 +2553,7 @@ model EmailCampaignRecipient {
 
 model AdminNotification {
   id        String   @id @default(cuid())
-  type      String   // NEW_ORDER | NEW_VENDOR | NEW_TICKET | PAYMENT_RECEIVED | PAYMENT_FAILED | NEW_CUSTOMER | NEW_LEAD
+  type      String // NEW_ORDER | NEW_VENDOR | NEW_TICKET | PAYMENT_RECEIVED | PAYMENT_FAILED | NEW_CUSTOMER | NEW_LEAD
   title     String
   message   String
   link      String?

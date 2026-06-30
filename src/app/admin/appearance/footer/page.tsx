@@ -99,7 +99,8 @@ import {
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
 import { useBusinessConfig } from "@/hooks/use-business-config";
-import type { FooterConfig, FooterWidget, FooterWidgetType, FooterLayout, BottomLink, TrustBadge, FooterWidgetLink, ButtonHoverEffect, ButtonCustomStyle, GradientDirection } from "@/lib/header-footer/types";
+import type { FooterConfig, FooterWidget, FooterWidgetType, FooterLayout, BottomLink, TrustBadge, FooterWidgetLink, ButtonHoverEffect, ButtonCustomStyle, GradientDirection, Translations } from "@/lib/header-footer/types";
+import { LocalizedInput } from "@/components/admin/LocalizedInput";
 import {
   Accordion,
   AccordionContent,
@@ -113,6 +114,7 @@ import { ArrowUpRight, MousePointerClick } from "lucide-react";
 import { PresetGallery } from "./components/PresetGallery";
 import { BUTTON_STYLE_PRESETS, type ButtonStylePreset } from "@/lib/button-presets";
 import { useLanguage } from "@/lib/i18n/language-context";
+import { resolveLocalized } from "@/lib/i18n/localized";
 
 const layoutOptions: { value: FooterLayout; labelKey: string; descriptionKey: string }[] = [
   { value: "MULTI_COLUMN", labelKey: "admin.footer.layoutMultiColumn", descriptionKey: "admin.footer.layoutMultiColumnDesc" },
@@ -364,6 +366,7 @@ interface WidgetLink {
   label: string;
   url: string;
   target: "_self" | "_blank";
+  translations?: Translations | null;
 }
 
 const defaultWidgetFormData = {
@@ -374,6 +377,7 @@ const defaultWidgetFormData = {
   column: 1,
   content: {} as Record<string, unknown>,
   links: [] as WidgetLink[],
+  translations: {} as Translations,
 };
 
 // Sortable Widget Component
@@ -520,7 +524,7 @@ function DroppableColumn({
 }
 
 export default function FooterBuilderPage() {
-  const { t } = useLanguage();
+  const { t, lang } = useLanguage();
   const { config: businessConfig } = useBusinessConfig();
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
@@ -618,6 +622,7 @@ export default function FooterBuilderPage() {
     copyrightLinkUrl: "",
     showDisclaimer: true,
     disclaimerText: "",
+    translations: {} as Translations,
     bottomLinks: [] as BottomLink[],
     showTrustBadges: false,
     trustBadges: [] as TrustBadge[],
@@ -683,6 +688,81 @@ export default function FooterBuilderPage() {
     customCSS: "",
   });
 
+  const previewCopyrightText =
+    resolveLocalized(formData.copyrightText, formData.translations, "copyrightText", lang) ||
+    t("footer.copyright", { year: String(new Date().getFullYear()), name: businessConfig.name });
+  const previewDisclaimerText =
+    resolveLocalized(formData.disclaimerText, formData.translations, "disclaimerText", lang) ||
+    t("footer.disclaimer", { name: businessConfig.name });
+
+  const parseImportedTranslations = (value: unknown): Record<string, unknown> | null => {
+    if (typeof value === "object" && value !== null) return value as Record<string, unknown>;
+    if (typeof value === "string") {
+      try {
+        const parsed = JSON.parse(value);
+        return typeof parsed === "object" && parsed !== null ? (parsed as Record<string, unknown>) : null;
+      } catch {
+        return null;
+      }
+    }
+    return null;
+  };
+
+  const normalizeImportedWidget = (widget: unknown): FooterWidget | null => {
+    if (!widget || typeof widget !== "object") return null;
+    const source: Record<string, unknown> = widget as Record<string, unknown>;
+    const sourceType = typeof source.type === "string" ? String(source.type) : "LINKS";
+    const rawLinks = Array.isArray(source.menuItems)
+      ? source.menuItems
+      : Array.isArray(source.links)
+        ? source.links
+        : [];
+    const menuItems = rawLinks
+      .filter((item): item is Record<string, unknown> => !!item && typeof item === "object")
+      .map((item, index): FooterWidgetLink => {
+        const link = item as Record<string, unknown>;
+        const linkTranslations = parseImportedTranslations(link.translations) as Translations | null;
+        return {
+          id: typeof link.id === "string" && link.id.trim() ? link.id : `import-${Date.now()}-${index}`,
+          label: typeof link.label === "string" ? link.label : "",
+          url: typeof link.url === "string" ? link.url : "/",
+          target: link.target === "_blank" ? "_blank" : "_self",
+          isVisible: link.isVisible !== false,
+          sortOrder: typeof link.sortOrder === "number" ? link.sortOrder : index,
+          ...(typeof link.icon === "string" && { icon: link.icon }),
+          ...(linkTranslations ? { translations: linkTranslations } : {}),
+        };
+      });
+
+    return {
+      id: typeof source.id === "string" ? source.id : `import-${Date.now()}`,
+      footerId: typeof source.footerId === "string" ? source.footerId : "",
+      type: sourceType as FooterWidgetType,
+      title: typeof source.title === "string" ? source.title : "",
+      showTitle: source.showTitle !== false,
+      headingIcon: typeof source.headingIcon === "string" ? source.headingIcon : null,
+      content: typeof source.content === "object" ? (source.content as Record<string, unknown>) : {},
+      column: typeof source.column === "number" ? source.column : 1,
+      sortOrder: typeof source.sortOrder === "number" ? source.sortOrder : 0,
+      customClass: typeof source.customClass === "string" ? source.customClass : null,
+      menuItems: sourceType === "LINKS" ? menuItems : [],
+      linksCount: typeof source.linksCount === "number" ? source.linksCount : menuItems.length,
+      translations: parseImportedTranslations(source.translations) as Translations | null,
+    };
+  };
+
+  const normalizeImportedBottomLinks = (links: unknown): BottomLink[] => {
+    if (!Array.isArray(links)) return [];
+    return links
+      .filter((link): link is Record<string, unknown> => !!link && typeof link === "object")
+      .map((link) => ({
+        label: typeof link.label === "string" ? link.label : "",
+        url: typeof link.url === "string" ? link.url : "/",
+        translations:
+          (parseImportedTranslations(link.translations) as Translations | null) || null,
+      }));
+  };
+
   useEffect(() => {
     fetchFooter();
   }, []);
@@ -711,6 +791,7 @@ export default function FooterBuilderPage() {
           copyrightLinkUrl: activeFooter.copyrightLinkUrl || "",
           showDisclaimer: activeFooter.showDisclaimer,
           disclaimerText: activeFooter.disclaimerText || "",
+          translations: activeFooter.translations || {},
           bottomLinks: activeFooter.bottomLinks || [],
           showTrustBadges: activeFooter.showTrustBadges,
           trustBadges: activeFooter.trustBadges || [],
@@ -808,6 +889,7 @@ export default function FooterBuilderPage() {
           copyrightLinkUrl: formData.copyrightLinkUrl || null,
           showDisclaimer: formData.showDisclaimer,
           disclaimerText: formData.disclaimerText || null,
+          translations: formData.translations,
           bottomLinks: formData.bottomLinks,
           // Trust Badges
           showTrustBadges: formData.showTrustBadges,
@@ -906,6 +988,7 @@ export default function FooterBuilderPage() {
       label: item.label,
       url: item.url || "",
       target: item.target,
+      translations: item.translations || null,
     })) || [];
 
     setWidgetFormData({
@@ -916,6 +999,7 @@ export default function FooterBuilderPage() {
       column: widget.column,
       content: widget.content || {},
       links,
+      translations: widget.translations || {},
     });
     setWidgetDialogOpen(true);
   }
@@ -942,6 +1026,7 @@ export default function FooterBuilderPage() {
             target: link.target,
             sortOrder: index,
             isVisible: true,
+            ...(link.translations ? { translations: link.translations } : {}),
           }))
         : undefined;
 
@@ -954,6 +1039,7 @@ export default function FooterBuilderPage() {
         headingIcon: widgetFormData.headingIcon || null,
         column: widgetFormData.column,
         content: widgetFormData.content,
+        translations: widgetFormData.translations,
         menuItems,
       };
 
@@ -1385,8 +1471,10 @@ export default function FooterBuilderPage() {
                           ) : (
                             widgets.map((widget) => (
                               <div key={widget.id} className="space-y-1">
-                                {widget.showTitle && widget.title && (
-                                  <h4 className="text-xs font-semibold preview-heading">{widget.title}</h4>
+                                {widget.showTitle && (
+                                  <h4 className="text-xs font-semibold preview-heading">
+                                    {resolveLocalized(widget.title, widget.translations, "title", lang)}
+                                  </h4>
                                 )}
                                 <div className="text-xs">
                                   {widget.type === "BRAND" && (() => {
@@ -1397,9 +1485,9 @@ export default function FooterBuilderPage() {
                                       <div className="space-y-1.5">
                                         <LogoPreview size="md" logoMode={logoMode} />
                                         <span className="font-semibold preview-heading block">{businessConfig.name}</span>
-                                        {brandContent?.tagline && (
+                                        {resolveLocalized(brandContent?.tagline || "", widget.translations, "tagline", lang) && (
                                           <p className="text-[10px] opacity-70 max-w-[140px] leading-tight">
-                                            {brandContent.tagline}
+                                            {resolveLocalized(brandContent?.tagline, widget.translations, "tagline", lang)}
                                           </p>
                                         )}
                                         {showContact && businessConfig.contact.supportEmail && (
@@ -1415,7 +1503,9 @@ export default function FooterBuilderPage() {
                                     <ul className="space-y-0.5">
                                       {widget.menuItems && widget.menuItems.length > 0 ? (
                                         widget.menuItems.slice(0, 4).map((item, idx) => (
-                                          <li key={idx} className="preview-link cursor-pointer">{item.label}</li>
+                                          <li key={idx} className="preview-link cursor-pointer">
+                                            {resolveLocalized(item.label, item.translations, "label", lang)}
+                                          </li>
                                         ))
                                       ) : (
                                         <>
@@ -1474,8 +1564,10 @@ export default function FooterBuilderPage() {
 
                       return allWidgets.map((widget) => (
                         <div key={widget.id} className="w-full max-w-md space-y-1">
-                          {widget.showTitle && widget.title && (
-                            <h4 className="text-xs font-semibold preview-heading">{widget.title}</h4>
+                          {widget.showTitle && (
+                            <h4 className="text-xs font-semibold preview-heading">
+                              {resolveLocalized(widget.title, widget.translations, "title", lang)}
+                            </h4>
                           )}
                           <div className="text-xs">
                             {widget.type === "BRAND" && (() => {
@@ -1487,11 +1579,11 @@ export default function FooterBuilderPage() {
                                   <LogoPreview size="lg" logoMode={logoMode} />
                                   <span className="font-semibold preview-heading">{businessConfig.name}</span>
                                   <p className="max-w-xs text-center" style={{ color: "var(--link-color)" }}>
-                                    {brandContent?.tagline || "Your all-in-one wedding planning platform."}
+                                    {resolveLocalized(brandContent?.tagline, widget.translations, "tagline", lang) || "Your all-in-one wedding planning platform."}
                                   </p>
-                                  {brandContent?.subtitle && (
+                                  {resolveLocalized(brandContent?.subtitle, widget.translations, "subtitle", lang) && (
                                     <p className="max-w-md text-[10px] opacity-60 text-center">
-                                      {brandContent.subtitle}
+                                      {resolveLocalized(brandContent?.subtitle, widget.translations, "subtitle", lang)}
                                     </p>
                                   )}
                                   {showContact && businessConfig.contact.supportEmail && (
@@ -1507,7 +1599,9 @@ export default function FooterBuilderPage() {
                               <div className="flex flex-wrap justify-center gap-x-4 gap-y-1">
                                 {widget.menuItems && widget.menuItems.length > 0 ? (
                                   widget.menuItems.map((item, idx) => (
-                                    <span key={idx} className="preview-link cursor-pointer">{item.label}</span>
+                                    <span key={idx} className="preview-link cursor-pointer">
+                                      {resolveLocalized(item.label, item.translations, "label", lang)}
+                                    </span>
                                   ))
                                 ) : (
                                   <>
@@ -1552,10 +1646,12 @@ export default function FooterBuilderPage() {
                     <LogoPreview size="xs" />
                     <span className="text-sm font-semibold preview-heading">{businessConfig.name}</span>
                   </div>
-                  <div className="flex flex-wrap justify-center gap-3 text-xs">
-                    {formData.bottomLinks.length > 0 ? (
-                      formData.bottomLinks.slice(0, 4).map((link, idx) => (
-                        <span key={idx} className="preview-link cursor-pointer">{link.label}</span>
+                    <div className="flex flex-wrap justify-center gap-3 text-xs">
+                      {formData.bottomLinks.length > 0 ? (
+                        formData.bottomLinks.slice(0, 4).map((link, idx) => (
+                        <span key={idx} className="preview-link cursor-pointer">
+                          {resolveLocalized(link.label, link.translations, "label", lang)}
+                        </span>
                       ))
                     ) : (
                       <>
@@ -1603,12 +1699,16 @@ export default function FooterBuilderPage() {
                           ) : (
                             widgets.map((widget) => (
                               <div key={widget.id}>
-                                {widget.showTitle && widget.title && (
-                                  <h4 className="text-xs font-semibold uppercase tracking-wider">{widget.title}</h4>
+                                {widget.showTitle && (
+                                  <h4 className="text-xs font-semibold uppercase tracking-wider">
+                                    {resolveLocalized(widget.title, widget.translations, "title", lang)}
+                                  </h4>
                                 )}
                                 <ul className="mt-1 space-y-0.5 text-xs text-muted-foreground">
                                   {widget.menuItems?.slice(0, 4).map((item, idx) => (
-                                    <li key={idx}>{item.label}</li>
+                                    <li key={idx}>
+                                      {resolveLocalized(item.label, item.translations, "label", lang)}
+                                    </li>
                                   )) || (
                                     <>
                                       <li>Item 1</li>
@@ -1653,14 +1753,18 @@ export default function FooterBuilderPage() {
                           ) : (
                             widgets.map((widget) => (
                               <div key={widget.id} className="space-y-1">
-                                {widget.showTitle && widget.title && (
-                                  <h4 className="text-xs font-semibold" style={{ color: formData.headingColor || undefined }}>{widget.title}</h4>
+                                {widget.showTitle && (
+                                  <h4 className="text-xs font-semibold" style={{ color: formData.headingColor || undefined }}>
+                                    {resolveLocalized(widget.title, widget.translations, "title", lang)}
+                                  </h4>
                                 )}
                                 <div className="text-xs text-muted-foreground">
                                   {widget.type === "LINKS" && (
                                     <ul className="space-y-0.5">
                                       {widget.menuItems?.slice(0, 4).map((item, idx) => (
-                                        <li key={idx} className="preview-link cursor-pointer">{item.label}</li>
+                                        <li key={idx} className="preview-link cursor-pointer">
+                                          {resolveLocalized(item.label, item.translations, "label", lang)}
+                                        </li>
                                       )) || <li className="preview-link">Link 1</li>}
                                     </ul>
                                   )}
@@ -1672,10 +1776,16 @@ export default function FooterBuilderPage() {
                                   )}
                                   {widget.type === "NEWSLETTER" && (
                                     <div className="mt-2 space-y-1">
-                                      <p className="text-xs opacity-60">{(widget.content as { text?: string })?.text || "Get LLC tips & US business insights"}</p>
+                                      <p className="text-xs opacity-60">
+                                        {resolveLocalized((widget.content as { text?: string })?.text, widget.translations, "text", lang) || "Get LLC tips & US business insights"}
+                                      </p>
                                       <div className="flex gap-1">
-                                        <div className="h-6 flex-1 rounded border border-white/20 bg-white/5 px-2 text-xs leading-6 opacity-40">{(widget.content as { placeholder?: string })?.placeholder || "your@email.com"}</div>
-                                        <div className="h-6 rounded bg-orange-500 px-2 text-xs font-medium leading-6 text-white">{(widget.content as { buttonText?: string })?.buttonText || "Subscribe"}</div>
+                                        <div className="h-6 flex-1 rounded border border-white/20 bg-white/5 px-2 text-xs leading-6 opacity-40">
+                                          {resolveLocalized((widget.content as { placeholder?: string })?.placeholder, widget.translations, "placeholder", lang) || "your@email.com"}
+                                        </div>
+                                        <div className="h-6 rounded bg-orange-500 px-2 text-xs font-medium leading-6 text-white">
+                                          {resolveLocalized((widget.content as { buttonText?: string })?.buttonText, widget.translations, "buttonText", lang) || "Subscribe"}
+                                        </div>
                                       </div>
                                     </div>
                                   )}
@@ -1715,11 +1825,17 @@ export default function FooterBuilderPage() {
                           <div key={column} className="space-y-2">
                             {widgets.map((widget) => (
                               <div key={widget.id}>
-                                {widget.showTitle && widget.title && <h4 className="text-xs font-semibold mb-1" style={{ color: formData.headingColor || undefined }}>{widget.title}</h4>}
+                                {widget.showTitle && (
+                                  <h4 className="text-xs font-semibold mb-1" style={{ color: formData.headingColor || undefined }}>
+                                    {resolveLocalized(widget.title, widget.translations, "title", lang)}
+                                  </h4>
+                                )}
                                 {widget.type === "LINKS" && (
                                   <ul className="space-y-0.5 text-xs text-muted-foreground">
                                     {widget.menuItems?.slice(0, 4).map((item, idx) => (
-                                      <li key={idx} className="hover:text-foreground cursor-pointer">{item.label}</li>
+                                      <li key={idx} className="hover:text-foreground cursor-pointer">
+                                        {resolveLocalized(item.label, item.translations, "label", lang)}
+                                      </li>
                                     )) || <li>Link</li>}
                                   </ul>
                                 )}
@@ -1754,11 +1870,17 @@ export default function FooterBuilderPage() {
                       const widgets = getWidgetsByColumn(column).filter(w => w.type === "LINKS");
                       return widgets.map((widget) => (
                         <div key={widget.id}>
-                          {widget.showTitle && widget.title && <h4 className="text-xs font-semibold mb-2" style={{ color: formData.headingColor || undefined }}>{widget.title}</h4>}
+                          {widget.showTitle && (
+                            <h4 className="text-xs font-semibold mb-2" style={{ color: formData.headingColor || undefined }}>
+                              {resolveLocalized(widget.title, widget.translations, "title", lang)}
+                            </h4>
+                          )}
                           <ul className="space-y-1 text-xs text-muted-foreground">
                             {widget.menuItems?.slice(0, 5).map((item, idx) => (
-                              <li key={idx} className="hover:text-foreground cursor-pointer">{item.label}</li>
-                            )) || <li>Link</li>}
+                            <li key={idx} className="hover:text-foreground cursor-pointer">
+                              {resolveLocalized(item.label, item.translations, "label", lang)}
+                            </li>
+                          )) || <li>Link</li>}
                           </ul>
                         </div>
                       ));
@@ -1789,12 +1911,20 @@ export default function FooterBuilderPage() {
                           ) : (
                             widgets.map((widget) => (
                               <div key={widget.id}>
-                                {widget.showTitle && widget.title && <h4 className="text-xs font-semibold preview-heading">{widget.title}</h4>}
+                                {widget.showTitle && (
+                                    <h4 className="text-xs font-semibold preview-heading">
+                                      {resolveLocalized(widget.title, widget.translations, "title", lang)}
+                                    </h4>
+                                )}
                                 {widget.type === "BRAND" && (() => {
                                   const brandContent = widget.content as { logoMode?: "auto" | "light" | "dark" } | null;
                                   return <div className="space-y-1"><LogoPreview size="sm" logoMode={brandContent?.logoMode || "auto"} /><span className="font-semibold text-sm preview-heading block">{businessConfig.name}</span></div>;
                                 })()}
-                                {widget.type === "LINKS" && <ul className="space-y-0.5 text-xs">{widget.menuItems?.slice(0,4).map((item,i) => <li key={i} className="preview-link cursor-pointer">{item.label}</li>) || <li className="preview-link">Link</li>}</ul>}
+                                {widget.type === "LINKS" && <ul className="space-y-0.5 text-xs">{widget.menuItems?.slice(0,4).map((item,i) => (
+                                  <li key={i} className="preview-link cursor-pointer">
+                                    {resolveLocalized(item.label, item.translations, "label", lang)}
+                                  </li>
+                                )) || <li className="preview-link">Link</li>}</ul>}
                                 {widget.type === "SOCIAL" && <SocialIconsPreview size="sm" />}
                                 {widget.type === "BUTTON" && (
                                   <div className="mt-1">
@@ -1825,23 +1955,25 @@ export default function FooterBuilderPage() {
                   )}
                     style={{ color: formData.textColor || undefined }}
                   >
-                    <p>{formData.copyrightText || `© ${new Date().getFullYear()} ${businessConfig.name}. All rights reserved.`}</p>
+                    <p>{previewCopyrightText}</p>
                     {formData.showDisclaimer && (
                       <p className="max-w-md text-[10px]">
-                        <strong>Disclaimer:</strong> {formData.disclaimerText || `${businessConfig.name} is not a law firm and does not provide legal advice.`}
+                        <strong>{t("footer.disclaimerLabel")}:</strong> {previewDisclaimerText}
                       </p>
                     )}
                   </div>
                   {formData.bottomLinks.length > 0 && (
-                    <div className={cn(
-                      "mt-2 flex flex-wrap gap-2 text-xs",
-                      formData.layout === "CENTERED" ? "justify-center" : ""
-                    )}>
-                      {formData.bottomLinks.map((link, idx) => (
-                        <span key={idx} className="preview-link cursor-pointer">{link.label}</span>
-                      ))}
-                    </div>
-                  )}
+                      <div className={cn(
+                        "mt-2 flex flex-wrap gap-2 text-xs",
+                        formData.layout === "CENTERED" ? "justify-center" : ""
+                      )}>
+                        {formData.bottomLinks.map((link, idx) => (
+                        <span key={idx} className="preview-link cursor-pointer">
+                          {resolveLocalized(link.label, link.translations, "label", lang)}
+                        </span>
+                        ))}
+                      </div>
+                    )}
                 </div>
               )}
             </div>
@@ -2019,8 +2151,8 @@ export default function FooterBuilderPage() {
             </CardHeader>
             <CardContent className="space-y-4">
               <div className="grid gap-4 md:grid-cols-2">
-                {/* Export */}
-                <div className="space-y-3">
+                  {/* Export */}
+                  <div className="space-y-3">
                   <h4 className="font-medium">{t("admin.footer.exportConfig")}</h4>
                   <p className="text-sm text-muted-foreground">
                     {t("admin.footer.exportConfigDesc")}
@@ -2037,9 +2169,18 @@ export default function FooterBuilderPage() {
                           type: w.type,
                           title: w.title,
                           showTitle: w.showTitle,
+                          headingIcon: w.headingIcon,
                           column: w.column,
                           sortOrder: w.sortOrder,
                           content: w.content,
+                          translations: w.translations,
+                          links: w.menuItems?.map((link) => ({
+                            id: link.id,
+                            label: link.label,
+                            url: link.url,
+                            target: link.target,
+                            translations: link.translations,
+                          })),
                         })),
                         exportedAt: new Date().toISOString(),
                         version: "1.0",
@@ -2081,11 +2222,21 @@ export default function FooterBuilderPage() {
                           if (!importData.layout || !importData.version) {
                             throw new Error("Invalid configuration file");
                           }
+                          const normalizedWidgets = Array.isArray(importData.widgets)
+                            ? importData.widgets.map((widget: unknown) => normalizeImportedWidget(widget)).filter((widget: FooterWidget | null): widget is FooterWidget => widget !== null)
+                            : [];
+                          const normalizedBottomLinks = normalizeImportedBottomLinks(importData.bottomLinks);
                           setFormData(prev => ({
                             ...prev,
                             ...importData,
+                            bottomLinks: Array.isArray(importData.bottomLinks)
+                              ? normalizedBottomLinks
+                              : prev.bottomLinks,
                             id: prev.id,
                           }));
+                          if (normalizedWidgets.length > 0) {
+                            setFooter(prev => (prev ? { ...prev, widgets: normalizedWidgets } : prev));
+                          }
                           toast.success(t("admin.footer.importSuccess"));
                         } catch (error) {
                           console.error("Import error:", error);
@@ -2157,15 +2308,17 @@ export default function FooterBuilderPage() {
 
               {formData.bottomBarEnabled && (
                 <>
-                  <div className="space-y-2">
-                    <Label htmlFor="copyrightText">{t("admin.footer.copyrightText")}</Label>
-                    <Input
-                      id="copyrightText"
-                      value={formData.copyrightText}
-                      onChange={(e) => setFormData({ ...formData, copyrightText: e.target.value })}
-                      placeholder={t("admin.footer.copyrightPlaceholder")}
-                    />
-                  </div>
+                  <LocalizedInput
+                    id="copyrightText"
+                    label={t("admin.footer.copyrightText")}
+                    placeholder={t("admin.footer.copyrightPlaceholder")}
+                    value={{ en: formData.copyrightText, ...(formData.translations?.copyrightText || {}) }}
+                    onChange={(next) => setFormData({
+                      ...formData,
+                      copyrightText: next.en ?? "",
+                      translations: { ...formData.translations, copyrightText: next as Record<string, string> },
+                    })}
+                  />
 
                   <div className="space-y-2">
                     <Label htmlFor="copyrightLinkUrl">Brand Link URL</Label>
@@ -2182,16 +2335,19 @@ export default function FooterBuilderPage() {
                   </div>
 
                   {formData.showDisclaimer && (
-                    <div className="space-y-2">
-                      <Label htmlFor="disclaimerText">{t("admin.footer.disclaimerText")}</Label>
-                      <Textarea
-                        id="disclaimerText"
-                        value={formData.disclaimerText}
-                        onChange={(e) => setFormData({ ...formData, disclaimerText: e.target.value })}
-                        placeholder={t("admin.footer.disclaimerPlaceholder")}
-                        rows={3}
-                      />
-                    </div>
+                    <LocalizedInput
+                      id="disclaimerText"
+                      textarea
+                      rows={3}
+                      label={t("admin.footer.disclaimerText")}
+                      placeholder={t("admin.footer.disclaimerPlaceholder")}
+                      value={{ en: formData.disclaimerText, ...(formData.translations?.disclaimerText || {}) }}
+                      onChange={(next) => setFormData({
+                        ...formData,
+                        disclaimerText: next.en ?? "",
+                        translations: { ...formData.translations, disclaimerText: next as Record<string, string> },
+                      })}
+                    />
                   )}
 
                   <Separator />
@@ -2210,23 +2366,27 @@ export default function FooterBuilderPage() {
                     ) : (
                       <div className="space-y-2">
                         {formData.bottomLinks.map((link, index) => (
-                          <div key={index} className="flex items-center gap-2">
-                            <Input
-                              value={link.label}
-                              onChange={(e) => updateBottomLink(index, { label: e.target.value })}
-                              placeholder={t("admin.footer.linkLabel")}
-                              className="flex-1"
-                            />
+                          <div key={index} className="flex items-start gap-2">
+                            <div className="flex-1">
+                              <LocalizedInput
+                                value={{ en: link.label, ...(link.translations?.label || {}) }}
+                                placeholder={t("admin.footer.linkLabel")}
+                                onChange={(next) => updateBottomLink(index, {
+                                  label: next.en ?? "",
+                                  translations: { ...link.translations, label: next as Record<string, string> },
+                                })}
+                              />
+                            </div>
                             <Input
                               value={link.url}
                               onChange={(e) => updateBottomLink(index, { url: e.target.value })}
                               placeholder={t("admin.footer.urlPlaceholder")}
-                              className="flex-1"
+                              className="mt-7 flex-1"
                             />
                             <Button
                               variant="ghost"
                               size="icon"
-                              className="text-destructive"
+                              className="mt-7 text-destructive"
                               onClick={() => removeBottomLink(index)}
                             >
                               <Trash2 className="h-4 w-4" />
@@ -3661,15 +3821,17 @@ export default function FooterBuilderPage() {
               </Select>
             </div>
 
-            <div className="space-y-2">
-              <Label htmlFor="widgetTitle">{t("admin.footer.widgetTitleLabel")}</Label>
-              <Input
-                id="widgetTitle"
-                value={widgetFormData.title}
-                onChange={(e) => setWidgetFormData({ ...widgetFormData, title: e.target.value })}
-                placeholder={t("admin.footer.widgetTitlePlaceholder")}
-              />
-            </div>
+            <LocalizedInput
+              id="widgetTitle"
+              label={t("admin.footer.widgetTitleLabel")}
+              placeholder={t("admin.footer.widgetTitlePlaceholder")}
+              value={{ en: widgetFormData.title, ...(widgetFormData.translations?.title || {}) }}
+              onChange={(next) => setWidgetFormData({
+                ...widgetFormData,
+                title: next.en ?? "",
+                translations: { ...widgetFormData.translations, title: next as Record<string, string> },
+              })}
+            />
 
             <div className="flex items-center justify-between rounded-lg border p-4">
               <div>
@@ -3758,25 +3920,29 @@ export default function FooterBuilderPage() {
                 ) : (
                   <div className="max-h-50 space-y-2 overflow-y-auto">
                     {widgetFormData.links.map((link, index) => (
-                      <div key={link.id} className="flex items-center gap-2 rounded-lg border p-2">
-                        <GripVertical className="h-4 w-4 shrink-0 text-muted-foreground" />
-                        <Input
-                          value={link.label}
-                          onChange={(e) => updateWidgetLink(index, { label: e.target.value })}
-                          placeholder={t("admin.footer.linkLabelPlaceholder")}
-                          className="flex-1"
-                        />
+                      <div key={link.id} className="flex items-start gap-2 rounded-lg border p-2">
+                        <GripVertical className="mt-2 h-4 w-4 shrink-0 text-muted-foreground" />
+                        <div className="flex-1">
+                          <LocalizedInput
+                            value={{ en: link.label, ...(link.translations?.label || {}) }}
+                            placeholder={t("admin.footer.linkLabelPlaceholder")}
+                            onChange={(next) => updateWidgetLink(index, {
+                              label: next.en ?? "",
+                              translations: { ...link.translations, label: next as Record<string, string> },
+                            })}
+                          />
+                        </div>
                         <Input
                           value={link.url}
                           onChange={(e) => updateWidgetLink(index, { url: e.target.value })}
                           placeholder={t("admin.footer.urlPlaceholder")}
-                          className="flex-1"
+                          className="mt-7 flex-1"
                         />
                         <Select
                           value={link.target}
                           onValueChange={(value: "_self" | "_blank") => updateWidgetLink(index, { target: value })}
                         >
-                          <SelectTrigger className="w-24">
+                          <SelectTrigger className="mt-7 w-24">
                             <SelectValue />
                           </SelectTrigger>
                           <SelectContent>
@@ -3787,7 +3953,7 @@ export default function FooterBuilderPage() {
                         <Button
                           variant="ghost"
                           size="icon"
-                          className="h-8 w-8 shrink-0 text-destructive"
+                          className="mt-7 h-8 w-8 shrink-0 text-destructive"
                           onClick={() => removeWidgetLink(index)}
                         >
                           <Trash2 className="h-4 w-4" />
@@ -3802,16 +3968,21 @@ export default function FooterBuilderPage() {
             {/* TEXT widget content */}
             {widgetFormData.type === "TEXT" && (
               <div className="space-y-2">
-                <Label htmlFor="textContent">{t("admin.footer.textContent")}</Label>
-                <Textarea
+                <LocalizedInput
                   id="textContent"
-                  value={(widgetFormData.content as { text?: string })?.text || ""}
-                  onChange={(e) => setWidgetFormData({
+                  textarea
+                  rows={4}
+                  label={t("admin.footer.textContent")}
+                  value={{
+                    en: (widgetFormData.content as { text?: string })?.text || "",
+                    ...(widgetFormData.translations?.text || {}),
+                  }}
+                  onChange={(next) => setWidgetFormData({
                     ...widgetFormData,
-                    content: { ...widgetFormData.content, text: e.target.value },
+                    content: { ...widgetFormData.content, text: next.en || "" },
+                    translations: { ...widgetFormData.translations, text: next as Record<string, string> },
                   })}
                   placeholder={t("admin.footer.textContentPlaceholder")}
-                  rows={4}
                 />
               </div>
             )}
@@ -3841,37 +4012,49 @@ export default function FooterBuilderPage() {
             {widgetFormData.type === "NEWSLETTER" && (
               <div className="space-y-4">
                 <div className="space-y-2">
-                  <Label htmlFor="newsletterText">{t("admin.footer.newsletterDescText")}</Label>
-                  <Input
+                  <LocalizedInput
                     id="newsletterText"
-                    value={(widgetFormData.content as { text?: string })?.text || ""}
-                    onChange={(e) => setWidgetFormData({
+                    label={t("admin.footer.newsletterDescText")}
+                    value={{
+                      en: (widgetFormData.content as { text?: string })?.text || "",
+                      ...(widgetFormData.translations?.text || {}),
+                    }}
+                    onChange={(next) => setWidgetFormData({
                       ...widgetFormData,
-                      content: { ...widgetFormData.content, text: e.target.value },
+                      content: { ...widgetFormData.content, text: next.en || "" },
+                      translations: { ...widgetFormData.translations, text: next as Record<string, string> },
                     })}
                     placeholder={t("admin.footer.newsletterDescPlaceholder")}
                   />
                 </div>
                 <div className="space-y-2">
-                  <Label htmlFor="newsletterPlaceholder">{t("admin.footer.newsletterInputPh")}</Label>
-                  <Input
+                  <LocalizedInput
                     id="newsletterPlaceholder"
-                    value={(widgetFormData.content as { placeholder?: string })?.placeholder || ""}
-                    onChange={(e) => setWidgetFormData({
+                    label={t("admin.footer.newsletterInputPh")}
+                    value={{
+                      en: (widgetFormData.content as { placeholder?: string })?.placeholder || "",
+                      ...(widgetFormData.translations?.placeholder || {}),
+                    }}
+                    onChange={(next) => setWidgetFormData({
                       ...widgetFormData,
-                      content: { ...widgetFormData.content, placeholder: e.target.value },
+                      content: { ...widgetFormData.content, placeholder: next.en || "" },
+                      translations: { ...widgetFormData.translations, placeholder: next as Record<string, string> },
                     })}
                     placeholder={t("admin.footer.newsletterInputPhPh")}
                   />
                 </div>
                 <div className="space-y-2">
-                  <Label htmlFor="newsletterButton">{t("admin.footer.newsletterButton")}</Label>
-                  <Input
+                  <LocalizedInput
                     id="newsletterButton"
-                    value={(widgetFormData.content as { buttonText?: string })?.buttonText || ""}
-                    onChange={(e) => setWidgetFormData({
+                    label={t("admin.footer.newsletterButton")}
+                    value={{
+                      en: (widgetFormData.content as { buttonText?: string })?.buttonText || "",
+                      ...(widgetFormData.translations?.buttonText || {}),
+                    }}
+                    onChange={(next) => setWidgetFormData({
                       ...widgetFormData,
-                      content: { ...widgetFormData.content, buttonText: e.target.value },
+                      content: { ...widgetFormData.content, buttonText: next.en || "" },
+                      translations: { ...widgetFormData.translations, buttonText: next as Record<string, string> },
                     })}
                     placeholder={t("admin.footer.newsletterButtonPh")}
                   />
@@ -3885,6 +4068,60 @@ export default function FooterBuilderPage() {
             {/* BRAND widget options */}
             {widgetFormData.type === "BRAND" && (
               <div className="space-y-4">
+                <LocalizedInput
+                  label={t("admin.footer.textContent")}
+                  value={{
+                    en: (widgetFormData.content as { tagline?: string })?.tagline || "",
+                    ...(widgetFormData.translations?.tagline || {}),
+                  }}
+                  onChange={(next) => setWidgetFormData({
+                    ...widgetFormData,
+                    content: { ...widgetFormData.content, tagline: next.en || "" },
+                    translations: { ...widgetFormData.translations, tagline: next as Record<string, string> },
+                  })}
+                  placeholder={t("admin.footer.textContentPlaceholder")}
+                />
+                <LocalizedInput
+                  label={t("admin.footer.textContent")}
+                  textarea
+                  rows={3}
+                  value={{
+                    en: (widgetFormData.content as { subtitle?: string })?.subtitle || "",
+                    ...(widgetFormData.translations?.subtitle || {}),
+                  }}
+                  onChange={(next) => setWidgetFormData({
+                    ...widgetFormData,
+                    content: { ...widgetFormData.content, subtitle: next.en || "" },
+                    translations: { ...widgetFormData.translations, subtitle: next as Record<string, string> },
+                  })}
+                  placeholder={t("admin.footer.textContentPlaceholder")}
+                />
+                <LocalizedInput
+                  label={t("admin.footer.buttonText")}
+                  value={{
+                    en: (widgetFormData.content as { ctaText?: string })?.ctaText || "",
+                    ...(widgetFormData.translations?.ctaText || {}),
+                  }}
+                  onChange={(next) => setWidgetFormData({
+                    ...widgetFormData,
+                    content: { ...widgetFormData.content, ctaText: next.en || "" },
+                    translations: { ...widgetFormData.translations, ctaText: next as Record<string, string> },
+                  })}
+                  placeholder={t("admin.footer.buttonTextPlaceholder")}
+                />
+                <LocalizedInput
+                  label={t("admin.footer.buttonText")}
+                  value={{
+                    en: (widgetFormData.content as { secondaryCtaText?: string })?.secondaryCtaText || "",
+                    ...(widgetFormData.translations?.secondaryCtaText || {}),
+                  }}
+                  onChange={(next) => setWidgetFormData({
+                    ...widgetFormData,
+                    content: { ...widgetFormData.content, secondaryCtaText: next.en || "" },
+                    translations: { ...widgetFormData.translations, secondaryCtaText: next as Record<string, string> },
+                  })}
+                  placeholder={t("admin.footer.buttonTextPlaceholder")}
+                />
                 <div className="space-y-2">
                   <Label>{t("admin.footer.logoVersion")}</Label>
                   <Select
@@ -3916,12 +4153,16 @@ export default function FooterBuilderPage() {
                 {/* Button Text and URL */}
                 <div className="grid gap-3 sm:grid-cols-2">
                   <div className="space-y-2">
-                    <Label>{t("admin.footer.buttonText")}</Label>
-                    <Input
-                      value={(widgetFormData.content as { text?: string })?.text || ""}
-                      onChange={(e) => setWidgetFormData({
+                    <LocalizedInput
+                      label={t("admin.footer.buttonText")}
+                      value={{
+                        en: (widgetFormData.content as { text?: string })?.text || "",
+                        ...(widgetFormData.translations?.text || {}),
+                      }}
+                      onChange={(next) => setWidgetFormData({
                         ...widgetFormData,
-                        content: { ...widgetFormData.content, text: e.target.value },
+                        content: { ...widgetFormData.content, text: next.en || "" },
+                        translations: { ...widgetFormData.translations, text: next as Record<string, string> },
                       })}
                       placeholder={t("admin.footer.buttonTextPlaceholder")}
                     />

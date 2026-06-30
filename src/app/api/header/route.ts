@@ -65,6 +65,7 @@ export async function GET() {
       categoryIcon: item.categoryIcon,
       categoryDesc: item.categoryDesc,
       visibleOnMobile: item.visibleOnMobile,
+      translations: item.translations ?? undefined,
       children: item.children?.map(transformMenuItem) || [],
     });
 
@@ -94,6 +95,7 @@ export async function GET() {
         registerText: header.registerText,
         registerUrl: header.registerUrl,
         registerStyle: safeJson(header.registerStyle),
+        translations: safeJson(header.translations),
       },
       search: {
         enabled: header.searchEnabled,

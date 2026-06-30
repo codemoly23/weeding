@@ -1,3 +1,5 @@
+import { normalizeTranslations } from "@/lib/i18n/localized";
+
 type TranslateFn = (key: string, params?: Record<string, string>) => string;
 
 const NAV_LABEL_KEYS: Record<string, string> = {
@@ -37,8 +39,21 @@ function normalizeLabel(label: string): string {
   return label.replace(/\s+/g, " ").trim().toLowerCase();
 }
 
-export function getNavLabel(label: string | null | undefined, t: TranslateFn, lang: string): string {
+export function getNavLabel(
+  label: string | null | undefined,
+  t: TranslateFn,
+  lang: string,
+  translations?: unknown,
+  field: string = "label",
+): string {
   if (!label) return "";
+
+  // Explicit per-locale translation (from the DB) wins over the legacy dictionary.
+  if (translations) {
+    const entry = normalizeTranslations(translations)[field] as Record<string, string> | undefined;
+    const explicit = entry?.[lang];
+    if (explicit) return explicit;
+  }
 
   const key = NAV_LABEL_KEYS[label];
   if (key) return t(key);

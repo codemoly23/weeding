@@ -56,6 +56,11 @@ export async function GET(
       widgets: footer.widgets.map((w) => ({
         ...w,
         content: safeJsonParse(w.content, null),
+        translations: safeJsonParse(w.translations, null),
+        menuItems: w.menuItems.map((item) => ({
+          ...item,
+          translations: safeJsonParse(item.translations, null),
+        })),
       })),
     });
   } catch (error) {
